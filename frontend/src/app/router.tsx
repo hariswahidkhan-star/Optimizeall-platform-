@@ -16,6 +16,8 @@ import { AuthLayout } from './layouts/AuthLayout';
 import { PortalLayout } from './layouts/PortalLayout';
 import { publicRoutes as billingPublicRoutes } from '@/features/agency/billing/publicRoutes';
 import { publicRoutes as crmPublicRoutes } from '@/features/agency/crm/publicRoutes';
+import { publicRoutes as emailPublicRoutes } from '@/features/agency/email/publicRoutes';
+import { publicRoutes as pagesPublicRoutes } from '@/features/agency/pages/publicRoutes';
 import { PublicLayout } from './layouts/PublicLayout';
 import { portals } from './portals';
 import type { PortalRouteHandle } from './portalTypes';
@@ -65,6 +67,8 @@ export const routes: RouteObject[] = [
           // Tokenized proposal (/p/:token) and invoice (/i/:token) links sent to clients by email.
           ...crmPublicRoutes,
           ...billingPublicRoutes,
+          // Unsubscribe, preference center, double opt-in and hosted sign-up links from marketing emails.
+          ...emailPublicRoutes,
           ...(showDesignSystem
             ? [
                 {
@@ -78,6 +82,8 @@ export const routes: RouteObject[] = [
             : []),
         ],
       },
+      // Client landing pages (/lp/:client/:slug) and embeddable forms (/f/:formId) render without the site chrome.
+      ...pagesPublicRoutes,
       {
         element: <AuthLayout />,
         children: [

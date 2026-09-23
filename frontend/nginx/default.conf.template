@@ -57,6 +57,14 @@ server {
         include /etc/nginx/snippets/proxy-api.conf;
     }
 
+    # Email tracking: open pixel, click redirect and one-click unsubscribe (RFC 8058). Never cached.
+    location /e/ {
+        proxy_pass ${API_UPSTREAM};
+        include /etc/nginx/snippets/proxy-api.conf;
+        proxy_hide_header Cache-Control;
+        add_header Cache-Control "no-store" always;
+    }
+
     location /health/ {
         proxy_pass ${API_UPSTREAM};
         include /etc/nginx/snippets/proxy-api.conf;
