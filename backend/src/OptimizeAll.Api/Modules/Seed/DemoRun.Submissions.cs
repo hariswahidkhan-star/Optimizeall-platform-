@@ -348,7 +348,7 @@ internal sealed partial class DemoRun
         plan.Created = true;
 
         var context = await _quotes.BuildContextAsync(campaign, ruleSet.Currency, plan.Who.Id, submission.Platform, submission.PostedAt,
-            null, submission.Id);
+            submission.SubmittedAt, null, submission.Id);
         submission.EstimatedRewardAmount = RewardEngine.Quote(ruleSet, context).Total;
         await ApplyRiskFlagsAsync(submission, campaign, AccountAt(plan.Account, Now), plan.Who);
         submission.Events.Add(new SubmissionEvent
@@ -629,7 +629,7 @@ internal sealed partial class DemoRun
         s.ContentHash = Normalization.ContentHash(caption);
 
         var ruleSet = await _quotes.LoadRuleSetAsync(s.RewardRuleSetId);
-        var context = await _quotes.BuildContextAsync(campaign, ruleSet.Currency, s.UserId, s.Platform, s.PostedAt, null, s.Id);
+        var context = await _quotes.BuildContextAsync(campaign, ruleSet.Currency, s.UserId, s.Platform, s.PostedAt, s.SubmittedAt, null, s.Id);
         s.EstimatedRewardAmount = RewardEngine.Quote(ruleSet, context).Total;
 
         _db.RemoveRange(s.Flags.Where(f => f.ResolvedAt is null).ToList());
