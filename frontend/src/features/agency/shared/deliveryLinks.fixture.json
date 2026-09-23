@@ -1,0 +1,19 @@
+{
+  "description": "Web paths the backend Projects/Clients modules put into notifications (Modules/Projects/DeliveryShared.cs DeliveryLinks). A backend unit test keeps DeliveryLinks and this file identical; deliveryLinks.test.ts resolves every path against the real router.",
+  "links": [
+    { "name": "AgencyHome", "path": "/agency" },
+    { "name": "AgencyClient", "path": "/agency/clients/:clientId" },
+    { "name": "AgencyProject", "path": "/agency/projects/:projectId" },
+    { "name": "AgencyTask", "path": "/agency/projects/:projectId?task=:taskId" },
+    { "name": "AgencyDeliverable", "path": "/agency/deliverables/:deliverableId" },
+    { "name": "AgencyThread", "path": "/agency/clients/:clientId?tab=messages&thread=:threadId" },
+    { "name": "AgencyReport", "path": "/agency/reports/:reportId" },
+    { "name": "AgencyBrief", "path": "/agency/clients/:clientId?tab=briefs&brief=:briefId" },
+    { "name": "AgencyTimesheets", "path": "/agency/time" },
+    { "name": "ClientHome", "path": "/client" },
+    { "name": "ClientDeliverable", "path": "/client/approvals/:deliverableId?org=:clientId" },
+    { "name": "ClientReport", "path": "/client/reports/:reportId?org=:clientId" },
+    { "name": "ClientThread", "path": "/client/messages?org=:clientId&thread=:threadId" },
+    { "name": "ClientProject", "path": "/client/projects/:projectId?org=:clientId" }
+  ]
+}
