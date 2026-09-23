@@ -1,0 +1,138 @@
+# Optimize All — staging / demo stack.
+#
+#   cp deploy/.env.staging.example deploy/.env.staging   # then fill in secrets (scripts/generate-secrets.sh)
+#   scripts/staging-up.sh      # wraps: docker compose --env-file deploy/.env.staging \
+#                              #          -f deploy/docker-compose.staging.yml -p optimizeall-staging up -d --build
+#
+#   Web app ........ http://localhost:${WEB_PORT:-8080}          (nginx: SPA + /api, /t, /health proxied to the API)
+#   API docs ....... http://localhost:${WEB_PORT:-8080}/api/docs
+#   Mail (Mailpit) . http://localhost:${MAILPIT_UI_PORT:-8025}    (every email the platform sends lands here)
+#
+# The API applies EF migrations on startup and runs the Baseline + Demo seed profiles (idempotent), so the
+# stack comes up with demo accounts and campaigns. See docs/DEPLOYMENT.md.
+
+name: optimizeall-staging
+
+x-restart: &restart
+  restart: unless-stopped
+
+services:
+  mysql:
+    <<: *restart
+    image: mysql:8.0
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+      - --default-time-zone=+00:00
+      - --max-allowed-packet=64M
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?set MYSQL_ROOT_PASSWORD in deploy/.env.staging}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-optimizeall}
+      MYSQL_USER: ${MYSQL_USER:-optimizeall}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?set MYSQL_PASSWORD in deploy/.env.staging}
+      TZ: UTC
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      # TCP (not the socket) so the temporary init server, which has networking disabled, doesn't count as healthy.
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root --password=\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+    # Uncomment to reach the database from the host (e.g. a SQL client). Keep closed on shared servers.
+    # ports:
+    #   - "127.0.0.1:3307:3306"
+
+  mailpit:
+    <<: *restart
+    image: axllent/mailpit:v1.27
+    environment:
+      MP_MAX_MESSAGES: 5000
+      MP_SMTP_AUTH_ACCEPT_ANY: "true"
+      MP_SMTP_AUTH_ALLOW_INSECURE: "true"
+    ports:
+      - "${MAILPIT_UI_PORT:-8025}:8025"
+    healthcheck:
+      test: ["CMD", "/mailpit", "readyz"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    <<: *restart
+    image: ${API_IMAGE:-optimizeall-api:staging}
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    depends_on:
+      mysql:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+    environment:
+      ASPNETCORE_ENVIRONMENT: Staging
+      ConnectionStrings__Default: "Server=mysql;Port=3306;Database=${MYSQL_DATABASE:-optimizeall};User=${MYSQL_USER:-optimizeall};Password=${MYSQL_PASSWORD};SslMode=None;AllowPublicKeyRetrieval=true;"
+      Database__InitializationMode: Migrate
+      Database__InitializeOnStartup: "true"
+      Database__Seed__0: Baseline
+      Database__Seed__1: ${DEMO_SEED:-Demo}
+      Jwt__SigningKey: ${JWT_SIGNING_KEY:?set JWT_SIGNING_KEY in deploy/.env.staging}
+      Jwt__Issuer: optimizeall
+      Jwt__Audience: optimizeall-web
+      Security__HashSalt: ${HASH_SALT:?set HASH_SALT in deploy/.env.staging}
+      # Same-origin behind nginx: no CORS origins needed.
+      Security__SecureCookies: ${SECURE_COOKIES:-false}
+      Email__Mode: Smtp
+      Email__SmtpHost: mailpit
+      Email__SmtpPort: "1025"
+      Email__SmtpUseStartTls: "false"
+      Email__FromAddress: ${EMAIL_FROM_ADDRESS:-no-reply@staging.optimizeall.local}
+      Email__FromName: Optimize All (staging)
+      Email__AppBaseUrl: ${PUBLIC_BASE_URL:-http://localhost:8080}
+      Tracking__PublicBaseUrl: ${PUBLIC_BASE_URL:-http://localhost:8080}
+      Tracking__PostbackSecret: ${POSTBACK_SECRET:?set POSTBACK_SECRET in deploy/.env.staging}
+      WhatsApp__Enabled: ${WHATSAPP_ENABLED:-false}
+      Payments__Provider: manual
+      Jobs__Enabled: "true"
+      RateLimiting__Enabled: "true"
+      Swagger__Enabled: "true"
+      DevTools__MailboxEnabled: "false"
+      Bootstrap__AdminEmail: ${BOOTSTRAP_ADMIN_EMAIL:-admin@optimizeall.local}
+      Bootstrap__AdminPassword: ${BOOTSTRAP_ADMIN_PASSWORD:?set BOOTSTRAP_ADMIN_PASSWORD in deploy/.env.staging}
+      Logging__LogLevel__Default: Information
+    volumes:
+      - api-storage:/app/storage
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      # First start applies migrations and the demo seed.
+      start_period: 120s
+    # The API is only reachable through the web container. Uncomment for direct access while debugging.
+    # ports:
+    #   - "127.0.0.1:5080:8080"
+
+  web:
+    <<: *restart
+    image: ${WEB_IMAGE:-optimizeall-web:staging}
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      API_UPSTREAM: http://api:8080
+    ports:
+      - "${WEB_PORT:-8080}:8080"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/healthz"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  mysql-data:
+  api-storage:
