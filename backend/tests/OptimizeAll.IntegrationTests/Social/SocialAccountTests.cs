@@ -195,14 +195,27 @@ public sealed class SocialAccountTests(ApiFactory api) : IClassFixture<ApiFactor
         Assert.Equal(12000, verified.GetProperty("account").GetProperty("followerCount").GetInt32());
         Assert.Equal(reviewerUser.Id, verified.GetProperty("verifiedBy").GetProperty("id").GetGuid());
 
-        // Stale stamp on a second decision → 409.
+        // A second decision on an already-decided profile → 409 (it is no longer pending review).
         await (await reviewer.PostAsJsonAsync($"/api/v1/review/social-accounts/{id1}/decision", new
         {
-            decision = "Rejected", note = "late", concurrencyStamp = stamp1,
+            decision = "Rejected", note = "late", concurrencyStamp = verified.GetProperty("account").GetProperty("concurrencyStamp").GetGuid(),
+        })).ShouldFailAsync(409, "social.not_pending");
+
+        // A profile that was never submitted for review can't be decided.
+        await (await reviewer.PostAsJsonAsync($"/api/v1/review/social-accounts/{id2}/decision", new
+        {
+            decision = "Verified", concurrencyStamp = a2.GetProperty("concurrencyStamp").GetGuid(),
+        })).ShouldFailAsync(409, "social.not_pending");
+        var requested2 = await (await owner.PostAsync($"/api/v1/me/social-accounts/{id2}/request-verification", null)).ReadJsonAsync();
+
+        // Stale stamp → 409.
+        await (await reviewer.PostAsJsonAsync($"/api/v1/review/social-accounts/{id2}/decision", new
+        {
+            decision = "Rejected", note = "stale", concurrencyStamp = a2.GetProperty("concurrencyStamp").GetGuid(),
         })).ShouldFailAsync(409, "concurrency.conflict");
 
         // Rejection requires a note.
-        var stamp2 = a2.GetProperty("concurrencyStamp").GetGuid();
+        var stamp2 = requested2.GetProperty("concurrencyStamp").GetGuid();
         await (await reviewer.PostAsJsonAsync($"/api/v1/review/social-accounts/{id2}/decision", new
         {
             decision = "Rejected", concurrencyStamp = stamp2,

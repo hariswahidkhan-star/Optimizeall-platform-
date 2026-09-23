@@ -47,6 +47,31 @@ public static class SocialProfileRules
         return null;
     }
 
+    /// <summary>
+    /// Platforms whose profile URLs always carry the handle in the path (e.g. instagram.com/handle, tiktok.com/@handle,
+    /// youtube.com/@handle). Facebook and LinkedIn profile URLs may use numeric/opaque ids, so they are not checked.
+    /// </summary>
+    public static readonly IReadOnlySet<SocialPlatform> HandleInUrlPlatforms = new HashSet<SocialPlatform>
+    {
+        SocialPlatform.Instagram, SocialPlatform.TikTok, SocialPlatform.X, SocialPlatform.Threads,
+        SocialPlatform.YouTube, SocialPlatform.Pinterest, SocialPlatform.Snapchat,
+    };
+
+    /// <summary>
+    /// True when the profile URL's path has a segment equal to the handle (case-insensitive, optional leading '@'),
+    /// or when the platform does not put handles in profile URLs. Assumes the URL already passed <see cref="ValidateProfileUrl"/>.
+    /// </summary>
+    public static bool ProfileUrlMatchesHandle(SocialPlatform platform, string url, string handle)
+    {
+        if (!HandleInUrlPlatforms.Contains(platform)) return true;
+        if (!Uri.TryCreate(url.Trim(), UriKind.Absolute, out var uri)) return false;
+        var normalized = Normalization.Handle(handle);
+        if (normalized.Length == 0) return false;
+        return uri.AbsolutePath.Split('/', StringSplitOptions.RemoveEmptyEntries)
+            .Select(segment => Uri.UnescapeDataString(segment).Trim().TrimStart('@'))
+            .Any(segment => string.Equals(segment, normalized, StringComparison.OrdinalIgnoreCase));
+    }
+
     /// <summary>Handle rules: 1–100 characters after stripping a leading '@'; no whitespace or URL characters.</summary>
     public static string? ValidateHandle(string? handle)
     {

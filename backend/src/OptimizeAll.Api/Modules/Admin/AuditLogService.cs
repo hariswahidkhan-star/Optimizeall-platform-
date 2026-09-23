@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Domain.Audit;
 using OptimizeAll.Domain.Identity;
+using OptimizeAll.Domain.Social;
+using OptimizeAll.Domain.Support;
 using OptimizeAll.Infrastructure.Persistence;
 
 namespace OptimizeAll.Api.Modules.Admin;
@@ -47,18 +49,38 @@ public sealed class AuditLogService(AppDbContext db)
         return new PagedResult<AuditLogDto>(page.Items.Select(ToDto).ToList(), page.Total, page.Page, page.PageSize);
     }
 
-    /// <summary>Most recent entries about a user or performed by them.</summary>
-    public async Task<List<AuditLogDto>> RecentForUserAsync(Guid userId, int take, CancellationToken ct)
+    /// <summary>
+    /// Most recent entries about a user: the user record itself and the user's own social accounts and support tickets.
+    /// Entries the user performed on other entities (actor-side) are included only when <paramref name="includeActorEntries"/>
+    /// is set, and IP address / correlation id only when <paramref name="includeNetworkDetails"/> is set; both are
+    /// <c>audit.view</c> data and must not leak through <c>users.view</c>.
+    /// </summary>
+    public async Task<List<AuditLogDto>> RecentForUserAsync(Guid userId, int take, bool includeActorEntries, bool includeNetworkDetails,
+        CancellationToken ct)
     {
         var id = userId.ToString();
-        var rows = await (from l in db.Set<AuditLog>().AsNoTracking()
-                          where (l.EntityType == nameof(User) && l.EntityId == id) || l.ActorUserId == userId
+        var accountIds = (await db.Set<SocialAccount>().AsNoTracking().Where(a => a.UserId == userId).Select(a => a.Id).ToListAsync(ct))
+            .Select(g => g.ToString()).ToList();
+        var ticketIds = (await db.Set<SupportTicket>().AsNoTracking().Where(t => t.UserId == userId).Select(t => t.Id).ToListAsync(ct))
+            .Select(g => g.ToString()).ToList();
+
+        var logs = db.Set<AuditLog>().AsNoTracking().Where(l =>
+            (l.EntityType == nameof(User) && l.EntityId == id) ||
+            (l.EntityType == nameof(SocialAccount) && accountIds.Contains(l.EntityId)) ||
+            (l.EntityType == nameof(SupportTicket) && ticketIds.Contains(l.EntityId)) ||
+            (includeActorEntries && l.ActorUserId == userId));
+
+        var rows = await (from l in logs
                           join u in db.Set<User>().AsNoTracking() on l.ActorUserId equals u.Id into actors
                           from u in actors.DefaultIfEmpty()
                           orderby l.Id descending
                           select new Row { Log = l, ActorEmail = u == null ? null : u.Email, ActorDisplayName = u == null ? null : u.DisplayName })
             .Take(take).ToListAsync(ct);
-        return rows.Select(ToDto).ToList();
+        return rows.Select(r =>
+        {
+            var dto = ToDto(r);
+            return includeNetworkDetails ? dto : dto with { IpAddress = null, CorrelationId = null };
+        }).ToList();
     }
 
     public async Task<FileContentResult> ExportCsvAsync(AuditLogQuery query, CancellationToken ct)

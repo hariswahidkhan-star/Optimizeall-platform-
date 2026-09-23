@@ -22,7 +22,7 @@ public sealed class MySocialAccountsController(ISocialAccountService social, ICu
     }
 
     /// <summary>
-    /// Edits a profile. Changing the handle, creation date or follower count of a Verified or PendingReview
+    /// Edits a profile. Changing the handle, profile link, creation date or follower count of a Verified or PendingReview
     /// profile resets it to Unverified (the response says so in <c>verificationReset</c> and <c>message</c>).
     /// </summary>
     [HttpPut("{id:guid}")]
@@ -54,6 +54,7 @@ public sealed class SocialAccountReviewController(ISocialAccountService social, 
     [HttpGet("{id:guid}")]
     public Task<ReviewSocialAccountDetailDto> Get(Guid id, CancellationToken ct) => social.ReviewGetAsync(id, ct);
 
+    /// <summary>Decides a PendingReview profile (409 <c>social.not_pending</c> otherwise). Staff can't review their own profiles.</summary>
     [HttpPost("{id:guid}/decision")]
     public Task<ReviewSocialAccountDetailDto> Decide(Guid id, SocialAccountDecisionRequest request, CancellationToken ct) =>
         social.DecideAsync(currentUser.Id, id, request, ct);
