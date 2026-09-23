@@ -2168,6 +2168,10 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
+                    b.Property<DateTime?>("InstructionsExportedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
                     b.Property<int>("ItemCount")
                         .HasColumnType("int");
 
@@ -2350,6 +2354,45 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         {
                             t.HasCheckConstraint("ck_payout_item_amount_positive", "`Amount` > 0");
                         });
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Payouts.PayoutItemEarning", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("EarningEntryId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("PaidAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("PayoutItemId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<decimal>("SettlementAmount")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("decimal(19,4)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EarningEntryId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("PayoutItemId", "EarningEntryId")
+                        .IsUnique();
+
+                    b.ToTable("payout_item_earnings", (string)null);
                 });
 
             modelBuilder.Entity("OptimizeAll.Domain.Payouts.PayoutSchedule", b =>
@@ -3410,6 +3453,15 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     b.HasOne("OptimizeAll.Domain.Identity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Payouts.PayoutItemEarning", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Payouts.PayoutItem", null)
+                        .WithMany()
+                        .HasForeignKey("PayoutItemId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

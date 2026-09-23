@@ -327,6 +327,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ExclusionsJson = table.Column<string>(type: "json", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    InstructionsExportedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
                     ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
@@ -1427,6 +1428,30 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "payout_item_earnings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    PayoutItemId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    EarningEntryId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    SettlementAmount = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: false),
+                    PaidAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_payout_item_earnings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_payout_item_earnings_payout_items_PayoutItemId",
+                        column: x => x.PayoutItemId,
+                        principalTable: "payout_items",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "support_messages",
                 columns: table => new
                 {
@@ -2062,6 +2087,22 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 columns: new[] { "UserId", "ReleasedAt" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_payout_item_earnings_EarningEntryId",
+                table: "payout_item_earnings",
+                column: "EarningEntryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_payout_item_earnings_PayoutItemId_EarningEntryId",
+                table: "payout_item_earnings",
+                columns: new[] { "PayoutItemId", "EarningEntryId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_payout_item_earnings_UserId",
+                table: "payout_item_earnings",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_payout_items_BatchId_UserId",
                 table: "payout_items",
                 columns: new[] { "BatchId", "UserId" },
@@ -2375,6 +2416,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "payout_holds");
+
+            migrationBuilder.DropTable(
+                name: "payout_item_earnings");
 
             migrationBuilder.DropTable(
                 name: "payout_profiles");
