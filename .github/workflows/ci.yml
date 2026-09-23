@@ -181,46 +181,35 @@ jobs:
             npx playwright install --with-deps chromium
           fi
 
-      - name: Start API (Development settings, Demo seed, fresh database)
-        env:
-          ASPNETCORE_ENVIRONMENT: Development
-          ASPNETCORE_URLS: http://localhost:5080
-          ConnectionStrings__Default: "Server=127.0.0.1;Port=3306;Database=optimizeall_e2e;User=root;Password=ci-root-password;"
-          Database__InitializationMode: Migrate
-          Database__Seed__0: Baseline
-          Database__Seed__1: Demo
-          RateLimiting__Enabled: "false"
-          Email__Mode: File
-          Email__PickupDirectory: ${{ runner.temp }}/e2e-mail
-          Email__AppBaseUrl: http://localhost:4173
-          Storage__RootPath: ${{ runner.temp }}/e2e-files
-        run: |
-          nohup dotnet run --project backend/src/OptimizeAll.Api -c Release --no-build --no-launch-profile \
-            > "$RUNNER_TEMP/api.log" 2>&1 &
-          for _ in $(seq 1 90); do
-            if curl -fsS http://localhost:5080/health/ready > /dev/null 2>&1; then echo "API ready"; exit 0; fi
-            sleep 2
-          done
-          echo "API did not become ready"; tail -n 100 "$RUNNER_TEMP/api.log"; exit 1
-
-      - name: Start web (vite preview, proxies /api and /t to :5080)
+      - name: Smoke suite (mocked API, vite preview on :4174)
         working-directory: frontend
+        env:
+          E2E_BASE_URL: http://localhost:4174
         run: |
-          nohup npx vite preview --port 4173 --strictPort > "$RUNNER_TEMP/web.log" 2>&1 &
+          nohup npx vite preview --port 4174 --strictPort > "$RUNNER_TEMP/web-smoke.log" 2>&1 &
+          web_pid=$!
           for _ in $(seq 1 30); do
-            if curl -fsS http://localhost:4173/ > /dev/null 2>&1; then echo "Web ready"; exit 0; fi
+            curl -fsS http://localhost:4174/ > /dev/null 2>&1 && break
             sleep 2
           done
-          echo "vite preview did not start"; cat "$RUNNER_TEMP/web.log"; exit 1
+          set +e
+          npm run e2e
+          code=$?
+          kill "$web_pid" 2>/dev/null
+          exit $code
 
-      - name: Run Playwright
-        working-directory: frontend
+      # Same as scripts/e2e-journeys.sh locally: fresh database oa_e2e_<timestamp>, API on :5099 (Development,
+      # Baseline seed only, file-mode email + dev mailbox, jobs off, bootstrap admin), `vite preview` on :4173
+      # proxying to it, E2E_SUITE=journeys on the desktop and mobile projects, teardown and Playwright's exit code.
+      - name: Full-stack journeys (scripts/e2e-journeys.sh)
         env:
-          PLAYWRIGHT_BASE_URL: http://localhost:4173
-          E2E_BASE_URL: http://localhost:4173
-          E2E_API_URL: http://localhost:5080
-          E2E_MAIL_DIR: ${{ runner.temp }}/e2e-mail
-        run: npm run e2e
+          DB_HOST: 127.0.0.1
+          DB_PORT: "3306"
+          DB_USER: root
+          DB_PASSWORD: ci-root-password
+          E2E_SKIP_BUILD: "1"
+          E2E_WORK_DIR: ${{ runner.temp }}/e2e
+        run: scripts/e2e-journeys.sh
 
       - name: Upload Playwright report
         if: failure()
@@ -239,8 +228,9 @@ jobs:
         with:
           name: e2e-server-logs
           path: |
-            ${{ runner.temp }}/api.log
-            ${{ runner.temp }}/web.log
+            ${{ runner.temp }}/e2e/api.log
+            ${{ runner.temp }}/e2e/web.log
+            ${{ runner.temp }}/web-smoke.log
           retention-days: 7
           if-no-files-found: ignore
 
