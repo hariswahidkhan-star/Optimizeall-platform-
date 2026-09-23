@@ -1,4 +1,5 @@
 import {
+  Award,
   BarChart3,
   CalendarDays,
   FlaskConical,
@@ -10,9 +11,20 @@ import {
 } from 'lucide-react';
 import type { RouteObject } from 'react-router-dom';
 import type { PortalNavItem } from '@/app/portalTypes';
-import { PendingSection } from '@/components/PendingSection';
-import { PortalOverview } from '@/components/PortalOverview';
 import { Permissions } from '@/lib/auth/permissions';
+import { AchievementsPage } from './achievements/AchievementsPage';
+import { AnalyticsPage, CampaignAnalyticsPage } from './analytics/AnalyticsPage';
+import { CalendarPage } from './calendar/CalendarPage';
+import { CampaignEditorPage } from './editor/CampaignEditorPage';
+import { ExperimentResultsPage } from './experiments/ExperimentResultsPage';
+import { ExperimentsPage } from './experiments/ExperimentsPage';
+import { InvitationsPage } from './invitations/InvitationsPage';
+import { CampaignsListPage } from './list/CampaignsListPage';
+import { OverviewPage } from './overview/OverviewPage';
+import { ReferralsPage } from './referrals/ReferralsPage';
+import { TemplatesPage } from './templates/TemplatesPage';
+
+const marketing = { anyOf: [Permissions.MarketingManage] };
 
 /** Campaign manager portal (/manage). Paths are relative to the portal base. */
 export const nav: PortalNavItem[] = [
@@ -28,33 +40,35 @@ export const nav: PortalNavItem[] = [
     label: 'Templates',
     icon: LayoutTemplate,
     description: 'Reusable approved content and captions.',
+    requires: marketing,
   },
   {
     to: 'calendar',
     label: 'Content calendar',
     icon: CalendarDays,
     description: 'What goes live when, across campaigns.',
+    requires: marketing,
   },
   {
     to: 'invitations',
     label: 'Invitations & landing pages',
     icon: Link2,
     description: 'Invite codes and campaign landing pages.',
-    requires: { anyOf: [Permissions.MarketingManage] },
+    requires: marketing,
   },
   {
     to: 'experiments',
     label: 'Experiments',
     icon: FlaskConical,
     description: 'A/B tests on landing pages and messaging.',
-    requires: { anyOf: [Permissions.MarketingManage] },
+    requires: marketing,
   },
   {
     to: 'referrals',
     label: 'Referrals',
     icon: Users,
     description: 'Referral programme rules and performance.',
-    requires: { anyOf: [Permissions.MarketingManage] },
+    requires: marketing,
   },
   {
     to: 'analytics',
@@ -63,38 +77,42 @@ export const nav: PortalNavItem[] = [
     description: 'Reach, participation and cost per approved post.',
     requires: { anyOf: [Permissions.AnalyticsView] },
   },
+  {
+    to: 'achievements',
+    label: 'Achievements',
+    icon: Award,
+    description: 'Badges participants earn for milestones.',
+    requires: marketing,
+  },
 ];
 
 export const routes: RouteObject[] = [
-  { index: true, element: <PortalOverview /> },
+  { index: true, element: <OverviewPage /> },
   {
     path: 'campaigns',
-    element: <PendingSection title="Campaigns" description="All campaigns and their status." />,
+    children: [
+      { index: true, element: <CampaignsListPage /> },
+      { path: 'new', element: <CampaignEditorPage /> },
+      { path: ':campaignId', element: <CampaignEditorPage /> },
+    ],
   },
-  {
-    path: 'templates',
-    element: <PendingSection title="Templates" description="Approved content templates." />,
-  },
-  {
-    path: 'calendar',
-    element: <PendingSection title="Content calendar" description="Scheduled campaign content by date." />,
-  },
-  {
-    path: 'invitations',
-    element: (
-      <PendingSection title="Invitations & landing pages" description="Invite codes and landing pages." />
-    ),
-  },
+  { path: 'templates', element: <TemplatesPage /> },
+  { path: 'calendar', element: <CalendarPage /> },
+  { path: 'invitations', element: <InvitationsPage /> },
   {
     path: 'experiments',
-    element: <PendingSection title="Experiments" description="Running and completed experiments." />,
+    children: [
+      { index: true, element: <ExperimentsPage /> },
+      { path: ':experimentId', element: <ExperimentResultsPage /> },
+    ],
   },
-  {
-    path: 'referrals',
-    element: <PendingSection title="Referrals" description="Referral programme settings and results." />,
-  },
+  { path: 'referrals', element: <ReferralsPage /> },
   {
     path: 'analytics',
-    element: <PendingSection title="Analytics" description="Campaign performance." />,
+    children: [
+      { index: true, element: <AnalyticsPage /> },
+      { path: 'campaigns/:campaignId', element: <CampaignAnalyticsPage /> },
+    ],
   },
+  { path: 'achievements', element: <AchievementsPage /> },
 ];
