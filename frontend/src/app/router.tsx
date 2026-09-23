@@ -15,6 +15,8 @@ import { AuthProvider } from '@/lib/auth/AuthProvider';
 import { RedirectIfAuthenticated, RequireAuth, RequirePermission } from './guards';
 import { AuthLayout } from './layouts/AuthLayout';
 import { PortalLayout } from './layouts/PortalLayout';
+import { publicRoutes as billingPublicRoutes } from '@/features/agency/billing/publicRoutes';
+import { publicRoutes as crmPublicRoutes } from '@/features/agency/crm/publicRoutes';
 import { PublicLayout } from './layouts/PublicLayout';
 import { portals } from './portals';
 import type { PortalRouteHandle } from './portalTypes';
@@ -61,6 +63,9 @@ export const routes: RouteObject[] = [
           // Invitation links (backend MarketingUrls.InvitationLink) and shareable public campaign pages.
           { path: 'join/:code', element: <JoinPage /> },
           { path: 'c/:slug', element: <CampaignLandingPage /> },
+          // Tokenized proposal (/p/:token) and invoice (/i/:token) links sent to clients by email.
+          ...crmPublicRoutes,
+          ...billingPublicRoutes,
           ...(showDesignSystem
             ? [
                 {

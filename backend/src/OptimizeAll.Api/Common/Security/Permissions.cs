@@ -132,6 +132,8 @@ public static class RolePermissions
             Permissions.PayoutsPrepare, Permissions.PayoutsFinalize, Permissions.PayoutsRecordPayment, Permissions.PayoutsHold,
             Permissions.PayoutSettingsEdit, Permissions.RewardsApproveBonus, Permissions.SubmissionsReverse,
             Permissions.AnalyticsView, Permissions.UsersView, Permissions.AuditView,
+            Permissions.BillingView, Permissions.BillingManage, Permissions.BillingSettings, Permissions.ClientsView,
+            Permissions.TimeViewAll,
         },
         [Role.Admin] = Permissions.All.Where(p => p != Permissions.ClientPortal && p != Permissions.ParticipantPortal)
             .Append(Permissions.ParticipantPortal).ToArray(),
