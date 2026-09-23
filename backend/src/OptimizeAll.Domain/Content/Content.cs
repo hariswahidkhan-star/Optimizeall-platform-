@@ -16,7 +16,7 @@ public enum ContentAudience
     Inactive,
 }
 
-public class HomepageBanner : AuditedEntity
+public class HomepageBanner : AuditedEntity, IConcurrencyStamped
 {
     public string Title { get; set; } = string.Empty;
     public string? Body { get; set; }
@@ -30,6 +30,7 @@ public class HomepageBanner : AuditedEntity
     public DateTime? EndsAt { get; set; }
     public int SortOrder { get; set; }
     public bool IsActive { get; set; } = true;
+    public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
 }
 
 public enum AnnouncementSeverity
@@ -40,7 +41,7 @@ public enum AnnouncementSeverity
     Critical,
 }
 
-public class Announcement : AuditedEntity
+public class Announcement : AuditedEntity, IConcurrencyStamped
 {
     public string Title { get; set; } = string.Empty;
     public string Body { get; set; } = string.Empty;
@@ -49,15 +50,17 @@ public class Announcement : AuditedEntity
     public DateTime PublishAt { get; set; }
     public DateTime? ExpiresAt { get; set; }
     public bool IsActive { get; set; } = true;
+    public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
 }
 
-public class FaqItem : AuditedEntity
+public class FaqItem : AuditedEntity, IConcurrencyStamped
 {
     public string Question { get; set; } = string.Empty;
     public string Answer { get; set; } = string.Empty;
     public string Category { get; set; } = "General";
     public int SortOrder { get; set; }
     public bool IsPublished { get; set; } = true;
+    public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
 }
 
 /// <summary>How the backend decides an onboarding step is complete for a participant.</summary>
@@ -74,7 +77,7 @@ public enum OnboardingCompletionRule
     FirstApprovedSubmission,
 }
 
-public class OnboardingStep : AuditedEntity
+public class OnboardingStep : AuditedEntity, IConcurrencyStamped
 {
     public string Key { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
@@ -84,6 +87,7 @@ public class OnboardingStep : AuditedEntity
     public OnboardingCompletionRule CompletionRule { get; set; }
     public int SortOrder { get; set; }
     public bool IsActive { get; set; } = true;
+    public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
 }
 
 /// <summary>Records steps with <see cref="OnboardingCompletionRule.Manual"/> the participant dismissed.</summary>
