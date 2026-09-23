@@ -1,0 +1,16 @@
+/* Client portal SEO overview. `cseo-` prefix; design tokens only. */
+
+.cseo-stats {
+  --grid-min: 11rem;
+  margin-block-end: var(--space-4);
+}
+
+.cseo-up {
+  color: var(--success-fg);
+  font-weight: var(--weight-medium);
+}
+
+.cseo-down {
+  color: var(--danger-fg);
+  font-weight: var(--weight-medium);
+}
