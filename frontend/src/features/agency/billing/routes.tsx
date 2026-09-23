@@ -1,14 +1,16 @@
+import { lazyPage } from '@/app/lazyPage';
 import { FileText, Wallet } from 'lucide-react';
 import type { RouteObject } from 'react-router-dom';
 import type { PortalNavItem } from '@/app/portalTypes';
 import { type PermissionRequirement, Permissions } from '@/lib/auth/permissions';
-import { BillingOverviewPage } from './pages/BillingOverviewPage';
-import { BillingSettingsPage } from './pages/BillingSettingsPage';
-import { InvoiceDetailPage } from './pages/InvoiceDetailPage';
-import { InvoiceEditorPage } from './pages/InvoiceEditorPage';
-import { InvoicesPage } from './pages/InvoicesPage';
-import { PaymentsPage } from './pages/PaymentsPage';
-import { ReportsPage } from './pages/ReportsPage';
+
+const BillingOverviewPage = lazyPage(() => import('./pages/BillingOverviewPage'), 'BillingOverviewPage');
+const BillingSettingsPage = lazyPage(() => import('./pages/BillingSettingsPage'), 'BillingSettingsPage');
+const InvoiceDetailPage = lazyPage(() => import('./pages/InvoiceDetailPage'), 'InvoiceDetailPage');
+const InvoiceEditorPage = lazyPage(() => import('./pages/InvoiceEditorPage'), 'InvoiceEditorPage');
+const InvoicesPage = lazyPage(() => import('./pages/InvoicesPage'), 'InvoicesPage');
+const PaymentsPage = lazyPage(() => import('./pages/PaymentsPage'), 'PaymentsPage');
+const ReportsPage = lazyPage(() => import('./pages/ReportsPage'), 'ReportsPage');
 
 /**
  * Agency portal area: client billing (invoices, payments, credit notes, reports, settings). Paths are relative to
@@ -18,8 +20,20 @@ import { ReportsPage } from './pages/ReportsPage';
 const requires: PermissionRequirement = { anyOf: [Permissions.BillingView] };
 
 export const nav: PortalNavItem[] = [
-  { to: 'billing', label: 'Billing', icon: Wallet, description: 'Receivables, overdue invoices, MRR and collections.', requires },
-  { to: 'billing/invoices', label: 'Invoices', icon: FileText, description: 'Draft, issue, send and collect client invoices.', requires },
+  {
+    to: 'billing',
+    label: 'Billing',
+    icon: Wallet,
+    description: 'Receivables, overdue invoices, MRR and collections.',
+    requires,
+  },
+  {
+    to: 'billing/invoices',
+    label: 'Invoices',
+    icon: FileText,
+    description: 'Draft, issue, send and collect client invoices.',
+    requires,
+  },
 ];
 
 export const routes: RouteObject[] = [

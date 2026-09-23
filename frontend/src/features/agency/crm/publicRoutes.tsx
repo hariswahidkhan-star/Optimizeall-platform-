@@ -1,5 +1,7 @@
+import { lazyPage } from '@/app/lazyPage';
 import type { RouteObject } from 'react-router-dom';
-import { PublicProposalPage } from './PublicProposalPage';
+
+const PublicProposalPage = lazyPage(() => import('./PublicProposalPage'), 'PublicProposalPage');
 
 /**
  * Public (anonymous) CRM pages. Wire into `app/router.tsx` as children of the `PublicLayout` route:

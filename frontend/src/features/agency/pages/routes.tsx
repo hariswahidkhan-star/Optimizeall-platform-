@@ -1,13 +1,15 @@
+import { lazyPage } from '@/app/lazyPage';
 import { FileText, LayoutTemplate } from 'lucide-react';
 import type { RouteObject } from 'react-router-dom';
 import type { PortalNavItem } from '@/app/portalTypes';
 import { type PermissionRequirement, Permissions } from '@/lib/auth/permissions';
-import { FormBuilderPage } from './FormBuilderPage';
-import { FormsListPage } from './FormsListPage';
-import { LandingPagesListPage } from './LandingPagesListPage';
-import { PageBuilderPage } from './PageBuilderPage';
-import { SubmissionsPage } from './SubmissionsPage';
-import { TemplatesPage } from './TemplatesPage';
+
+const FormBuilderPage = lazyPage(() => import('./FormBuilderPage'), 'FormBuilderPage');
+const FormsListPage = lazyPage(() => import('./FormsListPage'), 'FormsListPage');
+const LandingPagesListPage = lazyPage(() => import('./LandingPagesListPage'), 'LandingPagesListPage');
+const PageBuilderPage = lazyPage(() => import('./PageBuilderPage'), 'PageBuilderPage');
+const SubmissionsPage = lazyPage(() => import('./SubmissionsPage'), 'SubmissionsPage');
+const TemplatesPage = lazyPage(() => import('./TemplatesPage'), 'TemplatesPage');
 
 /** Every page in this area calls forms.manage APIs. */
 const forms: PermissionRequirement = { anyOf: [Permissions.FormsManage] };

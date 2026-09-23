@@ -1,16 +1,21 @@
+import { lazyPage } from '@/app/lazyPage';
 import { BadgeCheck, Inbox, LayoutDashboard, Radar, Scale } from 'lucide-react';
 import type { RouteObject } from 'react-router-dom';
 import type { PortalNavItem } from '@/app/portalTypes';
 import { type PermissionRequirement, Permissions } from '@/lib/auth/permissions';
-import { AppealDetailPage } from './pages/AppealDetailPage';
-import { AppealsPage } from './pages/AppealsPage';
-import { LiveChecksPage } from './pages/LiveChecksPage';
-import { OverviewPage } from './pages/OverviewPage';
-import { QueuePage } from './pages/QueuePage';
-import { SocialAccountPage } from './pages/SocialAccountPage';
-import { SocialVerificationPage } from './pages/SocialVerificationPage';
-import { WorkspacePage } from './pages/WorkspacePage';
 import './reviewer.css';
+
+const AppealDetailPage = lazyPage(() => import('./pages/AppealDetailPage'), 'AppealDetailPage');
+const AppealsPage = lazyPage(() => import('./pages/AppealsPage'), 'AppealsPage');
+const LiveChecksPage = lazyPage(() => import('./pages/LiveChecksPage'), 'LiveChecksPage');
+const OverviewPage = lazyPage(() => import('./pages/OverviewPage'), 'OverviewPage');
+const QueuePage = lazyPage(() => import('./pages/QueuePage'), 'QueuePage');
+const SocialAccountPage = lazyPage(() => import('./pages/SocialAccountPage'), 'SocialAccountPage');
+const SocialVerificationPage = lazyPage(
+  () => import('./pages/SocialVerificationPage'),
+  'SocialVerificationPage',
+);
+const WorkspacePage = lazyPage(() => import('./pages/WorkspacePage'), 'WorkspacePage');
 
 /** Portal entry (the queue and live checks call submissions.review APIs). */
 export const portalRequires: PermissionRequirement = { anyOf: [Permissions.SubmissionsReview] };

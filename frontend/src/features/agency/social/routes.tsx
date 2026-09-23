@@ -1,3 +1,4 @@
+import { lazyPage } from '@/app/lazyPage';
 import {
   BarChart3,
   CalendarDays,
@@ -13,29 +14,94 @@ import {
 import type { RouteObject } from 'react-router-dom';
 import type { PortalNavItem } from '@/app/portalTypes';
 import { type PermissionRequirement, Permissions } from '@/lib/auth/permissions';
-import { AnalyticsPage } from './AnalyticsPage';
-import { CalendarPage } from './CalendarPage';
-import { ComposerPage } from './ComposerPage';
-import { CompetitorsPage, InboxPage, ListeningPage } from './EngagementPages';
-import { LibraryPage } from './LibraryPage';
-import { ConnectCallbackPage, ProfilesPage } from './ProfilesPage';
-import { ApprovalsPage, PublishingPage } from './WorkflowPages';
+
+const AnalyticsPage = lazyPage(() => import('./AnalyticsPage'), 'AnalyticsPage');
+const CalendarPage = lazyPage(() => import('./CalendarPage'), 'CalendarPage');
+const ComposerPage = lazyPage(() => import('./ComposerPage'), 'ComposerPage');
+const CompetitorsPage = lazyPage(() => import('./EngagementPages'), 'CompetitorsPage');
+const InboxPage = lazyPage(() => import('./EngagementPages'), 'InboxPage');
+const ListeningPage = lazyPage(() => import('./EngagementPages'), 'ListeningPage');
+const LibraryPage = lazyPage(() => import('./LibraryPage'), 'LibraryPage');
+const ConnectCallbackPage = lazyPage(() => import('./ProfilesPage'), 'ConnectCallbackPage');
+const ProfilesPage = lazyPage(() => import('./ProfilesPage'), 'ProfilesPage');
+const ApprovalsPage = lazyPage(() => import('./WorkflowPages'), 'ApprovalsPage');
+const PublishingPage = lazyPage(() => import('./WorkflowPages'), 'PublishingPage');
 
 /** Every social page calls social.manage APIs; approve/schedule/publish actions additionally need social.publish (checked per action). */
 const social: PermissionRequirement = { anyOf: [Permissions.SocialManage] };
 
 /** Agency portal area: Social media management. Paths are relative to /agency. */
 export const nav: PortalNavItem[] = [
-  { to: 'social', label: 'Social calendar', icon: CalendarDays, description: 'Plan, approve and schedule posts across clients.', requires: social },
-  { to: 'social/compose', label: 'Compose', icon: PenSquare, description: 'Write a post with per-network variants and previews.', requires: social },
-  { to: 'social/approvals', label: 'Social approvals', icon: ClipboardCheck, description: 'Posts awaiting internal or client approval.', requires: social },
-  { to: 'social/publishing', label: 'Publishing log', icon: Send, description: 'Scheduled, published and failed posts.', requires: social },
-  { to: 'social/profiles', label: 'Profiles & connections', icon: Plug, description: 'Brand profiles, OAuth connections and queue slots.', requires: social },
-  { to: 'social/library', label: 'Social library', icon: Images, description: 'Media, hashtag sets, snippets and UTM campaigns.', requires: social },
-  { to: 'social/analytics', label: 'Social analytics', icon: BarChart3, description: 'KPIs, top posts and best times, with sources.', requires: social },
-  { to: 'social/listening', label: 'Listening', icon: Ear, description: 'Keywords, hashtags and competitor mentions.', requires: social },
-  { to: 'social/inbox', label: 'Social inbox', icon: Inbox, description: 'Comments and messages to answer.', requires: social },
-  { to: 'social/competitors', label: 'Competitors', icon: Trophy, description: 'Benchmark competitor profiles.', requires: social },
+  {
+    to: 'social',
+    label: 'Social calendar',
+    icon: CalendarDays,
+    description: 'Plan, approve and schedule posts across clients.',
+    requires: social,
+  },
+  {
+    to: 'social/compose',
+    label: 'Compose',
+    icon: PenSquare,
+    description: 'Write a post with per-network variants and previews.',
+    requires: social,
+  },
+  {
+    to: 'social/approvals',
+    label: 'Social approvals',
+    icon: ClipboardCheck,
+    description: 'Posts awaiting internal or client approval.',
+    requires: social,
+  },
+  {
+    to: 'social/publishing',
+    label: 'Publishing log',
+    icon: Send,
+    description: 'Scheduled, published and failed posts.',
+    requires: social,
+  },
+  {
+    to: 'social/profiles',
+    label: 'Profiles & connections',
+    icon: Plug,
+    description: 'Brand profiles, OAuth connections and queue slots.',
+    requires: social,
+  },
+  {
+    to: 'social/library',
+    label: 'Social library',
+    icon: Images,
+    description: 'Media, hashtag sets, snippets and UTM campaigns.',
+    requires: social,
+  },
+  {
+    to: 'social/analytics',
+    label: 'Social analytics',
+    icon: BarChart3,
+    description: 'KPIs, top posts and best times, with sources.',
+    requires: social,
+  },
+  {
+    to: 'social/listening',
+    label: 'Listening',
+    icon: Ear,
+    description: 'Keywords, hashtags and competitor mentions.',
+    requires: social,
+  },
+  {
+    to: 'social/inbox',
+    label: 'Social inbox',
+    icon: Inbox,
+    description: 'Comments and messages to answer.',
+    requires: social,
+  },
+  {
+    to: 'social/competitors',
+    label: 'Competitors',
+    icon: Trophy,
+    description: 'Benchmark competitor profiles.',
+    requires: social,
+  },
 ];
 
 export const routes: RouteObject[] = [

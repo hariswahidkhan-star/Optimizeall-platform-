@@ -1,3 +1,4 @@
+import { lazyPage } from '@/app/lazyPage';
 import {
   Award,
   BarChart3,
@@ -12,17 +13,22 @@ import {
 import type { RouteObject } from 'react-router-dom';
 import type { PortalNavItem } from '@/app/portalTypes';
 import { type PermissionRequirement, Permissions } from '@/lib/auth/permissions';
-import { AchievementsPage } from './achievements/AchievementsPage';
-import { AnalyticsPage, CampaignAnalyticsPage } from './analytics/AnalyticsPage';
-import { CalendarPage } from './calendar/CalendarPage';
-import { CampaignEditorPage } from './editor/CampaignEditorPage';
-import { ExperimentResultsPage } from './experiments/ExperimentResultsPage';
-import { ExperimentsPage } from './experiments/ExperimentsPage';
-import { InvitationsPage } from './invitations/InvitationsPage';
-import { CampaignsListPage } from './list/CampaignsListPage';
-import { OverviewPage } from './overview/OverviewPage';
-import { ReferralsPage } from './referrals/ReferralsPage';
-import { TemplatesPage } from './templates/TemplatesPage';
+
+const AchievementsPage = lazyPage(() => import('./achievements/AchievementsPage'), 'AchievementsPage');
+const AnalyticsPage = lazyPage(() => import('./analytics/AnalyticsPage'), 'AnalyticsPage');
+const CampaignAnalyticsPage = lazyPage(() => import('./analytics/AnalyticsPage'), 'CampaignAnalyticsPage');
+const CalendarPage = lazyPage(() => import('./calendar/CalendarPage'), 'CalendarPage');
+const CampaignEditorPage = lazyPage(() => import('./editor/CampaignEditorPage'), 'CampaignEditorPage');
+const ExperimentResultsPage = lazyPage(
+  () => import('./experiments/ExperimentResultsPage'),
+  'ExperimentResultsPage',
+);
+const ExperimentsPage = lazyPage(() => import('./experiments/ExperimentsPage'), 'ExperimentsPage');
+const InvitationsPage = lazyPage(() => import('./invitations/InvitationsPage'), 'InvitationsPage');
+const CampaignsListPage = lazyPage(() => import('./list/CampaignsListPage'), 'CampaignsListPage');
+const OverviewPage = lazyPage(() => import('./overview/OverviewPage'), 'OverviewPage');
+const ReferralsPage = lazyPage(() => import('./referrals/ReferralsPage'), 'ReferralsPage');
+const TemplatesPage = lazyPage(() => import('./templates/TemplatesPage'), 'TemplatesPage');
 
 /** Portal entry (the campaign pages call campaigns.manage APIs). */
 export const portalRequires: PermissionRequirement = { anyOf: [Permissions.CampaignsManage] };

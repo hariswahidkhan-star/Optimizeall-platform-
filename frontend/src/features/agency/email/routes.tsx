@@ -1,21 +1,27 @@
+import { lazyPage } from '@/app/lazyPage';
 import { Mail, MessageSquareText } from 'lucide-react';
 import type { RouteObject } from 'react-router-dom';
 import type { PortalNavItem } from '@/app/portalTypes';
 import { type PermissionRequirement, Permissions } from '@/lib/auth/permissions';
-import { ListDetailPage } from './audience/ListDetailPage';
-import { ListsPage } from './audience/ListsPage';
-import { SubscriberPage } from './audience/SubscriberPage';
-import { AutomationEditorPage } from './automations/AutomationEditorPage';
-import { AutomationsPage } from './automations/AutomationsPage';
 import { CampaignEditorPage } from './campaigns/CampaignEditorPage';
 import { CampaignReportPage } from './campaigns/CampaignReportPage';
 import { CampaignsPage } from './campaigns/CampaignsPage';
-import { EmailLayout } from './EmailLayout';
-import { EmailOverviewPage } from './overview/EmailOverviewPage';
-import { SegmentEditorPage, SegmentsPage } from './segments/SegmentPages';
-import { EmailSettingsPage } from './settings/EmailSettingsPage';
-import { TemplateEditorPage } from './templates/TemplateEditorPage';
-import { TemplatesPage } from './templates/TemplatesPage';
+
+const ListDetailPage = lazyPage(() => import('./audience/ListDetailPage'), 'ListDetailPage');
+const ListsPage = lazyPage(() => import('./audience/ListsPage'), 'ListsPage');
+const SubscriberPage = lazyPage(() => import('./audience/SubscriberPage'), 'SubscriberPage');
+const AutomationEditorPage = lazyPage(
+  () => import('./automations/AutomationEditorPage'),
+  'AutomationEditorPage',
+);
+const AutomationsPage = lazyPage(() => import('./automations/AutomationsPage'), 'AutomationsPage');
+const EmailLayout = lazyPage(() => import('./EmailLayout'), 'EmailLayout');
+const EmailOverviewPage = lazyPage(() => import('./overview/EmailOverviewPage'), 'EmailOverviewPage');
+const SegmentEditorPage = lazyPage(() => import('./segments/SegmentPages'), 'SegmentEditorPage');
+const SegmentsPage = lazyPage(() => import('./segments/SegmentPages'), 'SegmentsPage');
+const EmailSettingsPage = lazyPage(() => import('./settings/EmailSettingsPage'), 'EmailSettingsPage');
+const TemplateEditorPage = lazyPage(() => import('./templates/TemplateEditorPage'), 'TemplateEditorPage');
+const TemplatesPage = lazyPage(() => import('./templates/TemplatesPage'), 'TemplatesPage');
 
 /**
  * Agency portal area: Email & SMS marketing. Paths are relative to /agency. Everything lives under two top-level

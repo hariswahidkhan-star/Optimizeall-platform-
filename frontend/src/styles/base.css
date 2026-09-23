@@ -278,3 +278,10 @@ hr {
 .ui-link:hover {
   color: var(--color-link-hover);
 }
+
+/* Placeholder while a code-split page downloads (app/lazyPage.tsx). */
+.lazy-page-loading {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-8);
+}

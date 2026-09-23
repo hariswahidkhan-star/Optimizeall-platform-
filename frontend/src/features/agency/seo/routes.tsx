@@ -1,11 +1,13 @@
+import { lazyPage } from '@/app/lazyPage';
 import { Search } from 'lucide-react';
 import type { RouteObject } from 'react-router-dom';
 import type { PortalNavItem } from '@/app/portalTypes';
 import { type PermissionRequirement, Permissions } from '@/lib/auth/permissions';
-import { AuditResultsPage } from './AuditResultsPage';
-import { OnPageAnalyzerPage } from './OnPageAnalyzerPage';
-import { SeoSitePage } from './SeoSitePage';
-import { SeoSitesPage } from './SeoSitesPage';
+
+const AuditResultsPage = lazyPage(() => import('./AuditResultsPage'), 'AuditResultsPage');
+const OnPageAnalyzerPage = lazyPage(() => import('./OnPageAnalyzerPage'), 'OnPageAnalyzerPage');
+const SeoSitePage = lazyPage(() => import('./SeoSitePage'), 'SeoSitePage');
+const SeoSitesPage = lazyPage(() => import('./SeoSitesPage'), 'SeoSitesPage');
 
 /** Every SEO page calls seo.manage APIs. */
 const seo: PermissionRequirement = { anyOf: [Permissions.SeoManage] };

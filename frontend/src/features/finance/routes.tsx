@@ -1,3 +1,4 @@
+import { lazyPage } from '@/app/lazyPage';
 import {
   BookOpenText,
   CalendarClock,
@@ -11,15 +12,16 @@ import type { RouteObject } from 'react-router-dom';
 import type { PortalNavItem } from '@/app/portalTypes';
 import { type PermissionRequirement, Permissions } from '@/lib/auth/permissions';
 import { BatchReviewPage } from './batch/BatchReviewPage';
-import { LedgerPage } from './ledger/LedgerPage';
-import { UserBalancePage } from './ledger/UserBalancePage';
-import { ApprovalsPage } from './pages/ApprovalsPage';
-import { BatchesPage } from './pages/BatchesPage';
-import { ExchangeRatesPage } from './pages/ExchangeRatesPage';
-import { HoldsPage } from './pages/HoldsPage';
-import { OverviewPage } from './pages/OverviewPage';
-import { SchedulePage } from './pages/SchedulePage';
 import './finance.css';
+
+const LedgerPage = lazyPage(() => import('./ledger/LedgerPage'), 'LedgerPage');
+const UserBalancePage = lazyPage(() => import('./ledger/UserBalancePage'), 'UserBalancePage');
+const ApprovalsPage = lazyPage(() => import('./pages/ApprovalsPage'), 'ApprovalsPage');
+const BatchesPage = lazyPage(() => import('./pages/BatchesPage'), 'BatchesPage');
+const ExchangeRatesPage = lazyPage(() => import('./pages/ExchangeRatesPage'), 'ExchangeRatesPage');
+const HoldsPage = lazyPage(() => import('./pages/HoldsPage'), 'HoldsPage');
+const OverviewPage = lazyPage(() => import('./pages/OverviewPage'), 'OverviewPage');
+const SchedulePage = lazyPage(() => import('./pages/SchedulePage'), 'SchedulePage');
 
 /**
  * Finance portal (/finance). Paths are relative to the portal base. Every section declares the permission of the API

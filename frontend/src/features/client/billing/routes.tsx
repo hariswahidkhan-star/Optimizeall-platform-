@@ -1,8 +1,12 @@
+import { lazyPage } from '@/app/lazyPage';
 import { Receipt } from 'lucide-react';
 import type { RouteObject } from 'react-router-dom';
 import type { PortalNavItem } from '@/app/portalTypes';
 import { Permissions } from '@/lib/auth/permissions';
-import { ClientBillingPage, ClientInvoicePage, ClientProposalPage } from './ClientBillingPages';
+
+const ClientBillingPage = lazyPage(() => import('./ClientBillingPages'), 'ClientBillingPage');
+const ClientInvoicePage = lazyPage(() => import('./ClientBillingPages'), 'ClientInvoicePage');
+const ClientProposalPage = lazyPage(() => import('./ClientBillingPages'), 'ClientProposalPage');
 
 /**
  * Client portal area (billing). Paths are relative to /client. Every client user holds `client.portal`; the API further
@@ -11,7 +15,13 @@ import { ClientBillingPage, ClientInvoicePage, ClientProposalPage } from './Clie
 const requires = { anyOf: [Permissions.ClientPortal] };
 
 export const nav: PortalNavItem[] = [
-  { to: 'billing', label: 'Billing', icon: Receipt, description: 'Invoices, proposals to review, contracts and your statement.', requires },
+  {
+    to: 'billing',
+    label: 'Billing',
+    icon: Receipt,
+    description: 'Invoices, proposals to review, contracts and your statement.',
+    requires,
+  },
 ];
 
 export const routes: RouteObject[] = [

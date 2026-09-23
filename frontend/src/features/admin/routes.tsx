@@ -1,3 +1,4 @@
+import { lazyPage } from '@/app/lazyPage';
 import {
   BarChart3,
   Cog,
@@ -13,18 +14,19 @@ import type { ReactElement } from 'react';
 import type { RouteObject } from 'react-router-dom';
 import type { PortalNavItem } from '@/app/portalTypes';
 import { type PermissionRequirement, Permissions } from '@/lib/auth/permissions';
-import { AnalyticsPage } from './analytics/AnalyticsPage';
-import { AuditLogPage } from './audit/AuditLogPage';
-import { CategoriesPage } from './categories/CategoriesPage';
-import { ContentPage } from './content/ContentPage';
-import { JobsPage } from './jobs/JobsPage';
-import { OverviewPage } from './OverviewPage';
-import { SettingsPage } from './settings/SettingsPage';
-import { TicketDetailPage } from './support/TicketDetailPage';
-import { TicketsPage } from './support/TicketsPage';
-import { UserDetailPage } from './users/UserDetailPage';
-import { UsersPage } from './users/UsersPage';
 import './admin.css';
+
+const AnalyticsPage = lazyPage(() => import('./analytics/AnalyticsPage'), 'AnalyticsPage');
+const AuditLogPage = lazyPage(() => import('./audit/AuditLogPage'), 'AuditLogPage');
+const CategoriesPage = lazyPage(() => import('./categories/CategoriesPage'), 'CategoriesPage');
+const ContentPage = lazyPage(() => import('./content/ContentPage'), 'ContentPage');
+const JobsPage = lazyPage(() => import('./jobs/JobsPage'), 'JobsPage');
+const OverviewPage = lazyPage(() => import('./OverviewPage'), 'OverviewPage');
+const SettingsPage = lazyPage(() => import('./settings/SettingsPage'), 'SettingsPage');
+const TicketDetailPage = lazyPage(() => import('./support/TicketDetailPage'), 'TicketDetailPage');
+const TicketsPage = lazyPage(() => import('./support/TicketsPage'), 'TicketsPage');
+const UserDetailPage = lazyPage(() => import('./users/UserDetailPage'), 'UserDetailPage');
+const UsersPage = lazyPage(() => import('./users/UsersPage'), 'UsersPage');
 
 /**
  * Admin portal (/admin). The portal is open to several staff roles, so every section declares its own permission

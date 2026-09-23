@@ -1,19 +1,30 @@
-import { BarChart3, FileCheck2, FolderKanban, Home, MessagesSquare, NotebookPen, Palette, Smile, Users } from 'lucide-react';
+import { lazyPage } from '@/app/lazyPage';
+import {
+  BarChart3,
+  FileCheck2,
+  FolderKanban,
+  Home,
+  MessagesSquare,
+  NotebookPen,
+  Palette,
+  Smile,
+  Users,
+} from 'lucide-react';
 import type { RouteObject } from 'react-router-dom';
 import type { PortalNavItem } from '@/app/portalTypes';
-import { ApprovalDetailPage, ApprovalsPage } from './ApprovalsPages';
-import { ClientHomePage } from './ClientHomePage';
-import {
-  ClientBrandKitPage,
-  ClientBriefsPage,
-  ClientMessagesPage,
-  ClientProjectPage,
-  ClientProjectsPage,
-  ClientReportPage,
-  ClientReportsPage,
-  ClientTeamPage,
-} from './ClientPages';
-import { FeedbackPage } from './FeedbackPage';
+
+const ApprovalDetailPage = lazyPage(() => import('./ApprovalsPages'), 'ApprovalDetailPage');
+const ApprovalsPage = lazyPage(() => import('./ApprovalsPages'), 'ApprovalsPage');
+const ClientHomePage = lazyPage(() => import('./ClientHomePage'), 'ClientHomePage');
+const ClientBrandKitPage = lazyPage(() => import('./ClientPages'), 'ClientBrandKitPage');
+const ClientBriefsPage = lazyPage(() => import('./ClientPages'), 'ClientBriefsPage');
+const ClientMessagesPage = lazyPage(() => import('./ClientPages'), 'ClientMessagesPage');
+const ClientProjectPage = lazyPage(() => import('./ClientPages'), 'ClientProjectPage');
+const ClientProjectsPage = lazyPage(() => import('./ClientPages'), 'ClientProjectsPage');
+const ClientReportPage = lazyPage(() => import('./ClientPages'), 'ClientReportPage');
+const ClientReportsPage = lazyPage(() => import('./ClientPages'), 'ClientReportsPage');
+const ClientTeamPage = lazyPage(() => import('./ClientPages'), 'ClientTeamPage');
+const FeedbackPage = lazyPage(() => import('./FeedbackPage'), 'FeedbackPage');
 
 /**
  * Client portal area (core). Paths are relative to /client. Every page needs only `client.portal` (the portal entry);

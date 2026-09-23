@@ -1,3 +1,4 @@
+import { lazyPage } from '@/app/lazyPage';
 import {
   Award,
   Banknote,
@@ -14,23 +15,33 @@ import {
 import { Navigate, type RouteObject } from 'react-router-dom';
 import type { PortalNavItem } from '@/app/portalTypes';
 import { type PermissionRequirement, Permissions } from '@/lib/auth/permissions';
-import { AchievementsPage } from './achievements/AchievementsPage';
-import { CampaignDetailPage } from './campaigns/CampaignDetailPage';
-import { CampaignsPage } from './campaigns/CampaignsPage';
-import { EarningsPage } from './earnings/EarningsPage';
-import { HomePage } from './home/HomePage';
-import { NotificationsPage } from './notifications/NotificationsPage';
-import { PayoutDetailPage, PayoutsPage } from './payouts/PayoutsPage';
-import { NotificationPreferencesPage } from './profile/NotificationPreferencesPage';
-import { PayoutDetailsPage } from './profile/PayoutDetailsPage';
-import { ProfileDetailsPage } from './profile/ProfileDetailsPage';
-import { ProfileLayout } from './profile/ProfileLayout';
-import { SecurityPage } from './profile/SecurityPage';
-import { ReferralsPage } from './referrals/ReferralsPage';
-import { SocialAccountsPage } from './social/SocialAccountsPage';
-import { SubmissionDetailPage } from './submissions/SubmissionDetailPage';
-import { SubmissionsPage } from './submissions/SubmissionsPage';
-import { NewTicketPage, SupportPage, TicketDetailPage } from './support/SupportPages';
+
+const AchievementsPage = lazyPage(() => import('./achievements/AchievementsPage'), 'AchievementsPage');
+const CampaignDetailPage = lazyPage(() => import('./campaigns/CampaignDetailPage'), 'CampaignDetailPage');
+const CampaignsPage = lazyPage(() => import('./campaigns/CampaignsPage'), 'CampaignsPage');
+const EarningsPage = lazyPage(() => import('./earnings/EarningsPage'), 'EarningsPage');
+const HomePage = lazyPage(() => import('./home/HomePage'), 'HomePage');
+const NotificationsPage = lazyPage(() => import('./notifications/NotificationsPage'), 'NotificationsPage');
+const PayoutDetailPage = lazyPage(() => import('./payouts/PayoutsPage'), 'PayoutDetailPage');
+const PayoutsPage = lazyPage(() => import('./payouts/PayoutsPage'), 'PayoutsPage');
+const NotificationPreferencesPage = lazyPage(
+  () => import('./profile/NotificationPreferencesPage'),
+  'NotificationPreferencesPage',
+);
+const PayoutDetailsPage = lazyPage(() => import('./profile/PayoutDetailsPage'), 'PayoutDetailsPage');
+const ProfileDetailsPage = lazyPage(() => import('./profile/ProfileDetailsPage'), 'ProfileDetailsPage');
+const ProfileLayout = lazyPage(() => import('./profile/ProfileLayout'), 'ProfileLayout');
+const SecurityPage = lazyPage(() => import('./profile/SecurityPage'), 'SecurityPage');
+const ReferralsPage = lazyPage(() => import('./referrals/ReferralsPage'), 'ReferralsPage');
+const SocialAccountsPage = lazyPage(() => import('./social/SocialAccountsPage'), 'SocialAccountsPage');
+const SubmissionDetailPage = lazyPage(
+  () => import('./submissions/SubmissionDetailPage'),
+  'SubmissionDetailPage',
+);
+const SubmissionsPage = lazyPage(() => import('./submissions/SubmissionsPage'), 'SubmissionsPage');
+const NewTicketPage = lazyPage(() => import('./support/SupportPages'), 'NewTicketPage');
+const SupportPage = lazyPage(() => import('./support/SupportPages'), 'SupportPage');
+const TicketDetailPage = lazyPage(() => import('./support/SupportPages'), 'TicketDetailPage');
 
 /** Portal entry. No section needs more than the participant portal permission. */
 export const portalRequires: PermissionRequirement = { anyOf: [Permissions.ParticipantPortal] };

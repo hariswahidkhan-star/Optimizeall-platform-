@@ -1,5 +1,13 @@
+import { lazyPage } from '@/app/lazyPage';
 import type { RouteObject } from 'react-router-dom';
-import { ConfirmSubscriptionPage, PreferencesPage, SignupPage, UnsubscribePage } from './public/PublicEmailPages';
+
+const ConfirmSubscriptionPage = lazyPage(
+  () => import('./public/PublicEmailPages'),
+  'ConfirmSubscriptionPage',
+);
+const PreferencesPage = lazyPage(() => import('./public/PublicEmailPages'), 'PreferencesPage');
+const SignupPage = lazyPage(() => import('./public/PublicEmailPages'), 'SignupPage');
+const UnsubscribePage = lazyPage(() => import('./public/PublicEmailPages'), 'UnsubscribePage');
 
 /**
  * Anonymous pages linked from marketing emails (backend EmailMarketingUrls). Spread into the PublicLayout children in
