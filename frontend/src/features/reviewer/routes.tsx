@@ -1,9 +1,16 @@
-import { BadgeCheck, BarChart3, Inbox, LayoutDashboard, Radar, Scale } from 'lucide-react';
-import type { RouteObject } from 'react-router-dom';
+import { BadgeCheck, Inbox, LayoutDashboard, Radar, Scale } from 'lucide-react';
+import { Navigate, type RouteObject } from 'react-router-dom';
 import type { PortalNavItem } from '@/app/portalTypes';
-import { PendingSection } from '@/components/PendingSection';
-import { PortalOverview } from '@/components/PortalOverview';
 import { Permissions } from '@/lib/auth/permissions';
+import { AppealDetailPage } from './pages/AppealDetailPage';
+import { AppealsPage } from './pages/AppealsPage';
+import { LiveChecksPage } from './pages/LiveChecksPage';
+import { OverviewPage } from './pages/OverviewPage';
+import { QueuePage } from './pages/QueuePage';
+import { SocialAccountPage } from './pages/SocialAccountPage';
+import { SocialVerificationPage } from './pages/SocialVerificationPage';
+import { WorkspacePage } from './pages/WorkspacePage';
+import './reviewer.css';
 
 /** Reviewer portal (/review). Paths are relative to the portal base. */
 export const nav: PortalNavItem[] = [
@@ -29,41 +36,32 @@ export const nav: PortalNavItem[] = [
     description: 'Verify that connected social accounts are established and genuine.',
     requires: { anyOf: [Permissions.SocialAccountsVerify] },
   },
-  {
-    to: 'stats',
-    label: 'My stats',
-    icon: BarChart3,
-    description: 'Your review volume, turnaround and accuracy.',
-  },
 ];
 
 export const routes: RouteObject[] = [
-  { index: true, element: <PortalOverview /> },
+  { index: true, element: <OverviewPage /> },
   {
     path: 'queue',
-    element: (
-      <PendingSection
-        title="Review queue"
-        description="Submitted posts waiting for a decision, oldest first."
-      />
-    ),
+    children: [
+      { index: true, element: <QueuePage /> },
+      { path: ':submissionId', element: <WorkspacePage /> },
+    ],
   },
-  {
-    path: 'live-checks',
-    element: <PendingSection title="Live checks" description="Approved posts due for a follow-up check." />,
-  },
+  { path: 'live-checks', element: <LiveChecksPage /> },
   {
     path: 'appeals',
-    element: (
-      <PendingSection title="Appeals" description="Participant appeals against rejections and reversals." />
-    ),
+    children: [
+      { index: true, element: <AppealsPage /> },
+      { path: ':appealId', element: <AppealDetailPage /> },
+    ],
   },
   {
     path: 'social-verification',
-    element: <PendingSection title="Social verification" description="Accounts waiting for verification." />,
+    children: [
+      { index: true, element: <SocialVerificationPage /> },
+      { path: ':accountId', element: <SocialAccountPage /> },
+    ],
   },
-  {
-    path: 'stats',
-    element: <PendingSection title="My stats" description="Your review activity over time." />,
-  },
+  // The review stats now live on the overview page.
+  { path: 'stats', element: <Navigate to="/review" replace /> },
 ];
