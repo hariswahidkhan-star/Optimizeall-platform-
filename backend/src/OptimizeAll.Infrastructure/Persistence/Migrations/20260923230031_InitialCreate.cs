@@ -360,7 +360,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Subject = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Body = table.Column<string>(type: "varchar(10000)", maxLength: 10000, nullable: false)
+                    Body = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Status = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -397,7 +397,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     AutoresponderSubject = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    AutoresponderBody = table.Column<string>(type: "varchar(5000)", maxLength: 5000, nullable: true)
+                    AutoresponderBody = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     SortOrder = table.Column<int>(type: "int", nullable: false)
                 },
@@ -3595,7 +3595,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     AutoresponderEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     AutoresponderSubject = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    AutoresponderBody = table.Column<string>(type: "varchar(5000)", maxLength: 5000, nullable: true)
+                    AutoresponderBody = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     AllowedOrigins = table.Column<string>(type: "json", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -5844,7 +5844,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     WordCountTarget = table.Column<int>(type: "int", nullable: false),
                     CompetitorUrls = table.Column<string>(type: "json", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Notes = table.Column<string>(type: "varchar(8000)", maxLength: 8000, nullable: true)
+                    Notes = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Status = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -5949,7 +5949,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Status = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Notes = table.Column<string>(type: "varchar(4000)", maxLength: 4000, nullable: true)
+                    Notes = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LastContactedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
                     ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -5980,11 +5980,11 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     Rating = table.Column<int>(type: "int", nullable: false),
                     AuthorName = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Text = table.Column<string>(type: "varchar(4000)", maxLength: 4000, nullable: true)
+                    Text = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ReviewedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
                     Responded = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    ResponseText = table.Column<string>(type: "varchar(4000)", maxLength: 4000, nullable: true)
+                    ResponseText = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
@@ -6749,7 +6749,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     IsNoindex = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     InSitemap = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     InboundLinks = table.Column<int>(type: "int", nullable: false),
-                    RedirectChain = table.Column<string>(type: "varchar(4000)", maxLength: 4000, nullable: true)
+                    RedirectChain = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     FetchError = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")

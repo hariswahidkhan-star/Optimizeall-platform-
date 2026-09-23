@@ -169,6 +169,53 @@ public sealed class SeoApiTests(ApiFactory api) : IClassFixture<ApiFactory>
     }
 
     [Fact]
+    public async Task A_worker_whose_stale_audit_was_reclaimed_does_not_overwrite_the_new_results()
+    {
+        api.SetConfig(("Seo:Crawler:AllowLoopback", "true"), ("Seo:Crawler:DelayMilliseconds", "0"));
+        await using var siteServer = await TestSite.StartAsync();
+        var gate = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var firstRequestSeen = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var homeCalls = 0;
+        siteServer.Text("/robots.txt", "User-agent: *\nAllow: /\n").Route("/", async ctx =>
+        {
+            var call = Interlocked.Increment(ref homeCalls);
+            if (call == 1)
+            {
+                firstRequestSeen.TrySetResult();
+                await gate.Task;
+            }
+            ctx.Response.ContentType = "text/html; charset=utf-8";
+            await Microsoft.AspNetCore.Http.HttpResponseWritingExtensions.WriteAsync(ctx.Response, $"<html><head><title>{(call == 1 ? "Slow first run" : "Second run")}</title></head><body><h1>Home</h1></body></html>");
+        });
+
+        var client = await api.CreateClientAccountAsync();
+        var (_, seo) = await api.CreateClientAsync(Role.SeoSpecialist);
+        var siteId = (await (await seo.PostAsJsonAsync("/api/v1/agency/seo/sites", new
+        {
+            clientAccountId = client.Id, name = "Reclaim", domain = $"127.0.0.1:{siteServer.Port}", protocol = "http", targetCountry = "US", targetLanguage = "en",
+        })).ReadJsonAsync()).GetProperty("id").GetGuid();
+        var auditId = (await (await seo.PostAsync($"/api/v1/agency/seo/sites/{siteId}/audits", null)).ReadJsonAsync()).GetProperty("id").GetGuid();
+
+        // Worker A claims the audit and hangs on the home page …
+        using var scopeA = api.Services.CreateScope();
+        var slowRun = scopeA.ServiceProvider.GetRequiredService<SeoAuditRunner>().RunAsync(auditId, CancellationToken.None);
+        await firstRequestSeen.Task.WaitAsync(TimeSpan.FromSeconds(30));
+
+        // … long enough to be considered dead: worker B re-queues, claims and completes it.
+        api.Clock.Advance(SeoAuditRunner.StaleAfter + TimeSpan.FromMinutes(1));
+        using (var scopeB = api.Services.CreateScope())
+            await scopeB.ServiceProvider.GetRequiredService<SeoAuditRunner>().RunQueuedAsync(10, CancellationToken.None);
+        Assert.Equal(SeoAuditStatus.Completed, await api.WithDbAsync(db => db.Set<SeoAudit>().Where(a => a.Id == auditId).Select(a => a.Status).SingleAsync()));
+
+        // Worker A finally finishes: it lost its claim, so it must not replace B's results.
+        gate.SetResult();
+        Assert.Null(await slowRun);
+        var pages = await api.WithDbAsync(db => db.Set<SeoAuditPage>().Where(p => p.AuditId == auditId).ToListAsync());
+        var home = Assert.Single(pages);
+        Assert.Equal("Second run", home.Title);
+    }
+
+    [Fact]
     public async Task Audits_of_private_addresses_fail_safely()
     {
         api.SetConfig(("Seo:Crawler:AllowLoopback", "true"), ("Seo:Crawler:DelayMilliseconds", "0"));
@@ -186,6 +233,40 @@ public sealed class SeoApiTests(ApiFactory api) : IClassFixture<ApiFactory>
         Assert.Contains("non-public", page.GetProperty("fetchError").GetString());
 
         await (await seo.PostAsJsonAsync("/api/v1/agency/seo/analyze", new { url = "http://10.0.0.1/admin", keyword = "x" })).ShouldFailAsync(400, "seo.url_blocked");
+    }
+
+    [Fact]
+    public async Task Long_text_columns_of_seo_and_landing_page_entities_are_unbounded()
+    {
+        var modules = new[] { typeof(SeoSite).Namespace, typeof(LandingPage).Namespace, typeof(OptimizeAll.Domain.Integrations.IntegrationConnection).Namespace };
+        var offenders = await api.WithDbAsync(db => Task.FromResult(db.Model.GetEntityTypes()
+            .Where(t => modules.Contains(t.ClrType.Namespace))
+            .SelectMany(t => t.GetProperties().Where(p => p.GetMaxLength() >= 4000).Select(p => $"{t.ClrType.Name}.{p.Name} ({p.GetMaxLength()})"))
+            .ToList()));
+        Assert.Empty(offenders);
+    }
+
+    [Fact]
+    public async Task Csv_imports_reject_files_with_too_many_rows()
+    {
+        var client = await api.CreateClientAccountAsync();
+        var (_, seo) = await api.CreateClientAsync(Role.SeoSpecialist);
+        var siteId = (await (await seo.PostAsJsonAsync("/api/v1/agency/seo/sites", new
+        {
+            clientAccountId = client.Id, name = "Bulk", domain = "bulk.example", targetCountry = "US", targetLanguage = "en",
+        })).ReadJsonAsync()).GetProperty("id").GetGuid();
+        var rows = string.Concat(Enumerable.Repeat("x,not-a-date,3,,\n", OptimizeAll.Api.Modules.Seo.Ranking.CsvReader.MaxImportRows + 1));
+
+        var imports = new[]
+        {
+            ("ranks/import", "keyword,date,position,url,domain\n"),
+            ("search-console/import", "query,date,clicks,impressions,page\n"),
+            ("backlinks/import", "source_url,first_seen,x,y,z\n"),
+        };
+        foreach (var (path, header) in imports)
+            await (await seo.PostAsync($"/api/v1/agency/seo/sites/{siteId}/{path}", AgencyTestData.CsvUpload(header + rows)))
+                .ShouldFailAsync(400, "seo.import_too_many_rows");
+        Assert.False(await api.WithDbAsync(db => db.Set<SeoKeyword>().AnyAsync(k => k.SiteId == siteId)));
     }
 
     [Fact]
@@ -340,10 +421,22 @@ public sealed class SeoApiTests(ApiFactory api) : IClassFixture<ApiFactory>
         Assert.True(counts.Pages >= 4 && counts.Submissions > 0 && counts.Audits >= 8 && counts.Snapshots > 1000);
 
         var clients = await api.WithDbAsync(db => db.Set<ClientAccount>().Where(c => c.Slug == "nimbus-fitness" || c.Slug == "karachi-eats").ToListAsync());
-        var nimbus = clients.Single(c => c.Slug == "nimbus-fitness");
-        Assert.Equal(("Nimbus Fitness", "SaaS fitness app", "US", "USD"), (nimbus.Name, nimbus.Industry, nimbus.CountryCode, nimbus.Currency));
-        var eats = clients.Single(c => c.Slug == "karachi-eats");
-        Assert.Equal(("Karachi Eats", "restaurant group", "PK", "PKR"), (eats.Name, eats.Industry, eats.CountryCode, eats.Currency));
+        foreach (var canonical in new[] { OptimizeAll.Api.Modules.Clients.DeliveryDemoData.Nimbus, OptimizeAll.Api.Modules.Clients.DeliveryDemoData.KarachiEats })
+        {
+            var row = clients.Single(c => c.Slug == canonical.Slug);
+            Assert.Equal((canonical.Name, canonical.Industry, canonical.CountryCode, canonical.Currency, canonical.Website, canonical.Status),
+                (row.Name, row.Industry, row.CountryCode, row.Currency, row.Website, row.Status));
+        }
+
+        // The SEO and designer demo staff are the canonical delivery demo staff (same email, display name and role).
+        foreach (var staff in new[] { OptimizeAll.Api.Modules.Clients.DeliveryDemoData.Seo, OptimizeAll.Api.Modules.Clients.DeliveryDemoData.Designer })
+        {
+            var normalized = OptimizeAll.Domain.Common.Normalization.Email(staff.Email);
+            var user = await api.WithDbAsync(db => db.Set<OptimizeAll.Domain.Identity.User>().Include(u => u.Roles)
+                .SingleAsync(u => u.NormalizedEmail == normalized));
+            Assert.Equal(staff.DisplayName, user.DisplayName);
+            Assert.Contains(user.Roles, r => r.Role == staff.Role);
+        }
 
         var seoUser = await api.LoginAsync(new TestUser(Guid.Empty, AgencyToolkitDemoSeeder.SeoEmail, AgencyToolkitDemoSeeder.DemoPassword));
         var sites = await (await seoUser.GetAsync("/api/v1/agency/seo/sites?pageSize=50")).ReadJsonAsync();

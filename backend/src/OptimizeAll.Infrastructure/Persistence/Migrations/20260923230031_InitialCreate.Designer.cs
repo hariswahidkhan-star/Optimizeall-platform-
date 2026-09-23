@@ -12,7 +12,7 @@ using OptimizeAll.Infrastructure.Persistence;
 namespace OptimizeAll.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260923214602_InitialCreate")]
+    [Migration("20260923230031_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -5946,8 +5946,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasColumnType("json");
 
                     b.Property<string>("AutoresponderBody")
-                        .HasMaxLength(5000)
-                        .HasColumnType("varchar(5000)");
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("AutoresponderEnabled")
                         .HasColumnType("tinyint(1)");
@@ -6069,8 +6068,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Body")
                         .IsRequired()
-                        .HasMaxLength(10000)
-                        .HasColumnType("varchar(10000)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasPrecision(6)
@@ -6271,8 +6269,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasColumnType("varchar(60)");
 
                     b.Property<string>("AutoresponderBody")
-                        .HasMaxLength(5000)
-                        .HasColumnType("varchar(5000)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("AutoresponderSubject")
                         .HasMaxLength(200)
@@ -9483,8 +9480,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasColumnType("varchar(2000)");
 
                     b.Property<string>("RedirectChain")
-                        .HasMaxLength(4000)
-                        .HasColumnType("varchar(4000)");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("ResponseTimeMs")
                         .HasColumnType("int");
@@ -9756,8 +9752,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Notes")
-                        .HasMaxLength(8000)
-                        .HasColumnType("varchar(8000)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Outline")
                         .IsRequired()
@@ -9954,8 +9949,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Notes")
-                        .HasMaxLength(4000)
-                        .HasColumnType("varchar(4000)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("ProspectUrl")
                         .IsRequired()
@@ -10067,8 +10061,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("ResponseText")
-                        .HasMaxLength(4000)
-                        .HasColumnType("varchar(4000)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("ReviewedAt")
                         .HasPrecision(6)
@@ -10078,8 +10071,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Text")
-                        .HasMaxLength(4000)
-                        .HasColumnType("varchar(4000)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasPrecision(6)

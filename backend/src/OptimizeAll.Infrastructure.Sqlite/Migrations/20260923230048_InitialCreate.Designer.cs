@@ -11,7 +11,7 @@ using OptimizeAll.Infrastructure.Persistence;
 namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260923214609_InitialCreate")]
+    [Migration("20260923230048_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -5936,7 +5936,6 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("AutoresponderBody")
-                        .HasMaxLength(5000)
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("AutoresponderEnabled")
@@ -6059,7 +6058,6 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
                     b.Property<string>("Body")
                         .IsRequired()
-                        .HasMaxLength(10000)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
@@ -6261,7 +6259,6 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("AutoresponderBody")
-                        .HasMaxLength(5000)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("AutoresponderSubject")
@@ -9473,7 +9470,6 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("RedirectChain")
-                        .HasMaxLength(4000)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("ResponseTimeMs")
@@ -9746,7 +9742,6 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Notes")
-                        .HasMaxLength(8000)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Outline")
@@ -9944,7 +9939,6 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Notes")
-                        .HasMaxLength(4000)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProspectUrl")
@@ -10057,7 +10051,6 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ResponseText")
-                        .HasMaxLength(4000)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("ReviewedAt")
@@ -10068,7 +10061,6 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Text")
-                        .HasMaxLength(4000)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("UpdatedAt")

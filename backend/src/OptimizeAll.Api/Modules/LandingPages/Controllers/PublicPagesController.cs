@@ -153,7 +153,7 @@ public sealed class PublicPagesController(
         return new PublicFormDto(form.Id, form.Name, schema.RootElement.Clone(), form.SubmitLabel, form.SuccessMessage, form.RedirectUrl,
             form.ConsentText, form.ConsentVersion,
             siteKey is null ? null : new CaptchaDto(form.Captcha == CaptchaProvider.HCaptcha ? "hcaptcha" : "turnstile", siteKey),
-            tokens.Issue(form.Id));
+            tokens.Issue(form.Id, form.ConsentVersion));
     }
 
     /// <summary>Sticky assignment per (experiment, visitor); a concurrent duplicate insert reads the winner back.</summary>

@@ -94,7 +94,7 @@ internal sealed class FormConfiguration : IEntityTypeConfiguration<Form>
         b.Property(x => x.RedirectUrl).HasMaxLength(1000);
         b.Property(x => x.NotifyUserIds).HasJsonList();
         b.Property(x => x.AutoresponderSubject).HasMaxLength(200);
-        b.Property(x => x.AutoresponderBody).HasMaxLength(5000);
+        b.Property(x => x.AutoresponderBody); // long text: unbounded
         b.Property(x => x.AllowedOrigins).HasJsonList();
         b.Property(x => x.ConsentText).HasMaxLength(2000);
         b.Property(x => x.TemplateKey).HasMaxLength(60);
@@ -128,7 +128,7 @@ internal sealed class FormTemplateConfiguration : IEntityTypeConfiguration<FormT
         b.Property(x => x.SuccessMessage).HasMaxLength(1000).IsRequired();
         b.Property(x => x.ConsentText).HasMaxLength(2000);
         b.Property(x => x.AutoresponderSubject).HasMaxLength(200);
-        b.Property(x => x.AutoresponderBody).HasMaxLength(5000);
+        b.Property(x => x.AutoresponderBody); // long text: unbounded
     }
 }
 
@@ -181,7 +181,7 @@ internal sealed class FormEmailOutboxConfiguration : IEntityTypeConfiguration<Fo
         b.Property(x => x.ToAddress).HasMaxLength(254).IsRequired();
         b.Property(x => x.ToName).HasMaxLength(200);
         b.Property(x => x.Subject).HasMaxLength(200).IsRequired();
-        b.Property(x => x.Body).HasMaxLength(10000).IsRequired();
+        b.Property(x => x.Body).IsRequired(); // long text: unbounded
         b.Property(x => x.LastError).HasMaxLength(1000);
         b.HasIndex(x => x.Key).IsUnique();
         b.HasIndex(x => new { x.Status, x.NextAttemptAt });

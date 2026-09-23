@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Api.Common.Security;
+using OptimizeAll.Api.Modules.Clients;
 using OptimizeAll.Api.Modules.LandingPages;
 using OptimizeAll.Api.Modules.LandingPages.Templates;
 using OptimizeAll.Domain.Agency;
@@ -16,18 +17,13 @@ using OptimizeAll.Infrastructure.Persistence;
 
 namespace OptimizeAll.Api.Modules.Seo.Demo;
 
-/// <summary>The four canonical demo clients shared by every agency module's demo data (looked up by slug).</summary>
+/// <summary>
+/// The four canonical demo clients (<see cref="DeliveryDemoData.Clients"/>) shared by every agency module's demo data, looked
+/// up by slug; any that are missing are created with exactly the canonical values, whichever seeder runs first.
+/// </summary>
 public static class DemoClients
 {
-    public sealed record Definition(string Slug, string Name, string Industry, string CountryCode, string Currency, string TimeZone, string Website);
-
-    public static readonly IReadOnlyList<Definition> All = new Definition[]
-    {
-        new("nimbus-fitness", "Nimbus Fitness", "SaaS fitness app", "US", "USD", "America/New_York", "https://nimbusfitness.app"),
-        new("wanderly-travel", "Wanderly Travel", "travel", "GB", "GBP", "Europe/London", "https://wanderlytravel.co.uk"),
-        new("aurora-skincare", "Aurora Skincare", "e-commerce beauty", "AE", "AED", "Asia/Dubai", "https://auroraskincare.ae"),
-        new("karachi-eats", "Karachi Eats", "restaurant group", "PK", "PKR", "Asia/Karachi", "https://karachieats.pk"),
-    };
+    public static IReadOnlyList<DeliveryDemoData.DemoClient> All => DeliveryDemoData.Clients;
 
     /// <summary>Returns the canonical clients by slug, creating any that are missing with exactly the canonical values.</summary>
     public static async Task<Dictionary<string, ClientAccount>> EnsureAsync(AppDbContext db, CancellationToken ct)
@@ -39,7 +35,7 @@ public static class DemoClients
             var client = new ClientAccount
             {
                 Slug = d.Slug, Name = d.Name, Industry = d.Industry, CountryCode = d.CountryCode, Currency = d.Currency, TimeZone = d.TimeZone,
-                Website = d.Website, Status = ClientAccountStatus.Active,
+                Website = d.Website, Summary = d.Summary, Status = d.Status,
             };
             db.Add(client);
             existing[d.Slug] = client;
@@ -60,9 +56,9 @@ public sealed class AgencyToolkitDemoSeeder(IDatabaseDialect dialect, IPasswordH
     TimeProvider clock, ILogger<AgencyToolkitDemoSeeder> logger) : ISeeder
 {
     public const string MarkerKey = "demo.seo_pages.seeded";
-    public const string DemoPassword = "Demo#2026!pass";
-    public const string SeoEmail = "seo@demo.optimizeall.app";
-    public const string DesignerEmail = "designer@demo.optimizeall.app";
+    public const string DemoPassword = DeliveryDemoData.Password;
+    public static string SeoEmail => DeliveryDemoData.Seo.Email;
+    public static string DesignerEmail => DeliveryDemoData.Designer.Email;
 
     public string Profile => "Demo";
     public int Order => 300;
@@ -75,8 +71,8 @@ public sealed class AgencyToolkitDemoSeeder(IDatabaseDialect dialect, IPasswordH
         _now = clock.GetUtcNow().UtcDateTime;
         await using var tx = await dialect.BeginWriteTransactionAsync(db, ct);
         var clients = await DemoClients.EnsureAsync(db, ct);
-        await EnsureStaffAsync(db, SeoEmail, "Sana Qureshi (SEO)", Role.SeoSpecialist, ct);
-        var designer = await EnsureStaffAsync(db, DesignerEmail, "Daniel Reyes (Design)", Role.Designer, ct);
+        await EnsureStaffAsync(db, DeliveryDemoData.Seo, ct);
+        var designer = await EnsureStaffAsync(db, DeliveryDemoData.Designer, ct);
 
         if (await db.Set<SystemSetting>().AnyAsync(s => s.Key == MarkerKey, ct))
         {
@@ -111,8 +107,10 @@ public sealed class AgencyToolkitDemoSeeder(IDatabaseDialect dialect, IPasswordH
         logger.LogWarning("SEO and landing-page demo data created. Demo/staging data only.");
     }
 
-    private async Task<User> EnsureStaffAsync(AppDbContext db, string email, string name, Role role, CancellationToken ct)
+    /// <summary>The canonical demo staff member (same email, display name, role and home as the delivery demo seeder creates).</summary>
+    private async Task<User> EnsureStaffAsync(AppDbContext db, DeliveryDemoData.DemoStaff staff, CancellationToken ct)
     {
+        var (email, name, role) = (staff.Email, staff.DisplayName, staff.Role);
         var normalized = Normalization.Email(email);
         var user = await db.Set<User>().Include(u => u.Roles).FirstOrDefaultAsync(u => u.NormalizedEmail == normalized, ct);
         if (user is not null)
@@ -126,7 +124,7 @@ public sealed class AgencyToolkitDemoSeeder(IDatabaseDialect dialect, IPasswordH
         while (await db.Set<User>().AnyAsync(u => u.ReferralCode == code, ct));
         user = new User
         {
-            Email = email, NormalizedEmail = normalized, DisplayName = name, CountryCode = "US", TimeZone = "UTC", EmailVerifiedAt = _now,
+            Email = email, NormalizedEmail = normalized, DisplayName = name, CountryCode = "PK", TimeZone = "Asia/Karachi", EmailVerifiedAt = _now,
             ReferralCode = code,
         };
         user.PasswordHash = passwordHasher.HashPassword(user, DemoPassword);

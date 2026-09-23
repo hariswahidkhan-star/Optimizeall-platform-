@@ -7,7 +7,11 @@ using OptimizeAll.Api.Modules.Seo.Ranking;
 using OptimizeAll.Domain.Integrations;
 using OptimizeAll.Domain.Seo;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
+using OptimizeAll.Api.Modules.Seo;
 
 namespace OptimizeAll.UnitTests.Seo;
 
@@ -210,5 +214,24 @@ public sealed class DataForSeoProviderTests
         var serp = DataForSeoRankProvider.Parse(SerpJson, "k", "absent.test", out var error);
         Assert.Null(error);
         Assert.Null(serp!.Position);
+    }
+}
+
+public sealed class CrawlerLoopbackGuardTests
+{
+    [Theory]
+    [InlineData("Production", false)]
+    [InlineData("Staging", false)]
+    [InlineData("Testing", true)]
+    [InlineData("Development", true)]
+    public void AllowLoopback_from_configuration_only_takes_effect_in_test_and_development_hosts(string environment, bool expected)
+    {
+        var config = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?> { ["Seo:Crawler:AllowLoopback"] = "true" }).Build();
+        var services = new ServiceCollection();
+        services.AddSingleton<IHostEnvironment>(new Microsoft.Extensions.Hosting.Internal.HostingEnvironment { EnvironmentName = environment });
+        services.AddSeoModule(config);
+        using var provider = services.BuildServiceProvider();
+        Assert.Equal(expected, provider.GetRequiredService<IOptionsMonitor<SeoCrawlerOptions>>().CurrentValue.AllowLoopback);
     }
 }

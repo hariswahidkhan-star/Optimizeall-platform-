@@ -17,7 +17,10 @@ public static class SeoModule
     /// <summary>Registers the Seo module's services, jobs and event handlers.</summary>
     public static IServiceCollection AddSeoModule(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddOptions<SeoCrawlerOptions>().Bind(configuration.GetSection(SeoCrawlerOptions.Section));
+        services.AddOptions<SeoCrawlerOptions>().Bind(configuration.GetSection(SeoCrawlerOptions.Section))
+            // The loopback escape hatch exists for the test suite only: any other environment ignores the setting, so a
+            // stray Seo__Crawler__AllowLoopback=true in production configuration cannot open 127.0.0.0/8 to the crawler.
+            .PostConfigure<IHostEnvironment>((o, env) => o.AllowLoopback &= SeoCrawlerOptions.LoopbackPermittedIn(env));
         services.AddSingleton<IHostResolver, DnsHostResolver>();
         services.AddHttpClient<SafeHttpFetcher>(SafeHttpFetcher.HttpClientName)
             .ConfigurePrimaryHttpMessageHandler(SafeHttpFetcher.CreateHandler)

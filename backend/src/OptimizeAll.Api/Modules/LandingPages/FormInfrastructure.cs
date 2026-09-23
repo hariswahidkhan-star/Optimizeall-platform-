@@ -118,33 +118,42 @@ public sealed class CaptchaVerifier(HttpClient http, ICredentialVault vault, ICo
     }
 }
 
+/// <summary>What a valid render token vouches for: time since the form was served and the consent wording version shown.</summary>
+public sealed record FormRenderInfo(double ElapsedSeconds, int ConsentVersion);
+
 /// <summary>
-/// Signed "form rendered at" tokens for the minimum-fill-time check. The token binds the form id and the server time the
-/// form was served (Data Protection), so the client cannot fake how long the visitor spent on the form.
+/// Signed "form rendered at" tokens for the minimum-fill-time check. The token binds the form id, the server time the
+/// form was served and the consent version displayed (Data Protection), so the client can neither fake how long the visitor
+/// spent on the form nor claim agreement to a consent wording other than the one it was shown.
 /// </summary>
 public sealed class FormRenderTokens(IDataProtectionProvider protection, TimeProvider clock)
 {
     public static readonly TimeSpan MaxAge = TimeSpan.FromHours(24);
     private readonly IDataProtector _protector = protection.CreateProtector("OptimizeAll.Forms.RenderToken.v1");
 
-    public string Issue(Guid formId) => _protector.Protect($"{formId:N}|{clock.GetUtcNow().UtcTicks}");
+    public string Issue(Guid formId, int consentVersion) =>
+        _protector.Protect($"{formId:N}|{clock.GetUtcNow().UtcTicks}|{consentVersion}");
 
-    /// <summary>Seconds since the form was rendered, or null when the token is missing, forged, for another form or expired.</summary>
-    public double? ElapsedSeconds(string? token, Guid formId)
+    /// <summary>Null when the token is missing, forged, for another form, expired or from before consent versions were bound.</summary>
+    public FormRenderInfo? Read(string? token, Guid formId)
     {
         if (string.IsNullOrWhiteSpace(token) || token.Length > 1000) return null;
         try
         {
             var parts = _protector.Unprotect(token).Split('|');
-            if (parts.Length != 2 || parts[0] != formId.ToString("N") || !long.TryParse(parts[1], out var ticks)) return null;
+            if (parts.Length != 3 || parts[0] != formId.ToString("N") || !long.TryParse(parts[1], out var ticks) ||
+                !int.TryParse(parts[2], out var consentVersion)) return null;
             var elapsed = clock.GetUtcNow().UtcDateTime - new DateTime(ticks, DateTimeKind.Utc);
-            return elapsed < TimeSpan.Zero || elapsed > MaxAge ? null : elapsed.TotalSeconds;
+            return elapsed < TimeSpan.Zero || elapsed > MaxAge ? null : new FormRenderInfo(elapsed.TotalSeconds, consentVersion);
         }
         catch (System.Security.Cryptography.CryptographicException)
         {
             return null;
         }
     }
+
+    /// <summary>Seconds since the form was rendered, or null when the token is invalid (see <see cref="Read"/>).</summary>
+    public double? ElapsedSeconds(string? token, Guid formId) => Read(token, formId)?.ElapsedSeconds;
 }
 
 /// <summary>Delivers autoresponder emails from the form outbox with retry/backoff (5 attempts).</summary>
