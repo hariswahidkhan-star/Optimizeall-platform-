@@ -53,6 +53,7 @@ public sealed class TimeService(
     {
         var me = currentUser.Id;
         var (project, taskId) = await ValidateTargetAsync(r.ProjectId!.Value, r.TaskId, ct);
+        await using var userLock = await LockUserTimeAsync(me, ct);
         if (await db.Set<TimeEntry>().AnyAsync(e => e.RunningUserId == me, ct))
             throw DomainException.Conflict("time.timer_running", "You already have a timer running. Stop it before starting another.");
         var entry = new TimeEntry
@@ -120,6 +121,7 @@ public sealed class TimeService(
         var (project, taskId) = await ValidateTargetAsync(r.ProjectId!.Value, r.TaskId, ct);
         var date = r.Date!.Value;
         ValidateDate(date);
+        await using var userLock = await LockUserTimeAsync(me, ct);
         await EnsureWeekOpenAsync(me, date, ct);
         var entry = new TimeEntry
         {
@@ -134,6 +136,7 @@ public sealed class TimeService(
     public async Task<TimeEntryDto> UpdateAsync(Guid id, TimeEntryRequest r, CancellationToken ct)
     {
         var me = currentUser.Id;
+        await using var userLock = await LockUserTimeAsync(me, ct);
         var entry = await db.Set<TimeEntry>().FirstOrDefaultAsync(e => e.Id == id && e.UserId == me, ct) ?? throw DomainException.NotFound("TimeEntry");
         if (entry.IsRunning) throw DomainException.Conflict("time.timer_running", "Stop the timer before editing this entry.");
         DeliveryRules.EnsureStamp(entry, r.ConcurrencyStamp ?? Guid.Empty, db);
@@ -155,6 +158,7 @@ public sealed class TimeService(
     public async Task DeleteAsync(Guid id, CancellationToken ct)
     {
         var me = currentUser.Id;
+        await using var userLock = await LockUserTimeAsync(me, ct);
         var entry = await db.Set<TimeEntry>().FirstOrDefaultAsync(e => e.Id == id && e.UserId == me, ct) ?? throw DomainException.NotFound("TimeEntry");
         await EnsureWeekOpenAsync(me, entry.Date, ct);
         db.Remove(entry);
@@ -187,6 +191,13 @@ public sealed class TimeService(
                                                    (t.Status == TimesheetStatus.Submitted || t.Status == TimesheetStatus.Approved), ct))
             throw DomainException.Conflict("time.week_locked", "That week's timesheet is submitted or approved; its entries are locked.");
     }
+
+    /// <summary>
+    /// Serializes one user's time writes (entries, timer start, week submission): the week-lock check and the write it guards
+    /// must not interleave with a concurrent submit, or an entry could land in a week that was just submitted.
+    /// </summary>
+    private Task<IAsyncDisposable> LockUserTimeAsync(Guid userId, CancellationToken ct) =>
+        dialect.AcquireNamedLockAsync(db, $"time:{userId:N}", TimeSpan.FromSeconds(15), ct);
 
     internal async Task<List<TimeEntryDto>> ToDtosAsync(List<TimeEntry> rows, CancellationToken ct)
     {
@@ -240,6 +251,7 @@ public sealed class TimeService(
         var me = currentUser.Id;
         var week = BudgetMath.WeekStart(anyDay);
         var end = week.AddDays(6);
+        await using var userLock = await LockUserTimeAsync(me, ct);
         if (await db.Set<TimeEntry>().AnyAsync(e => e.RunningUserId == me && e.Date >= week && e.Date <= end, ct))
             throw DomainException.Conflict("time.timer_running", "Stop your running timer before submitting the week.");
         var total = await db.Set<TimeEntry>().Where(e => e.UserId == me && e.Date >= week && e.Date <= end).SumAsync(e => (int?)e.Minutes, ct) ?? 0;
@@ -284,7 +296,8 @@ public sealed class TimeService(
     public async Task<TimesheetDto> DecideAsync(Guid sheetId, bool approve, TimesheetDecisionRequest r, CancellationToken ct)
     {
         var sheet = await db.Set<Timesheet>().FirstOrDefaultAsync(t => t.Id == sheetId, ct) ?? throw DomainException.NotFound("Timesheet");
-        if (sheet.UserId == currentUser.Id && !currentUser.HasPermission(Permissions.SettingsManage))
+        // Never your own, whatever your permissions (admins included): approval needs a second person.
+        if (sheet.UserId == currentUser.Id)
             throw DomainException.Forbidden("time.own_timesheet", "Someone else must approve your timesheet.");
         DeliveryRules.EnsureStamp(sheet, r.ConcurrencyStamp, db);
         if (sheet.Status != TimesheetStatus.Submitted)

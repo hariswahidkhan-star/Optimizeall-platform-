@@ -82,6 +82,46 @@ public sealed class BillingJobTests(ApiFactory api) : IClassFixture<ApiFactory>
     }
 
     [Fact]
+    public async Task Periods_skipped_while_a_contract_is_paused_are_not_billed_after_resuming()
+    {
+        var (managerUser, manager) = await api.CreateClientAsync(Role.AccountManager);
+        var client = await api.CreateClientAccountAsync();
+        var start = api.Today();
+        var draft = await (await manager.PostAsJsonAsync("/api/v1/agency/contracts", new
+        {
+            clientAccountId = client.Id, title = "Open-ended retainer", startDate = start.Iso(), billingFrequency = "Monthly",
+            lines = new[] { Line("SEO retainer", 1, 1000m) },
+        })).ReadJsonAsync();
+        var contractId = draft.GetGuid("id");
+        (await manager.PostAsJsonAsync($"/api/v1/agency/contracts/{contractId}/activate",
+            new { concurrencyStamp = draft.GetGuid("concurrencyStamp") })).EnsureSuccessStatusCode();
+        await api.RunJobAsync<RecurringInvoiceJob>();
+        Assert.Single(await ContractInvoicesAsync(contractId));
+        var active = await (await manager.GetAsync($"/api/v1/agency/contracts/{contractId}")).ReadJsonAsync();
+
+        var paused = await (await manager.PostAsJsonAsync($"/api/v1/agency/contracts/{contractId}/pause",
+            new { concurrencyStamp = active.GetGuid("concurrencyStamp") })).ReadJsonAsync();
+        // Two periods start while paused; the job bills nothing.
+        api.Clock.SetUtcNow(new DateTimeOffset(start.AddMonths(2).AddDays(3).ToDateTime(new TimeOnly(6, 0)), TimeSpan.Zero));
+        await api.RunJobAsync<RecurringInvoiceJob>();
+        Assert.Single(await ContractInvoicesAsync(contractId));
+
+        // Resuming continues from the next period: the paused months are never invoiced.
+        manager = await api.LoginAsync(managerUser);
+        var resumed = await (await manager.PostAsJsonAsync($"/api/v1/agency/contracts/{contractId}/resume",
+            new { concurrencyStamp = paused.GetGuid("concurrencyStamp") })).ReadJsonAsync();
+        Assert.Equal(start.AddMonths(3).Iso(), resumed.Str("nextInvoiceDate"));
+        await api.RunJobAsync<RecurringInvoiceJob>();
+        Assert.Single(await ContractInvoicesAsync(contractId));
+
+        api.Clock.SetUtcNow(new DateTimeOffset(start.AddMonths(3).ToDateTime(new TimeOnly(6, 0)), TimeSpan.Zero));
+        await api.RunJobAsync<RecurringInvoiceJob>();
+        var invoices = await ContractInvoicesAsync(contractId);
+        Assert.Equal(2, invoices.Count);
+        Assert.Equal(start.AddMonths(3), invoices[1].PeriodStart);
+    }
+
+    [Fact]
     public async Task Overdue_job_marks_invoices_and_sends_each_reminder_once()
     {
         var (adminUser, admin) = await api.CreateClientAsync(Role.Admin);

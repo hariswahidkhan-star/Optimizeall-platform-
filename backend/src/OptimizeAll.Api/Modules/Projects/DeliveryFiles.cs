@@ -123,18 +123,54 @@ public sealed class DeliveryFileService(AppDbContext db, IFileStorage storage, I
         {
             var mine = await scope.MemberClientIdsAsync(ct);
             if (!mine.Contains(file.ClientAccountId)) return null;
+            // Membership alone is not enough: files of internal work (unsent versions, task attachments) stay staff-only.
+            if (await IsInternalOnlyAsync(file, ct)) return null;
         }
         var stream = storage.OpenRead(file.StorageKey);
         return stream is null ? null : (file, stream);
     }
 
-    /// <summary>Ids from <paramref name="ids"/> that are files of the client (attachments must belong to the same tenant).</summary>
+    /// <summary>
+    /// Ids from <paramref name="ids"/> that are files of the client (attachments must belong to the same tenant). For a
+    /// client user no file may be internal-only, so an internal file id can't be re-shared through a message.
+    /// </summary>
     public async Task EnsureFilesOfClientAsync(Guid clientId, IReadOnlyCollection<Guid> ids, CancellationToken ct)
     {
         if (ids.Count == 0) return;
-        var count = await db.Set<DeliveryFile>().CountAsync(f => ids.Contains(f.Id) && f.ClientAccountId == clientId, ct);
-        if (count != ids.Distinct().Count())
+        var distinct = ids.Distinct().ToList();
+        var rows = await db.Set<DeliveryFile>().AsNoTracking().Where(f => distinct.Contains(f.Id) && f.ClientAccountId == clientId).ToListAsync(ct);
+        var ok = rows.Count == distinct.Count;
+        if (ok && !scope.IsStaff)
+            foreach (var row in rows)
+                if (await IsInternalOnlyAsync(row, ct)) { ok = false; break; }
+        if (!ok)
             throw DeliveryRules.Invalid("file.invalid_attachment", "attachmentFileIds", "An attachment was not found. Upload it again.");
+    }
+
+    /// <summary>
+    /// True when a client's file belongs to internal work only and must not reach the client's users: it is the file of a
+    /// deliverable version that was never sent to the client, or a task attachment (tasks show the client only their title
+    /// and status), and it was not also shared with the client (a sent version, a message attachment, a brand asset, the
+    /// logo, or an upload by a member of the organization).
+    /// </summary>
+    public async Task<bool> IsInternalOnlyAsync(DeliveryFile file, CancellationToken ct)
+    {
+        var id = file.Id;
+        var clientId = file.ClientAccountId;
+        var versions = await (from v in db.Set<DeliverableVersion>().AsNoTracking()
+                              join d in db.Set<Deliverable>().AsNoTracking() on v.DeliverableId equals d.Id
+                              where v.FileId == id
+                              select new { Sent = v.Number <= d.LastSentVersion }).ToListAsync(ct);
+        if (versions.Any(v => v.Sent)) return false;
+        var internalUse = versions.Count > 0 || await db.Set<TaskAttachment>().AnyAsync(a => a.FileId == id, ct);
+        if (!internalUse) return false;
+        if (await db.Set<ClientMember>().AnyAsync(m => m.ClientAccountId == clientId && m.UserId == file.UploadedByUserId, ct)) return false;
+        if (await db.Set<ClientAccount>().AnyAsync(c => c.Id == clientId && c.LogoFileId == id, ct)) return false;
+        if (await db.Set<BrandAsset>().AnyAsync(a => a.ClientAccountId == clientId && a.FileId == id, ct)) return false;
+        // Message attachments are a JSON list column (not queryable portably): check them in memory.
+        var attachments = await db.Set<ThreadMessage>().AsNoTracking().Where(m => m.ClientAccountId == clientId)
+            .Select(m => m.AttachmentFileIds).ToListAsync(ct);
+        return !attachments.Any(list => list.Contains(id));
     }
 }
 

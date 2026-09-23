@@ -188,12 +188,27 @@ public sealed class ContractService(
         var before = contract.Status;
         contract.Status = to;
         if (to == ContractStatus.Active) contract.ActivatedAt ??= Now;
+        int? skippedFrom = null;
+        if (before == ContractStatus.Paused && to == ContractStatus.Active)
+        {
+            // Periods that started while the contract was paused are not billed later: resume from the next period.
+            var today = BillingDates.Today(clock);
+            var index = contract.NextPeriodIndex;
+            while (BillingPeriods.PeriodStart(contract.StartDate, contract.BillingFrequency, index) <= today) index++;
+            if (index != contract.NextPeriodIndex)
+            {
+                skippedFrom = contract.NextPeriodIndex;
+                contract.NextPeriodIndex = index;
+            }
+        }
         if (to == ContractStatus.Cancelled)
         {
             contract.CancelledAt = Now;
             contract.CancelReason = reason;
         }
-        audit.Record($"billing.contract_{to.ToString().ToLowerInvariant()}", nameof(Contract), id, new { Status = before }, new { Status = to }, reason);
+        audit.Record($"billing.contract_{to.ToString().ToLowerInvariant()}", nameof(Contract), id,
+            new { Status = before, NextPeriodIndex = skippedFrom ?? contract.NextPeriodIndex },
+            new { Status = to, contract.NextPeriodIndex, SkippedPeriods = skippedFrom is { } f ? contract.NextPeriodIndex - f : 0 }, reason);
         await db.SaveChangesAsync(ct);
         db.ChangeTracker.Clear();
         return await GetAsync(id, ct);
