@@ -320,14 +320,14 @@ public sealed class CampaignSendingTests(EmailFixture fx)
     public async Task Sending_requires_email_send_the_typed_name_and_a_clean_checklist()
     {
         var admin = await fx.StaffAsync();
-        var manager = await fx.StaffAsync(Role.AccountManager);
+        var creator = await fx.StaffAsync(Role.ContentCreator);
         var ws = await fx.CreateWorkspaceAsync();
         await fx.AddSubscribersAsync(ws, 2);
-        var campaign = await fx.CreateCampaignAsync(manager, ws, name: "October update");
+        var campaign = await fx.CreateCampaignAsync(creator, ws, name: "October update");
         var id = campaign.GetProperty("id").GetString();
 
-        // email.manage can author but not send.
-        await (await manager.PostAsJsonAsync($"/api/v1/agency/email/campaigns/{id}/send", new { confirm = true, confirmName = "October update" })).ShouldFailAsync(403);
+        // email.manage without email.send (content creators) can author but not send.
+        await (await creator.PostAsJsonAsync($"/api/v1/agency/email/campaigns/{id}/send", new { confirm = true, confirmName = "October update" })).ShouldFailAsync(403);
         await (await admin.PostAsJsonAsync($"/api/v1/agency/email/campaigns/{id}/send", new { confirm = true, confirmName = "october update" }))
             .ShouldFailAsync(400, "email.confirm_name_mismatch");
         await (await admin.PostAsJsonAsync($"/api/v1/agency/email/campaigns/{id}/send", new { confirm = false, confirmName = "October update" }))

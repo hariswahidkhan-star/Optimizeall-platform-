@@ -104,23 +104,14 @@ test('campaign draft → preview → client approval → public unsubscribe need
     am.frameLocator('iframe[title="Email preview (mobile)"]').getByText('Meet the autumn collection'),
   ).toBeVisible();
 
-  // Account managers draft; only email.send (admins) may confirm a send.
-  await expect(am.getByRole('button', { name: 'Review & send' })).toHaveCount(0);
-  const campaignUrl = new URL(am.url()).pathname;
-  amErrors.expectClean('the email campaign editor');
-
-  // Confirm the send as an admin: Aurora requires client approval, so it waits.
-  const sender = await actor(browser, accounts.admin, landing.admin);
-  const senderErrors = watchErrors(sender);
-  await sender.goto(campaignUrl);
-  await expect(sender.getByRole('heading', { level: 1, name: campaignName })).toBeVisible();
-  await sender.getByRole('button', { name: 'Review & send' }).click();
-  const send = modal(sender, `Send “${campaignName}”?`);
+  // Account managers have email.send: they confirm the send themselves. Aurora requires client approval, so it waits.
+  await am.getByRole('button', { name: 'Review & send' }).click();
+  const send = modal(am, `Send “${campaignName}”?`);
   await expect(send.getByText('Required before the send job starts')).toBeVisible();
   await send.getByLabel(`Type ${campaignName} to confirm`).fill(campaignName);
   await send.getByRole('button', { name: 'Send now' }).click();
-  await expect(toast(sender, 'Waiting for client approval')).toBeVisible();
-  senderErrors.expectClean('the email send confirmation');
+  await expect(toast(am, 'Waiting for client approval')).toBeVisible();
+  amErrors.expectClean('the email campaign editor and send confirmation');
 
   // ---------------------------------------------------------------- client: approve in the portal
   const owner = await actor(browser, accounts.auroraOwner, landing.client);

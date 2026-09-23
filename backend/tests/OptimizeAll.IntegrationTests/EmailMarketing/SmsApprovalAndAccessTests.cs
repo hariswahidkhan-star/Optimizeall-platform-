@@ -158,13 +158,14 @@ public sealed class SmsApprovalAndAccessTests(EmailFixture fx)
             Assert.Equal(HttpStatusCode.OK, (await creator.GetAsync(path)).StatusCode);
             Assert.Equal(HttpStatusCode.OK, (await manager.GetAsync(path)).StatusCode);
         }
-        // email.send and integrations.manage are admin-only in the role map.
+        // Content creators author but cannot send or run SMS; account managers can send and run SMS; choosing the provider
+        // (integrations.manage) stays admin-only.
+        await (await creator.PostAsJsonAsync($"/api/v1/agency/email/campaigns/{id}/pause", new { })).ShouldFailAsync(403);
+        await (await creator.GetAsync("/api/v1/agency/email/sms/campaigns")).ShouldFailAsync(403);
+        Assert.NotEqual(HttpStatusCode.Forbidden, (await manager.PostAsJsonAsync($"/api/v1/agency/email/campaigns/{id}/pause", new { })).StatusCode);
+        Assert.Equal(HttpStatusCode.OK, (await manager.GetAsync("/api/v1/agency/email/sms/campaigns")).StatusCode);
         foreach (var client in new[] { creator, manager })
-        {
-            await (await client.PostAsJsonAsync($"/api/v1/agency/email/campaigns/{id}/pause", new { })).ShouldFailAsync(403);
             await (await client.PutAsJsonAsync("/api/v1/agency/email/settings/provider", new { emailProvider = "sendgrid", confirm = true })).ShouldFailAsync(403);
-            await (await client.GetAsync("/api/v1/agency/email/sms/campaigns")).ShouldFailAsync(403);
-        }
         Assert.Equal(HttpStatusCode.OK, (await admin.GetAsync("/api/v1/agency/email/sms/campaigns")).StatusCode);
         var provider = await (await admin.PutAsJsonAsync("/api/v1/agency/email/settings/provider", new { clientAccountId = ws.ClientId, emailProvider = "sendgrid", confirm = true })).ReadJsonAsync();
         Assert.Contains(provider.GetProperty("providers").EnumerateArray(), p => p.GetProperty("channel").GetString() == "Email" && !p.GetProperty("ready").GetBoolean());

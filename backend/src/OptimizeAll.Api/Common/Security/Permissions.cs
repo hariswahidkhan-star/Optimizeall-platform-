@@ -142,8 +142,8 @@ public static class RolePermissions
             Permissions.CrmView, Permissions.CrmManage, Permissions.ProposalsManage, Permissions.ContractsManage,
             Permissions.ClientsView, Permissions.ClientsManage, Permissions.ProjectsView, Permissions.ProjectsManage,
             Permissions.DeliverablesSubmit, Permissions.ReportsManage, Permissions.TimeTrack, Permissions.TimeViewAll,
-            Permissions.BillingView, Permissions.SocialManage, Permissions.EmailManage, Permissions.AnalyticsView,
-            Permissions.CampaignsView, Permissions.UsersView,
+            Permissions.BillingView, Permissions.SocialManage, Permissions.EmailManage, Permissions.EmailSend,
+            Permissions.SmsManage, Permissions.AnalyticsView, Permissions.CampaignsView, Permissions.UsersView,
         },
         [Role.Strategist] = new[]
         {
