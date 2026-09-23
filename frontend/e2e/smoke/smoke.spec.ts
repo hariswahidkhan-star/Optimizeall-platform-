@@ -2,9 +2,9 @@ import { expect, test } from '@playwright/test';
 import { authResponse, hasHorizontalScroll, mockApi, participant, problem } from '../support/mockApi';
 
 test.describe('public site', () => {
-  test('landing page renders the value proposition and calls to action', async ({ page }) => {
+  test('creator landing page (/creators) renders the value proposition and calls to action', async ({ page }) => {
     await mockApi(page);
-    await page.goto('/');
+    await page.goto('/creators');
     await expect(
       page.getByRole('heading', { level: 1, name: /Get paid to share brands you believe in/ }),
     ).toBeVisible();
@@ -18,7 +18,7 @@ test.describe('public site', () => {
   test('no horizontal scroll at 360px', async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 780 });
     await mockApi(page);
-    for (const path of ['/', '/login', '/register', '/faq']) {
+    for (const path of ['/', '/creators', '/login', '/register', '/faq']) {
       await page.goto(path);
       await expect(page.locator('h1').first()).toBeVisible();
       expect(await hasHorizontalScroll(page), `horizontal scroll on ${path}`).toBe(false);

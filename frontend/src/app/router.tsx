@@ -5,12 +5,11 @@ import { LoginPage } from '@/features/auth/LoginPage';
 import { RegisterPage } from '@/features/auth/RegisterPage';
 import { ResetPasswordPage } from '@/features/auth/ResetPasswordPage';
 import { VerifyEmailPage } from '@/features/auth/VerifyEmailPage';
-import { FaqPage } from '@/features/public/FaqPage';
-import { LandingPage } from '@/features/public/LandingPage';
 import { CampaignLandingPage } from '@/features/public/landing/CampaignLandingPage';
 import { JoinPage } from '@/features/public/landing/JoinPage';
 import { NotFound } from '@/features/public/NotFound';
 import { RouteErrorPage } from '@/features/public/RouteErrorPage';
+import { publicRoutes } from '@/features/public/routes';
 import { AuthProvider } from '@/lib/auth/AuthProvider';
 import { RedirectIfAuthenticated, RequireAuth, RequirePermission } from './guards';
 import { AuthLayout } from './layouts/AuthLayout';
@@ -58,8 +57,8 @@ export const routes: RouteObject[] = [
       {
         element: <PublicLayout />,
         children: [
-          { index: true, element: <LandingPage /> },
-          { path: 'faq', element: <FaqPage /> },
+          // Public agency website (home, services, blog, careers, forms, CMS pages…): features/public/routes.tsx.
+          ...publicRoutes,
           // Invitation links (backend MarketingUrls.InvitationLink) and shareable public campaign pages.
           { path: 'join/:code', element: <JoinPage /> },
           { path: 'c/:slug', element: <CampaignLandingPage /> },
