@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Ledger;
+using OptimizeAll.Api.Common.Notifications;
 using OptimizeAll.Api.Modules.Rewards;
 using OptimizeAll.Domain.Campaigns;
 using OptimizeAll.Domain.Common;
@@ -127,8 +128,9 @@ internal sealed partial class DemoRun
                 SocialPlatform.Facebook => $"https://www.facebook.com/{handle}/posts/{_rng.Digits(16)}",
                 _ => throw new InvalidOperationException($"No demo URL format for {platform}."),
             };
-            var normalized = Normalization.PostUrl(url);
-            if (normalized is not null && PlatformUrlRules.IsValidPostUrl(platform, normalized) && _normalizedUrls.Add(normalized))
+            // Unique by canonical post key, the same key SubmissionService stores and de-duplicates on.
+            var key = PlatformUrlRules.CanonicalKey(platform, url);
+            if (key is not null && _normalizedUrls.Add(key))
                 return url;
             if (attempt > 20) throw new InvalidOperationException("Could not generate a unique demo post URL.");
         }
@@ -315,7 +317,8 @@ internal sealed partial class DemoRun
         }
         var ruleSet = await _quotes.GetCurrentRuleSetAsync(campaign.Id, Now)
                       ?? throw new InvalidOperationException($"Campaign {campaign.Slug} has no reward rules at {Now:u}.");
-        var normalizedUrl = Normalization.PostUrl(plan.PostUrl)!;
+        var normalizedUrl = PlatformUrlRules.CanonicalKey(plan.Account.Platform, plan.PostUrl)
+                            ?? throw new InvalidOperationException($"Invalid demo post URL {plan.PostUrl}.");
         if (await _db.Set<Submission>().AnyAsync(s => s.NormalizedPostUrl == normalizedUrl))
             throw new InvalidOperationException("Duplicate demo post URL.");
 
@@ -362,7 +365,7 @@ internal sealed partial class DemoRun
             submission.EstimatedRewardAmount, submission.RewardCurrency, submission.RiskScore,
         });
         await NotifyAsync(plan.Who.Id, NotificationTypes.SubmissionReceived, "Submission received",
-            $"We received your post for \"{campaign.Title}\". A reviewer will check it soon.", $"/submissions/{submission.Id}");
+            $"We received your post for \"{campaign.Title}\". A reviewer will check it soon.", AppLinks.Submission(submission.Id));
         Count("submissions");
         return true;
     }
@@ -499,7 +502,7 @@ internal sealed partial class DemoRun
                 {
                     await _ledger.ApproveAsync(bonus, step.Actor.Id);
                     await NotifyAsync(s.UserId, NotificationTypes.EarningApproved, "Bonus approved",
-                        $"Your quality bonus of {Money2(bonus.Amount, bonus.Currency)} for \"{campaign.Title}\" was approved.", "/earnings");
+                        $"Your quality bonus of {Money2(bonus.Amount, bonus.Currency)} for \"{campaign.Title}\" was approved.", AppLinks.Earnings);
                     Count("quality bonuses approved");
                 }
                 else
@@ -573,7 +576,7 @@ internal sealed partial class DemoRun
             SubmissionStatus.NeedsCorrection => ("Correction needed", $"Your post for \"{campaign.Title}\" needs a correction: {reason}"),
             _ => ("Submission not approved", $"Your post for \"{campaign.Title}\" was not approved: {reason}"),
         };
-        await NotifyAsync(s.UserId, NotificationTypes.SubmissionDecision, title, body, $"/submissions/{s.Id}");
+        await NotifyAsync(s.UserId, NotificationTypes.SubmissionDecision, title, body, AppLinks.Submission(s.Id));
         Count($"decisions ({action})");
 
         if (target == SubmissionStatus.Approved) await QualifyReferralAsync(s.UserId);
@@ -686,7 +689,7 @@ internal sealed partial class DemoRun
         _audit.Record("submission.reversed", nameof(Submission), s.Id, new { Status = "Approved" },
             new { Status = "Reversed", ReversedEarnings = earnings.Select(e => new { e.Id, e.Type, e.Amount, e.Currency }) }, reason);
         await NotifyAsync(s.UserId, NotificationTypes.SubmissionReversed, "Approval reversed",
-            $"The approval of your post for \"{plan.Campaign.Title}\" was reversed: {reason}", $"/submissions/{s.Id}");
+            $"The approval of your post for \"{plan.Campaign.Title}\" was reversed: {reason}", AppLinks.Submission(s.Id));
         Count("submissions reversed");
         return true;
     }
@@ -742,7 +745,7 @@ internal sealed partial class DemoRun
             overturn
                 ? $"Your appeal for \"{campaign.Title}\" was accepted and your post is now approved. {note}"
                 : $"Your appeal for \"{campaign.Title}\" was reviewed and the original decision stands. {note}",
-            $"/submissions/{s.Id}");
+            AppLinks.Submission(s.Id));
         Count(overturn ? "appeals overturned" : "appeals upheld");
     }
 

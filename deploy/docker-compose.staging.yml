@@ -92,6 +92,8 @@ services:
       Email__FromAddress: ${EMAIL_FROM_ADDRESS:-no-reply@staging.optimizeall.local}
       Email__FromName: Optimize All (staging)
       Email__AppBaseUrl: ${PUBLIC_BASE_URL:-http://localhost:8080}
+      # External image hosts for campaign/banner images (default: uploads only); mirror them in the web's IMG_SRC_EXTRA.
+      # Content__AllowedImageHosts__0: images.example.com
       Tracking__PublicBaseUrl: ${PUBLIC_BASE_URL:-http://localhost:8080}
       Tracking__PostbackSecret: ${POSTBACK_SECRET:?set POSTBACK_SECRET in deploy/.env.staging}
       WhatsApp__Enabled: ${WHATSAPP_ENABLED:-false}
@@ -127,6 +129,8 @@ services:
         condition: service_healthy
     environment:
       API_UPSTREAM: http://api:8080
+      # Extra CSP img-src hosts; keep in sync with the API's Content__AllowedImageHosts__N.
+      IMG_SRC_EXTRA: ${IMG_SRC_EXTRA:-}
     ports:
       - "${WEB_PORT:-8080}:8080"
     healthcheck:

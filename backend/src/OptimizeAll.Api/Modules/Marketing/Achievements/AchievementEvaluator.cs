@@ -67,7 +67,7 @@ public sealed class AchievementEvaluator(AppDbContext db, INotificationService n
             {
                 await notifications.StageAsync(new NotificationRequest(
                     userId, NotificationTypes.Achievement, $"Achievement unlocked: {achievement.Name}",
-                    achievement.Description, "/achievements", new[] { NotificationChannel.InApp }), ct);
+                    achievement.Description, AppLinks.Achievements, new[] { NotificationChannel.InApp }), ct);
                 await db.SaveChangesAsync(ct);
                 awarded.Add(achievement.Key);
             }

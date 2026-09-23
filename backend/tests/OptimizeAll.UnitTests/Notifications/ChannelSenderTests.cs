@@ -164,6 +164,9 @@ public sealed class EmailComposeTests
         Assert.Contains("&lt;b&gt;Sara&lt;/b&gt;", message.HtmlBody);
         Assert.Contains("https://app.example.com/app/support/1", message.TextBody);
         Assert.Contains("href=\"https://app.example.com/app/support/1\"", message.HtmlBody);
+        // The footer links to the real notification preferences route.
+        Assert.Contains("https://app.example.com/app/profile/notification-preferences", message.TextBody);
+        Assert.Contains("href=\"https://app.example.com/app/profile/notification-preferences\"", message.HtmlBody);
     }
 
     [Theory]

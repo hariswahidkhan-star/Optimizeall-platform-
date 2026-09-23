@@ -254,8 +254,10 @@ Errors: `400 social.note_required`, `400 social.invalid_created_at`, `404`, `409
 ## 3. Content / CMS — permission `content.manage`
 
 Every mutation is audited (`content.banner_created|updated|deleted`, `content.banners_reordered`, and the same
-pattern for `announcement`, `faq`, `onboarding_step`). Links (`imageUrl`, `ctaUrl`, `actionUrl`) must be absolute
-`https://` URLs or app paths starting with a single `/`. Lists support `search` + paging.
+pattern for `announcement`, `faq`, `onboarding_step`). Links (`ctaUrl`, `actionUrl`) must be absolute
+`https://` URLs or app paths starting with a single `/`. Banner `imageUrl` must be an upload (`/api/v1/files/{id}`,
+see `POST /admin/files` with `purpose=ContentImage`) or an https URL on a host in `Content:AllowedImageHosts`
+(default none). Lists support `search` + paging.
 
 ### Banners `/admin/content/banners`
 
@@ -325,7 +327,10 @@ link (`payout-details`: `/app/payout-details`) is moved to the current one on ev
 | POST | `/me/notifications/{id}/read` | `204` (idempotent; `404 notification.not_found` for others' ids) |
 | POST | `/me/notifications/read-all` | `{ "updated": 5 }` |
 
-`NotificationDto`: `{ "id", "type", "title", "body", "linkUrl", "createdAt", "readAt", "isRead" }`.
+`NotificationDto`: `{ "id", "type", "title", "body", "linkUrl", "createdAt", "readAt", "isRead" }`. `linkUrl` is an
+app-relative web route built with `Common/Notifications/AppLinks.cs` (e.g. `/app/submissions/{id}`,
+`/app/payouts/{itemId}`, `/review/live-checks`, `/finance/batches/{id}`); `frontend/src/app/appLinks.fixture.json`
+lists every pattern and tests on both sides keep them resolving to real routes.
 
 ### Preferences — any authenticated user
 
@@ -367,7 +372,8 @@ essential type), `409 notifications.concurrent_update`.
 * `INotificationChannelSender { NotificationChannel Channel; Task<ChannelSendResult> SendAsync(NotificationDelivery, Notification, User, CancellationToken) }`,
   `ChannelSendResult(ChannelSendStatus Status /* Sent|Failed|Skipped */, string? ProviderMessageId, string? Error)`.
   The dispatch job uses the **last registered** sender per channel.
-* `EmailChannelSender` — plain-text + HTML (all user content HTML-encoded), link = `Email:AppBaseUrl` + `linkUrl`.
+* `EmailChannelSender` — plain-text + HTML (all user content HTML-encoded), link = `Email:AppBaseUrl` + `linkUrl`;
+  the footer links to the notification preferences page (`AppLinks.NotificationPreferences`).
 * `WhatsAppChannelSender` — WhatsApp Business Cloud API. Configuration section `WhatsApp`:
   `Enabled`, `PhoneNumberId`, `AccessToken` (secret), `ApiBaseUrl` (default `https://graph.facebook.com/v20.0`),
   `TemplateName` (approved template with body parameters `{{1}}` title and `{{2}}` body), `TemplateLanguage`

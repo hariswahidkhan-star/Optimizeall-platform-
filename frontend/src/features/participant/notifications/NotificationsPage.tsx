@@ -15,8 +15,8 @@ import { pluralize } from '@/lib/format/text';
 import { qk, useNotifications, useUnreadCount } from '../api/queries';
 import type { NotificationItem, PagedResult, ParticipantHome } from '../api/types';
 import { QueryState } from '../components/QueryState';
-import { isInternalLink } from '../lib/labels';
 import '../participant.css';
+import { isInternalHref } from '@/lib/safeHref';
 
 const PAGE_SIZE = 20;
 
@@ -84,7 +84,7 @@ function NotificationRow({ n, onRead }: { n: NotificationItem; onRead: (id: stri
     <li className="pp-list__item pp-notification" data-unread={!n.isRead}>
       <div className="pp-list__main">
         <span className="pp-list__title">
-          {link && isInternalLink(link) ? (
+          {isInternalHref(link) ? (
             <Link to={link} className="ui-link" onClick={() => !n.isRead && onRead(n.id)}>
               {n.title}
             </Link>

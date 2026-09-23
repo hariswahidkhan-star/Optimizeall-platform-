@@ -141,7 +141,7 @@ public sealed class SubmissionService(
             });
             await notifications.StageAsync(new NotificationRequest(me, NotificationTypes.SubmissionReceived,
                 "Submission received", $"We received your post for \"{campaign.Title}\". A reviewer will check it soon.",
-                $"/submissions/{submission.Id}"), ct);
+                AppLinks.Submission(submission.Id)), ct);
 
             await SaveMappingDuplicateUrlAsync(ct);
             await tx.CommitAsync(ct);

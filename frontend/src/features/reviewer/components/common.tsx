@@ -2,6 +2,7 @@ import { ExternalLink as ExternalIcon, RefreshCw } from 'lucide-react';
 import { useEffect, useState, type ReactNode } from 'react';
 import { Alert, Button } from '@/components/ui';
 import { describeReviewError } from '../api/errors';
+import { SafeExternalLink } from '@/components/SafeExternalLink';
 
 /** Inline error for a failed reviewer action, with a "Refresh" action when the data on screen is stale. */
 export function ActionError({
@@ -53,21 +54,19 @@ export function ExternalLink({
   className?: string;
   onOpen?: () => void;
 }) {
-  const safe = /^https?:\/\//i.test(href);
-  if (!safe) return <span className={className}>{children}</span>;
   return (
-    <a
+    <SafeExternalLink
       href={href}
-      target="_blank"
-      rel="noopener noreferrer nofollow"
+      nofollow
       className={className ?? 'ui-link rv-external'}
+      fallback={<span className={className}>{children}</span>}
       onClick={onOpen}
       onAuxClick={onOpen}
     >
       {children}
       <ExternalIcon aria-hidden="true" className="rv-external__icon" />
       <span className="visually-hidden"> (opens in a new tab)</span>
-    </a>
+    </SafeExternalLink>
   );
 }
 

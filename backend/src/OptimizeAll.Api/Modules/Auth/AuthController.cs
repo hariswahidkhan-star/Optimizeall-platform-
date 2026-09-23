@@ -17,6 +17,7 @@ public sealed class AuthController(IAuthService auth, ICurrentUser currentUser, 
     private const string CsrfHeader = "X-Requested-With";
 
     /// <summary>Creates a participant account and sends a verification email. Always 202 (no account enumeration).</summary>
+    [AllowAnonymous]
     [HttpPost("register")]
     [ProducesResponseType(typeof(MessageResponse), StatusCodes.Status202Accepted)]
     public async Task<IActionResult> Register(RegisterRequest request, CancellationToken ct)
@@ -25,6 +26,7 @@ public sealed class AuthController(IAuthService auth, ICurrentUser currentUser, 
         return Accepted(new MessageResponse("Check your inbox to verify your email address."));
     }
 
+    [AllowAnonymous]
     [HttpPost("verify-email")]
     public async Task<ActionResult<MessageResponse>> VerifyEmail(TokenRequest request, CancellationToken ct)
     {
@@ -32,6 +34,7 @@ public sealed class AuthController(IAuthService auth, ICurrentUser currentUser, 
         return new MessageResponse("Your email address is verified.");
     }
 
+    [AllowAnonymous]
     [HttpPost("resend-verification")]
     [ProducesResponseType(typeof(MessageResponse), StatusCodes.Status202Accepted)]
     public async Task<IActionResult> ResendVerification(EmailRequest request, CancellationToken ct)
@@ -41,6 +44,7 @@ public sealed class AuthController(IAuthService auth, ICurrentUser currentUser, 
     }
 
     /// <summary>Returns a short-lived access token and sets the rotating refresh token as an HttpOnly cookie.</summary>
+    [AllowAnonymous]
     [HttpPost("login")]
     public async Task<ActionResult<AuthResponse>> Login(LoginRequest request, CancellationToken ct)
     {
@@ -50,6 +54,7 @@ public sealed class AuthController(IAuthService auth, ICurrentUser currentUser, 
     }
 
     /// <summary>Rotates the refresh cookie. Requires the X-Requested-With header (CSRF defence in depth with SameSite=Strict).</summary>
+    [AllowAnonymous]
     [HttpPost("refresh")]
     [EnableRateLimiting(RateLimitPolicies.Refresh)]
     public async Task<ActionResult<AuthResponse>> Refresh(CancellationToken ct)
@@ -69,6 +74,7 @@ public sealed class AuthController(IAuthService auth, ICurrentUser currentUser, 
         }
     }
 
+    [AllowAnonymous]
     [HttpPost("logout")]
     [EnableRateLimiting(RateLimitPolicies.Refresh)]
     public async Task<IActionResult> Logout(CancellationToken ct)
@@ -79,6 +85,7 @@ public sealed class AuthController(IAuthService auth, ICurrentUser currentUser, 
         return NoContent();
     }
 
+    [AllowAnonymous]
     [HttpPost("forgot-password")]
     [ProducesResponseType(typeof(MessageResponse), StatusCodes.Status202Accepted)]
     public async Task<IActionResult> ForgotPassword(EmailRequest request, CancellationToken ct)
@@ -87,6 +94,7 @@ public sealed class AuthController(IAuthService auth, ICurrentUser currentUser, 
         return Accepted(new MessageResponse("If an account exists for that email, we've sent a reset link."));
     }
 
+    [AllowAnonymous]
     [HttpPost("reset-password")]
     public async Task<ActionResult<MessageResponse>> ResetPassword(ResetPasswordRequest request, CancellationToken ct)
     {

@@ -1,5 +1,5 @@
 import { Plus, Trash2 } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import {
   Alert,
   Button,
@@ -7,9 +7,9 @@ import {
   CardBody,
   CardHeader,
   Checkbox,
+  CopyField,
   DataTable,
   DateTime,
-  FileDrop,
   FormField,
   IconButton,
   Input,
@@ -17,15 +17,12 @@ import {
   Select,
   Switch,
   Textarea,
-  useToast,
   type DataTableColumn,
 } from '@/components/ui';
-import { api } from '@/lib/api/client';
-import { errorMessage } from '@/lib/api/errors';
+import { ImageUpload } from '@/components/ImageUpload';
 import { browserTimeZone } from '@/lib/format/dates';
 import { useEligibilityDefaults } from '@/lib/api/meta';
 import { useCategories } from '../api/queries';
-import type { UploadedFile } from '../api/types';
 import { CheckboxGroup } from '../shared/CheckboxGroup';
 import { fieldError, type FieldErrorMap } from '../shared/formErrors';
 import { platformOptions, tierOptions } from '../shared/labels';
@@ -620,63 +617,13 @@ export function VerificationSection({ form, set, errors, disabled }: SectionProp
 
 // ---------------------------------------------------------------- landing & tracking
 
-/** Uploads an image to `/admin/files` and returns its URL. */
-export function ImageUpload({
-  label,
-  onUploaded,
+export function LandingSection({
+  form,
+  set,
+  errors,
   disabled,
-}: {
-  label: string;
-  onUploaded: (file: UploadedFile) => void;
-  disabled?: boolean;
-}) {
-  const toast = useToast();
-  const [file, setFile] = useState<File | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [busy, setBusy] = useState(false);
-
-  const upload = async () => {
-    if (!file) return;
-    setBusy(true);
-    setError(null);
-    try {
-      const form = new FormData();
-      form.append('file', file);
-      form.append('purpose', 'CampaignAsset');
-      const uploaded = await api.upload<UploadedFile>('/admin/files', form);
-      onUploaded(uploaded);
-      setFile(null);
-      toast.success('Image uploaded');
-    } catch (err) {
-      setError(errorMessage(err));
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  return (
-    <div className="stack mg-stack-sm">
-      <FileDrop
-        label={label}
-        value={file}
-        onChange={setFile}
-        maxSizeBytes={10 * 1024 * 1024}
-        hint="PNG, JPEG or WebP, up to 10 MB, at least 200×200 px."
-        error={error}
-        disabled={disabled || busy}
-      />
-      {file && (
-        <div>
-          <Button size="sm" onClick={upload} loading={busy} disabled={disabled}>
-            Upload image
-          </Button>
-        </div>
-      )}
-    </div>
-  );
-}
-
-export function LandingSection({ form, set, errors, disabled }: SectionProps) {
+  publicLandingUrl,
+}: SectionProps & { publicLandingUrl?: string }) {
   return (
     <div className="stack">
       <Card flat as="section" aria-labelledby="landing-title">
@@ -687,6 +634,15 @@ export function LandingSection({ form, set, errors, disabled }: SectionProps) {
           description="Shown on the public campaign page and invitation links. Headline and body fall back to the title and summary."
         />
         <CardBody className="stack">
+          {publicLandingUrl && (
+            <CopyField label="Public campaign page (share link)" value={publicLandingUrl} />
+          )}
+          {publicLandingUrl && form.visibility !== 'Public' && (
+            <p className="text-small text-muted">
+              Only public campaigns that are scheduled or active have a public page; invite-only campaigns are
+              shared with invitation links.
+            </p>
+          )}
           <FormField label="Headline" optional error={fieldError(errors, 'landingHeadline')}>
             <Input
               value={form.landingHeadline}
@@ -707,7 +663,7 @@ export function LandingSection({ form, set, errors, disabled }: SectionProps) {
           <FormField
             label="Hero image URL"
             optional
-            hint="An https URL or an uploaded file (/api/v1/files/…)."
+            hint="Upload an image below, or use an https URL on an allowed image host."
             error={fieldError(errors, 'heroImageUrl')}
           >
             <Input

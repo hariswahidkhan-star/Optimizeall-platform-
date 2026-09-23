@@ -435,8 +435,11 @@ export function BatchReviewPage({ tab = 'items' }: { tab?: 'items' | 'reconcilia
 
       <div className="stack fin-page">
         {selfPrepared && isDraft && can.finalize && (
-          <Alert tone="info" id="self-prepared-hint" title="Four-eyes rule">
-            You prepared this batch, so a different finance user must finalize it.
+          <Alert tone="info" title="Four-eyes rule">
+            {/* Describes the disabled Finalize button (the Alert itself is named by its title). */}
+            <span id="self-prepared-hint">
+              You prepared this batch, so a different finance user must finalize it.
+            </span>
           </Alert>
         )}
         {dispatch && (

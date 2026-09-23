@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Headers;
+using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Domain.Identity;
 using OptimizeAll.IntegrationTests.Campaigns;
 using OptimizeAll.IntegrationTests.Infrastructure;
@@ -88,7 +89,81 @@ public sealed class FileTests(ApiFactory api) : IClassFixture<ApiFactory>
             System.Net.Http.Json.JsonContent.Create(new { type = "Image", title = "Bad", url = "javascript:alert(1)" })))
             .ShouldFailAsync(400, "campaign.asset_url_invalid");
         await (await manager.PostAsync($"/api/v1/admin/campaigns/{campaign.Id}/assets",
-            System.Net.Http.Json.JsonContent.Create(new { type = "Image", title = "Wrong platform", url = "https://cdn.example/a.png", platform = "YouTube" })))
+            System.Net.Http.Json.JsonContent.Create(new { type = "Image", title = "Wrong platform", url = file.GetProperty("url").GetString(), platform = "YouTube" })))
             .ShouldFailAsync(400, "campaign.asset_platform_invalid");
+        // Image assets must be uploads (or on an allowed image host, none configured here); other asset types may
+        // link to any https URL.
+        await (await manager.PostAsync($"/api/v1/admin/campaigns/{campaign.Id}/assets",
+            System.Net.Http.Json.JsonContent.Create(new { type = "Image", title = "External", url = "https://placehold.co/600x600/png" })))
+            .ShouldFailAsync(400, "campaign.asset_url_invalid");
+        Assert.Equal(HttpStatusCode.Created, (await manager.PostAsync($"/api/v1/admin/campaigns/{campaign.Id}/assets",
+            System.Net.Http.Json.JsonContent.Create(new { type = "Link", title = "Product page", url = "https://brand.example/product" }))).StatusCode);
     }
+
+    [Fact]
+    public async Task Image_metadata_is_stripped_and_duplicates_still_match()
+    {
+        var (_, manager) = await api.CreateClientAsync(Role.CampaignManager);
+        var clean = CraftedPng(withGps: false);
+        var tagged = CraftedPng(withGps: true);
+        Assert.True(Contains(tagged, GpsMarker));
+
+        var file = await (await manager.PostAsync("/api/v1/admin/files", Upload(tagged))).ReadJsonAsync();
+        var served = await (await api.CreateClient().GetAsync(file.GetProperty("url").GetString())).Content.ReadAsByteArrayAsync();
+        Assert.False(Contains(served, GpsMarker));
+        Assert.False(Contains(served, "eXIf"));
+        Assert.False(Contains(served, "tEXt"));
+        Assert.Equal(clean, served);
+        Assert.Equal(clean.Length, file.GetProperty("sizeBytes").GetInt64());
+        Assert.Equal(Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(clean)).ToLowerInvariant(),
+            file.GetProperty("sha256").GetString()!.ToLowerInvariant());
+
+        // The same picture uploaded as screenshots (with and without metadata) is still flagged as a duplicate.
+        var kit = new CampaignTestKit(api);
+        var (_, creator) = await kit.ManagerAsync();
+        var campaign = await kit.CreateCampaignAsync(creator, kit.CampaignBody());
+        var a = await kit.ParticipantAsync();
+        var b = await kit.ParticipantAsync();
+        await kit.SubmitOkAsync(a, campaign.Id, screenshot: tagged);
+        var second = await kit.SubmitOkAsync(b, campaign.Id, screenshot: clean);
+        var flags = await api.WithDbAsync(db => db.Set<OptimizeAll.Domain.Submissions.SubmissionFlag>()
+            .Where(f => f.SubmissionId == second).Select(f => f.Type).ToListAsync());
+        Assert.Contains(OptimizeAll.Domain.Submissions.SubmissionFlagType.DuplicateScreenshot, flags);
+    }
+
+    private const string GpsMarker = "GPSLatitude=24.8607N;GPSLongitude=67.0011E";
+
+    private static bool Contains(byte[] data, string text) => data.AsSpan().IndexOf(System.Text.Encoding.ASCII.GetBytes(text)) >= 0;
+
+    /// <summary>A structurally valid PNG (random pixel payload) optionally carrying GPS EXIF and text chunks.</summary>
+    private static byte[] CraftedPng(bool withGps)
+    {
+        static void Chunk(Stream s, string type, byte[] data)
+        {
+            var len = new byte[4];
+            System.Buffers.Binary.BinaryPrimitives.WriteUInt32BigEndian(len, (uint)data.Length);
+            s.Write(len);
+            s.Write(System.Text.Encoding.ASCII.GetBytes(type));
+            s.Write(data);
+            s.Write(new byte[4]); // CRC is not validated
+        }
+
+        var s = new MemoryStream();
+        s.Write(new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A });
+        var ihdr = new byte[13];
+        System.Buffers.Binary.BinaryPrimitives.WriteUInt32BigEndian(ihdr, 800);
+        System.Buffers.Binary.BinaryPrimitives.WriteUInt32BigEndian(ihdr.AsSpan(4), 600);
+        ihdr[8] = 8; ihdr[9] = 2;
+        Chunk(s, "IHDR", ihdr);
+        if (withGps)
+        {
+            Chunk(s, "eXIf", System.Text.Encoding.ASCII.GetBytes("II*\0" + GpsMarker));
+            Chunk(s, "tEXt", System.Text.Encoding.ASCII.GetBytes("Location\0" + GpsMarker));
+        }
+        Chunk(s, "IDAT", Payload);
+        Chunk(s, "IEND", Array.Empty<byte>());
+        return s.ToArray();
+    }
+
+    private static readonly byte[] Payload = System.Security.Cryptography.RandomNumberGenerator.GetBytes(256);
 }

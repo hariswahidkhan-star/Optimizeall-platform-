@@ -125,14 +125,15 @@ platform > country > the campaign default. `eligibleFrom` is set when account ag
   "eligibility": { "minAccountAgeDays": null, "minFollowers": 0, "requireVerifiedAccount": false,
                    "countries": ["PK"], "languages": ["en"], "interests": ["fitness"], "tiers": ["Gold"] },
   "platforms": ["Instagram", "TikTok"],
-  "landingHeadline": null, "landingBody": null, "heroImageUrl": "https://… or /api/v1/files/{id}",
+  "landingHeadline": null, "landingBody": null, "heroImageUrl": "/api/v1/files/{id} or https://{allowed image host}/…",
   "trackingDestinationUrl": "https://…", "utmCampaign": "autumn"
 }
 ```
 Validation codes (400): `campaign.invalid_dates` (endsAt ≤ startsAt), `campaign.invalid_deadline` (deadline <
 endsAt), `campaign.invalid_time_zone`, `campaign.budget_currency_mismatch` (budget currency ≠ reward currency),
 `campaign.disclosure_required`, `campaign.invalid_tracking_url` (must be absolute https),
-`campaign.invalid_image_url`, `campaign.platform_required`, `campaign.invalid_country`,
+`campaign.invalid_image_url` (an upload `/api/v1/files/{id}` or an https URL on a host in `Content:AllowedImageHosts`,
+default none), `campaign.platform_required`, `campaign.invalid_country`,
 `campaign.category_not_found`. 409 `campaign.slug_taken` (explicit slug in use). These business errors carry the
 offending field in the problem's `errors` dictionary with a camelCase key, e.g.
 `{ "code": "campaign.invalid_dates", "errors": { "endsAt": ["The campaign must end after it starts."] } }`:
@@ -159,7 +160,8 @@ newest first, at most 500. `search` matches title or slug (use it to reach campa
   "assets": [ …CampaignAsset… ], "disclosures": [{ "id": "…", "platform": "Instagram", "countryCode": null, "text": "…" }],
   "currentRuleSet": { …RewardRuleSet… },
   "submissions": { "total": 3, "pending": 1, "approved": 1, "rejected": 1 },
-  "createdByUserId": "…", "createdAt": "…", "updatedAt": "…", "publishedAt": null, "concurrencyStamp": "…"
+  "createdByUserId": "…", "createdAt": "…", "updatedAt": "…", "publishedAt": null, "concurrencyStamp": "…",
+  "publicLandingPath": "/c/spring-drop" /* shareable public page; live while Public and Scheduled/Active */
 }
 ```
 `spent` = sum of `Amount` of the campaign's earnings that are not Reversed/Declined (reward currency).
@@ -253,8 +255,8 @@ approved earnings are never changed. See `docs/REWARD_ENGINE.md`.
 
 ### GET /files/{id} — anonymous route, access checked per file
 * CampaignAsset/ContentImage files marked public: anyone (`Cache-Control: public, max-age=86400`).
-* SubmissionScreenshot: the owner, or users with `submissions.review` / `campaigns.manage`
-  (`Cache-Control: private, max-age=300`).
+* SubmissionScreenshot: the owner, users with `submissions.review`, or campaign managers (`campaigns.manage`) for
+  submissions to campaigns they created (`Cache-Control: private, max-age=300`).
 * Anything else / not allowed / unknown → 404 `file.not_found` (existence is never revealed).
 
 Headers: real `Content-Type` (image/png|jpeg|webp), `Content-Disposition: inline`, `X-Content-Type-Options: nosniff`,
@@ -269,8 +271,9 @@ Fields: `file` (required), `purpose` = CampaignAsset (default for campaign manag
 ```
 Upload rules (also for screenshots): ≤ 10 MB (`file.too_large`); type detected from magic bytes — PNG, JPEG, WebP
 only, client type/extension ignored (`file.unsupported_type`); 200×200 to 10000×10000 px (`file.too_small`,
-`file.too_large_dimensions`); empty → `file.empty`; `file.required`, `file.invalid_purpose`. Files are stored
-privately under server-generated keys `yyyy/MM/{guid}.{ext}` in `Storage:RootPath`.
+`file.too_large_dimensions`); empty → `file.empty`; `file.required`, `file.invalid_purpose`. EXIF/GPS/XMP/IPTC and
+text metadata is removed without re-encoding before storage; `sizeBytes` and `sha256` describe the stripped image.
+Files are stored privately under server-generated keys `yyyy/MM/{guid}.{ext}` in `Storage:RootPath`.
 
 ---
 

@@ -102,15 +102,41 @@ internal static class DemoPng
     {
         var accent = Palette[Math.Abs(variant) % Palette.Length];
         var second = Palette[(Math.Abs(variant) / Palette.Length + 3) % Palette.Length];
-        var raw = new byte[(Width * 3 + 1) * Height];
         var captionLines = 3 + Math.Abs(variant) % 3;
-        for (var y = 0; y < Height; y++)
+        return Encode(Width, Height, (x, y) => Pixel(x, y, variant, accent, second, captionLines));
+    }
+
+    /// <summary>
+    /// A public campaign/banner creative (hero, image asset, homepage banner): a diagonal gradient between two palette
+    /// colours with a white "logo" block and a caption bar. <paramref name="variant"/> changes colours and layout.
+    /// </summary>
+    public static byte[] Creative(int width, int height, int variant)
+    {
+        var accent = Palette[Math.Abs(variant) % Palette.Length];
+        var second = Palette[(Math.Abs(variant) + 4) % Palette.Length];
+        var logo = Math.Min(width, height) / 5;
+        var logoX = width / 4 + Math.Abs(variant) * 37 % (width / 2);
+        return Encode(width, height, (x, y) =>
         {
-            var row = y * (Width * 3 + 1);
+            if (Math.Abs(x - logoX) < logo / 2 && Math.Abs(y - height / 2) < logo / 2) return (0xFF, 0xFF, 0xFF);
+            if (y > height * 3 / 4 && y < height * 3 / 4 + height / 16 && x > width / 10 && x < width * 6 / 10)
+                return (0xFF, 0xFF, 0xFF);
+            var t = (x + y) / (double)(width + height);
+            return ((byte)(accent.R + (second.R - accent.R) * t), (byte)(accent.G + (second.G - accent.G) * t),
+                (byte)(accent.B + (second.B - accent.B) * t));
+        });
+    }
+
+    private static byte[] Encode(int width, int height, Func<int, int, (byte R, byte G, byte B)> pixel)
+    {
+        var raw = new byte[(width * 3 + 1) * height];
+        for (var y = 0; y < height; y++)
+        {
+            var row = y * (width * 3 + 1);
             raw[row] = 0; // filter: none
-            for (var x = 0; x < Width; x++)
+            for (var x = 0; x < width; x++)
             {
-                var (r, g, b) = Pixel(x, y, variant, accent, second, captionLines);
+                var (r, g, b) = pixel(x, y);
                 var i = row + 1 + x * 3;
                 raw[i] = r;
                 raw[i + 1] = g;
@@ -121,8 +147,8 @@ internal static class DemoPng
         using var ms = new MemoryStream();
         ms.Write(new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A });
         var ihdr = new byte[13];
-        BinaryPrimitives.WriteUInt32BigEndian(ihdr.AsSpan(0), Width);
-        BinaryPrimitives.WriteUInt32BigEndian(ihdr.AsSpan(4), Height);
+        BinaryPrimitives.WriteUInt32BigEndian(ihdr.AsSpan(0), (uint)width);
+        BinaryPrimitives.WriteUInt32BigEndian(ihdr.AsSpan(4), (uint)height);
         ihdr[8] = 8;  // bit depth
         ihdr[9] = 2;  // colour type: truecolour
         ihdr[10] = 0; // compression
@@ -140,7 +166,7 @@ internal static class DemoPng
         return ms.ToArray();
     }
 
-    private static (byte, byte, byte) Pixel(int x, int y, int variant, (byte R, byte G, byte B) accent, (byte R, byte G, byte B) second, int captionLines)
+    private static (byte R, byte G, byte B) Pixel(int x, int y, int variant, (byte R, byte G, byte B) accent, (byte R, byte G, byte B) second, int captionLines)
     {
         // Status bar.
         if (y < 24) return (0x11, 0x11, 0x11);

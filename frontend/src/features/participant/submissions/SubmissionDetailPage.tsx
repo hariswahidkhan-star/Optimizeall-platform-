@@ -19,6 +19,7 @@ import { QueryState } from '../components/QueryState';
 import { earningTypeLabel, timelineActionLabel, timelineTone } from '../lib/labels';
 import { AppealForm, ResubmitForm } from './SubmissionForms';
 import '../participant.css';
+import { SafeExternalLink } from '@/components/SafeExternalLink';
 
 const DECISION_TONE: Record<string, Tone> = {
   NeedsCorrection: 'warning',
@@ -106,16 +107,15 @@ function SubmissionView({ s }: { s: SubmissionDetail }) {
                   {
                     label: 'Post link',
                     value: (
-                      <a
+                      <SafeExternalLink
                         href={s.postUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
                         className="ui-link pp-break pp-link-icon"
+                        fallback={<span className="pp-break">{s.postUrl}</span>}
                       >
                         {s.postUrl}
                         <ExternalLink aria-hidden="true" className="pp-inline-icon" />
                         <span className="visually-hidden"> (opens in a new tab)</span>
-                      </a>
+                      </SafeExternalLink>
                     ),
                   },
                   { label: 'Profile', value: `@${s.socialAccount.handle}` },

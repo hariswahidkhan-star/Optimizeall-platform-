@@ -4,6 +4,15 @@ import type { PermissionRequirement } from '@/lib/auth/permissions';
 
 export type PortalId = 'participant' | 'reviewer' | 'manager' | 'finance' | 'admin';
 
+/**
+ * Route `handle` used by portal route files. `requires` guards the route (and, for a parent route, all of its children
+ * such as detail pages) with a 403 page; the nav item for the same path must declare the same requirement
+ * (checked by app/portalRoutes.test.ts).
+ */
+export interface PortalRouteHandle {
+  requires?: PermissionRequirement;
+}
+
 /** One sidebar / bottom-bar destination inside a portal. */
 export interface PortalNavItem {
   /** Path relative to the portal base ('' = the portal home). */
@@ -14,7 +23,7 @@ export interface PortalNavItem {
   icon: LucideIcon;
   /** One line shown on the portal overview cards. */
   description?: string;
-  /** Hide the item (and guard its route) unless the user meets this requirement. */
+  /** Hide the item unless the user meets this requirement (same as the route's `handle.requires`). */
   requires?: PermissionRequirement;
   /** Shown in the mobile bottom tab bar (participant portal). */
   mobilePrimary?: boolean;

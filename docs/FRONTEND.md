@@ -15,23 +15,28 @@ frontend/
       providers.tsx          QueryClient, Theme, Toasts (AuthProvider sits inside the router)
       guards.tsx             RequireAuth, RedirectIfAuthenticated (+ re-exports RequirePermission)
       RequirePermission.tsx  403 guard, importable from feature route files without cycles
-      portals.ts             portal registry + landing/next-path rules
-      portalTypes.ts         PortalDefinition, PortalNavItem, PortalModule
+      portals.ts             portal registry + landing/next-path rules (canOpenPath checks route requirements)
+      portalTypes.ts         PortalDefinition, PortalNavItem, PortalModule, PortalRouteHandle
+      appLinks.fixture.json  web paths the backend links to (AppLinks.cs); appLinks.test.ts resolves each one
       portalContext.ts       useCurrentPortal()
       redirects.ts           safeNextPath() — open-redirect defence for ?next=
       layouts/               PublicLayout, AuthLayout, PortalLayout, EmailVerificationBanner
     components/
       ui/                    design system (see catalog below), `index.ts` barrel
       brand/Logo.tsx         LogoMark + Logo (mark | horizontal | stacked)
-      FullPageLoader, PendingSection, PortalOverview, ThemeToggle
+      FullPageLoader, PortalOverview, ThemeToggle, ProtectedImage
+      ImageUpload            POST /admin/files uploader (campaign creatives, content images)
+      SafeExternalLink       new-tab link for backend-provided URLs (renders text when unsafe)
     lib/
       api/                   client.ts, errors.ts, types.ts, query.ts
-      auth/                  AuthProvider, useAuth, permissions, deviceId
+      auth/                  AuthProvider, useAuth, permissions, deviceId, sessionPaths
+      safeHref.ts            isSafeHref / isInternalHref / isExternalHref (link safety for API-provided hrefs)
       format/                money.ts, dates.ts, text.ts, locale.ts
       hooks/                 useMediaQuery, useDebouncedValue, storage (safe localStorage)
       theme/                 ThemeProvider, useTheme
     features/
-      public/                LandingPage, FaqPage, NotFound, ForbiddenPage, RouteErrorPage
+      public/                LandingPage, FaqPage, NotFound, ForbiddenPage, RouteErrorPage,
+                             landing/ (JoinPage /join/:code, CampaignLandingPage /c/:slug)
       auth/                  Login, Register, CheckEmail, VerifyEmail, ForgotPassword, ResetPassword
       participant/ reviewer/ campaigns/ finance/ admin/   routes.tsx per portal (+ pages)
       design-system/         DesignSystemPage (dev/staging only)
@@ -95,13 +100,13 @@ Utilities in `base.css`: `.visually-hidden`, `.skip-link`, `.container`, `.stack
 | `DropdownMenu` | `trigger` (a button element), `items` (`{id,label,icon,to|onSelect,danger,disabled,current}` / separator / label), `align`, `placement` |
 | `Tooltip` | `content`, single focusable child; hover + focus, Escape |
 | Toasts | `useToast().success/error/info(title, description)`; polite live region, pause on hover/focus |
-| `Alert` | `tone`, `title`, `actions`, `onDismiss`, `role` (alert/status for dynamic messages) |
+| `Alert` | `tone`, `title`, `actions`, `onDismiss`, `role`. With a `title` it is `role="status"` (`alert` for the danger tone) named by the title (`aria-labelledby`); pass `role` to override. Untitled callouts have no role |
 | `Skeleton`, `SkeletonText`, `Spinner` | decorative placeholders; Spinner has role=status unless `decorative` |
 | `EmptyState` / `ErrorState` | `icon`, `title`, `description`, `action`; ErrorState takes `error` and shows the ApiError title + trace id, `onRetry` |
 | `Pagination` | `page`, `pageSize`, `total`, `onPageChange`, optional `onPageSizeChange` |
 | `DataTable<T>` | `columns[{id,header,cell,sortable,sortValue,align,primary,hideOnMobile}]`, `rows`, `getRowId`, `caption`, `sort`/`onSortChange` (server) or local sort, `loading`, `emptyState`, `rowActions`, `selectable`/`selectedIds`/`onSelectionChange`/`bulkActions`, `maxHeight` (sticky header); stacked cards below md |
 | `FilterBar` | `search`/`onSearchChange` (debounced), `filters`, `values`, `onFilterChange`, `onReset`, `actions`; active filters as removable chips |
-| `Stat` | `label`, `value`, `measurement` Measured·Estimated·Count, `delta{value,label,positiveIsGood}`, `icon`, `hint`, `loading` |
+| `Stat` | `label`, `value`, `measurement` Measured·Estimated·Count, `delta{value,label,positiveIsGood}`, `icon`, `hint`, `loading`. A `role="group"` named by its label (query tiles with `getByRole('group', { name: /^Pending/ })`) |
 | `ProgressBar` / `ProgressRing` | `value`, `max`, `label`, `valueText` |
 | `Stepper` | `steps[{id,title,description,status,action}]`, `label` |
 | `Avatar` | `name`, `src`, `size`, `decorative` |
@@ -126,7 +131,10 @@ Browse everything at **`/design-system`** (dev server, or builds with `VITE_SHOW
   `oa_refresh` cookie.
 * A 401 from any non-auth endpoint triggers a **single-flight** `POST /auth/refresh` (concurrent 401s share one
   promise), then the original request is retried once. If refresh fails the token is cleared and a
-  `session-expired` event fires; `AuthProvider` then navigates to `/login?expired=1&next=<path>`.
+  `session-expired` event fires; `AuthProvider` then navigates to `/login?expired=1&next=<path>` and sets the
+  transient `sessionExpired` flag, which `RequireAuth` uses for its own redirect in the same render (so a forced
+  sign-out, e.g. after a suspension, always shows "Your session has expired"). The flag clears once `/login` is shown
+  or on sign-in; ordinary anonymous visits redirect to `/login?next=<path>`.
 * Errors are `ApiError { status, code, title, errors?, traceId? }` parsed from RFC 7807 (`code`, `traceId`, `errors`
   extensions). ASP.NET validation keys are normalized to camelCase (`Email` → `email`). Network failures are
   `status 0 / code "network_error"`.
@@ -166,14 +174,36 @@ export const routes: RouteObject[] = [
 
 To add or replace a page:
 1. Build the page in `features/<portal>/` (use `PageHeader` for the `<h1>`, React Query + `api` for data).
-2. Point the route at it in `routes.tsx` (replace the `PendingSection` placeholder). Nested routes are fine.
-3. Add/adjust the `nav` item. A nav item's `requires` hides it for users without the permission **and** the router
-   wraps the matching route in `RequirePermission` (403 page). Mark up to four participant items `mobilePrimary`
-   for the phone bottom bar (`shortLabel` for a compact label).
-4. Paths are relative to the portal base (`/app`, `/review`, `/manage`, `/finance`, `/admin`).
+2. Point the route at it in `routes.tsx`. Nested routes are fine.
+3. Declare the section's permission on the **route**: `handle: { requires }` (the same permission the API controller
+   authorizes with). The router wraps every route with `handle.requires` — at any depth — in `RequirePermission`
+   (403 page); put it on the parent of list + detail routes so detail pages are guarded like their list.
+   `canOpenPath` (post-login `next`) checks the same requirements.
+4. Add/adjust the `nav` item with the **same** `requires` (it hides the item). Mark up to four participant items
+   `mobilePrimary` for the phone bottom bar (`shortLabel` for a compact label).
+5. Each routes file exports `portalRequires`, the portal entry requirement: any permission that opens one of its
+   sections (e.g. finance includes `rewards.approve_bonus` for Pending approvals and `payouts.hold` for Holds; admin
+   includes `support.manage`, `jobs.view`, `analytics.view`, `campaigns.manage`). Where a section needs a permission
+   on top of the portal's, write it as `allOf` (manager growth pages: `campaigns.manage` + `marketing.manage`).
+   `app/portalRoutes.test.ts` walks every portal and fails when a route requirement is not covered by the portal entry,
+   a nav item disagrees with its route, or a detail route is guarded differently from its list.
+6. Paths are relative to the portal base (`/app`, `/review`, `/manage`, `/finance`, `/admin`).
 
-`PendingSection` ("This section is being connected to the API") is used only from portal route files and should
-disappear as sections are implemented. `PortalOverview` builds a staff portal's landing page from its nav.
+`PortalOverview` builds a staff portal's landing page from its nav.
+
+### Links, images and public pages
+
+* Hrefs that come from the API go through `SafeExternalLink` / `isSafeHref` (`lib/safeHref.ts`): absolute
+  `http(s)` URLs and single-`/` app paths only; anything else renders as text. Use `isInternalHref` to decide between
+  a router link and a new-tab link (banner CTAs, onboarding actions, notification links).
+* Backend notification/email links come from `AppLinks.cs`; `app/appLinks.fixture.json` lists their patterns and
+  `app/appLinks.test.ts` asserts each resolves to a real route. When a route moves, update both.
+* Images: offer `ImageUpload` (`components/ImageUpload.tsx`) next to every image URL field. External image URLs only
+  work for hosts in the API's `Content:AllowedImageHosts` and the nginx `IMG_SRC_EXTRA` (CSP `img-src`).
+* Public landing routes in `PublicLayout`: `/join/:code` (invitation → `/register?invite=…[&ref=…]`) and `/c/:slug`
+  (public campaign → register, or `/app/campaigns/:slug` when signed in). They send `X-Visitor-Id` (localStorage
+  `oa.visitorId`, try/catch with an in-memory fallback) for landing-page experiments and render a friendly page on
+  404.
 
 ## Testing & quality
 
@@ -194,7 +224,8 @@ npm run e2e          # Playwright smoke suite (desktop-chromium + mobile-chromiu
   `axeViolations`), `src/test/viewport.ts` (`setViewportWidth` for the matchMedia mock).
 * E2E: `E2E_SUITE` picks `e2e/<suite>` (default `smoke`); `e2e/<suite>/global-setup.ts` is used when present.
   Without `E2E_BASE_URL`, Playwright builds and serves the app with `vite preview` on :5173. The smoke suite mocks
-  every `/api/v1/**` call with `page.route` (`e2e/support/mockApi.ts`). Full-stack journeys go in
+  every `/api/v1/**` call with `page.route` (`e2e/support/mockApi.ts`); `e2e/smoke/landing.spec.ts` covers the
+  public `/join/:code` and `/c/:slug` pages. Full-stack journeys go in
   `e2e/journeys/*.spec.ts` and run with `E2E_SUITE=journeys E2E_BASE_URL=…`.
 * Playwright uses the preinstalled Chromium (`PLAYWRIGHT_BROWSERS_PATH`); `@playwright/test` is pinned to 1.56 to
   match it.

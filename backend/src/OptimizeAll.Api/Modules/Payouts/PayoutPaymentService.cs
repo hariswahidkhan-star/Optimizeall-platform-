@@ -125,7 +125,7 @@ public sealed class PayoutPaymentService(
             await notifications.StageAsync(new NotificationRequest(item.UserId, NotificationTypes.PayoutPaid,
                 "Your payout was sent",
                 $"We sent your payout of {item.Amount:0.00} {item.Currency}. Payment reference ending {Tail(paymentReference)}.",
-                "/earnings/payouts", new[] { NotificationChannel.Email }), ct);
+                AppLinks.Payout(item.Id), new[] { NotificationChannel.Email }), ct);
             await db.SaveChangesAsync(ct);
             await PayoutStore.CompleteIfDoneAsync(db, batchId, now, ct);
             batchStatus = await db.Set<PayoutBatch>().AsNoTracking().Where(b => b.Id == batchId).Select(b => b.Status).FirstAsync(ct);
@@ -175,7 +175,7 @@ public sealed class PayoutPaymentService(
                 "We couldn't complete your payout",
                 $"Your payout of {item.Amount:0.00} {item.Currency} could not be completed. Please check your payout details; " +
                 "your earnings are safe and will be included in the next payout.",
-                "/settings/payout", new[] { NotificationChannel.Email }), ct);
+                AppLinks.PayoutDetails, new[] { NotificationChannel.Email }), ct);
             await db.SaveChangesAsync(ct);
             await PayoutStore.CompleteIfDoneAsync(db, batchId, now, ct);
             batchStatus = await db.Set<PayoutBatch>().AsNoTracking().Where(b => b.Id == batchId).Select(b => b.Status).FirstAsync(ct);

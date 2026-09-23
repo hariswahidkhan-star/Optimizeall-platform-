@@ -263,7 +263,7 @@ public sealed class SocialAccountService(
             verified
                 ? "A reviewer checked your profile and confirmed its details." + (note is null ? string.Empty : $" Note: {note}")
                 : $"A reviewer could not verify this profile. Reason: {note} You can update the details and request verification again.",
-            "/app/social-accounts",
+            AppLinks.SocialAccounts,
             new[] { NotificationChannel.InApp, NotificationChannel.Email }), ct);
 
         await db.SaveChangesAsync(ct);

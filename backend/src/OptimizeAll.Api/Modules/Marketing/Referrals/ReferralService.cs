@@ -177,7 +177,7 @@ public sealed class ReferralService(
                       (entry.Status == EarningStatus.PendingApproval ? "is pending approval." : "has been added to your earnings.")
                     : "Someone you invited completed their qualifying step. " +
                       (tracked.RejectionReason ?? "No reward applies to this referral."),
-                "/referrals",
+                AppLinks.Referrals,
                 new[] { NotificationChannel.InApp, NotificationChannel.Email }), ct);
 
             await db.SaveChangesAsync(ct);

@@ -532,7 +532,17 @@ export function CampaignEditor({ campaign, refetch }: EditorProps) {
     },
     { id: 'rewards', content: rewardsTab },
     { id: 'verification', content: <VerificationSection {...sectionProps} /> },
-    { id: 'landing', content: <LandingSection {...sectionProps} /> },
+    {
+      id: 'landing',
+      content: (
+        <LandingSection
+          {...sectionProps}
+          publicLandingUrl={
+            campaign?.publicLandingPath ? `${window.location.origin}${campaign.publicLandingPath}` : undefined
+          }
+        />
+      ),
+    },
   ].map((t) => ({ ...t, label: TAB_LABELS[t.id]!, badge: tabBadge(t.id) }));
 
   const menu = campaign ? actions.menuItems(campaign) : [];

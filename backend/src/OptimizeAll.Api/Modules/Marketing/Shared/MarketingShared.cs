@@ -1,6 +1,7 @@
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Errors;
+using OptimizeAll.Api.Common.Notifications;
 using OptimizeAll.Domain.Common;
 
 namespace OptimizeAll.Api.Modules.Marketing.Shared;
@@ -21,9 +22,9 @@ public sealed class MarketingUrls(IConfiguration configuration)
 
     public string? PostbackSecret => configuration["Tracking:PostbackSecret"] is { Length: > 0 } s ? s : null;
 
-    public string ReferralLink(string code) => $"{AppBaseUrl}/register?ref={Uri.EscapeDataString(code)}";
+    public string ReferralLink(string code) => $"{AppBaseUrl}{AppLinks.Register}?ref={Uri.EscapeDataString(code)}";
 
-    public string InvitationLink(string code) => $"{AppBaseUrl}/join/{code}";
+    public string InvitationLink(string code) => AppBaseUrl + AppLinks.Invitation(code);
 
     public string TrackingShortUrl(string code) => $"{TrackingBaseUrl}/t/{code}";
 }

@@ -99,6 +99,18 @@ export function isSafeLink(value: string): boolean {
 
 export const LINK_HINT = 'An https:// address or an app path such as /app/campaigns.';
 
+/** Banner/content images: an upload (`/api/v1/files/{id}`) or an https URL (the API checks the allowed hosts). */
+export function isImageLink(value: string): boolean {
+  if (value.startsWith('/')) return /^\/api\/v1\/files\/[0-9a-f-]{36}$/i.test(value);
+  try {
+    return new URL(value).protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
+export const IMAGE_HINT = 'Upload an image, or use an https URL on an allowed image host.';
+
 export function requireLength(
   errors: Record<string, string>,
   field: string,

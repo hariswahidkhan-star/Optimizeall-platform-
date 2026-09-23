@@ -1,0 +1,193 @@
+/* Public invitation (/join/:code) and campaign (/c/:slug) landing pages. */
+.campaign-landing__hero {
+  padding: var(--space-10) 0 var(--space-12);
+  background:
+    radial-gradient(60% 60% at 90% 10%, color-mix(in srgb, var(--color-accent) 18%, transparent) 0%, transparent 70%),
+    radial-gradient(50% 60% at 0% 100%, color-mix(in srgb, var(--primary-400) 16%, transparent) 0%, transparent 70%);
+}
+
+.campaign-landing__inner {
+  display: grid;
+  gap: var(--space-10);
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .campaign-landing__hero {
+    padding: var(--space-16) 0 var(--space-20);
+  }
+
+  .campaign-landing__inner {
+    grid-template-columns: 1.1fr 0.9fr;
+  }
+}
+
+.campaign-landing__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 4px 12px;
+  border: 1px solid var(--brand-border);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  color: var(--color-heading);
+  font-size: var(--text-small);
+  font-weight: var(--weight-medium);
+}
+
+.campaign-landing__eyebrow svg {
+  width: 16px;
+  height: 16px;
+  color: var(--color-accent-text);
+}
+
+.campaign-landing__title {
+  margin-top: var(--space-4);
+  font-size: var(--text-h1);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.campaign-landing__body {
+  margin-top: var(--space-4);
+  max-width: 60ch;
+  color: var(--color-text-muted);
+  font-size: var(--text-h4);
+  white-space: pre-line;
+}
+
+.campaign-landing__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+.campaign-landing__image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1200 / 630;
+  object-fit: cover;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  background: var(--color-surface-2);
+}
+
+.campaign-landing__details {
+  display: grid;
+  gap: var(--space-8);
+  padding-block: var(--space-10) var(--space-16);
+}
+
+.campaign-landing__facts {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  margin: 0;
+}
+
+.campaign-landing__fact {
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+}
+
+.campaign-landing__fact dt {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}
+
+.campaign-landing__fact dt svg {
+  width: 16px;
+  height: 16px;
+}
+
+.campaign-landing__fact dd {
+  margin: var(--space-2) 0 0;
+  color: var(--color-heading);
+  font-weight: var(--weight-semibold);
+}
+
+.campaign-landing__muted {
+  color: var(--color-text-muted);
+  font-weight: var(--weight-regular);
+}
+
+.campaign-landing__platforms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.campaign-landing__platforms li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.campaign-landing__platforms svg {
+  width: 16px;
+  height: 16px;
+}
+
+.campaign-landing__section-title,
+.campaign-landing__disclosure-title {
+  font-size: var(--text-h3);
+}
+
+.campaign-landing__gallery {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr));
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.campaign-landing__gallery figure {
+  margin: 0;
+}
+
+.campaign-landing__gallery img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-2);
+}
+
+.campaign-landing__gallery figcaption {
+  margin-top: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}
+
+.campaign-landing__disclosure {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  border: 1px solid var(--info-border);
+  border-radius: var(--radius-lg);
+  background: var(--info-bg);
+  color: var(--info-fg);
+}
+
+.campaign-landing__disclosure-text {
+  overflow-wrap: anywhere;
+}
+
+.campaign-landing__loading {
+  display: grid;
+  gap: var(--space-4);
+  padding-block: var(--space-12);
+}

@@ -278,7 +278,7 @@ public sealed class ReviewService(
             SubmissionStatus.NeedsCorrection => ("Correction needed", $"Your post for \"{campaign.Title}\" needs a correction: {reason}"),
             _ => ("Submission not approved", $"Your post for \"{campaign.Title}\" was not approved: {reason}"),
         };
-        return new NotificationRequest(s.UserId, NotificationTypes.SubmissionDecision, title, body, $"/submissions/{s.Id}",
+        return new NotificationRequest(s.UserId, NotificationTypes.SubmissionDecision, title, body, AppLinks.Submission(s.Id),
             new[] { NotificationChannel.Email });
     }
 
@@ -411,7 +411,7 @@ public sealed class ReviewService(
             new { Status = "Reversed", ReversedEarnings = earnings.Select(e => new { e.Id, e.Type, e.Amount, e.Currency }) }, reason);
         var title = await db.Set<Campaign>().Where(c => c.Id == s.CampaignId).Select(c => c.Title).FirstAsync(ct);
         await notifications.StageAsync(new NotificationRequest(s.UserId, NotificationTypes.SubmissionReversed, "Approval reversed",
-            $"The approval of your post for \"{title}\" was reversed: {reason}", $"/submissions/{s.Id}",
+            $"The approval of your post for \"{title}\" was reversed: {reason}", AppLinks.Submission(s.Id),
             new[] { NotificationChannel.Email }), ct);
     }
 
@@ -492,7 +492,7 @@ public sealed class ReviewService(
             ReasonText.Fit(status == AppealStatus.Overturned
                 ? $"Your appeal for \"{campaign.Title}\" was accepted and your post is now approved. {note}"
                 : $"Your appeal for \"{campaign.Title}\" was reviewed and the original decision stands. {note}", 2000)!,
-            $"/submissions/{s.Id}", new[] { NotificationChannel.Email }), ct);
+            AppLinks.Submission(s.Id), new[] { NotificationChannel.Email }), ct);
         await db.SaveChangesAsync(ct);
         await tx.CommitAsync(ct);
 

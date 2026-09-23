@@ -119,15 +119,18 @@ services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme).Co
 
 services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
 services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
+// Default deny: every endpoint needs a signed-in user unless it opts out with [AllowAnonymous] (public pages, auth
+// flows, tracking redirects, health checks) or declares a stricter [HasPermission].
 services.AddAuthorization(options =>
 {
-    options.FallbackPolicy = null;
+    options.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
 });
 
 services.AddHttpContextAccessor();
 services.AddScoped<ICurrentUser, HttpCurrentUser>();
 services.AddSingleton<ITokenService, TokenService>();
 services.AddSingleton<IPrivacyHasher, PrivacyHasher>();
+services.AddSingleton<ImageUrlPolicy>();
 services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
 services.AddAppRateLimiting();
 
@@ -253,12 +256,12 @@ app.UseRateLimiter();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHealthChecks("/health/live", new() { Predicate = _ => false });
+app.MapHealthChecks("/health/live", new() { Predicate = _ => false }).AllowAnonymous();
 app.MapHealthChecks("/health/ready", new()
 {
     Predicate = c => c.Tags.Contains("ready"),
     ResultStatusCodes = { [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable },
-});
+}).AllowAnonymous();
 
 if (app.Configuration.GetValue("Database:InitializeOnStartup", true))
     await DatabaseInitializer.InitializeAsync(app.Services);

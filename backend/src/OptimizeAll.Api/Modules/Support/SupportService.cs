@@ -240,7 +240,7 @@ public sealed class SupportService(
                 NotificationTypes.SupportReply,
                 $"New reply on your support ticket {ticket.Reference}",
                 $"Our support team replied to \"{ticket.Subject}\". Open the ticket to read the reply and respond.",
-                $"/app/support/{ticket.Id}",
+                AppLinks.SupportTicket(ticket.Id),
                 new[] { NotificationChannel.InApp, NotificationChannel.Email }), ct);
         }
         ConcurrencyGuard.Touch(db, ticket);

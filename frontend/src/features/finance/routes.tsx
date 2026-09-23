@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import type { RouteObject } from 'react-router-dom';
 import type { PortalNavItem } from '@/app/portalTypes';
-import { Permissions } from '@/lib/auth/permissions';
+import { type PermissionRequirement, Permissions } from '@/lib/auth/permissions';
 import { BatchReviewPage } from './batch/BatchReviewPage';
 import { LedgerPage } from './ledger/LedgerPage';
 import { UserBalancePage } from './ledger/UserBalancePage';
@@ -21,7 +21,25 @@ import { OverviewPage } from './pages/OverviewPage';
 import { SchedulePage } from './pages/SchedulePage';
 import './finance.css';
 
-/** Finance portal (/finance). Paths are relative to the portal base. */
+/**
+ * Finance portal (/finance). Paths are relative to the portal base. Every section declares the permission of the API
+ * it reads (route `handle.requires` + nav item). Campaign managers (rewards.approve_bonus) can open the portal for
+ * Pending approvals only.
+ */
+const requires = {
+  batches: { anyOf: [Permissions.PayoutsView] },
+  ledger: { anyOf: [Permissions.LedgerView] },
+  approvals: { anyOf: [Permissions.RewardsApproveBonus] },
+  holds: { anyOf: [Permissions.PayoutsHold] },
+  exchangeRates: { anyOf: [Permissions.PayoutsView] },
+  schedule: { anyOf: [Permissions.PayoutsView] },
+} satisfies Record<string, PermissionRequirement>;
+
+/** Portal entry: any permission that opens one of its sections. */
+export const portalRequires: PermissionRequirement = {
+  anyOf: [...new Set(Object.values(requires).flatMap((r) => r.anyOf))],
+};
+
 export const nav: PortalNavItem[] = [
   { to: '', label: 'Overview', icon: LayoutDashboard },
   {
@@ -29,42 +47,42 @@ export const nav: PortalNavItem[] = [
     label: 'Payout batches',
     icon: Layers,
     description: 'Prepare, finalize and record biweekly payout batches.',
-    requires: { anyOf: [Permissions.PayoutsView] },
+    requires: requires.batches,
   },
   {
     to: 'ledger',
     label: 'Ledger',
     icon: BookOpenText,
     description: 'Every earning, adjustment and reversal.',
-    requires: { anyOf: [Permissions.LedgerView] },
+    requires: requires.ledger,
   },
   {
     to: 'approvals',
     label: 'Pending approvals',
     icon: ClipboardCheck,
     description: 'Bonuses and adjustments waiting for approval.',
-    requires: { anyOf: [Permissions.RewardsApproveBonus, Permissions.LedgerAdjust] },
+    requires: requires.approvals,
   },
   {
     to: 'holds',
     label: 'Holds',
     icon: PauseCircle,
     description: 'Participants whose payouts are on hold, and why.',
-    requires: { anyOf: [Permissions.PayoutsHold, Permissions.PayoutsView] },
+    requires: requires.holds,
   },
   {
     to: 'exchange-rates',
     label: 'Exchange rates',
     icon: Coins,
     description: 'Rates used to convert earnings to the settlement currency.',
-    requires: { anyOf: [Permissions.PayoutsView, Permissions.PayoutSettingsEdit] },
+    requires: requires.exchangeRates,
   },
   {
     to: 'schedule',
     label: 'Payout schedule',
     icon: CalendarClock,
     description: 'Payout periods, cut-offs and minimum thresholds.',
-    requires: { anyOf: [Permissions.PayoutsView, Permissions.PayoutSettingsEdit] },
+    requires: requires.schedule,
   },
 ];
 
@@ -72,6 +90,7 @@ export const routes: RouteObject[] = [
   { index: true, element: <OverviewPage /> },
   {
     path: 'batches',
+    handle: { requires: requires.batches },
     children: [
       { index: true, element: <BatchesPage /> },
       { path: ':batchId', element: <BatchReviewPage /> },
@@ -80,13 +99,14 @@ export const routes: RouteObject[] = [
   },
   {
     path: 'ledger',
+    handle: { requires: requires.ledger },
     children: [
       { index: true, element: <LedgerPage /> },
       { path: 'users/:userId', element: <UserBalancePage /> },
     ],
   },
-  { path: 'approvals', element: <ApprovalsPage /> },
-  { path: 'holds', element: <HoldsPage /> },
-  { path: 'exchange-rates', element: <ExchangeRatesPage /> },
-  { path: 'schedule', element: <SchedulePage /> },
+  { path: 'approvals', handle: { requires: requires.approvals }, element: <ApprovalsPage /> },
+  { path: 'holds', handle: { requires: requires.holds }, element: <HoldsPage /> },
+  { path: 'exchange-rates', handle: { requires: requires.exchangeRates }, element: <ExchangeRatesPage /> },
+  { path: 'schedule', handle: { requires: requires.schedule }, element: <SchedulePage /> },
 ];

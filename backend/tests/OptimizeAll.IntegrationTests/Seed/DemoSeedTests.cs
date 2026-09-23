@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OptimizeAll.Api.Modules.Accounts;
 using OptimizeAll.Api.Modules.Seed;
 using OptimizeAll.Domain.Audit;
+using OptimizeAll.Domain.Campaigns;
 using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Files;
 using OptimizeAll.Domain.Identity;
@@ -250,6 +252,91 @@ public sealed class DemoSeedTests(DemoSeedFixture fx) : IClassFixture<DemoSeedFi
     }
 
     [Fact]
+    public async Task Seeded_submissions_follow_the_submission_and_review_rules()
+    {
+        var submissions = await fx.WithDbAsync(db => db.Set<Submission>().AsNoTracking().ToListAsync());
+        Assert.NotEmpty(submissions);
+        foreach (var s in submissions)
+        {
+            // Posts may be declared at most 7 days before the submission (SubmissionService rejects older ones).
+            Assert.True(s.PostedAt >= s.SubmittedAt.AddDays(-7), $"{s.Id}: posted {s.PostedAt:u}, submitted {s.SubmittedAt:u}");
+            Assert.True(s.PostedAt <= s.SubmittedAt, $"{s.Id}: posted after it was submitted");
+
+            // The stored key is the canonical post key of the URL, exactly as SubmissionService computes it.
+            var parsed = PlatformUrlRules.Parse(s.Platform, s.PostUrl);
+            Assert.True(parsed.IsValid, $"{s.Id}: {s.PostUrl} is not a valid {s.Platform} post URL");
+            Assert.Equal(parsed.CanonicalKey, s.NormalizedPostUrl);
+
+            // Nobody reviews or live-checks their own post.
+            Assert.NotEqual(s.UserId, s.DecidedByUserId);
+            Assert.NotEqual(s.UserId, s.LiveCheckedByUserId);
+            Assert.NotEqual(s.UserId, s.ClaimedByUserId);
+        }
+        Assert.Equal(submissions.Count, submissions.Select(s => s.NormalizedPostUrl).Distinct(StringComparer.Ordinal).Count());
+
+        // The participant only ever acts on their own submission as the author (never claims, decides or checks it).
+        var participantActions = new[] { "submitted", "resubmitted", "appealed" };
+        var selfActions = await fx.WithDbAsync(db => (
+            from e in db.Set<SubmissionEvent>()
+            join s in db.Set<Submission>() on e.SubmissionId equals s.Id
+            where e.ActorUserId == s.UserId
+            select e.Action).Distinct().ToListAsync());
+        Assert.All(selfActions, a => Assert.Contains(a, participantActions));
+    }
+
+    [Fact]
+    public async Task Suspended_users_have_no_earnings_approved_after_their_suspension()
+    {
+        var suspended = await fx.WithDbAsync(db => db.Set<User>().AsNoTracking()
+            .Where(u => u.Status == UserStatus.Suspended).Select(u => new { u.Id, u.StatusChangedAt }).ToListAsync());
+        Assert.NotEmpty(suspended);
+        foreach (var user in suspended)
+        {
+            Assert.NotNull(user.StatusChangedAt);
+            var approvedAfter = await fx.WithDbAsync(db => db.Set<EarningEntry>().AsNoTracking()
+                .Where(e => e.UserId == user.Id && e.Amount > 0 && e.ApprovedAt != null && e.ApprovedAt > user.StatusChangedAt)
+                .Select(e => e.IdempotencyKey).ToListAsync());
+            Assert.Empty(approvedAfter);
+        }
+    }
+
+    [Fact]
+    public async Task Seeded_images_are_public_uploads_allowed_by_the_csp()
+    {
+        await fx.WithDbAsync(async db =>
+        {
+            var images = new List<string?>();
+            images.AddRange(await db.Set<Campaign>().Select(c => c.HeroImageUrl).ToListAsync());
+            images.AddRange(await db.Set<CampaignAsset>().Where(a => a.Type == CampaignAssetType.Image).Select(a => a.Url).ToListAsync());
+            images.AddRange(await db.Set<OptimizeAll.Domain.Content.HomepageBanner>().Select(b => b.ImageUrl).ToListAsync());
+            var present = images.Where(u => u is not null).Select(u => u!).ToList();
+            Assert.NotEmpty(present);
+            Assert.All(present, url => Assert.True(FieldRules.IsAllowedImageUrl(url, Array.Empty<string>()), url));
+
+            var ids = present.Select(u => Guid.Parse(u[FieldRules.UploadedFilePrefix.Length..])).ToHashSet();
+            var files = await db.Set<StoredFile>().Where(f => ids.Contains(f.Id)).ToListAsync();
+            Assert.Equal(ids.Count, files.Count);
+            Assert.All(files, f => Assert.True(f.IsPublic && f.Purpose is FilePurpose.CampaignAsset or FilePurpose.ContentImage));
+            return true;
+        });
+
+        // Served anonymously, like any other public upload.
+        var hero = await fx.WithDbAsync(db => db.Set<Campaign>().Where(c => c.HeroImageUrl != null).Select(c => c.HeroImageUrl!).FirstAsync());
+        var response = await fx.Demo.CreateClient().GetAsync(hero);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal("image/png", response.Content.Headers.ContentType!.MediaType);
+    }
+
+    [Fact]
+    public async Task Seeded_notification_links_are_app_routes()
+    {
+        var links = await fx.WithDbAsync(db => db.Set<Notification>().Where(n => n.LinkUrl != null).Select(n => n.LinkUrl!).Distinct().ToListAsync());
+        Assert.NotEmpty(links);
+        var allowed = new[] { "/app", "/review/", "/finance/", "/login" };
+        Assert.All(links, l => Assert.True(allowed.Any(p => l == p || l.StartsWith(p == "/app" ? "/app/" : p, StringComparison.Ordinal)), l));
+    }
+
+    [Fact]
     public async Task Seeded_data_covers_every_journey()
     {
         await fx.WithDbAsync(async db =>
@@ -277,7 +364,7 @@ public sealed class DemoSeedTests(DemoSeedFixture fx) : IClassFixture<DemoSeedFi
                 var history = events.Where(e => e.SubmissionId == s.Id).OrderBy(e => e.CreatedAt).ThenBy(e => e.Id).ToList();
                 Assert.Equal("submitted", history[0].Action);
                 Assert.Equal(s.Status, history[^1].ToStatus);
-                Assert.Equal(Normalization.PostUrl(s.PostUrl), s.NormalizedPostUrl);
+                Assert.Equal(PlatformUrlRules.CanonicalKey(s.Platform, s.PostUrl), s.NormalizedPostUrl);
                 Assert.True(s.ScreenshotFileId is not null);
             }
 

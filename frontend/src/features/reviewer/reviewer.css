@@ -185,8 +185,11 @@
   background: var(--color-surface-2);
 }
 
+/* Resolved flags recede through tokens, not opacity, so their text keeps AA contrast (muted text ≥ 4.5:1). */
 .rv-flag[data-resolved] {
-  opacity: 0.8;
+  border-style: dashed;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
 }
 
 .rv-flag__head {

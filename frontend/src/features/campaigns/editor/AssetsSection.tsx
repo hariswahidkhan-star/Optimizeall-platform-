@@ -21,7 +21,7 @@ import { qk, useTemplateOptions } from '../api/queries';
 import type { AssetInput, CampaignAsset, CampaignAssetType } from '../api/types';
 import { fieldError, fieldErrorsFrom, type FieldErrorMap } from '../shared/formErrors';
 import { platformOptions } from '../shared/labels';
-import { ImageUpload } from './sections';
+import { ImageUpload } from '@/components/ImageUpload';
 
 const ASSET_CODE_FIELDS: Record<string, string> = {
   'campaign.asset_url_invalid': 'url',
@@ -363,7 +363,12 @@ function AssetDialog({
             ) : (
               <>
                 <ImageUpload label="Upload image" onUploaded={(file) => set({ fileId: file.id, url: '' })} />
-                <FormField label="Or image URL" optional hint="https only" error={fieldError(errors, 'url')}>
+                <FormField
+                  label="Or image URL"
+                  optional
+                  hint="https, on an allowed image host"
+                  error={fieldError(errors, 'url')}
+                >
                   <Input type="url" value={draft.url} onChange={(e) => set({ url: e.target.value })} />
                 </FormField>
               </>

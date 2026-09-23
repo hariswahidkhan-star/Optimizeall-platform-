@@ -191,6 +191,40 @@ internal sealed partial class DemoRun
         return file;
     }
 
+    /// <summary>
+    /// Writes a generated public creative (campaign hero/asset or homepage banner) through <see cref="IFileStorage"/>
+    /// like an admin upload, so the web app shows it from <c>/api/v1/files/{id}</c> (allowed by its CSP img-src).
+    /// </summary>
+    private async Task<StoredFile> StorePublicImageAsync(Guid ownerId, FilePurpose purpose, int width, int height, string fileName,
+        CancellationToken ct = default)
+    {
+        var png = DemoPng.Creative(width, height, _creativeVariant++);
+        var info = Domain.Files.ImageInspector.Inspect(png)
+                   ?? throw new InvalidOperationException("Generated demo image is not a valid image.");
+        var key = _storage.NewKey(Now, info.Extension);
+        await _storage.WriteAsync(key, png, ct);
+        _writtenKeys.Add(key);
+        var file = new StoredFile
+        {
+            OwnerUserId = ownerId,
+            Purpose = purpose,
+            StorageKey = key,
+            ContentType = info.ContentType,
+            SizeBytes = png.Length,
+            Sha256 = Normalization.Sha256Hex(png),
+            OriginalFileName = FileService.SanitizeFileName(fileName, info.Extension),
+            Width = info.Width,
+            Height = info.Height,
+            CreatedAt = Now,
+            IsPublic = true,
+        };
+        _db.Set<StoredFile>().Add(file);
+        Count("public images");
+        return file;
+    }
+
+    private int _creativeVariant;
+
     private Task NotifyAsync(Guid userId, string type, string title, string body, string? link) =>
         _notifications.StageAsync(new NotificationRequest(userId, type, title, body, link));
 

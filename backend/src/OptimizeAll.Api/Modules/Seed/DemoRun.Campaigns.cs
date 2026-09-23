@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using OptimizeAll.Api.Modules.Files;
 using OptimizeAll.Api.Modules.Rewards;
 using OptimizeAll.Domain.Campaigns;
 using OptimizeAll.Domain.Common;
+using OptimizeAll.Domain.Files;
 using OptimizeAll.Domain.Identity;
 using OptimizeAll.Domain.Rewards;
 using P = OptimizeAll.Domain.Common.SocialPlatform;
@@ -80,15 +82,15 @@ internal sealed partial class DemoRun
                 Platforms = Platforms(P.Instagram, P.TikTok, P.X, P.Facebook),
                 LandingHeadline = "Get paid to share the Nimbus Fitness launch",
                 LandingBody = "Join creators across the Gulf, South Asia and the UK sharing the Nimbus Fitness launch. Earn a fixed reward for every approved post.",
-                HeroImageUrl = "https://placehold.co/1200x630/png?text=Nimbus+Fitness",
+                HeroImageUrl = GeneratedImage,
                 TrackingDestinationUrl = "https://nimbusfitness.example/download?src=creators",
                 UtmCampaign = "nimbus-launch",
             },
         }, createdDaysAgo: 60, publishedDaysAgo: 58, ct,
             assets: new[]
             {
-                (CampaignAssetType.Image, "Launch visual (square)", "https://placehold.co/1080x1080/png?text=Nimbus+Fitness+Launch", (string?)null, (SocialPlatform?)null),
-                (CampaignAssetType.Image, "Story visual (9:16)", "https://placehold.co/1080x1920/png?text=Nimbus+Story", null, P.Instagram),
+                (CampaignAssetType.Image, "Launch visual (square)", GeneratedImage, (string?)null, (SocialPlatform?)null),
+                (CampaignAssetType.Image, "Story visual (9:16)", GeneratedImage, null, P.Instagram),
                 (CampaignAssetType.Caption, "Main caption", null, "Nimbus Fitness is live on iOS and Android — personalised workouts, audio coaching and a 30-day plan that fits a busy week. Get your first month free with my link. #NimbusFitness #TrainSmarter", null),
                 (CampaignAssetType.Caption, "Short caption for X", null, "My new workout coach lives in my pocket 💪 Nimbus Fitness is out now. #NimbusFitness #TrainSmarter", P.X),
                 (CampaignAssetType.Link, "App download link", "https://nimbusfitness.example/download", null, null),
@@ -164,12 +166,12 @@ internal sealed partial class DemoRun
                 RequireScreenshot = true,
                 Eligibility = new CampaignEligibility { MinFollowers = 1_000, Countries = new() { "AE", "SA" } },
                 Platforms = Platforms(P.Instagram, P.TikTok, P.YouTube),
-                HeroImageUrl = "https://placehold.co/1200x630/png?text=Desert+Bloom",
+                HeroImageUrl = GeneratedImage,
             },
         }, createdDaysAgo: 34, publishedDaysAgo: 31, ct,
             assets: new[]
             {
-                (CampaignAssetType.Image, "Product flat lay", "https://placehold.co/1080x1350/png?text=Desert+Bloom+Autumn+Glow", (string?)null, (SocialPlatform?)null),
+                (CampaignAssetType.Image, "Product flat lay", GeneratedImage, (string?)null, (SocialPlatform?)null),
                 (CampaignAssetType.Caption, "English caption", null, "Desert Bloom's new Autumn Glow collection is made for Gulf weather — lightweight hydration, SPF 50 and no white cast. Use code GLOW15 for 15% off. #DesertBloom #AutumnGlow", null),
                 (CampaignAssetType.Caption, "Arabic caption", null, "مجموعة Autumn Glow الجديدة من Desert Bloom مصممة لطقس الخليج — ترطيب خفيف وحماية SPF 50. استخدموا كود GLOW15 للحصول على خصم 15٪. #DesertBloom", null),
             },
@@ -221,14 +223,14 @@ internal sealed partial class DemoRun
                 RequireScreenshot = true,
                 Eligibility = new CampaignEligibility { MinFollowers = 500, Countries = new() { "PK" } },
                 Platforms = Platforms(P.Instagram, P.Facebook, P.TikTok),
-                HeroImageUrl = "https://placehold.co/1200x630/png?text=Karachi+Eats",
+                HeroImageUrl = GeneratedImage,
                 TrackingDestinationUrl = "https://karachieats.example/passes?utm_source=partner&lang=en",
                 UtmCampaign = "karachi-eats-2026",
             },
         }, createdDaysAgo: 38, publishedDaysAgo: 36, ct,
             assets: new[]
             {
-                (CampaignAssetType.Image, "Festival poster", "https://placehold.co/1080x1350/png?text=Karachi+Eats", (string?)null, (SocialPlatform?)null),
+                (CampaignAssetType.Image, "Festival poster", GeneratedImage, (string?)null, (SocialPlatform?)null),
                 (CampaignAssetType.Caption, "English caption", null, "Karachi Eats food festival is on at Port Grand — 60+ stalls, live music and family deals. Get early-bird passes with my link. #KarachiEats #PortGrand", null),
                 (CampaignAssetType.Caption, "Urdu caption", null, "کراچی ایٹس فوڈ فیسٹیول پورٹ گرینڈ پر — 60 سے زیادہ اسٹالز اور لائیو میوزک۔ #KarachiEats", null),
                 (CampaignAssetType.Link, "Passes page", "https://karachieats.example/passes", null, null),
@@ -275,14 +277,14 @@ internal sealed partial class DemoRun
                 RequireScreenshot = true,
                 Eligibility = new CampaignEligibility { MinFollowers = 300, Countries = new() { "US", "GB", "IN", "PK", "AE", "EG" } },
                 Platforms = Platforms(P.X, P.LinkedIn, P.Facebook, P.Instagram),
-                HeroImageUrl = "https://placehold.co/1200x630/png?text=LedgerLeaf",
+                HeroImageUrl = GeneratedImage,
                 TrackingDestinationUrl = "https://ledgerleaf.example/signup",
                 UtmCampaign = "ledgerleaf-save-smarter",
             },
         }, createdDaysAgo: 80, publishedDaysAgo: 78, ct,
             assets: new[]
             {
-                (CampaignAssetType.Image, "App screenshot", "https://placehold.co/1080x1080/png?text=LedgerLeaf", (string?)null, (SocialPlatform?)null),
+                (CampaignAssetType.Image, "App screenshot", GeneratedImage, (string?)null, (SocialPlatform?)null),
                 (CampaignAssetType.Caption, "Main caption", null, "LedgerLeaf helps you budget in minutes: automatic categories, savings goals and bill reminders. Start free with my link. #LedgerLeaf #SaveSmarter", null),
                 (CampaignAssetType.Caption, "LinkedIn caption", null, "Early-career tip: automate your budget before your first raise. I use LedgerLeaf for categories and savings goals. #LedgerLeaf #PersonalFinance", P.LinkedIn),
                 (CampaignAssetType.Link, "Sign-up link", "https://ledgerleaf.example/signup", null, null),
@@ -331,12 +333,12 @@ internal sealed partial class DemoRun
                 RequireScreenshot = true,
                 Eligibility = new CampaignEligibility { MinFollowers = 1_000, Interests = new() { "travel", "photography", "lifestyle" } },
                 Platforms = Platforms(P.Instagram, P.YouTube, P.TikTok, P.Facebook),
-                HeroImageUrl = "https://placehold.co/1200x630/png?text=Wanderly",
+                HeroImageUrl = GeneratedImage,
             },
         }, createdDaysAgo: 44, publishedDaysAgo: 42, ct,
             assets: new[]
             {
-                (CampaignAssetType.Image, "Hidden gem visual", "https://placehold.co/1080x1350/png?text=Wanderly+Hidden+Gems", (string?)null, (SocialPlatform?)null),
+                (CampaignAssetType.Image, "Hidden gem visual", GeneratedImage, (string?)null, (SocialPlatform?)null),
                 (CampaignAssetType.Caption, "Main caption", null, "Wanderly curates hidden-gem stays and experiences off the usual tourist trail. Get 10% off your first booking with my link. #Wanderly #HiddenGems", null),
             },
             disclosures: new[] { ((SocialPlatform?)P.YouTube, (string?)null, "Includes paid promotion — Wanderly") });
@@ -385,12 +387,12 @@ internal sealed partial class DemoRun
                 Platforms = Platforms(P.YouTube, P.Instagram, P.LinkedIn),
                 LandingHeadline = "You're invited: the Aurora Pro creators circle",
                 LandingBody = "A small group of creators gets early access to the Aurora Pro and a premium reward for an honest review.",
-                HeroImageUrl = "https://placehold.co/1200x630/png?text=Aurora+Pro",
+                HeroImageUrl = GeneratedImage,
             },
         }, createdDaysAgo: 24, publishedDaysAgo: 22, ct,
             assets: new[]
             {
-                (CampaignAssetType.Image, "Product hero", "https://placehold.co/1080x1080/png?text=Aurora+Pro", (string?)null, (SocialPlatform?)null),
+                (CampaignAssetType.Image, "Product hero", GeneratedImage, (string?)null, (SocialPlatform?)null),
                 (CampaignAssetType.Caption, "Review caption", null, "Aurora Pro: adaptive noise cancelling, 40-hour battery and studio-tuned sound. #AuroraPro #ad", null),
                 (CampaignAssetType.Link, "Product page", "https://aurora-audio.example/pro", null, null),
             },
@@ -426,7 +428,7 @@ internal sealed partial class DemoRun
                 MaxSubmissionsPerParticipant = 2,
                 Eligibility = new CampaignEligibility { MinFollowers = 1_000, Interests = new() { "gaming" } },
                 Platforms = Platforms(P.YouTube, P.TikTok, P.X),
-                HeroImageUrl = "https://placehold.co/1200x630/png?text=Orbit+Arena+S3",
+                HeroImageUrl = GeneratedImage,
             },
         }, createdDaysAgo: 6, publishedDaysAgo: 2, ct,
             assets: new[]
@@ -493,6 +495,9 @@ internal sealed partial class DemoRun
     private static List<CampaignPlatform> Platforms(params SocialPlatform[] platforms) =>
         platforms.Select(p => new CampaignPlatform { Platform = p }).ToList();
 
+    /// <summary>Placeholder for a hero/asset image that <see cref="AddCampaignAsync"/> generates and stores as an upload.</summary>
+    private const string GeneratedImage = "generated:image";
+
     /// <summary>A UTC time <paramref name="days"/> from today at <paramref name="hour"/>:00.</summary>
     private DateTime Day(int days, int hour) => DateTime.SpecifyKind(_now.Date.AddDays(days).AddHours(hour), DateTimeKind.Utc);
 
@@ -503,6 +508,9 @@ internal sealed partial class DemoRun
         var c = demo.Campaign;
         var created = Day(-createdDaysAgo, 10);
         c.Id = IdGenerator.NewId(created);
+        _clock.Now = created;
+        if (c.HeroImageUrl == GeneratedImage)
+            c.HeroImageUrl = FileUrls.For((await StorePublicImageAsync(Manager.Id, FilePurpose.CampaignAsset, 1200, 630, $"{c.Slug}-hero.png", ct)).Id);
         if (await _db.Set<Campaign>().AnyAsync(x => x.Slug == c.Slug, ct)) c.Slug += "-demo";
         c.CreatedAt = created;
         c.CreatedByUserId = Manager.Id;
@@ -511,10 +519,13 @@ internal sealed partial class DemoRun
         var order = 0;
         foreach (var a in assets)
         {
+            var file = a.Url == GeneratedImage
+                ? await StorePublicImageAsync(Manager.Id, FilePurpose.CampaignAsset, 600, 600, $"{c.Slug}-asset.png", ct)
+                : null;
             c.Assets.Add(new CampaignAsset
             {
-                CampaignId = c.Id, Type = a.Type, Title = a.Title, Url = a.Url, Body = a.Body, Platform = a.Platform,
-                SortOrder = order += 10, CreatedAt = created,
+                CampaignId = c.Id, Type = a.Type, Title = a.Title, Url = file is null ? a.Url : FileUrls.For(file.Id), FileId = file?.Id,
+                Body = a.Body, Platform = a.Platform, SortOrder = order += 10, CreatedAt = created,
             });
         }
         foreach (var d in disclosures)

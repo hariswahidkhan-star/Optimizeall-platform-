@@ -37,6 +37,28 @@ permissions (`backend/src/OptimizeAll.Api/Common/Security/Permissions.cs`). Part
 own data (`/api/v1/me/...` resolves the caller from the token; object ids are always checked against the
 caller). Role grants are audited and require `roles.assign`.
 
+**Default deny.** The authorization `FallbackPolicy` requires an authenticated user, so an endpoint without any
+attribute is never public by accident. Only these endpoints carry an explicit `[AllowAnonymous]` (asserted by
+`IntegrationTests/Auth/DefaultDenyTests`, which also sends an anonymous request to every other endpoint and expects
+`401`):
+
+* auth: `POST /auth/register|login|refresh|logout|verify-email|resend-verification|forgot-password|reset-password`
+  (`/auth/me` and `/auth/change-password` require a session);
+* public growth pages: `GET /public/invitations/{code}`, `GET /public/campaigns/{slug}`, `POST /public/conversions`
+  (HMAC-signed), the tracking redirect `GET /t/{code}`;
+* `GET /files/{id}` (the handler checks access per file, see § 5), `GET /campaign-categories`, `GET /content/faqs`,
+  `GET /meta/currencies`;
+* the dev mailbox `GET /dev/mailbox` (404 unless enabled outside Production) and the health checks
+  `/health/live`, `/health/ready`.
+
+**`users.view` for staff.** Reviewers, campaign managers and finance hold `users.view` so they can look people up
+while doing their job (a reviewer checking a participant's history, finance resolving a hold, a manager answering a
+partner). It opens the read-only admin user directory (profile, roles, status, social accounts, activity); it
+never exposes payout details (only masked hints), password data, raw IPs or device ids, and changing anything
+needs `users.manage` / `users.suspend` / `roles.assign` (admins only). The web app's admin portal is reachable with
+any permission that opens one of its sections, but post-login landing there is reserved for
+`settings.manage`/`content.manage`.
+
 | Permission | Participant | Reviewer | Campaign manager | Finance | Admin |
 |---|:-:|:-:|:-:|:-:|:-:|
 | `participant.portal` | ✓ | | | | ✓ |
@@ -103,6 +125,12 @@ batch finalization, payout settings, suspensions) additionally require an explic
   staff, never to a URL taken from the request. Post-login "return to" redirects in the SPA must accept only
   same-origin relative paths.
 * **Uploaded URLs** (post links) are normalized and validated per platform before storage.
+* **Links in the SPA**: every href that comes from the API (banner CTAs, onboarding actions, campaign assets,
+  post and profile URLs, notification links) goes through `isSafeHref` / `SafeExternalLink`
+  (`frontend/src/lib/safeHref.ts`): only absolute `http(s)` URLs without credentials and app paths starting with a
+  single `/` become links; other schemes, protocol-relative `//host` and backslashes render as plain text.
+* **Image URLs** (campaign hero and image assets, homepage banners) must be uploads (`/api/v1/files/{id}`) or https
+  URLs on a host listed in `Content:AllowedImageHosts` (default empty), matching the web CSP `img-src` (§ 8).
 
 ## 5. File uploads and private storage
 
@@ -111,8 +139,14 @@ batch finalization, payout settings, suspensions) additionally require an explic
   client-supplied name or MIME type.
 * Files are stored under `Storage__RootPath` with **server-generated keys**; client file names are never used
   as paths (no path traversal). Storage is outside any web root and **not served statically**: files are only
-  returned by authorized API endpoints (the owner and staff with review permissions), with
-  `X-Content-Type-Options: nosniff` and `Cache-Control: no-store`.
+  returned by authorized API endpoints, with `X-Content-Type-Options: nosniff` and a `sandbox` CSP.
+* **Metadata is stripped on upload** (`Files/ImageMetadataStripper`, no re-encoding): JPEG APP1 (Exif/XMP), APP13
+  (IPTC) and COM segments; PNG `eXIf`, `tEXt`, `zTXt`, `iTXt`, `tIME` chunks; WebP `EXIF`/`XMP ` chunks (RIFF size
+  and VP8X flags fixed). So GPS coordinates, device serials and capture times never reach storage. The stored bytes
+  and their SHA-256 (duplicate-screenshot detection) are those of the stripped image, so the same picture with or
+  without metadata still matches.
+* **Screenshot access**: the owner; users with `submissions.review`; and campaign managers only for submissions to
+  campaigns they created (`Campaign.CreatedByUserId`). Anyone else gets `404` (existence is not revealed).
 * Use a private volume/bucket with encryption at rest; never make it public.
 
 ## 6. Encryption of payout destinations
@@ -149,6 +183,9 @@ batch finalization, payout settings, suspensions) additionally require an explic
   endpoint additionally requires the `X-Requested-With` header (a simple cross-site form cannot set it).
 * Same-origin deployment (nginx proxies the API) needs no CORS. If the SPA must run on another origin, list it
   explicitly in `Security__AllowedOrigins__N` — never `*` (credentials are allowed for listed origins).
+* CSP `img-src 'self' data: blob:` plus `IMG_SRC_EXTRA` (web container, space-separated https origins) for external
+  image hosts; keep it identical to the API's `Content__AllowedImageHosts__N` so every image URL the API accepts can
+  load. Default: uploads only.
 * Headers: HSTS on HTTPS (API; enable for the SPA in nginx once HTTPS-only), CSP, `X-Frame-Options: DENY`,
   `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` disabling camera/microphone/geolocation,
   `Cross-Origin-Opener-Policy: same-origin`.
@@ -171,6 +208,12 @@ batch finalization, payout settings, suspensions) additionally require an explic
   keeping raw values. The one exception is the audit log, which keeps the acting user's IP address for
   accountability of privileged actions.
 * Payout details are encrypted (§ 6); logs never contain passwords, tokens or payout details.
+* **Reviewers see only what a review needs**: the review queue shows the participant's display name and country;
+  the review workspace adds email (to identify the account and match support tickets), tier, join date, account
+  status and their approved/rejected/reversed counts, plus the submitted post, its social account and related
+  submissions. Payout details, phone numbers, IPs/device ids (only fraud flags derived from their hashes) and
+  earnings outside the submission are not exposed to reviewers. Screenshots are scoped as in § 5.
+* Uploaded images are stripped of EXIF/GPS/XMP/text metadata (§ 5).
 * Collect only what campaigns need (country, language, interests, social handles); retention periods are in
   [OPERATIONS.md § 7](OPERATIONS.md#7-data-retention). Account deletion anonymizes personal data while keeping
   legally required financial/audit records.

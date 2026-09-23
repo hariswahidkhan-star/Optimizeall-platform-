@@ -170,7 +170,7 @@ public sealed class PayoutHoldsController(
         audit.Record("payout.hold_created", nameof(PayoutHold), hold.Id,
             after: new { hold.UserId, HeldDraftItems = draftItems.Count, AwaitingPaymentItems = awaiting.Count }, reason: hold.Reason);
         await notifications.StageAsync(new NotificationRequest(userId, NotificationTypes.PayoutHold, "Your payouts are paused",
-            EarningsSummaryService.NeutralHoldMessage, "/earnings"), ct);
+            EarningsSummaryService.NeutralHoldMessage, AppLinks.Earnings), ct);
         await db.SaveChangesAsync(ct);
         await tx.CommitAsync(ct);
 
@@ -193,7 +193,7 @@ public sealed class PayoutHoldsController(
 
         audit.Record("payout.hold_released", nameof(PayoutHold), id, after: new { hold.UserId }, reason: note);
         await notifications.StageAsync(new NotificationRequest(hold.UserId, NotificationTypes.PayoutHold, "Your payouts are active again",
-            "Your payouts have resumed. Eligible earnings will be included in the next payout.", "/earnings"), ct);
+            "Your payouts have resumed. Eligible earnings will be included in the next payout.", AppLinks.Earnings), ct);
         await db.SaveChangesAsync(ct);
 
         var row = await (from h in db.Set<PayoutHold>().AsNoTracking()

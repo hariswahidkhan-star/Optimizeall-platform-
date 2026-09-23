@@ -51,6 +51,9 @@ x-api-environment: &api-environment
   Email__FromAddress: ${EMAIL_FROM_ADDRESS:?set EMAIL_FROM_ADDRESS}
   Email__FromName: Optimize All
   Email__AppBaseUrl: ${PUBLIC_BASE_URL:?set PUBLIC_BASE_URL}
+  # External image hosts allowed for campaign/banner images (default: uploads only). List the same hosts in the web
+  # container's IMG_SRC_EXTRA (CSP img-src), e.g.:
+  # Content__AllowedImageHosts__0: images.example.com
   Tracking__PublicBaseUrl: ${TRACKING_BASE_URL:-${PUBLIC_BASE_URL}}
   Tracking__PostbackSecret_FILE: /run/secrets/postback_secret
   WhatsApp__Enabled: ${WHATSAPP_ENABLED:-false}
@@ -128,6 +131,8 @@ services:
         condition: service_healthy
     environment:
       API_UPSTREAM: http://api:8080
+      # Extra CSP img-src hosts; keep in sync with the API's Content__AllowedImageHosts__N.
+      IMG_SRC_EXTRA: ${IMG_SRC_EXTRA:-}
     # Bind to loopback: the TLS reverse proxy / load balancer on this host forwards to it.
     ports:
       - "127.0.0.1:${WEB_PORT:-8080}:8080"

@@ -4756,6 +4756,54 @@
         }
       }
     },
+    "/api/v1/campaigns/options": {
+      "get": {
+        "tags": [
+          "CampaignOptions"
+        ],
+        "summary": "Newest first, at most 500; search matches title or slug.",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Campaigns.CampaignOptionDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Campaigns.CampaignOptionDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Campaigns.CampaignOptionDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/campaign-categories": {
       "get": {
         "tags": [
@@ -6856,6 +6904,75 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Submissions.MySubmissionDetailDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/meta/currencies": {
+      "get": {
+        "tags": [
+          "Meta"
+        ],
+        "summary": "Currencies the platform accepts (OptimizeAll.Domain.Common.Money.SupportedCurrencies), alphabetical.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Meta.CurrencyDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Meta.CurrencyDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Meta.CurrencyDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/meta/eligibility-defaults": {
+      "get": {
+        "tags": [
+          "Meta"
+        ],
+        "summary": "Platform-wide social-profile eligibility minimums (admin settings) that campaigns start from.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Meta.EligibilityDefaultsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Meta.EligibilityDefaultsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Meta.EligibilityDefaultsDto"
                 }
               }
             }
@@ -9535,7 +9652,7 @@
         "tags": [
           "PublicLanding"
         ],
-        "summary": "Invitation landing payload. 404 when the link is inactive, expired or used up. Counts the visit.",
+        "summary": "Invitation landing payload. 404 when the link is inactive, expired or used up. Counts the visit, except for a\r\nstaff preview (preview = true from a caller holding marketing.manage), which also makes no\r\nexperiment assignment. `preview` from anyone else is ignored.",
         "parameters": [
           {
             "name": "code",
@@ -9543,6 +9660,13 @@
             "required": true,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "preview",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
             }
           }
         ],
@@ -10045,6 +10169,14 @@
           {
             "name": "AssignedToMe",
             "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "ClaimedByMe",
+            "in": "query",
+            "description": "true = only submissions I currently hold an active claim on.",
             "schema": {
               "type": "boolean"
             }
@@ -13400,6 +13532,12 @@
           "concurrencyStamp": {
             "type": "string",
             "format": "uuid"
+          },
+          "publicLandingPath": {
+            "type": "string",
+            "description": "App-relative public landing page (`/c/{slug}`); only reachable while the campaign is Public and Scheduled/Active.",
+            "nullable": true,
+            "readOnly": true
           }
         },
         "additionalProperties": false
@@ -13812,9 +13950,30 @@
           "remainingSubmissions": {
             "type": "integer",
             "format": "int32"
+          },
+          "trackingEnabled": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
+      },
+      "Campaigns.CampaignOptionDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Campaigns.CampaignStatus"
+          }
+        },
+        "additionalProperties": false,
+        "description": "An entry of GET /campaigns/options (staff campaign pickers)."
       },
       "Campaigns.CardEligibilityDto": {
         "type": "object",
@@ -16472,6 +16631,10 @@
             "type": "string",
             "format": "uuid"
           },
+          "campaignTitle": {
+            "type": "string",
+            "nullable": true
+          },
           "name": {
             "type": "string",
             "nullable": true
@@ -17601,6 +17764,34 @@
           "note": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Meta.CurrencyDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "minorUnits": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Meta.EligibilityDefaultsDto": {
+        "type": "object",
+        "properties": {
+          "minAccountAgeDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "minFollowers": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -21123,6 +21314,11 @@
               "$ref": "#/components/schemas/Review.ReviewAppealDto"
             },
             "nullable": true
+          },
+          "qualityBonusMax": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -21224,6 +21420,9 @@
           "reversedCount": {
             "type": "integer",
             "format": "int32"
+          },
+          "status": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Identity.UserStatus"
           }
         },
         "additionalProperties": false

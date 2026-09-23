@@ -88,6 +88,13 @@ IPs and device ids are stored only as keyed HMAC-SHA256 hashes (`Security:HashSa
 * Public campaign pages (`/api/v1/public/campaigns/{slug}`) exist for Active/Scheduled **public** campaigns and show
   landing copy (falling back to title/summary), hero image, platforms, a reward teaser (base rate of the rule version
   in force), dates, image assets and the default disclosure.
+* Web routes (public layout, no sign-in): `/join/{code}` renders the invitation (platform or campaign variant) with a
+  CTA to `/register?invite={code}` (plus `ref` when the link carries one); `/c/{slug}` renders the public campaign page
+  with a CTA to registration, or to `/app/campaigns/{slug}` for signed-in users. Both send `X-Visitor-Id` (a random id
+  kept in localStorage `oa.visitorId`) so LandingPage experiments assign a sticky variant, and show a friendly page
+  on `404` (expired/used-up invitation, private or unpublished campaign). The shareable link of a public campaign is
+  always `/c/{slug}` (`AppLinks.PublicCampaign`, exposed as `AdminCampaignDto.publicLandingPath` and
+  shown in the campaign editor's Landing page tab).
 
 ---
 

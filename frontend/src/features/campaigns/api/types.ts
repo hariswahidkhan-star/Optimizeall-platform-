@@ -294,6 +294,8 @@ export interface AdminCampaign {
   updatedAt: IsoDateTime;
   publishedAt: IsoDateTime | null;
   concurrencyStamp: string;
+  /** App-relative public landing page (`/c/{slug}`); reachable while the campaign is Public and Scheduled/Active. */
+  publicLandingPath: string;
 }
 
 export interface UploadedFile {

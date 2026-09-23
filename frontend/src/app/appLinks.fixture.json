@@ -1,0 +1,29 @@
+{
+  "description": "Web-app paths the backend puts into notifications, emails, onboarding steps and seed data (backend/src/OptimizeAll.Api/Common/Notifications/AppLinks.cs). Maintained by hand: the backend unit test AppLinksTests fails when AppLinks and this list differ, and src/app/appLinks.test.ts fails when a path does not resolve to a real route. Parameters: :id is a GUID, :slug a campaign slug, :code an invitation code.",
+  "links": [
+    { "name": "Login", "path": "/login" },
+    { "name": "Register", "path": "/register" },
+    { "name": "ForgotPassword", "path": "/forgot-password" },
+    { "name": "VerifyEmail", "path": "/verify-email" },
+    { "name": "ResetPassword", "path": "/reset-password" },
+    { "name": "Invitation", "path": "/join/:code" },
+    { "name": "PublicCampaign", "path": "/c/:slug" },
+    { "name": "ParticipantHome", "path": "/app" },
+    { "name": "Campaigns", "path": "/app/campaigns" },
+    { "name": "Campaign", "path": "/app/campaigns/:slug" },
+    { "name": "Submission", "path": "/app/submissions/:id" },
+    { "name": "Earnings", "path": "/app/earnings" },
+    { "name": "Payouts", "path": "/app/payouts" },
+    { "name": "Payout", "path": "/app/payouts/:id" },
+    { "name": "Profile", "path": "/app/profile" },
+    { "name": "PayoutDetails", "path": "/app/profile/payout-details" },
+    { "name": "NotificationPreferences", "path": "/app/profile/notification-preferences" },
+    { "name": "SocialAccounts", "path": "/app/social-accounts" },
+    { "name": "Achievements", "path": "/app/achievements" },
+    { "name": "Referrals", "path": "/app/referrals" },
+    { "name": "SupportTicket", "path": "/app/support/:id" },
+    { "name": "ReviewSubmission", "path": "/review/queue/:id" },
+    { "name": "ReviewLiveChecks", "path": "/review/live-checks" },
+    { "name": "FinanceBatch", "path": "/finance/batches/:id" }
+  ]
+}

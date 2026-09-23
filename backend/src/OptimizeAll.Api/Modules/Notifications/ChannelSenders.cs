@@ -65,7 +65,7 @@ public sealed class EmailChannelSender(IEmailSender email, IOptions<EmailOptions
     public static EmailMessage Compose(Notification notification, User user, string appBaseUrl)
     {
         var link = BuildLink(appBaseUrl, notification.LinkUrl);
-        var preferences = BuildLink(appBaseUrl, "/app/settings/notifications")!;
+        var preferences = BuildLink(appBaseUrl, AppLinks.NotificationPreferences)!;
         var text = $"Hi {user.DisplayName},\n\n{notification.Body}\n\n" +
                    (link is null ? string.Empty : $"Open in Optimize All: {link}\n\n") +
                    $"— Optimize All\nManage your notification settings: {preferences}\n";

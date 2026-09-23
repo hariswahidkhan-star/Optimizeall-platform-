@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +40,7 @@ public sealed record PublicCampaignLandingDto(
 
 /// <summary>Anonymous landing pages for invitation links and public campaigns.</summary>
 [ApiController]
+[AllowAnonymous]
 [Route("api/v1/public")]
 [EnableRateLimiting(RateLimitPolicies.Public)]
 public sealed class PublicLandingController(

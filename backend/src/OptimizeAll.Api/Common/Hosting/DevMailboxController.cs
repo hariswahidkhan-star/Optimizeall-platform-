@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MimeKit;
@@ -19,6 +20,7 @@ public sealed class DevToolsOptions
 /// verification and reset links without a real inbox. Returns 404 unless explicitly enabled outside Production.
 /// </summary>
 [ApiController]
+[AllowAnonymous]
 [Route("api/v1/dev/mailbox")]
 [ApiExplorerSettings(IgnoreApi = true)]
 public sealed partial class DevMailboxController(
