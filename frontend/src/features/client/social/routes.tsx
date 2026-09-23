@@ -1,7 +1,17 @@
+import { BarChart3, CalendarDays, ClipboardCheck } from 'lucide-react';
 import type { RouteObject } from 'react-router-dom';
 import type { PortalNavItem } from '@/app/portalTypes';
+import { ClientApprovalsPage, ClientPerformancePage, ClientSocialCalendarPage } from './ClientSocialPages';
 
-/** Client portal area (social). Paths are relative to /client. */
-export const nav: PortalNavItem[] = [];
+/** Client portal area (social): calendar preview, post approvals and a social + ads performance summary. Paths are relative to /client. */
+export const nav: PortalNavItem[] = [
+  { to: 'social', label: 'Social calendar', icon: CalendarDays, description: 'What goes live when on your social profiles.' },
+  { to: 'social/approvals', label: 'Post approvals', icon: ClipboardCheck, description: 'Approve posts or request changes.' },
+  { to: 'social/performance', label: 'Performance', icon: BarChart3, description: 'Social and paid ads results.' },
+];
 
-export const routes: RouteObject[] = [];
+export const routes: RouteObject[] = [
+  { path: 'social', element: <ClientSocialCalendarPage /> },
+  { path: 'social/approvals', element: <ClientApprovalsPage /> },
+  { path: 'social/performance', element: <ClientPerformancePage /> },
+];
