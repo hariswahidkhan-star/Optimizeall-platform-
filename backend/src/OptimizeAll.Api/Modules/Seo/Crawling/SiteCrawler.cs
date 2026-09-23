@@ -87,6 +87,15 @@ public sealed class SiteCrawler(SafeHttpFetcher fetcher, IOptionsMonitor<SeoCraw
 
         await LoadSitemapAsync(start, request.SitemapUrl, robots, result, o, ct);
 
+        // robots.txt governs every same-site request: queued pages, redirect targets and canonical/hreflang checks.
+        bool MayFetch(string url) => !result.RobotsUnreachable && robots.IsAllowed(o.RobotsToken, PathAndQuery(url));
+        bool MayFollow(Uri target)
+        {
+            if (!IsSameSite(target.AbsoluteUri, start.Host) || MayFetch(target.AbsoluteUri)) return true;
+            lock (result.BlockedByRobots) result.BlockedByRobots.Add(Normalize(target.AbsoluteUri));
+            return false;
+        }
+
         var visited = new HashSet<string>(StringComparer.Ordinal);
         var queue = new Queue<(string Url, int Depth, DiscoveredVia Via)>();
         queue.Enqueue((result.StartUrl, 0, DiscoveredVia.Start));
@@ -107,7 +116,7 @@ public sealed class SiteCrawler(SafeHttpFetcher fetcher, IOptionsMonitor<SeoCraw
                 else if (sitemapQueue.Count > 0) next = (sitemapQueue.Dequeue(), request.MaxDepth, DiscoveredVia.Sitemap);
                 else break;
                 if (!visited.Add(next.Url)) continue;
-                if (result.RobotsUnreachable || !robots.IsAllowed(o.RobotsToken, PathAndQuery(next.Url)))
+                if (!MayFetch(next.Url))
                 {
                     result.BlockedByRobots.Add(next.Url);
                     continue;
@@ -116,7 +125,7 @@ public sealed class SiteCrawler(SafeHttpFetcher fetcher, IOptionsMonitor<SeoCraw
             }
             if (batch.Count == 0) break;
 
-            var fetched = await Task.WhenAll(batch.Select(b => fetcher.GetAsync(b.Url, ct)));
+            var fetched = await Task.WhenAll(batch.Select(b => fetcher.GetAsync(b.Url, ct, mayFollow: MayFollow)));
             for (var i = 0; i < batch.Count; i++)
             {
                 var (url, depth, via) = batch[i];
@@ -165,7 +174,7 @@ public sealed class SiteCrawler(SafeHttpFetcher fetcher, IOptionsMonitor<SeoCraw
 
         foreach (var page in result.Pages) page.InSitemap = result.SitemapUrls.Contains(page.Url);
         CountInboundLinks(result);
-        await CheckExtraTargetsAsync(result, start.Host, ct);
+        await CheckExtraTargetsAsync(result, start.Host, MayFetch, ct);
         await CheckExternalLinksAsync(result, start.Host, o, ct);
         return result;
     }
@@ -235,13 +244,13 @@ public sealed class SiteCrawler(SafeHttpFetcher fetcher, IOptionsMonitor<SeoCraw
             page.InboundLinks = counts.TryGetValue(page.Url, out var s) ? s.Count : 0;
     }
 
-    private async Task CheckExtraTargetsAsync(CrawlResult result, string siteHost, CancellationToken ct)
+    private async Task CheckExtraTargetsAsync(CrawlResult result, string siteHost, Func<string, bool> mayFetch, CancellationToken ct)
     {
         var crawled = result.Pages.Select(p => p.Url).ToHashSet(StringComparer.Ordinal);
         var targets = result.Pages.Where(p => p.Data is not null)
             .SelectMany(p => p.Data!.Hreflangs.Select(h => h.Href).Append(p.Data.Canonical ?? string.Empty))
             .Where(u => u.Length > 0).Select(Normalize)
-            .Where(u => !crawled.Contains(u) && IsSameSite(u, siteHost))
+            .Where(u => !crawled.Contains(u) && IsSameSite(u, siteHost) && mayFetch(u))
             .Distinct().Take(MaxExtraChecks).ToList();
         foreach (var chunk in targets.Chunk(2))
         {

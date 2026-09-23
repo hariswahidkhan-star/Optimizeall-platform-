@@ -12,6 +12,19 @@ namespace OptimizeAll.Api.Modules.Seo.Ranking;
 /// <summary>Minimal RFC 4180 CSV reader (quoted fields, escaped quotes, CRLF/LF, optional BOM).</summary>
 public static class CsvReader
 {
+    /// <summary>Data rows (after the header) one import may contain; each row costs database round trips.</summary>
+    public const int MaxImportRows = 10_000;
+
+    /// <summary>Parses an uploaded import file; rejects files with more than <see cref="MaxImportRows"/> data rows.</summary>
+    public static List<string[]> ParseImport(string content)
+    {
+        var rows = Parse(content);
+        if (rows.Count == 0) throw new DomainException("seo.import_empty", "The file is empty.");
+        if (rows.Count - 1 > MaxImportRows)
+            throw new DomainException("seo.import_too_many_rows", $"An import may contain at most {MaxImportRows:N0} rows; split the file and import the parts.");
+        return rows;
+    }
+
     public static List<string[]> Parse(string content)
     {
         var rows = new List<string[]>();
@@ -141,8 +154,7 @@ public sealed class RankStore(AppDbContext db, IDatabaseDialect dialect, TimePro
     /// </summary>
     public async Task<ImportResult> ImportRanksAsync(SeoSite site, string csv, DateOnly? defaultDate, CancellationToken ct)
     {
-        var rows = CsvReader.Parse(csv);
-        if (rows.Count == 0) throw new DomainException("seo.import_empty", "The file is empty.");
+        var rows = CsvReader.ParseImport(csv);
         var header = CsvReader.Header(rows[0]);
         if (!header.Keys.Any(k => k is "keyword" or "query" or "top_queries" or "queries") ||
             !header.Keys.Any(k => k is "position" or "avg_position" or "average_position"))
@@ -202,8 +214,7 @@ public sealed class RankStore(AppDbContext db, IDatabaseDialect dialect, TimePro
     /// <summary>Imports a Search Console Performance export (query, page, clicks, impressions, ctr, position; date column or <paramref name="defaultDate"/>).</summary>
     public async Task<ImportResult> ImportSearchConsoleAsync(SeoSite site, string csv, DateOnly? defaultDate, CancellationToken ct)
     {
-        var rows = CsvReader.Parse(csv);
-        if (rows.Count == 0) throw new DomainException("seo.import_empty", "The file is empty.");
+        var rows = CsvReader.ParseImport(csv);
         var header = CsvReader.Header(rows[0]);
         if (!header.Keys.Any(k => k is "query" or "top_queries" or "queries" or "keyword") || !header.ContainsKey("clicks") || !header.ContainsKey("impressions"))
             throw new DomainException("seo.import_columns", "The CSV needs query, clicks and impressions columns (a Search Console Performance export).");

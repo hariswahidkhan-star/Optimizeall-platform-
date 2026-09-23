@@ -99,19 +99,14 @@ public sealed class FormSubmissionService(
             return accepted;
         }
 
-        var elapsed = tokens.ElapsedSeconds(payload.Token, formId)
-                      ?? throw new DomainException("forms.token_invalid", "This form has expired. Reload the page and try again.");
-        if (elapsed < form.MinFillSeconds)
+        var rendered = tokens.Read(payload.Token, formId)
+                       ?? throw new DomainException("forms.token_invalid", "This form has expired. Reload the page and try again.");
+        if (rendered.ElapsedSeconds < form.MinFillSeconds)
             throw new DomainException("forms.too_fast", "That was quick! Please take a moment to review your answers and submit again.");
 
         var ipHash = hasher.Hash(context.IpAddress);
-        if (ipHash is not null)
-        {
-            var since = Now - RateWindow;
-            var recent = db.Set<FormSubmission>().AsNoTracking().Where(s => s.IpHash == ipHash && s.SubmittedAt >= since);
-            if (await recent.CountAsync(s => s.FormId == formId, ct) >= MaxPerFormPerIp || await recent.CountAsync(ct) >= MaxPerIp)
-                throw new DomainException("forms.rate_limited", "Too many submissions from your network. Please try again in a few minutes.", DomainErrorKind.TooManyRequests);
-        }
+        // Cheap early check (spares the CAPTCHA call); the authoritative check is repeated under the lock below.
+        await EnforceRateLimitAsync(formId, ipHash, ct);
 
         if (await captcha.VerifyAsync(form.Captcha, form.ClientAccountId, payload.CaptchaToken, context.IpAddress, ct) == CaptchaVerifier.Result.Failed)
             throw new DomainException("forms.captcha_failed", "Please complete the verification challenge.");
@@ -121,6 +116,11 @@ public sealed class FormSubmissionService(
         var result = FormSchemas.ValidateSubmission(schema, raw, files);
         if (!result.IsValid)
             throw new DomainException("forms.invalid_submission", "Please correct the highlighted fields.", DomainErrorKind.Validation, result.Errors);
+
+        // Consent is recorded against the wording the visitor was shown. If staff changed it after the form was served,
+        // ask for a reload rather than recording agreement to text the visitor never saw.
+        if (result.ConsentGiven && rendered.ConsentVersion != form.ConsentVersion)
+            throw DomainException.Conflict("forms.consent_changed", "The consent wording of this form has changed. Reload the page, review it and submit again.");
 
         var (pageId, variantKey, experimentId) = await AttributionAsync(form, payload, ct);
         var values = result.Values;
@@ -145,8 +145,23 @@ public sealed class FormSubmissionService(
         };
 
         var written = new List<string>();
+        // Count-then-insert must not interleave for the same network, or parallel requests all pass the check. The named
+        // lock (taken before the write transaction) serializes submissions per IP-hash bucket; the count is re-checked inside.
+        IAsyncDisposable? ipLock = null;
         try
         {
+            if (ipHash is not null)
+            {
+                try
+                {
+                    ipLock = await dialect.AcquireNamedLockAsync(db, $"forms.ip:{ipHash[..2]}", TimeSpan.FromSeconds(10), ct);
+                }
+                catch (TimeoutException)
+                {
+                    throw new DomainException("forms.rate_limited", "Too many submissions from your network. Please try again in a few minutes.", DomainErrorKind.TooManyRequests);
+                }
+                await EnforceRateLimitAsync(formId, ipHash, ct);
+            }
             await using var tx = await dialect.BeginWriteTransactionAsync(db, ct);
             db.Add(submission);
             foreach (var file in result.Files)
@@ -172,10 +187,23 @@ public sealed class FormSubmissionService(
             foreach (var key in written) fileStore.Delete(key);
             throw;
         }
+        finally
+        {
+            if (ipLock is not null) await ipLock.DisposeAsync();
+        }
         db.ChangeTracker.Clear();
 
         await PublishOnceAsync(submission.Id, ct);
         return accepted with { SubmissionId = submission.Id };
+    }
+
+    private async Task EnforceRateLimitAsync(Guid formId, string? ipHash, CancellationToken ct)
+    {
+        if (ipHash is null) return;
+        var since = Now - RateWindow;
+        var recent = db.Set<FormSubmission>().AsNoTracking().Where(s => s.IpHash == ipHash && s.SubmittedAt >= since);
+        if (await recent.CountAsync(s => s.FormId == formId, ct) >= MaxPerFormPerIp || await recent.CountAsync(ct) >= MaxPerIp)
+            throw new DomainException("forms.rate_limited", "Too many submissions from your network. Please try again in a few minutes.", DomainErrorKind.TooManyRequests);
     }
 
     /// <summary>Claims the submission (EventPublishedAt null → now) and publishes FormSubmitted only if this call won the claim.</summary>

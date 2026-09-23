@@ -46,7 +46,7 @@ internal sealed class SeoAuditPageConfiguration : IEntityTypeConfiguration<SeoAu
         b.Property(x => x.Title).HasMaxLength(1000);
         b.Property(x => x.MetaDescription).HasMaxLength(2000);
         b.Property(x => x.Canonical).HasMaxLength(2000);
-        b.Property(x => x.RedirectChain).HasMaxLength(4000);
+        b.Property(x => x.RedirectChain); // long text: unbounded
         b.Property(x => x.FetchError).HasMaxLength(500);
         b.HasIndex(x => x.AuditId);
         b.HasOne<SeoAudit>().WithMany().HasForeignKey(x => x.AuditId).OnDelete(DeleteBehavior.Cascade);
@@ -150,7 +150,7 @@ internal sealed class SeoOutreachProspectConfiguration : IEntityTypeConfiguratio
         b.Property(x => x.ProspectUrl).HasMaxLength(1000).IsRequired();
         b.Property(x => x.ContactName).HasMaxLength(150);
         b.Property(x => x.ContactEmail).HasMaxLength(254);
-        b.Property(x => x.Notes).HasMaxLength(4000);
+        b.Property(x => x.Notes); // long text: unbounded
         b.HasIndex(x => x.SiteId);
         b.HasIndex(x => x.ClientAccountId);
         b.HasOne<SeoSite>().WithMany().HasForeignKey(x => x.SiteId).OnDelete(DeleteBehavior.Cascade);
@@ -210,8 +210,8 @@ internal sealed class SeoReviewConfiguration : IEntityTypeConfiguration<SeoRevie
         b.ToTable("seo_reviews");
         b.Property(x => x.Platform).HasMaxLength(60).IsRequired();
         b.Property(x => x.AuthorName).HasMaxLength(150);
-        b.Property(x => x.Text).HasMaxLength(4000);
-        b.Property(x => x.ResponseText).HasMaxLength(4000);
+        b.Property(x => x.Text); // long text: unbounded
+        b.Property(x => x.ResponseText); // long text: unbounded
         b.HasIndex(x => new { x.SiteId, x.ReviewedAt });
         b.HasIndex(x => x.ClientAccountId);
         b.HasOne<SeoSite>().WithMany().HasForeignKey(x => x.SiteId).OnDelete(DeleteBehavior.Cascade);
@@ -229,7 +229,7 @@ internal sealed class SeoContentBriefConfiguration : IEntityTypeConfiguration<Se
         b.Property(x => x.Questions).HasJsonList();
         b.Property(x => x.Outline).HasJsonList();
         b.Property(x => x.CompetitorUrls).HasJsonList();
-        b.Property(x => x.Notes).HasMaxLength(8000);
+        b.Property(x => x.Notes); // long text: unbounded
         b.HasIndex(x => x.SiteId);
         b.HasIndex(x => x.ClientAccountId);
         b.HasOne<SeoSite>().WithMany().HasForeignKey(x => x.SiteId).OnDelete(DeleteBehavior.Cascade);

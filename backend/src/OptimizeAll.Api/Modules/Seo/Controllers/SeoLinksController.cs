@@ -157,8 +157,7 @@ public sealed class SeoLinksController(
         var site = await access.SiteAsync(siteId, ct);
         if (file is null || file.Length == 0) throw new DomainException("seo.import_empty", "Choose a CSV file to import.");
         using var reader = new StreamReader(file.OpenReadStream());
-        var rows = CsvReader.Parse(await reader.ReadToEndAsync(ct));
-        if (rows.Count == 0) throw new DomainException("seo.import_empty", "The file is empty.");
+        var rows = CsvReader.ParseImport(await reader.ReadToEndAsync(ct));
         var header = CsvReader.Header(rows[0]);
         if (!header.Keys.Any(k => k is "source_url" or "source" or "referring_page_url" or "from_url"))
             throw new DomainException("seo.import_columns", "The CSV needs a source_url column (and target_url).");

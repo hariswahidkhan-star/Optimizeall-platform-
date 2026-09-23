@@ -153,6 +153,32 @@ public sealed class CrawlerTests
     }
 
     [Fact]
+    public async Task Robots_disallow_also_covers_redirect_targets_and_canonical_hreflang_checks()
+    {
+        await using var site = await TestSite.StartAsync();
+        site.Text("/robots.txt", "User-agent: *\nDisallow: /private/\n");
+        site.Html("/", "<html><head><title>Home</title><link rel=\"canonical\" href=\"/private/canonical\">" +
+                       "<link rel=\"alternate\" hreflang=\"de\" href=\"/private/de\"></head>" +
+                       "<body><a href=\"/go\">go</a> <a href=\"/private/direct\">direct</a></body></html>")
+            .Redirect("/go", "/private/secret")
+            .Html("/private/secret", "<p>secret</p>")
+            .Html("/private/canonical", "<p>secret</p>")
+            .Html("/private/de", "<p>secret</p>")
+            .Html("/private/direct", "<p>secret</p>");
+        var (_, crawler) = CrawlerKit.Create();
+
+        var result = await crawler.CrawlAsync(new CrawlRequest(site.Url("/"), 50, 5, null), CancellationToken.None);
+
+        foreach (var path in new[] { "/private/secret", "/private/canonical", "/private/de", "/private/direct" })
+            Assert.Equal(0, site.HitCount(path));
+        Assert.Equal(1, site.HitCount("/go"));
+        var go = result.Find(site.Url("/go"))!;
+        Assert.Equal(301, go.StatusCode);
+        Assert.Contains(site.Url("/private/secret"), result.BlockedByRobots);
+        Assert.Null(result.Find(site.Url("/private/secret")));
+    }
+
+    [Fact]
     public async Task Backlink_checker_verifies_live_nofollow_and_lost_links()
     {
         await using var site = await TestSite.StartAsync();

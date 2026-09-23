@@ -19,8 +19,15 @@ public sealed class SeoCrawlerOptions
     /// <summary>Product token matched against robots.txt User-agent groups.</summary>
     public string RobotsToken { get; set; } = "OptimizeAllBot";
 
-    /// <summary>Permit 127.0.0.0/8 and ::1 (tests only). Private, link-local and metadata addresses stay blocked.</summary>
+    /// <summary>
+    /// Permit 127.0.0.0/8 and ::1 (tests only). Private, link-local and metadata addresses stay blocked. Honoured only in
+    /// the "Testing" and "Development" environments (see <see cref="LoopbackPermittedIn"/>); elsewhere it is forced off.
+    /// </summary>
     public bool AllowLoopback { get; set; }
+
+    /// <summary>Environments in which <see cref="AllowLoopback"/> may take effect.</summary>
+    public static bool LoopbackPermittedIn(IHostEnvironment environment) =>
+        environment.IsEnvironment("Testing") || environment.IsDevelopment();
 
     public int RequestTimeoutSeconds { get; set; } = 15;
     public long MaxBodyBytes { get; set; } = 2 * 1024 * 1024;
@@ -215,12 +222,17 @@ public sealed class SafeHttpFetcher(HttpClient http, IHostResolver resolver, IOp
         return null;
     }
 
-    public Task<FetchResult> GetAsync(string url, CancellationToken ct, bool followRedirects = true) =>
-        FetchAsync(url, HttpMethod.Get, followRedirects, ct);
+    /// <summary>
+    /// GET with optional <c>mayFollow</c> gate for redirect targets (the crawler passes its robots.txt rules). When it refuses
+    /// a target, the target is not requested and the redirect response itself is returned (3xx, refused hop in Redirects).
+    /// </summary>
+    public Task<FetchResult> GetAsync(string url, CancellationToken ct, bool followRedirects = true, Func<Uri, bool>? mayFollow = null) =>
+        FetchAsync(url, HttpMethod.Get, followRedirects, ct, mayFollow);
 
     public Task<FetchResult> HeadAsync(string url, CancellationToken ct) => FetchAsync(url, HttpMethod.Head, true, ct);
 
-    public async Task<FetchResult> FetchAsync(string url, HttpMethod method, bool followRedirects, CancellationToken ct)
+    public async Task<FetchResult> FetchAsync(string url, HttpMethod method, bool followRedirects, CancellationToken ct,
+        Func<Uri, bool>? mayFollow = null)
     {
         var o = O;
         var redirects = new List<RedirectHop>();
@@ -287,6 +299,10 @@ public sealed class SafeHttpFetcher(HttpClient http, IHostResolver resolver, IOp
                         return Failure(url, next.AbsoluteUri, FetchErrorKind.RedirectLoop, "The redirects loop back to an earlier URL.", redirects, stopwatch, status);
                     if (redirects.Count > o.MaxRedirects)
                         return Failure(url, next.AbsoluteUri, FetchErrorKind.TooManyRedirects, $"More than {o.MaxRedirects} redirects.", redirects, stopwatch, status);
+                    if (mayFollow is not null && !mayFollow(next))
+                        return new FetchResult(url, current.AbsoluteUri, status, response.Content.Headers.ContentType?.ToString(), Array.Empty<byte>(),
+                            false, 0, (int)stopwatch.ElapsedMilliseconds, redirects, FetchErrorKind.None, null,
+                            response.Headers.TryGetValues("X-Robots-Tag", out var hopRobots) ? string.Join(", ", hopRobots) : null);
                     current = next;
                     continue;
                 }

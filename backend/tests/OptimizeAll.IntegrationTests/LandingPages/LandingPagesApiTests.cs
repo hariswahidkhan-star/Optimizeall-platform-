@@ -394,6 +394,64 @@ public sealed class LandingPagesApiTests(LandingPagesFixture fx) : IClassFixture
     }
 
     [Fact]
+    public async Task Per_ip_rate_limit_holds_under_concurrent_submissions()
+    {
+        var staff = await fx.StaffAsync();
+        var client = await fx.Api.CreateClientAccountAsync();
+        var detail = await (await staff.PostAsJsonAsync("/api/v1/agency/pages/forms", new { clientAccountId = client.Id, name = "Contact", templateKey = "contact" })).ReadJsonAsync();
+        var formId = detail.GetProperty("id").GetGuid();
+        var update = JsonNode.Parse(detail.GetRawText())!.AsObject();
+        update["minFillSeconds"] = 0;
+        update["autoresponderEnabled"] = false;
+        (await staff.PutAsync($"/api/v1/agency/pages/forms/{formId}", JsonBody(update))).EnsureSuccessStatusCode();
+
+        var visitor = fx.Anonymous(ip: "198.51.100.77");
+        var token = (await (await visitor.GetAsync($"/api/v1/public/forms/{formId}")).ReadJsonAsync()).GetProperty("token").GetString();
+        var path = $"/api/v1/public/forms/{formId}/submissions";
+        var body = new { token, values = new { name = "Burst", email = "burst@example.com", topic = "support", message = "Hello there", consent = "on" } };
+
+        var responses = await Task.WhenAll(Enumerable.Range(0, 12).Select(_ => visitor.PostAsJsonAsync(path, body)));
+
+        Assert.Equal(FormSubmissionService.MaxPerFormPerIp, responses.Count(r => r.StatusCode == HttpStatusCode.Created));
+        Assert.All(responses.Where(r => r.StatusCode != HttpStatusCode.Created), r => Assert.Equal(HttpStatusCode.TooManyRequests, r.StatusCode));
+        Assert.Equal(FormSubmissionService.MaxPerFormPerIp, await fx.WithDbAsync(db => db.Set<FormSubmission>().CountAsync(s => s.FormId == formId)));
+    }
+
+    [Fact]
+    public async Task Consent_is_recorded_against_the_version_the_visitor_was_shown()
+    {
+        var staff = await fx.StaffAsync();
+        var client = await fx.Api.CreateClientAccountAsync();
+        var detail = await (await staff.PostAsJsonAsync("/api/v1/agency/pages/forms", new { clientAccountId = client.Id, name = "Contact", templateKey = "contact" })).ReadJsonAsync();
+        var formId = detail.GetProperty("id").GetGuid();
+        var update = JsonNode.Parse(detail.GetRawText())!.AsObject();
+        update["minFillSeconds"] = 0;
+        var saved = await (await staff.PutAsync($"/api/v1/agency/pages/forms/{formId}", JsonBody(update))).ReadJsonAsync();
+        Assert.Equal(1, saved.GetProperty("consentVersion").GetInt32());
+
+        // The visitor loads the form while consent v1 is live …
+        var visitor = fx.Anonymous(ip: "198.51.100.90");
+        var shown = await (await visitor.GetAsync($"/api/v1/public/forms/{formId}")).ReadJsonAsync();
+        Assert.Equal(1, shown.GetProperty("consentVersion").GetInt32());
+        var staleToken = shown.GetProperty("token").GetString();
+
+        // … staff change the wording (v2) before the visitor submits.
+        update = JsonNode.Parse(saved.GetRawText())!.AsObject();
+        update["consentText"] = "I agree that my data may be shared with partners (v2).";
+        Assert.Equal(2, (await (await staff.PutAsync($"/api/v1/agency/pages/forms/{formId}", JsonBody(update))).ReadJsonAsync()).GetProperty("consentVersion").GetInt32());
+
+        var path = $"/api/v1/public/forms/{formId}/submissions";
+        var values = new { name = "Lin", email = "lin@example.com", topic = "support", message = "Help please", consent = "on" };
+        await (await visitor.PostAsJsonAsync(path, new { token = staleToken, values })).ShouldFailAsync(409, "forms.consent_changed");
+        Assert.False(await fx.WithDbAsync(db => db.Set<FormSubmission>().AnyAsync(s => s.FormId == formId)));
+
+        // After a reload (v2 shown) the submission is accepted and records v2.
+        var fresh = (await (await visitor.GetAsync($"/api/v1/public/forms/{formId}")).ReadJsonAsync()).GetProperty("token").GetString();
+        Assert.Equal(HttpStatusCode.Created, (await visitor.PostAsJsonAsync(path, new { token = fresh, values })).StatusCode);
+        Assert.Equal(2, await fx.WithDbAsync(db => db.Set<FormSubmission>().Where(s => s.FormId == formId).Select(s => s.ConsentVersion).SingleAsync()));
+    }
+
+    [Fact]
     public async Task Consent_text_changes_create_new_versions_and_notify_staff()
     {
         var staff = await fx.StaffAsync();

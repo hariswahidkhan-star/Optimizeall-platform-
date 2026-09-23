@@ -10,7 +10,8 @@ namespace OptimizeAll.Api.Modules.Seo.Audit;
 /// <summary>
 /// Executes queued audits. Claiming is a conditional update (Queued → Running), so two workers never run the same audit;
 /// results are written after deleting any partial rows of the same audit, so a crashed run can be re-queued and re-run
-/// safely. Stale Running audits (worker died) are re-queued after <see cref="StaleAfter"/>.
+/// safely. Stale Running audits (worker died) are re-queued after <see cref="StaleAfter"/>. A claim is identified by its
+/// StartedAt: a slow worker whose audit was re-queued and claimed again has lost its claim and writes nothing.
 /// </summary>
 public sealed class SeoAuditRunner(
     AppDbContext db, SiteCrawler crawler, IDatabaseDialect dialect, TimeProvider clock, ILogger<SeoAuditRunner> logger)
@@ -42,10 +43,12 @@ public sealed class SeoAuditRunner(
         return (completed, failed, requeued);
     }
 
-    /// <summary>Claims and runs one audit. Null when another worker claimed it first.</summary>
+    /// <summary>Claims and runs one audit. Null when another worker claimed it first (or took the claim over mid-run).</summary>
     public async Task<bool?> RunAsync(Guid auditId, CancellationToken ct)
     {
-        var startedAt = Now;
+        // Whole milliseconds, so the claim token compares equal after a round trip through any provider's datetime column.
+        var now = Now;
+        var startedAt = now.AddTicks(-(now.Ticks % TimeSpan.TicksPerMillisecond));
         var claimed = await db.Set<SeoAudit>().Where(a => a.Id == auditId && a.Status == SeoAuditStatus.Queued)
             .ExecuteUpdateAsync(s => s.SetProperty(a => a.Status, SeoAuditStatus.Running).SetProperty(a => a.StartedAt, startedAt), ct);
         if (claimed == 0) return null;
@@ -56,24 +59,47 @@ public sealed class SeoAuditRunner(
         {
             var crawl = await crawler.CrawlAsync(new CrawlRequest(site.BaseUrl, audit.MaxPages, audit.MaxDepth, site.SitemapUrl), ct);
             var outcome = AuditChecks.Run(crawl);
-            await SaveAsync(audit, crawl, outcome, ct);
-            return true;
+            if (await SaveAsync(audit, startedAt, crawl, outcome, ct)) return true;
+            logger.LogWarning("SEO audit {AuditId}: the claim was taken over by another worker; results of this run discarded", auditId);
+            return null;
         }
         catch (Exception ex) when (ex is not OperationCanceledException || !ct.IsCancellationRequested)
         {
             logger.LogWarning(ex, "SEO audit {AuditId} failed", auditId);
             db.ChangeTracker.Clear();
             var message = ex.Message.Length > 1900 ? ex.Message[..1900] : ex.Message;
-            await db.Set<SeoAudit>().Where(a => a.Id == auditId && a.Status == SeoAuditStatus.Running)
+            await db.Set<SeoAudit>().Where(a => a.Id == auditId && a.Status == SeoAuditStatus.Running && a.StartedAt == startedAt)
                 .ExecuteUpdateAsync(s => s.SetProperty(a => a.Status, SeoAuditStatus.Failed)
                     .SetProperty(a => a.FinishedAt, Now).SetProperty(a => a.FailureMessage, "The crawl could not be completed: " + message), CancellationToken.None);
             return false;
         }
     }
 
-    private async Task SaveAsync(SeoAudit audit, CrawlResult crawl, AuditOutcome outcome, CancellationToken ct)
+    /// <summary>Writes the results if this run still holds the claim (Running with its StartedAt); false when it lost it.</summary>
+    private async Task<bool> SaveAsync(SeoAudit audit, DateTime startedAt, CrawlResult crawl, AuditOutcome outcome, CancellationToken ct)
     {
         await using var tx = await dialect.BeginWriteTransactionAsync(db, ct);
+        // Completing the audit first both verifies the claim and locks the row (MySQL) for the rest of the transaction,
+        // so a concurrent re-queue cannot interleave with the result rows written below.
+        var finished = Now;
+        var completed = await db.Set<SeoAudit>()
+            .Where(a => a.Id == audit.Id && a.Status == SeoAuditStatus.Running && a.StartedAt == startedAt)
+            .ExecuteUpdateAsync(s => s
+                .SetProperty(a => a.Status, SeoAuditStatus.Completed)
+                .SetProperty(a => a.FinishedAt, finished)
+                .SetProperty(a => a.PagesCrawled, crawl.Pages.Count)
+                .SetProperty(a => a.HealthScore, outcome.HealthScore)
+                .SetProperty(a => a.ErrorCount, outcome.Errors)
+                .SetProperty(a => a.WarningCount, outcome.Warnings)
+                .SetProperty(a => a.NoticeCount, outcome.Notices)
+                .SetProperty(a => a.RobotsTxtFound, crawl.RobotsFound)
+                .SetProperty(a => a.SitemapFound, crawl.SitemapFound)
+                .SetProperty(a => a.FailureMessage, crawl.HitTimeLimit ? "Stopped at the time limit; results cover the pages crawled so far." : null), ct);
+        if (completed == 0)
+        {
+            await tx.RollbackAsync(ct);
+            return false;
+        }
         await db.Set<SeoAuditIssue>().Where(i => i.AuditId == audit.Id).ExecuteDeleteAsync(ct);
         await db.Set<SeoAuditPage>().Where(p => p.AuditId == audit.Id).ExecuteDeleteAsync(ct);
 
@@ -118,22 +144,9 @@ public sealed class SeoAuditRunner(
             });
         }
         await db.SaveChangesAsync(ct);
-
-        var finished = Now;
-        await db.Set<SeoAudit>().Where(a => a.Id == audit.Id && a.Status == SeoAuditStatus.Running)
-            .ExecuteUpdateAsync(s => s
-                .SetProperty(a => a.Status, SeoAuditStatus.Completed)
-                .SetProperty(a => a.FinishedAt, finished)
-                .SetProperty(a => a.PagesCrawled, crawl.Pages.Count)
-                .SetProperty(a => a.HealthScore, outcome.HealthScore)
-                .SetProperty(a => a.ErrorCount, outcome.Errors)
-                .SetProperty(a => a.WarningCount, outcome.Warnings)
-                .SetProperty(a => a.NoticeCount, outcome.Notices)
-                .SetProperty(a => a.RobotsTxtFound, crawl.RobotsFound)
-                .SetProperty(a => a.SitemapFound, crawl.SitemapFound)
-                .SetProperty(a => a.FailureMessage, crawl.HitTimeLimit ? "Stopped at the time limit; results cover the pages crawled so far." : null), ct);
         await tx.CommitAsync(ct);
         db.ChangeTracker.Clear();
+        return true;
     }
 
     private static string? Truncate(string? value, int max) => value is null ? null : value.Length <= max ? value : value[..max];
