@@ -191,11 +191,19 @@ services.AddControllers()
 services.AddProblemDetails();
 services.AddExceptionHandler<ProblemExceptionHandler>();
 services.AddHealthChecks().AddDbContextCheck<AppDbContext>("database", tags: new[] { "ready" });
-services.Configure<ForwardedHeadersOptions>(o =>
+// X-Forwarded-* is only honoured from trusted reverse proxies (Hosting:TrustedProxies / Hosting:TrustedNetworks,
+// e.g. the nginx container's network); otherwise clients could spoof their IP to evade rate limits and audit.
+services.AddOptions<ForwardedHeadersOptions>().Configure<IConfiguration>((o, cfg) =>
 {
     o.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-    o.KnownNetworks.Clear();
-    o.KnownProxies.Clear();
+    o.ForwardLimit = 1;
+    foreach (var proxy in cfg.GetSection("Hosting:TrustedProxies").Get<string[]>() ?? Array.Empty<string>())
+        o.KnownProxies.Add(System.Net.IPAddress.Parse(proxy));
+    foreach (var network in cfg.GetSection("Hosting:TrustedNetworks").Get<string[]>() ?? Array.Empty<string>())
+    {
+        var parts = network.Split('/');
+        o.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(System.Net.IPAddress.Parse(parts[0]), int.Parse(parts[1])));
+    }
 });
 services.Configure<Microsoft.AspNetCore.Http.Features.FormOptions>(o => o.MultipartBodyLengthLimit = 12 * 1024 * 1024);
 

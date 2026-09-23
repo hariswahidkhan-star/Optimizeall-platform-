@@ -72,6 +72,8 @@ services:
         condition: service_started
     environment:
       ASPNETCORE_ENVIRONMENT: Staging
+      # Only the nginx container on the compose network may set X-Forwarded-For/Proto.
+      Hosting__TrustedNetworks__0: ${TRUSTED_PROXY_NETWORK:-172.16.0.0/12}
       ConnectionStrings__Default: "Server=mysql;Port=3306;Database=${MYSQL_DATABASE:-optimizeall};User=${MYSQL_USER:-optimizeall};Password=${MYSQL_PASSWORD};SslMode=None;AllowPublicKeyRetrieval=true;"
       Database__InitializationMode: Migrate
       Database__InitializeOnStartup: "true"

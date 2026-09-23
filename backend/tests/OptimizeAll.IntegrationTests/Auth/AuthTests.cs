@@ -94,11 +94,54 @@ public sealed class AuthTests(ApiFactory api) : IClassFixture<ApiFactory>
             await (await client.PostAsJsonAsync("/api/v1/auth/login", new { email = user.Email, password = "wrong-password-123" }))
                 .ShouldFailAsync(401, "auth.invalid_credentials");
 
+        // While locked, even the correct password gets the same generic answer (no account enumeration).
         await (await client.PostAsJsonAsync("/api/v1/auth/login", new { email = user.Email, password = user.Password }))
-            .ShouldFailAsync(429, "auth.locked_out");
+            .ShouldFailAsync(401, "auth.invalid_credentials");
 
         api.Clock.Advance(TimeSpan.FromMinutes(16));
         (await client.PostAsJsonAsync("/api/v1/auth/login", new { email = user.Email, password = user.Password })).EnsureSuccessStatusCode();
+    }
+
+    [Fact]
+    public async Task Parallel_wrong_passwords_are_all_counted_toward_lockout()
+    {
+        var user = await api.CreateUserAsync();
+        var client = NewClient();
+        var attempts = Enumerable.Range(0, 12).Select(_ =>
+            client.PostAsJsonAsync("/api/v1/auth/login", new { email = user.Email, password = "wrong-password-123" }));
+        var responses = await Task.WhenAll(attempts);
+
+        Assert.All(responses, r => Assert.Equal(HttpStatusCode.Unauthorized, r.StatusCode));
+        await (await client.PostAsJsonAsync("/api/v1/auth/login", new { email = user.Email, password = user.Password }))
+            .ShouldFailAsync(401, "auth.invalid_credentials");
+    }
+
+    [Fact]
+    public async Task A_refresh_that_loses_a_rotation_race_keeps_the_session_alive()
+    {
+        var user = await api.CreateUserAsync();
+        var client = api.CreateClient(new WebApplicationFactoryClientOptions { HandleCookies = false });
+        client.DefaultRequestHeaders.Add("X-Requested-With", "tests");
+        var login = await client.PostAsJsonAsync("/api/v1/auth/login", new { email = user.Email, password = user.Password });
+        var cookie = login.Headers.GetValues("Set-Cookie").First().Split(';')[0];
+
+        HttpRequestMessage Refresh(string c)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, "/api/v1/auth/refresh");
+            request.Headers.Add("Cookie", c);
+            return request;
+        }
+
+        // Tab A rotates; tab B presents the same (now rotated) cookie a moment later.
+        var a = await client.SendAsync(Refresh(cookie));
+        a.EnsureSuccessStatusCode();
+        var newCookie = a.Headers.GetValues("Set-Cookie").First().Split(';')[0];
+        var b = await client.SendAsync(Refresh(cookie));
+        await b.ShouldFailAsync(401, "auth.refresh_race");
+        Assert.False(b.Headers.Contains("Set-Cookie"));
+
+        // The winner's session is intact.
+        (await client.SendAsync(Refresh(newCookie))).EnsureSuccessStatusCode();
     }
 
     [Fact]
@@ -118,7 +161,8 @@ public sealed class AuthTests(ApiFactory api) : IClassFixture<ApiFactory>
         r1.EnsureSuccessStatusCode();
         var secondCookie = r1.Headers.GetValues("Set-Cookie").First().Split(';')[0];
 
-        // Replay the first (already rotated) token: rejected, and the whole family is revoked.
+        // Replay the first (already rotated) token after the race grace window: treated as theft.
+        api.Clock.Advance(TimeSpan.FromMinutes(1));
         var replay = new HttpRequestMessage(HttpMethod.Post, "/api/v1/auth/refresh");
         replay.Headers.Add("Cookie", firstCookie);
         await (await client.SendAsync(replay)).ShouldFailAsync(401, "auth.session_expired");

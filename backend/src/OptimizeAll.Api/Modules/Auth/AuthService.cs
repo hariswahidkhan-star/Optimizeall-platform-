@@ -48,6 +48,8 @@ public sealed class AuthService(
     ILogger<AuthService> logger) : IAuthService
 {
     private const int MaxFailedLogins = 5;
+    private static readonly TimeSpan RotationGracePeriod = TimeSpan.FromSeconds(30);
+    public const string RefreshRaceCode = "auth.refresh_race";
     private static readonly TimeSpan LockoutDuration = TimeSpan.FromMinutes(15);
     private static readonly TimeSpan VerificationLifetime = TimeSpan.FromHours(48);
     private static readonly TimeSpan ResetLifetime = TimeSpan.FromHours(1);
@@ -67,7 +69,14 @@ public sealed class AuthService(
         var existing = await db.Set<User>().FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail, ct);
         if (existing is not null)
         {
-            // Same response as a new registration (prevents account enumeration); tell the owner instead.
+            // Same response as a new registration (prevents account enumeration); tell the owner instead,
+            // at most once a day so registration cannot be used to flood a mailbox.
+            var noticeSince = Now.AddDays(-1);
+            var recentlyNotified = await db.Set<OptimizeAll.Domain.Audit.AuditLog>().AnyAsync(a =>
+                a.Action == "auth.duplicate_registration_notice" && a.EntityId == existing.Id.ToString() && a.CreatedAt > noticeSince, ct);
+            if (recentlyNotified) return;
+            audit.Record("auth.duplicate_registration_notice", nameof(User), existing.Id);
+            await db.SaveChangesAsync(ct);
             await email.SendAsync(new EmailMessage(existing.Email, existing.DisplayName, "Someone tried to register with your email",
                 $"Hi {existing.DisplayName},\n\nSomeone tried to create an Optimize All account with this email address. " +
                 $"If it was you, sign in or reset your password at {emailOptions.Value.AppBaseUrl}/forgot-password.\n\n" +
@@ -167,21 +176,17 @@ public sealed class AuthService(
             throw InvalidCredentials();
         }
 
+        // A locked account answers exactly like a wrong password so lockout does not reveal which emails exist.
         if (user.LockoutEndsAt is { } lockedUntil && lockedUntil > Now)
-            throw new DomainException("auth.locked_out",
-                "Too many failed sign-in attempts. Try again in a few minutes or reset your password.", DomainErrorKind.TooManyRequests);
+        {
+            hasher.VerifyHashedPassword(new User(), DummyHash.Value, request.Password);
+            throw InvalidCredentials();
+        }
 
         var verification = hasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
         if (verification == PasswordVerificationResult.Failed)
         {
-            user.FailedLoginCount++;
-            if (user.FailedLoginCount >= MaxFailedLogins)
-            {
-                user.LockoutEndsAt = Now.Add(LockoutDuration);
-                user.FailedLoginCount = 0;
-                audit.Record("auth.locked_out", nameof(User), user.Id);
-            }
-            await db.SaveChangesAsync(ct);
+            await RegisterFailedLoginAsync(user.Id, ct);
             throw InvalidCredentials();
         }
 
@@ -191,17 +196,42 @@ public sealed class AuthService(
                     ? "Your account is suspended. Contact support if you believe this is a mistake."
                     : "This account has been deactivated.");
 
-        if (verification == PasswordVerificationResult.SuccessRehashNeeded)
-            user.PasswordHash = hasher.HashPassword(user, request.Password);
-
-        user.FailedLoginCount = 0;
-        user.LockoutEndsAt = null;
-        user.LastLoginAt = Now;
-        user.LastActiveAt = Now;
+        // Login bookkeeping uses atomic statements rather than the tracked (concurrency-stamped) entity, so parallel
+        // sign-ins from several devices never conflict with each other or with staff edits of the user.
+        var rehash = verification == PasswordVerificationResult.SuccessRehashNeeded
+            ? hasher.HashPassword(user, request.Password)
+            : user.PasswordHash;
+        await db.Set<User>().Where(u => u.Id == user.Id).ExecuteUpdateAsync(s => s
+            .SetProperty(u => u.FailedLoginCount, 0)
+            .SetProperty(u => u.LockoutEndsAt, (DateTime?)null)
+            .SetProperty(u => u.LastLoginAt, Now)
+            .SetProperty(u => u.LastActiveAt, Now)
+            .SetProperty(u => u.PasswordHash, rehash), ct);
 
         var result = IssueSession(user, familyId: IdGenerator.NewId());
         await db.SaveChangesAsync(ct);
         return result;
+    }
+
+    /// <summary>
+    /// Counts a failed attempt in a single atomic UPDATE so concurrent guesses are all counted, and starts the
+    /// lockout when the threshold is reached (the counter resets for the next window).
+    /// </summary>
+    private async Task RegisterFailedLoginAsync(Guid userId, CancellationToken ct)
+    {
+        var lockUntil = Now.Add(LockoutDuration);
+        await db.Database.ExecuteSqlInterpolatedAsync($@"
+            UPDATE users
+               SET LockoutEndsAt = CASE WHEN FailedLoginCount + 1 >= {MaxFailedLogins} THEN {lockUntil} ELSE LockoutEndsAt END,
+                   FailedLoginCount = CASE WHEN FailedLoginCount + 1 >= {MaxFailedLogins} THEN 0 ELSE FailedLoginCount + 1 END
+             WHERE Id = {userId}", ct);
+        var locked = await db.Set<User>().AsNoTracking()
+            .AnyAsync(u => u.Id == userId && u.LockoutEndsAt == lockUntil, ct);
+        if (locked)
+        {
+            audit.Record("auth.locked_out", nameof(User), userId);
+            await db.SaveChangesAsync(ct);
+        }
     }
 
     public async Task<LoginResult> RefreshAsync(string? rawRefreshToken, CancellationToken ct)
@@ -209,14 +239,19 @@ public sealed class AuthService(
         if (string.IsNullOrWhiteSpace(rawRefreshToken)) throw SessionExpired();
 
         var hash = tokens.Hash(rawRefreshToken);
-        var token = await db.Set<RefreshToken>().FirstOrDefaultAsync(t => t.TokenHash == hash, ct);
+        var token = await db.Set<RefreshToken>().AsNoTracking().FirstOrDefaultAsync(t => t.TokenHash == hash, ct);
         if (token is null) throw SessionExpired();
 
         if (token.RevokedAt is not null)
         {
+            // Two tabs refreshing with the same cookie: the loser arrives just after rotation. Within the grace window
+            // this is a benign race, not theft, so the session family is kept and the winner's new cookie stays valid.
+            if (token.RevokedReason == "rotated" && token.RevokedAt >= Now.Subtract(RotationGracePeriod))
+                throw RefreshRace();
+
             if (token.ReplacedByTokenId is not null)
             {
-                // A rotated token was presented again: likely theft. Revoke the whole family.
+                // A rotated token presented again outside the grace window: likely theft. Revoke the whole family.
                 await db.Set<RefreshToken>()
                     .Where(t => t.FamilyId == token.FamilyId && t.RevokedAt == null)
                     .ExecuteUpdateAsync(s => s.SetProperty(t => t.RevokedAt, Now).SetProperty(t => t.RevokedReason, "reuse_detected"), ct);
@@ -226,21 +261,28 @@ public sealed class AuthService(
         }
         if (token.ExpiresAt <= Now) throw SessionExpired();
 
-        var user = await db.Set<User>().Include(u => u.Roles).FirstOrDefaultAsync(u => u.Id == token.UserId, ct);
+        var user = await db.Set<User>().AsNoTracking().Include(u => u.Roles).FirstOrDefaultAsync(u => u.Id == token.UserId, ct);
         if (user is null || user.Status != UserStatus.Active) throw SessionExpired();
 
-        // Atomic rotation: only one concurrent refresh with the same token can succeed.
+        // Rotation is atomic and transactional: the old token is revoked and its replacement inserted together, and
+        // only one concurrent refresh with the same token can win the conditional update.
+        await using var tx = await db.Database.BeginTransactionAsync(ct);
         var result = IssueSession(user, token.FamilyId, out var newToken);
+        await db.SaveChangesAsync(ct);
         var rotated = await db.Set<RefreshToken>()
             .Where(t => t.Id == token.Id && t.RevokedAt == null)
             .ExecuteUpdateAsync(s => s
                 .SetProperty(t => t.RevokedAt, Now)
                 .SetProperty(t => t.RevokedReason, "rotated")
                 .SetProperty(t => t.ReplacedByTokenId, newToken.Id), ct);
-        if (rotated == 0) throw SessionExpired();
-
-        user.LastActiveAt = Now;
-        await db.SaveChangesAsync(ct);
+        if (rotated == 0)
+        {
+            await tx.RollbackAsync(ct);
+            throw RefreshRace();
+        }
+        await db.Set<User>().Where(u => u.Id == user.Id)
+            .ExecuteUpdateAsync(s => s.SetProperty(u => u.LastActiveAt, Now), ct);
+        await tx.CommitAsync(ct);
         return result;
     }
 
@@ -361,8 +403,9 @@ public sealed class AuthService(
     private async Task SendVerificationEmailAsync(User user, string rawToken, CancellationToken ct)
     {
         var link = $"{emailOptions.Value.AppBaseUrl}/verify-email?token={WebUtility.UrlEncode(rawToken)}";
-        var result = await email.SendAsync(new EmailMessage(user.Email, user.DisplayName, "Verify your Optimize All email",
-            $"Welcome to Optimize All, {user.DisplayName}!\n\nConfirm your email address to start joining paid campaigns:\n{link}\n\n" +
+        var result = await email.SendAsync(new EmailMessage(user.Email, user.Email, "Verify your Optimize All email",
+            // The display name is attacker-controlled until the address is verified, so it is not echoed here.
+            $"Welcome to Optimize All!\n\nConfirm your email address to start joining paid campaigns:\n{link}\n\n" +
             "This link expires in 48 hours."), ct);
         if (!result.Success)
             logger.LogWarning("Verification email for user {UserId} failed: {Error}", user.Id, result.Error);
@@ -388,7 +431,11 @@ public sealed class AuthService(
     }
 
     private static DomainException InvalidCredentials() =>
-        new("auth.invalid_credentials", "The email or password is incorrect.", DomainErrorKind.Unauthorized);
+        new("auth.invalid_credentials",
+            "The email or password is incorrect. After repeated failures, sign-in is paused for 15 minutes.", DomainErrorKind.Unauthorized);
+
+    private static DomainException RefreshRace() =>
+        new(RefreshRaceCode, "Your session was refreshed in another tab. Retry the request.", DomainErrorKind.Unauthorized);
 
     private static DomainException SessionExpired() =>
         new("auth.session_expired", "Your session has expired. Please sign in again.", DomainErrorKind.Unauthorized);

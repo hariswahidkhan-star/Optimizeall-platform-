@@ -60,8 +60,9 @@ public sealed class AuthController(IAuthService auth, ICurrentUser currentUser, 
             SetRefreshCookie(result.RefreshToken, result.RefreshExpiresAt);
             return result.Response;
         }
-        catch (DomainException ex) when (ex.Kind == DomainErrorKind.Unauthorized)
+        catch (DomainException ex) when (ex.Kind == DomainErrorKind.Unauthorized && ex.Code != AuthService.RefreshRaceCode)
         {
+            // A lost rotation race keeps the cookie: the winning response already set the new one.
             ClearRefreshCookie();
             throw;
         }

@@ -31,6 +31,8 @@ x-hardening: &hardening
 
 x-api-environment: &api-environment
   ASPNETCORE_ENVIRONMENT: Production
+  # CIDR of the reverse proxy/load balancer allowed to set X-Forwarded-For/Proto (set to your ingress network).
+  Hosting__TrustedNetworks__0: ${TRUSTED_PROXY_NETWORK:?set TRUSTED_PROXY_NETWORK}
   DOTNET_gcServer: "1"
   ConnectionStrings__Default_FILE: /run/secrets/db_connection_string
   Jwt__SigningKey_FILE: /run/secrets/jwt_signing_key
