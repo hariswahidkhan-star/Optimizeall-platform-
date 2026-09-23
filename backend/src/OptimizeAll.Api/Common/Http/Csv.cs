@@ -10,9 +10,9 @@ public static class Csv
     public static string Write(IEnumerable<string> header, IEnumerable<IEnumerable<object?>> rows)
     {
         var sb = new StringBuilder();
-        sb.AppendLine(string.Join(',', header.Select(Escape)));
+        sb.Append(string.Join(',', header.Select(Escape))).Append("\r\n");
         foreach (var row in rows)
-            sb.AppendLine(string.Join(',', row.Select(v => Escape(Format(v)))));
+            sb.Append(string.Join(',', row.Select(v => Escape(Format(v))))).Append("\r\n");
         return sb.ToString();
     }
 
