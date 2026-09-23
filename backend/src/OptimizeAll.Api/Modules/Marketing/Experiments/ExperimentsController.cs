@@ -8,6 +8,7 @@ using OptimizeAll.Domain.Campaigns;
 using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Marketing;
 using OptimizeAll.Domain.Submissions;
+using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Infrastructure.Persistence;
 
 namespace OptimizeAll.Api.Modules.Marketing.Experiments;
@@ -107,7 +108,7 @@ public sealed class ExperimentsController(
         if (query.CampaignId is { } c) q = q.Where(e => e.CampaignId == c);
         if (query.Status is { } s) q = q.Where(e => e.Status == s);
         if (!string.IsNullOrWhiteSpace(query.Search))
-            q = q.Where(e => EF.Functions.Like(e.Name, PagingExtensions.LikePattern(query.Search)));
+            q = q.Where(e => EF.Functions.Like(e.Name, PagingExtensions.LikePattern(query.Search), "\\"));
         var page = await q.OrderByDescending(e => e.CreatedAt).ToPagedAsync(query, ct);
         var campaignIds = page.Items.Select(e => e.CampaignId).Distinct().ToList();
         var titles = await db.Set<Campaign>().AsNoTracking().Where(c => campaignIds.Contains(c.Id))
@@ -153,7 +154,7 @@ public sealed class ExperimentsController(
             throw new DomainException("experiment.campaign_immutable", "An experiment cannot be moved to another campaign.");
         await ValidateAsync(request, ct);
 
-        await using var tx = await db.Database.BeginTransactionAsync(ct);
+        await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct);
         var before = Snapshot(experiment);
         experiment.Name = request.Name.Trim();
         experiment.Hypothesis = Clean(request.Hypothesis);
@@ -300,10 +301,10 @@ public sealed class ExperimentsController(
     private async Task<ExperimentDto> TransitionAsync(
         Guid id, ExperimentStatus? from, ExperimentStatus to, string action, Guid? winningVariantId, CancellationToken ct)
     {
-        await using var tx = await db.Database.BeginTransactionAsync(ct);
+        await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct);
         var experiment = await LoadAsync(id, tracked: true, ct);
         // Lock the campaign row so two concurrent starts cannot both pass the one-running-experiment check.
-        await db.Database.ExecuteSqlInterpolatedAsync($"SELECT Id FROM campaigns WHERE Id = {experiment.CampaignId.ToString()} FOR UPDATE", ct);
+        await db.Dialect().LockRowAsync(db, "campaigns", experiment.CampaignId, ct);
 
         var before = new { experiment.Status };
         if (to == ExperimentStatus.Completed)

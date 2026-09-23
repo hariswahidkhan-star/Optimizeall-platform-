@@ -3,9 +3,10 @@
 #   backend   dotnet build (Release) + unit tests + integration tests against local MySQL
 #   frontend  npm ci (if needed), typecheck, lint, unit tests, production build
 #   --e2e     additionally starts the API (fresh database, Demo seed) and `vite preview`, then runs Playwright
+#   --sqlite  integration tests (and --e2e) run on SQLite instead of MySQL (no database server needed)
 #
 # Usage:
-#   scripts/test-all.sh [--e2e] [--skip-backend] [--skip-frontend] [--no-integration]
+#   scripts/test-all.sh [--e2e] [--sqlite] [--skip-backend] [--skip-frontend] [--no-integration]
 #
 # Environment:
 #   OPTIMIZEALL_TEST_MYSQL  server connection string for integration tests
@@ -19,14 +20,15 @@ set -euo pipefail
 # shellcheck source-path=SCRIPTDIR source=lib/common.sh
 . "$(dirname "${BASH_SOURCE[0]}")/lib/common.sh"
 
-run_backend=true; run_frontend=true; run_integration=true; run_e2e=false
+run_backend=true; run_frontend=true; run_integration=true; run_e2e=false; sqlite=false
 for arg in "$@"; do
   case "$arg" in
     --e2e) run_e2e=true ;;
+    --sqlite) sqlite=true ;;
     --skip-backend) run_backend=false ;;
     --skip-frontend) run_frontend=false ;;
     --no-integration) run_integration=false ;;
-    -h|--help) sed -n '2,19p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -h|--help) sed -n '2,20p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) die "Unknown option: $arg (see --help)" ;;
   esac
 done
@@ -55,9 +57,16 @@ if $run_backend; then
     dotnet test "$BACKEND_DIR/tests/OptimizeAll.UnitTests" -c Release --no-build -nologo \
       --logger "trx;LogFileName=unit.trx" --results-directory "$results_dir"
 
-  if $run_integration; then
+  if $run_integration && $sqlite; then
+    # Each test class gets its own temporary SQLite file (deleted afterwards).
+    step "Backend: integration tests (SQLite)" \
+      env OPTIMIZEALL_TEST_PROVIDER=Sqlite \
+      dotnet test "$BACKEND_DIR/tests/OptimizeAll.IntegrationTests" -c Release --no-build -nologo \
+        --logger "trx;LogFileName=integration-sqlite.trx" --results-directory "$results_dir"
+  elif $run_integration; then
     export OPTIMIZEALL_TEST_MYSQL="${OPTIMIZEALL_TEST_MYSQL:-$(server_connection_string)}"
     step "Backend: integration tests (MySQL at $DB_HOST:$DB_PORT)" \
+      env OPTIMIZEALL_TEST_PROVIDER=MySql \
       dotnet test "$BACKEND_DIR/tests/OptimizeAll.IntegrationTests" -c Release --no-build -nologo \
         --logger "trx;LogFileName=integration.trx" --results-directory "$results_dir"
   fi
@@ -96,15 +105,22 @@ if $run_e2e; then
   stop_e2e() { local p; for p in ${e2e_pids[@]+"${e2e_pids[@]}"}; do stop_bg "$p"; done; }
   trap stop_e2e EXIT
 
-  log "E2E: recreating database $E2E_DB_NAME"
-  mysql_app -e "DROP DATABASE IF EXISTS \`$E2E_DB_NAME\`" \
-    || warn "Could not drop $E2E_DB_NAME (mysql client missing?); the API will migrate whatever exists"
+  if $sqlite; then
+    e2e_sqlite="$DEV_DIR/e2e.db"
+    log "E2E: fresh SQLite database $e2e_sqlite"
+    rm -rf "$e2e_sqlite" "$e2e_sqlite-wal" "$e2e_sqlite-shm" "$DEV_DIR/e2e-keys"
+    e2e_db_env=(Database__Provider=Sqlite "Database__SqlitePath=$e2e_sqlite")
+  else
+    log "E2E: recreating database $E2E_DB_NAME"
+    mysql_app -e "DROP DATABASE IF EXISTS \`$E2E_DB_NAME\`" \
+      || warn "Could not drop $E2E_DB_NAME (mysql client missing?); the API will migrate whatever exists"
+    e2e_db_env=(Database__Provider=MySql "ConnectionStrings__Default=$(connection_string "$E2E_DB_NAME")")
+  fi
 
   log "E2E: starting API on :$E2E_API_PORT (log: .dev/e2e-api.log)"
-  e2e_pids+=("$(cd "$ROOT" && \
+  e2e_pids+=("$(cd "$ROOT" && export "${e2e_db_env[@]}" && \
     ASPNETCORE_ENVIRONMENT=Development \
     ASPNETCORE_URLS="http://localhost:$E2E_API_PORT" \
-    ConnectionStrings__Default="$(connection_string "$E2E_DB_NAME")" \
     Database__Seed__0=Baseline Database__Seed__1=Demo \
     RateLimiting__Enabled=false \
     Email__AppBaseUrl="http://localhost:$E2E_WEB_PORT" \

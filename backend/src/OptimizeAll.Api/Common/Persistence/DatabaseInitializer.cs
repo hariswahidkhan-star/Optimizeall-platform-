@@ -48,13 +48,14 @@ public static class DatabaseInitializer
         var options = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<DatabaseOptions>>().Value;
         var db = sp.GetRequiredService<AppDbContext>();
 
-        if (options.InitializationMode != "None")
+        // A SQLite file needs no server; its directory is created when the connection string is resolved.
+        if (options.InitializationMode != "None" && db.IsMySql)
             await WaitForDatabaseAsync(db, options.StartupWaitSeconds, logger, ct);
 
         switch (options.InitializationMode)
         {
             case "Migrate":
-                logger.LogInformation("Applying database migrations");
+                logger.LogInformation("Applying database migrations ({Provider})", db.Database.ProviderName);
                 await db.Database.MigrateAsync(ct);
                 break;
             case "EnsureCreated":

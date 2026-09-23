@@ -8,6 +8,7 @@ using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Identity;
 using OptimizeAll.Domain.Rewards;
 using OptimizeAll.Domain.Submissions;
+using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Infrastructure.Persistence;
 
 namespace OptimizeAll.Api.Modules.Rewards;
@@ -139,7 +140,7 @@ public sealed class RewardRulesService(
         if (!request.Confirm)
             throw new DomainException("confirmation.required", "Confirm the reward change by sending \"confirm\": true.");
 
-        await using var tx = await db.Database.BeginTransactionAsync(System.Data.IsolationLevel.ReadCommitted, ct);
+        await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct, System.Data.IsolationLevel.ReadCommitted);
         await CampaignLock.LockAsync(db, campaignId, ct);
         var campaign = await db.Set<Campaign>().FirstOrDefaultAsync(c => c.Id == campaignId, ct)
             ?? throw DomainException.NotFound("Campaign");

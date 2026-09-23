@@ -1,40 +1,21 @@
-# Render Blueprint: Optimize All staging/demo environment.
+# Render Blueprint: Optimize All staging/demo environment on SQLite (the cheapest setup).
 #
 # Deploy: Render dashboard → New → Blueprint → connect this GitHub repository. See docs/RENDER.md.
 #
 #   optimizeall-web    public web service  — nginx serving the React app, reverse-proxying /api, /t and /health
-#   optimizeall-api    private service     — ASP.NET Core API (applies migrations + seeds demo data on startup)
-#   optimizeall-mysql  private service     — MySQL 8 on a persistent disk
+#   optimizeall-api    private service     — ASP.NET Core API with its SQLite database and uploads on one disk
+#                                            (applies migrations + seeds demo data on startup)
 #
-# Only optimizeall-web is reachable from the internet; the API and MySQL talk over Render's private network.
-# This is a demo/staging configuration: it seeds demo accounts and writes email to files (readable via the
-# dev mailbox) instead of sending real email. Do not use it as-is for production (see docs/DEPLOYMENT.md).
+# Only optimizeall-web is reachable from the internet; it talks to the API over Render's private network.
+#
+# SQLite means exactly ONE API instance (never scale optimizeall-api beyond 1 or enable autoscaling: the database is
+# a file on the service's disk, and named locks are in-process). Back up the database file (see docs/RENDER.md).
+# For a multi-instance setup use the MySQL Blueprint: deploy/render/render-mysql.yaml.
+#
+# This is a demo/staging configuration: it seeds demo accounts and writes email to files (readable via the dev
+# mailbox) instead of sending real email. Do not use it as-is for production (see docs/DEPLOYMENT.md).
 
 services:
-  - type: pserv
-    name: optimizeall-mysql
-    runtime: image
-    image:
-      url: docker.io/library/mysql:8.0
-    region: singapore
-    plan: starter
-    # Data lives in a sub-directory of the disk: a freshly formatted disk contains lost+found, which MySQL
-    # refuses to initialize over.
-    dockerCommand: docker-entrypoint.sh mysqld --datadir=/var/lib/mysql-disk/data --character-set-server=utf8mb4 --collation-server=utf8mb4_0900_ai_ci
-    disk:
-      name: mysql-data
-      mountPath: /var/lib/mysql-disk
-      sizeGB: 5
-    envVars:
-      - key: MYSQL_DATABASE
-        value: optimizeall
-      - key: MYSQL_USER
-        value: optimizeall
-      - key: MYSQL_PASSWORD
-        generateValue: true
-      - key: MYSQL_ROOT_PASSWORD
-        generateValue: true
-
   - type: pserv
     name: optimizeall-api
     runtime: docker
@@ -42,7 +23,10 @@ services:
     dockerContext: ./backend
     region: singapore
     plan: starter
-    # Uploaded screenshots and campaign images.
+    numInstances: 1
+    # One disk for all state: db/optimizeall.db (+ -wal/-shm) and files/ (uploaded screenshots, campaign images).
+    # Render keeps daily snapshots of disks; a disk also means zero-downtime deploys are not possible (the old
+    # instance stops before the new one starts), which SQLite requires anyway.
     disk:
       name: api-storage
       mountPath: /app/storage
@@ -52,22 +36,10 @@ services:
         value: "8080"
       - key: ASPNETCORE_ENVIRONMENT
         value: Staging
-      - key: Database__Host
-        fromService:
-          type: pserv
-          name: optimizeall-mysql
-          property: host
-      - key: Database__Port
-        value: "3306"
-      - key: Database__Name
-        value: optimizeall
-      - key: Database__User
-        value: optimizeall
-      - key: Database__Password
-        fromService:
-          type: pserv
-          name: optimizeall-mysql
-          envVarKey: MYSQL_PASSWORD
+      - key: Database__Provider
+        value: Sqlite
+      - key: Database__SqlitePath
+        value: /app/storage/db/optimizeall.db
       - key: Database__InitializationMode
         value: Migrate
       - key: Database__Seed__0

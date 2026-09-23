@@ -22,7 +22,7 @@ public sealed class ContentService(AppDbContext db, IAuditLogger audit, ImageUrl
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var p = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(b => EF.Functions.Like(b.Title, p) || (b.Body != null && EF.Functions.Like(b.Body, p)));
+            q = q.Where(b => EF.Functions.Like(b.Title, p, "\\") || (b.Body != null && EF.Functions.Like(b.Body, p, "\\")));
         }
         var page = await q.OrderBy(b => b.SortOrder).ThenByDescending(b => b.CreatedAt).ToPagedAsync(query, ct);
         return Map(page, ToDto);
@@ -99,7 +99,7 @@ public sealed class ContentService(AppDbContext db, IAuditLogger audit, ImageUrl
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var p = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(a => EF.Functions.Like(a.Title, p) || EF.Functions.Like(a.Body, p));
+            q = q.Where(a => EF.Functions.Like(a.Title, p, "\\") || EF.Functions.Like(a.Body, p, "\\"));
         }
         var page = await q.OrderByDescending(a => a.PublishAt).ToPagedAsync(query, ct);
         return Map(page, ToDto);
@@ -161,7 +161,7 @@ public sealed class ContentService(AppDbContext db, IAuditLogger audit, ImageUrl
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var p = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(f => EF.Functions.Like(f.Question, p) || EF.Functions.Like(f.Answer, p) || EF.Functions.Like(f.Category, p));
+            q = q.Where(f => EF.Functions.Like(f.Question, p, "\\") || EF.Functions.Like(f.Answer, p, "\\") || EF.Functions.Like(f.Category, p, "\\"));
         }
         var page = await q.OrderBy(f => f.Category).ThenBy(f => f.SortOrder).ThenBy(f => f.CreatedAt).ToPagedAsync(query, ct);
         return Map(page, ToDto);
@@ -228,7 +228,7 @@ public sealed class ContentService(AppDbContext db, IAuditLogger audit, ImageUrl
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var p = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(s => EF.Functions.Like(s.Key, p) || EF.Functions.Like(s.Title, p) || EF.Functions.Like(s.Description, p));
+            q = q.Where(s => EF.Functions.Like(s.Key, p, "\\") || EF.Functions.Like(s.Title, p, "\\") || EF.Functions.Like(s.Description, p, "\\"));
         }
         var page = await q.OrderBy(s => s.SortOrder).ThenBy(s => s.Key).ToPagedAsync(query, ct);
         return Map(page, ToDto);

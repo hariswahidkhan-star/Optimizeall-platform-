@@ -22,6 +22,7 @@ using OptimizeAll.Domain.Rewards;
 using OptimizeAll.Domain.Settings;
 using OptimizeAll.Domain.Social;
 using OptimizeAll.Domain.Submissions;
+using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Infrastructure.Persistence;
 
 namespace OptimizeAll.Api.Modules.Submissions;
@@ -85,10 +86,9 @@ public sealed class SubmissionService(
         Submission submission;
         try
         {
-            await using var tx = await db.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
+            await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct, IsolationLevel.ReadCommitted);
             // Serialize this participant's submissions so the per-campaign limit cannot be exceeded by parallel requests.
-            var meText = me.ToString();
-            await db.Database.ExecuteSqlInterpolatedAsync($"SELECT Id FROM users WHERE Id = {meText} FOR UPDATE", ct);
+            await db.Dialect().LockRowAsync(db, "users", me, ct);
 
             var active = await db.Set<Submission>().CountAsync(s =>
                 s.UserId == me && s.CampaignId == campaign.Id && s.Status != SubmissionStatus.Rejected, ct);
@@ -184,7 +184,7 @@ public sealed class SubmissionService(
         StoredFile? screenshot = null;
         try
         {
-            await using var tx = await db.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
+            await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct, IsolationLevel.ReadCommitted);
             if (form.Screenshot is not null)
             {
                 screenshot = await files.SaveImageAsync(form.Screenshot, FilePurpose.SubmissionScreenshot, me, isPublic: false, ct);
@@ -303,9 +303,8 @@ public sealed class SubmissionService(
         if (reason.Length < 20)
             throw new DomainException("appeal.reason_too_short", "Explain your appeal in at least 20 characters.");
 
-        await using var tx = await db.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
-        var idText = id.ToString();
-        await db.Database.ExecuteSqlInterpolatedAsync($"SELECT Id FROM submissions WHERE Id = {idText} FOR UPDATE", ct);
+        await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct, IsolationLevel.ReadCommitted);
+        await db.Dialect().LockRowAsync(db, "submissions", id, ct);
         var s = await db.Set<Submission>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && x.UserId == me, ct)
             ?? throw DomainException.NotFound("Submission");
         var appeals = await db.Set<Appeal>().AsNoTracking().Where(a => a.SubmissionId == id).ToListAsync(ct);

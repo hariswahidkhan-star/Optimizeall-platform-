@@ -418,11 +418,22 @@ public sealed class SubmissionTests(ApiFactory api) : IClassFixture<ApiFactory>
             var conn = db.Database.GetDbConnection();
             await conn.OpenAsync();
             await using var cmd = conn.CreateCommand();
-            cmd.CommandText = "SELECT COLLATION_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() " +
-                              "AND TABLE_NAME = 'submissions' AND COLUMN_NAME = 'NormalizedPostUrl'";
+            // SQLite: the column keeps the default BINARY (case-sensitive) collation, i.e. declares no COLLATE clause.
+            cmd.CommandText = ApiFactory.IsSqlite
+                ? "SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'submissions'"
+                : "SELECT COLLATION_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() " +
+                  "AND TABLE_NAME = 'submissions' AND COLUMN_NAME = 'NormalizedPostUrl'";
             return (string?)await cmd.ExecuteScalarAsync();
         });
-        Assert.Equal("utf8mb4_bin", collation);
+        if (ApiFactory.IsSqlite)
+        {
+            Assert.Contains("\"NormalizedPostUrl\" TEXT NOT NULL", collation);
+            Assert.DoesNotContain("COLLATE", collation!, StringComparison.OrdinalIgnoreCase);
+        }
+        else
+        {
+            Assert.Equal("utf8mb4_bin", collation);
+        }
     }
 
     [Fact]

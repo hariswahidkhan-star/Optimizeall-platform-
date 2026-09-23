@@ -54,7 +54,7 @@ public sealed class PayoutBatchesController(
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var like = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(b => EF.Functions.Like(b.Reference, like) || EF.Functions.Like(b.PeriodKey, like));
+            q = q.Where(b => EF.Functions.Like(b.Reference, like, "\\") || EF.Functions.Like(b.PeriodKey, like, "\\"));
         }
         var total = await q.CountAsync(ct);
         var items = await PayoutReadModels.SummariesAsync(db,

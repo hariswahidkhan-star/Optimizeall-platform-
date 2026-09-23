@@ -24,9 +24,13 @@ public class AppDbContext : DbContext, IDataProtectionKeyContext
     /// <summary>ASP.NET Data Protection key ring (shared across instances; encrypts payout destinations).</summary>
     public DbSet<DataProtectionKey> DataProtectionKeys => Set<DataProtectionKey>();
 
+    /// <summary>True when this context runs on MySQL (Pomelo); false for SQLite.</summary>
+    public bool IsMySql => DatabaseProviders.IsMySql(Database.ProviderName);
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasCharSet("utf8mb4");
+        var mySql = IsMySql;
+        if (mySql) modelBuilder.HasCharSet("utf8mb4");
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         modelBuilder.Entity<DataProtectionKey>(b =>
         {
@@ -44,6 +48,9 @@ public class AppDbContext : DbContext, IDataProtectionKeyContext
                     .IsConcurrencyToken();
             }
         }
+
+        // Configurations are written with MySQL column types/collations/check SQL; other providers get a portable model.
+        if (!mySql) PortableModel.Apply(modelBuilder);
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
@@ -52,7 +59,7 @@ public class AppDbContext : DbContext, IDataProtectionKeyContext
         configurationBuilder.Properties<decimal>().HavePrecision(19, 4);
         configurationBuilder.Properties<DateTime>().HaveConversion<UtcDateTimeConverter>().HavePrecision(6);
         configurationBuilder.Properties<DateTime?>().HaveConversion<NullableUtcDateTimeConverter>().HavePrecision(6);
-        configurationBuilder.Properties<Guid>().HaveColumnType("char(36)");
+        if (IsMySql) configurationBuilder.Properties<Guid>().HaveColumnType("char(36)");
     }
 
     public override int SaveChanges(bool acceptAllChangesOnSuccess)
@@ -124,7 +131,7 @@ public class AppDbContext : DbContext, IDataProtectionKeyContext
         v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v);
 }
 
-/// <summary>Helpers for mapping list-valued properties to MySQL JSON columns.</summary>
+/// <summary>Helpers for mapping list-valued properties to JSON text columns (MySQL <c>json</c>, SQLite <c>TEXT</c>).</summary>
 public static class JsonColumn
 {
     private static readonly System.Text.Json.JsonSerializerOptions Options = new(System.Text.Json.JsonSerializerDefaults.Web)

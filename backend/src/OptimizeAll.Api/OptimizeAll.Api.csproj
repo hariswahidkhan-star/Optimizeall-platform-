@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\OptimizeAll.Infrastructure\OptimizeAll.Infrastructure.csproj" />
     <ProjectReference Include="..\OptimizeAll.Domain\OptimizeAll.Domain.csproj" />
+    <ProjectReference Include="..\OptimizeAll.Infrastructure.Sqlite\OptimizeAll.Infrastructure.Sqlite.csproj" />
   </ItemGroup>
 
   <ItemGroup>

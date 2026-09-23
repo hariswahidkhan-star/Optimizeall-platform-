@@ -7,6 +7,7 @@ using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Identity;
 using OptimizeAll.Domain.Ledger;
 using OptimizeAll.Domain.Payouts;
+using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Infrastructure.Persistence;
 
 namespace OptimizeAll.Api.Modules.Payouts;
@@ -20,59 +21,29 @@ namespace OptimizeAll.Api.Modules.Payouts;
 public static class PayoutStore
 {
     /// <summary>
-    /// Serializes batch preparation across API instances and the background job with a MySQL named lock scoped to
-    /// the current database. Opens the connection explicitly so GET_LOCK/RELEASE_LOCK run on the same session.
+    /// Serializes batch preparation across API instances and the background job with a named lock (MySQL GET_LOCK
+    /// scoped to the current database; SQLite: in-process, single instance). Acquire it BEFORE beginning the
+    /// transaction and dispose it after the transaction.
     /// </summary>
     public static async Task<IAsyncDisposable> AcquirePrepareLockAsync(AppDbContext db, CancellationToken ct)
     {
-        await db.Database.OpenConnectionAsync(ct);
         try
         {
-            var result = await ScalarAsync(db, "SELECT GET_LOCK(LEFT(CONCAT('oa:payout-prepare:', DATABASE()), 64), 30)", ct);
-            if (result is null || Convert.ToInt64(result) != 1)
-                throw DomainException.Conflict("payout.prepare_busy",
-                    "Another payout batch preparation is in progress. Try again in a moment.");
-            return new NamedLock(db);
+            return await db.Dialect().AcquireNamedLockAsync(db, "payout-prepare", TimeSpan.FromSeconds(30), ct);
         }
-        catch
+        catch (TimeoutException)
         {
-            await db.Database.CloseConnectionAsync();
-            throw;
+            throw DomainException.Conflict("payout.prepare_busy",
+                "Another payout batch preparation is in progress. Try again in a moment.");
         }
-    }
-
-    private sealed class NamedLock(AppDbContext db) : IAsyncDisposable
-    {
-        public async ValueTask DisposeAsync()
-        {
-            try
-            {
-                await ScalarAsync(db, "SELECT RELEASE_LOCK(LEFT(CONCAT('oa:payout-prepare:', DATABASE()), 64))", CancellationToken.None);
-            }
-            finally
-            {
-                await db.Database.CloseConnectionAsync();
-            }
-        }
-    }
-
-    private static async Task<object?> ScalarAsync(AppDbContext db, string sql, CancellationToken ct)
-    {
-        var connection = db.Database.GetDbConnection();
-        await using var command = connection.CreateCommand();
-        command.CommandText = sql;
-        command.Transaction = db.Database.CurrentTransaction?.GetDbTransaction();
-        var value = await command.ExecuteScalarAsync(ct);
-        return value is DBNull ? null : value;
     }
 
     /// <summary>Takes a row lock on the batch for the rest of the transaction and returns its current status.</summary>
     public static async Task<PayoutBatchStatus?> LockBatchAsync(AppDbContext db, Guid batchId, CancellationToken ct)
     {
-        var rows = await db.Database
-            .SqlQuery<string>($"SELECT `Status` AS `Value` FROM payout_batches WHERE `Id` = {batchId.ToString()} FOR UPDATE")
-            .ToListAsync(ct);
-        return rows.Count == 0 ? null : Enum.Parse<PayoutBatchStatus>(rows[0]);
+        if (!await db.Dialect().LockRowAsync(db, "payout_batches", batchId, ct)) return null;
+        return await db.Set<PayoutBatch>().AsNoTracking().Where(b => b.Id == batchId).Select(b => (PayoutBatchStatus?)b.Status)
+            .FirstOrDefaultAsync(ct);
     }
 
     /// <summary>
@@ -188,7 +159,7 @@ public static class PayoutStore
          select new ScheduledEarningRef(e.Id, i.Id, b.Id, b.Reference, b.Status, i.Status, i.UserId)).ToListAsync(ct);
 
     public static Task<Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction> BeginAsync(AppDbContext db, CancellationToken ct) =>
-        db.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead, ct);
+        db.Dialect().BeginWriteTransactionAsync(db, ct, IsolationLevel.RepeatableRead);
 }
 
 /// <summary>Payouts-module implementation of <see cref="IPayoutReversalCoordinator"/>.</summary>

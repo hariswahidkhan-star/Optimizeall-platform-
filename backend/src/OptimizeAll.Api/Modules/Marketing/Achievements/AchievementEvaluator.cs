@@ -13,8 +13,9 @@ namespace OptimizeAll.Api.Modules.Marketing.Achievements;
 
 /// <summary>
 /// Computes a participant's achievement metrics and awards any active achievement whose threshold is met.
-/// Awarding is an INSERT IGNORE on the (UserId, AchievementId) primary key, and the notification is only staged when
-/// that insert created the row, in the same transaction — so duplicate events can never award or notify twice.
+/// Awarding is an insert on the (UserId, AchievementId) primary key (a duplicate-key violation means it was already
+/// awarded), and the notification is only staged when that insert created the row, in the same transaction — so
+/// duplicate events can never award or notify twice.
 /// </summary>
 public sealed class AchievementEvaluator(AppDbContext db, INotificationService notifications, TimeProvider clock)
 {
@@ -59,11 +60,22 @@ public sealed class AchievementEvaluator(AppDbContext db, INotificationService n
         foreach (var achievement in candidates.Where(a => metrics.TryGetValue(a.Criterion, out var v) && v >= a.Threshold))
         {
             var now = clock.GetUtcNow().UtcDateTime;
-            await using var tx = await db.Database.BeginTransactionAsync(ct);
-            var inserted = await db.Database.ExecuteSqlInterpolatedAsync(
-                $"INSERT IGNORE INTO user_achievements (UserId, AchievementId, AwardedAt) VALUES ({userId.ToString()}, {achievement.Id.ToString()}, {now})",
-                ct);
-            if (inserted == 1)
+            await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct);
+            var award = new UserAchievement { UserId = userId, AchievementId = achievement.Id, AwardedAt = now };
+            db.Set<UserAchievement>().Add(award);
+            bool inserted;
+            try
+            {
+                // Within the transaction EF wraps this in a savepoint, so a duplicate only undoes this insert.
+                await db.SaveChangesAsync(ct);
+                inserted = true;
+            }
+            catch (DbUpdateException ex) when (DatabaseErrors.IsUniqueViolation(ex))
+            {
+                db.Entry(award).State = EntityState.Detached; // already awarded by a concurrent evaluation
+                inserted = false;
+            }
+            if (inserted)
             {
                 await notifications.StageAsync(new NotificationRequest(
                     userId, NotificationTypes.Achievement, $"Achievement unlocked: {achievement.Name}",

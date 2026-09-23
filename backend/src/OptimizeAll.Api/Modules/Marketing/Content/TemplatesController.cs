@@ -57,7 +57,7 @@ public sealed class TemplatesController(AppDbContext db, IAuditLogger audit, ICu
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var like = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(t => EF.Functions.Like(t.Name, like) || EF.Functions.Like(t.Body, like) || EF.Functions.Like(t.Hashtags!, like));
+            q = q.Where(t => EF.Functions.Like(t.Name, like, "\\") || EF.Functions.Like(t.Body, like, "\\") || EF.Functions.Like(t.Hashtags!, like, "\\"));
         }
         q = (query.Sort?.ToLowerInvariant(), query.Desc) switch
         {

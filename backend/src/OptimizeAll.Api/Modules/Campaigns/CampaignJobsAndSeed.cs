@@ -30,7 +30,7 @@ public sealed class CampaignScheduleJob(AppDbContext db, IAuditLogger audit, Tim
         var moved = 0;
         foreach (var id in ids)
         {
-            await using var tx = await db.Database.BeginTransactionAsync(ct);
+            await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct);
             var updated = await db.Set<Campaign>().Where(c => c.Id == id && c.Status == from)
                 .ExecuteUpdateAsync(s => s.SetProperty(c => c.Status, to).SetProperty(c => c.UpdatedAt, now), ct);
             if (updated == 1)

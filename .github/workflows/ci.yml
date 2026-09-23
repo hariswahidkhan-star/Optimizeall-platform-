@@ -22,9 +22,14 @@ env:
 jobs:
   # ----------------------------------------------------------------------------------------------------
   backend:
-    name: Backend (build + unit + integration)
+    name: Backend (build + unit + integration, ${{ matrix.provider }})
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        # The API runs on MySQL 8 or SQLite (Database:Provider); the whole integration suite runs on both.
+        provider: [MySql, Sqlite]
     services:
       mysql:
         image: mysql:8.0
@@ -63,19 +68,27 @@ jobs:
           dotnet test backend/tests/OptimizeAll.UnitTests -c Release --no-build
           --logger "trx;LogFileName=unit.trx" --results-directory TestResults
 
-      - name: Integration tests (MySQL 8)
+      - name: Integration tests (${{ matrix.provider }})
         env:
-          # Server-level connection; each test class creates and drops its own database.
+          OPTIMIZEALL_TEST_PROVIDER: ${{ matrix.provider }}
+          # MySQL: server-level connection; each test class creates and drops its own database.
+          # SQLite: each test class uses its own temporary database file.
           OPTIMIZEALL_TEST_MYSQL: "Server=127.0.0.1;Port=3306;User=root;Password=ci-root-password;"
         run: >-
           dotnet test backend/tests/OptimizeAll.IntegrationTests -c Release --no-build
-          --logger "trx;LogFileName=integration.trx" --results-directory TestResults
+          --logger "trx;LogFileName=integration-${{ matrix.provider }}.trx" --results-directory TestResults
+
+      - name: Migrations are up to date (MySQL and SQLite)
+        if: matrix.provider == 'Sqlite'
+        run: |
+          dotnet tool install --global dotnet-ef --version 8.0.10
+          scripts/regenerate-migrations.sh --check
 
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: backend-test-results
+          name: backend-test-results-${{ matrix.provider }}
           path: TestResults/*.trx
           if-no-files-found: warn
 

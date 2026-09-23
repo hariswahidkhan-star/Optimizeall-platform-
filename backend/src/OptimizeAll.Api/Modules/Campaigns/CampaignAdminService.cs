@@ -15,6 +15,7 @@ using OptimizeAll.Domain.Files;
 using OptimizeAll.Domain.Ledger;
 using OptimizeAll.Domain.Rewards;
 using OptimizeAll.Domain.Submissions;
+using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Infrastructure.Persistence;
 
 namespace OptimizeAll.Api.Modules.Campaigns;
@@ -78,7 +79,7 @@ public sealed class CampaignAdminService(
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var pattern = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(c => EF.Functions.Like(c.Title, pattern) || EF.Functions.Like(c.Slug, pattern));
+            q = q.Where(c => EF.Functions.Like(c.Title, pattern, "\\") || EF.Functions.Like(c.Slug, pattern, "\\"));
         }
         q = (query.Sort ?? "newest").ToLowerInvariant() switch
         {
@@ -114,7 +115,7 @@ public sealed class CampaignAdminService(
         if (!string.IsNullOrWhiteSpace(search))
         {
             var pattern = PagingExtensions.LikePattern(search);
-            q = q.Where(c => EF.Functions.Like(c.Title, pattern) || EF.Functions.Like(c.Slug, pattern));
+            q = q.Where(c => EF.Functions.Like(c.Title, pattern, "\\") || EF.Functions.Like(c.Slug, pattern, "\\"));
         }
         return await q.OrderByDescending(c => c.CreatedAt).ThenBy(c => c.Id).Take(MaxOptions)
             .Select(c => new CampaignOptionDto(c.Id, c.Title, c.Status)).ToListAsync(ct);
@@ -409,7 +410,7 @@ public sealed class CampaignAdminService(
                 errors: new Dictionary<string, string[]> { ["campaign"] = problems.ToArray() });
 
         var target = campaign.StartsAt > now ? CampaignStatus.Scheduled : CampaignStatus.Active;
-        await using (var tx = await db.Database.BeginTransactionAsync(ct))
+        await using (var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct))
         {
             var updated = await db.Set<Campaign>()
                 .Where(c => c.Id == id && c.Status == CampaignStatus.Draft)
@@ -462,7 +463,7 @@ public sealed class CampaignAdminService(
 
         var target = to(campaign);
         var now = Now;
-        await using var tx = await db.Database.BeginTransactionAsync(ct);
+        await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct);
         var current = campaign.Status;
         var updated = await db.Set<Campaign>().Where(c => c.Id == id && c.Status == current)
             .ExecuteUpdateAsync(s => s.SetProperty(c => c.Status, target).SetProperty(c => c.UpdatedAt, now), ct);
@@ -652,7 +653,7 @@ public sealed class CampaignAdminService(
         if (incoming.GroupBy(d => (d.Platform, d.CountryCode)).Any(g => g.Count() > 1))
             throw new DomainException("campaign.duplicate_disclosure", "Each platform/country combination can only have one disclosure.");
 
-        await using var tx = await db.Database.BeginTransactionAsync(ct);
+        await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct);
         var existing = await db.Set<CampaignDisclosure>().Where(d => d.CampaignId == campaignId).ToListAsync(ct);
         var before = existing.Select(d => new { d.Platform, d.CountryCode, d.Text }).ToList();
         db.RemoveRange(existing);

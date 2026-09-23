@@ -12,6 +12,7 @@ using OptimizeAll.Domain.Identity;
 using OptimizeAll.Domain.Ledger;
 using OptimizeAll.Domain.Notifications;
 using OptimizeAll.Domain.Payouts;
+using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Infrastructure.Persistence;
 
 namespace OptimizeAll.Api.Modules.Payouts;
@@ -121,7 +122,7 @@ public sealed class PayoutHoldsController(
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var like = PagingExtensions.LikePattern(query.Search);
-            holds = holds.Where(x => EF.Functions.Like(x.Email, like) || EF.Functions.Like(x.DisplayName, like));
+            holds = holds.Where(x => EF.Functions.Like(x.Email, like, "\\") || EF.Functions.Like(x.DisplayName, like, "\\"));
         }
         var page = await holds.OrderByDescending(x => x.Hold.CreatedAt).ToPagedAsync(query, ct);
         return new PagedResult<PayoutHoldDto>(page.Items.Select(x => ToDto(x.Hold, x.Email, x.DisplayName)).ToList(),
@@ -133,16 +134,14 @@ public sealed class PayoutHoldsController(
     {
         var userId = request.UserId!.Value;
         var now = clock.GetUtcNow().UtcDateTime;
-        await using var tx = await PayoutStore.BeginAsync(db, ct);
-        // Serialize with batch preparation/regeneration: take the same MySQL named lock on this transaction's
-        // connection BEFORE reading anything. A prepare that is running finishes (and commits its draft items) first,
-        // so the draft items below are visible and get held; a prepare that starts after us waits and sees the hold.
-        // Released after commit (disposed before the transaction).
+        // Serialize with batch preparation/regeneration: take the same named lock BEFORE the transaction starts and
+        // anything is read. A prepare that is running finishes (and commits its draft items) first, so the draft items
+        // below are visible and get held; a prepare that starts after us waits and sees the hold.
+        // Released after commit (the transaction is disposed first).
         await using var prepareLock = await PayoutStore.AcquirePrepareLockAsync(db, ct);
+        await using var tx = await PayoutStore.BeginAsync(db, ct);
         // Row-lock the participant so two concurrent requests cannot both create an active hold.
-        var locked = await db.Database
-            .SqlQuery<string>($"SELECT `Email` AS `Value` FROM users WHERE `Id` = {userId.ToString()} FOR UPDATE").ToListAsync(ct);
-        if (locked.Count == 0) throw DomainException.NotFound("User");
+        if (!await db.Dialect().LockRowAsync(db, "users", userId, ct)) throw DomainException.NotFound("User");
         if (await db.Set<PayoutHold>().AnyAsync(h => h.UserId == userId && h.ReleasedAt == null, ct))
             throw DomainException.Conflict("payout.hold_exists", "This participant already has an active payout hold.");
 

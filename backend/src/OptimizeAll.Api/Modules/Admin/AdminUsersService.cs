@@ -16,6 +16,7 @@ using OptimizeAll.Domain.Notifications;
 using OptimizeAll.Domain.Payouts;
 using OptimizeAll.Domain.Social;
 using OptimizeAll.Domain.Submissions;
+using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Infrastructure.Persistence;
 
 namespace OptimizeAll.Api.Modules.Admin;
@@ -48,7 +49,7 @@ public sealed class AdminUsersService(
         if (!string.IsNullOrWhiteSpace(q.Search))
         {
             var p = PagingExtensions.LikePattern(q.Search);
-            users = users.Where(u => EF.Functions.Like(u.Email, p) || EF.Functions.Like(u.DisplayName, p));
+            users = users.Where(u => EF.Functions.Like(u.Email, p, "\\") || EF.Functions.Like(u.DisplayName, p, "\\"));
         }
         return users;
     }
@@ -146,18 +147,12 @@ public sealed class AdminUsersService(
         RequireConfirm(request.Confirm);
         if (id == currentUser.Id)
             throw DomainException.Forbidden("admin.cannot_suspend_self", "You can't suspend your own account.");
-        await using var tx = await db.Database.BeginTransactionAsync(ct);
-        // Lock the Admin role rows and their user rows (same order as SetRolesAsync) so two concurrent suspensions or a
-        // suspension racing a demotion can't both pass the "last active admin" check. Locking reads see the latest
-        // committed statuses.
-        var adminIds = await db.Database
-            .SqlQuery<Guid>($"SELECT UserId AS Value FROM user_roles WHERE Role = 'Admin' FOR UPDATE")
-            .ToListAsync(ct);
-        var activeAdminIds = adminIds.Count == 0
-            ? new List<Guid>()
-            : await db.Database
-                .SqlQuery<Guid>($"SELECT u.Id AS Value FROM users u JOIN user_roles r ON r.UserId = u.Id WHERE r.Role = 'Admin' AND u.Status = 'Active' FOR UPDATE")
-                .ToListAsync(ct);
+        // Serialize with other suspensions and role changes (same lock as SetRolesAsync) so two concurrent suspensions or
+        // a suspension racing a demotion can't both pass the "last active admin" check. The lock is taken before the
+        // transaction starts, so the reads below see the latest committed roles and statuses.
+        await using var adminLock = await AcquireAdminLockAsync(ct);
+        await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct);
+        var activeAdminIds = await ActiveAdminIdsAsync(ct);
 
         var user = await db.LoadUserAsync(id, ct);
         RequireAdminForStaffTarget(user);
@@ -211,11 +206,11 @@ public sealed class AdminUsersService(
             throw FieldRules.FieldError("admin.invalid_role", "roles", "Unknown role.");
         var newRoles = request.Roles.Distinct().OrderBy(r => r).ToList();
 
-        await using var tx = await db.Database.BeginTransactionAsync(ct);
-        // Lock the Admin role rows so two concurrent demotions can't both pass the "last admin" check.
-        var adminIds = await db.Database
-            .SqlQuery<Guid>($"SELECT UserId AS Value FROM user_roles WHERE Role = 'Admin' FOR UPDATE")
-            .ToListAsync(ct);
+        // Serialize with other role changes and suspensions so two concurrent demotions can't both pass the "last admin"
+        // check (lock before the transaction, so the reads below see the latest committed state).
+        await using var adminLock = await AcquireAdminLockAsync(ct);
+        await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct);
+        var adminIds = await db.Set<UserRole>().Where(r => r.Role == Role.Admin).Select(r => r.UserId).ToListAsync(ct);
 
         var user = await db.LoadUserAsync(id, ct);
         var oldRoles = user.Roles.Select(r => r.Role).OrderBy(r => r).ToList();
@@ -305,6 +300,25 @@ public sealed class AdminUsersService(
     }
 
     // ---------- Helpers ----------
+
+    /// <summary>The "last active admin" lock shared by suspensions and role changes.</summary>
+    private async Task<IAsyncDisposable> AcquireAdminLockAsync(CancellationToken ct)
+    {
+        try
+        {
+            return await db.Dialect().AcquireNamedLockAsync(db, "admin-roles", TimeSpan.FromSeconds(30), ct);
+        }
+        catch (TimeoutException)
+        {
+            throw DomainException.Conflict("admin.busy", "Another administrator change is in progress. Try again in a moment.");
+        }
+    }
+
+    private Task<List<Guid>> ActiveAdminIdsAsync(CancellationToken ct) =>
+        (from u in db.Set<User>()
+         join r in db.Set<UserRole>() on u.Id equals r.UserId
+         where r.Role == Role.Admin && u.Status == UserStatus.Active
+         select u.Id).ToListAsync(ct);
 
     private void RequireAdminForStaffTarget(User target)
     {

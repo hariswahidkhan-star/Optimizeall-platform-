@@ -42,6 +42,9 @@ controls are in [SECURITY.md](SECURITY.md); every configuration key is documente
   shares them. Background jobs coordinate through database leases (`job_leases`), so any number of API
   instances can run with `Jobs__Enabled=true`.
 * **State lives in two places:** the MySQL database and the file storage directory. Back up both.
+* **Database provider.** MySQL 8 (above; default) or SQLite (`Database__Provider=Sqlite`,
+  `Database__SqlitePath=/app/storage/db/optimizeall.db`) for small single-instance deployments — see
+  [§ 6](#6-sqlite-single-instance-deployments).
 
 | Image | Built from | Purpose |
 |---|---|---|
@@ -55,7 +58,7 @@ controls are in [SECURITY.md](SECURITY.md); every configuration key is documente
 |---|---|---|
 | .NET SDK | 8.0.x | backend build/tests |
 | Node.js / npm | 22 LTS | frontend |
-| MySQL | 8.0 (local install or container) | development and integration tests |
+| MySQL | 8.0 (local install or container) | development and integration tests (optional with `--sqlite`) |
 | Docker + Compose v2 | 24+ / 2.20+ | staging stack, image builds |
 | curl, openssl, mysql client | any | scripts |
 | `dotnet-ef` (optional) | 8.0.10 | creating migrations: `dotnet tool install --global dotnet-ef --version 8.0.10` |
@@ -68,6 +71,8 @@ scripts/dev-start.sh            # API :5080 + Vite :5173 in the background (.dev
 scripts/dev-stop.sh             # stops both (whole process groups)
 scripts/test-all.sh             # backend build + unit + integration tests, frontend typecheck/lint/test/build
 scripts/test-all.sh --e2e       # ...plus Playwright against a fresh database with the Demo seed
+scripts/dev-start.sh --sqlite   # same, but on SQLite (.dev/optimizeall-dev.db) — no MySQL needed
+scripts/test-all.sh --sqlite    # integration tests (and --e2e) on SQLite
 ```
 
 * The API runs with `ASPNETCORE_ENVIRONMENT=Development` and `appsettings.Development.json`: database
@@ -85,11 +90,13 @@ scripts/test-all.sh --e2e       # ...plus Playwright against a fresh database wi
   -- integration tests create and drop one database per test class:
   GRANT ALL PRIVILEGES ON `oa\_test\_%`.* TO 'optimizeall'@'localhost', 'optimizeall'@'127.0.0.1';
   ```
-* Integration tests read `OPTIMIZEALL_TEST_MYSQL` (server-level connection string, default
+* Integration tests read `OPTIMIZEALL_TEST_PROVIDER` (`MySql` default, or `Sqlite`: one temporary database file per
+  test class) and `OPTIMIZEALL_TEST_MYSQL` (server-level connection string, default
   `Server=127.0.0.1;Port=3306;User=optimizeall;Password=optimizeall_dev;`).
-* Schema changes: edit the entity + configuration, then
-  `dotnet ef migrations add <Name> -p src/OptimizeAll.Infrastructure -s src/OptimizeAll.Api -o Persistence/Migrations`
-  (run in `backend/`). Export the API contract with `scripts/export-openapi.sh` (writes `docs/api/openapi.json`).
+* Schema changes: edit the entity + configuration, then add the migration for both providers with
+  `scripts/regenerate-migrations.sh --add <Name>` (MySQL: `Infrastructure/Persistence/Migrations`, SQLite:
+  `Infrastructure.Sqlite/Migrations`; details in [ARCHITECTURE.md](ARCHITECTURE.md#database-portability-mysql-and-sqlite)).
+  Export the API contract with `scripts/export-openapi.sh` (writes `docs/api/openapi.json`).
 
 ## 4. Staging / demo with Docker Compose
 
@@ -239,6 +246,7 @@ Two supported modes:
 * Background jobs: safe on every instance (DB lease per job; one instance runs a job at a time). To isolate
   job load, run a dedicated instance with `Jobs__Enabled=true` and set `Jobs__Enabled=false` elsewhere.
 * Data-protection keys: persisted in MySQL (`data_protection_keys`), shared automatically.
+* Horizontal scaling needs MySQL. A SQLite deployment runs exactly one API instance (§ 6).
 * **File storage must be shared**: `Storage__RootPath` (`/app/storage/files` in the image) has to be the same
   shared filesystem on every instance (NFS, EFS, Azure Files, GCS Fuse), or be replaced by an object-storage
   implementation of `IFileStorage`. A local volume per instance breaks screenshot access.
@@ -294,3 +302,33 @@ Then, with a dedicated smoke-test participant and staff account:
 | WhatsApp notifications | WhatsApp Business Cloud API: `WhatsApp__PhoneNumberId`, `WhatsApp__AccessToken` (system-user token), approved template `WhatsApp__TemplateName` | `WhatsApp__Enabled=false`: WhatsApp deliveries are skipped; in-app + email still work |
 | Payouts | `Payments__Provider=manual` (default): finance pays outside the platform and records payment references | No automated money movement until a provider integration (e.g. Wise, PayPal Payouts) is added |
 | Advertiser conversion postbacks | `Tracking__PostbackSecret` shared with each advertiser | Postbacks are rejected; clicks are still tracked |
+
+## 6. SQLite (single-instance deployments)
+
+For demos, staging and small installations the API can run on SQLite instead of MySQL — no database server, the
+database is a file on the API's persistent volume. The Render Blueprint `render.yaml` uses this (see
+[RENDER.md](RENDER.md); the MySQL Blueprint is `deploy/render/render-mysql.yaml`).
+
+```bash
+Database__Provider=Sqlite
+Database__SqlitePath=/app/storage/db/optimizeall.db   # on the /app/storage volume of the API image
+Database__InitializationMode=Migrate                  # the API applies the SQLite migrations at startup
+```
+
+* **One API instance only.** SQLite allows one writer at a time; the API serializes writers with `BEGIN IMMEDIATE`
+  transactions and a 10 s busy timeout, and its named locks (payout preparation, admin changes) are in-process.
+  Two API processes on one file (or a file on a network share) are not supported. Deploys therefore stop the old
+  instance before starting the new one.
+* **Files on the volume:** `db/optimizeall.db` plus `-wal`/`-shm` (write-ahead log; never delete them while the API
+  runs), `db/optimizeall-keys/` (the Data Protection key ring that encrypts payout destinations — with SQLite it is
+  stored next to the database instead of in it), and `files/` (uploads). The image's entrypoint gives the app user
+  ownership of a freshly mounted volume.
+* **Backups:** back up `db/` (database, WAL and keys together) and `files/`. A filesystem/volume snapshot is
+  crash-consistent, which SQLite's WAL recovers from; a plain file copy must be taken while the API is stopped or
+  idle. Test restores like any other backup.
+* **Money:** SQLite has no decimal type; amounts are stored as exact decimal text and every sum, average, min/max,
+  comparison and ordering is computed in .NET `decimal` (never floating point), so results match MySQL.
+* **Migrations:** the `optimizeall-migrator` image targets MySQL; with SQLite keep
+  `Database__InitializationMode=Migrate`. Take a backup of `db/` before upgrading.
+* To move from SQLite to MySQL later, start a MySQL deployment and migrate the data with your preferred tool; the
+  schema is the same model on both providers.

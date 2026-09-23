@@ -5,11 +5,15 @@
 # PIDs go to .dev/*.pid and logs to .dev/*.log. Stop with scripts/dev-stop.sh.
 #
 # Usage:
-#   scripts/dev-start.sh [--api-only | --web-only] [--no-wait]
+#   scripts/dev-start.sh [--api-only | --web-only] [--no-wait] [--sqlite]
+#
+#   --sqlite   run the API on SQLite instead of MySQL (no database server needed); the database file is
+#              .dev/optimizeall-dev.db (override with SQLITE_PATH). Delete the file to start over.
 #
 # Environment:
 #   API_PORT=5080  WEB_PORT=5173   (the Vite proxy expects the API on 5080)
-#   DB_* variables override the connection string (see scripts/dev-setup.sh)
+#   DB_* variables override the MySQL connection string (see scripts/dev-setup.sh)
+#   SQLITE_PATH=.dev/optimizeall-dev.db   database file for --sqlite
 #
 # Development conveniences (appsettings.Development.json): Swagger at /api/docs, emails written to
 # backend/src/OptimizeAll.Api/storage/mail and shown by the dev mailbox, bootstrap admin
@@ -20,13 +24,14 @@ set -euo pipefail
 
 API_PORT="${API_PORT:-5080}"
 WEB_PORT="${WEB_PORT:-5173}"
-start_api=true; start_web=true; wait_ready=true
+start_api=true; start_web=true; wait_ready=true; sqlite=false
 for arg in "$@"; do
   case "$arg" in
     --api-only) start_web=false ;;
     --web-only) start_api=false ;;
     --no-wait) wait_ready=false ;;
-    -h|--help) sed -n '2,18p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    --sqlite) sqlite=true ;;
+    -h|--help) sed -n '2,22p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) die "Unknown option: $arg (see --help)" ;;
   esac
 done
@@ -42,10 +47,18 @@ if $start_api; then
   else
     port_in_use "$API_PORT" && die "Port $API_PORT is already in use (another API instance?)"
     have dotnet || die "dotnet is required"
-    log "Starting API on http://localhost:$API_PORT (log: .dev/api.log)"
-    pid="$(cd "$ROOT" && ASPNETCORE_ENVIRONMENT=Development \
-      ASPNETCORE_URLS="http://localhost:$API_PORT" \
-      ConnectionStrings__Default="$(connection_string)" \
+    if $sqlite; then
+      SQLITE_PATH="${SQLITE_PATH:-$DEV_DIR/optimizeall-dev.db}"
+      # Database:SqlitePath takes precedence over the MySQL ConnectionStrings:Default in appsettings.Development.json.
+      db_env=(Database__Provider=Sqlite "Database__SqlitePath=$SQLITE_PATH")
+      db_label="SQLite $SQLITE_PATH"
+    else
+      db_env=(Database__Provider=MySql "ConnectionStrings__Default=$(connection_string)")
+      db_label="MySQL $DB_HOST:$DB_PORT/$DB_NAME"
+    fi
+    log "Starting API on http://localhost:$API_PORT with $db_label (log: .dev/api.log)"
+    pid="$(cd "$ROOT" && export ASPNETCORE_ENVIRONMENT=Development \
+      ASPNETCORE_URLS="http://localhost:$API_PORT" "${db_env[@]}" && \
       start_bg api "$DEV_DIR/api.log" dotnet run --project "$API_PROJECT" --no-launch-profile)"
     echo "$pid" > "$DEV_DIR/api.pid"
   fi

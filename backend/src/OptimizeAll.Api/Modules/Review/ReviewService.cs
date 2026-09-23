@@ -18,6 +18,7 @@ using OptimizeAll.Domain.Payouts;
 using OptimizeAll.Domain.Rewards;
 using OptimizeAll.Domain.Settings;
 using OptimizeAll.Domain.Submissions;
+using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Infrastructure.Persistence;
 
 namespace OptimizeAll.Api.Modules.Review;
@@ -36,8 +37,8 @@ public interface IReviewService
 /// <summary>
 /// Reviewer commands. Every state transition is a conditional update on the expected current state (and, for
 /// decisions, the concurrency stamp the reviewer saw), so two reviewers can never both decide the same submission.
-/// Reward-affecting transitions first lock the campaign row (SELECT ... FOR UPDATE) so caps, budget and the
-/// first-post bonus are evaluated serially per campaign.
+/// Reward-affecting transitions first lock the campaign row (CampaignLock: MySQL row lock; SQLite write transaction)
+/// so caps, budget and the first-post bonus are evaluated serially per campaign.
 /// </summary>
 public sealed class ReviewService(
     AppDbContext db,
@@ -69,7 +70,7 @@ public sealed class ReviewService(
             .FirstOrDefaultAsync(ct) ?? throw DomainException.NotFound("Submission");
         EnsureNotSelf(owner);
 
-        await using var tx = await db.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
+        await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct, IsolationLevel.ReadCommitted);
         var moved = await db.Set<Submission>()
             .Where(s => s.Id == submissionId && s.Status == SubmissionStatus.Pending &&
                         (s.ClaimedByUserId == null || s.ClaimExpiresAt < now || s.ClaimedByUserId == me))
@@ -162,7 +163,7 @@ public sealed class ReviewService(
             _ => "rejected",
         };
 
-        await using var tx = await db.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
+        await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct, IsolationLevel.ReadCommitted);
         await CampaignLock.LockAsync(db, existing.CampaignId, ct);
         var campaign = await db.Set<Campaign>().AsNoTracking().FirstAsync(c => c.Id == existing.CampaignId, ct);
         var before = await db.Set<Submission>().AsNoTracking().FirstAsync(s => s.Id == submissionId, ct);
@@ -297,7 +298,7 @@ public sealed class ReviewService(
             ?? throw DomainException.NotFound("Submission");
         EnsureNotSelf(s.UserId);
 
-        await using var tx = await db.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
+        await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct, IsolationLevel.ReadCommitted);
         await CampaignLock.LockAsync(db, s.CampaignId, ct);
         if (result == LiveCheckResult.ConfirmedLive)
         {
@@ -362,7 +363,7 @@ public sealed class ReviewService(
             ?? throw DomainException.NotFound("Submission");
         EnsureNotSelf(s.UserId);
 
-        await using var tx = await db.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
+        await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct, IsolationLevel.ReadCommitted);
         await CampaignLock.LockAsync(db, s.CampaignId, ct);
         await ReverseCoreAsync(s, reason, me, now, "reversed", ct);
         await db.SaveChangesAsync(ct);
@@ -438,7 +439,7 @@ public sealed class ReviewService(
         var firstForUser = false;
         SubmissionStatus submissionStatus = s.Status;
 
-        await using var tx = await db.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
+        await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct, IsolationLevel.ReadCommitted);
         await CampaignLock.LockAsync(db, s.CampaignId, ct);
         var campaign = await db.Set<Campaign>().AsNoTracking().FirstAsync(c => c.Id == s.CampaignId, ct);
         if (status == AppealStatus.Overturned)
@@ -543,8 +544,7 @@ public sealed class ReviewService(
     /// </summary>
     private async Task EnsureParticipantActiveAsync(Guid userId, CancellationToken ct)
     {
-        var id = userId.ToString();
-        await db.Database.ExecuteSqlInterpolatedAsync($"SELECT Id FROM users WHERE Id = {id} FOR SHARE", ct);
+        await db.Dialect().LockRowAsync(db, "users", userId, ct, RowLockMode.Share);
         var status = await db.Set<User>().AsNoTracking().Where(u => u.Id == userId).Select(u => u.Status).FirstAsync(ct);
         if (status != UserStatus.Active)
             throw DomainException.Conflict("participant.not_active",
@@ -579,7 +579,7 @@ public sealed class ReviewService(
             .Select(s => new { s.Id, s.AssignedReviewerId }).ToListAsync(ct);
         var openIds = open.Select(o => o.Id).ToList();
 
-        await using var tx = await db.Database.BeginTransactionAsync(ct);
+        await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct);
         var updated = await db.Set<Submission>()
             .Where(s => openIds.Contains(s.Id) && (s.Status == SubmissionStatus.Pending || s.Status == SubmissionStatus.UnderReview))
             .ExecuteUpdateAsync(u => u.SetProperty(s => s.AssignedReviewerId, reviewerId), ct);

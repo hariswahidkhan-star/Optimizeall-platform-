@@ -70,8 +70,8 @@ public static class LedgerQueries
             else
             {
                 var like = PagingExtensions.LikePattern(term);
-                rows = rows.Where(r => EF.Functions.Like(r.UserEmail, like) || EF.Functions.Like(r.UserDisplayName, like) ||
-                                       EF.Functions.Like(r.Entry.Description, like));
+                rows = rows.Where(r => EF.Functions.Like(r.UserEmail, like, "\\") || EF.Functions.Like(r.UserDisplayName, like, "\\") ||
+                                       EF.Functions.Like(r.Entry.Description, like, "\\"));
             }
         }
         return rows.OrderByDescending(r => r.Entry.CreatedAt).ThenByDescending(r => r.Entry.Id);

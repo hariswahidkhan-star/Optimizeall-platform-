@@ -21,6 +21,7 @@ Prerequisites: .NET 8 SDK, Node 22, MySQL 8.
 scripts/dev-setup.sh      # checks prerequisites, creates the local DB/user, restores packages
 scripts/dev-start.sh      # API on http://localhost:5080 (Development: migrations + Baseline + Demo seed), web on http://localhost:5173
 scripts/dev-stop.sh
+scripts/dev-start.sh --sqlite   # same on SQLite (no MySQL needed)
 ```
 
 * API docs: http://localhost:5080/api/docs (Swagger UI) — static copy in [`docs/api/openapi.json`](docs/api/openapi.json)
@@ -30,13 +31,16 @@ scripts/dev-stop.sh
 
 Staging (full stack with real SMTP to Mailpit): `scripts/staging-up.sh` — see [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md).
 
-Hosted demo on Render: `render.yaml` is a one-click Blueprint (web + API + MySQL) — see [`docs/RENDER.md`](docs/RENDER.md).
+The API runs on MySQL 8 or SQLite (`Database__Provider`). Hosted demo on Render: `render.yaml` is a one-click
+Blueprint (web + API on SQLite, the cheapest option); `deploy/render/render-mysql.yaml` adds a MySQL service — see
+[`docs/RENDER.md`](docs/RENDER.md).
 
 ## Tests
 
 ```bash
 scripts/test-all.sh            # backend build + unit + integration (real MySQL), frontend typecheck/lint/test/build
 scripts/test-all.sh --e2e      # + Playwright smoke suite
+scripts/test-all.sh --sqlite   # integration tests on SQLite instead of MySQL
 scripts/e2e-journeys.sh        # full-stack Playwright journeys (participant, reviewer, finance, admin) on a fresh DB
 ```
 

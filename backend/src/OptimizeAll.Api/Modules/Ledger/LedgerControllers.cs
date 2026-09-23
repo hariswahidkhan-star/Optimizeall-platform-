@@ -95,8 +95,8 @@ public sealed class PendingEarningsController(AppDbContext db, LedgerAdminServic
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var like = PagingExtensions.LikePattern(query.Search);
-            rows = rows.Where(r => EF.Functions.Like(r.UserEmail, like) || EF.Functions.Like(r.UserDisplayName, like) ||
-                                   EF.Functions.Like(r.Entry.Description, like));
+            rows = rows.Where(r => EF.Functions.Like(r.UserEmail, like, "\\") || EF.Functions.Like(r.UserDisplayName, like, "\\") ||
+                                   EF.Functions.Like(r.Entry.Description, like, "\\"));
         }
         var page = await rows.OrderBy(r => r.Entry.CreatedAt).ThenBy(r => r.Entry.Id).ToPagedAsync(query, ct);
 
