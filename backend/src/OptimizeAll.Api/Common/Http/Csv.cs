@@ -34,9 +34,10 @@ public static class Csv
 
     public static string Escape(string value)
     {
-        // Prevent =, +, -, @, tab and CR from being interpreted as formulas by spreadsheet apps,
-        // unless the value is a plain number (e.g. negative amounts).
-        if (value.Length > 0 && "=+-@\t\r".Contains(value[0]) &&
+        // Prevent =, +, -, @, tab and CR from being interpreted as formulas by spreadsheet apps (spreadsheets also
+        // evaluate a formula after leading spaces), unless the value is a plain number (e.g. negative amounts).
+        var firstVisible = value.TrimStart(' ');
+        if (firstVisible.Length > 0 && "=+-@\t\r".Contains(firstVisible[0]) &&
             !decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out _))
         {
             value = "'" + value;

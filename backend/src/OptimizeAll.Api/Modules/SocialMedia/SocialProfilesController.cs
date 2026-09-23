@@ -167,7 +167,12 @@ public sealed class SocialProfilesController(
         profile.DisplayName = input.DisplayName.Trim();
         profile.ProfileUrl = CleanUrl(input.ProfileUrl, "profileUrl");
         profile.AvatarUrl = CleanUrl(input.AvatarUrl, "avatarUrl");
-        profile.ExternalId = string.IsNullOrWhiteSpace(input.ExternalId) ? null : input.ExternalId.Trim();
+        var externalId = string.IsNullOrWhiteSpace(input.ExternalId) ? null : input.ExternalId.Trim();
+        // A connected profile publishes with its stored token to ExternalId: re-pointing it is a credential change.
+        if (externalId != profile.ExternalId && profile.IntegrationConnectionId is not null && !currentUser.HasPermission(Permissions.IntegrationsManage))
+            throw DomainException.Forbidden("social.external_id_requires_integrations",
+                "Changing the account id of a connected profile requires the integrations.manage permission.");
+        profile.ExternalId = externalId;
         audit.Record("social.profile.updated", nameof(BrandProfile), profile.Id, before, new { profile.Handle, profile.DisplayName, profile.ExternalId });
         await db.SaveChangesAsync(ct);
         return await ToDtoAsync(profile, ct);

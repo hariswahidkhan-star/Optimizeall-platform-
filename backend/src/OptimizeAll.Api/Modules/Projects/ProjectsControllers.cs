@@ -18,7 +18,7 @@ public sealed class AgencyDashboardController(DashboardService dashboard) : Cont
 [ApiController]
 [HasPermission(Permissions.ProjectsView)]
 [Route("api/v1/agency/projects")]
-public sealed class AgencyProjectsController(ProjectService projects, TaskService tasks, DeliverableService deliverables, TimeService time) : ControllerBase
+public sealed class AgencyProjectsController(ProjectService projects, TaskService tasks, TimeService time) : ControllerBase
 {
     [HttpGet]
     public Task<PagedResult<ProjectSummaryDto>> List([FromQuery] ProjectListQuery query, CancellationToken ct) => projects.ListAsync(query, ct);

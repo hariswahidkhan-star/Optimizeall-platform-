@@ -110,7 +110,10 @@ public sealed class CsvTests
     [InlineData("=HYPERLINK(\"http://evil\")", "'=HYPERLINK(\"http://evil\")")]
     [InlineData("+cmd", "'+cmd")]
     [InlineData("@SUM(A1)", "'@SUM(A1)")]
+    [InlineData("  =1+1", "'  =1+1")]
+    [InlineData(" @SUM(A1)", "' @SUM(A1)")]
     [InlineData("-10.50", "-10.50")]
+    [InlineData(" -3", " -3")]
     [InlineData("plain", "plain")]
     public void Neutralizes_formula_injection_but_keeps_negative_numbers(string value, string expected)
     {
