@@ -65,6 +65,30 @@ All accounts use the password **`Demo#2026!pass`**.
 | `hamza.qureshi@demo.optimizeall.app` | Participant (PK) | Clawback: a paid post was reversed and netted against the next payout; open dispute ticket |
 | Other `first.last@demo.optimizeall.app` | Participants | About 25 more participants across PK, AE, SA, GB, US, IN and EG |
 
+### Agency demo accounts
+
+Same password. The agency's demo clients are **Nimbus Fitness** (US, USD), **Wanderly Travel** (UK, GBP),
+**Aurora Skincare** (UAE, AED) and **Karachi Eats** (Pakistan, PKR), each with projects, deliverables, CRM history,
+invoices, email lists and campaigns, social calendars, ad accounts and SEO sites.
+
+| Email | Role | Try |
+|---|---|---|
+| `admin@demo.optimizeall.app` | Admin | Every agency area, settings, integrations |
+| `am@demo.optimizeall.app` | Account manager | Agency home, clients, projects, approvals, proposals, contracts, reports |
+| `sales@demo.optimizeall.app` | Sales rep | CRM pipeline, lead scoring, proposals |
+| `strategist@demo.optimizeall.app` | Strategist | Reports, CRM (read), projects |
+| `content@demo.optimizeall.app` / `designer@demo.optimizeall.app` | Content creator / Designer | Tasks, deliverables, time tracking, landing pages |
+| `seo@demo.optimizeall.app` | SEO specialist | Site audits, rankings, backlinks, local SEO, briefs |
+| `ads@demo.optimizeall.app` | Ads specialist | Ad accounts, pacing, alerts, media plans, creatives |
+| `social@demo.optimizeall.app` | Social media manager | Calendar, composer, approvals, inbox, listening |
+| `finance1@demo.optimizeall.app` | Finance | Invoices, payments, credit notes, aging (plus participant payouts) |
+| `owner@nimbus.demo.optimizeall.app` | Client (Nimbus Fitness, Owner) | Client portal: everything for Nimbus |
+| `approver@nimbus.demo.optimizeall.app` | Client (Nimbus Fitness, Approver) | Approve deliverables, posts and email campaigns |
+| `billing@nimbus.demo.optimizeall.app` | Client (Nimbus Fitness, Billing) | Invoices and proposals |
+| `owner@aurora.demo.optimizeall.app` | Client (Aurora Skincare, Owner) | Shows that clients only ever see their own organization |
+
+The public agency website is at `/` (no sign-in).
+
 ## What is in the dataset
 
 * **People.** 6 staff and 41 participants in PK, AE, SA, GB, US, IN and EG, with varied languages, time zones, tiers

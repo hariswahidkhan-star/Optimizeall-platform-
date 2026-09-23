@@ -75,7 +75,11 @@ All use the password `Demo#2026!pass` — full list and walkthroughs in [DEMO.md
 | `reviewer1@demo.optimizeall.app` / `reviewer2@…` | Reviewer |
 | `manager@demo.optimizeall.app` | Campaign manager |
 | `finance1@demo.optimizeall.app` / `finance2@…` | Finance (two people for four-eyes steps) |
-| `admin@demo.optimizeall.app` | Admin |
+| `admin@demo.optimizeall.app` | Admin (all agency areas too) |
+| `am@demo.optimizeall.app`, `sales@…`, `seo@…`, `ads@…`, `social@…`, `designer@…` | Agency staff portal |
+| `owner@nimbus.demo.optimizeall.app`, `approver@nimbus.…` | Client portal (Nimbus Fitness) |
+
+The public agency website is the web service's root URL; no sign-in needed.
 
 ## Things to know
 
