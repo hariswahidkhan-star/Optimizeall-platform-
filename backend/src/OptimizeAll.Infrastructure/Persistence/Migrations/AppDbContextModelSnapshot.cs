@@ -2151,6 +2151,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasPrecision(6)
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("ExclusionsJson")
+                        .HasColumnType("json");
+
                     b.Property<DateTime?>("FinalizedAt")
                         .HasPrecision(6)
                         .HasColumnType("datetime(6)");
@@ -2169,6 +2172,11 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     b.Property<string>("Notes")
                         .HasMaxLength(2000)
                         .HasColumnType("varchar(2000)");
+
+                    b.Property<string>("PeriodKey")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
 
                     b.Property<DateTime>("PeriodStart")
                         .HasPrecision(6)
@@ -2205,6 +2213,8 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("Reference")
                         .IsUnique();
+
+                    b.HasIndex("PeriodKey", "Currency");
 
                     b.HasIndex("Status", "CutoffAt");
 
