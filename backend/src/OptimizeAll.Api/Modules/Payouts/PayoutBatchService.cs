@@ -34,7 +34,8 @@ public sealed class PayoutBatchService(
     IAuditLogger audit,
     INotificationService notifications,
     TimeProvider clock,
-    ILogger<PayoutBatchService> logger)
+    ILogger<PayoutBatchService> logger,
+    PayoutTestHooks? hooks = null)
 {
     public static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web)
     {
@@ -92,6 +93,7 @@ public sealed class PayoutBatchService(
                 Notes = string.IsNullOrWhiteSpace(note) ? null : note.Trim(),
             };
             var plan = await BuildPlanAsync(period, currency, schedule.MinimumPayoutAmount, ct);
+            await PayoutTestHooks.InvokeAsync(hooks?.AfterPrepareSelection, ct);
             if (plan.Items.Count == 0)
             {
                 throw DomainException.Conflict("payout.no_eligible_earnings",
@@ -140,6 +142,13 @@ public sealed class PayoutBatchService(
 
             var before = new { batch.ItemCount, batch.TotalAmount };
             var itemIds = await db.Set<PayoutItem>().Where(i => i.BatchId == batchId).Select(i => i.Id).ToListAsync(ct);
+            // Manual holds (and automatic ones such as "Submission reversal pending") survive regeneration: the
+            // participant's new item is created Held with the same reason. "No payout details" is re-derived by the planner.
+            var carriedHolds = (await db.Set<PayoutItem>().AsNoTracking()
+                    .Where(i => i.BatchId == batchId && i.Status == PayoutItemStatus.Held && i.HoldReason != null &&
+                                i.HoldReason != PayoutPlanner.MissingPayoutProfileReason)
+                    .Select(i => new { i.UserId, i.HoldReason }).ToListAsync(ct))
+                .ToDictionary(i => i.UserId, i => i.HoldReason!);
             await PayoutStore.ReleaseEarningsAsync(db, itemIds, ct);
             await db.Set<PaymentAttempt>().Where(a => itemIds.Contains(a.PayoutItemId)).ExecuteDeleteAsync(ct);
             await db.Set<PayoutItem>().Where(i => i.BatchId == batchId).ExecuteDeleteAsync(ct);
@@ -148,10 +157,10 @@ public sealed class PayoutBatchService(
                 batch.PeriodStart, batch.CutoffAt, batch.ScheduledPaymentDate, batch.PeriodKey);
             var plan = await BuildPlanAsync(period, batch.Currency, schedule.MinimumPayoutAmount, ct);
             batch.PreparedByUserId = actor;
-            await PopulateAsync(batch, plan, ct);
+            await PopulateAsync(batch, plan, ct, carriedHolds);
 
             audit.Record("payout.batch_regenerated", nameof(PayoutBatch), batch.Id, before,
-                new { batch.ItemCount, batch.TotalAmount, Excluded = plan.Exclusions.Count }, reason);
+                new { batch.ItemCount, batch.TotalAmount, Excluded = plan.Exclusions.Count, HoldsCarriedOver = carriedHolds.Count }, reason);
             await db.SaveChangesAsync(ct);
             await tx.CommitAsync(ct);
         }
@@ -184,7 +193,8 @@ public sealed class PayoutBatchService(
     }
 
     /// <summary>Creates items for the plan, attaches earnings with one conditional update per item, sets totals.</summary>
-    private async Task PopulateAsync(PayoutBatch batch, PayoutPlan plan, CancellationToken ct)
+    private async Task PopulateAsync(PayoutBatch batch, PayoutPlan plan, CancellationToken ct,
+        IReadOnlyDictionary<Guid, string>? carriedHolds = null)
     {
         var userIds = plan.Items.Select(i => i.UserId).ToList();
         var profiles = (await db.Set<PayoutProfile>().AsNoTracking()
@@ -195,18 +205,24 @@ public sealed class PayoutBatchService(
             .ToDictionary(g => g.Key, g => g.OrderByDescending(p => p.UpdatedAt).First().MaskedDestination);
 
         var providerKey = providers.Active.Key;
-        var items = plan.Items.Select(planned => (planned, item: new PayoutItem
+        var items = plan.Items.Select(planned =>
         {
-            BatchId = batch.Id,
-            UserId = planned.UserId,
-            Amount = planned.Amount,
-            Currency = batch.Currency,
-            EarningCount = planned.EarningIds.Count,
-            Status = planned.HeldForMissingPayoutProfile ? PayoutItemStatus.Held : PayoutItemStatus.Pending,
-            HoldReason = planned.HeldForMissingPayoutProfile ? PayoutPlanner.MissingPayoutProfileReason : null,
-            PaymentProvider = providerKey,
-            DestinationHint = profiles.TryGetValue(planned.UserId, out var hint) ? Truncate(hint, 64) : null,
-        })).ToList();
+            var holdReason = planned.HeldForMissingPayoutProfile
+                ? PayoutPlanner.MissingPayoutProfileReason
+                : carriedHolds?.GetValueOrDefault(planned.UserId);
+            return (planned, item: new PayoutItem
+            {
+                BatchId = batch.Id,
+                UserId = planned.UserId,
+                Amount = planned.Amount,
+                Currency = batch.Currency,
+                EarningCount = planned.EarningIds.Count,
+                Status = holdReason is null ? PayoutItemStatus.Pending : PayoutItemStatus.Held,
+                HoldReason = holdReason,
+                PaymentProvider = providerKey,
+                DestinationHint = profiles.TryGetValue(planned.UserId, out var hint) ? Truncate(hint, 64) : null,
+            });
+        }).ToList();
 
         db.Set<PayoutItem>().AddRange(items.Select(x => x.item));
         var payable = items.Where(x => x.item.Status != PayoutItemStatus.Held).ToList();
@@ -281,6 +297,9 @@ public sealed class PayoutBatchService(
                    ?? throw DomainException.NotFound("PayoutItem");
         if (item.Status != PayoutItemStatus.Held)
             throw DomainException.Conflict("payout.item_not_held", "Only held items can be released.");
+        if (await db.Set<EarningEntry>().CountAsync(e => e.PayoutItemId == itemId, ct) != item.EarningCount)
+            throw DomainException.Conflict("payout.item_released",
+                "This item's earnings were released (e.g. for a reversal). Regenerate the batch to include the participant again.");
         if (!await db.Set<PayoutProfile>().AnyAsync(p => p.UserId == item.UserId, ct))
             throw DomainException.Conflict("payout.no_payout_profile", "The participant has no payout details on file.");
         if (await db.Set<PayoutHold>().AnyAsync(h => h.UserId == item.UserId && h.ReleasedAt == null, ct))
@@ -322,6 +341,22 @@ public sealed class PayoutBatchService(
                 throw DomainException.Conflict("payout.cannot_cancel", $"A {status} batch cannot be cancelled.");
             if (await db.Set<PayoutItem>().AnyAsync(i => i.BatchId == batchId && i.Status == PayoutItemStatus.Paid, ct))
                 throw DomainException.Conflict("payout.has_paid_items", "Payments were already recorded for this batch; it cannot be cancelled.");
+            if (status == PayoutBatchStatus.Finalized)
+            {
+                var attempts = from a in db.Set<PaymentAttempt>()
+                               join i in db.Set<PayoutItem>() on a.PayoutItemId equals i.Id
+                               where i.BatchId == batchId
+                               select a.Status;
+                if (await attempts.AnyAsync(a => a == PaymentAttemptStatus.Submitted, ct))
+                    throw DomainException.Conflict("payout.attempt_in_flight",
+                        "A payment of this batch was submitted to the payment provider and has no outcome yet. " +
+                        "Wait for the provider's confirmation or failure before cancelling.");
+                var exportedAt = await db.Set<PayoutBatch>().Where(b => b.Id == batchId).Select(b => b.InstructionsExportedAt).FirstAsync(ct);
+                if (exportedAt is not null || await attempts.AnyAsync(a => a == PaymentAttemptStatus.Succeeded, ct))
+                    throw DomainException.Conflict("payout.instructions_exported",
+                        "Payment instructions for this batch were already exported (or a payment went through), so money may be on its way. " +
+                        "The batch can no longer be cancelled: mark each unpaid item failed with a reason instead.");
+            }
 
             var open = await db.Set<PayoutItem>().AsNoTracking()
                 .Where(i => i.BatchId == batchId && (i.Status == PayoutItemStatus.Pending || i.Status == PayoutItemStatus.Held ||
@@ -389,6 +424,28 @@ public sealed class PayoutBatchService(
                     : DomainException.Conflict("payout.not_draft", $"The batch is already {current}.");
             }
 
+            await EnsureNoConflictOfInterestAsync(batchId, actor, ct);
+
+            // Safety net for payout holds and suspensions placed after the batch was prepared (or racing with it): a
+            // pending item of a participant who is on hold or not active is held here, never moved to AwaitingPayment.
+            var pending = await db.Set<PayoutItem>().AsNoTracking()
+                .Where(i => i.BatchId == batchId && i.Status == PayoutItemStatus.Pending)
+                .Select(i => new { i.Id, i.UserId }).ToListAsync(ct);
+            var blockers = await PayoutStore.PayoutBlockersAsync(db, pending.Select(i => i.UserId).Distinct().ToList(), ct);
+            var heldAtFinalize = new List<Guid>();
+            foreach (var item in pending.Where(i => blockers.ContainsKey(i.UserId)))
+            {
+                var holdReason = blockers[item.UserId];
+                var held = await db.Set<PayoutItem>().Where(i => i.Id == item.Id && i.Status == PayoutItemStatus.Pending)
+                    .ExecuteUpdateAsync(s => s.SetProperty(i => i.Status, PayoutItemStatus.Held).SetProperty(i => i.HoldReason, holdReason)
+                        .SetProperty(i => i.UpdatedAt, now).SetProperty(i => i.ConcurrencyStamp, Guid.NewGuid()), ct);
+                if (held == 0) continue;
+                heldAtFinalize.Add(item.Id);
+                audit.Record("payout.item_held", nameof(PayoutItem), item.Id,
+                    after: new { BatchId = batchId, Automatic = true, AtFinalize = true }, reason: holdReason);
+            }
+
+            // Held items (manual or above) release their earnings exactly as before.
             var heldIds = await db.Set<PayoutItem>().Where(i => i.BatchId == batchId && i.Status == PayoutItemStatus.Held)
                 .Select(i => i.Id).ToListAsync(ct);
             await PayoutStore.ReleaseEarningsAsync(db, heldIds, ct);
@@ -412,7 +469,7 @@ public sealed class PayoutBatchService(
 
             audit.Record("payout.batch_finalized", nameof(PayoutBatch), batchId,
                 before: new { Status = PayoutBatchStatus.Draft, batch.ItemCount, batch.TotalAmount },
-                after: new { Status = PayoutBatchStatus.Finalized, AwaitingPayment = awaiting.Count, HeldReleased = heldIds.Count },
+                after: new { Status = PayoutBatchStatus.Finalized, AwaitingPayment = awaiting.Count, HeldReleased = heldIds.Count, HeldAtFinalize = heldAtFinalize },
                 reason: reason);
             await db.SaveChangesAsync(ct);
             await tx.CommitAsync(ct);
@@ -421,6 +478,22 @@ public sealed class PayoutBatchService(
 
         // After commit: hand each item to the payment provider layer (manual provider → RequiresManualAction).
         return await dispatcher.DispatchAsync(awaiting, ct);
+    }
+
+    /// <summary>
+    /// Segregation of duties at finalize: the finalizer must not be the beneficiary of any item of the batch, nor the
+    /// person who created or approved any earning in it (403 <c>payout.conflict_of_interest</c>).
+    /// </summary>
+    private async Task EnsureNoConflictOfInterestAsync(Guid batchId, Guid actor, CancellationToken ct)
+    {
+        if (await db.Set<PayoutItem>().AnyAsync(i => i.BatchId == batchId && i.UserId == actor, ct))
+            throw DomainException.Forbidden("payout.conflict_of_interest",
+                "You are the beneficiary of an item in this batch; another finance user must finalize it.");
+        var itemIds = db.Set<PayoutItem>().Where(i => i.BatchId == batchId).Select(i => i.Id);
+        if (await db.Set<EarningEntry>().AnyAsync(e => e.PayoutItemId != null && itemIds.Contains(e.PayoutItemId.Value) &&
+                                                       (e.CreatedByUserId == actor || e.ApprovedByUserId == actor), ct))
+            throw DomainException.Forbidden("payout.conflict_of_interest",
+                "You created or approved an earning included in this batch; another finance user must finalize it.");
     }
 
     public static IReadOnlyList<StoredExclusion> ReadExclusions(string? json) =>

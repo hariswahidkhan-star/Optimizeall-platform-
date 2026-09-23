@@ -1,7 +1,10 @@
 using System.Data;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore;
+using OptimizeAll.Api.Common.Audit;
+using OptimizeAll.Api.Common.Ledger;
 using OptimizeAll.Domain.Common;
+using OptimizeAll.Domain.Identity;
 using OptimizeAll.Domain.Ledger;
 using OptimizeAll.Domain.Payouts;
 using OptimizeAll.Infrastructure.Persistence;
@@ -133,6 +136,75 @@ public static class PayoutStore
         return updated == 1;
     }
 
+    /// <summary>
+    /// Holds a draft item because one of its earnings must be reversed, and releases ALL its earnings back to Approved
+    /// (exactly what finalize does for held items), so the caller can reverse the earning in the same transaction.
+    /// The batch is claimed as a Draft first (row-locked, concurrency stamp rotated); a batch finalized meanwhile makes
+    /// this fail with 409 <c>payout.not_draft</c>. Returns true when the item was Pending and is now Held.
+    /// </summary>
+    public static async Task<bool> HoldAndReleaseDraftItemAsync(
+        AppDbContext db, Guid batchId, Guid itemId, string reason, DateTime now, CancellationToken ct)
+    {
+        await ClaimDraftAsync(db, batchId, now, ct);
+        var newlyHeld = await db.Set<PayoutItem>()
+            .Where(i => i.Id == itemId && i.BatchId == batchId && i.Status == PayoutItemStatus.Pending)
+            .ExecuteUpdateAsync(s => s.SetProperty(i => i.Status, PayoutItemStatus.Held).SetProperty(i => i.HoldReason, reason)
+                .SetProperty(i => i.UpdatedAt, now).SetProperty(i => i.ConcurrencyStamp, Guid.NewGuid()), ct) == 1;
+        var status = await db.Set<PayoutItem>().Where(i => i.Id == itemId).Select(i => i.Status).FirstAsync(ct);
+        if (status != PayoutItemStatus.Held)
+            throw DomainException.Conflict("payout.item_state", $"The payout item is {status} and cannot be held.");
+        await ReleaseEarningsAsync(db, new[] { itemId }, ct);
+        await RecomputeTotalsAsync(db, batchId, now, ct);
+        return newlyHeld;
+    }
+
+    /// <summary>
+    /// Participants among <paramref name="userIds"/> who must not be paid right now, with the reason: an active payout
+    /// hold ("Payout hold: …") or an account that is not Active ("Account not active (Suspended)").
+    /// </summary>
+    public static async Task<Dictionary<Guid, string>> PayoutBlockersAsync(AppDbContext db, IReadOnlyCollection<Guid> userIds, CancellationToken ct)
+    {
+        var result = new Dictionary<Guid, string>();
+        if (userIds.Count == 0) return result;
+        var holds = await db.Set<PayoutHold>().AsNoTracking()
+            .Where(h => userIds.Contains(h.UserId) && h.ReleasedAt == null)
+            .OrderBy(h => h.CreatedAt).Select(h => new { h.UserId, h.Reason }).ToListAsync(ct);
+        foreach (var h in holds) result.TryAdd(h.UserId, Truncate("Payout hold: " + h.Reason));
+        var inactive = await db.Set<User>().AsNoTracking()
+            .Where(u => userIds.Contains(u.Id) && u.Status != UserStatus.Active)
+            .Select(u => new { u.Id, u.Status }).ToListAsync(ct);
+        foreach (var u in inactive) result.TryAdd(u.Id, $"Account not active ({u.Status})");
+        return result;
+    }
+
+    private static string Truncate(string value) => value.Length <= 1000 ? value : value[..1000];
+
+    /// <summary>Scheduled earnings among <paramref name="earningIds"/> with the item and batch that hold them.</summary>
+    public static Task<List<ScheduledEarningRef>> FindScheduledAsync(AppDbContext db, IReadOnlyCollection<Guid> earningIds, CancellationToken ct) =>
+        (from e in db.Set<EarningEntry>().AsNoTracking()
+         join i in db.Set<PayoutItem>() on e.PayoutItemId equals i.Id
+         join b in db.Set<PayoutBatch>() on i.BatchId equals b.Id
+         where earningIds.Contains(e.Id) && e.Status == EarningStatus.Scheduled
+         select new ScheduledEarningRef(e.Id, i.Id, b.Id, b.Reference, b.Status, i.Status, i.UserId)).ToListAsync(ct);
+
     public static Task<Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction> BeginAsync(AppDbContext db, CancellationToken ct) =>
         db.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead, ct);
+}
+
+/// <summary>Payouts-module implementation of <see cref="IPayoutReversalCoordinator"/>.</summary>
+public sealed class PayoutReversalCoordinator(AppDbContext db, IAuditLogger audit, TimeProvider clock) : IPayoutReversalCoordinator
+{
+    public async Task<IReadOnlyList<ScheduledEarningRef>> FindScheduledAsync(IReadOnlyCollection<Guid> earningIds, CancellationToken ct = default) =>
+        earningIds.Count == 0 ? Array.Empty<ScheduledEarningRef>() : await PayoutStore.FindScheduledAsync(db, earningIds, ct);
+
+    public async Task HoldForReversalAsync(ScheduledEarningRef earning, string holdReason, CancellationToken ct = default)
+    {
+        if (earning.BatchStatus != PayoutBatchStatus.Draft)
+            throw DomainException.Conflict("payout.not_draft", "Only items of draft batches can be held.");
+        var now = clock.GetUtcNow().UtcDateTime;
+        var newlyHeld = await PayoutStore.HoldAndReleaseDraftItemAsync(db, earning.BatchId, earning.ItemId, holdReason, now, ct);
+        audit.Record("payout.item_held", nameof(PayoutItem), earning.ItemId,
+            after: new { earning.BatchId, earning.BatchReference, Automatic = true, WasPending = newlyHeld, ReleasedForEarning = earning.EarningId },
+            reason: holdReason);
+    }
 }

@@ -130,6 +130,19 @@ internal sealed class PaymentAttemptConfiguration : IEntityTypeConfiguration<Pay
     }
 }
 
+internal sealed class PayoutItemEarningConfiguration : IEntityTypeConfiguration<PayoutItemEarning>
+{
+    public void Configure(EntityTypeBuilder<PayoutItemEarning> b)
+    {
+        b.ToTable("payout_item_earnings");
+        b.HasIndex(x => new { x.PayoutItemId, x.EarningEntryId }).IsUnique();
+        // Deliberately NOT unique: reconciliation must be able to see (and report) an earning paid twice.
+        b.HasIndex(x => x.EarningEntryId);
+        b.HasIndex(x => x.UserId);
+        b.HasOne<PayoutItem>().WithMany().HasForeignKey(x => x.PayoutItemId).OnDelete(DeleteBehavior.Restrict);
+    }
+}
+
 internal sealed class PayoutHoldConfiguration : IEntityTypeConfiguration<PayoutHold>
 {
     public void Configure(EntityTypeBuilder<PayoutHold> b)

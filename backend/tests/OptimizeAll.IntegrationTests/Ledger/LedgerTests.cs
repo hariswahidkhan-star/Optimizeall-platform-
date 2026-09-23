@@ -31,7 +31,7 @@ public sealed class LedgerTests(ApiFactory api) : IClassFixture<ApiFactory>
         Assert.True(first.GetProperty("created").GetBoolean());
         var earning = first.GetProperty("earning");
         Assert.Equal("Adjustment", earning.Str("type"));
-        Assert.Equal("Approved", earning.Str("status"));
+        Assert.Equal("PendingApproval", earning.Str("status")); // credits need a second person's approval (C2)
         Assert.Equal(12.35m, earning.Dec("originalAmount"));   // rounded to cents
         Assert.Equal("Goodwill credit after support dispute", earning.Str("reason"));
 

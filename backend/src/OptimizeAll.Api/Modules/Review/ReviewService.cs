@@ -14,6 +14,7 @@ using OptimizeAll.Domain.Events;
 using OptimizeAll.Domain.Identity;
 using OptimizeAll.Domain.Ledger;
 using OptimizeAll.Domain.Notifications;
+using OptimizeAll.Domain.Payouts;
 using OptimizeAll.Domain.Rewards;
 using OptimizeAll.Domain.Settings;
 using OptimizeAll.Domain.Submissions;
@@ -48,8 +49,11 @@ public sealed class ReviewService(
     IEventPublisher events,
     ISettingsService settings,
     IReviewQueryService queries,
-    TimeProvider clock) : IReviewService
+    TimeProvider clock,
+    IPayoutReversalCoordinator payoutReversals) : IReviewService
 {
+    public const string ReversalHoldReason = "Submission reversal pending";
+
     public static readonly string[] DecisionActions = { "approved", "correction_requested", "rejected" };
 
     private DateTime Now => clock.GetUtcNow().UtcDateTime;
@@ -377,6 +381,19 @@ public sealed class ReviewService(
                 .SetProperty(x => x.ConcurrencyStamp, Guid.NewGuid()).SetProperty(x => x.UpdatedAt, now), ct);
         if (updated == 0)
             throw DomainException.Conflict("review.not_approved", "Only approved submissions can be reversed.");
+
+        // Earnings already in a payout batch: a draft batch's item is held automatically (which releases its earnings
+        // back to Approved) so they can be reversed below; a finalized batch is frozen, so finance must act first.
+        var candidateIds = await db.Set<EarningEntry>().AsNoTracking()
+            .Where(e => e.SubmissionId == s.Id && e.Status == EarningStatus.Scheduled && e.ReversedByEntryId == null)
+            .Select(e => e.Id).ToListAsync(ct);
+        var scheduled = await payoutReversals.FindScheduledAsync(candidateIds, ct);
+        if (scheduled.FirstOrDefault(x => x.BatchStatus != PayoutBatchStatus.Draft) is { } frozen)
+            throw DomainException.Conflict("ledger.in_payout_batch",
+                $"An earning of this submission is in finalized payout batch {frozen.BatchReference} awaiting payment. " +
+                $"Ask finance to mark the participant's payout item ({frozen.ItemId}) failed first, then reverse the submission again.");
+        foreach (var item in scheduled.GroupBy(x => x.ItemId).Select(g => g.First()))
+            await payoutReversals.HoldForReversalAsync(item, ReversalHoldReason, ct);
 
         var earnings = await db.Set<EarningEntry>()
             .Where(e => e.SubmissionId == s.Id && e.Type != EarningType.Reversal && e.ReversedByEntryId == null &&

@@ -6,6 +6,7 @@ using OptimizeAll.Domain.Campaigns;
 using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Identity;
 using OptimizeAll.Domain.Ledger;
+using OptimizeAll.Domain.Marketing;
 using OptimizeAll.Domain.Payouts;
 using OptimizeAll.Domain.Settings;
 using OptimizeAll.Domain.Submissions;
@@ -38,7 +39,7 @@ public static class PayoutReadModels
                 b.Status, b.ItemCount, b.TotalAmount, b.Currency, p?.Count ?? 0, p?.Amount ?? 0m,
                 b.PreparedByUserId is { } pr ? users.GetValueOrDefault(pr) : null,
                 b.FinalizedByUserId is { } fi ? users.GetValueOrDefault(fi) : null,
-                b.CreatedAt, b.FinalizedAt, b.CompletedAt, b.CancelledAt);
+                b.CreatedAt, b.FinalizedAt, b.CompletedAt, b.CancelledAt, b.InstructionsExportedAt);
         }).ToList();
     }
 
@@ -209,6 +210,112 @@ public static class PayoutReadModels
 
     // ---------- Reconciliation ----------
 
+    /// <summary>
+    /// Repeated-payment checks that look beyond the single <c>EarningEntry.PayoutItemId</c> link, using the immutable
+    /// <see cref="PayoutItemEarning"/> rows written when a payment is recorded:
+    /// <list type="bullet">
+    /// <item><c>duplicate_earning_payment</c> — an earning paid by more than one item (paid-earning rows plus the current
+    /// link when that item is Paid).</item>
+    /// <item><c>paid_earning_linked_elsewhere</c> — an earning paid by an item of this batch is now linked to another item.</item>
+    /// <item><c>duplicate_payment_across_periods</c> — the same participant was paid the same earning set by an item of
+    /// another batch.</item>
+    /// </list>
+    /// </summary>
+    private static async Task<Dictionary<Guid, List<(string Type, string Message, Guid? EarningId)>>> RepeatedPaymentFindingsAsync(
+        AppDbContext db, PayoutBatch batch, List<PayoutItem> items, List<(Guid EarningId, Guid ItemId)> linked, CancellationToken ct)
+    {
+        var findings = new Dictionary<Guid, List<(string Type, string Message, Guid? EarningId)>>();
+        void Add(Guid itemId, string type, string message, Guid? earningId)
+        {
+            if (!findings.TryGetValue(itemId, out var list)) findings[itemId] = list = new();
+            list.Add((type, message, earningId));
+        }
+
+        var itemIds = items.Select(i => i.Id).ToList();
+        var itemById = items.ToDictionary(i => i.Id);
+        var mine = await db.Set<PayoutItemEarning>().AsNoTracking().Where(p => itemIds.Contains(p.PayoutItemId)).ToListAsync(ct);
+        var earningIds = mine.Select(p => p.EarningEntryId).Concat(linked.Select(l => l.EarningId)).Distinct().ToList();
+        var others = await db.Set<PayoutItemEarning>().AsNoTracking()
+            .Where(p => earningIds.Contains(p.EarningEntryId) && !itemIds.Contains(p.PayoutItemId)).ToListAsync(ct);
+        var currentLinks = await db.Set<EarningEntry>().AsNoTracking().Where(e => earningIds.Contains(e.Id))
+            .Select(e => new { e.Id, e.PayoutItemId }).ToDictionaryAsync(e => e.Id, e => e.PayoutItemId, ct);
+
+        // Other paid items of the same participants (for the cross-period check) and every other item referenced above.
+        var paidMine = items.Where(i => i.Status == PayoutItemStatus.Paid).ToList();
+        var paidUserIds = paidMine.Select(i => i.UserId).Distinct().ToList();
+        var otherPaidIds = await db.Set<PayoutItem>().AsNoTracking()
+            .Where(i => paidUserIds.Contains(i.UserId) && i.Status == PayoutItemStatus.Paid && i.BatchId != batch.Id)
+            .Select(i => i.Id).ToListAsync(ct);
+        var otherItemIds = others.Select(o => o.PayoutItemId)
+            .Concat(currentLinks.Values.Where(v => v != null).Select(v => v!.Value))
+            .Concat(otherPaidIds)
+            .Where(id => !itemById.ContainsKey(id)).Distinct().ToList();
+        var otherItems = await (from i in db.Set<PayoutItem>().AsNoTracking()
+                                join b in db.Set<PayoutBatch>() on i.BatchId equals b.Id
+                                where otherItemIds.Contains(i.Id)
+                                select new { i.Id, i.UserId, i.Status, b.Reference }).ToDictionaryAsync(x => x.Id, ct);
+
+        bool IsPaid(Guid id) => itemById.TryGetValue(id, out var it)
+            ? it.Status == PayoutItemStatus.Paid
+            : otherItems.TryGetValue(id, out var o) && o.Status == PayoutItemStatus.Paid;
+        string Describe(Guid id) => itemById.ContainsKey(id) ? $"item {id} (this batch)"
+            : otherItems.TryGetValue(id, out var o) ? $"item {id} (batch {o.Reference})" : $"item {id}";
+
+        // 1. An earning paid by more than one item.
+        var payersByEarning = mine.Concat(others).ToLookup(p => p.EarningEntryId, p => p.PayoutItemId);
+        foreach (var earningId in earningIds)
+        {
+            var payers = payersByEarning[earningId].ToHashSet();
+            if (currentLinks.GetValueOrDefault(earningId) is { } link && IsPaid(link)) payers.Add(link);
+            if (payers.Count < 2) continue;
+            var list = string.Join(", ", payers.Select(Describe));
+            foreach (var payer in payers.Where(itemById.ContainsKey))
+                Add(payer, "duplicate_earning_payment", $"Earning {earningId} was paid by {payers.Count} payout items: {list}.", earningId);
+        }
+
+        // 2. An earning paid by an item of this batch that is now linked to another item (it may be paid again).
+        foreach (var row in mine.Where(r => itemById[r.PayoutItemId].Status == PayoutItemStatus.Paid))
+        {
+            var link = currentLinks.GetValueOrDefault(row.EarningEntryId);
+            if (link != row.PayoutItemId)
+                Add(row.PayoutItemId, "paid_earning_linked_elsewhere",
+                    $"Earning {row.EarningEntryId} was paid by this item but is now linked to {(link is { } l ? Describe(l) : "no item")}.",
+                    row.EarningEntryId);
+        }
+
+        // 3. The same participant paid the same earning set in two batches (e.g. two periods).
+        if (paidMine.Count > 0 && otherPaidIds.Count > 0)
+        {
+            var otherRows = await db.Set<PayoutItemEarning>().AsNoTracking().Where(p => otherPaidIds.Contains(p.PayoutItemId))
+                .Select(p => new { p.PayoutItemId, p.EarningEntryId }).ToListAsync(ct);
+            var otherLinks = await db.Set<EarningEntry>().AsNoTracking()
+                .Where(e => e.PayoutItemId != null && otherPaidIds.Contains(e.PayoutItemId.Value))
+                .Select(e => new { ItemId = e.PayoutItemId!.Value, e.Id }).ToListAsync(ct);
+            // An item's paid set is its paid-earning rows, or (for payments recorded before those rows existed) its links.
+            var paidRows = mine.Select(r => (Item: r.PayoutItemId, Earning: r.EarningEntryId))
+                .Concat(otherRows.Select(r => (Item: r.PayoutItemId, Earning: r.EarningEntryId)))
+                .ToLookup(r => r.Item, r => r.Earning);
+            var links = linked.Select(l => (Item: l.ItemId, Earning: l.EarningId))
+                .Concat(otherLinks.Select(l => (Item: l.ItemId, Earning: l.Id)))
+                .ToLookup(l => l.Item, l => l.Earning);
+            HashSet<Guid> SetOf(Guid itemId) =>
+                paidRows[itemId].Any() ? paidRows[itemId].ToHashSet() : links[itemId].ToHashSet();
+            var otherPaidByUser = otherPaidIds.Where(otherItems.ContainsKey).ToLookup(id => otherItems[id].UserId);
+            foreach (var item in paidMine)
+            {
+                var set = SetOf(item.Id);
+                if (set.Count == 0) continue;
+                foreach (var otherId in otherPaidByUser[item.UserId])
+                {
+                    if (!set.SetEquals(SetOf(otherId))) continue;
+                    Add(item.Id, "duplicate_payment_across_periods",
+                        $"The same {set.Count} earning(s) were also paid to this participant by {Describe(otherId)}.", null);
+                }
+            }
+        }
+        return findings;
+    }
+
     public static async Task<ReconciliationDto> ReconcileAsync(AppDbContext db, Guid batchId, CancellationToken ct)
     {
         var batch = await db.Set<PayoutBatch>().AsNoTracking().FirstOrDefaultAsync(b => b.Id == batchId, ct)
@@ -217,12 +324,28 @@ public static class PayoutReadModels
         var itemIds = items.Select(i => i.Id).ToList();
         var earnings = await db.Set<EarningEntry>().AsNoTracking()
             .Where(e => e.PayoutItemId != null && itemIds.Contains(e.PayoutItemId.Value))
-            .Select(e => new { e.Id, ItemId = e.PayoutItemId!.Value, e.Status, e.SettlementAmount, e.SettlementCurrency })
+            .Select(e => new
+            {
+                e.Id, ItemId = e.PayoutItemId!.Value, e.Status, e.SettlementAmount, e.SettlementCurrency, e.ReferralId,
+                e.ReversedByEntryId,
+            })
             .ToListAsync(ct);
         var byItem = earnings.GroupBy(e => e.ItemId).ToDictionary(g => g.Key, g => g.ToList());
         var users = await PayoutUsersAsync(db, items.Select(i => i.UserId), ct);
         var discrepancies = new List<ReconciliationDiscrepancyDto>();
         var itemRows = new List<ReconciliationItemDto>();
+        var repeated = await RepeatedPaymentFindingsAsync(db, batch, items, earnings.Select(e => (e.Id, e.ItemId)).ToList(), ct);
+
+        // Rewards of rejected referrals that could not be reversed because they were in a finalized batch: finance must
+        // review the item (mark it failed and reverse the reward, or reverse the paid reward to claw it back).
+        var referralIds = earnings.Where(e => e.ReferralId != null && e.ReversedByEntryId == null && e.Status != EarningStatus.Reversed)
+            .Select(e => e.ReferralId!.Value).Distinct().ToList();
+        var rejectedReferrals = (await db.Set<Referral>().AsNoTracking()
+            .Where(r => referralIds.Contains(r.Id) && r.Status == ReferralStatus.Rejected)
+            .Select(r => r.Id).ToListAsync(ct)).ToHashSet();
+
+        // Once a batch is finalized, held (and failed) items have released their earnings back to the ledger.
+        var holdsReleased = batch.Status is PayoutBatchStatus.Finalized or PayoutBatchStatus.Completed;
 
         foreach (var item in items.OrderBy(i => i.Id))
         {
@@ -234,17 +357,31 @@ public static class PayoutReadModels
 
             switch (item.Status)
             {
+                case PayoutItemStatus.Held when holdsReleased:
+                case PayoutItemStatus.Failed or PayoutItemStatus.Cancelled:
+                    if (linked.Count > 0)
+                        Add("released_item_has_earnings", $"A {item.Status} item still has {linked.Count} linked earnings.");
+                    break;
+                // A draft item held for a reversal released its earnings immediately (nothing linked is expected).
+                case PayoutItemStatus.Held when linked.Count == 0:
+                    break;
                 case PayoutItemStatus.Pending or PayoutItemStatus.Held or PayoutItemStatus.AwaitingPayment or PayoutItemStatus.Paid:
                     if (item.Amount != sum)
                         Add("item_amount_mismatch", $"Item amount {item.Amount:0.####} differs from the sum of its earnings {sum:0.####}.");
                     if (linked.Count != item.EarningCount)
                         Add("earning_count_mismatch", $"Item lists {item.EarningCount} earnings but {linked.Count} are linked.");
                     break;
-                case PayoutItemStatus.Failed or PayoutItemStatus.Cancelled:
-                    if (linked.Count > 0)
-                        Add("released_item_has_earnings", $"A {item.Status} item still has {linked.Count} linked earnings.");
-                    break;
             }
+            foreach (var (type, message, earningId) in repeated.GetValueOrDefault(item.Id) ?? new())
+                Add(type, message, earningId);
+            foreach (var e in linked.Where(e => e.ReferralId is { } rid && rejectedReferrals.Contains(rid) &&
+                                                e.ReversedByEntryId == null && e.Status != EarningStatus.Reversed))
+                Add("pending_reversal",
+                    $"Earning {e.Id} is the reward of a rejected referral and still has to be reversed (PendingReversal). " +
+                    (item.Status == PayoutItemStatus.Paid
+                        ? "Reverse the paid earning to claw it back."
+                        : "Mark the item failed, then reverse the earning (or pay it and reverse it afterwards)."),
+                    e.Id, "warning");
 
             var expectedStatus = item.Status == PayoutItemStatus.Paid ? EarningStatus.Paid : EarningStatus.Scheduled;
             foreach (var e in linked)
@@ -264,7 +401,7 @@ public static class PayoutReadModels
                 discrepancies.Count == before));
         }
 
-        // No participant may be paid twice for the same period across (non-cancelled) batches.
+        // No participant may be paid twice for the same period across batches.
         var paidUsers = items.Where(i => i.Status == PayoutItemStatus.Paid).Select(i => i.UserId).ToList();
         var paidElsewhere = await (from i in db.Set<PayoutItem>().AsNoTracking()
                                    join b in db.Set<PayoutBatch>() on i.BatchId equals b.Id

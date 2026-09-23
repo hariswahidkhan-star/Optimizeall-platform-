@@ -29,10 +29,16 @@ public sealed class PayoutPaymentService(
 
     private DateTime Now => clock.GetUtcNow().UtcDateTime;
 
-    /// <summary>AwaitingPayment → Paid. <c>actor</c> is the finance user recording it, or null when a provider confirmed it.</summary>
+    /// <summary>
+    /// AwaitingPayment → Paid. <c>actor</c> is the finance user recording it, or null when a provider confirmed it.
+    /// A person cannot record a payment for a participant with an active payout hold unless they give an
+    /// <paramref name="overrideReason"/> (audited), and cannot record payments of a system-prepared batch they finalized.
+    /// </summary>
     public async Task<PaymentRecordedDto> RecordPaymentAsync(
-        Guid batchId, Guid itemId, string paymentReference, DateTime paidAt, string? note, Guid? actor, CancellationToken ct)
+        Guid batchId, Guid itemId, string paymentReference, DateTime paidAt, string? note, Guid? actor, CancellationToken ct,
+        string? overrideReason = null)
     {
+        overrideReason = string.IsNullOrWhiteSpace(overrideReason) ? null : overrideReason.Trim();
         paymentReference = paymentReference.Trim();
         if (paymentReference.Length is < 3 or > 120)
             throw new DomainException("payout.invalid_reference", "The payment reference must be 3–120 characters.");
@@ -52,6 +58,27 @@ public sealed class PayoutPaymentService(
                 throw DomainException.Conflict("payout.already_recorded", "A payment was already recorded for this item.");
             if (status != PayoutBatchStatus.Finalized)
                 throw DomainException.Conflict("payout.batch_not_finalized", "Payments can only be recorded for finalized batches.");
+
+            var holdOverridden = false;
+            if (actor is { } person)
+            {
+                // Segregation of duties: a system-prepared batch had no human preparer, so the second pair of eyes on
+                // the money leaving is the person recording the payment, who must differ from the finalizer.
+                var owners = await db.Set<PayoutBatch>().AsNoTracking().Where(b => b.Id == batchId)
+                    .Select(b => new { b.PreparedByUserId, b.FinalizedByUserId }).FirstAsync(ct);
+                if (owners.PreparedByUserId is null && owners.FinalizedByUserId == person)
+                    throw DomainException.Forbidden("payout.self_record",
+                        "This batch was prepared by the system and finalized by you; another finance user must record its payments.");
+
+                if (await db.Set<PayoutHold>().AnyAsync(h => h.UserId == item.UserId && h.ReleasedAt == null, ct))
+                {
+                    if (overrideReason is null)
+                        throw DomainException.Conflict("payout.user_on_hold",
+                            "The participant has an active payout hold. Do not pay them; if the money already left the account, " +
+                            "record the payment with an overrideReason explaining why.");
+                    holdOverridden = true;
+                }
+            }
 
             var updated = await db.Set<PayoutItem>()
                 .Where(i => i.Id == itemId && i.Status == PayoutItemStatus.AwaitingPayment)
@@ -73,6 +100,20 @@ public sealed class PayoutPaymentService(
             if (paidEarnings != item.EarningCount)
                 throw DomainException.Conflict("payout.earnings_changed",
                     $"Expected {item.EarningCount} scheduled earnings for this item but found {paidEarnings}. Nothing was recorded; run reconciliation.");
+
+            // Immutable record of what this item paid (reconciliation uses it to detect an earning paid twice).
+            var paidRows = await db.Set<EarningEntry>().AsNoTracking()
+                .Where(e => e.PayoutItemId == itemId && e.Status == EarningStatus.Paid)
+                .Select(e => new { e.Id, e.SettlementAmount }).ToListAsync(ct);
+            db.Set<PayoutItemEarning>().AddRange(paidRows.Select(e => new PayoutItemEarning
+            {
+                PayoutItemId = itemId, EarningEntryId = e.Id, UserId = item.UserId, SettlementAmount = e.SettlementAmount,
+                PaidAt = paidAt, CreatedAt = now,
+            }));
+
+            if (holdOverridden)
+                audit.Record("payout.payment_hold_overridden", nameof(PayoutItem), itemId,
+                    after: new { item.UserId, item.Amount, item.Currency, BatchId = batchId }, reason: overrideReason);
 
             await UpsertAttemptAsync(item, PaymentAttemptStatus.Succeeded, paymentReference,
                 actor is null ? "Confirmed by payment provider" : "Payment recorded by finance", ct);
@@ -108,6 +149,12 @@ public sealed class PayoutPaymentService(
                        ?? throw DomainException.NotFound("PayoutItem");
             if (status != PayoutBatchStatus.Finalized)
                 throw DomainException.Conflict("payout.batch_not_finalized", "Only items of finalized batches can be marked failed.");
+            // A person must not fail an item whose transfer the provider is still executing (it may yet succeed and the
+            // earnings would then be payable twice). The provider's own failure callback (actor null) is allowed.
+            if (actor is not null && await db.Set<PaymentAttempt>()
+                    .AnyAsync(a => a.PayoutItemId == itemId && a.Status == PaymentAttemptStatus.Submitted, ct))
+                throw DomainException.Conflict("payout.attempt_in_flight",
+                    "A payment for this item was submitted to the payment provider and has no outcome yet. Wait for the provider's confirmation or failure.");
 
             var updated = await db.Set<PayoutItem>()
                 .Where(i => i.Id == itemId && i.Status == PayoutItemStatus.AwaitingPayment)

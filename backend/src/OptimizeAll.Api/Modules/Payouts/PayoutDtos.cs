@@ -146,7 +146,8 @@ public sealed record PayoutBatchSummaryDto(
     DateTime CreatedAt,
     DateTime? FinalizedAt,
     DateTime? CompletedAt,
-    DateTime? CancelledAt);
+    DateTime? CancelledAt,
+    DateTime? InstructionsExportedAt = null);
 
 public sealed record PrepareBatchResponse(bool Created, PayoutBatchSummaryDto Batch, IReadOnlyList<PayoutExclusionDto> Exclusions);
 
@@ -272,6 +273,13 @@ public sealed class RecordPaymentRequest
 
     [MaxLength(1000)]
     public string? Note { get; set; }
+
+    /// <summary>
+    /// Required to record a payment for a participant with an active payout hold (e.g. the transfer already left the
+    /// account before the hold was placed). Audited as <c>payout.payment_hold_overridden</c>.
+    /// </summary>
+    [MaxLength(1000)]
+    public string? OverrideReason { get; set; }
 }
 
 public sealed class BulkPaymentLine

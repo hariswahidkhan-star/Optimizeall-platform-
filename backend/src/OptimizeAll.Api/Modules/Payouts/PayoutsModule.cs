@@ -20,6 +20,8 @@ public static class PayoutsModule
         services.AddSingleton<IPaymentProviderRegistry, PaymentProviderRegistry>();
         services.AddScoped<PaymentDispatcher>();
 
+        services.AddSingleton<PayoutTestHooks>();
+        services.AddScoped<OptimizeAll.Api.Common.Ledger.IPayoutReversalCoordinator, PayoutReversalCoordinator>();
         services.AddScoped<PayoutBatchService>();
         services.AddScoped<PayoutPaymentService>();
         services.AddScoped<ISeeder, PayoutsBaselineSeeder>();

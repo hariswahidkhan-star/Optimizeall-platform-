@@ -71,14 +71,18 @@ public sealed class ExchangeRateProvider(AppDbContext db) : IExchangeRateProvide
         to = Money.Normalize(to);
         if (from == to) return new ResolvedRate(1m, null);
 
+        // Take the latest direct (from→to) AND the latest inverse (to→from) rate and use whichever took effect later:
+        // finance may record a pair in either direction, and a newer inverse rate must win over a stale direct one.
         var direct = await db.Set<ExchangeRate>().AsNoTracking()
             .Where(r => r.BaseCurrency == from && r.QuoteCurrency == to && r.EffectiveAt <= atUtc)
-            .OrderByDescending(r => r.EffectiveAt).FirstOrDefaultAsync(ct);
-        if (direct is not null) return new ResolvedRate(direct.Rate, direct.Id);
-
+            .OrderByDescending(r => r.EffectiveAt).ThenByDescending(r => r.CreatedAt).FirstOrDefaultAsync(ct);
         var inverse = await db.Set<ExchangeRate>().AsNoTracking()
             .Where(r => r.BaseCurrency == to && r.QuoteCurrency == from && r.EffectiveAt <= atUtc)
-            .OrderByDescending(r => r.EffectiveAt).FirstOrDefaultAsync(ct);
+            .OrderByDescending(r => r.EffectiveAt).ThenByDescending(r => r.CreatedAt).FirstOrDefaultAsync(ct);
+
+        // On an exact tie the direct quote wins (no rounding through 1/rate).
+        if (direct is not null && (inverse is null || direct.EffectiveAt >= inverse.EffectiveAt))
+            return new ResolvedRate(direct.Rate, direct.Id);
         if (inverse is not null) return new ResolvedRate(Math.Round(1m / inverse.Rate, 8, MidpointRounding.AwayFromZero), inverse.Id);
 
         throw new DomainException("fx.rate_missing",

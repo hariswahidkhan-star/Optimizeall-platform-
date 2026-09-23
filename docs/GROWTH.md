@@ -40,14 +40,27 @@ Setting `referral.program` (`ReferralProgramSettings`, editable by admins):
 3. **Manual approval.** The reward is `PendingApproval` when `requireManualApproval` is on **or** the referral has any
    fraud signal; otherwise it is `Approved` (then subject to the normal payout hold).
 4. **Reversal.** If the qualifying action was the first approved submission and the referred participant's only
-   approved submission is reversed (`SubmissionReversed`), the unpaid reward is declined (if pending) or reversed
-   (if approved) with reason "Qualifying submission reversed", and the referral becomes `Rejected`. Paid or
-   scheduled rewards are not touched automatically.
+   approved submission is reversed (`SubmissionReversed`), the referral becomes `Rejected` (reason "Qualifying
+   submission reversed") and its reward is undone as described in [Undoing a reward](#undoing-a-reward).
 5. **Expiry.** `ReferralExpiryJob` (hourly) marks `Registered` referrals past `QualifyBy` as `Expired`. A late
    qualifying event never qualifies an expired window.
 6. **Manual rejection.** Marketing can reject any referral with a reason
-   (`POST /api/v1/marketing/referrals/{id}/reject`): a pending reward is declined, an approved unpaid reward is
-   reversed, paid/scheduled rewards stay as they are (finance can adjust). Audited.
+   (`POST /api/v1/marketing/referrals/{id}/reject`): the referral becomes `Rejected` with that reason and its reward
+   is undone as below. The response's `rewardAction` says what happened. Audited `referral.rejected`.
+
+#### Undoing a reward
+
+Both paths (the `SubmissionReversed` handler and marketing rejection) run in one transaction and always set the referral
+to `Rejected` with a reason. What happens to the reward depends on where it is in the payout lifecycle:
+
+| Reward status | Action | `rewardAction` |
+|---|---|---|
+| `PendingApproval` | Declined with the reason. | `declined` |
+| `Approved` (not in a batch) | Reversed (status `Reversed` + zero-sum negative leg). | `reversed` |
+| `Paid` | `ILedgerWriter.ReverseAsync` creates the clawback: a negative `Reversal` entry, `Approved`, available at once and netted against the referrer's next payout. | `clawback` |
+| `Scheduled` in a **Draft** batch | The referrer's payout item is held with reason "Referral reward reversal pending" (holding releases all of the item's earnings back to `Approved`), then the reward is reversed. The referrer's other earnings roll into the next batch (or back into this one after a regenerate + unhold). | `held_and_reversed` |
+| `Scheduled` in a **Finalized** batch | The frozen batch is not changed. An audit note `referral.reward_pending_reversal` (`PendingReversal: true`, with item and batch) is recorded and the batch's reconciliation report shows a `pending_reversal` **warning** on the item until the reward is reversed. Finance either marks the item failed and then reverses the (now `Approved`) reward, or pays it and reverses the paid reward (clawback). | `pending_reversal` |
+| Already reversed / declined | Nothing to do. | `already_reversed` / `none` |
 
 ### Fraud checks (`ReferralFraudRules`, pure and unit-tested)
 Signals never block a referral; they force manual approval and are shown to marketing (filter `flagged=true`).
