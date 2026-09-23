@@ -9,9 +9,17 @@ import {
 } from 'lucide-react';
 import type { RouteObject } from 'react-router-dom';
 import type { PortalNavItem } from '@/app/portalTypes';
-import { PendingSection } from '@/components/PendingSection';
-import { PortalOverview } from '@/components/PortalOverview';
 import { Permissions } from '@/lib/auth/permissions';
+import { BatchReviewPage } from './batch/BatchReviewPage';
+import { LedgerPage } from './ledger/LedgerPage';
+import { UserBalancePage } from './ledger/UserBalancePage';
+import { ApprovalsPage } from './pages/ApprovalsPage';
+import { BatchesPage } from './pages/BatchesPage';
+import { ExchangeRatesPage } from './pages/ExchangeRatesPage';
+import { HoldsPage } from './pages/HoldsPage';
+import { OverviewPage } from './pages/OverviewPage';
+import { SchedulePage } from './pages/SchedulePage';
+import './finance.css';
 
 /** Finance portal (/finance). Paths are relative to the portal base. */
 export const nav: PortalNavItem[] = [
@@ -41,7 +49,7 @@ export const nav: PortalNavItem[] = [
     to: 'holds',
     label: 'Holds',
     icon: PauseCircle,
-    description: 'Payout items on hold and why.',
+    description: 'Participants whose payouts are on hold, and why.',
     requires: { anyOf: [Permissions.PayoutsHold, Permissions.PayoutsView] },
   },
   {
@@ -61,29 +69,24 @@ export const nav: PortalNavItem[] = [
 ];
 
 export const routes: RouteObject[] = [
-  { index: true, element: <PortalOverview /> },
+  { index: true, element: <OverviewPage /> },
   {
     path: 'batches',
-    element: <PendingSection title="Payout batches" description="Batches by payout period." />,
+    children: [
+      { index: true, element: <BatchesPage /> },
+      { path: ':batchId', element: <BatchReviewPage /> },
+      { path: ':batchId/reconciliation', element: <BatchReviewPage tab="reconciliation" /> },
+    ],
   },
   {
     path: 'ledger',
-    element: <PendingSection title="Ledger" description="Earning entries across all participants." />,
+    children: [
+      { index: true, element: <LedgerPage /> },
+      { path: 'users/:userId', element: <UserBalancePage /> },
+    ],
   },
-  {
-    path: 'approvals',
-    element: <PendingSection title="Pending approvals" description="Items that need a finance decision." />,
-  },
-  {
-    path: 'holds',
-    element: <PendingSection title="Holds" description="Payout items currently on hold." />,
-  },
-  {
-    path: 'exchange-rates',
-    element: <PendingSection title="Exchange rates" description="Current and historical exchange rates." />,
-  },
-  {
-    path: 'schedule',
-    element: <PendingSection title="Payout schedule" description="How and when payouts happen." />,
-  },
+  { path: 'approvals', element: <ApprovalsPage /> },
+  { path: 'holds', element: <HoldsPage /> },
+  { path: 'exchange-rates', element: <ExchangeRatesPage /> },
+  { path: 'schedule', element: <SchedulePage /> },
 ];
