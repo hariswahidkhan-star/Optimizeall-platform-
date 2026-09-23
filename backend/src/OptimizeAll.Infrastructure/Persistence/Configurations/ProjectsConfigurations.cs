@@ -15,7 +15,7 @@ internal sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
     {
         b.ToTable("projects");
         b.Property(x => x.Name).HasMaxLength(200).IsRequired();
-        b.Property(x => x.Description).HasMaxLength(4000);
+        b.Property(x => x.Description);
         b.Property(x => x.ServiceLines).HasJsonList();
         b.Property(x => x.Currency).HasMaxLength(3).IsFixedLength().IsRequired();
         b.Property(x => x.TemplateKey).HasMaxLength(64);
@@ -55,7 +55,7 @@ internal sealed class ProjectTaskConfiguration : IEntityTypeConfiguration<Projec
     {
         b.ToTable("project_tasks");
         b.Property(x => x.Title).HasMaxLength(300).IsRequired();
-        b.Property(x => x.Description).HasMaxLength(20000);
+        b.Property(x => x.Description);
         b.Property(x => x.Labels).HasJsonList();
         b.Property(x => x.RecurrenceKey).HasMaxLength(80);
         b.HasIndex(x => x.RecurrenceKey).IsUnique();
@@ -118,7 +118,7 @@ internal sealed class TaskCommentConfiguration : IEntityTypeConfiguration<TaskCo
     public void Configure(EntityTypeBuilder<TaskComment> b)
     {
         b.ToTable("task_comments");
-        b.Property(x => x.Body).HasMaxLength(10000).IsRequired();
+        b.Property(x => x.Body).IsRequired();
         b.Property(x => x.MentionedUserIds).HasJsonList();
         b.HasIndex(x => new { x.TaskId, x.CreatedAt });
         b.HasOne<ProjectTask>().WithMany().HasForeignKey(x => x.TaskId).OnDelete(DeleteBehavior.Cascade);
@@ -142,7 +142,7 @@ internal sealed class RecurringTaskRuleConfiguration : IEntityTypeConfiguration<
     {
         b.ToTable("recurring_task_rules");
         b.Property(x => x.Title).HasMaxLength(300).IsRequired();
-        b.Property(x => x.Description).HasMaxLength(4000);
+        b.Property(x => x.Description);
         b.Property(x => x.Labels).HasJsonList();
         b.HasIndex(x => new { x.ProjectId, x.IsActive });
         b.HasOne<Project>().WithMany().HasForeignKey(x => x.ProjectId).OnDelete(DeleteBehavior.Cascade);
@@ -195,7 +195,7 @@ internal sealed class DeliverableConfiguration : IEntityTypeConfiguration<Delive
     {
         b.ToTable("deliverables");
         b.Property(x => x.Title).HasMaxLength(300).IsRequired();
-        b.Property(x => x.Description).HasMaxLength(4000);
+        b.Property(x => x.Description);
         b.HasIndex(x => new { x.ClientAccountId, x.Status });
         b.HasIndex(x => x.ProjectId);
         b.HasIndex(x => new { x.Status, x.ClientDueAt });
@@ -210,8 +210,8 @@ internal sealed class DeliverableVersionConfiguration : IEntityTypeConfiguration
     {
         b.ToTable("deliverable_versions");
         b.Property(x => x.LinkUrl).HasMaxLength(1000);
-        b.Property(x => x.Body).HasMaxLength(50000);
-        b.Property(x => x.Notes).HasMaxLength(4000);
+        b.Property(x => x.Body);
+        b.Property(x => x.Notes);
         b.HasIndex(x => new { x.DeliverableId, x.Number }).IsUnique();
         b.HasOne<Deliverable>().WithMany().HasForeignKey(x => x.DeliverableId).OnDelete(DeleteBehavior.Cascade);
         b.HasOne<DeliveryFile>().WithMany().HasForeignKey(x => x.FileId).OnDelete(DeleteBehavior.Restrict);
@@ -224,7 +224,7 @@ internal sealed class DeliverableReviewConfiguration : IEntityTypeConfiguration<
     {
         b.ToTable("deliverable_reviews");
         b.Property(x => x.UserName).HasMaxLength(200);
-        b.Property(x => x.Comment).HasMaxLength(4000);
+        b.Property(x => x.Comment);
         b.HasIndex(x => new { x.DeliverableId, x.CreatedAt });
         b.HasOne<Deliverable>().WithMany().HasForeignKey(x => x.DeliverableId).OnDelete(DeleteBehavior.Cascade);
     }
@@ -235,7 +235,7 @@ internal sealed class DeliverableCommentConfiguration : IEntityTypeConfiguration
     public void Configure(EntityTypeBuilder<DeliverableComment> b)
     {
         b.ToTable("deliverable_comments");
-        b.Property(x => x.Body).HasMaxLength(4000).IsRequired();
+        b.Property(x => x.Body).IsRequired();
         b.HasIndex(x => new { x.DeliverableId, x.VersionNumber });
         b.HasOne<Deliverable>().WithMany().HasForeignKey(x => x.DeliverableId).OnDelete(DeleteBehavior.Cascade);
     }
@@ -355,7 +355,7 @@ internal sealed class ThreadMessageConfiguration : IEntityTypeConfiguration<Thre
     public void Configure(EntityTypeBuilder<ThreadMessage> b)
     {
         b.ToTable("thread_messages");
-        b.Property(x => x.Body).HasMaxLength(10000).IsRequired();
+        b.Property(x => x.Body).IsRequired();
         b.Property(x => x.AttachmentFileIds).HasJsonList();
         b.HasIndex(x => new { x.ThreadId, x.CreatedAt });
         b.HasOne<MessageThread>().WithMany().HasForeignKey(x => x.ThreadId).OnDelete(DeleteBehavior.Cascade);
@@ -379,8 +379,8 @@ internal sealed class MeetingConfiguration : IEntityTypeConfiguration<Meeting>
         b.ToTable("client_meetings");
         b.Property(x => x.Title).HasMaxLength(200).IsRequired();
         b.Property(x => x.Location).HasMaxLength(500);
-        b.Property(x => x.Agenda).HasMaxLength(8000);
-        b.Property(x => x.Notes).HasMaxLength(20000);
+        b.Property(x => x.Agenda);
+        b.Property(x => x.Notes);
         b.Property(x => x.AttendeeUserIds).HasJsonList();
         b.Property(x => x.ActionItems).HasJsonList();
         b.HasIndex(x => new { x.ClientAccountId, x.StartsAt });

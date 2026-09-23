@@ -21,7 +21,7 @@ internal sealed class ClientAccountConfiguration : IEntityTypeConfiguration<Clie
         b.Property(x => x.BillingEmail).HasMaxLength(254);
         b.Property(x => x.BillingAddress).HasMaxLength(1000);
         b.Property(x => x.TaxId).HasMaxLength(64);
-        b.Property(x => x.Notes).HasMaxLength(4000);
+        b.Property(x => x.Notes);
         b.Property(x => x.StatusReason).HasMaxLength(1000);
         b.Property(x => x.Summary).HasMaxLength(1000);
         b.Property(x => x.BillingContactName).HasMaxLength(200);
@@ -83,7 +83,7 @@ internal sealed class BrandKitConfiguration : IEntityTypeConfiguration<BrandKit>
         b.Property(x => x.Dos).HasJsonList();
         b.Property(x => x.Donts).HasJsonList();
         b.Property(x => x.KeyMessages).HasJsonList();
-        b.Property(x => x.ToneOfVoice).HasMaxLength(4000);
+        b.Property(x => x.ToneOfVoice);
         b.HasOne<ClientAccount>().WithMany().HasForeignKey(x => x.ClientAccountId).OnDelete(DeleteBehavior.Cascade);
     }
 }

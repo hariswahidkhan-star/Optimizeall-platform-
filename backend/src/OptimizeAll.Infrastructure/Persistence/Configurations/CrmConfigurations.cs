@@ -194,7 +194,7 @@ internal sealed class CrmSavedViewConfiguration : IEntityTypeConfiguration<CrmSa
         b.ToTable("crm_saved_views");
         b.Property(x => x.Name).HasMaxLength(100).IsRequired();
         b.Property(x => x.Entity).HasMaxLength(20).IsRequired();
-        b.Property(x => x.FiltersJson).HasMaxLength(4000).IsRequired();
+        b.Property(x => x.FiltersJson).IsRequired();
         b.HasIndex(x => new { x.Entity, x.OwnerUserId });
         b.HasOne<User>().WithMany().HasForeignKey(x => x.OwnerUserId).OnDelete(DeleteBehavior.Cascade);
     }

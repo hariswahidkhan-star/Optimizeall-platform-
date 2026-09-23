@@ -47,7 +47,7 @@ internal sealed class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
         b.Property(x => x.Number).HasMaxLength(40);
         b.HasIndex(x => x.Number).IsUnique();
         b.Property(x => x.Currency).HasMaxLength(3).IsFixedLength().IsRequired();
-        b.Property(x => x.Notes).HasMaxLength(4000);
+        b.Property(x => x.Notes);
         b.Property(x => x.Reference).HasMaxLength(100);
         b.Property(x => x.IdempotencyKey).HasMaxLength(150);
         b.HasIndex(x => x.IdempotencyKey).IsUnique();
@@ -146,7 +146,7 @@ internal sealed class ContractConfiguration : IEntityTypeConfiguration<Contract>
         b.HasIndex(x => x.Number).IsUnique();
         b.Property(x => x.Title).HasMaxLength(200).IsRequired();
         b.Property(x => x.Currency).HasMaxLength(3).IsFixedLength().IsRequired();
-        b.Property(x => x.Notes).HasMaxLength(4000);
+        b.Property(x => x.Notes);
         b.Property(x => x.CancelReason).HasMaxLength(1000);
         b.HasIndex(x => new { x.ClientAccountId, x.Status });
         b.HasIndex(x => x.Status);
