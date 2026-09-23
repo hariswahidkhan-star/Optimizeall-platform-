@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Domain.Jobs;
 using OptimizeAll.Infrastructure.Persistence;
 
@@ -93,19 +94,38 @@ public sealed class JobRunner(IServiceScopeFactory scopeFactory, TimeProvider cl
         var now = clock.GetUtcNow().UtcDateTime;
         var until = now.Add(duration);
 
-        // Insert-if-absent, then conditional takeover of an expired lease; both are atomic statements.
+        // Insert-if-absent (a concurrent insert of the same name loses on the primary key), then conditional takeover
+        // of an expired lease; the takeover is a single atomic statement.
         // A held lease is never re-entered, not even by this process, so "run now" cannot overlap a scheduled run.
-        await db.Database.ExecuteSqlInterpolatedAsync(
-            $"INSERT IGNORE INTO job_leases (Name, Holder, LeasedUntil) VALUES ({name}, {""}, {now.AddSeconds(-1)})", ct);
-        var taken = await db.Database.ExecuteSqlInterpolatedAsync(
-            $"UPDATE job_leases SET Holder = {InstanceId}, LeasedUntil = {until} WHERE Name = {name} AND LeasedUntil < {now}", ct);
+        if (!await db.Set<JobLease>().AnyAsync(l => l.Name == name, ct))
+        {
+            var lease = new JobLease { Name = name, Holder = string.Empty, LeasedUntil = now.AddSeconds(-1) };
+            db.Set<JobLease>().Add(lease);
+            try
+            {
+                await db.SaveChangesAsync(ct);
+            }
+            catch (DbUpdateException ex) when (DatabaseErrors.IsUniqueViolation(ex))
+            {
+                // Another instance created it first.
+            }
+            finally
+            {
+                db.Entry(lease).State = EntityState.Detached;
+            }
+        }
+        var taken = await db.Set<JobLease>()
+            .Where(l => l.Name == name && l.LeasedUntil < now)
+            .ExecuteUpdateAsync(s => s.SetProperty(l => l.Holder, InstanceId).SetProperty(l => l.LeasedUntil, until), ct);
         return taken == 1;
     }
 
     private async Task ReleaseLeaseAsync(AppDbContext db, string name)
     {
-        await db.Database.ExecuteSqlInterpolatedAsync(
-            $"UPDATE job_leases SET LeasedUntil = {clock.GetUtcNow().UtcDateTime.AddSeconds(-1)} WHERE Name = {name} AND Holder = {InstanceId}");
+        var expired = clock.GetUtcNow().UtcDateTime.AddSeconds(-1);
+        await db.Set<JobLease>()
+            .Where(l => l.Name == name && l.Holder == InstanceId)
+            .ExecuteUpdateAsync(s => s.SetProperty(l => l.LeasedUntil, expired));
     }
 
     private static string Truncate(string s, int max) => s.Length <= max ? s : s[..max];

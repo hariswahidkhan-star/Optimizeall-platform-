@@ -58,7 +58,6 @@ public sealed class ProblemExceptionHandler(ILogger<ProblemExceptionHandler> log
         _ => StatusCodes.Status400BadRequest,
     };
 
-    /// <summary>MySQL error 1062 = ER_DUP_ENTRY.</summary>
-    public static bool IsUniqueViolation(DbUpdateException ex) =>
-        ex.InnerException is MySqlConnector.MySqlException { ErrorCode: MySqlConnector.MySqlErrorCode.DuplicateKeyEntry };
+    /// <summary>Unique/primary-key violation on either provider (MySQL ER_DUP_ENTRY, SQLite constraint 2067/1555).</summary>
+    public static bool IsUniqueViolation(DbUpdateException ex) => Persistence.DatabaseErrors.IsUniqueViolation(ex);
 }

@@ -112,13 +112,14 @@ public sealed class ProfileTests(ApiFactory api) : IClassFixture<ApiFactory>
         Assert.DoesNotContain("GB82WEST", row.EncryptedDestination);
         Assert.NotEqual(iban, row.EncryptedDestination);
 
-        // The raw column value in MySQL (not just the EF-materialized one) never contains the raw destination.
+        // The raw column value in the database (not just the EF-materialized one) never contains the raw destination.
         var rawColumn = await api.WithDbAsync(async db =>
         {
             var conn = db.Database.GetDbConnection();
             await conn.OpenAsync();
             await using var cmd = conn.CreateCommand();
-            cmd.CommandText = $"SELECT EncryptedDestination FROM payout_profiles WHERE UserId = '{user.Id}'";
+            // LOWER: SQLite stores Guids upper-case, MySQL lower-case.
+            cmd.CommandText = $"SELECT EncryptedDestination FROM payout_profiles WHERE LOWER(UserId) = '{user.Id}'";
             return (string)(await cmd.ExecuteScalarAsync())!;
         });
         Assert.DoesNotContain("GB82WEST12345698765432", rawColumn);

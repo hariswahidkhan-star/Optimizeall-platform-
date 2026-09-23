@@ -8,9 +8,13 @@
 #
 # Targets
 #   build     restore (cached layer) + publish
-#   efbundle  produces /out/efbundle (self-contained EF Core migrations bundle)
+#   efbundle  produces /out/efbundle (self-contained EF Core migrations bundle, MySQL)
 #   migrator  small image that runs the bundle:  docker run --rm -e ConnectionStrings__Default="<conn>" optimizeall-migrator
 #   runtime   (default) non-root ASP.NET Core runtime listening on :8080
+#
+# Database: MySQL 8 (default) or SQLite (Database__Provider=Sqlite, Database__SqlitePath=/app/storage/db/optimizeall.db).
+# With SQLite the database file lives on the /app/storage volume next to the uploaded files; the API applies the
+# SQLite migrations on startup (Database__InitializationMode=Migrate), so the migrator image is only for MySQL.
 #
 # Alpine variants are used because the app runs with InvariantGlobalization (no ICU needed) and busybox
 # `wget` gives us a HEALTHCHECK without installing curl.
@@ -25,6 +29,7 @@ WORKDIR /src
 COPY Directory.Build.props ./
 COPY src/OptimizeAll.Domain/OptimizeAll.Domain.csproj                 src/OptimizeAll.Domain/
 COPY src/OptimizeAll.Infrastructure/OptimizeAll.Infrastructure.csproj src/OptimizeAll.Infrastructure/
+COPY src/OptimizeAll.Infrastructure.Sqlite/OptimizeAll.Infrastructure.Sqlite.csproj src/OptimizeAll.Infrastructure.Sqlite/
 COPY src/OptimizeAll.Api/OptimizeAll.Api.csproj                       src/OptimizeAll.Api/
 RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
     dotnet restore src/OptimizeAll.Api/OptimizeAll.Api.csproj
@@ -65,9 +70,9 @@ ENTRYPOINT ["/app/efbundle"]
 FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine AS runtime
 WORKDIR /app
 
-# Writable state lives under /app/storage (uploaded screenshots/files; dev email pickup).
-# Data-protection keys are stored in the database, so nothing else needs to be persisted.
-RUN mkdir -p /app/storage/files /app/storage/mail && chown -R $APP_UID:$APP_UID /app/storage
+# Writable state lives under /app/storage (uploaded screenshots/files; dev email pickup; with SQLite the database in
+# db/). Data-protection keys are stored in the database, so nothing else needs to be persisted.
+RUN mkdir -p /app/storage/files /app/storage/mail /app/storage/db && chown -R $APP_UID:$APP_UID /app/storage
 
 # Entrypoint: supports Docker/Kubernetes secret files. For any env var NAME_FILE=/path, exports NAME=<file contents>
 # (e.g. Jwt__SigningKey_FILE=/run/secrets/jwt_signing_key), then starts the API as the non-root app user.
@@ -87,8 +92,9 @@ for var in $(env | sed -n 's/^\([A-Za-z_][A-Za-z0-9_]*\)_FILE=.*/\1/p'); do
   unset "${var}_FILE"
 done
 if [ "$(id -u)" = "0" ]; then
-  mkdir -p /app/storage/files /app/storage/mail
-  if [ "$(stat -c %u /app/storage)" != "$APP_UID" ] || [ "$(stat -c %u /app/storage/files)" != "$APP_UID" ]; then
+  mkdir -p /app/storage/files /app/storage/mail /app/storage/db
+  if [ "$(stat -c %u /app/storage)" != "$APP_UID" ] || [ "$(stat -c %u /app/storage/files)" != "$APP_UID" ] \
+     || [ "$(stat -c %u /app/storage/db)" != "$APP_UID" ]; then
     chown -R "$APP_UID:$APP_UID" /app/storage
   fi
   # BusyBox su (no extra package): -m keeps the environment, the app user is uid $APP_UID ("app").

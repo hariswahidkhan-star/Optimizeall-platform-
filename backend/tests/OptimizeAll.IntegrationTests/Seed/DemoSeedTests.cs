@@ -243,11 +243,15 @@ public sealed class DemoSeedTests(DemoSeedFixture fx) : IClassFixture<DemoSeedFi
         foreach (var reversal in entries.Where(e => e.Type == EarningType.Reversal))
             Assert.Equal(reversal.Id, byId[reversal.ReversesEntryId!.Value].ReversedByEntryId);
 
+        // SQLite stores decimals as TEXT: compare them numerically; it has LENGTH instead of CHAR_LENGTH.
+        var (amount, settlement, rate, length) = ApiFactory.IsSqlite
+            ? ("CAST(Amount AS REAL)", "CAST(SettlementAmount AS REAL)", "CAST(ExchangeRate AS REAL)", "LENGTH")
+            : ("`Amount`", "`SettlementAmount`", "`ExchangeRate`", "CHAR_LENGTH");
         var violations = await fx.WithDbAsync(db => db.Database.SqlQueryRaw<int>(
-            "SELECT COUNT(*) AS `Value` FROM earning_entries WHERE `ExchangeRate` <= 0 " +
-            "OR NOT ((`Amount` >= 0 AND `SettlementAmount` >= 0) OR (`Amount` <= 0 AND `SettlementAmount` <= 0)) " +
-            "OR (`Type` = 'Reversal' AND (`Amount` >= 0 OR `ReversesEntryId` IS NULL)) " +
-            "OR (`Type` IN ('Adjustment','Reversal') AND (`Reason` IS NULL OR CHAR_LENGTH(`Reason`) = 0))").SingleAsync());
+            $"SELECT COUNT(*) AS Value FROM earning_entries WHERE {rate} <= 0 " +
+            $"OR NOT (({amount} >= 0 AND {settlement} >= 0) OR ({amount} <= 0 AND {settlement} <= 0)) " +
+            $"OR (Type = 'Reversal' AND ({amount} >= 0 OR ReversesEntryId IS NULL)) " +
+            $"OR (Type IN ('Adjustment','Reversal') AND (Reason IS NULL OR {length}(Reason) = 0))").SingleAsync());
         Assert.Equal(0, violations);
     }
 

@@ -8,6 +8,7 @@ using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Identity;
 using OptimizeAll.Domain.Notifications;
+using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Infrastructure.Persistence;
 
 namespace OptimizeAll.Api.Modules.Notifications;
@@ -264,7 +265,7 @@ public sealed class NotificationCenterService(
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var p = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(x => (x.u != null && EF.Functions.Like(x.u.Email, p)) || (x.n != null && EF.Functions.Like(x.n.Type, p)));
+            q = q.Where(x => (x.u != null && EF.Functions.Like(x.u.Email, p, "\\")) || (x.n != null && EF.Functions.Like(x.n.Type, p, "\\")));
         }
         q = query.Desc ? q.OrderByDescending(x => x.d.CreatedAt).ThenByDescending(x => x.d.Id) : q.OrderBy(x => x.d.CreatedAt).ThenBy(x => x.d.Id);
 
@@ -279,7 +280,7 @@ public sealed class NotificationCenterService(
     public async Task<DeliveryDto> RetryDeliveryAsync(Guid id, CancellationToken ct)
     {
         var now = Now;
-        await using var tx = await db.Database.BeginTransactionAsync(ct);
+        await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct);
         var before = await db.Set<NotificationDelivery>().AsNoTracking().FirstOrDefaultAsync(d => d.Id == id, ct)
                      ?? throw DomainException.NotFound("NotificationDelivery");
         var updated = await db.Set<NotificationDelivery>().Where(d => d.Id == id && d.Status == DeliveryStatus.Failed)

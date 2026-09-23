@@ -10,6 +10,7 @@ using OptimizeAll.Domain.Eligibility;
 using OptimizeAll.Domain.Identity;
 using OptimizeAll.Domain.Notifications;
 using OptimizeAll.Domain.Social;
+using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Infrastructure.Persistence;
 
 namespace OptimizeAll.Api.Modules.Social;
@@ -56,7 +57,7 @@ public sealed class SocialAccountService(
         var createdAt = ValidateDeclaredFacts(platform, request.Handle, request.ProfileUrl, request.AccountCreatedAt!.Value,
             request.PrimaryLanguage, request.AudienceCountryCode);
 
-        await using var tx = await db.Database.BeginTransactionAsync(ct);
+        await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct);
         // Lock the owner first so concurrent creates/reactivations are serialized against the active-profile limit.
         await LockUserAsync(userId, ct);
         await EnsureBelowActiveLimitAsync(userId, ct);
@@ -149,7 +150,7 @@ public sealed class SocialAccountService(
 
     public async Task<SocialAccountDto> ReactivateAsync(Guid userId, Guid id, CancellationToken ct)
     {
-        await using var tx = await db.Database.BeginTransactionAsync(ct);
+        await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct);
         // Lock the owner first so concurrent creates/reactivations are serialized against the active-profile limit.
         await LockUserAsync(userId, ct);
         var account = await OwnedAsync(userId, id, ct);
@@ -199,8 +200,8 @@ public sealed class SocialAccountService(
         {
             var pattern = PagingExtensions.LikePattern(query.Search);
             var handle = PagingExtensions.LikePattern(Normalization.Handle(query.Search));
-            q = q.Where(x => EF.Functions.Like(x.a.NormalizedHandle, handle) || EF.Functions.Like(x.u.Email, pattern) ||
-                             EF.Functions.Like(x.u.DisplayName, pattern));
+            q = q.Where(x => EF.Functions.Like(x.a.NormalizedHandle, handle, "\\") || EF.Functions.Like(x.u.Email, pattern, "\\") ||
+                             EF.Functions.Like(x.u.DisplayName, pattern, "\\"));
         }
         // Review queue: oldest waiting first unless the caller asks for newest.
         q = query.Desc ? q.OrderByDescending(x => x.a.UpdatedAt) : q.OrderBy(x => x.a.UpdatedAt);
@@ -319,8 +320,7 @@ public sealed class SocialAccountService(
     /// <summary>Row-locks the owner (inside the caller's transaction) to serialize changes to their active-profile count.</summary>
     private async Task LockUserAsync(Guid userId, CancellationToken ct)
     {
-        var locked = await db.Database.SqlQuery<Guid>($"SELECT Id AS Value FROM users WHERE Id = {userId} FOR UPDATE").ToListAsync(ct);
-        if (locked.Count == 0) throw DomainException.NotFound("User");
+        if (!await db.Dialect().LockRowAsync(db, "users", userId, ct)) throw DomainException.NotFound("User");
     }
 
     private async Task EnsureBelowActiveLimitAsync(Guid userId, CancellationToken ct)

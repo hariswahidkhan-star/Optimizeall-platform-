@@ -69,7 +69,7 @@ public sealed class DemoSeeder(
 
         var now = clock.GetUtcNow().UtcDateTime;
         var run = new DemoRun(db, now, passwordHasher, dataProtection, storage, logger);
-        await using (var tx = await db.Database.BeginTransactionAsync(ct))
+        await using (var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct))
         {
             try
             {

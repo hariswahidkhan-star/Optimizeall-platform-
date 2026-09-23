@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Time.Testing;
+using Microsoft.Data.Sqlite;
 using MySqlConnector;
 using OptimizeAll.Api.Common.Jobs;
 using OptimizeAll.Api.Common.Persistence;
@@ -20,10 +21,13 @@ using OptimizeAll.Infrastructure.Persistence;
 namespace OptimizeAll.IntegrationTests.Infrastructure;
 
 /// <summary>
-/// Boots the real API against a fresh, uniquely named MySQL database (created from migrations) with a
-/// controllable clock. Background jobs are disabled; tests run them explicitly through <see cref="RunJobAsync{TJob}"/>.
+/// Boots the real API against a fresh database (created from migrations) with a controllable clock: a uniquely named
+/// MySQL database, or (OPTIMIZEALL_TEST_PROVIDER=Sqlite) a temporary SQLite file of its own (a real file, not
+/// in-memory, so WAL, the busy timeout and write-lock contention behave as in production); either is deleted on
+/// dispose. Background jobs are disabled; tests run them explicitly through <see cref="RunJobAsync{TJob}"/>.
 ///
 /// Environment variables:
+///   OPTIMIZEALL_TEST_PROVIDER "MySql" (default) or "Sqlite"
 ///   OPTIMIZEALL_TEST_MYSQL   server connection string without database
 ///                            (default "Server=127.0.0.1;Port=3306;User=optimizeall;Password=optimizeall_dev;")
 ///   OPTIMIZEALL_TEST_DB_INIT "Migrate" (default) or "EnsureCreated"
@@ -35,7 +39,16 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         Converters = { new JsonStringEnumConverter() },
     };
 
+    /// <summary>The provider the integration tests run on (OPTIMIZEALL_TEST_PROVIDER).</summary>
+    public static readonly DatabaseProvider Provider =
+        Enum.TryParse<DatabaseProvider>(Environment.GetEnvironmentVariable("OPTIMIZEALL_TEST_PROVIDER"), ignoreCase: true, out var p)
+            ? p
+            : DatabaseProvider.MySql;
+
+    public static bool IsSqlite => Provider == DatabaseProvider.Sqlite;
+
     private readonly string _databaseName = $"oa_test_{Guid.NewGuid():N}"[..30];
+    private readonly string _sqliteFile = Path.Combine(Path.GetTempPath(), $"oa-test-{Guid.NewGuid():N}.db");
     private readonly string _serverConnection =
         Environment.GetEnvironmentVariable("OPTIMIZEALL_TEST_MYSQL")
         ?? "Server=127.0.0.1;Port=3306;User=optimizeall;Password=optimizeall_dev;";
@@ -47,7 +60,9 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
     public FakeTimeProvider Clock { get; } = new(DateTimeOffset.UtcNow);
 
     // Each test host gets a small pool so many parallel test classes stay under MySQL's max_connections.
-    public string ConnectionString => $"{_serverConnection.TrimEnd(';')};Database={_databaseName};Maximum Pool Size=20;";
+    public string ConnectionString => IsSqlite
+        ? new SqliteConnectionStringBuilder { DataSource = _sqliteFile, Pooling = true }.ConnectionString
+        : $"{_serverConnection.TrimEnd(';')};Database={_databaseName};Maximum Pool Size=20;";
 
     /// <summary>For CREATE/DROP DATABASE only: unpooled, so these one-off admin connections never linger idle.</summary>
     private string AdminConnectionString => $"{_serverConnection.TrimEnd(';')};Pooling=false;";
@@ -59,6 +74,8 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         {
             config.AddInMemoryCollection(new Dictionary<string, string?>
             {
+                ["Database:Provider"] = Provider.ToString(),
+                ["Database:SqlitePath"] = null,
                 ["ConnectionStrings:Default"] = ConnectionString,
                 ["Database:InitializationMode"] = Environment.GetEnvironmentVariable("OPTIMIZEALL_TEST_DB_INIT") ?? "Migrate",
                 ["Database:InitializeOnStartup"] = "true",
@@ -86,6 +103,11 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
     public async Task InitializeAsync()
     {
+        if (IsSqlite)
+        {
+            _ = Services; // boot the host (creates the file, runs migrations + baseline seed)
+            return;
+        }
         await using var conn = new MySqlConnection(AdminConnectionString);
         await conn.OpenAsync();
         await using var cmd = conn.CreateCommand();
@@ -97,6 +119,19 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
     public new async Task DisposeAsync()
     {
         await base.DisposeAsync();
+        TryDelete(MailDirectory);
+        TryDelete(StorageDirectory);
+        if (IsSqlite)
+        {
+            await using (var pooled = new SqliteConnection(ConnectionString))
+                SqliteConnection.ClearPool(pooled);
+            foreach (var suffix in new[] { "", "-wal", "-shm" })
+            {
+                try { File.Delete(_sqliteFile + suffix); } catch (IOException) { }
+            }
+            TryDelete(Path.ChangeExtension(_sqliteFile, null) + "-keys"); // Data Protection key ring
+            return;
+        }
         // Close this host's idle pooled connections now instead of after the pool's idle timeout, so the many
         // short-lived test hosts stay well under the server's max_connections.
         await using (var pooled = new MySqlConnection(ConnectionString))
@@ -106,8 +141,6 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         await using var cmd = conn.CreateCommand();
         cmd.CommandText = $"DROP DATABASE IF EXISTS `{_databaseName}`";
         await cmd.ExecuteNonQueryAsync();
-        TryDelete(MailDirectory);
-        TryDelete(StorageDirectory);
     }
 
     /// <summary>Runs an action with a scoped DbContext (for arranging data or asserting on the database).</summary>

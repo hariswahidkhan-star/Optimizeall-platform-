@@ -128,7 +128,7 @@ public static class PayoutReadModels
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var like = PagingExtensions.LikePattern(query.Search);
-            var matching = db.Set<User>().Where(u => EF.Functions.Like(u.Email, like) || EF.Functions.Like(u.DisplayName, like)).Select(u => u.Id);
+            var matching = db.Set<User>().Where(u => EF.Functions.Like(u.Email, like, "\\") || EF.Functions.Like(u.DisplayName, like, "\\")).Select(u => u.Id);
             items = items.Where(i => matching.Contains(i.UserId));
         }
         var page = await items.OrderByDescending(i => i.Amount).ThenBy(i => i.Id).ToPagedAsync(query, ct);

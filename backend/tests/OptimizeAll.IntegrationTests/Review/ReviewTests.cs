@@ -552,6 +552,18 @@ public sealed class ReviewTests(ApiFactory api) : IClassFixture<ApiFactory>
             var sql = OptimizeAll.Api.Modules.Rewards.RewardQuoteService.SpentQuery(db, campaign.Id).Select(e => e.Amount).ToQueryString();
             Assert.Contains("IN (", sql);
             Assert.DoesNotContain("JSON_TABLE", sql, StringComparison.OrdinalIgnoreCase);
+            if (ApiFactory.IsSqlite)
+            {
+                // SQLite: EXPLAIN QUERY PLAN of the real command (with its parameters) names the index it searches.
+                await using var command = OptimizeAll.Api.Modules.Rewards.RewardQuoteService.SpentQuery(db, campaign.Id)
+                    .Select(e => e.Amount).CreateDbCommand();
+                await command.Connection!.OpenAsync();
+                command.CommandText = "EXPLAIN QUERY PLAN " + command.CommandText;
+                await using var planReader = await command.ExecuteReaderAsync();
+                var details = new List<string>();
+                while (await planReader.ReadAsync()) details.Add(planReader["detail"] as string ?? string.Empty);
+                return string.Join('\n', details);
+            }
             var conn = db.Database.GetDbConnection();
             await conn.OpenAsync();
             await using var cmd = conn.CreateCommand();

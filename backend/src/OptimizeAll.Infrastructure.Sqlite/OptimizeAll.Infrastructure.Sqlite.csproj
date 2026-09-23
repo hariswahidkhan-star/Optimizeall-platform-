@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    SQLite migrations for AppDbContext. The model and entity configurations live in OptimizeAll.Infrastructure; the
+    MySQL migrations stay there too. Regenerate both sets with scripts/regenerate-migrations.sh.
+  -->
+
+  <ItemGroup>
+    <ProjectReference Include="..\OptimizeAll.Infrastructure\OptimizeAll.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

@@ -10,6 +10,7 @@ using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Events;
 using OptimizeAll.Domain.Identity;
+using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Infrastructure.Persistence;
 
 namespace OptimizeAll.Api.Modules.Auth;
@@ -219,12 +220,12 @@ public sealed class AuthService(
     /// </summary>
     private async Task RegisterFailedLoginAsync(Guid userId, CancellationToken ct)
     {
-        var lockUntil = Now.Add(LockoutDuration);
-        await db.Database.ExecuteSqlInterpolatedAsync($@"
-            UPDATE users
-               SET LockoutEndsAt = CASE WHEN FailedLoginCount + 1 >= {MaxFailedLogins} THEN {lockUntil} ELSE LockoutEndsAt END,
-                   FailedLoginCount = CASE WHEN FailedLoginCount + 1 >= {MaxFailedLogins} THEN 0 ELSE FailedLoginCount + 1 END
-             WHERE Id = {userId}", ct);
+        DateTime? lockUntil = Now.Add(LockoutDuration);
+        // LockoutEndsAt is assigned first: MySQL evaluates SET assignments left to right (later ones see earlier
+        // results), so it must read FailedLoginCount before that is changed. SQLite reads the old row for all of them.
+        await db.Set<User>().Where(u => u.Id == userId).ExecuteUpdateAsync(s => s
+            .SetProperty(u => u.LockoutEndsAt, u => u.FailedLoginCount + 1 >= MaxFailedLogins ? lockUntil : u.LockoutEndsAt)
+            .SetProperty(u => u.FailedLoginCount, u => u.FailedLoginCount + 1 >= MaxFailedLogins ? 0 : u.FailedLoginCount + 1), ct);
         var locked = await db.Set<User>().AsNoTracking()
             .AnyAsync(u => u.Id == userId && u.LockoutEndsAt == lockUntil, ct);
         if (locked)
@@ -266,7 +267,7 @@ public sealed class AuthService(
 
         // Rotation is atomic and transactional: the old token is revoked and its replacement inserted together, and
         // only one concurrent refresh with the same token can win the conditional update.
-        await using var tx = await db.Database.BeginTransactionAsync(ct);
+        await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct);
         var result = IssueSession(user, token.FamilyId, out var newToken);
         await db.SaveChangesAsync(ct);
         var rotated = await db.Set<RefreshToken>()

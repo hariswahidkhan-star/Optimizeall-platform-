@@ -45,7 +45,7 @@ public sealed class CampaignCatalogService(AppDbContext db, IParticipantEligibil
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var pattern = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(c => EF.Functions.Like(c.Title, pattern) || EF.Functions.Like(c.Summary, pattern));
+            q = q.Where(c => EF.Functions.Like(c.Title, pattern, "\\") || EF.Functions.Like(c.Summary, pattern, "\\"));
         }
 
         var participant = await eligibility.LoadAsync(userId, ct);

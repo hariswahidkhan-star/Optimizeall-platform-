@@ -14,6 +14,7 @@ using OptimizeAll.Domain.Notifications;
 using OptimizeAll.Domain.Payouts;
 using OptimizeAll.Domain.Settings;
 using OptimizeAll.Domain.Submissions;
+using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Infrastructure.Persistence;
 
 namespace OptimizeAll.Api.Modules.Marketing.Referrals;
@@ -125,11 +126,10 @@ public sealed class ReferralService(
 
         var program = await GetProgramAsync(ct);
         var qualified = false;
-        await using (var tx = await db.Database.BeginTransactionAsync(ct))
+        await using (var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct))
         {
             // Serialize reward decisions per referrer so the reward cap cannot be exceeded by concurrent events.
-            await db.Database.ExecuteSqlInterpolatedAsync(
-                $"SELECT Id FROM users WHERE Id = {referral.ReferrerUserId.ToString()} FOR UPDATE", ct);
+            await db.Dialect().LockRowAsync(db, "users", referral.ReferrerUserId, ct);
 
             var won = await db.Set<Referral>()
                 .Where(r => r.Id == referral.Id && r.Status == ReferralStatus.Registered && r.QualifyBy >= now)
@@ -216,7 +216,7 @@ public sealed class ReferralService(
             ? await db.Set<EarningEntry>().FirstOrDefaultAsync(x => x.Id == entryId, ct)
             : null;
 
-        await using var tx = await db.Database.BeginTransactionAsync(ct);
+        await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct);
         var rewardAction = entry is null ? "none" : await UndoRewardAsync(referral, entry, QualifyingSubmissionReversedReason, null, ct);
 
         referral.Status = ReferralStatus.Rejected;
@@ -316,7 +316,7 @@ public sealed class ReferralService(
 
         var before = new { referral.Status, referral.EarningEntryId };
         var rewardAction = "none";
-        await using var tx = await db.Database.BeginTransactionAsync(ct);
+        await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct);
         if (referral.EarningEntryId is { } entryId)
         {
             var entry = await db.Set<EarningEntry>().FirstAsync(x => x.Id == entryId, ct);

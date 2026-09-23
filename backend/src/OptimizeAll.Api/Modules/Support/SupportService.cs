@@ -42,7 +42,7 @@ public sealed class SupportService(
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var p = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(t => EF.Functions.Like(t.Subject, p) || EF.Functions.Like(t.Reference, p));
+            q = q.Where(t => EF.Functions.Like(t.Subject, p, "\\") || EF.Functions.Like(t.Reference, p, "\\"));
         }
         return await q.OrderByDescending(t => t.UpdatedAt)
             .Select(t => new TicketSummaryDto(t.Id, t.Reference, t.Subject, t.Category, t.Status, t.Priority, t.CreatedAt, t.UpdatedAt))
@@ -170,7 +170,7 @@ public sealed class SupportService(
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var p = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(x => EF.Functions.Like(x.t.Subject, p) || EF.Functions.Like(x.t.Reference, p) || EF.Functions.Like(x.u.Email, p));
+            q = q.Where(x => EF.Functions.Like(x.t.Subject, p, "\\") || EF.Functions.Like(x.t.Reference, p, "\\") || EF.Functions.Like(x.u.Email, p, "\\"));
         }
         q = query.Desc ? q.OrderByDescending(x => x.t.UpdatedAt) : q.OrderBy(x => x.t.UpdatedAt);
 

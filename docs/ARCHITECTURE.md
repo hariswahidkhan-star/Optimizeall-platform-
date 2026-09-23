@@ -5,7 +5,7 @@ established social accounts, submit proof, and are paid for qualifying posts.
 
 ```
 frontend/  React 18 + TypeScript (Vite). One app with five role portals.
-backend/   ASP.NET Core 8 Web API (C#), EF Core 8 + Pomelo MySQL provider, MySQL 8.
+backend/   ASP.NET Core 8 Web API (C#), EF Core 8 on MySQL 8 (Pomelo) or SQLite (Database:Provider).
 docs/      Architecture, API, deployment and operations docs.
 deploy/    Docker Compose staging stack, nginx config.
 ```
@@ -15,10 +15,11 @@ deploy/    Docker Compose staging stack, nginx config.
 | Project | Contents |
 |---|---|
 | `OptimizeAll.Domain` | Entities, enums and **pure** business rules (eligibility, reward calculation, payout periods, URL normalization, money rounding). No I/O. Unit-tested. |
-| `OptimizeAll.Infrastructure` | `AppDbContext`, EF configurations (`Persistence/Configurations/*`), migrations. |
+| `OptimizeAll.Infrastructure` | `AppDbContext`, EF configurations (`Persistence/Configurations/*`), MySQL migrations. |
+| `OptimizeAll.Infrastructure.Sqlite` | SQLite migrations only (same model). |
 | `OptimizeAll.Api` | `Program.cs`, cross-cutting services (`Common/*`), and feature modules (`Modules/<Module>/`). |
 | `tests/OptimizeAll.UnitTests` | xUnit tests of Domain rules and pure services. |
-| `tests/OptimizeAll.IntegrationTests` | `WebApplicationFactory` tests against a real MySQL database. |
+| `tests/OptimizeAll.IntegrationTests` | `WebApplicationFactory` tests against a real MySQL database, or a SQLite file with `OPTIMIZEALL_TEST_PROVIDER=Sqlite`. |
 
 ### Modules
 
@@ -75,8 +76,8 @@ Modules talk to each other through:
 * Submissions capture `RewardRuleSetId/Version` when created; approval computes earnings from that version.
 * Unique indexes: canonical per-platform post key (binary collation; a post can be claimed once), `(Platform, NormalizedHandle)` social
   profiles, earning idempotency keys, one payout item per user per batch, batch idempotency key per period.
-* Schema changes: edit the entity + its `IEntityTypeConfiguration`, then add a migration:
-  `dotnet ef migrations add <Name> -p src/OptimizeAll.Infrastructure -s src/OptimizeAll.Api -o Persistence/Migrations`.
+* Schema changes: edit the entity + its `IEntityTypeConfiguration`, then add the migration for **both** providers
+  with one command: `scripts/regenerate-migrations.sh --add <Name>` (see "Database portability" below).
 
 ## Frontend layout
 
@@ -101,17 +102,65 @@ line; the agency modules below run everything else (website, CRM, billing, deliv
 
 ### Database portability (MySQL and SQLite)
 
-The API runs on **MySQL 8** or **SQLite** (`Database:Provider` = `MySql` | `Sqlite`). Therefore:
+The API runs on **MySQL 8** or **SQLite** (`Database:Provider` = `MySql` (default) | `Sqlite`):
+
+* MySQL: `ConnectionStrings:Default`, or `Database:Host/Port/Name/User/Password`. Multi-instance capable.
+* SQLite: `Database:SqlitePath` (e.g. `/app/storage/db/optimizeall.db`; wins), or a SQLite `ConnectionStrings:Default`
+  (`Data Source=…`). The directory is created if missing. Every connection runs with `journal_mode=WAL`,
+  `busy_timeout=10000`, `foreign_keys=ON`, `synchronous=NORMAL` (`SqlitePragmaInterceptor`). **Exactly one API
+  instance** may use a SQLite file: named locks are in-process. The Data Protection key ring is stored next to the
+  database file (`<name>-keys/`) instead of in it; back up both.
+
+Rules for all code (other agents included):
 
 * **No raw SQL in modules.** Use LINQ / `ExecuteUpdateAsync` / `ExecuteDeleteAsync`. For locking use
-  `IDatabaseDialect` (`Common/Persistence/DatabaseDialect.cs`): `BeginWriteTransactionAsync` (use it for every
-  transaction that writes), `LockRowAsync(db, "table_name", id)` (instead of `SELECT … FOR UPDATE`),
-  `AcquireNamedLockAsync` (instead of `GET_LOCK`), `IsUniqueViolation`.
+  `IDatabaseDialect` (`Common/Persistence/DatabaseDialect.cs`; inject it, or `db.Dialect()` in static helpers):
+  * `BeginWriteTransactionAsync(db, ct[, isolationLevel])` for **every transaction that writes** (SQLite:
+    `BEGIN IMMEDIATE`, which takes the single database write lock up front and waits up to the busy timeout).
+  * `LockRowAsync(db, "table_name", id, ct[, RowLockMode.Share])` instead of `SELECT … FOR UPDATE/SHARE` (SQLite:
+    existence check; throws outside a transaction). Returns false when the row doesn't exist.
+  * `AcquireNamedLockAsync(db, name, timeout, ct)` instead of `GET_LOCK`. Acquire it **before** beginning the
+    transaction and dispose it after (on SQLite, waiting for it while holding the write lock would deadlock; this
+    throws `InvalidOperationException`).
+  * `IsUniqueViolation(ex)` / `DatabaseErrors.IsUniqueViolation(ex)` / `ProblemExceptionHandler.IsUniqueViolation(ex)`
+    all recognize MySQL and SQLite duplicates. Insert-if-absent = insert and catch the unique violation (EF wraps
+    `SaveChanges` inside a transaction in a savepoint, so only that insert is undone); detach the failed entity.
+* On SQLite a write transaction must not wait for **another** DbContext/connection that writes (e.g. a service
+  that opens its own scope and saves): that is a self-deadlock until the busy timeout. Use the same context.
 * **No provider-specific column types or collations.** Do not call `HasColumnType("json"|"text"|...)` or
   `UseCollation(...)` directly in new configurations; use `HasJsonList()` for list columns and give long text a
-  `HasMaxLength` (unbounded text: leave max length unset). Keep decimals as `decimal`.
+  `HasMaxLength` (unbounded text: leave max length unset). Keep decimals as `decimal`. (Existing MySQL-only details —
+  `json`/`text`/`char(36)`, `utf8mb4_bin`, charset, check-constraint SQL — are stripped or rewritten for SQLite by
+  `Infrastructure/Persistence/PortableModel.cs`; SQLite's default `BINARY` collation is case-sensitive.)
+* Check constraints: write them in MySQL syntax with backtick identifiers; `PortableModel` rewrites them for SQLite
+  (double quotes, `CHAR_LENGTH` → `LENGTH`, decimal columns compared via `CAST(… AS REAL)`).
 * Keep queries translatable on both providers (no MySQL-only functions, no `DateTime` arithmetic inside SQL that
-  SQLite cannot translate; compute boundaries in C# and compare).
+  SQLite cannot translate; compute boundaries in C# and compare). `EF.Functions.Like(x, PagingExtensions.LikePattern(q), "\\")`
+  — pass the escape character; SQLite has no default one.
+* Money on SQLite: decimals are stored as TEXT. EF Core 8 translates decimal arithmetic/comparisons itself;
+  `Common/Persistence/SqliteQuerySupport.cs` adds exact `Sum`/`Average`/`Min`/`Max` (computed in .NET `decimal`),
+  decimal `OrderBy` (exact collation) and `Guid.NewGuid()` inside `ExecuteUpdate`. Values read back with their column
+  scale, as on MySQL. Never convert money to `double`.
+* Tests: the whole integration suite runs on both providers (`OPTIMIZEALL_TEST_PROVIDER=Sqlite`, or
+  `scripts/test-all.sh --sqlite`). A test that must inspect provider-specific details checks `ApiFactory.IsSqlite`.
+
+**Migrations** exist per provider: MySQL in `OptimizeAll.Infrastructure/Persistence/Migrations`, SQLite in
+`OptimizeAll.Infrastructure.Sqlite/Migrations` (`MigrationsAssembly` is chosen per provider in
+`DatabaseConnection.Configure`). One command regenerates/extends both and verifies them (no database server needed):
+
+```bash
+scripts/regenerate-migrations.sh              # delete both sets, recreate a single InitialCreate (pre-release)
+scripts/regenerate-migrations.sh --add <Name> # add migration <Name> to both sets
+scripts/regenerate-migrations.sh --check      # has-pending-model-changes for both (CI runs this)
+```
+
+Manually (from `backend/`), the design-time provider is selected through configuration:
+
+```bash
+dotnet ef migrations add <Name> -p src/OptimizeAll.Infrastructure -s src/OptimizeAll.Api -o Persistence/Migrations
+Database__Provider=Sqlite Database__SqlitePath=/tmp/design.db \
+  dotnet ef migrations add <Name> -p src/OptimizeAll.Infrastructure.Sqlite -s src/OptimizeAll.Api -o Migrations
+```
 
 ### Client tenancy
 

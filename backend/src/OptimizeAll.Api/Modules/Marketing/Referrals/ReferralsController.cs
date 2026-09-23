@@ -117,9 +117,9 @@ public sealed class ReferralsController(
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var like = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(x => EF.Functions.Like(x.a.DisplayName, like) || EF.Functions.Like(x.a.Email, like) ||
-                             EF.Functions.Like(x.b.DisplayName, like) || EF.Functions.Like(x.b.Email, like) ||
-                             EF.Functions.Like(x.r.CodeUsed, like));
+            q = q.Where(x => EF.Functions.Like(x.a.DisplayName, like, "\\") || EF.Functions.Like(x.a.Email, like, "\\") ||
+                             EF.Functions.Like(x.b.DisplayName, like, "\\") || EF.Functions.Like(x.b.Email, like, "\\") ||
+                             EF.Functions.Like(x.r.CodeUsed, like, "\\"));
         }
 
         var page = await q.OrderByDescending(x => x.r.CreatedAt)

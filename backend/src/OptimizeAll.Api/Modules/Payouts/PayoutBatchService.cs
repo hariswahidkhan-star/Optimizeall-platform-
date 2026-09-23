@@ -62,7 +62,7 @@ public sealed class PayoutBatchService(
 
     /// <summary>
     /// Prepares the draft batch for <paramref name="period"/> in the schedule's settlement currency. Idempotent: a retry
-    /// or a concurrent call returns the existing batch (Created=false). Serialized by a MySQL named lock; the unique
+    /// or a concurrent call returns the existing batch (Created=false). Serialized by the payout-prepare named lock; the unique
     /// index on IdempotencyKey is the final guard. <paramref name="actor"/> null = system (background job).
     /// </summary>
     public async Task<PrepareOutcome> PrepareAsync(PayoutPeriod period, Guid? actor, string? note, CancellationToken ct)

@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Api.Common.Settings;
 using OptimizeAll.Domain.Campaigns;
 using OptimizeAll.Domain.Common;
@@ -14,13 +15,15 @@ namespace OptimizeAll.Api.Modules.Campaigns;
 /// <summary>Row lock that serializes reward-affecting writes per campaign (approvals, rule versions).</summary>
 public static class CampaignLock
 {
-    /// <summary>Must run inside a transaction; holds an exclusive lock on the campaign row until commit/rollback.</summary>
+    /// <summary>
+    /// Must run inside a write transaction; holds an exclusive lock on the campaign row until commit/rollback
+    /// (MySQL row lock; on SQLite the write transaction already serializes all writers).
+    /// </summary>
     public static async Task LockAsync(AppDbContext db, Guid campaignId, CancellationToken ct)
     {
         if (db.Database.CurrentTransaction is null)
             throw new InvalidOperationException("Campaign locks require an open transaction.");
-        var id = campaignId.ToString();
-        await db.Database.ExecuteSqlInterpolatedAsync($"SELECT Id FROM campaigns WHERE Id = {id} FOR UPDATE", ct);
+        await db.Dialect().LockRowAsync(db, "campaigns", campaignId, ct);
     }
 }
 

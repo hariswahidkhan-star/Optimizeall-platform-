@@ -33,7 +33,7 @@ public sealed class AuditLogService(AppDbContext db)
         if (!string.IsNullOrWhiteSpace(q.Search))
         {
             var p = PagingExtensions.LikePattern(q.Search);
-            logs = logs.Where(l => EF.Functions.Like(l.Action, p) || EF.Functions.Like(l.EntityId, p) || (l.Reason != null && EF.Functions.Like(l.Reason, p)));
+            logs = logs.Where(l => EF.Functions.Like(l.Action, p, "\\") || EF.Functions.Like(l.EntityId, p, "\\") || (l.Reason != null && EF.Functions.Like(l.Reason, p, "\\")));
         }
 
         return from l in logs

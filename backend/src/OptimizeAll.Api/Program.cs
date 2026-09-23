@@ -67,19 +67,25 @@ services.Configure<DevToolsOptions>(config.GetSection(DevToolsOptions.Section));
 // ---------- Persistence ----------
 services.AddSingleton(TimeProvider.System);
 // Configuration is read lazily (per service resolution) so hosts/tests can override it before the app starts.
+// Database:Provider = MySql (default) | Sqlite; see DatabaseConnection.
 services.AddDbContext<AppDbContext>((sp, options) =>
-    options.UseMySql(
-        DatabaseConnection.Resolve(sp.GetRequiredService<IConfiguration>()),
-        new MySqlServerVersion(new Version(8, 0, 36)),
-        mysql =>
-        {
-            mysql.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName);
-            mysql.CommandTimeout(60);
-        }));
+    DatabaseConnection.Configure(options, sp.GetRequiredService<IConfiguration>()));
+services.AddSingleton<IDatabaseDialect>(sp =>
+    DatabaseDialects.For(DatabaseConnection.Provider(sp.GetRequiredService<IConfiguration>())));
 
 services.AddDataProtection()
     .SetApplicationName("OptimizeAll")
     .PersistKeysToDbContext<AppDbContext>();
+// SQLite: the key ring lives in files next to the database file instead. SQLite has one writer at a time, and the key
+// ring is written through its own DbContext, so creating a key while a request holds a write transaction (e.g.
+// encrypting a payout destination) would wait for that same request.
+services.AddOptions<Microsoft.AspNetCore.DataProtection.KeyManagement.KeyManagementOptions>()
+    .Configure<IConfiguration, ILoggerFactory>((o, cfg, loggers) =>
+    {
+        if (DatabaseConnection.Provider(cfg) == DatabaseProvider.Sqlite)
+            o.XmlRepository = new Microsoft.AspNetCore.DataProtection.Repositories.FileSystemXmlRepository(
+                new DirectoryInfo(DatabaseConnection.SqliteKeyDirectory(cfg)), loggers);
+    });
 
 // ---------- Security ----------
 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
@@ -156,7 +162,6 @@ services.AddOptions<Microsoft.AspNetCore.Cors.Infrastructure.CorsOptions>()
         }));
 
 // ---------- Cross-cutting services ----------
-services.AddSingleton<IDatabaseDialect, MySqlDialect>();
 services.AddScoped<IAuditLogger, AuditLogger>();
 services.AddSingleton<IEventPublisher, EventPublisher>();
 services.AddScoped<ISettingsService, SettingsService>();
