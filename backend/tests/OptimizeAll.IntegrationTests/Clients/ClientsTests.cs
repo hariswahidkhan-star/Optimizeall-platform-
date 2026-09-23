@@ -212,7 +212,10 @@ public sealed class ClientsTests(ApiFactory api) : IClassFixture<ApiFactory>
         new object[] { Role.AccountManager, "GET", "/api/v1/agency/time/timesheets/pending", 200 },
         new object[] { Role.AccountManager, "GET", "/api/v1/client/orgs", 403 },
         new object[] { Role.Admin, "GET", "/api/v1/agency/dashboard", 200 },
-        new object[] { Role.Finance, "GET", "/api/v1/agency/clients", 403 },
+        // Finance reads client accounts to bill them (clients.view) but cannot create or manage them.
+        new object[] { Role.Finance, "GET", "/api/v1/agency/clients", 200 },
+        new object[] { Role.Finance, "POST", "/api/v1/agency/clients", 403 },
+        new object[] { Role.Finance, "GET", "/api/v1/agency/projects", 403 },
     };
 
     [Theory]
