@@ -137,6 +137,34 @@ public sealed class AudienceTests(EmailFixture fx)
     }
 
     [Fact]
+    public async Task Csv_import_never_grants_sms_consent_to_a_number_that_texted_stop()
+    {
+        var staff = await fx.StaffAsync();
+        var ws = await fx.CreateWorkspaceAsync();
+        var key = Workspace.Key(ws.ClientId);
+        await fx.Db(async db =>
+        {
+            db.Add(new Suppression { ClientAccountId = ws.ClientId, ScopeKey = key, Channel = MessageChannel.Sms, Value = "+923001234567", Reason = SuppressionReason.StopKeyword, Source = "sms-stop", CreatedAt = fx.Now });
+            await db.SaveChangesAsync();
+        });
+        const string csv = "Email,Phone\nstopped@example.com,+923001234567\nfine@example.com,+923007654321\n";
+        var import = await (await staff.PostAsJsonAsync($"/api/v1/agency/email/lists/{ws.ListId}/imports", new
+        {
+            fileName = "sms.csv", csv, mapping = new Dictionary<string, string> { ["Email"] = "email", ["Phone"] = "phone" },
+            confirmConsent = true, consentSource = "Store opt-in (email and SMS)", grantSmsConsent = true,
+        })).ReadJsonAsync();
+        Assert.Equal(2, import.GetProperty("created").GetInt32());
+        Assert.Contains(import.GetProperty("errors").EnumerateArray(), e => e.GetProperty("row").GetInt32() == 2 && e.GetProperty("message").GetString()!.Contains("opted out of SMS"));
+
+        var stopped = await fx.Db(db => db.Set<Subscriber>().AsNoTracking().FirstAsync(s => s.ScopeKey == key && s.NormalizedEmail == "stopped@example.com"));
+        Assert.NotEqual(ConsentStatus.Granted, stopped.SmsConsent);
+        Assert.Equal(ConsentStatus.Granted, stopped.EmailConsent);
+        Assert.False(await fx.Db(db => db.Set<ConsentRecord>().AnyAsync(c => c.SubscriberId == stopped.Id && c.Channel == MessageChannel.Sms && c.Status == ConsentStatus.Granted)));
+        var fine = await fx.Db(db => db.Set<Subscriber>().AsNoTracking().FirstAsync(s => s.ScopeKey == key && s.NormalizedEmail == "fine@example.com"));
+        Assert.Equal(ConsentStatus.Granted, fine.SmsConsent);
+    }
+
+    [Fact]
     public async Task Segment_rules_are_evaluated_server_side()
     {
         var staff = await fx.StaffAsync();

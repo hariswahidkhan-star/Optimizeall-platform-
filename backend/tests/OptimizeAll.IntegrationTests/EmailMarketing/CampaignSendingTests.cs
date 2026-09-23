@@ -181,6 +181,47 @@ public sealed class CampaignSendingTests(EmailFixture fx)
         Assert.DoesNotContain(await fx.RecipientsAsync(id), r => r.Status == RecipientStatus.Sent);
     }
 
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task An_unknown_provider_outcome_is_never_retried_so_nobody_gets_the_email_twice(bool throwAfterSending)
+    {
+        var staff = await fx.StaffAsync();
+        var ws = await fx.CreateWorkspaceAsync();
+        await fx.AddSubscribersAsync(ws, 2);
+        var campaign = await fx.CreateCampaignAsync(staff, ws, extra: new { throttlePerMinute = 1000 });
+        var id = Guid.Parse(campaign.GetProperty("id").GetString()!);
+        await EmailFixture.ConfirmSendAsync(staff, campaign);
+
+        if (throwAfterSending) fx.Email.ThrowAfterSending = true;
+        else fx.Email.NextOutcome = ProviderOutcome.Unknown;
+        try { await fx.RunJobAsync<CampaignSendJob>(); }
+        finally
+        {
+            fx.Email.ThrowAfterSending = false;
+            fx.Email.NextOutcome = ProviderOutcome.Accepted;
+        }
+        // Later runs (after any retry backoff) must not send again: the provider may already have delivered them.
+        for (var i = 0; i < 3; i++)
+        {
+            fx.Api.Clock.Advance(TimeSpan.FromMinutes(10));
+            await fx.RunJobAsync<CampaignSendJob>();
+        }
+
+        var recipients = await fx.RecipientsAsync(id);
+        Assert.Equal(2, recipients.Count);
+        Assert.All(recipients, r =>
+        {
+            Assert.Equal(RecipientStatus.Failed, r.Status);
+            Assert.Contains("not retried", r.Error);
+        });
+        var references = recipients.Select(r => "c:" + r.Id.ToString("N")).ToHashSet();
+        var deliveries = fx.Email.For(ws.ClientId).Where(e => references.Contains(e.Metadata["oa_ref"])).ToList();
+        Assert.Equal(2, deliveries.Count);
+        Assert.Equal(2, deliveries.Select(e => e.To).Distinct().Count());
+        Assert.Equal(CampaignStatus.Sent, (await fx.CampaignAsync(id)).Status);
+    }
+
     [Fact]
     public async Task Ab_test_sends_to_a_cohort_then_the_winner_by_open_rate_to_the_rest()
     {
@@ -298,7 +339,7 @@ public sealed class CampaignSendingTests(EmailFixture fx)
         Assert.False(checklist.GetProperty("canSend").GetBoolean());
         Assert.Contains(checklist.GetProperty("items").EnumerateArray(), i => i.GetProperty("id").GetString() == "footer" && i.GetProperty("status").GetString() == "Fail");
         await (await admin.PostAsJsonAsync($"/api/v1/agency/email/campaigns/{noFooter.GetProperty("id").GetString()}/send",
-            new { confirm = true, confirmName = "No footer" })).ShouldFailAsync(400, "email.checklist_failed");
+            new { confirm = true, confirmName = "No footer", concurrencyStamp = noFooter.GetProperty("concurrencyStamp").GetString() })).ShouldFailAsync(400, "email.checklist_failed");
 
         // Unverified sender and missing address are blockers too.
         await fx.Db(async db =>
@@ -316,10 +357,20 @@ public sealed class CampaignSendingTests(EmailFixture fx)
             await db.SaveChangesAsync();
         });
 
-        var sent = await (await admin.PostAsJsonAsync($"/api/v1/agency/email/campaigns/{id}/send", new { confirm = true, confirmName = "October update", reason = "Approved by AM" })).ReadJsonAsync();
+        // The confirmation must name the reviewed version (concurrency stamp); a missing or stale one is refused.
+        var stamp = campaign.GetProperty("concurrencyStamp").GetString();
+        await (await admin.PostAsJsonAsync($"/api/v1/agency/email/campaigns/{id}/send", new { confirm = true, confirmName = "October update" }))
+            .ShouldFailAsync(400, "email.concurrency_stamp_required");
+        await (await admin.PostAsJsonAsync($"/api/v1/agency/email/campaigns/{id}/send", new { confirm = true, confirmName = "October update", concurrencyStamp = Guid.NewGuid() }))
+            .ShouldFailAsync(409, "concurrency.conflict");
+        Assert.Equal(CampaignStatus.Draft, (await fx.CampaignAsync(Guid.Parse(id!))).Status);
+
+        var sent = await (await admin.PostAsJsonAsync($"/api/v1/agency/email/campaigns/{id}/send", new { confirm = true, confirmName = "October update", concurrencyStamp = stamp, reason = "Approved by AM" })).ReadJsonAsync();
         Assert.Equal("Scheduled", sent.GetProperty("status").GetString());
         // Cannot be edited or sent twice once confirmed.
-        await (await admin.PostAsJsonAsync($"/api/v1/agency/email/campaigns/{id}/send", new { confirm = true, confirmName = "October update" })).ShouldFailAsync(409);
+        await (await admin.PostAsJsonAsync($"/api/v1/agency/email/campaigns/{id}/send", new { confirm = true, confirmName = "October update", concurrencyStamp = stamp })).ShouldFailAsync(409);
+        await (await admin.PostAsJsonAsync($"/api/v1/agency/email/campaigns/{id}/send",
+            new { confirm = true, confirmName = "October update", concurrencyStamp = sent.GetProperty("concurrencyStamp").GetString() })).ShouldFailAsync(409);
         Assert.True(await fx.Db(db => db.Set<OptimizeAll.Domain.Audit.AuditLog>().AnyAsync(a => a.Action == "email.campaign.send_confirmed" && a.EntityId == id)));
     }
 }

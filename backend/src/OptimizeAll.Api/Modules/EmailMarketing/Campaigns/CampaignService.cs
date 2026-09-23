@@ -303,7 +303,8 @@ public sealed class CampaignService(
                 if (parameters.Any(p => p.Length > 1024)) errors.Add("Template parameters are limited to 1024 characters.");
                 if (parameters.SelectMany(p => MergeTags.Unknown(p)).Any()) errors.Add("A template parameter uses an unknown merge tag.");
                 c.WhatsAppParametersJson = JsonSerializer.Serialize(parameters);
-                c.SmsBody ??= string.Join(" | ", parameters);
+                // Summary for lists/previews; bounded like a typed SMS body (10 parameters of 1024 characters would not fit).
+                c.SmsBody ??= Text.Clean(string.Join(" | ", parameters), 1600);
             }
         }
 
@@ -513,6 +514,9 @@ public sealed class CampaignService(
         if (!r.Confirm) throw new DomainException("email.confirm_required", "Confirm the send (confirm: true).");
         if (!string.Equals(r.ConfirmName.Trim(), c.Name, StringComparison.Ordinal))
             throw new DomainException("email.confirm_name_mismatch", "Type the campaign name exactly to confirm the send.");
+        // The confirmation is for the version the sender reviewed: without the stamp an edit made meanwhile would be sent unseen.
+        if (r.ConcurrencyStamp is null)
+            throw new DomainException("email.concurrency_stamp_required", "Reload the campaign and confirm the send again (concurrencyStamp is required).");
         AudienceService.ExpectStamp(c.ConcurrencyStamp, r.ConcurrencyStamp);
         if (c.Status != CampaignStatus.Draft) throw DomainException.Conflict("email.campaign_not_draft", $"The campaign is {c.Status}.");
         var checklist = await BuildChecklistAsync(c, ct);

@@ -152,10 +152,16 @@ public sealed partial class TrackingAndWebhookTests(EmailFixture fx)
         await (await anonymous.SendAsync(Request("sig", "1"))).ShouldFailAsync(503, "email.webhook_not_configured");
         using var key = ECDsa.Create(ECCurve.NamedCurves.nistP256);
         await fx.AddIntegrationAsync(ws.ClientId, "sendgrid", new() { ["webhookPublicKey"] = Convert.ToBase64String(key.ExportSubjectPublicKeyInfo()) }, new() { ["apiKey"] = "SG.x" });
-        const string ts = "1727000200";
+        // SendGrid signs each delivery attempt when it is sent: the timestamp is "now".
+        var ts = new DateTimeOffset(fx.Now).ToUnixTimeSeconds().ToString();
         using var otherKey = ECDsa.Create(ECCurve.NamedCurves.nistP256);
         var forged = Convert.ToBase64String(otherKey.SignData(Encoding.UTF8.GetBytes(ts).Concat(body).ToArray(), HashAlgorithmName.SHA256, DSASignatureFormat.Rfc3279DerSequence));
         await (await anonymous.SendAsync(Request(forged, ts))).ShouldFailAsync(401, "email.invalid_signature");
+        Assert.False(await fx.Db(db => db.Set<Suppression>().AnyAsync(x => x.Value == recipient.Address)));
+        // A genuine signature over a stale timestamp (a captured request replayed later) is rejected too.
+        var staleTs = new DateTimeOffset(fx.Now.AddHours(-2)).ToUnixTimeSeconds().ToString();
+        var stale = Convert.ToBase64String(key.SignData(Encoding.UTF8.GetBytes(staleTs).Concat(body).ToArray(), HashAlgorithmName.SHA256, DSASignatureFormat.Rfc3279DerSequence));
+        await (await anonymous.SendAsync(Request(stale, staleTs))).ShouldFailAsync(401, "email.invalid_signature");
         Assert.False(await fx.Db(db => db.Set<Suppression>().AnyAsync(x => x.Value == recipient.Address)));
 
         var signature = Convert.ToBase64String(key.SignData(Encoding.UTF8.GetBytes(ts).Concat(body).ToArray(), HashAlgorithmName.SHA256, DSASignatureFormat.Rfc3279DerSequence));

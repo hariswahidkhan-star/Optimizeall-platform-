@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Persistence;
+using OptimizeAll.Api.Modules.Clients;
 using OptimizeAll.Api.Modules.EmailMarketing.Audiences;
 using OptimizeAll.Api.Modules.EmailMarketing.Automations;
 using OptimizeAll.Api.Modules.EmailMarketing.Campaigns;
@@ -113,20 +114,37 @@ public static class ReadyMadeJourneys
 /// </summary>
 public sealed class EmailDemoSeeder(TimeProvider clock, IPasswordHasher<User> hasher, IDatabaseDialect dialect, ILogger<EmailDemoSeeder> logger) : ISeeder
 {
-    public const string DemoPassword = "Demo#2026!pass";
+    public const string DemoPassword = DeliveryDemoData.Password;
     public const string MarkerSeedKey = "demo-email-seeded";
 
     public string Profile => "Demo";
     public int Order => 300;
 
-    public sealed record DemoClient(string Slug, string Name, string Industry, string Country, string Currency, string TimeZone, string Address, string Domain);
+    /// <summary>
+    /// Email-specific demo data per canonical client (<see cref="DeliveryDemoData"/>): the client's identity comes from the
+    /// canonical record; the postal address (CAN-SPAM footer) and sending domain are the email workspace's own.
+    /// </summary>
+    public sealed record DemoClient(string Slug, string Name, string Industry, string Country, string Currency, string TimeZone, string Address, string Domain)
+    {
+        public DeliveryDemoData.DemoClient Canonical => DeliveryDemoData.Clients.First(c => c.Slug == Slug);
+    }
+
+    private static DemoClient Spec(DeliveryDemoData.DemoClient c, string address, string domain) =>
+        new(c.Slug, c.Name, c.Industry, c.CountryCode, c.Currency, c.TimeZone, address, domain);
 
     public static readonly DemoClient[] Clients =
     {
-        new("nimbus-fitness", "Nimbus Fitness", "SaaS fitness app", "US", "USD", "America/New_York", "1200 Market Street, Suite 400, San Francisco, CA 94102, USA", "nimbusfitness.example.com"),
-        new("wanderly-travel", "Wanderly Travel", "Travel", "GB", "GBP", "Europe/London", "18 Clerkenwell Road, London EC1M 5RN, United Kingdom", "wanderly.example.com"),
-        new("aurora-skincare", "Aurora Skincare", "E-commerce beauty", "AE", "AED", "Asia/Dubai", "Office 1204, Bay Square Building 7, Business Bay, Dubai, UAE", "auroraskincare.example.com"),
-        new("karachi-eats", "Karachi Eats", "Restaurant group", "PK", "PKR", "Asia/Karachi", "Plot 14-C, Khayaban-e-Ittehad, DHA Phase 6, Karachi 75500, Pakistan", "karachieats.example.com"),
+        Spec(DeliveryDemoData.Nimbus, "1200 Market Street, Suite 400, San Francisco, CA 94102, USA", "nimbusfitness.example.com"),
+        Spec(DeliveryDemoData.Wanderly, "18 Clerkenwell Road, London EC1M 5RN, United Kingdom", "wanderly.example.com"),
+        Spec(DeliveryDemoData.Aurora, "Office 1204, Bay Square Building 7, Business Bay, Dubai, UAE", "auroraskincare.example.com"),
+        Spec(DeliveryDemoData.KarachiEats, "Plot 14-C, Khayaban-e-Ittehad, DHA Phase 6, Karachi 75500, Pakistan", "karachieats.example.com"),
+    };
+
+    /// <summary>Home country and time zone of the demo staff this seeder may create (as the delivery demo seeder creates them).</summary>
+    private static readonly Dictionary<Role, (string Country, string TimeZone)> StaffLocale = new()
+    {
+        [Role.AccountManager] = ("AE", "Asia/Dubai"),
+        [Role.ContentCreator] = ("PK", "Asia/Karachi"),
     };
 
     private static readonly string[] FirstNames =
@@ -156,8 +174,8 @@ public sealed class EmailDemoSeeder(TimeProvider clock, IPasswordHasher<User> ha
         _rng = new Random(20260923);
         await using var tx = await dialect.BeginWriteTransactionAsync(db, ct);
 
-        await EnsureStaffAsync(db, "content", "Casey Content", Role.ContentCreator, ct);
-        var am = await EnsureStaffAsync(db, "am", "Amira Malik", Role.AccountManager, ct);
+        await EnsureStaffAsync(db, DeliveryDemoData.Content, ct);
+        var am = await EnsureStaffAsync(db, DeliveryDemoData.AccountManager, ct);
         var clients = new List<ClientAccount>();
         foreach (var c in Clients) clients.Add(await EnsureClientAsync(db, c, am, ct));
         await db.SaveChangesAsync(ct);
@@ -181,35 +199,51 @@ public sealed class EmailDemoSeeder(TimeProvider clock, IPasswordHasher<User> ha
         logger.LogWarning("Email demo data created for {Count} clients. Demo/staging data only.", clients.Count);
     }
 
-    private async Task<User> EnsureStaffAsync(AppDbContext db, string local, string name, Role role, CancellationToken ct)
+    /// <summary>
+    /// Finds or creates a canonical demo staff member (<see cref="DeliveryDemoData.Staff"/>) with exactly the canonical email,
+    /// display name and role, so the result is the same whichever demo seeder runs first.
+    /// </summary>
+    private async Task<User> EnsureStaffAsync(AppDbContext db, DeliveryDemoData.DemoStaff staff, CancellationToken ct)
     {
-        var email = $"{local}@demo.optimizeall.app";
-        var normalized = Normalization.Email(email);
+        var normalized = Normalization.Email(staff.Email);
         var user = await db.Set<User>().Include(u => u.Roles).FirstOrDefaultAsync(u => u.NormalizedEmail == normalized, ct);
         if (user is not null)
         {
-            if (!user.Roles.Any(r => r.Role == role)) user.Roles.Add(new UserRole { UserId = user.Id, Role = role, GrantedAt = _now });
+            if (!user.Roles.Any(r => r.Role == staff.Role)) user.Roles.Add(new UserRole { UserId = user.Id, Role = staff.Role, GrantedAt = _now });
             return user;
         }
+        var (country, tz) = StaffLocale.TryGetValue(staff.Role, out var locale) ? locale : ("GB", "Europe/London");
         user = new User
         {
-            Email = email, NormalizedEmail = normalized, DisplayName = name, CountryCode = "GB", LanguageCode = "en", TimeZone = "Europe/London",
-            EmailVerifiedAt = _now, ReferralCode = ("EM" + Guid.NewGuid().ToString("N")[..8]).ToUpperInvariant(),
+            Email = staff.Email, NormalizedEmail = normalized, DisplayName = staff.DisplayName, CountryCode = country, LanguageCode = "en", TimeZone = tz,
+            EmailVerifiedAt = _now, ReferralCode = await ReferralCodeAsync(db, staff.Email, ct),
         };
-        user.PasswordHash = hasher.HashPassword(user, DemoPassword);
-        user.Roles.Add(new UserRole { UserId = user.Id, Role = role, GrantedAt = _now });
+        user.PasswordHash = hasher.HashPassword(user, DeliveryDemoData.Password);
+        user.Roles.Add(new UserRole { UserId = user.Id, Role = staff.Role, GrantedAt = _now });
         db.Set<User>().Add(user);
         return user;
     }
 
+    /// <summary>Deterministic per email (same scheme as the delivery demo seeder), unique among users.</summary>
+    private static async Task<string> ReferralCodeAsync(AppDbContext db, string email, CancellationToken ct)
+    {
+        var baseCode = "DL" + Normalization.Sha256Hex(email.ToLowerInvariant())[..8].ToUpperInvariant();
+        var code = baseCode;
+        for (var i = 0; await db.Set<User>().AnyAsync(u => u.ReferralCode == code, ct) || db.ChangeTracker.Entries<User>().Any(e => e.Entity.ReferralCode == code); i++)
+            code = baseCode[..8] + i.ToString("00");
+        return code;
+    }
+
+    /// <summary>Finds or creates a canonical demo client with the canonical values of <see cref="DeliveryDemoData"/>.</summary>
     private async Task<ClientAccount> EnsureClientAsync(AppDbContext db, DemoClient c, User am, CancellationToken ct)
     {
         var client = await db.Set<ClientAccount>().FirstOrDefaultAsync(x => x.Slug == c.Slug, ct);
         if (client is not null) return client;
+        var d = c.Canonical;
         client = new ClientAccount
         {
-            Name = c.Name, Slug = c.Slug, Industry = c.Industry, CountryCode = c.Country, Currency = c.Currency, TimeZone = c.TimeZone,
-            Status = ClientAccountStatus.Active, Website = "https://" + c.Domain, BillingAddress = c.Address, AccountManagerUserId = am.Id,
+            Slug = d.Slug, Name = d.Name, Industry = d.Industry, CountryCode = d.CountryCode, Currency = d.Currency, TimeZone = d.TimeZone,
+            Status = d.Status, Website = d.Website, Summary = d.Summary, AccountManagerUserId = am.Id,
         };
         db.Set<ClientAccount>().Add(client);
         return client;

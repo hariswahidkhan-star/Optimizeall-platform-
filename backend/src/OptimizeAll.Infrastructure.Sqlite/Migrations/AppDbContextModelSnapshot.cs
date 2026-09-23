@@ -3986,7 +3986,6 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("TriggerDataJson")
-                        .HasMaxLength(4000)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -4016,7 +4015,6 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
                     b.Property<string>("ConfigJson")
                         .IsRequired()
-                        .HasMaxLength(8000)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Key")
@@ -4271,7 +4269,6 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DesignJson")
-                        .HasMaxLength(200000)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Key")
@@ -4425,7 +4422,6 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
                     b.Property<string>("DesignJson")
                         .IsRequired()
-                        .HasMaxLength(200000)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("ExpandedAt")
@@ -4530,7 +4526,6 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("WhatsAppParametersJson")
-                        .HasMaxLength(4000)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("WhatsAppTemplateLanguage")
@@ -4652,7 +4647,6 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
                     b.Property<string>("DesignJson")
                         .IsRequired()
-                        .HasMaxLength(200000)
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsArchived")
@@ -4945,7 +4939,6 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
                     b.Property<string>("DefinitionJson")
                         .IsRequired()
-                        .HasMaxLength(20000)
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("LastCount")
@@ -5236,7 +5229,6 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
                     b.Property<string>("ErrorsJson")
                         .IsRequired()
-                        .HasMaxLength(100000)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Failed")
@@ -5259,7 +5251,6 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
                     b.Property<string>("MappingJson")
                         .IsRequired()
-                        .HasMaxLength(8000)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("ProcessedRows")

@@ -31,6 +31,8 @@ public sealed class CapturingEmailProvider : IEmailMarketingProvider
     public ConcurrentQueue<OutboundEmail> Sent { get; } = new();
     public ProviderOutcome NextOutcome { get; set; } = ProviderOutcome.Accepted;
     public TimeSpan Delay { get; set; } = TimeSpan.Zero;
+    /// <summary>Delivers the message, then throws (a bug or lost connection after the provider accepted it).</summary>
+    public bool ThrowAfterSending { get; set; }
 
     public string Key => "smtp";
 
@@ -42,8 +44,12 @@ public sealed class CapturingEmailProvider : IEmailMarketingProvider
             case ProviderOutcome.NotConfigured: return ProviderResult.NotConfigured("Test provider not configured.");
             case ProviderOutcome.TransientFailure: return ProviderResult.Transient("Test transient failure.");
             case ProviderOutcome.PermanentFailure: return ProviderResult.Permanent("Test rejection.");
+            case ProviderOutcome.Unknown:
+                Sent.Enqueue(email); // the provider did deliver it, but did not confirm
+                return ProviderResult.Unknown("Test: accepted without a message id.");
         }
         Sent.Enqueue(email);
+        if (ThrowAfterSending) throw new InvalidOperationException("Test: connection lost after the message was accepted.");
         return ProviderResult.Accepted("<" + Guid.NewGuid().ToString("N") + "@test>");
     }
 
