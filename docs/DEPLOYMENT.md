@@ -151,6 +151,12 @@ publish job with registry credentials when a registry is chosen.
   to the nginx config so rate limits and fraud hashing use the real client IP.
 * The API sends HSTS on HTTPS requests. Enable the `Strict-Transport-Security` header for the SPA in
   `frontend/nginx/snippets/security-headers.conf` once the site is HTTPS-only (start with a short max-age).
+* Images: campaign/banner images are uploads served from `/api/v1/files/…` (same origin, allowed by the CSP). To
+  also allow images from an external host (e.g. a CDN), list it in **both** the API setting
+  `Content__AllowedImageHosts__0=images.example.com` (validates hero/asset/banner URLs) and the web container's
+  `IMG_SRC_EXTRA="https://images.example.com"` (rendered into the CSP `img-src` by
+  `frontend/nginx/default.conf.template` → `$oa_img_src_extra` in `snippets/security-headers.conf`). Several hosts are
+  space-separated in `IMG_SRC_EXTRA` and indexed (`__0`, `__1`, …) in the API setting.
 * Redirect HTTP to HTTPS at the proxy. Allow request bodies of at least 12 MB (screenshot uploads).
 
 ### 5.3 Database: managed MySQL 8

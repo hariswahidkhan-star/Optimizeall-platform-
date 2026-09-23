@@ -56,6 +56,7 @@ public sealed class CampaignAdminService(
     IEventPublisher events,
     IRewardQuoteService quotes,
     IRewardRulesService rewardRules,
+    ImageUrlPolicy images,
     TimeProvider clock) : ICampaignAdminService
 {
     private static readonly TimeSpan DefaultDeadlineGrace = TimeSpan.FromDays(3);
@@ -257,8 +258,8 @@ public sealed class CampaignAdminService(
         if (input.TrackingDestinationUrl is { Length: > 0 } tracking &&
             !(Uri.TryCreate(tracking, UriKind.Absolute, out var t) && t.Scheme == Uri.UriSchemeHttps))
             throw FieldError("trackingDestinationUrl", "campaign.invalid_tracking_url", "The tracking destination must be an absolute https URL.");
-        if (input.HeroImageUrl is { Length: > 0 } hero && !IsAllowedMediaUrl(hero))
-            throw FieldError("heroImageUrl", "campaign.invalid_image_url", "The hero image must be an https URL or an uploaded file (/api/v1/files/...).");
+        if (input.HeroImageUrl is { Length: > 0 } hero && !images.IsAllowed(hero))
+            throw FieldError("heroImageUrl", "campaign.invalid_image_url", "The hero image: " + ImageUrlPolicy.Message);
         if (input.Platforms.Count == 0)
             throw FieldError("platforms", "campaign.platform_required", "Choose at least one platform.");
         if (input.Eligibility.Countries.Any(c => c.Trim().Length != 2 || !c.Trim().All(char.IsAsciiLetter)))
@@ -596,6 +597,11 @@ public sealed class CampaignAdminService(
             if (file is null || !file.IsPublic || file.Purpose == FilePurpose.SubmissionScreenshot)
                 throw new DomainException("campaign.asset_file_invalid", "The file must be an uploaded public campaign image.");
             url = FileUrls.For(fileId);
+        }
+        else if (url is not null && input.Type == CampaignAssetType.Image && !images.IsAllowed(url))
+        {
+            // Images are rendered by the web app, so they must satisfy its CSP img-src (uploads + allowed hosts).
+            throw FieldError("url", "campaign.asset_url_invalid", "Image assets: " + ImageUrlPolicy.Message);
         }
         else if (url is not null && !IsAllowedMediaUrl(url))
         {

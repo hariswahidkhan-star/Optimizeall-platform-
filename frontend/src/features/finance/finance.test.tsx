@@ -344,6 +344,30 @@ describe('Accessibility and responsive layout', () => {
     expect(await axeViolations(container)).toEqual([]);
   });
 
+  it('describes the disabled Finalize button with the four-eyes rule when you prepared the batch', async () => {
+    mockFetch({
+      ...signedIn,
+      'GET /finance/payout-batches/b1': () =>
+        json(
+          200,
+          batchDetail(
+            {
+              status: 'Draft',
+              preparedBy: { id: 'fin-me', displayName: 'Farah Finance', email: 'farah@optimizeall.local' },
+            },
+            [payoutItem()],
+          ),
+        ),
+    });
+    renderWithApp(<BatchReviewPage />, { route: '/finance/batches/b1', path: '/finance/batches/:batchId' });
+    const finalize = await screen.findByRole('button', { name: 'Finalize' });
+    expect(finalize).toBeDisabled();
+    expect(finalize).toHaveAccessibleDescription(
+      'You prepared this batch, so a different finance user must finalize it.',
+    );
+    expect(screen.getByRole('status', { name: 'Four-eyes rule' })).toBeInTheDocument();
+  });
+
   it('renders batch items as cards with a record action on a phone', async () => {
     setViewportWidth(360);
     mockFetch({

@@ -1,4 +1,5 @@
 import { ArrowRight, ImageOff } from 'lucide-react';
+import { ImageUpload } from '@/components/ImageUpload';
 import { Badge } from '@/components/ui/Badge';
 import { buttonClasses } from '@/components/ui/buttonStyles';
 import { DateTime } from '@/components/ui/DateTime';
@@ -10,6 +11,8 @@ import { enumOptions, isoToLocalInput, localInputToIso, orNull } from '../shared
 import type { ContentConfig, FormProps } from './ContentEditor';
 import { ContentTab } from './ContentTab';
 import {
+  IMAGE_HINT,
+  isImageLink,
   isSafeLink,
   LINK_HINT,
   parseSortOrder,
@@ -91,12 +94,16 @@ function BannerForm({ draft, setDraft, errors }: FormProps<BannerDraft>) {
       <TextField
         label="Image URL"
         optional
-        type="url"
         maxLength={500}
         value={draft.imageUrl}
         onChange={(v) => set('imageUrl', v)}
         error={errors.imageUrl}
-        hint={LINK_HINT}
+        hint={IMAGE_HINT}
+      />
+      <ImageUpload
+        label="Or upload an image"
+        purpose="ContentImage"
+        onUploaded={(file) => set('imageUrl', file.url)}
       />
       <div className="admin-form-grid">
         <TextField
@@ -191,7 +198,7 @@ export function BannerPreview({
 }: {
   draft: Pick<BannerDraft, 'title' | 'body' | 'imageUrl' | 'ctaLabel' | 'ctaUrl'>;
 }) {
-  const imageOk = draft.imageUrl && isSafeLink(draft.imageUrl);
+  const imageOk = draft.imageUrl && isImageLink(draft.imageUrl);
   return (
     <div className="admin-banner-preview" data-testid="banner-preview">
       {imageOk ? (
@@ -274,7 +281,7 @@ export const bannerConfig: ContentConfig<Banner, BannerDraft> = {
     const errors: Record<string, string> = {};
     requireLength(errors, 'title', d.title, 1, 150, 'a title');
     if (d.body.length > 1000) errors.body = 'The body can be at most 1000 characters.';
-    if (d.imageUrl.trim() && !isSafeLink(d.imageUrl.trim())) errors.imageUrl = LINK_HINT;
+    if (d.imageUrl.trim() && !isImageLink(d.imageUrl.trim())) errors.imageUrl = IMAGE_HINT;
     if (d.ctaUrl.trim() && !isSafeLink(d.ctaUrl.trim())) errors.ctaUrl = LINK_HINT;
     if (d.ctaLabel.trim() && !d.ctaUrl.trim()) errors.ctaUrl = 'Add the link the button opens.';
     if (d.ctaUrl.trim() && !d.ctaLabel.trim()) errors.ctaLabel = 'Add a button label for the link.';

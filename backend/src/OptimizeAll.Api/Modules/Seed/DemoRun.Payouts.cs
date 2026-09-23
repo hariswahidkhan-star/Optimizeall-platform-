@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Ledger;
+using OptimizeAll.Api.Common.Notifications;
 using OptimizeAll.Api.Modules.Payouts;
 using OptimizeAll.Api.Modules.Payouts.Providers;
 using OptimizeAll.Domain.Common;
@@ -138,7 +139,7 @@ internal sealed partial class DemoRun
         foreach (var finance in new[] { Finance1, Finance2 })
             await NotifyAsync(finance.Id, NotificationTypes.BatchPrepared, $"Payout batch {batch.Reference} is ready for review",
                 $"{batch.ItemCount} participant(s), {batch.TotalAmount:0.00} {batch.Currency} for the period ending {batch.PeriodKey}.",
-                $"/finance/payouts/batches/{batch.Id}");
+                AppLinks.FinanceBatch(batch.Id));
         _batches[period.PeriodKey] = batch.Id;
         Count("payout batches");
         Count("payout items", items.Count);
@@ -185,7 +186,7 @@ internal sealed partial class DemoRun
             });
             await NotifyAsync(item.UserId, NotificationTypes.PayoutScheduled, "Your payout is scheduled",
                 $"A payout of {item.Amount:0.00} {item.Currency} is scheduled. Expected payment date: {batch.ScheduledPaymentDate:yyyy-MM-dd}.",
-                "/earnings/payouts");
+                AppLinks.Payout(item.Id));
         }
         _audit.As(finalizer.Id, finalizer.Role).Record("payout.batch_finalized", nameof(PayoutBatch), batchId, before,
             new { Status = PayoutBatchStatus.Finalized, AwaitingPayment = awaiting.Count, HeldReleased = heldIds.Count }, reason);
@@ -265,7 +266,7 @@ internal sealed partial class DemoRun
             after: new { Status = PayoutItemStatus.Paid, item.Amount, item.Currency, PaymentReference = reference, PaidAt = paidAt, BatchId = batchId },
             reason: "Paid via bank portal bulk upload");
         await NotifyAsync(item.UserId, NotificationTypes.PayoutPaid, "Your payout was sent",
-            $"We sent your payout of {item.Amount:0.00} {item.Currency}. Payment reference ending {reference[^4..]}.", "/earnings/payouts");
+            $"We sent your payout of {item.Amount:0.00} {item.Currency}. Payment reference ending {reference[^4..]}.", AppLinks.Payout(item.Id));
         await _db.SaveChangesAsync();
         Count("payments recorded");
     }
@@ -290,7 +291,7 @@ internal sealed partial class DemoRun
             after: new { Status = PayoutItemStatus.Failed, item.Amount, item.Currency, BatchId = batchId }, reason: reason);
         await NotifyAsync(item.UserId, NotificationTypes.PayoutScheduled, "We couldn't complete your payout",
             $"Your payout of {item.Amount:0.00} {item.Currency} could not be completed. Please check your payout details; your earnings are safe and will be included in the next payout.",
-            "/settings/payout");
+            AppLinks.PayoutDetails);
         await _db.SaveChangesAsync();
         await PayoutStore.ReleaseEarningsAsync(_db, new[] { itemId }, CancellationToken.None);
         Count("payments failed");
@@ -313,7 +314,7 @@ internal sealed partial class DemoRun
             _audit.As(Finance1.Id, Role.Finance).Record("payout.hold_created", nameof(PayoutHold), hold.Id,
                 after: new { hold.UserId, HeldDraftItems = 0, AwaitingPaymentItems = 0 }, reason: hold.Reason);
             await NotifyAsync(aisha.Id, NotificationTypes.PayoutHold, "Your payouts are paused",
-                Ledger.EarningsSummaryService.NeutralHoldMessage, "/earnings");
+                Ledger.EarningsSummaryService.NeutralHoldMessage, AppLinks.Earnings);
             Count("payout holds");
         });
 

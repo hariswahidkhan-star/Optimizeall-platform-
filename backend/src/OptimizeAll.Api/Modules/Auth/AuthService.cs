@@ -79,7 +79,7 @@ public sealed class AuthService(
             await db.SaveChangesAsync(ct);
             await email.SendAsync(new EmailMessage(existing.Email, existing.DisplayName, "Someone tried to register with your email",
                 $"Hi {existing.DisplayName},\n\nSomeone tried to create an Optimize All account with this email address. " +
-                $"If it was you, sign in or reset your password at {emailOptions.Value.AppBaseUrl}/forgot-password.\n\n" +
+                $"If it was you, sign in or reset your password at {emailOptions.Value.AppBaseUrl}{AppLinks.ForgotPassword}.\n\n" +
                 "If it wasn't you, you can ignore this message."), ct);
             return;
         }
@@ -313,7 +313,7 @@ public sealed class AuthService(
         });
         await db.SaveChangesAsync(ct);
 
-        var link = $"{emailOptions.Value.AppBaseUrl}/reset-password?token={WebUtility.UrlEncode(raw)}";
+        var link = $"{emailOptions.Value.AppBaseUrl}{AppLinks.ResetPassword}?token={WebUtility.UrlEncode(raw)}";
         await email.SendAsync(new EmailMessage(user.Email, user.DisplayName, "Reset your Optimize All password",
             $"Hi {user.DisplayName},\n\nUse this link within one hour to choose a new password:\n{link}\n\n" +
             "If you didn't ask for this, you can ignore this email; your password won't change."), ct);
@@ -402,7 +402,7 @@ public sealed class AuthService(
 
     private async Task SendVerificationEmailAsync(User user, string rawToken, CancellationToken ct)
     {
-        var link = $"{emailOptions.Value.AppBaseUrl}/verify-email?token={WebUtility.UrlEncode(rawToken)}";
+        var link = $"{emailOptions.Value.AppBaseUrl}{AppLinks.VerifyEmail}?token={WebUtility.UrlEncode(rawToken)}";
         var result = await email.SendAsync(new EmailMessage(user.Email, user.Email, "Verify your Optimize All email",
             // The display name is attacker-controlled until the address is verified, so it is not echoed here.
             $"Welcome to Optimize All!\n\nConfirm your email address to start joining paid campaigns:\n{link}\n\n" +

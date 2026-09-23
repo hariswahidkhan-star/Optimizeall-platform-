@@ -36,11 +36,13 @@ Modules talk to each other through:
 | Service | Purpose |
 |---|---|
 | `ICurrentUser` | Caller id, roles, permissions, IP. `Require(permission)` throws 403. |
-| `[HasPermission(Permissions.X)]` | Endpoint authorization. **Authorize by permission, never by role.** Role→permission map: `Common/Security/Permissions.cs`. |
+| `[HasPermission(Permissions.X)]` | Endpoint authorization. **Authorize by permission, never by role.** Role→permission map: `Common/Security/Permissions.cs`. Default deny: the fallback policy requires a signed-in user, so public endpoints need an explicit `[AllowAnonymous]` (list in SECURITY.md § 2). |
 | `IAuditLogger` | `Record(action, entityType, id, before, after, reason)` stages an append-only audit row saved in the same `SaveChanges` as the change. Required for campaign edits, reviews, reward changes, payout actions, suspensions, settings. |
 | `ILedgerWriter` | The **only** way to create/approve/decline/reverse `EarningEntry` rows. Idempotent by key; converts to settlement currency and stores original amount + rate. |
 | `IPayoutScheduleProvider`, `IExchangeRateProvider` | Active payout schedule (biweekly default) and FX lookup. |
 | `INotificationService` | `StageAsync(new NotificationRequest(...))` adds an in-app notification + outbox rows (Email/WhatsApp) in the caller's transaction. |
+| `AppLinks` | The only source of web-app paths for notification/email/onboarding links (`AppLinks.Submission(id)`, `AppLinks.FinanceBatch(id)`, …). Never hard-code `"/app/..."`; add a member here and to `frontend/src/app/appLinks.fixture.json` (both sides are tested). |
+| `ImageUrlPolicy` | Image URL rule for hero/asset/banner images: uploads (`/api/v1/files/{id}`) or https on `Content:AllowedImageHosts` (mirrors the web CSP). |
 | `IEmailSender` | Direct transactional email (auth flows). Other messages go through the notification outbox. |
 | `ISettingsService` | Admin-editable settings (`Domain/Settings/SettingKeys`). |
 | `IEventPublisher` | Publish domain events after commit. |

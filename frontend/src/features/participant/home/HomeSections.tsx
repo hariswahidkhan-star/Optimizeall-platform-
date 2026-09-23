@@ -34,7 +34,8 @@ import type {
 import { CampaignCard } from '../components/CampaignCard';
 import { PlatformTag } from '../components/Platform';
 import { AchievementIcon } from '../achievements/AchievementIcon';
-import { isInternalLink } from '../lib/labels';
+import { SafeExternalLink } from '@/components/SafeExternalLink';
+import { isInternalHref } from '@/lib/safeHref';
 
 // ---------------------------------------------------------------- state heroes
 
@@ -207,14 +208,14 @@ export function OnboardingCard({ onboarding }: { onboarding: ParticipantHome['on
       step.actionUrl || step.isManual ? (
         <div className="pp-actions">
           {step.actionUrl &&
-            (isInternalLink(step.actionUrl) ? (
+            (isInternalHref(step.actionUrl) ? (
               <ButtonLink to={step.actionUrl} size="sm" variant="secondary">
                 {step.actionLabel ?? 'Open'}
               </ButtonLink>
             ) : (
-              <a className="ui-link" href={step.actionUrl} target="_blank" rel="noopener noreferrer">
+              <SafeExternalLink className="ui-link" href={step.actionUrl} fallback={null}>
                 {step.actionLabel ?? 'Open'}
-              </a>
+              </SafeExternalLink>
             ))}
           {step.isManual && (
             <Button
@@ -267,19 +268,18 @@ export function Banners({ banners }: { banners: HomeBanner[] }) {
           </div>
           {banner.ctaLabel &&
             banner.ctaUrl &&
-            (isInternalLink(banner.ctaUrl) ? (
+            (isInternalHref(banner.ctaUrl) ? (
               <ButtonLink to={banner.ctaUrl} variant="highlight" size="sm">
                 {banner.ctaLabel}
               </ButtonLink>
             ) : (
-              <a
+              <SafeExternalLink
                 className={buttonClasses('highlight', 'sm')}
                 href={banner.ctaUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+                fallback={null}
               >
                 {banner.ctaLabel}
-              </a>
+              </SafeExternalLink>
             ))}
         </div>
       ))}

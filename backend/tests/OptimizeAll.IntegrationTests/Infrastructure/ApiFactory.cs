@@ -49,6 +49,9 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
     // Each test host gets a small pool so many parallel test classes stay under MySQL's max_connections.
     public string ConnectionString => $"{_serverConnection.TrimEnd(';')};Database={_databaseName};Maximum Pool Size=20;";
 
+    /// <summary>For CREATE/DROP DATABASE only: unpooled, so these one-off admin connections never linger idle.</summary>
+    private string AdminConnectionString => $"{_serverConnection.TrimEnd(';')};Pooling=false;";
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Testing");
@@ -83,7 +86,7 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
     public async Task InitializeAsync()
     {
-        await using var conn = new MySqlConnection(_serverConnection);
+        await using var conn = new MySqlConnection(AdminConnectionString);
         await conn.OpenAsync();
         await using var cmd = conn.CreateCommand();
         cmd.CommandText = $"CREATE DATABASE `{_databaseName}` CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci";
@@ -94,7 +97,11 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
     public new async Task DisposeAsync()
     {
         await base.DisposeAsync();
-        await using var conn = new MySqlConnection(_serverConnection);
+        // Close this host's idle pooled connections now instead of after the pool's idle timeout, so the many
+        // short-lived test hosts stay well under the server's max_connections.
+        await using (var pooled = new MySqlConnection(ConnectionString))
+            await MySqlConnection.ClearPoolAsync(pooled);
+        await using var conn = new MySqlConnection(AdminConnectionString);
         await conn.OpenAsync();
         await using var cmd = conn.CreateCommand();
         cmd.CommandText = $"DROP DATABASE IF EXISTS `{_databaseName}`";

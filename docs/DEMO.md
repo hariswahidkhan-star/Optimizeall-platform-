@@ -16,7 +16,15 @@ Database__Seed__1=Demo
 ```
 
 * **Idempotent.** The seed does nothing if the `demo.seeded` system setting or `sara.participant@demo.optimizeall.app`
-  already exists. Everything is written in one transaction; if it fails, the screenshots it wrote are deleted again.
+  already exists. Everything is written in one transaction; if it fails, the screenshots and images it wrote are
+  deleted again.
+* **Images are uploads.** Campaign heroes, image assets and homepage banners are generated PNGs written through
+  `IFileStorage` as public `CampaignAsset`/`ContentImage` files and referenced as `/api/v1/files/{id}`, so they load
+  under the web CSP (`img-src 'self'`) without any external image host.
+* **Follows the live rules.** Seeded submissions are declared posted at most 7 days before submission, store the
+  canonical post key of `PlatformUrlRules.Parse`, are never decided or live-checked by their own participant, and no
+  earnings are approved for a suspended user after the suspension (asserted by `DemoSeedTests`). Notification links
+  use `AppLinks` (real web routes).
 * **Always current.** All dates are relative to "now". The seed replays about three months of activity in
   chronological order, anchored to the biweekly payout periods. "c0" in this document means the cutoff of the last
   completed period, "c1" the cutoff before that, and so on.

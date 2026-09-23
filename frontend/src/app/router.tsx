@@ -7,6 +7,8 @@ import { ResetPasswordPage } from '@/features/auth/ResetPasswordPage';
 import { VerifyEmailPage } from '@/features/auth/VerifyEmailPage';
 import { FaqPage } from '@/features/public/FaqPage';
 import { LandingPage } from '@/features/public/LandingPage';
+import { CampaignLandingPage } from '@/features/public/landing/CampaignLandingPage';
+import { JoinPage } from '@/features/public/landing/JoinPage';
 import { NotFound } from '@/features/public/NotFound';
 import { RouteErrorPage } from '@/features/public/RouteErrorPage';
 import { AuthProvider } from '@/lib/auth/AuthProvider';
@@ -15,7 +17,7 @@ import { AuthLayout } from './layouts/AuthLayout';
 import { PortalLayout } from './layouts/PortalLayout';
 import { PublicLayout } from './layouts/PublicLayout';
 import { portals } from './portals';
-import type { PortalDefinition } from './portalTypes';
+import type { PortalRouteHandle } from './portalTypes';
 
 /** The design-system showcase ships in development and in builds with VITE_SHOW_DESIGN_SYSTEM=true (staging). */
 export const showDesignSystem = import.meta.env.DEV || import.meta.env.VITE_SHOW_DESIGN_SYSTEM === 'true';
@@ -29,15 +31,20 @@ function RootRoute() {
   );
 }
 
-/** Wraps routes whose nav item declares a permission, so deep links answer 403 like the hidden nav implies. */
-function guardPortalRoutes(portal: PortalDefinition): RouteObject[] {
-  return portal.routes.map((route) => {
-    const item = route.path ? portal.nav.find((n) => n.to === route.path) : undefined;
-    if (!item?.requires || route.index) return route;
-    return {
-      ...route,
-      element: <RequirePermission {...item.requires}>{route.element ?? <Outlet />}</RequirePermission>,
-    };
+/**
+ * Wraps every portal route that declares `handle.requires` (at any depth) in RequirePermission, so deep links answer
+ * 403 like the hidden nav implies. A parent's requirement covers its children (list + detail pages).
+ */
+export function guardPortalRoutes(routes: RouteObject[]): RouteObject[] {
+  return routes.map((route): RouteObject => {
+    const requires = (route.handle as PortalRouteHandle | undefined)?.requires;
+    const element = requires ? (
+      <RequirePermission {...requires}>{route.element ?? <Outlet />}</RequirePermission>
+    ) : (
+      route.element
+    );
+    if (route.index) return { ...route, element };
+    return { ...route, element, children: route.children ? guardPortalRoutes(route.children) : undefined };
   });
 }
 
@@ -51,6 +58,9 @@ export const routes: RouteObject[] = [
         children: [
           { index: true, element: <LandingPage /> },
           { path: 'faq', element: <FaqPage /> },
+          // Invitation links (backend MarketingUrls.InvitationLink) and shareable public campaign pages.
+          { path: 'join/:code', element: <JoinPage /> },
+          { path: 'c/:slug', element: <CampaignLandingPage /> },
           ...(showDesignSystem
             ? [
                 {
@@ -98,7 +108,7 @@ export const routes: RouteObject[] = [
             </RequirePermission>
           </RequireAuth>
         ),
-        children: [...guardPortalRoutes(portal), { path: '*', element: <NotFound /> }],
+        children: [...guardPortalRoutes(portal.routes), { path: '*', element: <NotFound /> }],
       })),
       {
         element: <PublicLayout />,

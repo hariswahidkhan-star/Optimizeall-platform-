@@ -25,6 +25,7 @@ import { QueryState } from '../components/QueryState';
 import { daysUntil } from '../lib/zonedTime';
 import { SocialAccountDialog } from './SocialAccountDialog';
 import '../participant.css';
+import { SafeExternalLink } from '@/components/SafeExternalLink';
 
 type Action = 'deactivate' | 'reactivate' | 'request-verification';
 
@@ -76,10 +77,15 @@ function AccountCard({
           <div className="cluster" style={{ ['--cluster-gap' as string]: 'var(--space-2)' }}>
             <PlatformTag platform={account.platform} />
             <h2 id={titleId} className="pp-list__title" style={{ fontSize: 'var(--text-h4)' }}>
-              <a href={account.profileUrl} target="_blank" rel="noopener noreferrer" className="ui-link">
+              <SafeExternalLink
+                href={account.profileUrl}
+                className="ui-link"
+                nofollow
+                fallback={<>@{account.handle}</>}
+              >
                 @{account.handle}
                 <span className="visually-hidden"> (opens profile in a new tab)</span>
-              </a>
+              </SafeExternalLink>
             </h2>
           </div>
           <div className="cluster" style={{ ['--cluster-gap' as string]: 'var(--space-2)' }}>

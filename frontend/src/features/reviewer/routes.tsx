@@ -1,7 +1,7 @@
 import { BadgeCheck, Inbox, LayoutDashboard, Radar, Scale } from 'lucide-react';
-import { Navigate, type RouteObject } from 'react-router-dom';
+import type { RouteObject } from 'react-router-dom';
 import type { PortalNavItem } from '@/app/portalTypes';
-import { Permissions } from '@/lib/auth/permissions';
+import { type PermissionRequirement, Permissions } from '@/lib/auth/permissions';
 import { AppealDetailPage } from './pages/AppealDetailPage';
 import { AppealsPage } from './pages/AppealsPage';
 import { LiveChecksPage } from './pages/LiveChecksPage';
@@ -11,6 +11,14 @@ import { SocialAccountPage } from './pages/SocialAccountPage';
 import { SocialVerificationPage } from './pages/SocialVerificationPage';
 import { WorkspacePage } from './pages/WorkspacePage';
 import './reviewer.css';
+
+/** Portal entry (the queue and live checks call submissions.review APIs). */
+export const portalRequires: PermissionRequirement = { anyOf: [Permissions.SubmissionsReview] };
+
+const appeals: PermissionRequirement = { allOf: [Permissions.SubmissionsReview, Permissions.AppealsResolve] };
+const socialVerification: PermissionRequirement = {
+  allOf: [Permissions.SubmissionsReview, Permissions.SocialAccountsVerify],
+};
 
 /** Reviewer portal (/review). Paths are relative to the portal base. */
 export const nav: PortalNavItem[] = [
@@ -27,14 +35,14 @@ export const nav: PortalNavItem[] = [
     label: 'Appeals',
     icon: Scale,
     description: 'Resolve participant appeals against review decisions.',
-    requires: { anyOf: [Permissions.AppealsResolve] },
+    requires: appeals,
   },
   {
     to: 'social-verification',
     label: 'Social verification',
     icon: BadgeCheck,
     description: 'Verify that connected social accounts are established and genuine.',
-    requires: { anyOf: [Permissions.SocialAccountsVerify] },
+    requires: socialVerification,
   },
 ];
 
@@ -50,6 +58,7 @@ export const routes: RouteObject[] = [
   { path: 'live-checks', element: <LiveChecksPage /> },
   {
     path: 'appeals',
+    handle: { requires: appeals },
     children: [
       { index: true, element: <AppealsPage /> },
       { path: ':appealId', element: <AppealDetailPage /> },
@@ -57,11 +66,10 @@ export const routes: RouteObject[] = [
   },
   {
     path: 'social-verification',
+    handle: { requires: socialVerification },
     children: [
       { index: true, element: <SocialVerificationPage /> },
       { path: ':accountId', element: <SocialAccountPage /> },
     ],
   },
-  // The review stats now live on the overview page.
-  { path: 'stats', element: <Navigate to="/review" replace /> },
 ];

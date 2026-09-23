@@ -198,7 +198,7 @@ public sealed class AdminUsersService(
         await notifications.StageAsync(new NotificationRequest(user.Id, NotificationTypes.AccountStatusChanged,
             "Your Optimize All account is active again",
             "Your account has been reactivated. You can sign in and continue taking part in campaigns.",
-            "/app", new[] { NotificationChannel.Email }), ct);
+            AppLinks.ParticipantHome, new[] { NotificationChannel.Email }), ct);
         await db.SaveChangesAsync(ct);
         return await GetAsync(id, ct);
     }

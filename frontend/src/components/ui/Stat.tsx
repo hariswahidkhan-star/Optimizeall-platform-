@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { ArrowDownRight, ArrowRight, ArrowUpRight } from 'lucide-react';
-import type { ReactNode } from 'react';
+import { useId, type ReactNode } from 'react';
 import { browserLocale } from '@/lib/format/locale';
 import { Skeleton } from './Skeleton';
 import './display.css';
@@ -38,8 +38,12 @@ export function MeasurementTag({ measurement }: { measurement: Measurement }) {
   );
 }
 
-/** KPI tile. */
+/**
+ * KPI tile. Rendered as a `group` named by its label, so assistive tech (and tests) find e.g. the "Pending" tile and
+ * read its value in context.
+ */
 export function Stat({ label, value, measurement, delta, icon, hint, loading, className }: StatProps) {
+  const labelId = useId();
   const direction = !delta ? 'flat' : delta.value > 0 ? 'up' : delta.value < 0 ? 'down' : 'flat';
   const good = delta?.positiveIsGood ?? true;
   const deltaTone = direction === 'flat' ? 'flat' : (direction === 'up') === good ? 'up' : 'down';
@@ -54,9 +58,16 @@ export function Stat({ label, value, measurement, delta, icon, hint, loading, cl
       : '');
 
   return (
-    <div className={clsx('ui-stat', className)} aria-busy={loading || undefined}>
+    <div
+      role="group"
+      aria-labelledby={labelId}
+      className={clsx('ui-stat', className)}
+      aria-busy={loading || undefined}
+    >
       <div className="ui-stat__top">
-        <span className="ui-stat__label">{label}</span>
+        <span id={labelId} className="ui-stat__label">
+          {label}
+        </span>
         {icon && (
           <span className="ui-stat__icon" aria-hidden="true">
             {icon}

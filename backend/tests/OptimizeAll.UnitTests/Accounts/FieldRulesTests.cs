@@ -84,6 +84,33 @@ public sealed class FieldRulesTests
     [InlineData("", false)]
     public void Content_urls(string url, bool valid) => Assert.Equal(valid, FieldRules.IsSafeContentUrl(url));
 
+    [Theory]
+    [InlineData("/api/v1/files/0f8fad5b-d9cb-469f-a165-70867728950e", true)]
+    [InlineData("https://images.example.com/hero.png", true)]
+    [InlineData("https://IMAGES.example.com/a/b.jpg?x=1", true)]
+    [InlineData("https://placehold.co/1200x630/png", false)]               // not in the allowlist
+    [InlineData("https://images.example.com.evil.test/a.png", false)]
+    [InlineData("https://evil.test/@images.example.com", false)]
+    [InlineData("https://user@images.example.com/a.png", false)]           // userinfo
+    [InlineData("https://images.example.com:8443/a.png", false)]           // non-default port (CSP host-source)
+    [InlineData("http://images.example.com/a.png", false)]
+    [InlineData("//images.example.com/a.png", false)]
+    [InlineData("/api/v1/files/not-a-guid", false)]
+    [InlineData("/api/v1/files/0f8fad5b-d9cb-469f-a165-70867728950e/../x", false)]
+    [InlineData("/app/logo.png", false)]
+    [InlineData("data:image/png;base64,AAAA", false)]
+    [InlineData("javascript:alert(1)", false)]
+    [InlineData("", false)]
+    public void Image_urls_are_uploads_or_allowlisted_https_hosts(string url, bool valid) =>
+        Assert.Equal(valid, FieldRules.IsAllowedImageUrl(url, new[] { "images.example.com", " cdn.example.org " }));
+
+    [Fact]
+    public void Image_urls_default_to_uploads_only()
+    {
+        Assert.True(FieldRules.IsAllowedImageUrl("/api/v1/files/0f8fad5b-d9cb-469f-a165-70867728950e", Array.Empty<string>()));
+        Assert.False(FieldRules.IsAllowedImageUrl("https://images.example.com/hero.png", Array.Empty<string>()));
+    }
+
     [Fact]
     public void Interests_are_normalized_and_limited()
     {

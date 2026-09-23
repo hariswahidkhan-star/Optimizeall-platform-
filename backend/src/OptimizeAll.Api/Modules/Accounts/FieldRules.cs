@@ -132,6 +132,25 @@ public static partial class FieldRules
         return Uri.TryCreate(v, UriKind.Absolute, out var uri) && uri.Scheme == Uri.UriSchemeHttps && !string.IsNullOrEmpty(uri.Host);
     }
 
+    /// <summary>Path prefix of files served by the Files module (<c>GET /api/v1/files/{id}</c>).</summary>
+    public const string UploadedFilePrefix = "/api/v1/files/";
+
+    /// <summary>
+    /// Image URL rule (hero, asset and banner images), matching the web app's CSP <c>img-src</c>: an uploaded file
+    /// (<c>/api/v1/files/{guid}</c>) or an absolute https URL on the default port whose host is in
+    /// <paramref name="allowedHosts"/> (exact, case-insensitive; configured as <c>Content:AllowedImageHosts</c>).
+    /// </summary>
+    public static bool IsAllowedImageUrl(string? value, IReadOnlyCollection<string> allowedHosts)
+    {
+        if (string.IsNullOrWhiteSpace(value)) return false;
+        var v = value.Trim();
+        if (v.StartsWith(UploadedFilePrefix, StringComparison.Ordinal))
+            return Guid.TryParseExact(v[UploadedFilePrefix.Length..], "D", out _);
+        return Uri.TryCreate(v, UriKind.Absolute, out var uri) && uri.Scheme == Uri.UriSchemeHttps &&
+               string.IsNullOrEmpty(uri.UserInfo) && uri.IsDefaultPort && !string.IsNullOrEmpty(uri.Host) &&
+               allowedHosts.Any(h => string.Equals(h.Trim(), uri.IdnHost, StringComparison.OrdinalIgnoreCase));
+    }
+
     public static DomainException FieldError(string code, string field, string message) =>
         new(code, message, DomainErrorKind.Validation, new Dictionary<string, string[]> { [field] = new[] { message } });
 

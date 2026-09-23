@@ -37,7 +37,7 @@ public sealed class LiveCheckReminderJob(AppDbContext db, INotificationService n
             await notifications.StageAsync(new NotificationRequest(reviewer, NotificationTypes.ReviewLiveCheckDue,
                 "Live checks due",
                 $"{due} approved post{(due == 1 ? " is" : "s are")} due for a check that {(due == 1 ? "it is" : "they are")} still live.",
-                "/review/live-checks"), ct);
+                AppLinks.ReviewLiveChecks), ct);
             staged++;
         }
         await db.SaveChangesAsync(ct);

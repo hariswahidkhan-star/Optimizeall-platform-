@@ -62,6 +62,7 @@ export function makeCampaign(overrides: Partial<AdminCampaign> = {}): AdminCampa
     id: 'c1',
     slug: 'spring-drop',
     title: 'Spring drop',
+    publicLandingPath: '/c/spring-drop',
     summary: 'Share our spring collection',
     description: '',
     category: null,

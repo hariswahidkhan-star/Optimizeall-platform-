@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Http;
+using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Api.Modules.Accounts;
 using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Content;
@@ -9,7 +10,7 @@ using OptimizeAll.Infrastructure.Persistence;
 namespace OptimizeAll.Api.Modules.Content;
 
 /// <summary>Admin CMS for homepage banners, announcements, FAQ and onboarding steps. Every change is audited.</summary>
-public sealed class ContentService(AppDbContext db, IAuditLogger audit)
+public sealed class ContentService(AppDbContext db, IAuditLogger audit, ImageUrlPolicy images)
 {
     // ---------- Banners ----------
 
@@ -55,13 +56,13 @@ public sealed class ContentService(AppDbContext db, IAuditLogger audit)
     public Task<ReorderResponse> ReorderBannersAsync(ReorderRequest request, CancellationToken ct) =>
         ReorderAsync<HomepageBanner>(request, "content.banners_reordered", (b, order) => b.SortOrder = order, ct);
 
-    private static void Apply(HomepageBanner b, BannerRequest r)
+    private void Apply(HomepageBanner b, BannerRequest r)
     {
         var errors = new Dictionary<string, string[]>();
         var imageUrl = Clean(r.ImageUrl);
         var ctaUrl = Clean(r.CtaUrl);
         var ctaLabel = Clean(r.CtaLabel);
-        if (imageUrl is not null && !FieldRules.IsSafeContentUrl(imageUrl)) errors["imageUrl"] = new[] { UrlMessage };
+        if (imageUrl is not null && !images.IsAllowed(imageUrl)) errors["imageUrl"] = new[] { ImageUrlPolicy.Message };
         if (ctaUrl is not null && !FieldRules.IsSafeContentUrl(ctaUrl)) errors["ctaUrl"] = new[] { UrlMessage };
         if (ctaUrl is not null && ctaLabel is null) errors["ctaLabel"] = new[] { "Add a button label for the link." };
         if (ctaLabel is not null && ctaUrl is null) errors["ctaUrl"] = new[] { "Add the link the button opens." };

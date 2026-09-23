@@ -4,8 +4,9 @@ import * as managerPortal from '@/features/campaigns/routes';
 import * as financePortal from '@/features/finance/routes';
 import * as participantPortal from '@/features/participant/routes';
 import * as reviewerPortal from '@/features/reviewer/routes';
-import { meetsRequirement, Permissions } from '@/lib/auth/permissions';
-import type { PortalDefinition, PortalId } from './portalTypes';
+import { matchRoutes } from 'react-router-dom';
+import { meetsRequirement, type PermissionRequirement, Permissions } from '@/lib/auth/permissions';
+import type { PortalDefinition, PortalId, PortalRouteHandle } from './portalTypes';
 
 /**
  * Portal registry, in landing priority order (admin, finance, manage, review, participant). Each portal's nav and
@@ -18,16 +19,12 @@ export const portals: PortalDefinition[] = [
     description: 'People, platform settings, content, support and audit.',
     basePath: '/admin',
     icon: ShieldHalf,
-    requires: {
-      anyOf: [
-        Permissions.UsersView,
-        Permissions.SettingsManage,
-        Permissions.ContentManage,
-        Permissions.AuditView,
-      ],
-    },
+    // Every permission that opens one of its sections (users, settings, content, categories, support, audit, jobs,
+    // analytics), so e.g. support staff reach Support tickets.
+    requires: adminPortal.portalRequires,
     landingRequires: { anyOf: [Permissions.SettingsManage, Permissions.ContentManage] },
-    ...adminPortal,
+    nav: adminPortal.nav,
+    routes: adminPortal.routes,
   },
   {
     id: 'finance',
@@ -35,9 +32,11 @@ export const portals: PortalDefinition[] = [
     description: 'Ledger, approvals and biweekly payouts.',
     basePath: '/finance',
     icon: Landmark,
-    requires: { anyOf: [Permissions.PayoutsView, Permissions.LedgerView] },
+    // Includes rewards.approve_bonus (Pending approvals) and payouts.hold (Holds); landing stays finance staff only.
+    requires: financePortal.portalRequires,
     landingRequires: { anyOf: [Permissions.PayoutsView, Permissions.LedgerView] },
-    ...financePortal,
+    nav: financePortal.nav,
+    routes: financePortal.routes,
   },
   {
     id: 'manager',
@@ -45,9 +44,10 @@ export const portals: PortalDefinition[] = [
     description: 'Campaigns, content, invitations and growth.',
     basePath: '/manage',
     icon: Megaphone,
-    requires: { anyOf: [Permissions.CampaignsManage] },
+    requires: managerPortal.portalRequires,
     landingRequires: { anyOf: [Permissions.CampaignsManage] },
-    ...managerPortal,
+    nav: managerPortal.nav,
+    routes: managerPortal.routes,
   },
   {
     id: 'reviewer',
@@ -55,9 +55,10 @@ export const portals: PortalDefinition[] = [
     description: 'Review submissions, appeals and social accounts.',
     basePath: '/review',
     icon: BadgeCheck,
-    requires: { anyOf: [Permissions.SubmissionsReview] },
+    requires: reviewerPortal.portalRequires,
     landingRequires: { anyOf: [Permissions.SubmissionsReview] },
-    ...reviewerPortal,
+    nav: reviewerPortal.nav,
+    routes: reviewerPortal.routes,
   },
   {
     id: 'participant',
@@ -65,10 +66,11 @@ export const portals: PortalDefinition[] = [
     description: 'Share campaigns, submit proof and get paid.',
     basePath: '/app',
     icon: Sparkles,
-    requires: { anyOf: [Permissions.ParticipantPortal] },
+    requires: participantPortal.portalRequires,
     landingRequires: { anyOf: [Permissions.ParticipantPortal] },
     bottomNav: true,
-    ...participantPortal,
+    nav: participantPortal.nav,
+    routes: participantPortal.routes,
   },
 ];
 
@@ -87,14 +89,21 @@ export function portalForPath(pathname: string): PortalDefinition | undefined {
   return portals.find((p) => pathname === p.basePath || pathname.startsWith(`${p.basePath}/`));
 }
 
+/** The `handle.requires` of every route matching `path` inside a portal (parents first). */
+export function routeRequirements(portal: PortalDefinition, pathname: string): PermissionRequirement[] {
+  const rest = pathname.slice(portal.basePath.length) || '/';
+  return (matchRoutes(portal.routes, rest) ?? [])
+    .map((m) => (m.route.handle as PortalRouteHandle | undefined)?.requires)
+    .filter((r): r is PermissionRequirement => !!r);
+}
+
 /** True when the user may open `path` (public paths are always allowed). */
 export function canOpenPath(permissions: readonly string[], path: string): boolean {
-  const portal = portalForPath(path.split(/[?#]/)[0] ?? path);
+  const pathname = path.split(/[?#]/)[0] ?? path;
+  const portal = portalForPath(pathname);
   if (!portal) return true;
   if (!meetsRequirement(permissions, portal.requires)) return false;
-  const rest = path.slice(portal.basePath.length).replace(/^\//, '').split(/[/?#]/)[0] ?? '';
-  const item = portal.nav.find((n) => n.to === rest);
-  return !item?.requires || meetsRequirement(permissions, item.requires);
+  return routeRequirements(portal, pathname).every((r) => meetsRequirement(permissions, r));
 }
 
 /**

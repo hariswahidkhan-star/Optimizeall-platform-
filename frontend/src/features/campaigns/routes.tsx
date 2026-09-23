@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import type { RouteObject } from 'react-router-dom';
 import type { PortalNavItem } from '@/app/portalTypes';
-import { Permissions } from '@/lib/auth/permissions';
+import { type PermissionRequirement, Permissions } from '@/lib/auth/permissions';
 import { AchievementsPage } from './achievements/AchievementsPage';
 import { AnalyticsPage, CampaignAnalyticsPage } from './analytics/AnalyticsPage';
 import { CalendarPage } from './calendar/CalendarPage';
@@ -24,7 +24,14 @@ import { OverviewPage } from './overview/OverviewPage';
 import { ReferralsPage } from './referrals/ReferralsPage';
 import { TemplatesPage } from './templates/TemplatesPage';
 
-const marketing = { anyOf: [Permissions.MarketingManage] };
+/** Portal entry (the campaign pages call campaigns.manage APIs). */
+export const portalRequires: PermissionRequirement = { anyOf: [Permissions.CampaignsManage] };
+
+/** Growth sections call marketing.manage APIs; within the portal that means campaigns.manage and marketing.manage. */
+const marketing: PermissionRequirement = {
+  allOf: [Permissions.CampaignsManage, Permissions.MarketingManage],
+};
+const analytics: PermissionRequirement = { allOf: [Permissions.CampaignsManage, Permissions.AnalyticsView] };
 
 /** Campaign manager portal (/manage). Paths are relative to the portal base. */
 export const nav: PortalNavItem[] = [
@@ -75,7 +82,7 @@ export const nav: PortalNavItem[] = [
     label: 'Analytics',
     icon: BarChart3,
     description: 'Reach, participation and cost per approved post.',
-    requires: { anyOf: [Permissions.AnalyticsView] },
+    requires: analytics,
   },
   {
     to: 'achievements',
@@ -96,23 +103,25 @@ export const routes: RouteObject[] = [
       { path: ':campaignId', element: <CampaignEditorPage /> },
     ],
   },
-  { path: 'templates', element: <TemplatesPage /> },
-  { path: 'calendar', element: <CalendarPage /> },
-  { path: 'invitations', element: <InvitationsPage /> },
+  { path: 'templates', handle: { requires: marketing }, element: <TemplatesPage /> },
+  { path: 'calendar', handle: { requires: marketing }, element: <CalendarPage /> },
+  { path: 'invitations', handle: { requires: marketing }, element: <InvitationsPage /> },
   {
     path: 'experiments',
+    handle: { requires: marketing },
     children: [
       { index: true, element: <ExperimentsPage /> },
       { path: ':experimentId', element: <ExperimentResultsPage /> },
     ],
   },
-  { path: 'referrals', element: <ReferralsPage /> },
+  { path: 'referrals', handle: { requires: marketing }, element: <ReferralsPage /> },
   {
     path: 'analytics',
+    handle: { requires: analytics },
     children: [
       { index: true, element: <AnalyticsPage /> },
       { path: 'campaigns/:campaignId', element: <CampaignAnalyticsPage /> },
     ],
   },
-  { path: 'achievements', element: <AchievementsPage /> },
+  { path: 'achievements', handle: { requires: marketing }, element: <AchievementsPage /> },
 ];

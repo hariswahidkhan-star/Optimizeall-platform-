@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using OptimizeAll.Api.Modules.Content;
 using OptimizeAll.Domain.Audit;
 using OptimizeAll.Domain.Content;
@@ -29,13 +30,39 @@ public sealed class ContentTests(ApiFactory api) : IClassFixture<ApiFactory>
     }
 
     [Fact]
+    public async Task Banner_images_must_be_uploads_or_on_an_allowed_image_host()
+    {
+        var (_, admin) = await api.AdminAsync();
+        object Banner(string imageUrl) => new { title = "Image policy", audience = "Everyone", sortOrder = 90, imageUrl };
+
+        // Default: no external image hosts (the web app's CSP img-src only allows 'self').
+        var rejected = await admin.PostAsJsonAsync("/api/v1/admin/content/banners", Banner("https://placehold.co/1200x400/png"));
+        Assert.Equal(400, (int)rejected.StatusCode);
+        Assert.True((await rejected.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("errors").TryGetProperty("imageUrl", out _));
+        Assert.Equal(201, (int)(await admin.PostAsJsonAsync("/api/v1/admin/content/banners", Banner($"/api/v1/files/{Guid.NewGuid()}"))).StatusCode);
+
+        // Hosts in Content:AllowedImageHosts are accepted (read at request time).
+        var config = api.Services.GetRequiredService<Microsoft.Extensions.Configuration.IConfiguration>();
+        config["Content:AllowedImageHosts:0"] = "images.example.com";
+        try
+        {
+            Assert.Equal(201, (int)(await admin.PostAsJsonAsync("/api/v1/admin/content/banners", Banner("https://images.example.com/a.png"))).StatusCode);
+            Assert.Equal(400, (int)(await admin.PostAsJsonAsync("/api/v1/admin/content/banners", Banner("https://other.example.com/a.png"))).StatusCode);
+        }
+        finally
+        {
+            config["Content:AllowedImageHosts:0"] = null;
+        }
+    }
+
+    [Fact]
     public async Task Admin_manages_banners_with_concurrency_reorder_and_audit()
     {
         var (_, admin) = await api.AdminAsync();
         var created = await admin.PostAsJsonAsync("/api/v1/admin/content/banners", new
         {
             title = "Summer bonus", body = "Earn double", ctaLabel = "See campaigns", ctaUrl = "/app/campaigns",
-            imageUrl = "https://cdn.example.com/b.png", audience = "Eligible", countryCode = "pk", languageCode = "EN", sortOrder = 30,
+            imageUrl = $"/api/v1/files/{Guid.NewGuid()}", audience = "Eligible", countryCode = "pk", languageCode = "EN", sortOrder = 30,
         });
         Assert.Equal(201, (int)created.StatusCode);
         var banner = await created.ReadJsonAsync();

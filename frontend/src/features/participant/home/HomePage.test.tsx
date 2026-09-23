@@ -95,4 +95,55 @@ describe('HomePage states', () => {
     expect(screen.getByRole('button', { name: 'Mark as done' })).toBeInTheDocument();
     expect(await axeViolations(container)).toEqual([]);
   });
+
+  it('banner CTAs: internal paths use the router, external https opens a new tab, unsafe URLs are not links', async () => {
+    renderHome(
+      makeHome({
+        state: 'Active',
+        banners: [
+          {
+            id: 'b1',
+            title: 'Internal',
+            body: null,
+            imageUrl: null,
+            ctaLabel: 'See campaigns',
+            ctaUrl: '/app/campaigns',
+          },
+          {
+            id: 'b2',
+            title: 'External',
+            body: null,
+            imageUrl: null,
+            ctaLabel: 'Read more',
+            ctaUrl: 'https://brand.example/x',
+          },
+          {
+            id: 'b3',
+            title: 'Evil',
+            body: null,
+            imageUrl: null,
+            ctaLabel: 'Click me',
+            ctaUrl: 'javascript:alert(1)',
+          },
+          {
+            id: 'b4',
+            title: 'Sneaky',
+            body: null,
+            imageUrl: null,
+            ctaLabel: 'Also me',
+            ctaUrl: '/\\evil.example',
+          },
+        ],
+      }),
+    );
+    expect(await screen.findByRole('link', { name: 'See campaigns' })).toHaveAttribute(
+      'href',
+      '/app/campaigns',
+    );
+    const external = screen.getByRole('link', { name: 'Read more' });
+    expect(external).toHaveAttribute('target', '_blank');
+    expect(external).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(screen.queryByRole('link', { name: 'Click me' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Also me' })).not.toBeInTheDocument();
+  });
 });

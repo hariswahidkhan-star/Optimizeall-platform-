@@ -324,9 +324,10 @@ public sealed class SubmissionTests(ApiFactory api) : IClassFixture<ApiFactory>
     }
 
     [Fact]
-    public async Task Screenshots_are_private_to_owner_and_reviewers()
+    public async Task Screenshots_are_private_to_owner_reviewers_and_the_campaign_creator()
     {
-        var campaign = await CampaignAsync();
+        var (_, creator) = await kit.ManagerAsync();
+        var campaign = await kit.CreateCampaignAsync(creator, kit.CampaignBody());
         var p = await kit.ParticipantAsync();
         var detail = await (await kit.SubmitAsync(p, campaign.Id)).ReadJsonAsync();
         var url = detail.GetProperty("screenshotUrl").GetString()!;
@@ -345,8 +346,15 @@ public sealed class SubmissionTests(ApiFactory api) : IClassFixture<ApiFactory>
         Assert.Equal(HttpStatusCode.NotFound, (await api.CreateClient().GetAsync(url)).StatusCode);
         var (_, reviewer) = await kit.ReviewerAsync();
         Assert.Equal(HttpStatusCode.OK, (await reviewer.GetAsync(url)).StatusCode);
-        var (_, manager) = await kit.ManagerAsync();
-        Assert.Equal(HttpStatusCode.OK, (await manager.GetAsync(url)).StatusCode);
+        // Campaign managers only see screenshots of submissions to campaigns they created (data minimization)…
+        Assert.Equal(HttpStatusCode.OK, (await creator.GetAsync(url)).StatusCode);
+        var (_, otherManager) = await kit.ManagerAsync();
+        Assert.Equal(HttpStatusCode.NotFound, (await otherManager.GetAsync(url)).StatusCode);
+        // …unless they also review submissions.
+        var (_, managerReviewer) = await api.CreateClientAsync(Role.CampaignManager, Role.Reviewer);
+        Assert.Equal(HttpStatusCode.OK, (await managerReviewer.GetAsync(url)).StatusCode);
+        var (_, finance) = await api.CreateClientAsync(Role.Finance);
+        Assert.Equal(HttpStatusCode.NotFound, (await finance.GetAsync(url)).StatusCode);
         Assert.Equal(HttpStatusCode.NotFound, (await p.Client.GetAsync($"/api/v1/files/{Guid.NewGuid()}")).StatusCode);
     }
 

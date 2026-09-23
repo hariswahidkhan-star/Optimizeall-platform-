@@ -7,6 +7,7 @@ import type { AuthResponse, MessageResponse, RegisterRequest, SessionUser } from
 import { AuthContext, type AuthContextValue, type AuthStatus } from './authContext';
 import { getDeviceId } from './deviceId';
 import { hasAnyPermission as hasAny, hasPermission as has } from './permissions';
+import { loginPathAfterExpiry } from './sessionPaths';
 
 /** Refresh this long before the access token expires. */
 const REFRESH_LEAD_MS = 60_000;
@@ -19,6 +20,8 @@ interface SessionState {
   status: AuthStatus;
   user: SessionUser | null;
   expiresAt: string | null;
+  /** Set by a forced sign-out; cleared on sign-in and once /login is shown. */
+  expired?: boolean;
 }
 
 /**
@@ -68,16 +71,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           return;
         }
         const wasSignedIn = statusRef.current === 'authenticated';
-        setState({ status: 'anonymous', user: null, expiresAt: null });
+        // The flag reaches RequireAuth in the same render as the anonymous status, so its own redirect to /login
+        // (which would otherwise supersede the navigation below) also carries expired=1.
+        setState({ status: 'anonymous', user: null, expiresAt: null, expired: wasSignedIn });
         queryClient.clear();
         if (wasSignedIn) {
           const { pathname, search } = locationRef.current;
-          const next = encodeURIComponent(pathname + search);
-          navigate(`/login?expired=1&next=${next}`, { replace: true });
+          navigate(loginPathAfterExpiry(pathname + search), { replace: true });
         }
       }),
     [navigate, queryClient],
   );
+
+  // The expiry notice is transient: once the sign-in page is shown, later redirects are ordinary ones.
+  useEffect(() => {
+    if (state.expired && location.pathname === '/login') setState((prev) => ({ ...prev, expired: false }));
+  }, [state.expired, location.pathname]);
 
   // Proactive refresh shortly before the access token expires.
   useEffect(() => {
@@ -140,6 +149,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user: state.user,
       permissions,
       expiresAt: state.expiresAt,
+      sessionExpired: !!state.expired,
       hasPermission: (permission) => has(permissions, permission),
       hasAnyPermission: (required) => hasAny(permissions, required),
       login,

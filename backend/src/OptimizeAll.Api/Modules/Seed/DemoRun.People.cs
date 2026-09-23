@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
+using OptimizeAll.Api.Common.Notifications;
 using OptimizeAll.Api.Modules.Accounts;
 using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Identity;
@@ -495,6 +496,6 @@ internal sealed partial class DemoRun
             after: new { referral.QualifyingAction, referral.EarningEntryId, referral.RejectionReason });
         await NotifyAsync(referral.ReferrerUserId, NotificationTypes.ReferralQualified, "Your referral qualified",
             $"Someone you invited completed their qualifying step. A referral reward of {program.ReferrerRewardAmount:0.00} {program.Currency} is pending approval.",
-            "/referrals");
+            AppLinks.Referrals);
     }
 }

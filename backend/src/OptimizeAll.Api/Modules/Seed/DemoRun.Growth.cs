@@ -1,9 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using OptimizeAll.Api.Common.Notifications;
+using OptimizeAll.Api.Modules.Files;
 using OptimizeAll.Api.Modules.Marketing.Achievements;
 using OptimizeAll.Api.Modules.Marketing.Tracking;
 using OptimizeAll.Domain.Campaigns;
 using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Content;
+using OptimizeAll.Domain.Files;
 using OptimizeAll.Domain.Identity;
 using OptimizeAll.Domain.Marketing;
 using OptimizeAll.Domain.Notifications;
@@ -266,26 +269,27 @@ internal sealed partial class DemoRun
         var banners = new (string Title, string Body, string? Cta, string? CtaUrl, ContentAudience Audience, string? Country, string? Lang, int? StartDays, int? EndDays, bool Active, int Sort)[]
         {
             ("Finish setting up your account", "Verify your email and add a social profile that's at least 90 days old to start earning.",
-                "Continue setup", "/onboarding", ContentAudience.Onboarding, null, null, null, null, true, 5),
+                "Continue setup", AppLinks.ParticipantHome, ContentAudience.Onboarding, null, null, null, null, true, 5),
             ("Nimbus Fitness launch is live", "Share your first workout and earn up to 8.50 USD per approved post.",
-                "View campaign", "/campaigns/nimbus-fitness-app-launch", ContentAudience.Eligible, null, null, -20, 20, true, 10),
+                "View campaign", AppLinks.Campaign("nimbus-fitness-app-launch"), ContentAudience.Eligible, null, null, -20, 20, true, 10),
             ("Invite-only campaigns for top creators", "Gold and Platinum creators can now join premium review campaigns like Aurora Pro.",
-                "See campaigns", "/campaigns", ContentAudience.ActiveEarners, null, null, -10, 30, true, 20),
+                "See campaigns", AppLinks.Campaigns, ContentAudience.ActiveEarners, null, null, -10, 30, true, 20),
             ("حملات جديدة في الإمارات", "حملة Desert Bloom متاحة الآن للمشاركين في الإمارات والسعودية.",
-                "عرض الحملة", "/campaigns/desert-bloom-autumn-glow", ContentAudience.Everyone, "AE", "ar", -25, 25, true, 15),
+                "عرض الحملة", AppLinks.Campaign("desert-bloom-autumn-glow"), ContentAudience.Everyone, "AE", "ar", -25, 25, true, 15),
             ("We miss you — new campaigns match your interests", "Three new campaigns launched since your last visit.",
-                "Browse campaigns", "/campaigns", ContentAudience.Inactive, null, null, null, null, true, 30),
+                "Browse campaigns", AppLinks.Campaigns, ContentAudience.Inactive, null, null, null, null, true, 30),
             ("Summer creator meetup", "Thanks to everyone who joined us in Dubai!", null, null, ContentAudience.Everyone, null, null, -90, -60, false, 40),
         };
         _clock.Now = _now.AddDays(-26);
         _audit.As(Admin.Id, Role.Admin);
         foreach (var b in banners)
         {
+            var image = await StorePublicImageAsync(Admin.Id, FilePurpose.ContentImage, 1200, 400, "banner.png", ct);
             var banner = new HomepageBanner
             {
                 Title = b.Title, Body = b.Body, CtaLabel = b.Cta, CtaUrl = b.CtaUrl, Audience = b.Audience, CountryCode = b.Country, LanguageCode = b.Lang,
                 StartsAt = b.StartDays is { } s ? Day(s, 0) : null, EndsAt = b.EndDays is { } e ? Day(e, 0) : null, IsActive = b.Active, SortOrder = b.Sort,
-                ImageUrl = "https://placehold.co/1200x400/png?text=" + Uri.EscapeDataString(b.Title[..Math.Min(20, b.Title.Length)]),
+                ImageUrl = FileUrls.For(image.Id),
                 CreatedAt = _clock.Now,
             };
             _db.Set<HomepageBanner>().Add(banner);
@@ -424,7 +428,7 @@ internal sealed partial class DemoRun
                 _db.Set<Notification>().Add(new Notification
                 {
                     UserId = person.Id, Type = NotificationTypes.Achievement, Title = $"Achievement unlocked: {achievement.Name}",
-                    Body = achievement.Description, LinkUrl = "/achievements", CreatedAt = awardedAt,
+                    Body = achievement.Description, LinkUrl = AppLinks.Achievements, CreatedAt = awardedAt,
                 });
                 Count("achievements awarded");
             }
@@ -440,7 +444,7 @@ internal sealed partial class DemoRun
         {
             UserId = sara.Id, Type = NotificationTypes.CampaignAlert, Title = "New campaign for you: Aurora Pro creators circle",
             Body = "You've been invited to review the Aurora Pro headphones. Premium reward for Gold creators.",
-            LinkUrl = "/campaigns/aurora-pro-creators-circle", CreatedAt = _now.AddDays(-19),
+            LinkUrl = AppLinks.Campaign("aurora-pro-creators-circle"), CreatedAt = _now.AddDays(-19),
         });
         await SaveAsync(ct);
 

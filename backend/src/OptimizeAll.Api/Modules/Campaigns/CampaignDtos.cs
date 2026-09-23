@@ -240,7 +240,11 @@ public sealed record AdminCampaignDto(
     string? LandingHeadline, string? LandingBody, string? HeroImageUrl, string? TrackingDestinationUrl, string? UtmCampaign,
     IReadOnlyList<CampaignAssetDto> Assets, IReadOnlyList<DisclosureDto> Disclosures, RewardRuleSetDto? CurrentRuleSet,
     SubmissionCountsDto Submissions, Guid CreatedByUserId, DateTime CreatedAt, DateTime UpdatedAt, DateTime? PublishedAt,
-    Guid ConcurrencyStamp);
+    Guid ConcurrencyStamp)
+{
+    /// <summary>App-relative public landing page (<c>/c/{slug}</c>); only reachable while the campaign is Public and Scheduled/Active.</summary>
+    public string PublicLandingPath => OptimizeAll.Api.Common.Notifications.AppLinks.PublicCampaign(Slug);
+}
 
 public sealed class AssetInput
 {

@@ -99,7 +99,7 @@ public sealed class RetentionJob(
                     userId, NotificationTypes.OnboardingReminder, "Confirm your email to get started",
                     "Welcome to Optimize All! Your email address isn't confirmed yet. Sign in and choose \"Resend verification\" " +
                     "to receive a new confirmation link, then you can join paid campaigns.",
-                    "/login", Channels), ct))
+                    AppLinks.Login, Channels), ct))
                 sent++;
         }
         return sent;
@@ -120,7 +120,7 @@ public sealed class RetentionJob(
             if (await SendAsync(userId, RetentionKinds.AddSocial, "d3", new NotificationRequest(
                     userId, NotificationTypes.OnboardingReminder, "Add the social profile you'll share from",
                     "Add your established social media profile to see which paid campaigns you qualify for.",
-                    "/profile/social-accounts", Channels), ct))
+                    AppLinks.SocialAccounts, Channels), ct))
                 sent++;
         }
         return sent;
@@ -143,7 +143,7 @@ public sealed class RetentionJob(
             if (await SendAsync(user.Id, RetentionKinds.FirstSubmission, "d7", new NotificationRequest(
                     user.Id, NotificationTypes.OnboardingReminder, "Ready for your first paid post?",
                     "Your profile qualifies for campaigns. Pick a campaign, share the approved content and submit your post link to get paid.",
-                    "/campaigns", Channels), ct))
+                    AppLinks.Campaigns, Channels), ct))
                 sent++;
             if (sent >= BatchSize) break;
         }
@@ -189,7 +189,7 @@ public sealed class RetentionJob(
 
                 if (await SendAsync(user.Id, RetentionKinds.CampaignAlert, key, new NotificationRequest(
                         user.Id, NotificationTypes.CampaignAlert, $"New campaign: {campaign.Title}",
-                        $"{campaign.Summary} You're eligible to take part.", $"/campaigns/{campaign.Slug}", Channels), ct))
+                        $"{campaign.Summary} You're eligible to take part.", AppLinks.Campaign(campaign.Slug), Channels), ct))
                     sent++;
                 if (sent >= BatchSize) return sent;
             }
@@ -230,7 +230,7 @@ public sealed class RetentionJob(
                     eligible == 1
                         ? "There is an active campaign you're eligible for. Share approved content and get paid for approved posts."
                         : $"There are {eligible} active campaigns you're eligible for. Share approved content and get paid for approved posts.",
-                    "/campaigns", Channels), ct))
+                    AppLinks.Campaigns, Channels), ct))
                 sent++;
             if (sent >= BatchSize) break;
         }

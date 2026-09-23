@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using OptimizeAll.Api.Common.Notifications;
 using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Domain.Content;
 using OptimizeAll.Infrastructure.Persistence;
@@ -25,22 +26,22 @@ public sealed class ContentBaselineSeeder(TimeProvider clock) : ISeeder
             null, null, OnboardingCompletionRule.EmailVerified),
         ("complete-profile", "Complete your profile",
             "Confirm your country and time zone and pick at least one interest. We use them to show you campaigns you can actually take part in and to display deadlines in your local time.",
-            "Edit profile", "/app/profile", OnboardingCompletionRule.ProfileCompleted),
+            "Edit profile", AppLinks.Profile, OnboardingCompletionRule.ProfileCompleted),
         ("add-social-account", "Add a social media profile",
             "Add the established social profile you'll share from, with its creation date and follower count. One profile can only be registered to one Optimize All account.",
-            "Add a profile", "/app/social-accounts", OnboardingCompletionRule.SocialAccountAdded),
+            "Add a profile", AppLinks.SocialAccounts, OnboardingCompletionRule.SocialAccountAdded),
         ("eligible-account", "Have a profile that qualifies",
             "Campaigns only accept established profiles. A newly created profile isn't eligible until it reaches the minimum account age shown on your Social profiles page; we'll tell you the exact date it qualifies.",
-            "Check eligibility", "/app/social-accounts", OnboardingCompletionRule.EligibleSocialAccount),
+            "Check eligibility", AppLinks.SocialAccounts, OnboardingCompletionRule.EligibleSocialAccount),
         ("payout-details", "Add your payout details",
             "Tell us how you'd like to be paid (bank transfer, PayPal or mobile wallet). Your details are encrypted and only a masked hint is ever shown.",
-            "Add payout details", "/app/profile/payout-details", OnboardingCompletionRule.PayoutProfileAdded),
+            "Add payout details", AppLinks.PayoutDetails, OnboardingCompletionRule.PayoutProfileAdded),
         ("first-submission", "Share your first campaign post",
             "Pick a campaign you're eligible for, share the approved content with the required paid-partnership disclosure, then submit the public link to your post.",
-            "Browse campaigns", "/app/campaigns", OnboardingCompletionRule.FirstSubmission),
+            "Browse campaigns", AppLinks.Campaigns, OnboardingCompletionRule.FirstSubmission),
         ("first-approved", "Get your first post approved",
             "A reviewer checks every submission against the campaign rules. Once your post is approved, the reward is added to your earnings and paid in the next payout.",
-            "Browse campaigns", "/app/campaigns", OnboardingCompletionRule.FirstApprovedSubmission),
+            "Browse campaigns", AppLinks.Campaigns, OnboardingCompletionRule.FirstApprovedSubmission),
     };
 
     internal static readonly (string Category, string Question, string Answer)[] Faqs =

@@ -33,6 +33,7 @@ import {
   TierDialog,
   type UserAction,
 } from './UserActionDialogs';
+import { SafeExternalLink } from '@/components/SafeExternalLink';
 
 const HISTORY_TONE: Record<string, 'danger' | 'success' | 'info'> = {
   'admin.user_suspended': 'danger',
@@ -274,9 +275,9 @@ export function UserDetailPage() {
                 primary: true,
                 cell: (a) => (
                   <div className="admin-cell-stack">
-                    <a className="ui-link" href={a.profileUrl} target="_blank" rel="noopener noreferrer">
+                    <SafeExternalLink className="ui-link" href={a.profileUrl} nofollow>
                       {a.handle}
-                    </a>
+                    </SafeExternalLink>
                     <span className="text-small text-muted">{a.platform}</span>
                   </div>
                 ),

@@ -34,6 +34,8 @@ import { QueryState } from '../components/QueryState';
 import { earningTypeLabel } from '../lib/labels';
 import { SubmitProofDialog } from './SubmitProofDialog';
 import '../participant.css';
+import { SafeExternalLink } from '@/components/SafeExternalLink';
+import { isSafeHref } from '@/lib/safeHref';
 
 /** Applies the participant's sticky experiment variants on top of the campaign content. */
 export function applyVariants(campaign: CampaignDetail, variants: ExperimentVariant[]) {
@@ -76,7 +78,7 @@ function AssetCard({ asset }: { asset: CampaignAsset }) {
           {asset.platform && <PlatformTag platform={asset.platform} />}
         </span>
       </div>
-      {asset.type === 'Image' && asset.url && (
+      {asset.type === 'Image' && isSafeHref(asset.url) && (
         <img src={asset.url} alt={asset.title} className="pp-asset__image" loading="lazy" />
       )}
       {asset.type === 'Caption' && asset.body && (
@@ -88,13 +90,13 @@ function AssetCard({ asset }: { asset: CampaignAsset }) {
         </>
       )}
       {asset.type !== 'Caption' && asset.body && <p className="pp-caption">{asset.body}</p>}
-      {asset.url && (
+      {isSafeHref(asset.url) && (
         <div className="pp-actions">
-          <a className="ui-link pp-link-icon" href={asset.url} target="_blank" rel="noopener noreferrer">
+          <SafeExternalLink className="ui-link pp-link-icon" href={asset.url}>
             {asset.type === 'Image' ? 'Open full size' : 'Open'}
             <ExternalLink aria-hidden="true" className="pp-inline-icon" />
             <span className="visually-hidden"> (opens in a new tab)</span>
-          </a>
+          </SafeExternalLink>
         </div>
       )}
     </li>

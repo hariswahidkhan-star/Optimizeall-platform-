@@ -8,7 +8,9 @@
 #   docker run -p 8080:8080 -e API_UPSTREAM=http://api:8080 optimizeall-web
 #
 # Runtime env:
-#   API_UPSTREAM   base URL of the API (scheme://host:port, no path). Default http://api:8080.
+#   API_UPSTREAM    base URL of the API (scheme://host:port, no path). Default http://api:8080.
+#   IMG_SRC_EXTRA   extra CSP img-src sources, space separated (e.g. "https://images.example.com"). Default empty.
+#                   Must match the API's Content:AllowedImageHosts.
 
 ARG NODE_VERSION=22
 ARG NGINX_VERSION=1.27
@@ -32,6 +34,8 @@ FROM nginxinc/nginx-unprivileged:${NGINX_VERSION}-alpine AS runtime
 # The official image renders /etc/nginx/templates/*.template with envsubst into /etc/nginx/conf.d at startup.
 # Only variables that are defined in the environment are substituted, so nginx's own $vars are untouched.
 ENV API_UPSTREAM=http://api:8080
+# Defined (empty) so envsubst always renders it; see nginx/snippets/security-headers.conf.
+ENV IMG_SRC_EXTRA=""
 
 COPY nginx/default.conf.template /etc/nginx/templates/default.conf.template
 COPY nginx/snippets/ /etc/nginx/snippets/

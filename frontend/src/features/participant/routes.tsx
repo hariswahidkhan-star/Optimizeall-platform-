@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { Navigate, type RouteObject } from 'react-router-dom';
 import type { PortalNavItem } from '@/app/portalTypes';
+import { type PermissionRequirement, Permissions } from '@/lib/auth/permissions';
 import { AchievementsPage } from './achievements/AchievementsPage';
 import { CampaignDetailPage } from './campaigns/CampaignDetailPage';
 import { CampaignsPage } from './campaigns/CampaignsPage';
@@ -30,6 +31,9 @@ import { SocialAccountsPage } from './social/SocialAccountsPage';
 import { SubmissionDetailPage } from './submissions/SubmissionDetailPage';
 import { SubmissionsPage } from './submissions/SubmissionsPage';
 import { NewTicketPage, SupportPage, TicketDetailPage } from './support/SupportPages';
+
+/** Portal entry. No section needs more than the participant portal permission. */
+export const portalRequires: PermissionRequirement = { anyOf: [Permissions.ParticipantPortal] };
 
 /** Participant portal (/app). Paths are relative to the portal base. */
 export const nav: PortalNavItem[] = [

@@ -9,6 +9,11 @@ export interface AuthContextValue {
   permissions: readonly string[];
   /** ISO timestamp at which the current access token expires. */
   expiresAt: string | null;
+  /**
+   * True from a forced sign-out (the session could not be renewed, e.g. after a suspension or password change) until
+   * the sign-in page is reached, so guards that redirect to /login keep the "session expired" notice (`expired=1`).
+   */
+  sessionExpired: boolean;
   hasPermission: (permission: string) => boolean;
   hasAnyPermission: (permissions: readonly string[]) => boolean;
   login: (email: string, password: string) => Promise<SessionUser>;

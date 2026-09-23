@@ -95,7 +95,7 @@ test.describe.serial('reviewer journey', () => {
 
   test('the participant resubmits through the UI', async () => {
     await pat.goto(`/app/submissions/${firstId}`);
-    const alert = pat.getByText('The reviewer asked for a correction').locator('..').locator('..');
+    const alert = pat.getByRole('status', { name: 'The reviewer asked for a correction' });
     await expect(alert).toContainText('Please add the campaign hashtag to your caption.');
     const form = pat.getByRole('region', { name: 'Edit & resubmit' });
     await form.getByLabel('Caption you used').fill(`Now with the hashtag ${fixtures().campaign.hashtag}`);
@@ -119,7 +119,7 @@ test.describe.serial('reviewer journey', () => {
     await expect(reward.getByRole('listitem').filter({ hasText: 'First-post bonus' })).toContainText('$1.00');
 
     await pat.goto('/app/earnings');
-    await expect(pat.locator('.ui-stat').filter({ hasText: /^Approved/ })).toContainText('$6.00');
+    await expect(pat.getByRole('group', { name: /^Approved\b/ })).toContainText('$6.00');
   });
 
   test('two reviewers on one submission: the second sees it held by the first', async () => {
@@ -204,18 +204,8 @@ test.describe.serial('reviewer journey', () => {
     await reviewer2.goto(`/review/queue/${firstId}`);
     await expect(reviewer2.getByRole('region', { name: 'Campaign requirements' })).toBeVisible();
     await expect(reviewer2.getByRole('img', { name: 'Screenshot submitted as evidence of the post' })).toBeVisible();
-    const all = await axeViolations(reviewer2);
-
-    // Known accessibility finding (reported, not an app change we may make here): resolved risk flags are rendered
-    // at `opacity: .8` (.rv-flag[data-resolved]), which pushes their muted text below the 4.5:1 contrast minimum.
-    // It is tolerated only for exactly those nodes so that any other violation still fails the journey.
-    const known = (v: (typeof all)[number]) =>
-      v.id === 'color-contrast' && v.targets.every((t) => t.includes('.rv-flag[data-resolved="true"]'));
-    const workspace = all.filter((v) => !known(v));
-    for (const v of all.filter(known)) {
-      test.info().annotations.push({ type: 'a11y finding', description: `${v.id}: ${v.targets.join(', ')}` });
-    }
-
+    // Resolved risk flags are included (they recede with tokenized muted colours that keep AA contrast).
+    const workspace = await axeViolations(reviewer2);
     expect({ queue, workspace }).toEqual({ queue: [], workspace: [] });
   });
 });

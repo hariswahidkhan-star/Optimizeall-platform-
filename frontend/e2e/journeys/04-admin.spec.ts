@@ -79,21 +79,14 @@ test.describe.serial('admin journey', () => {
     await expect(admin.getByText('Suspended', { exact: true }).first()).toBeVisible();
 
     // The participant's page is still open; the next in-app navigation fetches data, is refused, and the app
-    // signs them out to the login page (keeping where they were going).
+    // signs them out to the login page (keeping where they were going) and tells them their session ended.
     await pat.getByRole('link', { name: 'Referrals' }).first().click();
-    await expect(pat).toHaveURL(/\/login\?(.*&)?next=%2Fapp%2Freferrals/);
+    await expect(pat).toHaveURL(/\/login\?expired=1&next=%2Fapp%2Freferrals$/);
     await expect(pat.getByRole('heading', { level: 1, name: 'Welcome back' })).toBeVisible();
-    // Signed out for real: the portal is no longer reachable without signing in.
-    await pat.goto('/app');
-    await expect(pat).toHaveURL(/\/login\?next=%2Fapp/);
-  });
-
-  // App bug (reported): AuthProvider navigates to /login?expired=1&next=… when the session can't be renewed, but
-  // RequireAuth's <Navigate to="/login?next=…"> for the same render supersedes it, so the "Your session has expired"
-  // notice is never shown after a forced sign-out.
-  test.fixme('the forced sign-out tells the participant their session ended', async () => {
-    await expect(pat).toHaveURL(/\/login\?expired=1/);
     await expect(pat.getByText('Your session has expired')).toBeVisible();
+    // Signed out for real: the portal is no longer reachable without signing in (an ordinary redirect now).
+    await pat.goto('/app');
+    await expect(pat).toHaveURL(/\/login\?next=%2Fapp$/);
   });
 
   test('the admin reactivates the participant, who can sign in again', async () => {

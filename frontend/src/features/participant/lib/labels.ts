@@ -120,7 +120,3 @@ export const payoutMethodOptions: SelectOption[] = [
   { value: 'MobileWallet', label: 'Mobile wallet' },
   { value: 'Other', label: 'Other' },
 ];
-
-export function isInternalLink(url: string): boolean {
-  return url.startsWith('/') && !url.startsWith('//');
-}

@@ -131,7 +131,7 @@ test.describe.serial('participant journey', () => {
     await page.getByRole('link', { name: campaign.title }).click();
     await expect(page.getByRole('heading', { level: 1, name: campaign.title })).toBeVisible();
 
-    const disclosure = page.getByText('Paid-content disclosure required').locator('..').locator('..');
+    const disclosure = page.getByRole('status', { name: 'Paid-content disclosure required' });
     await expect(disclosure).toContainText(campaign.disclosure);
 
     const terms = page.getByRole('region', { name: 'Reward terms' });
@@ -180,8 +180,8 @@ test.describe.serial('participant journey', () => {
   test('earnings show the pending amount', async () => {
     await page.goto('/app/earnings');
     await expect(page.getByRole('heading', { level: 1, name: 'Earnings' })).toBeVisible();
-    // Stat tiles have no accessible grouping (reported), so the tile is found by its CSS class and label text.
-    const pending = page.locator('.ui-stat').filter({ hasText: /^Pending/ });
+    // Stat tiles are groups named by their label.
+    const pending = page.getByRole('group', { name: /^Pending\b/ });
     await expect(pending).toContainText('$6.00');
     await responsive('earnings');
   });

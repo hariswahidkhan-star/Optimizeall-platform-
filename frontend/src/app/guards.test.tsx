@@ -1,5 +1,7 @@
+import { useQuery } from '@tanstack/react-query';
 import { screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
+import { api } from '@/lib/api/client';
 import { json, makeUser, mockFetch, problem, session } from '@/test/fetchMock';
 import { renderWithApp } from '@/test/render';
 import { RequireAuth, RequirePermission } from './guards';
@@ -40,6 +42,51 @@ describe('route guards', () => {
     });
     renderWithApp(<Protected />, { route: '/review/queue', path: '/review/*' });
     expect(await screen.findByText('review queue')).toBeInTheDocument();
+  });
+});
+
+describe('forced sign-out (AuthProvider + RequireAuth)', () => {
+  function ProtectedPage() {
+    const query = useQuery({ queryKey: ['home'], queryFn: () => api.get('/me/home') });
+    return <p>{query.isSuccess ? 'home loaded' : 'protected page'}</p>;
+  }
+
+  it('keeps expired=1 on the guard redirect when the session cannot be renewed (e.g. suspension)', async () => {
+    let refreshes = 0;
+    mockFetch({
+      // Bootstrap succeeds; the renewal after the 401 fails (the account was suspended meanwhile).
+      'POST /auth/refresh': () =>
+        ++refreshes === 1
+          ? json(200, session(makeUser()))
+          : problem(401, 'auth.session_revoked', 'Signed out'),
+      'GET /me/home': () => problem(401, 'auth.unauthorized', 'Unauthorized'),
+    });
+    const { router } = renderWithApp(
+      <RequireAuth>
+        <ProtectedPage />
+      </RequireAuth>,
+      {
+        route: '/app/earnings?page=2',
+        path: '/app/*',
+        routes: [{ path: '/login', element: <p>login page</p> }],
+      },
+    );
+
+    expect(await screen.findByText('login page')).toBeInTheDocument();
+    const params = new URLSearchParams(router.state.location.search);
+    expect(params.get('expired')).toBe('1');
+    expect(params.get('next')).toBe('/app/earnings?page=2');
+  });
+
+  it('does not mark an ordinary anonymous redirect as expired', async () => {
+    mockFetch({ 'POST /auth/refresh': () => problem(401, 'auth.session_expired', 'Expired') });
+    const { router } = renderWithApp(<Protected />, {
+      route: '/review/queue',
+      path: '/review/*',
+      routes: [{ path: '/login', element: <p>login page</p> }],
+    });
+    expect(await screen.findByText('login page')).toBeInTheDocument();
+    expect(new URLSearchParams(router.state.location.search).get('expired')).toBeNull();
   });
 });
 
