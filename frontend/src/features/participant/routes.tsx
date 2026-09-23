@@ -11,12 +11,25 @@ import {
   Users,
   Wallet,
 } from 'lucide-react';
+import { Navigate, type RouteObject } from 'react-router-dom';
 import type { PortalNavItem } from '@/app/portalTypes';
-import { PendingSection } from '@/components/PendingSection';
-import type { RouteObject } from 'react-router-dom';
-import { HomePage } from './HomePage';
+import { AchievementsPage } from './achievements/AchievementsPage';
+import { CampaignDetailPage } from './campaigns/CampaignDetailPage';
+import { CampaignsPage } from './campaigns/CampaignsPage';
+import { EarningsPage } from './earnings/EarningsPage';
+import { HomePage } from './home/HomePage';
+import { NotificationsPage } from './notifications/NotificationsPage';
+import { PayoutDetailPage, PayoutsPage } from './payouts/PayoutsPage';
+import { NotificationPreferencesPage } from './profile/NotificationPreferencesPage';
+import { PayoutDetailsPage } from './profile/PayoutDetailsPage';
+import { ProfileDetailsPage } from './profile/ProfileDetailsPage';
 import { ProfileLayout } from './profile/ProfileLayout';
 import { SecurityPage } from './profile/SecurityPage';
+import { ReferralsPage } from './referrals/ReferralsPage';
+import { SocialAccountsPage } from './social/SocialAccountsPage';
+import { SubmissionDetailPage } from './submissions/SubmissionDetailPage';
+import { SubmissionsPage } from './submissions/SubmissionsPage';
+import { NewTicketPage, SupportPage, TicketDetailPage } from './support/SupportPages';
 
 /** Participant portal (/app). Paths are relative to the portal base. */
 export const nav: PortalNavItem[] = [
@@ -84,81 +97,34 @@ export const nav: PortalNavItem[] = [
 
 export const routes: RouteObject[] = [
   { index: true, element: <HomePage /> },
-  {
-    path: 'campaigns',
-    element: (
-      <PendingSection
-        title="Campaigns"
-        description="Campaigns you can join, with the approved content to share."
-      />
-    ),
-  },
-  {
-    path: 'submissions',
-    element: (
-      <PendingSection
-        title="My submissions"
-        description="Every post you submitted, with its review status and history."
-      />
-    ),
-  },
-  {
-    path: 'earnings',
-    element: (
-      <PendingSection
-        title="Earnings"
-        description="What you have earned, what is pending approval and what has been paid."
-      />
-    ),
-  },
-  {
-    path: 'payouts',
-    element: (
-      <PendingSection title="Payouts" description="Your biweekly payouts and the next scheduled payout." />
-    ),
-  },
-  {
-    path: 'social-accounts',
-    element: (
-      <PendingSection
-        title="Social accounts"
-        description="Connect the established accounts you share from and get them verified."
-      />
-    ),
-  },
-  {
-    path: 'referrals',
-    element: (
-      <PendingSection title="Referrals" description="Your referral link and the people you have invited." />
-    ),
-  },
-  {
-    path: 'achievements',
-    element: (
-      <PendingSection title="Achievements" description="Milestones you have reached on Optimize All." />
-    ),
-  },
-  {
-    path: 'notifications',
-    element: (
-      <PendingSection title="Notifications" description="Updates about reviews, earnings and payouts." />
-    ),
-  },
-  {
-    path: 'support',
-    element: <PendingSection title="Support" description="Open a ticket or follow up on an existing one." />,
-  },
+  { path: 'campaigns', element: <CampaignsPage /> },
+  { path: 'campaigns/:slug', element: <CampaignDetailPage /> },
+  { path: 'submissions', element: <SubmissionsPage /> },
+  { path: 'submissions/:id', element: <SubmissionDetailPage /> },
+  { path: 'earnings', element: <EarningsPage /> },
+  { path: 'payouts', element: <PayoutsPage /> },
+  { path: 'payouts/:itemId', element: <PayoutDetailPage /> },
+  { path: 'social-accounts', element: <SocialAccountsPage /> },
+  { path: 'referrals', element: <ReferralsPage /> },
+  { path: 'achievements', element: <AchievementsPage /> },
+  { path: 'notifications', element: <NotificationsPage /> },
+  { path: 'support', element: <SupportPage /> },
+  { path: 'support/new', element: <NewTicketPage /> },
+  { path: 'support/:ticketId', element: <TicketDetailPage /> },
+  // The seeded onboarding step links here.
+  { path: 'payout-details', element: <PayoutDetailsRedirect /> },
   {
     path: 'profile',
     element: <ProfileLayout />,
     children: [
-      { index: true, element: <PendingSection embedded title="Profile details" /> },
-      { path: 'payout-details', element: <PendingSection embedded title="Payout details" /> },
-      {
-        path: 'notification-preferences',
-        element: <PendingSection embedded title="Notification preferences" />,
-      },
+      { index: true, element: <ProfileDetailsPage /> },
+      { path: 'payout-details', element: <PayoutDetailsPage /> },
+      { path: 'notification-preferences', element: <NotificationPreferencesPage /> },
       { path: 'security', element: <SecurityPage /> },
     ],
   },
 ];
+
+function PayoutDetailsRedirect() {
+  return <Navigate to="/app/profile/payout-details" replace />;
+}
