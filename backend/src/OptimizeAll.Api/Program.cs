@@ -139,6 +139,7 @@ services.AddAuthorization(options =>
 services.AddHttpContextAccessor();
 services.AddScoped<ICurrentUser, HttpCurrentUser>();
 services.AddScoped<IClientScope, ClientScope>();
+services.AddScoped<ICredentialVault, CredentialVault>();
 services.AddSingleton<ITokenService, TokenService>();
 services.AddSingleton<IPrivacyHasher, PrivacyHasher>();
 services.AddSingleton<ImageUrlPolicy>();

@@ -1365,6 +1365,42 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "integration_connections",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Provider = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ClientAccountId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    DisplayName = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    SettingsJson = table.Column<string>(type: "varchar(8000)", maxLength: 8000, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    EncryptedSecrets = table.Column<string>(type: "varchar(16000)", maxLength: 16000, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Status = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    StatusMessage = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    LastVerifiedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    ExpiresAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_integration_connections", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_integration_connections_client_accounts_ClientAccountId",
+                        column: x => x.ClientAccountId,
+                        principalTable: "client_accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "notification_deliveries",
                 columns: table => new
                 {
@@ -2098,6 +2134,16 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 columns: new[] { "IsActive", "SortOrder" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_integration_connections_ClientAccountId",
+                table: "integration_connections",
+                column: "ClientAccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_integration_connections_Provider_ClientAccountId",
+                table: "integration_connections",
+                columns: new[] { "Provider", "ClientAccountId" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_invitation_links_CampaignId",
                 table: "invitation_links",
                 column: "CampaignId");
@@ -2495,6 +2541,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "homepage_banners");
 
             migrationBuilder.DropTable(
+                name: "integration_connections");
+
+            migrationBuilder.DropTable(
                 name: "invitation_links");
 
             migrationBuilder.DropTable(
@@ -2567,9 +2616,6 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "user_tokens");
 
             migrationBuilder.DropTable(
-                name: "client_accounts");
-
-            migrationBuilder.DropTable(
                 name: "post_templates");
 
             migrationBuilder.DropTable(
@@ -2577,6 +2623,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "experiment_variants");
+
+            migrationBuilder.DropTable(
+                name: "client_accounts");
 
             migrationBuilder.DropTable(
                 name: "notifications");
