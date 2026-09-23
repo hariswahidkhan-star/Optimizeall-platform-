@@ -1,0 +1,59 @@
+.portal-overview__grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.portal-overview__card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.portal-overview__icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-lg);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-soft-text);
+}
+
+.portal-overview__icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.portal-overview__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.portal-overview__title {
+  font-size: var(--text-h4);
+}
+
+.portal-overview__description {
+  margin-top: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}
+
+.portal-overview__arrow {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  color: var(--color-text-subtle);
+  transition: transform var(--duration-base) var(--ease-standard);
+}
+
+.ui-card--interactive:hover .portal-overview__arrow {
+  transform: translateX(3px);
+  color: var(--color-accent-text);
+}

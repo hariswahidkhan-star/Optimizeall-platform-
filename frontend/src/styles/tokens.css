@@ -1,0 +1,248 @@
+/*
+ * Optimize All design tokens.
+ *
+ * Brand: navy #1F2659 (primary), amber #FCB31E (accent), ink #1D174C (headings).
+ * Themes: every semantic color is declared once with light-dark(); the active scheme comes from
+ * `color-scheme` — the OS preference by default, or forced by ThemeProvider via <html data-theme>.
+ * Text/background pairs below are chosen to meet WCAG AA (4.5:1 for body text) in both themes.
+ * Amber never carries text on light surfaces; amber-toned text uses --accent-700 (5.1:1 on white).
+ */
+:root {
+  color-scheme: light dark;
+
+  /* ---------- Brand scales ---------- */
+  --primary-50: #eef0f9;
+  --primary-100: #dde1f2;
+  --primary-200: #bcc3e5;
+  --primary-300: #939dd2;
+  --primary-400: #6a76bd;
+  --primary-500: #4855a3;
+  --primary-600: #343f87;
+  --primary-700: #28316d;
+  --primary-800: #1f2659; /* brand navy */
+  --primary-900: #181d45;
+  --primary-950: #0f1230;
+
+  --accent-50: #fff8e8;
+  --accent-100: #ffefc4;
+  --accent-200: #fee08c;
+  --accent-300: #fdcc52;
+  --accent-400: #fcb31e; /* brand amber */
+  --accent-500: #e89a06;
+  --accent-600: #c47f00;
+  --accent-700: #9a6200; /* amber text on white: 5.1:1 */
+  --accent-800: #7a4d05;
+  --accent-900: #643f09;
+  --accent-950: #3a2200;
+
+  --ink: #1d174c;
+  --brand-navy: #1f2659;
+  --brand-amber: #fcb31e;
+
+  /* ---------- Surfaces & text ---------- */
+  --color-bg: light-dark(#f6f7fb, #0c0f24);
+  --color-bg-elevated: light-dark(#ffffff, #10142d);
+  --color-surface: light-dark(#ffffff, #141a36);
+  --color-surface-2: light-dark(#f1f3f9, #1b2244);
+  --color-surface-3: light-dark(#e7eaf4, #232b52);
+  --color-surface-inverse: light-dark(#1f2659, #e9ebf8);
+  --color-border: light-dark(#e1e4ef, #2a3260);
+  --color-border-strong: light-dark(#c5cadc, #3a4378);
+  --color-overlay: light-dark(rgb(15 18 48 / 0.48), rgb(4 6 18 / 0.72));
+
+  --color-heading: light-dark(#1d174c, #f4f5fd);
+  --color-text: light-dark(#2a2e4c, #e3e6f5);
+  --color-text-muted: light-dark(#545a78, #b4b9d6);
+  --color-text-subtle: light-dark(#666b88, #9097ba);
+  --color-text-inverse: light-dark(#ffffff, #141a36);
+  --color-text-on-accent: #1f2659;
+
+  /* ---------- Interactive ---------- */
+  --color-primary: light-dark(#1f2659, #bcc3e5);
+  --color-primary-hover: light-dark(#28316d, #dde1f2);
+  --color-primary-active: light-dark(#181d45, #eef0f9);
+  --color-on-primary: light-dark(#ffffff, #1d174c);
+  --color-primary-soft: light-dark(#eef0f9, rgb(147 157 210 / 0.16));
+  --color-primary-soft-hover: light-dark(#dde1f2, rgb(147 157 210 / 0.26));
+  --color-primary-soft-text: light-dark(#28316d, #ccd2f3);
+  --color-link: light-dark(#343f87, #b3bbf0);
+  --color-link-hover: light-dark(#1f2659, #dde1f2);
+
+  --color-accent: #fcb31e;
+  --color-accent-hover: #fdcc52;
+  --color-accent-active: #e89a06;
+  --color-accent-soft: light-dark(#fff8e8, rgb(252 179 30 / 0.14));
+  --color-accent-text: light-dark(#9a6200, #fdcc52);
+
+  --color-focus: light-dark(#343f87, #fcb31e);
+  --color-focus-halo: light-dark(rgb(252 179 30 / 0.55), rgb(252 179 30 / 0.35));
+  --color-selection: light-dark(rgb(252 179 30 / 0.35), rgb(252 179 30 / 0.4));
+
+  /* ---------- Semantic tones (bg / fg / border / solid) ---------- */
+  --success-bg: light-dark(#ecfdf3, rgb(52 211 153 / 0.12));
+  --success-fg: light-dark(#05603a, #6ee7b7);
+  --success-border: light-dark(#a6f0c6, rgb(52 211 153 / 0.35));
+  --success-solid: light-dark(#067647, #34d399);
+
+  --warning-bg: light-dark(#fffaeb, rgb(252 179 30 / 0.12));
+  --warning-fg: light-dark(#8a4b04, #fdcc52);
+  --warning-border: light-dark(#fedf89, rgb(252 179 30 / 0.38));
+  --warning-solid: light-dark(#c47f00, #fcb31e);
+
+  --danger-bg: light-dark(#fef3f2, rgb(248 113 113 / 0.12));
+  --danger-fg: light-dark(#b42318, #fca5a5);
+  --danger-border: light-dark(#fecdca, rgb(248 113 113 / 0.38));
+  --danger-solid: light-dark(#c4320a, #f87171);
+  --color-on-danger: light-dark(#ffffff, #1b0707);
+
+  --info-bg: light-dark(#eff4ff, rgb(96 165 250 / 0.12));
+  --info-fg: light-dark(#1d4ed8, #93c5fd);
+  --info-border: light-dark(#c3d6fd, rgb(96 165 250 / 0.36));
+  --info-solid: light-dark(#2563eb, #60a5fa);
+
+  --neutral-bg: light-dark(#f1f3f9, rgb(180 185 214 / 0.12));
+  --neutral-fg: light-dark(#3d4263, #cfd3ea);
+  --neutral-border: light-dark(#dadfeb, rgb(180 185 214 / 0.3));
+
+  --brand-bg: light-dark(#eef0f9, rgb(147 157 210 / 0.16));
+  --brand-fg: light-dark(#28316d, #ccd2f3);
+  --brand-border: light-dark(#c9cfeb, rgb(147 157 210 / 0.4));
+
+  /* ---------- Data visualisation ----------
+   * Categorical order is fixed: navy, amber, teal. Validated (lightness band, chroma, CVD separation) against the
+   * light surface and, separately, the dark surface. Light amber is < 3:1 on white, so charts always ship
+   * direct value labels or a data table. */
+  --chart-1: light-dark(#4855a3, #7d88e0);
+  --chart-2: light-dark(#d18a00, #c48200);
+  --chart-3: light-dark(#0e9384, #119f8f);
+  --chart-grid: light-dark(#e7eaf4, #262e57);
+  --chart-axis: light-dark(#666b88, #9097ba);
+
+  /* ---------- Logo colors (see components/brand/Logo) ---------- */
+  --logo-ring-primary: light-dark(#1f2659, #c9cff5);
+  --logo-ring-accent: #fcb31e;
+  --logo-ink: light-dark(#1d174c, #f4f5fd);
+  --logo-tagline: light-dark(#9a6200, #fcb31e);
+
+  /* ---------- Typography ---------- */
+  --font-sans:
+    'Inter Variable', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace;
+
+  --text-display: clamp(2.25rem, 1.6rem + 3vw, 3.75rem);
+  --text-h1: clamp(1.75rem, 1.5rem + 1vw, 2.25rem);
+  --text-h2: clamp(1.375rem, 1.25rem + 0.6vw, 1.75rem);
+  --text-h3: 1.25rem;
+  --text-h4: 1.0625rem;
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+  --text-xs: 0.75rem;
+
+  --leading-tight: 1.2;
+  --leading-snug: 1.35;
+  --leading-body: 1.6;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --tracking-tight: -0.02em;
+  --tracking-wide: 0.08em;
+  --tracking-brand: 0.18em;
+
+  /* ---------- Spacing (4px base) ---------- */
+  --space-0: 0;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  /* ---------- Radii ---------- */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+  --radius-full: 999px;
+
+  /* ---------- Elevation ---------- */
+  --shadow-xs: 0 1px 2px light-dark(rgb(16 24 64 / 0.06), rgb(0 0 0 / 0.4));
+  --shadow-sm:
+    0 1px 3px light-dark(rgb(16 24 64 / 0.08), rgb(0 0 0 / 0.45)),
+    0 1px 2px light-dark(rgb(16 24 64 / 0.04), rgb(0 0 0 / 0.3));
+  --shadow-md:
+    0 6px 16px -4px light-dark(rgb(16 24 64 / 0.1), rgb(0 0 0 / 0.5)),
+    0 2px 6px -2px light-dark(rgb(16 24 64 / 0.06), rgb(0 0 0 / 0.35));
+  --shadow-lg:
+    0 18px 40px -12px light-dark(rgb(16 24 64 / 0.18), rgb(0 0 0 / 0.6)),
+    0 6px 14px -6px light-dark(rgb(16 24 64 / 0.08), rgb(0 0 0 / 0.4));
+  --shadow-focus: 0 0 0 4px var(--color-focus-halo);
+
+  /* ---------- Layers ---------- */
+  --z-base: 0;
+  --z-sticky: 100;
+  --z-header: 200;
+  --z-dropdown: 300;
+  --z-overlay: 400;
+  --z-modal: 500;
+  --z-toast: 600;
+  --z-tooltip: 700;
+
+  /* ---------- Motion ---------- */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.3, 0, 0, 1.15);
+
+  /* ---------- Layout ---------- */
+  --container-max: 1200px;
+  --sidebar-width: 264px;
+  --topbar-height: 64px;
+  --bottom-nav-height: 64px;
+  --gutter: var(--space-4);
+
+  /*
+   * Breakpoints (for reference; CSS custom properties cannot be used inside media queries):
+   * sm 640px · md 768px · lg 1024px · xl 1280px — mirrored in src/lib/hooks/useMediaQuery.ts.
+   */
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --gutter: var(--space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --gutter: var(--space-8);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+  }
+}
