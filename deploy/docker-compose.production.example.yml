@@ -1,0 +1,176 @@
+# Optimize All — production reference deployment (single host, Docker Compose).
+#
+# This is an EXAMPLE showing the production hardening; adapt it to your platform (Kubernetes, ECS, Nomad...).
+# The same rules apply everywhere — see docs/DEPLOYMENT.md:
+#   * prebuilt, versioned images from your registry (no `build:`), deployed by digest or immutable tag
+#   * managed MySQL 8 (utf8mb4, automated backups + PITR, TLS) — no database container here
+#   * migrations run as a one-shot job BEFORE the new API version starts (API startup migration disabled)
+#   * no demo seed, Swagger off, Secure cookies, SMTP email, secrets from files (never in env files or git)
+#   * TLS terminates at a reverse proxy / load balancer in front of `web` (which listens on 127.0.0.1:8080)
+#
+#   cp deploy/.env.production.example deploy/.env.production    # non-secret settings
+#   mkdir -m 700 deploy/secrets && write one secret per file (see `secrets:` below; scripts/generate-secrets.sh --aspnet)
+#   docker compose --env-file deploy/.env.production -f deploy/docker-compose.production.example.yml up -d
+#
+# Secret files are mounted at /run/secrets/<name>; the API image's entrypoint maps every NAME_FILE variable to
+# NAME=<file contents>, e.g. Jwt__SigningKey_FILE=/run/secrets/jwt_signing_key.
+
+name: optimizeall
+
+x-hardening: &hardening
+  restart: unless-stopped
+  read_only: true
+  cap_drop: [ALL]
+  security_opt:
+    - no-new-privileges:true
+  logging:
+    driver: json-file
+    options:
+      max-size: "20m"
+      max-file: "10"
+
+x-api-environment: &api-environment
+  ASPNETCORE_ENVIRONMENT: Production
+  DOTNET_gcServer: "1"
+  ConnectionStrings__Default_FILE: /run/secrets/db_connection_string
+  Jwt__SigningKey_FILE: /run/secrets/jwt_signing_key
+  Jwt__Issuer: optimizeall
+  Jwt__Audience: optimizeall-web
+  Security__HashSalt_FILE: /run/secrets/hash_salt
+  Security__SecureCookies: "true"
+  # Same-origin deployment (web proxies /api): leave AllowedOrigins empty. Set only if the SPA is on another origin:
+  # Security__AllowedOrigins__0: https://app.example.com
+  Email__Mode: Smtp
+  Email__SmtpHost: ${SMTP_HOST:?set SMTP_HOST}
+  Email__SmtpPort: ${SMTP_PORT:-587}
+  Email__SmtpUseStartTls: "true"
+  Email__SmtpUsername: ${SMTP_USERNAME:-}
+  Email__SmtpPassword_FILE: /run/secrets/smtp_password
+  Email__FromAddress: ${EMAIL_FROM_ADDRESS:?set EMAIL_FROM_ADDRESS}
+  Email__FromName: Optimize All
+  Email__AppBaseUrl: ${PUBLIC_BASE_URL:?set PUBLIC_BASE_URL}
+  Tracking__PublicBaseUrl: ${TRACKING_BASE_URL:-${PUBLIC_BASE_URL}}
+  Tracking__PostbackSecret_FILE: /run/secrets/postback_secret
+  WhatsApp__Enabled: ${WHATSAPP_ENABLED:-false}
+  WhatsApp__PhoneNumberId: ${WHATSAPP_PHONE_NUMBER_ID:-}
+  WhatsApp__TemplateName: ${WHATSAPP_TEMPLATE_NAME:-}
+  WhatsApp__TemplateLanguage: ${WHATSAPP_TEMPLATE_LANGUAGE:-en}
+  WhatsApp__AccessToken_FILE: /run/secrets/whatsapp_access_token
+  Payments__Provider: manual
+  Storage__RootPath: /app/storage/files
+  Jobs__Enabled: "true"
+  RateLimiting__Enabled: "true"
+  Swagger__Enabled: "false"
+  DevTools__MailboxEnabled: "false"
+  Logging__LogLevel__Default: Information
+  Logging__Console__FormatterName: json
+
+services:
+  # One-shot: applies pending EF Core migrations, then exits. `api` waits for it to succeed.
+  migrate:
+    <<: *hardening
+    restart: "no"
+    image: ${MIGRATOR_IMAGE:?set MIGRATOR_IMAGE, e.g. ghcr.io/acme/optimizeall-migrator:1.4.0}
+    environment:
+      ConnectionStrings__Default_FILE: /run/secrets/db_connection_string
+    # The bundle has no secret-file entrypoint, so read the file here.
+    entrypoint: ["/bin/sh", "-c", 'ConnectionStrings__Default="$$(cat "$$ConnectionStrings__Default_FILE")" exec /app/efbundle']
+    secrets: [db_connection_string]
+    tmpfs: [/tmp]
+
+  api:
+    <<: *hardening
+    image: ${API_IMAGE:?set API_IMAGE, e.g. ghcr.io/acme/optimizeall-api:1.4.0}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    environment:
+      <<: *api-environment
+      # Schema is managed by the `migrate` job. Startup still ensures the Baseline seed and bootstrap admin.
+      Database__InitializationMode: None
+      Database__InitializeOnStartup: "true"
+      Database__Seed__0: Baseline
+      # One-time bootstrap: set these for the very first start, sign in, change the password, then remove both.
+      Bootstrap__AdminEmail: ${BOOTSTRAP_ADMIN_EMAIL:-}
+      Bootstrap__AdminPassword_FILE: /run/secrets/bootstrap_admin_password
+    secrets:
+      - db_connection_string
+      - jwt_signing_key
+      - hash_salt
+      - smtp_password
+      - postback_secret
+      - whatsapp_access_token
+      - bootstrap_admin_password
+    volumes:
+      # Uploaded screenshots/files. With more than one API instance this MUST be shared storage
+      # (NFS/EFS/Azure Files) mounted at the same path on every instance.
+      - ${STORAGE_PATH:-api-storage}:/app/storage
+    tmpfs: [/tmp]
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/health/ready"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 1g
+
+  web:
+    <<: *hardening
+    image: ${WEB_IMAGE:?set WEB_IMAGE, e.g. ghcr.io/acme/optimizeall-web:1.4.0}
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      API_UPSTREAM: http://api:8080
+    # Bind to loopback: the TLS reverse proxy / load balancer on this host forwards to it.
+    ports:
+      - "127.0.0.1:${WEB_PORT:-8080}:8080"
+    # read_only root: nginx (uid 101) renders its config into conf.d and keeps temp files in /tmp.
+    tmpfs:
+      - /tmp:uid=101,gid=101,mode=0755
+      - /etc/nginx/conf.d:uid=101,gid=101,mode=0755
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/healthz"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 256m
+
+  # Optional: a local MySQL for a single-box installation. A managed MySQL 8 service is strongly recommended.
+  # mysql:
+  #   image: mysql:8.0
+  #   restart: unless-stopped
+  #   command: [--character-set-server=utf8mb4, --collation-server=utf8mb4_0900_ai_ci, --default-time-zone=+00:00]
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
+  #     MYSQL_DATABASE: optimizeall
+  #     MYSQL_USER: optimizeall
+  #     MYSQL_PASSWORD_FILE: /run/secrets/mysql_password
+  #   volumes: [mysql-data:/var/lib/mysql]
+
+secrets:
+  db_connection_string:
+    file: ${SECRETS_DIR:-./secrets}/db_connection_string
+  jwt_signing_key:
+    file: ${SECRETS_DIR:-./secrets}/jwt_signing_key
+  hash_salt:
+    file: ${SECRETS_DIR:-./secrets}/hash_salt
+  smtp_password:
+    file: ${SECRETS_DIR:-./secrets}/smtp_password
+  postback_secret:
+    file: ${SECRETS_DIR:-./secrets}/postback_secret
+  whatsapp_access_token:
+    file: ${SECRETS_DIR:-./secrets}/whatsapp_access_token
+  bootstrap_admin_password:
+    file: ${SECRETS_DIR:-./secrets}/bootstrap_admin_password
+
+volumes:
+  api-storage:
