@@ -1,0 +1,68 @@
+.ui-filterbar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.ui-filterbar__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.ui-filterbar__search {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.ui-filterbar__filter {
+  flex: 0 1 200px;
+  min-width: 150px;
+}
+
+@media (max-width: 639px) {
+  .ui-filterbar__filter {
+    flex: 1 1 100%;
+  }
+}
+
+.ui-filterbar__actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+
+.ui-filterbar__chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.ui-filterbar__chips ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ui-filterbar__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 2px 0 var(--space-3);
+  border: 1px solid var(--brand-border);
+  border-radius: var(--radius-full);
+  background: var(--brand-bg);
+  color: var(--brand-fg);
+  font-size: var(--text-xs);
+}
+
+.ui-filterbar__chip .ui-button {
+  min-height: 26px;
+  min-width: 26px;
+  border-radius: 50%;
+}

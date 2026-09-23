@@ -1,0 +1,218 @@
+/* Spinner */
+.ui-spinner {
+  display: inline-block;
+  flex-shrink: 0;
+  width: var(--spinner-size, 20px);
+  height: var(--spinner-size, 20px);
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, currentColor 22%, transparent);
+  border-top-color: currentColor;
+  animation: ui-spin 0.7s linear infinite;
+}
+
+.ui-spinner--sm {
+  --spinner-size: 16px;
+}
+
+.ui-spinner--lg {
+  --spinner-size: 32px;
+  border-width: 3px;
+}
+
+@keyframes ui-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-spinner {
+    animation-duration: 1.6s !important;
+    animation-iteration-count: infinite !important;
+  }
+}
+
+/* Skeleton */
+.ui-skeleton {
+  display: block;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-2) 0%,
+    var(--color-surface-3) 45%,
+    var(--color-surface-2) 90%
+  );
+  background-size: 200% 100%;
+  animation: ui-shimmer 1.4s ease-in-out infinite;
+}
+
+.ui-skeleton--text {
+  height: 0.9em;
+  margin-block: 0.25em;
+}
+
+.ui-skeleton--circle {
+  border-radius: 50%;
+}
+
+.ui-skeleton-lines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+@keyframes ui-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+/* Alert / Callout */
+.ui-alert {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--tone-border);
+  border-radius: var(--radius-lg);
+  background: var(--tone-bg);
+  color: var(--color-text);
+  font-size: var(--text-small);
+}
+
+.ui-alert__icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--tone-fg);
+}
+
+.ui-alert__icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.ui-alert__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.ui-alert__title {
+  color: var(--tone-fg);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-small);
+  letter-spacing: 0;
+}
+
+.ui-alert__title + .ui-alert__content {
+  margin-top: var(--space-1);
+}
+
+.ui-alert__actions {
+  margin-top: var(--space-3);
+}
+
+.ui-alert__dismiss {
+  margin: -6px -8px -6px 0;
+}
+
+/* Tones shared by Alert, Badge, Callout */
+.tone-neutral {
+  --tone-bg: var(--neutral-bg);
+  --tone-fg: var(--neutral-fg);
+  --tone-border: var(--neutral-border);
+}
+
+.tone-brand {
+  --tone-bg: var(--brand-bg);
+  --tone-fg: var(--brand-fg);
+  --tone-border: var(--brand-border);
+}
+
+.tone-success {
+  --tone-bg: var(--success-bg);
+  --tone-fg: var(--success-fg);
+  --tone-border: var(--success-border);
+}
+
+.tone-warning {
+  --tone-bg: var(--warning-bg);
+  --tone-fg: var(--warning-fg);
+  --tone-border: var(--warning-border);
+}
+
+.tone-danger {
+  --tone-bg: var(--danger-bg);
+  --tone-fg: var(--danger-fg);
+  --tone-border: var(--danger-border);
+}
+
+.tone-info {
+  --tone-bg: var(--info-bg);
+  --tone-fg: var(--info-fg);
+  --tone-border: var(--info-border);
+}
+
+/* Empty / error states */
+.ui-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-12) var(--space-6);
+  text-align: center;
+}
+
+.ui-state--compact {
+  padding: var(--space-8) var(--space-4);
+}
+
+.ui-state__icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-xl);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-soft-text);
+  box-shadow: inset 0 0 0 1px var(--brand-border);
+}
+
+.ui-state--error .ui-state__icon {
+  background: var(--danger-bg);
+  color: var(--danger-fg);
+  box-shadow: inset 0 0 0 1px var(--danger-border);
+}
+
+.ui-state__icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.ui-state__title {
+  font-size: var(--text-h4);
+}
+
+.ui-state__description {
+  max-width: 46ch;
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}
+
+.ui-state__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.ui-state__trace {
+  color: var(--color-text-subtle);
+  font-size: var(--text-xs);
+}
+
+.ui-state__trace code {
+  user-select: all;
+}

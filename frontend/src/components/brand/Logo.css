@@ -1,0 +1,71 @@
+.oa-logo {
+  --logo-primary: var(--logo-ring-primary);
+  --logo-accent: var(--logo-ring-accent);
+  --logo-word: var(--logo-ink);
+  --logo-tag: var(--logo-tagline);
+
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--logo-size, 32px) * 0.3);
+  color: var(--logo-word);
+  line-height: 1;
+}
+
+.oa-logo--on-dark {
+  --logo-primary: #c9cff5;
+  --logo-accent: #fcb31e;
+  --logo-word: #ffffff;
+  --logo-tag: #fcb31e;
+}
+
+.oa-logo__mark {
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+.oa-logo__ring-primary {
+  stroke: var(--logo-primary);
+}
+
+.oa-logo__ring-accent {
+  stroke: var(--logo-accent);
+}
+
+.oa-logo__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45em;
+}
+
+.oa-logo__wordmark {
+  font-size: calc(var(--logo-size, 32px) * 0.5);
+  font-weight: 800;
+  letter-spacing: var(--tracking-brand);
+  white-space: nowrap;
+  /* Letter-spacing adds trailing space after the last glyph; pull it back so the wordmark centers. */
+  margin-right: calc(-1 * var(--tracking-brand));
+}
+
+.oa-logo--stacked {
+  flex-direction: column;
+  gap: calc(var(--logo-size, 32px) * 0.25);
+  text-align: center;
+}
+
+.oa-logo--stacked .oa-logo__wordmark {
+  font-size: calc(var(--logo-size, 32px) * 0.26);
+}
+
+.oa-logo--stacked .oa-logo__text {
+  align-items: center;
+}
+
+.oa-logo__tagline {
+  color: var(--logo-tag);
+  font-size: max(10px, calc(var(--logo-size, 32px) * 0.12));
+  font-weight: 300;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  margin-right: -0.3em;
+}
