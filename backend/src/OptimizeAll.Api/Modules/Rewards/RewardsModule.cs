@@ -5,6 +5,8 @@ public static class RewardsModule
     /// <summary>Registers the Rewards module's services, jobs and event handlers.</summary>
     public static IServiceCollection AddRewardsModule(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddScoped<IRewardQuoteService, RewardQuoteService>();
+        services.AddScoped<IRewardRulesService, RewardRulesService>();
         return services;
     }
 }
