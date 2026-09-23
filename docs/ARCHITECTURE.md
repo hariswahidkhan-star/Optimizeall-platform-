@@ -93,3 +93,50 @@ frontend/src/
 * All business rules (eligibility, rewards, payouts) come from the API. The UI never computes money.
 * Accessibility: semantic HTML, labelled controls, focus management in dialogs, WCAG AA contrast, keyboard
   support. Responsive from 360px wide.
+
+## Agency platform conventions (marketing agency operating system)
+
+Optimize All is a full-service marketing agency platform. The influencer/UGC sharing campaigns above are one service
+line; the agency modules below run everything else (website, CRM, billing, delivery and marketing execution).
+
+### Database portability (MySQL and SQLite)
+
+The API runs on **MySQL 8** or **SQLite** (`Database:Provider` = `MySql` | `Sqlite`). Therefore:
+
+* **No raw SQL in modules.** Use LINQ / `ExecuteUpdateAsync` / `ExecuteDeleteAsync`. For locking use
+  `IDatabaseDialect` (`Common/Persistence/DatabaseDialect.cs`): `BeginWriteTransactionAsync` (use it for every
+  transaction that writes), `LockRowAsync(db, "table_name", id)` (instead of `SELECT … FOR UPDATE`),
+  `AcquireNamedLockAsync` (instead of `GET_LOCK`), `IsUniqueViolation`.
+* **No provider-specific column types or collations.** Do not call `HasColumnType("json"|"text"|...)` or
+  `UseCollation(...)` directly in new configurations; use `HasJsonList()` for list columns and give long text a
+  `HasMaxLength` (unbounded text: leave max length unset). Keep decimals as `decimal`.
+* Keep queries translatable on both providers (no MySQL-only functions, no `DateTime` arithmetic inside SQL that
+  SQLite cannot translate; compute boundaries in C# and compare).
+
+### Client tenancy
+
+`ClientAccount` (`Domain/Agency/ClientAccount.cs`) is a client organization; `ClientMember` links users with the
+`Client` role to it with a duty (`Viewer`, `Approver`, `Billing`, `Owner`). Every client-owned entity has a
+`ClientAccountId`. **All** reads/writes of client-owned data go through `IClientScope`
+(`Common/Security/ClientScope.cs`): staff with `clients.view` see all clients; client users only their
+organizations (other tenants' records answer 404). Client-portal endpoints live under `/api/v1/client/...` and
+require `client.portal`; agency staff endpoints live under `/api/v1/agency/...`.
+
+### Roles
+
+Agency staff roles: `AccountManager`, `Strategist`, `ContentCreator`, `Designer`, `SeoSpecialist`, `AdsSpecialist`,
+`SocialMediaManager`, `SalesRep` (plus `Admin`, `Finance`, `CampaignManager`); client users have `Client`. The
+role → permission map is in `Common/Security/Permissions.cs` (frontend mirror: `lib/auth/permissions.ts`).
+
+### Frontend
+
+The agency staff portal (`/agency`) aggregates per-area route modules in `features/agency/<area>/routes.tsx`
+(`nav`, `routes`, `opensWith`); the client portal (`/client`) aggregates `features/client/<area>/routes.tsx`. The
+public marketing website lives in `features/public/**`.
+
+### Third-party integrations
+
+External platforms (Meta/Instagram/Facebook, X, LinkedIn, TikTok, YouTube, Google Ads, Meta Ads, SMS/WhatsApp
+providers, SEO data providers, payment gateways) are reached only through adapter interfaces whose default
+implementation reports **"not configured"** and never pretends to have published, sent or synced anything.
+Credentials are stored encrypted (Data Protection) and managed under `integrations.manage`.

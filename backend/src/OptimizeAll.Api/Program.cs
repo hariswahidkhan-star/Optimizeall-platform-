@@ -19,6 +19,17 @@ using OptimizeAll.Api.Common.Notifications;
 using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Api.Common.Settings;
+using OptimizeAll.Api.Modules.Website;
+using OptimizeAll.Api.Modules.Crm;
+using OptimizeAll.Api.Modules.Billing;
+using OptimizeAll.Api.Modules.Clients;
+using OptimizeAll.Api.Modules.Projects;
+using OptimizeAll.Api.Modules.EmailMarketing;
+using OptimizeAll.Api.Modules.SocialMedia;
+using OptimizeAll.Api.Modules.Ads;
+using OptimizeAll.Api.Modules.Seo;
+using OptimizeAll.Api.Modules.LandingPages;
+using OptimizeAll.Api.Modules.Integrations;
 using OptimizeAll.Api.Modules.Accounts;
 using OptimizeAll.Api.Modules.Admin;
 using OptimizeAll.Api.Modules.Analytics;
@@ -127,6 +138,7 @@ services.AddAuthorization(options =>
 
 services.AddHttpContextAccessor();
 services.AddScoped<ICurrentUser, HttpCurrentUser>();
+services.AddScoped<IClientScope, ClientScope>();
 services.AddSingleton<ITokenService, TokenService>();
 services.AddSingleton<IPrivacyHasher, PrivacyHasher>();
 services.AddSingleton<ImageUrlPolicy>();
@@ -143,6 +155,7 @@ services.AddOptions<Microsoft.AspNetCore.Cors.Infrastructure.CorsOptions>()
         }));
 
 // ---------- Cross-cutting services ----------
+services.AddSingleton<IDatabaseDialect, MySqlDialect>();
 services.AddScoped<IAuditLogger, AuditLogger>();
 services.AddSingleton<IEventPublisher, EventPublisher>();
 services.AddScoped<ISettingsService, SettingsService>();
@@ -181,6 +194,17 @@ services
     .AddMarketingModule(config)
     .AddAnalyticsModule(config)
     .AddRetentionModule(config)
+    .AddWebsiteModule(config)
+    .AddCrmModule(config)
+    .AddBillingModule(config)
+    .AddClientsModule(config)
+    .AddProjectsModule(config)
+    .AddEmailMarketingModule(config)
+    .AddSocialMediaModule(config)
+    .AddAdsModule(config)
+    .AddSeoModule(config)
+    .AddLandingPagesModule(config)
+    .AddIntegrationsModule(config)
     .AddSeedModule(config);
 
 // ---------- HTTP ----------

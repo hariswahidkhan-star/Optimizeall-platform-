@@ -54,6 +54,52 @@ public static class Permissions
     public const string AuditView = "audit.view";
     public const string JobsView = "jobs.view";
 
+    // Agency website & CMS
+    /// <summary>Services, packages, industries, case studies, testimonials, team, pages, navigation, legal.</summary>
+    public const string SiteManage = "site.manage";
+    public const string BlogWrite = "blog.write";
+    public const string BlogPublish = "blog.publish";
+    public const string CareersManage = "careers.manage";
+
+    // CRM & sales
+    public const string CrmView = "crm.view";
+    public const string CrmManage = "crm.manage";
+    public const string ProposalsManage = "proposals.manage";
+    public const string ContractsManage = "contracts.manage";
+
+    // Client billing
+    public const string BillingView = "billing.view";
+    public const string BillingManage = "billing.manage";
+    /// <summary>Sensitive: tax rates, invoice numbering, payment terms.</summary>
+    public const string BillingSettings = "billing.settings";
+
+    // Client delivery
+    public const string ClientsView = "clients.view";
+    public const string ClientsManage = "clients.manage";
+    public const string ProjectsView = "projects.view";
+    public const string ProjectsManage = "projects.manage";
+    public const string DeliverablesSubmit = "deliverables.submit";
+    public const string TimeTrack = "time.track";
+    public const string TimeViewAll = "time.view_all";
+    public const string ReportsManage = "reports.manage";
+
+    // Marketing execution
+    public const string EmailManage = "email.manage";
+    /// <summary>Sensitive: sending an email/SMS campaign to an audience.</summary>
+    public const string EmailSend = "email.send";
+    public const string SmsManage = "sms.manage";
+    public const string SocialManage = "social.manage";
+    public const string SocialPublish = "social.publish";
+    public const string AdsManage = "ads.manage";
+    public const string SeoManage = "seo.manage";
+    /// <summary>Landing pages and form builder.</summary>
+    public const string FormsManage = "forms.manage";
+    /// <summary>Sensitive: third-party integration credentials (social, ads, SMS, SEO data providers).</summary>
+    public const string IntegrationsManage = "integrations.manage";
+
+    // Client portal
+    public const string ClientPortal = "client.portal";
+
     public static readonly IReadOnlyList<string> All = typeof(Permissions)
         .GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static)
         .Where(f => f.IsLiteral && f.FieldType == typeof(string))
@@ -87,7 +133,56 @@ public static class RolePermissions
             Permissions.PayoutSettingsEdit, Permissions.RewardsApproveBonus, Permissions.SubmissionsReverse,
             Permissions.AnalyticsView, Permissions.UsersView, Permissions.AuditView,
         },
-        [Role.Admin] = Permissions.All.ToArray(),
+        [Role.Admin] = Permissions.All.Where(p => p != Permissions.ClientPortal && p != Permissions.ParticipantPortal)
+            .Append(Permissions.ParticipantPortal).ToArray(),
+        [Role.AccountManager] = new[]
+        {
+            Permissions.CrmView, Permissions.CrmManage, Permissions.ProposalsManage, Permissions.ContractsManage,
+            Permissions.ClientsView, Permissions.ClientsManage, Permissions.ProjectsView, Permissions.ProjectsManage,
+            Permissions.DeliverablesSubmit, Permissions.ReportsManage, Permissions.TimeTrack, Permissions.TimeViewAll,
+            Permissions.BillingView, Permissions.SocialManage, Permissions.EmailManage, Permissions.AnalyticsView,
+            Permissions.CampaignsView, Permissions.UsersView,
+        },
+        [Role.Strategist] = new[]
+        {
+            Permissions.CrmView, Permissions.ClientsView, Permissions.ProjectsView, Permissions.ProjectsManage,
+            Permissions.DeliverablesSubmit, Permissions.ReportsManage, Permissions.TimeTrack, Permissions.SeoManage,
+            Permissions.AdsManage, Permissions.AnalyticsView, Permissions.CampaignsView,
+        },
+        [Role.ContentCreator] = new[]
+        {
+            Permissions.ClientsView, Permissions.ProjectsView, Permissions.DeliverablesSubmit, Permissions.TimeTrack,
+            Permissions.BlogWrite, Permissions.SocialManage, Permissions.EmailManage,
+        },
+        [Role.Designer] = new[]
+        {
+            Permissions.ClientsView, Permissions.ProjectsView, Permissions.DeliverablesSubmit, Permissions.TimeTrack,
+            Permissions.FormsManage,
+        },
+        [Role.SeoSpecialist] = new[]
+        {
+            Permissions.ClientsView, Permissions.ProjectsView, Permissions.DeliverablesSubmit, Permissions.TimeTrack,
+            Permissions.SeoManage, Permissions.BlogWrite, Permissions.ReportsManage,
+        },
+        [Role.AdsSpecialist] = new[]
+        {
+            Permissions.ClientsView, Permissions.ProjectsView, Permissions.DeliverablesSubmit, Permissions.TimeTrack,
+            Permissions.AdsManage, Permissions.ReportsManage, Permissions.AnalyticsView,
+        },
+        [Role.SocialMediaManager] = new[]
+        {
+            Permissions.ClientsView, Permissions.ProjectsView, Permissions.DeliverablesSubmit, Permissions.TimeTrack,
+            Permissions.SocialManage, Permissions.SocialPublish, Permissions.ReportsManage,
+        },
+        [Role.SalesRep] = new[]
+        {
+            Permissions.CrmView, Permissions.CrmManage, Permissions.ProposalsManage, Permissions.ClientsView,
+            Permissions.BillingView,
+        },
+        [Role.Client] = new[]
+        {
+            Permissions.ClientPortal,
+        },
     };
 
     public static IReadOnlySet<string> For(IEnumerable<Role> roles) =>

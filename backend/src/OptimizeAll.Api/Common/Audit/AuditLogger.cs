@@ -35,7 +35,9 @@ public sealed class AuditLogger(AppDbContext db, ICurrentUser currentUser, TimeP
         {
             CreatedAt = clock.GetUtcNow().UtcDateTime,
             ActorUserId = currentUser.IdOrNull,
-            ActorType = currentUser.IsAuthenticated ? (roles.Count > 0 ? roles.Max().ToString() : "user") : "anonymous",
+            ActorType = !currentUser.IsAuthenticated ? "anonymous"
+                : roles.Contains(OptimizeAll.Domain.Identity.Role.Admin) ? "Admin"
+                : roles.Count > 0 ? roles.First().ToString() : "user",
             Action = action,
             EntityType = entityType,
             EntityId = entityId.ToString() ?? string.Empty,

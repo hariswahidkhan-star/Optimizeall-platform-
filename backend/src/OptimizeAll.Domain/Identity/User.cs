@@ -17,6 +17,19 @@ public enum Role
     CampaignManager,
     Finance,
     Admin,
+
+    // Agency delivery team
+    AccountManager,
+    Strategist,
+    ContentCreator,
+    Designer,
+    SeoSpecialist,
+    AdsSpecialist,
+    SocialMediaManager,
+    SalesRep,
+
+    /// <summary>A user of a client organization (client portal). Always scoped to their organization.</summary>
+    Client,
 }
 
 public class User : AuditedEntity, IConcurrencyStamped

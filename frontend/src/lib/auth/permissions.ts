@@ -38,6 +38,41 @@ export const Permissions = {
   SupportManage: 'support.manage',
   AuditView: 'audit.view',
   JobsView: 'jobs.view',
+
+  SiteManage: 'site.manage',
+  BlogWrite: 'blog.write',
+  BlogPublish: 'blog.publish',
+  CareersManage: 'careers.manage',
+
+  CrmView: 'crm.view',
+  CrmManage: 'crm.manage',
+  ProposalsManage: 'proposals.manage',
+  ContractsManage: 'contracts.manage',
+
+  BillingView: 'billing.view',
+  BillingManage: 'billing.manage',
+  BillingSettings: 'billing.settings',
+
+  ClientsView: 'clients.view',
+  ClientsManage: 'clients.manage',
+  ProjectsView: 'projects.view',
+  ProjectsManage: 'projects.manage',
+  DeliverablesSubmit: 'deliverables.submit',
+  TimeTrack: 'time.track',
+  TimeViewAll: 'time.view_all',
+  ReportsManage: 'reports.manage',
+
+  EmailManage: 'email.manage',
+  EmailSend: 'email.send',
+  SmsManage: 'sms.manage',
+  SocialManage: 'social.manage',
+  SocialPublish: 'social.publish',
+  AdsManage: 'ads.manage',
+  SeoManage: 'seo.manage',
+  FormsManage: 'forms.manage',
+  IntegrationsManage: 'integrations.manage',
+
+  ClientPortal: 'client.portal',
 } as const;
 
 export type Permission = (typeof Permissions)[keyof typeof Permissions];

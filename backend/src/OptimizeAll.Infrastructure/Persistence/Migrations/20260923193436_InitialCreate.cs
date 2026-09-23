@@ -578,6 +578,54 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "client_accounts",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Name = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Slug = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Industry = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Website = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CountryCode = table.Column<string>(type: "char(2)", fixedLength: true, maxLength: 2, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TimeZone = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Currency = table.Column<string>(type: "char(3)", fixedLength: true, maxLength: 3, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Status = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AccountManagerUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    LogoFileId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    BillingEmail = table.Column<string>(type: "varchar(254)", maxLength: 254, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    BillingAddress = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TaxId = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Notes = table.Column<string>(type: "varchar(4000)", maxLength: 4000, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CrmCompanyId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_client_accounts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_client_accounts_users_AccountManagerUserId",
+                        column: x => x.AccountManagerUserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "notification_preferences",
                 columns: table => new
                 {
@@ -1288,6 +1336,35 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "client_members",
+                columns: table => new
+                {
+                    ClientAccountId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Role = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AddedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    AddedByUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_client_members", x => new { x.ClientAccountId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_client_members_client_accounts_ClientAccountId",
+                        column: x => x.ClientAccountId,
+                        principalTable: "client_accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_client_members_users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "notification_deliveries",
                 columns: table => new
                 {
@@ -1905,6 +1982,27 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 columns: new[] { "Status", "StartsAt", "EndsAt" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_client_accounts_AccountManagerUserId",
+                table: "client_accounts",
+                column: "AccountManagerUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_client_accounts_Slug",
+                table: "client_accounts",
+                column: "Slug",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_client_accounts_Status",
+                table: "client_accounts",
+                column: "Status");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_client_members_UserId",
+                table: "client_members",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_content_calendar_entries_CampaignId",
                 table: "content_calendar_entries",
                 column: "CampaignId");
@@ -2376,6 +2474,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "campaign_platforms");
 
             migrationBuilder.DropTable(
+                name: "client_members");
+
+            migrationBuilder.DropTable(
                 name: "content_calendar_entries");
 
             migrationBuilder.DropTable(
@@ -2464,6 +2565,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "user_tokens");
+
+            migrationBuilder.DropTable(
+                name: "client_accounts");
 
             migrationBuilder.DropTable(
                 name: "post_templates");

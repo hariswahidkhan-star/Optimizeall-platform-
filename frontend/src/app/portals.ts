@@ -1,4 +1,6 @@
-import { BadgeCheck, Landmark, Megaphone, ShieldHalf, Sparkles } from 'lucide-react';
+import { BadgeCheck, Briefcase, Building2, Landmark, Megaphone, ShieldHalf, Sparkles } from 'lucide-react';
+import * as agencyPortal from '@/features/agency/routes';
+import * as clientPortal from '@/features/client/routes';
 import * as adminPortal from '@/features/admin/routes';
 import * as managerPortal from '@/features/campaigns/routes';
 import * as financePortal from '@/features/finance/routes';
@@ -25,6 +27,17 @@ export const portals: PortalDefinition[] = [
     landingRequires: { anyOf: [Permissions.SettingsManage, Permissions.ContentManage] },
     nav: adminPortal.nav,
     routes: adminPortal.routes,
+  },
+  {
+    id: 'agency',
+    label: 'Agency',
+    description: 'Clients, sales, delivery and every marketing service the agency runs.',
+    basePath: '/agency',
+    icon: Briefcase,
+    requires: agencyPortal.portalRequires,
+    landingRequires: agencyPortal.portalRequires,
+    nav: agencyPortal.nav,
+    routes: agencyPortal.routes,
   },
   {
     id: 'finance',
@@ -71,6 +84,17 @@ export const portals: PortalDefinition[] = [
     bottomNav: true,
     nav: participantPortal.nav,
     routes: participantPortal.routes,
+  },
+  {
+    id: 'client',
+    label: 'Client portal',
+    description: 'Your projects, approvals, reports and invoices.',
+    basePath: '/client',
+    icon: Building2,
+    requires: clientPortal.portalRequires,
+    landingRequires: clientPortal.portalRequires,
+    nav: clientPortal.nav,
+    routes: clientPortal.routes,
   },
 ];
 

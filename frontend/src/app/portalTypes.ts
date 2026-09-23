@@ -2,7 +2,7 @@ import type { LucideIcon } from 'lucide-react';
 import type { RouteObject } from 'react-router-dom';
 import type { PermissionRequirement } from '@/lib/auth/permissions';
 
-export type PortalId = 'participant' | 'reviewer' | 'manager' | 'finance' | 'admin';
+export type PortalId = 'participant' | 'reviewer' | 'manager' | 'finance' | 'admin' | 'agency' | 'client';
 
 /**
  * Route `handle` used by portal route files. `requires` guards the route (and, for a parent route, all of its children
