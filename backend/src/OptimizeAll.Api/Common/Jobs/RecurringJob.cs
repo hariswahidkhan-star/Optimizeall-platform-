@@ -53,7 +53,7 @@ public sealed class JobRunner(IServiceScopeFactory scopeFactory, TimeProvider cl
         var run = new JobRun
         {
             JobName = job.Name,
-            RunKey = now.ToString("yyyyMMddHHmmssfff"),
+            RunKey = $"{now:yyyyMMddHHmmssfff}-{Guid.NewGuid():N}"[..40],
             Status = JobRunStatus.Running,
             Attempt = 1,
             StartedAt = now,
@@ -94,10 +94,11 @@ public sealed class JobRunner(IServiceScopeFactory scopeFactory, TimeProvider cl
         var until = now.Add(duration);
 
         // Insert-if-absent, then conditional takeover of an expired lease; both are atomic statements.
+        // A held lease is never re-entered, not even by this process, so "run now" cannot overlap a scheduled run.
         await db.Database.ExecuteSqlInterpolatedAsync(
             $"INSERT IGNORE INTO job_leases (Name, Holder, LeasedUntil) VALUES ({name}, {""}, {now.AddSeconds(-1)})", ct);
         var taken = await db.Database.ExecuteSqlInterpolatedAsync(
-            $"UPDATE job_leases SET Holder = {InstanceId}, LeasedUntil = {until} WHERE Name = {name} AND (LeasedUntil < {now} OR Holder = {InstanceId})", ct);
+            $"UPDATE job_leases SET Holder = {InstanceId}, LeasedUntil = {until} WHERE Name = {name} AND LeasedUntil < {now}", ct);
         return taken == 1;
     }
 

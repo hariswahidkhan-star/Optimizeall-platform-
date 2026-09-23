@@ -12,7 +12,7 @@ using OptimizeAll.Infrastructure.Persistence;
 namespace OptimizeAll.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260923130127_InitialCreate")]
+    [Migration("20260923134231_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -525,6 +525,10 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("char(36)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasPrecision(6)
                         .HasColumnType("datetime(6)");
@@ -576,6 +580,10 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasMaxLength(60)
                         .HasColumnType("varchar(60)");
 
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("char(36)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasPrecision(6)
                         .HasColumnType("datetime(6)");
@@ -614,6 +622,10 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     b.Property<string>("Body")
                         .HasMaxLength(1000)
                         .HasColumnType("varchar(1000)");
+
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("CountryCode")
                         .HasMaxLength(2)
@@ -688,6 +700,10 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)");
+
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasPrecision(6)

@@ -58,6 +58,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     PublishAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
                     ExpiresAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
                     IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
                 },
@@ -177,6 +178,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     SortOrder = table.Column<int>(type: "int", nullable: false),
                     IsPublished = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
                 },
@@ -211,6 +213,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     EndsAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
                     SortOrder = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
                 },
@@ -282,6 +285,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     SortOrder = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
                 },
