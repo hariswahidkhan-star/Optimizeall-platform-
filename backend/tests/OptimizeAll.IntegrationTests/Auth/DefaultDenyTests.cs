@@ -32,6 +32,9 @@ public sealed class DefaultDenyTests(ApiFactory api) : IClassFixture<ApiFactory>
         "GET api/v1/public/campaigns/{slug}",
         "POST api/v1/public/conversions",
         "GET t/{code}",
+        "GET api/v1/public/lp/{clientSlug}/{pageSlug}",
+        "GET api/v1/public/forms/{formId:guid}",
+        "POST api/v1/public/forms/{formId:guid}/submissions",
         "GET api/v1/files/{id:guid}",
         "GET api/v1/campaign-categories",
         "GET api/v1/content/faqs",
@@ -176,6 +179,10 @@ public sealed class DefaultDenyTests(ApiFactory api) : IClassFixture<ApiFactory>
         await (await client.GetAsync("/api/v1/public/campaigns/no-such-campaign")).ShouldFailAsync(404);
         await (await client.GetAsync($"/api/v1/files/{Guid.NewGuid()}")).ShouldFailAsync(404, "file.not_found");
         Assert.Equal(HttpStatusCode.NotFound, (await client.GetAsync("/t/NOPE1234")).StatusCode);
+        await (await client.GetAsync("/api/v1/public/lp/no-client/no-page")).ShouldFailAsync(404, "page.not_found");
+        await (await client.GetAsync($"/api/v1/public/forms/{Guid.NewGuid()}")).ShouldFailAsync(404, "form.not_found");
+        await (await client.PostAsync($"/api/v1/public/forms/{Guid.NewGuid()}/submissions", new StringContent("{}", Encoding.UTF8, "application/json")))
+            .ShouldFailAsync(404, "form.not_found");
         await (await client.PostAsync("/api/v1/public/conversions", new StringContent("{}", Encoding.UTF8, "application/json")))
             .ShouldFailAsync(503, "tracking.postback_not_configured");
     }
