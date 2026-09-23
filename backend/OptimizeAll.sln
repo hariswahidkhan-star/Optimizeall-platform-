@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{124DDF98-A373-4D55-A172-B57E51E2B0A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptimizeAll.Api", "src\OptimizeAll.Api\OptimizeAll.Api.csproj", "{07B375C5-33EE-4DB9-89BF-5F237D5A9604}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptimizeAll.Domain", "src\OptimizeAll.Domain\OptimizeAll.Domain.csproj", "{5F187D2A-AEB8-4499-B34D-F95CC8A34A9C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptimizeAll.Infrastructure", "src\OptimizeAll.Infrastructure\OptimizeAll.Infrastructure.csproj", "{EF7512DA-3BF5-43B2-AEF8-13AB0B3763D4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F2620244-9BA2-4436-AD85-6868DDBE3E71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptimizeAll.IntegrationTests", "tests\OptimizeAll.IntegrationTests\OptimizeAll.IntegrationTests.csproj", "{2AC8270B-BBCD-438F-8B44-5E9BBAC13FC0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptimizeAll.UnitTests", "tests\OptimizeAll.UnitTests\OptimizeAll.UnitTests.csproj", "{A4E97109-0120-46E0-A666-91C4B8F24242}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{07B375C5-33EE-4DB9-89BF-5F237D5A9604}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07B375C5-33EE-4DB9-89BF-5F237D5A9604}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07B375C5-33EE-4DB9-89BF-5F237D5A9604}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07B375C5-33EE-4DB9-89BF-5F237D5A9604}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F187D2A-AEB8-4499-B34D-F95CC8A34A9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F187D2A-AEB8-4499-B34D-F95CC8A34A9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F187D2A-AEB8-4499-B34D-F95CC8A34A9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F187D2A-AEB8-4499-B34D-F95CC8A34A9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF7512DA-3BF5-43B2-AEF8-13AB0B3763D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF7512DA-3BF5-43B2-AEF8-13AB0B3763D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF7512DA-3BF5-43B2-AEF8-13AB0B3763D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF7512DA-3BF5-43B2-AEF8-13AB0B3763D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AC8270B-BBCD-438F-8B44-5E9BBAC13FC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AC8270B-BBCD-438F-8B44-5E9BBAC13FC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AC8270B-BBCD-438F-8B44-5E9BBAC13FC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AC8270B-BBCD-438F-8B44-5E9BBAC13FC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4E97109-0120-46E0-A666-91C4B8F24242}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4E97109-0120-46E0-A666-91C4B8F24242}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4E97109-0120-46E0-A666-91C4B8F24242}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4E97109-0120-46E0-A666-91C4B8F24242}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{07B375C5-33EE-4DB9-89BF-5F237D5A9604} = {124DDF98-A373-4D55-A172-B57E51E2B0A7}
+		{5F187D2A-AEB8-4499-B34D-F95CC8A34A9C} = {124DDF98-A373-4D55-A172-B57E51E2B0A7}
+		{EF7512DA-3BF5-43B2-AEF8-13AB0B3763D4} = {124DDF98-A373-4D55-A172-B57E51E2B0A7}
+		{2AC8270B-BBCD-438F-8B44-5E9BBAC13FC0} = {F2620244-9BA2-4436-AD85-6868DDBE3E71}
+		{A4E97109-0120-46E0-A666-91C4B8F24242} = {F2620244-9BA2-4436-AD85-6868DDBE3E71}
+	EndGlobalSection
+EndGlobal

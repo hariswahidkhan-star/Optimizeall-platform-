@@ -1,0 +1,26 @@
+# .NET
+bin/
+obj/
+*.user
+.vs/
+TestResults/
+storage/
+
+# Node
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+.vite/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+appsettings.*.local.json
+
+# OS / editors
+.DS_Store
+.idea/
+*.swp
