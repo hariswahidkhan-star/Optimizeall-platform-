@@ -2,15 +2,17 @@
 
 *Discover the world of solution.*
 
-Optimize All is a platform for paid social media sharing campaigns. Participants share company-approved content from their
-established social accounts, submit proof, and are paid for qualifying posts after human review. Reviewers, campaign
-managers, finance and administrators each have their own portal.
+Optimize All is a full-service digital marketing agency platform: the agency's public website and CMS, sales and
+billing, client delivery with a client portal, and the tools to run every marketing service it sells — email and
+SMS/WhatsApp marketing, social media management, paid advertising, SEO, landing pages and forms, and paid social sharing
+(influencer/advocacy) campaigns. Each team has its own portal: agency staff, clients, participants, reviewers, campaign
+managers, finance and administrators.
 
 | | |
 |---|---|
 | Frontend | React 18 + TypeScript (Vite), bespoke accessible design system, TanStack Query — `frontend/` |
 | Backend | ASP.NET Core 8 Web API (C#), EF Core 8 + Pomelo — `backend/` |
-| Database | MySQL 8 (utf8mb4), EF Core migrations |
+| Database | MySQL 8 (utf8mb4) **or** SQLite (`Database__Provider`), EF Core migrations for each provider |
 | Delivery | Docker images, Docker Compose staging stack (MySQL + Mailpit + API + nginx web), GitHub Actions CI |
 
 ## Quick start (local)
@@ -44,12 +46,31 @@ scripts/test-all.sh --sqlite   # integration tests on SQLite instead of MySQL
 scripts/e2e-journeys.sh        # full-stack Playwright journeys (participant, reviewer, finance, admin) on a fresh DB
 ```
 
-Integration tests boot the real API against a freshly migrated, uniquely named MySQL database per test class, with a
+Integration tests boot the real API against a freshly migrated, uniquely named database per test class (MySQL, or SQLite
+with `OPTIMIZEALL_TEST_PROVIDER=Sqlite`), with a
 controllable clock for cutoffs, holds and expiries.
 
 ## What is built
 
-### Stage 1 — reliable core (fully working)
+### Agency services
+| Service line | What the platform does | Docs |
+|---|---|---|
+| **Agency website & CMS** | Public marketing site (home, services, industries, pricing, case studies, testimonials, team, blog with RSS, careers with applications, search, CMS pages), SEO metadata, structured data, sitemap/robots, contact / free-audit / quote forms, consultation booking, newsletter with double opt-in | [WEBSITE.md](docs/WEBSITE.md) |
+| **CRM, proposals & billing** | Contacts, companies, deal pipeline with stages and lead scoring, proposals with tokenized accept/decline pages, contracts, invoices with tax rates, partial payments, credit notes, four-eyes voids/write-offs, aging reports, tokenized invoice pages | [SALES_AND_BILLING.md](docs/SALES_AND_BILLING.md) |
+| **Client delivery** | Client accounts and teams, brand kits, SLAs, projects, tasks, deliverables with versioned client approvals, time tracking and timesheets, utilization, client reports, agency home dashboard, **client portal** | [CLIENT_DELIVERY.md](docs/CLIENT_DELIVERY.md) |
+| **Email & SMS/WhatsApp marketing** | Lists, subscribers, consent records, suppressions, segments, block-based templates, campaigns with A/B variants, client approval, scheduled sends, journeys/automations, open/click tracking, one-click unsubscribe, preference center, provider webhooks (SendGrid, Mailgun, Twilio) | [EMAIL_SMS.md](docs/EMAIL_SMS.md) |
+| **Social media management** | Brand profiles, content calendar, composer with per-network validation, client approvals, queue and evergreen publishing, media library, hashtag sets, listening, unified inbox, competitor tracking, analytics | [SOCIAL_ADS.md](docs/SOCIAL_ADS.md) |
+| **Paid advertising** | Ad accounts (Google Ads and Meta adapters, CSV import for others), campaigns/ad groups/ads, budget pacing and alerts, media plans vs actuals, creatives with approval, naming conventions, UTM builder, experiments | [SOCIAL_ADS.md](docs/SOCIAL_ADS.md) |
+| **SEO** | Site audits by a safe crawler (SSRF-protected), on-page analyzer, keyword rank tracking, Search Console import, backlinks and outreach, local SEO profiles/citations/reviews, content briefs | [SEO_CRO.md](docs/SEO_CRO.md) |
+| **Landing pages, forms & CRO** | Block-based page builder with templates, versions, A/B tests, analytics; multi-step forms with conditional logic, consent versions, file uploads, embeds; integrations hub with write-only encrypted secrets | [SEO_CRO.md](docs/SEO_CRO.md) |
+| **Paid social sharing campaigns** | The participant/reviewer/payout platform described below | [REWARD_ENGINE.md](docs/REWARD_ENGINE.md), [PAYOUTS.md](docs/PAYOUTS.md) |
+
+Agency roles: Admin, Account manager, Strategist, Content creator, Designer, SEO specialist, Ads specialist, Social
+media manager, Sales rep, Finance; client users have per-client duties (Viewer, Approver, Billing, Owner). Every client
+record is tenant-scoped: staff see the clients they work on, client users see only their own organization.
+
+
+### Paid social sharing campaigns — stage 1: reliable core (fully working)
 * **Accounts**: registration, email verification, secure sign-in (short-lived JWT + rotating HttpOnly refresh cookie with
   reuse detection), lockout, password reset, profiles, encrypted payout details (only a masked hint is ever shown).
 * **Social profiles & eligibility**: per-profile qualification with reasons; newly created accounts are ineligible until
@@ -74,7 +95,7 @@ controllable clock for cutoffs, holds and expiries.
   admin-managed banners, announcements, FAQs, onboarding steps, categories and settings; support tickets; audit log;
   in-app notification center with email delivery.
 
-### Stage 2 — growth (fully working)
+### Paid social sharing campaigns — stage 2: growth (fully working)
 Referral links with fraud signals and rewards only after the qualifying action; invitation links and campaign landing
 pages; segmentation by language, location, platform, interests, tier and verified attributes; post templates and content
 calendar; tracking links with UTM parameters, click measurement (bots excluded) and signed conversion postbacks; A/B
@@ -89,6 +110,11 @@ achievements, onboarding reminders, campaign alerts and reactivation messages; p
 | WhatsApp notifications | Adapter implemented (WhatsApp Business Cloud API); deliveries are recorded as *Skipped — credentials not configured* | WhatsApp Business account, phone number id, access token, approved template |
 | Automatic payouts | **Not sending money.** Batches are paid manually and references recorded; the provider layer (`IPaymentProvider`) is ready | A payment provider account + credentials and an adapter (see [`docs/PAYOUTS.md`](docs/PAYOUTS.md)) |
 | Verified conversions | Postback endpoint with HMAC signature implemented | Advertiser integration + `Tracking__PostbackSecret` |
+| Marketing email at scale | Campaigns send through SMTP; SendGrid and Mailgun adapters with signed delivery/bounce webhooks | ESP account, verified sending domain (SPF/DKIM/DMARC) — see [EMAIL_SMS.md](docs/EMAIL_SMS.md) |
+| SMS / WhatsApp campaigns | Twilio adapter with inbound (STOP) and status webhooks | Twilio account and number (or WhatsApp sender) |
+| Social publishing | Facebook, Instagram and X adapters with OAuth; other networks use the manual *mark as published* flow | A developer app per network (client id/secret) and app review where the network requires it |
+| Ads data | Google Ads and Meta adapters; every platform supports CSV import | API access (developer token / app) per platform |
+| Rank tracking, Search Console | Manual and CSV rank entry, DataForSEO adapter, Search Console import | DataForSEO credentials; Google OAuth app for Search Console |
 
 ## Documentation
 
@@ -102,5 +128,7 @@ achievements, onboarding reminders, campaign alerts and reactivation messages; p
 | [DEPLOYMENT.md](docs/DEPLOYMENT.md) / [OPERATIONS.md](docs/OPERATIONS.md) | Staging/production deployment, migrations, rollback, jobs, runbooks |
 | [FRONTEND.md](docs/FRONTEND.md) | Frontend structure, design tokens, components, testing |
 | [DEMO.md](docs/DEMO.md) | Demo accounts and scripted walkthroughs |
-| [RENDER.md](docs/RENDER.md) | Deploying the demo environment to Render with the Blueprint |
+| [RENDER.md](docs/RENDER.md) | Deploying the demo environment to Render (SQLite or MySQL Blueprint) |
+| [WEBSITE.md](docs/WEBSITE.md) · [SALES_AND_BILLING.md](docs/SALES_AND_BILLING.md) · [CLIENT_DELIVERY.md](docs/CLIENT_DELIVERY.md) | Agency website/CMS, CRM and billing, client delivery and portal |
+| [EMAIL_SMS.md](docs/EMAIL_SMS.md) · [SOCIAL_ADS.md](docs/SOCIAL_ADS.md) · [SEO_CRO.md](docs/SEO_CRO.md) | Marketing service lines: deliverability and compliance, social and ads, SEO and conversion |
 | [api/](docs/api) | Endpoint reference per module + OpenAPI document |
