@@ -111,6 +111,9 @@ describe('post-login landing', () => {
   it('uses portal priority', () => {
     expect(defaultLandingPath(admin)).toBe('/admin');
     expect(defaultLandingPath(['payouts.view', 'ledger.view', 'users.view', 'audit.view'])).toBe('/finance');
+    // The Finance role also holds agency billing/client permissions; it still lands in /finance.
+    expect(defaultLandingPath(['payouts.view', 'ledger.view', 'billing.view', 'billing.manage', 'clients.view'])).toBe('/finance');
+    expect(defaultLandingPath(['crm.view', 'billing.view', 'clients.view'])).toBe('/agency');
     expect(defaultLandingPath(['campaigns.manage', 'users.view'])).toBe('/manage');
     expect(defaultLandingPath(['submissions.review', 'users.view'])).toBe('/review');
     expect(defaultLandingPath(['participant.portal'])).toBe('/app');

@@ -11,8 +11,9 @@ import { meetsRequirement, type PermissionRequirement, Permissions } from '@/lib
 import type { PortalDefinition, PortalId, PortalRouteHandle } from './portalTypes';
 
 /**
- * Portal registry, in landing priority order (admin, finance, manage, review, participant). Each portal's nav and
- * routes live in its feature folder.
+ * Portal registry, in landing priority order (admin, finance, agency, manage, review, participant). Finance comes
+ * before agency: the Finance role also holds billing.view/clients.view (agency permissions) but lands in /finance.
+ * Each portal's nav and routes live in its feature folder.
  */
 export const portals: PortalDefinition[] = [
   {
@@ -29,17 +30,6 @@ export const portals: PortalDefinition[] = [
     routes: adminPortal.routes,
   },
   {
-    id: 'agency',
-    label: 'Agency',
-    description: 'Clients, sales, delivery and every marketing service the agency runs.',
-    basePath: '/agency',
-    icon: Briefcase,
-    requires: agencyPortal.portalRequires,
-    landingRequires: agencyPortal.portalRequires,
-    nav: agencyPortal.nav,
-    routes: agencyPortal.routes,
-  },
-  {
     id: 'finance',
     label: 'Finance',
     description: 'Ledger, approvals and biweekly payouts.',
@@ -50,6 +40,17 @@ export const portals: PortalDefinition[] = [
     landingRequires: { anyOf: [Permissions.PayoutsView, Permissions.LedgerView] },
     nav: financePortal.nav,
     routes: financePortal.routes,
+  },
+  {
+    id: 'agency',
+    label: 'Agency',
+    description: 'Clients, sales, delivery and every marketing service the agency runs.',
+    basePath: '/agency',
+    icon: Briefcase,
+    requires: agencyPortal.portalRequires,
+    landingRequires: agencyPortal.portalRequires,
+    nav: agencyPortal.nav,
+    routes: agencyPortal.routes,
   },
   {
     id: 'manager',

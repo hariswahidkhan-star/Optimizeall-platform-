@@ -9,6 +9,8 @@ import { defineConfig, devices } from '@playwright/test';
  *  - journeys: full-stack journeys against a running backend; add e2e/journeys/*.spec.ts and, if needed,
  *              e2e/journeys/global-setup.ts (any e2e/<suite>/global-setup.ts is picked up automatically) to seed
  *              data / create users.
+ *  - agency:   full-stack agency-platform journeys (public website, CRM → proposal → invoice, delivery approvals,
+ *              email, social, landing pages, authorization) against the Demo seed's accounts and clients.
  *
  * E2E_BASE_URL (or PLAYWRIGHT_BASE_URL) points the tests at an already running app; without it Playwright builds the
  * app and serves it with `vite preview` on :5173.
@@ -16,9 +18,16 @@ import { defineConfig, devices } from '@playwright/test';
  * The journeys share one database and build on each other (participant → reviewer → finance → admin), so they run
  * serially on one worker, in file order, without retries; the mobile project runs only the participant journey.
  * Run them with scripts/e2e-journeys.sh (fresh database, API, `vite preview`, teardown).
+ *
+ * The agency suite runs the same way (serial, one worker, no retries); its mobile project runs only
+ * responsive.spec.ts (which pins a 390×844 viewport) and the desktop project runs everything else. Run it with
+ * `E2E_SUITE=agency E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
  */
 const suite = process.env.E2E_SUITE ?? 'smoke';
-const journeys = suite === 'journeys';
+const agency = suite === 'agency';
+/** Full-stack suites share one database and build on earlier steps: serial, one worker, no retries. */
+const journeys = suite === 'journeys' || agency;
+const mobileOnly = agency ? /responsive\.spec\.ts$/ : /participant\.spec\.ts$/;
 const baseURL = process.env.E2E_BASE_URL || process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:5173';
 const suiteSetup = `./e2e/${suite}/global-setup.ts`;
 
@@ -37,11 +46,15 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
   projects: [
-    { name: 'desktop-chromium', use: { ...devices['Desktop Chrome'] } },
+    {
+      name: 'desktop-chromium',
+      use: { ...devices['Desktop Chrome'] },
+      ...(agency ? { testIgnore: mobileOnly } : {}),
+    },
     {
       name: 'mobile-chromium',
       use: { ...devices['Pixel 7'] },
-      ...(journeys ? { testMatch: /participant\.spec\.ts$/ } : {}),
+      ...(journeys ? { testMatch: mobileOnly } : {}),
     },
   ],
   webServer: process.env.E2E_BASE_URL || process.env.PLAYWRIGHT_BASE_URL
