@@ -1329,6 +1329,8 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("SubmissionId");
 
+                    b.HasIndex("CampaignId", "Status");
+
                     b.HasIndex("Status", "AvailableAt");
 
                     b.HasIndex("UserId", "Status");
@@ -2783,7 +2785,8 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     b.Property<string>("NormalizedPostUrl")
                         .IsRequired()
                         .HasMaxLength(768)
-                        .HasColumnType("varchar(768)");
+                        .HasColumnType("varchar(768)")
+                        .UseCollation("utf8mb4_bin");
 
                     b.Property<string>("Platform")
                         .IsRequired()

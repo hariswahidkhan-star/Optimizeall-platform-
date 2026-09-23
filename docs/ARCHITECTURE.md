@@ -71,7 +71,7 @@ Modules talk to each other through:
 * `EarningEntry` is immutable after insert (amount, currency, rate, rule version, keys). Corrections are new
   Adjustment/Reversal entries. `AuditLog` is append-only. Both are enforced in `AppDbContext`.
 * Submissions capture `RewardRuleSetId/Version` when created; approval computes earnings from that version.
-* Unique indexes: normalized post URL (a post can be claimed once), `(Platform, NormalizedHandle)` social
+* Unique indexes: canonical per-platform post key (binary collation; a post can be claimed once), `(Platform, NormalizedHandle)` social
   profiles, earning idempotency keys, one payout item per user per batch, batch idempotency key per period.
 * Schema changes: edit the entity + its `IEntityTypeConfiguration`, then add a migration:
   `dotnet ef migrations add <Name> -p src/OptimizeAll.Infrastructure -s src/OptimizeAll.Api -o Persistence/Migrations`.

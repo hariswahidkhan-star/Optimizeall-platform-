@@ -12,7 +12,7 @@ using OptimizeAll.Infrastructure.Persistence;
 namespace OptimizeAll.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260923135147_InitialCreate")]
+    [Migration("20260923141919_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -1331,6 +1331,8 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.HasIndex("SubmissionId");
+
+                    b.HasIndex("CampaignId", "Status");
 
                     b.HasIndex("Status", "AvailableAt");
 
@@ -2786,7 +2788,8 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     b.Property<string>("NormalizedPostUrl")
                         .IsRequired()
                         .HasMaxLength(768)
-                        .HasColumnType("varchar(768)");
+                        .HasColumnType("varchar(768)")
+                        .UseCollation("utf8mb4_bin");
 
                     b.Property<string>("Platform")
                         .IsRequired()

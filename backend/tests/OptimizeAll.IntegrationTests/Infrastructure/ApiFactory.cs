@@ -46,7 +46,8 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
     /// <summary>Test clock. Starts at the real current time; advance it to cross cutoffs, holds and expiries.</summary>
     public FakeTimeProvider Clock { get; } = new(DateTimeOffset.UtcNow);
 
-    public string ConnectionString => $"{_serverConnection.TrimEnd(';')};Database={_databaseName};";
+    // Each test host gets a small pool so many parallel test classes stay under MySQL's max_connections.
+    public string ConnectionString => $"{_serverConnection.TrimEnd(';')};Database={_databaseName};Maximum Pool Size=20;";
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {

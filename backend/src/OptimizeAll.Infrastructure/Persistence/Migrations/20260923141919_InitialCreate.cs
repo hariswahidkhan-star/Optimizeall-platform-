@@ -1531,7 +1531,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PostUrl = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    NormalizedPostUrl = table.Column<string>(type: "varchar(768)", maxLength: 768, nullable: false)
+                    NormalizedPostUrl = table.Column<string>(type: "varchar(768)", maxLength: 768, nullable: false, collation: "utf8mb4_bin")
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PostedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
                     CaptionText = table.Column<string>(type: "text", nullable: true)
@@ -1893,6 +1893,11 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "IX_content_calendar_entries_TemplateId",
                 table: "content_calendar_entries",
                 column: "TemplateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_earning_entries_CampaignId_Status",
+                table: "earning_entries",
+                columns: new[] { "CampaignId", "Status" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_earning_entries_ExchangeRateId",
