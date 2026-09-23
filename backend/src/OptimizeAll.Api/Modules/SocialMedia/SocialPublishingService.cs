@@ -335,6 +335,13 @@ public sealed class SocialEvergreenJob(AppDbContext db, IDatabaseDialect dialect
                 original.EvergreenIntervalDays, lastPublished, now);
             if (repeat is null) continue;
 
+            // The client approval gate also applies to recycled copies: when the client requires approval and never
+            // approved the original (e.g. the setting was switched on later), the copy waits for the client.
+            var requiresClient = await db.Set<SocialClientSettings>().AsNoTracking()
+                .AnyAsync(x => x.ClientAccountId == original.ClientAccountId && x.RequireClientApproval, ct);
+            var approved = !requiresClient
+                           || await SocialPostService.IsClientApprovedAsync(db, original.ClientAccountId, original.ApprovedByUserId, ct);
+
             await using var tx = await dialect.BeginWriteTransactionAsync(db, ct);
             var bumped = await db.Set<SocialPost>()
                 .Where(p => p.Id == original.Id && p.EvergreenRepeatCount == repeat - 1)
@@ -348,15 +355,15 @@ public sealed class SocialEvergreenJob(AppDbContext db, IDatabaseDialect dialect
             {
                 ClientAccountId = original.ClientAccountId,
                 Title = $"{original.Title} (evergreen #{repeat})",
-                Status = SocialPostStatus.Scheduled,
+                Status = approved ? SocialPostStatus.Scheduled : SocialPostStatus.ClientApproval,
                 ScheduledAt = new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0, DateTimeKind.Utc).AddHours(1),
                 CampaignId = original.CampaignId,
                 AutoAppendUtm = original.AutoAppendUtm,
                 RecycledFromPostId = original.Id,
                 RecycleNumber = repeat,
                 CreatedByUserId = original.CreatedByUserId,
-                ApprovedByUserId = original.ApprovedByUserId,
-                ApprovedAt = original.ApprovedAt,
+                ApprovedByUserId = approved ? original.ApprovedByUserId : null,
+                ApprovedAt = approved ? original.ApprovedAt : null,
             };
             foreach (var v in original.Variants)
             {

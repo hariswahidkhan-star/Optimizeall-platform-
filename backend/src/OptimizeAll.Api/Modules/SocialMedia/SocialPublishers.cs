@@ -74,8 +74,42 @@ internal static class ProviderErrors
         return PublishResult.Fail(PublishFailureKind.Rejected, $"{provider} rejected the post ({(int)status}): {detail}");
     }
 
-    public static PublishResult FromException(string provider, Exception ex) =>
-        PublishResult.Fail(PublishFailureKind.Transient, $"{provider} request failed: {ex.Message}");
+    /// <summary>
+    /// A network error or timeout. Before the request that creates the post was sent, nothing can be live and a retry is
+    /// safe (Transient). Once it was sent, the post may be live even though no answer arrived (e.g. the HTTP timeout
+    /// fired after the provider accepted it), so the outcome is Unknown and never retried automatically: an automatic
+    /// retry would publish a duplicate.
+    /// </summary>
+    public static PublishResult FromException(string provider, Exception ex, bool publishRequestSent) => publishRequestSent && !NeverConnected(ex)
+        ? PublishResult.Fail(PublishFailureKind.Unknown,
+            $"{provider} did not answer the publish request ({ex.Message}); it may be live. Check the network before retrying.")
+        : PublishResult.Fail(PublishFailureKind.Transient, $"{provider} request failed: {ex.Message}");
+
+    /// <summary>The connection was never established (DNS, TCP connect, TLS handshake): the request cannot have arrived.</summary>
+    private static bool NeverConnected(Exception ex) => ex is HttpRequestException
+    {
+        HttpRequestError: HttpRequestError.NameResolutionError or HttpRequestError.ConnectionError or HttpRequestError.SecureConnectionError,
+    };
+
+    /// <summary>Network errors and timeouts (not a cancellation of the run itself).</summary>
+    public static bool IsNetworkError(Exception ex, CancellationToken ct) =>
+        ex is HttpRequestException or TaskCanceledException && !ct.IsCancellationRequested;
+
+    /// <summary>
+    /// Runs a follow-up call (first comment, permalink lookup) after the post is live. Its failure must never turn the
+    /// successful publication into a failure (which would be retried and publish a duplicate); it becomes a note instead.
+    /// </summary>
+    public static async Task<string?> AfterPublishAsync(Func<Task<string?>> step, string what, CancellationToken ct)
+    {
+        try
+        {
+            return await step();
+        }
+        catch (Exception ex) when (IsNetworkError(ex, ct))
+        {
+            return $"Published, but {what} failed: {ex.Message}";
+        }
+    }
 
     public static string Truncate(string s, int max) => s.Length <= max ? s : s[..max] + "…";
 }
@@ -149,6 +183,7 @@ public sealed class FacebookPagePublisher(MetaGraphClient graph, ILogger<Faceboo
         if (r.Media.Any(m => string.IsNullOrWhiteSpace(m.PublicUrl)))
             return PublishResult.NotSupported("Facebook fetches media by URL: mark the media as public or use an https URL.");
 
+        var sent = false;
         try
         {
             var page = Uri.EscapeDataString(r.ExternalProfileId);
@@ -157,6 +192,7 @@ public sealed class FacebookPagePublisher(MetaGraphClient graph, ILogger<Faceboo
             var videos = r.Media.Where(m => m.Kind == MediaKind.Video).ToList();
             if (videos.Count > 0)
             {
+                sent = true;
                 res = await graph.PostAsync($"{page}/videos", new Dictionary<string, string>
                 {
                     ["file_url"] = videos[0].PublicUrl!,
@@ -167,6 +203,7 @@ public sealed class FacebookPagePublisher(MetaGraphClient graph, ILogger<Faceboo
             }
             else if (r.Media.Count == 1)
             {
+                sent = true;
                 res = await graph.PostAsync($"{page}/photos", new Dictionary<string, string>
                 {
                     ["url"] = r.Media[0].PublicUrl!,
@@ -190,6 +227,7 @@ public sealed class FacebookPagePublisher(MetaGraphClient graph, ILogger<Faceboo
                     if (!photo.Success) return MetaGraphClient.Failure("Facebook", photo);
                     form[$"attached_media[{i}]"] = JsonSerializer.Serialize(new { media_fbid = MetaGraphClient.Str(photo.Body, "id") });
                 }
+                sent = true;
                 res = await graph.PostAsync($"{page}/feed", form, r.AccessToken, ct);
                 if (!res.Success) return MetaGraphClient.Failure("Facebook", res);
                 postId = MetaGraphClient.Str(res.Body, "id");
@@ -201,16 +239,19 @@ public sealed class FacebookPagePublisher(MetaGraphClient graph, ILogger<Faceboo
             string? note = null;
             if (!string.IsNullOrWhiteSpace(r.FirstComment))
             {
-                var comment = await graph.PostAsync($"{Uri.EscapeDataString(postId)}/comments",
-                    new Dictionary<string, string> { ["message"] = r.FirstComment }, r.AccessToken, ct);
-                if (!comment.Success) note = "Published, but the first comment failed: " + ProviderErrors.Truncate(comment.Raw, 200);
+                note = await ProviderErrors.AfterPublishAsync(async () =>
+                {
+                    var comment = await graph.PostAsync($"{Uri.EscapeDataString(postId)}/comments",
+                        new Dictionary<string, string> { ["message"] = r.FirstComment }, r.AccessToken, ct);
+                    return comment.Success ? null : "Published, but the first comment failed: " + ProviderErrors.Truncate(comment.Raw, 200);
+                }, "the first comment", ct);
             }
             return PublishResult.Ok(postId, $"https://www.facebook.com/{postId}", note);
         }
-        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException && !ct.IsCancellationRequested)
+        catch (Exception ex) when (ProviderErrors.IsNetworkError(ex, ct))
         {
             logger.LogWarning(ex, "Facebook publish failed for variant {Variant}", r.VariantId);
-            return ProviderErrors.FromException("Facebook", ex);
+            return ProviderErrors.FromException("Facebook", ex, sent);
         }
     }
 }
@@ -234,6 +275,7 @@ public sealed class InstagramPublisher(MetaGraphClient graph, IOptions<SocialMed
         if (r.Media.Any(m => string.IsNullOrWhiteSpace(m.PublicUrl)))
             return PublishResult.NotSupported("Instagram fetches media by URL: mark the media as public or use an https URL.");
 
+        var sent = false;
         try
         {
             var user = Uri.EscapeDataString(r.ExternalProfileId);
@@ -269,6 +311,7 @@ public sealed class InstagramPublisher(MetaGraphClient graph, IOptions<SocialMed
                 if (ready is not null) return ready;
             }
 
+            sent = true;
             var published = await graph.PostAsync($"{user}/media_publish",
                 new Dictionary<string, string> { ["creation_id"] = containerId }, r.AccessToken, ct);
             if (!published.Success) return MetaGraphClient.Failure("Instagram", published);
@@ -277,22 +320,29 @@ public sealed class InstagramPublisher(MetaGraphClient graph, IOptions<SocialMed
                 return PublishResult.Fail(PublishFailureKind.Unknown, $"Instagram answered without a media id: {ProviderErrors.Truncate(published.Raw, 300)}");
 
             string? permalink = null;
-            var info = await graph.GetAsync($"{Uri.EscapeDataString(mediaId)}?fields=permalink", r.AccessToken, ct);
-            if (info.Success) permalink = MetaGraphClient.Str(info.Body, "permalink");
+            await ProviderErrors.AfterPublishAsync(async () =>
+            {
+                var info = await graph.GetAsync($"{Uri.EscapeDataString(mediaId)}?fields=permalink", r.AccessToken, ct);
+                if (info.Success) permalink = MetaGraphClient.Str(info.Body, "permalink");
+                return null;
+            }, "the permalink lookup", ct);
 
             string? note = null;
             if (!string.IsNullOrWhiteSpace(r.FirstComment))
             {
-                var comment = await graph.PostAsync($"{Uri.EscapeDataString(mediaId)}/comments",
-                    new Dictionary<string, string> { ["message"] = r.FirstComment }, r.AccessToken, ct);
-                if (!comment.Success) note = "Published, but the first comment failed: " + ProviderErrors.Truncate(comment.Raw, 200);
+                note = await ProviderErrors.AfterPublishAsync(async () =>
+                {
+                    var comment = await graph.PostAsync($"{Uri.EscapeDataString(mediaId)}/comments",
+                        new Dictionary<string, string> { ["message"] = r.FirstComment }, r.AccessToken, ct);
+                    return comment.Success ? null : "Published, but the first comment failed: " + ProviderErrors.Truncate(comment.Raw, 200);
+                }, "the first comment", ct);
             }
             return PublishResult.Ok(mediaId, permalink ?? $"https://www.instagram.com/{r.Handle.TrimStart('@')}/", note);
         }
-        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException && !ct.IsCancellationRequested)
+        catch (Exception ex) when (ProviderErrors.IsNetworkError(ex, ct))
         {
             logger.LogWarning(ex, "Instagram publish failed for variant {Variant}", r.VariantId);
-            return ProviderErrors.FromException("Instagram", ex);
+            return ProviderErrors.FromException("Instagram", ex, sent);
         }
     }
 
@@ -354,8 +404,10 @@ public sealed class XPublisher(IHttpClientFactory factory, IOptions<SocialMediaO
         if (r.Media.Count > 0)
             return PublishResult.NotSupported("Media upload to X is not implemented in this release; publish text-only or post manually and mark as published.");
 
+        var sent = false;
         try
         {
+            sent = true;
             var (status, body, raw) = await PostTweetAsync(new { text = r.Text }, r.AccessToken, ct);
             if (status != HttpStatusCode.Created && status != HttpStatusCode.OK)
                 return ProviderErrors.FromHttp("X", status, raw, tokenExpired: status == HttpStatusCode.Unauthorized);
@@ -366,16 +418,20 @@ public sealed class XPublisher(IHttpClientFactory factory, IOptions<SocialMediaO
             string? note = null;
             if (!string.IsNullOrWhiteSpace(r.FirstComment))
             {
-                var reply = await PostTweetAsync(new { text = r.FirstComment, reply = new { in_reply_to_tweet_id = id } }, r.AccessToken, ct);
-                if (reply.Status is not (HttpStatusCode.Created or HttpStatusCode.OK))
-                    note = "Published, but the reply (first comment) failed: " + ProviderErrors.Truncate(reply.Raw, 200);
+                note = await ProviderErrors.AfterPublishAsync(async () =>
+                {
+                    var reply = await PostTweetAsync(new { text = r.FirstComment, reply = new { in_reply_to_tweet_id = id } }, r.AccessToken, ct);
+                    return reply.Status is HttpStatusCode.Created or HttpStatusCode.OK
+                        ? null
+                        : "Published, but the reply (first comment) failed: " + ProviderErrors.Truncate(reply.Raw, 200);
+                }, "the reply (first comment)", ct);
             }
             return PublishResult.Ok(id, $"https://x.com/{Uri.EscapeDataString(r.Handle.TrimStart('@'))}/status/{id}", note);
         }
-        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException && !ct.IsCancellationRequested)
+        catch (Exception ex) when (ProviderErrors.IsNetworkError(ex, ct))
         {
             logger.LogWarning(ex, "X publish failed for variant {Variant}", r.VariantId);
-            return ProviderErrors.FromException("X", ex);
+            return ProviderErrors.FromException("X", ex, sent);
         }
     }
 

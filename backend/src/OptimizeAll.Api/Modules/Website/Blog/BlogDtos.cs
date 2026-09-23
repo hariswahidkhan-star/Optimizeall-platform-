@@ -20,13 +20,12 @@ public sealed record BlogPostSummaryDto(
     Guid Id, string Slug, string Title, BlogPostStatus Status, string? AuthorName, IReadOnlyList<string> Categories, IReadOnlyList<string> Tags,
     int ReadingMinutes, DateTime? PublishAt, DateTime? PublishedAt, DateTime UpdatedAt);
 
+/// <summary>A blog post for the editor; <c>Can</c> says what the caller may do next (drives the editor's buttons).</summary>
 public sealed record BlogPostDto(
     Guid Id, string Slug, string Title, string Excerpt, string BodyMarkdown, string? CoverImageUrl, string? CoverImageAlt, Guid? AuthorId,
     IReadOnlyList<Guid> CategoryIds, IReadOnlyList<string> Tags, int ReadingMinutes, BlogPostStatus Status, DateTime? PublishAt,
     DateTime? PublishedAt, IReadOnlyList<Guid> RelatedPostIds, SeoDto Seo, Guid? CreatedByUserId, Guid? SubmittedByUserId,
-    Guid? PublishedByUserId, DateTime CreatedAt, DateTime UpdatedAt, Guid ConcurrencyStamp,
-    /// <summary>What the caller may do next (drives the editor's buttons).</summary>
-    BlogPermissionsDto Can);
+    Guid? PublishedByUserId, DateTime CreatedAt, DateTime UpdatedAt, Guid ConcurrencyStamp, BlogPermissionsDto Can);
 
 public sealed record BlogPermissionsDto(bool Edit, bool Submit, bool Publish, bool Schedule, bool Unpublish, bool ReturnToDraft, bool Delete);
 

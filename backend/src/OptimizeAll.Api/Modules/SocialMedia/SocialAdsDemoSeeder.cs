@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Api.Modules.Ads;
+using OptimizeAll.Api.Modules.Clients;
 using OptimizeAll.Domain.Ads;
 using OptimizeAll.Domain.Agency;
 using OptimizeAll.Domain.Common;
@@ -21,21 +22,14 @@ namespace OptimizeAll.Api.Modules.SocialMedia;
 public sealed class SocialAdsDemoSeeder(
     TimeProvider clock, IPasswordHasher<User> passwordHasher, IDatabaseDialect dialect, IServiceProvider services, ILogger<SocialAdsDemoSeeder> logger) : ISeeder
 {
-    public const string Password = "Demo#2026!pass";
-    public const string SocialEmail = "social@demo.optimizeall.app";
-    public const string AdsEmail = "ads@demo.optimizeall.app";
+    public const string Password = DeliveryDemoData.Password;
     public const string MarkerHandle = "nimbusfitness";
 
     public string Profile => "Demo";
     public int Order => 300;
 
-    internal static readonly (string Slug, string Name, string Industry, string Country, string Currency, string TimeZone)[] Clients =
-    {
-        ("nimbus-fitness", "Nimbus Fitness", "SaaS fitness app", "US", "USD", "America/New_York"),
-        ("wanderly-travel", "Wanderly Travel", "Travel", "GB", "GBP", "Europe/London"),
-        ("aurora-skincare", "Aurora Skincare", "E-commerce beauty", "AE", "AED", "Asia/Dubai"),
-        ("karachi-eats", "Karachi Eats", "Restaurant group", "PK", "PKR", "Asia/Karachi"),
-    };
+    /// <summary>The canonical demo clients (<see cref="DeliveryDemoData"/>), so the result does not depend on seeder order.</summary>
+    internal static IReadOnlyList<DeliveryDemoData.DemoClient> Clients => DeliveryDemoData.Clients;
 
     private DateTime _now;
     private Random _rng = new(20260923);
@@ -45,10 +39,10 @@ public sealed class SocialAdsDemoSeeder(
         _now = clock.GetUtcNow().UtcDateTime;
         _rng = new Random(20260923);
         var clients = await EnsureClientsAsync(db, ct);
-        var social = await EnsureStaffAsync(db, SocialEmail, "Sofia Social (demo)", Role.SocialMediaManager, ct);
-        var ads = await EnsureStaffAsync(db, AdsEmail, "Adam Ads (demo)", Role.AdsSpecialist, ct);
+        var social = await EnsureStaffAsync(db, DeliveryDemoData.Social, ct);
+        var ads = await EnsureStaffAsync(db, DeliveryDemoData.Ads, ct);
 
-        var nimbus = clients["nimbus-fitness"];
+        var nimbus = clients[DeliveryDemoData.Nimbus.Slug];
         if (await db.Set<BrandProfile>().AnyAsync(p => p.ClientAccountId == nimbus.Id && p.Handle == MarkerHandle, ct))
         {
             logger.LogInformation("Social/ads demo data already present; skipping");
@@ -84,8 +78,8 @@ public sealed class SocialAdsDemoSeeder(
             {
                 existing = new ClientAccount
                 {
-                    Slug = c.Slug, Name = c.Name, Industry = c.Industry, CountryCode = c.Country, Currency = c.Currency, TimeZone = c.TimeZone,
-                    Status = ClientAccountStatus.Active, Notes = "Demo client (staging data only).",
+                    Slug = c.Slug, Name = c.Name, Industry = c.Industry, CountryCode = c.CountryCode, Currency = c.Currency, TimeZone = c.TimeZone,
+                    Status = c.Status, Website = c.Website, Summary = c.Summary, Notes = "Demo client (staging data only).",
                 };
                 db.Set<ClientAccount>().Add(existing);
                 await db.SaveChangesAsync(ct);
@@ -95,8 +89,9 @@ public sealed class SocialAdsDemoSeeder(
         return result;
     }
 
-    private async Task<User> EnsureStaffAsync(AppDbContext db, string email, string name, Role role, CancellationToken ct)
+    private async Task<User> EnsureStaffAsync(AppDbContext db, DeliveryDemoData.DemoStaff staff, CancellationToken ct)
     {
+        var (email, name, role) = (staff.Email, staff.DisplayName, staff.Role);
         var normalized = Normalization.Email(email);
         var user = await db.Set<User>().Include(u => u.Roles).FirstOrDefaultAsync(u => u.NormalizedEmail == normalized, ct);
         if (user is not null)
@@ -139,10 +134,10 @@ public sealed class SocialAdsDemoSeeder(
 
     private void SeedSocial(AppDbContext db, Dictionary<string, ClientAccount> clients, Guid staffId)
     {
-        var nimbus = clients["nimbus-fitness"];
-        var wanderly = clients["wanderly-travel"];
-        var aurora = clients["aurora-skincare"];
-        var karachi = clients["karachi-eats"];
+        var nimbus = clients[DeliveryDemoData.Nimbus.Slug];
+        var wanderly = clients[DeliveryDemoData.Wanderly.Slug];
+        var aurora = clients[DeliveryDemoData.Aurora.Slug];
+        var karachi = clients[DeliveryDemoData.KarachiEats.Slug];
 
         db.Set<SocialClientSettings>().AddRange(
             new SocialClientSettings { ClientAccountId = nimbus.Id, RequireClientApproval = true, UpdatedAt = _now },
@@ -284,8 +279,8 @@ public sealed class SocialAdsDemoSeeder(
 
         // Comments on the approval posts.
         db.Set<SocialPostComment>().AddRange(
-            new SocialPostComment { PostId = review.Id, ClientAccountId = nimbus.Id, AuthorName = "Sofia Social (demo)", AuthorUserId = staffId, IsInternal = true, Kind = PostCommentKind.Submitted, Body = "Submitted for internal review.", CreatedAt = _now.AddHours(-5) },
-            new SocialPostComment { PostId = clientApproval.Id, ClientAccountId = nimbus.Id, AuthorName = "Sofia Social (demo)", AuthorUserId = staffId, Kind = PostCommentKind.Approved, Body = "Approved internally; sent to the client for approval.", CreatedAt = _now.AddHours(-3) });
+            new SocialPostComment { PostId = review.Id, ClientAccountId = nimbus.Id, AuthorName = DeliveryDemoData.Social.DisplayName, AuthorUserId = staffId, IsInternal = true, Kind = PostCommentKind.Submitted, Body = "Submitted for internal review.", CreatedAt = _now.AddHours(-5) },
+            new SocialPostComment { PostId = clientApproval.Id, ClientAccountId = nimbus.Id, AuthorName = DeliveryDemoData.Social.DisplayName, AuthorUserId = staffId, Kind = PostCommentKind.Approved, Body = "Approved internally; sent to the client for approval.", CreatedAt = _now.AddHours(-3) });
 
         // Metrics: an export-style daily profile series (90 days) and per-post lifetime snapshots.
         var batch = Add(db, new SocialMetricImport
@@ -380,10 +375,10 @@ public sealed class SocialAdsDemoSeeder(
 
     private void SeedAds(AppDbContext db, Dictionary<string, ClientAccount> clients, Guid adsStaffId, Guid socialStaffId)
     {
-        var nimbus = clients["nimbus-fitness"];
-        var wanderly = clients["wanderly-travel"];
-        var aurora = clients["aurora-skincare"];
-        var karachi = clients["karachi-eats"];
+        var nimbus = clients[DeliveryDemoData.Nimbus.Slug];
+        var wanderly = clients[DeliveryDemoData.Wanderly.Slug];
+        var aurora = clients[DeliveryDemoData.Aurora.Slug];
+        var karachi = clients[DeliveryDemoData.KarachiEats.Slug];
 
         db.Set<AdsClientSettings>().Add(new AdsClientSettings
         {

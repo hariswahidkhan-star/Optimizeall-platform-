@@ -207,7 +207,7 @@ public sealed record ExperimentDto(Guid Id, Guid ClientAccountId, Guid? AdAccoun
 
 // ---------------------------------------------------------------- controller
 
-/// <summary>Naming conventions, UTM builder, media plans (actual vs plan), creative & copy library and experiments log.</summary>
+/// <summary>Naming conventions, UTM builder, media plans (actual vs plan), creative &amp; copy library and experiments log.</summary>
 [ApiController]
 [Route("api/v1/agency/ads")]
 [HasPermission(Permissions.AdsManage)]

@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Notifications;
 using OptimizeAll.Api.Common.Security;
@@ -124,7 +123,6 @@ public sealed class SocialPostService(
     ICurrentUser currentUser,
     IAuditLogger audit,
     INotificationService notifications,
-    IOptions<SocialMediaOptions> options,
     TimeProvider clock)
 {
     private DateTime Now => clock.GetUtcNow().UtcDateTime;
@@ -355,6 +353,7 @@ public sealed class SocialPostService(
         await EnsureValidAsync(post, settings, ct);
         var from = post.Status;
         post.Status = PostWorkflow.Next(from, WorkflowAction.Schedule, settings.RequireClientApproval);
+        await EnsureClientApprovedAsync(post, settings, ct);
         post.ScheduledAt = at;
         post.NextAttemptAt = null;
         AddComment(post, PostCommentKind.Scheduled, $"Scheduled for {at:yyyy-MM-dd HH:mm} UTC.", isInternal: true);
@@ -451,6 +450,7 @@ public sealed class SocialPostService(
             v.FailureReason = null;
         }
         var settings = await access.SettingsAsync(post.ClientAccountId, ct);
+        await EnsureClientApprovedAsync(post, settings, ct);
         post.Status = PostWorkflow.Next(post.Status, WorkflowAction.Retry, settings.RequireClientApproval);
         if (post.ScheduledAt is null || post.ScheduledAt < Now) post.ScheduledAt = Now;
         post.NextAttemptAt = null;
@@ -477,6 +477,66 @@ public sealed class SocialPostService(
         audit.Record("social.post.deleted", nameof(SocialPost), post.Id, Snapshot(post));
         db.Remove(post);
         await db.SaveChangesAsync(ct);
+    }
+
+    // ------------------------------ client approval gate
+
+    /// <summary>
+    /// True when the post's approval came from one of the client's Approvers/Owners. The approval workflow records the
+    /// user of the last transition to Approved: a client approver after "client approve", a staff member after an internal
+    /// approval while client approval was off.
+    /// </summary>
+    public static Task<bool> IsClientApprovedAsync(AppDbContext db, Guid clientId, Guid? approvedByUserId, CancellationToken ct) =>
+        approvedByUserId is not { } approver
+            ? Task.FromResult(false)
+            : db.Set<ClientMember>().AsNoTracking().AnyAsync(m => m.ClientAccountId == clientId && m.UserId == approver
+                && (m.Role == ClientMemberRole.Approver || m.Role == ClientMemberRole.Owner), ct);
+
+    /// <summary>
+    /// When the client requires approval, a post approved only internally (e.g. before the setting was switched on) must
+    /// not be scheduled or published: 409 <c>social.client_approval_required</c>.
+    /// </summary>
+    private async Task EnsureClientApprovedAsync(SocialPost post, SocialClientSettings settings, CancellationToken ct)
+    {
+        if (!settings.RequireClientApproval || await IsClientApprovedAsync(db, post.ClientAccountId, post.ApprovedByUserId, ct)) return;
+        throw DomainException.Conflict("social.client_approval_required",
+            "This client requires client approval, and this post was only approved internally. Send it to the client for approval first.");
+    }
+
+    /// <summary>
+    /// Called when a client's "require client approval" setting is switched on: approved or scheduled posts that the client
+    /// has not approved go back to ClientApproval (conditional update, so a post the publishing job has just claimed is left
+    /// alone) and the client's approvers are notified. Returns the number of posts reopened.
+    /// </summary>
+    public async Task<int> ReopenForClientApprovalAsync(Guid clientId, CancellationToken ct)
+    {
+        var candidates = await db.Set<SocialPost>().AsNoTracking()
+            .Where(p => p.ClientAccountId == clientId && (p.Status == SocialPostStatus.Approved || p.Status == SocialPostStatus.Scheduled))
+            .Select(p => new { p.Id, p.Status, p.ApprovedByUserId, p.Title }).ToListAsync(ct);
+        var reopened = new List<(Guid Id, string Title)>();
+        foreach (var c in candidates)
+        {
+            if (await IsClientApprovedAsync(db, clientId, c.ApprovedByUserId, ct)) continue;
+            var changed = await db.Set<SocialPost>()
+                .Where(p => p.Id == c.Id && p.Status == c.Status)
+                .ExecuteUpdateAsync(s => s
+                    .SetProperty(p => p.Status, SocialPostStatus.ClientApproval)
+                    .SetProperty(p => p.ApprovedAt, (DateTime?)null)
+                    .SetProperty(p => p.ApprovedByUserId, (Guid?)null)
+                    .SetProperty(p => p.NextAttemptAt, (DateTime?)null)
+                    .SetProperty(p => p.UpdatedAt, Now)
+                    .SetProperty(p => p.ConcurrencyStamp, Guid.NewGuid()), ct);
+            if (changed == 1) reopened.Add((c.Id, c.Title));
+        }
+        foreach (var (id, title) in reopened)
+        {
+            var post = new SocialPost { Id = id, ClientAccountId = clientId, Title = title };
+            AddComment(post, PostCommentKind.System, "Client approval is now required; the post is waiting for the client's approval.", isInternal: false);
+            audit.Record("social.post.reopened_for_client_approval", nameof(SocialPost), id);
+            await NotifyClientApproversAsync(post, ct);
+        }
+        if (reopened.Count > 0) await db.SaveChangesAsync(ct);
+        return reopened.Count;
     }
 
     // ------------------------------ mapping
@@ -508,6 +568,9 @@ public sealed class SocialPostService(
         var allowed = forClient
             ? (post.Status == SocialPostStatus.ClientApproval ? new[] { "clientApprove", "clientRequestChanges" } : Array.Empty<string>())
             : AllowedActions(post, settings.RequireClientApproval);
+        if (!forClient && settings.RequireClientApproval && post.Status is SocialPostStatus.Approved or SocialPostStatus.Failed
+            && !await IsClientApprovedAsync(db, post.ClientAccountId, post.ApprovedByUserId, ct))
+            allowed = allowed.Where(a => a is not ("schedule" or "queue" or "retry")).ToList();
         return new PostDto(post.Id, post.ClientAccountId, client, post.Title, post.Status, post.ScheduledAt, post.CampaignId, post.AutoAppendUtm,
             post.IsEvergreen, post.EvergreenIntervalDays, post.EvergreenMaxRepeats, post.EvergreenRepeatCount, post.RecycledFromPostId,
             post.RecycleNumber, post.PublishedAt, forClient ? null : post.FailureReason, settings.RequireClientApproval,

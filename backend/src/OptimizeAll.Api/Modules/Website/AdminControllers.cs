@@ -340,7 +340,7 @@ public sealed class WebsiteCareersController(CareersService careers) : Controlle
 [Authorize]
 [Route("api/v1/agency/website")]
 public sealed class WebsiteLeadsController(
-    InquiryService inquiries, BookingService bookings, NewsletterService newsletter, OverviewService overview, ICurrentUser user) : ControllerBase
+    InquiryService inquiries, BookingService bookings, NewsletterService newsletter, OverviewService overview) : ControllerBase
 {
     [HttpGet("overview")]
     [RequireAnyPermission(Permissions.SiteManage, Permissions.CrmView, Permissions.BlogWrite, Permissions.BlogPublish, Permissions.CareersManage)]

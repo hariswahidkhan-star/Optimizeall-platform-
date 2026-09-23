@@ -96,6 +96,7 @@ public sealed class SocialProfilesController(
     SocialAppCredentials appCredentials,
     SocialOAuthRegistry oauth,
     ProfileTokenStore tokens,
+    SocialPostService posts,
     OAuthStateKey stateKey,
     ICredentialVault vault,
     ICurrentUser currentUser,
@@ -298,7 +299,10 @@ public sealed class SocialProfilesController(
         return new SocialSettingsDto(clientId, s.RequireClientApproval, s.DefaultUtmMedium, s.ConcurrencyStamp);
     }
 
-    /// <summary>Per-client settings; turning client approval on or off is audited.</summary>
+    /// <summary>
+    /// Per-client settings; turning client approval on or off is audited. Turning it on sends approved and scheduled posts
+    /// that the client has not approved back to the client for approval.
+    /// </summary>
     [HttpPut("clients/{clientId:guid}/settings")]
     [HasPermission(Permissions.SocialPublish)]
     public async Task<SocialSettingsDto> UpdateSettings(Guid clientId, SocialSettingsInput input, CancellationToken ct)
@@ -321,6 +325,7 @@ public sealed class SocialProfilesController(
         s.UpdatedAt = Now;
         audit.Record("social.settings.updated", nameof(SocialClientSettings), clientId, before, new { s.RequireClientApproval, s.DefaultUtmMedium });
         await db.SaveChangesAsync(ct);
+        if (s.RequireClientApproval && !before.RequireClientApproval) await posts.ReopenForClientApprovalAsync(clientId, ct);
         return new SocialSettingsDto(clientId, s.RequireClientApproval, s.DefaultUtmMedium, s.ConcurrencyStamp);
     }
 

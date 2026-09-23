@@ -304,9 +304,10 @@ public static class AdImportParser
                 level == AdLevel.Ad ? Key(adId, adName) : null, adName, currency, spend, impressions, clicks, conversions, value, reach, views));
         }
 
-        // Sum rows of the same entity and day (segmented exports, e.g. by device or network).
+        // Sum rows of the same entity and day (segmented exports, e.g. by device or network). Amounts in different
+        // currencies are never added up: such rows stay separate so the currency check reports them.
         var merged = parsed
-            .GroupBy(p => (p.Date, p.Level, p.EntityKey))
+            .GroupBy(p => (p.Date, p.Level, p.EntityKey, Currency: (p.Currency ?? string.Empty).ToUpperInvariant()))
             .Select(g => g.Skip(1).Aggregate(g.First(), (a, b) => a with
             {
                 Spend = a.Spend + b.Spend,

@@ -223,9 +223,12 @@ public static partial class Slugs
 /// </summary>
 public static class ConsultationSlots
 {
+    // booked: time ranges (UTC) held by active bookings. A slot that overlaps one is not offered even when it starts at
+    // a different time, e.g. after the slot length or the availability windows changed (a 09:00–09:30 booking blocks a
+    // new 09:20 slot).
     public static IReadOnlyList<DateTime> Available(
         ConsultationSettings settings, TimeZoneInfo zone, IReadOnlySet<DateOnly> blackouts, IReadOnlySet<string> bookedKeys,
-        DateTime nowUtc, DateTime fromUtc, DateTime toUtc)
+        DateTime nowUtc, DateTime fromUtc, DateTime toUtc, IReadOnlyCollection<(DateTime Start, DateTime End)>? booked = null)
     {
         var result = new List<DateTime>();
         if (!settings.IsEnabled || settings.SlotMinutes <= 0) return result;
@@ -252,6 +255,7 @@ public static class ConsultationSlots
                     var utc = TimeZoneInfo.ConvertTimeToUtc(local, zone);
                     if (utc < start || utc >= end) continue;
                     if (bookedKeys.Contains(ConsultationBooking.KeyFor(utc))) continue;
+                    if (booked is not null && booked.Any(b => b.Start < utc + slot && utc < b.End)) continue;
                     result.Add(utc);
                 }
             }

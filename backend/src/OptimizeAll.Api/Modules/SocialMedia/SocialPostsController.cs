@@ -55,7 +55,7 @@ public sealed record VariantStateDto(
 [ApiController]
 [Route("api/v1/agency/social")]
 public sealed class SocialPostsController(
-    AppDbContext db, SocialAccess access, SocialPostService posts, NetworkPresetProvider presets, TimeProvider clock) : ControllerBase
+    AppDbContext db, SocialAccess access, SocialPostService posts, NetworkPresetProvider presets) : ControllerBase
 {
     [HttpGet("presets")]
     [HasPermission(Permissions.SocialManage)]
