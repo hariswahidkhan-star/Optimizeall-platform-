@@ -183,6 +183,11 @@ The agency staff portal (`/agency`) aggregates per-area route modules in `featur
 (`nav`, `routes`, `opensWith`); the client portal (`/client`) aggregates `features/client/<area>/routes.tsx`. The
 public marketing website lives in `features/public/**`.
 
+Every routed page is code-split: route modules reference pages through `lazyPage(() => import('./pages/X'), 'X')`
+(`app/lazyPage.tsx`, React.lazy + Suspense), so `element: <X />` and the permission guards that wrap it stay unchanged
+while visitors of the public site download ~107 KB (gzip) of shared code instead of every portal. Public-website
+routes use the router's `lazy` field. Add new pages the same way.
+
 ### Third-party integrations
 
 External platforms (Meta/Instagram/Facebook, X, LinkedIn, TikTok, YouTube, Google Ads, Meta Ads, SMS/WhatsApp

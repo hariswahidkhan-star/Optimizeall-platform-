@@ -157,8 +157,8 @@ USD, GBP, AED and PKR (paid, partially paid, overdue, not yet due) and an applie
 
 | Email | Role |
 |---|---|
-| `sales@demo.optimizeall.app` | Sales Rep (Hassan Raza) |
-| `am@demo.optimizeall.app` | Account Manager (Amina Qureshi) |
+| `sales@demo.optimizeall.app` | Sales Rep (Omar Farooq) |
+| `am@demo.optimizeall.app` | Account Manager (Amira Haddad) |
 | `owner@nimbus.demo.optimizeall.app` | Nimbus Fitness Owner: sees billing |
 | `billing@nimbus.demo.optimizeall.app` | Nimbus Fitness Billing: sees billing |
 | `approver@nimbus.demo.optimizeall.app` | Nimbus Fitness Approver: billing hidden |
@@ -166,7 +166,8 @@ USD, GBP, AED and PKR (paid, partially paid, overdue, not yet due) and an applie
 ## Known limitations
 
 - Online card payment needs a payment gateway; until one is configured, clients pay by bank transfer.
-- The Finance role has no `billing.*` permission by default, so only Admin can manage billing unless the role matrix
-  is changed.
+- Finance manages billing (`billing.view`, `billing.manage`, `billing.settings`) and can read client accounts
+  (`clients.view`); account managers and sales reps can view invoices. Voids and write-offs need a second person;
+  credit notes do not, so a person who issued an invoice can credit its balance themselves (audited).
 - Revenue reports show gross invoiced amounts and don't net out credit notes.
 - Service slugs on lines are free text. They are not yet validated against the website's service catalog.

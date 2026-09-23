@@ -102,6 +102,13 @@ batch finalization, payout settings, suspensions) additionally require an explic
 * `auth` policy: 10 requests/min per IP on credential endpoints (`RateLimiting__AuthPerMinute`).
 * `submissions` policy: 30 writes/min per user for actions that create staff work (submissions, tickets, appeals).
 * `public` policy: 120 requests/min per IP for unauthenticated endpoints (landing pages, `/t/{code}`, postbacks).
+* `tracking` policy: 1,200 requests/min per IP for email open pixels, click redirects and one-click unsubscribes
+  (`/e/*`; mailbox providers fetch these for many recipients from a few proxy IPs), `RateLimiting__TrackingPerMinute`.
+* `webhooks` policy: 6,000 requests/min per endpoint path, i.e. per provider and workspace, for signature-verified
+  provider webhooks (SendGrid, Mailgun, Twilio), `RateLimiting__WebhooksPerMinute`. `tracking` and `webhooks`
+  endpoints are exempt from the global per-IP bucket, so a large send cannot lose bounce/complaint events.
+* Email links that change state (double opt-in confirmation, newsletter confirm/unsubscribe pages) act only when the
+  reader presses a button — never on page load — so mail security scanners that open links cannot act for them.
 * Rejections return `429` with `Retry-After`. Limits are per API instance (in memory). The client IP comes from
   `X-Forwarded-For` set by the trusted nginx tier — see DEPLOYMENT.md § 5.2; a misconfigured proxy that hides
   client IPs makes all users share one bucket.
