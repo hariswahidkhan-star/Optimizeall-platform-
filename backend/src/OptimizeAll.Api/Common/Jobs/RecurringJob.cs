@@ -138,6 +138,9 @@ public sealed class RecurringJobService<TJob>(
     }
 }
 
+/// <summary>Describes a registered job (for the admin job list and "run now").</summary>
+public sealed record JobDescriptor(string Name, Type JobType, TimeSpan Interval);
+
 public static class JobRegistration
 {
     /// <summary>Registers a job for DI and schedules it to run every <paramref name="interval"/>.</summary>
@@ -145,6 +148,7 @@ public static class JobRegistration
         where TJob : class, IJob
     {
         services.AddScoped<TJob>();
+        services.AddSingleton(new JobDescriptor(typeof(TJob).Name, typeof(TJob), interval));
         services.AddHostedService(sp => new RecurringJobService<TJob>(
             sp.GetRequiredService<JobRunner>(),
             sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<JobOptions>>(),

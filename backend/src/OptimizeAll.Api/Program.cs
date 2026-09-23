@@ -54,25 +54,29 @@ services.Configure<JobOptions>(config.GetSection(JobOptions.Section));
 services.Configure<DevToolsOptions>(config.GetSection(DevToolsOptions.Section));
 
 // ---------- Persistence ----------
-var connectionString = config.GetConnectionString("Default")
-    ?? throw new InvalidOperationException("ConnectionStrings:Default is required.");
 services.AddSingleton(TimeProvider.System);
-services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 36)), mysql =>
-    {
-        mysql.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName);
-        mysql.CommandTimeout(60);
-    }));
+// Configuration is read lazily (per service resolution) so hosts/tests can override it before the app starts.
+services.AddDbContext<AppDbContext>((sp, options) =>
+    options.UseMySql(
+        sp.GetRequiredService<IConfiguration>().GetConnectionString("Default")
+            ?? throw new InvalidOperationException("ConnectionStrings:Default is required."),
+        new MySqlServerVersion(new Version(8, 0, 36)),
+        mysql =>
+        {
+            mysql.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName);
+            mysql.CommandTimeout(60);
+        }));
 
 services.AddDataProtection()
     .SetApplicationName("OptimizeAll")
     .PersistKeysToDbContext<AppDbContext>();
 
 // ---------- Security ----------
-var jwt = config.GetSection(JwtOptions.Section).Get<JwtOptions>() ?? new JwtOptions();
-services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
+    .Configure<Microsoft.Extensions.Options.IOptions<JwtOptions>>((options, jwtOptions) =>
     {
+        var jwt = jwtOptions.Value;
         options.MapInboundClaims = false;
         options.TokenValidationParameters = new TokenValidationParameters
         {
@@ -104,6 +108,15 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+// Token lifetime is evaluated against the injectable clock (consistent with every other time rule and testable).
+services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme).Configure<TimeProvider>((o, clock) =>
+    o.TokenValidationParameters.LifetimeValidator = (notBefore, expires, _, parameters) =>
+    {
+        var now = clock.GetUtcNow().UtcDateTime;
+        return (notBefore is null || notBefore.Value <= now.Add(parameters.ClockSkew)) &&
+               (expires is null || expires.Value >= now.Subtract(parameters.ClockSkew));
+    });
+
 services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
 services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
 services.AddAuthorization(options =>
@@ -116,14 +129,16 @@ services.AddScoped<ICurrentUser, HttpCurrentUser>();
 services.AddSingleton<ITokenService, TokenService>();
 services.AddSingleton<IPrivacyHasher, PrivacyHasher>();
 services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
-services.AddAppRateLimiting(config);
+services.AddAppRateLimiting();
 
-var allowedOrigins = config.GetSection("Security:AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
-services.AddCors(options => options.AddDefaultPolicy(policy =>
-{
-    if (allowedOrigins.Length > 0)
-        policy.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
-}));
+services.AddCors();
+services.AddOptions<Microsoft.AspNetCore.Cors.Infrastructure.CorsOptions>()
+    .Configure<Microsoft.Extensions.Options.IOptions<SecurityOptions>>((options, security) =>
+        options.AddDefaultPolicy(policy =>
+        {
+            if (security.Value.AllowedOrigins.Length > 0)
+                policy.WithOrigins(security.Value.AllowedOrigins).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+        }));
 
 // ---------- Cross-cutting services ----------
 services.AddScoped<IAuditLogger, AuditLogger>();
@@ -136,11 +151,15 @@ services.AddScoped<ILedgerWriter, LedgerWriter>();
 services.AddSingleton<JobRunner>();
 services.AddScoped<IAuthService, AuthService>();
 
-var emailMode = config.GetValue<string>("Email:Mode") ?? "File";
-if (builder.Environment.IsProduction() && emailMode != "Smtp")
-    throw new InvalidOperationException("Production requires Email:Mode=Smtp.");
-if (emailMode == "Smtp") services.AddSingleton<IEmailSender, SmtpEmailSender>();
-else services.AddSingleton<IEmailSender, FileEmailSender>();
+services.AddSingleton<SmtpEmailSender>();
+services.AddSingleton<FileEmailSender>();
+services.AddSingleton<IEmailSender>(sp =>
+{
+    var mode = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<EmailOptions>>().Value.Mode;
+    if (sp.GetRequiredService<IHostEnvironment>().IsProduction() && mode != "Smtp")
+        throw new InvalidOperationException("Production requires Email:Mode=Smtp.");
+    return mode == "Smtp" ? sp.GetRequiredService<SmtpEmailSender>() : sp.GetRequiredService<FileEmailSender>();
+});
 
 // ---------- Modules ----------
 services
@@ -177,7 +196,6 @@ services.Configure<ForwardedHeadersOptions>(o =>
     o.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
     o.KnownNetworks.Clear();
     o.KnownProxies.Clear();
-    o.ForwardLimit = config.GetValue("Hosting:ForwardLimit", 1);
 });
 services.Configure<Microsoft.AspNetCore.Http.Features.FormOptions>(o => o.MultipartBodyLengthLimit = 12 * 1024 * 1024);
 
@@ -211,7 +229,7 @@ app.UseExceptionHandler();
 app.UseSecurityHeaders();
 if (!app.Environment.IsDevelopment()) app.UseHsts();
 
-if (config.GetValue("Swagger:Enabled", !app.Environment.IsProduction()))
+if (app.Configuration.GetValue("Swagger:Enabled", !app.Environment.IsProduction()))
 {
     app.UseSwagger(o => o.RouteTemplate = "api/docs/{documentName}/openapi.json");
     app.UseSwaggerUI(o =>
@@ -234,7 +252,7 @@ app.MapHealthChecks("/health/ready", new()
     ResultStatusCodes = { [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable },
 });
 
-if (config.GetValue("Database:InitializeOnStartup", true))
+if (app.Configuration.GetValue("Database:InitializeOnStartup", true))
     await DatabaseInitializer.InitializeAsync(app.Services);
 
 app.Run();

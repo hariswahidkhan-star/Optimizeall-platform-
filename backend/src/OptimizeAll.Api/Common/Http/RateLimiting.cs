@@ -15,11 +15,12 @@ public static class RateLimitPolicies
     /// <summary>Public unauthenticated endpoints (landing pages, tracking redirects, postbacks): 120/minute per IP.</summary>
     public const string Public = "public";
 
-    public static IServiceCollection AddAppRateLimiting(this IServiceCollection services, IConfiguration config)
+    public static IServiceCollection AddAppRateLimiting(this IServiceCollection services)
     {
-        var enabled = config.GetValue("RateLimiting:Enabled", true);
-        services.AddRateLimiter(options =>
+        services.AddRateLimiter(_ => { });
+        services.AddOptions<RateLimiterOptions>().Configure<IConfiguration>((options, config) =>
         {
+            var enabled = config.GetValue("RateLimiting:Enabled", true);
             options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
             options.OnRejected = async (context, ct) =>
             {
