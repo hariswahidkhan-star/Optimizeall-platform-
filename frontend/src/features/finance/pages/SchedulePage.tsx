@@ -22,11 +22,12 @@ import {
   useToast,
   type DataTableColumn,
 } from '@/components/ui';
+import { useSupportedCurrencies } from '@/lib/api/meta';
 import { useSchedule, useUpdateSchedule } from '../api/hooks';
 import type { PayoutFrequency, PayoutPeriod, PayoutSchedule, PayoutScheduleResponse } from '../api/types';
 import { QueryError } from '../components/common';
 import { FormDialog } from '../components/FormDialog';
-import { currencyOptions, dateOnlyToDisplay, localInputToIso, toLocalInputValue } from '../lib/format';
+import { dateOnlyToDisplay, localInputToIso, toLocalInputValue } from '../lib/format';
 import { useCan } from '../lib/useCan';
 
 const FREQUENCIES: { value: PayoutFrequency; label: string }[] = [
@@ -112,6 +113,7 @@ function EditScheduleDialog({
   const update = useUpdateSchedule();
   const toast = useToast();
   const zones = useMemo(timeZones, []);
+  const currencies = useSupportedCurrencies(current.settlementCurrency);
   const zoneListId = useId();
   const [form, setForm] = useState({
     frequency: current.frequency as PayoutFrequency,
@@ -270,7 +272,7 @@ function EditScheduleDialog({
           <Select
             value={form.settlementCurrency}
             onChange={(e) => set('settlementCurrency', e.target.value)}
-            options={currencyOptions}
+            options={currencies.options}
           />
         </FormField>
         <FormField label={`Minimum payout (${form.settlementCurrency})`} required error={err(errors.minimum)}>

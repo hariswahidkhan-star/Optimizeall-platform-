@@ -43,7 +43,12 @@ export function paged<T>(items: T[]): PagedResult<T> {
 }
 
 export function reviewDetail(
-  overrides: { claimMine?: boolean; status?: ReviewDetail['submission']['status'] } = {},
+  overrides: {
+    claimMine?: boolean;
+    status?: ReviewDetail['submission']['status'];
+    participantStatus?: ReviewDetail['participant']['status'];
+    qualityBonusMax?: number | null;
+  } = {},
 ): ReviewDetail {
   const mine = overrides.claimMine ?? true;
   return {
@@ -115,6 +120,7 @@ export function reviewDetail(
       approvedCount: 3,
       rejectedCount: 0,
       reversedCount: 0,
+      status: overrides.participantStatus ?? 'Active',
     },
     history: [],
     flags: [
@@ -160,6 +166,7 @@ export function reviewDetail(
     },
     earnings: [],
     appeals: [],
+    qualityBonusMax: overrides.qualityBonusMax === undefined ? 10 : overrides.qualityBonusMax,
   };
 }
 

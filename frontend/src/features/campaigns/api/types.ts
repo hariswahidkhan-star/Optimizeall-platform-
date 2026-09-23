@@ -38,30 +38,6 @@ export const REWARD_RULE_TYPES = [
 export type RewardRuleType = (typeof REWARD_RULE_TYPES)[number];
 export type BonusApprovalMode = 'Automatic' | 'ManualApproval';
 
-/** `Money.SupportedCurrencies` on the backend. */
-export const SUPPORTED_CURRENCIES = [
-  'USD',
-  'EUR',
-  'GBP',
-  'AED',
-  'SAR',
-  'PKR',
-  'INR',
-  'CAD',
-  'AUD',
-  'JPY',
-  'KWD',
-  'BHD',
-  'OMR',
-  'QAR',
-  'EGP',
-  'TRY',
-  'NGN',
-  'ZAR',
-  'BRL',
-  'MXN',
-] as const;
-
 export interface CategoryRef {
   id: string;
   name: string;
@@ -462,6 +438,7 @@ export interface ExperimentVariant {
 export interface Experiment {
   id: string;
   campaignId: string;
+  campaignTitle: string;
   name: string;
   hypothesis: string | null;
   element: ExperimentElement;

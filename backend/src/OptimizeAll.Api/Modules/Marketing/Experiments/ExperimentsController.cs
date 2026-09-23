@@ -61,7 +61,7 @@ public sealed record VariantDto(
     string? LandingHeadline, string? LandingBody);
 
 public sealed record ExperimentDto(
-    Guid Id, Guid CampaignId, string Name, string? Hypothesis, ExperimentElement Element, ExperimentStatus Status,
+    Guid Id, Guid CampaignId, string CampaignTitle, string Name, string? Hypothesis, ExperimentElement Element, ExperimentStatus Status,
     DateTime? StartedAt, DateTime? EndedAt, Guid? WinningVariantId, IReadOnlyList<VariantDto> Variants,
     Guid ConcurrencyStamp, DateTime CreatedAt, DateTime UpdatedAt);
 
@@ -109,12 +109,16 @@ public sealed class ExperimentsController(
         if (!string.IsNullOrWhiteSpace(query.Search))
             q = q.Where(e => EF.Functions.Like(e.Name, PagingExtensions.LikePattern(query.Search)));
         var page = await q.OrderByDescending(e => e.CreatedAt).ToPagedAsync(query, ct);
-        return new PagedResult<ExperimentDto>(page.Items.Select(ToDto).ToList(), page.Total, page.Page, page.PageSize);
+        var campaignIds = page.Items.Select(e => e.CampaignId).Distinct().ToList();
+        var titles = await db.Set<Campaign>().AsNoTracking().Where(c => campaignIds.Contains(c.Id))
+            .ToDictionaryAsync(c => c.Id, c => c.Title, ct);
+        return new PagedResult<ExperimentDto>(page.Items.Select(e => ToDto(e, titles.GetValueOrDefault(e.CampaignId, string.Empty))).ToList(),
+            page.Total, page.Page, page.PageSize);
     }
 
     [HttpGet("api/v1/marketing/experiments/{id:guid}")]
     [HasPermission(Permissions.MarketingManage)]
-    public async Task<ExperimentDto> Get(Guid id, CancellationToken ct) => ToDto(await LoadAsync(id, tracked: false, ct));
+    public async Task<ExperimentDto> Get(Guid id, CancellationToken ct) => await ToDtoAsync(await LoadAsync(id, tracked: false, ct), ct);
 
     [HttpPost("api/v1/marketing/experiments")]
     [HasPermission(Permissions.MarketingManage)]
@@ -133,7 +137,7 @@ public sealed class ExperimentsController(
         db.Set<Experiment>().Add(experiment);
         audit.Record("experiment.created", nameof(Experiment), experiment.Id, after: Snapshot(experiment));
         await db.SaveChangesAsync(ct);
-        return CreatedAtAction(nameof(Get), new { id = experiment.Id }, ToDto(experiment));
+        return CreatedAtAction(nameof(Get), new { id = experiment.Id }, await ToDtoAsync(experiment, ct));
     }
 
     /// <summary>Replaces name, hypothesis, element and variants. Only allowed while the experiment is a Draft.</summary>
@@ -164,7 +168,7 @@ public sealed class ExperimentsController(
         audit.Record("experiment.updated", nameof(Experiment), id, before, Snapshot(experiment));
         await db.SaveChangesAsync(ct);
         await tx.CommitAsync(ct);
-        return ToDto(experiment);
+        return await ToDtoAsync(experiment, ct);
     }
 
     [HttpDelete("api/v1/marketing/experiments/{id:guid}")]
@@ -332,7 +336,7 @@ public sealed class ExperimentsController(
         audit.Record(action, nameof(Experiment), id, before, new { experiment.Status, experiment.WinningVariantId });
         await db.SaveChangesAsync(ct);
         await tx.CommitAsync(ct);
-        return ToDto(experiment);
+        return await ToDtoAsync(experiment, ct);
     }
 
     private async Task ValidateAsync(ExperimentRequest request, CancellationToken ct)
@@ -416,8 +420,12 @@ public sealed class ExperimentsController(
         e.Name, e.Element, e.Status, Variants = e.Variants.Select(v => new { v.Key, v.Name, v.Weight }).ToList(),
     };
 
-    private static ExperimentDto ToDto(Experiment e) => new(
-        e.Id, e.CampaignId, e.Name, e.Hypothesis, e.Element, e.Status, e.StartedAt, e.EndedAt, e.WinningVariantId,
+    private async Task<ExperimentDto> ToDtoAsync(Experiment e, CancellationToken ct) =>
+        ToDto(e, await db.Set<Campaign>().AsNoTracking().Where(c => c.Id == e.CampaignId).Select(c => c.Title).FirstOrDefaultAsync(ct)
+            ?? string.Empty);
+
+    private static ExperimentDto ToDto(Experiment e, string campaignTitle) => new(
+        e.Id, e.CampaignId, campaignTitle, e.Name, e.Hypothesis, e.Element, e.Status, e.StartedAt, e.EndedAt, e.WinningVariantId,
         e.Variants.OrderBy(v => v.Key).Select(v => new VariantDto(v.Id, v.Key, v.Name, v.Weight, v.Title, v.Instructions,
             v.AssetId, v.LandingHeadline, v.LandingBody)).ToList(),
         e.ConcurrencyStamp, e.CreatedAt, e.UpdatedAt);

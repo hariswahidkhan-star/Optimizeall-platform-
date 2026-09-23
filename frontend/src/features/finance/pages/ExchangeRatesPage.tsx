@@ -19,11 +19,12 @@ import {
   useToast,
   type DataTableColumn,
 } from '@/components/ui';
+import { useSupportedCurrencies } from '@/lib/api/meta';
 import { useCreateExchangeRate, useExchangeRates } from '../api/hooks';
 import type { ExchangeRate } from '../api/types';
 import { QueryError } from '../components/common';
 import { FormDialog } from '../components/FormDialog';
-import { currencyOptions, localInputToIso, toLocalInputValue } from '../lib/format';
+import { localInputToIso, toLocalInputValue } from '../lib/format';
 import { useCan } from '../lib/useCan';
 
 const columns: DataTableColumn<ExchangeRate>[] = [
@@ -58,6 +59,7 @@ function AddRateDialog({ open, onClose }: { open: boolean; onClose: () => void }
   const [base, setBase] = useState('EUR');
   const [quote, setQuote] = useState('USD');
   const [rate, setRate] = useState('');
+  const currencyOptions = useSupportedCurrencies().options;
   const [effectiveAt, setEffectiveAt] = useState('');
   const [source, setSource] = useState('manual');
   const [reason, setReason] = useState('');
@@ -180,6 +182,7 @@ export function ExchangeRatesPage() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(25);
   const [adding, setAdding] = useState(false);
+  const currencyOptions = useSupportedCurrencies().options;
   const query = useExchangeRates({ base, quote, page, pageSize });
 
   return (

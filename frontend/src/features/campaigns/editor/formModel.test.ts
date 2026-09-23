@@ -101,4 +101,17 @@ describe('fieldErrorsFrom', () => {
     );
     expect(fieldError(coded, 'Slug')).toEqual(['Slug in use']);
   });
+
+  it('prefers the field named by a business error over the code fallback', () => {
+    const error = new ApiError({
+      status: 400,
+      code: 'campaign.invalid_dates',
+      title: 'The campaign must end after it starts.',
+      errors: { endsAt: ['The campaign must end after it starts.'] },
+    });
+    const map = fieldErrorsFrom(error, { 'campaign.invalid_dates': 'startsAt' });
+    expect(fieldError(map, 'endsAt')).toEqual(['The campaign must end after it starts.']);
+    // The fallback mapping is not applied on top (no duplicate or misplaced message).
+    expect(fieldError(map, 'startsAt')).toBeUndefined();
+  });
 });

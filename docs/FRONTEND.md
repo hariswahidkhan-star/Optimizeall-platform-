@@ -87,7 +87,7 @@ Utilities in `base.css`: `.visually-hidden`, `.skip-link`, `.container`, `.stack
 | `Switch` | `checked`, `onCheckedChange`, `label`, `description` (role=switch) |
 | `RadioGroup` | `legend`, `value`, `onChange`, `options`, `orientation`, `variant="cards"`, `error` |
 | `Card`, `CardHeader`, `CardBody`, `CardFooter` | `as`, `flat`, `interactive` (+ a link with `ui-card__link` makes the whole card clickable) |
-| `Badge` / `StatusBadge` | `tone`; StatusBadge `kind` submission·earning·payout·payoutItem·campaign·socialVerification·ticket + `status` (unknown values fall back to a humanized neutral badge). `statusOptions(kind)` feeds filters |
+| `Badge` / `StatusBadge` | `tone`; StatusBadge `kind` submission·earning·payout·payoutItem·campaign·socialVerification·ticket + `status` (unknown values fall back to a humanized neutral badge), optional `label` override for audience-specific wording (tone stays shared). `statusOptions(kind)` feeds filters |
 | `Tabs` | `tabs[{id,label,content,badge}]`, `label`, controlled `value`/`onValueChange`; roving tabindex |
 | `Dialog` | `open`, `onClose`, `title`, `description`, `footer`, `size`, `initialFocusRef`, `dismissible`, `role`; portal, focus trap, Escape, focus restore, bottom sheet on phones |
 | `ConfirmDialog` | `onConfirm({reason})` (may be async; shows busy + inline error), `tone`, `requireReason`, `confirmText` (type-to-confirm) |
@@ -130,6 +130,9 @@ Browse everything at **`/design-system`** (dev server, or builds with `VITE_SHOW
 * Errors are `ApiError { status, code, title, errors?, traceId? }` parsed from RFC 7807 (`code`, `traceId`, `errors`
   extensions). ASP.NET validation keys are normalized to camelCase (`Email` → `email`). Network failures are
   `status 0 / code "network_error"`.
+* `lib/api/meta.ts` — `useSupportedCurrencies(current?)` (`GET /meta/currencies`; use it for every currency picker, never
+  hard-code the list) and `useEligibilityDefaults()`. `lib/api/campaignOptions.ts` — `useCampaignOptions(search?)`
+  (`GET /campaigns/options`, `campaigns.view`) for staff campaign filters/pickers.
 * `lib/api/query.ts` — QueryClient defaults: never retry 4xx, up to 2 retries otherwise, 30 s stale time.
 
 `AuthProvider` (inside the router) restores the session on load via a silent refresh (guards show a full-page

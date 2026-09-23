@@ -7,7 +7,8 @@ export type FieldErrorMap = Record<string, string[]>;
  * Collects the field errors of a server response into a case-insensitive map. DataAnnotations errors arrive with
  * PascalCase keys (`Title`, `Eligibility.MinFollowers`, `Variants[0].Title`); the client camel-cases the first
  * letter of each segment, but nested/indexed keys may still differ in case, so everything is lower-cased here.
- * `codeFields` maps business error codes (which carry no field key) onto a field.
+ * Business errors (e.g. `campaign.slug_taken`) normally carry their field in `errors` too; `codeFields` maps a code
+ * onto a field only as a fallback, for responses that name no field at all.
  */
 export function fieldErrorsFrom(error: unknown, codeFields: Record<string, string> = {}): FieldErrorMap {
   if (!isApiError(error)) return {};
@@ -17,7 +18,7 @@ export function fieldErrorsFrom(error: unknown, codeFields: Record<string, strin
     result[field] = [...(result[field] ?? []), ...messages];
   }
   const mapped = codeFields[error.code];
-  if (mapped) {
+  if (mapped && Object.keys(result).length === 0) {
     const field = mapped.toLowerCase();
     result[field] = [...(result[field] ?? []), error.title];
   }

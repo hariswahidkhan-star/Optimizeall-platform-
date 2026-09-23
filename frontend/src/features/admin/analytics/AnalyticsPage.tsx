@@ -232,7 +232,7 @@ export function AnalyticsPage() {
                   title="Daily trend"
                   description="Counted per UTC day."
                 />
-                <CardBody className="admin-chart-wrap">
+                <CardBody>
                   <LineChart
                     title="Registrations, submissions and approvals per day"
                     description={`Daily counts from ${data.timeseries[0]?.date} to ${data.timeseries[data.timeseries.length - 1]?.date}.`}

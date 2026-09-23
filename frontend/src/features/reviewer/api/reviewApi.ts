@@ -28,6 +28,7 @@ export interface QueueFilters {
   minRisk?: string;
   flagged?: string;
   assignedToMe?: boolean;
+  claimedByMe?: boolean;
   sort?: 'oldest' | 'risk';
   page?: number;
   pageSize?: number;
@@ -47,7 +48,6 @@ export const reviewKeys = {
   stats: () => ['review', 'stats'] as const,
   queue: (filters: QueueFilters) => ['review', 'queue', filters] as const,
   queueRoot: () => ['review', 'queue'] as const,
-  queueCampaigns: () => ['review', 'queue-campaigns'] as const,
   detail: (id: string) => ['review', 'submission', id] as const,
   liveChecks: (due: boolean, page: number) => ['review', 'live-checks', { due, page }] as const,
   appeals: (status: string, page: number) => ['review', 'appeals', { status, page }] as const,
@@ -71,6 +71,7 @@ export const reviewApi = {
         minRisk: filters.minRisk,
         flagged: filters.flagged,
         assignedToMe: filters.assignedToMe || undefined,
+        claimedByMe: filters.claimedByMe || undefined,
         sort: filters.sort,
         page: filters.page,
         pageSize: filters.pageSize,

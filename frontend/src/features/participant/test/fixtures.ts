@@ -107,6 +107,7 @@ export function makeCampaign(overrides: Partial<CampaignDetail> = {}): CampaignD
     ...card,
     visibility: 'Public',
     isOpenForSubmissions: true,
+    trackingEnabled: false,
     timeZone: 'Europe/London',
     landingHeadline: null,
     landingBody: null,

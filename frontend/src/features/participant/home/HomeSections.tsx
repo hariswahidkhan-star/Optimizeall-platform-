@@ -34,7 +34,7 @@ import type {
 import { CampaignCard } from '../components/CampaignCard';
 import { PlatformTag } from '../components/Platform';
 import { AchievementIcon } from '../achievements/AchievementIcon';
-import { isInternalLink, normalizeAppLink } from '../lib/labels';
+import { isInternalLink } from '../lib/labels';
 
 // ---------------------------------------------------------------- state heroes
 
@@ -208,7 +208,7 @@ export function OnboardingCard({ onboarding }: { onboarding: ParticipantHome['on
         <div className="pp-actions">
           {step.actionUrl &&
             (isInternalLink(step.actionUrl) ? (
-              <ButtonLink to={normalizeAppLink(step.actionUrl)} size="sm" variant="secondary">
+              <ButtonLink to={step.actionUrl} size="sm" variant="secondary">
                 {step.actionLabel ?? 'Open'}
               </ButtonLink>
             ) : (
@@ -268,7 +268,7 @@ export function Banners({ banners }: { banners: HomeBanner[] }) {
           {banner.ctaLabel &&
             banner.ctaUrl &&
             (isInternalLink(banner.ctaUrl) ? (
-              <ButtonLink to={normalizeAppLink(banner.ctaUrl)} variant="highlight" size="sm">
+              <ButtonLink to={banner.ctaUrl} variant="highlight" size="sm">
                 {banner.ctaLabel}
               </ButtonLink>
             ) : (

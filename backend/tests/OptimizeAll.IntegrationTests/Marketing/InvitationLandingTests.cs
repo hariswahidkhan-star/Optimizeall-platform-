@@ -67,6 +67,31 @@ public sealed class InvitationLandingTests(ApiFactory api) : IClassFixture<ApiFa
     }
 
     [Fact]
+    public async Task Staff_preview_does_not_count_a_visit_but_anonymous_preview_does()
+    {
+        var (_, manager) = await api.CreateClientAsync(Role.CampaignManager);
+        var invite = await (await manager.PostAsJsonAsync("/api/v1/marketing/invitations", new { name = "Preview check" })).ReadJsonAsync();
+        var code = invite.GetProperty("code").GetString()!;
+        var id = invite.GetProperty("id").GetGuid();
+        async Task<int> VisitsAsync() =>
+            (await (await manager.GetAsync($"/api/v1/marketing/invitations/{id}")).ReadJsonAsync()).GetProperty("stats").GetProperty("visits").GetInt32();
+
+        var preview = await (await manager.GetAsync($"/api/v1/public/invitations/{code}?preview=true")).ReadJsonAsync();
+        Assert.Equal("platform", preview.GetProperty("type").GetString());
+        Assert.Equal(0, await VisitsAsync());
+
+        // Without marketing.manage the flag is ignored.
+        (await Anonymous().GetAsync($"/api/v1/public/invitations/{code}?preview=true")).EnsureSuccessStatusCode();
+        var (_, reviewer) = await api.CreateClientAsync(Role.Reviewer);
+        (await reviewer.GetAsync($"/api/v1/public/invitations/{code}?preview=true")).EnsureSuccessStatusCode();
+        Assert.Equal(2, await VisitsAsync());
+
+        // The manager's normal (non-preview) visit counts.
+        (await manager.GetAsync($"/api/v1/public/invitations/{code}")).EnsureSuccessStatusCode();
+        Assert.Equal(3, await VisitsAsync());
+    }
+
+    [Fact]
     public async Task Inactive_and_expired_invitations_are_not_found_and_are_not_counted()
     {
         var (_, manager) = await api.CreateClientAsync(Role.CampaignManager);

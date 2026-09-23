@@ -20,7 +20,7 @@ import {
 import { api } from '@/lib/api/client';
 import { formatNumber } from '@/lib/format/money';
 import { humanize } from '@/lib/format/text';
-import { qk, useCampaignOptions } from '../api/queries';
+import { qk } from '../api/queries';
 import type { Experiment, ExperimentResults, VariantComparison, VariantResult } from '../api/types';
 import { measurementTag } from '../analytics/metrics';
 import { STATUS_TONES } from './ExperimentsPage';
@@ -142,7 +142,6 @@ export function ExperimentResultsView({
         />
         <CardBody className="stack">
           <BarChart
-            className="mg-chart"
             title={`${metricLabel} by variant`}
             description="Share of assigned participants who submitted at least one post, per variant."
             data={results.variants.map((v) => ({
@@ -193,7 +192,6 @@ export function ExperimentResultsView({
 
 export function ExperimentResultsPage() {
   const { experimentId = '' } = useParams();
-  const campaigns = useCampaignOptions();
   const experiment = useQuery({
     queryKey: qk.experiment(experimentId),
     queryFn: () => api.get<Experiment>(`/marketing/experiments/${experimentId}`),
@@ -203,7 +201,7 @@ export function ExperimentResultsPage() {
     queryFn: () => api.get<ExperimentResults>(`/marketing/experiments/${experimentId}/results`),
   });
   const e = experiment.data;
-  const campaignTitle = e ? campaigns.data?.items.find((c) => c.id === e.campaignId)?.title : undefined;
+  const campaignTitle = e?.campaignTitle;
 
   return (
     <>

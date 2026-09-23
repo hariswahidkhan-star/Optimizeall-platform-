@@ -14,11 +14,12 @@ import { useToast } from '@/components/ui/toastContext';
 import { countryName, countryOptions } from '@/features/auth/localeOptions';
 import { api } from '@/lib/api/client';
 import { errorMessage } from '@/lib/api/errors';
+import { useSupportedCurrencies } from '@/lib/api/meta';
 import { qk, usePayoutProfile } from '../api/queries';
 import type { PayoutMethod, PayoutProfile, UpdatePayoutProfileRequest } from '../api/types';
 import { QueryState } from '../components/QueryState';
 import { firstMessage, focusFirstError, mapFormErrors } from '../lib/formErrors';
-import { payoutMethodOptions, SUPPORTED_CURRENCIES } from '../lib/labels';
+import { payoutMethodOptions } from '../lib/labels';
 import '../participant.css';
 
 const FIELDS = ['method', 'accountHolderName', 'destination', 'preferredCurrency', 'countryCode'] as const;
@@ -78,6 +79,7 @@ function PayoutForm({ current }: { current: PayoutProfile }) {
   const [holder, setHolder] = useState(current.accountHolderName ?? '');
   const [destination, setDestination] = useState('');
   const [currency, setCurrency] = useState(current.preferredCurrency ?? 'USD');
+  const currencyOptions = useSupportedCurrencies(currency).options;
   const [country, setCountry] = useState(current.countryCode ?? '');
   const [clientErrors, setClientErrors] = useState<Partial<Record<Field, string>>>({});
 
@@ -193,11 +195,7 @@ function PayoutForm({ current }: { current: PayoutProfile }) {
           required
           error={errorFor('preferredCurrency')}
         >
-          <Select
-            value={currency}
-            options={SUPPORTED_CURRENCIES.map((c) => ({ value: c, label: c }))}
-            onChange={(e) => setCurrency(e.target.value)}
-          />
+          <Select value={currency} options={currencyOptions} onChange={(e) => setCurrency(e.target.value)} />
         </FormField>
         <FormField
           id="payout-countryCode"

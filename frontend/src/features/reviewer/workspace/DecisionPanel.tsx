@@ -1,6 +1,17 @@
 import { Check, MessageSquareWarning, X } from 'lucide-react';
 import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from 'react';
-import { Button, Card, CardBody, CardHeader, FormField, Input, Switch, Textarea } from '@/components/ui';
+import {
+  Alert,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  FormField,
+  Input,
+  Switch,
+  Textarea,
+} from '@/components/ui';
+import { formatMoney } from '@/lib/format/money';
 import { safeStorage } from '@/lib/hooks/storage';
 import type { DecisionRequest, ReviewDecision, ReviewDetail } from '../api/types';
 import { ActionError } from '../components/common';
@@ -53,7 +64,8 @@ interface DecisionPanelProps {
 
 /**
  * Approve / request correction / reject. Correction and rejection need a reason the participant will read;
- * approval can add a quality bonus (the server bounds it by the campaign's quality-bonus rule).
+ * approval can add a quality bonus up to the recorded rule set's quality-bonus rule (`qualityBonusMax`; hidden when the
+ * rule set has none). Approval is disabled while the participant isn't Active (the server would refuse it).
  * Shortcuts A, C and R pick a decision; they are ignored while typing.
  */
 export function DecisionPanel({
@@ -97,7 +109,18 @@ export function DecisionPanel({
     else reasonRef.current?.focus();
   }, [focusTick, mode]);
 
+  const participantStatus = detail.participant.status;
+  const canApprove = participantStatus === 'Active';
+  const bonusMax = detail.qualityBonusMax;
+  const currency = detail.submission.currency;
+
+  useEffect(() => {
+    // The participant was suspended while the form was open (seen after a refresh): approval is no longer possible.
+    if (!canApprove) setMode((current) => (current === 'Approve' ? null : current));
+  }, [canApprove]);
+
   const choose = (next: ReviewDecision) => {
+    if (next === 'Approve' && !canApprove) return;
     setMode(next);
     setShowErrors(false);
     setFocusTick((t) => t + 1);
@@ -114,13 +137,15 @@ export function DecisionPanel({
     needsReason && trimmed.length < REASON_MIN
       ? `Explain the decision to the participant (at least ${REASON_MIN} characters).`
       : null;
-  const bonusValue = bonus.trim() === '' ? undefined : Number(bonus);
+  const bonusValue = bonusMax === null || bonus.trim() === '' ? undefined : Number(bonus);
   const bonusError =
-    mode === 'Approve' &&
-    bonusValue !== undefined &&
-    (!Number.isFinite(bonusValue) || bonusValue < 0 || !/^\d+(\.\d{1,2})?$/.test(bonus.trim()))
-      ? 'Enter an amount of 0 or more with at most 2 decimals.'
-      : null;
+    mode !== 'Approve' || bonusValue === undefined
+      ? null
+      : !Number.isFinite(bonusValue) || bonusValue < 0 || !/^\d+(\.\d{1,2})?$/.test(bonus.trim())
+        ? 'Enter an amount of 0 or more with at most 2 decimals.'
+        : bonusMax !== null && bonusValue > bonusMax
+          ? `The quality bonus can be at most ${formatMoney(bonusMax, currency)}.`
+          : null;
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
@@ -173,6 +198,12 @@ export function DecisionPanel({
             onDismiss={onDismissError}
           />
         )}
+        {!canApprove && (
+          <Alert tone="warning" title={`This participant is ${participantStatus.toLowerCase()}`}>
+            {participantStatus === 'Suspended' ? 'Suspended' : 'Deactivated'} participants can’t be approved.
+            Reject the submission or request a correction, or leave it until the account is reinstated.
+          </Alert>
+        )}
         {!canDecide ? (
           <p className="text-muted">{blockedReason ?? 'Claim this submission to decide it.'}</p>
         ) : (
@@ -186,7 +217,7 @@ export function DecisionPanel({
                   aria-keyshortcuts={m.key}
                   leadingIcon={m.icon}
                   onClick={() => choose(m.id)}
-                  disabled={pending}
+                  disabled={pending || (m.id === 'Approve' && !canApprove)}
                   className="rv-mode"
                 >
                   {m.label}
@@ -199,11 +230,11 @@ export function DecisionPanel({
 
             {mode && (
               <form id={formId} className="stack" onSubmit={submit} noValidate>
-                {mode === 'Approve' && (
+                {mode === 'Approve' && bonusMax !== null && (
                   <FormField
                     label="Quality bonus"
                     optional
-                    hint={`Only for exceptional posts. Limited by the campaign’s quality-bonus rule; the amount actually awarded is shown after approval (${detail.submission.currency}).`}
+                    hint={`Only for exceptional posts. Up to ${formatMoney(bonusMax, currency)} under this submission’s reward rules; caps may lower the amount actually awarded, which is shown after approval.`}
                     error={showErrors ? bonusError : null}
                   >
                     <Input
@@ -211,7 +242,7 @@ export function DecisionPanel({
                       value={bonus}
                       onChange={(e) => setBonus(e.target.value)}
                       placeholder="0.00"
-                      trailing={<span className="text-small">{detail.submission.currency}</span>}
+                      trailing={<span className="text-small">{currency}</span>}
                     />
                   </FormField>
                 )}

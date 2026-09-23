@@ -1,6 +1,11 @@
-import { keepPreviousData, useQuery, useQueryClient, type QueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+  type QueryClient,
+} from '@tanstack/react-query';
 import { api } from '@/lib/api/client';
-import { isApiError } from '@/lib/api/errors';
 import type {
   Achievement,
   Announcement,
@@ -41,7 +46,7 @@ export const qk = {
   campaign: (slug: string) => ['campaigns', 'detail', slug] as const,
   categories: ['campaign-categories'] as const,
   variants: (campaignId: string) => ['campaigns', 'variants', campaignId] as const,
-  trackingLink: (campaignId: string) => ['me', 'tracking-link', campaignId] as const,
+  trackingLinks: ['me', 'tracking-links'] as const,
   submissions: ['me', 'submissions'] as const,
   submissionList: (params: object) => ['me', 'submissions', 'list', params] as const,
   submission: (id: string) => ['me', 'submissions', 'detail', id] as const,
@@ -141,25 +146,31 @@ export const useExperimentVariants = (campaignId: string | undefined) =>
     staleTime: Infinity,
   });
 
-/**
- * The caller's tracking link for a campaign. The API creates it on first request (idempotent) and answers
- * `409 tracking.not_enabled` when the campaign has no tracking destination — that resolves to `null` here so the UI
- * can simply hide the section.
- */
-export const useTrackingLink = (campaignId: string | undefined, enabled: boolean) =>
+/** The caller's existing tracking links (reading never creates one). */
+export const useMyTrackingLinks = (enabled: boolean) =>
   useQuery({
-    queryKey: qk.trackingLink(campaignId ?? ''),
-    queryFn: async () => {
-      try {
-        return await api.post<TrackingLink>(`/me/campaigns/${campaignId}/tracking-link`);
-      } catch (error) {
-        if (isApiError(error) && error.code === 'tracking.not_enabled') return null;
-        throw error;
-      }
-    },
-    enabled: !!campaignId && enabled,
-    staleTime: 5 * 60_000,
+    queryKey: qk.trackingLinks,
+    queryFn: ({ signal }) => api.get<TrackingLink[]>('/me/tracking-links', { signal }),
+    enabled,
+    staleTime: 60_000,
   });
+
+/**
+ * Creates (or returns — the API is idempotent) the caller's tracking link for a campaign. Only called when the
+ * participant asks for it, so viewing a campaign never creates links. `409 tracking.not_enabled` when the campaign
+ * has no tracking destination.
+ */
+export function useCreateTrackingLink() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (campaignId: string) => api.post<TrackingLink>(`/me/campaigns/${campaignId}/tracking-link`),
+    onSuccess: (link) => {
+      queryClient.setQueryData<TrackingLink[]>(qk.trackingLinks, (current) =>
+        current ? [...current.filter((l) => l.id !== link.id), link] : [link],
+      );
+    },
+  });
+}
 
 // ---------------------------------------------------------------- submissions
 

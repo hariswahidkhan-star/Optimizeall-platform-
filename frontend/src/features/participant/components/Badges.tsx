@@ -1,16 +1,6 @@
 import { CircleCheck, CircleSlash } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
-import type { Reason, TicketStatus } from '../api/types';
-import { TICKET_STATUS } from '../lib/labels';
-
-export function TicketStatusBadge({ status }: { status: TicketStatus | string }) {
-  const meta = TICKET_STATUS[status as TicketStatus] ?? { tone: 'neutral' as const, label: status };
-  return (
-    <Badge tone={meta.tone} dot>
-      {meta.label}
-    </Badge>
-  );
-}
+import type { Reason } from '../api/types';
 
 /** "Eligible" or "Not eligible" with the first reason next to it (all reasons are server-computed). */
 export function EligibilityBadge({

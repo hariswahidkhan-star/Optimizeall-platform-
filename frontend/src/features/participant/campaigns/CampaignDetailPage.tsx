@@ -1,4 +1,4 @@
-import { CircleCheck, CircleSlash, ExternalLink, Megaphone, ShieldAlert } from 'lucide-react';
+import { CircleCheck, CircleSlash, ExternalLink, Link2, Megaphone, ShieldAlert } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Alert } from '@/components/ui/Alert';
@@ -13,9 +13,21 @@ import { Money } from '@/components/ui/Money';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { StatusBadge } from '@/components/ui/StatusBadge';
+import { errorMessage, isApiError } from '@/lib/api/errors';
 import { humanize, pluralize } from '@/lib/format/text';
-import { useCampaign, useExperimentVariants, useTrackingLink } from '../api/queries';
-import type { CampaignAsset, CampaignDetail, ExperimentVariant, RewardTerms } from '../api/types';
+import {
+  useCampaign,
+  useCreateTrackingLink,
+  useExperimentVariants,
+  useMyTrackingLinks,
+} from '../api/queries';
+import type {
+  CampaignAsset,
+  CampaignDetail,
+  ExperimentVariant,
+  RewardTerms,
+  TrackingLink,
+} from '../api/types';
 import { CopyButton } from '../components/CopyButton';
 import { PlatformList, PlatformTag, platformLabel } from '../components/Platform';
 import { QueryState } from '../components/QueryState';
@@ -184,9 +196,15 @@ function RewardTermsCard({ terms }: { terms: RewardTerms }) {
   );
 }
 
+/**
+ * Personal tracking link. Shown only for campaigns with tracking enabled; an existing link is read from
+ * `GET /me/tracking-links`, and a new one is created only when the participant asks for it.
+ */
 function TrackingSection({ campaignId }: { campaignId: string }) {
-  const link = useTrackingLink(campaignId, true);
-  if (link.isPending || link.isError || !link.data) return null;
+  const links = useMyTrackingLinks(true);
+  const create = useCreateTrackingLink();
+  const existing = links.data?.find((l) => l.campaignId === campaignId) ?? null;
+  const link = existing ?? (create.data?.campaignId === campaignId ? create.data : null);
   return (
     <Card as="section" aria-labelledby="tracking-title">
       <CardHeader
@@ -195,23 +213,53 @@ function TrackingSection({ campaignId }: { campaignId: string }) {
         description="Add this link to your post or bio. Clicks and verified conversions are measured and shown here."
       />
       <CardBody className="stack">
-        <CopyField label="Tracking link" value={link.data.shortUrl} />
-        <KeyValueList
-          layout="inline"
-          items={[
-            { label: 'Clicks', value: <span className="tabular">{link.data.stats.clicks}</span> },
-            {
-              label: 'Unique clicks',
-              value: <span className="tabular">{link.data.stats.uniqueClicks}</span>,
-            },
-            {
-              label: 'Verified conversions',
-              value: <span className="tabular">{link.data.stats.verifiedConversions}</span>,
-            },
-          ]}
-        />
+        {!link ? (
+          <>
+            {create.isError && (
+              <Alert tone="danger" role="alert">
+                {isApiError(create.error) && create.error.code === 'tracking.not_enabled'
+                  ? 'Tracking links are no longer available for this campaign.'
+                  : errorMessage(create.error)}
+              </Alert>
+            )}
+            <div>
+              <Button
+                leadingIcon={<Link2 />}
+                loading={create.isPending}
+                disabled={links.isPending}
+                onClick={() => create.mutate(campaignId)}
+              >
+                Get my tracking link
+              </Button>
+            </div>
+          </>
+        ) : (
+          <TrackingLinkDetails link={link} />
+        )}
       </CardBody>
     </Card>
+  );
+}
+
+function TrackingLinkDetails({ link }: { link: TrackingLink }) {
+  return (
+    <>
+      <CopyField label="Tracking link" value={link.shortUrl} />
+      <KeyValueList
+        layout="inline"
+        items={[
+          { label: 'Clicks', value: <span className="tabular">{link.stats.clicks}</span> },
+          {
+            label: 'Unique clicks',
+            value: <span className="tabular">{link.stats.uniqueClicks}</span>,
+          },
+          {
+            label: 'Verified conversions',
+            value: <span className="tabular">{link.stats.verifiedConversions}</span>,
+          },
+        ]}
+      />
+    </>
   );
 }
 
@@ -357,7 +405,7 @@ function CampaignDetailView({ campaign }: { campaign: CampaignDetail }) {
             </CardBody>
           </Card>
 
-          <TrackingSection campaignId={campaign.id} />
+          {campaign.trackingEnabled && <TrackingSection campaignId={campaign.id} />}
         </div>
 
         <aside

@@ -16,6 +16,7 @@ export function parseQueueParams(params: URLSearchParams): QueueFilters {
     minRisk: minRisk && /^\d{1,5}$/.test(minRisk) ? minRisk : undefined,
     flagged: flagged && FLAGGED.has(flagged) ? flagged : undefined,
     assignedToMe: params.get('mine') === '1',
+    claimedByMe: params.get('claimed') === '1',
     sort: params.get('sort') === 'risk' ? 'risk' : 'oldest',
     page: Number.isInteger(page) && page > 1 ? page : 1,
     pageSize: 25,

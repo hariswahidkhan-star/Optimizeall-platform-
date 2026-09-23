@@ -3,6 +3,7 @@ using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Domain.Campaigns;
 using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Eligibility;
+using OptimizeAll.Domain.Marketing;
 using OptimizeAll.Domain.Rewards;
 using OptimizeAll.Domain.Submissions;
 using OptimizeAll.Infrastructure.Persistence;
@@ -141,7 +142,8 @@ public sealed class CampaignCatalogService(AppDbContext db, IParticipantEligibil
             campaign.LandingHeadline, campaign.LandingBody, card.Reward, campaign.Description, campaign.PostingInstructions,
             campaign.RequiredHashtags, campaign.RequiredMentions,
             campaign.Assets.OrderBy(a => a.SortOrder).ThenBy(a => a.CreatedAt).Select(CampaignAssetDto.From).ToList(),
-            disclosures, Terms(campaign, row.RuleSet), eligibilityDto, mySubmissions, row.MyCount, Remaining(row));
+            disclosures, Terms(campaign, row.RuleSet), eligibilityDto, mySubmissions, row.MyCount, Remaining(row),
+            TrackingUrl.IsValidDestination(campaign.TrackingDestinationUrl));
     }
 
     private IQueryable<Campaign> ListedCampaigns(bool includeScheduled) =>

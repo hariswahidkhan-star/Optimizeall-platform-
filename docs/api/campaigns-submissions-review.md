@@ -98,9 +98,13 @@ Reasons: `Matches your interest in {x}` | `Ends in {n} days` / `Ends within a da
                    "eligibleFrom": "…Z", "reasons": [{ "code": "social.account_too_new", "message": "…" }] }]
   },
   "mySubmissions": [{ "id": "…", "status": "Pending", "submittedAt": "…" }],
-  "mySubmissionCount": 1, "remainingSubmissions": 4
+  "mySubmissionCount": 1, "remainingSubmissions": 4,
+  "trackingEnabled": true
 }
 ```
+`trackingEnabled` is true when the campaign has a valid https tracking destination; only then can the participant get
+a personal tracking link (`POST /me/campaigns/{campaignId}/tracking-link`, created on request — the UI calls it only
+when the participant asks, never on page view; existing links are read with `GET /me/tracking-links`).
 `disclosures` has one entry per allowed platform, resolved for the caller's country: platform+country >
 platform > country > the campaign default. `eligibleFrom` is set when account age is the only blocker.
 
@@ -129,7 +133,16 @@ Validation codes (400): `campaign.invalid_dates` (endsAt ≤ startsAt), `campaig
 endsAt), `campaign.invalid_time_zone`, `campaign.budget_currency_mismatch` (budget currency ≠ reward currency),
 `campaign.disclosure_required`, `campaign.invalid_tracking_url` (must be absolute https),
 `campaign.invalid_image_url`, `campaign.platform_required`, `campaign.invalid_country`,
-`campaign.category_not_found`. 409 `campaign.slug_taken` (explicit slug in use).
+`campaign.category_not_found`. 409 `campaign.slug_taken` (explicit slug in use). These business errors carry the
+offending field in the problem's `errors` dictionary with a camelCase key, e.g.
+`{ "code": "campaign.invalid_dates", "errors": { "endsAt": ["The campaign must end after it starts."] } }`:
+`endsAt`, `submissionDeadline`, `timeZone`, `defaultDisclosureText`, `title`/`summary` (`campaign.title_required`),
+`budgetCurrency` (`campaign.budget_currency_mismatch`), `budgetAmount` (`campaign.budget_change_unconfirmed` on
+update), `trackingDestinationUrl`, `heroImageUrl`, `platforms`, `eligibility.countries`, `categoryId`, `slug`.
+
+### GET /campaigns/options?search= — `campaigns.view`
+Lightweight list for staff filters and pickers (reviewers, finance, managers): `[{ "id": "…", "title": "…", "status": "Active" }]`,
+newest first, at most 500. `search` matches title or slug (use it to reach campaigns beyond the newest 500).
 
 ### AdminCampaign (response of GET/POST/PUT/publish/…)
 ```json
@@ -353,7 +366,7 @@ appeal and no appeal filed since that decision.
 
 | Method & path | Permission | Body | Response | Errors |
 |---|---|---|---|---|
-| GET `/review/queue?status=Pending\|UnderReview&campaignId=&platform=&minRisk=&flagged=&assignedToMe=&sort=oldest\|risk` | submissions.review | – | Paged ReviewQueueItem | |
+| GET `/review/queue?status=Pending\|UnderReview&campaignId=&platform=&minRisk=&flagged=&assignedToMe=&claimedByMe=&sort=oldest\|risk` | submissions.review | – | Paged ReviewQueueItem | |
 | POST `/review/submissions/{id}/claim` | submissions.review | – | Claim | 403 `review.self_review`, 409 `review.claimed_by_other` (`errors.claimedBy`, `claimedByUserId`, `claimExpiresAt`), 409 `review.already_decided`, 404 |
 | POST `/review/submissions/{id}/release` | submissions.review | – | 204 | 409 `review.not_claimed`, 404 |
 | GET `/review/submissions/{id}` | submissions.review | – | ReviewDetail | 404 |
@@ -376,7 +389,8 @@ ReviewQueueItem:
   "flagTypes": ["DuplicateScreenshot", "NewParticipant"], "claimedBy": { "id": "…", "displayName": "…" } | null,
   "claimExpiresAt": "…" | null, "assignedReviewer": { … } | null, "correctionCount": 0 }
 ```
-`flagged=true` = has unresolved flags. `claimedBy` only while the claim is active.
+`flagged=true` = has unresolved flags. `claimedByMe=true` = only submissions the caller holds an active (unexpired)
+claim on. `claimedBy` only while the claim is active.
 
 Claim: `{ "submissionId": "…", "status": "UnderReview", "claimedBy": { "id", "displayName" }, "claimExpiresAt": "…", "concurrencyStamp": "…" }`
 (claims last `review.claimMinutes`, default 15; claiming again extends; claiming does not change the stamp).
@@ -396,14 +410,16 @@ ReviewDetail:
   "account": { "id": "…", "handle": "sara", "profileUrl": "…", "platform": "Instagram", "accountCreatedAt": "…", "accountAgeDays": 400,
                "followerCount": 5000, "verificationStatus": "Verified", "isActive": true },
   "participant": { "id": "…", "displayName": "…", "email": "…", "countryCode": "PK", "tier": "Standard", "joinedAt": "…",
-                   "approvedCount": 3, "rejectedCount": 0, "reversedCount": 0 },
+                   "approvedCount": 3, "rejectedCount": 0, "reversedCount": 0,
+                   "status": "Active" /* Active|Suspended|Deactivated — only Active participants can be approved */ },
   "history": [{ "id": "…", "campaign": { "id", "title" }, "status": "Approved", "submittedAt": "…", "postUrl": "…" }],
   "flags": [{ "id": "…", "type": "DuplicateScreenshot", "detail": "…", "weight": 40, "createdAt": "…", "resolved": false, "resolvedAt": null, "resolutionNote": null }],
   "relatedSubmissions": [{ "id": "…", "match": "screenshot|content|screenshot_and_content", "campaign": { … }, "participant": { "id", "displayName" }, "status": "…", "submittedAt": "…" }],
   "events": [{ "action": "claimed", "fromStatus": "Pending", "toStatus": "UnderReview", "reason": null, "actor": { "id", "displayName" } | null, "at": "…" }],
   "rewardQuote": { …RewardQuote from the recorded version, with current aggregates/caps… } | null,
   "earnings": [{ "id": "…", "type": "PostReward", "amount": 5.0, "currency": "USD", "status": "Approved", "createdAt": "…", "rewardRuleSetVersion": 1 }],
-  "appeals": [ ReviewAppeal ]
+  "appeals": [ ReviewAppeal ],
+  "qualityBonusMax": 10.0 /* Amount of the QualityBonus rule of the recorded rule-set version (its currency); null = no quality bonus */
 }
 ```
 ReviewAppeal: `{ id, status, decisionAppealed, reason, createdAt, resolvedBy: {id,displayName}|null, resolutionNote, resolvedAt, concurrencyStamp }`.

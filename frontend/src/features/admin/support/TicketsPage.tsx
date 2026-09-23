@@ -12,7 +12,9 @@ import { api } from '@/lib/api/client';
 import type { PagedResult } from '@/lib/api/types';
 import { humanize } from '@/lib/format/text';
 import { TICKET_CATEGORIES, TICKET_PRIORITIES, TICKET_STATUSES, type StaffTicketSummary } from '../api/types';
-import { AdminBadge, badgeLabel } from '../shared/badges';
+import { StatusBadge } from '@/components/ui/StatusBadge';
+import { statusMeta } from '@/components/ui/statusMap';
+import { AdminBadge } from '../shared/badges';
 import { enumOptions, QueryError } from '../shared/common';
 import { useListParams } from '../shared/useListParams';
 import { useSupportStaff } from './useSupportStaff';
@@ -48,7 +50,7 @@ export function TicketsPage() {
               {
                 id: 'status',
                 label: 'Status',
-                options: enumOptions(TICKET_STATUSES, (v) => badgeLabel('ticket', v)),
+                options: enumOptions(TICKET_STATUSES, (v) => statusMeta('ticket', v).label),
               },
               { id: 'priority', label: 'Priority', options: enumOptions(TICKET_PRIORITIES) },
               { id: 'category', label: 'Category', options: enumOptions(TICKET_CATEGORIES) },
@@ -105,7 +107,7 @@ export function TicketsPage() {
                   {
                     id: 'status',
                     header: 'Status',
-                    cell: (t) => <AdminBadge kind="ticket" value={t.status} />,
+                    cell: (t) => <StatusBadge kind="ticket" status={t.status} />,
                   },
                   {
                     id: 'priority',

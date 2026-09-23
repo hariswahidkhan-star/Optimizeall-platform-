@@ -168,7 +168,6 @@ export function AnalyticsReport({
               const rows = data.spendByCampaign.filter((s) => s.currency === currency);
               return (
                 <BarChart
-                  className="mg-chart"
                   key={currency}
                   title={`Spend by campaign (${currency})`}
                   description={`Spend on approved posts per campaign in ${currency}.`}
@@ -227,7 +226,6 @@ export function AnalyticsReport({
             ) : (
               <div className="mg-report__grid">
                 <LineChart
-                  className="mg-chart"
                   title="Registrations, submissions and approvals per day"
                   description="Daily counts from our records."
                   labels={labels}
@@ -246,7 +244,6 @@ export function AnalyticsReport({
                   ]}
                 />
                 <LineChart
-                  className="mg-chart"
                   title="Tracked clicks per day (measured)"
                   description="Clicks on participant tracking links, bots excluded."
                   labels={labels}

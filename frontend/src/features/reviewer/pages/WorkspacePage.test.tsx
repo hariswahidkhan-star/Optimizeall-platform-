@@ -5,7 +5,7 @@ import { json, mockFetch, problem } from '@/test/fetchMock';
 import { axeViolations, renderWithApp } from '@/test/render';
 import { setViewportWidth } from '@/test/viewport';
 import type { ReviewDetail } from '../api/types';
-import { reviewDetail, reviewerSession } from '../test/fixtures';
+import { REVIEWER_ID, reviewDetail, reviewerSession } from '../test/fixtures';
 import { WorkspacePage } from './WorkspacePage';
 
 function renderWorkspace(
@@ -197,6 +197,73 @@ describe('WorkspacePage', () => {
     renderWorkspace(approved);
     await screen.findByRole('heading', { name: 'Campaign requirements' });
     expect(screen.queryByRole('button', { name: 'Reverse approval…' })).not.toBeInTheDocument();
+  });
+
+  it('warns about a suspended participant and disables approval', async () => {
+    const user = userEvent.setup();
+    renderWorkspace(reviewDetail({ participantStatus: 'Suspended' }));
+    expect(await screen.findByText('This participant is suspended')).toBeInTheDocument();
+    const approve = screen.getByRole('button', { name: /^Approve/ });
+    expect(approve).toBeDisabled();
+    await user.keyboard('a');
+    expect(screen.queryByRole('button', { name: 'Confirm approval' })).not.toBeInTheDocument();
+    // Rejecting is still possible.
+    await user.click(screen.getByRole('button', { name: /^Reject/ }));
+    expect(screen.getByLabelText(/Reason for rejection/)).toBeInTheDocument();
+  });
+
+  it('bounds the quality bonus by the rule set maximum', async () => {
+    const user = userEvent.setup();
+    const { calls } = renderWorkspace(reviewDetail({ qualityBonusMax: 10 }), {
+      'POST /review/submissions/s1/decision': () =>
+        json(200, {
+          submissionId: 's1',
+          status: 'Approved',
+          decidedAt: '2026-09-23T12:00:00Z',
+          decisionReason: null,
+          concurrencyStamp: 'stamp-2',
+          reward: null,
+          earnings: [],
+          liveCheckStatus: 'NotRequired',
+          liveCheckDueAt: null,
+        }),
+    });
+    await user.click(await screen.findByRole('button', { name: /^Approve/ }));
+    await turnOffNext(user);
+    const bonus = screen.getByLabelText(/Quality bonus/);
+    expect(screen.getByText(/Up to \$10\.00/)).toBeInTheDocument();
+    await user.type(bonus, '12');
+    await user.click(screen.getByRole('button', { name: 'Confirm approval' }));
+    expect(await screen.findByText(/can be at most \$10\.00/)).toBeInTheDocument();
+    expect(decisionCalls(calls)).toHaveLength(0);
+
+    await user.clear(bonus);
+    await user.type(bonus, '7.5');
+    await user.click(screen.getByRole('button', { name: 'Confirm approval' }));
+    await waitFor(() => expect(decisionCalls(calls)).toHaveLength(1));
+    expect(decisionCalls(calls)[0]!.body).toMatchObject({ decision: 'Approve', qualityBonusAmount: 7.5 });
+  });
+
+  it('hides the quality bonus when the rule set has none', async () => {
+    const user = userEvent.setup();
+    renderWorkspace(reviewDetail({ qualityBonusMax: null }));
+    await user.click(await screen.findByRole('button', { name: /^Approve/ }));
+    expect(screen.getByRole('button', { name: /Confirm approval/ })).toBeInTheDocument();
+    expect(screen.queryByLabelText(/Quality bonus/)).not.toBeInTheDocument();
+  });
+
+  it('relies on the server to refuse self-review and explains it', async () => {
+    const user = userEvent.setup();
+    const own = reviewDetail({ claimMine: false });
+    own.submission.claim = { claimedBy: null, claimExpiresAt: null, isMine: false, isActive: false };
+    own.participant.id = REVIEWER_ID;
+    renderWorkspace(own, {
+      'POST /review/submissions/s1/claim': () =>
+        problem(403, 'review.self_review', 'You can’t review or resolve your own submissions or appeals.'),
+    });
+    await user.click(await screen.findByRole('button', { name: 'Claim to review' }));
+    expect(await screen.findByRole('alert')).toHaveTextContent('You can’t review your own submission');
+    expect(screen.queryByRole('button', { name: /^Approve/ })).not.toBeInTheDocument();
   });
 
   it('uses tabs on phones and has no axe violations', async () => {

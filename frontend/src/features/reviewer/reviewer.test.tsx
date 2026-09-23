@@ -24,18 +24,20 @@ describe('queue URL params', () => {
       minRisk: undefined,
       flagged: undefined,
       assignedToMe: false,
+      claimedByMe: false,
       sort: 'oldest',
       page: 1,
       pageSize: 25,
     });
-    expect(parseQueueParams(new URLSearchParams('status=UnderReview&mine=1&sort=risk&page=3'))).toMatchObject(
-      {
-        status: 'UnderReview',
-        assignedToMe: true,
-        sort: 'risk',
-        page: 3,
-      },
-    );
+    expect(
+      parseQueueParams(new URLSearchParams('status=UnderReview&mine=1&claimed=1&sort=risk&page=3')),
+    ).toMatchObject({
+      status: 'UnderReview',
+      assignedToMe: true,
+      claimedByMe: true,
+      sort: 'risk',
+      page: 3,
+    });
   });
 
   it('resets the page on filter changes and drops the default sort', () => {

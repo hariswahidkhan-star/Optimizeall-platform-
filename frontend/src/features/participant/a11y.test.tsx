@@ -1,4 +1,5 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import type { ReactElement } from 'react';
 import { describe, expect, it } from 'vitest';
 import { json, mockFetch } from '@/test/fetchMock';
@@ -297,8 +298,15 @@ describe('participant pages accessibility', () => {
     expect(await axeViolations(container)).toEqual([]);
   });
 
-  it('hides the tracking section when the campaign has no tracking', async () => {
+  it('words ticket statuses for the participant with the shared status badge', async () => {
     mockFetch(routes);
+    renderWithApp(<TicketDetailPage />, { route: '/app/support/t1', path: '/app/support/:ticketId' });
+    expect((await screen.findAllByText('Awaiting your reply')).length).toBeGreaterThan(0);
+    expect(screen.queryByText('Awaiting participant')).not.toBeInTheDocument();
+  });
+
+  it('hides the tracking section when the campaign has no tracking', async () => {
+    const { calls } = mockFetch(routes);
     renderWithApp(<CampaignDetailPage />, {
       route: '/app/campaigns/autumn-launch',
       path: '/app/campaigns/:slug',
@@ -306,5 +314,75 @@ describe('participant pages accessibility', () => {
     expect(await screen.findByRole('heading', { name: 'Reward terms' })).toBeInTheDocument();
     await new Promise((r) => setTimeout(r, 50));
     expect(screen.queryByRole('heading', { name: 'Your tracking link' })).not.toBeInTheDocument();
+    expect(calls.some((c) => c.path.includes('tracking-link'))).toBe(false);
+  });
+
+  it('creates a tracking link only when the participant asks for it', async () => {
+    const user = userEvent.setup();
+    const link = {
+      id: 't1',
+      campaignId: 'c1',
+      campaignTitle: 'Autumn launch',
+      code: 'abc123',
+      shortUrl: 'https://oa.test/t/abc123',
+      destinationPreview: 'https://brand.example',
+      utmSource: 'optimizeall',
+      utmMedium: 'social',
+      utmCampaign: 'autumn',
+      utmContent: null,
+      createdAt: '2026-09-20T00:00:00Z',
+      stats: { clicks: 4, uniqueClicks: 3, verifiedConversions: 1 },
+    };
+    const { calls } = mockFetch({
+      ...routes,
+      'GET /campaigns/autumn-launch': () => json(200, makeCampaign({ trackingEnabled: true })),
+      'GET /me/tracking-links': () => json(200, []),
+      'POST /me/campaigns/c1/tracking-link': () => json(200, link),
+    });
+    const { container } = renderWithApp(<CampaignDetailPage />, {
+      route: '/app/campaigns/autumn-launch',
+      path: '/app/campaigns/:slug',
+    });
+    const button = await screen.findByRole('button', { name: 'Get my tracking link' });
+    await waitFor(() => expect(button).toBeEnabled());
+    const posts = () =>
+      calls.filter((c) => c.method === 'POST' && c.path === '/me/campaigns/c1/tracking-link');
+    expect(posts()).toHaveLength(0);
+    expect(await axeViolations(container)).toEqual([]);
+
+    await user.click(button);
+    expect(await screen.findByDisplayValue('https://oa.test/t/abc123')).toBeInTheDocument();
+    expect(posts()).toHaveLength(1);
+  });
+
+  it('shows an existing tracking link without creating one', async () => {
+    const { calls } = mockFetch({
+      ...routes,
+      'GET /campaigns/autumn-launch': () => json(200, makeCampaign({ trackingEnabled: true })),
+      'GET /me/tracking-links': () =>
+        json(200, [
+          {
+            id: 't1',
+            campaignId: 'c1',
+            campaignTitle: 'Autumn launch',
+            code: 'abc123',
+            shortUrl: 'https://oa.test/t/existing',
+            destinationPreview: 'https://brand.example',
+            utmSource: 'optimizeall',
+            utmMedium: 'social',
+            utmCampaign: 'autumn',
+            utmContent: null,
+            createdAt: '2026-09-20T00:00:00Z',
+            stats: { clicks: 0, uniqueClicks: 0, verifiedConversions: 0 },
+          },
+        ]),
+    });
+    renderWithApp(<CampaignDetailPage />, {
+      route: '/app/campaigns/autumn-launch',
+      path: '/app/campaigns/:slug',
+    });
+    expect(await screen.findByDisplayValue('https://oa.test/t/existing')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Get my tracking link' })).not.toBeInTheDocument();
+    expect(calls.some((c) => c.method === 'POST' && c.path.includes('tracking-link'))).toBe(false);
   });
 });

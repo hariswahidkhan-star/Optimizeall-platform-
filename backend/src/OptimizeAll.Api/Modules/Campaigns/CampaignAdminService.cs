@@ -22,6 +22,9 @@ namespace OptimizeAll.Api.Modules.Campaigns;
 public interface ICampaignAdminService
 {
     Task<PagedResult<AdminCampaignListItemDto>> ListAsync(AdminCampaignQuery query, CancellationToken ct);
+
+    /// <summary>Lightweight id/title/status list for staff pickers and filters (newest first, at most 500).</summary>
+    Task<IReadOnlyList<CampaignOptionDto>> OptionsAsync(string? search, CancellationToken ct);
     Task<AdminCampaignDto> GetAsync(Guid id, CancellationToken ct);
     Task<AdminCampaignDto> CreateAsync(CreateCampaignRequest request, CancellationToken ct);
     Task<AdminCampaignDto> UpdateAsync(Guid id, UpdateCampaignRequest request, CancellationToken ct);
@@ -100,6 +103,20 @@ public sealed class CampaignAdminService(
                 c.BudgetAmount - s, c.CreatedAt, c.UpdatedAt, c.PublishedAt);
         }).ToList();
         return new PagedResult<AdminCampaignListItemDto>(items, total, query.Page, query.PageSize);
+    }
+
+    public const int MaxOptions = 500;
+
+    public async Task<IReadOnlyList<CampaignOptionDto>> OptionsAsync(string? search, CancellationToken ct)
+    {
+        var q = db.Set<Campaign>().AsNoTracking();
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var pattern = PagingExtensions.LikePattern(search);
+            q = q.Where(c => EF.Functions.Like(c.Title, pattern) || EF.Functions.Like(c.Slug, pattern));
+        }
+        return await q.OrderByDescending(c => c.CreatedAt).ThenBy(c => c.Id).Take(MaxOptions)
+            .Select(c => new CampaignOptionDto(c.Id, c.Title, c.Status)).ToListAsync(ct);
     }
 
     public async Task<AdminCampaignDto> GetAsync(Guid id, CancellationToken ct)
@@ -195,7 +212,7 @@ public sealed class CampaignAdminService(
         {
             currentUser.Require(Permissions.RewardsEdit);
             if (!request.Confirm || string.IsNullOrWhiteSpace(request.Reason) || request.Reason.Trim().Length < 5)
-                throw new DomainException("campaign.budget_change_unconfirmed",
+                throw FieldError("budgetAmount", "campaign.budget_change_unconfirmed",
                     "Changing the budget requires \"confirm\": true and a reason (at least 5 characters).");
         }
 
@@ -219,35 +236,41 @@ public sealed class CampaignAdminService(
         var startsAt = RewardRuleSetFactory.Utc(input.StartsAt);
         var endsAt = RewardRuleSetFactory.Utc(input.EndsAt);
         if (startsAt == default || endsAt <= startsAt)
-            throw new DomainException("campaign.invalid_dates", "The campaign must end after it starts.");
+            throw FieldError("endsAt", "campaign.invalid_dates", "The campaign must end after it starts.");
         var deadline = RewardRuleSetFactory.Utc(input.SubmissionDeadline) ?? endsAt + DefaultDeadlineGrace;
         if (deadline < endsAt)
-            throw new DomainException("campaign.invalid_deadline", "The submission deadline cannot be before the campaign ends.");
+            throw FieldError("submissionDeadline", "campaign.invalid_deadline", "The submission deadline cannot be before the campaign ends.");
         if (!CampaignClock.IsValidZone(input.TimeZone))
-            throw new DomainException("campaign.invalid_time_zone", $"'{input.TimeZone}' is not a valid IANA time zone.");
+            throw FieldError("timeZone", "campaign.invalid_time_zone", $"'{input.TimeZone}' is not a valid IANA time zone.");
         if (string.IsNullOrWhiteSpace(input.DefaultDisclosureText))
-            throw new DomainException("campaign.disclosure_required", "A paid-content disclosure (e.g. #ad) is required.");
+            throw FieldError("defaultDisclosureText", "campaign.disclosure_required", "A paid-content disclosure (e.g. #ad) is required.");
         if (string.IsNullOrWhiteSpace(input.Title) || string.IsNullOrWhiteSpace(input.Summary))
-            throw new DomainException("campaign.title_required", "A title and summary are required.");
+            throw FieldError(string.IsNullOrWhiteSpace(input.Title) ? "title" : "summary", "campaign.title_required",
+                "A title and summary are required.");
         if (input.BudgetAmount.HasValue)
         {
             var budgetCurrency = Money.Normalize(input.BudgetCurrency ?? ruleCurrency);
             if (budgetCurrency != Money.Normalize(ruleCurrency))
-                throw new DomainException("campaign.budget_currency_mismatch",
+                throw FieldError("budgetCurrency", "campaign.budget_currency_mismatch",
                     $"The budget must be in the reward currency ({ruleCurrency}).");
         }
         if (input.TrackingDestinationUrl is { Length: > 0 } tracking &&
             !(Uri.TryCreate(tracking, UriKind.Absolute, out var t) && t.Scheme == Uri.UriSchemeHttps))
-            throw new DomainException("campaign.invalid_tracking_url", "The tracking destination must be an absolute https URL.");
+            throw FieldError("trackingDestinationUrl", "campaign.invalid_tracking_url", "The tracking destination must be an absolute https URL.");
         if (input.HeroImageUrl is { Length: > 0 } hero && !IsAllowedMediaUrl(hero))
-            throw new DomainException("campaign.invalid_image_url", "The hero image must be an https URL or an uploaded file (/api/v1/files/...).");
+            throw FieldError("heroImageUrl", "campaign.invalid_image_url", "The hero image must be an https URL or an uploaded file (/api/v1/files/...).");
         if (input.Platforms.Count == 0)
-            throw new DomainException("campaign.platform_required", "Choose at least one platform.");
+            throw FieldError("platforms", "campaign.platform_required", "Choose at least one platform.");
         if (input.Eligibility.Countries.Any(c => c.Trim().Length != 2 || !c.Trim().All(char.IsAsciiLetter)))
-            throw new DomainException("campaign.invalid_country", "Target countries must be two-letter ISO codes.");
+            throw FieldError("eligibility.countries", "campaign.invalid_country", "Target countries must be two-letter ISO codes.");
         if (input.CategoryId is { } categoryId && !await db.Set<CampaignCategory>().AnyAsync(c => c.Id == categoryId, ct))
-            throw new DomainException("campaign.category_not_found", "The selected category does not exist.");
+            throw FieldError("categoryId", "campaign.category_not_found", "The selected category does not exist.");
     }
+
+    /// <summary>A business validation error that also names the offending field (camelCase key) for the editor.</summary>
+    private static DomainException FieldError(string field, string code, string message,
+        DomainErrorKind kind = DomainErrorKind.Validation) =>
+        new(code, message, kind, new Dictionary<string, string[]> { [field] = [message] });
 
     public static bool IsAllowedMediaUrl(string url) =>
         url.StartsWith("/api/v1/files/", StringComparison.Ordinal) && Guid.TryParse(url["/api/v1/files/".Length..], out _) ||
@@ -304,7 +327,8 @@ public sealed class CampaignAdminService(
             .Select(c => c.Slug).ToListAsync(ct);
         if (!taken.Contains(baseSlug)) return baseSlug;
         if (explicitSlug)
-            throw DomainException.Conflict("campaign.slug_taken", $"The slug '{baseSlug}' is already used by another campaign.");
+            throw FieldError("slug", "campaign.slug_taken", $"The slug '{baseSlug}' is already used by another campaign.",
+                DomainErrorKind.Conflict);
         for (var i = 2; ; i++)
         {
             var candidate = $"{baseSlug}-{i}";
@@ -320,7 +344,7 @@ public sealed class CampaignAdminService(
         }
         catch (DbUpdateException ex) when (ProblemExceptionHandler.IsUniqueViolation(ex) && ex.InnerException!.Message.Contains("Slug"))
         {
-            throw DomainException.Conflict("campaign.slug_taken", "That slug is already used by another campaign.");
+            throw FieldError("slug", "campaign.slug_taken", "That slug is already used by another campaign.", DomainErrorKind.Conflict);
         }
     }
 

@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Api.Modules.Rewards;
 using OptimizeAll.Domain.Common;
+using OptimizeAll.Domain.Identity;
 using OptimizeAll.Domain.Ledger;
 using OptimizeAll.Domain.Social;
 using OptimizeAll.Domain.Submissions;
@@ -40,6 +41,9 @@ public sealed class ReviewQueueQuery : PageQuery
     /// <summary>true = only submissions with unresolved flags; false = only unflagged.</summary>
     public bool? Flagged { get; set; }
     public bool AssignedToMe { get; set; }
+
+    /// <summary>true = only submissions I currently hold an active claim on.</summary>
+    public bool ClaimedByMe { get; set; }
 }
 
 public sealed class DecisionRequest
@@ -143,7 +147,7 @@ public sealed record ReviewAccountDto(
 
 public sealed record ReviewParticipantDto(
     Guid Id, string DisplayName, string Email, string CountryCode, ParticipantTier Tier, DateTime JoinedAt,
-    int ApprovedCount, int RejectedCount, int ReversedCount);
+    int ApprovedCount, int RejectedCount, int ReversedCount, UserStatus Status);
 
 public sealed record HistoryItemDto(Guid Id, QueueCampaignDto Campaign, SubmissionStatus Status, DateTime SubmittedAt, string PostUrl);
 
@@ -166,7 +170,7 @@ public sealed record ReviewDetailDto(
     RequirementsDto Requirements, ReviewSubmissionDto Submission, ReviewAccountDto Account, ReviewParticipantDto Participant,
     IReadOnlyList<HistoryItemDto> History, IReadOnlyList<FlagDto> Flags, IReadOnlyList<RelatedSubmissionDto> RelatedSubmissions,
     IReadOnlyList<ReviewEventDto> Events, RewardQuoteDto? RewardQuote, IReadOnlyList<ReviewEarningDto> Earnings,
-    IReadOnlyList<ReviewAppealDto> Appeals);
+    IReadOnlyList<ReviewAppealDto> Appeals, decimal? QualityBonusMax);
 
 public sealed record DecisionResultDto(
     Guid SubmissionId, SubmissionStatus Status, DateTime DecidedAt, string? DecisionReason, Guid ConcurrencyStamp,

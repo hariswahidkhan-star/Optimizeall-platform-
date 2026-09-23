@@ -189,7 +189,6 @@ export function OverviewPage() {
                 <Skeleton height={220} />
               ) : data && data.timeseries.length > 0 ? (
                 <LineChart
-                  className="mg-chart"
                   title="Submissions and approvals per day, last 30 days"
                   description={`${data.timeseries.reduce((s, p) => s + p.submissions, 0)} submissions and ${data.timeseries.reduce((s, p) => s + p.approvals, 0)} approvals in the last 30 days.`}
                   labels={data.timeseries.map((p) => p.date)}

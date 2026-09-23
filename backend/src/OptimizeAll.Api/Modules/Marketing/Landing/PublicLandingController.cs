@@ -42,7 +42,8 @@ public sealed record PublicCampaignLandingDto(
 [Route("api/v1/public")]
 [EnableRateLimiting(RateLimitPolicies.Public)]
 public sealed class PublicLandingController(
-    AppDbContext db, ExperimentAssignmentService experiments, IPrivacyHasher hasher, TimeProvider clock) : ControllerBase
+    AppDbContext db, ExperimentAssignmentService experiments, IPrivacyHasher hasher, ICurrentUser currentUser, TimeProvider clock)
+    : ControllerBase
 {
     public const string VisitorHeader = "X-Visitor-Id";
     public const string PlatformHeadline = "Get paid to share brands you already love";
@@ -51,10 +52,15 @@ public sealed class PublicLandingController(
 
     private DateTime Now => clock.GetUtcNow().UtcDateTime;
 
-    /// <summary>Invitation landing payload. 404 when the link is inactive, expired or used up. Counts the visit.</summary>
+    /// <summary>
+    /// Invitation landing payload. 404 when the link is inactive, expired or used up. Counts the visit, except for a
+    /// staff preview (<paramref name="preview"/> = true from a caller holding marketing.manage), which also makes no
+    /// experiment assignment. <c>preview</c> from anyone else is ignored.
+    /// </summary>
     [HttpGet("invitations/{code}")]
-    public async Task<InvitationLandingDto> Invitation(string code, CancellationToken ct)
+    public async Task<InvitationLandingDto> Invitation(string code, [FromQuery] bool preview, CancellationToken ct)
     {
+        var staffPreview = preview && currentUser.HasPermission(Permissions.MarketingManage);
         var now = Now;
         var link = await db.Set<InvitationLink>().AsNoTracking().FirstOrDefaultAsync(i => i.Code == code, ct);
         if (link is null || !InvitationsController.IsUsable(link, now))
@@ -68,14 +74,15 @@ public sealed class PublicLandingController(
                 throw DomainException.NotFound("Invitation");
         }
 
-        await db.Set<InvitationLink>().Where(i => i.Id == link.Id)
-            .ExecuteUpdateAsync(s => s.SetProperty(i => i.VisitCount, i => i.VisitCount + 1), ct);
+        if (!staffPreview)
+            await db.Set<InvitationLink>().Where(i => i.Id == link.Id)
+                .ExecuteUpdateAsync(s => s.SetProperty(i => i.VisitCount, i => i.VisitCount + 1), ct);
 
         var utm = new UtmDto(link.UtmSource, link.UtmMedium, link.UtmCampaign);
         if (campaign is null)
             return new InvitationLandingDto(link.Code, "platform", PlatformHeadline, PlatformBody, null, null, utm, null);
 
-        var (headline, body, experiment) = await LandingContentAsync(campaign, ct);
+        var (headline, body, experiment) = await LandingContentAsync(campaign, assign: !staffPreview, ct);
         return new InvitationLandingDto(link.Code, "campaign", headline, body, campaign.HeroImageUrl,
             await ToLandingCampaignAsync(campaign, ct), utm, experiment);
     }
@@ -89,7 +96,7 @@ public sealed class PublicLandingController(
             campaign.Status is not (CampaignStatus.Scheduled or CampaignStatus.Active))
             throw DomainException.NotFound("Campaign");
 
-        var (headline, body, experiment) = await LandingContentAsync(campaign, ct);
+        var (headline, body, experiment) = await LandingContentAsync(campaign, assign: true, ct);
         var teaser = await RewardTeaserAsync(campaign.Id, ct);
         return new PublicCampaignLandingDto(
             campaign.Slug, campaign.Title, campaign.Summary, headline, body, campaign.HeroImageUrl,
@@ -111,13 +118,14 @@ public sealed class PublicLandingController(
     /// Landing headline/body with a running LandingPage experiment applied for identified anonymous visitors
     /// (X-Visitor-Id, hashed). Without a visitor id no assignment is made and the base content is shown.
     /// </summary>
-    private async Task<(string Headline, string Body, LandingExperimentDto? Experiment)> LandingContentAsync(Campaign campaign, CancellationToken ct)
+    private async Task<(string Headline, string Body, LandingExperimentDto? Experiment)> LandingContentAsync(
+        Campaign campaign, bool assign, CancellationToken ct)
     {
         var headline = string.IsNullOrWhiteSpace(campaign.LandingHeadline) ? campaign.Title : campaign.LandingHeadline;
         var body = string.IsNullOrWhiteSpace(campaign.LandingBody) ? campaign.Summary : campaign.LandingBody;
 
         var visitorId = Request.Headers[VisitorHeader].ToString();
-        if (string.IsNullOrWhiteSpace(visitorId) || visitorId.Length > 200) return (headline, body, null);
+        if (!assign || string.IsNullOrWhiteSpace(visitorId) || visitorId.Length > 200) return (headline, body, null);
 
         var running = await experiments.RunningAsync(campaign.Id, ExperimentElement.LandingPage, ct);
         var experiment = running.FirstOrDefault();

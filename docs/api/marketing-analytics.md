@@ -133,7 +133,9 @@ Deletes a link that was never visited or used; otherwise deactivates it (keeps i
 
 ### `GET /api/v1/public/invitations/{code}` — anonymous, rate limited
 
-Landing payload for `/join/{code}`. Counts a visit (atomic increment). `404 invitation.not_found` when the code is
+Landing payload for `/join/{code}`. Counts a visit (atomic increment). `?preview=true` from a signed-in caller with
+`marketing.manage` (the manager portal's landing preview) counts no visit and makes no landing-page experiment
+assignment; from anyone else (anonymous included) the flag is ignored and the visit counts. `404 invitation.not_found` when the code is
 unknown, inactive, expired or used up, or (campaign invitations) the campaign is not Scheduled/Active. Invite-only
 campaigns are allowed here.
 
@@ -256,7 +258,7 @@ Query: `campaignId?`, `from?`, `to?` (default last 30 days; clicks by click time
 
 ```json
 {
-  "id": "0192…", "campaignId": "…", "name": "Title test", "hypothesis": "…", "element": "Title",
+  "id": "0192…", "campaignId": "…", "campaignTitle": "Spring launch", "name": "Title test", "hypothesis": "…", "element": "Title",
   "status": "Running", "startedAt": "…", "endedAt": null, "winningVariantId": null,
   "variants": [
     { "id": "…", "key": "A", "name": "Control", "weight": 50, "title": "Share our spring collection",

@@ -183,6 +183,59 @@ describe('Adjustment dialog', () => {
   });
 });
 
+describe('Reference data from the API', () => {
+  it('filters the ledger by a campaign found with the searchable picker', async () => {
+    const user = userEvent.setup();
+    const { fn } = mockFetch({
+      ...signedIn,
+      'GET /finance/ledger': () => json(200, emptyPage),
+      'GET /campaigns/options': () =>
+        json(200, [
+          { id: 'c1', title: 'Spring launch', status: 'Active' },
+          { id: 'c2', title: 'Summer sale', status: 'Ended' },
+        ]),
+    });
+    renderWithApp(<LedgerPage />, { route: '/finance/ledger' });
+    const urls = (path: string) =>
+      fn.mock.calls
+        .map(([input]) => new URL(String(input), 'http://localhost'))
+        .filter((u) => u.pathname === `/api/v1${path}`);
+
+    await user.type(await screen.findByLabelText('Find campaign'), 'summer');
+    await waitFor(() =>
+      expect(urls('/campaigns/options').some((u) => u.searchParams.get('search') === 'summer')).toBe(true),
+    );
+    const select = screen.getByLabelText('Campaign');
+    await waitFor(() =>
+      expect(within(select).getByRole('option', { name: 'Summer sale (Ended)' })).toBeInTheDocument(),
+    );
+    await user.selectOptions(select, 'c2');
+    await waitFor(() => expect(urls('/finance/ledger').at(-1)?.searchParams.get('campaignId')).toBe('c2'));
+  });
+
+  it('offers the currencies the API supports in the adjustment dialog', async () => {
+    mockFetch({
+      ...signedIn,
+      'GET /finance/payout-schedule': () => json(200, scheduleResponse()),
+      'GET /meta/currencies': () =>
+        json(200, [
+          { code: 'EUR', minorUnits: 2 },
+          { code: 'KWD', minorUnits: 3 },
+          { code: 'USD', minorUnits: 2 },
+        ]),
+    });
+    renderWithApp(<AdjustmentDialog open onClose={() => undefined} />, { route: '/' });
+    const dialog = await screen.findByRole('alertdialog', { name: 'New adjustment' });
+    const currency = within(dialog).getByLabelText(/^Currency/);
+    await waitFor(() => expect(within(currency).getByRole('option', { name: 'KWD' })).toBeInTheDocument());
+    expect(
+      within(currency)
+        .getAllByRole('option')
+        .map((o) => o.textContent),
+    ).toEqual(['EUR', 'KWD', 'USD']);
+  });
+});
+
 describe('Bulk CSV parsing', () => {
   it('parses lines, skips a header and reports errors per line', () => {
     const paidAt = '2026-09-26T10:00:00.000Z';

@@ -1,4 +1,5 @@
 import type { SelectOption } from '@/components/ui/Select';
+import { statusOptions } from '@/components/ui/statusMap';
 import type { Tone } from '@/components/ui/tones';
 import { humanize } from '@/lib/format/text';
 import {
@@ -50,18 +51,19 @@ export const ticketCategoryOptions: SelectOption[] = TICKET_CATEGORIES.map((c) =
   label: c === 'SocialProfile' ? 'Social profile' : humanize(c),
 }));
 
-/** Ticket statuses of the support module (the shared status map predates them). */
-export const TICKET_STATUS: Record<TicketStatus, { tone: Tone; label: string }> = {
-  Open: { tone: 'info', label: 'Open' },
-  AwaitingParticipant: { tone: 'warning', label: 'Awaiting your reply' },
-  AwaitingStaff: { tone: 'brand', label: 'With support' },
-  Resolved: { tone: 'success', label: 'Resolved' },
-  Closed: { tone: 'neutral', label: 'Closed' },
+/** Participant wording for ticket statuses that differs from the shared (staff-neutral) status map. */
+const PARTICIPANT_TICKET_LABELS: Partial<Record<TicketStatus, string>> = {
+  AwaitingParticipant: 'Awaiting your reply',
 };
 
-export const ticketStatusOptions: SelectOption[] = Object.entries(TICKET_STATUS).map(([value, meta]) => ({
-  value,
-  label: meta.label,
+/** Label override for `<StatusBadge kind="ticket" label=…>` in the participant portal (undefined = shared label). */
+export function participantTicketLabel(status: string): string | undefined {
+  return PARTICIPANT_TICKET_LABELS[status as TicketStatus];
+}
+
+export const ticketStatusOptions: SelectOption[] = statusOptions('ticket').map((o) => ({
+  value: o.value,
+  label: participantTicketLabel(o.value) ?? o.label,
 }));
 
 /** Human names for submission timeline actions. */
@@ -118,39 +120,6 @@ export const payoutMethodOptions: SelectOption[] = [
   { value: 'MobileWallet', label: 'Mobile wallet' },
   { value: 'Other', label: 'Other' },
 ];
-
-/** Mirrors `Money.SupportedCurrencies` in the backend domain. */
-export const SUPPORTED_CURRENCIES = [
-  'USD',
-  'EUR',
-  'GBP',
-  'AED',
-  'SAR',
-  'PKR',
-  'INR',
-  'CAD',
-  'AUD',
-  'JPY',
-  'KWD',
-  'BHD',
-  'OMR',
-  'QAR',
-  'EGP',
-  'TRY',
-  'NGN',
-  'ZAR',
-  'BRL',
-  'MXN',
-];
-
-/**
- * Onboarding/banner links come from the CMS as app paths. The seeded payout step points at `/app/payout-details`,
- * which lives under the profile area in this app.
- */
-export function normalizeAppLink(url: string): string {
-  if (url === '/app/payout-details') return '/app/profile/payout-details';
-  return url;
-}
 
 export function isInternalLink(url: string): boolean {
   return url.startsWith('/') && !url.startsWith('//');

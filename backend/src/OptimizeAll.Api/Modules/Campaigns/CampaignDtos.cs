@@ -75,7 +75,8 @@ public sealed record CampaignDetailDto(
     string? HeroImageUrl, string? LandingHeadline, string? LandingBody, CardRewardDto? Reward,
     string Description, string PostingInstructions, string? RequiredHashtags, string? RequiredMentions,
     IReadOnlyList<CampaignAssetDto> Assets, IReadOnlyList<ResolvedDisclosureDto> Disclosures, RewardTermsDto? RewardTerms,
-    DetailEligibilityDto Eligibility, IReadOnlyList<MySubmissionRefDto> MySubmissions, int MySubmissionCount, int RemainingSubmissions);
+    DetailEligibilityDto Eligibility, IReadOnlyList<MySubmissionRefDto> MySubmissions, int MySubmissionCount, int RemainingSubmissions,
+    bool TrackingEnabled);
 
 // ---------------------------------------------------------------- staff
 
@@ -209,6 +210,9 @@ public sealed class AdminCampaignQuery : PageQuery
     public CampaignStatus? Status { get; set; }
     public Guid? CategoryId { get; set; }
 }
+
+/// <summary>An entry of GET /campaigns/options (staff campaign pickers).</summary>
+public sealed record CampaignOptionDto(Guid Id, string Title, CampaignStatus Status);
 
 public sealed record SubmissionCountsDto(int Total, int Pending, int Approved, int Rejected);
 

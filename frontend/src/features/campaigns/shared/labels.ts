@@ -1,6 +1,6 @@
 import type { SelectOption } from '@/components/ui';
 import { humanize } from '@/lib/format/text';
-import { PARTICIPANT_TIERS, SOCIAL_PLATFORMS, SUPPORTED_CURRENCIES } from '../api/types';
+import { PARTICIPANT_TIERS, SOCIAL_PLATFORMS } from '../api/types';
 
 export const platformOptions: SelectOption[] = SOCIAL_PLATFORMS.map((p) => ({
   value: p,
@@ -8,8 +8,6 @@ export const platformOptions: SelectOption[] = SOCIAL_PLATFORMS.map((p) => ({
 }));
 
 export const tierOptions: SelectOption[] = PARTICIPANT_TIERS.map((t) => ({ value: t, label: t }));
-
-export const currencyOptions: SelectOption[] = SUPPORTED_CURRENCIES.map((c) => ({ value: c, label: c }));
 
 export function enumOptions(values: readonly string[]): SelectOption[] {
   return values.map((v) => ({ value: v, label: humanize(v) }));

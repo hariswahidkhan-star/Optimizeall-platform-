@@ -8,7 +8,8 @@ namespace OptimizeAll.Api.Modules.Content;
 /// <summary>
 /// Baseline content every environment needs: onboarding checklist, FAQ and a welcome announcement.
 /// Idempotent: rows are matched by onboarding key / FAQ question / announcement title and never duplicated or
-/// overwritten, so admin edits made later through the CMS are preserved.
+/// overwritten, so admin edits made later through the CMS are preserved. The one exception is an onboarding action
+/// link that still points at a retired baseline URL (<see cref="RetiredActionUrls"/>): it is moved to the current link.
 /// </summary>
 public sealed class ContentBaselineSeeder(TimeProvider clock) : ISeeder
 {
@@ -33,7 +34,7 @@ public sealed class ContentBaselineSeeder(TimeProvider clock) : ISeeder
             "Check eligibility", "/app/social-accounts", OnboardingCompletionRule.EligibleSocialAccount),
         ("payout-details", "Add your payout details",
             "Tell us how you'd like to be paid (bank transfer, PayPal or mobile wallet). Your details are encrypted and only a masked hint is ever shown.",
-            "Add payout details", "/app/payout-details", OnboardingCompletionRule.PayoutProfileAdded),
+            "Add payout details", "/app/profile/payout-details", OnboardingCompletionRule.PayoutProfileAdded),
         ("first-submission", "Share your first campaign post",
             "Pick a campaign you're eligible for, share the approved content with the required paid-partnership disclosure, then submit the public link to your post.",
             "Browse campaigns", "/app/campaigns", OnboardingCompletionRule.FirstSubmission),
@@ -76,11 +77,28 @@ public sealed class ContentBaselineSeeder(TimeProvider clock) : ISeeder
             "Open a support ticket from the Help page. You can link it to a specific submission or payout so we can help faster. We reply in the ticket and notify you by email."),
     };
 
+    /// <summary>
+    /// Action links earlier baseline versions seeded that no longer exist in the participant portal, by step key.
+    /// Existing rows still pointing at one are moved to the current link; any other (admin-edited) link is kept.
+    /// </summary>
+    internal static readonly IReadOnlyDictionary<string, string[]> RetiredActionUrls = new Dictionary<string, string[]>
+    {
+        ["payout-details"] = ["/app/payout-details"],
+    };
+
     public async Task SeedAsync(AppDbContext db, CancellationToken ct)
     {
         var now = clock.GetUtcNow().UtcDateTime;
 
-        var existingKeys = (await db.Set<OnboardingStep>().Select(s => s.Key).ToListAsync(ct)).ToHashSet();
+        var existingSteps = await db.Set<OnboardingStep>().ToListAsync(ct);
+        var existingKeys = existingSteps.Select(s => s.Key).ToHashSet();
+        foreach (var step in existingSteps)
+        {
+            var baseline = Steps.FirstOrDefault(s => s.Key == step.Key);
+            if (baseline.Key is not null && RetiredActionUrls.TryGetValue(step.Key, out var retired) &&
+                step.ActionUrl is not null && retired.Contains(step.ActionUrl))
+                step.ActionUrl = baseline.ActionUrl;
+        }
         for (var i = 0; i < Steps.Length; i++)
         {
             var s = Steps[i];

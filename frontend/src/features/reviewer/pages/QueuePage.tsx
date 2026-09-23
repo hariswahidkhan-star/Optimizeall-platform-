@@ -21,6 +21,7 @@ import {
   type FilterDefinition,
   type SortState,
 } from '@/components/ui';
+import { useCampaignOptions } from '@/lib/api/campaignOptions';
 import { Permissions } from '@/lib/auth/permissions';
 import { useAuth } from '@/lib/auth/useAuth';
 import { pluralize } from '@/lib/format/text';
@@ -165,19 +166,7 @@ export function QueuePage() {
     refetchIntervalInBackground: false,
   });
 
-  // Reviewers can't list campaigns (campaigns.manage), so campaign filter options come from the open queue itself.
-  const campaigns = useQuery({
-    queryKey: reviewKeys.queueCampaigns(),
-    queryFn: ({ signal }) => reviewApi.queue({ pageSize: 200 }, signal),
-    staleTime: 5 * 60_000,
-    select: (page) => {
-      const seen = new Map<string, string>();
-      for (const item of page.items) seen.set(item.campaign.id, item.campaign.title);
-      return [...seen]
-        .map(([value, label]) => ({ value, label }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-    },
-  });
+  const campaigns = useCampaignOptions();
 
   const claim = useClaim();
   const queueSearch = params.toString();
@@ -200,7 +189,9 @@ export function QueuePage() {
   };
 
   const campaignOptions = useMemo(() => {
-    const options = campaigns.data ?? [];
+    const options = (campaigns.data ?? [])
+      .filter((c) => c.status !== 'Draft')
+      .map((c) => ({ value: c.id, label: c.title }));
     if (filters.campaignId && !options.some((o) => o.value === filters.campaignId))
       return [...options, { value: filters.campaignId, label: 'Selected campaign' }];
     return options;
@@ -239,6 +230,7 @@ export function QueuePage() {
       ],
     },
     { id: 'mine', label: 'Assigned', allLabel: 'Anyone', options: [{ value: '1', label: 'Assigned to me' }] },
+    { id: 'claimed', label: 'Claim', allLabel: 'Any', options: [{ value: '1', label: 'Claimed by me' }] },
   ];
   const filterValues: Record<string, string | undefined> = {
     status: filters.status,
@@ -247,6 +239,7 @@ export function QueuePage() {
     minRisk: filters.minRisk,
     flagged: filters.flagged,
     mine: filters.assignedToMe ? '1' : undefined,
+    claimed: filters.claimedByMe ? '1' : undefined,
   };
 
   const sort: SortState =

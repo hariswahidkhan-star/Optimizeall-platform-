@@ -284,7 +284,6 @@ function RetentionCard({
           <>
             <Stat label="Messages sent" value={formatNumber(data.total)} measurement="Count" />
             <BarChart
-              className="mg-chart"
               title="Retention messages by kind"
               description={`${data.total} messages sent in the period.`}
               data={data.items.map((i) => ({ label: retentionKindLabel(i.kind), value: i.sent }))}

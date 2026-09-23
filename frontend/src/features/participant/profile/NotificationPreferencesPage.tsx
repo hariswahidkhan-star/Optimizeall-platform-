@@ -86,62 +86,59 @@ function PreferencesMatrix({ prefs }: { prefs: NotificationPreferences }) {
               </tr>
             </thead>
             <tbody>
-              {/* The API also lists staff-only types (labelled "(staff)"); they never reach participants. */}
-              {prefs.types
-                .filter((row) => !/\(staff\)\s*$/i.test(row.label))
-                .map((row) => (
-                  <tr key={row.type}>
-                    <th scope="row">
-                      <span className="pp-matrix__type">
-                        <span className="pp-matrix__label">{row.label}</span>
-                        <span className="pp-matrix__desc">{row.description}</span>
-                        {row.marketing && (
-                          <span className="pp-matrix__desc">
-                            Email also needs marketing emails turned on in your profile.
-                          </span>
-                        )}
-                      </span>
-                    </th>
-                    {CHANNELS.map((c) => {
-                      const cell = row.channels.find((x) => x.channel === c.id);
-                      if (!cell) return <td key={c.id} data-align="center" data-channel={c.label} />;
-                      const k = key(row.type, c.id);
-                      const checked = draft[k] ?? cell.enabled;
-                      const label = `${c.label} for ${row.label}`;
-                      if (cell.locked) {
-                        return (
-                          <td key={c.id} data-align="center" data-channel={c.label}>
-                            <span className="pp-lock">
-                              <Lock aria-hidden="true" />
-                              <span>
-                                {!cell.available ? 'Unavailable' : cell.enabled ? 'Always on' : 'Off'}
-                              </span>
-                              <span className="visually-hidden">
-                                : {label} is essential and can’t be changed
-                              </span>
-                            </span>
-                          </td>
-                        );
-                      }
+              {prefs.types.map((row) => (
+                <tr key={row.type}>
+                  <th scope="row">
+                    <span className="pp-matrix__type">
+                      <span className="pp-matrix__label">{row.label}</span>
+                      <span className="pp-matrix__desc">{row.description}</span>
+                      {row.marketing && (
+                        <span className="pp-matrix__desc">
+                          Email also needs marketing emails turned on in your profile.
+                        </span>
+                      )}
+                    </span>
+                  </th>
+                  {CHANNELS.map((c) => {
+                    const cell = row.channels.find((x) => x.channel === c.id);
+                    if (!cell) return <td key={c.id} data-align="center" data-channel={c.label} />;
+                    const k = key(row.type, c.id);
+                    const checked = draft[k] ?? cell.enabled;
+                    const label = `${c.label} for ${row.label}`;
+                    if (cell.locked) {
                       return (
                         <td key={c.id} data-align="center" data-channel={c.label}>
-                          <Checkbox
-                            label={
-                              <span className="visually-hidden">
-                                {cell.available
-                                  ? label
-                                  : `${label} (unavailable${whatsApp?.reason ? `: ${whatsApp.reason}` : ''})`}
-                              </span>
-                            }
-                            checked={checked && cell.available}
-                            disabled={!cell.available || save.isPending}
-                            onChange={(e) => setDraft((d) => ({ ...d, [k]: e.target.checked }))}
-                          />
+                          <span className="pp-lock">
+                            <Lock aria-hidden="true" />
+                            <span>
+                              {!cell.available ? 'Unavailable' : cell.enabled ? 'Always on' : 'Off'}
+                            </span>
+                            <span className="visually-hidden">
+                              : {label} is essential and can’t be changed
+                            </span>
+                          </span>
                         </td>
                       );
-                    })}
-                  </tr>
-                ))}
+                    }
+                    return (
+                      <td key={c.id} data-align="center" data-channel={c.label}>
+                        <Checkbox
+                          label={
+                            <span className="visually-hidden">
+                              {cell.available
+                                ? label
+                                : `${label} (unavailable${whatsApp?.reason ? `: ${whatsApp.reason}` : ''})`}
+                            </span>
+                          }
+                          checked={checked && cell.available}
+                          disabled={!cell.available || save.isPending}
+                          onChange={(e) => setDraft((d) => ({ ...d, [k]: e.target.checked }))}
+                        />
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
             </tbody>
           </table>
         </CardBody>

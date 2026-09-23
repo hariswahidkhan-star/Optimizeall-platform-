@@ -75,7 +75,7 @@ export function WorkspacePage() {
   const navigate = useNavigate();
   const toast = useToast();
   const queryClient = useQueryClient();
-  const { user, hasPermission } = useAuth();
+  const { hasPermission } = useAuth();
   const isMobile = useIsMobile();
   const now = useNow(1000);
   const [tab, setTab] = useState('submission');
@@ -142,8 +142,8 @@ export function WorkspacePage() {
   const state = claimState(s, now);
   // The server still reports my claim as active, but its expiry has passed on this clock.
   const expired = s.claim.isMine && s.claim.isActive && state === 'none';
-  const ownSubmission = !!user && detail.participant.id === user.id;
-  const canDecide = state === 'mine' && !ownSubmission && !advancing;
+  // Self-review is refused by the server (403 review.self_review on claim and decision), shown via describeReviewError.
+  const canDecide = state === 'mine' && !advancing;
 
   const refresh = () => {
     setDecisionError(null);
@@ -174,9 +174,8 @@ export function WorkspacePage() {
       },
     });
 
-  const blockedReason = ownSubmission
-    ? 'This is your own submission. Self-review isn’t allowed — leave it for another reviewer.'
-    : state === 'closed'
+  const blockedReason =
+    state === 'closed'
       ? `This submission is ${humanize(s.status).toLowerCase()}. There is nothing left to decide.`
       : state === 'other'
         ? `${s.claim.claimedBy?.displayName ?? 'Another reviewer'} holds the claim.`
@@ -230,11 +229,6 @@ export function WorkspacePage() {
         }
       />
       <div className="stack">
-        {ownSubmission && (
-          <Alert tone="danger" title="This is your own submission">
-            Self-review isn’t allowed. Leave it for another reviewer.
-          </Alert>
-        )}
         <ClaimBanner
           submission={s}
           state={state}

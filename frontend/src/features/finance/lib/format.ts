@@ -1,34 +1,5 @@
 import type { PayoutExclusionReason } from '../api/types';
 
-/**
- * Currencies the backend accepts (mirror of `Domain/Common/Money.SupportedCurrencies`). There is no endpoint that
- * lists them, so the form offers these and the server remains the judge (`ledger.currency_unsupported`).
- */
-export const SUPPORTED_CURRENCIES = [
-  'USD',
-  'EUR',
-  'GBP',
-  'AED',
-  'SAR',
-  'PKR',
-  'INR',
-  'CAD',
-  'AUD',
-  'JPY',
-  'KWD',
-  'BHD',
-  'OMR',
-  'QAR',
-  'EGP',
-  'TRY',
-  'NGN',
-  'ZAR',
-  'BRL',
-  'MXN',
-];
-
-export const currencyOptions = SUPPORTED_CURRENCIES.map((c) => ({ value: c, label: c }));
-
 const pad = (n: number) => String(n).padStart(2, '0');
 
 /** Value for an `<input type="datetime-local">` in the browser's zone (e.g. "2026-09-23T14:05"). */

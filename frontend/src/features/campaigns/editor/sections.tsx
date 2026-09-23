@@ -23,7 +23,8 @@ import {
 import { api } from '@/lib/api/client';
 import { errorMessage } from '@/lib/api/errors';
 import { browserTimeZone } from '@/lib/format/dates';
-import { useCategories, useGlobalMinAccountAge } from '../api/queries';
+import { useEligibilityDefaults } from '@/lib/api/meta';
+import { useCategories } from '../api/queries';
 import type { UploadedFile } from '../api/types';
 import { CheckboxGroup } from '../shared/CheckboxGroup';
 import { fieldError, type FieldErrorMap } from '../shared/formErrors';
@@ -287,7 +288,7 @@ export function ScheduleSection({ form, set, errors, disabled }: SectionProps) {
 // ---------------------------------------------------------------- targeting
 
 export function TargetingSection({ form, set, errors, disabled }: SectionProps) {
-  const globalAge = useGlobalMinAccountAge();
+  const defaults = useEligibilityDefaults().data;
   return (
     <div className="stack">
       <CheckboxGroup
@@ -369,9 +370,9 @@ export function TargetingSection({ form, set, errors, disabled }: SectionProps) 
           label="Minimum account age (days)"
           optional
           hint={
-            globalAge.exact
-              ? `Blank = the global default, currently ${globalAge.days} days.`
-              : `Blank = the global default (${globalAge.days} days unless an admin has changed it).`
+            defaults
+              ? `Blank = the platform default, currently ${defaults.minAccountAgeDays} days.`
+              : 'Blank = the platform default.'
           }
           error={fieldError(errors, 'eligibility.minAccountAgeDays')}
         >
@@ -381,7 +382,7 @@ export function TargetingSection({ form, set, errors, disabled }: SectionProps) 
             max={3650}
             step={1}
             inputMode="numeric"
-            placeholder={`Default: ${globalAge.days}`}
+            placeholder={defaults ? `Default: ${defaults.minAccountAgeDays}` : undefined}
             value={form.minAccountAgeDays}
             disabled={disabled}
             onChange={(e) => set({ minAccountAgeDays: e.target.value })}
