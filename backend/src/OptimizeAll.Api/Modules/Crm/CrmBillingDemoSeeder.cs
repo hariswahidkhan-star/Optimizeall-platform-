@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Api.Modules.Billing;
+using OptimizeAll.Api.Modules.Clients;
 using OptimizeAll.Domain.Agency;
 using OptimizeAll.Domain.Billing;
 using OptimizeAll.Domain.Common;
@@ -15,8 +16,8 @@ namespace OptimizeAll.Api.Modules.Crm;
 
 /// <summary>
 /// "Demo" profile for CRM, proposals, contracts and billing (STAGING/DEMO DATA ONLY). Ensures the shared demo agency staff,
-/// the four canonical client accounts and the Nimbus client users exist (creating missing ones with the agreed values —
-/// another module's seeder may have created them first), then adds a realistic pipeline, activities, proposals, retainers,
+/// client accounts and client users of <see cref="DeliveryDemoData"/> exist (through <see cref="DeliveryDemoAccounts"/>, so
+/// they are the same whichever demo seeder runs first), then adds a realistic pipeline, activities, proposals, retainers,
 /// invoices (numbered through the real gapless sequence), payments and a credit note. Idempotent via <see cref="MarkerKey"/>.
 /// </summary>
 public sealed class CrmBillingDemoSeeder(
@@ -28,38 +29,12 @@ public sealed class CrmBillingDemoSeeder(
     ILogger<CrmBillingDemoSeeder> logger) : ISeeder
 {
     public const string MarkerKey = "demo.crm-billing.seeded";
-    public const string Password = "Demo#2026!pass";
-    public const string StaffDomain = "demo.optimizeall.app";
+    /// <summary>Password of every demo account (<see cref="DeliveryDemoData.Password"/>).</summary>
+    public const string Password = DeliveryDemoData.Password;
+    public const string StaffDomain = DeliveryDemoData.Domain;
 
     public string Profile => "Demo";
     public int Order => 300;
-
-    public static readonly (string Local, string Name, Role Role)[] Staff =
-    {
-        ("am", "Amina Qureshi", Role.AccountManager),
-        ("strategist", "Daniel Brooks", Role.Strategist),
-        ("content", "Leila Haddad", Role.ContentCreator),
-        ("designer", "Marco Rossi", Role.Designer),
-        ("seo", "Priya Nair", Role.SeoSpecialist),
-        ("ads", "Omar Farouk", Role.AdsSpecialist),
-        ("social", "Sofia Martins", Role.SocialMediaManager),
-        ("sales", "Hassan Raza", Role.SalesRep),
-    };
-
-    public static readonly (string Slug, string Name, string Industry, string Country, string Currency, string TimeZone, string Website)[] Clients =
-    {
-        ("nimbus-fitness", "Nimbus Fitness", "SaaS fitness app", "US", "USD", "America/New_York", "https://nimbusfitness.example"),
-        ("wanderly-travel", "Wanderly Travel", "Travel", "GB", "GBP", "Europe/London", "https://wanderly.example"),
-        ("aurora-skincare", "Aurora Skincare", "E-commerce beauty", "AE", "AED", "Asia/Dubai", "https://auroraskincare.example"),
-        ("karachi-eats", "Karachi Eats", "Restaurant group", "PK", "PKR", "Asia/Karachi", "https://karachieats.example"),
-    };
-
-    public static readonly (string Email, string Name, ClientMemberRole Role)[] NimbusUsers =
-    {
-        ("owner@nimbus.demo.optimizeall.app", "Olivia Carter", ClientMemberRole.Owner),
-        ("approver@nimbus.demo.optimizeall.app", "Ethan Park", ClientMemberRole.Approver),
-        ("billing@nimbus.demo.optimizeall.app", "Grace Liu", ClientMemberRole.Billing),
-    };
 
     private DateTime _now;
     private DateOnly _today;
@@ -74,17 +49,10 @@ public sealed class CrmBillingDemoSeeder(
         _now = clock.GetUtcNow().UtcDateTime;
         _today = DateOnly.FromDateTime(_now);
 
-        // Shared people and clients (idempotent lookups by email/slug).
-        var staff = new Dictionary<string, Guid>();
-        foreach (var (local, name, role) in Staff) staff[local] = await EnsureUserAsync(db, $"{local}@{StaffDomain}", name, role, "PK", ct);
-        var clients = new Dictionary<string, ClientAccount>();
-        foreach (var c in Clients) clients[c.Slug] = await EnsureClientAsync(db, c, staff["am"], ct);
-        foreach (var (email, name, role) in NimbusUsers)
-        {
-            var userId = await EnsureUserAsync(db, email, name, Role.Client, "US", ct);
-            if (!await db.Set<ClientMember>().AnyAsync(m => m.ClientAccountId == clients["nimbus-fitness"].Id && m.UserId == userId, ct))
-                db.Set<ClientMember>().Add(new ClientMember { ClientAccountId = clients["nimbus-fitness"].Id, UserId = userId, Role = role, AddedAt = _now });
-        }
+        // Shared people and clients: the canonical DeliveryDemoData records, created when missing exactly as the delivery demo
+        // seeder creates them (so the result doesn't depend on which seeder runs first).
+        var (people, clients) = await DeliveryDemoAccounts.EnsureAsync(db, passwordHasher, _now, ct);
+        var staff = DeliveryDemoData.Staff.ToDictionary(x => x.Email.Split('@')[0], x => people[x.Email].Id);
         await db.SaveChangesAsync(ct);
         if (!await db.Set<PipelineStage>().AnyAsync(ct)) await new CrmBaselineSeeder().SeedAsync(db, ct);
         if (!await db.Set<TaxRate>().AnyAsync(ct)) await new BillingBaselineSeeder().SeedAsync(db, ct);
@@ -121,8 +89,8 @@ public sealed class CrmBillingDemoSeeder(
             companies[key] = c;
             return c;
         }
-        foreach (var (slug, name, industry, country, _, _, website) in Clients)
-            Company(slug, name, CrmNormalization.Domain(website), industry, CompanySize.Medium, country, am, clients[slug].Id, "client");
+        foreach (var c in DeliveryDemoData.Clients)
+            Company(c.Slug, c.Name, CrmNormalization.Domain(c.Website), c.Industry, CompanySize.Medium, c.CountryCode, am, clients[c.Slug].Id, "client");
         Company("brightline", "Brightline Dental Group", "brightlinedental.example", "healthcare", CompanySize.Small, "US", sales, null, "multi-location");
         Company("peak", "Peak Outdoors", "peakoutdoors.example", "e-commerce", CompanySize.Medium, "GB", sales, null, "shopify");
         Company("lumen", "Lumen Analytics", "lumenanalytics.example", "saas", CompanySize.Medium, "AE", sales, null, "b2b");
@@ -391,42 +359,6 @@ public sealed class CrmBillingDemoSeeder(
     }
 
     // ------------------------------------------------------------------ Helpers
-
-    private async Task<Guid> EnsureUserAsync(AppDbContext db, string email, string name, Role role, string country, CancellationToken ct)
-    {
-        var normalized = Normalization.Email(email);
-        var existing = await db.Set<User>().Include(u => u.Roles).FirstOrDefaultAsync(u => u.NormalizedEmail == normalized, ct);
-        if (existing is not null)
-        {
-            if (!existing.HasRole(role)) existing.Roles.Add(new UserRole { UserId = existing.Id, Role = role, GrantedAt = _now });
-            return existing.Id;
-        }
-        var user = new User
-        {
-            Email = email, NormalizedEmail = normalized, DisplayName = name, CountryCode = country, EmailVerifiedAt = _now,
-            ReferralCode = "D" + Convert.ToHexString(System.Security.Cryptography.RandomNumberGenerator.GetBytes(5)),
-            TimeZone = country == "PK" ? "Asia/Karachi" : "America/New_York",
-        };
-        user.PasswordHash = passwordHasher.HashPassword(user, Password);
-        user.Roles.Add(new UserRole { UserId = user.Id, Role = role, GrantedAt = _now });
-        db.Set<User>().Add(user);
-        return user.Id;
-    }
-
-    private static async Task<ClientAccount> EnsureClientAsync(AppDbContext db,
-        (string Slug, string Name, string Industry, string Country, string Currency, string TimeZone, string Website) c, Guid accountManager, CancellationToken ct)
-    {
-        var existing = await db.Set<ClientAccount>().FirstOrDefaultAsync(x => x.Slug == c.Slug, ct);
-        if (existing is not null) return existing;
-        var client = new ClientAccount
-        {
-            Slug = c.Slug, Name = c.Name, Industry = c.Industry, CountryCode = c.Country, Currency = c.Currency, TimeZone = c.TimeZone,
-            Website = c.Website, Status = ClientAccountStatus.Active, AccountManagerUserId = accountManager,
-            BillingEmail = $"accounts@{c.Slug}.demo.optimizeall.app",
-        };
-        db.Set<ClientAccount>().Add(client);
-        return client;
-    }
 
     private sealed record SeedLine(string Description, string Service, decimal Quantity, decimal UnitPrice, Recurrence Recurrence, TaxRate? Rate,
         DiscountType DiscountType, decimal DiscountValue);

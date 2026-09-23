@@ -73,6 +73,50 @@ public sealed class DeliveryOperationsTests(ApiFactory api) : IClassFixture<ApiF
     }
 
     [Fact]
+    public async Task Admins_cannot_approve_their_own_timesheet_either()
+    {
+        var am = await api.StaffAsync();
+        var org = await api.CreateOrgAsync(am.Client);
+        var projectId = (await am.Client.CreateProjectAsync(org)).GetProperty("id").GetGuid();
+        var admin = await api.StaffAsync(Role.Admin);
+        (await admin.Client.PostAsJsonAsync("/api/v1/agency/time/entries", new { projectId, date = Today, minutes = 60 })).EnsureSuccessStatusCode();
+        var week = await (await admin.Client.PostAsync($"/api/v1/agency/time/timesheets/submit?date={Today:yyyy-MM-dd}", null)).ReadJsonAsync();
+        var sheetId = week.GetProperty("id").GetGuid();
+        var stamp = week.GetProperty("concurrencyStamp").GetGuid();
+        await (await admin.Client.PostAsJsonAsync($"/api/v1/agency/time/timesheets/{sheetId}/approve", new { concurrencyStamp = stamp }))
+            .ShouldFailAsync(403, "time.own_timesheet");
+        // Another manager can.
+        var approved = await (await am.Client.PostAsJsonAsync($"/api/v1/agency/time/timesheets/{sheetId}/approve", new { concurrencyStamp = stamp })).ReadJsonAsync();
+        Assert.Equal("Approved", approved.GetProperty("status").GetString());
+    }
+
+    [Fact]
+    public async Task Entries_racing_a_week_submission_never_land_in_the_submitted_week()
+    {
+        var am = await api.StaffAsync();
+        var org = await api.CreateOrgAsync(am.Client);
+        var projectId = (await am.Client.CreateProjectAsync(org)).GetProperty("id").GetGuid();
+        var designer = await api.StaffAsync(Role.Designer);
+        for (var round = 1; round <= 6; round++)
+        {
+            var day = Today.AddDays(-7 * round);
+            (await designer.Client.PostAsJsonAsync("/api/v1/agency/time/entries", new { projectId, date = day, minutes = 10 })).EnsureSuccessStatusCode();
+            var writes = Enumerable.Range(0, 12)
+                .Select(_ => designer.Client.PostAsJsonAsync("/api/v1/agency/time/entries", new { projectId, date = day, minutes = 1 })).ToList();
+            var submit = designer.Client.PostAsync($"/api/v1/agency/time/timesheets/submit?date={day:yyyy-MM-dd}", null);
+            await Task.WhenAll(writes.Append(submit));
+            Assert.All(writes, w => Assert.Contains(w.Result.StatusCode, new[] { HttpStatusCode.Created, HttpStatusCode.Conflict }));
+            submit.Result.EnsureSuccessStatusCode();
+            var week = BudgetMath.WeekStart(day);
+            var (total, logged) = await api.WithDbAsync(async db => (
+                await db.Set<Timesheet>().Where(t => t.UserId == designer.User.Id && t.WeekStart == week).Select(t => t.TotalMinutes).SingleAsync(),
+                await db.Set<TimeEntry>().Where(e => e.UserId == designer.User.Id && e.Date >= week && e.Date <= week.AddDays(6)).SumAsync(e => e.Minutes)));
+            // The submitted total is exactly what is in the (now locked) week.
+            Assert.Equal(logged, total);
+        }
+    }
+
+    [Fact]
     public async Task Budget_burn_uses_user_then_role_then_project_rates()
     {
         var am = await api.StaffAsync();
@@ -175,6 +219,30 @@ public sealed class DeliveryOperationsTests(ApiFactory api) : IClassFixture<ApiF
         Assert.Equal("Google Analytics 4 export", kpi.GetProperty("source").GetString());
         await (await am.Client.PutAsJsonAsync($"/api/v1/agency/reports/{id}", new { title = "Edited title", sections = edited, concurrencyStamp = published.GetProperty("concurrencyStamp").GetGuid() }))
             .ShouldFailAsync(409, "report.published");
+    }
+
+    [Fact]
+    public async Task Published_reports_hide_empty_sections_and_staff_notes_from_the_client()
+    {
+        var am = await api.StaffAsync();
+        var org = await api.CreateOrgAsync(am.Client);
+        var viewer = await api.ClientUserAsync(org, ClientMemberRole.Viewer);
+        var report = await (await am.Client.PostAsJsonAsync("/api/v1/agency/reports", new { clientId = org, period = "2026-06" })).ReadJsonAsync();
+        var id = report.GetProperty("id").GetGuid();
+        var staffSections = report.GetProperty("sections").EnumerateArray().ToList();
+        Assert.Contains(staffSections, s => s.GetProperty("providerNote").GetString()?.Contains("No data source") == true);
+        (await am.Client.PostAsJsonAsync($"/api/v1/agency/reports/{id}/publish", new { concurrencyStamp = report.GetProperty("concurrencyStamp").GetGuid() }))
+            .EnsureSuccessStatusCode();
+
+        var clientReport = await (await viewer.Client.GetAsync($"/api/v1/client/orgs/{org}/reports/{id}")).ReadJsonAsync();
+        var raw = clientReport.GetRawText();
+        Assert.DoesNotContain("No data source", raw);
+        Assert.DoesNotContain("<!--", raw);
+        Assert.DoesNotContain("\\u003C!--", raw);
+        var sections = clientReport.GetProperty("sections").EnumerateArray().ToList();
+        Assert.True(sections.Count < staffSections.Count);
+        Assert.All(sections, s => Assert.True(s.GetProperty("kpis").GetArrayLength() > 0 || s.GetProperty("body").ValueKind == JsonValueKind.String));
+        Assert.All(sections, s => Assert.Equal(JsonValueKind.Null, s.GetProperty("providerNote").ValueKind));
     }
 
     [Fact]

@@ -318,7 +318,24 @@ public sealed class ReportService(
         var r = await db.Set<ClientReport>().AsNoTracking()
                     .FirstOrDefaultAsync(x => x.Id == id && x.ClientAccountId == clientId && x.Status == ReportStatus.Published, ct)
                 ?? throw DomainException.NotFound("Report");
-        return (await ToDtoAsync(r, ct)) with { AvailableProviders = Array.Empty<ReportProviderDto>() };
+        // Staff-only guidance never reaches the client: sections with nothing to show (no KPIs and no text beyond the
+        // template's prompt) are hidden, and the data-source notes meant for the team are removed.
+        var sections = r.Sections.Select(s => s with { Body = ClientText(s.Body), ProviderNote = null })
+            .Where(s => s.Kpis.Count > 0 || s.Body is not null).ToList();
+        return (await ToDtoAsync(r, ct)) with { Sections = sections, AvailableProviders = Array.Empty<ReportProviderDto>() };
+    }
+
+    /// <summary>A section body as the client sees it: without the template's prompt comments; null when nothing is left.</summary>
+    internal static string? ClientText(string? body)
+    {
+        if (string.IsNullOrWhiteSpace(body)) return null;
+        var text = body;
+        for (var start = text.IndexOf("<!--", StringComparison.Ordinal); start >= 0; start = text.IndexOf("<!--", StringComparison.Ordinal))
+        {
+            var end = text.IndexOf("-->", start + 4, StringComparison.Ordinal);
+            text = end < 0 ? text[..start] : text[..start] + text[(end + 3)..];
+        }
+        return string.IsNullOrWhiteSpace(text) ? null : text.Trim();
     }
 
     // ------------------------------------------------------------------ job

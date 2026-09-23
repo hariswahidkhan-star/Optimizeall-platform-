@@ -265,6 +265,55 @@ public sealed class DeliverableWorkflowTests(ApiFactory api) : IClassFixture<Api
         Assert.Equal(HttpStatusCode.Forbidden, (await participant.GetAsync($"/api/v1/agency/files/{fileId}")).StatusCode);
     }
 
+    [Fact]
+    public async Task Client_users_can_only_download_files_that_were_shared_with_them()
+    {
+        var am = await api.StaffAsync();
+        var org = await api.CreateOrgAsync(am.Client);
+        var projectId = (await am.Client.CreateProjectAsync(org)).GetProperty("id").GetGuid();
+        var owner = await api.ClientUserAsync(org, ClientMemberRole.Owner);
+        var d = await am.Client.CreateDeliverableAsync(projectId, "Draft creative");
+        var id = d.GetProperty("deliverable").GetProperty("id").GetGuid();
+
+        using (var form = OneFile(DemoPng.Creative(16, 16, 1), "draft.png"))
+            (await am.Client.PostAsync($"/api/v1/agency/deliverables/{id}/versions", form)).EnsureSuccessStatusCode();
+        var detail = await (await am.Client.GetAsync($"/api/v1/agency/deliverables/{id}")).ReadJsonAsync();
+        var draftFile = detail.GetProperty("versions")[0].GetProperty("file").GetProperty("id").GetGuid();
+
+        // An internal task attachment and an unsent deliverable version are staff-only, even for the organization's Owner.
+        var internalFile = (await UploadAsync(am.Client, org, DemoPng.Creative(12, 12, 3), "internal.png")).GetProperty("id").GetGuid();
+        var task = await (await am.Client.PostAsJsonAsync($"/api/v1/agency/projects/{projectId}/tasks", new { title = "Internal QA" })).ReadJsonAsync();
+        (await am.Client.PostAsJsonAsync($"/api/v1/agency/tasks/{task.GetProperty("task").GetProperty("id").GetGuid()}/attachments", new { fileId = internalFile }))
+            .EnsureSuccessStatusCode();
+        await (await owner.Client.GetAsync($"/api/v1/client/orgs/{org}/files/{draftFile}")).ShouldFailAsync(404);
+        await (await owner.Client.GetAsync($"/api/v1/client/orgs/{org}/files/{internalFile}")).ShouldFailAsync(404);
+        (await am.Client.GetAsync($"/api/v1/agency/files/{internalFile}")).EnsureSuccessStatusCode();
+
+        // Nor can a client user re-share an internal file id through a message.
+        await (await owner.Client.PostAsJsonAsync($"/api/v1/client/orgs/{org}/threads",
+            new { subject = "Files", body = "See attached", attachmentFileIds = new[] { internalFile } })).ShouldFailAsync(400, "file.invalid_attachment");
+
+        // Once the version is sent to the client it can be downloaded; so can files the team attaches to a message.
+        (await am.Client.PostAsJsonAsync($"/api/v1/agency/deliverables/{id}/submit", new { version = 1 })).EnsureSuccessStatusCode();
+        (await am.Client.PostAsJsonAsync($"/api/v1/agency/deliverables/{id}/internal-approve", new { version = 1 })).EnsureSuccessStatusCode();
+        (await owner.Client.GetAsync($"/api/v1/client/orgs/{org}/files/{draftFile}")).EnsureSuccessStatusCode();
+        (await am.Client.PostAsJsonAsync($"/api/v1/agency/clients/{org}/threads",
+            new { subject = "Assets", body = "Here you go", attachmentFileIds = new[] { internalFile } })).EnsureSuccessStatusCode();
+        (await owner.Client.GetAsync($"/api/v1/client/orgs/{org}/files/{internalFile}")).EnsureSuccessStatusCode();
+
+        // The client's own uploads stay readable to the organization.
+        using var upload = OneFile(DemoPng.Creative(10, 10, 4), "brief.png");
+        var own = await (await owner.Client.PostAsync($"/api/v1/client/orgs/{org}/files", upload)).ReadJsonAsync();
+        (await owner.Client.GetAsync($"/api/v1/client/orgs/{org}/files/{own.GetProperty("id").GetGuid()}")).EnsureSuccessStatusCode();
+    }
+
+    private static MultipartFormDataContent OneFile(byte[] bytes, string name)
+    {
+        var form = new MultipartFormDataContent();
+        form.Add(new ByteArrayContent(bytes), "file", name);
+        return form;
+    }
+
     private static async Task<JsonElement> UploadAsync(HttpClient staff, Guid clientId, byte[] bytes, string name)
     {
         using var form = new MultipartFormDataContent();
