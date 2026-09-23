@@ -44,7 +44,7 @@ public sealed record AlertDto(
 public sealed record BudgetEvaluation(AdBudget Budget, PacingResult Pacing, AdTotals Totals, IReadOnlyList<string> FxMissing);
 
 /// <summary>Budget pacing: spend of the budget's scope (converted to the budget currency) vs expected-to-date and month-end projection.</summary>
-public sealed class PacingService(AppDbContext db, AdsKpiService kpis)
+public sealed class PacingService(AdsKpiService kpis)
 {
     public async Task<BudgetEvaluation> EvaluateAsync(AdBudget budget, DateOnly asOf, CancellationToken ct)
     {

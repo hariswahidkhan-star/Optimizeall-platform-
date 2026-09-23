@@ -49,7 +49,7 @@ export function parseMarkdown(source: string): Block[] {
   let i = 0;
   const isBlank = (l: string) => l.trim() === '';
   const startsBlock = (l: string) =>
-    /^\s{0,3}(#{1,6}\s|>|```|~~~|[-*+]\s|\d+[.)]\s|(-{3,}|\*{3,}|_{3,})\s*$)/.test(l) || /^\s*\|/.test(l);
+    /^\s{0,3}(#{1,6}\s|>|```|~~~|[-*+]\s|\d+[.)]\s|(-{3,}|\*{3,}|_{3,})\s*$)/.test(l) || /^\s*\|/.test(l) || /^\s*(```|~~~)/.test(l);
 
   while (i < lines.length) {
     const line = lines[i];
@@ -57,11 +57,14 @@ export function parseMarkdown(source: string): Block[] {
       i++;
       continue;
     }
-    const fence = /^\s{0,3}(```|~~~)\s*([\w-]*)/.exec(line);
+    const fence = /^\s*(`{3,}|~{3,})\s*([\w-]*)/.exec(line);
     if (fence) {
+      // As in the API's sanitizer (CommonMark): only a line made of the same fence character, at least as long as the
+      // opening fence, closes the block. "```js" inside a block is code, not a closing fence.
+      const closing = new RegExp(`^\\s*${fence[1][0] === '`' ? '`' : '~'}{${fence[1].length},}\\s*$`);
       const body: string[] = [];
       i++;
-      while (i < lines.length && !lines[i].trim().startsWith(fence[1])) body.push(lines[i++]);
+      while (i < lines.length && !closing.test(lines[i])) body.push(lines[i++]);
       i++;
       blocks.push({ kind: 'code', lang: fence[2], text: body.join('\n') });
       continue;

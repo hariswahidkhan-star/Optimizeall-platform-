@@ -162,11 +162,15 @@ public sealed class AdMetricWriter(AppDbContext db, IDatabaseDialect dialect, Ti
     {
         var now = clock.GetUtcNow().UtcDateTime;
         int inserted = 0, updated = 0;
+
+        // Serialize writers of the same ad account (a double-submitted import, an import racing the daily sync): both
+        // would read "no row yet" and insert, so one would fail on the unique metric key and campaigns/ad groups would
+        // be created twice. The named lock is taken before the transaction, and the mirror rows are read inside it.
+        await using var accountLock = await AcquireAccountLockAsync(account.Id, ct);
+        await using var tx = await dialect.BeginWriteTransactionAsync(db, ct);
         var campaigns = await db.Set<AdCampaign>().Where(c => c.AdAccountId == account.Id).ToListAsync(ct);
         var groups = await db.Set<AdGroup>().Where(g => g.AdAccountId == account.Id).ToListAsync(ct);
         var ads = await db.Set<Ad>().Where(a => a.AdAccountId == account.Id).ToListAsync(ct);
-
-        await using var tx = await dialect.BeginWriteTransactionAsync(db, ct);
         foreach (var chunk in rows.Chunk(500))
         {
             var minDate = chunk.Min(r => r.Date);
@@ -216,6 +220,18 @@ public sealed class AdMetricWriter(AppDbContext db, IDatabaseDialect dialect, Ti
         }
         await tx.CommitAsync(ct);
         return new UpsertResult(inserted, updated);
+    }
+
+    private async Task<IAsyncDisposable> AcquireAccountLockAsync(Guid accountId, CancellationToken ct)
+    {
+        try
+        {
+            return await dialect.AcquireNamedLockAsync(db, $"ads:{accountId:N}", TimeSpan.FromSeconds(60), ct);
+        }
+        catch (TimeoutException)
+        {
+            throw DomainException.Conflict("ads.write_busy", "Metrics for this ad account are being written right now. Try again in a moment.");
+        }
     }
 
     public static string EntityKey(AdMetricRow r) => Truncate(r.Level switch

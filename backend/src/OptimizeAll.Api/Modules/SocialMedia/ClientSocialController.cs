@@ -98,6 +98,12 @@ public sealed class ClientSocialController(
     public async Task<IActionResult> Media(Guid id, CancellationToken ct)
     {
         var asset = await access.OwnedAsync<SocialMediaAsset>(id, m => m.ClientAccountId, "Media", ct);
+        // Only media of posts the client may see: not the agency's library, drafts or posts in internal review.
+        var visibleMedia = await db.Set<SocialPostVariant>().AsNoTracking()
+            .Where(v => v.ClientAccountId == asset.ClientAccountId)
+            .Join(db.Set<SocialPost>().Where(p => Visible.Contains(p.Status)), v => v.PostId, p => p.Id, (v, _) => v.MediaIds)
+            .ToListAsync(ct);
+        if (!visibleMedia.Any(ids => ids.Contains(asset.Id))) throw DomainException.NotFound("Media");
         return await SocialLibraryController.StreamAsync(this, db, storage, asset, ct);
     }
 

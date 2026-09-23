@@ -60,10 +60,13 @@ public sealed class BookingService(
         var blackouts = (await db.Set<ConsultationBlackout>().AsNoTracking().Select(b => b.Date).ToListAsync(ct)).ToHashSet();
         var lower = from.AddDays(-1);
         var upper = to.AddDays(1);
-        var booked = (await db.Set<ConsultationBooking>().AsNoTracking()
-                .Where(b => b.SlotKey != null && b.SlotStart >= lower && b.SlotStart <= upper).Select(b => b.SlotKey!).ToListAsync(ct))
-            .Where(k => k != exceptKey).ToHashSet();
-        return ConsultationSlots.Available(s, Zone(s.TimeZone), blackouts, booked, now, from, to);
+        // Bookings that hold a slot (SlotKey set) and may overlap the window; slots can be up to a day long.
+        var active = (await db.Set<ConsultationBooking>().AsNoTracking()
+                .Where(b => b.SlotKey != null && b.SlotStart >= lower && b.SlotStart <= upper)
+                .Select(b => new { Key = b.SlotKey!, b.SlotStart, b.SlotEnd }).ToListAsync(ct))
+            .Where(b => b.Key != exceptKey).ToList();
+        return ConsultationSlots.Available(s, Zone(s.TimeZone), blackouts, active.Select(b => b.Key).ToHashSet(), now, from, to,
+            active.Select(b => (b.SlotStart, b.SlotEnd)).ToList());
     }
 
     // ---------------------------------------------------------------- Public
@@ -96,9 +99,6 @@ public sealed class BookingService(
         var settings = await SettingsAsync(ct);
         if (!settings.IsEnabled) throw DomainException.Conflict("website.booking_disabled", "Online booking is paused. Please use the contact form instead.");
         var start = slotStart!.Value;
-        var available = await AvailableAsync(settings, start.AddMinutes(-1), start.AddMinutes(1), null, ct);
-        if (!available.Contains(start)) throw SlotTaken();
-
         var inquiry = inquiries.NewInquiry(InquiryType.Consultation, contact, input);
         inquiry.ServiceSlugs = slugs;
         inquiry.Message = WebsiteRules.Clean(input.Notes);
@@ -119,20 +119,28 @@ public sealed class BookingService(
             InquiryId = inquiry.Id,
         };
 
-        await using (var tx = await dialect.BeginWriteTransactionAsync(db, ct))
+        // The unique SlotKey stops two bookings of the same start; the lock also stops overlapping bookings with different
+        // starts (possible after the slot length changed) from both passing the availability check.
+        await using (await LockSlotsAsync(ct))
         {
-            db.Set<WebsiteInquiry>().Add(inquiry);
-            db.Set<ConsultationBooking>().Add(booking);
-            try
+            var available = await AvailableAsync(settings, start.AddMinutes(-1), start.AddMinutes(1), null, ct);
+            if (!available.Contains(start)) throw SlotTaken();
+
+            await using (var tx = await dialect.BeginWriteTransactionAsync(db, ct))
             {
-                await db.SaveChangesAsync(ct);
-                await tx.CommitAsync(ct);
-            }
-            catch (DbUpdateException ex) when (dialect.IsUniqueViolation(ex))
-            {
-                await tx.RollbackAsync(CancellationToken.None);
-                db.ChangeTracker.Clear();
-                throw SlotTaken();
+                db.Set<WebsiteInquiry>().Add(inquiry);
+                db.Set<ConsultationBooking>().Add(booking);
+                try
+                {
+                    await db.SaveChangesAsync(ct);
+                    await tx.CommitAsync(ct);
+                }
+                catch (DbUpdateException ex) when (dialect.IsUniqueViolation(ex))
+                {
+                    await tx.RollbackAsync(CancellationToken.None);
+                    db.ChangeTracker.Clear();
+                    throw SlotTaken();
+                }
             }
         }
 
@@ -143,6 +151,19 @@ public sealed class BookingService(
             $"Reference: {LeadReference.For(booking.Id)}\n\n— The Optimize All team", ct);
         return new BookingConfirmationDto(LeadReference.For(booking.Id), booking.SlotStart, booking.SlotEnd, booking.VisitorTimeZone,
             "Your consultation is booked. We've emailed you the details.");
+    }
+
+    /// <summary>Serializes booking and rescheduling (taken before any write transaction).</summary>
+    private async Task<IAsyncDisposable> LockSlotsAsync(CancellationToken ct)
+    {
+        try
+        {
+            return await dialect.AcquireNamedLockAsync(db, "consultation-slots", TimeSpan.FromSeconds(15), ct);
+        }
+        catch (TimeoutException)
+        {
+            throw DomainException.Conflict("website.booking_busy", "Lots of people are booking right now. Please try again in a moment.");
+        }
     }
 
     private static DomainException SlotTaken() =>
@@ -285,21 +306,24 @@ public sealed class BookingService(
         if (b.Status != BookingStatus.Confirmed) throw DomainException.Conflict("website.booking_not_active", "Only confirmed bookings can be rescheduled.");
         var settings = await SettingsAsync(ct);
         var start = WebsiteRules.Utc(input.SlotStart)!.Value;
-        // Staff may reschedule into any free slot of the published availability (minimum notice still applies).
-        var available = await AvailableAsync(settings, start.AddMinutes(-1), start.AddMinutes(1), b.SlotKey, ct);
-        if (!available.Contains(start)) throw SlotTaken();
-        var before = new { b.SlotStart };
-        b.SlotStart = start;
-        b.SlotEnd = start.AddMinutes(settings.SlotMinutes);
-        b.SlotKey = ConsultationBooking.KeyFor(start);
-        audit.Record("website.booking_rescheduled", nameof(ConsultationBooking), b.Id, before, new { b.SlotStart });
-        try
+        await using (await LockSlotsAsync(ct))
         {
-            await db.SaveChangesAsync(ct);
-        }
-        catch (DbUpdateException ex) when (dialect.IsUniqueViolation(ex))
-        {
-            throw SlotTaken();
+            // Staff may reschedule into any free slot of the published availability (minimum notice still applies).
+            var available = await AvailableAsync(settings, start.AddMinutes(-1), start.AddMinutes(1), b.SlotKey, ct);
+            if (!available.Contains(start)) throw SlotTaken();
+            var before = new { b.SlotStart };
+            b.SlotStart = start;
+            b.SlotEnd = start.AddMinutes(settings.SlotMinutes);
+            b.SlotKey = ConsultationBooking.KeyFor(start);
+            audit.Record("website.booking_rescheduled", nameof(ConsultationBooking), b.Id, before, new { b.SlotStart });
+            try
+            {
+                await db.SaveChangesAsync(ct);
+            }
+            catch (DbUpdateException ex) when (dialect.IsUniqueViolation(ex))
+            {
+                throw SlotTaken();
+            }
         }
         if (input.NotifyVisitor)
             await SendAsync(b, "Your consultation with Optimize All has a new time",
