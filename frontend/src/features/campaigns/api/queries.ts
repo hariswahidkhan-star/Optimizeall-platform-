@@ -9,7 +9,6 @@ import type {
   AdminCategory,
   PostTemplate,
   RewardRuleSet,
-  SettingEntry,
 } from './types';
 
 /** Query keys for the manager portal (all under 'manage' so a mutation can invalidate broadly). */
@@ -89,27 +88,4 @@ export function useTemplateOptions(enabled = true) {
     enabled: enabled && allowed,
     staleTime: 60_000,
   });
-}
-
-const MIN_ACCOUNT_AGE_KEY = 'eligibility.minAccountAgeDays';
-/** Backend default for `eligibility.minAccountAgeDays` (SettingKeys doc comment). */
-export const DOCUMENTED_MIN_ACCOUNT_AGE_DAYS = 90;
-
-/**
- * The global minimum account age. Only readable through `/admin/settings` (settings.manage); other users see the
- * documented default with a note that an admin may have changed it.
- */
-export function useGlobalMinAccountAge(): { days: number; exact: boolean } {
-  const { hasPermission } = useAuth();
-  const canRead = hasPermission(Permissions.SettingsManage);
-  const query = useQuery({
-    queryKey: qk.settings(),
-    queryFn: () => api.get<SettingEntry[]>('/admin/settings'),
-    enabled: canRead,
-    staleTime: 5 * 60_000,
-  });
-  const entry = query.data?.find((s) => s.key === MIN_ACCOUNT_AGE_KEY);
-  const value = Number(entry?.value);
-  if (entry && Number.isFinite(value)) return { days: value, exact: true };
-  return { days: DOCUMENTED_MIN_ACCOUNT_AGE_DAYS, exact: false };
 }

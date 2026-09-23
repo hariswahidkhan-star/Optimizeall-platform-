@@ -566,8 +566,3 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
 }
-
-/* The chart data table (visually hidden) can be wider than a phone; clip it without hiding it from assistive tech. */
-.mg-chart {
-  overflow: clip;
-}

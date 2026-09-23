@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Http;
+using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Identity;
 using OptimizeAll.Domain.Notifications;
@@ -103,6 +104,20 @@ public static class NotificationCatalog
         .Select(f => (string)f.GetRawConstantValue()!)
         .ToArray();
 
+    /// <summary>
+    /// Staff-only kinds and the permission a user needs to receive them. Users without it never get these
+    /// notifications, so the preference matrix leaves them out.
+    /// </summary>
+    public static readonly IReadOnlyDictionary<string, string> StaffTypes = new Dictionary<string, string>
+    {
+        [NotificationTypes.ReviewLiveCheckDue] = Permissions.SubmissionsReview,
+        [NotificationTypes.BatchPrepared] = Permissions.PayoutsView,
+    };
+
+    /// <summary>The kinds shown in the preference matrix of a user with <paramref name="permissions"/>.</summary>
+    public static IEnumerable<string> TypesFor(IReadOnlySet<string> permissions) =>
+        AllTypes.Where(t => !StaffTypes.TryGetValue(t, out var needed) || permissions.Contains(needed));
+
     public static (string Label, string Description) Describe(string type) =>
         Labels.TryGetValue(type, out var d) ? d : (type, string.Empty);
 
@@ -150,7 +165,8 @@ public sealed class NotificationCenterService(
 
     // ----- Preferences -----
 
-    public async Task<NotificationPreferencesDto> GetPreferencesAsync(Guid userId, CancellationToken ct)
+    /// <summary>The caller's preference matrix; staff-only kinds are listed only with the matching permission.</summary>
+    public async Task<NotificationPreferencesDto> GetPreferencesAsync(Guid userId, IReadOnlySet<string> permissions, CancellationToken ct)
     {
         var user = await db.Set<User>().AsNoTracking().FirstOrDefaultAsync(u => u.Id == userId, ct) ?? throw DomainException.NotFound("User");
         var rows = await db.Set<NotificationPreference>().AsNoTracking().Where(p => p.UserId == userId).ToListAsync(ct);
@@ -170,7 +186,7 @@ public sealed class NotificationCenterService(
             new(NotificationChannel.WhatsApp, whatsAppReason is null, whatsAppReason),
         };
 
-        var types = NotificationCatalog.AllTypes.Select(type =>
+        var types = NotificationCatalog.TypesFor(permissions).Select(type =>
         {
             var essential = NotificationTypes.Essential.Contains(type);
             var (label, description) = NotificationCatalog.Describe(type);
@@ -185,9 +201,10 @@ public sealed class NotificationCenterService(
         return new NotificationPreferencesDto(channels, types);
     }
 
-    public async Task<NotificationPreferencesDto> UpdatePreferencesAsync(Guid userId, UpdatePreferencesRequest request, CancellationToken ct)
+    public async Task<NotificationPreferencesDto> UpdatePreferencesAsync(Guid userId, IReadOnlySet<string> permissions,
+        UpdatePreferencesRequest request, CancellationToken ct)
     {
-        var known = NotificationCatalog.AllTypes.ToHashSet();
+        var known = NotificationCatalog.TypesFor(permissions).ToHashSet();
         var errors = new List<string>();
         foreach (var change in request.Preferences)
         {
@@ -224,7 +241,7 @@ public sealed class NotificationCenterService(
         {
             throw DomainException.Conflict("notifications.concurrent_update", "Your preferences were changed in another session. Reload and try again.");
         }
-        return await GetPreferencesAsync(userId, ct);
+        return await GetPreferencesAsync(userId, permissions, ct);
     }
 
     // ----- Admin: outbox -----

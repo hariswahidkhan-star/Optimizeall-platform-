@@ -338,6 +338,8 @@ export interface CampaignDetail {
   mySubmissions: { id: string; status: SubmissionStatus; submittedAt: IsoDateTime }[];
   mySubmissionCount: number;
   remainingSubmissions: number;
+  /** The campaign has a tracking destination, so participants can get a personal tracking link. */
+  trackingEnabled: boolean;
 }
 
 export type CampaignSort = 'deadline' | 'reward' | 'newest';

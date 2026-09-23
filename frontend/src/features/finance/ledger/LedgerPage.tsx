@@ -24,6 +24,7 @@ import {
 import { humanize } from '@/lib/format/text';
 import { useLedger } from '../api/hooks';
 import { EARNING_TYPES, type LedgerRow } from '../api/types';
+import { CampaignPicker } from '../components/CampaignPicker';
 import { DownloadButton, Muted, PersonCell, QueryError } from '../components/common';
 import { FinanceDrawer } from '../components/FinanceDrawer';
 import { GUID_RE, nextDay } from '../lib/format';
@@ -119,7 +120,7 @@ export function LedgerPage() {
     type,
     status,
     userId: GUID_RE.test(userId) ? userId : undefined,
-    campaignId: GUID_RE.test(campaignId.trim()) ? campaignId.trim() : undefined,
+    campaignId: campaignId || undefined,
     from: from || undefined,
     to: to ? nextDay(to) : undefined,
   };
@@ -278,22 +279,13 @@ export function LedgerPage() {
                 }}
               />
             </FormField>
-            <FormField
-              label="Campaign id"
-              error={
-                campaignId.trim() && !GUID_RE.test(campaignId.trim()) ? 'Enter a full campaign id.' : null
-              }
-            >
-              <Input
-                size="sm"
-                value={campaignId}
-                spellCheck={false}
-                onChange={(e) => {
-                  setCampaignId(e.target.value);
-                  setPage(1);
-                }}
-              />
-            </FormField>
+            <CampaignPicker
+              value={campaignId}
+              onChange={(id) => {
+                setCampaignId(id);
+                setPage(1);
+              }}
+            />
             {userId && (
               <div className="fin-filter-extra__chip">
                 <span className="text-small">

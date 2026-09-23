@@ -29,11 +29,11 @@ public sealed class MyNotificationsController(NotificationCenterService center, 
     public Task<ReadAllResponse> MarkAllRead(CancellationToken ct) => center.MarkAllReadAsync(currentUser.Id, ct);
 
     [HttpGet("notification-preferences")]
-    public Task<NotificationPreferencesDto> Preferences(CancellationToken ct) => center.GetPreferencesAsync(currentUser.Id, ct);
+    public Task<NotificationPreferencesDto> Preferences(CancellationToken ct) => center.GetPreferencesAsync(currentUser.Id, currentUser.Permissions, ct);
 
     [HttpPut("notification-preferences")]
     public Task<NotificationPreferencesDto> UpdatePreferences(UpdatePreferencesRequest request, CancellationToken ct) =>
-        center.UpdatePreferencesAsync(currentUser.Id, request, ct);
+        center.UpdatePreferencesAsync(currentUser.Id, currentUser.Permissions, request, ct);
 }
 
 /// <summary>Outbox monitoring for operators.</summary>

@@ -425,14 +425,16 @@ function InvitationDialog({
 }
 
 /**
- * Renders the public landing payload (`GET /public/invitations/{code}`) as participants will see it. Note: the
- * public endpoint counts a visit each time it is loaded, so the preview is fetched on demand only.
+ * Renders the public landing payload (`GET /public/invitations/{code}?preview=true`) as participants will see it.
+ * With `preview=true` and marketing.manage the server counts no visit (and makes no experiment assignment).
  */
 function InvitationPreview({ invitation, onClose }: { invitation: Invitation; onClose: () => void }) {
   const query = useQuery({
     queryKey: ['manage', 'invitation-preview', invitation.code],
     queryFn: () =>
-      api.get<PublicInvitationLanding>(`/public/invitations/${encodeURIComponent(invitation.code)}`),
+      api.get<PublicInvitationLanding>(`/public/invitations/${encodeURIComponent(invitation.code)}`, {
+        query: { preview: true },
+      }),
     staleTime: Infinity,
     retry: false,
   });
@@ -454,7 +456,7 @@ function InvitationPreview({ invitation, onClose }: { invitation: Invitation; on
     >
       <div className="stack">
         <CopyField label="Invitation link" value={invitation.url} />
-        <p className="text-small text-muted">Loading this preview counts as one landing page visit.</p>
+        <p className="text-small text-muted">Previews aren’t counted as landing page visits.</p>
         {query.isLoading ? (
           <Skeleton height={220} />
         ) : notUsable ? (

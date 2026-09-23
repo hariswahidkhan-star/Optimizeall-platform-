@@ -16,6 +16,7 @@ import { FormField } from '@/components/ui/FormField';
 import { Input } from '@/components/ui/Input';
 import { KeyValueList } from '@/components/ui/KeyValueList';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { StatusBadge } from '@/components/ui/StatusBadge';
 import { Pagination } from '@/components/ui/Pagination';
 import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
@@ -25,10 +26,9 @@ import { errorMessage } from '@/lib/api/errors';
 import { humanize } from '@/lib/format/text';
 import { qk, usePayouts, useSubmissions, useTicket, useTickets } from '../api/queries';
 import type { CreateTicketRequest, Ticket, TicketCategory, TicketSummary } from '../api/types';
-import { TicketStatusBadge } from '../components/Badges';
 import { QueryState } from '../components/QueryState';
 import { firstMessage, focusFirstError, mapFormErrors } from '../lib/formErrors';
-import { ticketCategoryOptions, ticketStatusOptions } from '../lib/labels';
+import { participantTicketLabel, ticketCategoryOptions, ticketStatusOptions } from '../lib/labels';
 import '../participant.css';
 
 const columns: DataTableColumn<TicketSummary>[] = [
@@ -45,7 +45,11 @@ const columns: DataTableColumn<TicketSummary>[] = [
       </span>
     ),
   },
-  { id: 'status', header: 'Status', cell: (t) => <TicketStatusBadge status={t.status} /> },
+  {
+    id: 'status',
+    header: 'Status',
+    cell: (t) => <StatusBadge kind="ticket" status={t.status} label={participantTicketLabel(t.status)} />,
+  },
   { id: 'category', header: 'Category', cell: (t) => humanize(t.category) },
   {
     id: 'updated',
@@ -345,7 +349,9 @@ function TicketView({ ticket }: { ticket: Ticket }) {
         title={ticket.subject}
         eyebrow={ticket.reference}
         breadcrumbs={[{ label: 'Support', to: '/app/support' }, { label: ticket.reference }]}
-        meta={<TicketStatusBadge status={ticket.status} />}
+        meta={
+          <StatusBadge kind="ticket" status={ticket.status} label={participantTicketLabel(ticket.status)} />
+        }
         actions={
           ticket.status !== 'Closed' ? (
             <Button variant="secondary" leadingIcon={<X />} onClick={() => setClosing(true)}>
@@ -400,7 +406,16 @@ function TicketView({ ticket }: { ticket: Ticket }) {
             <KeyValueList
               layout="inline"
               items={[
-                { label: 'Status', value: <TicketStatusBadge status={ticket.status} /> },
+                {
+                  label: 'Status',
+                  value: (
+                    <StatusBadge
+                      kind="ticket"
+                      status={ticket.status}
+                      label={participantTicketLabel(ticket.status)}
+                    />
+                  ),
+                },
                 { label: 'Category', value: humanize(ticket.category) },
                 { label: 'Opened', value: <DateTime value={ticket.createdAt} format="date" /> },
                 { label: 'Last activity', value: <DateTime value={ticket.updatedAt} format="relative" /> },

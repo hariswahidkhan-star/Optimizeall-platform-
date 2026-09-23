@@ -104,6 +104,31 @@ describe('CampaignEditorPage', () => {
     expect(screen.getAllByText('The Title field must be at least 3 characters.').length).toBeGreaterThan(0);
   });
 
+  it('shows a business error on the field the server names', async () => {
+    const user = userEvent.setup();
+    setup(makeCampaign(), {
+      'PUT /admin/campaigns/c1': () =>
+        problem(409, 'campaign.slug_taken', 'That slug is already used by another campaign.', {
+          errors: { slug: ['That slug is already used by another campaign.'] },
+        }),
+    });
+    const title = await screen.findByLabelText('Title');
+    await user.type(title, '!');
+    await user.click(screen.getByRole('button', { name: 'Save changes' }));
+    await waitFor(() => expect(screen.getByLabelText(/Slug/)).toHaveAttribute('aria-invalid', 'true'));
+  });
+
+  it('uses the platform eligibility defaults from the API', async () => {
+    const user = userEvent.setup();
+    setup(makeCampaign(), {
+      'GET /meta/eligibility-defaults': () => json(200, { minAccountAgeDays: 120, minFollowers: 50 }),
+    });
+    await user.click(await screen.findByRole('tab', { name: /Targeting/ }));
+    const age = await screen.findByLabelText(/Minimum account age/);
+    await waitFor(() => expect(age).toHaveAttribute('placeholder', 'Default: 120'));
+    expect(screen.getByText('Blank = the platform default, currently 120 days.')).toBeInTheDocument();
+  });
+
   it('asks for a reason when the budget changes', async () => {
     const user = userEvent.setup();
     const { calls } = setup(makeCampaign(), {

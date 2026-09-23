@@ -306,10 +306,11 @@ Content errors: `400 content.invalid` (field errors), `400 content.reorder_dupli
 
 ### Baseline seed (profile `Baseline`, idempotent)
 Onboarding steps `verify-email`, `complete-profile`, `add-social-account`, `eligible-account`, `payout-details`,
-`first-submission`, `first-approved` (action URLs `/app/profile`, `/app/social-accounts`, `/app/payout-details`,
-`/app/campaigns`); 15 FAQ items in *Getting started, Eligibility, Submissions, Payments, Disclosure & rules,
-Account*; a welcome announcement for the `Onboarding` audience. Existing rows (matched by key / question / title)
-are never overwritten.
+`first-submission`, `first-approved` (action URLs `/app/profile`, `/app/social-accounts`,
+`/app/profile/payout-details`, `/app/campaigns`); 15 FAQ items in *Getting started, Eligibility, Submissions, Payments,
+Disclosure & rules, Account*; a welcome announcement for the `Onboarding` audience. Existing rows (matched by key /
+question / title) are never overwritten, except that an onboarding step whose `actionUrl` is still a retired baseline
+link (`payout-details`: `/app/payout-details`) is moved to the current one on every seed run; admin-chosen links are kept.
 
 ---
 
@@ -349,7 +350,9 @@ are never overwritten.
 }
 ```
 
-Every `NotificationTypes` constant is a row. Essential types (`account.email_verification`,
+Every `NotificationTypes` constant the caller can receive is a row. Staff-only types are listed only with the
+matching permission: `review.live_check_due` needs `submissions.review`, `payout.batch_prepared` needs `payouts.view`
+(`NotificationCatalog.StaffTypes`); for anyone else they are omitted and `PUT` treats them as unknown. Essential types (`account.email_verification`,
 `account.password_reset`, `account.status_changed`, `payout.paid`) are `locked: true` on all channels. In-app is
 always on and locked. WhatsApp `available=false` reasons: integration not configured, or the user has not opted in
 with a number (profile). Marketing types (`campaign.alert`, `retention.reactivation`) additionally require
@@ -571,3 +574,16 @@ first; `action` is a prefix match (`admin.` or `admin.user_suspended`); `from`/`
 `POST /admin/jobs/{name}/run` — requires `jobs.view` **and** `settings.manage`; runs the job now through
 `JobRunner` and returns its `JobRunDto`. Errors: `404 job.not_found`, `409 jobs.lease_held`. Audited
 `admin.job_run_requested`.
+
+---
+
+## 7. Reference data — `/meta`
+
+### `GET /meta/currencies` — anonymous
+Currencies the platform accepts (`Money.SupportedCurrencies`), alphabetical, with their minor-unit digits:
+`[{ "code": "AED", "minorUnits": 2 }, …, { "code": "JPY", "minorUnits": 0 }, { "code": "KWD", "minorUnits": 3 }, …]`.
+The UI builds every currency picker from it (`frontend/src/lib/api/meta.ts#useSupportedCurrencies`).
+
+### `GET /meta/eligibility-defaults` — any authenticated user
+Platform-wide social-profile minimums (admin settings `eligibility.minAccountAgeDays`, `eligibility.minFollowers`)
+that apply when a campaign leaves its own minimum blank: `{ "minAccountAgeDays": 90, "minFollowers": 0 }`.

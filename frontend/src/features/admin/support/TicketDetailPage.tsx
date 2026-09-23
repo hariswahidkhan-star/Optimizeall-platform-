@@ -22,7 +22,9 @@ import { Permissions } from '@/lib/auth/permissions';
 import { useAuth } from '@/lib/auth/useAuth';
 import { humanize } from '@/lib/format/text';
 import { TICKET_PRIORITIES, TICKET_STATUSES, type StaffMessage, type StaffTicket } from '../api/types';
-import { AdminBadge, badgeLabel } from '../shared/badges';
+import { StatusBadge } from '@/components/ui/StatusBadge';
+import { statusMeta } from '@/components/ui/statusMap';
+import { AdminBadge } from '../shared/badges';
 import { enumOptions, QueryError, useCan } from '../shared/common';
 import { adminErrorMessage, isConflict, mapFieldErrors } from '../shared/errors';
 import { useSupportStaff } from './useSupportStaff';
@@ -184,7 +186,7 @@ function UpdatePanel({
       void queryClient.invalidateQueries({ queryKey: ['admin', 'tickets'] });
       toast.success(
         'Ticket updated',
-        `${updated.reference} is ${badgeLabel('ticket', updated.status).toLowerCase()}.`,
+        `${updated.reference} is ${statusMeta('ticket', updated.status).label.toLowerCase()}.`,
       );
     },
   });
@@ -250,7 +252,7 @@ function UpdatePanel({
           <FormField label="Status" error={server.fields.status}>
             <Select
               value={status}
-              options={enumOptions(TICKET_STATUSES, (v) => badgeLabel('ticket', v))}
+              options={enumOptions(TICKET_STATUSES, (v) => statusMeta('ticket', v).label)}
               onChange={(e) => setStatus(e.target.value)}
             />
           </FormField>
@@ -327,7 +329,7 @@ export function TicketDetailPage() {
         breadcrumbs={breadcrumbs}
         meta={
           <>
-            <AdminBadge kind="ticket" value={t.status} />
+            <StatusBadge kind="ticket" status={t.status} />
             <AdminBadge kind="priority" value={t.priority} />
             <Badge tone="neutral">{humanize(t.category)}</Badge>
           </>

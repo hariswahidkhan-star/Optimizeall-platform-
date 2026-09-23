@@ -485,4 +485,98 @@ public sealed class CampaignTests(ApiFactory api) : IClassFixture<ApiFactory>
         var (_, finance) = await api.CreateClientAsync(Role.Finance);
         Assert.Equal(HttpStatusCode.Forbidden, (await finance.PostAsJsonAsync("/api/v1/admin/campaigns", kit.CampaignBody())).StatusCode);
     }
+
+    // ------------------------------------------------------------------ portal gaps
+
+    [Fact]
+    public async Task Options_list_campaigns_for_staff_with_campaigns_view_newest_first_and_searchable()
+    {
+        var (_, manager) = await kit.ManagerAsync();
+        var marker = Guid.NewGuid().ToString("N")[..8];
+        var older = await kit.CreateCampaignAsync(manager, kit.CampaignBody(title: $"Options {marker} older"));
+        api.Clock.Advance(TimeSpan.FromSeconds(5));
+        var newer = await kit.CreateCampaignAsync(manager, kit.CampaignBody(title: $"Options {marker} newer"), publish: false);
+
+        foreach (var role in new[] { Role.Reviewer, Role.Finance, Role.CampaignManager })
+        {
+            var (_, staff) = await api.CreateClientAsync(role);
+            var options = await CampaignTestKit.GetJsonAsync(staff, $"/api/v1/campaigns/options?search={marker}");
+            var items = options.EnumerateArray().ToList();
+            Assert.Equal(new[] { newer.Id, older.Id }, items.Select(i => i.GetProperty("id").GetGuid()).ToArray());
+            Assert.Equal($"Options {marker} newer", items[0].GetProperty("title").GetString());
+            Assert.Equal("Draft", items[0].GetProperty("status").GetString());
+            Assert.Equal("Active", items[1].GetProperty("status").GetString());
+        }
+
+        var all = await CampaignTestKit.GetJsonAsync(manager, "/api/v1/campaigns/options");
+        Assert.InRange(all.GetArrayLength(), 2, CampaignAdminService.MaxOptions);
+
+        var participant = await kit.ParticipantAsync();
+        Assert.Equal(HttpStatusCode.Forbidden, (await participant.Client.GetAsync("/api/v1/campaigns/options")).StatusCode);
+        Assert.Equal(HttpStatusCode.Unauthorized, (await api.CreateClient().GetAsync("/api/v1/campaigns/options")).StatusCode);
+    }
+
+    private static async Task<Dictionary<string, string[]>> FieldErrorsAsync(HttpResponseMessage response, int status, string code)
+    {
+        var text = await response.Content.ReadAsStringAsync();
+        await new HttpResponseMessage(response.StatusCode) { Content = new StringContent(text) }.ShouldFailAsync(status, code);
+        var errors = JsonSerializer.Deserialize<JsonElement>(text).GetProperty("errors");
+        return errors.EnumerateObject().ToDictionary(p => p.Name, p => p.Value.EnumerateArray().Select(v => v.GetString()!).ToArray());
+    }
+
+    [Fact]
+    public async Task Business_validation_errors_name_the_field()
+    {
+        var (_, manager) = await kit.ManagerAsync();
+
+        var badDates = kit.CampaignBody();
+        badDates["endsAt"] = kit.Now.AddDays(-2);
+        var errors = await FieldErrorsAsync(await manager.PostAsJsonAsync("/api/v1/admin/campaigns", badDates), 400, "campaign.invalid_dates");
+        Assert.Equal(new[] { "endsAt" }, errors.Keys.ToArray());
+        Assert.Equal("The campaign must end after it starts.", Assert.Single(errors["endsAt"]));
+
+        var budgetCurrency = kit.CampaignBody();
+        budgetCurrency["budgetAmount"] = 100m;
+        budgetCurrency["budgetCurrency"] = "EUR";
+        errors = await FieldErrorsAsync(await manager.PostAsJsonAsync("/api/v1/admin/campaigns", budgetCurrency), 400,
+            "campaign.budget_currency_mismatch");
+        Assert.True(errors.ContainsKey("budgetCurrency"));
+
+        var countries = kit.CampaignBody();
+        countries["eligibility"] = new { minFollowers = 0, countries = new[] { "Pakistan" } };
+        errors = await FieldErrorsAsync(await manager.PostAsJsonAsync("/api/v1/admin/campaigns", countries), 400, "campaign.invalid_country");
+        Assert.True(errors.ContainsKey("eligibility.countries"));
+
+        var first = await kit.CreateCampaignAsync(manager, publish: false);
+        var taken = kit.CampaignBody();
+        taken["slug"] = first.Slug;
+        errors = await FieldErrorsAsync(await manager.PostAsJsonAsync("/api/v1/admin/campaigns", taken), 409, "campaign.slug_taken");
+        Assert.True(errors.ContainsKey("slug"));
+
+        // Update goes through the same checks.
+        var current = await CampaignTestKit.GetJsonAsync(manager, $"/api/v1/admin/campaigns/{first.Id}");
+        var update = kit.CampaignBody();
+        update.Remove("rewardRules");
+        update["concurrencyStamp"] = current.GetProperty("concurrencyStamp").GetGuid();
+        update["trackingDestinationUrl"] = "http://insecure.example";
+        errors = await FieldErrorsAsync(await manager.PutAsJsonAsync($"/api/v1/admin/campaigns/{first.Id}", update), 400,
+            "campaign.invalid_tracking_url");
+        Assert.True(errors.ContainsKey("trackingDestinationUrl"));
+    }
+
+    [Fact]
+    public async Task Detail_reports_whether_tracking_links_are_enabled()
+    {
+        var (_, manager) = await kit.ManagerAsync();
+        var tracked = kit.CampaignBody();
+        tracked["trackingDestinationUrl"] = "https://brand.example/launch";
+        var withTracking = await kit.CreateCampaignAsync(manager, tracked);
+        var withoutTracking = await kit.CreateCampaignAsync(manager);
+        var p = await kit.ParticipantAsync();
+
+        var on = await CampaignTestKit.GetJsonAsync(p.Client, $"/api/v1/campaigns/{withTracking.Slug}");
+        Assert.True(on.GetProperty("trackingEnabled").GetBoolean());
+        var off = await CampaignTestKit.GetJsonAsync(p.Client, $"/api/v1/campaigns/{withoutTracking.Slug}");
+        Assert.False(off.GetProperty("trackingEnabled").GetBoolean());
+    }
 }

@@ -11,8 +11,9 @@ import {
   Input,
   Select,
 } from '@/components/ui';
+import { useSupportedCurrencies } from '@/lib/api/meta';
 import type { RewardRuleType } from '../../api/types';
-import { currencyOptions, platformOptions, ruleTypeLabel, tierOptions } from '../../shared/labels';
+import { platformOptions, ruleTypeLabel, tierOptions } from '../../shared/labels';
 import { newRule, ruleHints, type RuleRow, type RulesForm } from '../formModel';
 
 export interface RulesBuilderProps {
@@ -57,6 +58,7 @@ export function RulesBuilder({
   const hints = ruleHints(value);
   const setHints = hints.filter((h) => h.rowKey === null);
   const set = (patch: Partial<RulesForm>) => onChange({ ...value, ...patch });
+  const currencyOptions = useSupportedCurrencies(value.currency).options;
   const setRule = (key: string, patch: Partial<RuleRow>) =>
     set({ rules: value.rules.map((r) => (r.key === key ? { ...r, ...patch } : r)) });
   const move = (index: number, delta: number) => {

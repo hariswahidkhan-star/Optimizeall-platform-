@@ -8,6 +8,7 @@ using OptimizeAll.Domain.Campaigns;
 using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Identity;
 using OptimizeAll.Domain.Ledger;
+using OptimizeAll.Domain.Rewards;
 using OptimizeAll.Domain.Social;
 using OptimizeAll.Domain.Submissions;
 using OptimizeAll.Infrastructure.Persistence;
@@ -54,6 +55,11 @@ public sealed class ReviewQueryService(
         if (query.Flagged == true) q = q.Where(s => s.Flags.Any(f => f.ResolvedAt == null));
         if (query.Flagged == false) q = q.Where(s => !s.Flags.Any(f => f.ResolvedAt == null));
         if (query.AssignedToMe) q = q.Where(s => s.AssignedReviewerId == me);
+        if (query.ClaimedByMe)
+        {
+            var claimNow = Now;
+            q = q.Where(s => s.ClaimedByUserId == me && s.ClaimExpiresAt > claimNow);
+        }
 
         q = (query.Sort ?? "oldest").ToLowerInvariant() == "risk"
             ? q.OrderByDescending(s => s.RiskScore).ThenBy(s => s.SubmittedAt)
@@ -129,6 +135,11 @@ public sealed class ReviewQueryService(
             // A rule set that can no longer be priced is shown without a quote rather than failing the whole page.
         }
 
+        // The reviewer's quality-bonus ceiling comes from the rule set version recorded on the submission.
+        var qualityBonusMax = await db.Set<RewardRule>().AsNoTracking()
+            .Where(r => r.RuleSetId == s.RewardRuleSetId && r.Type == RewardRuleType.QualityBonus)
+            .Select(r => (decimal?)r.Amount).FirstOrDefaultAsync(ct);
+
         var claimActive = s.ClaimedByUserId is not null && s.ClaimExpiresAt > now;
         return new ReviewDetailDto(
             new RequirementsDto(campaign.Id, campaign.Title, campaign.PostingInstructions, campaign.RequiredHashtags, campaign.RequiredMentions,
@@ -145,7 +156,7 @@ public sealed class ReviewQueryService(
                 Math.Max(0, account.AccountAgeDays(now)), account.FollowerCount, account.VerificationStatus, account.IsActive),
             new ReviewParticipantDto(user.Id, user.DisplayName, user.Email, user.CountryCode, user.Tier, user.CreatedAt,
                 statusCounts.GetValueOrDefault(SubmissionStatus.Approved), statusCounts.GetValueOrDefault(SubmissionStatus.Rejected),
-                statusCounts.GetValueOrDefault(SubmissionStatus.Reversed)),
+                statusCounts.GetValueOrDefault(SubmissionStatus.Reversed), user.Status),
             history,
             s.Flags.OrderByDescending(x => x.Weight).ThenBy(x => x.CreatedAt)
                 .Select(x => new FlagDto(x.Id, x.Type, x.Detail, x.Weight, x.CreatedAt, x.ResolvedAt is not null, x.ResolvedAt, x.ResolutionNote)).ToList(),
@@ -156,7 +167,8 @@ public sealed class ReviewQueryService(
                 .Select(e => new ReviewEventDto(e.Action, e.FromStatus, e.ToStatus, e.Reason, Person(names, e.ActorUserId), e.CreatedAt)).ToList(),
             quote,
             await EarningsAsync(s.Id, ct),
-            appeals.Select(a => ToAppealDto(a, names)).ToList());
+            appeals.Select(a => ToAppealDto(a, names)).ToList(),
+            qualityBonusMax);
     }
 
     public async Task<IReadOnlyList<ReviewEarningDto>> EarningsAsync(Guid submissionId, CancellationToken ct) =>

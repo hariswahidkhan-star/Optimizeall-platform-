@@ -1,6 +1,6 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { BarChart3, CheckCircle2, FlaskConical, Pause, Pencil, Play, Plus, Trash2 } from 'lucide-react';
-import { useState, type FormEvent } from 'react';
+import { useMemo, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Alert,
@@ -30,7 +30,8 @@ import { api } from '@/lib/api/client';
 import { errorMessage } from '@/lib/api/errors';
 import type { PagedResult } from '@/lib/api/types';
 import { humanize } from '@/lib/format/text';
-import { qk, useCampaign, useCampaignOptions } from '../api/queries';
+import { useCampaignOptions } from '@/lib/api/campaignOptions';
+import { qk, useCampaign } from '../api/queries';
 import {
   EXPERIMENT_ELEMENTS,
   EXPERIMENT_STATUSES,
@@ -78,7 +79,6 @@ export function ExperimentsPage() {
     queryFn: () => api.get<PagedResult<Experiment>>('/marketing/experiments', { query: params }),
     placeholderData: keepPreviousData,
   });
-  const campaignTitle = (id: string) => campaigns.data?.items.find((c) => c.id === id)?.title ?? 'Campaign';
 
   const refresh = () => queryClient.invalidateQueries({ queryKey: ['manage'] });
 
@@ -165,7 +165,7 @@ export function ExperimentsPage() {
           <Link className="ui-link mg-strong" to={`/manage/experiments/${e.id}`}>
             {e.name}
           </Link>
-          <span className="text-small text-muted">{campaignTitle(e.campaignId)}</span>
+          <span className="text-small text-muted">{e.campaignTitle}</span>
         </span>
       ),
     },
@@ -246,7 +246,7 @@ export function ExperimentsPage() {
             {
               id: 'campaign',
               label: 'Campaign',
-              options: (campaigns.data?.items ?? []).map((c) => ({ value: c.id, label: c.title })),
+              options: (campaigns.data ?? []).map((c) => ({ value: c.id, label: c.title })),
             },
             {
               id: 'status',
@@ -356,6 +356,13 @@ export function ExperimentDialog({
   const toast = useToast();
   const campaigns = useCampaignOptions();
   const [campaignId, setCampaignId] = useState(experiment?.campaignId ?? '');
+  const campaignChoices = useMemo(() => {
+    const options = (campaigns.data ?? []).map((c) => ({ value: c.id, label: c.title }));
+    // An existing experiment's campaign stays selectable even beyond the newest 500.
+    if (experiment && !options.some((o) => o.value === experiment.campaignId))
+      options.unshift({ value: experiment.campaignId, label: experiment.campaignTitle });
+    return options;
+  }, [campaigns.data, experiment]);
   const [name, setName] = useState(experiment?.name ?? '');
   const [hypothesis, setHypothesis] = useState(experiment?.hypothesis ?? '');
   const [element, setElement] = useState<ExperimentElement>(experiment?.element ?? 'Title');
@@ -464,7 +471,7 @@ export function ExperimentDialog({
               value={campaignId}
               disabled={!!experiment}
               placeholder="Choose a campaign"
-              options={(campaigns.data?.items ?? []).map((c) => ({ value: c.id, label: c.title }))}
+              options={campaignChoices}
               onChange={(e) => setCampaignId(e.target.value)}
             />
           </FormField>

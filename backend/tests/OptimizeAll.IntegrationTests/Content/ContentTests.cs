@@ -1,7 +1,9 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using OptimizeAll.Api.Modules.Content;
 using OptimizeAll.Domain.Audit;
+using OptimizeAll.Domain.Content;
 using OptimizeAll.Domain.Identity;
 using OptimizeAll.IntegrationTests.Accounts;
 using OptimizeAll.IntegrationTests.Infrastructure;
@@ -114,6 +116,29 @@ public sealed class ContentTests(ApiFactory api) : IClassFixture<ApiFactory>
         var keys = steps.GetProperty("items").EnumerateArray().Select(s => s.GetProperty("key").GetString()).ToList();
         Assert.Equal(new[] { "verify-email", "complete-profile", "add-social-account", "eligible-account", "payout-details", "first-submission", "first-approved" },
             keys.Take(7));
+    }
+
+    [Fact]
+    public async Task Baseline_seeder_moves_the_payout_step_to_the_profile_payout_page_but_keeps_admin_links()
+    {
+        Task<string?> ActionUrlAsync(string key) =>
+            api.WithDbAsync(db => db.Set<OnboardingStep>().Where(s => s.Key == key).Select(s => s.ActionUrl).FirstAsync());
+        Task SetActionUrlAsync(string key, string url) =>
+            api.WithDbAsync(db => db.Set<OnboardingStep>().Where(s => s.Key == key).ExecuteUpdateAsync(s => s.SetProperty(x => x.ActionUrl, url)));
+        Task SeedAsync() => api.WithDbAsync(db => new ContentBaselineSeeder(api.Clock).SeedAsync(db, default));
+
+        Assert.Equal("/app/profile/payout-details", await ActionUrlAsync("payout-details"));
+
+        // A database seeded by an earlier version still has the retired link: re-seeding fixes it.
+        await SetActionUrlAsync("payout-details", "/app/payout-details");
+        await SeedAsync();
+        Assert.Equal("/app/profile/payout-details", await ActionUrlAsync("payout-details"));
+
+        // A link an admin chose is preserved.
+        await SetActionUrlAsync("payout-details", "/app/profile");
+        await SeedAsync();
+        Assert.Equal("/app/profile", await ActionUrlAsync("payout-details"));
+        await SetActionUrlAsync("payout-details", "/app/profile/payout-details");
     }
 
     [Fact]

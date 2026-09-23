@@ -15,7 +15,7 @@ import { pluralize } from '@/lib/format/text';
 import { qk, useNotifications, useUnreadCount } from '../api/queries';
 import type { NotificationItem, PagedResult, ParticipantHome } from '../api/types';
 import { QueryState } from '../components/QueryState';
-import { isInternalLink, normalizeAppLink } from '../lib/labels';
+import { isInternalLink } from '../lib/labels';
 import '../participant.css';
 
 const PAGE_SIZE = 20;
@@ -79,7 +79,7 @@ function useMarkRead() {
 }
 
 function NotificationRow({ n, onRead }: { n: NotificationItem; onRead: (id: string) => void }) {
-  const link = n.linkUrl ? normalizeAppLink(n.linkUrl) : null;
+  const link = n.linkUrl;
   return (
     <li className="pp-list__item pp-notification" data-unread={!n.isRead}>
       <div className="pp-list__main">

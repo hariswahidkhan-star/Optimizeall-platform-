@@ -32,6 +32,17 @@ public sealed class CampaignsController(ICampaignCatalogService catalog, ICurren
     public Task<CampaignDetailDto> Detail(string slug, CancellationToken ct) => catalog.DetailAsync(currentUser.Id, slug, ct);
 }
 
+/// <summary>Campaign id/title/status options for staff filters and pickers (reviewers, finance, managers).</summary>
+[ApiController]
+public sealed class CampaignOptionsController(ICampaignAdminService campaigns) : ControllerBase
+{
+    /// <summary>Newest first, at most 500; <paramref name="search"/> matches title or slug.</summary>
+    [HasPermission(Permissions.CampaignsView)]
+    [HttpGet("api/v1/campaigns/options")]
+    public Task<IReadOnlyList<CampaignOptionDto>> Options([FromQuery] string? search, CancellationToken ct) =>
+        campaigns.OptionsAsync(search, ct);
+}
+
 /// <summary>Staff campaign management.</summary>
 [ApiController]
 [Route("api/v1/admin/campaigns")]

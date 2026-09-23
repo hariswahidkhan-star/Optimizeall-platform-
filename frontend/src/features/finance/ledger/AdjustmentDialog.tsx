@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { Alert, Checkbox, FormField, Input, Money, Select, Textarea, useToast } from '@/components/ui';
+import { useSupportedCurrencies } from '@/lib/api/meta';
 import { useCreateAdjustment, useSchedule } from '../api/hooks';
 import { FormDialog } from '../components/FormDialog';
 import { UserPicker, type PickedUser } from '../components/UserPicker';
-import { GUID_RE, currencyOptions, newRequestId } from '../lib/format';
+import { GUID_RE, newRequestId } from '../lib/format';
 
 export interface AdjustmentDialogProps {
   open: boolean;
@@ -48,6 +49,8 @@ export function AdjustmentDialog({ open, onClose, user }: AdjustmentDialogProps)
   }, [open]);
 
   const effectiveCurrency = currency || schedule.data?.current.settlementCurrency || 'USD';
+  const currencies = useSupportedCurrencies(effectiveCurrency);
+  const currencyOptions = currencies.options;
   const numeric = Number(amount);
   const userError =
     !picked || !GUID_RE.test(picked.id) ? 'Choose a participant or paste a valid user id.' : null;

@@ -81,6 +81,14 @@ describe('Ticket detail', () => {
     expect(await axeViolations(baseElement)).toEqual([]);
   });
 
+  it('shows the status with the shared ticket status badge', async () => {
+    mockAdminApi({ 'GET /admin/support/tickets/t1': () => json(200, ticket), 'GET /admin/users': staffList });
+    renderTicket();
+    await screen.findByRole('list', { name: 'Messages, oldest first' });
+    // Shared statusMap label for AwaitingStaff (also used by the status select).
+    expect(screen.getAllByText('Awaiting support').length).toBeGreaterThan(0);
+  });
+
   it('adds an internal note with isInternalNote=true and a clear warning', async () => {
     const user = userEvent.setup();
     const { calls } = mockAdminApi({

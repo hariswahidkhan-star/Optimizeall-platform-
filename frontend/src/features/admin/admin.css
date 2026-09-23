@@ -683,10 +683,3 @@
 .admin-analytics-group {
   margin-block-start: var(--space-2);
 }
-
-/* The shared chart's visually-hidden data table is wider than 1px (tables ignore the clip width); keep it from
-   widening the page on phones. */
-.admin-chart-wrap {
-  position: relative;
-  overflow: hidden;
-}

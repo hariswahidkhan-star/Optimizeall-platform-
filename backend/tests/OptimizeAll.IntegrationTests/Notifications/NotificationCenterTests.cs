@@ -2,6 +2,7 @@ using System.Net.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using OptimizeAll.Api.Common.Notifications;
+using OptimizeAll.Domain.Identity;
 using OptimizeAll.Domain.Notifications;
 using OptimizeAll.Infrastructure.Persistence;
 using OptimizeAll.IntegrationTests.Infrastructure;
@@ -61,6 +62,42 @@ public sealed class NotificationCenterTests(ApiFactory api) : IClassFixture<ApiF
     }
 
     [Fact]
+    public async Task Preferences_list_staff_only_types_only_for_users_with_the_matching_permission()
+    {
+        static async Task<List<string>> TypesAsync(HttpClient client) =>
+            (await (await client.GetAsync("/api/v1/me/notification-preferences")).ReadJsonAsync())
+            .GetProperty("types").EnumerateArray().Select(t => t.GetProperty("type").GetString()!).ToList();
+
+        var (_, participant) = await api.CreateClientAsync();
+        var participantTypes = await TypesAsync(participant);
+        Assert.DoesNotContain(NotificationTypes.ReviewLiveCheckDue, participantTypes);
+        Assert.DoesNotContain(NotificationTypes.BatchPrepared, participantTypes);
+        Assert.Contains(NotificationTypes.SubmissionDecision, participantTypes);
+        // A participant can't change a kind they never receive.
+        await (await participant.PutAsJsonAsync("/api/v1/me/notification-preferences", new
+        {
+            preferences = new[] { new { type = NotificationTypes.BatchPrepared, channel = "Email", enabled = false } },
+        })).ShouldFailAsync(400, "notifications.preference_locked");
+
+        var (_, reviewer) = await api.CreateClientAsync(Role.Reviewer);
+        var reviewerTypes = await TypesAsync(reviewer);
+        Assert.Contains(NotificationTypes.ReviewLiveCheckDue, reviewerTypes);
+        Assert.DoesNotContain(NotificationTypes.BatchPrepared, reviewerTypes);
+
+        var (_, finance) = await api.CreateClientAsync(Role.Finance);
+        var financeTypes = await TypesAsync(finance);
+        Assert.Contains(NotificationTypes.BatchPrepared, financeTypes);
+        Assert.DoesNotContain(NotificationTypes.ReviewLiveCheckDue, financeTypes);
+        (await finance.PutAsJsonAsync("/api/v1/me/notification-preferences", new
+        {
+            preferences = new[] { new { type = NotificationTypes.BatchPrepared, channel = "Email", enabled = false } },
+        })).EnsureSuccessStatusCode();
+
+        var (_, admin) = await api.CreateClientAsync(Role.Admin);
+        Assert.Equal(20, (await TypesAsync(admin)).Count);
+    }
+
+    [Fact]
     public async Task Preferences_matrix_locks_essential_types_and_mutes_outbox_rows()
     {
         var (user, client) = await api.CreateClientAsync();
@@ -71,7 +108,8 @@ public sealed class NotificationCenterTests(ApiFactory api) : IClassFixture<ApiF
         Assert.False(string.IsNullOrEmpty(whatsApp.GetProperty("reason").GetString()));
 
         var types = prefs.GetProperty("types").EnumerateArray().ToList();
-        Assert.Equal(20, types.Count);
+        // Every kind except the two staff-only ones.
+        Assert.Equal(18, types.Count);
         var essential = types.Single(t => t.GetProperty("type").GetString() == NotificationTypes.PayoutPaid);
         Assert.True(essential.GetProperty("essential").GetBoolean());
         Assert.All(essential.GetProperty("channels").EnumerateArray(), c => Assert.True(c.GetProperty("locked").GetBoolean()));

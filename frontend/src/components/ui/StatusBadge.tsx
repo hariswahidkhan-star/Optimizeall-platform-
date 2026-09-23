@@ -6,14 +6,16 @@ export interface StatusBadgeProps {
   status: string;
   size?: 'sm' | 'md';
   className?: string;
+  /** Audience-specific wording that replaces the shared label (the tone stays the shared one). */
+  label?: string;
 }
 
 /** Maps a domain status (submission, earning, payout, campaign, ...) to a consistent tone and label. */
-export function StatusBadge({ kind, status, size, className }: StatusBadgeProps) {
+export function StatusBadge({ kind, status, size, className, label }: StatusBadgeProps) {
   const meta = statusMeta(kind, status);
   return (
     <Badge tone={meta.tone} size={size} dot className={className}>
-      {meta.label}
+      {label ?? meta.label}
     </Badge>
   );
 }

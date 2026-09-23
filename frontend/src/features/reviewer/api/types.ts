@@ -26,6 +26,7 @@ export type LiveCheckStatus = 'NotRequired' | 'Pending' | 'ConfirmedLive' | 'Rem
 export type AppealStatus = 'Open' | 'Upheld' | 'Overturned' | 'Withdrawn';
 export type VerificationStatus = 'Unverified' | 'PendingReview' | 'Verified' | 'Rejected';
 export type ReviewDecision = 'Approve' | 'RequestCorrection' | 'Reject';
+export type UserStatus = 'Active' | 'Suspended' | 'Deactivated';
 
 export type FlagType =
   | 'DuplicateScreenshot'
@@ -143,6 +144,8 @@ export interface ReviewParticipant {
   approvedCount: number;
   rejectedCount: number;
   reversedCount: number;
+  /** Only Active participants can be approved (the server answers 409 participant.not_active otherwise). */
+  status: UserStatus;
 }
 
 export interface HistoryItem {
@@ -235,6 +238,8 @@ export interface ReviewDetail {
   rewardQuote: RewardQuote | null;
   earnings: ReviewEarning[];
   appeals: ReviewAppeal[];
+  /** Ceiling of the recorded rule set's QualityBonus rule (rule-set currency); null = no quality bonus. */
+  qualityBonusMax: number | null;
 }
 
 export interface DecisionRequest {

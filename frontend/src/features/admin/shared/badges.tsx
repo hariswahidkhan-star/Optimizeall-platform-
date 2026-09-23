@@ -10,14 +10,6 @@ const USER_STATUS: Meta = {
   Deactivated: { tone: 'neutral' },
 };
 
-export const TICKET_STATUS: Meta = {
-  Open: { tone: 'info' },
-  AwaitingParticipant: { tone: 'warning', label: 'Awaiting participant' },
-  AwaitingStaff: { tone: 'brand', label: 'Awaiting staff' },
-  Resolved: { tone: 'success' },
-  Closed: { tone: 'neutral' },
-};
-
 const PRIORITY: Meta = {
   Low: { tone: 'neutral' },
   Normal: { tone: 'info' },
@@ -46,11 +38,11 @@ const SEVERITY: Meta = {
   Critical: { tone: 'danger' },
 };
 
-export type BadgeKind = 'user' | 'ticket' | 'priority' | 'delivery' | 'jobRun' | 'severity';
+/** Ticket statuses use the shared `StatusBadge kind="ticket"` (components/ui/statusMap). */
+export type BadgeKind = 'user' | 'priority' | 'delivery' | 'jobRun' | 'severity';
 
 const MAPS: Record<BadgeKind, Meta> = {
   user: USER_STATUS,
-  ticket: TICKET_STATUS,
   priority: PRIORITY,
   delivery: DELIVERY,
   jobRun: JOB_RUN,

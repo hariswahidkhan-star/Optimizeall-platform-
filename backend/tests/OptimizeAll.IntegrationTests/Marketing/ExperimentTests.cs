@@ -36,6 +36,11 @@ public sealed class ExperimentTests(ApiFactory api) : IClassFixture<ApiFactory>
         var experiment = await created.ReadJsonAsync();
         var id = experiment.GetProperty("id").GetGuid();
         Assert.Equal("Draft", experiment.GetProperty("status").GetString());
+        Assert.Equal(campaign.Title, experiment.GetProperty("campaignTitle").GetString());
+        var listed = await (await manager.GetAsync($"/api/v1/marketing/experiments?campaignId={campaign.Id}")).ReadJsonAsync();
+        Assert.Equal(campaign.Title, listed.GetProperty("items")[0].GetProperty("campaignTitle").GetString());
+        var fetched = await (await manager.GetAsync($"/api/v1/marketing/experiments/{id}")).ReadJsonAsync();
+        Assert.Equal(campaign.Title, fetched.GetProperty("campaignTitle").GetString());
 
         // Draft edits are allowed (and guarded by the concurrency stamp).
         var edit = TitleExperiment(campaign.Id, "Title test v2");

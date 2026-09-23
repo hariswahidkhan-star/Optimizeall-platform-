@@ -28,6 +28,12 @@ function renderQueue(route = '/review/queue', extra: Parameters<typeof mockFetch
           }),
         ]),
       ),
+    'GET /campaigns/options': () =>
+      json(200, [
+        { id: 'c3', title: 'Winter Draft', status: 'Draft' },
+        { id: 'c2', title: 'Summer Sale', status: 'Ended' },
+        { id: 'c1', title: 'Autumn Launch', status: 'Active' },
+      ]),
     ...extra,
   });
   const utils = renderWithApp(<QueuePage />, {
@@ -75,6 +81,29 @@ describe('QueuePage', () => {
 
     await user.click(screen.getByRole('button', { name: /Remove filter Status/ }));
     await waitFor(() => expect(router.state.location.search).not.toContain('status='));
+  });
+
+  it('offers campaigns from /campaigns/options and a "Claimed by me" filter', async () => {
+    const user = userEvent.setup();
+    const { fn, router } = renderQueue();
+    await screen.findAllByText('Autumn Launch');
+    const campaign = screen.getByLabelText('Campaign');
+    await waitFor(() =>
+      expect(within(campaign).getByRole('option', { name: 'Summer Sale' })).toBeInTheDocument(),
+    );
+    // Drafts never have submissions, so they are not offered.
+    expect(within(campaign).queryByRole('option', { name: 'Winter Draft' })).not.toBeInTheDocument();
+
+    await user.selectOptions(campaign, 'c2');
+    await waitFor(() => expect(router.state.location.search).toContain('campaignId=c2'));
+    await user.selectOptions(screen.getByLabelText('Claim'), '1');
+    await waitFor(() => expect(router.state.location.search).toContain('claimed=1'));
+    await waitFor(() => {
+      const url = queueUrls(fn).at(-1)!;
+      expect(url.searchParams.get('claimedByMe')).toBe('true');
+      expect(url.searchParams.get('campaignId')).toBe('c2');
+    });
+    expect(screen.getByRole('list', { name: 'Active filters' })).toHaveTextContent('Claim: Claimed by me');
   });
 
   it('shows risk severity and flags for each row', async () => {

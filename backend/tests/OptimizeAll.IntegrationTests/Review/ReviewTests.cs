@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Modules.Review;
 using OptimizeAll.Domain.Common;
@@ -567,6 +568,57 @@ public sealed class ReviewTests(ApiFactory api) : IClassFixture<ApiFactory>
             return reader["possible_keys"] as string ?? string.Empty;
         });
         Assert.Contains("IX_earning_entries_CampaignId_Status", plan);
+    }
+
+    // ------------------------------------------------------------------ portal gaps
+
+    [Fact]
+    public async Task Detail_includes_participant_status_and_quality_bonus_max_of_the_recorded_rule_set()
+    {
+        var withBonus = await CampaignAsync(null, new { type = "QualityBonus", amount = 7.5m });
+        var without = await CampaignAsync();
+        var p = await kit.ParticipantAsync();
+        var bonusId = await kit.SubmitOkAsync(p, withBonus.Id);
+        var plainId = await kit.SubmitOkAsync(p, without.Id);
+        var (_, reviewer) = await kit.ReviewerAsync();
+
+        var detail = await CampaignTestKit.GetJsonAsync(reviewer, $"/api/v1/review/submissions/{bonusId}");
+        Assert.Equal(7.5m, detail.GetProperty("qualityBonusMax").GetDecimal());
+        Assert.Equal("Active", detail.GetProperty("participant").GetProperty("status").GetString());
+
+        var plain = await CampaignTestKit.GetJsonAsync(reviewer, $"/api/v1/review/submissions/{plainId}");
+        Assert.Equal(JsonValueKind.Null, plain.GetProperty("qualityBonusMax").ValueKind);
+
+        await SetUserStatusAsync(p.User.Id, UserStatus.Suspended);
+        detail = await CampaignTestKit.GetJsonAsync(reviewer, $"/api/v1/review/submissions/{bonusId}");
+        Assert.Equal("Suspended", detail.GetProperty("participant").GetProperty("status").GetString());
+    }
+
+    [Fact]
+    public async Task Queue_filters_to_submissions_claimed_by_me()
+    {
+        var campaign = await CampaignAsync();
+        var p = await kit.ParticipantAsync();
+        var mine = await kit.SubmitOkAsync(p, campaign.Id);
+        var theirs = await kit.SubmitOkAsync(p, campaign.Id);
+        var open = await kit.SubmitOkAsync(p, campaign.Id);
+        var (_, a) = await kit.ReviewerAsync();
+        var (_, b) = await kit.ReviewerAsync();
+        (await a.PostAsync($"/api/v1/review/submissions/{mine}/claim", null)).EnsureSuccessStatusCode();
+        (await b.PostAsync($"/api/v1/review/submissions/{theirs}/claim", null)).EnsureSuccessStatusCode();
+
+        var queue = await CampaignTestKit.GetJsonAsync(a, $"/api/v1/review/queue?campaignId={campaign.Id}&claimedByMe=true");
+        Assert.Equal(new[] { mine }, queue.GetProperty("items").EnumerateArray().Select(i => i.GetProperty("id").GetGuid()).ToArray());
+
+        var all = await CampaignTestKit.GetJsonAsync(a, $"/api/v1/review/queue?campaignId={campaign.Id}");
+        Assert.Equal(3, all.GetProperty("total").GetInt32());
+        Assert.Contains(open, all.GetProperty("items").EnumerateArray().Select(i => i.GetProperty("id").GetGuid()));
+
+        // An expired claim is no longer "mine".
+        await api.WithDbAsync(db => db.Set<Submission>().Where(s => s.Id == mine)
+            .ExecuteUpdateAsync(s => s.SetProperty(x => x.ClaimExpiresAt, kit.Now.AddMinutes(-1))));
+        queue = await CampaignTestKit.GetJsonAsync(a, $"/api/v1/review/queue?campaignId={campaign.Id}&claimedByMe=true");
+        Assert.Equal(0, queue.GetProperty("total").GetInt32());
     }
 }
 
