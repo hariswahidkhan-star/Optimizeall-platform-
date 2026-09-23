@@ -1,0 +1,247 @@
+# Optimize All — Demo data and demo scripts
+
+> **STAGING / DEMO DATA ONLY. NEVER SEED THIS IN PRODUCTION.**
+> Every demo account shares one published password, the brands are fictional, and payout destinations are
+> fake (example.com PayPal addresses and generated IBANs/wallet numbers). The Demo seed profile must never
+> appear in a production `Database:Seed` setting.
+
+## How the data is created
+
+The `Demo` seed profile (`backend/src/OptimizeAll.Api/Modules/Seed`) runs after the Baseline seeders when
+`Database:Seed` lists it. Development already uses `["Baseline", "Demo"]`. For staging, set:
+
+```
+Database__Seed__0=Baseline
+Database__Seed__1=Demo
+```
+
+* **Idempotent.** The seed does nothing if the `demo.seeded` system setting or `sara.participant@demo.optimizeall.app`
+  already exists. Everything is written in one transaction; if it fails, the screenshots it wrote are deleted again.
+* **Always current.** All dates are relative to "now". The seed replays about three months of activity in
+  chronological order, anchored to the biweekly payout periods. "c0" in this document means the cutoff of the last
+  completed period, "c1" the cutoff before that, and so on.
+* **Realistic and consistent.**
+  * Submissions go through the real rules: eligibility at the time they were made, normalized unique post URLs,
+    risk flags, the reward rule version captured at submission, caps and budgets.
+  * Earnings are written by the production `LedgerWriter`, driven by a simulated clock, so FX conversion, rounding,
+    hold periods and idempotency keys match production (`submission:{id}:PostReward`, `firstpost:{campaign}:{user}`,
+    `referral:{id}`, `adjustment:{guid}`, `reversal:{entryId}`).
+  * Payout batches are built with the Payouts module's planner and store operations. Reconciliation is balanced
+    for every batch.
+  * Screenshots are real PNGs (320×560), saved through `IFileStorage` with a `StoredFile` row and SHA-256.
+  * Payout destinations are encrypted with the Accounts module's data-protection purpose and masked with its helper.
+* **Deterministic.** Uses a fixed random seed (`20260923`). If you re-seed a fresh database on another day, the same
+  story plays out on dates shifted relative to that day.
+
+To reset a staging database, drop it and restart the API. Migrations, Baseline and Demo run again.
+
+## Demo accounts
+
+All accounts use the password **`Demo#2026!pass`**.
+
+| Email | Role | What to show |
+|---|---|---|
+| `admin@demo.optimizeall.app` | Admin | Users (suspended participant, tiers, roles), settings, audit log, jobs, content (banners, announcements, FAQs) |
+| `reviewer1@demo.optimizeall.app` | Reviewer | Review queue, claims, decisions, live checks, reversals, appeals |
+| `reviewer2@demo.optimizeall.app` | Reviewer | Second reviewer: holds a live claim, resolves appeals on reviewer1's decisions |
+| `manager@demo.optimizeall.app` | Campaign manager | Campaigns in every status, reward rule versions, quality bonus approvals, experiments, invitations, tracking, templates, calendar, analytics |
+| `finance1@demo.optimizeall.app` | Finance | Prepared every batch; creates adjustments; records payments; payout holds; FX rates |
+| `finance2@demo.optimizeall.app` | Finance | Second pair of eyes: finalizes the draft batch, approves pending adjustments |
+| `sara.participant@demo.optimizeall.app` | Participant (PK, Gold) | The full participant journey: every balance bucket, paid history, referral, achievements, notifications, tickets |
+| `new.participant@demo.optimizeall.app` | Participant (PK) | Email verified, one Instagram profile created 10 days ago → ineligible (`social.account_too_new`) |
+| `unverified@demo.optimizeall.app` | Participant (US) | Email not verified (onboarding state and banner) |
+| `hold.participant@demo.optimizeall.app` | Participant (AE) | Active payout hold (KYC review): neutral hold message, excluded from batches |
+| `suspended.participant@demo.optimizeall.app` | Participant (GB) | Suspended; sign-in returns `account.suspended` |
+| `bilal.ahmed@demo.optimizeall.app` | Participant (PK) | Velocity: 11 posts in under 24 h, daily caps applied, velocity flag |
+| `zainab.malik@`, `usman.tariq@`, `karim.mostafa@` | Participants | Sara's referrals: qualified and rewarded; flagged for a shared device (reward pending); still pending |
+| `hamza.qureshi@demo.optimizeall.app` | Participant (PK) | Clawback: a paid post was reversed and netted against the next payout; open dispute ticket |
+| Other `first.last@demo.optimizeall.app` | Participants | About 25 more participants across PK, AE, SA, GB, US, IN and EG |
+
+## What is in the dataset
+
+* **People.** 6 staff and 41 participants in PK, AE, SA, GB, US, IN and EG, with varied languages, time zones, tiers
+  (Standard to Platinum) and interests.
+  * 94 social profiles on Instagram, TikTok, X, YouTube, LinkedIn and Facebook. Most are Verified; some are pending
+    review or unverified, and one was rejected.
+  * Payout profiles for most participants: PayPal, bank IBAN or mobile wallet.
+  * 9 participants registered in the last 30 days, so the analytics funnel has a cohort.
+* **Campaigns** (fictional brands):
+
+  | Campaign | Status | Currency | Highlights |
+  |---|---|---|---|
+  | Nimbus Fitness App launch | Active | USD | Reward rules **v1 → v2**; overrides by platform, country and tier; launch-week and weekend bonuses; first-post and manual quality bonuses; daily, weekly and campaign caps; tracking link with UTM; a running A/B experiment |
+  | Desert Bloom Skincare — Autumn Glow | Active | **AED** | AE/SA only; 72 h live check; Arabic caption and disclosures |
+  | Karachi Eats food festival | Active | **PKR** | PK only; 48 h live check; tracking destination with UTM |
+  | LedgerLeaf budgeting app — Save smarter | Ended | USD | Most of the paid history; tracking and conversions; completed experiment |
+  | Wanderly Travel — Hidden Gems | Paused | USD | Interest targeting; paused by the client |
+  | Aurora Pro headphones — creators circle | Active, **invite-only** | USD | Gold/Platinum only, verified profiles, 5,000+ followers; invitation link |
+  | Orbit Arena season 3 trailer | Scheduled | USD | Starts in 5 days; launch-day bonus |
+  | CodeSprout Kids coding week | Draft | USD | Incomplete draft |
+
+* **Exchange rates** marked `source = demo`: AED, PKR (updated 30 days ago), SAR and GBP to USD.
+* **About 170 submissions** in every status (Pending, UnderReview, Approved, NeedsCorrection, Rejected, Reversed):
+  * one live reviewer claim and one expired claim;
+  * risk flags: duplicate screenshot, outside the campaign window, high velocity, repeated content, unverified
+    profile, new participant;
+  * live checks that are pending and not yet due, pending and already due, confirmed, and removed (reversed);
+  * appeals that are open, upheld and overturned.
+* **Earnings in every state**: PendingApproval (quality bonuses, live checks, a flagged referral reward and a pending
+  adjustment), Approved (some still inside the 3-day hold), Scheduled, Paid, Reversed, Declined, and clawbacks netted
+  against a later payout. Adjustments carry reasons; positive ones were created by finance1 and approved by finance2.
+  Referral rewards are included.
+* **Payout batches** (biweekly):
+  * c3 and c2: Completed, all items paid with payment references (one c2 payment failed and its earnings rolled into
+    c1).
+  * c1: Finalized, about half the items Paid and the rest AwaitingPayment.
+  * All batches were prepared by finance1. Historical batches were finalized by finance2, or by the admin when
+    finance2 had approved an earning inside that batch: nobody finalizes a batch containing earnings they created,
+    approved or receive.
+  * c0: **Draft**, prepared by finance1. Its exclusions show the payout hold, the suspended account and participants
+    below the minimum.
+* **Growth.**
+  * Referrals (qualified, pending and flagged for a shared device) and invitation links.
+  * About 60 tracking links with unique, repeat and bot clicks, plus verified and unverified conversions.
+  * One running and one completed experiment with assignments, post templates and calendar entries.
+* **Content and support.**
+  * Homepage banners for each audience (onboarding, eligible, active earners, inactive, AE/Arabic) and three
+    announcements.
+  * Support tickets that are open, awaiting the participant, awaiting staff and resolved, with internal notes.
+  * Notifications with a mix of read and unread. Achievements are awarded from the real metrics.
+* **Audit log** entries for staff actions, for example `campaign.reward_rules_changed`, `campaign.published`,
+  `submission.approved`, `ledger.adjustment_created`, `payout.batch_prepared`, `payout.batch_finalized`,
+  `payout.payment_recorded`, `payout.hold_created` and `admin.user_suspended`.
+
+## Demo scripts
+
+API paths are given for reference (`/api/v1/...`); in the web app use the matching portal pages.
+
+### 1. Participant journey (Sara)
+
+1. Sign in as `sara.participant@…`.
+   * The home page shows active-earner banners, announcements and unread notifications.
+2. Open **Earnings** (`GET /me/earnings/summary`). Every bucket has a value:
+   * **Pending**: the Aurora Pro post waiting for review, the Karachi Eats post whose live check is due, and a
+     3.00 USD quality bonus waiting for approval.
+   * **Approved / on hold / available for next payout**: recent Nimbus approvals, some still inside the 3-day hold,
+     and a goodwill credit.
+   * **Scheduled**: her item in the draft batch.
+   * **Paid**: her LedgerLeaf and Nimbus history.
+   * **Reversed**: a Wanderly post whose disclosure was removed after approval.
+3. Open **Submissions**. Show each item's timeline (submitted → approved, etc.):
+   * the Nimbus TikTok post submitted under **reward rules v1** and approved after v2 went live, still paid at the
+     v1 TikTok rate (7.50, not 8.50);
+   * the Wanderly post that **needs a correction** while the campaign is paused.
+4. **Payouts** (`GET /me/payouts`): paid items with masked destination and payment reference.
+5. **Referrals**:
+   * Zainab qualified, and finance approved the reward (it is then included in a payout).
+   * Usman qualified, but the reward is pending because of a shared-device signal.
+   * Karim is still pending.
+6. **Achievements** (first approved post, five approved, multi-platform…), **Notifications** (read and unread mix) and
+   **Support**:
+   * an open payout question;
+   * a ticket awaiting her reply;
+   * a resolved ticket that produced the goodwill credit.
+7. Contrast with `new.participant@…`:
+   * **Social accounts** shows the Instagram profile doesn't qualify yet: `social.account_too_new`, qualifies in 80
+     days.
+   * Every campaign card shows the same reason.
+8. Contrast with `unverified@…` (onboarding banner, email not verified).
+9. Contrast with `hold.participant@…`: the earnings page shows the neutral payout-hold message.
+
+### 2. Reviewer journey
+
+1. Sign in as `reviewer1@…` and open the **Review queue** (`GET /review/queue`).
+   * One item is **UnderReview**, claimed by Priya Nair (reviewer2); claims last 15 minutes.
+   * High-risk items show their flags.
+2. Claim a pending submission (`POST /review/submissions/{id}/claim`), check the screenshot and post link, then
+   **Approve** it, optionally with a quality bonus.
+   * The decision shows the reward lines priced from the submission's captured rule version.
+3. Request a correction or reject another submission (a reason is required).
+4. **Live checks** (`GET /review/live-checks`): confirm a due Desert Bloom or Karachi Eats post (earnings become
+   Approved), or mark one removed (this reverses its earnings).
+5. **Appeals** (`GET /review/appeals`): resolve Kavya's open appeal.
+   * Show the upheld duplicate-screenshot appeal (Harry) and the overturned LedgerLeaf appeal (Ahmed).
+6. Show Bilal's submissions:
+   * the velocity flag on his 11th post;
+   * "caps applied" on his approvals.
+
+### 3. Campaign manager journey
+
+1. Sign in as `manager@…` and open **Campaigns**. There is a campaign in every status: Active, Scheduled, Paused,
+   Ended and Draft, plus one invite-only campaign.
+2. Open **Nimbus Fitness → Reward rules**.
+   * Compare **v1** and **v2** (base 6.00 → 7.00, TikTok and Pakistan overrides, Platinum tier rates, the
+     time-limited bonuses, first-post and quality bonuses, caps).
+   * Each version shows how many submissions use it. The change is in the audit log
+     (`campaign.reward_rules_changed`).
+3. Use the **reward preview** to price a TikTok post from a Platinum creator in PK.
+4. Approve or decline pending **quality bonuses** (`/finance/pending-earnings`, permission `rewards.approve_bonus`).
+5. **Marketing**:
+   * the running Nimbus title experiment (with assignments) and the completed LedgerLeaf landing-page experiment
+     (winner B);
+   * invitation links (Aurora VIP invites);
+   * tracking links with clicks and conversions;
+   * templates and the content calendar.
+6. **Analytics** (`GET /analytics/overview`):
+   * counted sections: funnel, posts, spend;
+   * measured sections: tracked clicks with bots excluded, verified conversions;
+   * estimated section: reach from declared follower counts.
+7. Try to publish **CodeSprout** (Draft). Publishing explains what is missing.
+
+### 4. Finance journey (four-eyes payout run)
+
+1. Sign in as `finance1@…` and open **Payout batches**. There are four:
+   * two Completed (c3 and c2);
+   * one Finalized with items Paid and AwaitingPayment (c1);
+   * one **Draft** (c0).
+2. **Prepare** (already done): the draft for the last completed period was prepared by finance1.
+3. **Review** the draft:
+   * Items with masked destinations, totals by status, and **exclusions**: payout hold (Aisha), account inactive
+     (Jack, suspended), below minimum.
+   * Optionally hold and unhold an item.
+4. Try to finalize as finance1. It is refused (`payout.self_finalize`).
+5. Sign in as `finance2@…` and **finalize** the draft (confirm + reason).
+   * Items become AwaitingPayment and the manual provider asks for payment.
+6. **Export**: `GET /finance/payout-batches/{id}/export.csv` and `/payment-instructions.csv`.
+7. Sign in as `finance1@…` and **record payment** for an item (`POST /finance/payout-batches/{id}/items/{itemId}/record-payment`)
+   with a bank reference. Optionally bulk-record the rest.
+   * When every item is paid or failed, the batch completes.
+8. **Reconcile**: `GET /finance/payout-batches/{id}/reconciliation` shows *balanced* for every batch.
+   * In the c2 batch, show the failed payment whose earnings rolled into c1.
+   * Show Hamza's clawback netted inside the c2 batch.
+9. **Ledger**:
+   * the ledger with adjustments, their reasons and approvers;
+   * the pending 15.00 USD credit for Noor, which finance2 can approve (it was created by finance1);
+   * the FX rates marked `demo`;
+   * payout holds, one active and one released.
+
+### 5. Admin journey
+
+1. Sign in as `admin@…` and open **Users**.
+   * Filter to the suspended participant (reason and history).
+   * Show tiers and roles; you can reactivate the participant.
+2. **Audit log**: filter by action (`campaign.reward_rules_changed`, `payout.batch_finalized`, `payout.payment_recorded`,
+   `admin.user_suspended`) or by actor. Seeded rows carry correlation id `demo-seed`.
+3. **Settings** (eligibility minimum account age 90 days, velocity limit, claim minutes) and **Jobs**.
+4. **Content**: banners per audience (onboarding, eligible, active earners, inactive, AE/Arabic), announcements,
+   FAQs and onboarding steps.
+5. **Support**:
+   * Hamza's urgent dispute with an internal note;
+   * Aisha's ticket awaiting staff;
+   * the resolved tickets.
+
+## Automated checks
+
+`backend/tests/OptimizeAll.IntegrationTests/Seed/DemoSeedTests.cs` boots the API with `["Baseline", "Demo"]` on a fresh
+database. It checks that:
+
+* the seed is idempotent;
+* the demo logins work;
+* every batch reconciles;
+* the ledger meets its constraints and key conventions;
+* every journey is covered;
+* Sara's balance buckets have values;
+* the new participant is ineligible;
+* analytics has counted, measured and estimated sections;
+* a reviewer can claim and decide a submission;
+* finance2 can finalize the draft batch that finance1 prepared.
