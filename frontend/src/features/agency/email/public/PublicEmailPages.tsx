@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { useParams } from 'react-router-dom';
 import { Alert } from '@/components/ui/Alert';
 import { Button } from '@/components/ui/Button';
@@ -166,23 +166,23 @@ function PreferencesForm({ token, initial }: { token: string; initial: Preferenc
 /** Double opt-in confirmation: confirms once with an explicit POST (the page itself makes it, not a GET link). */
 export function ConfirmSubscriptionPage() {
   const { token = '' } = useParams();
-  const started = useRef(false);
+  // Confirmation needs a click: link scanners that open (and even render) the email's link must not subscribe anyone.
   const confirm = useMutation({
     mutationFn: () => api.post<{ list: string; workspace: string }>(`${PUBLIC_API}/confirm/${encodeURIComponent(token)}`, undefined, anonymous),
   });
-  const { mutate } = confirm;
-  useEffect(() => {
-    if (started.current) return;
-    started.current = true;
-    mutate();
-  }, [mutate]);
   return (
     <PublicShell title="Confirm your subscription">
-      {confirm.isPending && <p>Confirming…</p>}
-      {confirm.isSuccess && (
+      {confirm.isSuccess ? (
         <p role="status">
           Thanks, you are subscribed to <strong>{confirm.data.list}</strong> from {confirm.data.workspace}.
         </p>
+      ) : (
+        <>
+          <p>Please confirm that you want to receive these emails.</p>
+          <Button onClick={() => confirm.mutate()} loading={confirm.isPending}>
+            Confirm subscription
+          </Button>
+        </>
       )}
       {confirm.isError && <Alert tone="danger">{errorMessage(confirm.error)}</Alert>}
     </PublicShell>

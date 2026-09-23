@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 import { MailCheck, MailX } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Alert, ButtonLink, EmptyState, Input, Spinner } from '@/components/ui';
+import { Alert, Button, ButtonLink, EmptyState, Input } from '@/components/ui';
 import { api } from '@/lib/api/client';
 import { errorMessage } from '@/lib/api/errors';
 import { useDebouncedValue } from '@/lib/hooks/useDebouncedValue';
@@ -13,18 +13,11 @@ import { useDocumentHead } from '../site/head';
 function NewsletterTokenPage({ action }: { action: 'confirm' | 'unsubscribe' }) {
   const [params] = useSearchParams();
   const token = params.get('token') ?? '';
-  const started = useRef(false);
+  // The action needs a click: mail security scanners open (and may render) links, and must not confirm or unsubscribe.
   const mutation = useMutation({
     mutationFn: () => api.post<{ status: string; message: string }>(`/public/newsletter/${action}`, { token }),
   });
   useDocumentHead({ title: action === 'confirm' ? 'Confirm your subscription' : 'Unsubscribe', noIndex: true });
-
-  useEffect(() => {
-    // One request per visit (React strict mode mounts effects twice in development).
-    if (!token || started.current) return;
-    started.current = true;
-    mutation.mutate();
-  }, [token, mutation]);
 
   const title = action === 'confirm' ? 'Newsletter subscription' : 'Unsubscribe';
   return (
@@ -36,9 +29,16 @@ function NewsletterTokenPage({ action }: { action: 'confirm' | 'unsubscribe' }) 
             Open the link from your email again, or copy the whole address into your browser.
           </Alert>
         ) : mutation.isPending || mutation.isIdle ? (
-          <p role="status">
-            <Spinner decorative /> {action === 'confirm' ? 'Confirming your subscription…' : 'Updating your preferences…'}
-          </p>
+          <div>
+            <p>
+              {action === 'confirm'
+                ? 'Confirm that you want to receive our newsletter.'
+                : 'Unsubscribe this email address from our newsletter?'}
+            </p>
+            <Button onClick={() => mutation.mutate()} loading={mutation.isPending}>
+              {action === 'confirm' ? 'Confirm subscription' : 'Unsubscribe'}
+            </Button>
+          </div>
         ) : mutation.isSuccess ? (
           <EmptyState
             icon={action === 'confirm' ? <MailCheck /> : <MailX />}

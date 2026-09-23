@@ -7,6 +7,7 @@ import { json, mockFetch, problem } from '@/test/fetchMock';
 import { axeViolations, renderWithApp } from '@/test/render';
 import { BookConsultationPage, groupSlotsByDay } from './pages/BookConsultationPage';
 import { HomePage } from './pages/HomePage';
+import { NewsletterConfirmPage, NewsletterUnsubscribePage } from './pages/MiscPages';
 import { QuotePage } from './pages/QuotePage';
 import { ServiceDetailPage } from './pages/ServicePages';
 import { clearConsent, resetConsentCache } from './site/consent';
@@ -316,5 +317,23 @@ describe('Services mega-menu', () => {
     expect(trigger).toHaveAttribute('aria-expanded', 'true');
     await user.click(document.body);
     await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'));
+  });
+});
+
+describe('Newsletter email links', () => {
+  it.each([
+    ['confirm', NewsletterConfirmPage, 'Confirm subscription', "You're subscribed"],
+    ['unsubscribe', NewsletterUnsubscribePage, 'Unsubscribe', "You've been unsubscribed"],
+  ] as const)('only %s when the reader presses the button (link scanners must not act)', async (action, Page, button, done) => {
+    const user = userEvent.setup();
+    const { calls } = mockFetch({ [`POST /public/newsletter/${action}`]: () => json(200, { status: 'ok', message: 'Done.' }) });
+    renderWithApp(<Page />, { route: `/newsletter/${action}?token=tok-1`, path: `/newsletter/${action}`, withAuth: false });
+    const press = await screen.findByRole('button', { name: button });
+    expect(calls.filter((c) => c.method === 'POST' && c.path.includes('/newsletter/'))).toHaveLength(0);
+    await user.click(press);
+    expect(await screen.findByText(done)).toBeInTheDocument();
+    const posts = calls.filter((c) => c.method === 'POST' && c.path.includes('/newsletter/'));
+    expect(posts).toHaveLength(1);
+    expect(posts[0].body).toEqual({ token: 'tok-1' });
   });
 });

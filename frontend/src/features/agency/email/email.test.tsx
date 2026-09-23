@@ -329,9 +329,13 @@ describe('Public email pages', () => {
     expect(calls.find((c) => c.method === 'POST')!.body).toMatchObject({ email: 'new@example.com', consent: true, website: '' });
   });
 
-  it('confirms a double opt-in once', async () => {
+  it('confirms a double opt-in only when the subscriber presses the button, once', async () => {
+    const user = userEvent.setup();
     const { calls } = mockFetch({ 'POST /public/email/confirm/tok-3': () => json(200, { list: 'Newsletter', workspace: 'Nimbus Fitness' }) });
     renderWithApp(<ConfirmSubscriptionPage />, { route: '/email/confirm/tok-3', path: '/email/confirm/:token', withAuth: false });
+    const button = await screen.findByRole('button', { name: 'Confirm subscription' });
+    expect(calls.filter((c) => c.method === 'POST')).toHaveLength(0);
+    await user.click(button);
     expect(await screen.findByText(/you are subscribed to/)).toBeInTheDocument();
     expect(calls.filter((c) => c.method === 'POST')).toHaveLength(1);
   });
