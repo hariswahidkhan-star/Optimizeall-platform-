@@ -2,10 +2,11 @@
  * Minimal client for the real API, used only to *arrange* journey data (global setup, second submissions, schedule
  * tweaks) — every behaviour under test goes through the UI.
  */
-export const API_URL = (process.env.E2E_API_URL || process.env.E2E_BASE_URL || 'http://localhost:5099').replace(
-  /\/$/,
-  '',
-);
+export const API_URL = (
+  process.env.E2E_API_URL ||
+  process.env.E2E_BASE_URL ||
+  'http://localhost:5099'
+).replace(/\/$/, '');
 const API_BASE = `${API_URL}/api/v1`;
 
 export class ApiError extends Error {
@@ -101,7 +102,11 @@ interface MailboxMessage {
  * Latest email to `to` from the dev mailbox (GET /dev/mailbox, file-mode email only). Polls briefly because the
  * mail is written by the request that triggered it, but the caller may race the file system.
  */
-export async function latestMail(to: string, subjectPattern?: RegExp, timeoutMs = 15_000): Promise<MailboxMessage> {
+export async function latestMail(
+  to: string,
+  subjectPattern?: RegExp,
+  timeoutMs = 15_000,
+): Promise<MailboxMessage> {
   const deadline = Date.now() + timeoutMs;
   let last: unknown;
   while (Date.now() < deadline) {

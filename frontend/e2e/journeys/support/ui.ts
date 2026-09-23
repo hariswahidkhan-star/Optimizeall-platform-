@@ -34,7 +34,9 @@ export async function expectNoHorizontalScroll(page: Page, where: string) {
 
 /** Runs axe (WCAG 2.1 A/AA) and returns the violations, formatted for an assertion message. */
 export async function axeViolations(page: Page) {
-  const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+  const results = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+    .analyze();
   return results.violations.map((v) => ({
     id: v.id,
     impact: v.impact,

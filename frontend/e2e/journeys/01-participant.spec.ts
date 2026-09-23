@@ -54,7 +54,9 @@ test.describe.serial('participant journey', () => {
 
     // The referral was recorded for the referrer (arrangement check through the API).
     const referrer = await ApiSession.login(fixtures().referrer.email, fixtures().referrer.password);
-    const referrals = await referrer.get<{ items: { maskedName: string; status: string }[] }>('/me/referrals');
+    const referrals = await referrer.get<{ items: { maskedName: string; status: string }[] }>(
+      '/me/referrals',
+    );
     expect(referrals.items.length).toBeGreaterThan(0);
   });
 
@@ -100,7 +102,9 @@ test.describe.serial('participant journey', () => {
 
     const card = page.getByRole('article', { name: new RegExp(`@${escape(me().tiktok)}`) });
     await expect(card.getByText('Doesn’t qualify yet')).toBeVisible();
-    await expect(card.getByText('Profiles must be at least 90 days old. This one qualifies in 85 days.')).toBeVisible();
+    await expect(
+      card.getByText('Profiles must be at least 90 days old. This one qualifies in 85 days.'),
+    ).toBeVisible();
     await expect(card.getByText(/85 days\s*until it qualifies/)).toBeVisible();
     await responsive('social accounts');
   });
@@ -148,7 +152,9 @@ test.describe.serial('participant journey', () => {
     await expect(dialog).toBeVisible();
     // Only the Instagram profile qualifies, so it is preselected; the TikTok one is listed as not eligible.
     const profile = dialog.getByLabel('Profile you posted from');
-    await expect(profile.locator('option:checked')).toHaveText(new RegExp(`Instagram · @${escape(me().instagram)}`));
+    await expect(profile.locator('option:checked')).toHaveText(
+      new RegExp(`Instagram · @${escape(me().instagram)}`),
+    );
     await dialog.getByLabel('Link to your post').fill(`https://instagram.com/p/${me().postCode}/`);
     await dialog.getByLabel('Caption you used').fill(`Loving it! ${fixtures().campaign.hashtag}`);
     await dialog.getByLabel('Screenshot of your post').setInputFiles(pngFile(mobile ? 11 : 1));

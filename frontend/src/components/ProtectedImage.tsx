@@ -7,7 +7,11 @@ import { Skeleton } from './ui';
  * Loads an image that requires authentication (e.g. `/api/v1/files/{id}` submission screenshots, which are
  * private and cannot be requested by a plain `<img src>`), and renders it from a revocable object URL.
  */
-export function useProtectedImageUrl(src: string | null | undefined): { url: string | null; loading: boolean; failed: boolean } {
+export function useProtectedImageUrl(src: string | null | undefined): {
+  url: string | null;
+  loading: boolean;
+  failed: boolean;
+} {
   const [state, setState] = useState<{ url: string | null; loading: boolean; failed: boolean }>({
     url: null,
     loading: Boolean(src),

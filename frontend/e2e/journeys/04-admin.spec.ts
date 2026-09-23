@@ -50,14 +50,20 @@ test.describe.serial('admin journey', () => {
 
   test('the participant’s TikTok qualification text follows the new minimum', async () => {
     const api = await ApiSession.login(participant.email, participant.password);
-    const accounts = await api.get<{ items: { platform: string; accountAgeDays: number }[] }>('/me/social-accounts');
+    const accounts = await api.get<{ items: { platform: string; accountAgeDays: number }[] }>(
+      '/me/social-accounts',
+    );
     const age = accounts.items.find((a) => a.platform === 'TikTok')!.accountAgeDays;
     const remaining = NEW_MIN_AGE - age;
 
     await pat.goto('/app/social-accounts');
-    const card = pat.getByRole('article', { name: new RegExp(`@${participant.tiktok.replace(/\./g, '\\.')}`) });
+    const card = pat.getByRole('article', {
+      name: new RegExp(`@${participant.tiktok.replace(/\./g, '\\.')}`),
+    });
     await expect(
-      card.getByText(`Profiles must be at least ${NEW_MIN_AGE} days old. This one qualifies in ${remaining} days.`),
+      card.getByText(
+        `Profiles must be at least ${NEW_MIN_AGE} days old. This one qualifies in ${remaining} days.`,
+      ),
     ).toBeVisible();
     await expect(card.getByText(new RegExp(`${remaining} days\\s*until it qualifies`))).toBeVisible();
   });

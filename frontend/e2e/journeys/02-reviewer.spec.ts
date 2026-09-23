@@ -156,7 +156,9 @@ test.describe.serial('reviewer journey', () => {
       reviewer2.getByText(`${fixtures().reviewer1.displayName} is reviewing this submission`),
     ).toBeVisible();
     await expect(
-      reviewer2.getByRole('region', { name: 'Decision' }).getByText(`${fixtures().reviewer1.displayName} holds the claim.`),
+      reviewer2
+        .getByRole('region', { name: 'Decision' })
+        .getByText(`${fixtures().reviewer1.displayName} holds the claim.`),
     ).toBeVisible();
     await expect(reviewer2.getByRole('button', { name: 'Approve', exact: true })).toHaveCount(0);
   });
@@ -181,7 +183,9 @@ test.describe.serial('reviewer journey', () => {
       await page.goto('/review/appeals');
       await expect(page.getByRole('heading', { level: 1, name: 'Appeals' })).toBeVisible();
       await page.getByRole('link', { name: fixtures().campaign.title }).click();
-      await expect(page.getByRole('heading', { level: 1, name: `Appeal: ${fixtures().campaign.title}` })).toBeVisible();
+      await expect(
+        page.getByRole('heading', { level: 1, name: `Appeal: ${fixtures().campaign.title}` }),
+      ).toBeVisible();
     };
 
     await openAppeal(reviewer1);
@@ -203,7 +207,9 @@ test.describe.serial('reviewer journey', () => {
     const queue = queueViolations;
     await reviewer2.goto(`/review/queue/${firstId}`);
     await expect(reviewer2.getByRole('region', { name: 'Campaign requirements' })).toBeVisible();
-    await expect(reviewer2.getByRole('img', { name: 'Screenshot submitted as evidence of the post' })).toBeVisible();
+    await expect(
+      reviewer2.getByRole('img', { name: 'Screenshot submitted as evidence of the post' }),
+    ).toBeVisible();
     // Resolved risk flags are included (they recede with tokenized muted colours that keep AA contrast).
     const workspace = await axeViolations(reviewer2);
     expect({ queue, workspace }).toEqual({ queue: [], workspace: [] });

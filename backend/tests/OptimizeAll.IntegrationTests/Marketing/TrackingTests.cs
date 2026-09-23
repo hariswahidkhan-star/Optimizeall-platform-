@@ -90,7 +90,7 @@ public sealed class TrackingTests(ApiFactory api) : IClassFixture<ApiFactory>
         Assert.Equal(1, byVisitor[0].Count(c => c.IsUnique)); // the repeat visit is not unique
         Assert.All(byVisitor.Skip(1), g => Assert.True(g.Single().IsUnique));
         Assert.Equal(1, clicks.Count(c => c.IsSuspectedBot));
-        Assert.False(byVisitor[0].Any(c => c.IsSuspectedBot));
+        Assert.DoesNotContain(byVisitor[0], c => c.IsSuspectedBot);
 
         var stats = (await (await client.GetAsync("/api/v1/me/tracking-links")).ReadJsonAsync())[0].GetProperty("stats");
         Assert.Equal(3, stats.GetProperty("clicks").GetInt32()); // bots excluded

@@ -155,9 +155,8 @@ public sealed class AdminUsersService(
             .ToListAsync(ct);
         var activeAdminIds = adminIds.Count == 0
             ? new List<Guid>()
-            : await db.Database.SqlQueryRaw<Guid>(
-                    $"SELECT Id AS Value FROM users WHERE Status = 'Active' AND Id IN ({string.Join(", ", adminIds.Select((_, i) => "{" + i + "}"))}) FOR UPDATE",
-                    adminIds.Cast<object>().ToArray())
+            : await db.Database
+                .SqlQuery<Guid>($"SELECT u.Id AS Value FROM users u JOIN user_roles r ON r.UserId = u.Id WHERE r.Role = 'Admin' AND u.Status = 'Active' FOR UPDATE")
                 .ToListAsync(ct);
 
         var user = await db.LoadUserAsync(id, ct);

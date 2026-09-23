@@ -50,9 +50,9 @@ test.describe.serial('finance journey', () => {
     const financeApi = await ApiSession.login(fixtures().finance1.email, fixtures().finance1.password);
     const patApi = await ApiSession.login(participant.email, participant.password);
     const profile = await patApi.get<{ id: string }>('/me/profile');
-    const ledger = await financeApi.get<{ items: { availableAt: string | null; settlementAmount: number }[] }>(
-      `/finance/ledger?userId=${profile.id}&status=Approved&pageSize=50`,
-    );
+    const ledger = await financeApi.get<{
+      items: { availableAt: string | null; settlementAmount: number }[];
+    }>(`/finance/ledger?userId=${profile.id}&status=Approved&pageSize=50`);
     expect(ledger.items.map((e) => e.settlementAmount).sort()).toEqual([1, 5, 5]);
     const lastAvailable = Math.max(...ledger.items.map((e) => Date.parse(e.availableAt!)));
 
@@ -81,7 +81,9 @@ test.describe.serial('finance journey', () => {
     });
     await expect
       .poll(async () => {
-        const s = await financeApi.get<{ lastCompletedPeriod: { periodKey: string } }>('/finance/payout-schedule');
+        const s = await financeApi.get<{ lastCompletedPeriod: { periodKey: string } }>(
+          '/finance/payout-schedule',
+        );
         return s.lastCompletedPeriod.periodKey;
       })
       .toBe(periodKey);
@@ -91,7 +93,9 @@ test.describe.serial('finance journey', () => {
     await finance1.goto('/finance/batches');
     await finance1.getByRole('button', { name: 'Prepare batch' }).click();
     const dialog = modal(finance1, 'Prepare payout batch');
-    await expect(dialog.getByRole('radio', { name: new RegExp(`Last completed period · ${periodKey}`) })).toBeChecked();
+    await expect(
+      dialog.getByRole('radio', { name: new RegExp(`Last completed period · ${periodKey}`) }),
+    ).toBeChecked();
     await dialog.getByRole('button', { name: 'Prepare batch' }).click();
 
     await expect(finance1).toHaveURL(/\/finance\/batches\/[0-9a-f-]{36}$/);
@@ -135,9 +139,13 @@ test.describe.serial('finance journey', () => {
     await dialog.getByLabel('Reason').fill('Reviewed the item and the warnings.');
     await submit.click();
 
-    await expect(finance2.getByRole('region', { name: 'Batch finalized — no money has been sent' })).toBeVisible();
+    await expect(
+      finance2.getByRole('region', { name: 'Batch finalized — no money has been sent' }),
+    ).toBeVisible();
     await expect(finance2.getByText('Awaiting manual payment — no money has been sent')).toBeVisible();
-    await expect(finance2.getByRole('row').filter({ hasText: participant.email })).toContainText('Awaiting payment');
+    await expect(finance2.getByRole('row').filter({ hasText: participant.email })).toContainText(
+      'Awaiting payment',
+    );
   });
 
   test('finance 2 downloads the payment instructions after confirming', async () => {
@@ -148,7 +156,9 @@ test.describe.serial('finance journey', () => {
       finance2.waitForEvent('download'),
       dialog.getByRole('button', { name: 'Download (audited)' }).click(),
     ]);
-    expect(download.suggestedFilename()).toMatch(new RegExp(`^payment-instructions-${reference}(-\\d+)?\\.csv$`));
+    expect(download.suggestedFilename()).toMatch(
+      new RegExp(`^payment-instructions-${reference}(-\\d+)?\\.csv$`),
+    );
     const csv = readFileSync((await download.path())!, 'utf8');
     expect(csv).toContain(participant.email);
     expect(csv).toContain(paypal.toLowerCase());
