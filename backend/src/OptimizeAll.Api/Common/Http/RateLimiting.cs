@@ -9,6 +9,9 @@ public static class RateLimitPolicies
     /// <summary>Credential endpoints: 10 requests/minute per IP.</summary>
     public const string Auth = "auth";
 
+    /// <summary>Session refresh: 60/minute per IP (page loads and multiple tabs refresh silently; credentials are not accepted here).</summary>
+    public const string Refresh = "refresh";
+
     /// <summary>Writes that create work for staff (submissions, tickets, appeals): 30/minute per user.</summary>
     public const string Submissions = "submissions";
 
@@ -43,6 +46,12 @@ public static class RateLimitPolicies
                 : RateLimitPartition.GetFixedWindowLimiter(ClientKey(ctx), _ => new FixedWindowRateLimiterOptions
                 {
                     PermitLimit = config.GetValue("RateLimiting:AuthPerMinute", 10), Window = TimeSpan.FromMinutes(1), QueueLimit = 0,
+                }));
+
+            options.AddPolicy(Refresh, ctx => !enabled ? RateLimitPartition.GetNoLimiter("off")
+                : RateLimitPartition.GetFixedWindowLimiter(ClientKey(ctx), _ => new FixedWindowRateLimiterOptions
+                {
+                    PermitLimit = 60, Window = TimeSpan.FromMinutes(1), QueueLimit = 0,
                 }));
 
             options.AddPolicy(Submissions, ctx => !enabled ? RateLimitPartition.GetNoLimiter("off")

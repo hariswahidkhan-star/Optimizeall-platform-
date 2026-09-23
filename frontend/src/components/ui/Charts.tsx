@@ -45,30 +45,33 @@ function ChartTable({
   series: ChartSeries[];
   format: Formatter;
 }) {
+  // The wrapper is what gets hidden: a table ignores width constraints and would widen the page on phones.
   return (
-    <table className="visually-hidden">
-      <caption>{caption}</caption>
-      <thead>
-        <tr>
-          <th scope="col">Label</th>
-          {series.map((s) => (
-            <th key={s.id} scope="col">
-              {s.label}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {labels.map((label, i) => (
-          <tr key={label}>
-            <th scope="row">{label}</th>
+    <div className="visually-hidden">
+      <table>
+        <caption>{caption}</caption>
+        <thead>
+          <tr>
+            <th scope="col">Label</th>
             {series.map((s) => (
-              <td key={s.id}>{s.values[i] !== undefined ? format(s.values[i]) : '—'}</td>
+              <th key={s.id} scope="col">
+                {s.label}
+              </th>
             ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {labels.map((label, i) => (
+            <tr key={label}>
+              <th scope="row">{label}</th>
+              {series.map((s) => (
+                <td key={s.id}>{s.values[i] !== undefined ? format(s.values[i]) : '—'}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 

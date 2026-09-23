@@ -57,9 +57,8 @@ const MAP: Record<StatusKind, Record<string, StatusMeta>> = {
   },
   ticket: {
     Open: { tone: 'info', label: 'Open' },
-    InProgress: { tone: 'brand', label: 'In progress' },
-    AwaitingCustomer: { tone: 'warning', label: 'Awaiting your reply' },
-    AwaitingUser: { tone: 'warning', label: 'Awaiting your reply' },
+    AwaitingParticipant: { tone: 'warning', label: 'Awaiting participant' },
+    AwaitingStaff: { tone: 'brand', label: 'Awaiting support' },
     Resolved: { tone: 'success', label: 'Resolved' },
     Closed: { tone: 'neutral', label: 'Closed' },
   },

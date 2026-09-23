@@ -51,6 +51,7 @@ public sealed class AuthController(IAuthService auth, ICurrentUser currentUser, 
 
     /// <summary>Rotates the refresh cookie. Requires the X-Requested-With header (CSRF defence in depth with SameSite=Strict).</summary>
     [HttpPost("refresh")]
+    [EnableRateLimiting(RateLimitPolicies.Refresh)]
     public async Task<ActionResult<AuthResponse>> Refresh(CancellationToken ct)
     {
         RequireCsrfHeader();
@@ -69,6 +70,7 @@ public sealed class AuthController(IAuthService auth, ICurrentUser currentUser, 
     }
 
     [HttpPost("logout")]
+    [EnableRateLimiting(RateLimitPolicies.Refresh)]
     public async Task<IActionResult> Logout(CancellationToken ct)
     {
         RequireCsrfHeader();
