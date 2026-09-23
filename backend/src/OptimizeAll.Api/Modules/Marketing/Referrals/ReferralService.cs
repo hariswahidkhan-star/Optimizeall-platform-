@@ -11,6 +11,7 @@ using OptimizeAll.Domain.Identity;
 using OptimizeAll.Domain.Ledger;
 using OptimizeAll.Domain.Marketing;
 using OptimizeAll.Domain.Notifications;
+using OptimizeAll.Domain.Payouts;
 using OptimizeAll.Domain.Settings;
 using OptimizeAll.Domain.Submissions;
 using OptimizeAll.Infrastructure.Persistence;
@@ -27,6 +28,7 @@ public sealed class ReferralService(
     AppDbContext db,
     ISettingsService settings,
     ILedgerWriter ledger,
+    IPayoutReversalCoordinator payoutReversals,
     INotificationService notifications,
     IAuditLogger audit,
     AchievementEvaluator achievements,
@@ -34,6 +36,7 @@ public sealed class ReferralService(
     ILogger<ReferralService> logger)
 {
     public const string QualifyingSubmissionReversedReason = "Qualifying submission reversed";
+    public const string RewardReversalHoldReason = "Referral reward reversal pending";
 
     private DateTime Now => clock.GetUtcNow().UtcDateTime;
 
@@ -196,8 +199,8 @@ public sealed class ReferralService(
     }
 
     /// <summary>
-    /// When the referred participant's only approved submission is reversed, the referral is rejected and its unpaid
-    /// reward declined (pending) or reversed (approved). Paid or scheduled rewards are left untouched.
+    /// When the referred participant's only approved submission is reversed, the referral is rejected and its reward
+    /// undone through <see cref="UndoRewardAsync"/> (declined, reversed, clawed back, or held for reversal).
     /// </summary>
     public async Task OnSubmissionReversedAsync(SubmissionReversed e, CancellationToken ct)
     {
@@ -212,25 +215,18 @@ public sealed class ReferralService(
         EarningEntry? entry = referral.EarningEntryId is { } entryId
             ? await db.Set<EarningEntry>().FirstOrDefaultAsync(x => x.Id == entryId, ct)
             : null;
-        if (entry is { Status: EarningStatus.Paid or EarningStatus.Scheduled })
-        {
-            logger.LogInformation("Referral {ReferralId}: qualifying submission reversed but reward {EntryId} is already {Status}",
-                referral.Id, entry.Id, entry.Status);
-            return;
-        }
 
-        if (entry is { Status: EarningStatus.PendingApproval })
-            ledger.Decline(entry, QualifyingSubmissionReversedReason, null);
-        else if (entry is { Status: EarningStatus.Approved, ReversedByEntryId: null })
-            await ledger.ReverseAsync(entry, QualifyingSubmissionReversedReason, null, ct);
+        await using var tx = await db.Database.BeginTransactionAsync(ct);
+        var rewardAction = entry is null ? "none" : await UndoRewardAsync(referral, entry, QualifyingSubmissionReversedReason, null, ct);
 
         referral.Status = ReferralStatus.Rejected;
         referral.RejectionReason = QualifyingSubmissionReversedReason;
         audit.RecordSystem("referral.rejected", nameof(Referral), referral.Id,
-            after: new { referral.Status, RewardStatus = entry?.Status }, reason: QualifyingSubmissionReversedReason);
+            after: new { referral.Status, RewardStatus = entry?.Status, rewardAction }, reason: QualifyingSubmissionReversedReason);
         try
         {
             await db.SaveChangesAsync(ct);
+            await tx.CommitAsync(ct);
         }
         catch (DbUpdateConcurrencyException)
         {
@@ -255,7 +251,62 @@ public sealed class ReferralService(
                 .SetProperty(r => r.ConcurrencyStamp, Guid.NewGuid()), ct);
     }
 
-    /// <summary>Marketing rejection: declines (pending) or reverses (approved, unpaid) the reward; audited.</summary>
+    /// <summary>
+    /// Undoes the reward of a referral being rejected, in the caller's transaction. Returns the action taken:
+    /// <list type="bullet">
+    /// <item><c>declined</c> — PendingApproval → Declined.</item>
+    /// <item><c>reversed</c> — Approved (unpaid) → Reversed.</item>
+    /// <item><c>clawback</c> — Paid: <see cref="ILedgerWriter.ReverseAsync"/> creates a negative entry netted against
+    /// the referrer's next payout.</item>
+    /// <item><c>held_and_reversed</c> — Scheduled in a Draft batch: the referrer's item is held
+    /// ("Referral reward reversal pending"), which releases the reward back to Approved, and it is then reversed.</item>
+    /// <item><c>pending_reversal</c> — Scheduled in a Finalized batch: nothing can change in the frozen batch, so a
+    /// <c>referral.reward_pending_reversal</c> (PendingReversal) audit note is recorded and the item is flagged by the
+    /// reconciliation report (<c>pending_reversal</c> warning) until finance reverses the reward.</item>
+    /// </list>
+    /// </summary>
+    private async Task<string> UndoRewardAsync(Referral referral, EarningEntry entry, string reason, Guid? actor, CancellationToken ct)
+    {
+        if (entry.ReversedByEntryId is not null || entry.Status is EarningStatus.Reversed) return "already_reversed";
+        switch (entry.Status)
+        {
+            case EarningStatus.PendingApproval:
+                ledger.Decline(entry, reason, actor);
+                return "declined";
+            case EarningStatus.Approved:
+                await ledger.ReverseAsync(entry, reason, actor, ct);
+                return "reversed";
+            case EarningStatus.Paid:
+                await ledger.ReverseAsync(entry, reason, actor, ct);
+                return "clawback";
+            case EarningStatus.Scheduled:
+                var scheduled = (await payoutReversals.FindScheduledAsync(new[] { entry.Id }, ct)).SingleOrDefault()
+                                ?? throw DomainException.Conflict("payout.earnings_changed", "The reward's payout item changed; try again.");
+                if (scheduled.BatchStatus == PayoutBatchStatus.Draft)
+                {
+                    await payoutReversals.HoldForReversalAsync(scheduled, RewardReversalHoldReason, ct);
+                    await db.Entry(entry).ReloadAsync(ct); // now Approved and unlinked
+                    await ledger.ReverseAsync(entry, reason, actor, ct);
+                    return "held_and_reversed";
+                }
+                var note = new
+                {
+                    PendingReversal = true, ReferralId = referral.Id, EarningId = entry.Id, scheduled.ItemId, scheduled.BatchId,
+                    scheduled.BatchReference, scheduled.ItemStatus,
+                };
+                if (actor is null)
+                    audit.RecordSystem("referral.reward_pending_reversal", nameof(EarningEntry), entry.Id, after: note, reason: reason);
+                else
+                    audit.Record("referral.reward_pending_reversal", nameof(EarningEntry), entry.Id, after: note, reason: reason);
+                logger.LogWarning("Referral {ReferralId}: reward {EntryId} is in finalized batch {Batch}; flagged PendingReversal",
+                    referral.Id, entry.Id, scheduled.BatchReference);
+                return "pending_reversal";
+            default:
+                return "none";
+        }
+    }
+
+    /// <summary>Marketing rejection: undoes the reward (see <see cref="UndoRewardAsync"/>); audited.</summary>
     public async Task<ReferralRejectResult> RejectAsync(Guid referralId, string reason, Guid actorId, CancellationToken ct)
     {
         var referral = await db.Set<Referral>().FirstOrDefaultAsync(r => r.Id == referralId, ct)
@@ -265,24 +316,11 @@ public sealed class ReferralService(
 
         var before = new { referral.Status, referral.EarningEntryId };
         var rewardAction = "none";
+        await using var tx = await db.Database.BeginTransactionAsync(ct);
         if (referral.EarningEntryId is { } entryId)
         {
             var entry = await db.Set<EarningEntry>().FirstAsync(x => x.Id == entryId, ct);
-            switch (entry.Status)
-            {
-                case EarningStatus.PendingApproval:
-                    ledger.Decline(entry, reason, actorId);
-                    rewardAction = "declined";
-                    break;
-                case EarningStatus.Approved when entry.ReversedByEntryId is null:
-                    await ledger.ReverseAsync(entry, reason, actorId, ct);
-                    rewardAction = "reversed";
-                    break;
-                case EarningStatus.Paid:
-                case EarningStatus.Scheduled:
-                    rewardAction = "unchanged_" + entry.Status.ToString().ToLowerInvariant();
-                    break;
-            }
+            rewardAction = await UndoRewardAsync(referral, entry, reason.Trim(), actorId, ct);
         }
 
         referral.Status = ReferralStatus.Rejected;
@@ -290,6 +328,7 @@ public sealed class ReferralService(
         audit.Record("referral.rejected", nameof(Referral), referral.Id, before,
             new { referral.Status, rewardAction }, reason);
         await db.SaveChangesAsync(ct);
+        await tx.CommitAsync(ct);
         return new ReferralRejectResult(referral.Id, referral.Status, rewardAction);
     }
 }

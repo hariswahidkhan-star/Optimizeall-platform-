@@ -132,7 +132,8 @@ public sealed class PayoutBatchesController(
     [HttpPost("{id:guid}/items/{itemId:guid}/record-payment")]
     [HasPermission(Permissions.PayoutsRecordPayment)]
     public Task<PaymentRecordedDto> RecordPayment(Guid id, Guid itemId, RecordPaymentRequest request, CancellationToken ct) =>
-        payments.RecordPaymentAsync(id, itemId, request.PaymentReference, request.PaidAt!.Value, request.Note?.Trim(), currentUser.Id, ct);
+        payments.RecordPaymentAsync(id, itemId, request.PaymentReference, request.PaidAt!.Value, request.Note?.Trim(), currentUser.Id, ct,
+            request.OverrideReason);
 
     [HttpPost("{id:guid}/items/{itemId:guid}/mark-failed")]
     [HasPermission(Permissions.PayoutsRecordPayment)]
@@ -158,9 +159,16 @@ public sealed class PayoutBatchesController(
             rows.Select(r => PayoutReadModels.ExportCells(batch, r)));
     }
 
+    /// <summary>Status cell of a companion row for an item that must not be paid now (see <see cref="PaymentInstructions"/>).</summary>
+    public const string ExcludedMarker = "EXCLUDED";
+
     /// <summary>
     /// Sensitive: CSV of the items awaiting payment with the DECRYPTED payout destination, for paying manually.
-    /// Requires <c>?confirm=true</c>; every export is audited.
+    /// Requires <c>?confirm=true</c>; every export is audited and the first one sets <c>InstructionsExportedAt</c>
+    /// (after which the batch can no longer be cancelled).
+    /// Items whose participant has an active payout hold or an inactive account are NOT payable: they appear after the
+    /// payable rows as companion rows whose Status is <c>EXCLUDED</c>, whose destination is withheld and replaced by the
+    /// reason ("EXCLUDED — do not pay: …").
     /// </summary>
     [HttpGet("{id:guid}/payment-instructions.csv")]
     [HasPermission(Permissions.PayoutsRecordPayment)]
@@ -172,13 +180,32 @@ public sealed class PayoutBatchesController(
         if (batch.Status is not (PayoutBatchStatus.Finalized or PayoutBatchStatus.Completed))
             throw DomainException.Conflict("payout.batch_not_finalized", "Payment instructions are only available for finalized batches.");
 
+        var blockers = await PayoutStore.PayoutBlockersAsync(db, rows.Select(r => r.Item.UserId).Distinct().ToList(), ct);
+        var payable = rows.Where(r => !blockers.ContainsKey(r.Item.UserId)).ToList();
+        var excluded = rows.Where(r => blockers.ContainsKey(r.Item.UserId)).ToList();
+
         var protector = dataProtection.CreateProtector(DestinationProtectorPurpose);
         var header = PayoutReadModels.ExportHeader.Append("Destination (confidential)").ToArray();
-        var cells = rows.Select(r => PayoutReadModels.ExportCells(batch, r)
+        var statusColumn = Array.IndexOf(PayoutReadModels.ExportHeader, "Status");
+        var cells = payable.Select(r => PayoutReadModels.ExportCells(batch, r)
             .Append(Decrypt(protector, r.Profile?.EncryptedDestination)).ToArray()).ToList();
+        foreach (var r in excluded)
+        {
+            var row = PayoutReadModels.ExportCells(batch, r);
+            row[statusColumn] = ExcludedMarker;
+            cells.Add(row.Append($"EXCLUDED — do not pay: {blockers[r.Item.UserId]}").ToArray());
+        }
 
+        var now = clock.GetUtcNow().UtcDateTime;
+        await db.Set<PayoutBatch>().Where(b => b.Id == batch.Id && b.InstructionsExportedAt == null)
+            .ExecuteUpdateAsync(s => s.SetProperty(b => b.InstructionsExportedAt, now), ct);
         audit.Record("payout.payment_instructions_exported", nameof(PayoutBatch), batch.Id,
-            after: new { batch.Reference, Items = rows.Count, ItemIds = rows.Select(r => r.Item.Id).ToList() },
+            after: new
+            {
+                batch.Reference, Items = payable.Count, ItemIds = payable.Select(r => r.Item.Id).ToList(),
+                Excluded = excluded.Count, ExcludedItemIds = excluded.Select(r => r.Item.Id).ToList(),
+                FirstExport = batch.InstructionsExportedAt is null,
+            },
             reason: "Sensitive export: decrypted payout destinations");
         await db.SaveChangesAsync(ct);
         return Csv.File($"payment-instructions-{batch.Reference}-{clock.GetUtcNow():yyyyMMddHHmmss}.csv", header, cells);

@@ -20,6 +20,14 @@ Every amount owed to a participant is an immutable `EarningEntry` row (`earning_
   was in force when the entry was created. A later exchange rate never changes an existing entry.
 * Idempotency keys (unique index) make creation safe to retry: `submission:{id}:PostReward`, `adjustment:{requestId}`,
   `reversal:{entryId}`, …
+* **Manual adjustments.** A credit (positive adjustment) creates money, so it is recorded `PendingApproval` and only
+  becomes payable once a *different* user approves it in the pending-earnings queue. A debit (negative adjustment) only
+  reduces what is owed and is `Approved` and available immediately. Nobody may adjust their own account
+  (403 `ledger.self_adjustment`), and nobody may approve or decline an earning they created or that is credited to
+  them (403 `ledger.self_approval`).
+* **Exchange rates.** To convert from→to, the latest direct row (from→to) and the latest inverse row (to→from)
+  effective at that instant are both looked up and the one with the later `EffectiveAt` is used (inverse = 1/rate,
+  rounded to 8 decimals; an exact tie uses the direct row). So a newer rate entered in either direction always wins.
 
 ### Earning lifecycle
 
@@ -34,7 +42,7 @@ Every amount owed to a participant is an immutable `EarningEntry` row (`earning_
                          item Failed, batch cancelled,────┘   ▼                                               │   ▼
                          batch regenerated              Reversed (+ zero-sum negative leg, status Reversed)   │  Paid
                                                                                                               │   │
-                                           Scheduled earnings cannot be reversed (409 ledger.in_payout_batch) ┘   │ reverse (paid)
+     Scheduled earnings cannot be reversed directly (409 ledger.in_payout_batch; see "Reversing …" below) ┘   │ reverse (paid)
                                                                                                                   ▼
                                                        new negative Reversal entry, status Approved, AvailableAt = now
                                                        (a clawback netted against the participant's next payout)
@@ -45,6 +53,25 @@ Every amount owed to a participant is an immutable `EarningEntry` row (`earning_
 * Status transitions made by the payout module are conditional bulk updates (`ExecuteUpdate … WHERE Status = expected`)
   that also rotate the row's `ConcurrencyStamp`, so a concurrent tracked update (e.g. a reversal) fails with 409
   instead of silently overwriting.
+
+### Reversing an earning that is already in a payout batch
+
+`ILedgerWriter.ReverseAsync` refuses `Scheduled` earnings. The flows that must reverse them handle the batch first
+(through `IPayoutReversalCoordinator`, implemented by the Payouts module, in the caller's transaction):
+
+* **Submission reversal** (`ReviewService`, also a failed live check): if an earning of the submission is Scheduled in a
+  **Draft** batch, the participant's item is held automatically (reason "Submission reversal pending"). Holding for a
+  reversal releases *all* the item's earnings back to `Approved` (exactly what finalize does to held items), then the
+  submission's earnings are reversed; the participant's other earnings roll into the next batch. If the item is in a
+  **Finalized** batch the reversal is refused (409 `ledger.in_payout_batch`) with a message telling the reviewer to have
+  finance mark the payout item failed first, then reverse again.
+* **Referral rejection** (`SubmissionReversed` handler and marketing rejection): Paid → clawback via `ReverseAsync`;
+  Scheduled in a Draft batch → item held ("Referral reward reversal pending") and reward reversed; Scheduled in a
+  Finalized batch → audit note `referral.reward_pending_reversal` (PendingReversal) and a `pending_reversal`
+  reconciliation warning on the item until finance reverses it. The referral is always set to `Rejected` with a reason.
+  Details in [GROWTH.md](GROWTH.md#undoing-a-reward).
+* A draft item held this way has no linked earnings; it cannot be unheld (409 `payout.item_released`) — regenerate the
+  batch instead (the hold reason is carried over to the regenerated item).
 
 ### Balance buckets (participant summary)
 
@@ -95,7 +122,7 @@ Changing the **settlement currency** is refused (409 `payout.settlement_currency
             prepare (API or job)          finalize (4-eyes)              every item Paid/Failed/Held/Cancelled
   (none) ─────────────────────► Draft ───────────────────► Finalized ───────────────────────────────────► Completed
                                  │  ▲                          │
-                 hold/unhold item│  │regenerate                │ cancel (only with zero Paid items)
+                 hold/unhold item│  │regenerate                │ cancel (no Paid item, nothing exported or in flight)
                                  ▼  │                          ▼
                                 Draft                      Cancelled ◄──── cancel (Draft)
 ```
@@ -114,7 +141,9 @@ completed period if **no batch in any status** exists for it; `PreparedByUserId 
 
 1. Serialization: MySQL named lock `GET_LOCK('oa:payout-prepare:<database>', 30)` on an explicitly opened connection
    (scoped to the database name so staging/test databases on one server do not block each other), released with
-   `RELEASE_LOCK` on the same connection.
+   `RELEASE_LOCK` on the same connection. **Creating a payout hold takes the same lock** (on its own transaction's
+   connection, before it reads anything): a hold placed while a batch is being prepared waits until the draft is
+   committed and then holds the new item; a preparation that starts after the hold sees it and excludes the participant.
 2. Idempotency: `IdempotencyKey = period:{periodKey}:{currency}` (unique index = final guard). If a batch exists, it is
    returned with `created:false` (HTTP 200) — retries and concurrent calls never create a second batch.
 3. Selection: `Status = Approved AND PayoutItemId IS NULL AND AvailableAt ≤ cutoff AND SettlementCurrency = batch currency`,
@@ -142,6 +171,8 @@ If nothing is payable the batch is not created (409 `payout.no_eligible_earnings
 * Hold/unhold an item, regenerate (releases everything and re-runs selection for the same period on the same row; the
   regenerating user becomes the preparer), cancel. Every draft change rotates the batch `ConcurrencyStamp`, so a
   finalize based on a stale review is rejected.
+* Regenerate preserves manual item holds: each participant whose item was `Held` (for any reason other than "No payout
+  details on file", which the planner re-derives) gets a new item that is `Held` with the same reason.
 * Placing a payout hold on a participant automatically holds their `Pending` items in draft batches. Items already
   `AwaitingPayment` are listed in the hold response for finance to decide.
 
@@ -150,13 +181,37 @@ If nothing is payable the batch is not created (409 `payout.no_eligible_earnings
 `POST …/{id}/finalize {confirm:true, concurrencyStamp}` with `payouts.finalize`:
 
 * Four-eyes: the finalizer must not be the person who prepared (or last regenerated) the batch (403
-  `payout.self_finalize`). System-prepared batches can be finalized by any finance user.
+  `payout.self_finalize`). System-prepared batches can be finalized by any finance user without a conflict of interest.
+* Conflict of interest (403 `payout.conflict_of_interest`): the finalizer must not be the beneficiary of any item in the
+  batch, nor the creator or approver of any earning linked to it.
 * `UPDATE payout_batches SET Status='Finalized' … WHERE Id=@id AND Status='Draft' AND ConcurrencyStamp=@stamp` —
   of two simultaneous finalizes exactly one wins; the other gets 409.
-* Same transaction: `Held` items release their earnings (back to `Approved`, unlinked), `Pending` items become
-  `AwaitingPayment`, totals are recomputed, participants are notified (`payout.scheduled`, in-app + email, with amount
-  and expected payment date).
+* Same transaction: every `Pending` item whose participant now has an active payout hold or an account that is not
+  Active is moved to `Held` (reason `Payout hold: <hold reason>` / `Account not active (<status>)`, audited
+  `payout.item_held`) — a safety net for holds and suspensions after (or racing with) preparation. Then `Held` items
+  release their earnings (back to `Approved`, unlinked), `Pending` items become `AwaitingPayment`, totals are
+  recomputed, participants are notified (`payout.scheduled`, in-app + email, with amount and expected payment date).
 * After commit every `AwaitingPayment` item is dispatched through the payment provider layer.
+
+### Segregation of duties
+
+No single person can both create money and pay it out. The matrix below lists who may **not** perform each step
+(everything not listed is allowed to any user holding the permission). "System" means the background job.
+
+| Step (permission) | Refused to | Error |
+|---|---|---|
+| Positive adjustment (`ledger.adjust`) | Anyone, for their own account. The credit is created `PendingApproval` and is not payable until approved. | 403 `ledger.self_adjustment` |
+| Negative adjustment / debit (`ledger.adjust`) | Anyone, for their own account. Otherwise immediate (`Approved`). | 403 `ledger.self_adjustment` |
+| Approve / decline a pending earning, incl. credits (`rewards.approve_bonus`) | The earning's creator; the earning's beneficiary. | 403 `ledger.self_approval` |
+| Prepare / regenerate a batch (`payouts.prepare`) | — (the regenerating user becomes the preparer). | — |
+| Finalize (`payouts.finalize`) | The preparer / last regenerator; the beneficiary of any item in the batch; the creator or approver of any earning in the batch. | 403 `payout.self_finalize`, 403 `payout.conflict_of_interest` |
+| Record a payment (`payouts.record_payment`), batch prepared by a **person** | — (preparer ≠ finalizer is already enforced, so the finalizer may record). | — |
+| Record a payment, batch prepared by the **system** | The finalizer (there was no human preparer, so the recorder is the second pair of eyes). | 403 `payout.self_record` |
+| Record a payment for a participant with an active payout hold | Everyone, unless an `overrideReason` is given (audited `payout.payment_hold_overridden`). | 409 `payout.user_on_hold` |
+| Provider confirmation / failure (no human actor) | — (the money already moved; recorded through the same atomic path). | — |
+
+Resulting minimum for a manual credit to leave the bank: creator ≠ approver ≠ beneficiary, then preparer ≠ finalizer
+(and the finalizer is none of creator, approver or beneficiary); for system-prepared batches, finalizer ≠ recorder.
 
 ## 4. Double-payment protections
 
@@ -169,7 +224,10 @@ If nothing is payable the batch is not created (409 `payout.no_eligible_earnings
 | Two finance users (or a retry, or a provider webhook) recording one payment | Batch row lock (`SELECT … FOR UPDATE`) + conditional `AwaitingPayment→Paid`; the loser gets 409 `payout.already_recorded`; earnings `Scheduled→Paid` checked against the item's earning count. |
 | Duplicate provider dispatch | One `PaymentAttempt` per item, key `payout-item:{itemId}:dispatch` (unique); retries reuse it and never call the provider again once it has an outcome. |
 | Paying a user twice for one period across batches | Reconciliation check `duplicate_period_payment`. |
+| The same earning paid by two items, or the same earning set paid in two batches (e.g. two periods) | Every recorded payment writes immutable `payout_item_earnings` rows (item, earning, amount, paidAt); reconciliation checks `duplicate_earning_payment`, `paid_earning_linked_elsewhere`, `duplicate_payment_across_periods`. |
 | Reusing a bank reference by mistake | Reconciliation warning `duplicate_payment_reference`. |
+| A hold created while a batch is being prepared | Hold creation takes the prepare named lock; finalize re-checks holds and account status and holds affected items. |
+| Cancelling a batch whose money may already be moving | Cancel refused once instructions were exported or an attempt is `Submitted`/`Succeeded` (409 `payout.instructions_exported` / `payout.attempt_in_flight`). |
 
 ## 5. Recording payments and failures
 
@@ -179,11 +237,21 @@ If nothing is payable the batch is not created (409 `payout.no_eligible_earnings
   `Pending`/`AwaitingPayment` any more the batch becomes `Completed`.
 * `record-payments` (bulk) processes each line independently with the same rules and returns
   `recorded | already_recorded | invalid` per line.
+* Record-payment refusals: 409 `payout.user_on_hold` when the participant has an active payout hold (unless
+  `overrideReason` is given — e.g. the transfer left before the hold was placed; audited
+  `payout.payment_hold_overridden`), 403 `payout.self_record` for the finalizer of a system-prepared batch.
 * `mark-failed {reason}` → item `Failed`, earnings back to `Approved` (unlinked) so they roll into the next batch;
-  participant told to check their payout details.
+  participant told to check their payout details. Refused while the item's payment attempt is `Submitted` to a provider
+  without an outcome (409 `payout.attempt_in_flight`); the provider's own failure callback is still accepted.
+* `payment-instructions.csv` → payable items with decrypted destinations; items of participants with an active hold
+  or an inactive account are **companion rows** with `Status = EXCLUDED` and the destination replaced by
+  `EXCLUDED — do not pay: <reason>`. The first export sets `InstructionsExportedAt` on the batch (shown in the batch DTO
+  as `instructionsExportedAt`).
 * `cancel` (Draft, or Finalized with zero Paid items) → all open items `Cancelled`, their earnings back to `Approved`,
   open payment attempts `Failed`, the period's idempotency key is released (the job will not re-create it; finance can
-  prepare it again deliberately).
+  prepare it again deliberately). A Finalized batch can **not** be cancelled once money may be in flight: any attempt
+  `Submitted` (409 `payout.attempt_in_flight`), any attempt `Succeeded` or payment instructions already exported (409
+  `payout.instructions_exported`). Use per-item `mark-failed` with a reason instead.
 
 ## 6. Reconciliation
 
@@ -197,14 +265,23 @@ recorded paid, awaiting, failed, held and cancelled totals, a per-item table and
 | `paid_item_unpaid_earning` | error | Paid item with an earning not `Paid`. |
 | `unpaid_item_paid_earning` | error | Unpaid item with a `Paid` earning. |
 | `earning_status_mismatch` | error | Linked earning not `Scheduled` on an open item. |
-| `released_item_has_earnings` | error | `Failed`/`Cancelled` item still has linked earnings. |
+| `released_item_has_earnings` | error | `Failed`/`Cancelled` item — or a `Held` item of a Finalized/Completed batch — still has linked earnings. |
 | `currency_mismatch` | error | Earning settled in another currency than the item. |
 | `duplicate_period_payment` | error | Participant also paid for the same period in another batch. |
+| `duplicate_earning_payment` | error | An earning was paid by more than one item (paid-earning rows, plus its current link when that item is Paid). |
+| `paid_earning_linked_elsewhere` | error | An earning paid by an item of this batch is now linked to another item (it could be paid again). |
+| `duplicate_payment_across_periods` | error | The participant was paid exactly the same earning set by an item of another batch (e.g. another period). |
 | `batch_total_mismatch` | error | Batch total ≠ Σ payable items. |
 | `duplicate_payment_reference` | warning | Same payment reference on several items. |
+| `pending_reversal` | warning | The item contains the reward of a rejected referral that could not be reversed because the batch was finalized (PendingReversal); finance must fail the item and reverse the reward, or reverse it after payment (clawback). |
 
-`isBalanced` is true when there is no error-severity discrepancy. Each earning can link to at most one item by
-construction (single `PayoutItemId` column).
+Expected state per item status: `Pending`/`AwaitingPayment`/`Paid` items (and `Held` items of a Draft batch that still
+hold their earnings) must have amount = Σ linked earnings and count = linked earnings; in Finalized/Completed batches
+`Held` and `Failed` items (and `Cancelled` items anywhere) are expected to have **zero** linked earnings, since finalize
+and mark-failed released them. A Draft `Held` item with no linked earnings was held for a reversal and is fine.
+
+`isBalanced` is true when there is no error-severity discrepancy. Each earning links to at most one item at a time
+(single `PayoutItemId` column); the history of which item paid which earning is kept in `payout_item_earnings`.
 
 ## 7. Finance runbook (manual payments)
 
@@ -213,17 +290,22 @@ construction (single `PayoutItemId` column).
 2. **Review** the batch: check warnings (missing payout details, appeals, disputes, high-risk submissions) and the
    exclusions list. Hold items you are not comfortable paying (they return to the participant's balance at finalize),
    or place a payout hold on the participant. Regenerate after changing holds/earnings if needed.
-3. **Finalize** — must be done by a second finance user. Participants are told their payout is scheduled.
+3. **Finalize** — must be done by a second finance user who is not paid in the batch and did not create or approve any
+   of its earnings. Items of participants who were put on hold or suspended since preparation are held automatically.
+   Participants are told their payout is scheduled.
 4. **Download payment instructions** (`payment-instructions.csv?confirm=true`, permission `payouts.record_payment`).
    The file contains decrypted bank/wallet details — store it only in the approved secure location and delete it after
-   use. Every download is audited.
+   use. Every download is audited. **Never pay rows marked `EXCLUDED`** (participant on hold or inactive). After the
+   first download the batch can no longer be cancelled.
 5. **Pay** each participant in the bank/PayPal/wallet portal, using the batch reference and item id in the payment
    description where possible.
 6. **Record** each payment with the bank/PayPal transaction reference and the actual payment date (single or bulk).
    Never record a payment that has not left the account. If a transfer bounces, **mark the item failed** with the
-   bank's reason; the earnings return to the participant's balance for the next batch.
+   bank's reason; the earnings return to the participant's balance for the next batch. For a batch prepared by the
+   system job, payments must be recorded by someone other than the finalizer. Recording a payment for a participant
+   on hold requires an override reason.
 7. **Reconcile**: open the reconciliation report, confirm `isBalanced`, compare `recordedPaid` with the bank statement,
-   investigate any warning (duplicate references). Export the CSV for the accounting archive.
+   investigate any warning (duplicate references, `pending_reversal`). Export the CSV for the accounting archive.
 8. Mistakes: a wrongly recorded payment cannot be "un-paid" in the UI (by design). Record a compensating adjustment
    (with the support ticket) and document it; for an unpaid batch prepared in error, cancel it.
 

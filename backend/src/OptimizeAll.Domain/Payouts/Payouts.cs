@@ -86,6 +86,12 @@ public class PayoutBatch : AuditedEntity, IConcurrencyStamped
     /// (payout hold, inactive account, non-positive balance, below minimum), with their carried-over amounts.
     /// </summary>
     public string? ExclusionsJson { get; set; }
+
+    /// <summary>
+    /// First time the decrypted payment instructions were exported. Once set, money may already be in flight outside the
+    /// platform, so the batch can no longer be cancelled (items must be marked failed individually).
+    /// </summary>
+    public DateTime? InstructionsExportedAt { get; set; }
     public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
 
     public List<PayoutItem> Items { get; set; } = new();
@@ -149,6 +155,21 @@ public class PaymentAttempt : Entity
     public string? Message { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
+}
+
+/// <summary>
+/// Immutable record of which earnings a payout item paid, written in the same transaction that records the payment.
+/// Unlike <c>EarningEntry.PayoutItemId</c> (a single, movable link) it keeps the history, so reconciliation can detect
+/// an earning paid by more than one item or the same earning set paid in two batches.
+/// </summary>
+public class PayoutItemEarning : Entity
+{
+    public Guid PayoutItemId { get; set; }
+    public Guid EarningEntryId { get; set; }
+    public Guid UserId { get; set; }
+    public decimal SettlementAmount { get; set; }
+    public DateTime PaidAt { get; set; }
+    public DateTime CreatedAt { get; set; }
 }
 
 /// <summary>Stops a participant's earnings from being paid until released (fraud review, KYC, dispute).</summary>

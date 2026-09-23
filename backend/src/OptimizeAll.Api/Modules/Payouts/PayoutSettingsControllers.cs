@@ -134,6 +134,11 @@ public sealed class PayoutHoldsController(
         var userId = request.UserId!.Value;
         var now = clock.GetUtcNow().UtcDateTime;
         await using var tx = await PayoutStore.BeginAsync(db, ct);
+        // Serialize with batch preparation/regeneration: take the same MySQL named lock on this transaction's
+        // connection BEFORE reading anything. A prepare that is running finishes (and commits its draft items) first,
+        // so the draft items below are visible and get held; a prepare that starts after us waits and sees the hold.
+        // Released after commit (disposed before the transaction).
+        await using var prepareLock = await PayoutStore.AcquirePrepareLockAsync(db, ct);
         // Row-lock the participant so two concurrent requests cannot both create an active hold.
         var locked = await db.Database
             .SqlQuery<string>($"SELECT `Email` AS `Value` FROM users WHERE `Id` = {userId.ToString()} FOR UPDATE").ToListAsync(ct);

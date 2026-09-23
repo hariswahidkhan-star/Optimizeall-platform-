@@ -33,6 +33,9 @@ public sealed class LedgerAdminService(
         if (amount == 0)
             throw new DomainException("ledger.zero_amount", "The adjustment amount must not be zero (after rounding to the currency's minor unit).");
         var userId = request.UserId!.Value;
+        // Segregation of duties: nobody may credit or debit their own account.
+        if (userId == currentUser.Id)
+            throw DomainException.Forbidden("ledger.self_adjustment", "You cannot create an adjustment on your own account.");
         var key = $"adjustment:{request.RequestId!.Value:N}";
 
         // Idempotent replay: a retried/double-clicked request returns the adjustment it already created.
@@ -66,8 +69,10 @@ public sealed class LedgerAdminService(
         var reason = request.Reason.Trim();
         var description = (amount > 0 ? "Manual credit" : "Manual debit") +
                           (ticketReference is null ? string.Empty : $" (support ticket {ticketReference})");
+        // Credits create money: they wait in the pending-earnings queue until a DIFFERENT user approves them (the
+        // approval enforces approver ≠ creator ≠ beneficiary). Debits only reduce what is owed and apply immediately.
         var entry = await ledger.RecordAsync(new NewEarning(
-            userId, EarningType.Adjustment, amount, currency, key, description, RequiresApproval: false,
+            userId, EarningType.Adjustment, amount, currency, key, description, RequiresApproval: amount > 0,
             CampaignId: campaignId, SubmissionId: request.SubmissionId, Reason: reason,
             CreatedByUserId: currentUser.Id), ct);
 
@@ -75,7 +80,7 @@ public sealed class LedgerAdminService(
             after: new
             {
                 entry.UserId, entry.Amount, entry.Currency, entry.SettlementAmount, entry.SettlementCurrency,
-                entry.SubmissionId, SupportTicketId = request.SupportTicketId, RequestId = request.RequestId,
+                entry.SubmissionId, SupportTicketId = request.SupportTicketId, RequestId = request.RequestId, entry.Status,
             },
             reason: reason);
 
@@ -154,9 +159,11 @@ public sealed class LedgerAdminService(
             throw DomainException.Conflict("ledger.not_pending", "This earning is no longer pending approval.");
         if (entry.ConcurrencyStamp != concurrencyStamp)
             throw DomainException.Conflict("concurrency.conflict", "This earning was changed by someone else. Reload and try again.");
-        // Four-eyes: whoever recorded a manual bonus cannot approve it.
+        // Four-eyes: whoever recorded a manual bonus/credit cannot approve it, and nobody decides their own earnings.
         if (entry.CreatedByUserId is { } creator && creator == currentUser.Id)
             throw DomainException.Forbidden("ledger.self_approval", "You cannot approve or decline an earning you created.");
+        if (entry.UserId == currentUser.Id)
+            throw DomainException.Forbidden("ledger.self_approval", "You cannot approve or decline an earning credited to your own account.");
         return entry;
     }
 

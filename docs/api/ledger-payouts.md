@@ -115,12 +115,15 @@ Reversed by earning ID, Reason.
 { "requestId": "guid (required, client-generated)", "userId": "guid", "amount": -8.00, "currency": "USD",
   "reason": "≥ 10 chars", "submissionId": "guid|null", "supportTicketId": "guid|null", "confirm": true }
 ```
-Creates an `Adjustment` entry (status `Approved`; credits available after the hold period, debits immediately).
-Idempotency key `adjustment:{requestId}`: **201** `{ "created": true, "earning": LedgerRow }` when created, **200**
-`{ "created": false, "earning": LedgerRow }` for a replay. Audited `ledger.adjustment_created`.
+Creates an `Adjustment` entry. **Credits** (amount > 0) are created `PendingApproval` and appear in
+`GET /finance/pending-earnings`; they become payable only after a **different** user approves them there (approver ≠
+creator ≠ beneficiary), then wait for the hold period. **Debits** (amount < 0) are `Approved` immediately and available
+at once. Idempotency key `adjustment:{requestId}`: **201** `{ "created": true, "earning": LedgerRow }` when created,
+**200** `{ "created": false, "earning": LedgerRow }` for a replay. Audited `ledger.adjustment_created` (with the status).
 Errors: 400 (validation, `ledger.zero_amount`, `ledger.currency_unsupported`, `ledger.submission_mismatch`,
-`ledger.ticket_mismatch`), 404 user/submission/ticket, 409 `ledger.request_id_reused` (same requestId, different
-payload), 409 `fx.rate_missing` (no rate to the settlement currency).
+`ledger.ticket_mismatch`), 403 `ledger.self_adjustment` (`userId` is the caller: nobody credits or debits their own
+account), 404 user/submission/ticket, 409 `ledger.request_id_reused` (same requestId, different payload), 409
+`fx.rate_missing` (no rate to the settlement currency).
 
 ### `POST /finance/earnings/{id}/reverse` — `ledger.adjust`
 `{ "reason": "≥ 10 chars", "confirm": true }` → `{ "original": LedgerRow, "reversal": LedgerRow }`.
@@ -140,16 +143,19 @@ Query: `type`, `search`, paging (oldest first). Returns `Paged<PendingEarning>`:
 
 ### `POST /finance/pending-earnings/{id}/approve` — `rewards.approve_bonus`
 `{ "concurrencyStamp": "guid" }` → `LedgerRow` (status `Approved`, `availableAt` set). Participant notified
-(`earning.approved`). Errors: 403 `ledger.self_approval` (approver created the entry), 409 `ledger.awaiting_live_check`,
-409 `ledger.not_pending`, 409 `concurrency.conflict`.
+(`earning.approved`). Errors: 403 `ledger.self_approval` (the caller created the entry **or** is its beneficiary),
+409 `ledger.awaiting_live_check`, 409 `ledger.not_pending`, 409 `concurrency.conflict`.
 
 ### `POST /finance/pending-earnings/{id}/decline` — `rewards.approve_bonus`
-`{ "reason": "≥ 5 chars", "concurrencyStamp": "guid" }` → `LedgerRow` (status `Declined`). Same four-eyes/409 rules.
+`{ "reason": "≥ 5 chars", "concurrencyStamp": "guid" }` → `LedgerRow` (status `Declined`). Same four-eyes/409 rules
+(403 `ledger.self_approval` for the creator or the beneficiary).
 
 ### `GET /finance/exchange-rates` — `payouts.view`
 Query: `base`, `quote`, paging. `Paged<ExchangeRate>`:
 `{ "id", "baseCurrency": "EUR", "quoteCurrency": "USD", "rate": 1.08, "effectiveAt", "source", "createdAt", "createdByUserId" }`
-(1 base = rate quote; the inverse pair is used automatically when only the reverse rate exists).
+(1 base = rate quote). A conversion from→to takes the latest direct (from→to) and the latest inverse (to→from) row
+effective at that time and uses whichever has the later `effectiveAt` (inverse = 1/rate, 8 decimals; on an exact tie
+the direct row wins).
 
 ### `POST /finance/exchange-rates` — `payouts.settings`
 `{ "baseCurrency", "quoteCurrency", "rate": "> 0, ≤ 1,000,000 (8 decimals)", "effectiveAt": "≥ now − 1 day", "source": "2–50", "reason": "≥ 10", "confirm": true }`
@@ -203,8 +209,11 @@ Query: `active` (true/false), `userId`, `search`, paging. `Paged<PayoutHold>`:
 ### `POST /finance/holds`
 `{ "userId": "guid", "reason": "5–1000" }` → **201**
 `{ "hold": PayoutHold, "heldDraftItemIds": ["guid"], "awaitingPaymentItemIds": ["guid"] }` — Pending items of draft
-batches are held automatically; items awaiting payment need a manual decision. Participant notified (`payout.hold`,
-neutral text). Errors: 404 user, 409 `payout.hold_exists`. Audited `payout.hold_created`.
+batches are held automatically; items awaiting payment need a manual decision (they are excluded from payment
+instructions and record-payment refuses them without an override). Serialized with batch preparation by the same
+named lock (`GET_LOCK('oa:payout-prepare:<db>')`), so a hold placed while a batch is being prepared waits for it and
+then holds the new draft item. Participant notified (`payout.hold`, neutral text). Errors: 404 user, 409
+`payout.hold_exists`, 409 `payout.prepare_busy` (lock not obtained within 30 s). Audited `payout.hold_created`.
 
 ### `POST /finance/holds/{id}/release`
 `{ "note": "optional" }` → `PayoutHold`. 409 `payout.hold_not_active`. Audited `payout.hold_released`; participant notified.
@@ -221,7 +230,8 @@ neutral text). Errors: 404 user, 409 `payout.hold_exists`. Audited `payout.hold_
   "totalAmount": 47.00,      // Σ payable items
   "currency": "USD", "paidCount": 0, "paidAmount": 0,
   "preparedBy": UserRef|null /* null = system job */, "finalizedBy": UserRef|null,
-  "createdAt": "…", "finalizedAt": "…|null", "completedAt": "…|null", "cancelledAt": "…|null" }
+  "createdAt": "…", "finalizedAt": "…|null", "completedAt": "…|null", "cancelledAt": "…|null",
+  "instructionsExportedAt": "…|null" /* first payment-instructions export; the batch can no longer be cancelled */ }
 
 // PayoutItem
 { "itemId": "guid", "user": PayoutUser, "amount": 25.00, "currency": "USD", "earningCount": 1,
@@ -274,11 +284,16 @@ Pass `concurrencyStamp` to finalize; any draft change (hold/unhold/regenerate/pa
 | Endpoint | Body | Response | Errors |
 |---|---|---|---|
 | `POST …/{id}/items/{itemId}/hold` | `{ "reason": "5–1000" }` | `PayoutItem` (Held) | 409 `payout.not_draft`, `payout.item_state` |
-| `POST …/{id}/items/{itemId}/unhold` | `{ "note"?: "…" }` | `PayoutItem` (Pending) | 409 `payout.not_draft`, `payout.item_not_held`, `payout.no_payout_profile`, `payout.user_on_hold`, `payout.user_inactive` |
+| `POST …/{id}/items/{itemId}/unhold` | `{ "note"?: "…" }` | `PayoutItem` (Pending) | 409 `payout.not_draft`, `payout.item_not_held`, `payout.item_released` (the item's earnings were released for a reversal — regenerate instead), `payout.no_payout_profile`, `payout.user_on_hold`, `payout.user_inactive` |
 | `POST …/{id}/regenerate` | `{ "reason": "5–1000" }` | `PayoutBatchSummary` | 409 `payout.not_draft`, `payout.settlement_currency_changed`, `payout.earnings_changed` |
-| `POST …/{id}/cancel` | `{ "reason": "5–1000", "confirm": true }` | `PayoutBatchSummary` (Cancelled) | 409 `payout.cannot_cancel` (Completed/Cancelled), `payout.has_paid_items` |
+| `POST …/{id}/cancel` | `{ "reason": "5–1000", "confirm": true }` | `PayoutBatchSummary` (Cancelled) | 409 `payout.cannot_cancel` (Completed/Cancelled), `payout.has_paid_items`, `payout.attempt_in_flight`, `payout.instructions_exported` |
 
-Cancel is allowed for Draft batches and for Finalized batches without Paid items. Audited
+Regenerate keeps manual holds: a participant whose item was Held (any reason except "No payout details on file", which
+the planner re-derives) gets a new item that is Held with the same reason.
+
+Cancel is allowed for Draft batches, and for Finalized batches only while no money can be in flight: no Paid item, no
+payment attempt `Submitted` (409 `payout.attempt_in_flight`), no attempt `Succeeded` and payment instructions never
+exported (409 `payout.instructions_exported` — mark each unpaid item failed with a reason instead). Audited
 `payout.item_held`, `payout.item_unheld`, `payout.batch_regenerated`, `payout.batch_cancelled`.
 
 ### `POST /finance/payout-batches/{id}/finalize` — `payouts.finalize`
@@ -288,29 +303,41 @@ Cancel is allowed for Draft batches and for Finalized batches without Paid items
   "dispatch": [ { "itemId": "guid", "status": "RequiresManualAction", "providerReference": null,
                   "message": "Pay manually and record the payment reference", "reused": false } ] }
 ```
-Errors: 403 `payout.self_finalize`; 409 `concurrency.conflict` (stale stamp), `payout.not_draft` (already finalized —
-the loser of two concurrent finalizes). Audited `payout.batch_finalized`. Never marks anything paid.
+In the same transaction, before items move to `AwaitingPayment`, every `Pending` item whose participant has an active
+payout hold or an account that is not Active is set to `Held` (reason `Payout hold: …` / `Account not active (…)`,
+audited `payout.item_held`) and its earnings are released like any held item.
+Errors: 403 `payout.self_finalize` (finalizer prepared or last regenerated the batch), 403 `payout.conflict_of_interest`
+(finalizer is the beneficiary of an item, or created or approved an earning in the batch); 409 `concurrency.conflict`
+(stale stamp), `payout.not_draft` (already finalized — the loser of two concurrent finalizes). Audited
+`payout.batch_finalized`. Never marks anything paid.
 
 ### `POST /finance/payout-batches/{id}/dispatch` — `payouts.record_payment`
 Re-dispatches `AwaitingPayment` items; existing attempts are reused (`reused: true`). Returns `[DispatchResult]`.
 409 `payout.batch_not_finalized`.
 
 ### `POST /finance/payout-batches/{id}/items/{itemId}/record-payment` — `payouts.record_payment`
-`{ "paymentReference": "3–120", "paidAt": "≤ now (5 min tolerance)", "note": "optional" }` →
-`{ "item": PayoutItem, "batchStatus": "Finalized|Completed" }`.
-Errors: 400 `payout.paid_at_in_future`, `payout.invalid_reference`; 409 `payout.already_recorded` (already paid —
-concurrent or retried request), `payout.item_not_awaiting_payment`, `payout.batch_not_finalized`,
-`payout.earnings_changed`. Audited `payout.payment_recorded`; participant notified (`payout.paid`); event
-`PayoutItemPaid` published.
+`{ "paymentReference": "3–120", "paidAt": "≤ now (5 min tolerance)", "note": "optional", "overrideReason": "optional, ≤ 1000" }` →
+`{ "item": PayoutItem, "batchStatus": "Finalized|Completed" }`. The paid earnings are also recorded in
+`payout_item_earnings` (used by reconciliation to detect repeated payments).
+Errors: 400 `payout.paid_at_in_future`, `payout.invalid_reference`; 403 `payout.self_record` (the batch was prepared
+by the system job and the caller finalized it); 409 `payout.user_on_hold` (the participant has an active payout hold
+and no `overrideReason` was given — with one, the payment is recorded and audited `payout.payment_hold_overridden`),
+`payout.already_recorded` (already paid — concurrent or retried request), `payout.item_not_awaiting_payment`,
+`payout.batch_not_finalized`, `payout.earnings_changed`. Audited `payout.payment_recorded`; participant notified
+(`payout.paid`); event `PayoutItemPaid` published. Provider confirmations (no human actor) skip the self-record and hold
+checks: the money has already moved.
 
 ### `POST /finance/payout-batches/{id}/items/{itemId}/mark-failed` — `payouts.record_payment`
 `{ "reason": "5–1000" }` → `{ "item": PayoutItem, "batchStatus" }`. Earnings return to `Approved`.
-Errors: 409 `payout.already_recorded`, `payout.item_state`, `payout.batch_not_finalized`. Audited `payout.payment_failed`.
+Errors: 409 `payout.already_recorded`, `payout.item_state`, `payout.batch_not_finalized`, `payout.attempt_in_flight`
+(the item's payment attempt is `Submitted` to a provider without an outcome; the provider's own failure callback is
+still accepted). Audited `payout.payment_failed`.
 
 ### `POST /finance/payout-batches/{id}/record-payments` — `payouts.record_payment`
 Body: `[ { "itemId": "guid", "paymentReference": "…", "paidAt": "…" } ]` (1–1000 lines) →
 `[ { "itemId": "guid", "status": "recorded|already_recorded|invalid", "message": "…" } ]`. Each line is atomic and
-independent.
+independent and follows the single record-payment rules (a held participant or a self-record is reported `invalid`;
+overrides are only possible one item at a time).
 
 ### `GET /finance/payout-batches/{id}/export.csv` — `payouts.view`
 Columns: Batch reference, Period, Item ID, Participant name, Email, Country, Amount, Currency, Earning count, Status,
@@ -319,8 +346,16 @@ Method, Account holder, Masked destination, Payment reference, Paid at (UTC).
 ### `GET /finance/payout-batches/{id}/payment-instructions.csv?confirm=true` — `payouts.record_payment`
 Items `AwaitingPayment` only; same columns plus **Destination (confidential)** — decrypted with the Data Protection
 purpose `OptimizeAll.PayoutProfile.Destination.v1`. Finalized/Completed batches only (409
-`payout.batch_not_finalized`); 400 `request.confirm_required` without `confirm=true`. Every download is audited
-(`payout.payment_instructions_exported`, item ids only — never destinations).
+`payout.batch_not_finalized`); 400 `request.confirm_required` without `confirm=true`.
+
+**Excluded items.** Items whose participant has an active payout hold or an account that is not Active are not payable.
+They are listed after the payable rows as **companion rows** whose `Status` cell is `EXCLUDED` and whose destination
+cell is `EXCLUDED — do not pay: <reason>` (`Payout hold: …` or `Account not active (…)`); their destination is never
+decrypted. Filter on `Status = EXCLUDED` to count them.
+
+The first download sets the batch's `instructionsExportedAt` (after which the batch cannot be cancelled). Every download
+is audited (`payout.payment_instructions_exported` with the payable and excluded item ids and counts — never
+destinations).
 
 ### `GET /finance/payout-batches/{id}/reconciliation` — `payouts.view`
 ```json
@@ -332,7 +367,8 @@ purpose `OptimizeAll.PayoutProfile.Destination.v1`. Finalized/Completed batches 
   "items": [ { "itemId", "user": PayoutUser, "status", "amount", "earningsTotal", "earningCount",
                "linkedEarningCount", "paymentReference", "paidAt", "ok": true } ] }
 ```
-Discrepancy types: see PAYOUTS.md §6.
+Discrepancy types (including `duplicate_earning_payment`, `paid_earning_linked_elsewhere`,
+`duplicate_payment_across_periods` and the `pending_reversal` warning): see PAYOUTS.md §6.
 
 ### `GET /finance/payout-batches/{id}/reconciliation.csv` — `payouts.view`
 Per-item rows (Result `OK`/`DISCREPANCY` with details) plus batch-level discrepancy rows.
