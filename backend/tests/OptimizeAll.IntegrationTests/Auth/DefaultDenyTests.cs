@@ -37,6 +37,12 @@ public sealed class DefaultDenyTests(ApiFactory api) : IClassFixture<ApiFactory>
         "GET api/v1/content/faqs",
         "GET api/v1/meta/currencies",
         "GET api/v1/dev/mailbox",
+        // CRM & billing: tokenized public proposal (/p/{token}) and invoice (/i/{token}) pages.
+        "GET api/v1/public/proposals/{token}",
+        "POST api/v1/public/proposals/{token}/accept",
+        "POST api/v1/public/proposals/{token}/decline",
+        "GET api/v1/public/invoices/{token}",
+        "GET api/v1/public/invoices/{token}/document",
         "* /health/live",
         "* /health/ready",
     };

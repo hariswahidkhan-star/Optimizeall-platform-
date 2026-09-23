@@ -1,0 +1,174 @@
+/* Billing, proposals and contracts — local styles (design tokens only; no new colors). */
+
+.bill-grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+}
+
+.bill-two-col {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 1024px) {
+  .bill-two-col {
+    grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+    align-items: start;
+  }
+}
+
+.bill-strong {
+  font-weight: var(--weight-semibold);
+}
+
+.bill-muted {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}
+
+.bill-amounts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+}
+
+.bill-lines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bill-line {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 768px) {
+  .bill-line {
+    grid-template-columns: minmax(0, 3fr) repeat(2, minmax(0, 1fr));
+  }
+
+  .bill-line__wide {
+    grid-column: 1 / -1;
+  }
+}
+
+.bill-line__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  grid-column: 1 / -1;
+}
+
+.bill-totals {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.bill-totals div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.bill-totals dt {
+  color: var(--color-text-muted);
+}
+
+.bill-totals dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.bill-totals__grand {
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border-strong);
+  font-weight: var(--weight-semibold);
+}
+
+.bill-totals__grand dt {
+  color: var(--color-heading);
+}
+
+.bill-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.bill-pre {
+  margin: 0;
+  white-space: pre-wrap;
+  font: inherit;
+}
+
+.bill-public {
+  padding-block: var(--space-8);
+}
+
+/* Printable documents (invoice / proposal pages). */
+.bill-document {
+  max-width: 880px;
+  margin-inline: auto;
+}
+
+.bill-document__head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.bill-document table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bill-document th,
+.bill-document td {
+  padding: var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.bill-document .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.bill-no-print {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+@media print {
+  body:has(.bill-document) .public-header,
+  body:has(.bill-document) .public-footer,
+  body:has(.bill-document) .skip-link,
+  body:has(.bill-document) .portal-sidebar,
+  body:has(.bill-document) .portal-topbar,
+  .bill-no-print {
+    display: none !important;
+  }
+
+  .bill-document {
+    max-width: none;
+  }
+}
