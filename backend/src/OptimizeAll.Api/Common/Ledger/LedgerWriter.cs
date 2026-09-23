@@ -167,7 +167,8 @@ public sealed class LedgerWriter(
         {
             entry.ApprovedAt = now;
             entry.ApprovedByUserId = earning.CreatedByUserId;
-            entry.AvailableAt = now.AddDays(schedule.EarningHoldDays);
+            // Debits (negative adjustments) net against the very next payout; credits wait for the hold period.
+            entry.AvailableAt = amount < 0 ? now : now.AddDays(schedule.EarningHoldDays);
         }
 
         db.Set<EarningEntry>().Add(entry);
@@ -208,6 +209,9 @@ public sealed class LedgerWriter(
             throw DomainException.Conflict("ledger.cannot_reverse_reversal", "A reversal cannot itself be reversed.");
         if (entry.ReversedByEntryId is not null || entry.Status is EarningStatus.Reversed)
             throw DomainException.Conflict("ledger.already_reversed", "This earning has already been reversed.");
+        if (entry.Amount < 0)
+            throw DomainException.Conflict("ledger.cannot_reverse_debit",
+                "A debit cannot be reversed; record a positive adjustment instead.");
         if (entry.Status == EarningStatus.Declined)
             throw DomainException.Conflict("ledger.declined", "Declined earnings were never payable and need no reversal.");
         if (entry.Status == EarningStatus.Scheduled)

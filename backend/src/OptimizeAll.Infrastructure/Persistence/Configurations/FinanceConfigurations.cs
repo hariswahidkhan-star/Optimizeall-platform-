@@ -86,7 +86,10 @@ internal sealed class PayoutBatchConfiguration : IEntityTypeConfiguration<Payout
         b.Property(x => x.Currency).HasMaxLength(3).IsFixedLength().IsRequired();
         b.Property(x => x.CancelReason).HasMaxLength(1000);
         b.Property(x => x.Notes).HasMaxLength(2000);
+        b.Property(x => x.PeriodKey).HasMaxLength(10).IsRequired();
+        b.Property(x => x.ExclusionsJson).HasColumnType("json");
         b.HasIndex(x => new { x.Status, x.CutoffAt });
+        b.HasIndex(x => new { x.PeriodKey, x.Currency });
         b.HasMany(x => x.Items).WithOne().HasForeignKey(i => i.BatchId).OnDelete(DeleteBehavior.Restrict);
     }
 }

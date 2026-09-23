@@ -60,6 +60,9 @@ public class PayoutBatch : AuditedEntity, IConcurrencyStamped
 
     /// <summary>Unique key preventing duplicate batches for the same period (e.g. "period:2026-09-20").</summary>
     public string IdempotencyKey { get; set; } = string.Empty;
+
+    /// <summary>Cutoff local date of the period (yyyy-MM-dd), see PayoutPeriodCalculator.</summary>
+    public string PeriodKey { get; set; } = string.Empty;
     public DateTime PeriodStart { get; set; }
     public DateTime CutoffAt { get; set; }
     public DateOnly ScheduledPaymentDate { get; set; }
@@ -77,6 +80,12 @@ public class PayoutBatch : AuditedEntity, IConcurrencyStamped
     public Guid? CancelledByUserId { get; set; }
     public string? CancelReason { get; set; }
     public string? Notes { get; set; }
+
+    /// <summary>
+    /// JSON snapshot (array) of participants with eligible earnings who were NOT included when the batch was prepared
+    /// (payout hold, inactive account, non-positive balance, below minimum), with their carried-over amounts.
+    /// </summary>
+    public string? ExclusionsJson { get; set; }
     public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
 
     public List<PayoutItem> Items { get; set; } = new();
