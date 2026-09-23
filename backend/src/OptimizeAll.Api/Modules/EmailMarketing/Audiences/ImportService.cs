@@ -257,7 +257,11 @@ public sealed class ImportService(
             fields, rowTags, "import");
         var consentNote = $"Import {import.FileName}: {import.ConsentSource}";
         var emailConsent = email is null ? null : new ConsentGrant(ConsentStatus.Granted, "import", null, "import-attestation", import.AttestedByUserId, consentNote);
-        var smsConsent = phone is not null && import.GrantSmsConsent ? new ConsentGrant(ConsentStatus.Granted, "import", null, "import-attestation", import.AttestedByUserId, consentNote) : null;
+        // A number that texted STOP (or is otherwise SMS-suppressed) can only opt back in itself (START); an import never re-grants it.
+        var smsSuppressed = phone is not null && import.GrantSmsConsent &&
+                            await db.Set<Suppression>().AsNoTracking().AnyAsync(x => x.ScopeKey == scope && x.Channel == MessageChannel.Sms && x.Value == phone, ct);
+        if (smsSuppressed) errors.Add($"{phone} opted out of SMS; SMS consent not recorded");
+        var smsConsent = phone is not null && import.GrantSmsConsent && !smsSuppressed ? new ConsentGrant(ConsentStatus.Granted, "import", null, "import-attestation", import.AttestedByUserId, consentNote) : null;
         var (subscriber, created) = await audiences.UpsertContactAsync(list.ClientAccountId, input, emailConsent, smsConsent, allowResubscribe: false, ct);
         await audiences.SubscribeAsync(list, subscriber, "import", requireConfirmation: false, null, ct);
         return new(created ? RowResult.Created : RowResult.Updated, errors.Count == 0 ? null : string.Join("; ", errors));

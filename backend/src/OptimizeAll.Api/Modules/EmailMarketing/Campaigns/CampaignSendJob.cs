@@ -305,6 +305,8 @@ public sealed class CampaignSendJob(
         ProviderResult result;
         var segments = 0;
         decimal cost = 0;
+        // Set right before the provider is called: an exception after that point may follow a delivered message.
+        var attempted = false;
         try
         {
             var values = await composer.ValuesAsync(s, ctx.Settings, TokenSource.CampaignRecipient, r.Id, c.Name, null, ct);
@@ -320,6 +322,7 @@ public sealed class CampaignSendJob(
                     }
                     var composed = composer.Compose(design, subject, preview, values, TokenSource.CampaignRecipient, r.Id, ctx.LinkIds,
                         feedbackId: $"{c.Id:N}:{c.ScopeKey}:oa", language: s.Language ?? "en");
+                    attempted = true;
                     result = await ctx.EmailProvider!.SendAsync(new OutboundEmail(c.ClientAccountId, r.Address, FullName(s), sender.FromEmail, sender.FromName,
                         sender.ReplyTo, composed.Subject, composed.Html, composed.Text, composed.Headers,
                         new Dictionary<string, string> { ["oa_ref"] = "c:" + r.Id.ToString("N") }), ct);
@@ -330,6 +333,7 @@ public sealed class CampaignSendJob(
                     var text = MessageComposer.ComposeText(c.SmsBody ?? string.Empty, values);
                     segments = SmsSegments.Calculate(text).Segments;
                     cost = segments * ctx.Settings.SmsCostPerSegment;
+                    attempted = true;
                     result = await sms.SendAsync(c.ClientAccountId, r.Address, text, $"{urls.PublicBaseUrl}/api/v1/public/sms/webhooks/twilio/{c.ScopeKey}/status", ct);
                     break;
                 }
@@ -337,6 +341,7 @@ public sealed class CampaignSendJob(
                 {
                     var parameters = CampaignService.ParseParams(c.WhatsAppParametersJson).Select(p => MessageComposer.ComposeText(p, values)).ToList();
                     cost = ctx.Settings.WhatsAppCostPerMessage;
+                    attempted = true;
                     result = await whatsApp.SendTemplateAsync(c.ClientAccountId, r.Address, c.WhatsAppTemplateName ?? string.Empty,
                         c.WhatsAppTemplateLanguage ?? "en", parameters, ct);
                     break;
@@ -346,7 +351,9 @@ public sealed class CampaignSendJob(
         catch (Exception ex) when (!ct.IsCancellationRequested)
         {
             logger.LogWarning(ex, "Sending recipient {Recipient} threw", recipientId);
-            result = ProviderResult.Transient($"{ex.GetType().Name}: {ex.Message}");
+            result = attempted
+                ? ProviderResult.Unknown($"The provider call failed with an unexpected error ({ex.GetType().Name}: {ex.Message}); not retried to avoid a duplicate.")
+                : ProviderResult.Transient($"{ex.GetType().Name}: {ex.Message}");
         }
 
         switch (result.Outcome)
@@ -380,6 +387,12 @@ public sealed class CampaignSendJob(
                         .SetProperty(x => x.DueAt, retryAt).SetProperty(x => x.Error, error).SetProperty(x => x.LockedUntil, (DateTime?)null)
                         .SetProperty(x => x.ClaimId, (Guid?)null), CancellationToken.None);
                 return Outcome.Retrying;
+
+            case ProviderOutcome.Unknown:
+                // The provider may have delivered it: never re-sent automatically (same rule as an interrupted send).
+                await Finish(recipientId, claimId, RecipientStatus.Failed, null,
+                    "Outcome unknown, not retried to avoid a duplicate: " + (result.Error ?? "the provider did not confirm the message."), ct);
+                return Outcome.Failed;
 
             default:
                 await Finish(recipientId, claimId, RecipientStatus.Failed, null, result.Error ?? "The provider rejected the message.", ct);

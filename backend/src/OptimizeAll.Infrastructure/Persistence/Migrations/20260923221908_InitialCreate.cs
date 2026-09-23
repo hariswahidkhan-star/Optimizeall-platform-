@@ -3236,7 +3236,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PreviewText = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    DesignJson = table.Column<string>(type: "longtext", maxLength: 200000, nullable: false)
+                    DesignJson = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Topic = table.Column<string>(type: "varchar(60)", maxLength: 60, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -3246,7 +3246,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     WhatsAppTemplateLanguage = table.Column<string>(type: "varchar(12)", maxLength: 12, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    WhatsAppParametersJson = table.Column<string>(type: "varchar(4000)", maxLength: 4000, nullable: true)
+                    WhatsAppParametersJson = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ScheduleMode = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -3346,7 +3346,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Name = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    DefinitionJson = table.Column<string>(type: "longtext", maxLength: 20000, nullable: false)
+                    DefinitionJson = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LastCount = table.Column<int>(type: "int", nullable: true),
                     LastCountedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
@@ -3511,7 +3511,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PreviewText = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    DesignJson = table.Column<string>(type: "longtext", maxLength: 200000, nullable: false)
+                    DesignJson = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IsArchived = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     SeedKey = table.Column<string>(type: "varchar(60)", maxLength: 60, nullable: true)
@@ -5052,7 +5052,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     Position = table.Column<int>(type: "int", nullable: false),
                     Type = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ConfigJson = table.Column<string>(type: "varchar(8000)", maxLength: 8000, nullable: false)
+                    ConfigJson = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NextKey = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -5084,7 +5084,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     PreviewText = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     SenderProfileId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    DesignJson = table.Column<string>(type: "longtext", maxLength: 200000, nullable: true)
+                    DesignJson = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -5112,7 +5112,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CsvContent = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    MappingJson = table.Column<string>(type: "varchar(8000)", maxLength: 8000, nullable: false)
+                    MappingJson = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     TagsJson = table.Column<string>(type: "varchar(2000)", maxLength: 2000, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -5128,7 +5128,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     Updated = table.Column<int>(type: "int", nullable: false),
                     Skipped = table.Column<int>(type: "int", nullable: false),
                     Failed = table.Column<int>(type: "int", nullable: false),
-                    ErrorsJson = table.Column<string>(type: "longtext", maxLength: 100000, nullable: false)
+                    ErrorsJson = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     StartedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
                     CompletedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
@@ -5169,7 +5169,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     ClaimId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     LockedUntil = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
                     StepsExecuted = table.Column<int>(type: "int", nullable: false),
-                    TriggerDataJson = table.Column<string>(type: "varchar(4000)", maxLength: 4000, nullable: true)
+                    TriggerDataJson = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>

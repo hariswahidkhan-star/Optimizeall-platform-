@@ -189,6 +189,41 @@ public sealed class SmsApprovalAndAccessTests(EmailFixture fx)
     }
 
     [Fact]
+    public async Task WhatsApp_campaigns_with_the_largest_allowed_parameters_are_stored_intact()
+    {
+        // Validation allows 10 parameters of up to 1024 characters; the columns must hold that on every provider
+        // (MySQL rejected it as "Data too long" when the JSON column was varchar(4000) and the summary varchar(1600)).
+        var staff = await fx.StaffAsync();
+        var ws = await fx.CreateWorkspaceAsync();
+        var parameters = Enumerable.Range(0, 10).Select(i => $"P{i}-" + new string((char)('a' + i), 1000)).ToList();
+        var campaign = await fx.CreateCampaignAsync(staff, ws, path: SmsPath, channel: "WhatsApp",
+            extra: new { whatsAppTemplateName = "spring_offer", whatsAppTemplateLanguage = "en", whatsAppParameters = parameters });
+        var reloaded = await (await staff.GetAsync($"{SmsPath}/{campaign.GetProperty("id").GetString()}")).ReadJsonAsync();
+        Assert.Equal(parameters, reloaded.GetProperty("whatsAppParameters").EnumerateArray().Select(p => p.GetString()!).ToList());
+        Assert.True(reloaded.GetProperty("smsBody").GetString()!.Length <= 1600);
+    }
+
+    [Fact]
+    public async Task Long_json_columns_are_unbounded_text_on_every_provider()
+    {
+        // Convention: long text is unbounded (varchar(N >= 4000) risks "Data too long" and MySQL's row-size limit).
+        await fx.Db(db =>
+        {
+            var model = db.Model;
+            foreach (var (entity, property) in new[]
+            {
+                (typeof(EmailCampaign), nameof(EmailCampaign.WhatsAppParametersJson)), (typeof(EmailCampaign), nameof(EmailCampaign.DesignJson)),
+                (typeof(SubscriberImport), nameof(SubscriberImport.MappingJson)), (typeof(SubscriberImport), nameof(SubscriberImport.ErrorsJson)),
+                (typeof(AutomationStep), nameof(AutomationStep.ConfigJson)), (typeof(AutomationEnrollment), nameof(AutomationEnrollment.TriggerDataJson)),
+                (typeof(EmailTemplate), nameof(EmailTemplate.DesignJson)), (typeof(CampaignVariant), nameof(CampaignVariant.DesignJson)),
+                (typeof(Segment), nameof(Segment.DefinitionJson)),
+            })
+                Assert.True(model.FindEntityType(entity)!.FindProperty(property)!.GetMaxLength() is null, $"{entity.Name}.{property} must be unbounded");
+            return Task.CompletedTask;
+        });
+    }
+
+    [Fact]
     public async Task Demo_seed_creates_the_canonical_clients_campaigns_in_every_status_and_is_idempotent()
     {
         async Task RunSeed()
@@ -224,6 +259,23 @@ public sealed class SmsApprovalAndAccessTests(EmailFixture fx)
         Assert.True(await fx.Db(db => db.Set<Automation>().AnyAsync(a => ids.Contains(a.ClientAccountId) && a.Status == AutomationStatus.Active)));
         Assert.True(await fx.Db(db => db.Set<User>().AnyAsync(u => u.NormalizedEmail == "CONTENT@DEMO.OPTIMIZEALL.APP")));
         Assert.True(await fx.Db(db => db.Set<User>().AnyAsync(u => u.NormalizedEmail == "AM@DEMO.OPTIMIZEALL.APP")));
+
+        // Whichever demo seeder runs first, the shared demo people and clients carry the canonical values.
+        foreach (var canonical in new[] { OptimizeAll.Api.Modules.Clients.DeliveryDemoData.AccountManager, OptimizeAll.Api.Modules.Clients.DeliveryDemoData.Content })
+        {
+            var normalized = canonical.Email.ToUpperInvariant();
+            var user = await fx.Db(db => db.Set<User>().AsNoTracking().Include(u => u.Roles).FirstAsync(u => u.NormalizedEmail == normalized));
+            Assert.Equal(canonical.DisplayName, user.DisplayName);
+            Assert.Contains(user.Roles, r => r.Role == canonical.Role);
+        }
+        foreach (var canonical in OptimizeAll.Api.Modules.Clients.DeliveryDemoData.Clients)
+        {
+            var client = clients.Single(c => c.Slug == canonical.Slug);
+            Assert.Equal((canonical.Name, canonical.Industry, canonical.CountryCode, canonical.Currency, canonical.TimeZone, canonical.Status, canonical.Website),
+                (client.Name, client.Industry, client.CountryCode, client.Currency, client.TimeZone, client.Status, client.Website));
+        }
+        var am = await fx.Db(db => db.Set<User>().AsNoTracking().FirstAsync(u => u.NormalizedEmail == "AM@DEMO.OPTIMIZEALL.APP"));
+        Assert.All(clients, c => Assert.Equal(am.Id, c.AccountManagerUserId));
 
         // Sent demo campaigns have report data.
         var staff = await fx.StaffAsync();

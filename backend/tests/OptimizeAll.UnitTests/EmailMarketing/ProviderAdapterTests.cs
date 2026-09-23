@@ -108,6 +108,51 @@ public sealed class ProviderAdapterTests
         Assert.NotEqual(ProviderOutcome.Accepted, result.Outcome);
     }
 
+    // ---------- Ambiguous outcomes (never retried: a retry could deliver a duplicate) ----------
+
+    [Fact]
+    public async Task A_2xx_without_a_message_id_is_an_unknown_outcome_not_a_retryable_failure()
+    {
+        var sendGrid = await new SendGridEmailProvider(new HttpClient(Respond(HttpStatusCode.Accepted, "")),
+            new FakeVault().With("sendgrid", new(), new() { ["apiKey"] = "SG.key" }), NullLogger<SendGridEmailProvider>.Instance).SendAsync(Email(), default);
+        Assert.Equal(ProviderOutcome.Unknown, sendGrid.Outcome);
+
+        var mailgun = await new MailgunEmailProvider(new HttpClient(Respond(HttpStatusCode.OK, "{\"message\":\"Queued\"}")),
+            new FakeVault().With("mailgun", new() { ["domain"] = "mg.brand.test" }, new() { ["apiKey"] = "k" }), NullLogger<MailgunEmailProvider>.Instance).SendAsync(Email(), default);
+        Assert.Equal(ProviderOutcome.Unknown, mailgun.Outcome);
+
+        var twilio = await new TwilioSmsProvider(new HttpClient(Respond(HttpStatusCode.Created, "{\"status\":\"queued\"}")),
+            new FakeVault().With("twilio", new() { ["accountSid"] = "AC1", ["fromNumber"] = "+15005550006" }, new() { ["authToken"] = "tok" }),
+            NullLogger<TwilioSmsProvider>.Instance).SendAsync(null, "+14155550123", "Hi", null, default);
+        Assert.Equal(ProviderOutcome.Unknown, twilio.Outcome);
+
+        var whatsApp = await new WhatsAppCloudTemplateProvider(new HttpClient(Respond(HttpStatusCode.OK, "{}")),
+            new FakeVault().With("whatsapp", new() { ["phoneNumberId"] = "123" }, new() { ["accessToken"] = "EAAB" }),
+            NullLogger<WhatsAppCloudTemplateProvider>.Instance).SendTemplateAsync(null, "+923001234567", "promo", "en", new[] { "Ann" }, default);
+        Assert.Equal(ProviderOutcome.Unknown, whatsApp.Outcome);
+    }
+
+    [Fact]
+    public async Task A_timeout_or_lost_connection_is_unknown_but_a_connect_failure_is_retryable()
+    {
+        var vault = new FakeVault().With("sendgrid", new(), new() { ["apiKey"] = "SG.key" });
+        Task<ProviderResult> Send(Exception thrown) =>
+            new SendGridEmailProvider(new HttpClient(new FakeHandler((_, _) => throw thrown)), vault, NullLogger<SendGridEmailProvider>.Instance).SendAsync(Email(), default);
+
+        // HttpClient timeout: the request was sent, the answer never came.
+        Assert.Equal(ProviderOutcome.Unknown, (await Send(new TaskCanceledException("The request was canceled due to the configured HttpClient.Timeout"))).Outcome);
+        // Connection dropped while waiting for the response.
+        Assert.Equal(ProviderOutcome.Unknown, (await Send(new HttpRequestException(HttpRequestError.ResponseEnded, "The response ended prematurely."))).Outcome);
+        // Nothing could have been transmitted: safe to retry.
+        Assert.Equal(ProviderOutcome.TransientFailure, (await Send(new HttpRequestException(HttpRequestError.ConnectionError, "Connection refused"))).Outcome);
+        Assert.Equal(ProviderOutcome.TransientFailure, (await Send(new HttpRequestException(HttpRequestError.NameResolutionError, "No such host"))).Outcome);
+
+        var twilio = await new TwilioSmsProvider(new HttpClient(new FakeHandler((_, _) => throw new TaskCanceledException("timeout"))),
+            new FakeVault().With("twilio", new() { ["accountSid"] = "AC1", ["fromNumber"] = "+15005550006" }, new() { ["authToken"] = "tok" }),
+            NullLogger<TwilioSmsProvider>.Instance).SendAsync(null, "+14155550123", "Hi", null, default);
+        Assert.Equal(ProviderOutcome.Unknown, twilio.Outcome);
+    }
+
     // ---------- Mailgun ----------
 
     [Fact]
@@ -256,5 +301,24 @@ public sealed class TrackingTokenAndWebhookSignatureTests
         Assert.True(WebhookService.IsValidMailgunSignature("signing-key", ts, "token-1", sig, now));
         Assert.False(WebhookService.IsValidMailgunSignature("signing-key", ts, "token-2", sig, now));
         Assert.False(WebhookService.IsValidMailgunSignature("signing-key", ts, "token-1", sig, now.AddHours(1)));
+        // An out-of-range timestamp is rejected, not an unhandled exception (500).
+        Assert.False(WebhookService.IsValidMailgunSignature("signing-key", "99999999999999999", "token-1", sig, now));
+    }
+
+    [Fact]
+    public void Webhook_timestamps_must_be_fresh()
+    {
+        var now = new DateTime(2026, 9, 23, 12, 0, 0, DateTimeKind.Utc);
+        string Ts(DateTime at) => new DateTimeOffset(at).ToUnixTimeSeconds().ToString();
+        Assert.True(WebhookService.IsFreshTimestamp(Ts(now), now, WebhookService.SendGridTolerance));
+        Assert.True(WebhookService.IsFreshTimestamp(Ts(now.AddMinutes(-10)), now, WebhookService.SendGridTolerance));
+        Assert.True(WebhookService.IsFreshTimestamp(Ts(now.AddMinutes(2)), now, WebhookService.SendGridTolerance));
+        Assert.False(WebhookService.IsFreshTimestamp(Ts(now.AddHours(-1)), now, WebhookService.SendGridTolerance));
+        Assert.False(WebhookService.IsFreshTimestamp(Ts(now.AddHours(1)), now, WebhookService.SendGridTolerance));
+        Assert.False(WebhookService.IsFreshTimestamp("1727000000", now, WebhookService.SendGridTolerance)); // 2024: a replay
+        Assert.False(WebhookService.IsFreshTimestamp("99999999999999999", now, WebhookService.SendGridTolerance));
+        Assert.False(WebhookService.IsFreshTimestamp("-5", now, WebhookService.SendGridTolerance));
+        Assert.False(WebhookService.IsFreshTimestamp("", now, WebhookService.SendGridTolerance));
+        Assert.False(WebhookService.IsFreshTimestamp(null, now, WebhookService.SendGridTolerance));
     }
 }

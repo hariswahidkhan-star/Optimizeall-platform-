@@ -62,7 +62,7 @@ public sealed class TwilioSmsProvider(HttpClient http, ICredentialVault vault, I
                 }
                 catch (JsonException) { }
                 return string.IsNullOrWhiteSpace(messageSid)
-                    ? ProviderResult.Transient("Twilio answered without a message sid; treating the outcome as unknown.")
+                    ? ProviderResult.Unknown("Twilio answered without a message sid; treating the outcome as unknown (not retried).")
                     : ProviderResult.Accepted(messageSid);
             }
             var result = ProviderResult.FromHttpStatus(response.StatusCode, text, "Twilio");
@@ -72,7 +72,7 @@ public sealed class TwilioSmsProvider(HttpClient http, ICredentialVault vault, I
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException && !ct.IsCancellationRequested)
         {
             logger.LogWarning(ex, "Twilio request failed");
-            return ProviderResult.Transient($"Twilio request failed: {ex.Message}");
+            return ProviderResult.FromException(ex, "Twilio");
         }
     }
 
@@ -165,7 +165,7 @@ public sealed class WhatsAppCloudTemplateProvider(HttpClient http, ICredentialVa
                 }
                 catch (JsonException) { }
                 return string.IsNullOrWhiteSpace(id)
-                    ? ProviderResult.Transient("WhatsApp answered without a message id; treating the outcome as unknown.")
+                    ? ProviderResult.Unknown("WhatsApp answered without a message id; treating the outcome as unknown (not retried).")
                     : ProviderResult.Accepted(id);
             }
             var result = ProviderResult.FromHttpStatus(response.StatusCode, body, "WhatsApp");
@@ -175,7 +175,7 @@ public sealed class WhatsAppCloudTemplateProvider(HttpClient http, ICredentialVa
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException && !ct.IsCancellationRequested)
         {
             logger.LogWarning(ex, "WhatsApp request failed");
-            return ProviderResult.Transient($"WhatsApp request failed: {ex.Message}");
+            return ProviderResult.FromException(ex, "WhatsApp");
         }
     }
 }

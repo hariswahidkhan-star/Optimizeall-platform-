@@ -30,6 +30,8 @@ public sealed class WebhookService(
     AppDbContext db, ICredentialVault vault, AudienceService audiences, IDatabaseDialect dialect, TimeProvider clock, ILogger<WebhookService> logger)
 {
     public static readonly TimeSpan MailgunTolerance = TimeSpan.FromMinutes(15);
+    /// <summary>Replay window for SendGrid's signed timestamp (each delivery attempt is signed when it is sent).</summary>
+    public static readonly TimeSpan SendGridTolerance = TimeSpan.FromMinutes(15);
 
     // ---------- SendGrid ----------
 
@@ -37,7 +39,16 @@ public sealed class WebhookService(
     {
         var creds = await vault.GetAsync(SendGridEmailProvider.ProviderKey, clientId, ct);
         if (creds is null || !creds.Settings.TryGetValue("webhookPublicKey", out var key) || string.IsNullOrWhiteSpace(key)) return WebhookVerdict.NotConfigured;
-        return VerifySendGridSignature(key, signature, timestamp, body) ? WebhookVerdict.Ok : WebhookVerdict.InvalidSignature;
+        return VerifySendGridSignature(key, signature, timestamp, body) && IsFreshTimestamp(timestamp, clock.GetUtcNow().UtcDateTime, SendGridTolerance)
+            ? WebhookVerdict.Ok : WebhookVerdict.InvalidSignature;
+    }
+
+    /// <summary>True when <paramref name="timestamp"/> (unix seconds) is within <paramref name="tolerance"/> of now (replay protection).</summary>
+    public static bool IsFreshTimestamp(string? timestamp, DateTime nowUtc, TimeSpan tolerance)
+    {
+        if (!long.TryParse(timestamp, System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out var seconds)) return false;
+        if (seconds > 253_402_300_799) return false; // beyond DateTimeOffset's range (would throw)
+        return (nowUtc - DateTimeOffset.FromUnixTimeSeconds(seconds).UtcDateTime).Duration() <= tolerance;
     }
 
     /// <summary>SendGrid "Signed Event Webhook": ECDSA (P-256, SHA-256, DER signature, base64) over UTF-8(timestamp) + raw body.</summary>
@@ -120,8 +131,7 @@ public sealed class WebhookService(
     public static bool IsValidMailgunSignature(string signingKey, string? timestamp, string? token, string? signature, DateTime nowUtc)
     {
         if (string.IsNullOrEmpty(timestamp) || string.IsNullOrEmpty(token) || string.IsNullOrEmpty(signature)) return false;
-        if (!long.TryParse(timestamp, out var seconds)) return false;
-        if ((nowUtc - DateTimeOffset.FromUnixTimeSeconds(seconds).UtcDateTime).Duration() > MailgunTolerance) return false;
+        if (!IsFreshTimestamp(timestamp, nowUtc, MailgunTolerance)) return false;
         var expected = HMACSHA256.HashData(Encoding.UTF8.GetBytes(signingKey), Encoding.UTF8.GetBytes(timestamp + token));
         byte[] provided;
         try { provided = Convert.FromHexString(signature); }

@@ -2570,12 +2570,12 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     SenderProfileId = table.Column<Guid>(type: "TEXT", nullable: true),
                     Subject = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
                     PreviewText = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
-                    DesignJson = table.Column<string>(type: "TEXT", maxLength: 200000, nullable: false),
+                    DesignJson = table.Column<string>(type: "TEXT", nullable: false),
                     Topic = table.Column<string>(type: "TEXT", maxLength: 60, nullable: true),
                     SmsBody = table.Column<string>(type: "TEXT", maxLength: 1600, nullable: true),
                     WhatsAppTemplateName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
                     WhatsAppTemplateLanguage = table.Column<string>(type: "TEXT", maxLength: 12, nullable: true),
-                    WhatsAppParametersJson = table.Column<string>(type: "TEXT", maxLength: 4000, nullable: true),
+                    WhatsAppParametersJson = table.Column<string>(type: "TEXT", nullable: true),
                     ScheduleMode = table.Column<string>(type: "TEXT", maxLength: 40, nullable: false),
                     ScheduledAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
                     ScheduledLocalTime = table.Column<string>(type: "TEXT", maxLength: 20, nullable: true),
@@ -2656,7 +2656,7 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     ClientAccountId = table.Column<Guid>(type: "TEXT", nullable: true),
                     ScopeKey = table.Column<string>(type: "TEXT", maxLength: 36, nullable: false),
                     Name = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
-                    DefinitionJson = table.Column<string>(type: "TEXT", maxLength: 20000, nullable: false),
+                    DefinitionJson = table.Column<string>(type: "TEXT", nullable: false),
                     LastCount = table.Column<int>(type: "INTEGER", nullable: true),
                     LastCountedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
                     ConcurrencyStamp = table.Column<Guid>(type: "TEXT", nullable: false),
@@ -2785,7 +2785,7 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     Category = table.Column<string>(type: "TEXT", maxLength: 40, nullable: false),
                     Subject = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
                     PreviewText = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
-                    DesignJson = table.Column<string>(type: "TEXT", maxLength: 200000, nullable: false),
+                    DesignJson = table.Column<string>(type: "TEXT", nullable: false),
                     IsArchived = table.Column<bool>(type: "INTEGER", nullable: false),
                     SeedKey = table.Column<string>(type: "TEXT", maxLength: 60, nullable: true),
                     ConcurrencyStamp = table.Column<Guid>(type: "TEXT", nullable: false),
@@ -4066,7 +4066,7 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     Key = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     Position = table.Column<int>(type: "INTEGER", nullable: false),
                     Type = table.Column<string>(type: "TEXT", maxLength: 40, nullable: false),
-                    ConfigJson = table.Column<string>(type: "TEXT", maxLength: 8000, nullable: false),
+                    ConfigJson = table.Column<string>(type: "TEXT", nullable: false),
                     NextKey = table.Column<string>(type: "TEXT", maxLength: 20, nullable: true),
                     AltNextKey = table.Column<string>(type: "TEXT", maxLength: 20, nullable: true)
                 },
@@ -4091,7 +4091,7 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     Subject = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
                     PreviewText = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
                     SenderProfileId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    DesignJson = table.Column<string>(type: "TEXT", maxLength: 200000, nullable: true)
+                    DesignJson = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -4114,7 +4114,7 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     Status = table.Column<string>(type: "TEXT", maxLength: 40, nullable: false),
                     FileName = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
                     CsvContent = table.Column<string>(type: "TEXT", nullable: true),
-                    MappingJson = table.Column<string>(type: "TEXT", maxLength: 8000, nullable: false),
+                    MappingJson = table.Column<string>(type: "TEXT", nullable: false),
                     TagsJson = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: false),
                     ConsentAttestation = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: false),
                     ConsentSource = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
@@ -4126,7 +4126,7 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     Updated = table.Column<int>(type: "INTEGER", nullable: false),
                     Skipped = table.Column<int>(type: "INTEGER", nullable: false),
                     Failed = table.Column<int>(type: "INTEGER", nullable: false),
-                    ErrorsJson = table.Column<string>(type: "TEXT", maxLength: 100000, nullable: false),
+                    ErrorsJson = table.Column<string>(type: "TEXT", nullable: false),
                     StartedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
                     CompletedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
                     LockedUntil = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
@@ -4162,7 +4162,7 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     ClaimId = table.Column<Guid>(type: "TEXT", nullable: true),
                     LockedUntil = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
                     StepsExecuted = table.Column<int>(type: "INTEGER", nullable: false),
-                    TriggerDataJson = table.Column<string>(type: "TEXT", maxLength: 4000, nullable: true)
+                    TriggerDataJson = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {

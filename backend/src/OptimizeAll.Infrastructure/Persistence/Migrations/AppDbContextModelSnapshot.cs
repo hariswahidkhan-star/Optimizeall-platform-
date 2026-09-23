@@ -3996,8 +3996,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("TriggerDataJson")
-                        .HasMaxLength(4000)
-                        .HasColumnType("varchar(4000)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -4026,8 +4025,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("ConfigJson")
                         .IsRequired()
-                        .HasMaxLength(8000)
-                        .HasColumnType("varchar(8000)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -4281,7 +4279,6 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("DesignJson")
-                        .HasMaxLength(200000)
                         .HasColumnType("longtext");
 
                     b.Property<string>("Key")
@@ -4435,7 +4432,6 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("DesignJson")
                         .IsRequired()
-                        .HasMaxLength(200000)
                         .HasColumnType("longtext");
 
                     b.Property<DateTime?>("ExpandedAt")
@@ -4540,8 +4536,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("WhatsAppParametersJson")
-                        .HasMaxLength(4000)
-                        .HasColumnType("varchar(4000)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("WhatsAppTemplateLanguage")
                         .HasMaxLength(12)
@@ -4662,7 +4657,6 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("DesignJson")
                         .IsRequired()
-                        .HasMaxLength(200000)
                         .HasColumnType("longtext");
 
                     b.Property<bool>("IsArchived")
@@ -4955,7 +4949,6 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("DefinitionJson")
                         .IsRequired()
-                        .HasMaxLength(20000)
                         .HasColumnType("longtext");
 
                     b.Property<int?>("LastCount")
@@ -5246,7 +5239,6 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("ErrorsJson")
                         .IsRequired()
-                        .HasMaxLength(100000)
                         .HasColumnType("longtext");
 
                     b.Property<int>("Failed")
@@ -5269,8 +5261,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("MappingJson")
                         .IsRequired()
-                        .HasMaxLength(8000)
-                        .HasColumnType("varchar(8000)");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("ProcessedRows")
                         .HasColumnType("int");

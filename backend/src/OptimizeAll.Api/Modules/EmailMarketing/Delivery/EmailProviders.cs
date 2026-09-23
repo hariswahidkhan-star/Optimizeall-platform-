@@ -25,6 +25,11 @@ public enum ProviderOutcome
     PermanentFailure,
     /// <summary>No credentials/configuration: nothing was attempted.</summary>
     NotConfigured,
+    /// <summary>
+    /// The request may have reached the provider but its outcome is unknown (timeout after sending, connection lost
+    /// mid-request, a 2xx without a message id). Never retried automatically: a retry could deliver a duplicate.
+    /// </summary>
+    Unknown,
 }
 
 public sealed record ProviderResult(ProviderOutcome Outcome, string? MessageId = null, string? Error = null)
@@ -33,6 +38,17 @@ public sealed record ProviderResult(ProviderOutcome Outcome, string? MessageId =
     public static ProviderResult Transient(string error) => new(ProviderOutcome.TransientFailure, null, error);
     public static ProviderResult Permanent(string error) => new(ProviderOutcome.PermanentFailure, null, error);
     public static ProviderResult NotConfigured(string error) => new(ProviderOutcome.NotConfigured, null, error);
+    public static ProviderResult Unknown(string error) => new(ProviderOutcome.Unknown, null, error);
+
+    /// <summary>
+    /// Classifies an exception from an HTTP provider call: only failures that happen before the request could have been
+    /// transmitted (DNS, TCP connect, TLS handshake) are safe to retry; a timeout or a connection lost while waiting for the
+    /// answer means the provider may already have accepted the message.
+    /// </summary>
+    public static ProviderResult FromException(Exception ex, string provider) =>
+        ex is HttpRequestException { HttpRequestError: HttpRequestError.NameResolutionError or HttpRequestError.ConnectionError or HttpRequestError.SecureConnectionError }
+            ? Transient($"{provider} could not be reached: {ex.Message}")
+            : Unknown($"{provider} request failed after it may have been sent ({ex.GetType().Name}: {ex.Message}); not retried to avoid a duplicate.");
 
     public static ProviderResult FromHttpStatus(HttpStatusCode status, string body, string provider)
     {
@@ -115,24 +131,38 @@ public sealed class SmtpEmailMarketingProvider(IOptions<EmailOptions> options, I
             return ProviderResult.Accepted(mime.MessageId ?? string.Empty);
         }
         if (string.IsNullOrWhiteSpace(o.SmtpHost)) return ProviderResult.NotConfigured("SMTP host is not configured (Email:SmtpHost).");
+        using var client = new SmtpClient();
         try
         {
-            using var client = new SmtpClient();
             await client.ConnectAsync(o.SmtpHost, o.SmtpPort, o.SmtpUseStartTls ? SecureSocketOptions.StartTls : SecureSocketOptions.Auto, ct);
             if (!string.IsNullOrEmpty(o.SmtpUsername)) await client.AuthenticateAsync(o.SmtpUsername, o.SmtpPassword ?? string.Empty, ct);
-            await client.SendAsync(mime, ct);
-            await client.DisconnectAsync(true, ct);
-            return ProviderResult.Accepted(mime.MessageId ?? string.Empty);
-        }
-        catch (SmtpCommandException ex) when ((int)ex.StatusCode >= 500)
-        {
-            return ProviderResult.Permanent($"SMTP rejected the message: {ex.Message}");
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
-            logger.LogWarning(ex, "Marketing SMTP send failed");
-            return ProviderResult.Transient($"SMTP send failed: {ex.Message}");
+            // Nothing was transmitted yet: safe to retry.
+            logger.LogWarning(ex, "Marketing SMTP connection failed");
+            return ProviderResult.Transient($"SMTP connection failed: {ex.Message}");
         }
+        try
+        {
+            await client.SendAsync(mime, ct);
+        }
+        catch (SmtpCommandException ex)
+        {
+            // The server answered with a status: 5xx rejects the message, 4xx asks to try again later (not accepted).
+            return (int)ex.StatusCode >= 500
+                ? ProviderResult.Permanent($"SMTP rejected the message: {ex.Message}")
+                : ProviderResult.Transient($"SMTP deferred the message: {ex.Message}");
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            // The connection broke while the message was being transferred: the relay may have accepted it.
+            logger.LogWarning(ex, "Marketing SMTP send failed mid-transfer");
+            return ProviderResult.Unknown($"SMTP send failed after the message may have been transferred ({ex.Message}); not retried to avoid a duplicate.");
+        }
+        try { await client.DisconnectAsync(true, ct); }
+        catch (Exception ex) when (ex is not OperationCanceledException) { logger.LogDebug(ex, "SMTP disconnect failed after a successful send"); }
+        return ProviderResult.Accepted(mime.MessageId ?? string.Empty);
     }
 
     public static MimeMessage BuildMime(OutboundEmail email)
@@ -178,7 +208,7 @@ public sealed class SendGridEmailProvider(HttpClient http, ICredentialVault vaul
             {
                 var id = response.Headers.TryGetValues("X-Message-Id", out var values) ? values.FirstOrDefault() : null;
                 return string.IsNullOrWhiteSpace(id)
-                    ? ProviderResult.Transient("SendGrid accepted the request without an X-Message-Id; treating the outcome as unknown.")
+                    ? ProviderResult.Unknown("SendGrid accepted the request without an X-Message-Id; treating the outcome as unknown (not retried).")
                     : ProviderResult.Accepted(id);
             }
             var result = ProviderResult.FromHttpStatus(response.StatusCode, body, "SendGrid");
@@ -188,7 +218,7 @@ public sealed class SendGridEmailProvider(HttpClient http, ICredentialVault vaul
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException && !ct.IsCancellationRequested)
         {
             logger.LogWarning(ex, "SendGrid request failed");
-            return ProviderResult.Transient($"SendGrid request failed: {ex.Message}");
+            return ProviderResult.FromException(ex, "SendGrid");
         }
     }
 
@@ -273,7 +303,7 @@ public sealed class MailgunEmailProvider(HttpClient http, ICredentialVault vault
                 }
                 catch (JsonException) { }
                 return string.IsNullOrWhiteSpace(id)
-                    ? ProviderResult.Transient("Mailgun answered without a message id; treating the outcome as unknown.")
+                    ? ProviderResult.Unknown("Mailgun answered without a message id; treating the outcome as unknown (not retried).")
                     : ProviderResult.Accepted(id.Trim('<', '>'));
             }
             var result = ProviderResult.FromHttpStatus(response.StatusCode, body, "Mailgun");
@@ -283,7 +313,7 @@ public sealed class MailgunEmailProvider(HttpClient http, ICredentialVault vault
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException && !ct.IsCancellationRequested)
         {
             logger.LogWarning(ex, "Mailgun request failed");
-            return ProviderResult.Transient($"Mailgun request failed: {ex.Message}");
+            return ProviderResult.FromException(ex, "Mailgun");
         }
     }
 }

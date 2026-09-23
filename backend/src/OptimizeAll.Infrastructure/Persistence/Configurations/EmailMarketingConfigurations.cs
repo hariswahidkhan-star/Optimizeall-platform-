@@ -124,11 +124,11 @@ internal sealed class SubscriberImportConfiguration : IEntityTypeConfiguration<S
         b.ToTable("email_imports");
         b.Property(x => x.FileName).HasMaxLength(255).IsRequired();
         b.Property(x => x.CsvContent);
-        b.Property(x => x.MappingJson).HasMaxLength(8000).IsRequired();
+        b.Property(x => x.MappingJson).IsRequired();
         b.Property(x => x.TagsJson).HasMaxLength(2000).IsRequired();
         b.Property(x => x.ConsentAttestation).HasMaxLength(1000).IsRequired();
         b.Property(x => x.ConsentSource).HasMaxLength(200).IsRequired();
-        b.Property(x => x.ErrorsJson).HasMaxLength(100_000).IsRequired();
+        b.Property(x => x.ErrorsJson).IsRequired();
         b.HasIndex(x => x.Status);
         b.HasIndex(x => x.ListId);
         b.HasOne<EmailList>().WithMany().HasForeignKey(x => x.ListId).OnDelete(DeleteBehavior.Cascade);
@@ -176,7 +176,7 @@ internal sealed class EmailTemplateConfiguration : IEntityTypeConfiguration<Emai
         b.Property(x => x.Category).HasMaxLength(40).IsRequired();
         b.Property(x => x.Subject).HasMaxLength(200).IsRequired();
         b.Property(x => x.PreviewText).HasMaxLength(200);
-        b.Property(x => x.DesignJson).HasMaxLength(200_000).IsRequired();
+        b.Property(x => x.DesignJson).IsRequired();
         b.Property(x => x.SeedKey).HasMaxLength(60);
         b.HasIndex(x => new { x.ScopeKey, x.SeedKey }).IsUnique();
         b.HasOne<ClientAccount>().WithMany().HasForeignKey(x => x.ClientAccountId).OnDelete(DeleteBehavior.Cascade);
@@ -190,7 +190,7 @@ internal sealed class SegmentConfiguration : IEntityTypeConfiguration<Segment>
         b.ToTable("email_segments");
         b.Property(x => x.ScopeKey).HasMaxLength(36).IsRequired();
         b.Property(x => x.Name).HasMaxLength(150).IsRequired();
-        b.Property(x => x.DefinitionJson).HasMaxLength(20_000).IsRequired();
+        b.Property(x => x.DefinitionJson).IsRequired();
         b.HasIndex(x => x.ScopeKey);
         b.HasOne<ClientAccount>().WithMany().HasForeignKey(x => x.ClientAccountId).OnDelete(DeleteBehavior.Cascade);
     }
@@ -205,12 +205,12 @@ internal sealed class EmailCampaignConfiguration : IEntityTypeConfiguration<Emai
         b.Property(x => x.Name).HasMaxLength(150).IsRequired();
         b.Property(x => x.Subject).HasMaxLength(200).IsRequired();
         b.Property(x => x.PreviewText).HasMaxLength(200);
-        b.Property(x => x.DesignJson).HasMaxLength(200_000).IsRequired();
+        b.Property(x => x.DesignJson).IsRequired();
         b.Property(x => x.Topic).HasMaxLength(60);
         b.Property(x => x.SmsBody).HasMaxLength(1600);
         b.Property(x => x.WhatsAppTemplateName).HasMaxLength(100);
         b.Property(x => x.WhatsAppTemplateLanguage).HasMaxLength(12);
-        b.Property(x => x.WhatsAppParametersJson).HasMaxLength(4000);
+        b.Property(x => x.WhatsAppParametersJson);
         b.Property(x => x.ScheduledLocalTime).HasMaxLength(20);
         b.Property(x => x.AbWinnerVariant).HasMaxLength(2);
         b.Property(x => x.ApprovalNote).HasMaxLength(1000);
@@ -229,7 +229,7 @@ internal sealed class CampaignVariantConfiguration : IEntityTypeConfiguration<Ca
         b.Property(x => x.Key).HasMaxLength(2).IsRequired();
         b.Property(x => x.Subject).HasMaxLength(200);
         b.Property(x => x.PreviewText).HasMaxLength(200);
-        b.Property(x => x.DesignJson).HasMaxLength(200_000);
+        b.Property(x => x.DesignJson);
         b.HasIndex(x => new { x.CampaignId, x.Key }).IsUnique();
         b.HasOne<EmailCampaign>().WithMany().HasForeignKey(x => x.CampaignId).OnDelete(DeleteBehavior.Cascade);
     }
@@ -313,7 +313,7 @@ internal sealed class AutomationStepConfiguration : IEntityTypeConfiguration<Aut
     {
         b.ToTable("email_automation_steps");
         b.Property(x => x.Key).HasMaxLength(20).IsRequired();
-        b.Property(x => x.ConfigJson).HasMaxLength(8000).IsRequired();
+        b.Property(x => x.ConfigJson).IsRequired();
         b.Property(x => x.NextKey).HasMaxLength(20);
         b.Property(x => x.AltNextKey).HasMaxLength(20);
         b.HasIndex(x => new { x.AutomationId, x.Key }).IsUnique();
@@ -328,7 +328,7 @@ internal sealed class AutomationEnrollmentConfiguration : IEntityTypeConfigurati
         b.ToTable("email_automation_enrollments");
         b.Property(x => x.CurrentStepKey).HasMaxLength(20);
         b.Property(x => x.ExitReason).HasMaxLength(500);
-        b.Property(x => x.TriggerDataJson).HasMaxLength(4000);
+        b.Property(x => x.TriggerDataJson);
         b.HasIndex(x => new { x.AutomationId, x.SubscriberId, x.Iteration }).IsUnique();
         b.HasIndex(x => new { x.Status, x.NextRunAt });
         b.HasIndex(x => x.SubscriberId);
