@@ -27,3 +27,4 @@ appsettings.*.local.json
 
 # Agent worktrees
 .claude/worktrees/
+!.env.*.example
