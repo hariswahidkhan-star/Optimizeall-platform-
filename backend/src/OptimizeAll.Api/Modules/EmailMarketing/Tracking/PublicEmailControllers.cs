@@ -18,7 +18,7 @@ namespace OptimizeAll.Api.Modules.EmailMarketing.Tracking;
 /// </summary>
 [ApiController]
 [AllowAnonymous]
-[EnableRateLimiting(RateLimitPolicies.Public)]
+[EnableRateLimiting(RateLimitPolicies.Tracking)]
 public sealed class EmailTrackingController(EngagementService engagement, EmailMarketingUrls urls, ILogger<EmailTrackingController> logger) : ControllerBase
 {
     private static readonly byte[] Pixel = Convert.FromBase64String("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
@@ -198,7 +198,7 @@ public sealed class PublicEmailController(EngagementService engagement, SignalsS
 /// <summary>Provider webhooks per workspace ("agency" or a client id): ESP delivery/bounce/complaint events and Twilio SMS.</summary>
 [ApiController]
 [AllowAnonymous]
-[EnableRateLimiting(RateLimitPolicies.Public)]
+[EnableRateLimiting(RateLimitPolicies.Webhooks)]
 public sealed class EmailWebhooksController(WebhookService webhooks, EmailMarketingUrls urls) : ControllerBase
 {
     private const int MaxBytes = 2 * 1024 * 1024;

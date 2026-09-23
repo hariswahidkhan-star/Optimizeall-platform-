@@ -18,6 +18,22 @@ public static class RateLimitPolicies
     /// <summary>Public unauthenticated endpoints (landing pages, tracking redirects, postbacks): 120/minute per IP.</summary>
     public const string Public = "public";
 
+    /// <summary>
+    /// Email open pixels, click redirects and one-click unsubscribes: 1,200/minute per IP (mailbox providers fetch pixels
+    /// and post unsubscribes for many recipients from a few proxy IPs). Exempt from the global per-IP limiter.
+    /// </summary>
+    public const string Tracking = "tracking";
+
+    /// <summary>
+    /// Signature-verified provider webhooks (ESP events, SMS status/inbound): 6,000/minute per endpoint path, i.e. per
+    /// provider and workspace, never per IP (providers send one request per message from shared IPs). Exempt from the
+    /// global per-IP limiter so a large send cannot lose bounce/complaint events (and therefore suppressions).
+    /// </summary>
+    public const string Webhooks = "webhooks";
+
+    /// <summary>Policies whose endpoints bypass the global per-IP limiter (they carry their own, higher limits).</summary>
+    private static readonly HashSet<string> HighVolumePolicies = new(StringComparer.Ordinal) { Tracking, Webhooks };
+
     public static IServiceCollection AddAppRateLimiting(this IServiceCollection services)
     {
         services.AddRateLimiter(_ => { });
@@ -36,7 +52,7 @@ public static class RateLimitPolicies
 
             // Global safety net per client IP.
             options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(ctx =>
-                !enabled ? RateLimitPartition.GetNoLimiter("off")
+                !enabled || IsHighVolume(ctx) ? RateLimitPartition.GetNoLimiter("off")
                     : RateLimitPartition.GetTokenBucketLimiter(ClientKey(ctx), _ => new TokenBucketRateLimiterOptions
                     {
                         TokenLimit = 300, TokensPerPeriod = 300, ReplenishmentPeriod = TimeSpan.FromMinutes(1), QueueLimit = 0,
@@ -65,9 +81,24 @@ public static class RateLimitPolicies
                 {
                     PermitLimit = 120, Window = TimeSpan.FromMinutes(1), QueueLimit = 0,
                 }));
+
+            options.AddPolicy(Tracking, ctx => !enabled ? RateLimitPartition.GetNoLimiter("off")
+                : RateLimitPartition.GetFixedWindowLimiter(ClientKey(ctx), _ => new FixedWindowRateLimiterOptions
+                {
+                    PermitLimit = config.GetValue("RateLimiting:TrackingPerMinute", 1200), Window = TimeSpan.FromMinutes(1), QueueLimit = 0,
+                }));
+
+            options.AddPolicy(Webhooks, ctx => !enabled ? RateLimitPartition.GetNoLimiter("off")
+                : RateLimitPartition.GetFixedWindowLimiter("webhook:" + ctx.Request.Path.Value?.ToLowerInvariant(), _ => new FixedWindowRateLimiterOptions
+                {
+                    PermitLimit = config.GetValue("RateLimiting:WebhooksPerMinute", 6000), Window = TimeSpan.FromMinutes(1), QueueLimit = 0,
+                }));
         });
         return services;
     }
+
+    private static bool IsHighVolume(HttpContext ctx) =>
+        ctx.GetEndpoint()?.Metadata.GetMetadata<EnableRateLimitingAttribute>()?.PolicyName is { } policy && HighVolumePolicies.Contains(policy);
 
     private static string ClientKey(HttpContext ctx) => ctx.Connection.RemoteIpAddress?.ToString() ?? "unknown";
 
