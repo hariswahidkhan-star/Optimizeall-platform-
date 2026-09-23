@@ -48,7 +48,7 @@ public sealed class SubmissionService(
     IEventPublisher events,
     TimeProvider clock) : ISubmissionService
 {
-    public static readonly TimeSpan MaxPostedAtSkew = TimeSpan.FromMinutes(10);
+    public static readonly TimeSpan MaxPostedAtSkew = SubmissionTiming.MaxFutureSkew;
 
     private DateTime Now => clock.GetUtcNow().UtcDateTime;
 
@@ -64,8 +64,8 @@ public sealed class SubmissionService(
         var platform = form.Platform!.Value;
         var postedAt = form.PostedAt!.Value.UtcDateTime;
         var account = await ValidateParticipantAsync(campaign, me, form.SocialAccountId!.Value, platform, ct);
-        var normalizedUrl = ValidateUrl(platform, form.PostUrl);
-        ValidatePostedAt(postedAt, now);
+        var (normalizedUrl, isShortLink) = ValidateUrl(platform, form.PostUrl);
+        ValidatePostedAt(postedAt, now, submittedAt: now);
         if (await db.Set<Submission>().AnyAsync(s => s.NormalizedPostUrl == normalizedUrl, ct))
             throw DuplicateUrl();
         if (campaign.RequireScreenshot && form.Screenshot is null)
@@ -123,10 +123,11 @@ public sealed class SubmissionService(
                 ExperimentVariantId = variantId,
             };
 
-            var context = await quotes.BuildContextAsync(campaign, ruleSet.Currency, me, platform, postedAt, null, submission.Id, ct);
+            var context = await quotes.BuildContextAsync(campaign, ruleSet.Currency, me, platform, postedAt, submission.SubmittedAt,
+                null, submission.Id, ct);
             submission.EstimatedRewardAmount = RewardEngine.Quote(ruleSet, context).Total;
 
-            await ApplyRiskFlagsAsync(submission, campaign, account, ct);
+            await ApplyRiskFlagsAsync(submission, campaign, account, isShortLink, ct);
             submission.Events.Add(new SubmissionEvent
             {
                 SubmissionId = submission.Id, FromStatus = null, ToStatus = SubmissionStatus.Pending, Action = "submitted",
@@ -171,9 +172,10 @@ public sealed class SubmissionService(
         var account = await ValidateParticipantAsync(campaign, me, submission.SocialAccountId, submission.Platform, ct);
 
         var postUrl = string.IsNullOrWhiteSpace(form.PostUrl) ? submission.PostUrl : form.PostUrl.Trim();
-        var normalizedUrl = ValidateUrl(submission.Platform, postUrl);
+        var (normalizedUrl, isShortLink) = ValidateUrl(submission.Platform, postUrl);
         var postedAt = form.PostedAt?.UtcDateTime ?? submission.PostedAt;
-        ValidatePostedAt(postedAt, now);
+        // Re-runs every PostedAt rule against the original SubmittedAt (which a correction does not change).
+        ValidatePostedAt(postedAt, now, submission.SubmittedAt);
         if (await db.Set<Submission>().AnyAsync(s => s.NormalizedPostUrl == normalizedUrl && s.Id != id, ct))
             throw DuplicateUrl();
         if (campaign.RequireScreenshot && form.Screenshot is null && submission.ScreenshotFileId is null)
@@ -202,11 +204,12 @@ public sealed class SubmissionService(
 
             // Estimated reward is re-priced with the ORIGINAL captured rule set version.
             var ruleSet = await quotes.LoadRuleSetAsync(submission.RewardRuleSetId, ct);
-            var context = await quotes.BuildContextAsync(campaign, ruleSet.Currency, me, submission.Platform, postedAt, null, submission.Id, ct);
+            var context = await quotes.BuildContextAsync(campaign, ruleSet.Currency, me, submission.Platform, postedAt,
+                submission.SubmittedAt, null, submission.Id, ct);
             submission.EstimatedRewardAmount = RewardEngine.Quote(ruleSet, context).Total;
 
             db.RemoveRange(submission.Flags.Where(f => f.ResolvedAt is null).ToList());
-            await ApplyRiskFlagsAsync(submission, campaign, account, ct);
+            await ApplyRiskFlagsAsync(submission, campaign, account, isShortLink, ct);
 
             submission.Status = SubmissionStatus.Pending;
             submission.CorrectionCount++;
@@ -313,11 +316,14 @@ public sealed class SubmissionService(
 
         var appeal = new Appeal { SubmissionId = id, UserId = me, DecisionAppealed = s.Status, Reason = reason, Status = AppealStatus.Open };
         db.Set<Appeal>().Add(appeal);
+        // The appeal keeps the full text (2000); the timeline and audit copies are cut to their 1000-char columns.
         db.Set<SubmissionEvent>().Add(new SubmissionEvent
         {
-            SubmissionId = id, FromStatus = s.Status, ToStatus = s.Status, Action = "appealed", ActorUserId = me, Reason = reason, CreatedAt = now,
+            SubmissionId = id, FromStatus = s.Status, ToStatus = s.Status, Action = "appealed", ActorUserId = me,
+            Reason = ReasonText.Fit(reason), CreatedAt = now,
         });
-        audit.Record("submission.appealed", nameof(Submission), id, after: new { AppealId = appeal.Id, DecisionAppealed = s.Status.ToString() }, reason: reason);
+        audit.Record("submission.appealed", nameof(Submission), id, after: new { AppealId = appeal.Id, DecisionAppealed = s.Status.ToString() },
+            reason: ReasonText.Fit(reason));
         await db.SaveChangesAsync(ct);
         await tx.CommitAsync(ct);
         return await GetMineAsync(id, ct);
@@ -365,23 +371,30 @@ public sealed class SubmissionService(
         return account;
     }
 
-    private static string ValidateUrl(SocialPlatform platform, string raw)
+    /// <summary>Validates the link for the platform and returns its canonical post key (stored in NormalizedPostUrl).</summary>
+    private static (string Key, bool IsShortLink) ValidateUrl(SocialPlatform platform, string raw)
     {
-        var normalized = Normalization.PostUrl(raw);
-        if (normalized is null || normalized.Length > 768)
-            throw new DomainException("submission.invalid_url", "Enter the full public link to your post (https://...).");
-        if (!PlatformUrlRules.IsValidPostUrl(platform, normalized))
-            throw new DomainException("submission.url_platform_mismatch", $"That link is not a {platform} post link.");
-        return normalized;
+        var parsed = PlatformUrlRules.Parse(platform, raw);
+        return parsed.Error switch
+        {
+            PostUrlError.None => (parsed.CanonicalKey!, parsed.IsShortLink),
+            PostUrlError.PlatformMismatch =>
+                throw new DomainException("submission.url_platform_mismatch", $"That link is not a {platform} post link."),
+            _ => throw new DomainException("submission.invalid_url", "Enter the full public link to your post (https://...)."),
+        };
     }
 
-    private static void ValidatePostedAt(DateTime postedAt, DateTime now)
+    private static void ValidatePostedAt(DateTime postedAt, DateTime now, DateTime submittedAt)
     {
-        if (postedAt > now + MaxPostedAtSkew)
+        if (SubmissionTiming.IsPostedAtInFuture(postedAt, now))
             throw new DomainException("submission.posted_at_in_future", "The post time can't be in the future.");
+        if (SubmissionTiming.IsPostedAtTooOld(postedAt, submittedAt))
+            throw new DomainException("submission.posted_at_too_old",
+                $"Posts must be submitted within {SubmissionTiming.MaxPostAgeAtSubmission.TotalDays:0} days of going live.");
     }
 
-    private async Task ApplyRiskFlagsAsync(Submission submission, Campaign campaign, SocialAccount account, CancellationToken ct)
+    private async Task ApplyRiskFlagsAsync(Submission submission, Campaign campaign, SocialAccount account, bool isShortLink,
+        CancellationToken ct)
     {
         var now = Now;
         var id = submission.Id;
@@ -396,6 +409,8 @@ public sealed class SubmissionService(
             RepeatedContentCount = hash is null ? 0 : await db.Set<Submission>().CountAsync(s =>
                 s.ContentHash == hash && s.Id != id && (s.UserId == submission.UserId || s.CampaignId == campaign.Id), ct),
             PostedAtUtc = submission.PostedAt,
+            SubmittedAtUtc = submission.SubmittedAt,
+            IsShortLink = isShortLink,
             CampaignStartsAtUtc = campaign.StartsAt,
             CampaignEndsAtUtc = campaign.EndsAt,
             AccountVerified = account.VerificationStatus == SocialAccountVerificationStatus.Verified,

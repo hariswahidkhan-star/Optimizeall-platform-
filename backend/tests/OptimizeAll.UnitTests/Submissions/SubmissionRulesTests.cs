@@ -40,6 +40,12 @@ public sealed class PlatformUrlRulesTests
     [InlineData(SocialPlatform.YouTube, "not a url")]
     [InlineData(SocialPlatform.YouTube, "")]
     [InlineData(SocialPlatform.YouTube, null)]
+    [InlineData(SocialPlatform.Instagram, "https://de.instagram.com/p/abc")]
+    [InlineData(SocialPlatform.Instagram, "https://evil.www.instagram.com/p/abc")]
+    [InlineData(SocialPlatform.Instagram, "https://www.www.instagram.com/p/abc")]
+    [InlineData(SocialPlatform.TikTok, "https://vm.tiktok.com/")]
+    [InlineData(SocialPlatform.YouTube, "https://attacker.youtube.com/watch?v=abc")]
+    [InlineData(SocialPlatform.X, "https://api.x.com/user/status/1")]
     public void Rejects_other_hosts_roots_and_invalid_urls(SocialPlatform platform, string? url) =>
         Assert.False(PlatformUrlRules.IsValidPostUrl(platform, url));
 
@@ -54,6 +60,8 @@ public sealed class PlatformUrlRulesTests
     [InlineData("https://www.instagram.com/p/ABC/?utm_source=ig&igshid=xyz", "https://instagram.com/p/ABC")]
     [InlineData("https://m.instagram.com/p/ABC", "https://instagram.com/p/ABC")]
     [InlineData("http://instagram.com/p/ABC/#comments", "https://instagram.com/p/ABC")]
+    [InlineData("https://www.instagram.com./p/ABC/", "https://instagram.com/p/ABC")]
+    [InlineData("https://WWW.M.Instagram.COM/p/ABC", "https://instagram.com/p/ABC")]
     public void Url_variants_normalize_to_the_same_value(string raw, string expected) =>
         Assert.Equal(expected, Normalization.PostUrl(raw));
 }
@@ -65,6 +73,7 @@ public sealed class RiskRulesTests
     private static RiskSignals Clean() => new()
     {
         PostedAtUtc = Now.AddHours(-1),
+        SubmittedAtUtc = Now,
         CampaignStartsAtUtc = Now.AddDays(-5),
         CampaignEndsAtUtc = Now.AddDays(5),
         AccountVerified = true,
@@ -92,13 +101,15 @@ public sealed class RiskRulesTests
             AccountVerified = false,
             SubmissionsInLast24Hours = 10,
             ParticipantCreatedAtUtc = Now.AddDays(-2),
+            IsShortLink = true,
         });
         Assert.Equal(new[]
         {
             SubmissionFlagType.DuplicateScreenshot, SubmissionFlagType.RepeatedContent, SubmissionFlagType.OutsideCampaignWindow,
+            SubmissionFlagType.PostedLongBeforeSubmission, SubmissionFlagType.UnresolvedShortLink,
             SubmissionFlagType.AccountNotVerified, SubmissionFlagType.HighSubmissionVelocity, SubmissionFlagType.NewParticipant,
         }, flags.Select(f => f.Type));
-        Assert.Equal(40 + 20 + 30 + 10 + 15 + 5, RiskRules.Score(flags));
+        Assert.Equal(40 + 20 + 30 + 15 + 10 + 10 + 15 + 5, RiskRules.Score(flags));
     }
 
     [Fact]
@@ -113,6 +124,17 @@ public sealed class RiskRulesTests
     {
         Assert.Empty(RiskRules.Evaluate(Clean() with { SubmissionsInLast24Hours = 9 }));
         Assert.Single(RiskRules.Evaluate(Clean() with { SubmissionsInLast24Hours = 10 }));
+    }
+
+    [Fact]
+    public void Posted_long_before_submission_is_flagged_only_beyond_48_hours()
+    {
+        Assert.Empty(RiskRules.Evaluate(Clean() with { PostedAtUtc = Now.AddHours(-48) }));
+        var flag = Assert.Single(RiskRules.Evaluate(Clean() with { PostedAtUtc = Now.AddHours(-48).AddMinutes(-1) }));
+        Assert.Equal(SubmissionFlagType.PostedLongBeforeSubmission, flag.Type);
+        Assert.Equal(15, flag.Weight);
+        // Measured against the submission time, not "now" (a later resubmission doesn't raise it by itself).
+        Assert.Empty(RiskRules.Evaluate(Clean() with { PostedAtUtc = Now.AddDays(-3), SubmittedAtUtc = Now.AddDays(-2), NowUtc = Now }));
     }
 
     [Fact]

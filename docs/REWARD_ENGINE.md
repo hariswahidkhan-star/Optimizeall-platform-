@@ -38,23 +38,42 @@ A campaign's rewards are a list of immutable, numbered **rule-set versions** (`r
 |---|---|
 | `Platform` | Submission platform |
 | `CountryCode`, `Tier` | Participant profile at pricing time |
-| `PostedAtUtc` | Submission `PostedAt` |
-| `IsFirstApprovedPostInCampaign` | No other Approved submission of the participant in the campaign **and** no `firstpost:{campaignId}:{userId}` earning exists yet |
-| `EarnedTodayInCampaign`, `EarnedThisWeekInCampaign` | Sum of the participant's campaign earnings (status not Reversed/Declined, reversal legs included) whose submission was posted on the same campaign-local day / Monday-based week as this post (campaign `TimeZone`) |
+| `PostedAtUtc` | `min(PostedAt, SubmittedAt)` of the submission (see "Post and submission times") — used only for rate-override and time-limited-bonus windows |
+| `IsFirstApprovedPostInCampaign` | No other Approved submission of the participant in the campaign **and** no live (not Reversed, not reversed-by-a-reversal-entry) `FirstPostBonus` earning of the participant in the campaign. Declined bonuses count as taken. |
+| `EarnedTodayInCampaign`, `EarnedThisWeekInCampaign` | Sum of the participant's campaign earnings (status PendingApproval/Approved/Scheduled/Paid, reversal legs included) whose submission was **submitted** on the same campaign-local day / Monday-based week as this submission's `SubmittedAt` (campaign `TimeZone`; entries without a submission use their `CreatedAt`) |
 | `EarnedInCampaignTotal` | Same, all time |
-| `CampaignBudgetRemaining` | `Campaign.BudgetAmount` − all non-reversed, non-declined campaign earnings; null when no budget (or when the budget currency differs from the rule currency, which validation prevents) |
+| `CampaignBudgetRemaining` | `Campaign.BudgetAmount` − all campaign earnings with status PendingApproval/Approved/Scheduled/Paid (written as `Status IN (…)` so it range-scans the `earning_entries (CampaignId, Status)` index); null when no budget (or when the budget currency differs from the rule currency, which validation prevents) |
 | `QualityBonusRequested` | Reviewer's proposed quality bonus |
 
-Caps are evaluated against the **posting** day/week rather than the approval day, so a review backlog approved
-on one day does not unfairly exhaust a participant's daily cap.
+Caps are evaluated against the **submission** day/week rather than the approval day, so a review backlog approved
+on one day does not unfairly exhaust a participant's daily cap — and not against the participant-declared post
+day, so back-dating posts cannot spread them over several daily caps.
+
+## Post and submission times
+
+`PostedAt` is chosen by the participant; `SubmittedAt` is set by the server when the submission is created (a
+correction/resubmission keeps it). Money only depends on `PostedAt` within fixed, campaign-independent bounds
+(`Domain/Submissions/SubmissionTiming.cs`):
+
+| Rule | Value |
+|---|---|
+| `PostedAt` may be in the future by at most | 10 minutes (clock skew) → else 400 `submission.posted_at_in_future` |
+| `PostedAt` may be before `SubmittedAt` by at most | **7 days** (`SubmissionTiming.MaxPostAgeAtSubmission`) → else 400 `submission.posted_at_too_old` |
+| Risk flag `PostedLongBeforeSubmission` (weight 15) | `SubmittedAt − PostedAt > 48 h` |
+| Rate-override and time-limited-bonus windows | evaluated at `min(PostedAt, SubmittedAt)` — effectively PostedAt, but never later than the submission (a future PostedAt can't reach into a window that hasn't started) and never earlier than SubmittedAt − 7 days |
+| Daily / weekly caps | campaign-local day / week of `SubmittedAt` |
+| Live-check due time | `max(PostedAt, SubmittedAt) + MinPostLiveHours`; confirmation before it is refused (409 `review.live_check_not_due`) |
+
+A resubmission after a correction request re-runs all of these checks (against the original `SubmittedAt`),
+recomputes the risk flags and re-prices the estimate.
 
 ## Algorithm
 
 1. **Validate** the rule set (see below); an invalid set throws `reward.invalid_rules` (400).
 2. **Post rate** (`PostReward` line): the most specific `RateOverride` whose conditions all match and whose window
-   contains `PostedAt`. Specificity = number of set conditions among Platform/Country/Tier. Ties → higher
+   contains the context's `PostedAtUtc`. Specificity = number of set conditions among Platform/Country/Tier. Ties → higher
    `Priority` → higher `Amount` → lower `Id`. No match → the `BaseRate`.
-3. **Time-limited bonuses**: every `TimeLimitedBonus` whose window contains `PostedAt` and whose optional
+3. **Time-limited bonuses**: every `TimeLimitedBonus` whose window contains `PostedAtUtc` and whose optional
    conditions match adds a `TimeLimitedBonus` line (ordered by window start).
 4. **First-post bonus**: added when `IsFirstApprovedPostInCampaign`.
 5. **Quality bonus**: only when `QualityBonusRequested > 0`; amount = `min(requested, rule.Amount)`.
@@ -103,8 +122,14 @@ the applied caps are returned and written into the approval event reason.
 |---|---|
 | PostReward, QualityBonus | `submission:{submissionId}:{Type}` |
 | TimeLimitedBonus | `submission:{submissionId}:TimeLimitedBonus:{ruleId}` (several can apply to one post) |
-| FirstPostBonus | `firstpost:{campaignId}:{userId}` — at most one per participant per campaign, even under races |
-| Appeal overturn | the above with `:appeal:{appealId}` appended (first-post key unchanged) |
+| FirstPostBonus | `firstpost:{campaignId}:{userId}`, or `firstpost:{campaignId}:{userId}:{n}` where `n` = number of the participant's reversed first-post bonuses in the campaign — at most one **live** first-post bonus per participant per campaign, even under races |
+| Appeal overturn | the above with `:appeal:{appealId}` appended (first-post key follows the rule above) |
+
+**First-post bonus after a reversal.** A reversed first-post bonus (status Reversed, or a paid one clawed back by a
+Reversal entry) no longer counts as "taken": the participant's next approval in the campaign (including an appeal
+overturn of the reversed submission) earns it again. Its key carries `n`, so each re-earning has a new, unique key;
+`n` and the "taken" check are evaluated under the campaign row lock and the unique idempotency index is the final
+guard, so concurrent approvals still produce a single live bonus. A declined bonus stays taken.
 
 `RequiresApproval` on the ledger = `line.RequiresApproval || campaign.MinPostLiveHours > 0`. When a live check is
 required, confirming the post is still live approves every pending line except `ManualApproval` bonuses, which

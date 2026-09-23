@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Domain.Campaigns;
 using OptimizeAll.Domain.Common;
@@ -15,7 +16,8 @@ public sealed record PricedReward(RewardRuleSet RuleSet, RewardContext Context, 
 /// <summary>
 /// Builds <see cref="RewardContext"/>s from the database and prices posts with <see cref="RewardEngine"/>.
 /// Aggregates come from the participant's non-reversed, non-declined earnings in the campaign; "today"/"this week"
-/// are the campaign-local day/week (Monday start) of the post's PostedAt.
+/// are the campaign-local day/week (Monday start) of the submission's <b>SubmittedAt</b> (server time, not the
+/// participant-declared PostedAt). Rate and bonus windows use <see cref="SubmissionTiming.RewardWindowTime"/>.
 /// </summary>
 public interface IRewardQuoteService
 {
@@ -26,10 +28,18 @@ public interface IRewardQuoteService
 
     /// <summary>
     /// Context for a post by <paramref name="userId"/>. <paramref name="excludeSubmissionId"/> is the submission being
-    /// priced (never counted as a prior approval).
+    /// priced (never counted as a prior approval). Windows use min(PostedAt, SubmittedAt); caps use SubmittedAt's day/week.
     /// </summary>
     Task<RewardContext> BuildContextAsync(Campaign campaign, string ruleSetCurrency, Guid userId, SocialPlatform platform,
-        DateTime postedAtUtc, decimal? qualityBonusRequested, Guid? excludeSubmissionId, CancellationToken ct = default);
+        DateTime postedAtUtc, DateTime submittedAtUtc, decimal? qualityBonusRequested, Guid? excludeSubmissionId,
+        CancellationToken ct = default);
+
+    /// <summary>
+    /// Idempotency key for the participant's next first-post bonus in the campaign: <c>firstpost:{campaignId}:{userId}</c>,
+    /// or <c>firstpost:{campaignId}:{userId}:{n}</c> once <c>n</c> earlier first-post bonuses have been reversed.
+    /// Must be called under the campaign lock.
+    /// </summary>
+    Task<string> FirstPostKeyAsync(Guid campaignId, Guid userId, CancellationToken ct = default);
 
     /// <summary>Prices a submission from its <b>recorded</b> rule set version.</summary>
     Task<PricedReward> QuoteSubmissionAsync(Submission submission, decimal? qualityBonusRequested, CancellationToken ct = default);
@@ -40,7 +50,38 @@ public interface IRewardQuoteService
 
 public sealed class RewardQuoteService(AppDbContext db) : IRewardQuoteService
 {
-    public static string FirstPostKey(Guid campaignId, Guid userId) => $"firstpost:{campaignId}:{userId}";
+    /// <summary>
+    /// Earnings that count as spent / earned: every status except Reversed and Declined, written as an explicit
+    /// <c>Status IN ('PendingApproval','Approved','Scheduled','Paid')</c> so it can range-scan (CampaignId, Status).
+    /// </summary>
+    public static readonly Expression<Func<EarningEntry, bool>> IsCounted = e =>
+        e.Status == EarningStatus.PendingApproval || e.Status == EarningStatus.Approved ||
+        e.Status == EarningStatus.Scheduled || e.Status == EarningStatus.Paid;
+
+    /// <summary>
+    /// Key of the first-post bonus after <paramref name="reversedCount"/> earlier ones were reversed (n = 0 keeps the
+    /// original key format).
+    /// </summary>
+    public static string FirstPostKey(Guid campaignId, Guid userId, int reversedCount = 0) =>
+        reversedCount == 0 ? $"firstpost:{campaignId}:{userId}" : $"firstpost:{campaignId}:{userId}:{reversedCount}";
+
+    /// <summary>
+    /// Campaign earnings that count against the budget. Filters on (CampaignId, Status IN ...) so MySQL can range-scan
+    /// the (CampaignId, Status) index instead of the whole table.
+    /// </summary>
+    public static IQueryable<EarningEntry> SpentQuery(AppDbContext db, Guid campaignId) =>
+        db.Set<EarningEntry>().Where(e => e.CampaignId == campaignId).Where(IsCounted);
+
+    /// <summary>First-post bonus entries of the participant in the campaign.</summary>
+    private IQueryable<EarningEntry> FirstPostEntries(Guid campaignId, Guid userId) =>
+        db.Set<EarningEntry>().Where(e => e.UserId == userId && e.CampaignId == campaignId && e.Type == EarningType.FirstPostBonus);
+
+    public async Task<string> FirstPostKeyAsync(Guid campaignId, Guid userId, CancellationToken ct = default)
+    {
+        var reversed = await FirstPostEntries(campaignId, userId)
+            .CountAsync(e => e.Status == EarningStatus.Reversed || e.ReversedByEntryId != null, ct);
+        return FirstPostKey(campaignId, userId, reversed);
+    }
 
     public async Task<RewardRuleSet?> GetCurrentRuleSetAsync(Guid campaignId, DateTime atUtc, CancellationToken ct = default) =>
         await db.Set<RewardRuleSet>().AsNoTracking().Include(r => r.Rules)
@@ -53,28 +94,34 @@ public sealed class RewardQuoteService(AppDbContext db) : IRewardQuoteService
         ?? throw DomainException.NotFound("RewardRuleSet");
 
     public async Task<RewardContext> BuildContextAsync(Campaign campaign, string ruleSetCurrency, Guid userId, SocialPlatform platform,
-        DateTime postedAtUtc, decimal? qualityBonusRequested, Guid? excludeSubmissionId, CancellationToken ct = default)
+        DateTime postedAtUtc, DateTime submittedAtUtc, decimal? qualityBonusRequested, Guid? excludeSubmissionId,
+        CancellationToken ct = default)
     {
         var participant = await db.Set<User>().AsNoTracking().Where(u => u.Id == userId)
             .Select(u => new { u.CountryCode, u.Tier }).FirstOrDefaultAsync(ct)
             ?? throw DomainException.NotFound("User");
 
         var rows = await (
-                from e in db.Set<EarningEntry>().AsNoTracking()
-                where e.UserId == userId && e.CampaignId == campaign.Id &&
-                      e.Status != EarningStatus.Reversed && e.Status != EarningStatus.Declined
+                from e in db.Set<EarningEntry>().AsNoTracking().Where(IsCounted)
+                where e.UserId == userId && e.CampaignId == campaign.Id
                 join s in db.Set<Submission>() on e.SubmissionId equals (Guid?)s.Id into sj
                 from s in sj.DefaultIfEmpty()
-                select new { e.Amount, PostedAt = (DateTime?)s.PostedAt, e.CreatedAt })
+                select new { e.Amount, SubmittedAt = (DateTime?)s.SubmittedAt, e.CreatedAt })
             .ToListAsync(ct);
 
+        // Caps count against the campaign-local day/week of the SUBMISSION time (server-recorded), never the
+        // participant-declared post time.
+        var capTime = SubmissionTiming.CapTime(submittedAtUtc);
         var zone = CampaignClock.Zone(campaign.TimeZone);
-        var (dayStart, dayEnd) = CampaignClock.LocalDay(zone, postedAtUtc);
-        var (weekStart, weekEnd) = CampaignClock.LocalWeek(zone, postedAtUtc);
+        var (dayStart, dayEnd) = CampaignClock.LocalDay(zone, capTime);
+        var (weekStart, weekEnd) = CampaignClock.LocalWeek(zone, capTime);
         decimal InRange(DateTime from, DateTime to) =>
-            rows.Where(r => (r.PostedAt ?? r.CreatedAt) >= from && (r.PostedAt ?? r.CreatedAt) < to).Sum(r => r.Amount);
+            rows.Where(r => (r.SubmittedAt ?? r.CreatedAt) >= from && (r.SubmittedAt ?? r.CreatedAt) < to).Sum(r => r.Amount);
 
-        var firstPostTaken = await db.Set<EarningEntry>().AnyAsync(e => e.IdempotencyKey == FirstPostKey(campaign.Id, userId), ct);
+        // A first-post bonus that was reversed no longer counts as taken (a later approval may earn it again, under a
+        // new idempotency key; see FirstPostKeyAsync). Declined ones stay taken.
+        var firstPostTaken = await FirstPostEntries(campaign.Id, userId)
+            .AnyAsync(e => e.Status != EarningStatus.Reversed && e.ReversedByEntryId == null, ct);
         var hasOtherApproved = await db.Set<Submission>().AnyAsync(s =>
             s.UserId == userId && s.CampaignId == campaign.Id && s.Status == SubmissionStatus.Approved &&
             (excludeSubmissionId == null || s.Id != excludeSubmissionId), ct);
@@ -89,7 +136,7 @@ public sealed class RewardQuoteService(AppDbContext db) : IRewardQuoteService
             Platform = platform,
             CountryCode = participant.CountryCode,
             Tier = participant.Tier,
-            PostedAtUtc = postedAtUtc,
+            PostedAtUtc = SubmissionTiming.RewardWindowTime(postedAtUtc, submittedAtUtc),
             IsFirstApprovedPostInCampaign = !firstPostTaken && !hasOtherApproved,
             EarnedTodayInCampaign = InRange(dayStart, dayEnd),
             EarnedThisWeekInCampaign = InRange(weekStart, weekEnd),
@@ -105,16 +152,14 @@ public sealed class RewardQuoteService(AppDbContext db) : IRewardQuoteService
             ?? throw DomainException.NotFound("Campaign");
         var ruleSet = await LoadRuleSetAsync(submission.RewardRuleSetId, ct);
         var context = await BuildContextAsync(campaign, ruleSet.Currency, submission.UserId, submission.Platform,
-            submission.PostedAt, qualityBonusRequested, submission.Id, ct);
+            submission.PostedAt, submission.SubmittedAt, qualityBonusRequested, submission.Id, ct);
         return new PricedReward(ruleSet, context, RewardEngine.Quote(ruleSet, context));
     }
 
     public async Task<decimal?> BudgetRemainingAsync(Campaign campaign, CancellationToken ct = default)
     {
         if (!campaign.BudgetAmount.HasValue) return null;
-        var spent = await db.Set<EarningEntry>()
-            .Where(e => e.CampaignId == campaign.Id && e.Status != EarningStatus.Reversed && e.Status != EarningStatus.Declined)
-            .SumAsync(e => (decimal?)e.Amount, ct) ?? 0m;
+        var spent = await SpentQuery(db, campaign.Id).SumAsync(e => (decimal?)e.Amount, ct) ?? 0m;
         return campaign.BudgetAmount.Value - spent;
     }
 }

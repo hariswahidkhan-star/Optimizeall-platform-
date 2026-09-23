@@ -10,6 +10,12 @@ public sealed record RiskSignals
     public int RepeatedContentCount { get; init; }
 
     public DateTime PostedAtUtc { get; init; }
+
+    /// <summary>When the submission was (first) made, recorded by the server.</summary>
+    public DateTime SubmittedAtUtc { get; init; }
+
+    /// <summary>The URL is a short link whose target can't be resolved offline.</summary>
+    public bool IsShortLink { get; init; }
     public DateTime CampaignStartsAtUtc { get; init; }
     public DateTime CampaignEndsAtUtc { get; init; }
 
@@ -38,6 +44,8 @@ public static class RiskRules
     public const int AccountNotVerifiedWeight = 10;
     public const int HighVelocityWeight = 15;
     public const int NewParticipantWeight = 5;
+    public const int PostedLongBeforeSubmissionWeight = 15;
+    public const int UnresolvedShortLinkWeight = 10;
     public static readonly TimeSpan NewParticipantPeriod = TimeSpan.FromDays(7);
 
     public static IReadOnlyList<RiskFlag> Evaluate(RiskSignals s)
@@ -56,6 +64,15 @@ public static class RiskRules
             flags.Add(new(SubmissionFlagType.OutsideCampaignWindow,
                 $"Posted at {s.PostedAtUtc:yyyy-MM-dd HH:mm} UTC, outside the campaign window " +
                 $"{s.CampaignStartsAtUtc:yyyy-MM-dd HH:mm}–{s.CampaignEndsAtUtc:yyyy-MM-dd HH:mm} UTC.", OutsideCampaignWindowWeight));
+
+        if (s.SubmittedAtUtc - s.PostedAtUtc > SubmissionTiming.LongGapFlagThreshold)
+            flags.Add(new(SubmissionFlagType.PostedLongBeforeSubmission,
+                $"Declared posted at {s.PostedAtUtc:yyyy-MM-dd HH:mm} UTC, {(s.SubmittedAtUtc - s.PostedAtUtc).TotalHours:0} hours " +
+                $"before it was submitted ({s.SubmittedAtUtc:yyyy-MM-dd HH:mm} UTC).", PostedLongBeforeSubmissionWeight));
+
+        if (s.IsShortLink)
+            flags.Add(new(SubmissionFlagType.UnresolvedShortLink,
+                "The post link is a short link. Open it and check that it leads to a post not already claimed.", UnresolvedShortLinkWeight));
 
         if (!s.AccountVerified && !s.CampaignRequiresVerifiedAccount)
             flags.Add(new(SubmissionFlagType.AccountNotVerified,

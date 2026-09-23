@@ -19,22 +19,38 @@ public static partial class Normalization
     };
 
     /// <summary>
-    /// Canonical form of a public post URL used for duplicate detection: https scheme, lower-case host
-    /// without "www."/"m."/"mobile.", no fragment, no tracking parameters, no trailing slash.
-    /// Returns null when the value is not an absolute http(s) URL.
+    /// Tidy display form of a public post URL: https scheme, lower-case host without a trailing dot or leading
+    /// "www."/"m."/"mobile."/"web." labels, no port, no fragment, no tracking parameters, no trailing slash.
+    /// Returns null when the value is not an absolute http(s) URL or carries credentials.
+    /// <para>Not used for duplicate detection: that uses the per-platform canonical post key from
+    /// <c>OptimizeAll.Domain.Submissions.PlatformUrlRules.Parse</c>.</para>
     /// </summary>
+    private static readonly string[] DisplayHostPrefixes = { "www.", "m.", "mobile.", "web." };
+
     public static string? PostUrl(string? raw)
     {
         if (string.IsNullOrWhiteSpace(raw)) return null;
         if (!Uri.TryCreate(raw.Trim(), UriKind.Absolute, out var uri)) return null;
         if (uri.Scheme != Uri.UriSchemeHttps && uri.Scheme != Uri.UriSchemeHttp) return null;
-        if (string.IsNullOrEmpty(uri.Host)) return null;
+        if (string.IsNullOrEmpty(uri.Host) || !string.IsNullOrEmpty(uri.UserInfo)) return null;
 
-        var host = uri.Host.ToLowerInvariant();
-        foreach (var prefix in new[] { "www.", "m.", "mobile.", "web." })
+        var host = uri.Host.TrimEnd('.').ToLowerInvariant();
+        var stripped = true;
+        while (stripped)
         {
-            if (host.StartsWith(prefix, StringComparison.Ordinal)) { host = host[prefix.Length..]; break; }
+            stripped = false;
+            foreach (var prefix in DisplayHostPrefixes)
+            {
+                // Never strip down to a bare TLD (e.g. "m.com" stays as is).
+                if (host.StartsWith(prefix, StringComparison.Ordinal) && host.IndexOf('.', prefix.Length) > 0)
+                {
+                    host = host[prefix.Length..];
+                    stripped = true;
+                    break;
+                }
+            }
         }
+        if (host.Length == 0) return null;
         if (host == "twitter.com") host = "x.com";
 
         var path = uri.AbsolutePath.TrimEnd('/');

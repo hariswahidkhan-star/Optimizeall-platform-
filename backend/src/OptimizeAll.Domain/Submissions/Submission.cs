@@ -33,7 +33,11 @@ public class Submission : AuditedEntity, IConcurrencyStamped
 
     public string PostUrl { get; set; } = string.Empty;
 
-    /// <summary>Canonical URL (see Normalization.PostUrl). Globally unique: a post can only be claimed once.</summary>
+    /// <summary>
+    /// Canonical <b>post key</b> (see <see cref="PlatformUrlRules.Parse"/>), e.g. <c>instagram:Cabc123</c>,
+    /// <c>youtube:dQw4w9WgXcQ</c>, or a normalized URL when the post id can't be read from the link. The column keeps its
+    /// historical name. Globally unique and compared case-sensitively (utf8mb4_bin): a post can only be claimed once.
+    /// </summary>
     public string NormalizedPostUrl { get; set; } = string.Empty;
 
     /// <summary>When the participant says the post went live (UTC).</summary>
@@ -98,6 +102,10 @@ public enum SubmissionFlagType
     NewParticipant,
     SharedDeviceOrIp,
     ReferralFraudSuspected,
+    /// <summary>The declared post time is more than 48 hours before the submission.</summary>
+    PostedLongBeforeSubmission,
+    /// <summary>The URL is a short link (e.g. vm.tiktok.com) that a reviewer must open to identify the post.</summary>
+    UnresolvedShortLink,
     Other,
 }
 

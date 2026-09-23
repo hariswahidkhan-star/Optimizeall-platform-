@@ -63,6 +63,13 @@ public sealed class SubmissionTests(ApiFactory api) : IClassFixture<ApiFactory>
     [InlineData("https://m.instagram.com/p/{0}/")]
     [InlineData("http://www.instagram.com/p/{0}?utm_source=ig_web&igshid=abc")]
     [InlineData("https://www.instagram.com/p/{0}/#comments")]
+    [InlineData("https://www.instagram.com./p/{0}/")]
+    [InlineData("https://instagram.com./p/{0}")]
+    [InlineData("https://instagram.com/p/{0}?x=1")]
+    [InlineData("https://instagram.com/reel/{0}/")]
+    [InlineData("https://m.instagram.com/reels/{0}?igsh=q&x=1")]
+    [InlineData("https://www.instagram.com/tv/{0}")]
+    [InlineData("https://www.instagram.com/someone.else/p/{0}/")]
     public async Task Duplicate_urls_are_rejected_including_variants(string variant)
     {
         var campaign = await CampaignAsync();
@@ -205,7 +212,8 @@ public sealed class SubmissionTests(ApiFactory api) : IClassFixture<ApiFactory>
         var id = await kit.SubmitOkAsync(p, campaign.Id);
         var (_, reviewer) = await kit.ReviewerAsync();
 
-        await (await CampaignTestKit.DecideAsync(reviewer, id, "RequestCorrection", "no")).ShouldFailAsync(400, "review.reason_required");
+        await (await CampaignTestKit.DecideAsync(reviewer, id, "RequestCorrection", "no")).ShouldFailAsync(400, "review.reason_too_short");
+        await (await CampaignTestKit.DecideAsync(reviewer, id, "RequestCorrection", "   ")).ShouldFailAsync(400, "review.reason_required");
         (await CampaignTestKit.DecideAsync(reviewer, id, "RequestCorrection", "Please add the #ad disclosure")).EnsureSuccessStatusCode();
         var mine = await CampaignTestKit.GetJsonAsync(p.Client, $"/api/v1/me/submissions/{id}");
         Assert.Equal("NeedsCorrection", mine.GetProperty("status").GetString());
@@ -293,7 +301,7 @@ public sealed class SubmissionTests(ApiFactory api) : IClassFixture<ApiFactory>
     }
 
     [Fact]
-    public async Task Upheld_appeal_changes_nothing_and_admins_may_resolve_their_own_decisions()
+    public async Task Upheld_appeal_changes_nothing_and_admins_cannot_resolve_their_own_decisions()
     {
         var campaign = await CampaignAsync();
         var p = await kit.ParticipantAsync();
@@ -304,8 +312,13 @@ public sealed class SubmissionTests(ApiFactory api) : IClassFixture<ApiFactory>
             new { reason = "My account is public now, please look again." })).ReadJsonAsync();
         var appeals = await CampaignTestKit.GetJsonAsync(admin, "/api/v1/review/appeals?pageSize=200");
         var item = appeals.GetProperty("items").EnumerateArray().Single(a => a.GetProperty("submissionId").GetGuid() == id);
-        var resolution = await (await admin.PostAsJsonAsync($"/api/v1/review/appeals/{item.GetProperty("id").GetGuid()}/resolve",
-            new { outcome = "Upheld", note = "Post still private", concurrencyStamp = item.GetProperty("concurrencyStamp").GetGuid() })).ReadJsonAsync();
+        var body = new { outcome = "Upheld", note = "Post still private", concurrencyStamp = item.GetProperty("concurrencyStamp").GetGuid() };
+
+        // Four eyes applies to admins too.
+        await (await admin.PostAsJsonAsync($"/api/v1/review/appeals/{item.GetProperty("id").GetGuid()}/resolve", body))
+            .ShouldFailAsync(403, "appeal.same_reviewer");
+        var (_, otherAdmin) = await api.CreateClientAsync(Role.Admin);
+        var resolution = await (await otherAdmin.PostAsJsonAsync($"/api/v1/review/appeals/{item.GetProperty("id").GetGuid()}/resolve", body)).ReadJsonAsync();
         Assert.Equal("Rejected", resolution.GetProperty("submissionStatus").GetString());
         Assert.Empty(await kit.EarningsAsync(id));
     }
@@ -362,5 +375,144 @@ public sealed class SubmissionTests(ApiFactory api) : IClassFixture<ApiFactory>
             .ToDictionaryAsync(s => s.Id, s => s.ExperimentVariantId));
         Assert.Equal(variant.Id, stored[id]);
         Assert.Null(stored[id2]);
+    }
+
+    // ------------------------------------------------------------------ C1: canonical post keys
+
+    [Fact]
+    public async Task Unknown_subdomains_are_rejected_as_platform_mismatch()
+    {
+        var campaign = await CampaignAsync();
+        var p = await kit.ParticipantAsync();
+        var code = Guid.NewGuid().ToString("N");
+        await (await kit.SubmitAsync(p, campaign.Id, $"https://de.instagram.com/p/{code}/")).ShouldFailAsync(400, "submission.url_platform_mismatch");
+        await (await kit.SubmitAsync(p, campaign.Id, $"https://instagram.com.evil.example/p/{code}/")).ShouldFailAsync(400, "submission.url_platform_mismatch");
+    }
+
+    [Fact]
+    public async Task Stored_key_is_canonical_and_codes_differing_only_by_case_are_distinct_posts()
+    {
+        var campaign = await CampaignAsync();
+        var p = await kit.ParticipantAsync();
+        var code = "CxY" + Guid.NewGuid().ToString("N")[..10];
+        var upper = await kit.SubmitOkAsync(p, campaign.Id, $"https://www.instagram.com/reel/{code.ToUpperInvariant()}/?igsh=1");
+        var lower = await kit.SubmitOkAsync(p, campaign.Id, $"https://instagram.com/p/{code.ToLowerInvariant()}");
+
+        var keys = await api.WithDbAsync(db => db.Set<Submission>().Where(s => s.Id == upper || s.Id == lower)
+            .ToDictionaryAsync(s => s.Id, s => s.NormalizedPostUrl));
+        Assert.Equal($"instagram:{code.ToUpperInvariant()}", keys[upper]);
+        Assert.Equal($"instagram:{code.ToLowerInvariant()}", keys[lower]);
+
+        // The same case is still a duplicate, and the column itself compares case-sensitively.
+        await (await kit.SubmitAsync(p, campaign.Id, $"https://instagram.com./p/{code.ToLowerInvariant()}/?x=1")).ShouldFailAsync(409, "submission.duplicate_url");
+        var collation = await api.WithDbAsync(async db =>
+        {
+            var conn = db.Database.GetDbConnection();
+            await conn.OpenAsync();
+            await using var cmd = conn.CreateCommand();
+            cmd.CommandText = "SELECT COLLATION_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() " +
+                              "AND TABLE_NAME = 'submissions' AND COLUMN_NAME = 'NormalizedPostUrl'";
+            return (string?)await cmd.ExecuteScalarAsync();
+        });
+        Assert.Equal("utf8mb4_bin", collation);
+    }
+
+    [Fact]
+    public async Task YouTube_link_forms_of_one_video_collide()
+    {
+        var campaign = await CampaignAsync(b => b["platforms"] = new[] { "Instagram", "YouTube" });
+        var first = await kit.ParticipantAsync(SocialPlatform.YouTube);
+        var second = await kit.ParticipantAsync(SocialPlatform.YouTube);
+        var videoId = "Yt" + Guid.NewGuid().ToString("N")[..9];
+        await kit.SubmitOkAsync(first, campaign.Id, $"https://youtu.be/{videoId}?si=abc");
+        foreach (var variant in new[]
+                 {
+                     $"https://www.youtube.com/watch?v={videoId}&t=10s", $"https://m.youtube.com/shorts/{videoId}",
+                     $"https://youtube.com./live/{videoId}?feature=share",
+                 })
+            await (await kit.SubmitAsync(second, campaign.Id, variant)).ShouldFailAsync(409, "submission.duplicate_url");
+    }
+
+    [Fact]
+    public async Task TikTok_short_links_are_accepted_and_flagged_for_reviewers()
+    {
+        var campaign = await CampaignAsync();
+        var p = await kit.ParticipantAsync(SocialPlatform.TikTok);
+        var code = "ZM" + Guid.NewGuid().ToString("N")[..8];
+        var id = await kit.SubmitOkAsync(p, campaign.Id, $"https://vm.tiktok.com/{code}/");
+        var s = await api.WithDbAsync(db => db.Set<Submission>().Include(x => x.Flags).FirstAsync(x => x.Id == id));
+        Assert.Equal($"tiktok-short:{code}", s.NormalizedPostUrl);
+        Assert.Contains(s.Flags, f => f.Type == SubmissionFlagType.UnresolvedShortLink);
+        var other = await kit.ParticipantAsync(SocialPlatform.TikTok);
+        await (await kit.SubmitAsync(other, campaign.Id, $"https://www.tiktok.com/t/{code}")).ShouldFailAsync(409, "submission.duplicate_url");
+    }
+
+    // ------------------------------------------------------------------ H1: participant-chosen PostedAt
+
+    [Fact]
+    public async Task Posted_at_more_than_seven_days_before_submission_is_refused_and_long_gaps_are_flagged()
+    {
+        var campaign = await CampaignAsync(b => b["startsAt"] = kit.Now.AddDays(-20));
+        var p = await kit.ParticipantAsync();
+        await (await kit.SubmitAsync(p, campaign.Id, postedAt: kit.Now.AddDays(-7).AddMinutes(-1))).ShouldFailAsync(400, "submission.posted_at_too_old");
+
+        var old = await kit.SubmitOkAsync(p, campaign.Id, postedAt: kit.Now.AddDays(-7).AddMinutes(5));
+        var recent = await kit.SubmitOkAsync(p, campaign.Id, postedAt: kit.Now.AddHours(-47));
+        var flags = await api.WithDbAsync(db => db.Set<SubmissionFlag>().Where(f => f.SubmissionId == old || f.SubmissionId == recent).ToListAsync());
+        var flag = Assert.Single(flags, f => f.Type == SubmissionFlagType.PostedLongBeforeSubmission);
+        Assert.Equal(old, flag.SubmissionId);
+        Assert.Equal(15, flag.Weight);
+    }
+
+    [Fact]
+    public async Task Resubmission_re_runs_the_posted_at_rules()
+    {
+        var campaign = await CampaignAsync();
+        var p = await kit.ParticipantAsync();
+        var id = await kit.SubmitOkAsync(p, campaign.Id, postedAt: kit.Now.AddHours(-1));
+        var (_, reviewer) = await kit.ReviewerAsync();
+        (await CampaignTestKit.DecideAsync(reviewer, id, "RequestCorrection", "Please fix the post time")).EnsureSuccessStatusCode();
+
+        var tooOld = new MultipartFormDataContent { { new StringContent(kit.Now.AddDays(-8).ToString("O")), "postedAt" } };
+        await (await p.Client.PutAsync($"/api/v1/me/submissions/{id}", tooOld)).ShouldFailAsync(400, "submission.posted_at_too_old");
+
+        var backdated = new MultipartFormDataContent { { new StringContent(kit.Now.AddDays(-3).ToString("O")), "postedAt" } };
+        (await p.Client.PutAsync($"/api/v1/me/submissions/{id}", backdated)).EnsureSuccessStatusCode();
+        var flags = await api.WithDbAsync(db => db.Set<SubmissionFlag>().Where(f => f.SubmissionId == id && f.ResolvedAt == null).ToListAsync());
+        Assert.Contains(flags, f => f.Type == SubmissionFlagType.PostedLongBeforeSubmission);
+    }
+
+    [Fact]
+    public async Task A_future_posted_at_cannot_reach_into_a_bonus_window_that_has_not_started()
+    {
+        var start = kit.Now.AddMinutes(2);
+        var campaign = await CampaignAsync(extraRules: new object[]
+        {
+            new { type = "TimeLimitedBonus", amount = 2m, validFrom = start, validTo = start.AddDays(1), label = "Launch bonus" },
+        });
+        var p = await kit.ParticipantAsync();
+        // Declared 5 minutes in the future (inside the allowed clock skew) and inside the bonus window.
+        var detail = await (await kit.SubmitAsync(p, campaign.Id, postedAt: kit.Now.AddMinutes(5))).ReadJsonAsync();
+        Assert.Equal(5m, detail.GetProperty("estimatedReward").GetDecimal());
+    }
+
+    // ------------------------------------------------------------------ M1: long appeal text
+
+    [Fact]
+    public async Task Maximum_length_appeal_is_stored_and_its_timeline_copy_truncated()
+    {
+        var campaign = await CampaignAsync();
+        var p = await kit.ParticipantAsync();
+        var id = await kit.SubmitOkAsync(p, campaign.Id);
+        var (_, reviewer) = await kit.ReviewerAsync();
+        (await CampaignTestKit.DecideAsync(reviewer, id, "Reject", new string('r', 900))).EnsureSuccessStatusCode();
+        var reason = new string('a', 2000);
+        (await p.Client.PostAsJsonAsync($"/api/v1/me/submissions/{id}/appeal", new { reason })).EnsureSuccessStatusCode();
+
+        var stored = await api.WithDbAsync(db => db.Set<Appeal>().Where(a => a.SubmissionId == id).Select(a => a.Reason).FirstAsync());
+        Assert.Equal(2000, stored.Length);
+        var evt = await api.WithDbAsync(db => db.Set<SubmissionEvent>().Where(e => e.SubmissionId == id && e.Action == "appealed").Select(e => e.Reason!).FirstAsync());
+        Assert.Equal(1000, evt.Length);
+        Assert.EndsWith("…", evt);
     }
 }

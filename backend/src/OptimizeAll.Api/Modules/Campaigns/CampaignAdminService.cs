@@ -145,8 +145,8 @@ public sealed class CampaignAdminService(
     private async Task<Dictionary<Guid, decimal>> SpentAsync(List<Guid> ids, CancellationToken ct)
     {
         var rows = await db.Set<EarningEntry>()
-            .Where(e => e.CampaignId != null && ids.Contains(e.CampaignId.Value) &&
-                        e.Status != EarningStatus.Reversed && e.Status != EarningStatus.Declined)
+            .Where(e => e.CampaignId != null && ids.Contains(e.CampaignId.Value))
+            .Where(RewardQuoteService.IsCounted) // Status IN (...): range scan on (CampaignId, Status)
             .GroupBy(e => e.CampaignId!.Value)
             .Select(g => new { CampaignId = g.Key, Sum = g.Sum(e => e.Amount) }).ToListAsync(ct);
         return rows.ToDictionary(r => r.CampaignId, r => r.Sum);
