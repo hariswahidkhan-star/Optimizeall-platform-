@@ -85,6 +85,9 @@ services:
 
   api:
     <<: *hardening
+    # Run as the image's non-root app user from the start (the entrypoint's root-only storage ownership fix is
+    # skipped; the named volume is created with the right owner from the image).
+    user: "1654:1654"
     image: ${API_IMAGE:?set API_IMAGE, e.g. ghcr.io/acme/optimizeall-api:1.4.0}
     depends_on:
       migrate:

@@ -30,6 +30,8 @@ scripts/dev-stop.sh
 
 Staging (full stack with real SMTP to Mailpit): `scripts/staging-up.sh` — see [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md).
 
+Hosted demo on Render: `render.yaml` is a one-click Blueprint (web + API + MySQL) — see [`docs/RENDER.md`](docs/RENDER.md).
+
 ## Tests
 
 ```bash
@@ -96,4 +98,5 @@ achievements, onboarding reminders, campaign alerts and reactivation messages; p
 | [DEPLOYMENT.md](docs/DEPLOYMENT.md) / [OPERATIONS.md](docs/OPERATIONS.md) | Staging/production deployment, migrations, rollback, jobs, runbooks |
 | [FRONTEND.md](docs/FRONTEND.md) | Frontend structure, design tokens, components, testing |
 | [DEMO.md](docs/DEMO.md) | Demo accounts and scripted walkthroughs |
+| [RENDER.md](docs/RENDER.md) | Deploying the demo environment to Render with the Blueprint |
 | [api/](docs/api) | Endpoint reference per module + OpenAPI document |

@@ -70,7 +70,10 @@ WORKDIR /app
 RUN mkdir -p /app/storage/files /app/storage/mail && chown -R $APP_UID:$APP_UID /app/storage
 
 # Entrypoint: supports Docker/Kubernetes secret files. For any env var NAME_FILE=/path, exports NAME=<file contents>
-# (e.g. Jwt__SigningKey_FILE=/run/secrets/jwt_signing_key), then starts the API.
+# (e.g. Jwt__SigningKey_FILE=/run/secrets/jwt_signing_key), then starts the API as the non-root app user.
+# When started as root (platforms that mount a fresh root-owned disk at /app/storage and cannot choose the user,
+# e.g. Render), it first gives the app user ownership of the storage directories, then drops privileges with
+# BusyBox su. When started as the app user (`user: 1654` in compose/Kubernetes), that step is skipped.
 COPY --chmod=0755 <<'EOF' /usr/local/bin/docker-entrypoint.sh
 #!/bin/sh
 set -eu
@@ -83,6 +86,14 @@ for var in $(env | sed -n 's/^\([A-Za-z_][A-Za-z0-9_]*\)_FILE=.*/\1/p'); do
   export "$var=$(cat "$file")"
   unset "${var}_FILE"
 done
+if [ "$(id -u)" = "0" ]; then
+  mkdir -p /app/storage/files /app/storage/mail
+  if [ "$(stat -c %u /app/storage)" != "$APP_UID" ] || [ "$(stat -c %u /app/storage/files)" != "$APP_UID" ]; then
+    chown -R "$APP_UID:$APP_UID" /app/storage
+  fi
+  # BusyBox su (no extra package): -m keeps the environment, the app user is uid $APP_UID ("app").
+  exec su -m -s /bin/sh app -c 'exec dotnet /app/OptimizeAll.Api.dll "$@"' dotnet "$@"
+fi
 exec dotnet /app/OptimizeAll.Api.dll "$@"
 EOF
 
@@ -99,7 +110,7 @@ ENV ASPNETCORE_URLS=http://+:8080 \
 
 VOLUME ["/app/storage"]
 EXPOSE 8080
-USER $APP_UID
+# No USER here: the entrypoint drops to $APP_UID itself (see above). Orchestrators should still set the user.
 
 # Liveness only (no DB dependency). Orchestrators should use /health/ready for readiness/traffic.
 HEALTHCHECK --interval=30s --timeout=5s --start-period=90s --retries=3 \

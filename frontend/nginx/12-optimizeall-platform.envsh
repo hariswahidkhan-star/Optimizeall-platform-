@@ -1,0 +1,22 @@
+#!/bin/sh
+# Sourced by the nginx image entrypoint before templates are rendered (files in /docker-entrypoint.d ending in
+# .envsh are sourced in name order, so exports here are visible to 20-envsubst-on-templates.sh).
+#
+#   API_HOSTPORT   host:port of the API on a private network (e.g. Render's fromService "hostport").
+#                  When set, it overrides API_UPSTREAM as http://$API_HOSTPORT.
+#   REAL_IP_FROM   space-separated CIDRs of the load balancer in front of nginx (e.g. "10.0.0.0/8" on Render).
+#                  nginx then takes the client address from X-Forwarded-For sent by that load balancer, so the
+#                  API's rate limits and audit logs see the real client instead of the load balancer.
+
+if [ -n "${API_HOSTPORT:-}" ]; then
+  export API_UPSTREAM="http://${API_HOSTPORT}"
+fi
+
+if [ -n "${REAL_IP_FROM:-}" ]; then
+  {
+    for cidr in $REAL_IP_FROM; do
+      echo "set_real_ip_from ${cidr};"
+    done
+    echo "real_ip_header X-Forwarded-For;"
+  } > /etc/nginx/conf.d/00-real-ip.conf
+fi

@@ -15,6 +15,9 @@ public sealed class DatabaseOptions
 
     /// <summary>Seed profiles to apply after initialization, e.g. ["Baseline"] or ["Baseline","Demo"].</summary>
     public string[] Seed { get; set; } = Array.Empty<string>();
+
+    /// <summary>How long startup waits for the database server to accept connections before failing.</summary>
+    public int StartupWaitSeconds { get; set; } = 120;
 }
 
 public sealed class BootstrapOptions
@@ -45,6 +48,9 @@ public static class DatabaseInitializer
         var options = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<DatabaseOptions>>().Value;
         var db = sp.GetRequiredService<AppDbContext>();
 
+        if (options.InitializationMode != "None")
+            await WaitForDatabaseAsync(db, options.StartupWaitSeconds, logger, ct);
+
         switch (options.InitializationMode)
         {
             case "Migrate":
@@ -70,6 +76,31 @@ public static class DatabaseInitializer
                 logger.LogInformation("Running seeder {Seeder} ({Profile})", seeder.GetType().Name, profile);
                 await seeder.SeedAsync(db, ct);
                 db.ChangeTracker.Clear();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Waits for the database server to accept connections (containers and platforms often start the API before
+    /// MySQL is ready), so startup doesn't fail on a transient "connection refused".
+    /// </summary>
+    private static async Task WaitForDatabaseAsync(AppDbContext db, int maxSeconds, ILogger logger, CancellationToken ct)
+    {
+        var deadline = DateTime.UtcNow.AddSeconds(Math.Max(0, maxSeconds));
+        for (var attempt = 1; ; attempt++)
+        {
+            try
+            {
+                // Connects to the server without requiring the schema to exist yet.
+                await using var connection = new MySqlConnector.MySqlConnection(
+                    new MySqlConnector.MySqlConnectionStringBuilder(db.Database.GetConnectionString() ?? string.Empty) { Database = string.Empty }.ConnectionString);
+                await connection.OpenAsync(ct);
+                return;
+            }
+            catch (MySqlConnector.MySqlException ex) when (DateTime.UtcNow < deadline)
+            {
+                logger.LogWarning("Database not reachable yet (attempt {Attempt}): {Message}. Retrying in 3s.", attempt, ex.Message);
+                await Task.Delay(TimeSpan.FromSeconds(3), ct);
             }
         }
     }

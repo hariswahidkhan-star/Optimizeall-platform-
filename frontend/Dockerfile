@@ -39,6 +39,7 @@ ENV IMG_SRC_EXTRA=""
 
 COPY nginx/default.conf.template /etc/nginx/templates/default.conf.template
 COPY nginx/snippets/ /etc/nginx/snippets/
+COPY --chmod=0755 nginx/12-optimizeall-platform.envsh /docker-entrypoint.d/12-optimizeall-platform.envsh
 COPY --from=build /app/dist /usr/share/nginx/html
 
 EXPOSE 8080

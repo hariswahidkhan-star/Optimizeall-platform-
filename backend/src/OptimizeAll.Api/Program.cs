@@ -58,8 +58,7 @@ services.AddSingleton(TimeProvider.System);
 // Configuration is read lazily (per service resolution) so hosts/tests can override it before the app starts.
 services.AddDbContext<AppDbContext>((sp, options) =>
     options.UseMySql(
-        sp.GetRequiredService<IConfiguration>().GetConnectionString("Default")
-            ?? throw new InvalidOperationException("ConnectionStrings:Default is required."),
+        DatabaseConnection.Resolve(sp.GetRequiredService<IConfiguration>()),
         new MySqlServerVersion(new Version(8, 0, 36)),
         mysql =>
         {
