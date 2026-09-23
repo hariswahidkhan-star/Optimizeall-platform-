@@ -1,0 +1,81 @@
+/* Agency paid advertising. Built on design-system tokens; `ad-` prefix. */
+
+.ad-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.ad-client-picker {
+  min-width: 14rem;
+}
+
+.ad-stats {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+}
+
+.ad-muted {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+  margin: 0;
+}
+
+.ad-h2 {
+  margin: 0;
+  font-size: var(--text-h3);
+  color: var(--color-heading);
+}
+
+.ad-pacing-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.ad-pacing-board {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ad-num {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.ad-list {
+  margin: 0;
+  padding-left: var(--space-5);
+  font-size: var(--text-small);
+}
+
+.ad-error {
+  color: var(--danger-fg);
+}
+
+.ad-warning {
+  color: var(--warning-fg);
+}
+
+.ad-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: var(--text-small);
+  overflow-wrap: anywhere;
+  background: var(--color-surface-2);
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  margin: 0;
+}
+
+.ad-mapping {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+}
