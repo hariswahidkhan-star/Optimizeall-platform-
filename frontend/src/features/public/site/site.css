@@ -387,6 +387,8 @@
 }
 
 .site-section--brand .site-section__title,
+.site-section--brand .site-section__intro,
+.site-section--brand .eyebrow,
 .site-section--brand h3 {
   color: var(--color-on-primary);
 }

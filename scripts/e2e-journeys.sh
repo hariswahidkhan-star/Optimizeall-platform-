@@ -1,17 +1,21 @@
 #!/usr/bin/env bash
 # Runs the full-stack Playwright journeys (frontend/e2e/journeys) against a real API and a fresh MySQL database.
 #
-#   1. creates a fresh database oa_e2e_<timestamp>
-#   2. builds and starts the API on :$E2E_API_PORT (Development, Baseline seed only, file-mode email + dev mailbox,
+#   1. creates a fresh database oa_e2e_<timestamp> (MySQL), or a fresh SQLite file with E2E_DB_PROVIDER=sqlite
+#   2. builds and starts the API on :$E2E_API_PORT (Development, $E2E_SEED seed profiles, file-mode email + dev mailbox,
 #      background jobs off, relaxed auth rate limit, bootstrap admin)
 #   3. builds the frontend and serves it with `vite preview` on :$E2E_WEB_PORT, proxying /api and /t to the API
-#   4. waits for /health/ready and runs `E2E_SUITE=journeys npx playwright test` (desktop + mobile projects)
+#   4. waits for /health/ready and runs `E2E_SUITE=$E2E_SUITE npx playwright test` (desktop + mobile projects)
 #   5. always tears down (kills the servers by PID, drops the database) and exits with Playwright's exit code
 #
 # Usage:
 #   scripts/e2e-journeys.sh [extra playwright args...]      e.g. --project=desktop-chromium, --repeat-each=1
 #
 # Environment:
+#   E2E_SUITE=journeys    Playwright suite (frontend/e2e/<suite>): "journeys" (participant → admin, Baseline seed) or
+#                         "agency" (agency platform journeys against the Demo seed's accounts and clients)
+#   E2E_SEED              comma-separated seed profiles (default: Baseline for journeys, Baseline,Demo for agency)
+#   E2E_DB_PROVIDER=mysql mysql (default) or sqlite (a fresh file in $E2E_WORK_DIR; no MySQL server needed)
 #   DB_HOST/DB_PORT/DB_USER/DB_PASSWORD   MySQL server (defaults: 127.0.0.1:3306 optimizeall/optimizeall_dev);
 #                                         the user must be able to CREATE/DROP databases
 #   E2E_API_PORT=5099  E2E_WEB_PORT=4173
@@ -32,8 +36,18 @@ API_LOG="$E2E_WORK_DIR/api.log"
 WEB_LOG="$E2E_WORK_DIR/web.log"
 ADMIN_EMAIL="${E2E_ADMIN_EMAIL:-e2e-admin@optimizeall.test}"
 ADMIN_PASSWORD="${E2E_ADMIN_PASSWORD:-E2e-Admin#Journey-2026}"
+E2E_SUITE="${E2E_SUITE:-journeys}"
+case "$E2E_SUITE" in
+  agency) E2E_SEED="${E2E_SEED:-Baseline,Demo}" ;;
+  *) E2E_SEED="${E2E_SEED:-Baseline}" ;;
+esac
+E2E_DB_PROVIDER="$(printf '%s' "${E2E_DB_PROVIDER:-mysql}" | tr '[:upper:]' '[:lower:]')"
+case "$E2E_DB_PROVIDER" in mysql|sqlite) ;; *) die "E2E_DB_PROVIDER must be mysql or sqlite" ;; esac
+SQLITE_FILE="$E2E_WORK_DIR/e2e.db"
 
-have mysql || die "The mysql client is required (it creates and drops the e2e database)"
+if [ "$E2E_DB_PROVIDER" = mysql ]; then
+  have mysql || die "The mysql client is required (it creates and drops the e2e database)"
+fi
 have dotnet || die "dotnet is required"
 have npx || die "Node.js/npm is required"
 
@@ -49,7 +63,9 @@ teardown() {
   local code=$?
   [ -n "$web_pid" ] && stop_bg "$web_pid"
   [ -n "$api_pid" ] && stop_bg "$api_pid"
-  if $db_created && [ "${E2E_KEEP_DB:-}" != "1" ]; then
+  if $db_created && [ "$E2E_DB_PROVIDER" = sqlite ]; then
+    [ "${E2E_KEEP_DB:-}" = "1" ] && log "Database kept: $SQLITE_FILE" || rm -f "$SQLITE_FILE" "$SQLITE_FILE-wal" "$SQLITE_FILE-shm"
+  elif $db_created && [ "${E2E_KEEP_DB:-}" != "1" ]; then
     local i
     for i in 1 2 3 4 5 6; do
       mysql_app -e "DROP DATABASE IF EXISTS \`$E2E_DB_NAME\`" && break
@@ -63,16 +79,29 @@ trap teardown EXIT
 trap 'exit 130' INT TERM
 
 # ------------------------------------------------------------------ database
-log "Creating database $E2E_DB_NAME"
-# Retries for a while: a shared MySQL server may briefly refuse connections (ERROR 1040 Too many connections).
-for attempt in $(seq 1 30); do
-  if mysql_app -e "CREATE DATABASE \`$E2E_DB_NAME\` CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci"; then
-    db_created=true; break
-  fi
-  warn "Could not create $E2E_DB_NAME (attempt $attempt); retrying"
-  sleep 5
-done
-$db_created || die "Could not create $E2E_DB_NAME"
+if [ "$E2E_DB_PROVIDER" = sqlite ]; then
+  log "Using a fresh SQLite database $SQLITE_FILE"
+  rm -f "$SQLITE_FILE" "$SQLITE_FILE-wal" "$SQLITE_FILE-shm"
+  db_created=true
+  db_env=(Database__Provider=Sqlite Database__SqlitePath="$SQLITE_FILE")
+else
+  log "Creating database $E2E_DB_NAME"
+  # Retries for a while: a shared MySQL server may briefly refuse connections (ERROR 1040 Too many connections).
+  for attempt in $(seq 1 30); do
+    if mysql_app -e "CREATE DATABASE \`$E2E_DB_NAME\` CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci"; then
+      db_created=true; break
+    fi
+    warn "Could not create $E2E_DB_NAME (attempt $attempt); retrying"
+    sleep 5
+  done
+  $db_created || die "Could not create $E2E_DB_NAME"
+  db_env=(ConnectionStrings__Default="$(connection_string "$E2E_DB_NAME")")
+fi
+seed_env=()
+IFS=',' read -r -a seed_profiles <<< "$E2E_SEED"
+for i in "${!seed_profiles[@]}"; do seed_env+=("Database__Seed__$i=${seed_profiles[$i]// /}"); done
+# Clears the next index so appsettings.Development.json's list ("Baseline", "Demo") cannot leak into a shorter one.
+seed_env+=("Database__Seed__${#seed_profiles[@]}=None")
 
 # ------------------------------------------------------------------ builds
 if [ "${E2E_SKIP_BUILD:-}" != "1" ]; then
@@ -87,20 +116,20 @@ if [ "${E2E_SKIP_BUILD:-}" != "1" ]; then
 fi
 
 # ------------------------------------------------------------------ API
-log "Starting API on :$E2E_API_PORT"
-api_pid="$(cd "$ROOT" && \
+log "Starting API on :$E2E_API_PORT ($E2E_DB_PROVIDER, seed: $E2E_SEED)"
+api_pid="$(cd "$ROOT" && start_bg e2e-api "$API_LOG" env \
   ASPNETCORE_ENVIRONMENT=Development \
   ASPNETCORE_URLS="http://localhost:$E2E_API_PORT" \
-  ConnectionStrings__Default="$(connection_string "$E2E_DB_NAME")" \
+  "${db_env[@]}" \
   Database__InitializationMode=Migrate \
-  Database__Seed__0=Baseline Database__Seed__1=None \
+  "${seed_env[@]}" \
   Email__Mode=File Email__PickupDirectory="$MAIL_DIR" Email__AppBaseUrl="http://localhost:$E2E_WEB_PORT" \
   DevTools__MailboxEnabled=true \
   RateLimiting__AuthPerMinute=1000 \
   Jobs__Enabled=false \
   Storage__RootPath="$FILES_DIR" \
   Bootstrap__AdminEmail="$ADMIN_EMAIL" Bootstrap__AdminPassword="$ADMIN_PASSWORD" \
-  start_bg e2e-api "$API_LOG" dotnet run --project "$API_PROJECT" -c Release --no-build --no-launch-profile)"
+  dotnet run --project "$API_PROJECT" -c Release --no-build --no-launch-profile)"
 
 # ------------------------------------------------------------------ web
 log "Starting vite preview on :$E2E_WEB_PORT (proxy → :$E2E_API_PORT)"
@@ -115,10 +144,10 @@ wait_for_url "http://localhost:$E2E_WEB_PORT/" 60 "$web_pid" \
 ok "Web ready"
 
 # ------------------------------------------------------------------ playwright
-log "Running Playwright journeys"
+log "Running Playwright suite $E2E_SUITE"
 set +e
 (cd "$FRONTEND_DIR" && \
-  E2E_SUITE=journeys \
+  E2E_SUITE="$E2E_SUITE" E2E_DB_PROVIDER="$E2E_DB_PROVIDER" \
   PLAYWRIGHT_BASE_URL="http://localhost:$E2E_WEB_PORT" E2E_BASE_URL="http://localhost:$E2E_WEB_PORT" \
   E2E_API_URL="http://localhost:$E2E_API_PORT" E2E_MAIL_DIR="$MAIL_DIR" \
   E2E_ADMIN_EMAIL="$ADMIN_EMAIL" E2E_ADMIN_PASSWORD="$ADMIN_PASSWORD" \

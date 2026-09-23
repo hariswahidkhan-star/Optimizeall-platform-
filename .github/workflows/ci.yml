@@ -224,6 +224,16 @@ jobs:
           E2E_WORK_DIR: ${{ runner.temp }}/e2e
         run: scripts/e2e-journeys.sh
 
+      # Agency platform journeys (public website, CRM → proposal → invoice, delivery/email/social approvals, landing
+      # pages, authorization, phone layouts) against the Demo seed's accounts, on a throwaway SQLite database.
+      - name: Agency journeys (scripts/e2e-journeys.sh, E2E_SUITE=agency, SQLite)
+        env:
+          E2E_SUITE: agency
+          E2E_DB_PROVIDER: sqlite
+          E2E_SKIP_BUILD: "1"
+          E2E_WORK_DIR: ${{ runner.temp }}/e2e-agency
+        run: scripts/e2e-journeys.sh
+
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v4
@@ -243,6 +253,8 @@ jobs:
           path: |
             ${{ runner.temp }}/e2e/api.log
             ${{ runner.temp }}/e2e/web.log
+            ${{ runner.temp }}/e2e-agency/api.log
+            ${{ runner.temp }}/e2e-agency/web.log
             ${{ runner.temp }}/web-smoke.log
           retention-days: 7
           if-no-files-found: ignore

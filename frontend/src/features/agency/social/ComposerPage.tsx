@@ -203,7 +203,9 @@ function Composer({ post }: { post: Post | null }) {
       });
       return { ...result, profileIds: parsed.variants.map((v) => v.profileId) };
     },
-    enabled: !!debounced && selected.length > 0,
+    // Gate on the debounced body, not `selected`: right after the first network is ticked `selected` is non-empty while
+    // the debounced body still has no variants, which the API rejects with 400.
+    enabled: !!debounced && selected.length > 0 && (JSON.parse(debounced) as PostInput).variants.length > 0,
     retry: false,
   });
   const validationByNetwork = new Map(
