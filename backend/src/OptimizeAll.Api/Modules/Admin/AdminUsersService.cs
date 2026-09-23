@@ -121,7 +121,9 @@ public sealed class AdminUsersService(
         var payout = await db.Set<PayoutProfile>().AsNoTracking().Where(p => p.UserId == id)
             .Select(p => new PayoutProfileSummaryDto(p.Method, p.MaskedDestination, p.PreferredCurrency, p.UpdatedAt)).FirstOrDefaultAsync(ct);
 
-        var recent = await auditLogs.RecentForUserAsync(id, 20, ct);
+        // Actor-side entries and network details are audit-log data: only for callers who may read the audit log.
+        var canViewAudit = currentUser.HasPermission(Permissions.AuditView);
+        var recent = await auditLogs.RecentForUserAsync(id, 20, includeActorEntries: canViewAudit, includeNetworkDetails: canViewAudit, ct);
 
         return new AdminUserDetailDto(
             ToProfile(user),
@@ -144,10 +146,26 @@ public sealed class AdminUsersService(
         RequireConfirm(request.Confirm);
         if (id == currentUser.Id)
             throw DomainException.Forbidden("admin.cannot_suspend_self", "You can't suspend your own account.");
+        await using var tx = await db.Database.BeginTransactionAsync(ct);
+        // Lock the Admin role rows and their user rows (same order as SetRolesAsync) so two concurrent suspensions or a
+        // suspension racing a demotion can't both pass the "last active admin" check. Locking reads see the latest
+        // committed statuses.
+        var adminIds = await db.Database
+            .SqlQuery<Guid>($"SELECT UserId AS Value FROM user_roles WHERE Role = 'Admin' FOR UPDATE")
+            .ToListAsync(ct);
+        var activeAdminIds = adminIds.Count == 0
+            ? new List<Guid>()
+            : await db.Database.SqlQueryRaw<Guid>(
+                    $"SELECT Id AS Value FROM users WHERE Status = 'Active' AND Id IN ({string.Join(", ", adminIds.Select((_, i) => "{" + i + "}"))}) FOR UPDATE",
+                    adminIds.Cast<object>().ToArray())
+                .ToListAsync(ct);
+
         var user = await db.LoadUserAsync(id, ct);
         RequireAdminForStaffTarget(user);
         if (user.Status == UserStatus.Suspended)
             throw DomainException.Conflict("admin.already_suspended", "This account is already suspended.");
+        if (user.Roles.Any(r => r.Role == Role.Admin) && !activeAdminIds.Any(a => a != id))
+            throw DomainException.Conflict("admin.last_admin", "At least one active administrator must remain.");
 
         var before = new { user.Status, user.StatusReason };
         user.Status = UserStatus.Suspended;
@@ -161,6 +179,7 @@ public sealed class AdminUsersService(
             $"Your account has been suspended. Reason: {user.StatusReason} If you believe this is a mistake, reply to this email or contact support.",
             null, new[] { NotificationChannel.Email }), ct);
         await db.SaveChangesAsync(ct);
+        await tx.CommitAsync(ct);
         return await GetAsync(id, ct);
     }
 

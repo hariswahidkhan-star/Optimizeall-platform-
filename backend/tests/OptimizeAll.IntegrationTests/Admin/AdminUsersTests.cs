@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Domain.Audit;
@@ -146,6 +147,77 @@ public sealed class AdminUsersTests(ApiFactory api) : IClassFixture<ApiFactory>
         Assert.Contains(target.Email, text);
         Assert.DoesNotContain("PasswordHash", text, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain("AQAAAA", text); // ASP.NET Identity password hash prefix
+    }
+
+    [Fact]
+    public async Task User_detail_exposes_actor_side_audit_and_network_details_only_with_audit_view()
+    {
+        // The target is a staff member whose own actions (actor-side entries) are audit.view data.
+        var target = await api.CreateUserAsync(new[] { Role.Participant, Role.CampaignManager });
+        var otherEntityId = Guid.NewGuid().ToString();
+        await api.WithDbAsync(async db =>
+        {
+            var now = api.Clock.GetUtcNow().UtcDateTime;
+            db.Set<AuditLog>().Add(new AuditLog
+            {
+                CreatedAt = now, ActorUserId = target.Id, ActorType = "CampaignManager", Action = "campaign.reward_rules_changed",
+                EntityType = "Campaign", EntityId = otherEntityId, BeforeJson = "{\"rate\":\"secret-before\"}",
+                AfterJson = "{\"rate\":\"secret-after\"}", Reason = "actor-side secret reason", IpAddress = "198.51.100.23",
+                CorrelationId = "corr-actor-side",
+            });
+            db.Set<AuditLog>().Add(new AuditLog
+            {
+                CreatedAt = now, ActorUserId = null, ActorType = "system", Action = "admin.user_tier_changed",
+                EntityType = "User", EntityId = target.Id.ToString(), BeforeJson = "{\"tier\":\"Standard\"}",
+                AfterJson = "{\"tier\":\"Gold\"}", Reason = "about the user", IpAddress = "203.0.113.77", CorrelationId = "corr-about-user",
+            });
+            await db.SaveChangesAsync();
+        });
+
+        // users.view only (Reviewer): entries about the user, no actor-side entries, no IP/correlation id.
+        var (_, reviewer) = await api.CreateClientAsync(Role.Reviewer);
+        var limitedResponse = await reviewer.GetAsync($"/api/v1/admin/users/{target.Id}");
+        var limitedText = await limitedResponse.Content.ReadAsStringAsync();
+        var limited = await limitedResponse.ReadJsonAsync();
+        var limitedAudit = limited.GetProperty("recentAudit").EnumerateArray().ToList();
+        Assert.Contains(limitedAudit, a => a.GetProperty("reason").GetString() == "about the user");
+        Assert.DoesNotContain(limitedAudit, a => a.GetProperty("entityId").GetString() == otherEntityId);
+        Assert.All(limitedAudit, a =>
+        {
+            Assert.True(a.GetProperty("entityType").GetString() is "User" or "SocialAccount" or "SupportTicket");
+            Assert.Equal(JsonValueKind.Null, a.GetProperty("ipAddress").ValueKind);
+            Assert.Equal(JsonValueKind.Null, a.GetProperty("correlationId").ValueKind);
+        });
+        Assert.DoesNotContain("secret-before", limitedText);
+        Assert.DoesNotContain("actor-side secret reason", limitedText);
+        Assert.DoesNotContain("198.51.100.23", limitedText);
+        Assert.DoesNotContain("203.0.113.77", limitedText);
+
+        // audit.view (Finance): actor-side entries and network details are included.
+        var (_, finance) = await api.CreateClientAsync(Role.Finance);
+        var full = await (await finance.GetAsync($"/api/v1/admin/users/{target.Id}")).ReadJsonAsync();
+        var fullAudit = full.GetProperty("recentAudit").EnumerateArray().ToList();
+        var actorSide = Assert.Single(fullAudit, a => a.GetProperty("entityId").GetString() == otherEntityId);
+        Assert.Equal("198.51.100.23", actorSide.GetProperty("ipAddress").GetString());
+        var about = Assert.Single(fullAudit, a => a.GetProperty("reason").GetString() == "about the user");
+        Assert.Equal("corr-about-user", about.GetProperty("correlationId").GetString());
+    }
+
+    [Fact]
+    public async Task User_detail_includes_entries_about_the_users_own_social_accounts()
+    {
+        var (target, targetClient) = await api.CreateClientAsync();
+        var handle = "own" + Guid.NewGuid().ToString("N")[..10];
+        var created = await (await targetClient.PostAsJsonAsync("/api/v1/me/social-accounts", new
+        {
+            platform = "Instagram", handle, profileUrl = $"https://www.instagram.com/{handle}/",
+            accountCreatedAt = api.Clock.GetUtcNow().UtcDateTime.AddDays(-300), followerCount = 100,
+        })).ReadJsonAsync();
+        var (_, reviewer) = await api.CreateClientAsync(Role.Reviewer);
+        var detail = await (await reviewer.GetAsync($"/api/v1/admin/users/{target.Id}")).ReadJsonAsync();
+        Assert.Contains(detail.GetProperty("recentAudit").EnumerateArray(), a =>
+            a.GetProperty("action").GetString() == "social.account_added" &&
+            a.GetProperty("entityId").GetString() == created.GetProperty("id").GetGuid().ToString());
     }
 
     [Fact]

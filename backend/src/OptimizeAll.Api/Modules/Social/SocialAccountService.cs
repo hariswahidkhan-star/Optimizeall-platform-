@@ -56,10 +56,10 @@ public sealed class SocialAccountService(
         var createdAt = ValidateDeclaredFacts(platform, request.Handle, request.ProfileUrl, request.AccountCreatedAt!.Value,
             request.PrimaryLanguage, request.AudienceCountryCode);
 
-        var active = await db.Set<SocialAccount>().CountAsync(a => a.UserId == userId && a.IsActive, ct);
-        if (active >= SocialProfileRules.MaxActiveAccountsPerUser)
-            throw DomainException.Conflict("social.limit_reached",
-                $"You can have at most {SocialProfileRules.MaxActiveAccountsPerUser} active social profiles. Remove one first.");
+        await using var tx = await db.Database.BeginTransactionAsync(ct);
+        // Lock the owner first so concurrent creates/reactivations are serialized against the active-profile limit.
+        await LockUserAsync(userId, ct);
+        await EnsureBelowActiveLimitAsync(userId, ct);
 
         var normalized = Normalization.Handle(request.Handle);
         await EnsureHandleAvailableAsync(userId, platform, normalized, null, ct);
@@ -79,6 +79,7 @@ public sealed class SocialAccountService(
         db.Set<SocialAccount>().Add(account);
         audit.Record("social.account_added", nameof(SocialAccount), account.Id, after: AuditView(account));
         await SaveHandleAsync(ct);
+        await tx.CommitAsync(ct);
 
         var (criteria, participant) = await CriteriaAsync(userId, ct);
         return ToDto(account, criteria, participant);
@@ -99,6 +100,7 @@ public sealed class SocialAccountService(
 
         var before = AuditView(account);
         var factsChanged = normalized != account.NormalizedHandle ||
+                           Normalization.PostUrl(request.ProfileUrl) != Normalization.PostUrl(account.ProfileUrl) ||
                            createdAt != account.AccountCreatedAt ||
                            request.FollowerCount != account.FollowerCount;
 
@@ -128,7 +130,7 @@ public sealed class SocialAccountService(
         var (criteria, participant) = await CriteriaAsync(userId, ct);
         return new SocialAccountChangeResponse(ToDto(account, criteria, participant), reset,
             reset
-                ? "Profile updated. Because you changed the handle, creation date or follower count, it needs to be verified again."
+                ? "Profile updated. Because you changed the handle, profile link, creation date or follower count, it needs to be verified again."
                 : "Profile updated.");
     }
 
@@ -147,17 +149,18 @@ public sealed class SocialAccountService(
 
     public async Task<SocialAccountDto> ReactivateAsync(Guid userId, Guid id, CancellationToken ct)
     {
+        await using var tx = await db.Database.BeginTransactionAsync(ct);
+        // Lock the owner first so concurrent creates/reactivations are serialized against the active-profile limit.
+        await LockUserAsync(userId, ct);
         var account = await OwnedAsync(userId, id, ct);
         if (!account.IsActive)
         {
-            var active = await db.Set<SocialAccount>().CountAsync(a => a.UserId == userId && a.IsActive, ct);
-            if (active >= SocialProfileRules.MaxActiveAccountsPerUser)
-                throw DomainException.Conflict("social.limit_reached",
-                    $"You can have at most {SocialProfileRules.MaxActiveAccountsPerUser} active social profiles. Remove one first.");
+            await EnsureBelowActiveLimitAsync(userId, ct);
             account.IsActive = true;
             audit.Record("social.account_reactivated", nameof(SocialAccount), account.Id);
             await db.SaveChangesAsync(ct);
         }
+        await tx.CommitAsync(ct);
         var (criteria, participant) = await CriteriaAsync(userId, ct);
         return ToDto(account, criteria, participant);
     }
@@ -225,6 +228,10 @@ public sealed class SocialAccountService(
 
         var account = await db.Set<SocialAccount>().FirstOrDefaultAsync(a => a.Id == id, ct)
                       ?? throw DomainException.NotFound("SocialAccount");
+        if (account.UserId == reviewerId)
+            throw DomainException.Forbidden("social.self_verification", "You can't review your own social profile.");
+        if (account.VerificationStatus != SocialAccountVerificationStatus.PendingReview)
+            throw DomainException.Conflict("social.not_pending", "This profile is not waiting for review.");
         ConcurrencyGuard.Apply(db, account, request.ConcurrencyStamp!.Value);
 
         if (request.VerifiedAccountCreatedAt is { } corrected)
@@ -303,7 +310,25 @@ public sealed class SocialAccountService(
             errors["audienceCountryCode"] = new[] { "Use a two-letter country code." };
         if (errors.Count > 0)
             throw new DomainException("social.invalid", "Some profile details are invalid.", DomainErrorKind.Validation, errors);
+        if (!SocialProfileRules.ProfileUrlMatchesHandle(platform, profileUrl, handle))
+            throw FieldRules.FieldError("social.url_handle_mismatch", "profileUrl",
+                $"The profile link must point to @{Normalization.Handle(handle)} on {platform}.");
         return SocialProfileRules.ToUtc(createdAt);
+    }
+
+    /// <summary>Row-locks the owner (inside the caller's transaction) to serialize changes to their active-profile count.</summary>
+    private async Task LockUserAsync(Guid userId, CancellationToken ct)
+    {
+        var locked = await db.Database.SqlQuery<Guid>($"SELECT Id AS Value FROM users WHERE Id = {userId} FOR UPDATE").ToListAsync(ct);
+        if (locked.Count == 0) throw DomainException.NotFound("User");
+    }
+
+    private async Task EnsureBelowActiveLimitAsync(Guid userId, CancellationToken ct)
+    {
+        var active = await db.Set<SocialAccount>().CountAsync(a => a.UserId == userId && a.IsActive, ct);
+        if (active >= SocialProfileRules.MaxActiveAccountsPerUser)
+            throw DomainException.Conflict("social.limit_reached",
+                $"You can have at most {SocialProfileRules.MaxActiveAccountsPerUser} active social profiles. Remove one first.");
     }
 
     private async Task EnsureHandleAvailableAsync(Guid userId, SocialPlatform platform, string normalized, Guid? exceptId, CancellationToken ct)
