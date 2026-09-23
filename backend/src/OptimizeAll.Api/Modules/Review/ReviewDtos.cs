@@ -47,7 +47,8 @@ public sealed class DecisionRequest
     [Required]
     public ReviewDecision? Decision { get; set; }
 
-    [MaxLength(1000)]
+    /// <summary>Required (5+ characters after trimming) unless approving.</summary>
+    [MaxLength(ReasonText.MaxInputLength)]
     public string? Reason { get; set; }
 
     [Range(typeof(decimal), "0", "1000000")]
@@ -62,13 +63,15 @@ public sealed class LiveCheckRequest
     [Required]
     public LiveCheckResult? Result { get; set; }
 
-    [MaxLength(1000)]
+    /// <summary>Required (5+ characters after trimming) when the result is Removed.</summary>
+    [MaxLength(ReasonText.MaxInputLength)]
     public string? Note { get; set; }
 }
 
 public sealed class ReverseRequest
 {
-    [Required, MinLength(5), MaxLength(1000)]
+    /// <summary>At least 5 characters after trimming (400 review.reason_too_short).</summary>
+    [Required, MaxLength(ReasonText.MaxInputLength)]
     public string Reason { get; set; } = string.Empty;
 
     public bool Confirm { get; set; }
@@ -79,7 +82,8 @@ public sealed class ResolveAppealRequest
     [Required]
     public AppealOutcome? Outcome { get; set; }
 
-    [Required, MinLength(5), MaxLength(2000)]
+    /// <summary>At least 5 characters after trimming (400 review.reason_too_short).</summary>
+    [Required, MaxLength(ReasonText.MaxInputLength)]
     public string Note { get; set; } = string.Empty;
 
     [Required]

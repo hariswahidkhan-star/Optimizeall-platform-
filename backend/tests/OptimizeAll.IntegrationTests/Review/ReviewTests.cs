@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Modules.Review;
+using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Identity;
 using OptimizeAll.Domain.Ledger;
 using OptimizeAll.Domain.Notifications;
@@ -252,8 +253,11 @@ public sealed class ReviewTests(ApiFactory api) : IClassFixture<ApiFactory>
 
         var earnings = await kit.EarningsAsync(id);
         var live = earnings.Where(e => e.Status is EarningStatus.Approved or EarningStatus.PendingApproval && e.Type != EarningType.Reversal).ToList();
-        // A fresh post reward; the first-post bonus is never paid twice.
-        Assert.Equal(EarningType.PostReward, Assert.Single(live).Type);
+        // A fresh post reward, and (because the only first-post bonus was reversed) the first-post bonus once more,
+        // under the next first-post key. Never two live first-post bonuses.
+        Assert.Equal(2, live.Count);
+        Assert.Single(live, e => e.Type == EarningType.PostReward);
+        Assert.Equal($"firstpost:{campaign.Id}:{p.User.Id}:1", Assert.Single(live, e => e.Type == EarningType.FirstPostBonus).IdempotencyKey);
         Assert.Equal(2, earnings.Count(e => e.Status == EarningStatus.Reversed && e.Type != EarningType.Reversal));
     }
 
@@ -289,6 +293,280 @@ public sealed class ReviewTests(ApiFactory api) : IClassFixture<ApiFactory>
         Assert.Contains(detail.GetProperty("events").EnumerateArray(), e => e.GetProperty("action").GetString() == "approved" &&
                                                                              e.GetProperty("actor").GetProperty("id").GetGuid() == reviewerUser.Id);
         Assert.Equal(1, detail.GetProperty("earnings").GetArrayLength());
+    }
+
+    // ------------------------------------------------------------------ helpers for the integrity tests
+
+    private async Task<Participant> StaffParticipantAsync(params Role[] staffRoles)
+    {
+        var user = await api.CreateUserAsync(new[] { Role.Participant }.Concat(staffRoles).ToArray());
+        var accountId = await kit.AddAccountAsync(user.Id, SocialPlatform.Instagram);
+        return new Participant(user, await api.LoginAsync(user), accountId, SocialPlatform.Instagram);
+    }
+
+    private static async Task<(Guid Id, Guid Stamp)> AppealItemAsync(HttpClient staff, Guid submissionId)
+    {
+        var appeals = await CampaignTestKit.GetJsonAsync(staff, "/api/v1/review/appeals?status=Open&pageSize=200");
+        var item = appeals.GetProperty("items").EnumerateArray().Single(a => a.GetProperty("submissionId").GetGuid() == submissionId);
+        return (item.GetProperty("id").GetGuid(), item.GetProperty("concurrencyStamp").GetGuid());
+    }
+
+    private static Task<HttpResponseMessage> ResolveAsync(HttpClient staff, (Guid Id, Guid Stamp) appeal, string outcome, string note) =>
+        staff.PostAsJsonAsync($"/api/v1/review/appeals/{appeal.Id}/resolve", new { outcome, note, concurrencyStamp = appeal.Stamp });
+
+    private static Task<HttpResponseMessage> AppealAsync(Participant p, Guid id, string? reason = null) =>
+        p.Client.PostAsJsonAsync($"/api/v1/me/submissions/{id}/appeal", new { reason = reason ?? "Please look again, the post meets every requirement." });
+
+    private Task SetUserStatusAsync(Guid userId, UserStatus status) =>
+        api.WithDbAsync(db => db.Set<User>().Where(u => u.Id == userId).ExecuteUpdateAsync(u => u.SetProperty(x => x.Status, status)));
+
+    // ------------------------------------------------------------------ H2: self-review
+
+    [Fact]
+    public async Task Staff_can_never_review_their_own_submissions_or_appeals()
+    {
+        var campaign = await CampaignAsync();
+        var me = await StaffParticipantAsync(Role.Admin);
+        var mine = await kit.SubmitOkAsync(me, campaign.Id);
+
+        await (await me.Client.PostAsync($"/api/v1/review/submissions/{mine}/claim", null)).ShouldFailAsync(403, "review.self_review");
+        await (await CampaignTestKit.DecideAsync(me.Client, mine, "Approve")).ShouldFailAsync(403, "review.self_review");
+        await (await CampaignTestKit.DecideAsync(me.Client, mine, "Reject", "Rejecting my own post")).ShouldFailAsync(403, "review.self_review");
+        Assert.Empty(await kit.EarningsAsync(mine));
+
+        // Approved by someone else: still can't confirm the live check or reverse it.
+        var (_, reviewer) = await kit.ReviewerAsync();
+        (await CampaignTestKit.DecideAsync(reviewer, mine, "Approve")).EnsureSuccessStatusCode();
+        await (await me.Client.PostAsJsonAsync($"/api/v1/review/submissions/{mine}/live-check", new { result = "ConfirmedLive" }))
+            .ShouldFailAsync(403, "review.self_review");
+        await (await me.Client.PostAsJsonAsync($"/api/v1/review/submissions/{mine}/reverse", new { reason = "Reversing my own post", confirm = true }))
+            .ShouldFailAsync(403, "review.self_review");
+
+        // Rejected by someone else and appealed: can't resolve the own appeal.
+        var second = await kit.SubmitOkAsync(me, campaign.Id);
+        (await CampaignTestKit.DecideAsync(reviewer, second, "Reject", "Product not visible")).EnsureSuccessStatusCode();
+        (await AppealAsync(me, second)).EnsureSuccessStatusCode();
+        var appeal = await AppealItemAsync(me.Client, second);
+        await (await ResolveAsync(me.Client, appeal, "Overturned", "Looks fine to me")).ShouldFailAsync(403, "review.self_review");
+        Assert.Equal(SubmissionStatus.Rejected, await api.WithDbAsync(db => db.Set<Submission>().Where(s => s.Id == second).Select(s => s.Status).FirstAsync()));
+    }
+
+    // ------------------------------------------------------------------ H3: suspended participants
+
+    [Fact]
+    public async Task Suspended_participants_cannot_be_approved_or_overturned_but_can_be_rejected_and_reversed()
+    {
+        var campaign = await CampaignAsync();
+        var p = await kit.ParticipantAsync();
+        var toApprove = await kit.SubmitOkAsync(p, campaign.Id);
+        var toReject = await kit.SubmitOkAsync(p, campaign.Id);
+        var approvedEarlier = await kit.SubmitOkAsync(p, campaign.Id);
+        var appealed = await kit.SubmitOkAsync(p, campaign.Id);
+        var (_, a) = await kit.ReviewerAsync();
+        var (_, b) = await kit.ReviewerAsync();
+        (await CampaignTestKit.DecideAsync(a, approvedEarlier, "Approve")).EnsureSuccessStatusCode();
+        (await CampaignTestKit.DecideAsync(a, appealed, "Reject", "Product not visible")).EnsureSuccessStatusCode();
+        (await AppealAsync(p, appealed)).EnsureSuccessStatusCode();
+
+        await SetUserStatusAsync(p.User.Id, UserStatus.Suspended);
+
+        await (await CampaignTestKit.DecideAsync(a, toApprove, "Approve")).ShouldFailAsync(409, "participant.not_active");
+        Assert.Empty(await kit.EarningsAsync(toApprove));
+        Assert.Equal(SubmissionStatus.Pending, await api.WithDbAsync(db => db.Set<Submission>().Where(s => s.Id == toApprove).Select(s => s.Status).FirstAsync()));
+        (await CampaignTestKit.DecideAsync(a, toReject, "Reject", "Account under investigation")).EnsureSuccessStatusCode();
+
+        var appeal = await AppealItemAsync(b, appealed);
+        await (await ResolveAsync(b, appeal, "Overturned", "Product is visible")).ShouldFailAsync(409, "participant.not_active");
+        Assert.Empty(await kit.EarningsAsync(appealed));
+        (await ResolveAsync(b, appeal, "Upheld", "Decision stands")).EnsureSuccessStatusCode();
+
+        var (_, finance) = await api.CreateClientAsync(Role.Finance);
+        (await finance.PostAsJsonAsync($"/api/v1/review/submissions/{approvedEarlier}/reverse",
+            new { reason = "Fraud investigation", confirm = true })).EnsureSuccessStatusCode();
+    }
+
+    // ------------------------------------------------------------------ M3: overturn limits
+
+    [Fact]
+    public async Task Overturn_rechecks_the_submission_limit_and_archived_campaigns()
+    {
+        var (_, a) = await kit.ReviewerAsync();
+        var (_, b) = await kit.ReviewerAsync();
+
+        var limited = await CampaignAsync(body => body["maxSubmissionsPerParticipant"] = 1);
+        var p = await kit.ParticipantAsync();
+        var rejected = await kit.SubmitOkAsync(p, limited.Id);
+        (await CampaignTestKit.DecideAsync(a, rejected, "Reject", "Product not visible")).EnsureSuccessStatusCode();
+        (await AppealAsync(p, rejected)).EnsureSuccessStatusCode();
+        await kit.SubmitOkAsync(p, limited.Id); // allowed: the rejected one no longer counts
+        var appeal = await AppealItemAsync(b, rejected);
+        await (await ResolveAsync(b, appeal, "Overturned", "Product is visible")).ShouldFailAsync(409, "appeal.submission_limit_reached");
+        Assert.Empty(await kit.EarningsAsync(rejected));
+
+        var archived = await CampaignAsync();
+        var q = await kit.ParticipantAsync();
+        var qs = await kit.SubmitOkAsync(q, archived.Id);
+        (await CampaignTestKit.DecideAsync(a, qs, "Reject", "Product not visible")).EnsureSuccessStatusCode();
+        (await AppealAsync(q, qs)).EnsureSuccessStatusCode();
+        await api.WithDbAsync(db => db.Set<OptimizeAll.Domain.Campaigns.Campaign>().Where(c => c.Id == archived.Id)
+            .ExecuteUpdateAsync(u => u.SetProperty(c => c.Status, OptimizeAll.Domain.Campaigns.CampaignStatus.Archived)));
+        await (await ResolveAsync(b, await AppealItemAsync(b, qs), "Overturned", "Product is visible")).ShouldFailAsync(409, "appeal.campaign_archived");
+        Assert.Empty(await kit.EarningsAsync(qs));
+    }
+
+    // ------------------------------------------------------------------ L1 / M1: reasons
+
+    [Fact]
+    public async Task Reasons_are_validated_after_trimming()
+    {
+        var campaign = await CampaignAsync();
+        var p = await kit.ParticipantAsync();
+        var id = await kit.SubmitOkAsync(p, campaign.Id);
+        var approved = await kit.SubmitOkAsync(p, campaign.Id);
+        var (_, a) = await kit.ReviewerAsync();
+        var (_, b) = await kit.ReviewerAsync();
+
+        await (await CampaignTestKit.DecideAsync(a, id, "Reject", "    ab     ")).ShouldFailAsync(400, "review.reason_too_short");
+        await (await CampaignTestKit.DecideAsync(a, id, "Reject", "      ")).ShouldFailAsync(400, "review.reason_required");
+
+        (await CampaignTestKit.DecideAsync(a, approved, "Approve")).EnsureSuccessStatusCode();
+        var (_, finance) = await api.CreateClientAsync(Role.Finance);
+        await (await finance.PostAsJsonAsync($"/api/v1/review/submissions/{approved}/reverse", new { reason = "   abc     ", confirm = true }))
+            .ShouldFailAsync(400, "review.reason_too_short");
+
+        (await CampaignTestKit.DecideAsync(a, id, "Reject", "Product not visible")).EnsureSuccessStatusCode();
+        (await AppealAsync(p, id)).EnsureSuccessStatusCode();
+        await (await ResolveAsync(b, await AppealItemAsync(b, id), "Upheld", "  ok      ")).ShouldFailAsync(400, "review.reason_too_short");
+    }
+
+    [Fact]
+    public async Task Maximum_length_reasons_fit_on_every_path()
+    {
+        var (_, manager) = await kit.ManagerAsync();
+        var body = kit.CampaignBody(baseAmount: 4m);
+        body["rewardRules"] = new Dictionary<string, object?>
+        {
+            ["currency"] = "USD", ["dailyCapPerParticipant"] = 6m, ["rules"] = new object[] { new { type = "BaseRate", amount = 4m } },
+        };
+        var campaign = await kit.CreateCampaignAsync(manager, body);
+        var p = await kit.ParticipantAsync();
+        var s1 = await kit.SubmitOkAsync(p, campaign.Id);
+        var s2 = await kit.SubmitOkAsync(p, campaign.Id);
+        var s3 = await kit.SubmitOkAsync(p, campaign.Id);
+        var s4 = await kit.SubmitOkAsync(p, campaign.Id);
+        var (_, a) = await kit.ReviewerAsync();
+        var (_, b) = await kit.ReviewerAsync();
+        var (_, finance) = await api.CreateClientAsync(Role.Finance);
+        var max = new string('m', 900);
+
+        await (await CampaignTestKit.DecideAsync(a, s1, "Reject", max + "x")).ShouldFailAsync(400);
+        (await CampaignTestKit.DecideAsync(a, s1, "Approve", max)).EnsureSuccessStatusCode();
+        // Capped approval: "{900 chars} (caps applied: daily_cap)" is composed and must be cut to the column.
+        (await CampaignTestKit.DecideAsync(a, s2, "Approve", max)).EnsureSuccessStatusCode();
+        (await CampaignTestKit.DecideAsync(a, s3, "Reject", max)).EnsureSuccessStatusCode();
+        (await CampaignTestKit.DecideAsync(a, s4, "RequestCorrection", max)).EnsureSuccessStatusCode();
+        (await finance.PostAsJsonAsync($"/api/v1/review/submissions/{s1}/reverse", new { reason = max, confirm = true })).EnsureSuccessStatusCode();
+
+        (await AppealAsync(p, s3, new string('a', 2000))).EnsureSuccessStatusCode();
+        await (await ResolveAsync(b, await AppealItemAsync(b, s3), "Overturned", max + "x")).ShouldFailAsync(400);
+        (await ResolveAsync(b, await AppealItemAsync(b, s3), "Overturned", max)).EnsureSuccessStatusCode();
+        (await AppealAsync(p, s1, new string('b', 2000))).EnsureSuccessStatusCode();
+        (await ResolveAsync(b, await AppealItemAsync(b, s1), "Upheld", max)).EnsureSuccessStatusCode();
+
+        var ids = new[] { s1, s2, s3, s4 };
+        var reasons = await api.WithDbAsync(db => db.Set<SubmissionEvent>().Where(e => ids.Contains(e.SubmissionId) && e.Reason != null)
+            .Select(e => new { e.Action, e.Reason }).ToListAsync());
+        Assert.All(reasons, r => Assert.True(r.Reason!.Length <= 1000, r.Action));
+        Assert.Contains(reasons, r => r.Action == "approved" && r.Reason!.StartsWith(max) && r.Reason.EndsWith("(caps applied: daily_cap)"));
+        Assert.Contains(reasons, r => r.Action == "appealed" && r.Reason!.Length == 1000 && r.Reason.EndsWith("…"));
+        var decisionReasons = await api.WithDbAsync(db => db.Set<Submission>().Where(s => ids.Contains(s.Id)).Select(s => s.DecisionReason).ToListAsync());
+        Assert.All(decisionReasons, r => Assert.True((r?.Length ?? 0) <= 1000));
+        Assert.Equal(SubmissionStatus.Approved, await api.WithDbAsync(db => db.Set<Submission>().Where(s => s.Id == s3).Select(s => s.Status).FirstAsync()));
+    }
+
+    // ------------------------------------------------------------------ H1: caps by submission day
+
+    [Fact]
+    public async Task Daily_cap_counts_the_submission_day_not_the_declared_post_day()
+    {
+        var (_, manager) = await kit.ManagerAsync();
+        var body = kit.CampaignBody(baseAmount: 4m);
+        body["startsAt"] = kit.Now.AddDays(-5);
+        body["rewardRules"] = new Dictionary<string, object?>
+        {
+            ["currency"] = "USD", ["dailyCapPerParticipant"] = 6m, ["rules"] = new object[] { new { type = "BaseRate", amount = 4m } },
+        };
+        var campaign = await kit.CreateCampaignAsync(manager, body);
+        var p = await kit.ParticipantAsync();
+        // Declared on different days, submitted the same day: they share one daily cap.
+        var s1 = await kit.SubmitOkAsync(p, campaign.Id, postedAt: kit.Now.AddDays(-3));
+        var s2 = await kit.SubmitOkAsync(p, campaign.Id, postedAt: kit.Now.AddMinutes(-5));
+        var (_, reviewer) = await kit.ReviewerAsync();
+        (await CampaignTestKit.DecideAsync(reviewer, s1, "Approve")).EnsureSuccessStatusCode();
+        var second = await (await CampaignTestKit.DecideAsync(reviewer, s2, "Approve")).ReadJsonAsync();
+        Assert.Equal(2m, second.GetProperty("reward").GetProperty("total").GetDecimal());
+        Assert.Equal("daily_cap", second.GetProperty("reward").GetProperty("appliedCaps")[0].GetString());
+    }
+
+    // ------------------------------------------------------------------ L5: first-post bonus after a reversal
+
+    [Fact]
+    public async Task Reversed_first_post_bonus_can_be_earned_again_exactly_once_under_concurrency()
+    {
+        var campaign = await CampaignAsync(null, new { type = "FirstPostBonus", amount = 3m });
+        var p = await kit.ParticipantAsync();
+        var s1 = await kit.SubmitOkAsync(p, campaign.Id);
+        var s2 = await kit.SubmitOkAsync(p, campaign.Id);
+        var s3 = await kit.SubmitOkAsync(p, campaign.Id);
+        var (_, a) = await kit.ReviewerAsync();
+        var (_, b) = await kit.ReviewerAsync();
+        (await CampaignTestKit.DecideAsync(a, s1, "Approve")).EnsureSuccessStatusCode();
+        var (_, finance) = await api.CreateClientAsync(Role.Finance);
+        (await finance.PostAsJsonAsync($"/api/v1/review/submissions/{s1}/reverse", new { reason = "Post was deleted", confirm = true })).EnsureSuccessStatusCode();
+
+        var stamp2 = await CampaignTestKit.StampAsync(a, s2);
+        var stamp3 = await CampaignTestKit.StampAsync(b, s3);
+        var results = await Task.WhenAll(
+            CampaignTestKit.DecideAsync(a, s2, "Approve", stamp: stamp2),
+            CampaignTestKit.DecideAsync(b, s3, "Approve", stamp: stamp3));
+        Assert.All(results, r => Assert.Equal(HttpStatusCode.OK, r.StatusCode));
+
+        var bonuses = await api.WithDbAsync(db => db.Set<EarningEntry>()
+            .Where(e => e.UserId == p.User.Id && e.Type == EarningType.FirstPostBonus).ToListAsync());
+        Assert.Equal(2, bonuses.Count);
+        Assert.Equal(EarningStatus.Reversed, Assert.Single(bonuses, e => e.IdempotencyKey == $"firstpost:{campaign.Id}:{p.User.Id}").Status);
+        var again = Assert.Single(bonuses, e => e.IdempotencyKey == $"firstpost:{campaign.Id}:{p.User.Id}:1");
+        Assert.Equal(EarningStatus.Approved, again.Status);
+        Assert.Contains(again.SubmissionId!.Value, new[] { s2, s3 });
+    }
+
+    // ------------------------------------------------------------------ M2: budget query index
+
+    [Fact]
+    public async Task Budget_spent_query_can_use_the_campaign_status_index()
+    {
+        var campaign = await CampaignAsync();
+        var plan = await api.WithDbAsync(async db =>
+        {
+            var sql = OptimizeAll.Api.Modules.Rewards.RewardQuoteService.SpentQuery(db, campaign.Id).Select(e => e.Amount).ToQueryString();
+            Assert.Contains("IN (", sql);
+            Assert.DoesNotContain("JSON_TABLE", sql, StringComparison.OrdinalIgnoreCase);
+            var conn = db.Database.GetDbConnection();
+            await conn.OpenAsync();
+            await using var cmd = conn.CreateCommand();
+            // ToQueryString declares parameters as SET statements; run them, then EXPLAIN the SELECT.
+            var statements = sql.Split(";", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            foreach (var set in statements[..^1])
+            {
+                cmd.CommandText = set;
+                await cmd.ExecuteNonQueryAsync();
+            }
+            cmd.CommandText = "EXPLAIN " + statements[^1];
+            await using var reader = await cmd.ExecuteReaderAsync();
+            Assert.True(await reader.ReadAsync());
+            return reader["possible_keys"] as string ?? string.Empty;
+        });
+        Assert.Contains("IX_earning_entries_CampaignId_Status", plan);
     }
 }
 
@@ -348,5 +626,62 @@ public sealed class LiveCheckTests(ApiFactory api) : IClassFixture<ApiFactory>
         var removedEarnings = await kit.EarningsAsync(removed);
         Assert.Contains(removedEarnings, e => e.Type == EarningType.Reversal);
         Assert.All(removedEarnings.Where(e => e.Type != EarningType.Reversal), e => Assert.Equal(EarningStatus.Reversed, e.Status));
+    }
+
+    [Fact]
+    public async Task Live_check_due_time_is_measured_from_the_submission_not_a_backdated_post()
+    {
+        var (_, manager) = await kit.ManagerAsync();
+        var body = kit.CampaignBody();
+        body["minPostLiveHours"] = 48;
+        var campaign = await kit.CreateCampaignAsync(manager, body);
+        var reviewerUser = await api.CreateUserAsync(new[] { Role.Reviewer });
+        var reviewer = await api.LoginAsync(reviewerUser);
+        var p = await kit.ParticipantAsync();
+        var submittedAt = kit.Now;
+        var id = await kit.SubmitOkAsync(p, campaign.Id, postedAt: kit.Now.AddHours(-47));
+
+        var approved = await (await CampaignTestKit.DecideAsync(reviewer, id, "Approve")).ReadJsonAsync();
+        var due = approved.GetProperty("liveCheckDueAt").GetDateTime().ToUniversalTime();
+        Assert.True(due >= submittedAt.AddHours(48) - TimeSpan.FromSeconds(1), $"due {due:O}");
+
+        api.Clock.Advance(TimeSpan.FromHours(2)); // PostedAt + 48h has passed, SubmittedAt + 48h has not
+        reviewer = await api.LoginAsync(reviewerUser);
+        await (await reviewer.PostAsJsonAsync($"/api/v1/review/submissions/{id}/live-check", new { result = "ConfirmedLive" }))
+            .ShouldFailAsync(409, "review.live_check_not_due");
+    }
+
+    [Fact]
+    public async Task Suspended_participant_live_check_cannot_be_confirmed_and_long_removal_notes_fit()
+    {
+        var (_, manager) = await kit.ManagerAsync();
+        var body = kit.CampaignBody();
+        body["minPostLiveHours"] = 24;
+        var campaign = await kit.CreateCampaignAsync(manager, body);
+        var reviewerUser = await api.CreateUserAsync(new[] { Role.Reviewer });
+        var reviewer = await api.LoginAsync(reviewerUser);
+        var p = await kit.ParticipantAsync();
+        var kept = await kit.SubmitOkAsync(p, campaign.Id);
+        var removed = await kit.SubmitOkAsync(p, campaign.Id);
+        (await CampaignTestKit.DecideAsync(reviewer, kept, "Approve")).EnsureSuccessStatusCode();
+        (await CampaignTestKit.DecideAsync(reviewer, removed, "Approve")).EnsureSuccessStatusCode();
+
+        api.Clock.Advance(TimeSpan.FromHours(25));
+        reviewer = await api.LoginAsync(reviewerUser);
+        await api.WithDbAsync(db => db.Set<User>().Where(u => u.Id == p.User.Id)
+            .ExecuteUpdateAsync(u => u.SetProperty(x => x.Status, UserStatus.Suspended)));
+
+        await (await reviewer.PostAsJsonAsync($"/api/v1/review/submissions/{kept}/live-check", new { result = "ConfirmedLive" }))
+            .ShouldFailAsync(409, "participant.not_active");
+        Assert.All(await kit.EarningsAsync(kept), e => Assert.Equal(EarningStatus.PendingApproval, e.Status));
+
+        await (await reviewer.PostAsJsonAsync($"/api/v1/review/submissions/{removed}/live-check", new { result = "Removed", note = "   ab   " }))
+            .ShouldFailAsync(400, "review.reason_too_short");
+        var gone = await (await reviewer.PostAsJsonAsync($"/api/v1/review/submissions/{removed}/live-check",
+            new { result = "Removed", note = new string('n', 900) })).ReadJsonAsync();
+        Assert.Equal("Reversed", gone.GetProperty("status").GetString());
+        var reason = await api.WithDbAsync(db => db.Set<Submission>().Where(s => s.Id == removed).Select(s => s.DecisionReason!).FirstAsync());
+        Assert.True(reason.Length <= 1000);
+        Assert.Equal("Post removed before the minimum live duration: " + new string('n', 900), reason);
     }
 }

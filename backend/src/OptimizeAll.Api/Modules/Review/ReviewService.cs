@@ -61,6 +61,9 @@ public sealed class ReviewService(
         var me = currentUser.Id;
         var now = Now;
         var until = now.AddMinutes(await settings.GetAsync(SettingKeys.ReviewClaimMinutes, 15, ct));
+        var owner = await db.Set<Submission>().AsNoTracking().Where(s => s.Id == submissionId).Select(s => (Guid?)s.UserId)
+            .FirstOrDefaultAsync(ct) ?? throw DomainException.NotFound("Submission");
+        EnsureNotSelf(owner);
 
         await using var tx = await db.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
         var moved = await db.Set<Submission>()
@@ -132,14 +135,15 @@ public sealed class ReviewService(
         var me = currentUser.Id;
         var now = Now;
         var decision = request.Decision!.Value;
-        var reason = string.IsNullOrWhiteSpace(request.Reason) ? null : request.Reason.Trim();
-        if (decision != ReviewDecision.Approve && (reason is null || reason.Length < 5))
-            throw new DomainException("review.reason_required", "Explain the decision to the participant (at least 5 characters).");
+        var reason = decision == ReviewDecision.Approve
+            ? Trimmed(request.Reason)
+            : RequireReason(request.Reason, "Explain the decision to the participant");
         if (decision != ReviewDecision.Approve && request.QualityBonusAmount is > 0)
             throw new DomainException("review.quality_bonus_requires_approval", "A quality bonus can only be awarded when approving.");
 
         var existing = await db.Set<Submission>().AsNoTracking().FirstOrDefaultAsync(s => s.Id == submissionId, ct)
             ?? throw DomainException.NotFound("Submission");
+        EnsureNotSelf(existing.UserId);
 
         var target = decision switch
         {
@@ -158,8 +162,10 @@ public sealed class ReviewService(
         await CampaignLock.LockAsync(db, existing.CampaignId, ct);
         var campaign = await db.Set<Campaign>().AsNoTracking().FirstAsync(c => c.Id == existing.CampaignId, ct);
         var before = await db.Set<Submission>().AsNoTracking().FirstAsync(s => s.Id == submissionId, ct);
+        if (target == SubmissionStatus.Approved)
+            await EnsureParticipantActiveAsync(before.UserId, ct);
 
-        var (liveStatus, liveDue) = LiveCheckFor(campaign, before.PostedAt, target);
+        var (liveStatus, liveDue) = LiveCheckFor(campaign, before, target);
         var stamp = request.ConcurrencyStamp!.Value;
         var newStamp = Guid.NewGuid();
         var updated = await db.Set<Submission>()
@@ -190,7 +196,7 @@ public sealed class ReviewService(
             var approved = await RecordApprovalEarningsAsync(before, campaign, request.QualityBonusAmount, keySuffix: string.Empty, me, ct);
             rewardDto = RewardQuoteDto.From(approved.Quote, approved.RuleSet.Id, approved.RuleSet.Version);
             if (approved.Quote.AppliedCaps.Count > 0)
-                eventReason = $"{(reason is null ? "Approved" : reason)} (caps applied: {string.Join(", ", approved.Quote.AppliedCaps)})";
+                eventReason = ReasonText.Fit($"{(reason is null ? "Approved" : reason)} (caps applied: {string.Join(", ", approved.Quote.AppliedCaps)})");
             firstForUser = !await db.Set<Submission>().AnyAsync(s =>
                 s.UserId == before.UserId && s.Id != submissionId && s.Status == SubmissionStatus.Approved, ct);
         }
@@ -216,9 +222,10 @@ public sealed class ReviewService(
             liveStatus, liveDue);
     }
 
-    private static (LiveCheckStatus Status, DateTime? DueAt) LiveCheckFor(Campaign campaign, DateTime postedAt, SubmissionStatus target) =>
+    /// <summary>Live check due at max(PostedAt, SubmittedAt) + MinPostLiveHours, so a back-dated PostedAt can't shorten it.</summary>
+    private static (LiveCheckStatus Status, DateTime? DueAt) LiveCheckFor(Campaign campaign, Submission s, SubmissionStatus target) =>
         target == SubmissionStatus.Approved && campaign.MinPostLiveHours > 0
-            ? (LiveCheckStatus.Pending, postedAt.AddHours(campaign.MinPostLiveHours))
+            ? (LiveCheckStatus.Pending, SubmissionTiming.LiveCheckDueAt(s.PostedAt, s.SubmittedAt, campaign.MinPostLiveHours))
             : (LiveCheckStatus.NotRequired, null);
 
     /// <summary>
@@ -230,11 +237,15 @@ public sealed class ReviewService(
     {
         var priced = await quotes.QuoteSubmissionAsync(submission, qualityBonus, ct);
         var requiresLiveCheck = campaign.MinPostLiveHours > 0;
+        // Suffixed with the number of reversed first-post bonuses, so a reversed bonus can be earned again exactly once.
+        var firstPostKey = priced.Quote.Lines.Any(l => l.Type == EarningType.FirstPostBonus)
+            ? await quotes.FirstPostKeyAsync(campaign.Id, submission.UserId, ct)
+            : null;
         foreach (var line in priced.Quote.Lines)
         {
             var key = line.Type switch
             {
-                EarningType.FirstPostBonus => RewardQuoteService.FirstPostKey(campaign.Id, submission.UserId),
+                EarningType.FirstPostBonus => firstPostKey!,
                 EarningType.TimeLimitedBonus => $"submission:{submission.Id}:{line.Type}:{line.RuleId}{keySuffix}",
                 _ => $"submission:{submission.Id}:{line.Type}{keySuffix}",
             };
@@ -274,18 +285,27 @@ public sealed class ReviewService(
         var me = currentUser.Id;
         var now = Now;
         var result = request.Result!.Value;
-        var note = string.IsNullOrWhiteSpace(request.Note) ? null : request.Note.Trim();
-        if (result == LiveCheckResult.Removed && (note is null || note.Length < 5))
-            throw new DomainException("review.reason_required", "Describe what you found (at least 5 characters).");
+        var note = result == LiveCheckResult.Removed
+            ? RequireReason(request.Note, "Describe what you found")
+            : Trimmed(request.Note);
 
         var s = await db.Set<Submission>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == submissionId, ct)
             ?? throw DomainException.NotFound("Submission");
-        if (result == LiveCheckResult.ConfirmedLive && s.LiveCheckDueAt > now)
-            throw DomainException.Conflict("review.live_check_not_due",
-                $"The post must stay live until {s.LiveCheckDueAt:yyyy-MM-dd HH:mm} UTC before it can be confirmed.");
+        EnsureNotSelf(s.UserId);
 
         await using var tx = await db.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
         await CampaignLock.LockAsync(db, s.CampaignId, ct);
+        if (result == LiveCheckResult.ConfirmedLive)
+        {
+            // Never earlier than max(PostedAt, SubmittedAt) + MinPostLiveHours, whatever was stored at approval.
+            var campaign = await db.Set<Campaign>().AsNoTracking().FirstAsync(c => c.Id == s.CampaignId, ct);
+            var due = SubmissionTiming.LiveCheckDueAt(s.PostedAt, s.SubmittedAt, campaign.MinPostLiveHours);
+            if (s.LiveCheckDueAt is { } stored && stored > due) due = stored;
+            if (due > now)
+                throw DomainException.Conflict("review.live_check_not_due",
+                    $"The post must stay live until {due:yyyy-MM-dd HH:mm} UTC before it can be confirmed.");
+            await EnsureParticipantActiveAsync(s.UserId, ct);
+        }
         var target = result == LiveCheckResult.ConfirmedLive ? LiveCheckStatus.ConfirmedLive : LiveCheckStatus.Removed;
         var updated = await db.Set<Submission>()
             .Where(x => x.Id == submissionId && x.Status == SubmissionStatus.Approved && x.LiveCheckStatus == LiveCheckStatus.Pending)
@@ -333,9 +353,10 @@ public sealed class ReviewService(
             throw new DomainException("confirmation.required", "Confirm the reversal by sending \"confirm\": true.");
         var me = currentUser.Id;
         var now = Now;
-        var reason = request.Reason.Trim();
+        var reason = RequireReason(request.Reason, "Explain the reversal");
         var s = await db.Set<Submission>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == submissionId, ct)
             ?? throw DomainException.NotFound("Submission");
+        EnsureNotSelf(s.UserId);
 
         await using var tx = await db.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
         await CampaignLock.LockAsync(db, s.CampaignId, ct);
@@ -349,6 +370,7 @@ public sealed class ReviewService(
     /// <summary>Approved → Reversed and every live earning of the submission reversed in the ledger (same transaction).</summary>
     private async Task ReverseCoreAsync(Submission s, string reason, Guid me, DateTime now, string action, CancellationToken ct)
     {
+        reason = ReasonText.Fit(reason)!;
         var updated = await db.Set<Submission>().Where(x => x.Id == s.Id && x.Status == SubmissionStatus.Approved)
             .ExecuteUpdateAsync(u => u.SetProperty(x => x.Status, SubmissionStatus.Reversed).SetProperty(x => x.DecidedAt, now)
                 .SetProperty(x => x.DecidedByUserId, me).SetProperty(x => x.DecisionReason, reason)
@@ -382,13 +404,16 @@ public sealed class ReviewService(
     {
         var me = currentUser.Id;
         var now = Now;
-        var note = request.Note.Trim();
+        var note = RequireReason(request.Note, "Explain the appeal decision");
         var outcome = request.Outcome!.Value;
         var appeal = await db.Set<Appeal>().AsNoTracking().FirstOrDefaultAsync(a => a.Id == appealId, ct) ?? throw DomainException.NotFound("Appeal");
         var s = await db.Set<Submission>().AsNoTracking().FirstAsync(x => x.Id == appeal.SubmissionId, ct);
+        EnsureNotSelf(s.UserId);
+        EnsureNotSelf(appeal.UserId);
         if (appeal.Status != AppealStatus.Open)
             throw DomainException.Conflict("appeal.already_resolved", "This appeal has already been resolved.");
-        if (s.DecidedByUserId == me && !currentUser.Roles.Contains(Role.Admin))
+        // Four eyes for everyone, admins included.
+        if (s.DecidedByUserId == me)
             throw DomainException.Forbidden("appeal.same_reviewer", "Appeals must be resolved by someone other than the reviewer who made the decision.");
 
         var status = outcome == AppealOutcome.Overturned ? AppealStatus.Overturned : AppealStatus.Upheld;
@@ -398,20 +423,23 @@ public sealed class ReviewService(
 
         await using var tx = await db.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
         await CampaignLock.LockAsync(db, s.CampaignId, ct);
+        var campaign = await db.Set<Campaign>().AsNoTracking().FirstAsync(c => c.Id == s.CampaignId, ct);
+        if (status == AppealStatus.Overturned)
+            await EnsureOverturnAllowedAsync(appeal, s, campaign, ct);
+
         var resolved = await db.Set<Appeal>().Where(a => a.Id == appealId && a.Status == AppealStatus.Open && a.ConcurrencyStamp == stamp)
             .ExecuteUpdateAsync(u => u.SetProperty(a => a.Status, status).SetProperty(a => a.ResolvedByUserId, me)
-                .SetProperty(a => a.ResolvedAt, now).SetProperty(a => a.ResolutionNote, note)
+                .SetProperty(a => a.ResolvedAt, now).SetProperty(a => a.ResolutionNote, ReasonText.Fit(note, ReasonText.MaxResolutionNoteLength))
                 .SetProperty(a => a.ConcurrencyStamp, Guid.NewGuid()).SetProperty(a => a.UpdatedAt, now), ct);
         if (resolved == 0)
             throw DomainException.Conflict("appeal.already_resolved", "This appeal was changed by someone else. Reload and try again.");
 
-        var campaign = await db.Set<Campaign>().AsNoTracking().FirstAsync(c => c.Id == s.CampaignId, ct);
         if (status == AppealStatus.Overturned)
         {
             var from = appeal.DecisionAppealed;
             var fresh = await db.Set<Submission>().AsNoTracking().FirstAsync(x => x.Id == s.Id, ct);
-            var (liveStatus, liveDue) = LiveCheckFor(campaign, fresh.PostedAt, SubmissionStatus.Approved);
-            var reason = $"Appeal overturned: {note}";
+            var (liveStatus, liveDue) = LiveCheckFor(campaign, fresh, SubmissionStatus.Approved);
+            var reason = ReasonText.Fit($"Appeal overturned: {note}");
             var moved = await db.Set<Submission>().Where(x => x.Id == s.Id && x.Status == from)
                 .ExecuteUpdateAsync(u => u.SetProperty(x => x.Status, SubmissionStatus.Approved).SetProperty(x => x.DecidedAt, now)
                     .SetProperty(x => x.DecidedByUserId, me).SetProperty(x => x.DecisionReason, reason)
@@ -427,7 +455,7 @@ public sealed class ReviewService(
             db.Set<SubmissionEvent>().Add(new SubmissionEvent
             {
                 SubmissionId = s.Id, FromStatus = from, ToStatus = SubmissionStatus.Approved, Action = "appeal_overturned",
-                ActorUserId = me, Reason = note, CreatedAt = now,
+                ActorUserId = me, Reason = ReasonText.Fit(note), CreatedAt = now,
             });
             submissionStatus = SubmissionStatus.Approved;
         }
@@ -436,17 +464,17 @@ public sealed class ReviewService(
             db.Set<SubmissionEvent>().Add(new SubmissionEvent
             {
                 SubmissionId = s.Id, FromStatus = s.Status, ToStatus = s.Status, Action = "appeal_upheld", ActorUserId = me,
-                Reason = note, CreatedAt = now,
+                Reason = ReasonText.Fit(note), CreatedAt = now,
             });
         }
 
         audit.Record("appeal.resolved", nameof(Appeal), appealId, new { Status = "Open" },
-            new { Status = status.ToString(), SubmissionId = s.Id, SubmissionStatus = submissionStatus.ToString() }, note);
+            new { Status = status.ToString(), SubmissionId = s.Id, SubmissionStatus = submissionStatus.ToString() }, ReasonText.Fit(note));
         await notifications.StageAsync(new NotificationRequest(s.UserId, NotificationTypes.AppealResolved,
             status == AppealStatus.Overturned ? "Appeal accepted" : "Appeal reviewed",
-            status == AppealStatus.Overturned
+            ReasonText.Fit(status == AppealStatus.Overturned
                 ? $"Your appeal for \"{campaign.Title}\" was accepted and your post is now approved. {note}"
-                : $"Your appeal for \"{campaign.Title}\" was reviewed and the original decision stands. {note}",
+                : $"Your appeal for \"{campaign.Title}\" was reviewed and the original decision stands. {note}", 2000)!,
             $"/submissions/{s.Id}", new[] { NotificationChannel.Email }), ct);
         await db.SaveChangesAsync(ct);
         await tx.CommitAsync(ct);
@@ -458,6 +486,63 @@ public sealed class ReviewService(
         var myName = await db.Set<User>().Where(u => u.Id == me).Select(u => u.DisplayName).FirstAsync(ct);
         return new AppealResolutionDto(ReviewQueryService.ToAppealDto(updatedAppeal, new Dictionary<Guid, string> { [me] = myName }),
             submissionStatus, await queries.EarningsAsync(s.Id, ct));
+    }
+
+    /// <summary>
+    /// Checks for an appeal overturn (inside the transaction, after the campaign lock): the participant is active, the
+    /// campaign is not archived and, for a Rejected -> Approved overturn, the participant is still within
+    /// MaxSubmissionsPerParticipant (the rejected submission stopped counting when it was rejected).
+    /// </summary>
+    private async Task EnsureOverturnAllowedAsync(Appeal appeal, Submission s, Campaign campaign, CancellationToken ct)
+    {
+        await EnsureParticipantActiveAsync(s.UserId, ct);
+        if (campaign.Status == CampaignStatus.Archived)
+            throw DomainException.Conflict("appeal.campaign_archived", "The campaign is archived, so the decision can no longer be overturned.");
+        if (appeal.DecisionAppealed == SubmissionStatus.Rejected)
+        {
+            var active = await db.Set<Submission>().CountAsync(x =>
+                x.UserId == s.UserId && x.CampaignId == s.CampaignId && x.Id != s.Id &&
+                (x.Status == SubmissionStatus.Approved || x.Status == SubmissionStatus.Pending ||
+                 x.Status == SubmissionStatus.UnderReview || x.Status == SubmissionStatus.NeedsCorrection), ct);
+            if (active >= campaign.MaxSubmissionsPerParticipant)
+                throw DomainException.Conflict("appeal.submission_limit_reached",
+                    $"The participant already has {active} active submission{(active == 1 ? "" : "s")} in this campaign " +
+                    $"(limit {campaign.MaxSubmissionsPerParticipant}), so this one can't be approved.");
+        }
+    }
+
+    // ------------------------------------------------------------------ guards
+
+    /// <summary>Staff can never review, approve, confirm, reverse or resolve appeals on their own submissions.</summary>
+    private void EnsureNotSelf(Guid participantId)
+    {
+        if (participantId == currentUser.Id)
+            throw DomainException.Forbidden("review.self_review", "You can't review or resolve your own submissions or appeals.");
+    }
+
+    /// <summary>
+    /// Reads the participant's status inside the current transaction with a shared row lock (so a suspension commits
+    /// either before this check or after this transaction). Money may only be granted to active participants.
+    /// </summary>
+    private async Task EnsureParticipantActiveAsync(Guid userId, CancellationToken ct)
+    {
+        var id = userId.ToString();
+        await db.Database.ExecuteSqlInterpolatedAsync($"SELECT Id FROM users WHERE Id = {id} FOR SHARE", ct);
+        var status = await db.Set<User>().AsNoTracking().Where(u => u.Id == userId).Select(u => u.Status).FirstAsync(ct);
+        if (status != UserStatus.Active)
+            throw DomainException.Conflict("participant.not_active",
+                $"The participant's account is {status.ToString().ToLowerInvariant()}, so no earnings can be granted.");
+    }
+
+    private static string? Trimmed(string? raw) => string.IsNullOrWhiteSpace(raw) ? null : raw.Trim();
+
+    /// <summary>A required reason, validated after trimming (400 review.reason_required / review.reason_too_short).</summary>
+    private static string RequireReason(string? raw, string prompt)
+    {
+        var reason = Trimmed(raw) ?? throw new DomainException("review.reason_required", $"{prompt} (at least {ReasonText.MinLength} characters).");
+        if (reason.Length < ReasonText.MinLength)
+            throw new DomainException("review.reason_too_short", $"{prompt} (at least {ReasonText.MinLength} characters).");
+        return reason;
     }
 
     // ------------------------------------------------------------------ assignment

@@ -15,7 +15,9 @@ internal sealed class SubmissionConfiguration : IEntityTypeConfiguration<Submiss
     {
         b.ToTable("submissions");
         b.Property(x => x.PostUrl).HasMaxLength(1000).IsRequired();
-        b.Property(x => x.NormalizedPostUrl).HasMaxLength(768).IsRequired();
+        // Holds the canonical post key (PlatformUrlRules.Parse), e.g. "instagram:Cabc123". Binary collation: post ids are
+        // case-sensitive (Instagram shortcodes), so "instagram:AbC" and "instagram:abc" are different posts.
+        b.Property(x => x.NormalizedPostUrl).HasMaxLength(768).IsRequired().UseCollation("utf8mb4_bin");
 
         // A public post can be claimed exactly once across the whole platform.
         b.HasIndex(x => x.NormalizedPostUrl).IsUnique();

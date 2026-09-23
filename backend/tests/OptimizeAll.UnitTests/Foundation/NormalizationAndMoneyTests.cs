@@ -14,6 +14,9 @@ public sealed class PostUrlNormalizationTests
     [InlineData("https://twitter.com/brand/status/123?s=20&t=abc", "https://x.com/brand/status/123")]
     [InlineData("https://www.tiktok.com/@creator/video/7291#comments", "https://tiktok.com/@creator/video/7291")]
     [InlineData("  https://WWW.YouTube.com/watch?v=abc123&feature=share  ", "https://youtube.com/watch?v=abc123")]
+    [InlineData("https://instagram.com./p/Cx1abc/", "https://instagram.com/p/Cx1abc")]
+    [InlineData("https://www.m.instagram.com:443/p/Cx1abc", "https://instagram.com/p/Cx1abc")]
+    [InlineData("https://mobile.twitter.com./brand/status/1", "https://x.com/brand/status/1")]
     public void Variants_of_the_same_post_normalize_identically(string raw, string expected)
     {
         Assert.Equal(expected, Normalization.PostUrl(raw));
@@ -26,6 +29,7 @@ public sealed class PostUrlNormalizationTests
     [InlineData("ftp://instagram.com/p/1")]
     [InlineData("javascript:alert(1)")]
     [InlineData("/relative/path")]
+    [InlineData("https://user:secret@instagram.com/p/1")]
     public void Invalid_urls_return_null(string? raw)
     {
         Assert.Null(Normalization.PostUrl(raw));

@@ -34,6 +34,8 @@ internal sealed class EarningEntryConfiguration : IEntityTypeConfiguration<Earni
         b.HasIndex(x => new { x.UserId, x.Status });
         b.HasIndex(x => new { x.Status, x.AvailableAt });
         b.HasIndex(x => new { x.UserId, x.CampaignId, x.CreatedAt });
+        // Campaign budget / spent aggregates filter on (CampaignId, Status IN ...).
+        b.HasIndex(x => new { x.CampaignId, x.Status });
         b.HasIndex(x => x.SubmissionId);
         b.HasIndex(x => x.PayoutItemId);
         b.HasIndex(x => x.ReversesEntryId).IsUnique();

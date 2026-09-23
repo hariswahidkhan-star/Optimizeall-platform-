@@ -279,19 +279,43 @@ Checks and codes, in order:
 | `submission.social_account_inactive` | 400 | account deactivated |
 | `submission.account_ineligible` | 409 | account fails campaign rules (`errors.reasons[]`: "code: message") |
 | `submission.not_eligible` | 409 | participant fails campaign rules (`errors.reasons[]`) |
-| `submission.invalid_url` | 400 | not an absolute http(s) URL |
-| `submission.url_platform_mismatch` | 400 | host not on the platform (or a bare profile/root URL) |
+| `submission.invalid_url` | 400 | not an absolute http(s) URL, has credentials (`user:pw@`), or its post key would exceed 768 chars |
+| `submission.url_platform_mismatch` | 400 | host is not exactly one of the platform's hosts or an allow-listed subdomain of one (e.g. `de.instagram.com` is refused; a trailing dot is ignored), or the URL is the site root |
 | `submission.posted_at_in_future` | 400 | `postedAt` > now + 10 min |
-| `submission.duplicate_url` | 409 | the normalized URL (https, no www/m./mobile., no tracking params/fragment/trailing slash, twitter→x) was already submitted by anyone; unique index is the final guard |
+| `submission.posted_at_too_old` | 400 | `postedAt` < submission time − 7 days (campaign-independent, see REWARD_ENGINE.md) |
+| `submission.duplicate_url` | 409 | the post's **canonical key** was already submitted by anyone (see below); the unique, case-sensitive index is the final guard |
 | `submission.screenshot_required` | 400 | campaign requires a screenshot |
 | `submission.limit_reached` | 409 | non-Rejected submissions ≥ `maxSubmissionsPerParticipant` (serialized per participant) |
 | `campaign.no_reward_rules` | 409 | campaign has no rule set |
 | `file.*` | 400 | screenshot invalid (see Files) |
 
+**Canonical post key** (`Domain/Submissions/PlatformUrlRules.cs`, stored in `NormalizedPostUrl`, which keeps its
+historical name; binary `utf8mb4_bin` collation because ids such as Instagram shortcodes are case-sensitive):
+
+| Platform | URL forms | Key |
+|---|---|---|
+| Instagram | `/p/{code}`, `/reel/`, `/reels/`, `/tv/` (optionally after `/{user}`) | `instagram:{code}` |
+| TikTok | `/@user/video/{id}`, `/video/{id}` (`/photo/` too) | `tiktok:{id}` |
+| TikTok short links | `vm.tiktok.com/{code}`, `vt.tiktok.com/{code}`, `tiktok.com/t/{code}` | `tiktok-short:{code}` + flag |
+| X / Twitter | `/{user}/status/{id}` | `x:{id}` |
+| YouTube | `watch?v={id}`, `youtu.be/{id}`, `/shorts/{id}`, `/live/{id}` | `youtube:{id}` |
+| Facebook | `story.php`/`permalink.php?story_fbid=&id=`, `/posts/{id}`, `/reel/{id}`, `/watch?v=`, `photo.php?fbid=` | `facebook:story:{id}:{story_fbid}`, `facebook:post:{id}`, `facebook:reel:{id}`, `facebook:video:{v}`, `facebook:photo:{fbid}` |
+| LinkedIn | `urn:li:activity:{id}` (e.g. `/feed/update/…`), `/posts/…-activity-{id}-…` | `linkedin:activity:{id}` |
+| Threads | `/@user/post/{code}` | `threads:{code}` |
+| Pinterest | `/pin/{id}` | `pinterest:{id}` |
+| Snapchat | `/spotlight/{id}` | `snapchat:spotlight:{id}` |
+| anything else | – | normalized URL: `https://{host without subdomain}{path without trailing slash}`, only identity query parameters kept (YouTube `v`; Facebook `story_fbid`, `id`, `v`, `fbid`) |
+
+Allowed subdomains: Instagram `www`, `m`; TikTok `www`, `m`, `vm`, `vt`; X/Twitter `www`, `m`, `mobile`; Facebook
+`www`, `m`, `mobile`, `web`, `mbasic`; LinkedIn/YouTube/Pinterest `www`, `m`; Threads/youtu.be/instagr.am `www`;
+Snapchat `www`, `story`, `web`. Short-link hosts (`fb.watch`, `pin.it`, `lnkd.in`) get a `{platform}-short:{code}` key.
+`postUrl` itself is stored as entered; `Normalization.PostUrl` is only a display helper.
+
 On success the submission captures the current rule set id/version and an estimated reward, gets risk flags
 (reviewer-only evidence; never auto-rejects): DuplicateScreenshot 40, RepeatedContent 20, OutsideCampaignWindow 30,
-AccountNotVerified 10 (only when the campaign doesn't require verification), HighSubmissionVelocity 15 (>
-`fraud.submissionVelocityPer24h` in 24h), NewParticipant 5 (joined < 7 days). A "submitted" event, audit entry and
+PostedLongBeforeSubmission 15 (`postedAt` more than 48 h before the submission), UnresolvedShortLink 10 (short link a
+reviewer must open), AccountNotVerified 10 (only when the campaign doesn't require verification),
+HighSubmissionVelocity 15 (> `fraud.submissionVelocityPer24h` in 24h), NewParticipant 5 (joined < 7 days). A "submitted" event, audit entry and
 in-app `submission.received` notification are written; `SubmissionCreated` is published after commit.
 
 ### MySubmissionDetail
@@ -320,8 +344,8 @@ appeal and no appeal filed since that decision.
 |---|---|---|---|
 | GET `/me/submissions?status=&campaignId=` | – | Paged `{ id, campaign{id,slug,title}, platform, postUrl, status, submittedAt, estimatedReward, currency, decisionReason }` newest first | |
 | GET `/me/submissions/{id}` | – | MySubmissionDetail | 404 (not owner) |
-| PUT `/me/submissions/{id}` (multipart, rate limited) | any of `postUrl`, `postedAt`, `captionText`, `screenshot` | MySubmissionDetail (status Pending, `correctionCount`+1, original rule version kept, flags recomputed, event `resubmitted`) | 409 `submission.not_editable` (not NeedsCorrection) + all create checks (URL uniqueness excludes itself) |
-| POST `/me/submissions/{id}/appeal` (rate limited) | `{ "reason": "20–2000 chars" }` | MySubmissionDetail | 400 validation, 409 `appeal.not_allowed` |
+| PUT `/me/submissions/{id}` (multipart, rate limited) | any of `postUrl`, `postedAt`, `captionText`, `screenshot` | MySubmissionDetail (status Pending, `correctionCount`+1, original rule version kept, flags recomputed, estimate re-priced, event `resubmitted`) | 409 `submission.not_editable` (not NeedsCorrection) + all create checks (URL uniqueness excludes itself; `postedAt` rules are re-run against the original `submittedAt`, which a correction doesn't change) |
+| POST `/me/submissions/{id}/appeal` (rate limited) | `{ "reason": "20–2000 chars" }` | MySubmissionDetail (the appeal keeps the full text; the timeline/audit copy is cut to 1000 chars with "…") | 400 validation, 409 `appeal.not_allowed` |
 
 ---
 
@@ -330,16 +354,16 @@ appeal and no appeal filed since that decision.
 | Method & path | Permission | Body | Response | Errors |
 |---|---|---|---|---|
 | GET `/review/queue?status=Pending\|UnderReview&campaignId=&platform=&minRisk=&flagged=&assignedToMe=&sort=oldest\|risk` | submissions.review | – | Paged ReviewQueueItem | |
-| POST `/review/submissions/{id}/claim` | submissions.review | – | Claim | 409 `review.claimed_by_other` (`errors.claimedBy`, `claimedByUserId`, `claimExpiresAt`), 409 `review.already_decided`, 404 |
+| POST `/review/submissions/{id}/claim` | submissions.review | – | Claim | 403 `review.self_review`, 409 `review.claimed_by_other` (`errors.claimedBy`, `claimedByUserId`, `claimExpiresAt`), 409 `review.already_decided`, 404 |
 | POST `/review/submissions/{id}/release` | submissions.review | – | 204 | 409 `review.not_claimed`, 404 |
 | GET `/review/submissions/{id}` | submissions.review | – | ReviewDetail | 404 |
-| POST `/review/submissions/{id}/decision` | submissions.review | `{ decision: Approve\|RequestCorrection\|Reject, reason?, qualityBonusAmount?, concurrencyStamp }` | DecisionResult | 400 `review.reason_required` (≥5 chars for RequestCorrection/Reject), `review.quality_bonus_requires_approval`, `reward.quality_bonus_not_configured`; 409 `review.already_decided`, `review.claimed_by_other`; 409 `fx.rate_missing` |
+| POST `/review/submissions/{id}/decision` | submissions.review | `{ decision: Approve\|RequestCorrection\|Reject, reason? (≤900), qualityBonusAmount?, concurrencyStamp }` | DecisionResult | 400 `review.reason_required` (missing/blank for RequestCorrection/Reject), `review.reason_too_short` (<5 chars after trimming), `review.quality_bonus_requires_approval`, `reward.quality_bonus_not_configured`; 403 `review.self_review`; 409 `review.already_decided`, `review.claimed_by_other`, `participant.not_active` (Approve only); 409 `fx.rate_missing` |
 | GET `/review/live-checks?due=true` | submissions.review | – | Paged LiveCheckItem | |
-| POST `/review/submissions/{id}/live-check` | submissions.review | `{ result: ConfirmedLive\|Removed, note? }` (note ≥5 for Removed) | LiveCheckResult | 409 `review.live_check_not_due`, `review.live_check_not_pending`, 400 `review.reason_required` |
-| POST `/review/submissions/{id}/reverse` | submissions.reverse | `{ reason (5–1000), confirm: true }` | ReverseResult | 400 `confirmation.required`, 409 `review.not_approved`, 409 `ledger.in_payout_batch` |
+| POST `/review/submissions/{id}/live-check` | submissions.review | `{ result: ConfirmedLive\|Removed, note? (≤900) }` (note ≥5 after trimming for Removed) | LiveCheckResult | 400 `review.reason_required`, `review.reason_too_short`; 403 `review.self_review`; 409 `review.live_check_not_due` (before `max(postedAt, submittedAt) + minPostLiveHours`), `review.live_check_not_pending`, `participant.not_active` (ConfirmedLive only) |
+| POST `/review/submissions/{id}/reverse` | submissions.reverse | `{ reason (5–900 after trimming), confirm: true }` | ReverseResult | 400 `confirmation.required`, `review.reason_too_short`; 403 `review.self_review`; 409 `review.not_approved`, 409 `ledger.in_payout_batch` |
 | GET `/review/appeals?status=Open` | appeals.resolve | – | Paged AppealListItem (oldest first; `status` omitted = Open) | |
 | GET `/review/appeals/{id}` | appeals.resolve | – | `{ appeal: ReviewAppeal, originalDecidedBy: {id,displayName}\|null, review: ReviewDetail }` | 404 |
-| POST `/review/appeals/{id}/resolve` | appeals.resolve | `{ outcome: Upheld\|Overturned, note (5–2000), concurrencyStamp }` | `{ appeal: ReviewAppeal, submissionStatus, earnings: [ReviewEarning] }` | 403 `appeal.same_reviewer` (the original decider, unless Admin), 409 `appeal.already_resolved`, 409 `appeal.submission_changed` |
+| POST `/review/appeals/{id}/resolve` | appeals.resolve | `{ outcome: Upheld\|Overturned, note (5–900 after trimming), concurrencyStamp }` | `{ appeal: ReviewAppeal, submissionStatus, earnings: [ReviewEarning] }` | 400 `review.reason_too_short`; 403 `review.self_review` (caller is the submission's or the appeal's participant), 403 `appeal.same_reviewer` (the original decider — Admins included); 409 `appeal.already_resolved`, `appeal.submission_changed`; Overturned only: 409 `participant.not_active`, `appeal.campaign_archived`, `appeal.submission_limit_reached` |
 | GET `/review/reviewers` | review.assign | – | `[{ id, displayName, email, assignedOpen, decisionsToday }]` | |
 | POST `/review/assign` | review.assign | `{ submissionIds: [..≤200], reviewerId }` | `{ updated: 3, skippedIds: [ids not open] }` | 400 `review.not_a_reviewer` |
 | GET `/review/stats` | submissions.review | – | ReviewStats | |
@@ -395,10 +419,18 @@ atomically). The campaign row is locked (`SELECT … FOR UPDATE`) and the submis
 (`Status IN (Pending, UnderReview) AND ConcurrencyStamp = @stamp`), so of two simultaneous decisions exactly one
 succeeds (the other gets 409 `review.already_decided`). Approval prices the recorded rule-set version and writes
 ledger entries (keys in REWARD_ENGINE.md); when `minPostLiveHours > 0` all earnings start PendingApproval and
-`liveCheckStatus = Pending`, due at `postedAt + minPostLiveHours`. A 0 total (caps/budget) still approves, with
+`liveCheckStatus = Pending`, due at `max(postedAt, submittedAt) + minPostLiveHours` (a back-dated `postedAt` can't shorten
+it; confirmation re-checks this bound). A 0 total (caps/budget) still approves, with
 `reward.appliedCaps` and the caps in the event reason. Every decision resolves open flags, adds an event, audits
 (`submission.approved|correction_requested|rejected`) and notifies the participant (in-app + email).
 `SubmissionApproved` is published after commit.
+
+Integrity rules for every review command: staff can never act on their own submission (claim, decision, live
+check, reversal, appeal resolution → 403 `review.self_review`). Approve, appeal overturn and live-check
+confirmation read the participant's `Status` inside the transaction (shared row lock) and refuse with 409
+`participant.not_active` unless it is Active; reject, correction, removal and reversal stay allowed. Reasons are
+capped at 900 chars on input and every composed string written to `SubmissionEvent.Reason`,
+`Submission.DecisionReason`, the audit reason (1000) or `Appeal.ResolutionNote` (2000) is cut with "…" to fit.
 
 LiveCheckItem: `{ submissionId, campaign{id,title}, participant{id,displayName}, platform, postUrl, postedAt, decidedAt, dueAt, isDue }`.
 LiveCheckResult: `{ submissionId, status: Approved|Reversed, liveCheckStatus, earnings: [ReviewEarning] }` — ConfirmedLive
@@ -410,8 +442,12 @@ the ledger (unpaid → Reversed with a zero-sum negative leg; paid → negative 
 (`submission.reversed`); `SubmissionReversed` published after commit.
 
 Appeal resolution: Overturned on a Rejected or Reversed submission approves it with fresh earnings (keys suffixed
-`:appeal:{appealId}`; the first-post bonus is never paid twice; old reversed entries stay reversed). Upheld changes
-nothing. Participant notified (`appeal.resolved`), audited `appeal.resolved`.
+`:appeal:{appealId}`; old reversed entries stay reversed; the first-post bonus follows the usual rule — it is paid
+again only if every earlier first-post bonus was reversed, under `firstpost:{campaignId}:{userId}:{n}`). Before
+overturning, the participant must be Active (`participant.not_active`), the campaign not Archived
+(`appeal.campaign_archived`) and, for a Rejected submission, the participant's Approved/Pending/UnderReview/
+NeedsCorrection submissions in the campaign must be below `maxSubmissionsPerParticipant`
+(`appeal.submission_limit_reached`). Upheld changes nothing. Participant notified (`appeal.resolved`), audited `appeal.resolved`.
 
 AppealListItem: `{ id, submissionId, campaign{id,title}, participant{id,displayName}, status, decisionAppealed, reason, createdAt, originalDecidedBy{id,displayName}|null, concurrencyStamp }`.
 
