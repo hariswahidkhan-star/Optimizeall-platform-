@@ -69,6 +69,10 @@ public sealed class DefaultDenyTests(ApiFactory api) : IClassFixture<ApiFactory>
         "GET api/v1/public/team",
         "GET api/v1/public/pages/{slug}",
         "GET api/v1/public/search",
+        // Moved public addresses: the web app's lookup and the web server's 301 gate (Website/Redirects).
+        "GET api/v1/public/redirects",
+        "GET api/v1/public/redirects/gate",
+        "HEAD api/v1/public/redirects/gate",
         "GET api/v1/public/blog",
         "GET api/v1/public/blog/{slug}",
         "GET api/v1/public/blog/rss.xml",
