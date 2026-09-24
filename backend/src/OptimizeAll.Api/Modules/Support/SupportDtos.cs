@@ -94,6 +94,9 @@ public sealed class UpdateTicketRequest
 
     public Guid? AssignedToUserId { get; set; }
 
+    /// <summary>Optional: re-file the ticket under another category.</summary>
+    public TicketCategory? Category { get; set; }
+
     [Required]
     public Guid? ConcurrencyStamp { get; set; }
 }

@@ -6,6 +6,7 @@ using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Api.Common.Notifications;
 using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Api.Modules.Accounts;
+using OptimizeAll.Api.Modules.Notifications.Templates;
 using OptimizeAll.Api.Modules.Website.Shared;
 using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Website;
@@ -20,7 +21,7 @@ namespace OptimizeAll.Api.Modules.Website.Leads;
 /// </summary>
 public sealed class BookingService(
     AppDbContext db, IDatabaseDialect dialect, FormGuard guard, InquiryService inquiries, IEmailSender email, IOptions<EmailOptions> emailOptions,
-    IAuditLogger audit, TimeProvider clock, ILogger<BookingService> logger)
+    IAuditLogger audit, TimeProvider clock, ILogger<BookingService> logger, EmailTemplateService templates)
 {
     public async Task<ConsultationSettings> SettingsAsync(CancellationToken ct)
     {
@@ -145,10 +146,7 @@ public sealed class BookingService(
         }
 
         await inquiries.PublishAsync(inquiry, ct);
-        await SendAsync(booking, "Your consultation with Optimize All is confirmed",
-            $"Hi {booking.Name},\n\nYour free consultation is booked for {Describe(booking)}.\n\n" +
-            "We'll send a video-call link before the meeting. To change or cancel, just reply to this email.\n\n" +
-            $"Reference: {LeadReference.For(booking.Id)}\n\n— The Optimize All team", ct);
+        await SendTemplateAsync(booking, EmailTemplateCatalog.BookingConfirmed, new(), ct);
         return new BookingConfirmationDto(LeadReference.For(booking.Id), booking.SlotStart, booking.SlotEnd, booking.VisitorTimeZone,
             "Your consultation is booked. We've emailed you the details.");
     }
@@ -175,6 +173,16 @@ public sealed class BookingService(
         var local = TimeZoneInfo.ConvertTimeFromUtc(b.SlotStart, zone);
         var end = TimeZoneInfo.ConvertTimeFromUtc(b.SlotEnd, zone);
         return $"{local.ToString("dddd d MMMM yyyy, HH:mm", CultureInfo.InvariantCulture)}–{end.ToString("HH:mm", CultureInfo.InvariantCulture)} ({b.VisitorTimeZone})";
+    }
+
+    /// <summary>Sends an editable website email template (name, time and reference are always available).</summary>
+    private async Task SendTemplateAsync(ConsultationBooking b, string key, Dictionary<string, string> values, CancellationToken ct)
+    {
+        values["name"] = b.Name;
+        values["when"] = Describe(b);
+        values["reference"] = LeadReference.For(b.Id);
+        var mail = await templates.RenderAsync(key, values, ct);
+        await SendAsync(b, mail.Subject, mail.Text, ct);
     }
 
     private async Task SendAsync(ConsultationBooking b, string subject, string text, CancellationToken ct)
@@ -293,9 +301,11 @@ public sealed class BookingService(
         audit.Record("website.booking_cancelled", nameof(ConsultationBooking), b.Id, after: new { b.SlotStart, b.Status }, reason: b.CancellationReason);
         await db.SaveChangesAsync(ct);
         if (input.NotifyVisitor)
-            await SendAsync(b, "Your consultation with Optimize All was cancelled",
-                $"Hi {b.Name},\n\nWe're sorry — we had to cancel your consultation on {Describe(b)}.\nReason: {b.CancellationReason}\n\n" +
-                $"Please book another time at {emailOptions.Value.AppBaseUrl.TrimEnd('/')}/book-a-consultation or reply to this email.\n\n— The Optimize All team", ct);
+            await SendTemplateAsync(b, EmailTemplateCatalog.BookingCancelled, new()
+            {
+                ["reason"] = b.CancellationReason ?? string.Empty,
+                ["bookUrl"] = $"{emailOptions.Value.AppBaseUrl.TrimEnd('/')}/book-a-consultation",
+            }, ct);
         return ToDto(b);
     }
 
@@ -326,8 +336,7 @@ public sealed class BookingService(
             }
         }
         if (input.NotifyVisitor)
-            await SendAsync(b, "Your consultation with Optimize All has a new time",
-                $"Hi {b.Name},\n\nYour consultation has been moved to {Describe(b)}.\n\nIf the new time doesn't work, reply to this email.\n\n— The Optimize All team", ct);
+            await SendTemplateAsync(b, EmailTemplateCatalog.BookingRescheduled, new(), ct);
         return ToDto(b);
     }
 

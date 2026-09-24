@@ -114,6 +114,24 @@ public sealed class AdminSettingsService(
         return (await ListAsync(ct)).First(s => s.Key == key);
     }
 
+    /// <summary>Removes the saved value so the built-in default applies again (confirmed and audited like an update).</summary>
+    public async Task<SettingDto> ResetAsync(string key, ResetSettingRequest request, CancellationToken ct)
+    {
+        if (!SettingDefinitions.All.ContainsKey(key))
+            throw DomainException.NotFound("Setting");
+        if (!request.Confirm)
+            throw FieldRules.FieldError("admin.confirmation_required", "confirm", "Confirm this change by sending \"confirm\": true.");
+        var row = await db.Set<SystemSetting>().FirstOrDefaultAsync(s => s.Key == key, ct);
+        if (row is not null)
+        {
+            audit.Record("admin.setting_reset", nameof(SystemSetting), key,
+                new { value = Parse(row.ValueJson) }, new { value = DefaultElement(key) }, request.Reason.Trim());
+            db.Remove(row);
+            await db.SaveChangesAsync(ct);
+        }
+        return (await ListAsync(ct)).First(s => s.Key == key);
+    }
+
     private static SettingDto ToDto(SettingDefinitions.Definition def, SystemSetting? row, IReadOnlyDictionary<Guid, string> actors)
     {
         var defaultValue = DefaultElement(def.Key);

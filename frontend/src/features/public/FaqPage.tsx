@@ -6,6 +6,7 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { api } from '@/lib/api/client';
 import { normalizeFaqs } from './faqs';
+import { useSiteCopy } from './site/copy';
 import './FaqPage.css';
 
 function slug(value: string): string {
@@ -28,9 +29,11 @@ function Paragraphs({ text }: { text: string }) {
 
 /** Public FAQ, grouped by category, from the content API. */
 export function FaqPage() {
+  const copy = useSiteCopy();
+  const browserTitle = copy.text('faq.seo.title');
   useEffect(() => {
-    document.title = 'FAQ · Optimize All';
-  }, []);
+    document.title = browserTitle;
+  }, [browserTitle]);
 
   const query = useQuery({
     queryKey: ['content', 'faqs'],
@@ -43,11 +46,9 @@ export function FaqPage() {
   return (
     <div className="container faq-page">
       <header className="faq-page__header">
-        <p className="eyebrow">Help centre</p>
-        <h1>Frequently asked questions</h1>
-        <p className="faq-page__lead">
-          How campaigns, reviews and payouts work on Optimize All. Can’t find an answer? Sign in and contact support.
-        </p>
+        <p className="eyebrow">{copy.text('faq.hero.eyebrow')}</p>
+        <h1>{copy.text('faq.hero.title')}</h1>
+        <p className="faq-page__lead">{copy.text('faq.hero.lead')}</p>
       </header>
 
       {query.isPending && (
@@ -61,8 +62,8 @@ export function FaqPage() {
       {unavailable && (
         <EmptyState
           icon={<MessageCircleQuestion />}
-          title="Answers are on their way"
-          description="We’re updating our help articles. In the meantime, the home page explains how campaigns, review and payouts work."
+          title={copy.text('faq.empty.title')}
+          description={copy.text('faq.empty.description')}
           action={
             <>
               <ButtonLink to="/#how-it-works">How it works</ButtonLink>

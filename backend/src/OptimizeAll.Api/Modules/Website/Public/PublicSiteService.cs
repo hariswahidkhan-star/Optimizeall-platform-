@@ -249,7 +249,8 @@ public sealed class PublicSiteService(AppDbContext db, SiteSettingsService setti
 
     public async Task<PublicPageDto> PageAsync(string slug, CancellationToken ct)
     {
-        var p = await db.Set<SitePage>().AsNoTracking().FirstOrDefaultAsync(x => x.Slug == slug && x.IsPublished, ct)
+        var at = clock.GetUtcNow().UtcDateTime;
+        var p = await db.Set<SitePage>().AsNoTracking().FirstOrDefaultAsync(x => x.Slug == slug && x.IsPublished && (x.PublishAt == null || x.PublishAt <= at), ct)
             ?? throw CmsStore.NotFound<SitePage>();
         var blocks = PageBlockValidator.Parse(p.BlocksJson);
         var s = await SettingsAsync(ct);
@@ -329,7 +330,7 @@ public sealed class PublicSiteService(AppDbContext db, SiteSettingsService setti
         urls.AddRange((await db.Set<BlogPost>().AsNoTracking()
                 .Where(p => p.Status == BlogPostStatus.Published && p.PublishedAt <= now && !p.Seo.NoIndex).Select(p => new { p.Slug, p.UpdatedAt }).ToListAsync(ct))
             .Select(p => ($"/blog/{p.Slug}", (DateTime?)p.UpdatedAt)));
-        urls.AddRange((await db.Set<SitePage>().AsNoTracking().Where(p => p.IsPublished && !p.Seo.NoIndex).Select(p => new { p.Slug, p.UpdatedAt }).ToListAsync(ct))
+        urls.AddRange((await db.Set<SitePage>().AsNoTracking().Where(p => p.IsPublished && (p.PublishAt == null || p.PublishAt <= now) && !p.Seo.NoIndex).Select(p => new { p.Slug, p.UpdatedAt }).ToListAsync(ct))
             .Where(p => urls.All(u => u.Path != $"/{p.Slug}"))
             .Select(p => ($"/{p.Slug}", (DateTime?)p.UpdatedAt)));
         urls.AddRange((await db.Set<JobOpening>().AsNoTracking()

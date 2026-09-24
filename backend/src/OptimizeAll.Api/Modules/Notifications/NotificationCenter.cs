@@ -156,6 +156,15 @@ public sealed class NotificationCenterService(
             throw DomainException.NotFound("Notification");
     }
 
+    /// <summary>Marks a notification unread again (a reminder to come back to it). Idempotent.</summary>
+    public async Task MarkUnreadAsync(Guid userId, Guid id, CancellationToken ct)
+    {
+        var updated = await db.Set<Notification>().Where(n => n.Id == id && n.UserId == userId && n.ReadAt != null)
+            .ExecuteUpdateAsync(s => s.SetProperty(n => n.ReadAt, (DateTime?)null), ct);
+        if (updated == 0 && !await db.Set<Notification>().AnyAsync(n => n.Id == id && n.UserId == userId, ct))
+            throw DomainException.NotFound("Notification");
+    }
+
     public async Task<ReadAllResponse> MarkAllReadAsync(Guid userId, CancellationToken ct)
     {
         var now = Now;

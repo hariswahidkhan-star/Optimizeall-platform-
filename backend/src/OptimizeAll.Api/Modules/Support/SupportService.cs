@@ -128,6 +128,25 @@ public sealed class SupportService(
         return await ParticipantViewAsync(userId, id, ct);
     }
 
+    /// <summary>How long after being resolved or closed a participant can reopen a ticket instead of filing a new one.</summary>
+    public static readonly TimeSpan ReopenWindow = TimeSpan.FromDays(30);
+
+    /// <summary>Reopens the participant's own resolved or closed ticket (within <see cref="ReopenWindow"/>).</summary>
+    public async Task<ParticipantTicketDto> ReopenAsParticipantAsync(Guid userId, Guid id, CancellationToken ct)
+    {
+        var ticket = await db.Set<SupportTicket>().FirstOrDefaultAsync(t => t.Id == id && t.UserId == userId, ct)
+                     ?? throw DomainException.NotFound("SupportTicket");
+        if (IsOpen(ticket.Status)) return await ParticipantViewAsync(userId, id, ct);
+        if (ticket.ResolvedAt is { } resolved && Now - resolved > ReopenWindow)
+            throw DomainException.Conflict("support.reopen_expired", "This ticket was closed more than 30 days ago. Please open a new ticket.");
+        var before = ticket.Status;
+        ticket.Status = TicketStatus.AwaitingStaff;
+        ticket.ResolvedAt = null;
+        audit.Record("support.ticket_reopened_by_participant", nameof(SupportTicket), ticket.Id, new { status = before }, new { status = ticket.Status });
+        await db.SaveChangesAsync(ct);
+        return await ParticipantViewAsync(userId, id, ct);
+    }
+
     private async Task<ParticipantTicketDto> ParticipantViewAsync(Guid userId, Guid id, CancellationToken ct)
     {
         var t = await db.Set<SupportTicket>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId, ct)
@@ -266,13 +285,17 @@ public sealed class SupportService(
                 throw FieldRules.FieldError("support.invalid_assignee", "assignedToUserId", "Tickets can only be assigned to active support staff.");
         }
 
-        var before = new { ticket.Status, ticket.Priority, ticket.AssignedToUserId };
+        if (request.Category is { } category && !Enum.IsDefined(category))
+            throw FieldRules.FieldError("support.invalid_category", "category", "Unknown category.");
+
+        var before = new { ticket.Status, ticket.Priority, ticket.AssignedToUserId, ticket.Category };
         ticket.Status = status;
         ticket.Priority = priority;
         ticket.AssignedToUserId = request.AssignedToUserId;
+        if (request.Category is { } newCategory) ticket.Category = newCategory;
         ticket.ResolvedAt = status is TicketStatus.Resolved or TicketStatus.Closed ? ticket.ResolvedAt ?? Now : null;
         audit.Record("support.ticket_updated", nameof(SupportTicket), ticket.Id, before,
-            new { ticket.Status, ticket.Priority, ticket.AssignedToUserId });
+            new { ticket.Status, ticket.Priority, ticket.AssignedToUserId, ticket.Category });
         await db.SaveChangesAsync(ct);
         return await GetForStaffAsync(id, ct);
     }

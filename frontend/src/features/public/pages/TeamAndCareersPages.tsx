@@ -9,6 +9,7 @@ import { formatMoney } from '@/lib/format/money';
 import { initials } from '@/lib/format/text';
 import { isExternalHref } from '@/lib/safeHref';
 import { type EmploymentType, type PublicJob, useJob, useJobs, useSite, useTeam, type WorkplaceType } from '../site/api';
+import { useSiteCopy } from '../site/copy';
 import { CtaBand, formatPublished, PageHero, PublicQueryState, Section } from '../site/components';
 import { ConsentCheckbox, fieldErrorsOf, Honeypot, useFormToken } from '../site/forms';
 import { headFromSeo, useDocumentHead } from '../site/head';
@@ -17,13 +18,14 @@ import { Markdown } from '../site/Markdown';
 /** /team */
 export function TeamPage() {
   const { data, isLoading, error } = useTeam();
-  useDocumentHead({ title: 'Our team', description: 'Meet the strategists, specialists and creators behind Optimize All.' });
+  const copy = useSiteCopy();
+  useDocumentHead({ title: copy.text('team.seo.title'), description: copy.text('team.seo.description') });
   return (
     <>
       <PageHero
-        eyebrow="Team"
-        title="The people behind your results"
-        lead="Senior strategists and hands-on specialists who work as one team on your account."
+        eyebrow={copy.text('team.hero.eyebrow')}
+        title={copy.text('team.hero.title')}
+        lead={copy.text('team.hero.lead')}
         breadcrumbs={[{ label: 'Home', to: '/' }, { label: 'Team' }]}
       />
       <PublicQueryState error={error} isLoading={isLoading} notFoundTitle="Team unavailable">
@@ -63,9 +65,9 @@ export function TeamPage() {
           </div>
         </div>
       </PublicQueryState>
-      <Section title="Want to join us?" tone="muted">
+      <Section title={copy.text('team.join.title')} tone="muted">
         <p>
-          We're always looking for talented marketers. <Link to="/careers">See open roles</Link>.
+          {copy.text('team.join.text')} <Link to="/careers">{copy.text('team.join.link')}</Link>.
         </p>
       </Section>
     </>
@@ -84,19 +86,20 @@ export const EMPLOYMENT_LABEL: Record<EmploymentType, string> = {
 /** /careers */
 export function CareersPage() {
   const { data, isLoading, error } = useJobs();
-  useDocumentHead({ title: 'Careers', description: 'Join Optimize All: open roles in search, paid media, content, creative and client services.' });
+  const copy = useSiteCopy();
+  useDocumentHead({ title: copy.text('careers.seo.title'), description: copy.text('careers.seo.description') });
   return (
     <>
       <PageHero
-        eyebrow="Careers"
-        title="Do the best work of your career"
-        lead="A small, senior, remote-friendly team with a written-first culture, real learning budgets and clients who value great work."
+        eyebrow={copy.text('careers.hero.eyebrow')}
+        title={copy.text('careers.hero.title')}
+        lead={copy.text('careers.hero.lead')}
         breadcrumbs={[{ label: 'Home', to: '/' }, { label: 'Careers' }]}
       />
       <PublicQueryState error={error} isLoading={isLoading} notFoundTitle="Careers unavailable">
-        <Section title="Open roles">
+        <Section title={copy.text('careers.openRoles')}>
           {data && data.length === 0 ? (
-            <EmptyState title="No open roles right now" headingLevel={3} description="We'd still love to hear from you — send a note through the contact page." />
+            <EmptyState title={copy.text('careers.empty.title')} headingLevel={3} description={copy.text('careers.empty.description')} />
           ) : (
             <ul className="site-grid site-grid--2">
               {(data ?? []).map((job) => (
@@ -135,6 +138,7 @@ function salaryText(job: PublicJob): string | null {
 export function JobDetailPage() {
   const { slug = '' } = useParams();
   const { data: job, isLoading, error } = useJob(slug);
+  const copy = useSiteCopy();
   useDocumentHead(job ? headFromSeo(job.seo, job.jsonLd) : { title: 'Careers' });
   return (
     <PublicQueryState error={error} isLoading={isLoading} notFoundTitle="This role is no longer open">
@@ -168,7 +172,7 @@ export function JobDetailPage() {
               <Markdown source={job.descriptionMarkdown} />
               {job.requirements.length > 0 && (
                 <>
-                  <h2 className="site-subheading">What we're looking for</h2>
+                  <h2 className="site-subheading">{copy.text('careers.detail.requirementsTitle')}</h2>
                   <ul className="site-prose">
                     {job.requirements.map((r) => (
                       <li key={r}>{r}</li>
@@ -178,7 +182,7 @@ export function JobDetailPage() {
               )}
               {job.benefits.length > 0 && (
                 <>
-                  <h2 className="site-subheading">Benefits</h2>
+                  <h2 className="site-subheading">{copy.text('careers.detail.benefitsTitle')}</h2>
                   <ul className="site-prose">
                     {job.benefits.map((b) => (
                       <li key={b}>{b}</li>
@@ -199,6 +203,7 @@ const PDF_TYPES = ['application/pdf'];
 
 function ApplicationForm({ job }: { job: PublicJob }) {
   const { data: site } = useSite();
+  const copy = useSiteCopy();
   const token = useFormToken();
   const id = useId();
   const [values, setValues] = useState({ name: '', email: '', phone: '', portfolioUrl: '', coverLetter: '' });
@@ -244,7 +249,7 @@ function ApplicationForm({ job }: { job: PublicJob }) {
   return (
     <form className="site-form" onSubmit={submit} noValidate aria-labelledby={`${id}-title`}>
       <h2 id={`${id}-title`} className="site-section__title">
-        Apply for this role
+        {copy.text('careers.detail.applyTitle')}
       </h2>
       <FormField label="Full name" required error={errors.name}>
         <Input autoComplete="name" value={values.name} onChange={(e) => set('name')(e.target.value)} />
@@ -300,5 +305,6 @@ function ApplicationForm({ job }: { job: PublicJob }) {
 }
 
 export function CareersCta() {
-  return <CtaBand title="Not the right role?" text="Tell us about yourself — we hire throughout the year." />;
+  const copy = useSiteCopy();
+  return <CtaBand title={copy.text('careers.cta.title')} text={copy.text('careers.cta.text')} />;
 }

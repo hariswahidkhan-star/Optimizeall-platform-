@@ -9,6 +9,7 @@ using OptimizeAll.Api.Common.Notifications;
 using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Api.Modules.Accounts;
+using OptimizeAll.Api.Modules.Notifications.Templates;
 using OptimizeAll.Api.Modules.Website.Shared;
 using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Events;
@@ -25,7 +26,7 @@ namespace OptimizeAll.Api.Modules.Website.Leads;
 public sealed class NewsletterService(
     AppDbContext db, IDatabaseDialect dialect, FormGuard guard, IPrivacyHasher hasher, ICurrentUser user, IEmailSender email,
     IOptions<EmailOptions> emailOptions, IOptions<SecurityOptions> security, IEventPublisher events, IAuditLogger audit, TimeProvider clock,
-    ILogger<NewsletterService> logger)
+    ILogger<NewsletterService> logger, EmailTemplateService templates)
 {
     public static readonly TimeSpan ConfirmLifetime = TimeSpan.FromHours(48);
 
@@ -72,11 +73,13 @@ public sealed class NewsletterService(
         }
 
         var baseUrl = emailOptions.Value.AppBaseUrl.TrimEnd('/');
-        await SendAsync(subscriber.Email, "Confirm your Optimize All newsletter subscription",
-            "Hi,\n\nPlease confirm that you'd like to receive the Optimize All newsletter:\n" +
-            $"{baseUrl}/newsletter/confirm?token={Uri.EscapeDataString(token)}\n\n" +
-            $"The link expires in {ConfirmLifetime.TotalHours:0} hours. If you didn't sign up, ignore this email and you won't hear from us.\n\n" +
-            $"Unsubscribe at any time: {UnsubscribeUrl(subscriber.Id)}\n\n— The Optimize All team", ct);
+        var mail = await templates.RenderAsync(EmailTemplateCatalog.NewsletterConfirm, new Dictionary<string, string>
+        {
+            ["confirmUrl"] = $"{baseUrl}/newsletter/confirm?token={Uri.EscapeDataString(token)}",
+            ["unsubscribeUrl"] = UnsubscribeUrl(subscriber.Id),
+            ["hours"] = ConfirmLifetime.TotalHours.ToString("0", System.Globalization.CultureInfo.InvariantCulture),
+        }, ct);
+        await SendAsync(subscriber.Email, mail.Subject, mail.Text, ct);
         return new NewsletterResultDto("pending", SubscribeMessage);
     }
 
@@ -139,6 +142,34 @@ public sealed class NewsletterService(
         if (query.Status is { } status) q = q.Where(s => s.Status == status);
         if (!string.IsNullOrWhiteSpace(query.Search)) q = q.Where(s => EF.Functions.Like(s.Email, PagingExtensions.LikePattern(query.Search)));
         return CmsStore.Map(await q.OrderByDescending(s => s.CreatedAt).ToPagedAsync(query, ct), ToDto);
+    }
+
+    /// <summary>Unsubscribes an address on the subscriber's behalf (e.g. they asked by reply). Idempotent.</summary>
+    public async Task<SubscriberDto> UnsubscribeByStaffAsync(Guid id, CancellationToken ct)
+    {
+        var s = await db.Set<NewsletterSubscriber>().FirstOrDefaultAsync(x => x.Id == id, ct)
+            ?? throw new DomainException("website.not_found", "Subscriber was not found.", DomainErrorKind.NotFound);
+        if (s.Status != NewsletterStatus.Unsubscribed)
+        {
+            var before = s.Status;
+            s.Status = NewsletterStatus.Unsubscribed;
+            s.UnsubscribedAt = clock.GetUtcNow().UtcDateTime;
+            s.ConfirmTokenHash = null;
+            s.ConfirmTokenExpiresAt = null;
+            audit.Record("website.subscriber_unsubscribed", nameof(NewsletterSubscriber), s.Id, new { Status = before }, new { s.Status });
+            await db.SaveChangesAsync(ct);
+        }
+        return ToDto(s);
+    }
+
+    /// <summary>Erases a subscriber entirely (data-erasure request). The audit entry keeps only the id.</summary>
+    public async Task DeleteSubscriberAsync(Guid id, CancellationToken ct)
+    {
+        var s = await db.Set<NewsletterSubscriber>().FirstOrDefaultAsync(x => x.Id == id, ct)
+            ?? throw new DomainException("website.not_found", "Subscriber was not found.", DomainErrorKind.NotFound);
+        audit.Record("website.subscriber_deleted", nameof(NewsletterSubscriber), s.Id, new { s.Status, s.Source });
+        db.Remove(s);
+        await db.SaveChangesAsync(ct);
     }
 
     public async Task<IReadOnlyList<NewsletterSubscriber>> ExportAsync(NewsletterStatus? status, CancellationToken ct)

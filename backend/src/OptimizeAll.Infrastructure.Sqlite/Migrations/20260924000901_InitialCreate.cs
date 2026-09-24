@@ -129,6 +129,23 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "content_copy_entries",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Key = table.Column<string>(type: "TEXT", maxLength: 120, nullable: false),
+                    Value = table.Column<string>(type: "TEXT", nullable: false),
+                    UpdatedByUserId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    ConcurrencyStamp = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_content_copy_entries", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "crm_assignment_cursors",
                 columns: table => new
                 {
@@ -222,6 +239,25 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_delivery_dispatch_keys", x => x.Key);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "email_template_overrides",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Key = table.Column<string>(type: "TEXT", maxLength: 120, nullable: false),
+                    Subject = table.Column<string>(type: "TEXT", maxLength: 300, nullable: false),
+                    Body = table.Column<string>(type: "TEXT", nullable: false),
+                    ActionLabel = table.Column<string>(type: "TEXT", maxLength: 80, nullable: true),
+                    UpdatedByUserId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    ConcurrencyStamp = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_email_template_overrides", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -914,7 +950,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     SeoCanonicalUrl = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
                     SeoNoIndex = table.Column<bool>(type: "INTEGER", nullable: false),
                     IsPublished = table.Column<bool>(type: "INTEGER", nullable: false),
+                    PublishAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
                     SortOrder = table.Column<int>(type: "INTEGER", nullable: false),
+                    Version = table.Column<int>(type: "INTEGER", nullable: false),
                     ConcurrencyStamp = table.Column<Guid>(type: "TEXT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false)
@@ -1643,6 +1681,37 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         principalTable: "website_job_openings",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "website_page_revisions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    PageId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Version = table.Column<int>(type: "INTEGER", nullable: false),
+                    Slug = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Title = table.Column<string>(type: "TEXT", maxLength: 160, nullable: false),
+                    Summary = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
+                    Kind = table.Column<string>(type: "TEXT", maxLength: 40, nullable: false),
+                    BlocksJson = table.Column<string>(type: "TEXT", nullable: false),
+                    SeoJson = table.Column<string>(type: "TEXT", nullable: false),
+                    IsPublished = table.Column<bool>(type: "INTEGER", nullable: false),
+                    PublishAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
+                    Action = table.Column<string>(type: "TEXT", maxLength: 40, nullable: false),
+                    Note = table.Column<string>(type: "TEXT", maxLength: 300, nullable: true),
+                    AuthorUserId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_website_page_revisions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_website_page_revisions_website_pages_PageId",
+                        column: x => x.PageId,
+                        principalTable: "website_pages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -6755,6 +6824,12 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 column: "TemplateId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_content_copy_entries_Key",
+                table: "content_copy_entries",
+                column: "Key",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_contract_lines_ContractId_Position",
                 table: "contract_lines",
                 columns: new[] { "ContractId", "Position" });
@@ -7296,6 +7371,12 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 name: "IX_email_suppressions_ScopeKey_CreatedAt",
                 table: "email_suppressions",
                 columns: new[] { "ScopeKey", "CreatedAt" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_email_template_overrides_Key",
+                table: "email_template_overrides",
+                column: "Key",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_email_templates_ClientAccountId",
@@ -8576,6 +8657,12 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_website_page_revisions_PageId_Version",
+                table: "website_page_revisions",
+                columns: new[] { "PageId", "Version" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_website_pages_IsPublished_Kind",
                 table: "website_pages",
                 columns: new[] { "IsPublished", "Kind" });
@@ -8734,6 +8821,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 name: "content_calendar_entries");
 
             migrationBuilder.DropTable(
+                name: "content_copy_entries");
+
+            migrationBuilder.DropTable(
                 name: "contract_lines");
 
             migrationBuilder.DropTable(
@@ -8816,6 +8906,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
             migrationBuilder.DropTable(
                 name: "email_suppressions");
+
+            migrationBuilder.DropTable(
+                name: "email_template_overrides");
 
             migrationBuilder.DropTable(
                 name: "email_templates");
@@ -9103,7 +9196,7 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 name: "website_newsletter_subscribers");
 
             migrationBuilder.DropTable(
-                name: "website_pages");
+                name: "website_page_revisions");
 
             migrationBuilder.DropTable(
                 name: "website_service_packages");
@@ -9218,6 +9311,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
             migrationBuilder.DropTable(
                 name: "website_job_applications");
+
+            migrationBuilder.DropTable(
+                name: "website_pages");
 
             migrationBuilder.DropTable(
                 name: "website_services");

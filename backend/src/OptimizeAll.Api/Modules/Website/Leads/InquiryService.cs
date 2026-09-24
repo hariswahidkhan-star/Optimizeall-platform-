@@ -205,6 +205,23 @@ public sealed class InquiryService(
         if (WebsiteRules.Utc(query.From) is { } from) q = q.Where(i => i.CreatedAt >= from);
         if (WebsiteRules.Utc(query.To) is { } to) q = q.Where(i => i.CreatedAt < to);
         if (!string.IsNullOrWhiteSpace(query.UtmSource)) q = q.Where(i => i.UtmSource == query.UtmSource.Trim());
+        switch (query.AssignedTo?.Trim())
+        {
+            case null or "":
+                break;
+            case "unassigned":
+                q = q.Where(i => i.AssignedToUserId == null);
+                break;
+            case "me":
+                var me = user.Id;
+                q = q.Where(i => i.AssignedToUserId == me);
+                break;
+            default:
+                if (!Guid.TryParse(query.AssignedTo, out var assignee))
+                    throw FieldRules.FieldError("website.invalid", "assignedTo", "Use a user id, \"me\" or \"unassigned\".");
+                q = q.Where(i => i.AssignedToUserId == assignee);
+                break;
+        }
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var p = PagingExtensions.LikePattern(query.Search);
@@ -244,6 +261,17 @@ public sealed class InquiryService(
         audit.Record("website.inquiry_updated", nameof(WebsiteInquiry), i.Id, before, new { i.Status, i.AssignedToUserId, i.StaffNotes });
         await db.SaveChangesAsync(ct);
         return ToDto(i, null);
+    }
+
+    /// <summary>Erases an inquiry (spam, or a data-erasure request). A linked booking keeps its own record but loses the link.</summary>
+    public async Task DeleteAsync(Guid id, CancellationToken ct)
+    {
+        user.Require(Permissions.SiteManage);
+        var i = await db.Set<WebsiteInquiry>().FirstOrDefaultAsync(x => x.Id == id, ct) ?? throw CmsStore.NotFound<WebsiteInquiry>();
+        foreach (var b in await db.Set<ConsultationBooking>().Where(b => b.InquiryId == id).ToListAsync(ct)) b.InquiryId = null;
+        audit.Record("website.inquiry_deleted", nameof(WebsiteInquiry), i.Id, new { i.Type, i.Status, Reference = LeadReference.For(i.Id) });
+        db.Remove(i);
+        await db.SaveChangesAsync(ct);
     }
 
     public async Task<IReadOnlyList<WebsiteInquiry>> ExportRowsAsync(InquiryQuery query, CancellationToken ct)

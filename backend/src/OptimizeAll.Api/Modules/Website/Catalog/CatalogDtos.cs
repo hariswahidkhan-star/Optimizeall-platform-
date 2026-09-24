@@ -203,11 +203,27 @@ public sealed class TeamMemberInput : StampedInput
 
 // ---------- Pages ----------
 
-public sealed record SitePageSummaryDto(Guid Id, string Slug, string Title, SitePageKind Kind, bool IsPublished, int BlockCount, DateTime UpdatedAt);
+public sealed record SitePageSummaryDto(
+    Guid Id, string Slug, string Title, SitePageKind Kind, bool IsPublished, int BlockCount, DateTime UpdatedAt,
+    DateTime? PublishAt = null, int Version = 0);
 
 public sealed record SitePageDto(
     Guid Id, string Slug, string Title, string? Summary, SitePageKind Kind, IReadOnlyList<PageBlock> Blocks, SeoDto Seo, bool IsPublished,
-    int SortOrder, DateTime UpdatedAt, Guid ConcurrencyStamp);
+    int SortOrder, DateTime UpdatedAt, Guid ConcurrencyStamp, DateTime? PublishAt = null, int Version = 0);
+
+/// <summary>One saved version of a page (newest first in lists).</summary>
+public sealed record SitePageRevisionSummaryDto(
+    int Version, string Action, string? Note, string Title, bool IsPublished, DateTime? PublishAt, Guid? AuthorUserId, string? AuthorName,
+    DateTime CreatedAt, bool IsCurrent);
+
+public sealed record SitePageRevisionDto(
+    int Version, string Action, string? Note, string Slug, string Title, string? Summary, SitePageKind Kind, IReadOnlyList<PageBlock> Blocks,
+    SeoDto Seo, bool IsPublished, DateTime? PublishAt, Guid? AuthorUserId, string? AuthorName, DateTime CreatedAt, bool IsCurrent);
+
+public sealed class RestorePageRevisionInput : StampedInput
+{
+    [MaxLength(300)] public string? Note { get; set; }
+}
 
 public sealed class SitePageInput : StampedInput
 {
@@ -218,7 +234,14 @@ public sealed class SitePageInput : StampedInput
     public List<PageBlockInput>? Blocks { get; set; }
     public SeoInput? Seo { get; set; }
     public bool IsPublished { get; set; }
+
+    /// <summary>Optional scheduled go-live (UTC) for a published page.</summary>
+    public DateTime? PublishAt { get; set; }
+
     [Range(-100000, 100000)] public int SortOrder { get; set; }
+
+    /// <summary>Optional note stored with this version in the page history (e.g. "Updated retention period").</summary>
+    [MaxLength(300)] public string? RevisionNote { get; set; }
 }
 
 /// <summary>Filter for simple CMS lists.</summary>

@@ -167,6 +167,26 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "content_copy_entries",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Key = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Value = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UpdatedByUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_content_copy_entries", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "crm_assignment_cursors",
                 columns: table => new
                 {
@@ -276,6 +296,30 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_delivery_dispatch_keys", x => x.Key);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "email_template_overrides",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Key = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Subject = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Body = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ActionLabel = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UpdatedByUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_email_template_overrides", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -1184,7 +1228,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     SeoNoIndex = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     IsPublished = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    PublishAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
                     SortOrder = table.Column<int>(type: "int", nullable: false),
+                    Version = table.Column<int>(type: "int", nullable: false),
                     ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
@@ -2092,6 +2138,46 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         principalTable: "website_job_openings",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "website_page_revisions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    PageId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Version = table.Column<int>(type: "int", nullable: false),
+                    Slug = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Title = table.Column<string>(type: "varchar(160)", maxLength: 160, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Summary = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Kind = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    BlocksJson = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    SeoJson = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsPublished = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    PublishAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    Action = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Note = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AuthorUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_website_page_revisions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_website_page_revisions_website_pages_PageId",
+                        column: x => x.PageId,
+                        principalTable: "website_pages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -8121,6 +8207,12 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 column: "TemplateId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_content_copy_entries_Key",
+                table: "content_copy_entries",
+                column: "Key",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_contract_lines_ContractId_Position",
                 table: "contract_lines",
                 columns: new[] { "ContractId", "Position" });
@@ -8662,6 +8754,12 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "IX_email_suppressions_ScopeKey_CreatedAt",
                 table: "email_suppressions",
                 columns: new[] { "ScopeKey", "CreatedAt" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_email_template_overrides_Key",
+                table: "email_template_overrides",
+                column: "Key",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_email_templates_ClientAccountId",
@@ -9942,6 +10040,12 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_website_page_revisions_PageId_Version",
+                table: "website_page_revisions",
+                columns: new[] { "PageId", "Version" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_website_pages_IsPublished_Kind",
                 table: "website_pages",
                 columns: new[] { "IsPublished", "Kind" });
@@ -10100,6 +10204,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "content_calendar_entries");
 
             migrationBuilder.DropTable(
+                name: "content_copy_entries");
+
+            migrationBuilder.DropTable(
                 name: "contract_lines");
 
             migrationBuilder.DropTable(
@@ -10182,6 +10289,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "email_suppressions");
+
+            migrationBuilder.DropTable(
+                name: "email_template_overrides");
 
             migrationBuilder.DropTable(
                 name: "email_templates");
@@ -10469,7 +10579,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "website_newsletter_subscribers");
 
             migrationBuilder.DropTable(
-                name: "website_pages");
+                name: "website_page_revisions");
 
             migrationBuilder.DropTable(
                 name: "website_service_packages");
@@ -10584,6 +10694,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "website_job_applications");
+
+            migrationBuilder.DropTable(
+                name: "website_pages");
 
             migrationBuilder.DropTable(
                 name: "website_services");

@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Options;
 using OptimizeAll.Api.Common.Notifications;
+using OptimizeAll.Api.Modules.Notifications.Templates;
 using OptimizeAll.Domain.Identity;
 using OptimizeAll.Domain.Notifications;
 
@@ -44,8 +45,11 @@ internal static class RecipientRules
             : null;
 }
 
-/// <summary>Sends notifications as plain-text + simple HTML email through <see cref="IEmailSender"/>.</summary>
-public sealed class EmailChannelSender(IEmailSender email, IOptions<EmailOptions> options) : INotificationChannelSender
+/// <summary>
+/// Sends notifications as plain-text + simple HTML email through <see cref="IEmailSender"/>, worded by the editable
+/// email templates (the layout plus the notification type's own template).
+/// </summary>
+public sealed class EmailChannelSender(IEmailSender email, IOptions<EmailOptions> options, EmailTemplateService templates) : INotificationChannelSender
 {
     public NotificationChannel Channel => NotificationChannel.Email;
 
@@ -54,43 +58,27 @@ public sealed class EmailChannelSender(IEmailSender email, IOptions<EmailOptions
         if (RecipientRules.SkipReason(notification, user) is { } reason) return ChannelSendResult.Skipped(reason);
         if (string.IsNullOrWhiteSpace(user.Email)) return ChannelSendResult.Skipped("Recipient has no email address.");
 
-        var message = Compose(notification, user, options.Value.AppBaseUrl);
+        var message = await templates.ComposeNotificationAsync(notification, user, options.Value.AppBaseUrl, ct);
         var result = await email.SendAsync(message, ct);
         return result.Success
             ? ChannelSendResult.Sent(result.ProviderMessageId)
             : ChannelSendResult.Failed(result.Error ?? "Email provider reported a failure.");
     }
 
-    /// <summary>Builds the email. All user-controlled text is HTML-encoded in the HTML part.</summary>
+    /// <summary>Builds the email with the shipped default templates. All user-controlled text is HTML-encoded in the HTML part.</summary>
     public static EmailMessage Compose(Notification notification, User user, string appBaseUrl)
     {
+        var layout = EmailTemplateCatalog.Find(EmailTemplateCatalog.LayoutKey)!;
         var link = BuildLink(appBaseUrl, notification.LinkUrl);
         var preferences = BuildLink(appBaseUrl, AppLinks.NotificationPreferences)!;
-        var text = $"Hi {user.DisplayName},\n\n{notification.Body}\n\n" +
-                   (link is null ? string.Empty : $"Open in Optimize All: {link}\n\n") +
-                   $"— Optimize All\nManage your notification settings: {preferences}\n";
-
-        var enc = HtmlEncoder.Default;
-        var html = "<!DOCTYPE html><html><body style=\"font-family:Arial,Helvetica,sans-serif;color:#1f2937;line-height:1.5\">" +
-                   $"<p>Hi {enc.Encode(user.DisplayName)},</p>" +
-                   $"<h2 style=\"font-size:18px\">{enc.Encode(notification.Title)}</h2>" +
-                   $"<p>{enc.Encode(notification.Body).Replace("&#xA;", "<br>")}</p>" +
-                   (link is null ? string.Empty
-                       : $"<p><a href=\"{enc.Encode(link)}\" style=\"background:#2563eb;color:#ffffff;padding:10px 16px;border-radius:6px;text-decoration:none\">Open in Optimize All</a></p>") +
-                   $"<p style=\"font-size:12px;color:#6b7280\">Optimize All · <a href=\"{enc.Encode(preferences)}\">Notification settings</a></p>" +
-                   "</body></html>";
-
-        return new EmailMessage(user.Email, user.DisplayName, notification.Title, text, html);
+        var r = EmailTemplateService.RenderNotification(
+            new EmailTemplateTexts(layout.Subject, layout.Body, layout.ActionLabel), new EmailTemplateTexts("{{title}}", "{{body}}", null),
+            user.DisplayName, notification.Title, notification.Body, link, preferences, "Optimize All");
+        return new EmailMessage(user.Email, user.DisplayName, r.Subject, r.Text, r.Html);
     }
 
     /// <summary>App-relative links are prefixed with the app base URL; absolute https links are kept; anything else is dropped.</summary>
-    public static string? BuildLink(string appBaseUrl, string? linkUrl)
-    {
-        if (string.IsNullOrWhiteSpace(linkUrl)) return null;
-        if (linkUrl.StartsWith('/') && !linkUrl.StartsWith("//", StringComparison.Ordinal))
-            return appBaseUrl.TrimEnd('/') + linkUrl;
-        return Uri.TryCreate(linkUrl, UriKind.Absolute, out var uri) && uri.Scheme == Uri.UriSchemeHttps ? linkUrl : null;
-    }
+    public static string? BuildLink(string appBaseUrl, string? linkUrl) => EmailLinks.Build(appBaseUrl, linkUrl);
 }
 
 /// <summary>WhatsApp Business Cloud API configuration (section "WhatsApp"). Secrets come from secret configuration.</summary>

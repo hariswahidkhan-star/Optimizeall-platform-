@@ -16,6 +16,7 @@ import type {
   ServiceCard as ServiceCardData,
   Testimonial,
 } from './api';
+import { useSiteCopy } from './copy';
 import { SiteIcon } from './icons';
 
 export const PERIOD_SUFFIX: Record<BillingPeriod, string> = {
@@ -331,27 +332,22 @@ export function TestimonialCarousel({ items, label = 'Client testimonials' }: { 
   );
 }
 
-export function CtaBand({
-  title = 'Ready to grow?',
-  text = 'Get a free, no-obligation marketing audit from a senior strategist — or book a 30-minute call.',
-}: {
-  title?: string;
-  text?: string;
-}) {
+export function CtaBand({ title, text }: { title?: string; text?: string }) {
   const id = useId();
+  const copy = useSiteCopy();
   return (
     <section className="site-cta" aria-labelledby={id}>
       <div className="container site-cta__inner">
         <div>
-          <h2 id={id}>{title}</h2>
-          <p>{text}</p>
+          <h2 id={id}>{title ?? copy.text('shared.cta.title')}</h2>
+          <p>{text ?? copy.text('shared.cta.text')}</p>
         </div>
         <div className="site-cta__actions">
           <ButtonLink to="/free-audit" variant="highlight" size="lg" trailingIcon={<ArrowRight />}>
-            Get a free audit
+            {copy.text('shared.cta.primary')}
           </ButtonLink>
           <ButtonLink to="/book-a-consultation" variant="secondary" size="lg">
-            Book a call
+            {copy.text('shared.cta.secondary')}
           </ButtonLink>
         </div>
       </div>
@@ -361,6 +357,7 @@ export function CtaBand({
 
 /** Loading / error / not-found handling for public detail pages. */
 export function PublicQueryState({ error, isLoading, notFoundTitle, children }: { error: unknown; isLoading: boolean; notFoundTitle: string; children: ReactNode }) {
+  const copy = useSiteCopy();
   if (isLoading)
     return (
       <div className="container site-loading" aria-busy="true">
@@ -375,7 +372,7 @@ export function PublicQueryState({ error, isLoading, notFoundTitle, children }: 
           <EmptyState
             title={notFoundTitle}
             headingLevel={2}
-            description="It may have moved or been unpublished."
+            description={copy.text('shared.notFound.description')}
             action={
               <ButtonLink to="/" variant="secondary">
                 Go to the homepage

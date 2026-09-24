@@ -63,6 +63,9 @@ public sealed class InquiryQuery : PageQuery
     public DateTime? To { get; set; }
     [MaxLength(100)] public string? Service { get; set; }
     [MaxLength(150)] public string? UtmSource { get; set; }
+
+    /// <summary>A user id, "me" or "unassigned".</summary>
+    [MaxLength(40)] public string? AssignedTo { get; set; }
 }
 
 public sealed class UpdateInquiryInput : StampedInput

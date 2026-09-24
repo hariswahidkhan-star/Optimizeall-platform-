@@ -28,6 +28,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Editable page copy catalog (kept identical to frontend/src/features/public/site/siteCopy.json). -->
+    <EmbeddedResource Include="Modules\Content\Copy\site-copy.json" LogicalName="OptimizeAll.SiteCopy.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <InternalsVisibleTo Include="OptimizeAll.IntegrationTests" />
     <InternalsVisibleTo Include="OptimizeAll.UnitTests" />
   </ItemGroup>

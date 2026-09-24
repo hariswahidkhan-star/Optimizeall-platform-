@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { EmptyState } from '@/components/ui';
 import { usePage, usePricing } from '../site/api';
 import { Blocks } from '../site/Blocks';
+import { useSiteCopy } from '../site/copy';
 import { CtaBand, PackageCard, PageHero, PublicQueryState, Section } from '../site/components';
 import { useDocumentHead } from '../site/head';
 
@@ -13,10 +14,8 @@ export function PricingPage() {
   const { data, isLoading, error } = usePricing();
   const page = usePage('pricing');
   const [mode, setMode] = useState<Mode>('recurring');
-  useDocumentHead({
-    title: 'Pricing',
-    description: 'Transparent starting packages for every Optimize All service: monthly retainers and one-time projects.',
-  });
+  const copy = useSiteCopy();
+  useDocumentHead({ title: copy.text('pricing.seo.title'), description: copy.text('pricing.seo.description') });
 
   const services = useMemo(
     () =>
@@ -32,9 +31,9 @@ export function PricingPage() {
   return (
     <>
       <PageHero
-        eyebrow="Pricing"
-        title="Clear prices. No surprises."
-        lead="Starting packages for every service. Taxes and third-party costs such as ad spend are extra and always billed at cost."
+        eyebrow={copy.text('pricing.hero.eyebrow')}
+        title={copy.text('pricing.hero.title')}
+        lead={copy.text('pricing.hero.lead')}
         breadcrumbs={[{ label: 'Home', to: '/' }, { label: 'Pricing' }]}
       />
       {page.data && <Blocks blocks={page.data.blocks.filter((b) => b.type !== 'faq')} />}
@@ -42,10 +41,10 @@ export function PricingPage() {
         <div className="container">
           <div className="site-toggle" role="group" aria-label="Billing type">
             <button type="button" aria-pressed={mode === 'recurring'} onClick={() => setMode('recurring')}>
-              Monthly retainers
+              {copy.text('pricing.toggle.recurring')}
             </button>
             <button type="button" aria-pressed={mode === 'oneTime'} onClick={() => setMode('oneTime')}>
-              One-time projects
+              {copy.text('pricing.toggle.oneTime')}
             </button>
           </div>
         </div>
@@ -53,7 +52,7 @@ export function PricingPage() {
       <PublicQueryState error={error} isLoading={isLoading} notFoundTitle="Pricing unavailable">
         {services.length === 0 && (
           <div className="container">
-            <EmptyState title="No packages of this type yet" headingLevel={2} />
+            <EmptyState title={copy.text('pricing.empty')} headingLevel={2} />
           </div>
         )}
         {services.map(({ service, packages }) => (
@@ -72,7 +71,7 @@ export function PricingPage() {
         ))}
       </PublicQueryState>
       {page.data && <Blocks blocks={page.data.blocks.filter((b) => b.type === 'faq')} />}
-      <CtaBand title="Need something bespoke?" text="Combine services or scale across markets — we'll build a custom quote around your goals." />
+      <CtaBand title={copy.text('pricing.cta.title')} text={copy.text('pricing.cta.text')} />
     </>
   );
 }

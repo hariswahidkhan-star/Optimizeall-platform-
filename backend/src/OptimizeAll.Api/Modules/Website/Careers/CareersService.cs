@@ -244,6 +244,18 @@ public sealed class CareersService(
         return await GetApplicationAsync(id, ct);
     }
 
+    /// <summary>Erases an application with its notes and CV (data-erasure request or retention clean-up).</summary>
+    public async Task DeleteApplicationAsync(Guid id, CancellationToken ct)
+    {
+        var a = await Db.Set<JobApplication>().Include(x => x.Notes).FirstOrDefaultAsync(x => x.Id == id, ct) ?? throw CmsStore.NotFound<JobApplication>();
+        var cv = await Db.Set<CareerCvFile>().FirstOrDefaultAsync(f => f.Id == a.CvFileId, ct);
+        audit.Record("careers.application_deleted", nameof(JobApplication), a.Id, new { a.JobOpeningId, a.Stage });
+        Db.RemoveRange(a.Notes);
+        Db.Remove(a);
+        if (cv is not null) Db.Remove(cv);
+        await Db.SaveChangesAsync(ct);
+    }
+
     public async Task<CareerCvFile> DownloadCvAsync(Guid applicationId, CancellationToken ct)
     {
         var a = await store.FindAsync<JobApplication>(applicationId, ct, true);
