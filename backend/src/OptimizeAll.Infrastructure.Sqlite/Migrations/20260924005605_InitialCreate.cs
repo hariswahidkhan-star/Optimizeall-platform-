@@ -366,7 +366,12 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     ConsentText = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: true),
                     AutoresponderSubject = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
                     AutoresponderBody = table.Column<string>(type: "TEXT", nullable: true),
-                    SortOrder = table.Column<int>(type: "INTEGER", nullable: false)
+                    SortOrder = table.Column<int>(type: "INTEGER", nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
+                    IsCustom = table.Column<bool>(type: "INTEGER", nullable: false),
+                    IsCustomized = table.Column<bool>(type: "INTEGER", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
+                    ConcurrencyStamp = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -461,7 +466,12 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     MetaDescription = table.Column<string>(type: "TEXT", maxLength: 320, nullable: false),
                     BlocksJson = table.Column<string>(type: "TEXT", nullable: false),
                     FormTemplateKey = table.Column<string>(type: "TEXT", maxLength: 60, nullable: true),
-                    SortOrder = table.Column<int>(type: "INTEGER", nullable: false)
+                    SortOrder = table.Column<int>(type: "INTEGER", nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
+                    IsCustom = table.Column<bool>(type: "INTEGER", nullable: false),
+                    IsCustomized = table.Column<bool>(type: "INTEGER", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
+                    ConcurrencyStamp = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -625,7 +635,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     Severity = table.Column<string>(type: "TEXT", maxLength: 40, nullable: false),
                     WhyItMatters = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: false),
                     HowToFix = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: false),
-                    IsEnabled = table.Column<bool>(type: "INTEGER", nullable: false)
+                    IsEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
+                    ConcurrencyStamp = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -642,7 +654,10 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     Url = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
                     Category = table.Column<string>(type: "TEXT", maxLength: 60, nullable: false),
                     Countries = table.Column<string>(type: "TEXT", nullable: false),
-                    SortOrder = table.Column<int>(type: "INTEGER", nullable: false)
+                    SortOrder = table.Column<int>(type: "INTEGER", nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
+                    IsCustom = table.Column<bool>(type: "INTEGER", nullable: false),
+                    ConcurrencyStamp = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -659,7 +674,10 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     Year = table.Column<int>(type: "INTEGER", nullable: true),
                     Name = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
                     Countries = table.Column<string>(type: "TEXT", nullable: false),
-                    SourceUrl = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false)
+                    SourceUrl = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
+                    SeedKey = table.Column<string>(type: "TEXT", maxLength: 120, nullable: true),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
+                    ConcurrencyStamp = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -691,7 +709,8 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     LinkHandling = table.Column<string>(type: "TEXT", maxLength: 40, nullable: false),
                     RecommendedTimes = table.Column<string>(type: "TEXT", nullable: false),
                     Source = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
+                    ConcurrencyStamp = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -3275,6 +3294,7 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     UtmMedium = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
                     UtmContent = table.Column<string>(type: "TEXT", maxLength: 150, nullable: true),
                     UtmTerm = table.Column<string>(type: "TEXT", maxLength: 150, nullable: true),
+                    IsArchived = table.Column<bool>(type: "INTEGER", nullable: false),
                     ConcurrencyStamp = table.Column<Guid>(type: "TEXT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false)
@@ -4613,7 +4633,11 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     ConsentVersion = table.Column<int>(type: "INTEGER", nullable: true),
                     ConsentGiven = table.Column<bool>(type: "INTEGER", nullable: false),
                     SubmittedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
-                    EventPublishedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true)
+                    EventPublishedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
+                    Status = table.Column<string>(type: "TEXT", maxLength: 40, nullable: false),
+                    Note = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: true),
+                    StatusChangedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
+                    StatusChangedByUserId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -5240,7 +5264,10 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     IsInternal = table.Column<bool>(type: "INTEGER", nullable: false),
                     Kind = table.Column<string>(type: "TEXT", maxLength: 40, nullable: false),
                     Body = table.Column<string>(type: "TEXT", maxLength: 4000, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
+                    IsResolved = table.Column<bool>(type: "INTEGER", nullable: false),
+                    ResolvedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
+                    ResolvedByUserId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -5669,7 +5696,11 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     Severity = table.Column<string>(type: "TEXT", maxLength: 40, nullable: false),
                     AffectedCount = table.Column<int>(type: "INTEGER", nullable: false),
                     AffectedUrls = table.Column<string>(type: "TEXT", nullable: false),
-                    Details = table.Column<string>(type: "TEXT", nullable: true)
+                    Details = table.Column<string>(type: "TEXT", nullable: true),
+                    Status = table.Column<string>(type: "TEXT", maxLength: 40, nullable: false),
+                    StatusNote = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
+                    StatusChangedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
+                    StatusChangedByUserId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -7793,6 +7824,11 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 column: "EventPublishedAt");
 
             migrationBuilder.CreateIndex(
+                name: "IX_form_submissions_FormId_Status",
+                table: "form_submissions",
+                columns: new[] { "FormId", "Status" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_form_submissions_FormId_SubmittedAt",
                 table: "form_submissions",
                 columns: new[] { "FormId", "SubmittedAt" });
@@ -8513,6 +8549,12 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 name: "IX_sm_awareness_days_Month_Day_Name",
                 table: "sm_awareness_days",
                 columns: new[] { "Month", "Day", "Name" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_sm_awareness_days_SeedKey",
+                table: "sm_awareness_days",
+                column: "SeedKey",
                 unique: true);
 
             migrationBuilder.CreateIndex(

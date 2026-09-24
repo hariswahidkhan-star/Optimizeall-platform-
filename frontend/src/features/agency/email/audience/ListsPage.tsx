@@ -1,10 +1,13 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, Users } from 'lucide-react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Archive, ArchiveRestore, Pencil, Plus, Tags, Users } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Alert } from '@/components/ui/Alert';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import { ButtonLink } from '@/components/ui/ButtonLink';
+import { Checkbox } from '@/components/ui/Checkbox';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Card, CardBody } from '@/components/ui/Card';
 import { DataTable } from '@/components/ui/DataTable';
 import { Dialog } from '@/components/ui/Dialog';
@@ -101,20 +104,47 @@ export function ListFormDialog({ open, onClose, list }: { open: boolean; onClose
 }
 
 export function ListsPage() {
-  const { clientId } = useEmailWorkspace();
-  const lists = useLists(clientId);
+  const { clientId, key } = useEmailWorkspace();
+  const [showArchived, setShowArchived] = useState(false);
+  const active = useLists(clientId);
+  const withArchived = useQuery({
+    queryKey: [...emailKeys.lists(key), 'with-archived'],
+    queryFn: ({ signal }) =>
+      api.get<EmailList[]>(`${EMAIL_API}/lists`, { query: { ...(clientId ? { clientId } : {}), includeArchived: true }, signal }),
+    enabled: showArchived,
+  });
+  const lists = showArchived ? withArchived : active;
   const [open, setOpen] = useState(false);
+  const [editing, setEditing] = useState<EmailList | null>(null);
+  const [archiving, setArchiving] = useState<EmailList | null>(null);
+  const queryClient = useQueryClient();
+  const toast = useToast();
+  const refresh = () => void queryClient.invalidateQueries({ queryKey: emailKeys.lists(key) });
+  const restore = useMutation({
+    mutationFn: (l: EmailList) => api.post<EmailList>(`${EMAIL_API}/lists/${l.id}/restore`),
+    onSuccess: (l) => {
+      toast.success('List restored', l.name);
+      refresh();
+    },
+    onError: (e) => toast.error('Could not restore the list', errorMessage(e)),
+  });
   return (
     <>
       <PageHeader
         title="Audience"
         description="Lists of contacts who gave consent. The workspace suppression list always wins over any list."
         actions={
-          <Button leadingIcon={<Plus />} onClick={() => setOpen(true)}>
-            New list
-          </Button>
+          <>
+            <ButtonLink to="../tags" relative="path" variant="secondary" leadingIcon={<Tags />}>
+              Tags & fields
+            </ButtonLink>
+            <Button leadingIcon={<Plus />} onClick={() => setOpen(true)}>
+              New list
+            </Button>
+          </>
         }
       />
+      <Checkbox label="Show archived lists" checked={showArchived} onChange={(e) => setShowArchived(e.target.checked)} />
       <Card>
         <CardBody>
           {lists.isError ? (
@@ -124,7 +154,14 @@ export function ListsPage() {
               caption="Lists"
               rows={lists.data ?? []}
               getRowId={(l) => l.id}
+              rowLabel={(l) => l.name}
               loading={lists.isPending}
+              rowActions={(l) => [
+                { id: 'edit', label: 'Edit', icon: <Pencil />, onSelect: () => setEditing(l) },
+                l.isArchived
+                  ? { id: 'restore', label: 'Restore list', icon: <ArchiveRestore />, onSelect: () => restore.mutate(l) }
+                  : { id: 'archive', label: 'Archive list', icon: <Archive />, danger: true, onSelect: () => setArchiving(l) },
+              ]}
               columns={[
                 {
                   id: 'name',
@@ -136,6 +173,9 @@ export function ListsPage() {
                         {l.name}
                       </Link>
                       {l.description && <span className="email-muted">{l.description}</span>}
+                      {l.isArchived && (
+                        <Badge size="sm">Archived</Badge>
+                      )}
                     </span>
                   ),
                 },
@@ -150,6 +190,21 @@ export function ListsPage() {
         </CardBody>
       </Card>
       {open && <ListFormDialog open onClose={() => setOpen(false)} />}
+      {editing && <ListFormDialog open list={editing} onClose={() => setEditing(null)} />}
+      <ConfirmDialog
+        open={archiving !== null}
+        onClose={() => setArchiving(null)}
+        tone="danger"
+        title="Archive this list?"
+        description="Its sign-up form stops accepting contacts and it is hidden from campaign audiences. Contacts and history are kept; you can restore it."
+        confirmLabel="Archive list"
+        onConfirm={async () => {
+          if (!archiving) return;
+          await api.delete(`${EMAIL_API}/lists/${archiving.id}`);
+          toast.success('List archived');
+          refresh();
+        }}
+      />
     </>
   );
 }

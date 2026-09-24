@@ -1,4 +1,4 @@
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Download } from 'lucide-react';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -21,14 +21,20 @@ import {
 import { SafeExternalLink } from '@/components/SafeExternalLink';
 import { api } from '@/lib/api/client';
 import type { PagedResult } from '@/lib/api/types';
-import { seoKeys, severityTone, type AuditDetail, type AuditDiff, type AuditPage, type DiffIssue } from './api';
+import { seoKeys, severityTone, type AuditDetail, type AuditDiff, type AuditIssue, type AuditPage, type DiffIssue } from './api';
 import { AuditIssueGroups } from './AuditIssueGroups';
 import { healthTone } from './common';
 import './seo.css';
 
 export function AuditResultsPage() {
   const { auditId = '' } = useParams();
+  const queryClient = useQueryClient();
   const detail = useQuery({ queryKey: seoKeys.audit(auditId), queryFn: () => api.get<AuditDetail>(`/agency/seo/audits/${auditId}`) });
+  // Replace the triaged issue in the cached audit so the list updates without a refetch.
+  const onIssueChanged = (issue: AuditIssue) =>
+    queryClient.setQueryData<AuditDetail>(seoKeys.audit(auditId), (old) =>
+      old ? { ...old, issues: old.issues.map((i) => (i.ruleKey === issue.ruleKey ? issue : i)) } : old,
+    );
   if (detail.isError) return <ErrorState error={detail.error} onRetry={() => void detail.refetch()} />;
   const d = detail.data;
   const a = d?.audit;
@@ -57,7 +63,15 @@ export function AuditResultsPage() {
         <Tabs
           label="Audit results"
           tabs={[
-            { id: 'issues', label: 'Issues', badge: d.issues.length, content: <AuditIssueGroups issues={d.issues} /> },
+            { id: 'issues', label: 'Issues', badge: d.issues.length, content: (
+                <AuditIssueGroups
+                  issues={d.issues}
+                  auditId={auditId}
+                  onChanged={onIssueChanged}
+                  triageDisabledReason={d.audit.status === 'Completed' ? undefined : 'Issues can be marked fixed or ignored once the audit has completed.'}
+                />
+              ),
+            },
             { id: 'changes', label: 'Changes since last audit', content: <DiffView auditId={auditId} hasPrevious={!!d.previousAuditId} /> },
             { id: 'pages', label: 'Crawled pages', content: <PagesView auditId={auditId} /> },
           ]}

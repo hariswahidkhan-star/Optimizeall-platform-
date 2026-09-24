@@ -92,7 +92,7 @@ public class LandingPageView : Entity
     public string? UtmSource { get; set; }
 }
 
-public class LandingPageTemplate
+public class LandingPageTemplate : IConcurrencyStamped
 {
     public string Key { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
@@ -107,6 +107,17 @@ public class LandingPageTemplate
     /// <summary>Form template to create alongside a page made from this template.</summary>
     public string? FormTemplateKey { get; set; }
     public int SortOrder { get; set; }
+
+    /// <summary>Hidden templates are not offered when creating pages.</summary>
+    public bool IsActive { get; set; } = true;
+
+    /// <summary>Added by the agency (never touched by the seeder; can be deleted).</summary>
+    public bool IsCustom { get; set; }
+
+    /// <summary>A built-in template the agency edited: the seeder no longer refreshes it (reset restores the catalog copy).</summary>
+    public bool IsCustomized { get; set; }
+    public DateTime? UpdatedAt { get; set; }
+    public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
 }
 
 public enum FormStatus
@@ -163,7 +174,7 @@ public class FormConsentVersion : Entity
     public DateTime CreatedAt { get; set; }
 }
 
-public class FormTemplate
+public class FormTemplate : IConcurrencyStamped
 {
     public string Key { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
@@ -175,6 +186,17 @@ public class FormTemplate
     public string? AutoresponderSubject { get; set; }
     public string? AutoresponderBody { get; set; }
     public int SortOrder { get; set; }
+
+    /// <summary>Hidden templates are not offered when creating forms.</summary>
+    public bool IsActive { get; set; } = true;
+
+    /// <summary>Added by the agency (never touched by the seeder; can be deleted).</summary>
+    public bool IsCustom { get; set; }
+
+    /// <summary>A built-in template the agency edited: the seeder no longer refreshes it.</summary>
+    public bool IsCustomized { get; set; }
+    public DateTime? UpdatedAt { get; set; }
+    public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
 }
 
 public class FormSubmission : Entity
@@ -206,6 +228,20 @@ public class FormSubmission : Entity
 
     /// <summary>Set once FormSubmitted was published (conditional update, so it is published at most once).</summary>
     public DateTime? EventPublishedAt { get; set; }
+
+    /// <summary>Follow-up state of the lead (New → InProgress → Done; Spam hides it from exports by default).</summary>
+    public FormSubmissionStatus Status { get; set; } = FormSubmissionStatus.New;
+    public string? Note { get; set; }
+    public DateTime? StatusChangedAt { get; set; }
+    public Guid? StatusChangedByUserId { get; set; }
+}
+
+public enum FormSubmissionStatus
+{
+    New,
+    InProgress,
+    Done,
+    Spam,
 }
 
 public class FormSubmissionFile : Entity

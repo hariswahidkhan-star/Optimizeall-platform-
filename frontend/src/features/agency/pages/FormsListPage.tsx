@@ -1,10 +1,11 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { FileText, Plus } from 'lucide-react';
+import { Archive, ArchiveRestore, BookmarkPlus, CopyPlus, FileText, Inbox, Pencil, Plus } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Badge,
   Button,
+  ConfirmDialog,
   DataTable,
   DateTime,
   Dialog,
@@ -20,9 +21,13 @@ import {
   type DataTableColumn,
 } from '@/components/ui';
 import { api } from '@/lib/api/client';
+import { errorMessage } from '@/lib/api/errors';
 import type { PagedResult } from '@/lib/api/types';
+import { Permissions } from '@/lib/auth/permissions';
+import { useAuth } from '@/lib/auth/useAuth';
 import { fieldErrors, firstError, useClientOptions } from '../seo/common';
 import { pageKeys, type FormDetail, type FormListItem, type FormStatus, type FormTemplateInfo } from './api';
+import { SaveAsTemplateDialog } from './TemplateLibraryPage';
 import './pages.css';
 
 export const formStatusTone: Record<FormStatus, 'success' | 'warning' | 'neutral'> = { Active: 'success', Draft: 'warning', Archived: 'neutral' };
@@ -32,6 +37,30 @@ export function FormsListPage() {
   const [filters, setFilters] = useState<Record<string, string | undefined>>({});
   const [page, setPage] = useState(1);
   const [creating, setCreating] = useState(false);
+  const [savingTemplate, setSavingTemplate] = useState<FormListItem | null>(null);
+  const [archiving, setArchiving] = useState<FormListItem | null>(null);
+  const navigate = useNavigate();
+  const toast = useToast();
+  const queryClient = useQueryClient();
+  const { hasPermission } = useAuth();
+  const canSaveTemplates = hasPermission(Permissions.SettingsManage);
+  const duplicate = useMutation({
+    mutationFn: (f: FormListItem) => api.post<{ id: string; name: string }>(`/agency/pages/forms/${f.id}/duplicate`),
+    onSuccess: (copy) => {
+      toast.success('Form duplicated', `“${copy.name}” is a draft: activate it in the builder.`);
+      void queryClient.invalidateQueries({ queryKey: pageKeys.all });
+      navigate(copy.id);
+    },
+    onError: (e) => toast.error('Could not duplicate the form', errorMessage(e)),
+  });
+  const restore = useMutation({
+    mutationFn: (f: FormListItem) => api.post(`/agency/pages/forms/${f.id}/restore`),
+    onSuccess: () => {
+      toast.success('Form restored as a draft', 'Activate it in the builder to accept submissions again.');
+      void queryClient.invalidateQueries({ queryKey: pageKeys.all });
+    },
+    onError: (e) => toast.error('Could not restore the form', errorMessage(e)),
+  });
   const clients = useClientOptions('pages');
   const params = { search, clientId: filters.client, status: filters.status, page, pageSize: 25 };
   const query = useQuery({
@@ -111,7 +140,24 @@ export function FormsListPage() {
               columns={columns}
               rows={query.data?.items ?? []}
               getRowId={(f) => f.id}
+              rowLabel={(f) => f.name}
               loading={query.isLoading}
+              rowActions={(f) => [
+                { id: 'open', label: 'Open builder', icon: <Pencil />, to: f.id },
+                { id: 'submissions', label: 'Submissions', icon: <Inbox />, to: `${f.id}/submissions` },
+                { id: 'duplicate', label: 'Duplicate', icon: <CopyPlus />, onSelect: () => duplicate.mutate(f) },
+                {
+                  id: 'template',
+                  label: 'Save as template',
+                  icon: <BookmarkPlus />,
+                  disabled: !canSaveTemplates,
+                  description: canSaveTemplates ? undefined : 'Needs the settings.manage permission.',
+                  onSelect: () => setSavingTemplate(f),
+                },
+                f.status === 'Archived'
+                  ? { id: 'restore', label: 'Restore as draft', icon: <ArchiveRestore />, onSelect: () => restore.mutate(f) }
+                  : { id: 'archive', label: 'Archive', icon: <Archive />, danger: true, onSelect: () => setArchiving(f) },
+              ]}
               emptyState={
                 <EmptyState
                   icon={<FileText />}
@@ -125,6 +171,21 @@ export function FormsListPage() {
           </>
         )}
       </div>
+      {savingTemplate && <SaveAsTemplateDialog kind="form" id={savingTemplate.id} defaultName={savingTemplate.name} onClose={() => setSavingTemplate(null)} />}
+      <ConfirmDialog
+        open={archiving !== null}
+        onClose={() => setArchiving(null)}
+        tone="danger"
+        title="Archive this form?"
+        description="It stops accepting submissions (pages using it show nothing in its place). Submissions are kept; you can restore it."
+        confirmLabel="Archive form"
+        onConfirm={async () => {
+          if (!archiving) return;
+          await api.delete(`/agency/pages/forms/${archiving.id}`);
+          toast.success('Form archived');
+          void queryClient.invalidateQueries({ queryKey: pageKeys.all });
+        }}
+      />
       {creating && <CreateFormDialog onClose={() => setCreating(false)} />}
     </>
   );

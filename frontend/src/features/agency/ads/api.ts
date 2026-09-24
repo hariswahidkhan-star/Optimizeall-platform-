@@ -298,6 +298,40 @@ export interface Experiment {
   }[];
   significanceSource: string;
   method: string;
+  adAccountId?: string | null;
+  campaignId?: string | null;
+  concurrencyStamp?: string;
+}
+
+export type AdEntityStatus = 'Draft' | 'Active' | 'Paused' | 'Ended' | 'Removed';
+export const AD_ENTITY_STATUSES: AdEntityStatus[] = ['Draft', 'Active', 'Paused', 'Ended', 'Removed'];
+
+export interface AdGroupRow {
+  id: string;
+  campaignId: string;
+  externalId: string | null;
+  name: string;
+  status: AdEntityStatus;
+  budgetAmount: number | null;
+  bidStrategy: string | null;
+  targetingSummary: string | null;
+  source: 'Plan' | 'Synced' | 'Imported';
+  totals: Totals;
+  kpis: Kpis;
+  concurrencyStamp: string;
+}
+
+export interface AdRow {
+  id: string;
+  adGroupId: string;
+  externalId: string | null;
+  name: string;
+  status: AdEntityStatus;
+  creativeId: string | null;
+  source: 'Plan' | 'Synced' | 'Imported';
+  totals: Totals;
+  kpis: Kpis;
+  concurrencyStamp: string;
 }
 
 export interface ImportTemplate {

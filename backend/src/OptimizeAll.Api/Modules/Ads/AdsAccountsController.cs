@@ -61,6 +61,7 @@ public sealed class AdGroupInput
     [Range(0, 1_000_000_000)] public decimal? BudgetAmount { get; set; }
     [MaxLength(100)] public string? BidStrategy { get; set; }
     [MaxLength(2000)] public string? TargetingSummary { get; set; }
+    public Guid? ConcurrencyStamp { get; set; }
 }
 
 public sealed class AdInput
@@ -68,12 +69,14 @@ public sealed class AdInput
     [Required, MaxLength(300)] public string Name { get; set; } = string.Empty;
     public AdEntityStatus Status { get; set; } = AdEntityStatus.Draft;
     public Guid? CreativeId { get; set; }
+    public Guid? ConcurrencyStamp { get; set; }
 }
 
 public sealed record AdGroupDto(Guid Id, Guid CampaignId, string? ExternalId, string Name, AdEntityStatus Status, decimal? BudgetAmount, string? BidStrategy,
-    string? TargetingSummary, AdEntitySource Source, TotalsDto Totals, AdKpis Kpis);
+    string? TargetingSummary, AdEntitySource Source, TotalsDto Totals, AdKpis Kpis, Guid ConcurrencyStamp = default);
 
-public sealed record AdDto(Guid Id, Guid AdGroupId, string? ExternalId, string Name, AdEntityStatus Status, Guid? CreativeId, AdEntitySource Source, TotalsDto Totals, AdKpis Kpis);
+public sealed record AdDto(Guid Id, Guid AdGroupId, string? ExternalId, string Name, AdEntityStatus Status, Guid? CreativeId, AdEntitySource Source, TotalsDto Totals, AdKpis Kpis,
+    Guid ConcurrencyStamp = default);
 
 public sealed record OverviewRowDto(Guid ClientAccountId, string ClientName, string Currency, TotalsDto Totals, AdKpis Kpis, IReadOnlyList<string> FxMissing,
     int Accounts, int OpenAlerts);
@@ -241,7 +244,7 @@ public sealed class AdsAccountsController(
         {
             var totals = AdsKpiService.Sum(metrics.Where(m => m.AdGroupId == g.Id));
             return new AdGroupDto(g.Id, g.CampaignId, g.ExternalId, g.Name, g.Status, g.BudgetAmount, g.BidStrategy, g.TargetingSummary, g.Source,
-                TotalsDto.From(totals), AdKpis.From(totals));
+                TotalsDto.From(totals), AdKpis.From(totals), g.ConcurrencyStamp);
         }).ToList();
     }
 
@@ -259,7 +262,7 @@ public sealed class AdsAccountsController(
         db.Set<AdGroup>().Add(g);
         await db.SaveChangesAsync(ct);
         return new AdGroupDto(g.Id, g.CampaignId, null, g.Name, g.Status, g.BudgetAmount, g.BidStrategy, g.TargetingSummary, g.Source,
-            TotalsDto.From(AdTotals.Zero), AdKpis.From(AdTotals.Zero));
+            TotalsDto.From(AdTotals.Zero), AdKpis.From(AdTotals.Zero), g.ConcurrencyStamp);
     }
 
     [HttpGet("ad-groups/{id:guid}/ads")]
@@ -274,7 +277,7 @@ public sealed class AdsAccountsController(
         return ads.Select(a =>
         {
             var totals = AdsKpiService.Sum(metrics.Where(m => m.AdId == a.Id));
-            return new AdDto(a.Id, a.AdGroupId, a.ExternalId, a.Name, a.Status, a.CreativeId, a.Source, TotalsDto.From(totals), AdKpis.From(totals));
+            return new AdDto(a.Id, a.AdGroupId, a.ExternalId, a.Name, a.Status, a.CreativeId, a.Source, TotalsDto.From(totals), AdKpis.From(totals), a.ConcurrencyStamp);
         }).ToList();
     }
 
@@ -292,7 +295,113 @@ public sealed class AdsAccountsController(
         };
         db.Set<Ad>().Add(ad);
         await db.SaveChangesAsync(ct);
-        return new AdDto(ad.Id, ad.AdGroupId, null, ad.Name, ad.Status, ad.CreativeId, ad.Source, TotalsDto.From(AdTotals.Zero), AdKpis.From(AdTotals.Zero));
+        return new AdDto(ad.Id, ad.AdGroupId, null, ad.Name, ad.Status, ad.CreativeId, ad.Source, TotalsDto.From(AdTotals.Zero), AdKpis.From(AdTotals.Zero),
+            ad.ConcurrencyStamp);
+    }
+
+    // ------------------------------ edit / delete of the structure
+
+    [HttpPut("ad-groups/{id:guid}")]
+    [HasPermission(Permissions.AdsManage)]
+    public async Task<AdGroupDto> UpdateAdGroup(Guid id, AdGroupInput input, CancellationToken ct)
+    {
+        var g = await access.OwnedAsync<AdGroup>(id, x => x.ClientAccountId, "Ad group", ct);
+        StampGuard.Expect(db, g, input.ConcurrencyStamp, "ad group");
+        var before = new { g.Name, g.Status, g.BudgetAmount };
+        g.Name = input.Name.Trim();
+        g.Status = input.Status;
+        g.BudgetAmount = input.BudgetAmount;
+        g.BidStrategy = input.BidStrategy;
+        g.TargetingSummary = input.TargetingSummary;
+        audit.Record("ads.ad_group.updated", nameof(AdGroup), g.Id, before, new { g.Name, g.Status, g.BudgetAmount });
+        await db.SaveChangesAsync(ct);
+        return new AdGroupDto(g.Id, g.CampaignId, g.ExternalId, g.Name, g.Status, g.BudgetAmount, g.BidStrategy, g.TargetingSummary, g.Source,
+            TotalsDto.From(AdTotals.Zero), AdKpis.From(AdTotals.Zero), g.ConcurrencyStamp);
+    }
+
+    [HttpPut("ads/{id:guid}")]
+    [HasPermission(Permissions.AdsManage)]
+    public async Task<AdDto> UpdateAd(Guid id, AdInput input, CancellationToken ct)
+    {
+        var ad = await access.OwnedAsync<Ad>(id, x => x.ClientAccountId, "Ad", ct);
+        StampGuard.Expect(db, ad, input.ConcurrencyStamp, "ad");
+        if (input.CreativeId is { } cid && !await db.Set<AdCreative>().AnyAsync(c => c.Id == cid && c.ClientAccountId == ad.ClientAccountId, ct))
+            throw DomainException.NotFound("Creative");
+        var before = new { ad.Name, ad.Status, ad.CreativeId };
+        ad.Name = input.Name.Trim();
+        ad.Status = input.Status;
+        ad.CreativeId = input.CreativeId;
+        audit.Record("ads.ad.updated", nameof(Ad), ad.Id, before, new { ad.Name, ad.Status, ad.CreativeId });
+        await db.SaveChangesAsync(ct);
+        return new AdDto(ad.Id, ad.AdGroupId, ad.ExternalId, ad.Name, ad.Status, ad.CreativeId, ad.Source, TotalsDto.From(AdTotals.Zero), AdKpis.From(AdTotals.Zero),
+            ad.ConcurrencyStamp);
+    }
+
+    /// <summary>
+    /// Deletes a planned campaign without reported metrics, with its ad groups and ads. Synced or imported campaigns (or any
+    /// with metrics) are history: set their status to Removed instead.
+    /// </summary>
+    [HttpDelete("campaigns/{id:guid}")]
+    [HasPermission(Permissions.AdsManage)]
+    public async Task<IActionResult> DeleteCampaign(Guid id, CancellationToken ct)
+    {
+        var campaign = await access.OwnedAsync<AdCampaign>(id, c => c.ClientAccountId, "Campaign", ct);
+        if (campaign.Source != AdEntitySource.Plan || await db.Set<AdDailyMetric>().AnyAsync(m => m.CampaignId == id, ct))
+            throw DomainException.Conflict("ads.campaign_has_history", "This campaign has platform data; set its status to Removed instead of deleting it.");
+        if (await db.Set<AdBudget>().AnyAsync(b => b.CampaignId == id, ct))
+            throw DomainException.Conflict("ads.campaign_has_budget", "A budget targets this campaign; delete or retarget the budget first.");
+        await db.Set<Ad>().Where(a => a.CampaignId == id).ExecuteDeleteAsync(ct);
+        await db.Set<AdGroup>().Where(g => g.CampaignId == id).ExecuteDeleteAsync(ct);
+        await db.Set<AdCreative>().Where(c => c.CampaignId == id).ExecuteUpdateAsync(s => s.SetProperty(c => c.CampaignId, (Guid?)null), ct);
+        await db.Set<AdExperiment>().Where(e => e.CampaignId == id).ExecuteUpdateAsync(s => s.SetProperty(e => e.CampaignId, (Guid?)null), ct);
+        db.Remove(campaign);
+        audit.Record("ads.campaign.deleted", nameof(AdCampaign), id, before: new { campaign.Name, campaign.Status });
+        await db.SaveChangesAsync(ct);
+        return NoContent();
+    }
+
+    [HttpDelete("ad-groups/{id:guid}")]
+    [HasPermission(Permissions.AdsManage)]
+    public async Task<IActionResult> DeleteAdGroup(Guid id, CancellationToken ct)
+    {
+        var g = await access.OwnedAsync<AdGroup>(id, x => x.ClientAccountId, "Ad group", ct);
+        if (g.Source != AdEntitySource.Plan || await db.Set<AdDailyMetric>().AnyAsync(m => m.AdGroupId == id, ct))
+            throw DomainException.Conflict("ads.ad_group_has_history", "This ad group has platform data; set its status to Removed instead of deleting it.");
+        await db.Set<Ad>().Where(a => a.AdGroupId == id).ExecuteDeleteAsync(ct);
+        db.Remove(g);
+        audit.Record("ads.ad_group.deleted", nameof(AdGroup), id, before: new { g.Name });
+        await db.SaveChangesAsync(ct);
+        return NoContent();
+    }
+
+    [HttpDelete("ads/{id:guid}")]
+    [HasPermission(Permissions.AdsManage)]
+    public async Task<IActionResult> DeleteAd(Guid id, CancellationToken ct)
+    {
+        var ad = await access.OwnedAsync<Ad>(id, x => x.ClientAccountId, "Ad", ct);
+        if (ad.Source != AdEntitySource.Plan || await db.Set<AdDailyMetric>().AnyAsync(m => m.AdId == id, ct))
+            throw DomainException.Conflict("ads.ad_has_history", "This ad has platform data; set its status to Removed instead of deleting it.");
+        db.Remove(ad);
+        audit.Record("ads.ad.deleted", nameof(Ad), id, before: new { ad.Name });
+        await db.SaveChangesAsync(ct);
+        return NoContent();
+    }
+
+    /// <summary>Deletes an ad account registered by mistake (no campaigns, metrics or imports). Otherwise deactivate it.</summary>
+    [HttpDelete("accounts/{id:guid}")]
+    [HasPermission(Permissions.AdsManage)]
+    public async Task<IActionResult> DeleteAccount(Guid id, CancellationToken ct)
+    {
+        var account = await access.OwnedAsync<AdAccount>(id, a => a.ClientAccountId, "Ad account", ct);
+        if (await db.Set<AdCampaign>().AnyAsync(c => c.AdAccountId == id, ct) || await db.Set<AdDailyMetric>().AnyAsync(m => m.AdAccountId == id, ct)
+            || await db.Set<AdImportBatch>().AnyAsync(b => b.AdAccountId == id, ct))
+            throw DomainException.Conflict("ads.account_has_history", "This account has campaigns or reported data; deactivate it instead so reporting keeps it.");
+        if (account.IntegrationConnectionId is not null)
+            throw DomainException.Conflict("ads.account_connected", "Disconnect the account's integration before deleting it.");
+        db.Remove(account);
+        audit.Record("ads.account.deleted", nameof(AdAccount), id, before: new { account.Platform, account.ExternalAccountId, account.Name });
+        await db.SaveChangesAsync(ct);
+        return NoContent();
     }
 
     /// <summary>Spend, ROAS and CPA across all clients (each in its own currency, plus agency totals in <paramref name="currency"/>).</summary>

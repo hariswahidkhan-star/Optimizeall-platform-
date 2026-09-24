@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Check, Plus, Star, X } from 'lucide-react';
+import { Check, Pencil, Plus, Star, Trash2, X } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
 import {
   Alert,
@@ -9,6 +9,7 @@ import {
   CardBody,
   CardHeader,
   Checkbox,
+  ConfirmDialog,
   DataTable,
   DateTime,
   Dialog,
@@ -42,7 +43,8 @@ export function LocalSeoPanel({ site }: { site: Site }) {
   const local = useQuery({ queryKey: seoKeys.local(site.id), queryFn: () => api.get<LocalSeo>(`/agency/seo/sites/${site.id}/local`) });
   const reviews = useQuery({ queryKey: ['agency', 'seo', 'site', site.id, 'reviews'], queryFn: () => api.get<Review[]>(`/agency/seo/sites/${site.id}/reviews`) });
   const [editing, setEditing] = useState<Citation | null>(null);
-  const [addingReview, setAddingReview] = useState(false);
+  const [addingReview, setAddingReview] = useState<Review | 'new' | null>(null);
+  const [deletingReview, setDeletingReview] = useState<Review | null>(null);
   const refresh = () => void queryClient.invalidateQueries({ queryKey: ['agency', 'seo', 'site', site.id] });
   const data = local.data;
   const [profile, setProfile] = useState<{ businessName: string; address: string; phone: string; website: string; done: string[] } | null>(null);
@@ -180,7 +182,7 @@ export function LocalSeoPanel({ site }: { site: Site }) {
           title="Reviews"
           headingLevel={3}
           actions={
-            <Button size="sm" variant="secondary" leadingIcon={<Plus />} onClick={() => setAddingReview(true)}>
+            <Button size="sm" variant="secondary" leadingIcon={<Plus />} onClick={() => setAddingReview('new')}>
               Log review
             </Button>
           }
@@ -203,8 +205,17 @@ export function LocalSeoPanel({ site }: { site: Site }) {
                       {r.platform} · <DateTime value={r.reviewedAt} format="date" />
                     </span>
                     {r.responded ? <Badge tone="success">Responded</Badge> : <Badge tone="warning">Needs a reply</Badge>}
+                    <span className="seo-toolbar">
+                      <Button size="sm" variant="ghost" leadingIcon={<Pencil />} onClick={() => setAddingReview(r)} aria-label={`Edit review by ${r.authorName ?? 'Anonymous'}`}>
+                        {r.responded ? 'Edit' : 'Reply / edit'}
+                      </Button>
+                      <Button size="sm" variant="ghost" leadingIcon={<Trash2 />} onClick={() => setDeletingReview(r)} aria-label={`Delete review by ${r.authorName ?? 'Anonymous'}`}>
+                        Delete
+                      </Button>
+                    </span>
                   </div>
                   {r.text && <p>{r.text}</p>}
+                  {r.responseText && <p className="text-small text-muted">Our reply: {r.responseText}</p>}
                 </li>
               ))}
             </ul>
@@ -212,7 +223,23 @@ export function LocalSeoPanel({ site }: { site: Site }) {
         </CardBody>
       </Card>
       {editing && <CitationDialog siteId={site.id} citation={editing} onClose={() => setEditing(null)} onSaved={refresh} />}
-      {addingReview && <ReviewDialog siteId={site.id} onClose={() => setAddingReview(false)} onSaved={refresh} />}
+      {addingReview && (
+        <ReviewDialog siteId={site.id} review={addingReview === 'new' ? null : addingReview} onClose={() => setAddingReview(null)} onSaved={refresh} />
+      )}
+      <ConfirmDialog
+        open={deletingReview !== null}
+        onClose={() => setDeletingReview(null)}
+        tone="danger"
+        title="Delete this review?"
+        description="It is removed from the review log and the rating summary."
+        confirmLabel="Delete review"
+        onConfirm={async () => {
+          if (!deletingReview) return;
+          await api.delete(`/agency/seo/reviews/${deletingReview.id}`);
+          toast.success('Review deleted');
+          refresh();
+        }}
+      />
     </div>
   );
 }
@@ -295,11 +322,18 @@ function CitationDialog({ siteId, citation, onClose, onSaved }: { siteId: string
   );
 }
 
-function ReviewDialog({ siteId, onClose, onSaved }: { siteId: string; onClose: () => void; onSaved: () => void }) {
-  const [form, setForm] = useState({ platform: 'Google', rating: '5', authorName: '', text: '', reviewedAt: new Date().toISOString().slice(0, 10), responseText: '' });
+function ReviewDialog({ siteId, review, onClose, onSaved }: { siteId: string; review: Review | null; onClose: () => void; onSaved: () => void }) {
+  const [form, setForm] = useState({
+    platform: review?.platform ?? 'Google',
+    rating: String(review?.rating ?? 5),
+    authorName: review?.authorName ?? '',
+    text: review?.text ?? '',
+    reviewedAt: (review?.reviewedAt ?? new Date().toISOString()).slice(0, 10),
+    responseText: review?.responseText ?? '',
+  });
   const save = useMutation({
     mutationFn: () =>
-      api.post(`/agency/seo/sites/${siteId}/reviews`, {
+      (review ? api.put : api.post)(review ? `/agency/seo/reviews/${review.id}` : `/agency/seo/sites/${siteId}/reviews`, {
         platform: form.platform,
         rating: Number(form.rating),
         authorName: form.authorName || null,
@@ -317,7 +351,7 @@ function ReviewDialog({ siteId, onClose, onSaved }: { siteId: string; onClose: (
     <Dialog
       open
       onClose={onClose}
-      title="Log a review"
+      title={review ? 'Edit review' : 'Log a review'}
       footer={
         <>
           <Button variant="secondary" onClick={onClose}>

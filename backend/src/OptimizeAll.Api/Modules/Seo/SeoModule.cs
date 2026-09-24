@@ -44,7 +44,7 @@ public static class SeoModule
     }
 }
 
-/// <summary>Baseline: SEO audit rule copy and the local-SEO citation directory list (idempotent upserts by key).</summary>
+/// <summary>Baseline: SEO audit rule copy and the local-SEO citation directory list (insert-only by key, so agency edits survive restarts).</summary>
 public sealed class SeoBaselineSeeder : ISeeder
 {
     public string Profile => "Baseline";
@@ -64,11 +64,8 @@ public sealed class SeoBaselineSeeder : ISeeder
         foreach (var d in LocalSeoCatalog.Directories)
         {
             order += 10;
-            if (sources.TryGetValue(d.Key, out var existing))
-            {
-                existing.SortOrder = order;
-                continue;
-            }
+            // Insert-only: directories the agency renamed, re-ordered or hid keep their settings.
+            if (sources.ContainsKey(d.Key)) continue;
             db.Add(new SeoCitationSource { Key = d.Key, Name = d.Name, Url = d.Url, Category = d.Category, Countries = d.Countries.ToList(), SortOrder = order });
         }
         await db.SaveChangesAsync(ct);

@@ -12,7 +12,7 @@ using OptimizeAll.Infrastructure.Persistence;
 namespace OptimizeAll.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260924005344_InitialCreate")]
+    [Migration("20260924005557_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -6768,6 +6768,10 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
 
+                    b.Property<string>("Note")
+                        .HasMaxLength(2000)
+                        .HasColumnType("varchar(2000)");
+
                     b.Property<string>("Phone")
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)");
@@ -6775,6 +6779,18 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     b.Property<string>("Referrer")
                         .HasMaxLength(1000)
                         .HasColumnType("varchar(1000)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)");
+
+                    b.Property<DateTime?>("StatusChangedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("StatusChangedByUserId")
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("SubmittedAt")
                         .HasPrecision(6)
@@ -6809,6 +6825,8 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     b.HasIndex("ClientAccountId");
 
                     b.HasIndex("EventPublishedAt");
+
+                    b.HasIndex("FormId", "Status");
 
                     b.HasIndex("FormId", "SubmittedAt");
 
@@ -6872,6 +6890,10 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
 
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("ConsentText")
                         .HasMaxLength(2000)
                         .HasColumnType("varchar(2000)");
@@ -6880,6 +6902,15 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsCustom")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsCustomized")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -6902,6 +6933,10 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("varchar(1000)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Key");
 
@@ -7051,6 +7086,10 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasMaxLength(60)
                         .HasColumnType("varchar(60)");
 
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -7059,6 +7098,15 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     b.Property<string>("FormTemplateKey")
                         .HasMaxLength(60)
                         .HasColumnType("varchar(60)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsCustom")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsCustomized")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("MetaDescription")
                         .IsRequired()
@@ -7077,6 +7125,10 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
                     b.Property<int>("SortOrder")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Key");
 
@@ -10040,6 +10092,22 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)");
 
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)");
+
+                    b.Property<DateTime?>("StatusChangedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("StatusChangedByUserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("StatusNote")
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AuditId", "RuleKey")
@@ -10130,6 +10198,10 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasMaxLength(60)
                         .HasColumnType("varchar(60)");
 
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("HowToFix")
                         .IsRequired()
                         .HasMaxLength(2000)
@@ -10147,6 +10219,10 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("varchar(150)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("WhyItMatters")
                         .IsRequired()
@@ -10309,9 +10385,19 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasMaxLength(60)
                         .HasColumnType("varchar(60)");
 
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("Countries")
                         .IsRequired()
                         .HasColumnType("json");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsCustom")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -11026,12 +11112,19 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("Countries")
                         .IsRequired()
                         .HasColumnType("json");
 
                     b.Property<int>("Day")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<int>("Month")
                         .HasColumnType("int");
@@ -11040,6 +11133,10 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
+
+                    b.Property<string>("SeedKey")
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)");
 
                     b.Property<string>("SourceUrl")
                         .IsRequired()
@@ -11050,6 +11147,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SeedKey")
+                        .IsUnique();
 
                     b.HasIndex("Month", "Day", "Name")
                         .IsUnique();
@@ -11073,6 +11173,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasPrecision(6)
                         .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -11684,6 +11787,10 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     b.Property<bool>("AllowsMixedMedia")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("LinkHandling")
                         .IsRequired()
                         .HasMaxLength(40)
@@ -11889,12 +11996,22 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     b.Property<bool>("IsInternal")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<bool>("IsResolved")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Kind")
                         .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)");
 
                     b.Property<Guid>("PostId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("ResolvedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("ResolvedByUserId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");

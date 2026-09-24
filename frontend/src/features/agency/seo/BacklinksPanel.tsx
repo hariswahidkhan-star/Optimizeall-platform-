@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Link2, Plus, ShieldCheck, Trash2 } from 'lucide-react';
+import { CheckCircle2, Link2, Pencil, Plus, ShieldCheck, Trash2, XCircle } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
 import {
   Alert,
@@ -8,6 +8,7 @@ import {
   Card,
   CardBody,
   CardHeader,
+  ConfirmDialog,
   DataTable,
   DateTime,
   Dialog,
@@ -48,7 +49,9 @@ export function BacklinksPanel({ site }: { site: Site }) {
   const queryClient = useQueryClient();
   const toast = useToast();
   const [status, setStatus] = useState<string>('');
-  const [adding, setAdding] = useState(false);
+  const [adding, setAdding] = useState<Backlink | 'new' | null>(null);
+  const [removing, setRemoving] = useState<Backlink | null>(null);
+  const [removingProspect, setRemovingProspect] = useState<Outreach | null>(null);
   const [prospect, setProspect] = useState<Outreach | 'new' | null>(null);
   const params = { status: status || undefined, pageSize: 100 };
   const list = useQuery({
@@ -65,9 +68,17 @@ export function BacklinksPanel({ site }: { site: Site }) {
     },
     onError: (err) => toast.error('Check failed', errorMessage(err)),
   });
-  const remove = useMutation({
-    mutationFn: (b: Backlink) => api.delete(`/agency/seo/backlinks/${b.id}`),
-    onSuccess: refresh,
+  const setOutcome = useMutation({
+    mutationFn: ({ o, status }: { o: Outreach; status: OutreachStatus }) =>
+      api.put<Outreach>(`/agency/seo/outreach/${o.id}`, {
+        prospectUrl: o.prospectUrl, contactName: o.contactName, contactEmail: o.contactEmail, status, notes: o.notes,
+        lastContactedAt: o.lastContactedAt, concurrencyStamp: o.concurrencyStamp,
+      }),
+    onSuccess: (o) => {
+      toast.success(o.status === 'Won' ? 'Marked as won' : 'Marked as lost');
+      refresh();
+    },
+    onError: (err) => toast.error('Could not update the prospect', errorMessage(err)),
   });
   const summary = list.data?.summary;
 
@@ -115,7 +126,7 @@ export function BacklinksPanel({ site }: { site: Site }) {
         <Stat label="Lost" value={summary?.lost ?? '—'} measurement="Measured" loading={list.isLoading} />
       </div>
       <div className="seo-toolbar">
-        <Button leadingIcon={<Plus />} onClick={() => setAdding(true)}>
+        <Button leadingIcon={<Plus />} onClick={() => setAdding('new')}>
           Add backlink
         </Button>
         <CsvImportButton
@@ -146,7 +157,10 @@ export function BacklinksPanel({ site }: { site: Site }) {
         getRowId={(b) => b.id}
         rowLabel={(b) => b.sourceUrl}
         loading={list.isLoading}
-        rowActions={(b) => [{ id: 'delete', label: 'Remove', icon: <Trash2 />, danger: true, onSelect: () => remove.mutate(b) }]}
+        rowActions={(b) => [
+          { id: 'edit', label: 'Edit', icon: <Pencil />, onSelect: () => setAdding(b) },
+          { id: 'delete', label: 'Remove', icon: <Trash2 />, danger: true, onSelect: () => setRemoving(b) },
+        ]}
         emptyState={<EmptyState compact headingLevel={3} icon={<Link2 />} title="No backlinks" description="Add links manually or import a CSV; the checker verifies them daily." />}
       />
       <Card>
@@ -168,21 +182,76 @@ export function BacklinksPanel({ site }: { site: Site }) {
             getRowId={(o) => o.id}
             rowLabel={(o) => o.prospectUrl}
             loading={outreach.isLoading}
-            rowActions={(o) => [{ id: 'edit', label: 'Edit', onSelect: () => setProspect(o) }]}
+            rowActions={(o) => [
+              { id: 'edit', label: 'Edit', icon: <Pencil />, onSelect: () => setProspect(o) },
+              ...(o.status === 'Won' || o.status === 'Lost'
+                ? []
+                : [
+                    { id: 'won', label: 'Mark link won', icon: <CheckCircle2 />, onSelect: () => setOutcome.mutate({ o, status: 'Won' }) },
+                    { id: 'lost', label: 'Mark lost', icon: <XCircle />, onSelect: () => setOutcome.mutate({ o, status: 'Lost' }) },
+                  ]),
+              { id: 'delete', label: 'Delete', icon: <Trash2 />, danger: true, onSelect: () => setRemovingProspect(o) },
+            ]}
             emptyState={<EmptyState compact headingLevel={4} title="No prospects yet" />}
           />
         </CardBody>
       </Card>
-      {adding && <BacklinkDialog site={site} onClose={() => setAdding(false)} onSaved={refresh} />}
+      {adding && <BacklinkDialog site={site} backlink={adding === 'new' ? null : adding} onClose={() => setAdding(null)} onSaved={refresh} />}
+      <ConfirmDialog
+        open={removing !== null}
+        onClose={() => setRemoving(null)}
+        tone="danger"
+        title="Remove this backlink?"
+        description={removing ? `${removing.sourceUrl} will no longer be tracked or checked.` : undefined}
+        confirmLabel="Remove"
+        onConfirm={async () => {
+          if (!removing) return;
+          await api.delete(`/agency/seo/backlinks/${removing.id}`);
+          toast.success('Backlink removed');
+          refresh();
+        }}
+      />
+      <ConfirmDialog
+        open={removingProspect !== null}
+        onClose={() => setRemovingProspect(null)}
+        tone="danger"
+        title="Delete this prospect?"
+        description={removingProspect ? `${removingProspect.prospectUrl} and its notes are removed from outreach.` : undefined}
+        confirmLabel="Delete"
+        onConfirm={async () => {
+          if (!removingProspect) return;
+          await api.delete(`/agency/seo/outreach/${removingProspect.id}`);
+          toast.success('Prospect deleted');
+          refresh();
+        }}
+      />
       {prospect && <OutreachDialog siteId={site.id} prospect={prospect === 'new' ? null : prospect} onClose={() => setProspect(null)} onSaved={refresh} />}
     </div>
   );
 }
 
-function BacklinkDialog({ site, onClose, onSaved }: { site: Site; onClose: () => void; onSaved: () => void }) {
-  const [form, setForm] = useState({ sourceUrl: '', targetUrl: site.baseUrl, anchorText: '', rel: '' });
+export function BacklinkDialog({
+  site,
+  backlink,
+  onClose,
+  onSaved,
+}: {
+  site: Site;
+  backlink?: Backlink | null;
+  onClose: () => void;
+  onSaved: () => void;
+}) {
+  const [form, setForm] = useState({
+    sourceUrl: backlink?.sourceUrl ?? '',
+    targetUrl: backlink?.targetUrl ?? site.baseUrl,
+    anchorText: backlink?.anchorText ?? '',
+    rel: backlink?.rel ?? '',
+  });
   const save = useMutation({
-    mutationFn: () => api.post<Backlink>(`/agency/seo/sites/${site.id}/backlinks`, { ...form, anchorText: form.anchorText || null, rel: form.rel || null }),
+    mutationFn: () => {
+      const body = { ...form, anchorText: form.anchorText || null, rel: form.rel || null };
+      return backlink ? api.put<Backlink>(`/agency/seo/backlinks/${backlink.id}`, body) : api.post<Backlink>(`/agency/seo/sites/${site.id}/backlinks`, body);
+    },
     onSuccess: () => {
       onSaved();
       onClose();
@@ -193,20 +262,21 @@ function BacklinkDialog({ site, onClose, onSaved }: { site: Site; onClose: () =>
     <Dialog
       open
       onClose={onClose}
-      title="Add a backlink"
+      title={backlink ? 'Edit backlink' : 'Add a backlink'}
+      description={backlink ? 'Changing a URL resets the link check; it is verified again on the next check.' : undefined}
       footer={
         <>
           <Button variant="secondary" onClick={onClose}>
             Cancel
           </Button>
           <Button type="submit" form="seo-backlink" loading={save.isPending}>
-            Add
+            {backlink ? 'Save' : 'Add'}
           </Button>
         </>
       }
     >
       <form id="seo-backlink" className="stack" onSubmit={(e: FormEvent) => (e.preventDefault(), save.mutate())}>
-        {save.isError && <Alert tone="danger" title="Could not add the backlink">{errorMessage(save.error)}</Alert>}
+        {save.isError && <Alert tone="danger" title={backlink ? 'Could not save the backlink' : 'Could not add the backlink'}>{errorMessage(save.error)}</Alert>}
         <FormField label="Linking page URL" required error={firstError(errors, 'sourceUrl')}>
           <Input value={form.sourceUrl} inputMode="url" onChange={(e) => setForm({ ...form, sourceUrl: e.target.value })} />
         </FormField>
@@ -215,6 +285,9 @@ function BacklinkDialog({ site, onClose, onSaved }: { site: Site; onClose: () =>
         </FormField>
         <FormField label="Anchor text" optional>
           <Input value={form.anchorText} onChange={(e) => setForm({ ...form, anchorText: e.target.value })} />
+        </FormField>
+        <FormField label="Rel attribute" optional hint="Leave empty for a followed link (e.g. nofollow, ugc, sponsored).">
+          <Input value={form.rel} onChange={(e) => setForm({ ...form, rel: e.target.value })} />
         </FormField>
       </form>
     </Dialog>

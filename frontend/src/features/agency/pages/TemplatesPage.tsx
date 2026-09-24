@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { Badge, Button, ErrorState, PageHeader, Skeleton } from '@/components/ui';
+import { Settings2 } from 'lucide-react';
+import { Badge, Button, ButtonLink, ErrorState, PageHeader, Skeleton } from '@/components/ui';
 import { api } from '@/lib/api/client';
 import { pageKeys, type FormTemplateInfo, type PageTemplate } from './api';
 import { blockLabels } from './blockDefaults';
@@ -23,6 +24,11 @@ export function TemplatesPage() {
         title="Templates"
         description="Proven page layouts with real copy. Every template is fully editable after you create a page from it."
         breadcrumbs={[{ label: 'Landing pages', to: '/agency/pages' }, { label: 'Templates' }]}
+        actions={
+          <ButtonLink to="library" variant="secondary" leadingIcon={<Settings2 />}>
+            Manage library
+          </ButtonLink>
+        }
       />
       <div className="stack">
         <section aria-labelledby="pb-page-templates" className="stack">

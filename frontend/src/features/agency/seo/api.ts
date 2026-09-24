@@ -10,7 +10,8 @@ export type KeywordIntent = 'Unknown' | 'Informational' | 'Navigational' | 'Comm
 export type BacklinkStatus = 'Unchecked' | 'Live' | 'Nofollow' | 'Lost' | 'Error';
 export type OutreachStatus = 'Identified' | 'Contacted' | 'FollowedUp' | 'Replied' | 'Won' | 'Lost';
 export type CitationStatus = 'NotStarted' | 'Submitted' | 'Live' | 'NeedsUpdate' | 'Rejected';
-export type BriefStatus = 'Draft' | 'Ready' | 'HandedOff';
+export type BriefStatus = 'Draft' | 'Ready' | 'HandedOff' | 'Published';
+export type IssueStatus = 'Open' | 'Fixed' | 'Ignored';
 
 export interface Site {
   id: string;
@@ -83,6 +84,39 @@ export interface AuditIssue {
   howToFix: string;
   affectedCount: number;
   hits: IssueHit[];
+  /** Triage state (absent on older payloads = Open). */
+  status?: IssueStatus;
+  statusNote?: string | null;
+  statusChangedAt?: IsoDateTime | null;
+}
+
+/** Agency-wide audit rule settings (`GET /agency/seo/rules`). */
+export interface AuditRule {
+  key: string;
+  title: string;
+  category: string;
+  severity: SeoSeverity;
+  defaultSeverity: SeoSeverity;
+  whyItMatters: string;
+  howToFix: string;
+  isEnabled: boolean;
+  isCustomized: boolean;
+  concurrencyStamp: string;
+}
+
+/** Local-SEO directory (`GET /agency/seo/citation-sources`). */
+export interface CitationSource {
+  id: string;
+  key: string;
+  name: string;
+  url: string;
+  category: string;
+  countries: string[];
+  sortOrder: number;
+  isActive: boolean;
+  isCustom: boolean;
+  citationCount: number;
+  concurrencyStamp: string;
 }
 
 export interface AuditDetail {
@@ -371,6 +405,8 @@ export const seoKeys = {
   outreach: (siteId: string) => ['agency', 'seo', 'site', siteId, 'outreach'] as const,
   local: (siteId: string) => ['agency', 'seo', 'site', siteId, 'local'] as const,
   briefs: (siteId: string) => ['agency', 'seo', 'site', siteId, 'briefs'] as const,
+  rules: ['agency', 'seo', 'rules'] as const,
+  sources: ['agency', 'seo', 'citation-sources'] as const,
 };
 
 export function useSite(id: string) {

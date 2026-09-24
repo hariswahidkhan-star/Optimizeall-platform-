@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Copy, Send } from 'lucide-react';
+import { CheckCircle2, Copy, CopyPlus, RotateCcw, Send, Trash2 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
@@ -297,6 +297,15 @@ function Composer({ post }: { post: Post | null }) {
   const active = activeTab && profileMap.get(activeTab);
   const activeForm = activeTab ? variants[activeTab] : undefined;
   const allowed = post?.allowedActions ?? [];
+  const duplicate = useMutation({
+    mutationFn: () => api.post<{ id: string; title: string }>(`/agency/social/posts/${post!.id}/duplicate`),
+    onSuccess: (copy) => {
+      toast.success('Post duplicated', `“${copy.title}” is a new draft.`);
+      void queryClient.invalidateQueries({ queryKey: socialKeys.all });
+      navigate(`/agency/social/posts/${copy.id}`);
+    },
+    onError: (e) => toast.error('Could not duplicate the post', errorMessage(e)),
+  });
   const primaryActions = (['submit', 'approve', 'schedule', 'queue', 'unschedule', 'retry', 'markPublished', 'requestChanges'] as Action[]).filter(
     (a) => allowed.includes(a),
   );
@@ -320,10 +329,21 @@ function Composer({ post }: { post: Post | null }) {
                 {ACTION_LABELS[a]}
               </Button>
             ))}
-            {allowed.includes('delete') && (
+            {post && (
+              <Button variant="ghost" leadingIcon={<CopyPlus />} loading={duplicate.isPending} onClick={() => duplicate.mutate()}>
+                Duplicate
+              </Button>
+            )}
+            {allowed.includes('delete') ? (
               <Button variant="ghost" onClick={() => setAction('delete')}>
                 Delete
               </Button>
+            ) : (
+              post && (
+                <Button variant="ghost" disabled title="Published posts are kept for reporting and cannot be deleted.">
+                  Delete
+                </Button>
+              )
             )}
           </div>
         }
@@ -638,32 +658,77 @@ function Discussion({ post }: { post: Post }) {
   const [internal, setInternal] = useState(true);
   const queryClient = useQueryClient();
   const toast = useToast();
+  const { user } = useAuth();
+  const refresh = () => void queryClient.invalidateQueries({ queryKey: socialKeys.post(post.id) });
   const add = useMutation({
     mutationFn: () => api.post<Post>(`/agency/social/posts/${post.id}/comments`, { body, internal }),
     onSuccess: () => {
       setBody('');
-      void queryClient.invalidateQueries({ queryKey: socialKeys.post(post.id) });
+      refresh();
     },
     onError: (e) => toast.error('Comment not saved', errorMessage(e)),
   });
+  const resolve = useMutation({
+    mutationFn: ({ id, done }: { id: string; done: boolean }) => api.post(`/agency/social/posts/${post.id}/comments/${id}/${done ? 'resolve' : 'reopen'}`),
+    onSuccess: refresh,
+    onError: (e) => toast.error('Not changed', errorMessage(e)),
+  });
+  const remove = useMutation({
+    mutationFn: (id: string) => api.delete(`/agency/social/posts/${post.id}/comments/${id}`),
+    onSuccess: refresh,
+    onError: (e) => toast.error('Comment not deleted', errorMessage(e)),
+  });
   const tone = (kind: string): Tone =>
     kind === 'Approved' || kind === 'Published' ? 'success' : kind === 'ChangesRequested' || kind === 'Failed' ? 'danger' : 'neutral';
+  const feedback = post.comments.filter((c) => c.kind === 'Comment' || c.kind === 'ChangesRequested');
+  const open = feedback.filter((c) => !c.isResolved).length;
   return (
     <Card as="section" aria-labelledby="sm-discussion">
-      <CardHeader title="Approvals & comments" titleId="sm-discussion" />
+      <CardHeader
+        title="Approvals & comments"
+        titleId="sm-discussion"
+        description={feedback.length > 0 ? `${open} open feedback item${open === 1 ? '' : 's'} of ${feedback.length}` : undefined}
+      />
       <CardBody className="stack">
         {post.comments.length === 0 ? (
           <p className="sm-muted">No comments yet.</p>
         ) : (
           <Timeline
             label="Post history"
-            items={post.comments.map((c) => ({
-              id: c.id,
-              title: `${c.authorName}${c.isClient ? ' (client)' : ''}${c.isInternal ? ' · internal' : ''}`,
-              description: <span className="sm-pre">{c.body}</span>,
-              timestamp: c.createdAt,
-              tone: tone(c.kind),
-            }))}
+            items={post.comments.map((c) => {
+              const resolvable = c.kind === 'Comment' || c.kind === 'ChangesRequested';
+              const mine = !!user && c.authorUserId === user.id && c.kind === 'Comment' && !c.isClient;
+              return {
+                id: c.id,
+                title: `${c.authorName}${c.isClient ? ' (client)' : ''}${c.isInternal ? ' · internal' : ''}${c.isResolved ? ' · done' : ''}`,
+                description: (
+                  <span className="stack" style={{ gap: 4 }}>
+                    <span className={c.isResolved ? 'sm-pre sm-muted' : 'sm-pre'}>{c.body}</span>
+                    {(resolvable || mine) && (
+                      <span className="cluster">
+                        {resolvable && (
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            leadingIcon={c.isResolved ? <RotateCcw /> : <CheckCircle2 />}
+                            onClick={() => resolve.mutate({ id: c.id, done: !c.isResolved })}
+                          >
+                            {c.isResolved ? 'Reopen' : 'Mark done'}
+                          </Button>
+                        )}
+                        {mine && (
+                          <Button size="sm" variant="ghost" leadingIcon={<Trash2 />} onClick={() => remove.mutate(c.id)}>
+                            Delete
+                          </Button>
+                        )}
+                      </span>
+                    )}
+                  </span>
+                ),
+                timestamp: c.createdAt,
+                tone: c.isResolved ? 'success' : tone(c.kind),
+              };
+            })}
           />
         )}
         <FormField label="Add a comment">

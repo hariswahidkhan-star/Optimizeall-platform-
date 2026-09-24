@@ -84,6 +84,9 @@ public sealed class SocialMediaBaselineSeeder(TimeProvider clock) : ISeeder
         (8, 14, null, "Independence Day (Pakistan)", new[] { "PK" }, "https://cabinet.gov.pk/"),
     };
 
+    internal static string SeedKey(int month, int day, string name) =>
+        $"{month:00}-{day:00}-" + new string(name.ToLowerInvariant().Select(c => char.IsAsciiLetterOrDigit(c) ? c : '-').ToArray()).Trim('-');
+
     public async Task SeedAsync(AppDbContext db, CancellationToken ct)
     {
         var now = clock.GetUtcNow().UtcDateTime;
@@ -91,12 +94,23 @@ public sealed class SocialMediaBaselineSeeder(TimeProvider clock) : ISeeder
         foreach (var preset in NetworkPresets.Defaults.Where(d => !existing.Contains(d.Network)))
             db.Set<SocialNetworkPreset>().Add(preset.ToEntity(now));
 
-        var days = await db.Set<SocialAwarenessDay>().Select(d => new { d.Month, d.Day, d.Name }).ToListAsync(ct);
-        foreach (var d in AwarenessDays.Where(d => !days.Any(x => x.Month == d.Month && x.Day == d.Day && x.Name == d.Name)))
+        // Insert-only by seed key: days the agency renamed, hid or deleted are never re-added or overwritten.
+        var days = await db.Set<SocialAwarenessDay>().ToListAsync(ct);
+        foreach (var d in AwarenessDays)
+        {
+            var key = SeedKey(d.Month, d.Day, d.Name);
+            if (days.Any(x => x.SeedKey == key)) continue;
+            var legacy = days.FirstOrDefault(x => x.SeedKey == null && x.Month == d.Month && x.Day == d.Day && x.Name == d.Name);
+            if (legacy is not null)
+            {
+                legacy.SeedKey = key;
+                continue;
+            }
             db.Set<SocialAwarenessDay>().Add(new SocialAwarenessDay
             {
-                Month = d.Month, Day = d.Day, Year = d.Year, Name = d.Name, Countries = d.Countries.ToList(), SourceUrl = d.Source,
+                Month = d.Month, Day = d.Day, Year = d.Year, Name = d.Name, Countries = d.Countries.ToList(), SourceUrl = d.Source, SeedKey = key,
             });
+        }
         await db.SaveChangesAsync(ct);
     }
 }

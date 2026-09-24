@@ -61,6 +61,7 @@ internal sealed class SeoAuditIssueConfiguration : IEntityTypeConfiguration<SeoA
         b.Property(x => x.RuleKey).HasMaxLength(60).IsRequired();
         b.Property(x => x.AffectedUrls).HasJsonList();
         b.Property(x => x.Details);
+        b.Property(x => x.StatusNote).HasMaxLength(1000);
         b.HasIndex(x => new { x.AuditId, x.RuleKey }).IsUnique();
         b.HasOne<SeoAudit>().WithMany().HasForeignKey(x => x.AuditId).OnDelete(DeleteBehavior.Cascade);
     }

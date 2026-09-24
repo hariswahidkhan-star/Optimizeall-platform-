@@ -96,7 +96,8 @@ public sealed record VariantDto(
     DateTime? NextAttemptAt, PublishFailureKind FailureKind, string? FailureReason, string? ExternalPostId, string? PublishedUrl,
     DateTime? PublishedAt, bool PublishedManually, VariantValidation Validation);
 
-public sealed record CommentDto(Guid Id, string AuthorName, bool IsClient, bool IsInternal, PostCommentKind Kind, string Body, DateTime CreatedAt);
+public sealed record CommentDto(Guid Id, string AuthorName, bool IsClient, bool IsInternal, PostCommentKind Kind, string Body, DateTime CreatedAt,
+    Guid? AuthorUserId = null, bool IsResolved = false, DateTime? ResolvedAt = null);
 
 public sealed record PostDto(
     Guid Id, Guid ClientAccountId, string ClientName, string Title, SocialPostStatus Status, DateTime? ScheduledAt, Guid? CampaignId,
@@ -203,7 +204,9 @@ public sealed class SocialPostService(
     private async Task ApplyAsync(SocialPost post, PostInput input, CancellationToken ct)
     {
         var clientId = post.ClientAccountId;
-        if (input.CampaignId is not null) await CampaignAsync(clientId, input.CampaignId, ct);
+        if (input.CampaignId is not null && await CampaignAsync(clientId, input.CampaignId, ct) is { IsArchived: true } archived && post.CampaignId != archived.Id)
+            throw new DomainException("social.campaign_archived", $"The campaign {archived.Name} is archived; restore it or choose another campaign.",
+                errors: new Dictionary<string, string[]> { ["campaignId"] = new[] { "This campaign is archived." } });
         var profileIds = input.Variants.Select(v => v.ProfileId!.Value).ToList();
         if (profileIds.Distinct().Count() != profileIds.Count)
             throw new DomainException("social.duplicate_profile", "Each profile can appear only once in a post.");
@@ -575,7 +578,7 @@ public sealed class SocialPostService(
             post.IsEvergreen, post.EvergreenIntervalDays, post.EvergreenMaxRepeats, post.EvergreenRepeatCount, post.RecycledFromPostId,
             post.RecycleNumber, post.PublishedAt, forClient ? null : post.FailureReason, settings.RequireClientApproval,
             variants.All(v => v.Validation.IsValid), allowed, variants,
-            comments.Select(c => new CommentDto(c.Id, c.AuthorName, c.IsClient, c.IsInternal, c.Kind, c.Body, c.CreatedAt)).ToList(),
+            comments.Select(c => new CommentDto(c.Id, c.AuthorName, c.IsClient, c.IsInternal, c.Kind, c.Body, c.CreatedAt, c.AuthorUserId, c.IsResolved, c.ResolvedAt)).ToList(),
             creator ?? "Unknown", post.CreatedAt, post.UpdatedAt, post.ConcurrencyStamp);
     }
 

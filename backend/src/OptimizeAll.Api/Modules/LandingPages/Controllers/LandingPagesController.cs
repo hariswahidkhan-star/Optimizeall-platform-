@@ -112,7 +112,7 @@ public sealed class LandingPagesController(
     [HttpGet("templates")]
     public async Task<List<PageTemplateDto>> Templates(CancellationToken ct)
     {
-        var rows = await db.Set<LandingPageTemplate>().AsNoTracking().OrderBy(t => t.SortOrder).ToListAsync(ct);
+        var rows = await db.Set<LandingPageTemplate>().AsNoTracking().Where(t => t.IsActive).OrderBy(t => t.SortOrder).ThenBy(t => t.Name).ToListAsync(ct);
         return rows.Select(t =>
         {
             using var doc = JsonDocument.Parse(t.BlocksJson);

@@ -40,6 +40,8 @@ public sealed class LandingPagesBaselineSeeder : ISeeder
         {
             if (forms.TryGetValue(t.Key, out var existing))
             {
+                // Templates the agency edited keep their copy; "reset" restores the catalog version.
+                if (existing.IsCustomized || existing.IsCustom) continue;
                 existing.Name = t.Name;
                 existing.Description = t.Description;
                 existing.SchemaJson = t.SchemaJson;
@@ -58,6 +60,7 @@ public sealed class LandingPagesBaselineSeeder : ISeeder
         {
             if (pages.TryGetValue(t.Key, out var existing))
             {
+                if (existing.IsCustomized || existing.IsCustom) continue;
                 existing.Name = t.Name;
                 existing.Category = t.Category;
                 existing.Description = t.Description;

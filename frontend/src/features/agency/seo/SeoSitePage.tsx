@@ -1,13 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Pencil, Play } from 'lucide-react';
+import { Ban, Pencil, Play, Settings2, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import {
   Badge,
   Button,
+  ButtonLink,
   Card,
   CardBody,
   CardHeader,
+  ConfirmDialog,
   DataTable,
   DateTime,
   EmptyState,
@@ -72,6 +74,9 @@ export function SeoSitePage() {
         actions={
           s && (
             <>
+              <ButtonLink variant="ghost" leadingIcon={<Settings2 />} to="/agency/seo/settings">
+                Audit rules
+              </ButtonLink>
               <Button variant="secondary" leadingIcon={<Pencil />} onClick={() => setEditing(true)}>
                 Edit site
               </Button>
@@ -103,6 +108,18 @@ export function SeoSitePage() {
 
 function AuditsPanel({ siteId }: { siteId: string }) {
   const history = useAuditHistory(siteId);
+  const queryClient = useQueryClient();
+  const toast = useToast();
+  const [deleting, setDeleting] = useState<AuditSummary | null>(null);
+  const refresh = () => void queryClient.invalidateQueries({ queryKey: seoKeys.audits(siteId) });
+  const cancel = useMutation({
+    mutationFn: (a: AuditSummary) => api.post<AuditSummary>(`/agency/seo/audits/${a.id}/cancel`),
+    onSuccess: () => {
+      toast.success('Audit cancelled');
+      refresh();
+    },
+    onError: (err) => toast.error('Could not cancel the audit', errorMessage(err)),
+  });
   const audits = history.data?.items ?? [];
   const latest = audits.find((a) => a.status === 'Completed');
   const columns: DataTableColumn<AuditSummary>[] = [
@@ -164,7 +181,21 @@ function AuditsPanel({ siteId }: { siteId: string }) {
         columns={columns}
         rows={audits}
         getRowId={(a) => a.id}
+        rowLabel={(a) => `Audit of ${new Date(a.queuedAt).toLocaleString()}`}
         loading={history.isLoading}
+        rowActions={(a) => [
+          a.status === 'Queued'
+            ? { id: 'cancel', label: 'Cancel audit', icon: <Ban />, onSelect: () => cancel.mutate(a) }
+            : {
+                id: 'delete',
+                label: 'Delete audit',
+                icon: <Trash2 />,
+                danger: true,
+                disabled: a.status === 'Running',
+                description: a.status === 'Running' ? 'Wait for the crawl to finish.' : undefined,
+                onSelect: () => setDeleting(a),
+              },
+        ]}
         emptyState={
           <EmptyState
             compact
@@ -173,6 +204,20 @@ function AuditsPanel({ siteId }: { siteId: string }) {
             description="Run an audit to crawl the site (robots.txt respected, up to the page limit) and check 30+ SEO rules."
           />
         }
+      />
+      <ConfirmDialog
+        open={deleting !== null}
+        onClose={() => setDeleting(null)}
+        tone="danger"
+        title="Delete this audit?"
+        description="Its issues, crawled pages and triage notes are removed. Other audits of the site are kept."
+        confirmLabel="Delete audit"
+        onConfirm={async () => {
+          if (!deleting) return;
+          await api.delete(`/agency/seo/audits/${deleting.id}`);
+          toast.success('Audit deleted');
+          refresh();
+        }}
       />
     </div>
   );

@@ -6755,12 +6755,28 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Note")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Phone")
                         .HasMaxLength(40)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Referrer")
                         .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("StatusChangedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("StatusChangedByUserId")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("SubmittedAt")
@@ -6796,6 +6812,8 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.HasIndex("ClientAccountId");
 
                     b.HasIndex("EventPublishedAt");
+
+                    b.HasIndex("FormId", "Status");
 
                     b.HasIndex("FormId", "SubmittedAt");
 
@@ -6859,6 +6877,10 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("ConsentText")
                         .HasMaxLength(2000)
                         .HasColumnType("TEXT");
@@ -6867,6 +6889,15 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsCustom")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsCustomized")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -6888,6 +6919,10 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.Property<string>("SuccessMessage")
                         .IsRequired()
                         .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasPrecision(6)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Key");
@@ -7038,6 +7073,10 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasMaxLength(60)
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -7046,6 +7085,15 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.Property<string>("FormTemplateKey")
                         .HasMaxLength(60)
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsCustom")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsCustomized")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("MetaDescription")
                         .IsRequired()
@@ -7064,6 +7112,10 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
                     b.Property<int>("SortOrder")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Key");
 
@@ -10027,6 +10079,22 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("StatusChangedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("StatusChangedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StatusNote")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AuditId", "RuleKey")
@@ -10117,6 +10185,10 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasMaxLength(60)
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("HowToFix")
                         .IsRequired()
                         .HasMaxLength(2000)
@@ -10133,6 +10205,10 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(150)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasPrecision(6)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("WhyItMatters")
@@ -10296,9 +10372,19 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasMaxLength(60)
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Countries")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsCustom")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -11013,11 +11099,18 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Countries")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Day")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Month")
@@ -11026,6 +11119,10 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SeedKey")
+                        .HasMaxLength(120)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("SourceUrl")
@@ -11037,6 +11134,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SeedKey")
+                        .IsUnique();
 
                     b.HasIndex("Month", "Day", "Name")
                         .IsUnique();
@@ -11060,6 +11160,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasPrecision(6)
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -11671,6 +11774,10 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.Property<bool>("AllowsMixedMedia")
                         .HasColumnType("INTEGER");
 
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("LinkHandling")
                         .IsRequired()
                         .HasMaxLength(40)
@@ -11876,12 +11983,22 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.Property<bool>("IsInternal")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("IsResolved")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Kind")
                         .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("PostId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ResolvedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ResolvedByUserId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

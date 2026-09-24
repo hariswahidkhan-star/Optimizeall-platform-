@@ -66,6 +66,9 @@ export interface Preset {
   allowsMixedMedia: boolean;
   minAspectRatio: number | null;
   maxAspectRatio: number | null;
+  minVideoSeconds?: number | null;
+  maxVideoSeconds?: number | null;
+  maxImageBytes?: number | null;
   maxAltTextLength: number;
   supportsFirstComment: boolean;
   linkHandling: LinkHandling;
@@ -131,6 +134,10 @@ export interface PostComment {
   kind: string;
   body: string;
   createdAt: IsoDateTime;
+  authorUserId?: string | null;
+  /** Feedback marked as addressed ("done"). */
+  isResolved?: boolean;
+  resolvedAt?: IsoDateTime | null;
 }
 
 export interface Post {
@@ -282,10 +289,38 @@ export interface Snippet {
 
 export interface SocialCampaign {
   id: string;
+  clientAccountId?: string;
   name: string;
   utmCampaign: string;
   utmSource: string | null;
   utmMedium: string | null;
+  utmContent?: string | null;
+  utmTerm?: string | null;
+  concurrencyStamp?: string;
+  /** Archived campaigns keep their posts but cannot be picked for new ones. */
+  isArchived?: boolean;
+}
+
+/** Agency-wide network preset with its edit state (`GET /agency/social/admin/presets`). */
+export interface AdminPreset {
+  preset: Preset;
+  isCustomized: boolean;
+  updatedAt: IsoDateTime | null;
+  concurrencyStamp: string;
+}
+
+/** Awareness day as managed by admins (`GET /agency/social/admin/awareness-days`). */
+export interface AwarenessDayAdmin {
+  id: string;
+  month: number;
+  day: number;
+  year: number | null;
+  name: string;
+  countries: string[];
+  sourceUrl: string;
+  isActive: boolean;
+  isBuiltIn: boolean;
+  concurrencyStamp: string;
 }
 
 export interface SocialSettings {
@@ -334,6 +369,7 @@ export interface ListeningQuery {
   term: string;
   networks: SocialNetwork[];
   isActive: boolean;
+  concurrencyStamp?: string;
 }
 
 export interface InboxItem {
@@ -433,6 +469,7 @@ export interface Competitor {
     source: string;
     sourceLabel: string;
   }[];
+  concurrencyStamp?: string;
 }
 
 export interface ImportPreview {
@@ -476,6 +513,8 @@ export const socialKeys = {
   queries: (clientId: string) => ['social', 'queries', clientId] as const,
   inbox: (clientId: string, params: Record<string, unknown>) => ['social', 'inbox', clientId, params] as const,
   competitors: (clientId: string) => ['social', 'competitors', clientId] as const,
+  adminPresets: () => ['social', 'admin', 'presets'] as const,
+  awarenessDays: () => ['social', 'admin', 'awareness-days'] as const,
 };
 
 export const useSocialClients = () =>
@@ -519,10 +558,10 @@ export const useSnippets = (clientId: string | undefined) =>
     enabled: !!clientId,
   });
 
-export const useSocialCampaigns = (clientId: string | undefined) =>
+export const useSocialCampaigns = (clientId: string | undefined, includeArchived = false) =>
   useQuery({
-    queryKey: socialKeys.campaigns(clientId ?? ''),
-    queryFn: () => api.get<SocialCampaign[]>(`/agency/social/clients/${clientId}/campaigns`),
+    queryKey: [...socialKeys.campaigns(clientId ?? ''), includeArchived ? 'all' : 'active'],
+    queryFn: () => api.get<SocialCampaign[]>(`/agency/social/clients/${clientId}/campaigns`, { query: { includeArchived: includeArchived || undefined } }),
     enabled: !!clientId,
   });
 

@@ -1,10 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Download, FileText, Plus, Send } from 'lucide-react';
+import { CheckCircle2, Copy, Download, FileText, Pencil, Plus, RotateCcw, Send, Trash2 } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
 import {
   Alert,
   Badge,
   Button,
+  ConfirmDialog,
   DataTable,
   DateTime,
   Dialog,
@@ -21,7 +22,14 @@ import { errorMessage } from '@/lib/api/errors';
 import { seoKeys, type Brief, type BriefStatus, type Site } from './api';
 import { fieldErrors, firstError, lines } from './common';
 
-const statusLabel: Record<BriefStatus, string> = { Draft: 'Draft', Ready: 'Ready for writing', HandedOff: 'Handed off' };
+const statusLabel: Record<BriefStatus, string> = { Draft: 'Draft', Ready: 'Ready for writing', HandedOff: 'Handed off', Published: 'Published (done)' };
+const statusTone: Record<BriefStatus, 'neutral' | 'info' | 'brand' | 'success'> = { Draft: 'neutral', Ready: 'info', HandedOff: 'brand', Published: 'success' };
+
+/** Full PUT body of a brief with a new status (the API replaces every field). */
+const withStatus = (b: Brief, status: BriefStatus) => ({
+  title: b.title, targetKeyword: b.targetKeyword, relatedKeywords: b.relatedKeywords, questions: b.questions, outline: b.outline,
+  wordCountTarget: b.wordCountTarget, competitorUrls: b.competitorUrls, notes: b.notes, status, concurrencyStamp: b.concurrencyStamp,
+});
 
 export function BriefsPanel({ site }: { site: Site }) {
   const queryClient = useQueryClient();
@@ -30,6 +38,23 @@ export function BriefsPanel({ site }: { site: Site }) {
   const [handoff, setHandoff] = useState<{ message: string; markdown: string } | null>(null);
   const briefs = useQuery({ queryKey: seoKeys.briefs(site.id), queryFn: () => api.get<Brief[]>(`/agency/seo/sites/${site.id}/briefs`) });
   const refresh = () => void queryClient.invalidateQueries({ queryKey: seoKeys.briefs(site.id) });
+  const [deleting, setDeleting] = useState<Brief | null>(null);
+  const setStatus = useMutation({
+    mutationFn: ({ b, status }: { b: Brief; status: BriefStatus }) => api.put<Brief>(`/agency/seo/briefs/${b.id}`, withStatus(b, status)),
+    onSuccess: (b) => {
+      toast.success(b.status === 'Published' ? 'Brief marked done' : 'Brief reopened');
+      refresh();
+    },
+    onError: (err) => toast.error('Could not update the brief', errorMessage(err)),
+  });
+  const duplicate = useMutation({
+    mutationFn: (b: Brief) => api.post<Brief>(`/agency/seo/briefs/${b.id}/duplicate`),
+    onSuccess: (b) => {
+      toast.success('Brief duplicated', b.title);
+      refresh();
+    },
+    onError: (err) => toast.error('Could not duplicate the brief', errorMessage(err)),
+  });
   const handOff = useMutation({
     mutationFn: (b: Brief) => api.post<{ brief: Brief; taskCreated: boolean; message: string; markdown: string }>(`/agency/seo/briefs/${b.id}/handoff`),
     onSuccess: (r) => {
@@ -52,7 +77,7 @@ export function BriefsPanel({ site }: { site: Site }) {
       ),
     },
     { id: 'words', header: 'Words', align: 'right', cell: (b) => b.wordCountTarget.toLocaleString('en') },
-    { id: 'status', header: 'Status', cell: (b) => <Badge tone={b.status === 'HandedOff' ? 'success' : b.status === 'Ready' ? 'info' : 'neutral'}>{statusLabel[b.status]}</Badge> },
+    { id: 'status', header: 'Status', cell: (b) => <Badge tone={statusTone[b.status]}>{statusLabel[b.status]}</Badge> },
     { id: 'updated', header: 'Updated', hideOnMobile: true, cell: (b) => <DateTime value={b.updatedAt} format="relative" /> },
   ];
 
@@ -71,18 +96,37 @@ export function BriefsPanel({ site }: { site: Site }) {
         rowLabel={(b) => b.title}
         loading={briefs.isLoading}
         rowActions={(b) => [
-          { id: 'edit', label: 'Edit', onSelect: () => setEditing(b) },
+          { id: 'edit', label: 'Edit', icon: <Pencil />, onSelect: () => setEditing(b) },
           {
             id: 'export',
             label: 'Download Markdown',
             icon: <Download />,
             onSelect: () => void api.download(`/agency/seo/briefs/${b.id}/export.md`, 'brief.md'),
           },
-          { id: 'handoff', label: 'Hand off to content team', icon: <Send />, onSelect: () => handOff.mutate(b) },
+          { id: 'handoff', label: 'Hand off to content team', icon: <Send />, onSelect: () => handOff.mutate(b), disabled: b.status === 'Published' },
+          b.status === 'Published'
+            ? { id: 'reopen', label: 'Reopen as draft', icon: <RotateCcw />, onSelect: () => setStatus.mutate({ b, status: 'Draft' }) }
+            : { id: 'done', label: 'Mark published (done)', icon: <CheckCircle2 />, onSelect: () => setStatus.mutate({ b, status: 'Published' }) },
+          { id: 'duplicate', label: 'Duplicate', icon: <Copy />, onSelect: () => duplicate.mutate(b) },
+          { id: 'delete', label: 'Delete', icon: <Trash2 />, danger: true, onSelect: () => setDeleting(b) },
         ]}
         emptyState={<EmptyState compact headingLevel={3} icon={<FileText />} title="No briefs yet" description="Plan articles around a target keyword with an outline and competitor pages." />}
       />
       {editing && <BriefDialog siteId={site.id} brief={editing === 'new' ? null : editing} onClose={() => setEditing(null)} onSaved={refresh} />}
+      <ConfirmDialog
+        open={deleting !== null}
+        onClose={() => setDeleting(null)}
+        tone="danger"
+        title="Delete this brief?"
+        description={deleting ? `“${deleting.title}” is removed. Download the Markdown first if you still need it.` : undefined}
+        confirmLabel="Delete brief"
+        onConfirm={async () => {
+          if (!deleting) return;
+          await api.delete(`/agency/seo/briefs/${deleting.id}`);
+          toast.success('Brief deleted');
+          refresh();
+        }}
+      />
       {handoff && (
         <Dialog open onClose={() => setHandoff(null)} title="Brief handed off" size="lg">
           <div className="stack">
@@ -176,7 +220,7 @@ function BriefDialog({ siteId, brief, onClose, onSaved }: { siteId: string; brie
             <Input type="number" min={100} max={20000} value={form.wordCountTarget} onChange={(e) => setForm({ ...form, wordCountTarget: e.target.value })} />
           </FormField>
           <FormField label="Status">
-            <Select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value as BriefStatus })} options={(['Draft', 'Ready', 'HandedOff'] as const).map((s) => ({ value: s, label: statusLabel[s] }))} />
+            <Select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value as BriefStatus })} options={(['Draft', 'Ready', 'HandedOff', 'Published'] as const).map((s) => ({ value: s, label: statusLabel[s] }))} />
           </FormField>
         </div>
         <FormField label="Competitor URLs" optional hint="Pages currently ranking that we want to beat, one per line." error={firstError(errors, 'competitorUrls')}>

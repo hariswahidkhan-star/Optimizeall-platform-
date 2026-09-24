@@ -255,12 +255,16 @@ public sealed class AdsBudgetsController(AppDbContext db, SocialAccess access, P
     [HttpPost("alerts/{id:guid}/resolve")]
     public Task<AlertDto> Resolve(Guid id, CancellationToken ct) => SetStatus(id, AdAlertStatus.Resolved, ct);
 
+    /// <summary>Reopens an acknowledged or resolved alert (e.g. resolved by mistake).</summary>
+    [HttpPost("alerts/{id:guid}/reopen")]
+    public Task<AlertDto> Reopen(Guid id, CancellationToken ct) => SetStatus(id, AdAlertStatus.Open, ct);
+
     private async Task<AlertDto> SetStatus(Guid id, AdAlertStatus status, CancellationToken ct)
     {
         var alert = await access.OwnedAsync<AdAlert>(id, a => a.ClientAccountId, "Alert", ct);
         alert.Status = status;
-        alert.AcknowledgedByUserId = currentUser.Id;
-        alert.AcknowledgedAt = clock.GetUtcNow().UtcDateTime;
+        alert.AcknowledgedByUserId = status == AdAlertStatus.Open ? null : currentUser.Id;
+        alert.AcknowledgedAt = status == AdAlertStatus.Open ? null : clock.GetUtcNow().UtcDateTime;
         audit.Record($"ads.alert.{status.ToString().ToLowerInvariant()}", nameof(AdAlert), alert.Id);
         await db.SaveChangesAsync(ct);
         var name = await db.Set<ClientAccount>().AsNoTracking().Where(c => c.Id == alert.ClientAccountId).Select(c => c.Name).FirstAsync(ct);

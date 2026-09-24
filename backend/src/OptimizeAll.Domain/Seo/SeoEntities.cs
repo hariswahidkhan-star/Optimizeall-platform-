@@ -109,10 +109,23 @@ public class SeoAuditIssue : Entity
 
     /// <summary>Optional detail per URL ("url\tdetail" lines) such as the broken link target or the duplicate title.</summary>
     public string? Details { get; set; }
+
+    /// <summary>Triage state set by the team (Open until someone marks it fixed or ignored). Ignored carries over to later audits.</summary>
+    public SeoIssueStatus Status { get; set; } = SeoIssueStatus.Open;
+    public string? StatusNote { get; set; }
+    public DateTime? StatusChangedAt { get; set; }
+    public Guid? StatusChangedByUserId { get; set; }
+}
+
+public enum SeoIssueStatus
+{
+    Open,
+    Fixed,
+    Ignored,
 }
 
 /// <summary>Editable copy of an audit rule's explanation (seeded from <see cref="SeoAuditRules"/>).</summary>
-public class SeoAuditRule
+public class SeoAuditRule : IConcurrencyStamped
 {
     public string Key { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
@@ -120,7 +133,11 @@ public class SeoAuditRule
     public SeoSeverity Severity { get; set; }
     public string WhyItMatters { get; set; } = string.Empty;
     public string HowToFix { get; set; } = string.Empty;
+
+    /// <summary>Disabled rules are skipped by new audits (existing results are kept).</summary>
     public bool IsEnabled { get; set; } = true;
+    public DateTime? UpdatedAt { get; set; }
+    public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
 }
 
 public enum KeywordIntent
@@ -265,7 +282,7 @@ public class SeoLocalProfile : AuditedEntity, IConcurrencyStamped
 }
 
 /// <summary>A business directory where citations can be listed (seeded; see <see cref="LocalSeoCatalog.Directories"/>).</summary>
-public class SeoCitationSource : Entity
+public class SeoCitationSource : Entity, IConcurrencyStamped
 {
     public string Key { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
@@ -275,6 +292,13 @@ public class SeoCitationSource : Entity
     /// <summary>Country codes where the directory matters most; empty = global.</summary>
     public List<string> Countries { get; set; } = new();
     public int SortOrder { get; set; }
+
+    /// <summary>Hidden directories no longer appear in the citation tracker (existing citations are kept).</summary>
+    public bool IsActive { get; set; } = true;
+
+    /// <summary>True for directories the agency added (the baseline seeder never touches them).</summary>
+    public bool IsCustom { get; set; }
+    public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
 }
 
 public enum CitationStatus
@@ -320,6 +344,9 @@ public enum ContentBriefStatus
     Draft,
     Ready,
     HandedOff,
+
+    /// <summary>Done: the content went live.</summary>
+    Published,
 }
 
 public class SeoContentBrief : AuditedEntity, IConcurrencyStamped

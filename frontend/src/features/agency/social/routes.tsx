@@ -9,6 +9,7 @@ import {
   PenSquare,
   Plug,
   Send,
+  Settings2,
   Trophy,
 } from 'lucide-react';
 import type { RouteObject } from 'react-router-dom';
@@ -26,6 +27,7 @@ const ConnectCallbackPage = lazyPage(() => import('./ProfilesPage'), 'ConnectCal
 const ProfilesPage = lazyPage(() => import('./ProfilesPage'), 'ProfilesPage');
 const ApprovalsPage = lazyPage(() => import('./WorkflowPages'), 'ApprovalsPage');
 const PublishingPage = lazyPage(() => import('./WorkflowPages'), 'PublishingPage');
+const SocialSettingsPage = lazyPage(() => import('./SocialSettingsPage'), 'SocialSettingsPage');
 
 /** Every social page calls social.manage APIs; approve/schedule/publish actions additionally need social.publish (checked per action). */
 const social: PermissionRequirement = { anyOf: [Permissions.SocialManage] };
@@ -102,6 +104,13 @@ export const nav: PortalNavItem[] = [
     description: 'Benchmark competitor profiles.',
     requires: social,
   },
+  {
+    to: 'social/settings',
+    label: 'Social settings',
+    icon: Settings2,
+    description: 'Network limits, best posting times and awareness days.',
+    requires: social,
+  },
 ];
 
 export const routes: RouteObject[] = [
@@ -117,6 +126,7 @@ export const routes: RouteObject[] = [
   { path: 'social/listening', element: <ListeningPage />, handle: { requires: social } },
   { path: 'social/inbox', element: <InboxPage />, handle: { requires: social } },
   { path: 'social/competitors', element: <CompetitorsPage />, handle: { requires: social } },
+  { path: 'social/settings', element: <SocialSettingsPage />, handle: { requires: social } },
 ];
 
 /** Permissions that open at least one page of this area (added to the agency portal's entry requirement). */

@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Audit;
@@ -18,7 +19,13 @@ public sealed record IssueHitDto(string Url, string? Detail);
 
 public sealed record AuditIssueDto(
     string RuleKey, string Title, string Category, SeoSeverity Severity, string WhyItMatters, string HowToFix, int AffectedCount,
-    IReadOnlyList<IssueHitDto> Hits);
+    IReadOnlyList<IssueHitDto> Hits, SeoIssueStatus Status, string? StatusNote, DateTime? StatusChangedAt);
+
+public sealed class IssueStatusRequest
+{
+    [Required] public SeoIssueStatus? Status { get; set; }
+    [MaxLength(1000)] public string? Note { get; set; }
+}
 
 public sealed record AuditDetailDto(
     AuditSummaryDto Audit, string SiteName, string SiteBaseUrl, Guid? PreviousAuditId, IReadOnlyList<AuditIssueDto> Issues);
@@ -94,6 +101,42 @@ public sealed class SeoAuditsController(
         audit.Record("seo.audit_cancelled", nameof(SeoAudit), id);
         await db.SaveChangesAsync(ct);
         return ToSummary(await db.Set<SeoAudit>().AsNoTracking().FirstAsync(a => a.Id == row.Id, ct));
+    }
+
+    /// <summary>Triage one issue of an audit: mark it fixed, ignore it (carried over to later audits) or reopen it.</summary>
+    [HttpPost("audits/{id:guid}/issues/{ruleKey}/status")]
+    public async Task<AuditIssueDto> SetIssueStatus(Guid id, string ruleKey, IssueStatusRequest request, CancellationToken ct)
+    {
+        var row = await access.OwnedAsync<SeoAudit>(id, a => a.ClientAccountId, "Audit", ct, tracked: false);
+        if (row.Status != SeoAuditStatus.Completed) throw DomainException.Conflict("seo.audit_not_completed", "Issues can be triaged once the audit has completed.");
+        var issue = await db.Set<SeoAuditIssue>().FirstOrDefaultAsync(i => i.AuditId == id && i.RuleKey == ruleKey, ct) ?? throw DomainException.NotFound("Issue");
+        var status = request.Status!.Value;
+        if (status == SeoIssueStatus.Ignored && string.IsNullOrWhiteSpace(request.Note))
+            throw new DomainException("seo.issue_note_required", "Say why the issue is ignored (kept for the next audits).",
+                errors: new Dictionary<string, string[]> { ["note"] = new[] { "Add a note explaining why this issue is ignored." } });
+        var before = new { issue.Status, issue.StatusNote };
+        issue.Status = status;
+        issue.StatusNote = status == SeoIssueStatus.Open ? null : request.Note?.Trim();
+        issue.StatusChangedAt = clock.GetUtcNow().UtcDateTime;
+        issue.StatusChangedByUserId = currentUser.Id;
+        audit.Record("seo.issue_status_changed", nameof(SeoAudit), id, before, new { issue.RuleKey, issue.Status, issue.StatusNote });
+        await db.SaveChangesAsync(ct);
+        return ToIssue(issue, await RulesAsync(ct));
+    }
+
+    /// <summary>Deletes a finished audit and its results (queued or running audits must be cancelled or finish first).</summary>
+    [HttpDelete("audits/{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
+    {
+        var row = await access.OwnedAsync<SeoAudit>(id, a => a.ClientAccountId, "Audit", ct, tracked: false);
+        if (row.Status is SeoAuditStatus.Queued or SeoAuditStatus.Running)
+            throw DomainException.Conflict("seo.audit_in_progress", "Cancel the audit or wait for it to finish before deleting it.");
+        await db.Set<SeoAuditIssue>().Where(i => i.AuditId == id).ExecuteDeleteAsync(ct);
+        await db.Set<SeoAuditPage>().Where(p => p.AuditId == id).ExecuteDeleteAsync(ct);
+        await db.Set<SeoAudit>().Where(a => a.Id == id).ExecuteDeleteAsync(ct);
+        audit.Record("seo.audit_deleted", nameof(SeoAudit), id, before: new { row.SiteId, row.Status, row.HealthScore, row.QueuedAt });
+        await db.SaveChangesAsync(ct);
+        return NoContent();
     }
 
     [HttpGet("audits/{id:guid}/pages")]
@@ -178,7 +221,7 @@ public sealed class SeoAuditsController(
             ? details.Select(p => new IssueHitDto(p[0], p[1].Length == 0 ? null : p[1])).ToList()
             : i.AffectedUrls.Select(u => new IssueHitDto(u, null)).ToList();
         return new AuditIssueDto(i.RuleKey, rule?.Title ?? i.RuleKey, rule?.Category ?? "Other", i.Severity, rule?.WhyItMatters ?? string.Empty,
-            rule?.HowToFix ?? string.Empty, i.AffectedCount, hits);
+            rule?.HowToFix ?? string.Empty, i.AffectedCount, hits, i.Status, i.StatusNote, i.StatusChangedAt);
     }
 
     internal static AuditSummaryDto ToSummary(SeoAudit a) => new(a.Id, a.SiteId, a.Status, a.QueuedAt, a.StartedAt, a.FinishedAt, a.PagesCrawled,

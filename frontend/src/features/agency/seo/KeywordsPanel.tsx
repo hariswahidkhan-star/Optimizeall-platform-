@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ArrowDown, ArrowUp, History, Plus, RefreshCw, Upload } from 'lucide-react';
+import { ArrowDown, ArrowUp, History, Pause, Pencil, Play, Plus, RefreshCw, Trash2, Upload } from 'lucide-react';
 import { useRef, useState, type FormEvent } from 'react';
 import {
   Alert,
@@ -9,6 +9,8 @@ import {
   Card,
   CardBody,
   CardHeader,
+  Checkbox,
+  ConfirmDialog,
   DataTable,
   Dialog,
   FormField,
@@ -42,6 +44,16 @@ export function KeywordsPanel({ site }: { site: Site }) {
   const toast = useToast();
   const [adding, setAdding] = useState(false);
   const [historyFor, setHistoryFor] = useState<Keyword | null>(null);
+  const [editingKeyword, setEditingKeyword] = useState<Keyword | null>(null);
+  const [deletingKeyword, setDeletingKeyword] = useState<Keyword | null>(null);
+  const toggleTracked = useMutation({
+    mutationFn: (k: Keyword) => api.put<Keyword>(`/agency/seo/keywords/${k.id}`, { ...keywordBody(k), isTracked: !k.isTracked }),
+    onSuccess: (k) => {
+      toast.success(k.isTracked ? 'Tracking resumed' : 'Tracking paused', k.keyword);
+      refreshAll();
+    },
+    onError: (err) => toast.error('Could not update the keyword', errorMessage(err)),
+  });
   const [notice, setNotice] = useState<{ tone: 'info' | 'warning' | 'success'; title: string; body?: string } | null>(null);
   const keywords = useQuery({ queryKey: seoKeys.keywords(site.id), queryFn: () => api.get<Keyword[]>(`/agency/seo/sites/${site.id}/keywords`) });
   const overview = useQuery({
@@ -232,11 +244,105 @@ export function KeywordsPanel({ site }: { site: Site }) {
         getRowId={(k) => k.id}
         rowLabel={(k) => k.keyword}
         loading={keywords.isLoading}
-        rowActions={(k) => [{ id: 'history', label: 'Position history', icon: <History />, onSelect: () => setHistoryFor(k) }]}
+        rowActions={(k) => [
+          { id: 'history', label: 'Position history', icon: <History />, onSelect: () => setHistoryFor(k) },
+          { id: 'edit', label: 'Edit', icon: <Pencil />, onSelect: () => setEditingKeyword(k) },
+          k.isTracked
+            ? { id: 'pause', label: 'Pause tracking', icon: <Pause />, onSelect: () => toggleTracked.mutate(k) }
+            : { id: 'resume', label: 'Resume tracking', icon: <Play />, onSelect: () => toggleTracked.mutate(k) },
+          { id: 'delete', label: 'Delete', icon: <Trash2 />, danger: true, onSelect: () => setDeletingKeyword(k) },
+        ]}
+      />
+      {editingKeyword && <EditKeywordDialog keyword={editingKeyword} onClose={() => setEditingKeyword(null)} onSaved={refreshAll} />}
+      <ConfirmDialog
+        open={deletingKeyword !== null}
+        onClose={() => setDeletingKeyword(null)}
+        tone="danger"
+        title="Delete this keyword?"
+        description={deletingKeyword ? `“${deletingKeyword.keyword}” and its ranking history are removed. Pause tracking instead to keep the history.` : undefined}
+        confirmLabel="Delete keyword"
+        onConfirm={async () => {
+          if (!deletingKeyword) return;
+          await api.delete(`/agency/seo/keywords/${deletingKeyword.id}`);
+          toast.success('Keyword deleted');
+          refreshAll();
+        }}
       />
       {adding && <AddKeywordsDialog siteId={site.id} onClose={() => setAdding(false)} onSaved={refreshAll} />}
       {historyFor && <HistoryDialog keyword={historyFor} onClose={() => setHistoryFor(null)} />}
     </div>
+  );
+}
+
+const keywordBody = (k: Keyword) => ({
+  intent: k.intent, searchVolume: k.searchVolume, difficulty: k.difficulty, targetUrl: k.targetUrl, tags: k.tags, isTracked: k.isTracked,
+  concurrencyStamp: k.concurrencyStamp,
+});
+
+export function EditKeywordDialog({ keyword, onClose, onSaved }: { keyword: Keyword; onClose: () => void; onSaved: () => void }) {
+  const [form, setForm] = useState({
+    intent: keyword.intent,
+    searchVolume: keyword.searchVolume?.toString() ?? '',
+    difficulty: keyword.difficulty?.toString() ?? '',
+    targetUrl: keyword.targetUrl ?? '',
+    tags: keyword.tags.join(', '),
+    isTracked: keyword.isTracked,
+  });
+  const save = useMutation({
+    mutationFn: () =>
+      api.put<Keyword>(`/agency/seo/keywords/${keyword.id}`, {
+        intent: form.intent,
+        searchVolume: form.searchVolume === '' ? null : Number(form.searchVolume),
+        difficulty: form.difficulty === '' ? null : Number(form.difficulty),
+        targetUrl: form.targetUrl.trim() || null,
+        tags: form.tags.split(',').map((t) => t.trim()).filter(Boolean),
+        isTracked: form.isTracked,
+        concurrencyStamp: keyword.concurrencyStamp,
+      }),
+    onSuccess: () => {
+      onSaved();
+      onClose();
+    },
+  });
+  const errors = fieldErrors(save.error);
+  return (
+    <Dialog
+      open
+      onClose={onClose}
+      title={`Edit “${keyword.keyword}”`}
+      footer={
+        <>
+          <Button variant="secondary" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button type="submit" form="seo-edit-keyword" loading={save.isPending}>
+            Save
+          </Button>
+        </>
+      }
+    >
+      <form id="seo-edit-keyword" className="stack" onSubmit={(e: FormEvent) => (e.preventDefault(), save.mutate())}>
+        {save.isError && <Alert tone="danger" title="Could not save the keyword">{errorMessage(save.error)}</Alert>}
+        <FormField label="Search intent">
+          <Select value={form.intent} onChange={(e) => setForm({ ...form, intent: e.target.value as KeywordIntent })} options={intents.map((i) => ({ value: i, label: i }))} />
+        </FormField>
+        <div className="seo-grid-2">
+          <FormField label="Monthly search volume" optional error={firstError(errors, 'searchVolume')}>
+            <Input type="number" min={0} value={form.searchVolume} onChange={(e) => setForm({ ...form, searchVolume: e.target.value })} />
+          </FormField>
+          <FormField label="Difficulty (0–100)" optional error={firstError(errors, 'difficulty')}>
+            <Input type="number" min={0} max={100} value={form.difficulty} onChange={(e) => setForm({ ...form, difficulty: e.target.value })} />
+          </FormField>
+        </div>
+        <FormField label="Target URL" optional error={firstError(errors, 'targetUrl')}>
+          <Input value={form.targetUrl} inputMode="url" onChange={(e) => setForm({ ...form, targetUrl: e.target.value })} />
+        </FormField>
+        <FormField label="Tags" optional hint="Comma-separated">
+          <Input value={form.tags} onChange={(e) => setForm({ ...form, tags: e.target.value })} />
+        </FormField>
+        <Checkbox label="Track this keyword daily" checked={form.isTracked} onChange={(e) => setForm({ ...form, isTracked: e.target.checked })} />
+      </form>
+    </Dialog>
   );
 }
 

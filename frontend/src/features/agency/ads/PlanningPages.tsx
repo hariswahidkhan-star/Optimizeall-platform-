@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ClipboardList, FlaskConical, Link2, Megaphone, Plus, Trash2 } from 'lucide-react';
+import { Archive, CheckCircle2, ClipboardList, CopyPlus, FlaskConical, Link2, Megaphone, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import {
   Alert,
@@ -8,6 +8,7 @@ import {
   Card,
   CardBody,
   CardHeader,
+  ConfirmDialog,
   CopyField,
   DataTable,
   Dialog,
@@ -53,7 +54,33 @@ const platformOptions = AD_PLATFORMS.map((p) => ({ value: p, label: PLATFORM_LAB
 export function MediaPlansPage() {
   const [clientId, setClientId] = useClientParam();
   const [creating, setCreating] = useState(false);
+  const [editingPlan, setEditingPlan] = useState<MediaPlan | null>(null);
+  const [deletingPlan, setDeletingPlan] = useState<MediaPlan | null>(null);
   const [viewing, setViewing] = useState<MediaPlan | null>(null);
+  const queryClient = useQueryClient();
+  const toast = useToast();
+  const refreshPlans = () => void queryClient.invalidateQueries({ queryKey: ['ads', 'plans'] });
+  const setPlanStatus = useMutation({
+    mutationFn: ({ plan, status }: { plan: MediaPlan; status: MediaPlan['status'] }) =>
+      api.put<MediaPlan>(`/agency/ads/media-plans/${plan.id}`, { ...planBody(plan), status }),
+    onSuccess: (p) => {
+      toast.success(p.status === 'Approved' ? 'Plan approved' : p.status === 'Archived' ? 'Plan archived' : 'Plan back to draft', p.name);
+      refreshPlans();
+    },
+    onError: (e) => toast.error('Not changed', errorMessage(e)),
+  });
+  const duplicatePlan = useMutation({
+    mutationFn: (plan: MediaPlan) => {
+      const [y, m] = plan.month.split('-').map(Number);
+      const next = new Date(Date.UTC(y!, m!, 1)).toISOString().slice(0, 10);
+      return api.post<MediaPlan>(`/agency/ads/media-plans/${plan.id}/duplicate`, undefined, { query: { month: next } });
+    },
+    onSuccess: (p) => {
+      toast.success('Plan copied to the next month', p.name);
+      refreshPlans();
+    },
+    onError: (e) => toast.error('Not copied', errorMessage(e)),
+  });
   const plans = useQuery({
     queryKey: adsKeys.plans(clientId),
     queryFn: () => api.get<MediaPlan[]>('/agency/ads/media-plans', { query: { clientId } }),
@@ -97,12 +124,46 @@ export function MediaPlansPage() {
           columns={columns}
           rows={plans.data ?? []}
           getRowId={(p) => p.id}
+          rowLabel={(p) => p.name}
           loading={plans.isLoading}
+          rowActions={(p) => [
+            { id: 'view', label: 'Actual vs plan', onSelect: () => setViewing(p) },
+            { id: 'edit', label: 'Edit', icon: <Pencil />, onSelect: () => setEditingPlan(p) },
+            ...(p.status === 'Draft'
+              ? [{ id: 'approve', label: 'Approve plan', icon: <CheckCircle2 />, onSelect: () => setPlanStatus.mutate({ plan: p, status: 'Approved' }) }]
+              : [{ id: 'draft', label: 'Back to draft', onSelect: () => setPlanStatus.mutate({ plan: p, status: 'Draft' }) }]),
+            ...(p.status !== 'Archived' ? [{ id: 'archive', label: 'Archive', icon: <Archive />, onSelect: () => setPlanStatus.mutate({ plan: p, status: 'Archived' }) }] : []),
+            { id: 'duplicate', label: 'Copy to next month', icon: <CopyPlus />, onSelect: () => duplicatePlan.mutate(p) },
+            {
+              id: 'delete',
+              label: 'Delete',
+              icon: <Trash2 />,
+              danger: true,
+              disabled: p.status === 'Approved',
+              description: p.status === 'Approved' ? 'Approved plans are the agreed budget — archive first.' : undefined,
+              onSelect: () => setDeletingPlan(p),
+            },
+          ]}
           emptyState={<EmptyState icon={<ClipboardList />} headingLevel={2} title="No media plans" />}
         />
       )}
       {viewing && <PlanActualsDialog plan={viewing} onClose={() => setViewing(null)} />}
       {creating && <PlanDialog defaultClient={clientId} onClose={() => setCreating(false)} />}
+      {editingPlan && <PlanDialog plan={editingPlan} onClose={() => setEditingPlan(null)} />}
+      <ConfirmDialog
+        open={deletingPlan !== null}
+        onClose={() => setDeletingPlan(null)}
+        tone="danger"
+        title="Delete this media plan?"
+        description={deletingPlan ? `“${deletingPlan.name}” and its channel lines are removed.` : undefined}
+        confirmLabel="Delete plan"
+        onConfirm={async () => {
+          if (!deletingPlan) return;
+          await api.delete(`/agency/ads/media-plans/${deletingPlan.id}`);
+          toast.success('Plan deleted');
+          refreshPlans();
+        }}
+      />
     </>
   );
 }
@@ -150,25 +211,45 @@ function PlanActualsDialog({ plan, onClose }: { plan: MediaPlan; onClose: () => 
   );
 }
 
-function PlanDialog({ defaultClient, onClose }: { defaultClient?: string; onClose: () => void }) {
+/** Full PUT body of a plan (the API replaces the plan and its lines). */
+function planBody(plan: MediaPlan) {
+  return {
+    clientAccountId: plan.clientAccountId,
+    name: plan.name,
+    month: plan.month,
+    currency: plan.currency,
+    status: plan.status,
+    notes: plan.notes,
+    lines: plan.lines.map(({ id: _id, ...l }) => l),
+    concurrencyStamp: plan.concurrencyStamp,
+  };
+}
+
+function PlanDialog({ defaultClient, plan, onClose }: { defaultClient?: string; plan?: MediaPlan; onClose: () => void }) {
   const clients = useAdsClients();
   const queryClient = useQueryClient();
   const now = new Date();
   const month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-  const [clientId, setClientId] = useState(defaultClient ?? '');
-  const [name, setName] = useState('');
-  const [planMonth, setPlanMonth] = useState(month);
-  const [currency, setCurrency] = useState(clients.data?.find((c) => c.id === defaultClient)?.currency ?? 'USD');
+  const [clientId, setClientId] = useState(plan?.clientAccountId ?? defaultClient ?? '');
+  const [name, setName] = useState(plan?.name ?? '');
+  const [planMonth, setPlanMonth] = useState(plan ? plan.month.slice(0, 7) : month);
+  const [currency, setCurrency] = useState(plan?.currency ?? clients.data?.find((c) => c.id === defaultClient)?.currency ?? 'USD');
+  const [notes, setNotes] = useState(plan?.notes ?? '');
   const monthEnd = (m: string) => {
     const [y, mo] = m.split('-').map(Number);
     return new Date(Date.UTC(y!, mo!, 0)).toISOString().slice(0, 10);
   };
-  const [lines, setLines] = useState<MediaPlanLine[]>([
-    { platform: 'GoogleAds', channel: 'Search', objective: 'Conversions', plannedBudget: 0, flightStart: `${month}-01`, flightEnd: monthEnd(month), kpiName: 'CPA', kpiTarget: null },
-  ]);
+  const [lines, setLines] = useState<MediaPlanLine[]>(
+    plan?.lines.map(({ id: _id, ...l }) => l) ?? [
+      { platform: 'GoogleAds', channel: 'Search', objective: 'Conversions', plannedBudget: 0, flightStart: `${month}-01`, flightEnd: monthEnd(month), kpiName: 'CPA', kpiTarget: null },
+    ],
+  );
   const [error, setError] = useState<string | null>(null);
   const save = useMutation({
-    mutationFn: () => api.post<MediaPlan>('/agency/ads/media-plans', { clientAccountId: clientId, name, month: `${planMonth}-01`, currency, lines }),
+    mutationFn: () => {
+      const body = { clientAccountId: clientId, name, month: `${planMonth}-01`, currency, lines, notes: notes || null, status: plan?.status ?? 'Draft', concurrencyStamp: plan?.concurrencyStamp };
+      return plan ? api.put<MediaPlan>(`/agency/ads/media-plans/${plan.id}`, body) : api.post<MediaPlan>('/agency/ads/media-plans', body);
+    },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['ads', 'plans'] });
       onClose();
@@ -181,7 +262,7 @@ function PlanDialog({ defaultClient, onClose }: { defaultClient?: string; onClos
       open
       size="lg"
       onClose={onClose}
-      title="New media plan"
+      title={plan ? 'Edit media plan' : 'New media plan'}
       footer={
         <>
           <Button variant="secondary" onClick={onClose}>
@@ -199,6 +280,7 @@ function PlanDialog({ defaultClient, onClose }: { defaultClient?: string; onClos
           <FormField label="Client" required>
             <Select
               value={clientId}
+              disabled={!!plan}
               placeholder="Choose a client"
               onChange={(e) => {
                 setClientId(e.target.value);
@@ -218,6 +300,9 @@ function PlanDialog({ defaultClient, onClose }: { defaultClient?: string; onClos
             <Input value={currency} maxLength={3} onChange={(e) => setCurrency(e.target.value.toUpperCase())} />
           </FormField>
         </div>
+        <FormField label="Notes" optional>
+          <Textarea rows={2} maxLength={4000} value={notes} onChange={(e) => setNotes(e.target.value)} />
+        </FormField>
         {lines.map((l, i) => (
           <fieldset key={i} className="ad-mapping" style={{ border: '1px solid var(--color-border)', borderRadius: 8, padding: 12 }}>
             <legend>Channel {i + 1}</legend>
@@ -277,6 +362,17 @@ export function CreativesPage() {
   const [clientId, setClientId] = useClientParam();
   const [editing, setEditing] = useState<Creative | 'new' | null>(null);
   const [acting, setActing] = useState<{ creative: Creative; step: string } | null>(null);
+  const [deletingCreative, setDeletingCreative] = useState<Creative | null>(null);
+  const queryClient = useQueryClient();
+  const toast = useToast();
+  const duplicateCreative = useMutation({
+    mutationFn: (c: Creative) => api.post<Creative>(`/agency/ads/creatives/${c.id}/duplicate`),
+    onSuccess: (c) => {
+      toast.success('Creative duplicated', c.name);
+      void queryClient.invalidateQueries({ queryKey: ['ads', 'creatives'] });
+    },
+    onError: (e) => toast.error('Not duplicated', errorMessage(e)),
+  });
   const creatives = useQuery({
     queryKey: adsKeys.creatives(clientId),
     queryFn: () => api.get<Creative[]>('/agency/ads/creatives', { query: { clientId } }),
@@ -307,8 +403,10 @@ export function CreativesPage() {
     },
   ];
   const menu = (c: Creative): MenuEntry[] => [
-    { id: 'edit', label: 'Edit', onSelect: () => setEditing(c) },
+    { id: 'edit', label: 'Edit', icon: <Pencil />, onSelect: () => setEditing(c) },
     ...c.allowedActions.map((a) => ({ id: a, label: a.replace(/-/g, ' ').replace(/^./, (x) => x.toUpperCase()), onSelect: () => setActing({ creative: c, step: a }) })),
+    { id: 'duplicate', label: 'Duplicate', icon: <CopyPlus />, onSelect: () => duplicateCreative.mutate(c) },
+    { id: 'delete', label: 'Delete', icon: <Trash2 />, danger: true, onSelect: () => setDeletingCreative(c) },
   ];
   return (
     <>
@@ -344,6 +442,20 @@ export function CreativesPage() {
         <CreativeDialog creative={editing === 'new' ? null : editing} clientId={editing === 'new' ? clientId! : editing.clientAccountId} onClose={() => setEditing(null)} />
       )}
       {acting && <CreativeActionDialog creative={acting.creative} step={acting.step} onClose={() => setActing(null)} />}
+      <ConfirmDialog
+        open={deletingCreative !== null}
+        onClose={() => setDeletingCreative(null)}
+        tone="danger"
+        title="Delete this creative?"
+        description="Creatives used by ads cannot be deleted — unlink them from those ads first."
+        confirmLabel="Delete creative"
+        onConfirm={async () => {
+          if (!deletingCreative) return;
+          await api.delete(`/agency/ads/creatives/${deletingCreative.id}`);
+          toast.success('Creative deleted');
+          void queryClient.invalidateQueries({ queryKey: ['ads', 'creatives'] });
+        }}
+      />
     </>
   );
 }
@@ -513,6 +625,10 @@ function CreativeDialog({ creative, clientId, onClose }: { creative: Creative | 
 export function AdExperimentsPage() {
   const [clientId, setClientId] = useClientParam();
   const [creating, setCreating] = useState(false);
+  const [editingExperiment, setEditingExperiment] = useState<Experiment | null>(null);
+  const [deletingExperiment, setDeletingExperiment] = useState<Experiment | null>(null);
+  const queryClient = useQueryClient();
+  const toast = useToast();
   const experiments = useQuery({
     queryKey: adsKeys.experiments(clientId),
     queryFn: () => api.get<Experiment[]>('/agency/ads/experiments', { query: { clientId } }),
@@ -546,6 +662,24 @@ export function AdExperimentsPage() {
                 titleId={`exp-${e.id}`}
                 headingLevel={2}
                 description={`${PLATFORM_LABELS[e.platform]} · ${e.status}${e.winnerVariant ? ` · winner: ${e.winnerVariant}` : ''}`}
+                actions={
+                  <div className="cluster">
+                    <Button size="sm" variant="secondary" leadingIcon={<Pencil />} onClick={() => setEditingExperiment(e)} aria-label={`Edit ${e.name}`}>
+                      {e.status === 'Running' ? 'Update / conclude' : 'Edit'}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      leadingIcon={<Trash2 />}
+                      disabled={e.status === 'Running'}
+                      title={e.status === 'Running' ? 'Conclude the running experiment before deleting it.' : undefined}
+                      onClick={() => setDeletingExperiment(e)}
+                      aria-label={`Delete ${e.name}`}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                }
               />
               <CardBody className="stack">
                 <p>
@@ -580,23 +714,50 @@ export function AdExperimentsPage() {
         </div>
       )}
       {creating && clientId && <ExperimentDialog clientId={clientId} onClose={() => setCreating(false)} />}
+      {editingExperiment && <ExperimentDialog clientId={editingExperiment.clientAccountId} experiment={editingExperiment} onClose={() => setEditingExperiment(null)} />}
+      <ConfirmDialog
+        open={deletingExperiment !== null}
+        onClose={() => setDeletingExperiment(null)}
+        tone="danger"
+        title="Delete this experiment?"
+        description={deletingExperiment ? `“${deletingExperiment.name}” and its variant results are removed from the log.` : undefined}
+        confirmLabel="Delete"
+        onConfirm={async () => {
+          if (!deletingExperiment) return;
+          await api.delete(`/agency/ads/experiments/${deletingExperiment.id}`);
+          toast.success('Experiment deleted');
+          void queryClient.invalidateQueries({ queryKey: ['ads', 'experiments'] });
+        }}
+      />
     </>
   );
 }
 
-function ExperimentDialog({ clientId, onClose }: { clientId: string; onClose: () => void }) {
+function ExperimentDialog({ clientId, experiment, onClose }: { clientId: string; experiment?: Experiment; onClose: () => void }) {
   const queryClient = useQueryClient();
-  const [name, setName] = useState('');
-  const [hypothesis, setHypothesis] = useState('');
-  const [platform, setPlatform] = useState<AdPlatform>('GoogleAds');
-  const [metric, setMetric] = useState('ConversionRate');
-  const [variants, setVariants] = useState([
-    { name: 'A — control', isControl: true, impressions: 0, clicks: 0, conversions: 0 },
-    { name: 'B', isControl: false, impressions: 0, clicks: 0, conversions: 0 },
-  ]);
+  const [name, setName] = useState(experiment?.name ?? '');
+  const [hypothesis, setHypothesis] = useState(experiment?.hypothesis ?? '');
+  const [platform, setPlatform] = useState<AdPlatform>(experiment?.platform ?? 'GoogleAds');
+  const [metric, setMetric] = useState<string>(experiment?.metric ?? 'ConversionRate');
+  const [status, setStatus] = useState<Experiment['status']>(experiment?.status ?? 'Running');
+  const [result, setResult] = useState(experiment?.result ?? '');
+  const [winner, setWinner] = useState(experiment?.winnerVariant ?? '');
+  const [variants, setVariants] = useState(
+    experiment?.variants.map((v) => ({ name: v.name, isControl: v.isControl, impressions: v.impressions, clicks: v.clicks, conversions: v.conversions, spend: v.spend })) ?? [
+      { name: 'A — control', isControl: true, impressions: 0, clicks: 0, conversions: 0, spend: 0 },
+      { name: 'B', isControl: false, impressions: 0, clicks: 0, conversions: 0, spend: 0 },
+    ],
+  );
   const [error, setError] = useState<string | null>(null);
   const save = useMutation({
-    mutationFn: () => api.post<Experiment>('/agency/ads/experiments', { clientAccountId: clientId, name, hypothesis, platform, metric, variants, status: 'Running' }),
+    mutationFn: () => {
+      const body = {
+        clientAccountId: clientId, name, hypothesis, platform, metric, variants, status, result: result || null, winnerVariant: winner || null,
+        adAccountId: experiment?.adAccountId ?? null, campaignId: experiment?.campaignId ?? null, startDate: experiment?.startDate ?? null,
+        endDate: experiment?.endDate ?? null, enteredPValue: experiment?.enteredPValue ?? null, concurrencyStamp: experiment?.concurrencyStamp,
+      };
+      return experiment ? api.put<Experiment>(`/agency/ads/experiments/${experiment.id}`, body) : api.post<Experiment>('/agency/ads/experiments', body);
+    },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['ads', 'experiments'] });
       onClose();
@@ -608,7 +769,7 @@ function ExperimentDialog({ clientId, onClose }: { clientId: string; onClose: ()
       open
       size="lg"
       onClose={onClose}
-      title="Log an experiment"
+      title={experiment ? 'Update experiment' : 'Log an experiment'}
       footer={
         <>
           <Button variant="secondary" onClick={onClose}>
@@ -635,7 +796,24 @@ function ExperimentDialog({ clientId, onClose }: { clientId: string; onClose: ()
           <FormField label="Metric">
             <Select value={metric} onChange={(e) => setMetric(e.target.value)} options={[{ value: 'ConversionRate', label: 'Conversion rate' }, { value: 'Ctr', label: 'Click-through rate' }]} />
           </FormField>
+          <FormField label="Status" hint="Mark Concluded when the test is done.">
+            <Select
+              value={status}
+              onChange={(e) => setStatus(e.target.value as Experiment['status'])}
+              options={(['Planned', 'Running', 'Concluded'] as const).map((s) => ({ value: s, label: s }))}
+            />
+          </FormField>
+          {status === 'Concluded' && (
+            <FormField label="Winner" optional>
+              <Select value={winner} placeholder="No clear winner" onChange={(e) => setWinner(e.target.value)} options={variants.map((v) => ({ value: v.name, label: v.name }))} />
+            </FormField>
+          )}
         </div>
+        {status === 'Concluded' && (
+          <FormField label="Result / learnings" optional>
+            <Textarea rows={2} maxLength={2000} value={result} onChange={(e) => setResult(e.target.value)} />
+          </FormField>
+        )}
         {variants.map((v, i) => (
           <fieldset key={i} className="ad-mapping" style={{ border: 0, padding: 0 }}>
             <legend>{v.name}</legend>
@@ -697,17 +875,20 @@ export function UtmPage() {
 
   const [template, setTemplate] = useState<string | null>(null);
   const [lower, setLower] = useState<boolean | null>(null);
+  const [defaultSource, setDefaultSource] = useState<string | null>(null);
+  const [defaultMedium, setDefaultMedium] = useState<string | null>(null);
+  const [deletingLink, setDeletingLink] = useState<UtmLink | null>(null);
   const saveSettings = useMutation({
     mutationFn: () =>
       api.put<AdsSettings>(`/agency/ads/clients/${clientId}/settings`, {
         campaignNamingTemplate: template ?? settings.data?.campaignNamingTemplate ?? null,
-        defaultUtmSource: settings.data?.defaultUtmSource ?? '{platform}',
-        defaultUtmMedium: settings.data?.defaultUtmMedium ?? 'cpc',
+        defaultUtmSource: defaultSource ?? settings.data?.defaultUtmSource ?? '{platform}',
+        defaultUtmMedium: defaultMedium ?? settings.data?.defaultUtmMedium ?? 'cpc',
         lowercaseUtm: lower ?? settings.data?.lowercaseUtm ?? true,
         concurrencyStamp: settings.data?.concurrencyStamp,
       }),
     onSuccess: () => {
-      toast.success('Naming settings saved');
+      toast.success('Naming & UTM defaults saved');
       void queryClient.invalidateQueries({ queryKey: adsKeys.settings(clientId ?? '') });
     },
     onError: (e) => toast.error('Not saved', errorMessage(e)),
@@ -771,6 +952,14 @@ export function UtmPage() {
               <FormField label="Template" hint="Example: {client}_{platform}_{objective}_{yyyymm}_{name}. Planned campaigns must match it.">
                 <Input value={template ?? settings.data?.campaignNamingTemplate ?? ''} onChange={(e) => setTemplate(e.target.value)} />
               </FormField>
+              <div className="ad-stats">
+                <FormField label="Default utm_source" hint="{platform} becomes google, meta, tiktok…">
+                  <Input value={defaultSource ?? settings.data?.defaultUtmSource ?? ''} maxLength={100} onChange={(e) => setDefaultSource(e.target.value)} />
+                </FormField>
+                <FormField label="Default utm_medium">
+                  <Input value={defaultMedium ?? settings.data?.defaultUtmMedium ?? ''} maxLength={100} onChange={(e) => setDefaultMedium(e.target.value)} />
+                </FormField>
+              </div>
               <Switch
                 checked={lower ?? settings.data?.lowercaseUtm ?? true}
                 onCheckedChange={setLower}
@@ -778,7 +967,7 @@ export function UtmPage() {
               />
               <div>
                 <Button variant="secondary" loading={saveSettings.isPending} onClick={() => saveSettings.mutate()}>
-                  Save naming settings
+                  Save naming & UTM defaults
                 </Button>
               </div>
               <div className="cluster">
@@ -815,12 +1004,27 @@ export function UtmPage() {
                 ]}
                 rows={history.data ?? []}
                 getRowId={(l) => l.id ?? l.taggedUrl}
+                rowLabel={(l) => l.campaign}
+                rowActions={(l) => (l.id ? [{ id: 'delete', label: 'Delete from history', icon: <Trash2 />, danger: true, onSelect: () => setDeletingLink(l) }] : [])}
                 emptyState={<EmptyState compact icon={<Link2 />} headingLevel={3} title="No links yet" />}
               />
             </CardBody>
           </Card>
         </div>
       )}
+      <ConfirmDialog
+        open={deletingLink !== null}
+        onClose={() => setDeletingLink(null)}
+        tone="danger"
+        title="Delete this tagged link from the history?"
+        description="Links already in use keep working; only the saved record is removed."
+        confirmLabel="Delete"
+        onConfirm={async () => {
+          if (!deletingLink?.id) return;
+          await api.delete(`/agency/ads/utm/${deletingLink.id}`);
+          void queryClient.invalidateQueries({ queryKey: adsKeys.utm(clientId ?? '') });
+        }}
+      />
     </>
   );
 }

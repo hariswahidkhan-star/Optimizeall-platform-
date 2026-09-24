@@ -74,7 +74,7 @@ public sealed class SocialSettingsInput
 }
 
 public sealed record SocialCampaignDto(Guid Id, Guid ClientAccountId, string Name, string UtmCampaign, string? UtmSource, string? UtmMedium,
-    string? UtmContent, string? UtmTerm, Guid ConcurrencyStamp);
+    string? UtmContent, string? UtmTerm, Guid ConcurrencyStamp, bool IsArchived = false);
 
 public sealed class SocialCampaignInput
 {
@@ -336,11 +336,12 @@ public sealed class SocialProfilesController(
 
     [HttpGet("clients/{clientId:guid}/campaigns")]
     [HasPermission(Permissions.SocialManage)]
-    public async Task<IReadOnlyList<SocialCampaignDto>> Campaigns(Guid clientId, CancellationToken ct)
+    public async Task<IReadOnlyList<SocialCampaignDto>> Campaigns(Guid clientId, [FromQuery] bool includeArchived, CancellationToken ct)
     {
         await access.ClientAsync(clientId, ct);
-        return await db.Set<SocialCampaign>().AsNoTracking().Where(c => c.ClientAccountId == clientId).OrderBy(c => c.Name)
-            .Select(c => new SocialCampaignDto(c.Id, c.ClientAccountId, c.Name, c.UtmCampaign, c.UtmSource, c.UtmMedium, c.UtmContent, c.UtmTerm, c.ConcurrencyStamp))
+        return await db.Set<SocialCampaign>().AsNoTracking().Where(c => c.ClientAccountId == clientId && (includeArchived || !c.IsArchived))
+            .OrderBy(c => c.IsArchived).ThenBy(c => c.Name)
+            .Select(c => new SocialCampaignDto(c.Id, c.ClientAccountId, c.Name, c.UtmCampaign, c.UtmSource, c.UtmMedium, c.UtmContent, c.UtmTerm, c.ConcurrencyStamp, c.IsArchived))
             .ToListAsync(ct);
     }
 
@@ -354,7 +355,7 @@ public sealed class SocialProfilesController(
         db.Set<SocialCampaign>().Add(c);
         audit.Record("social.campaign.created", nameof(SocialCampaign), c.Id, after: new { c.Name, c.UtmCampaign });
         await db.SaveChangesAsync(ct);
-        return new SocialCampaignDto(c.Id, c.ClientAccountId, c.Name, c.UtmCampaign, c.UtmSource, c.UtmMedium, c.UtmContent, c.UtmTerm, c.ConcurrencyStamp);
+        return new SocialCampaignDto(c.Id, c.ClientAccountId, c.Name, c.UtmCampaign, c.UtmSource, c.UtmMedium, c.UtmContent, c.UtmTerm, c.ConcurrencyStamp, c.IsArchived);
     }
 
     [HttpPut("campaigns/{id:guid}")]
@@ -370,7 +371,7 @@ public sealed class SocialProfilesController(
         Apply(c, input);
         audit.Record("social.campaign.updated", nameof(SocialCampaign), c.Id, after: new { c.Name, c.UtmCampaign });
         await db.SaveChangesAsync(ct);
-        return new SocialCampaignDto(c.Id, c.ClientAccountId, c.Name, c.UtmCampaign, c.UtmSource, c.UtmMedium, c.UtmContent, c.UtmTerm, c.ConcurrencyStamp);
+        return new SocialCampaignDto(c.Id, c.ClientAccountId, c.Name, c.UtmCampaign, c.UtmSource, c.UtmMedium, c.UtmContent, c.UtmTerm, c.ConcurrencyStamp, c.IsArchived);
     }
 
     private static void Apply(SocialCampaign c, SocialCampaignInput input)

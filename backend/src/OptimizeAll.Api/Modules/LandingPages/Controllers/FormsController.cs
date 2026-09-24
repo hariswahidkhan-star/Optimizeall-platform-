@@ -87,7 +87,7 @@ public sealed record SubmissionDto(
     Guid Id, DateTime SubmittedAt, string? Name, string? Email, string? Phone, IReadOnlyDictionary<string, string> Values, string? UtmSource,
     string? UtmMedium, string? UtmCampaign, string? UtmTerm, string? UtmContent, string? Referrer, string? EmbedOrigin, Guid? LandingPageId,
     string? LandingPageName, string? VariantKey, bool ConsentGiven, int? ConsentVersion, string? ConsentText, bool EventPublished,
-    IReadOnlyList<SubmissionFileDto> Files);
+    IReadOnlyList<SubmissionFileDto> Files, FormSubmissionStatus Status = FormSubmissionStatus.New, string? Note = null, DateTime? StatusChangedAt = null);
 
 public sealed record EmbedDto(string FormUrl, string IframeSnippet, IReadOnlyList<string> AllowedOrigins, string FrameAncestors, string Guidance);
 
@@ -102,6 +102,9 @@ public sealed class SubmissionQuery : PageQuery
     public DateTime? From { get; set; }
     public DateTime? To { get; set; }
     public Guid? LandingPageId { get; set; }
+
+    /// <summary>Follow-up status filter; by default everything except spam is listed.</summary>
+    public FormSubmissionStatus? Status { get; set; }
 }
 
 /// <summary>Form builder, submissions (with CSV export and file downloads) and embed codes (forms.manage).</summary>
@@ -115,7 +118,7 @@ public sealed class FormsController(
     [HttpGet("form-templates")]
     public async Task<List<FormTemplateDto>> Templates(CancellationToken ct)
     {
-        var rows = await db.Set<FormTemplate>().AsNoTracking().OrderBy(t => t.SortOrder).ToListAsync(ct);
+        var rows = await db.Set<FormTemplate>().AsNoTracking().Where(t => t.IsActive).OrderBy(t => t.SortOrder).ThenBy(t => t.Name).ToListAsync(ct);
         return rows.Select(t =>
         {
             using var doc = JsonDocument.Parse(t.SchemaJson);
@@ -228,11 +231,12 @@ public sealed class FormsController(
         audit.Record("forms.submissions_exported", nameof(Form), form.Id, after: new { Rows = rows.Count });
         await db.SaveChangesAsync(ct);
         var header = new[] { "submitted_at", "name", "email", "phone" }.Concat(fieldKeys)
-            .Concat(new[] { "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "referrer", "landing_page", "variant", "consent_given", "consent_version" });
+            .Concat(new[] { "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "referrer", "landing_page", "variant", "consent_given", "consent_version",
+                "status", "note" });
         var lines = dtos.Select(d => new object?[] { d.SubmittedAt, d.Name, d.Email, d.Phone }
             .Concat(fieldKeys.Select(k => (object?)d.Values.GetValueOrDefault(k)))
             .Concat(new object?[] { d.UtmSource, d.UtmMedium, d.UtmCampaign, d.UtmTerm, d.UtmContent, d.Referrer, d.LandingPageName, d.VariantKey,
-                d.ConsentGiven ? "yes" : "no", d.ConsentVersion }));
+                d.ConsentGiven ? "yes" : "no", d.ConsentVersion, d.Status.ToString(), d.Note }));
         return Csv.File($"{LandingPageService.Slugify(form.Name)}-submissions.csv", header, lines);
     }
 
@@ -279,6 +283,8 @@ public sealed class FormsController(
         if (query.From is { } from) { var f = from.ToUniversalTime(); q = q.Where(s => s.SubmittedAt >= f); }
         if (query.To is { } to) { var t = to.ToUniversalTime(); q = q.Where(s => s.SubmittedAt <= t); }
         if (query.LandingPageId is { } p) q = q.Where(s => s.LandingPageId == p);
+        if (query.Status is { } st) q = q.Where(s => s.Status == st);
+        else q = q.Where(s => s.Status != FormSubmissionStatus.Spam);
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var like = PagingExtensions.LikePattern(query.Search);
@@ -325,7 +331,7 @@ public sealed class FormsController(
             s.LandingPageId is { } p ? pages.GetValueOrDefault(p) : null, s.VariantKey, s.ConsentGiven, s.ConsentVersion,
             s.ConsentVersion is { } v ? consents.GetValueOrDefault(v) : null, s.EventPublishedAt is not null,
             files.GetValueOrDefault(s.Id)?.Select(f => new SubmissionFileDto(f.Id, f.FieldKey, f.FileName, f.ContentType, f.SizeBytes)).ToList()
-            ?? new List<SubmissionFileDto>())).ToList();
+            ?? new List<SubmissionFileDto>(), s.Status, s.Note, s.StatusChangedAt)).ToList();
     }
 
     private static object Snapshot(Form f) => new

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { BellRing, Gauge, Plus } from 'lucide-react';
+import { BellRing, Gauge, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import {
   Alert,
@@ -7,6 +7,7 @@ import {
   Button,
   Card,
   CardBody,
+  ConfirmDialog,
   DataTable,
   DateTime,
   Dialog,
@@ -55,6 +56,10 @@ export function PacingPage() {
   const [clientId, setClientId] = useClientParam();
   const [month, setMonth] = useState(monthValue());
   const [adding, setAdding] = useState(false);
+  const [editing, setEditing] = useState<Budget | null>(null);
+  const [deleting, setDeleting] = useState<Budget | null>(null);
+  const queryClient = useQueryClient();
+  const toast = useToast();
   const params = { month: `${month}-01`, clientId };
   const query = useQuery({
     queryKey: adsKeys.pacing(params),
@@ -87,17 +92,32 @@ export function PacingPage() {
         <ul className="ad-pacing-board" aria-label="Budgets">
           {query.data!.map((b) => (
             <li key={b.id}>
-              <PacingCard budget={b} />
+              <PacingCard budget={b} onEdit={() => setEditing(b)} onDelete={() => setDeleting(b)} />
             </li>
           ))}
         </ul>
       )}
       {adding && <BudgetDialog defaultClient={clientId} month={month} onClose={() => setAdding(false)} />}
+      {editing && <BudgetDialog budget={editing} month={editing.month.slice(0, 7)} onClose={() => setEditing(null)} />}
+      <ConfirmDialog
+        open={deleting !== null}
+        onClose={() => setDeleting(null)}
+        tone="danger"
+        title="Delete this budget?"
+        description={deleting ? `${deleting.clientName} · ${deleting.scopeLabel}: pacing and alerts for it stop.` : undefined}
+        confirmLabel="Delete budget"
+        onConfirm={async () => {
+          if (!deleting) return;
+          await api.delete(`/agency/ads/budgets/${deleting.id}`);
+          toast.success('Budget deleted');
+          void queryClient.invalidateQueries({ queryKey: adsKeys.all });
+        }}
+      />
     </>
   );
 }
 
-export function PacingCard({ budget: b }: { budget: Budget }) {
+export function PacingCard({ budget: b, onEdit, onDelete }: { budget: Budget; onEdit?: () => void; onDelete?: () => void }) {
   const p = b.pacing;
   const spentShare = b.amount > 0 ? Math.min(p.actualToDate / b.amount, 1.5) : 0;
   return (
@@ -134,36 +154,57 @@ export function PacingCard({ budget: b }: { budget: Budget }) {
           ]}
         />
         {b.fxMissing.length > 0 && <p className="ad-warning">Missing exchange rate: {b.fxMissing.join(', ')}</p>}
+        {(onEdit || onDelete) && (
+          <div className="cluster">
+            {onEdit && (
+              <Button size="sm" variant="secondary" leadingIcon={<Pencil />} onClick={onEdit} aria-label={`Edit budget of ${b.clientName} (${b.scopeLabel})`}>
+                Edit
+              </Button>
+            )}
+            {onDelete && (
+              <Button size="sm" variant="ghost" leadingIcon={<Trash2 />} onClick={onDelete} aria-label={`Delete budget of ${b.clientName} (${b.scopeLabel})`}>
+                Delete
+              </Button>
+            )}
+          </div>
+        )}
       </CardBody>
     </Card>
   );
 }
 
-function BudgetDialog({ defaultClient, month, onClose }: { defaultClient?: string; month: string; onClose: () => void }) {
+export function BudgetDialog({ defaultClient, budget, month, onClose }: { defaultClient?: string; budget?: Budget; month: string; onClose: () => void }) {
   const clients = useAdsClients();
   const queryClient = useQueryClient();
-  const [clientId, setClientId] = useState(defaultClient ?? '');
-  const [platform, setPlatform] = useState('');
-  const [amount, setAmount] = useState('');
-  const [currency, setCurrency] = useState(clients.data?.find((c) => c.id === defaultClient)?.currency ?? 'USD');
-  const [over, setOver] = useState('115');
-  const [under, setUnder] = useState('85');
-  const [targetCpa, setTargetCpa] = useState('');
-  const [targetRoas, setTargetRoas] = useState('');
+  const [clientId, setClientId] = useState(budget?.clientAccountId ?? defaultClient ?? '');
+  const [budgetMonth, setBudgetMonth] = useState(month);
+  const [platform, setPlatform] = useState<string>(budget?.platform ?? '');
+  const [amount, setAmount] = useState(budget ? String(budget.amount) : '');
+  const [currency, setCurrency] = useState(budget?.currency ?? clients.data?.find((c) => c.id === defaultClient)?.currency ?? 'USD');
+  const [over, setOver] = useState(budget ? String(Math.round(budget.overPacingThreshold * 100)) : '115');
+  const [under, setUnder] = useState(budget ? String(Math.round(budget.underPacingThreshold * 100)) : '85');
+  const [targetCpa, setTargetCpa] = useState(budget?.targetCpa?.toString() ?? '');
+  const [targetRoas, setTargetRoas] = useState(budget?.targetRoas?.toString() ?? '');
+  const [notes, setNotes] = useState(budget?.notes ?? '');
   const [error, setError] = useState<string | null>(null);
   const save = useMutation({
-    mutationFn: () =>
-      api.post<Budget>('/agency/ads/budgets', {
+    mutationFn: () => {
+      const body = {
         clientAccountId: clientId,
-        month: `${month}-01`,
+        month: `${budgetMonth}-01`,
         platform: platform || null,
+        campaignId: budget?.campaignId ?? null,
         amount: Number(amount),
         currency,
         overPacingThreshold: Number(over) / 100,
         underPacingThreshold: Number(under) / 100,
         targetCpa: targetCpa ? Number(targetCpa) : null,
         targetRoas: targetRoas ? Number(targetRoas) : null,
-      }),
+        notes: notes || null,
+        concurrencyStamp: budget?.concurrencyStamp,
+      };
+      return budget ? api.put<Budget>(`/agency/ads/budgets/${budget.id}`, body) : api.post<Budget>('/agency/ads/budgets', body);
+    },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: adsKeys.all });
       onClose();
@@ -174,23 +215,24 @@ function BudgetDialog({ defaultClient, month, onClose }: { defaultClient?: strin
     <Dialog
       open
       onClose={onClose}
-      title="Add monthly budget"
+      title={budget ? 'Edit budget' : 'Add monthly budget'}
       footer={
         <>
           <Button variant="secondary" onClick={onClose}>
             Cancel
           </Button>
           <Button disabled={!clientId || !amount} loading={save.isPending} onClick={() => save.mutate()}>
-            Add budget
+            {budget ? 'Save' : 'Add budget'}
           </Button>
         </>
       }
     >
       <div className="stack">
         {error && <Alert tone="danger">{error}</Alert>}
-        <FormField label="Client" required>
+        <FormField label="Client" required hint={budget ? 'A budget cannot move to another client.' : undefined}>
           <Select
             value={clientId}
+            disabled={!!budget}
             placeholder="Choose a client"
             onChange={(e) => {
               setClientId(e.target.value);
@@ -222,7 +264,13 @@ function BudgetDialog({ defaultClient, month, onClose }: { defaultClient?: strin
           <FormField label="Target ROAS" optional>
             <Input type="number" step="0.1" value={targetRoas} onChange={(e) => setTargetRoas(e.target.value)} />
           </FormField>
+          <FormField label="Month">
+            <Input type="month" value={budgetMonth} onChange={(e) => setBudgetMonth(e.target.value || month)} />
+          </FormField>
         </div>
+        <FormField label="Notes" optional>
+          <Input value={notes} maxLength={1000} onChange={(e) => setNotes(e.target.value)} />
+        </FormField>
       </div>
     </Dialog>
   );
@@ -242,7 +290,7 @@ export function AlertsPage() {
     queryFn: () => api.get<AdAlert[]>('/agency/ads/alerts', { query: params }),
   });
   const act = useMutation({
-    mutationFn: ({ id, kind }: { id: string; kind: 'acknowledge' | 'resolve' }) => api.post<AdAlert>(`/agency/ads/alerts/${id}/${kind}`),
+    mutationFn: ({ id, kind }: { id: string; kind: 'acknowledge' | 'resolve' | 'reopen' }) => api.post<AdAlert>(`/agency/ads/alerts/${id}/${kind}`),
     onSuccess: () => void queryClient.invalidateQueries({ queryKey: ['ads', 'alerts'] }),
     onError: (e) => toast.error('Not updated', errorMessage(e)),
   });
@@ -284,7 +332,8 @@ export function AlertsPage() {
           loading={query.isLoading}
           rowActions={(a) => [
             ...(a.status === 'Open' ? [{ id: 'ack', label: 'Acknowledge', onSelect: () => act.mutate({ id: a.id, kind: 'acknowledge' }) }] : []),
-            ...(a.status !== 'Resolved' ? [{ id: 'resolve', label: 'Resolve', onSelect: () => act.mutate({ id: a.id, kind: 'resolve' }) }] : []),
+            ...(a.status !== 'Resolved' ? [{ id: 'resolve', label: 'Resolve (done)', onSelect: () => act.mutate({ id: a.id, kind: 'resolve' }) }] : []),
+            ...(a.status !== 'Open' ? [{ id: 'reopen', label: 'Reopen', onSelect: () => act.mutate({ id: a.id, kind: 'reopen' }) }] : []),
           ]}
           emptyState={<EmptyState icon={<BellRing />} headingLevel={2} title="No alerts" />}
         />

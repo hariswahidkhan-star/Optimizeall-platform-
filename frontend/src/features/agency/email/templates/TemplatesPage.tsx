@@ -1,9 +1,12 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { LayoutTemplate, Plus } from 'lucide-react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Archive, ArchiveRestore, Copy, LayoutTemplate, Pencil, Plus } from 'lucide-react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { ButtonLink } from '@/components/ui/ButtonLink';
+import { Checkbox } from '@/components/ui/Checkbox';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Card, CardBody } from '@/components/ui/Card';
 import { DataTable } from '@/components/ui/DataTable';
 import { DateTime } from '@/components/ui/DateTime';
@@ -15,12 +18,20 @@ import { api } from '@/lib/api/client';
 import { errorMessage } from '@/lib/api/errors';
 import { humanize } from '@/lib/format/text';
 import { EMAIL_API, emailKeys, useTemplates } from '../api/queries';
-import type { Template } from '../api/types';
+import type { Template, TemplateListItem } from '../api/types';
 import { useEmailWorkspace } from '../shared/workspace';
 
 export function TemplatesPage() {
   const { clientId, key } = useEmailWorkspace();
-  const templates = useTemplates(clientId);
+  const [showArchived, setShowArchived] = useState(false);
+  const active = useTemplates(clientId);
+  const all = useQuery({
+    queryKey: [...emailKeys.templates(key), 'all'],
+    queryFn: ({ signal }) => api.get<TemplateListItem[]>(`${EMAIL_API}/templates/all`, { query: clientId ? { clientId } : {}, signal }),
+    enabled: showArchived,
+  });
+  const templates = showArchived ? all : active;
+  const [archiving, setArchiving] = useState<TemplateListItem | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const toast = useToast();
@@ -31,6 +42,14 @@ export function TemplatesPage() {
       navigate(t.id);
     },
     onError: (e) => toast.error('Could not copy the template', errorMessage(e)),
+  });
+  const restore = useMutation({
+    mutationFn: (t: TemplateListItem) => api.post<Template>(`${EMAIL_API}/templates/${t.id}/restore`),
+    onSuccess: (t) => {
+      toast.success('Template restored', t.name);
+      void queryClient.invalidateQueries({ queryKey: emailKeys.templates(key) });
+    },
+    onError: (e) => toast.error('Could not restore the template', errorMessage(e)),
   });
 
   return (
@@ -44,6 +63,7 @@ export function TemplatesPage() {
           </ButtonLink>
         }
       />
+      <Checkbox label="Show archived templates" checked={showArchived} onChange={(e) => setShowArchived(e.target.checked)} />
       <Card>
         <CardBody>
           {templates.isError ? (
@@ -53,7 +73,23 @@ export function TemplatesPage() {
               caption="Email templates"
               rows={templates.data ?? []}
               getRowId={(t) => t.id}
+              rowLabel={(t) => t.name}
               loading={templates.isPending}
+              rowActions={(t) => [
+                { id: 'edit', label: 'Edit', icon: <Pencil />, to: t.id },
+                { id: 'duplicate', label: t.isGlobal && clientId ? 'Copy to this workspace' : 'Duplicate', icon: <Copy />, onSelect: () => duplicate.mutate(t.id) },
+                t.isArchived
+                  ? { id: 'restore', label: 'Restore', icon: <ArchiveRestore />, onSelect: () => restore.mutate(t) }
+                  : {
+                      id: 'archive',
+                      label: 'Archive',
+                      icon: <Archive />,
+                      danger: true,
+                      disabled: t.isGlobal && !!clientId,
+                      description: t.isGlobal && clientId ? 'Agency library templates are archived from the agency workspace.' : undefined,
+                      onSelect: () => setArchiving(t),
+                    },
+              ]}
               columns={[
                 {
                   id: 'name',
@@ -65,6 +101,7 @@ export function TemplatesPage() {
                         {t.name}
                       </Link>
                       <span className="email-muted">{t.subject}</span>
+                      {t.isArchived && <Badge size="sm">Archived</Badge>}
                     </span>
                   ),
                 },
@@ -91,6 +128,20 @@ export function TemplatesPage() {
           )}
         </CardBody>
       </Card>
+      <ConfirmDialog
+        open={archiving !== null}
+        onClose={() => setArchiving(null)}
+        tone="danger"
+        title="Archive this template?"
+        description="It is hidden from the template picker. Campaigns and journeys that already use it keep working; you can restore it."
+        confirmLabel="Archive"
+        onConfirm={async () => {
+          if (!archiving) return;
+          await api.delete(`${EMAIL_API}/templates/${archiving.id}`);
+          toast.success('Template archived');
+          void queryClient.invalidateQueries({ queryKey: emailKeys.templates(key) });
+        }}
+      />
     </>
   );
 }

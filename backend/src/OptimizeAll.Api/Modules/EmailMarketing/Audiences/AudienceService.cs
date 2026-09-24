@@ -232,6 +232,18 @@ public sealed class AudienceService(
         await db.SaveChangesAsync(ct);
     }
 
+    public async Task<EmailListDto> RestoreListAsync(Guid id, CancellationToken ct)
+    {
+        var list = await LoadListAsync(id, ct);
+        if (list.IsArchived)
+        {
+            list.IsArchived = false;
+            audit.Record("email.list.restored", nameof(EmailList), list.Id, after: Snapshot(list));
+            await db.SaveChangesAsync(ct);
+        }
+        return await GetListAsync(list.Id, ct);
+    }
+
     private static void Apply(EmailList list, EmailListRequest r)
     {
         list.Name = r.Name.Trim();
