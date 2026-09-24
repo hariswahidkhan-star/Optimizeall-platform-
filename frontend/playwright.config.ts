@@ -55,6 +55,12 @@ import { defineConfig, devices } from '@playwright/test';
  * negative paths) against the Demo seed with the non-production test sign-in on. Serial, one worker, desktop project
  * only. Run it with `E2E_SUITE=j-admin E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
  *
+ * The j-content suite walks the staff side that controls the public site (CMS pages with revisions and schedules, the
+ * service catalog and pricing, case studies/testimonials/team, the blog workflow, site settings and page texts, SEO:
+ * head tags, JSON-LD, robots.txt and sitemap.xml, the landing-page and form builders, and the permission negatives). It
+ * runs like j-campaigns (serial, one worker, desktop only) against Baseline + Demo:
+ * `E2E_SUITE=j-content E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
+ *
  * The a11y suite (accessibility & responsive layout: axe WCAG 2.2 A/AA in the light and dark theme, no horizontal
  * scroll at 360/768/1280 px, keyboard and focus behaviour) runs against the Demo seed too. It never changes data, so
  * its tests run in parallel (two workers); each test sets its own viewport, so only the desktop project runs it. Run
@@ -86,7 +92,7 @@ const responsiveSplit =
  * Serial journeys run on desktop only: their screens are staff tools (campaign manager/reviewer, finance, admin…) whose
  * phone layouts are covered by the a11y and responsive specs.
  */
-const desktopJourney = ['j-campaigns', 'j-finance', 'j-lead-to-cash', 'j-admin'].includes(suite);
+const desktopJourney = ['j-campaigns', 'j-finance', 'j-lead-to-cash', 'j-admin', 'j-content'].includes(suite);
 /** The finance journey compares datetime-local input (browser time) with UTC periods, so its browser runs in UTC. */
 const finance = suite === 'j-finance';
 /** Full-stack suites share one database and build on earlier steps: serial, one worker, no retries. */

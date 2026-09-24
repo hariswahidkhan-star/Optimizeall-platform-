@@ -128,11 +128,13 @@
   animation: ui-fade-in var(--duration-base) var(--ease-standard);
 }
 
+/* Same layer as dialogs: modals stack in the order they open (later portals come later in the DOM), so a dialog
+   opened from inside a drawer (e.g. a service's "New package") is above the drawer, not partly under it. */
 .ui-drawer {
   position: fixed;
   top: 0;
   bottom: 0;
-  z-index: calc(var(--z-modal) + 1);
+  z-index: var(--z-modal);
   display: flex;
   flex-direction: column;
   width: min(88vw, var(--drawer-width, 320px));

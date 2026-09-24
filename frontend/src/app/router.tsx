@@ -38,10 +38,28 @@ function RootRoute() {
 /**
  * Wraps every portal route that declares `handle.requires` (at any depth) in RequirePermission, so deep links answer
  * 403 like the hidden nav implies. A parent's requirement covers its children (list + detail pages).
+ *
+ * Lazy routes (`lazy: () => ({ Component })`) cannot be wrapped in place: React Router renders a lazily loaded
+ * `Component` instead of the route's `element`, which silently dropped the guard. The guard becomes the route's element
+ * and the lazy page moves to an index child rendered in its Outlet.
  */
 export function guardPortalRoutes(routes: RouteObject[]): RouteObject[] {
   return routes.map((route): RouteObject => {
     const requires = (route.handle as PortalRouteHandle | undefined)?.requires;
+    if (requires && route.lazy) {
+      const { lazy, children, ...rest } = route;
+      const guard = (
+        <RequirePermission {...requires}>
+          <Outlet />
+        </RequirePermission>
+      );
+      if (route.index) return { element: guard, handle: route.handle, children: [{ index: true, lazy }] };
+      return {
+        ...rest,
+        element: guard,
+        children: [{ index: true, lazy }, ...(children ? guardPortalRoutes(children) : [])],
+      } as RouteObject;
+    }
     const element = requires ? (
       <RequirePermission {...requires}>{route.element ?? <Outlet />}</RequirePermission>
     ) : (

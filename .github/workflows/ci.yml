@@ -340,6 +340,17 @@ jobs:
           E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-finance
         run: scripts/e2e-journeys.sh
 
+      # Site content, SEO and landing-page builder journey: CMS pages (revisions, schedules, reserved slugs), services and
+      # pricing, case studies/testimonials/team, the blog workflow, site settings, head tags/JSON-LD/robots/sitemap,
+      # landing pages and forms (publish, A/B, analytics, CSV export) and the permission negatives. Baseline + Demo, SQLite.
+      - name: Site content + SEO + landing pages journey (scripts/e2e-journeys.sh, E2E_SUITE=j-content, SQLite)
+        env:
+          E2E_SUITE: j-content
+          E2E_DB_PROVIDER: sqlite
+          E2E_SKIP_BUILD: "1"
+          E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-content
+        run: scripts/e2e-journeys.sh
+
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v4
@@ -379,6 +390,8 @@ jobs:
             ${{ runner.temp }}/e2e-j-finance/web.log
             ${{ runner.temp }}/e2e-lead-to-cash/api.log
             ${{ runner.temp }}/e2e-lead-to-cash/web.log
+            ${{ runner.temp }}/e2e-j-content/api.log
+            ${{ runner.temp }}/e2e-j-content/web.log
             ${{ runner.temp }}/web-smoke.log
           retention-days: 7
           if-no-files-found: ignore

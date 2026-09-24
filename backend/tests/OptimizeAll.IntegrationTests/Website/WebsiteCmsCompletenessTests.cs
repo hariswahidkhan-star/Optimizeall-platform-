@@ -223,4 +223,23 @@ public sealed class WebsiteCmsCompletenessTests(ApiFactory api) : IClassFixture<
         Assert.False(await api.WithDbAsync(db => db.Set<JobApplicationNote>().AnyAsync(n => n.ApplicationId == application.Id)));
         await (await admin.DeleteAsync($"/api/v1/agency/website/careers/applications/{application.Id}")).ShouldFailAsync(404);
     }
+
+    [Theory]
+    [InlineData("verify-email")]
+    [InlineData("reset-password")]
+    [InlineData("forgot-password")]
+    [InlineData("check-email")]
+    [InlineData("design-system")]
+    [InlineData("lp")]
+    [InlineData("f")]
+    public async Task Pages_cannot_take_the_address_of_a_built_in_route(string slug)
+    {
+        // A published page at /verify-email or /lp would never render (the app's own route wins) while the sitemap listed
+        // it; the slug is refused up front.
+        var admin = await api.AdminAsync();
+        await (await admin.PostAsJsonAsync("/api/v1/agency/website/pages", PageBody(slug, "Shadowed", "Never reachable.", true)))
+            .ShouldFailAsync(400, "website.invalid");
+        var sitemap = await (await api.Anonymous().GetAsync("/api/v1/public/sitemap.xml")).Content.ReadAsStringAsync();
+        Assert.DoesNotMatch($"<loc>[^<]*/{slug}</loc>", sitemap);
+    }
 }

@@ -21,7 +21,10 @@ The public marketing site of Optimize All (the agency) and the CMS that runs it.
 `/contact` · `/free-audit` · `/get-a-quote` (3 steps) · `/book-a-consultation` · `/newsletter/confirm` and
 `/newsletter/unsubscribe` · `/search` · every published CMS page at `/{slug}`: the seeded `/about`, `/how-we-work`,
 and the legal pages `/privacy-policy`, `/terms-of-service`, `/cookie-policy`, `/accessibility`, `/refund-policy`. The creator (participant) landing
-page that used to be the home page now lives at `/creators`; `/faq` is unchanged.
+page that used to be the home page now lives at `/creators`; `/faq` is unchanged. A CMS page cannot take the address
+of a built-in route (`/services`, `/blog`, `/login`, `/verify-email`, `/reset-password`, `/lp`, `/f`, the portals…:
+`CatalogAdminService.ReservedSlugs`, 400 `website.invalid`), since the built-in route would always win while the
+sitemap listed the page; `pricing` and `contact` are allowed on purpose — `/pricing` and `/contact` embed that CMS page.
 
 Every page has a unique title and description, a canonical URL, Open Graph/Twitter tags and, where it fits, JSON-LD
 (Organization, WebSite, Service + Offer, FAQPage, BreadcrumbList, Article/BlogPosting, JobPosting). The header has a

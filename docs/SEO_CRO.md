@@ -90,7 +90,11 @@ rule).
 
 * Pages are edited as a **draft** (up to four variants A–D, each a list of typed blocks). **Publish** validates every
   block and writes an immutable `LandingPageVersion` (snapshot + SHA-256 content hash). The public URL
-  `/lp/{clientSlug}/{pageSlug}` only ever serves the published version; drafts are never visible.
+  `/lp/{clientSlug}/{pageSlug}` only ever serves the published version; drafts are never visible. The URL slug is part
+  of the published snapshot too: renaming a published page in the draft keeps it live at its old address (and "View
+  live"/`publicPath` keep pointing there) until the rename is published; meanwhile no other page of the client can
+  take either address (409 `landing.slug_taken`). The public page writes the page's title, description and Open Graph
+  image (absolute URL) as `og:*`/`twitter:card` tags; landing pages are never listed in the site's sitemap.
 * **Content safety:** blocks are strict typed JSON; text is rendered as text (React escaping, no
   `dangerouslySetInnerHTML`); HTML tags, `javascript:`/`data:` URLs and event handlers are rejected server-side;
   images must be uploads or allow-listed hosts; videos are YouTube/Vimeo IDs rendered via `youtube-nocookie.com` and

@@ -25,6 +25,7 @@
 #                           j-campaigns     campaign manager + reviewer (Demo seed)
 #                           j-finance       payouts and the payments hub (Demo seed)
 #                           j-admin         platform administration: users, roles, test users, log-in-as (Demo seed)
+#                           j-content       site content, SEO, landing-page and form builders (Demo seed)
 #                           j-lead-to-cash  website inquiry → CRM → proposal → contract → paid recurring invoice (Demo seed)
 #   E2E_SEED              comma-separated seed profiles (default: Baseline for journeys and j-participant,
 #                         Baseline,Demo for everything else)

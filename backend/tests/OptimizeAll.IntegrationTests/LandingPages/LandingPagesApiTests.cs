@@ -111,6 +111,39 @@ public sealed class LandingPagesApiTests(LandingPagesFixture fx) : IClassFixture
     }
 
     [Fact]
+    public async Task A_slug_rename_is_part_of_the_draft_and_goes_live_only_when_published()
+    {
+        var staff = await fx.StaffAsync();
+        var created = await CreatePageAsync(staff);
+        var visitor = fx.Anonymous(visitorId: "visitor-rename");
+        var oldPath = $"/api/v1/public/lp/{created.ClientSlug}/{created.Slug}";
+        var newSlug = created.Slug + "-renamed";
+        var newPath = $"/api/v1/public/lp/{created.ClientSlug}/{newSlug}";
+
+        var draft = Draft(created.Page);
+        draft["slug"] = newSlug;
+        var saved = await (await staff.PutAsync($"/api/v1/agency/pages/landing-pages/{created.PageId}", JsonBody(draft))).ReadJsonAsync();
+        Assert.Equal(newSlug, saved.GetProperty("slug").GetString());
+        // Visitors (and "View live") still use the published address; the new one is not live yet.
+        (await visitor.GetAsync(oldPath)).EnsureSuccessStatusCode();
+        await (await visitor.GetAsync(newPath)).ShouldFailAsync(404);
+        Assert.Equal($"/lp/{created.ClientSlug}/{created.Slug}", saved.GetProperty("publicPath").GetString());
+        var list = await (await staff.GetAsync($"/api/v1/agency/pages/landing-pages?clientId={created.ClientId}")).ReadJsonAsync();
+        Assert.Equal($"/lp/{created.ClientSlug}/{created.Slug}", list.GetProperty("items")[0].GetProperty("publicPath").GetString());
+        // The live address stays reserved while the rename is pending.
+        await (await staff.PostAsJsonAsync("/api/v1/agency/pages/landing-pages", new { clientAccountId = created.ClientId, name = "Squatter", slug = created.Slug }))
+            .ShouldFailAsync(409, "landing.slug_taken");
+
+        var published = await (await staff.PostAsync($"/api/v1/agency/pages/landing-pages/{created.PageId}/publish", null)).ReadJsonAsync();
+        Assert.Equal($"/lp/{created.ClientSlug}/{newSlug}", published.GetProperty("publicPath").GetString());
+        (await visitor.GetAsync(newPath)).EnsureSuccessStatusCode();
+        await (await visitor.GetAsync(oldPath)).ShouldFailAsync(404);
+        // Once the rename is live, the old address is free again.
+        (await staff.PostAsJsonAsync("/api/v1/agency/pages/landing-pages", new { clientAccountId = created.ClientId, name = "Reuse", slug = created.Slug }))
+            .EnsureSuccessStatusCode();
+    }
+
+    [Fact]
     public async Task Unsafe_block_content_is_rejected_on_save()
     {
         var staff = await fx.StaffAsync();

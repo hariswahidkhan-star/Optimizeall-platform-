@@ -215,6 +215,32 @@ public sealed class ImpersonationTests(ApiFactory api) : IClassFixture<ApiFactor
     }
 
     [Fact]
+    public async Task Website_editors_can_edit_content_but_not_the_site_settings_while_impersonated()
+    {
+        // Site settings choose the tag-manager / pixel scripts loaded on every public page and the canonical site URL.
+        var (_, admin) = await AdminAsync();
+        var editor = await api.CreateUserAsync(new[] { Role.ContentCreator });
+        await api.WithDbAsync(async db =>
+        {
+            var role = new CustomRole { Name = "Website editor", NormalizedName = CustomRole.Normalize("Website editor " + Guid.NewGuid().ToString("N")[..6]), Permissions = new() { "site.manage" } };
+            db.Add(role);
+            db.Add(new UserCustomRole { UserId = editor.Id, CustomRoleId = role.Id, AssignedAt = DateTime.UtcNow });
+            await db.Set<User>().Where(u => u.Id == editor.Id).ExecuteUpdateAsync(s => s.SetProperty(u => u.PermissionVersion, u => u.PermissionVersion + 1));
+            await db.SaveChangesAsync();
+            return true;
+        });
+        var token = await Impersonating.TokenAsync(admin, editor.Id);
+
+        var settings = await (await Impersonating.SendAsync(admin, HttpMethod.Get, "/api/v1/agency/website/settings", token)).ReadJsonAsync();
+        await (await Impersonating.SendAsync(admin, HttpMethod.Put, "/api/v1/agency/website/settings", token,
+            new { settings = settings.GetProperty("settings"), concurrencyStamp = settings.GetProperty("concurrencyStamp").GetGuid() }))
+            .ShouldFailAsync(403, "auth.impersonation_forbidden_action");
+        // Everyday content work stays possible (and is audited as the impersonator).
+        (await Impersonating.SendAsync(admin, HttpMethod.Post, "/api/v1/agency/website/testimonials", token,
+            new { quote = "Great team.", authorName = "Ivy", isPublished = false, isFeatured = false, sortOrder = 0 })).EnsureSuccessStatusCode();
+    }
+
+    [Fact]
     public async Task Exit_ends_the_session_and_returns_the_admin_session()
     {
         var (adminUser, admin) = await AdminAsync();
