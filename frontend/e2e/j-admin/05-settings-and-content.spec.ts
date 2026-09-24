@@ -275,8 +275,8 @@ test('CMS page: version history, restore an older version, scheduled go-live hid
   await editor.getByRole('button', { name: 'Save page' }).click();
   await expect(toast(admin, 'Page saved')).toBeVisible();
   await visitor.reload();
-  await expect(visitor.getByText(v1)).toHaveCount(0);
   await expect(visitor.getByRole('heading', { level: 1 })).toHaveText('We couldn’t find that page');
+  await expect(visitor.getByText(v1)).toHaveCount(0);
   await goLive.fill('');
   await editor.getByRole('button', { name: 'Save page' }).click();
   await expect(toast(admin, 'Page saved')).toBeVisible();

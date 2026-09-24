@@ -145,6 +145,7 @@ test('log in as a user: banner on every page type, blocked actions, exit, audit'
   }, adminToken);
   expect(again).toEqual({ status: 200, email: accounts.admin.email });
   await admin.reload();
+  await expect(admin.getByRole('heading', { level: 1, name: 'Users' })).toBeVisible();
   await expect(banner).toHaveCount(0);
 
   // Audit: the session start with the reason, and requests recorded as "admin as user".
