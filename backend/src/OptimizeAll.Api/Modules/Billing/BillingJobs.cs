@@ -218,42 +218,75 @@ public sealed class InvoiceOverdueJob(
         // Every open invoice whose first reminder date has been reached; invoices that already got their latest applicable
         // reminder are skipped below (unique reminder per kind), so a long outage still sends the last reminder once.
         var latestDue = today.AddDays(-allOffsets.Min());
-        var candidates = await db.Set<Invoice>().AsNoTracking()
-            .Where(i => Invoice.OpenStatuses.Contains(i.Status) && i.DueDate != null && i.DueDate <= latestDue)
-            .OrderBy(i => i.DueDate).Take(2000)
-            .ToListAsync(ct);
         var sent = 0;
-        foreach (var invoice in candidates)
+        // Every candidate is visited, page by page (keyset on due date + id). A fixed "first N by due date" window would
+        // fill up with old invoices that already had their last reminder and starve every newer one.
+        DateOnly? afterDue = null;
+        var afterId = Guid.Empty;
+        while (true)
         {
-            if (invoice.IssueDate is { } issued && issued >= today) continue; // just issued: the invoice email itself is the reminder
-            var offsets = OffsetsFor(invoice.ClientAccountId, policies, agencyOffsets);
-            if (offsets.Count == 0) continue;
-            var offset = ApplicableOffset(invoice.DueDate!.Value, today, offsets);
-            if (offset is null) continue;
-            var kind = ReminderKind(offset.Value);
-            if (await db.Set<InvoiceReminder>().AsNoTracking().AnyAsync(r => r.InvoiceId == invoice.Id && r.Kind == kind, ct)) continue;
+            var query = db.Set<Invoice>().AsNoTracking()
+                .Where(i => Invoice.OpenStatuses.Contains(i.Status) && i.DueDate != null && i.DueDate <= latestDue);
+            if (afterDue is { } lastDue)
+                query = query.Where(i => i.DueDate > lastDue || (i.DueDate == lastDue && i.Id.CompareTo(afterId) > 0));
+            var page = await query.OrderBy(i => i.DueDate).ThenBy(i => i.Id).Take(CandidatePageSize).ToListAsync(ct);
+            if (page.Count == 0) break;
+            afterDue = page[^1].DueDate;
+            afterId = page[^1].Id;
 
-            Func<CancellationToken, Task>? afterCommit = null;
-            try
+            var ids = page.Select(i => i.Id).ToList();
+            var already = (await db.Set<InvoiceReminder>().AsNoTracking().Where(r => ids.Contains(r.InvoiceId))
+                .Select(r => new { r.InvoiceId, r.Kind }).ToListAsync(ct)).Select(r => (r.InvoiceId, r.Kind)).ToHashSet();
+            foreach (var candidate in page)
             {
-                await using var tx = await dialect.BeginWriteTransactionAsync(db, ct);
-                db.Set<InvoiceReminder>().Add(new InvoiceReminder { InvoiceId = invoice.Id, Kind = kind, SentAt = now });
-                afterCommit = await invoices.DeliverAsync(invoice, kind, ct);
-                audit.RecordSystem("billing.invoice_reminder_sent", nameof(Invoice), invoice.Id, new { invoice.Number, Kind = kind });
-                await db.SaveChangesAsync(ct);
-                await tx.CommitAsync(ct);
-                sent++;
+                if (candidate.IssueDate is { } issued && issued >= today) continue; // just issued: the invoice email itself is the reminder
+                var offsets = OffsetsFor(candidate.ClientAccountId, policies, agencyOffsets);
+                if (offsets.Count == 0) continue;
+                var offset = ApplicableOffset(candidate.DueDate!.Value, today, offsets);
+                if (offset is null) continue;
+                var kind = ReminderKind(offset.Value);
+                if (already.Contains((candidate.Id, kind))) continue;
+                if (await SendAsync(candidate.Id, kind, now, ct)) sent++;
             }
-            catch (DbUpdateException ex) when (dialect.IsUniqueViolation(ex))
-            {
-                afterCommit = null; // another run sent it
-            }
-            finally
-            {
-                db.ChangeTracker.Clear();
-            }
-            if (afterCommit is not null) await afterCommit(ct);
+            if (page.Count < CandidatePageSize) break;
         }
         return $"Marked {marked} invoice(s) overdue; sent {sent} reminder(s).";
+    }
+
+    /// <summary>Invoices read per page while looking for due reminders.</summary>
+    public const int CandidatePageSize = 500;
+
+    /// <summary>
+    /// Sends one scheduled reminder. The invoice is locked and re-read in the transaction: the candidate list may be
+    /// minutes old by now, and an invoice paid, voided or written off meanwhile must not be chased (nor quoted with an
+    /// outdated balance).
+    /// </summary>
+    private async Task<bool> SendAsync(Guid invoiceId, string kind, DateTime now, CancellationToken ct)
+    {
+        Func<CancellationToken, Task>? afterCommit = null;
+        try
+        {
+            await using var tx = await dialect.BeginWriteTransactionAsync(db, ct);
+            if (!await dialect.LockRowAsync(db, "invoices", invoiceId, ct)) return false;
+            var invoice = await db.Set<Invoice>().AsNoTracking().FirstAsync(i => i.Id == invoiceId, ct);
+            if (!Invoice.IsOpen(invoice.Status) || invoice.Balance <= 0) return false;
+            if (await db.Set<InvoiceReminder>().AsNoTracking().AnyAsync(r => r.InvoiceId == invoiceId && r.Kind == kind, ct)) return false;
+            db.Set<InvoiceReminder>().Add(new InvoiceReminder { InvoiceId = invoiceId, Kind = kind, SentAt = now });
+            afterCommit = await invoices.DeliverAsync(invoice, kind, ct);
+            audit.RecordSystem("billing.invoice_reminder_sent", nameof(Invoice), invoiceId, new { invoice.Number, Kind = kind, invoice.Balance, invoice.Currency });
+            await db.SaveChangesAsync(ct);
+            await tx.CommitAsync(ct);
+        }
+        catch (DbUpdateException ex) when (dialect.IsUniqueViolation(ex))
+        {
+            afterCommit = null; // another run (or instance) sent it
+        }
+        finally
+        {
+            db.ChangeTracker.Clear();
+        }
+        if (afterCommit is null) return false;
+        await afterCommit(ct);
+        return true;
     }
 }

@@ -156,9 +156,25 @@ public sealed class PaymentClaimService(
         return new PagedResult<PaymentClaimDto>(await ToDtosAsync(page, includeReviewNote: true, ct), total, q.Page, q.PageSize);
     }
 
+    /// <summary>
+    /// Confirming and rejecting one claim are serialized by this named lock (taken before any transaction) and the claim
+    /// is re-read under it. Otherwise a reject committing between "payment recorded" and "claim confirmed" leaves a
+    /// payment on the invoice for a report the client was told had been rejected.
+    /// </summary>
+    private static string ClaimLock(Guid claimId) => $"oa:payment-claim:{claimId:N}";
+
+    private static readonly TimeSpan ClaimLockTimeout = TimeSpan.FromSeconds(15);
+
     public async Task<ClaimReviewedDto> ConfirmAsync(Guid claimId, ConfirmPaymentClaimRequest r, CancellationToken ct)
     {
-        var claim = await LoadScopedAsync(claimId, ct);
+        await LoadScopedAsync(claimId, ct); // tenancy: 404 for a claim the caller may not see
+        await using (await dialect.AcquireNamedLockAsync(db, ClaimLock(claimId), ClaimLockTimeout, ct))
+            return await ConfirmLockedAsync(claimId, r, ct);
+    }
+
+    private async Task<ClaimReviewedDto> ConfirmLockedAsync(Guid claimId, ConfirmPaymentClaimRequest r, CancellationToken ct)
+    {
+        var claim = await db.Set<PaymentClaim>().AsNoTracking().FirstAsync(c => c.Id == claimId, ct);
         if (claim.Status == PaymentClaimStatus.Rejected)
             throw DomainException.Conflict("payments.claim_rejected", "This payment report was rejected; ask the client to report it again.");
         var alreadyConfirmed = claim.Status == PaymentClaimStatus.Confirmed;
@@ -207,12 +223,24 @@ public sealed class PaymentClaimService(
 
     public async Task<ClaimReviewedDto> RejectAsync(Guid claimId, RejectPaymentClaimRequest r, CancellationToken ct)
     {
-        var claim = await LoadScopedAsync(claimId, ct);
+        await LoadScopedAsync(claimId, ct); // tenancy: 404 for a claim the caller may not see
+        await using (await dialect.AcquireNamedLockAsync(db, ClaimLock(claimId), ClaimLockTimeout, ct))
+            return await RejectLockedAsync(claimId, r, ct);
+    }
+
+    private async Task<ClaimReviewedDto> RejectLockedAsync(Guid claimId, RejectPaymentClaimRequest r, CancellationToken ct)
+    {
+        var claim = await db.Set<PaymentClaim>().AsNoTracking().FirstAsync(c => c.Id == claimId, ct);
         var reason = r.Reason.Trim();
         if (claim.Status == PaymentClaimStatus.Rejected && claim.ReviewNote == reason)
             return new ClaimReviewedDto((await ToDtosAsync(new[] { claim }, includeReviewNote: true, ct))[0], null, Replayed: true);
         if (claim.Status != PaymentClaimStatus.Pending)
             throw DomainException.Conflict("payments.claim_state", $"This payment report is already {claim.Status}.");
+        // A confirmation that recorded the payment but stopped before closing the claim (crash, timeout): the money is on
+        // the invoice, so the report can't be rejected; confirming it again finishes it (same idempotency key).
+        if (await db.Set<Payment>().AsNoTracking().AnyAsync(p => p.RequestId == claimId && p.ReversedAt == null, ct))
+            throw DomainException.Conflict("payments.claim_state",
+                "A payment was already recorded for this report. Confirm it to close the report, or reverse the payment first.");
         await using (var tx = await dialect.BeginWriteTransactionAsync(db, ct))
         {
             var stamp = r.ConcurrencyStamp!.Value;

@@ -259,7 +259,11 @@ public sealed class PaymentsHubQueries(
             var actions = new List<string>();
             if (CanManageBilling && p.ReversedAt is null && !p.IsReversal && inv is not null &&
                 inv.Status is not (InvoiceStatus.Void or InvoiceStatus.WrittenOff))
-                actions.AddRange(new[] { PaymentActions.Edit, PaymentActions.Reverse, PaymentActions.Refund, PaymentActions.UploadProof });
+            {
+                actions.AddRange(new[] { PaymentActions.Edit, PaymentActions.Reverse, PaymentActions.UploadProof });
+                // Four-eyes: whoever recorded the payment can't record its refund, so it isn't offered to them.
+                if (p.RecordedByUserId != currentUser.IdOrNull) actions.Insert(2, PaymentActions.Refund);
+            }
             return new PaymentRecordDto($"{PaymentRecordKind.InvoicePayment}:{p.Id}", PaymentRecordKind.InvoicePayment, p.Id, PaymentDirection.Incoming,
                 status, p.ReversedAt is null ? "Recorded" : $"Reversed ({p.ReversalKind})",
                 new PaymentPartyDto("client", p.ClientAccountId, clients.GetValueOrDefault(p.ClientAccountId, "—"), null),
@@ -327,7 +331,9 @@ public sealed class PaymentsHubQueries(
         var rows = await (from i in db.Set<PayoutItem>().AsNoTracking()
                           join b in db.Set<PayoutBatch>() on i.BatchId equals b.Id
                           where ids.Contains(i.Id)
-                          select new { i, b.Reference, BatchStatus = b.Status, b.ScheduledPaymentDate }).ToListAsync(ct);
+                          select new { i, b.Reference, BatchStatus = b.Status, b.ScheduledPaymentDate, b.PreparedByUserId, b.FinalizedByUserId })
+            .ToListAsync(ct);
+        var me = currentUser.IdOrNull;
         var users = await UsersAsync(rows.Select(r => r.i.UserId).Concat(rows.Where(r => r.i.RecordedByUserId.HasValue).Select(r => r.i.RecordedByUserId!.Value)), ct);
         return rows.Select(r =>
         {
@@ -344,6 +350,8 @@ public sealed class PaymentsHubQueries(
             var actions = CanRecordPayouts && i.Status == PayoutItemStatus.AwaitingPayment && r.BatchStatus == PayoutBatchStatus.Finalized
                 ? new List<string> { PaymentActions.MarkPayoutPaid, PaymentActions.MarkPayoutFailed }
                 : new List<string>();
+            // Segregation of duties (PayoutPaymentService): the finalizer of a system-prepared batch can't record its payments.
+            if (r.PreparedByUserId is null && r.FinalizedByUserId is not null && r.FinalizedByUserId == me) actions.Remove(PaymentActions.MarkPayoutPaid);
             var person = users.GetValueOrDefault(i.UserId);
             return new PaymentRecordDto($"{PaymentRecordKind.PayoutItem}:{i.Id}", PaymentRecordKind.PayoutItem, i.Id, PaymentDirection.Outgoing,
                 status, i.Status.ToString(), new PaymentPartyDto("participant", i.UserId, person.Name ?? "—", person.Email),

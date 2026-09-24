@@ -59,7 +59,7 @@ public sealed class PaymentService(
             throw new DomainException("billing.paid_on_invalid", "The payment date is too far before the invoice date.",
                 errors: LineBuilder.Errors("paidOn", "Check the payment date."));
 
-        var replay = await FindReplayAsync(requestId, invoiceId, amount, reference, ct);
+        var replay = await FindReplayAsync(requestId, invoiceId, amount, reference, request.Method, paidOn, ct);
         if (replay is not null) return replay;
 
         Payment payment;
@@ -72,7 +72,7 @@ public sealed class PaymentService(
             if (await db.Set<Payment>().AsNoTracking().AnyAsync(p => p.RequestId == requestId, ct))
             {
                 await tx.RollbackAsync(ct);
-                return await FindReplayAsync(requestId, invoiceId, amount, reference, ct)
+                return await FindReplayAsync(requestId, invoiceId, amount, reference, request.Method, paidOn, ct)
                        ?? throw DomainException.Conflict("billing.request_id_reused", "This request id was already used for another payment.");
             }
             invoice = await db.Set<Invoice>().FirstAsync(i => i.Id == invoiceId, ct);
@@ -129,11 +129,18 @@ public sealed class PaymentService(
         return new PaymentRecordedDto(dto.Payments.First(p => p.Id == payment.Id), dto, Replayed: false);
     }
 
-    private async Task<PaymentRecordedDto?> FindReplayAsync(Guid requestId, Guid invoiceId, decimal amount, string reference, CancellationToken ct)
+    /// <summary>
+    /// The payment an earlier request with this id recorded (a retry), or null. A request id reused with different data
+    /// (another invoice, amount, reference, method or date — or a reversal's id) is refused, never answered with the old
+    /// payment as if it were this one.
+    /// </summary>
+    private async Task<PaymentRecordedDto?> FindReplayAsync(Guid requestId, Guid invoiceId, decimal amount, string reference,
+        PaymentMethod method, DateOnly paidOn, CancellationToken ct)
     {
         var existing = await db.Set<Payment>().AsNoTracking().FirstOrDefaultAsync(p => p.RequestId == requestId, ct);
         if (existing is null) return null;
-        if (existing.InvoiceId != invoiceId || existing.Amount != amount || existing.Reference != reference)
+        if (existing.IsReversal || existing.InvoiceId != invoiceId || existing.Amount != amount || existing.Reference != reference ||
+            existing.Method != method || existing.PaidOn != paidOn)
             throw DomainException.Conflict("billing.request_id_reused",
                 "This request id was already used for a different payment. Start a new payment instead.");
         var dto = await invoices.GetAsync(invoiceId, ct);
@@ -229,6 +236,12 @@ public sealed class PaymentService(
                 return await ToDtoAsync(paymentId, ct); // the same edit was already saved (retry / double click)
             }
             db.Entry(payment).Property(p => p.ConcurrencyStamp).OriginalValue = request.ConcurrencyStamp!.Value;
+            // Same date rule as recording: an edit can't move a payment to before the invoice existed.
+            if (request.PaidOn is { } newDate &&
+                await db.Set<Invoice>().AsNoTracking().Where(i => i.Id == payment.InvoiceId).Select(i => i.IssueDate).FirstOrDefaultAsync(ct) is { } issued &&
+                newDate < issued.AddYears(-1))
+                throw new DomainException("billing.paid_on_invalid", "The payment date is too far before the invoice date.",
+                    errors: LineBuilder.Errors("paidOn", "Check the payment date."));
             if (reference is not null && reference != payment.Reference &&
                 await db.Set<Payment>().AnyAsync(p => p.InvoiceId == payment.InvoiceId && p.ActiveReference == reference && p.Id != paymentId, ct))
                 throw DomainException.Conflict("billing.duplicate_reference", "A payment with this reference was already recorded on this invoice.");
@@ -280,7 +293,7 @@ public sealed class PaymentService(
         var visible = await LoadScopedAsync(paymentId, ct);
         var actor = currentUser.Id;
         await RequireNotClientMemberAsync(visible.ClientAccountId, actor, ct);
-        var replay = await FindReversalReplayAsync(requestId, paymentId, ct);
+        var replay = await FindReversalReplayAsync(requestId, paymentId, kind, reason, ct);
         if (replay is not null) return replay;
         if (visible.IsReversal)
             throw DomainException.Conflict("billing.payment_is_reversal", "This row is itself a reversal and can't be reversed.");
@@ -300,7 +313,7 @@ public sealed class PaymentService(
             if (await db.Set<Payment>().AsNoTracking().AnyAsync(p => p.RequestId == requestId, ct))
             {
                 await tx.RollbackAsync(ct);
-                return await FindReversalReplayAsync(requestId, paymentId, ct)
+                return await FindReversalReplayAsync(requestId, paymentId, kind, reason, ct)
                        ?? throw DomainException.Conflict("billing.request_id_reused", "This request id was already used for another payment.");
             }
             var payment = await db.Set<Payment>().FirstAsync(p => p.Id == paymentId, ct);
@@ -369,11 +382,14 @@ public sealed class PaymentService(
         return new PaymentReversedDto(dto.Payments.First(p => p.Id == paymentId), dto.Payments.First(p => p.Id == reversal.Id), dto, Replayed: false);
     }
 
-    private async Task<PaymentReversedDto?> FindReversalReplayAsync(Guid requestId, Guid paymentId, CancellationToken ct)
+    private async Task<PaymentReversedDto?> FindReversalReplayAsync(Guid requestId, Guid paymentId, PaymentReversalKind kind, string reason,
+        CancellationToken ct)
     {
         var existing = await db.Set<Payment>().AsNoTracking().FirstOrDefaultAsync(p => p.RequestId == requestId, ct);
         if (existing is null) return null;
-        if (existing.ReversalOfPaymentId != paymentId)
+        // A retry must be the same request: a refund retried as an "error" reversal (or with another reason) is refused,
+        // never reported as done.
+        if (existing.ReversalOfPaymentId != paymentId || existing.ReversalKind != kind || existing.ReversalReason != reason)
             throw DomainException.Conflict("billing.request_id_reused",
                 "This request id was already used for a different payment. Start a new request instead.");
         var dto = await invoices.GetAsync(existing.InvoiceId, ct);

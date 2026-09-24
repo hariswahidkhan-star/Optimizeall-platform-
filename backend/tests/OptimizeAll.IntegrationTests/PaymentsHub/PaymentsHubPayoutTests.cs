@@ -89,11 +89,17 @@ public sealed class PaymentsHubPayoutTests : FreshDatabaseTest
         var batchPaid = await (await finalizer.PostAsJsonAsync($"{Hub}/payout-batches/{batch.Id}/mark-paid",
             new { paymentReference = "BULK-SELF", paidAt = FK.Now(Api), confirm = true })).ReadJsonAsync();
         Assert.Equal(1, batchPaid.GetProperty("invalid").GetInt32());
+        // …so the hub doesn't offer it to them (another finance user still gets it).
+        var asFinalizer = (await (await finalizer.GetAsync($"{Hub}/records/PayoutItem/{item.Id}")).ReadJsonAsync()).GetProperty("record");
+        Assert.DoesNotContain("mark_payout_paid", asFinalizer.Actions());
+        Assert.Contains("mark_payout_failed", asFinalizer.Actions());
 
         // A participant on hold needs an override reason.
         var (_, holder) = await Api.CreateClientAsync(Role.Finance);
         (await holder.PostAsJsonAsync("/api/v1/finance/holds", new { userId = user.Id, reason = "Fraud check pending" })).EnsureSuccessStatusCode();
         var (_, recorder) = await Api.CreateClientAsync(Role.Finance);
+        Assert.Contains("mark_payout_paid",
+            (await (await recorder.GetAsync($"{Hub}/records/PayoutItem/{item.Id}")).ReadJsonAsync()).GetProperty("record").Actions());
         await (await recorder.PostAsJsonAsync(url, new { paymentReference = "HOLD-001", paidAt = FK.Now(Api) })).ShouldFailAsync(409, "payout.user_on_hold");
         var ok = await recorder.PostAsJsonAsync(url, new { paymentReference = "HOLD-001", paidAt = FK.Now(Api), overrideReason = "Transfer left before the hold was placed" });
         Assert.Equal(HttpStatusCode.OK, ok.StatusCode);
