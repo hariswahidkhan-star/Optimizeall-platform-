@@ -36,8 +36,12 @@ public sealed class CampaignsController(ICampaignCatalogService catalog, ICurren
 [ApiController]
 public sealed class CampaignOptionsController(ICampaignAdminService campaigns) : ControllerBase
 {
-    /// <summary>Newest first, at most 500; <paramref name="search"/> matches title or slug.</summary>
-    [HasPermission(Permissions.CampaignsView)]
+    /// <summary>
+    /// Newest first, at most 500; <paramref name="search"/> matches title or slug. Open to every permission whose pages
+    /// carry a campaign picker — the review queue (submissions.review), the ledger (ledger.view) and the manager portal
+    /// (campaigns.manage) — not just campaigns.view, so a custom role granting only one of those pages works too.
+    /// </summary>
+    [RequireAnyPermission(Permissions.CampaignsView, Permissions.CampaignsManage, Permissions.LedgerView, Permissions.SubmissionsReview)]
     [HttpGet("api/v1/campaigns/options")]
     public Task<IReadOnlyList<CampaignOptionDto>> Options([FromQuery] string? search, CancellationToken ct) =>
         campaigns.OptionsAsync(search, ct);
