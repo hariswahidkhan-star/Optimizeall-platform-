@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { json } from '@/test/fetchMock';
 import { renderWithApp } from '@/test/render';
@@ -51,24 +51,26 @@ function renderClient(permissions: string[], tab = 'overview') {
 }
 
 describe('Client detail tabs', () => {
-  it.each([
-    ['finance', FINANCE_PERMISSIONS],
-    ['sales', SALES_PERMISSIONS],
-  ])(
-    'hides the Projects and Time tabs from %s, whose API calls there would be refused',
-    async (_, permissions) => {
-      const { calls } = renderClient(permissions, 'time');
-      const tabs = await screen.findByRole('tablist', { name: 'Client sections' });
-      expect(tabs).toHaveTextContent('Overview');
-      expect(screen.queryByRole('tab', { name: 'Projects' })).not.toBeInTheDocument();
-      expect(screen.queryByRole('tab', { name: 'Time' })).not.toBeInTheDocument();
-      // ?tab=time falls back to the overview instead of a hidden tab.
-      expect(screen.getByRole('tab', { name: 'Overview' })).toHaveAttribute('aria-selected', 'true');
-      expect(
-        calls.some((c) => c.path.startsWith('/agency/projects') || c.path.startsWith('/agency/time')),
-      ).toBe(false);
-    },
-  );
+  it('hides the Projects and Time tabs from sales, whose API calls there would be refused', async () => {
+    const { calls } = renderClient(SALES_PERMISSIONS, 'time');
+    const tabs = await screen.findByRole('tablist', { name: 'Client sections' });
+    expect(tabs).toHaveTextContent('Overview');
+    expect(screen.queryByRole('tab', { name: 'Projects' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('tab', { name: 'Time' })).not.toBeInTheDocument();
+    // ?tab=time falls back to the overview instead of a hidden tab.
+    expect(screen.getByRole('tab', { name: 'Overview' })).toHaveAttribute('aria-selected', 'true');
+    expect(
+      calls.some((c) => c.path.startsWith('/agency/projects') || c.path.startsWith('/agency/time')),
+    ).toBe(false);
+  });
+
+  it("shows finance the client's time (time.view_all) but not projects", async () => {
+    const { calls } = renderClient(FINANCE_PERMISSIONS, 'time');
+    expect(await screen.findByRole('tab', { name: 'Time' })).toHaveAttribute('aria-selected', 'true');
+    expect(screen.queryByRole('tab', { name: 'Projects' })).not.toBeInTheDocument();
+    await waitFor(() => expect(calls.some((c) => c.path === '/agency/time/entries')).toBe(true));
+    expect(calls.some((c) => c.path.startsWith('/agency/projects'))).toBe(false);
+  });
 
   it('shows the Projects and Time tabs to an account manager', async () => {
     renderClient(AM_PERMISSIONS);

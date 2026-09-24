@@ -228,12 +228,12 @@ export function ClientDetailPage() {
   const { hasPermission } = useAuth();
   const [params, setParams] = useSearchParams();
   const [dialog, setDialog] = useState<'status' | 'edit' | null>(null);
-  // Tabs whose API the user may call: Projects needs projects.view; Time reads /agency/time/entries, which is the time
-  // tracker's API (time.track) widened to everyone's entries by time.view_all. Finance and sales hold clients.view
-  // without these, and would otherwise get "You don't have access" inside the tab.
+  // Tabs whose API the user may call: Projects needs projects.view; Time lists everyone's entries for the client, which
+  // needs time.view_all (Finance has it without time.track). Sales holds clients.view without either and would
+  // otherwise get "You don't have access" inside the tab.
   const hidden = new Set<string>([
     ...(hasPermission(Permissions.ProjectsView) ? [] : ['projects']),
-    ...(hasPermission(Permissions.TimeViewAll) && hasPermission(Permissions.TimeTrack) ? [] : ['time']),
+    ...(hasPermission(Permissions.TimeViewAll) ? [] : ['time']),
   ]);
   const requested = params.get('tab') ?? '';
   const tab = (TABS as readonly string[]).includes(requested) && !hidden.has(requested) ? requested : 'overview';

@@ -310,32 +310,43 @@ public sealed class AgencyDeliverablesController(DeliverableService deliverables
         deliverables.StaffCommentAsync(id, request, ct);
 }
 
+/// <summary>
+/// Time tracking. Tracking your own time needs <c>time.track</c>; reading entries, exports and timesheets also works with
+/// <c>time.view_all</c> alone (e.g. Finance billing client time), and utilization/rates need <c>time.view_all</c>. The
+/// service limits people without <c>time.view_all</c> to their own time.
+/// </summary>
 [ApiController]
-[HasPermission(Permissions.TimeTrack)]
 [Route("api/v1/agency/time")]
 public sealed class AgencyTimeController(TimeService time) : ControllerBase
 {
+    [HasPermission(Permissions.TimeTrack)]
     [HttpGet("timer")]
     public async Task<IActionResult> Timer(CancellationToken ct) => Ok(await time.RunningAsync(ct));
 
     /// <summary>Starts a timer (409 time.timer_running when one is already running).</summary>
+    [HasPermission(Permissions.TimeTrack)]
     [HttpPost("timer/start")]
     public Task<TimeEntryDto> Start(StartTimerRequest request, CancellationToken ct) => time.StartAsync(request, ct);
 
+    [HasPermission(Permissions.TimeTrack)]
     [HttpPost("timer/stop")]
     public Task<TimeEntryDto> Stop(CancellationToken ct) => time.StopAsync(ct);
 
     /// <summary>My entries (default: this week). With time.view_all: <c>userId</c>, <c>projectId</c> or <c>clientId</c>.</summary>
+    [RequireAnyPermission(Permissions.TimeTrack, Permissions.TimeViewAll)]
     [HttpGet("entries")]
     public Task<IReadOnlyList<TimeEntryDto>> Entries([FromQuery] TimeEntryQuery query, CancellationToken ct) => time.ListAsync(query, ct);
 
+    [HasPermission(Permissions.TimeTrack)]
     [HttpPost("entries")]
     public async Task<IActionResult> Create(TimeEntryRequest request, CancellationToken ct) =>
         StatusCode(StatusCodes.Status201Created, await time.CreateAsync(request, ct));
 
+    [HasPermission(Permissions.TimeTrack)]
     [HttpPut("entries/{id:guid}")]
     public Task<TimeEntryDto> Update(Guid id, TimeEntryRequest request, CancellationToken ct) => time.UpdateAsync(id, request, ct);
 
+    [HasPermission(Permissions.TimeTrack)]
     [HttpDelete("entries/{id:guid}")]
     public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
     {
@@ -343,14 +354,17 @@ public sealed class AgencyTimeController(TimeService time) : ControllerBase
         return NoContent();
     }
 
+    [RequireAnyPermission(Permissions.TimeTrack, Permissions.TimeViewAll)]
     [HttpGet("entries/export.csv")]
     public Task<FileContentResult> Export([FromQuery] TimeEntryQuery query, CancellationToken ct) => time.ExportCsvAsync(query, ct);
 
     /// <summary>The week containing <c>date</c> (default today) for me, or <c>userId</c> (managers).</summary>
+    [RequireAnyPermission(Permissions.TimeTrack, Permissions.TimeViewAll)]
     [HttpGet("timesheets/week")]
     public Task<TimesheetDto> Week([FromQuery] DateOnly? date, [FromQuery] Guid? userId, CancellationToken ct) =>
         time.WeekAsync(userId, date ?? DateOnly.FromDateTime(DateTime.UtcNow), ct);
 
+    [HasPermission(Permissions.TimeTrack)]
     [HttpPost("timesheets/submit")]
     public Task<TimesheetDto> Submit([FromQuery] DateOnly date, CancellationToken ct) => time.SubmitAsync(date, ct);
 
@@ -358,17 +372,21 @@ public sealed class AgencyTimeController(TimeService time) : ControllerBase
     /// Reopens a week for editing: the owner can recall a submitted week; a project manager (never for their own week) can
     /// reopen an approved or rejected one (a reason is required for approved weeks).
     /// </summary>
+    [HasPermission(Permissions.TimeTrack)]
     [HttpPost("timesheets/{id:guid}/reopen")]
     public Task<TimesheetDto> Reopen(Guid id, TimesheetDecisionRequest request, CancellationToken ct) => time.ReopenAsync(id, request, ct);
 
+    [HasPermission(Permissions.TimeTrack)]
     [HttpGet("timesheets/pending")]
     [HasPermission(Permissions.ProjectsManage)]
     public Task<IReadOnlyList<TimesheetDto>> Pending(CancellationToken ct) => time.PendingAsync(ct);
 
+    [HasPermission(Permissions.TimeTrack)]
     [HttpPost("timesheets/{id:guid}/approve")]
     [HasPermission(Permissions.ProjectsManage)]
     public Task<TimesheetDto> Approve(Guid id, TimesheetDecisionRequest request, CancellationToken ct) => time.DecideAsync(id, true, request, ct);
 
+    [HasPermission(Permissions.TimeTrack)]
     [HttpPost("timesheets/{id:guid}/reject")]
     [HasPermission(Permissions.ProjectsManage)]
     public Task<TimesheetDto> Reject(Guid id, TimesheetDecisionRequest request, CancellationToken ct) => time.DecideAsync(id, false, request, ct);
@@ -382,12 +400,14 @@ public sealed class AgencyTimeController(TimeService time) : ControllerBase
     public Task<IReadOnlyList<HourlyRateDto>> Rates(CancellationToken ct) => time.RatesAsync(ct);
 
     [DeniedWhileImpersonating] // billable rates are money
+    [HasPermission(Permissions.TimeTrack)]
     [HttpPut("rates")]
     [HasPermission(Permissions.ProjectsManage)]
     [HasPermission(Permissions.TimeViewAll)]
     public Task<IReadOnlyList<HourlyRateDto>> SaveRate(HourlyRateRequest request, CancellationToken ct) => time.SaveRateAsync(request, ct);
 
     [DeniedWhileImpersonating] // billable rates are money
+    [HasPermission(Permissions.TimeTrack)]
     [HttpDelete("rates/{id:guid}")]
     [HasPermission(Permissions.ProjectsManage)]
     [HasPermission(Permissions.TimeViewAll)]
