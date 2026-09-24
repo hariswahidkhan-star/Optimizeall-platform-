@@ -84,7 +84,8 @@ public sealed class CrmController(CrmService crm, ContactImportService import, L
     [HttpPost("contacts/import")]
     [HasPermission(Permissions.CrmManage)]
     [RequestSizeLimit(ContactImportService.MaxBytes + 64 * 1024)]
-    public async Task<ImportResultDto> Import([FromForm] IFormFile? file, [FromQuery] bool dryRun, [FromQuery] bool updateExisting, CancellationToken ct)
+    // No [FromForm] on the IFormFile itself: [ApiController] infers it, and Swashbuckle rejects the explicit attribute.
+    public async Task<ImportResultDto> Import(IFormFile? file, [FromQuery] bool dryRun, [FromQuery] bool updateExisting, CancellationToken ct)
     {
         if (file is null || file.Length == 0) throw new DomainException("crm.import_empty", "Choose a CSV file to import.");
         if (file.Length > ContactImportService.MaxBytes) throw new DomainException("crm.import_too_large", "The file is larger than 2 MB.");

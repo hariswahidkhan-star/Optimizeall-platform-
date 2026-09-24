@@ -135,6 +135,14 @@ guard, so concurrent approvals still produce a single live bonus. A declined bon
 required, confirming the post is still live approves every pending line except `ManualApproval` bonuses, which
 stay pending for finance (`rewards.approve_bonus`).
 
+**Withdrawn submissions.** A participant can withdraw a submission before it is decided (Pending, UnderReview or
+NeedsCorrection → `Withdrawn`, see `docs/api/campaigns-submissions-review.md`). Nothing is priced or reserved before
+approval — the estimate shown to the participant is informational and caps/budget are evaluated only at approval
+under the campaign lock — so a withdrawal writes no ledger entries and has nothing to release. A withdrawal and an
+approval racing on the same submission are both conditional updates on its status, so either the approval (with its
+earnings) or the withdrawal (with none) happens, never both. Withdrawn submissions don't count toward the
+per-participant submission limit, the "first approved post" check or any cap.
+
 ## Mapping future options to the model
 
 | Option | How it maps |

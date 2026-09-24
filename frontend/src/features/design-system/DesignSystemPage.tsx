@@ -106,7 +106,7 @@ const ROWS: SampleRow[] = [
 ];
 
 const STATUS_SAMPLES: Record<StatusKind, string[]> = {
-  submission: ['Pending', 'UnderReview', 'Approved', 'NeedsCorrection', 'Rejected', 'Reversed'],
+  submission: ['Pending', 'UnderReview', 'Approved', 'NeedsCorrection', 'Rejected', 'Reversed', 'Withdrawn'],
   earning: ['PendingApproval', 'Approved', 'Scheduled', 'Paid', 'Reversed', 'Declined'],
   payout: ['Draft', 'Finalized', 'Completed', 'Cancelled'],
   payoutItem: ['Pending', 'Held', 'AwaitingPayment', 'Paid', 'Failed', 'Cancelled'],

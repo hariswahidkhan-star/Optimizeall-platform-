@@ -84,10 +84,12 @@ api_pid="$(cd "$bin_dir" && \
   start_bg api "$tmp/api.log" dotnet OptimizeAll.Api.dll)"
 
 url="http://127.0.0.1:$port/api/docs/v1/openapi.json"
-wait_for_url "$url" 180 "$api_pid" || die "API did not serve $url"
+# Wait for the cheap liveness probe first: generating the document takes tens of seconds on a busy machine, longer
+# than wait_for_url's per-request timeout, so polling the document itself would abort every attempt.
+wait_for_url "http://127.0.0.1:$port/health/live" 600 "$api_pid" || die "API did not start"
 
 mkdir -p "$(dirname "$output")"
-curl -fsS "$url" -o "$tmp/openapi.raw.json"
+curl -fsS --max-time 600 "$url" -o "$tmp/openapi.raw.json" || die "API did not serve $url"
 if have node; then
   node -e 'const fs=require("fs");const [i,o]=process.argv.slice(1);fs.writeFileSync(o,JSON.stringify(JSON.parse(fs.readFileSync(i,"utf8")),null,2)+"\n")' \
     "$tmp/openapi.raw.json" "$output"

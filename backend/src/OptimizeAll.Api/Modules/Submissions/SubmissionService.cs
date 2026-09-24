@@ -34,6 +34,7 @@ public interface ISubmissionService
     Task<PagedResult<MySubmissionListItemDto>> ListMineAsync(MySubmissionsQuery query, CancellationToken ct);
     Task<MySubmissionDetailDto> GetMineAsync(Guid id, CancellationToken ct);
     Task<MySubmissionDetailDto> AppealAsync(Guid id, AppealRequest request, CancellationToken ct);
+    Task<MySubmissionDetailDto> WithdrawAsync(Guid id, WithdrawSubmissionRequest request, CancellationToken ct);
 }
 
 /// <summary>Participant proof submission, correction and appeal.</summary>
@@ -91,7 +92,8 @@ public sealed class SubmissionService(
             await db.Dialect().LockRowAsync(db, "users", me, ct);
 
             var active = await db.Set<Submission>().CountAsync(s =>
-                s.UserId == me && s.CampaignId == campaign.Id && s.Status != SubmissionStatus.Rejected, ct);
+                s.UserId == me && s.CampaignId == campaign.Id && s.Status != SubmissionStatus.Rejected &&
+                s.Status != SubmissionStatus.Withdrawn, ct);
             if (active >= campaign.MaxSubmissionsPerParticipant)
                 throw DomainException.Conflict("submission.limit_reached",
                     $"You have reached the limit of {campaign.MaxSubmissionsPerParticipant} submission{(campaign.MaxSubmissionsPerParticipant == 1 ? "" : "s")} for this campaign.");
@@ -279,7 +281,7 @@ public sealed class SubmissionService(
             new LiveCheckDto(s.LiveCheckStatus, s.LiveCheckDueAt, s.LiveCheckedAt), timeline, earnings,
             latest is null ? null : new AppealSummaryDto(latest.Id, latest.Status, latest.DecisionAppealed, latest.Reason,
                 latest.ResolutionNote, latest.CreatedAt, latest.ResolvedAt),
-            s.Status == SubmissionStatus.NeedsCorrection, canAppeal, deadline);
+            s.Status == SubmissionStatus.NeedsCorrection, canAppeal, deadline, s.CanWithdraw);
     }
 
     private async Task<(bool CanAppeal, DateTime? Deadline)> AppealEligibilityAsync(Submission s, IReadOnlyList<Appeal> appeals, CancellationToken ct)
@@ -327,6 +329,77 @@ public sealed class SubmissionService(
         await tx.CommitAsync(ct);
         return await GetMineAsync(id, ct);
     }
+
+    // ------------------------------------------------------------------ withdraw
+
+    /// <summary>
+    /// Pending / UnderReview / NeedsCorrection → Withdrawn. A single conditional update on the expected status (and the
+    /// post key read just before), so it races safely with a reviewer's decision, which is itself conditional on
+    /// Pending/UnderReview and the concurrency stamp that this update replaces: exactly one of the two wins. No earnings
+    /// exist before a decision, so nothing is reversed; the post key is released so the post can be submitted again.
+    /// </summary>
+    public async Task<MySubmissionDetailDto> WithdrawAsync(Guid id, WithdrawSubmissionRequest request, CancellationToken ct)
+    {
+        if (!request.Confirm)
+            throw new DomainException("confirmation.required", "Confirm the withdrawal by sending \"confirm\": true.");
+        var me = currentUser.Id;
+        var now = Now;
+        var reason = ReasonText.Fit(Blank(request.Reason));
+        // A reviewer may claim (Pending → UnderReview) between the read and the update; the status is then re-read and the
+        // withdrawal retried. A decision (Approved / Rejected) is final and ends the loop with 409.
+        for (var attempt = 0; attempt < 3; attempt++)
+        {
+            var s = await db.Set<Submission>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && x.UserId == me, ct)
+                ?? throw DomainException.NotFound("Submission");
+            if (!s.CanWithdraw) throw NotWithdrawable(s.Status);
+            var from = s.Status;
+            var key = s.NormalizedPostUrl;
+            var releasedKey = WithdrawnKey(s.Id, key);
+
+            await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct, IsolationLevel.ReadCommitted);
+            var updated = await db.Set<Submission>()
+                .Where(x => x.Id == id && x.UserId == me && x.Status == from && x.NormalizedPostUrl == key)
+                .ExecuteUpdateAsync(u => u
+                    .SetProperty(x => x.Status, SubmissionStatus.Withdrawn)
+                    .SetProperty(x => x.NormalizedPostUrl, releasedKey)
+                    .SetProperty(x => x.ClaimedByUserId, (Guid?)null).SetProperty(x => x.ClaimExpiresAt, (DateTime?)null)
+                    .SetProperty(x => x.ConcurrencyStamp, Guid.NewGuid()).SetProperty(x => x.UpdatedAt, now), ct);
+            if (updated == 0)
+            {
+                await tx.RollbackAsync(ct);
+                continue;
+            }
+
+            // Open risk flags no longer need a reviewer's attention.
+            await db.Set<SubmissionFlag>().Where(f => f.SubmissionId == id && f.ResolvedAt == null)
+                .ExecuteUpdateAsync(u => u.SetProperty(f => f.ResolvedAt, now).SetProperty(f => f.ResolvedByUserId, me)
+                    .SetProperty(f => f.ResolutionNote, "withdrawn by participant"), ct);
+            db.Set<SubmissionEvent>().Add(new SubmissionEvent
+            {
+                SubmissionId = id, FromStatus = from, ToStatus = SubmissionStatus.Withdrawn, Action = "withdrawn", ActorUserId = me,
+                Reason = reason, CreatedAt = now,
+            });
+            audit.Record("submission.withdrawn", nameof(Submission), id,
+                before: new { Status = from.ToString(), NormalizedPostUrl = key },
+                after: new { Status = nameof(SubmissionStatus.Withdrawn), s.EstimatedRewardAmount, s.RewardCurrency }, reason: reason);
+            await db.SaveChangesAsync(ct);
+            await tx.CommitAsync(ct);
+            return await GetMineAsync(id, ct);
+        }
+        throw DomainException.Conflict("submission.changed", "This submission changed a moment ago. Reload and try again.");
+    }
+
+    /// <summary>The released post key of a withdrawn submission: unique per submission and never a valid post key.</summary>
+    public static string WithdrawnKey(Guid submissionId, string key)
+    {
+        var value = $"{Submission.WithdrawnKeyPrefix}{submissionId:N}:{key}";
+        return value.Length <= 768 ? value : value[..768];
+    }
+
+    private static DomainException NotWithdrawable(SubmissionStatus status) =>
+        DomainException.Conflict("submission.not_withdrawable", status == SubmissionStatus.Withdrawn
+            ? "This submission was already withdrawn."
+            : $"This submission can no longer be withdrawn because it was already decided ({status}).");
 
     // ------------------------------------------------------------------ helpers
 

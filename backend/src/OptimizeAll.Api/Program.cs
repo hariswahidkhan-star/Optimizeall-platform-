@@ -48,6 +48,7 @@ using OptimizeAll.Api.Modules.Review;
 using OptimizeAll.Api.Modules.Rewards;
 using OptimizeAll.Api.Modules.Seed;
 using OptimizeAll.Api.Modules.Social;
+using OptimizeAll.Api.Modules.Search;
 using OptimizeAll.Api.Modules.Submissions;
 using OptimizeAll.Api.Modules.Support;
 using OptimizeAll.Domain.Identity;
@@ -218,6 +219,7 @@ services
     .AddNotificationsModule(config)
     .AddSupportModule(config)
     .AddAdminModule(config)
+    .AddSearchModule(config)
     .AddCampaignsModule(config)
     .AddRewardsModule(config)
     .AddSubmissionsModule(config)

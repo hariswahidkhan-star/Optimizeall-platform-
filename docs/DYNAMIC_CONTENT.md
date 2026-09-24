@@ -79,6 +79,7 @@ hard-coded, where each kind of content now lives, how editors change it, and wha
 | SEO | Titles/descriptions of every built-in page | Page texts (`*.seo.title`, `*.seo.description`); CMS entities keep their own SEO panel |
 | Navigation, footer, contact, social, announcement bar | (already dynamic) | Site settings |
 | Pricing, services, FAQ answers, testimonials, team, legal pages, about | (already dynamic) | CMS entities / CMS pages (legal pages now versioned) |
+| Account emails | Verification, password reset, "someone tried to register with your email" (Auth module) | Email templates → *Account emails* (plus a new "Google sign-in connected" security notice); each must keep its link |
 | Emails | Notification email layout ("Hi …", "Open in Optimize All", "— Optimize All") and every notification's wording; newsletter confirmation; consultation booked/cancelled/moved | Email templates |
 | Participant banners, announcements, FAQ, onboarding | (already dynamic) | Admin → Content |
 
@@ -91,8 +92,5 @@ hard-coded, where each kind of content now lives, how editors change it, and wha
   the API (`/public/site` → `consent`) and are not duplicated in the frontend.
 * **Staff portals' operational copy** (reviewer workspace, finance, agency delivery): task instructions for trained
   staff, not marketing content.
-* **Authentication emails** (verification, password reset, "someone tried to register") are sent by the Auth module,
-  which is owned by another workstream; they can adopt `EmailTemplateService.RenderAsync` with new catalog keys the
-  same way the website emails did.
 * **Email sent by other modules through their own channels** (proposals, invoices, landing-page form autoresponders)
   already have their own per-record editable texts in those modules.

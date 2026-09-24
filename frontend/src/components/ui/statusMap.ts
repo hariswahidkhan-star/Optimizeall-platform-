@@ -18,6 +18,7 @@ const MAP: Record<StatusKind, Record<string, StatusMeta>> = {
     NeedsCorrection: { tone: 'warning', label: 'Needs correction' },
     Rejected: { tone: 'danger', label: 'Rejected' },
     Reversed: { tone: 'danger', label: 'Reversed' },
+    Withdrawn: { tone: 'neutral', label: 'Withdrawn' },
   },
   earning: {
     PendingApproval: { tone: 'neutral', label: 'Pending approval' },

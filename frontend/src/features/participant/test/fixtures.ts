@@ -195,6 +195,7 @@ export function makeSubmission(overrides: Partial<SubmissionDetail> = {}): Submi
     canEdit: false,
     canAppeal: false,
     appealDeadline: null,
+    canWithdraw: false,
     ...overrides,
   };
 }

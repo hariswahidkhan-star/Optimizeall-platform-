@@ -176,7 +176,9 @@ export function WorkspacePage() {
 
   const blockedReason =
     state === 'closed'
-      ? `This submission is ${humanize(s.status).toLowerCase()}. There is nothing left to decide.`
+      ? s.status === 'Withdrawn'
+        ? 'Withdrawn by participant. There is nothing left to decide.'
+        : `This submission is ${humanize(s.status).toLowerCase()}. There is nothing left to decide.`
       : state === 'other'
         ? `${s.claim.claimedBy?.displayName ?? 'Another reviewer'} holds the claim.`
         : advancing

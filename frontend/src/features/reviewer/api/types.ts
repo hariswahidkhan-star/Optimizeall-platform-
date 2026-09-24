@@ -20,7 +20,7 @@ export const SOCIAL_PLATFORMS: SocialPlatform[] = [
 ];
 
 export type SubmissionStatus =
-  'Pending' | 'UnderReview' | 'Approved' | 'NeedsCorrection' | 'Rejected' | 'Reversed';
+  'Pending' | 'UnderReview' | 'Approved' | 'NeedsCorrection' | 'Rejected' | 'Reversed' | 'Withdrawn';
 
 export type LiveCheckStatus = 'NotRequired' | 'Pending' | 'ConfirmedLive' | 'Removed';
 export type AppealStatus = 'Open' | 'Upheld' | 'Overturned' | 'Withdrawn';

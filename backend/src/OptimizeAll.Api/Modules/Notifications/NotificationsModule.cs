@@ -11,6 +11,7 @@ public static class NotificationsModule
         services.AddOptions<WhatsAppOptions>().Configure<IConfiguration>((o, config) => config.GetSection(WhatsAppOptions.Section).Bind(o));
         services.AddScoped<NotificationCenterService>();
         services.AddScoped<EmailTemplateService>();
+        services.AddScoped<AccountEmails>();
 
         // Channel adapters. The dispatch job uses the last registered sender per channel.
         services.AddScoped<INotificationChannelSender, EmailChannelSender>();

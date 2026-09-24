@@ -15,6 +15,9 @@ public static class RateLimitPolicies
     /// <summary>Writes that create work for staff (submissions, tickets, appeals): 30/minute per user.</summary>
     public const string Submissions = "submissions";
 
+    /// <summary>Staff global search (command palette, typed as you go): 60/minute per user.</summary>
+    public const string Search = "search";
+
     /// <summary>Public unauthenticated endpoints (landing pages, tracking redirects, postbacks): 120/minute per IP.</summary>
     public const string Public = "public";
 
@@ -74,6 +77,13 @@ public static class RateLimitPolicies
                 : RateLimitPartition.GetSlidingWindowLimiter(UserKey(ctx), _ => new SlidingWindowRateLimiterOptions
                 {
                     PermitLimit = 30, Window = TimeSpan.FromMinutes(1), SegmentsPerWindow = 6, QueueLimit = 0,
+                }));
+
+            options.AddPolicy(Search, ctx => !enabled ? RateLimitPartition.GetNoLimiter("off")
+                : RateLimitPartition.GetSlidingWindowLimiter("search:" + UserKey(ctx), _ => new SlidingWindowRateLimiterOptions
+                {
+                    PermitLimit = config.GetValue("RateLimiting:SearchPerMinute", 60), Window = TimeSpan.FromMinutes(1),
+                    SegmentsPerWindow = 6, QueueLimit = 0,
                 }));
 
             options.AddPolicy(Public, ctx => !enabled ? RateLimitPartition.GetNoLimiter("off")

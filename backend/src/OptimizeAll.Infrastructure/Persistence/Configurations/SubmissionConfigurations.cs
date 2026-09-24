@@ -44,6 +44,7 @@ internal sealed class SubmissionConfiguration : IEntityTypeConfiguration<Submiss
         b.HasMany(x => x.Flags).WithOne().HasForeignKey(f => f.SubmissionId).OnDelete(DeleteBehavior.Cascade);
         b.HasMany(x => x.Events).WithOne().HasForeignKey(e => e.SubmissionId).OnDelete(DeleteBehavior.Cascade);
         b.Ignore(x => x.IsOpenForReview);
+        b.Ignore(x => x.CanWithdraw);
     }
 }
 

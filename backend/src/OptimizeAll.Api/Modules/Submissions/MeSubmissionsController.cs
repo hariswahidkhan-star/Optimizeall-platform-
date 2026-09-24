@@ -39,4 +39,13 @@ public sealed class MeSubmissionsController(ISubmissionService submissions) : Co
     [EnableRateLimiting(RateLimitPolicies.Submissions)]
     public Task<MySubmissionDetailDto> Appeal(Guid id, AppealRequest request, CancellationToken ct) =>
         submissions.AppealAsync(id, request, ct);
+
+    /// <summary>
+    /// Withdraws a submission that hasn't been decided yet (Pending, UnderReview or NeedsCorrection → Withdrawn). Final;
+    /// 409 <c>submission.not_withdrawable</c> once a reviewer has approved or rejected it.
+    /// </summary>
+    [HttpPost("{id:guid}/withdraw")]
+    [EnableRateLimiting(RateLimitPolicies.Submissions)]
+    public Task<MySubmissionDetailDto> Withdraw(Guid id, WithdrawSubmissionRequest request, CancellationToken ct) =>
+        submissions.WithdrawAsync(id, request, ct);
 }

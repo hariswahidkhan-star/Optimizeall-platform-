@@ -105,6 +105,8 @@ public sealed class ReviewService(
 
     private async Task<DomainException> ClaimConflictAsync(Submission s, DateTime now, CancellationToken ct)
     {
+        if (s.Status == SubmissionStatus.Withdrawn)
+            return WithdrawnConflict();
         if (!s.IsOpenForReview)
             return DomainException.Conflict("review.already_decided", $"This submission was already decided ({s.Status}).");
         if (s.ClaimedByUserId is { } other && other != currentUser.Id && s.ClaimExpiresAt >= now)
@@ -121,6 +123,10 @@ public sealed class ReviewService(
         }
         return DomainException.Conflict("review.already_decided", "This submission changed while you were reviewing it. Reload and try again.");
     }
+
+    /// <summary>The participant withdrew the submission before (or while) it was reviewed; it can't be decided any more.</summary>
+    private static DomainException WithdrawnConflict() =>
+        DomainException.Conflict("review.already_decided", "The participant withdrew this submission, so it can't be decided any more.");
 
     public async Task ReleaseAsync(Guid submissionId, CancellationToken ct)
     {
@@ -186,6 +192,8 @@ public sealed class ReviewService(
                 .SetProperty(s => s.UpdatedAt, now), ct);
         if (updated == 0)
         {
+            if (before.Status == SubmissionStatus.Withdrawn)
+                throw WithdrawnConflict();
             if (before.IsOpenForReview && before.ConcurrencyStamp == stamp)
                 throw await ClaimConflictAsync(before, now, ct);
             throw DomainException.Conflict("review.already_decided",

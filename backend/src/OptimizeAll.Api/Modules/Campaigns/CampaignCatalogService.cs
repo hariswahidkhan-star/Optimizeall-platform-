@@ -171,7 +171,7 @@ public sealed class CampaignCatalogService(AppDbContext db, IParticipantEligibil
         return campaigns.Select(c => new Row(
             c, setByCampaign.GetValueOrDefault(c.Id), eligibility.Evaluate(participant, c),
             mine.Count(m => m.CampaignId == c.Id),
-            mine.Count(m => m.CampaignId == c.Id && m.Status != SubmissionStatus.Rejected))).ToList();
+            mine.Count(m => m.CampaignId == c.Id && m.Status != SubmissionStatus.Rejected && m.Status != SubmissionStatus.Withdrawn))).ToList();
     }
 
     private static decimal? BaseAmount(Row r) => r.RuleSet?.Rules.FirstOrDefault(x => x.Type == RewardRuleType.BaseRate)?.Amount;

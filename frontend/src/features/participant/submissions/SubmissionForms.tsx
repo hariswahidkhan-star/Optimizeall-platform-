@@ -1,9 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Gavel, RotateCcw } from 'lucide-react';
+import { Gavel, RotateCcw, Undo2 } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
 import { Alert } from '@/components/ui/Alert';
 import { Button } from '@/components/ui/Button';
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { DateTime } from '@/components/ui/DateTime';
 import { FileDrop } from '@/components/ui/FileDrop';
 import { FormField } from '@/components/ui/FormField';
@@ -232,5 +233,76 @@ export function AppealForm({ submission }: { submission: SubmissionDetail }) {
         </form>
       </CardBody>
     </Card>
+  );
+}
+
+const WITHDRAW_REASON_MAX = 1000;
+
+/**
+ * Withdraw a submission that hasn't been decided yet (pending, under review or waiting for a correction). Final: the
+ * submission earns nothing and leaves the review queue; the campaign slot and the post are freed.
+ */
+export function WithdrawAction({ submission }: { submission: SubmissionDetail }) {
+  const toast = useToast();
+  const client = useQueryClient();
+  const [open, setOpen] = useState(false);
+  const [reason, setReason] = useState('');
+
+  const withdraw = useMutation({
+    mutationFn: () =>
+      api.post<SubmissionDetail>(`/me/submissions/${submission.id}/withdraw`, {
+        confirm: true,
+        reason: reason.trim() || null,
+      }),
+    onSuccess: async (updated) => {
+      client.setQueryData(qk.submission(submission.id), updated);
+      toast.success('Submission withdrawn', 'It won’t be reviewed. You can submit the post again if you want.');
+      await invalidateAfterSubmission(client);
+    },
+  });
+
+  return (
+    <>
+      <Button
+        variant="secondary"
+        leadingIcon={<Undo2 />}
+        onClick={() => {
+          setReason('');
+          setOpen(true);
+        }}
+      >
+        Withdraw submission
+      </Button>
+      <ConfirmDialog
+        open={open}
+        onClose={() => setOpen(false)}
+        tone="danger"
+        title="Withdraw this submission?"
+        description="It won’t be reviewed and won’t earn a reward. You can’t undo this, but you can submit the post again."
+        confirmLabel="Withdraw"
+        cancelLabel="Keep it"
+        onConfirm={async () => {
+          try {
+            await withdraw.mutateAsync();
+          } catch (error) {
+            // Shown inside the dialog; refresh the page data (a reviewer may have decided a moment ago).
+            await client.invalidateQueries({ queryKey: qk.submission(submission.id) });
+            throw error;
+          }
+        }}
+      >
+        <FormField
+          label="Reason (optional)"
+          hint={`Shown to the reviewers. ${reason.length} / ${WITHDRAW_REASON_MAX} characters.`}
+        >
+          <Textarea
+            rows={3}
+            maxLength={WITHDRAW_REASON_MAX}
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+          />
+        </FormField>
+      </ConfirmDialog>
+    </>
   );
 }

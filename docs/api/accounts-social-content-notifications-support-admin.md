@@ -345,7 +345,7 @@ lists every pattern and tests on both sides keep them resolving to real routes.
   ],
   "types": [
     { "type": "submission.decision", "label": "Submission decisions", "description": "...",
-      "essential": false, "marketing": false,
+      "essential": false, "marketing": false, "group": "Creator program",
       "channels": [
         { "channel": "InApp", "enabled": true, "locked": true, "available": true },
         { "channel": "Email", "enabled": true, "locked": false, "available": true },
@@ -355,13 +355,23 @@ lists every pattern and tests on both sides keep them resolving to real routes.
 }
 ```
 
-Every `NotificationTypes` constant the caller can receive is a row. Staff-only types are listed only with the
-matching permission: `review.live_check_due` needs `submissions.review`, `payout.batch_prepared` needs `payouts.view`
-(`NotificationCatalog.StaffTypes`); for anyone else they are omitted and `PUT` treats them as unknown. Essential types (`account.email_verification`,
-`account.password_reset`, `account.status_changed`, `payout.paid`) are `locked: true` on all channels. In-app is
-always on and locked. WhatsApp `available=false` reasons: integration not configured, or the user has not opted in
-with a number (profile). Marketing types (`campaign.alert`, `retention.reactivation`) additionally require
-`marketingEmailOptIn` for email (enforced when staging).
+Every notification kind the caller can receive is a row (`NotificationCatalog`): the participant program, review and
+payouts, and the agency modules — CRM (`crm.*`), billing and the payments hub (`billing.invoice_issued`,
+`billing.invoice_reminder`, `billing.invoice_paid`, `billing.payment_claimed`, `billing.payment_claim_reviewed`,
+`billing.proposal_received`), delivery (`projects.*`, `deliverables.*`, `time.timesheet_decision`, `reports.published`,
+`messages.new`, `briefs.submitted`, `clients.invited`), marketing services (`social.*`, `email.campaign_approval*`,
+`email.automation_alert`, `ads.alert`, `forms.submission`, `integrations.expiring`) and `website.inquiry`. Rows carry a
+`group` for display. Each kind has an audience (any of a set of permissions, e.g. participant kinds need
+`participant.portal`, `billing.payment_claimed` needs `billing.view` or `clients.view`, client-portal kinds need
+`client.portal`); kinds outside the caller's audience are omitted and `PUT` treats them as unknown. Staff and client
+users open the matrix from the account menu ("Notification settings"); participants from their profile.
+Essential types (`account.email_verification`, `account.password_reset`, `account.status_changed`, `payout.paid`) are
+`locked: true` on all channels. In-app is always on and locked. WhatsApp `available=false` reasons: integration not
+configured, or the user has not opted in with a number (profile). **WhatsApp follows email**: when a sender asks for
+email and WhatsApp is configured, an opted-in user with a number also gets the message on WhatsApp unless they turned
+WhatsApp off for that kind. Marketing types (`campaign.alert`, `retention.reactivation`) additionally require
+`marketingEmailOptIn` for every external channel (enforced when staging). Preferences apply to every kind whichever
+module stages it (`INotificationService.StageAsync`).
 
 `PUT /me/notification-preferences` body `{ "preferences": [ { "type": "submission.decision", "channel": "Email", "enabled": false } ] }`
 (1–200 entries) → the full matrix. Errors: `400 notifications.preference_locked` (unknown type, InApp channel or
@@ -623,3 +633,63 @@ The UI builds every currency picker from it (`frontend/src/lib/api/meta.ts#useSu
 ### `GET /meta/eligibility-defaults` — any authenticated user
 Platform-wide social-profile minimums (admin settings `eligibility.minAccountAgeDays`, `eligibility.minFollowers`)
 that apply when a campaign leaves its own minimum blank: `{ "minAccountAgeDays": 90, "minFollowers": 0 }`.
+
+---
+
+## 8. Sign-in, impersonation, editable texts and search (summary)
+
+Short reference for endpoints added in later waves; the request/response shapes are in `openapi.json`.
+
+### Sign in with Google — `/auth` (see `docs/SECURITY.md`)
+
+| verb | path | who | notes |
+|---|---|---|---|
+| GET | `/auth/providers` | anonymous | `{ google: { enabled } }` — unconfigured providers are reported disabled |
+| POST | `/auth/google/start` `{ returnTo? }` | anonymous | `{ authorizationUrl }` + HttpOnly flow cookie (nonce, PKCE verifier; 10 min) |
+| POST | `/auth/google/callback` `{ code, state }` | anonymous | `status`: `signedIn` (auth response + refresh cookie), `needsTerms` (a sign-up `ticket`), `linked` (profile flow); 409 `auth.google_link_unverified`, `auth.google_link_requires_sign_in`, `auth.google_already_linked` |
+| POST | `/auth/google/complete` `{ ticket, acceptTerms, displayName?, countryCode, … }` | anonymous | creates a verified Participant without a password and signs in |
+| GET | `/auth/external-logins` | signed in | `{ hasPassword, googleEnabled, logins: [{ provider, email, createdAt, lastUsedAt }] }` |
+| POST | `/auth/external-logins/google/start` | signed in | connect Google from the profile |
+| DELETE | `/auth/external-logins/google` | signed in | 409 `auth.google_unlink_last_method` when it is the only sign-in method |
+
+When a Google account is connected to an existing account (by verified email or from the profile) the owner gets the
+editable **"Google sign-in connected"** security email (`auth.google_linked`).
+
+### Impersonation and test users
+
+| verb | path | permission | notes |
+|---|---|---|---|
+| POST | `/admin/users/{id}/impersonate` `{ reason, confirm: true }` | `users.impersonate` (built-in Admin only) | time-boxed session as the user; admins, other impersonators, yourself and inactive accounts refused; audited |
+| POST | `/auth/impersonation/exit` | signed in | ends the session and returns to the staff member's own session (idempotent) |
+| POST | `/admin/test-users` `{ roles, displayName?, countryCode?, clientAccountId?, clientMemberRole? }` → 201 | `users.manage` | verified test account; the generated password is returned once |
+| DELETE | `/admin/test-users/{id}` `{ reason }` | `users.manage` | deactivates a test account (real accounts: 409) |
+| GET/POST | `/dev/test-accounts`, `/dev/test-login` | non-Production with `DevTools:TestLoginEnabled` | one-click sign-in as a test/demo account |
+
+Writes are refused while impersonating where marked (`DeniedWhileImpersonating`). Custom roles: see *Roles &
+permissions* above.
+
+### Editable texts (see `docs/DYNAMIC_CONTENT.md`)
+
+| verb | path | permission |
+|---|---|---|
+| GET | `/content/copy` | anonymous — overridden page/portal text keys only |
+| GET/PUT | `/agency/website/copy` | `site.manage` — website page texts |
+| GET/PUT | `/admin/content/copy` | `content.manage` — portal texts |
+| GET | `/admin/email-templates` | `content.manage` |
+| GET/PUT/DELETE | `/admin/email-templates/{key}` (PUT/DELETE carry `concurrencyStamp`) | `content.manage` |
+| POST | `/admin/email-templates/{key}/preview` | `content.manage` |
+
+Email template groups: *Notification layout*, *Notification emails* (one per notification kind, every module),
+*Website emails* and *Account emails* — `auth.verify_email` (must keep `{{verifyUrl}}`), `auth.password_reset`
+(`{{resetUrl}}`), `auth.duplicate_registration` and `auth.google_linked` (`{{forgotPasswordUrl}}`). Their defaults are
+the texts the Auth module sent before (unit test `AccountEmailTemplateTests`).
+
+### Global search — `GET /search?q=&limit=` (staff)
+
+Command-palette search (Ctrl/Cmd+K in the agency and admin portals). Returns
+`{ query, groups: [{ type, label, items: [{ id, title, subtitle, url }] }] }` for the types the caller may open:
+`clients` (`clients.view`), `contacts` and `deals` (`crm.view`, archived excluded), `projects` (`projects.view`),
+`invoices` (`billing.view`), `campaigns` (`campaigns.view`), `users` (`users.view`). Client-owned records go through the
+client scope. `q` is 2–100 characters after trimming (`400 search.query_too_short`), `limit` 1–10 per type (default 5),
+LIKE wildcards are literal. `403 search.forbidden` without any of those permissions (participants, client users).
+Rate limited per user (`RateLimiting:SearchPerMinute`, default 60).

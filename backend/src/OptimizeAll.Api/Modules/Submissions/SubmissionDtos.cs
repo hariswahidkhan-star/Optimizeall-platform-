@@ -53,6 +53,17 @@ public sealed class AppealRequest
     public string Reason { get; set; } = string.Empty;
 }
 
+/// <summary>Body of POST /me/submissions/{id}/withdraw.</summary>
+public sealed class WithdrawSubmissionRequest
+{
+    /// <summary>Must be <c>true</c>: withdrawing is final.</summary>
+    public bool Confirm { get; set; }
+
+    /// <summary>Optional note for the reviewers (why the post was withdrawn).</summary>
+    [MaxLength(1000)]
+    public string? Reason { get; set; }
+}
+
 public sealed class MySubmissionsQuery : PageQuery
 {
     public SubmissionStatus? Status { get; set; }
@@ -81,4 +92,4 @@ public sealed record MySubmissionDetailDto(
     string? CaptionText, string? ScreenshotUrl, SubmissionStatus Status, DateTime SubmittedAt, DateTime? DecidedAt,
     string? DecisionReason, int CorrectionCount, decimal EstimatedReward, string Currency, int RewardRuleSetVersion,
     LiveCheckDto LiveCheck, IReadOnlyList<TimelineEntryDto> Timeline, IReadOnlyList<SubmissionEarningDto> Earnings,
-    AppealSummaryDto? Appeal, bool CanEdit, bool CanAppeal, DateTime? AppealDeadline);
+    AppealSummaryDto? Appeal, bool CanEdit, bool CanAppeal, DateTime? AppealDeadline, bool CanWithdraw);
