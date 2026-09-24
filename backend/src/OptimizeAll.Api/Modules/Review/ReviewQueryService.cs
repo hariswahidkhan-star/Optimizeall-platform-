@@ -27,17 +27,11 @@ public interface IReviewQueryService
     Task<IReadOnlyList<ReviewEarningDto>> EarningsAsync(Guid submissionId, CancellationToken ct);
 }
 
-public static class ReviewRoles
-{
-    /// <summary>Roles whose permission set includes submissions.review.</summary>
-    public static IReadOnlyList<Role> Reviewers { get; } =
-        Enum.GetValues<Role>().Where(r => RolePermissions.For(r).Contains(Permissions.SubmissionsReview)).ToList();
-}
-
 public sealed class ReviewQueryService(
     AppDbContext db,
     ICurrentUser currentUser,
     IRewardQuoteService quotes,
+    IPermissionDirectory directory,
     TimeProvider clock) : IReviewQueryService
 {
     private DateTime Now => clock.GetUtcNow().UtcDateTime;
@@ -219,9 +213,9 @@ public sealed class ReviewQueryService(
 
     public async Task<IReadOnlyList<ReviewerDto>> ReviewersAsync(CancellationToken ct)
     {
-        var roles = ReviewRoles.Reviewers.ToList();
-        var reviewers = await db.Set<User>().AsNoTracking()
-            .Where(u => u.Status == UserStatus.Active && u.Roles.Any(r => roles.Contains(r.Role)))
+        // Built-in or custom-role holders of submissions.review.
+        var reviewers = await (await directory.UsersWithPermissionAsync(Permissions.SubmissionsReview, ct))
+            .Where(u => u.Status == UserStatus.Active)
             .OrderBy(u => u.DisplayName).Select(u => new { u.Id, u.DisplayName, u.Email }).ToListAsync(ct);
         var ids = reviewers.Select(r => r.Id).ToList();
         var assigned = await db.Set<Submission>()

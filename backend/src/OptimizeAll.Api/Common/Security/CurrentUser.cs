@@ -40,7 +40,7 @@ public interface ICurrentUser
     void Require(string permission);
 }
 
-public sealed class HttpCurrentUser(IHttpContextAccessor accessor) : ICurrentUser
+public sealed class HttpCurrentUser(IHttpContextAccessor accessor, IPermissionResolver resolver) : ICurrentUser
 {
     private ClaimsPrincipal? Principal => accessor.HttpContext?.User;
 
@@ -53,7 +53,8 @@ public sealed class HttpCurrentUser(IHttpContextAccessor accessor) : ICurrentUse
 
     public IReadOnlyCollection<Role> Roles => Principal is null ? Array.Empty<Role>() : ClaimsHelper.GetRoles(Principal).ToArray();
 
-    public IReadOnlySet<string> Permissions => RolePermissions.For(Roles);
+    /// <summary>Effective permissions: built-in roles plus custom roles (see <see cref="IPermissionResolver"/>).</summary>
+    public IReadOnlySet<string> Permissions => Principal is null ? RolePermissions.For(Array.Empty<Role>()) : resolver.Resolve(Principal);
 
     public bool HasPermission(string permission) => Permissions.Contains(permission);
 

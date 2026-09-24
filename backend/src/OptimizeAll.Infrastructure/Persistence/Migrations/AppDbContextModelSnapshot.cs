@@ -5481,6 +5481,58 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     b.ToTable("stored_files", (string)null);
                 });
 
+            modelBuilder.Entity("OptimizeAll.Domain.Identity.CustomRole", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("CreatedByUserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("IsSystem")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)");
+
+                    b.Property<string>("NormalizedName")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)");
+
+                    b.Property<string>("Permissions")
+                        .IsRequired()
+                        .HasColumnType("json");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("UpdatedByUserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique();
+
+                    b.ToTable("custom_roles", (string)null);
+                });
+
             modelBuilder.Entity("OptimizeAll.Domain.Identity.PayoutProfile", b =>
                 {
                     b.Property<Guid>("Id")
@@ -5663,6 +5715,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("varchar(512)");
 
+                    b.Property<int>("PermissionVersion")
+                        .HasColumnType("int");
+
                     b.Property<string>("ReferralCode")
                         .IsRequired()
                         .HasMaxLength(16)
@@ -5718,6 +5773,28 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     b.HasIndex("Status");
 
                     b.ToTable("users", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Identity.UserCustomRole", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("CustomRoleId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("AssignedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("AssignedByUserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("UserId", "CustomRoleId");
+
+                    b.HasIndex("CustomRoleId");
+
+                    b.ToTable("user_custom_roles", (string)null);
                 });
 
             modelBuilder.Entity("OptimizeAll.Domain.Identity.UserRole", b =>
@@ -14397,6 +14474,21 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("OptimizeAll.Domain.Identity.RefreshToken", b =>
                 {
+                    b.HasOne("OptimizeAll.Domain.Identity.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Identity.UserCustomRole", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Identity.CustomRole", null)
+                        .WithMany()
+                        .HasForeignKey("CustomRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("OptimizeAll.Domain.Identity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")

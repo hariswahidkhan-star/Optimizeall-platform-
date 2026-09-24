@@ -9,6 +9,7 @@ public static class AdminModule
         services.AddScoped<AdminUsersService>();
         services.AddScoped<AdminSettingsService>();
         services.AddScoped<AdminJobsService>();
+        services.AddScoped<Roles.AdminRolesService>();
         return services;
     }
 }

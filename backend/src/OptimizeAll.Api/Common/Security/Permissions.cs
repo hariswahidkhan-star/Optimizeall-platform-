@@ -48,6 +48,8 @@ public static class Permissions
     public const string UsersManage = "users.manage";
     public const string UsersSuspend = "users.suspend";
     public const string RolesAssign = "roles.assign";
+    /// <summary>Sensitive: create/edit/delete custom roles and assign them to users (grant requires the built-in Admin role).</summary>
+    public const string RolesManage = "roles.manage";
     public const string ContentManage = "content.manage";
     public const string SettingsManage = "settings.manage";
     public const string SupportManage = "support.manage";

@@ -4,6 +4,7 @@ import {
   Cog,
   FileText,
   FolderTree,
+  KeyRound,
   LayoutDashboard,
   LifeBuoy,
   ScrollText,
@@ -21,6 +22,7 @@ const AuditLogPage = lazyPage(() => import('./audit/AuditLogPage'), 'AuditLogPag
 const CategoriesPage = lazyPage(() => import('./categories/CategoriesPage'), 'CategoriesPage');
 const ContentPage = lazyPage(() => import('./content/ContentPage'), 'ContentPage');
 const JobsPage = lazyPage(() => import('./jobs/JobsPage'), 'JobsPage');
+const RolesPage = lazyPage(() => import('./roles/RolesPage'), 'RolesPage');
 const OverviewPage = lazyPage(() => import('./OverviewPage'), 'OverviewPage');
 const SettingsPage = lazyPage(() => import('./settings/SettingsPage'), 'SettingsPage');
 const TicketDetailPage = lazyPage(() => import('./support/TicketDetailPage'), 'TicketDetailPage');
@@ -36,6 +38,7 @@ const UsersPage = lazyPage(() => import('./users/UsersPage'), 'UsersPage');
  */
 const requires = {
   users: { anyOf: [Permissions.UsersView] },
+  roles: { anyOf: [Permissions.RolesManage] },
   settings: { anyOf: [Permissions.SettingsManage] },
   content: { anyOf: [Permissions.ContentManage] },
   // The API (/admin/campaign-categories) authorizes with campaigns.manage.
@@ -59,6 +62,13 @@ export const nav: PortalNavItem[] = [
     icon: Users,
     description: 'Find people, manage roles and suspensions.',
     requires: requires.users,
+  },
+  {
+    to: 'roles',
+    label: 'Roles & permissions',
+    icon: KeyRound,
+    description: 'Built-in roles and custom roles with exactly the permissions you choose.',
+    requires: requires.roles,
   },
   {
     to: 'settings',
@@ -126,6 +136,7 @@ export const routes: RouteObject[] = [
       { path: ':userId', element: page(<UserDetailPage />) },
     ],
   },
+  { path: 'roles', handle: { requires: requires.roles }, element: page(<RolesPage />) },
   { path: 'settings', handle: { requires: requires.settings }, element: page(<SettingsPage />) },
   { path: 'content', handle: { requires: requires.content }, element: page(<ContentPage />) },
   { path: 'categories', handle: { requires: requires.categories }, element: page(<CategoriesPage />) },

@@ -19,17 +19,19 @@ public sealed class PermissionRequirement(string permission) : IAuthorizationReq
     public string Permission { get; } = permission;
 }
 
-/// <summary>Permissions are resolved from the role claims on every request so role changes apply immediately on refresh.</summary>
-public sealed class PermissionHandler : AuthorizationHandler<PermissionRequirement>
+/// <summary>
+/// Effective permissions (built-in roles from the token plus custom roles from the database/cache) are resolved on every
+/// request by <see cref="IPermissionResolver"/>, so custom-role changes apply immediately without re-login.
+/// </summary>
+public sealed class PermissionHandler(IPermissionResolver resolver) : AuthorizationHandler<PermissionRequirement>
 {
-    protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionRequirement requirement)
+    protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionRequirement requirement)
     {
         if (context.User.Identity?.IsAuthenticated == true &&
-            RolePermissions.For(ClaimsHelper.GetRoles(context.User)).Contains(requirement.Permission))
+            (await resolver.ResolveAsync(context.User)).Contains(requirement.Permission))
         {
             context.Succeed(requirement);
         }
-        return Task.CompletedTask;
     }
 }
 

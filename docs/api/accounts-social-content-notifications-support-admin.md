@@ -477,7 +477,7 @@ changes nothing visible. Public replies on Closed tickets → `409 support.ticke
 
 | verb | path | permission |
 |---|---|---|
-| GET | `/admin/users?search=&role=&status=&country=&tier=&sort=email\|displayName\|lastActiveAt\|createdAt&desc=` | `users.view` |
+| GET | `/admin/users?search=&role=&status=&country=&tier=&permission=&sort=email\|displayName\|lastActiveAt\|createdAt&desc=` | `users.view` |
 | GET | `/admin/users/export.csv` (same filters, ≤ 50,000 rows; no secrets) | `users.view` |
 | GET | `/admin/users/{id}` | `users.view` |
 | POST | `/admin/users/{id}/suspend` `{ reason (3–500), confirm: true }` | `users.suspend` |
@@ -504,11 +504,13 @@ All mutations return `AdminUserDetailDto`:
   "activePayoutHolds": [ { "id", "reason", "createdAt", "createdByUserId" } ],
   "payoutProfile": { "method", "destinationHint", "preferredCurrency", "updatedAt" } | null,
   "recentAudit": [ AuditLogDto ],
-  "concurrencyStamp": "guid"
+  "concurrencyStamp": "guid",
+  "customRoles": [ { "id", "name", "assignedAt" } ]
 }
 ```
 
-(`earnings` are sums of `settlementAmount` per status and settlement currency; `recentAudit` = last 20 entries about
+(`permission=` keeps users holding that permission through a built-in **or custom** role, e.g. `support.manage` for the
+ticket assignee picker; `400 admin.invalid_permission` for an unknown key. `earnings` are sums of `settlementAmount` per status and settlement currency; `recentAudit` = last 20 entries about
 or by the user.)
 
 Rules and errors:
@@ -526,6 +528,34 @@ Rules and errors:
   `409 admin.email_exists`.
 * Audit actions: `admin.user_suspended`, `admin.user_reactivated`, `admin.user_roles_changed`,
   `admin.user_tier_changed`, `admin.staff_created`.
+
+### Roles & permissions — `roles.manage`
+
+Custom roles are admin-defined permission bundles; effective permissions = built-in roles ∪ custom roles, applied on
+the user's next request (no re-login). Guardrails and audit: SECURITY.md § 2 "Custom roles".
+
+| verb | path | notes |
+|---|---|---|
+| GET | `/admin/roles` | `{ builtIn: [{ name, label, permissions, userCount }], custom: [CustomRoleDto] }` (built-in roles are read-only) |
+| GET | `/admin/roles/catalog` | `{ areas: [{ area, permissions: [{ key, label, description, sensitive, adminOnly, granted }] }], callerIsAdmin }`; `granted` = the caller may put it into a role |
+| GET | `/admin/roles/{id}` | `{ role: CustomRoleDto, holders: [{ userId, displayName, email, status, assignedAt }] }` |
+| POST | `/admin/roles` `{ name (2–80), description?, permissions: [..] }` | `201 CustomRoleDetailDto` |
+| PUT | `/admin/roles/{id}` `{ name, description?, permissions, concurrencyStamp }` | `CustomRoleDetailDto`; `409 concurrency.conflict` when stale |
+| DELETE | `/admin/roles/{id}?confirm=&reassignTo=` | `204`; an assigned role needs `confirm=true` (`409 roles.in_use`), `reassignTo` moves holders to another custom role |
+| GET | `/admin/roles/users/{userId}` | `{ userId, roles: [{ id, name, assignedAt }], effectivePermissions }` |
+| PUT | `/admin/roles/{id}/users/{userId}` | assign (idempotent) → `UserCustomRolesDto` |
+| DELETE | `/admin/roles/{id}/users/{userId}` | unassign (idempotent) → `UserCustomRolesDto` |
+
+`CustomRoleDto`: `{ id, name, description, permissions, isSystem, userCount, createdAt, createdByUserId, createdByName,
+updatedAt, concurrencyStamp, canManage }` (`canManage` = the caller holds every permission of the role, as needed to
+edit, delete, assign or unassign it).
+
+Errors: `403 roles.cannot_grant_unheld` (a permission the caller doesn't hold), `403 roles.admin_only_permission`
+(`roles.manage`/`settings.manage`/`users.impersonate` need the built-in Admin role), `400 roles.client_portal_mixed`,
+`409 roles.client_staff_conflict` (the user's effective set would mix `client.portal` and staff permissions),
+`400 roles.unknown_permission`, `400 roles.permissions_required`, `400 roles.invalid_name`, `400 roles.name_reserved`,
+`409 roles.name_taken`, `403 roles.system_role`, `400 roles.invalid_reassignment`. Audit actions:
+`admin.custom_role_created|updated|deleted` (entity `CustomRole`), `admin.custom_role_assigned|unassigned` (entity `User`).
 
 ### Settings — `settings.manage`
 

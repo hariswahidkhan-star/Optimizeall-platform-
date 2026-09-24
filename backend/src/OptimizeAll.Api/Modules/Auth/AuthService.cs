@@ -42,6 +42,7 @@ public sealed class AuthService(
     IEventPublisher events,
     IAuditLogger audit,
     ICurrentUser currentUser,
+    IPermissionResolver permissionResolver,
     IPrivacyHasher privacyHasher,
     IOptions<JwtOptions> jwtOptions,
     IOptions<EmailOptions> emailOptions,
@@ -354,7 +355,7 @@ public sealed class AuthService(
     {
         var user = await db.Set<User>().AsNoTracking().Include(u => u.Roles).FirstOrDefaultAsync(u => u.Id == userId, ct)
                    ?? throw DomainException.NotFound("User");
-        return ToDto(user);
+        return ToDto(user, await permissionResolver.ForUserAsync(user.Id, user.Roles.Select(r => r.Role), ct));
     }
 
     public async Task RevokeAllSessionsAsync(User user, string reason, CancellationToken ct)
@@ -365,12 +366,16 @@ public sealed class AuthService(
             .ExecuteUpdateAsync(s => s.SetProperty(t => t.RevokedAt, Now).SetProperty(t => t.RevokedReason, reason), ct);
     }
 
-    public static SessionUserDto ToDto(User user)
+    /// <summary>Session user with effective permissions (built-in roles + custom roles, see <see cref="IPermissionResolver"/>).</summary>
+    private SessionUserDto ToDto(User user) =>
+        ToDto(user, permissionResolver.ForUser(user.Id, user.Roles.Select(r => r.Role)));
+
+    public static SessionUserDto ToDto(User user, IEnumerable<string> effectivePermissions)
     {
         var roles = user.Roles.Select(r => r.Role).ToArray();
         return new SessionUserDto(user.Id, user.Email, user.DisplayName, user.IsEmailVerified, user.CountryCode,
             user.LanguageCode, user.TimeZone, user.Status.ToString(), roles.Select(r => r.ToString()).ToArray(),
-            RolePermissions.For(roles).OrderBy(p => p).ToArray());
+            effectivePermissions.Distinct().OrderBy(p => p).ToArray());
     }
 
     private LoginResult IssueSession(User user, Guid familyId) => IssueSession(user, familyId, out _);

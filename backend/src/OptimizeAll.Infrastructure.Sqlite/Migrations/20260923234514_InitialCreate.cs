@@ -199,6 +199,27 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "custom_roles",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 80, nullable: false),
+                    NormalizedName = table.Column<string>(type: "TEXT", maxLength: 80, nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    Permissions = table.Column<string>(type: "TEXT", nullable: false),
+                    IsSystem = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CreatedByUserId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    UpdatedByUserId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    ConcurrencyStamp = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_custom_roles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "data_protection_keys",
                 columns: table => new
                 {
@@ -730,6 +751,7 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     LastLoginAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
                     LastActiveAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
                     SecurityVersion = table.Column<int>(type: "INTEGER", nullable: false),
+                    PermissionVersion = table.Column<int>(type: "INTEGER", nullable: false),
                     ConcurrencyStamp = table.Column<Guid>(type: "TEXT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false)
@@ -1469,6 +1491,32 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_user_achievements_users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "user_custom_roles",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CustomRoleId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    AssignedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
+                    AssignedByUserId = table.Column<Guid>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_user_custom_roles", x => new { x.UserId, x.CustomRoleId });
+                    table.ForeignKey(
+                        name: "FK_user_custom_roles_custom_roles_CustomRoleId",
+                        column: x => x.CustomRoleId,
+                        principalTable: "custom_roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_user_custom_roles_users_UserId",
                         column: x => x.UserId,
                         principalTable: "users",
                         principalColumn: "Id",
@@ -6968,6 +7016,12 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 column: "OwnerUserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_custom_roles_NormalizedName",
+                table: "custom_roles",
+                column: "NormalizedName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_deliverable_comments_DeliverableId_VersionNumber",
                 table: "deliverable_comments",
                 columns: new[] { "DeliverableId", "VersionNumber" });
@@ -8378,6 +8432,11 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 column: "AchievementId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_user_custom_roles_CustomRoleId",
+                table: "user_custom_roles",
+                column: "CustomRoleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_user_roles_Role",
                 table: "user_roles",
                 column: "Role");
@@ -9073,6 +9132,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 name: "user_achievements");
 
             migrationBuilder.DropTable(
+                name: "user_custom_roles");
+
+            migrationBuilder.DropTable(
                 name: "user_roles");
 
             migrationBuilder.DropTable(
@@ -9206,6 +9268,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
             migrationBuilder.DropTable(
                 name: "achievements");
+
+            migrationBuilder.DropTable(
+                name: "custom_roles");
 
             migrationBuilder.DropTable(
                 name: "website_team_members");

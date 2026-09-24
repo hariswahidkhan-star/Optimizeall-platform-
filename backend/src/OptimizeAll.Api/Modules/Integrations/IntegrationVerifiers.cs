@@ -97,7 +97,8 @@ public sealed class IntegrationVerifier(IHttpClientFactory httpFactory, IConfigu
 /// Daily: warns integration managers about tokens expiring within 14 days (once per expiry date; idempotent via the audit
 /// log) and marks already-expired connections as Error.
 /// </summary>
-public sealed class IntegrationExpiryJob(AppDbContext db, INotificationService notifications, IAuditLogger audit, TimeProvider clock) : IJob
+public sealed class IntegrationExpiryJob(
+    AppDbContext db, INotificationService notifications, IAuditLogger audit, IPermissionDirectory directory, TimeProvider clock) : IJob
 {
     public const string WarningAction = "integration.expiry_warning";
     public static readonly TimeSpan WarnWithin = TimeSpan.FromDays(14);
@@ -121,9 +122,9 @@ public sealed class IntegrationExpiryJob(AppDbContext db, INotificationService n
         var expiring = await db.Set<IntegrationConnection>().AsNoTracking()
             .Where(c => c.ExpiresAt != null && c.ExpiresAt > now && c.ExpiresAt <= horizon && c.Status != IntegrationStatus.Disconnected)
             .ToListAsync(ct);
-        var roles = Enum.GetValues<Role>().Where(r => r != Role.Client && RolePermissions.For(r).Contains(Permissions.IntegrationsManage)).ToList();
-        var managers = await db.Set<User>().AsNoTracking().Where(u => u.Status == UserStatus.Active && u.Roles.Any(r => roles.Contains(r.Role)))
-            .Select(u => u.Id).ToListAsync(ct);
+        // Built-in or custom-role holders of integrations.manage (custom roles cannot mix client.portal with staff permissions).
+        var managers = await (await directory.UsersWithPermissionAsync(Permissions.IntegrationsManage, ct))
+            .Where(u => u.Status == UserStatus.Active).Select(u => u.Id).ToListAsync(ct);
         var warned = 0;
         foreach (var c in expiring)
         {

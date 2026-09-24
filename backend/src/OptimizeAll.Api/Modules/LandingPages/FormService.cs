@@ -27,7 +27,7 @@ public sealed class FormInput
 }
 
 /// <summary>Form definitions: validation, consent versioning and creation from templates.</summary>
-public sealed class FormService(AppDbContext db, TimeProvider clock)
+public sealed class FormService(AppDbContext db, IPermissionDirectory directory, TimeProvider clock)
 {
     public const int MaxMinFillSeconds = 60;
 
@@ -103,7 +103,7 @@ public sealed class FormService(AppDbContext db, TimeProvider clock)
         if (notify.Count > 20) Add("notifyUserIds", "At most 20 people can be notified.");
         else if (notify.Count > 0)
         {
-            var staff = await StaffCandidatesQuery().Where(u => notify.Contains(u.Id)).Select(u => u.Id).ToListAsync(ct);
+            var staff = await (await StaffCandidatesQueryAsync(ct)).Where(u => notify.Contains(u.Id)).Select(u => u.Id).ToListAsync(ct);
             if (staff.Count != notify.Count) Add("notifyUserIds", "Notifications can only go to active staff who manage forms.");
         }
 
@@ -138,12 +138,9 @@ public sealed class FormService(AppDbContext db, TimeProvider clock)
         db.Add(new FormConsentVersion { FormId = form.Id, Version = form.ConsentVersion, Text = text, CreatedAt = clock.GetUtcNow().UtcDateTime });
     }
 
-    /// <summary>Active staff whose roles grant forms.manage (notification recipients).</summary>
-    public IQueryable<User> StaffCandidatesQuery()
-    {
-        var roles = Enum.GetValues<Role>().Where(r => RolePermissions.For(r).Contains(Permissions.FormsManage)).ToList();
-        return db.Set<User>().AsNoTracking().Where(u => u.Status == UserStatus.Active && u.Roles.Any(r => roles.Contains(r.Role)));
-    }
+    /// <summary>Active staff whose built-in or custom roles grant forms.manage (notification recipients).</summary>
+    public async Task<IQueryable<User>> StaffCandidatesQueryAsync(CancellationToken ct) =>
+        (await directory.UsersWithPermissionAsync(Permissions.FormsManage, ct)).Where(u => u.Status == UserStatus.Active);
 
     /// <summary>Scheme + host (+ non-default port) of any http(s) URL, lower-cased (e.g. the web app's own origin).</summary>
     public static string? CanonicalOrigin(string? raw) =>

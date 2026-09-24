@@ -29,6 +29,8 @@ public sealed class AdminUsersService(
     INotificationService notifications,
     IPasswordHasher<User> hasher,
     AuditLogService auditLogs,
+    IPermissionDirectory directory,
+    Roles.AdminRolesService customRoles,
     TimeProvider clock)
 {
     public const int MaxExportRows = 50_000;
@@ -39,9 +41,16 @@ public sealed class AdminUsersService(
 
     // ---------- Read ----------
 
-    private IQueryable<User> Filter(AdminUserQuery q)
+    private async Task<IQueryable<User>> FilterAsync(AdminUserQuery q, CancellationToken ct)
     {
         var users = db.Set<User>().AsNoTracking();
+        if (!string.IsNullOrWhiteSpace(q.Permission))
+        {
+            var permission = q.Permission.Trim();
+            if (!Permissions.All.Contains(permission))
+                throw FieldRules.FieldError("admin.invalid_permission", "permission", "Unknown permission.");
+            users = await directory.UsersWithPermissionAsync(permission, ct);
+        }
         if (q.Role is { } role) users = users.Where(u => u.Roles.Any(r => r.Role == role));
         if (q.Status is { } status) users = users.Where(u => u.Status == status);
         if (!string.IsNullOrWhiteSpace(q.Country)) { var c = q.Country.Trim().ToUpperInvariant(); users = users.Where(u => u.CountryCode == c); }
@@ -56,7 +65,7 @@ public sealed class AdminUsersService(
 
     public async Task<PagedResult<AdminUserListItemDto>> ListAsync(AdminUserQuery query, CancellationToken ct)
     {
-        var q = Filter(query);
+        var q = await FilterAsync(query, ct);
         q = query.Sort?.ToLowerInvariant() switch
         {
             "email" => query.Desc ? q.OrderByDescending(u => u.Email) : q.OrderBy(u => u.Email),
@@ -71,7 +80,7 @@ public sealed class AdminUsersService(
 
     public async Task<FileContentResult> ExportCsvAsync(AdminUserQuery query, CancellationToken ct)
     {
-        var users = await Filter(query).Include(u => u.Roles).OrderBy(u => u.CreatedAt).Take(MaxExportRows).ToListAsync(ct);
+        var users = await (await FilterAsync(query, ct)).Include(u => u.Roles).OrderBy(u => u.CreatedAt).Take(MaxExportRows).ToListAsync(ct);
         return Csv.File($"users-{Now:yyyyMMdd-HHmmss}.csv",
             new[] { "id", "email", "displayName", "countryCode", "languageCode", "status", "tier", "roles", "emailVerified", "createdAt", "lastActiveAt" },
             users.Select(u => new object?[]
@@ -137,7 +146,8 @@ public sealed class AdminUsersService(
             holds,
             payout,
             recent,
-            user.ConcurrencyStamp);
+            user.ConcurrencyStamp,
+            await customRoles.AssignedAsync(id, ct));
     }
 
     // ---------- Status ----------

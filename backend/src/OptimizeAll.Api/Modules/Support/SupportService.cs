@@ -19,6 +19,7 @@ public sealed class SupportService(
     AppDbContext db,
     IAuditLogger audit,
     INotificationService notifications,
+    IPermissionDirectory directory,
     TimeProvider clock,
     ILogger<SupportService> logger)
 {
@@ -260,9 +261,10 @@ public sealed class SupportService(
 
         if (request.AssignedToUserId is { } assigneeId && assigneeId != ticket.AssignedToUserId)
         {
-            var assignee = await db.Set<User>().AsNoTracking().Include(u => u.Roles).FirstOrDefaultAsync(u => u.Id == assigneeId, ct);
-            if (assignee is null || assignee.Status != UserStatus.Active ||
-                !RolePermissions.For(assignee.Roles.Select(r => r.Role)).Contains(Permissions.SupportManage))
+            // Built-in or custom-role holders of support.manage.
+            var assignable = await (await directory.UsersWithPermissionAsync(Permissions.SupportManage, ct))
+                .AnyAsync(u => u.Id == assigneeId && u.Status == UserStatus.Active, ct);
+            if (!assignable)
                 throw FieldRules.FieldError("support.invalid_assignee", "assignedToUserId", "Tickets can only be assigned to active support staff.");
         }
 

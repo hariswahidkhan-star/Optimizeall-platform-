@@ -125,7 +125,7 @@ public sealed class FormsController(
 
     [HttpGet("staff-options")]
     public async Task<List<StaffOptionDto>> StaffOptions(CancellationToken ct) =>
-        await forms.StaffCandidatesQuery().OrderBy(u => u.DisplayName).Take(200)
+        await (await forms.StaffCandidatesQueryAsync(ct)).OrderBy(u => u.DisplayName).Take(200)
             .Select(u => new StaffOptionDto(u.Id, u.DisplayName, u.Email)).ToListAsync(ct);
 
     [HttpGet("forms")]

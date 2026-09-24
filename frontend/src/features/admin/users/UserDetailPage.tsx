@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Ban, BadgeCheck, Layers, ShieldCheck, UserCheck } from 'lucide-react';
+import { Ban, BadgeCheck, KeyRound, Layers, ShieldCheck, UserCheck } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { useParams } from 'react-router-dom';
 import { Alert } from '@/components/ui/Alert';
@@ -24,6 +24,7 @@ import { formatNumber } from '@/lib/format/money';
 import { humanize } from '@/lib/format/text';
 import type { AdminUserDetail } from '../api/types';
 import { AuditEntry } from '../audit/AuditEntry';
+import { UserCustomRolesSection } from '../roles/UserCustomRolesSection';
 import { AdminBadge, roleLabel } from '../shared/badges';
 import { QueryError, useCan } from '../shared/common';
 import {
@@ -142,6 +143,11 @@ export function UserDetailPage() {
                 {roleLabel(r)}
               </Badge>
             ))}
+            {(user.customRoles ?? []).map((r) => (
+              <Badge key={r.id} tone="info" icon={<KeyRound />}>
+                {r.name}
+              </Badge>
+            ))}
             {p.emailVerified && (
               <Badge tone="success" icon={<BadgeCheck />}>
                 Email verified
@@ -198,6 +204,8 @@ export function UserDetailPage() {
             ]}
           />
         </Section>
+
+        <UserCustomRolesSection userId={p.id} displayName={p.displayName} assigned={user.customRoles ?? []} />
 
         <section aria-labelledby="user-submissions" className="stack">
           <h2 id="user-submissions" className="admin-section-title">

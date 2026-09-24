@@ -117,9 +117,16 @@ services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
                 if (!Guid.TryParse(sub, out var userId)) { context.Fail("invalid subject"); return; }
                 var db = context.HttpContext.RequestServices.GetRequiredService<AppDbContext>();
                 var state = await db.Set<User>().AsNoTracking().Where(u => u.Id == userId)
-                    .Select(u => new { u.Status, u.SecurityVersion }).FirstOrDefaultAsync(context.HttpContext.RequestAborted);
+                    .Select(u => new { u.Status, u.SecurityVersion, u.PermissionVersion }).FirstOrDefaultAsync(context.HttpContext.RequestAborted);
                 if (state is null || state.Status != UserStatus.Active || state.SecurityVersion.ToString() != sv)
+                {
                     context.Fail("session revoked");
+                    return;
+                }
+                // Effective permissions (built-in + custom roles) for this request, keyed by the current permission version.
+                context.HttpContext.Items[PermissionResolver.PermissionVersionItem] = (userId, state.PermissionVersion);
+                await context.HttpContext.RequestServices.GetRequiredService<IPermissionResolver>()
+                    .ResolveAsync(context.Principal!, context.HttpContext.RequestAborted);
             },
         };
     });
@@ -134,7 +141,10 @@ services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme).Co
     });
 
 services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
-services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
+services.AddScoped<IAuthorizationHandler, PermissionHandler>();
+services.AddSingleton<CustomRolePermissionCache>();
+services.AddScoped<IPermissionResolver, PermissionResolver>();
+services.AddScoped<IPermissionDirectory, PermissionDirectory>();
 // Default deny: every endpoint needs a signed-in user unless it opts out with [AllowAnonymous] (public pages, auth
 // flows, tracking redirects, health checks) or declares a stricter [HasPermission].
 services.AddAuthorization(options =>

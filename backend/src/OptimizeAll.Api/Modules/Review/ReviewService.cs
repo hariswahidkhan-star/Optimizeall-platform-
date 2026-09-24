@@ -50,6 +50,7 @@ public sealed class ReviewService(
     IEventPublisher events,
     ISettingsService settings,
     IReviewQueryService queries,
+    IPermissionDirectory directory,
     TimeProvider clock,
     IPayoutReversalCoordinator payoutReversals) : IReviewService
 {
@@ -567,9 +568,9 @@ public sealed class ReviewService(
     public async Task<AssignResultDto> AssignAsync(AssignRequest request, CancellationToken ct)
     {
         var reviewerId = request.ReviewerId!.Value;
-        var roles = ReviewRoles.Reviewers.ToList();
-        var isReviewer = await db.Set<User>().AnyAsync(u => u.Id == reviewerId && u.Status == UserStatus.Active &&
-                                                            u.Roles.Any(r => roles.Contains(r.Role)), ct);
+        // Built-in or custom-role holders of submissions.review.
+        var isReviewer = await (await directory.UsersWithPermissionAsync(Permissions.SubmissionsReview, ct))
+            .AnyAsync(u => u.Id == reviewerId && u.Status == UserStatus.Active, ct);
         if (!isReviewer)
             throw new DomainException("review.not_a_reviewer", "The selected user can't review submissions.");
 
