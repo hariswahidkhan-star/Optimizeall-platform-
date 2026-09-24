@@ -1,6 +1,6 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { CalendarDays, ChevronLeft, ChevronRight, MoveRight, Plus } from 'lucide-react';
-import { useMemo, useState, type DragEvent, type KeyboardEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type DragEvent, type KeyboardEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -101,8 +101,8 @@ export function CalendarPage() {
   }, [query.data]);
 
   const reschedule = useMutation({
-    mutationFn: ({ post, at }: { post: PostSummary; at: string }) =>
-      api.post<Post>(`/agency/social/posts/${post.id}/reschedule`, { scheduledAt: at, concurrencyStamp: post.concurrencyStamp }),
+    mutationFn: ({ id, at, concurrencyStamp }: { id: string; at: string; concurrencyStamp: string }) =>
+      api.post<Post>(`/agency/social/posts/${id}/reschedule`, { scheduledAt: at, concurrencyStamp }),
     onSuccess: (updated) => {
       setAnnouncement(`Moved “${updated.title}” to ${new Date(updated.scheduledAt ?? '').toLocaleString()}.`);
       toast.success('Post moved');
@@ -110,6 +110,38 @@ export function CalendarPage() {
     },
     onError: (error) => toast.error('Could not move the post', errorMessage(error)),
   });
+
+  const gridRef = useRef<HTMLDivElement>(null);
+  /** The post a keyboard move is following (see the effect below) and where its last move put it. */
+  const refocus = useRef<{ id: string; at: string | null } | null>(null);
+
+  // Moves of one post run one after another, each from the time and stamp the previous move returned: pressing Alt+→
+  // twice (or dropping again) before the calendar reloaded must move the post twice, not fail with a false conflict
+  // because the second request still carried the stamp the first one replaced.
+  const lastMove = useRef(new Map<string, { from: string; scheduledAt: string; concurrencyStamp: string }>());
+  const moveQueue = useRef(new Map<string, Promise<void>>());
+  const move = (post: PostSummary, target: (currentIso: string) => string) => {
+    const run = async () => {
+      const known = lastMove.current.get(post.id);
+      const current =
+        known && (post.concurrencyStamp === known.from || post.concurrencyStamp === known.concurrencyStamp)
+          ? known
+          : { scheduledAt: post.scheduledAt!, concurrencyStamp: post.concurrencyStamp };
+      const updated = await reschedule.mutateAsync({
+        id: post.id,
+        at: target(current.scheduledAt),
+        concurrencyStamp: current.concurrencyStamp,
+      });
+      lastMove.current.set(post.id, {
+        from: current.concurrencyStamp,
+        scheduledAt: updated.scheduledAt ?? current.scheduledAt,
+        concurrencyStamp: updated.concurrencyStamp,
+      });
+      if (refocus.current?.id === post.id) refocus.current.at = updated.scheduledAt;
+    };
+    const next = (moveQueue.current.get(post.id) ?? Promise.resolve()).then(run).catch(() => undefined); // errors are toasted
+    moveQueue.current.set(post.id, next);
+  };
 
   const canMove = (p: PostSummary) => p.status !== 'Publishing' && p.status !== 'Published';
 
@@ -120,7 +152,7 @@ export function CalendarPage() {
     setDragging(null);
     if (!post?.scheduledAt || !canMove(post)) return;
     if (dayKey(new Date(post.scheduledAt)) === dayKey(day)) return;
-    reschedule.mutate({ post, at: moveToDay(post.scheduledAt, day) });
+    move(post, (current) => moveToDay(current, day));
   };
 
   /** Keyboard alternative to drag: Alt+←/→ moves a day, Alt+↑/↓ a week. */
@@ -129,13 +161,27 @@ export function CalendarPage() {
     const delta = ({ ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 } as Record<string, number>)[e.key];
     if (!delta) return;
     e.preventDefault();
-    reschedule.mutate({ post, at: addDays(new Date(post.scheduledAt), delta).toISOString() });
+    refocus.current = { id: post.id, at: null };
+    move(post, (current) => addDays(new Date(current), delta).toISOString());
   };
+
+  // A keyboard move re-renders the chip in another day's cell (a new element): give it the focus back so the next
+  // Alt+arrow keeps moving the same post instead of going nowhere.
+  useEffect(() => {
+    const follow = refocus.current;
+    if (!follow) return;
+    const target = gridRef.current?.querySelector<HTMLButtonElement>(`button[data-post-id="${follow.id}"]`);
+    if (target && document.activeElement !== target) target.focus();
+    // Once the calendar shows the post where the last move put it, stop following it.
+    const shown = query.data?.posts.find((p) => p.id === follow.id)?.scheduledAt;
+    if (follow.at && shown && new Date(shown).getTime() === new Date(follow.at).getTime()) refocus.current = null;
+  }, [query.data]);
 
   const chip = (p: PostSummary) => (
     <div key={p.id} className="stack" style={{ gap: 2 }}>
       <button
         type="button"
+        data-post-id={p.id}
         className={`sm-chip sm-chip--${p.status}${dragging?.id === p.id ? ' sm-chip--moving' : ''}`}
         draggable={canMove(p)}
         onDragStart={(e) => {
@@ -267,7 +313,7 @@ export function CalendarPage() {
               emptyState={<EmptyState icon={<CalendarDays />} title="Nothing planned in this period" headingLevel={3} />}
             />
           ) : (
-            <div className="sm-calendar" role="grid" aria-labelledby="sm-calendar-title">
+            <div ref={gridRef} className="sm-calendar" role="grid" aria-labelledby="sm-calendar-title">
               <div role="row" style={{ display: 'contents' }}>
                 {WEEKDAYS.map((d) => (
                   <div key={d} role="columnheader" className="sm-calendar__head">
@@ -351,7 +397,7 @@ export function CalendarPage() {
         post={moving}
         onClose={() => setMoving(null)}
         onMove={(at) => {
-          if (moving) reschedule.mutate({ post: moving, at });
+          if (moving) move(moving, () => at);
           setMoving(null);
         }}
       />

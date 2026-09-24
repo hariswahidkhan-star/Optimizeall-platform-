@@ -39,6 +39,7 @@ import {
   type SeriesPoint,
   type TopPost,
 } from '@/features/agency/social/api';
+import { PLATFORM_LABELS, type AdPlatform } from '@/features/agency/ads/api';
 import { PostPreview } from '@/features/agency/social/PostPreview';
 import { NetworkChip, PostStatusBadge, SourceLabel, percent } from '@/features/agency/social/shared';
 import '@/features/agency/social/social.css';
@@ -328,8 +329,13 @@ function ReviewDialog({ postId, org, onClose }: { postId: string; org: Organizat
       }),
     onSuccess: (_, kind) => {
       toast.success(kind === 'approve' ? 'Post approved' : 'Changes requested');
-      void queryClient.invalidateQueries({ queryKey: ['client-social'] });
       onClose();
+      // A post sent back for changes is a draft again, which clients cannot open: refreshing the open post (and its
+      // media) would be a 404, so those are dropped and only the lists are refreshed.
+      const own = (key: readonly unknown[]) => (key[1] === 'post' || key[1] === 'media') && key[2] === postId;
+      void queryClient.invalidateQueries({ queryKey: ['client-social'], predicate: (q) => !own(q.queryKey) });
+      queryClient.removeQueries({ queryKey: clientKeys.post(postId) });
+      queryClient.removeQueries({ queryKey: ['client-social', 'media', postId] });
     },
     onError: (e) => setError(errorMessage(e)),
   });
@@ -572,7 +578,7 @@ function PerformanceBody({ org, days }: { org: Organization; days: number }) {
             {ads.platforms.map((p) => (
               <li key={p.platform}>
                 <Badge tone="brand">
-                  {p.platform}: {formatMoney(p.totals.spend, cur)} · ROAS{' '}
+                  {PLATFORM_LABELS[p.platform as AdPlatform] ?? p.platform}: {formatMoney(p.totals.spend, cur)} · ROAS{' '}
                   {p.kpis.roas == null ? '—' : p.kpis.roas.toFixed(2)}
                 </Badge>
               </li>

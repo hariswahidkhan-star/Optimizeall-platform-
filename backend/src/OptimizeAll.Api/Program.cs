@@ -248,7 +248,8 @@ services
 services.AddControllers()
     .AddJsonOptions(o =>
     {
-        o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        // Strings or defined numbers; undefined enum values are a 400 (see DefinedEnumJsonConverterFactory).
+        o.JsonSerializerOptions.Converters.Add(new OptimizeAll.Api.Common.Http.DefinedEnumJsonConverterFactory());
         o.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
     });
 services.AddProblemDetails();

@@ -59,7 +59,8 @@ Modules talk to each other through:
 
 * Routes: `/api/v1/<area>/...`. Participant self-service lives under `/api/v1/me/...`; staff areas under
   `/api/v1/admin/...`, `/api/v1/review/...`, `/api/v1/finance/...`, `/api/v1/marketing/...`.
-* JSON is camelCase; enums serialize as strings; timestamps are UTC ISO-8601 (`...Z`).
+* JSON is camelCase; enums serialize as strings; timestamps are UTC ISO-8601 (`...Z`). Request bodies may send an enum as its
+  name or its (defined) number; a value that is not a member of the enum is a 400 (`DefinedEnumJsonConverterFactory`).
 * Validation: DataAnnotations on request DTOs (automatic 400) plus business checks throwing
   `DomainException(code, message, kind)`. The global handler maps it to RFC 7807 with `code` and `traceId`.
 * Optimistic concurrency: entities implementing `IConcurrencyStamped` get a new `ConcurrencyStamp` on each

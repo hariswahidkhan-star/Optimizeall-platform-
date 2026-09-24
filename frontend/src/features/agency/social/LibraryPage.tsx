@@ -133,6 +133,9 @@ function MediaTab({ clientId }: { clientId: string }) {
   );
 }
 
+/** Upload limit of the Files module (backend FileService.MaxBytes). */
+const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
+
 function UploadDialog({ clientId, onClose }: { clientId: string; onClose: () => void }) {
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState('');
@@ -174,7 +177,8 @@ function UploadDialog({ clientId, onClose }: { clientId: string; onClose: () => 
     >
       <div className="stack">
         {error && <Alert tone="danger">{error}</Alert>}
-        <FileDrop label="Image" value={file} onChange={setFile} />
+        {/* The server accepts images up to 10 MB (FileService.MaxBytes), as the description says. */}
+        <FileDrop label="Image" value={file} onChange={setFile} maxSizeBytes={MAX_IMAGE_BYTES} />
         <FormField label="Title" optional>
           <Input value={title} onChange={(e) => setTitle(e.target.value)} />
         </FormField>
