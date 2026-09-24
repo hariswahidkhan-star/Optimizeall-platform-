@@ -278,4 +278,12 @@ describe('WorkspacePage', () => {
     await screen.findByRole('heading', { name: 'Campaign requirements' });
     expect(await axeViolations(container)).toEqual([]);
   });
+
+  it('explains a submission withdrawn by the participant and offers no decision', async () => {
+    const { container } = renderWorkspace(reviewDetail({ status: 'Withdrawn' }));
+    expect(await screen.findByText('Withdrawn by participant')).toBeInTheDocument();
+    expect(screen.getByText(/Nothing needs to be reviewed/)).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Confirm approval/ })).not.toBeInTheDocument();
+    expect(await axeViolations(container)).toEqual([]);
+  });
 });

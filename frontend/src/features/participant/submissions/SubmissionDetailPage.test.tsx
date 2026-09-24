@@ -1,7 +1,7 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { json, mockFetch } from '@/test/fetchMock';
+import { json, mockFetch, problem } from '@/test/fetchMock';
 import { axeViolations, renderWithApp } from '@/test/render';
 import type { SubmissionDetail } from '../api/types';
 import { authRoutes, makeSubmission } from '../test/fixtures';
@@ -120,5 +120,65 @@ describe('SubmissionDetailPage', () => {
     expect(screen.queryByRole('heading', { name: 'Edit & resubmit' })).not.toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'Appeal this decision' })).not.toBeInTheDocument();
     expect(await axeViolations(container)).toEqual([]);
+  });
+
+  it('withdraws an undecided submission after confirmation', async () => {
+    const user = userEvent.setup();
+    let current = makeSubmission({ status: 'Pending', canWithdraw: true });
+    const { calls, container } = renderDetail(current, {
+      'GET /me/submissions/sub1': () => json(200, current),
+      'POST /me/submissions/sub1/withdraw': () => {
+        current = makeSubmission({
+          status: 'Withdrawn',
+          canWithdraw: false,
+          timeline: [
+            ...current.timeline,
+            {
+              action: 'withdrawn',
+              fromStatus: 'Pending',
+              toStatus: 'Withdrawn',
+              reason: 'Wrong link',
+              actor: 'You',
+              at: '2026-09-21T09:00:00Z',
+            },
+          ],
+        });
+        return json(200, current);
+      },
+    });
+    await user.click(await screen.findByRole('button', { name: 'Withdraw submission' }));
+    const dialog = await screen.findByRole('alertdialog', { name: 'Withdraw this submission?' });
+    expect(await axeViolations(container)).toEqual([]);
+    // Cancelling sends nothing.
+    await user.click(screen.getByRole('button', { name: 'Keep it' }));
+    expect(dialog).not.toBeInTheDocument();
+    expect(calls.some((c) => c.path.endsWith('/withdraw'))).toBe(false);
+
+    await user.click(screen.getByRole('button', { name: 'Withdraw submission' }));
+    await user.type(await screen.findByLabelText(/Reason/), 'Wrong link');
+    await user.click(screen.getByRole('button', { name: 'Withdraw' }));
+    await waitFor(() => expect(calls.some((c) => c.path.endsWith('/withdraw'))).toBe(true));
+    expect(calls.find((c) => c.path.endsWith('/withdraw'))?.body).toEqual({ confirm: true, reason: 'Wrong link' });
+    expect(await screen.findByText('You withdrew this submission')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Withdraw submission' })).not.toBeInTheDocument();
+    expect(screen.getByRole('list', { name: 'Submission status history' })).toHaveTextContent('Withdrawn');
+  });
+
+  it('shows the conflict inside the dialog when a reviewer decided first', async () => {
+    const user = userEvent.setup();
+    renderDetail(makeSubmission({ status: 'UnderReview', canWithdraw: true }), {
+      'POST /me/submissions/sub1/withdraw': () =>
+        problem(409, 'submission.not_withdrawable', 'This submission can no longer be withdrawn because it was already decided (Approved).'),
+    });
+    await user.click(await screen.findByRole('button', { name: 'Withdraw submission' }));
+    await user.click(await screen.findByRole('button', { name: 'Withdraw' }));
+    expect(await screen.findByText(/can no longer be withdrawn/)).toBeInTheDocument();
+    expect(screen.getByRole('alertdialog')).toBeInTheDocument();
+  });
+
+  it('does not offer withdrawal for decided submissions', async () => {
+    renderDetail(makeSubmission({ status: 'Approved', canWithdraw: false }));
+    expect(await screen.findByRole('heading', { name: 'Live check' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Withdraw submission' })).not.toBeInTheDocument();
   });
 });

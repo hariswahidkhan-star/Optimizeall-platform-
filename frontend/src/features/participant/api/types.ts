@@ -388,7 +388,7 @@ export interface TrackingLink {
 // ---------------------------------------------------------------- Submissions
 
 export type SubmissionStatus =
-  'Pending' | 'UnderReview' | 'Approved' | 'NeedsCorrection' | 'Rejected' | 'Reversed';
+  'Pending' | 'UnderReview' | 'Approved' | 'NeedsCorrection' | 'Rejected' | 'Reversed' | 'Withdrawn';
 
 export type LiveCheckStatus = 'NotRequired' | 'Pending' | 'ConfirmedLive' | 'Removed';
 
@@ -458,6 +458,8 @@ export interface SubmissionDetail {
   canEdit: boolean;
   canAppeal: boolean;
   appealDeadline: IsoDateTime | null;
+  /** Whether the participant can still withdraw it (not decided yet). */
+  canWithdraw: boolean;
 }
 
 // ---------------------------------------------------------------- Ledger & payouts

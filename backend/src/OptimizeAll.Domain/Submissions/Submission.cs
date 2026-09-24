@@ -11,6 +11,11 @@ public enum SubmissionStatus
     Rejected,
     /// <summary>Previously approved, later reversed (e.g. post removed, fraud); earnings reversed in the ledger.</summary>
     Reversed,
+    /// <summary>
+    /// Withdrawn by the participant before a decision (from Pending, UnderReview or NeedsCorrection). Final: it earns
+    /// nothing, leaves the review queue, no longer counts toward the per-campaign submission limit and frees the post key.
+    /// </summary>
+    Withdrawn,
 }
 
 public enum LiveCheckStatus
@@ -86,6 +91,15 @@ public class Submission : AuditedEntity, IConcurrencyStamped
     public List<SubmissionEvent> Events { get; set; } = new();
 
     public bool IsOpenForReview => Status is SubmissionStatus.Pending or SubmissionStatus.UnderReview;
+
+    /// <summary>Statuses from which the participant may withdraw (nothing decided, no earnings exist yet).</summary>
+    public static readonly SubmissionStatus[] WithdrawableStatuses =
+        { SubmissionStatus.Pending, SubmissionStatus.UnderReview, SubmissionStatus.NeedsCorrection };
+
+    public bool CanWithdraw => WithdrawableStatuses.Contains(Status);
+
+    /// <summary>Prefix given to the post key of a withdrawn submission, so the post can be submitted again.</summary>
+    public const string WithdrawnKeyPrefix = "withdrawn:";
 }
 
 public enum SubmissionFlagType

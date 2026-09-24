@@ -417,12 +417,13 @@ const EVENT_TONE: Record<string, Tone> = {
   correction_requested: 'warning',
   appealed: 'info',
   claimed: 'info',
+  withdrawn: 'neutral',
 };
 
 export function eventItems(events: ReviewEvent[]): TimelineItem[] {
   return events.map((e, i) => ({
     id: `${e.at}-${i}`,
-    title: humanize(e.action),
+    title: e.action === 'withdrawn' ? 'Withdrawn by participant' : humanize(e.action),
     timestamp: e.at,
     tone: EVENT_TONE[e.action] ?? 'neutral',
     actor: e.actor?.displayName ?? 'System',

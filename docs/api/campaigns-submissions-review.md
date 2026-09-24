@@ -347,12 +347,13 @@ in-app `submission.received` notification are written; `SubmissionCreated` is pu
                { "action": "rejected", "fromStatus": "UnderReview", "toStatus": "Rejected", "reason": "…", "actor": "Reviewer", "at": "…" }],
   "earnings": [{ "id": "…", "type": "PostReward", "amount": 5.0, "currency": "USD", "status": "Approved", "createdAt": "…" }],
   "appeal": { "id": "…", "status": "Open", "decisionAppealed": "Rejected", "reason": "…", "resolutionNote": null, "createdAt": "…", "resolvedAt": null } | null,
-  "canEdit": false, "canAppeal": true, "appealDeadline": "…"
+  "canEdit": false, "canAppeal": true, "appealDeadline": "…", "canWithdraw": false
 }
 ```
 Actors are `You`, `Reviewer` or `System` (staff names are hidden). Risk score and flags are never included.
 Timeline actions: submitted, claimed, approved, correction_requested, rejected, resubmitted, appealed,
-appeal_overturned, appeal_upheld, reversed, live_check_confirmed, live_check_removed.
+appeal_overturned, appeal_upheld, reversed, live_check_confirmed, live_check_removed, withdrawn.
+`canWithdraw`: status Pending, UnderReview or NeedsCorrection (nothing decided yet).
 `canAppeal`: status Rejected or Reversed, within `review.appealWindowDays` (default 14) of `decidedAt`, no open
 appeal and no appeal filed since that decision.
 
@@ -361,6 +362,7 @@ appeal and no appeal filed since that decision.
 | GET `/me/submissions?status=&campaignId=` | – | Paged `{ id, campaign{id,slug,title}, platform, postUrl, status, submittedAt, estimatedReward, currency, decisionReason }` newest first | |
 | GET `/me/submissions/{id}` | – | MySubmissionDetail | 404 (not owner) |
 | PUT `/me/submissions/{id}` (multipart, rate limited) | any of `postUrl`, `postedAt`, `captionText`, `screenshot` | MySubmissionDetail (status Pending, `correctionCount`+1, original rule version kept, flags recomputed, estimate re-priced, event `resubmitted`) | 409 `submission.not_editable` (not NeedsCorrection) + all create checks (URL uniqueness excludes itself; `postedAt` rules are re-run against the original `submittedAt`, which a correction doesn't change) |
+| POST `/me/submissions/{id}/withdraw` (rate limited) | `{ "confirm": true, "reason": "optional, ≤ 1000" }` | MySubmissionDetail (status `Withdrawn`, event `withdrawn` with the reason, audited `submission.withdrawn`) | 400 `confirmation.required`, validation; 404 (not owner); 409 `submission.not_withdrawable` (already Approved/Rejected/Reversed/Withdrawn), `submission.changed` (kept changing under concurrent claims) |
 | POST `/me/submissions/{id}/appeal` (rate limited) | `{ "reason": "20–2000 chars" }` | MySubmissionDetail (the appeal keeps the full text; the timeline/audit copy is cut to 1000 chars with "…") | 400 validation, 409 `appeal.not_allowed` |
 
 ---
@@ -443,6 +445,16 @@ it; confirmation re-checks this bound). A 0 total (caps/budget) still approves, 
 `reward.appliedCaps` and the caps in the event reason. Every decision resolves open flags, adds an event, audits
 (`submission.approved|correction_requested|rejected`) and notifies the participant (in-app + email).
 `SubmissionApproved` is published after commit.
+
+**Withdrawal by the participant.** Pending, UnderReview and NeedsCorrection submissions can be withdrawn
+(`POST /me/submissions/{id}/withdraw`). It is one conditional update on the status read just before, and a decision
+is conditional on Pending/UnderReview and the concurrency stamp that the withdrawal replaces, so when a participant
+withdraws while a reviewer decides, exactly one wins: the reviewer gets 409 `review.already_decided` ("The participant
+withdrew this submission…"), or the participant gets 409 `submission.not_withdrawable`. A withdrawn submission leaves
+the review queue (it is visible with `?status=Withdrawn`; the workspace shows "Withdrawn by participant"), its claim
+and open flags are cleared, it has no earnings (none exist before approval), it stops counting toward
+`maxSubmissionsPerParticipant`, and its post key is released (`withdrawn:{id}:{key}`) so the same post can be submitted
+again. Withdrawal is final.
 
 Integrity rules for every review command: staff can never act on their own submission (claim, decision, live
 check, reversal, appeal resolution → 403 `review.self_review`). Approve, appeal overturn and live-check

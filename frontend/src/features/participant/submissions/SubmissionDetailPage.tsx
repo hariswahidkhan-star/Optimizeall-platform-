@@ -17,7 +17,7 @@ import type { SubmissionDetail } from '../api/types';
 import { PlatformTag } from '../components/Platform';
 import { QueryState } from '../components/QueryState';
 import { earningTypeLabel, timelineActionLabel, timelineTone } from '../lib/labels';
-import { AppealForm, ResubmitForm } from './SubmissionForms';
+import { AppealForm, ResubmitForm, WithdrawAction } from './SubmissionForms';
 import '../participant.css';
 import { SafeExternalLink } from '@/components/SafeExternalLink';
 
@@ -74,11 +74,20 @@ function SubmissionView({ s }: { s: SubmissionDetail }) {
           </>
         }
         actions={
-          <Link to={`/app/campaigns/${s.campaign.slug}`} className="ui-link">
-            View campaign
-          </Link>
+          <>
+            {s.canWithdraw && <WithdrawAction submission={s} />}
+            <Link to={`/app/campaigns/${s.campaign.slug}`} className="ui-link">
+              View campaign
+            </Link>
+          </>
         }
       />
+
+      {s.status === 'Withdrawn' && (
+        <Alert tone="neutral" title="You withdrew this submission">
+          <p>It won’t be reviewed or earn a reward. You can submit the post again from the campaign page.</p>
+        </Alert>
+      )}
 
       {s.decisionReason &&
         (s.status === 'NeedsCorrection' || s.status === 'Rejected' || s.status === 'Reversed') && (

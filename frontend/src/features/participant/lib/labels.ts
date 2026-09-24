@@ -22,6 +22,7 @@ export const submissionStatusOptions: SelectOption[] = [
   { value: 'Approved', label: 'Approved' },
   { value: 'Rejected', label: 'Rejected' },
   { value: 'Reversed', label: 'Reversed' },
+  { value: 'Withdrawn', label: 'Withdrawn' },
 ];
 
 export const earningTypeOptions: SelectOption[] = EARNING_TYPES.map((t) => ({
@@ -81,6 +82,7 @@ export function timelineActionLabel(action: string): string {
     reversed: 'Reversed',
     live_check_confirmed: 'Live check passed',
     live_check_removed: 'Post found removed',
+    withdrawn: 'Withdrawn',
   };
   return labels[action] ?? humanize(action);
 }

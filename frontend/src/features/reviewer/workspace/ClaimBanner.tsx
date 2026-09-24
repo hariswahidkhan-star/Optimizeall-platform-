@@ -47,6 +47,17 @@ export function ClaimBanner({
 }: ClaimBannerProps) {
   const { claim } = submission;
 
+  if (state === 'closed' && submission.status === 'Withdrawn') {
+    return (
+      <Alert tone="info" title="Withdrawn by participant" className="rv-claim">
+        <span className="rv-inline">
+          <StatusBadge kind="submission" status={submission.status} size="sm" />
+          <span>The participant withdrew this submission before a decision. Nothing needs to be reviewed.</span>
+        </span>
+      </Alert>
+    );
+  }
+
   if (state === 'closed') {
     return (
       <Alert tone="info" title="This submission has been decided" className="rv-claim">
