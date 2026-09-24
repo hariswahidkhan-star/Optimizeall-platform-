@@ -538,6 +538,116 @@ public sealed class AdsPlanningController(
         return ExperimentDtoFrom(e);
     }
 
+    // ------------------------------ edit / delete / duplicate
+
+    [HttpDelete("utm/{id:guid}")]
+    public async Task<IActionResult> DeleteUtm(Guid id, CancellationToken ct)
+    {
+        var link = await access.OwnedAsync<AdUtmLink>(id, l => l.ClientAccountId, "UTM link", ct);
+        db.Remove(link);
+        audit.Record("ads.utm.deleted", nameof(AdUtmLink), id, before: new { link.TaggedUrl });
+        await db.SaveChangesAsync(ct);
+        return NoContent();
+    }
+
+    [HttpGet("media-plans/{id:guid}")]
+    public async Task<MediaPlanDto> Plan(Guid id, CancellationToken ct)
+    {
+        var q = await access.ScopedAsync<MediaPlan>(p => p.ClientAccountId, ct);
+        var plan = await q.AsNoTracking().Include(p => p.Lines).FirstOrDefaultAsync(p => p.Id == id, ct) ?? throw DomainException.NotFound("Media plan");
+        var name = await db.Set<ClientAccount>().AsNoTracking().Where(c => c.Id == plan.ClientAccountId).Select(c => c.Name).FirstAsync(ct);
+        return PlanDto(plan, name);
+    }
+
+    /// <summary>Deletes a draft or archived plan. An approved plan is the agreed budget: archive it first.</summary>
+    [HttpDelete("media-plans/{id:guid}")]
+    public async Task<IActionResult> DeletePlan(Guid id, CancellationToken ct)
+    {
+        var q = await access.ScopedAsync<MediaPlan>(p => p.ClientAccountId, ct);
+        var plan = await q.Include(p => p.Lines).FirstOrDefaultAsync(p => p.Id == id, ct) ?? throw DomainException.NotFound("Media plan");
+        if (plan.Status == MediaPlanStatus.Approved)
+            throw DomainException.Conflict("ads.plan_approved", "An approved plan is the agreed budget; archive it before deleting.");
+        foreach (var line in plan.Lines.ToList()) db.Remove(line);
+        db.Remove(plan);
+        audit.Record("ads.media_plan.deleted", nameof(MediaPlan), id, before: new { plan.Name, plan.Month, plan.Status });
+        await db.SaveChangesAsync(ct);
+        return NoContent();
+    }
+
+    /// <summary>Copies a plan into a new draft, optionally for another month (flights shift by the same number of months).</summary>
+    [HttpPost("media-plans/{id:guid}/duplicate")]
+    public async Task<MediaPlanDto> DuplicatePlan(Guid id, [FromQuery] DateOnly? month, CancellationToken ct)
+    {
+        var q = await access.ScopedAsync<MediaPlan>(p => p.ClientAccountId, ct);
+        var source = await q.AsNoTracking().Include(p => p.Lines).FirstOrDefaultAsync(p => p.Id == id, ct) ?? throw DomainException.NotFound("Media plan");
+        var target = month is { } m ? new DateOnly(m.Year, m.Month, 1) : source.Month;
+        var shift = (target.Year - source.Month.Year) * 12 + target.Month - source.Month.Month;
+        var copy = new MediaPlan
+        {
+            ClientAccountId = source.ClientAccountId, Name = (source.Name.Length > 190 ? source.Name[..190] : source.Name) + " (copy)", Month = target,
+            Currency = source.Currency, Status = MediaPlanStatus.Draft, Notes = source.Notes,
+        };
+        foreach (var l in source.Lines)
+        {
+            copy.Lines.Add(new MediaPlanLine
+            {
+                PlanId = copy.Id, ClientAccountId = copy.ClientAccountId, Platform = l.Platform, Channel = l.Channel, Objective = l.Objective,
+                PlannedBudget = l.PlannedBudget, FlightStart = l.FlightStart.AddMonths(shift), FlightEnd = l.FlightEnd.AddMonths(shift), KpiName = l.KpiName,
+                KpiTarget = l.KpiTarget, PlannedImpressions = l.PlannedImpressions, PlannedClicks = l.PlannedClicks, PlannedConversions = l.PlannedConversions,
+            });
+        }
+        db.Set<MediaPlan>().Add(copy);
+        audit.Record("ads.media_plan.duplicated", nameof(MediaPlan), copy.Id, after: new { From = id, copy.Name, copy.Month });
+        await db.SaveChangesAsync(ct);
+        var name = await db.Set<ClientAccount>().AsNoTracking().Where(c => c.Id == copy.ClientAccountId).Select(c => c.Name).FirstAsync(ct);
+        return PlanDto(copy, name);
+    }
+
+    /// <summary>Deletes a creative that no ad uses. Approved creatives in use stay for the record.</summary>
+    [HttpDelete("creatives/{id:guid}")]
+    public async Task<IActionResult> DeleteCreative(Guid id, CancellationToken ct)
+    {
+        var creative = await access.OwnedAsync<AdCreative>(id, c => c.ClientAccountId, "Creative", ct);
+        if (await db.Set<Ad>().AnyAsync(a => a.CreativeId == id, ct))
+            throw DomainException.Conflict("ads.creative_in_use", "Ads use this creative; unlink it from those ads first.");
+        db.Remove(creative);
+        audit.Record("ads.creative.deleted", nameof(AdCreative), id, before: new { creative.Name, creative.Status });
+        await db.SaveChangesAsync(ct);
+        return NoContent();
+    }
+
+    [HttpPost("creatives/{id:guid}/duplicate")]
+    public async Task<CreativeDto> DuplicateCreative(Guid id, CancellationToken ct)
+    {
+        var source = await access.OwnedAsync<AdCreative>(id, c => c.ClientAccountId, "Creative", ct);
+        var copy = new AdCreative
+        {
+            ClientAccountId = source.ClientAccountId, Name = (source.Name.Length > 190 ? source.Name[..190] : source.Name) + " (copy)", Platform = source.Platform,
+            Format = source.Format, Headlines = source.Headlines.ToList(), Descriptions = source.Descriptions.ToList(), PrimaryText = source.PrimaryText,
+            CallToAction = source.CallToAction, FinalUrl = source.FinalUrl, MediaAssetIds = source.MediaAssetIds.ToList(), CampaignId = source.CampaignId,
+            Status = SocialPostStatus.Draft, CreatedByUserId = currentUser.Id,
+        };
+        db.Set<AdCreative>().Add(copy);
+        audit.Record("ads.creative.duplicated", nameof(AdCreative), copy.Id, after: new { From = id, copy.Name });
+        await db.SaveChangesAsync(ct);
+        return await CreativeDtoAsync(copy, ct);
+    }
+
+    /// <summary>Deletes a planned or concluded experiment; a running test must be concluded first.</summary>
+    [HttpDelete("experiments/{id:guid}")]
+    public async Task<IActionResult> DeleteExperiment(Guid id, CancellationToken ct)
+    {
+        var q = await access.ScopedAsync<AdExperiment>(e => e.ClientAccountId, ct);
+        var e = await q.Include(x => x.Variants).FirstOrDefaultAsync(x => x.Id == id, ct) ?? throw DomainException.NotFound("Experiment");
+        if (e.Status == AdExperimentStatus.Running)
+            throw DomainException.Conflict("ads.experiment_running", "Conclude the running experiment before deleting it.");
+        foreach (var v in e.Variants.ToList()) db.Remove(v);
+        db.Remove(e);
+        audit.Record("ads.experiment.deleted", nameof(AdExperiment), id, before: new { e.Name, e.Status });
+        await db.SaveChangesAsync(ct);
+        return NoContent();
+    }
+
     // ------------------------------ helpers
 
     private async Task<string?> TemplateAsync(Guid clientId, CancellationToken ct) =>

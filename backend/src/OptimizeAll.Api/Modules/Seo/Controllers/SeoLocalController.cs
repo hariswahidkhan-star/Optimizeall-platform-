@@ -205,6 +205,7 @@ public sealed class SeoLocalController(AppDbContext db, SeoAccess access, IAudit
         var row = new SeoReview { SiteId = site.Id, ClientAccountId = site.ClientAccountId };
         Apply(row, request);
         db.Add(row);
+        audit.Record("seo.review_added", nameof(SeoReview), row.Id, after: new { row.Platform, row.Rating });
         await db.SaveChangesAsync(ct);
         return ToReview(row);
     }
@@ -213,7 +214,9 @@ public sealed class SeoLocalController(AppDbContext db, SeoAccess access, IAudit
     public async Task<ReviewDto> UpdateReview(Guid id, ReviewRequest request, CancellationToken ct)
     {
         var row = await access.OwnedAsync<SeoReview>(id, r => r.ClientAccountId, "Review", ct);
+        var before = new { row.Rating, row.Responded };
         Apply(row, request);
+        audit.Record("seo.review_updated", nameof(SeoReview), row.Id, before, new { row.Rating, row.Responded });
         await db.SaveChangesAsync(ct);
         return ToReview(row);
     }
@@ -223,6 +226,7 @@ public sealed class SeoLocalController(AppDbContext db, SeoAccess access, IAudit
     {
         var row = await access.OwnedAsync<SeoReview>(id, r => r.ClientAccountId, "Review", ct);
         db.Remove(row);
+        audit.Record("seo.review_deleted", nameof(SeoReview), id, before: new { row.Platform, row.Rating, row.AuthorName });
         await db.SaveChangesAsync(ct);
         return NoContent();
     }
@@ -262,9 +266,29 @@ public sealed class SeoLocalController(AppDbContext db, SeoAccess access, IAudit
             if (stamp != row.ConcurrencyStamp) throw DomainException.Conflict("concurrency.conflict", "This brief was changed by someone else. Reload and try again.");
             db.Entry(row).Property(b => b.ConcurrencyStamp).OriginalValue = stamp;
         }
+        var before = new { row.Title, row.Status };
         Apply(row, request);
+        audit.Record("seo.brief_updated", nameof(SeoContentBrief), row.Id, before, new { row.Title, row.Status });
         await db.SaveChangesAsync(ct);
         return ToBrief(row);
+    }
+
+    /// <summary>Copies a brief (as a new draft) so a similar article can be planned without retyping the outline.</summary>
+    [HttpPost("briefs/{id:guid}/duplicate")]
+    public async Task<BriefDto> DuplicateBrief(Guid id, CancellationToken ct)
+    {
+        var source = await access.OwnedAsync<SeoContentBrief>(id, b => b.ClientAccountId, "Brief", ct, tracked: false);
+        var copy = new SeoContentBrief
+        {
+            SiteId = source.SiteId, ClientAccountId = source.ClientAccountId, CreatedByUserId = currentUser.Id,
+            Title = (source.Title.Length > 190 ? source.Title[..190] : source.Title) + " (copy)", TargetKeyword = source.TargetKeyword,
+            RelatedKeywords = source.RelatedKeywords.ToList(), Questions = source.Questions.ToList(), Outline = source.Outline.ToList(),
+            WordCountTarget = source.WordCountTarget, CompetitorUrls = source.CompetitorUrls.ToList(), Notes = source.Notes, Status = ContentBriefStatus.Draft,
+        };
+        db.Add(copy);
+        audit.Record("seo.brief_duplicated", nameof(SeoContentBrief), copy.Id, after: new { From = id, copy.Title });
+        await db.SaveChangesAsync(ct);
+        return ToBrief(copy);
     }
 
     [HttpDelete("briefs/{id:guid}")]
@@ -331,7 +355,9 @@ public sealed class SeoLocalController(AppDbContext db, SeoAccess access, IAudit
         var citations = await db.Set<SeoCitation>().AsNoTracking().Where(c => c.SiteId == siteId).ToDictionaryAsync(c => c.SourceId, ct);
         var reviews = await db.Set<SeoReview>().AsNoTracking().Where(r => r.SiteId == siteId).Select(r => new { r.Rating, r.Responded }).ToListAsync(ct);
         var done = profile?.CompletedChecklist.ToHashSet() ?? new HashSet<string>();
-        var list = sources.Select(s => ToCitation(s, citations.GetValueOrDefault(s.Id), profile)).ToList();
+        // Hidden directories drop out of the tracker unless this site already tracks a citation there.
+        var list = sources.Where(s => s.IsActive || citations.ContainsKey(s.Id))
+            .Select(s => ToCitation(s, citations.GetValueOrDefault(s.Id), profile)).ToList();
         return new LocalSeoDto(siteId,
             profile is null ? null : new LocalProfileDto(profile.BusinessName, profile.Address, profile.Phone, profile.Website, profile.ConcurrencyStamp),
             LocalSeoCatalog.GbpChecklist.Select(i => new ChecklistItemDto(i.Key, i.Title, i.Guidance, done.Contains(i.Key))).ToList(),

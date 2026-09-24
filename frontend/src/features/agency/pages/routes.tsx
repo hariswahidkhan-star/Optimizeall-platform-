@@ -10,6 +10,7 @@ const LandingPagesListPage = lazyPage(() => import('./LandingPagesListPage'), 'L
 const PageBuilderPage = lazyPage(() => import('./PageBuilderPage'), 'PageBuilderPage');
 const SubmissionsPage = lazyPage(() => import('./SubmissionsPage'), 'SubmissionsPage');
 const TemplatesPage = lazyPage(() => import('./TemplatesPage'), 'TemplatesPage');
+const TemplateLibraryPage = lazyPage(() => import('./TemplateLibraryPage'), 'TemplateLibraryPage');
 
 /** Every page in this area calls forms.manage APIs. */
 const forms: PermissionRequirement = { anyOf: [Permissions.FormsManage] };
@@ -35,6 +36,7 @@ export const nav: PortalNavItem[] = [
 export const routes: RouteObject[] = [
   { path: 'pages', element: <LandingPagesListPage />, handle: { requires: forms } },
   { path: 'pages/templates', element: <TemplatesPage />, handle: { requires: forms } },
+  { path: 'pages/templates/library', element: <TemplateLibraryPage />, handle: { requires: forms } },
   { path: 'pages/forms', element: <FormsListPage />, handle: { requires: forms } },
   { path: 'pages/forms/:formId', element: <FormBuilderPage />, handle: { requires: forms } },
   { path: 'pages/forms/:formId/submissions', element: <SubmissionsPage />, handle: { requires: forms } },

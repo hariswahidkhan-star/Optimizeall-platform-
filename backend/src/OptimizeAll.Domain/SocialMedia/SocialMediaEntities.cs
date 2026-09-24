@@ -186,6 +186,9 @@ public class SocialCampaign : AuditedEntity, IConcurrencyStamped
     public string? UtmMedium { get; set; }
     public string? UtmContent { get; set; }
     public string? UtmTerm { get; set; }
+
+    /// <summary>Archived campaigns keep their posts and reporting but cannot be picked for new posts.</summary>
+    public bool IsArchived { get; set; }
     public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
 }
 
@@ -269,6 +272,11 @@ public class SocialPostComment : Entity
     public PostCommentKind Kind { get; set; }
     public string Body { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
+
+    /// <summary>Feedback that has been addressed ("mark done"); it stays in the history.</summary>
+    public bool IsResolved { get; set; }
+    public DateTime? ResolvedAt { get; set; }
+    public Guid? ResolvedByUserId { get; set; }
 }
 
 /// <summary>One publish attempt of a variant (publishing log).</summary>
@@ -337,7 +345,7 @@ public class SocialQueueSlot : Entity
 }
 
 /// <summary>Editable per-network best-practice preset (seeded by the Baseline profile).</summary>
-public class SocialNetworkPreset
+public class SocialNetworkPreset : IConcurrencyStamped
 {
     public SocialNetwork Network { get; set; }
     public int MaxTextLength { get; set; }
@@ -363,6 +371,7 @@ public class SocialNetworkPreset
     public List<string> RecommendedTimes { get; set; } = new();
     public string Source { get; set; } = string.Empty;
     public DateTime UpdatedAt { get; set; }
+    public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
 }
 
 public enum LinkHandling
@@ -378,7 +387,7 @@ public enum LinkHandling
 }
 
 /// <summary>Holiday or awareness day shown on the content calendar (seeded list, each with its source).</summary>
-public class SocialAwarenessDay : Entity
+public class SocialAwarenessDay : Entity, IConcurrencyStamped
 {
     public int Month { get; set; }
     public int Day { get; set; }
@@ -390,6 +399,13 @@ public class SocialAwarenessDay : Entity
     /// <summary>ISO country codes, or empty for global observances.</summary>
     public List<string> Countries { get; set; } = new();
     public string SourceUrl { get; set; } = string.Empty;
+
+    /// <summary>Key of the built-in day this row was seeded from (null for days the agency added); the seeder never re-adds a key.</summary>
+    public string? SeedKey { get; set; }
+
+    /// <summary>Hidden days are not shown on calendars.</summary>
+    public bool IsActive { get; set; } = true;
+    public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
 }
 
 public class SocialListeningQuery : AuditedEntity, IConcurrencyStamped

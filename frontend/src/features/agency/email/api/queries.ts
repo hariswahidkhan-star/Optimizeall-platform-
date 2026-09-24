@@ -50,6 +50,8 @@ export const emailKeys = {
   checklist: (id: string) => ['email', 'campaign', id, 'checklist'] as const,
   report: (id: string) => ['email', 'campaign', id, 'report'] as const,
   automations: (ws: string) => ['email', ws, 'automations'] as const,
+  tags: (ws: string) => ['email', ws, 'tags'] as const,
+  fields: (ws: string) => ['email', ws, 'fields'] as const,
   automation: (id: string) => ['email', 'automation', id] as const,
   settings: (ws: string) => ['email', ws, 'settings'] as const,
   senders: (ws: string) => ['email', ws, 'senders'] as const,
@@ -194,10 +196,25 @@ export function useCampaignReport(id: string | undefined, channel: 'email' | 'sm
   });
 }
 
-export function useAutomations(clientId: string | null) {
+export function useAutomations(clientId: string | null, includeArchived = false) {
   return useQuery({
-    queryKey: emailKeys.automations(clientId ?? 'agency'),
-    queryFn: ({ signal }) => api.get<AutomationListItem[]>(`${EMAIL_API}/automations`, { query: wsQuery(clientId), signal }),
+    queryKey: [...emailKeys.automations(clientId ?? 'agency'), includeArchived ? 'all' : 'active'],
+    queryFn: ({ signal }) =>
+      api.get<AutomationListItem[]>(`${EMAIL_API}/automations${includeArchived ? '/all' : ''}`, { query: wsQuery(clientId), signal }),
+  });
+}
+
+/** A tag or custom-field key of the workspace with its usage (`GET …/tags`, `GET …/fields`). */
+export interface AudienceKey {
+  key: string;
+  contacts: number;
+  referencedBy: number;
+}
+
+export function useAudienceKeys(kind: 'tags' | 'fields', clientId: string | null) {
+  return useQuery({
+    queryKey: kind === 'tags' ? emailKeys.tags(clientId ?? 'agency') : emailKeys.fields(clientId ?? 'agency'),
+    queryFn: ({ signal }) => api.get<AudienceKey[]>(`${EMAIL_API}/${kind}`, { query: wsQuery(clientId), signal }),
   });
 }
 

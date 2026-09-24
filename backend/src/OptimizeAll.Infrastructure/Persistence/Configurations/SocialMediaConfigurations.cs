@@ -183,7 +183,9 @@ internal sealed class SocialAwarenessDayConfiguration : IEntityTypeConfiguration
         b.Property(x => x.Name).HasMaxLength(200).IsRequired();
         b.Property(x => x.Countries).HasJsonList();
         b.Property(x => x.SourceUrl).HasMaxLength(500).IsRequired();
+        b.Property(x => x.SeedKey).HasMaxLength(120);
         b.HasIndex(x => new { x.Month, x.Day, x.Name }).IsUnique();
+        b.HasIndex(x => x.SeedKey).IsUnique();
     }
 }
 

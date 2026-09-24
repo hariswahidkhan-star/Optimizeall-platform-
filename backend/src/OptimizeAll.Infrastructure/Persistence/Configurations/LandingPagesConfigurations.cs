@@ -149,6 +149,8 @@ internal sealed class FormSubmissionConfiguration : IEntityTypeConfiguration<For
         b.Property(x => x.UtmContent).HasMaxLength(150);
         b.Property(x => x.Referrer).HasMaxLength(1000);
         b.Property(x => x.EmbedOrigin).HasMaxLength(253);
+        b.Property(x => x.Note).HasMaxLength(2000);
+        b.HasIndex(x => new { x.FormId, x.Status });
         b.Property(x => x.IpHash).HasMaxLength(64);
         b.HasIndex(x => new { x.FormId, x.SubmittedAt });
         b.HasIndex(x => new { x.LandingPageId, x.SubmittedAt });

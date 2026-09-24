@@ -58,7 +58,8 @@ public sealed class SeoAuditRunner(
         try
         {
             var crawl = await crawler.CrawlAsync(new CrawlRequest(site.BaseUrl, audit.MaxPages, audit.MaxDepth, site.SitemapUrl), ct);
-            var outcome = AuditChecks.Run(crawl);
+            var rules = await db.Set<SeoAuditRule>().AsNoTracking().ToDictionaryAsync(r => r.Key, ct);
+            var outcome = AuditChecks.Run(crawl, rules);
             if (await SaveAsync(audit, startedAt, crawl, outcome, ct)) return true;
             logger.LogWarning("SEO audit {AuditId}: the claim was taken over by another worker; results of this run discarded", auditId);
             return null;
@@ -128,9 +129,18 @@ public sealed class SeoAuditRunner(
             });
         }
 
+        // Rules the team marked "ignored" on the previous completed audit stay ignored (with their note) until reopened.
+        var previousId = await db.Set<SeoAudit>().AsNoTracking()
+            .Where(a => a.SiteId == audit.SiteId && a.Status == SeoAuditStatus.Completed && a.Id != audit.Id && a.QueuedAt <= audit.QueuedAt)
+            .OrderByDescending(a => a.QueuedAt).Select(a => (Guid?)a.Id).FirstOrDefaultAsync(ct);
+        var ignored = previousId is null
+            ? new Dictionary<string, SeoAuditIssue>()
+            : await db.Set<SeoAuditIssue>().AsNoTracking().Where(i => i.AuditId == previousId && i.Status == SeoIssueStatus.Ignored)
+                .ToDictionaryAsync(i => i.RuleKey, ct);
         foreach (var issue in outcome.Issues)
         {
             var hits = issue.Hits.Take(MaxUrlsPerIssue).ToList();
+            var carried = ignored.GetValueOrDefault(issue.RuleKey);
             db.Set<SeoAuditIssue>().Add(new SeoAuditIssue
             {
                 AuditId = audit.Id,
@@ -141,6 +151,10 @@ public sealed class SeoAuditRunner(
                 Details = hits.Any(h => h.Detail is not null)
                     ? string.Join("\n", hits.Select(h => $"{h.Url}\t{(h.Detail ?? string.Empty).Replace('\n', ' ').Replace('\t', ' ')}"))
                     : null,
+                Status = carried is null ? SeoIssueStatus.Open : SeoIssueStatus.Ignored,
+                StatusNote = carried?.StatusNote,
+                StatusChangedAt = carried?.StatusChangedAt,
+                StatusChangedByUserId = carried?.StatusChangedByUserId,
             });
         }
         await db.SaveChangesAsync(ct);

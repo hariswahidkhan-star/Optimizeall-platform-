@@ -24,7 +24,11 @@ public static partial class AuditChecks
         SeoAuditRules.RobotsMissing, SeoAuditRules.RobotsInvalid, SeoAuditRules.SitemapMissing, SeoAuditRules.SitemapInvalid,
     };
 
-    public static AuditOutcome Run(CrawlResult crawl)
+    /// <param name="rules">
+    /// The agency's rule settings (seo_audit_rules). Disabled rules are skipped and their severity overrides the catalog
+    /// default; rules missing from the dictionary keep the catalog defaults.
+    /// </param>
+    public static AuditOutcome Run(CrawlResult crawl, IReadOnlyDictionary<string, SeoAuditRule>? rules = null)
     {
         var issues = new Dictionary<string, List<IssueHit>>();
         void Hit(string rule, string url, string? detail = null)
@@ -146,7 +150,9 @@ public static partial class AuditChecks
         foreach (var error in crawl.SitemapErrors.Take(50)) Hit(SeoAuditRules.SitemapInvalid, crawl.SitemapUrl ?? crawl.StartUrl, error);
 
         var drafts = issues
-            .Select(i => new IssueDraft(i.Key, SeoAuditRules.Find(i.Key)?.Severity ?? SeoSeverity.Notice, i.Value))
+            .Where(i => rules is null || !rules.TryGetValue(i.Key, out var r) || r.IsEnabled)
+            .Select(i => new IssueDraft(i.Key,
+                rules is not null && rules.TryGetValue(i.Key, out var r) ? r.Severity : SeoAuditRules.Find(i.Key)?.Severity ?? SeoSeverity.Notice, i.Value))
             .OrderBy(i => i.Severity).ThenByDescending(i => i.Hits.Count).ThenBy(i => i.RuleKey, StringComparer.Ordinal)
             .ToList();
         var score = HealthScore(drafts, crawl.Pages.Count);

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Link2, Plug, Plus, Unplug } from 'lucide-react';
+import { Archive, ArchiveRestore, Link2, Pencil, Plug, Plus, Unplug } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
@@ -9,6 +9,8 @@ import {
   Card,
   CardBody,
   CardHeader,
+  Checkbox,
+  ConfirmDialog,
   DataTable,
   DateTime,
   Dialog,
@@ -66,7 +68,16 @@ export function ProfilesPage() {
   const { hasPermission } = useAuth();
   const canPublish = hasPermission(Permissions.SocialPublish);
   const canTokens = hasPermission(Permissions.IntegrationsManage);
-  const profiles = useProfiles(clientId);
+  const [showArchived, setShowArchived] = useState(false);
+  const active = useProfiles(clientId);
+  const all = useQuery({
+    queryKey: [...socialKeys.profiles(clientId ?? ''), 'all'],
+    queryFn: () => api.get<Profile[]>(`/agency/social/clients/${clientId}/profiles`, { query: { includeArchived: true } }),
+    enabled: !!clientId && showArchived,
+  });
+  const profiles = showArchived ? all : active;
+  const [editing, setEditing] = useState<Profile | null>(null);
+  const [archiving, setArchiving] = useState<Profile | null>(null);
   const toast = useToast();
   const queryClient = useQueryClient();
   const [adding, setAdding] = useState(false);
@@ -74,6 +85,14 @@ export function ProfilesPage() {
   const [tokenFor, setTokenFor] = useState<Profile | null>(null);
 
   const refresh = () => queryClient.invalidateQueries({ queryKey: socialKeys.profiles(clientId ?? '') });
+  const restore = useMutation({
+    mutationFn: (p: Profile) => api.post(`/agency/social/profiles/${p.id}/restore`),
+    onSuccess: () => {
+      toast.success('Profile restored');
+      void refresh();
+    },
+    onError: (e) => toast.error('Could not restore', errorMessage(e)),
+  });
 
   const connect = useMutation({
     mutationFn: (p: Profile) => api.post<{ authorizationUrl: string }>(`/agency/social/profiles/${p.id}/connect/start`),
@@ -153,9 +172,25 @@ export function ProfilesPage() {
         ]
       : []),
     ...(canTokens ? [{ id: 'token', label: 'Paste an access token…', icon: <Plug />, onSelect: () => setTokenFor(p) } satisfies MenuEntry] : []),
+    { id: 'edit', label: 'Edit details…', icon: <Pencil />, onSelect: () => setEditing(p) } satisfies MenuEntry,
     ...(canPublish && p.connectionState === 'Connected'
       ? [{ id: 'disconnect', label: 'Disconnect', icon: <Unplug />, danger: true, onSelect: () => disconnect.mutate(p) } satisfies MenuEntry]
       : []),
+    ...(canPublish
+      ? [
+          p.isActive
+            ? ({ id: 'archive', label: 'Archive profile', icon: <Archive />, danger: true, onSelect: () => setArchiving(p) } satisfies MenuEntry)
+            : ({ id: 'restore', label: 'Restore profile', icon: <ArchiveRestore />, onSelect: () => restore.mutate(p) } satisfies MenuEntry),
+        ]
+      : [
+          {
+            id: 'archive',
+            label: 'Archive profile',
+            icon: <Archive />,
+            disabled: true,
+            description: 'Archiving needs the social.publish permission.',
+          } satisfies MenuEntry,
+        ]),
   ];
 
   const missingCreds = (profiles.data ?? []).some((p) => p.connectionState === 'AppCredentialsRequired');
@@ -175,6 +210,7 @@ export function ProfilesPage() {
       />
       <div className="sm-toolbar">
         <ClientPicker value={clientId} onChange={setClientId} />
+        {clientId && <Checkbox label="Show archived profiles" checked={showArchived} onChange={(e) => setShowArchived(e.target.checked)} />}
       </div>
       {!clientId ? (
         <EmptyState icon={<Plug />} title="Choose a client" description="Profiles belong to a client." />
@@ -213,7 +249,89 @@ export function ProfilesPage() {
       )}
       {queueFor && <QueueDialog profile={queueFor} onClose={() => setQueueFor(null)} onSaved={() => void refresh()} />}
       {tokenFor && <TokenDialog profile={tokenFor} onClose={() => setTokenFor(null)} onSaved={() => void refresh()} />}
+      {editing && <EditProfileDialog profile={editing} onClose={() => setEditing(null)} onSaved={() => void refresh()} />}
+      <ConfirmDialog
+        open={archiving !== null}
+        onClose={() => setArchiving(null)}
+        tone="danger"
+        title="Archive this profile?"
+        description="It disappears from the composer and queue; its posts and metrics are kept for reporting. You can restore it later."
+        confirmLabel="Archive"
+        onConfirm={async () => {
+          if (!archiving) return;
+          await api.delete(`/agency/social/profiles/${archiving.id}`);
+          toast.success('Profile archived');
+          void refresh();
+        }}
+      />
     </>
+  );
+}
+
+export function EditProfileDialog({ profile, onClose, onSaved }: { profile: Profile; onClose: () => void; onSaved: () => void }) {
+  const [form, setForm] = useState({
+    handle: profile.handle,
+    displayName: profile.displayName,
+    profileUrl: profile.profileUrl ?? '',
+    avatarUrl: profile.avatarUrl ?? '',
+    externalId: profile.externalId ?? '',
+  });
+  const save = useMutation({
+    mutationFn: () =>
+      api.put<Profile>(`/agency/social/profiles/${profile.id}`, {
+        network: profile.network,
+        handle: form.handle,
+        displayName: form.displayName,
+        profileUrl: form.profileUrl || null,
+        avatarUrl: form.avatarUrl || null,
+        externalId: form.externalId || null,
+        concurrencyStamp: profile.concurrencyStamp,
+      }),
+    onSuccess: () => {
+      onSaved();
+      onClose();
+    },
+  });
+  return (
+    <Dialog
+      open
+      onClose={onClose}
+      title={`Edit ${NETWORK_LABELS[profile.network]} profile`}
+      description="The network cannot change; add a new profile for another network."
+      footer={
+        <>
+          <Button variant="secondary" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button loading={save.isPending} disabled={!form.handle || !form.displayName} onClick={() => save.mutate()}>
+            Save
+          </Button>
+        </>
+      }
+    >
+      <div className="stack">
+        {save.isError && <Alert tone="danger">{errorMessage(save.error)}</Alert>}
+        <FormField label="Handle" required>
+          <Input value={form.handle} maxLength={150} onChange={(e) => setForm({ ...form, handle: e.target.value })} />
+        </FormField>
+        <FormField label="Display name" required>
+          <Input value={form.displayName} maxLength={200} onChange={(e) => setForm({ ...form, displayName: e.target.value })} />
+        </FormField>
+        <FormField label="Profile URL" optional>
+          <Input type="url" value={form.profileUrl} onChange={(e) => setForm({ ...form, profileUrl: e.target.value })} />
+        </FormField>
+        <FormField label="Avatar URL" optional>
+          <Input type="url" value={form.avatarUrl} onChange={(e) => setForm({ ...form, avatarUrl: e.target.value })} />
+        </FormField>
+        <FormField
+          label="Account id"
+          optional
+          hint={profile.connectionState === 'Connected' ? 'Changing the account id of a connected profile needs the integrations.manage permission.' : undefined}
+        >
+          <Input value={form.externalId} maxLength={100} onChange={(e) => setForm({ ...form, externalId: e.target.value })} />
+        </FormField>
+      </div>
+    </Dialog>
   );
 }
 
@@ -236,6 +354,14 @@ function ClientSettingsCard({ clientId, canEdit }: { clientId: string; canEdit: 
     <Card as="section" aria-labelledby="sm-client-settings">
       <CardHeader title="Client settings" titleId="sm-client-settings" />
       <CardBody className="stack">
+        {settings.data && (
+          <UtmMediumField
+            key={settings.data.concurrencyStamp}
+            value={settings.data.defaultUtmMedium}
+            disabled={!canEdit || save.isPending}
+            onSave={(medium) => save.mutate({ ...settings.data!, defaultUtmMedium: medium })}
+          />
+        )}
         {settings.data ? (
           <Switch
             checked={settings.data.requireClientApproval}
@@ -249,6 +375,20 @@ function ClientSettingsCard({ clientId, canEdit }: { clientId: string; canEdit: 
         )}
       </CardBody>
     </Card>
+  );
+}
+
+function UtmMediumField({ value, disabled, onSave }: { value: string; disabled: boolean; onSave: (value: string) => void }) {
+  const [medium, setMedium] = useState(value);
+  return (
+    <div className="cluster">
+      <FormField label="Default utm_medium" hint="Used when a post's campaign has no utm_medium.">
+        <Input value={medium} maxLength={100} disabled={disabled} onChange={(e) => setMedium(e.target.value)} />
+      </FormField>
+      <Button variant="secondary" size="sm" disabled={disabled || !medium.trim() || medium === value} onClick={() => onSave(medium.trim())}>
+        Save
+      </Button>
+    </div>
   );
 }
 

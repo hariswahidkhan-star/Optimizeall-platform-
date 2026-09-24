@@ -1,5 +1,5 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { FileText, LayoutTemplate, Plus } from 'lucide-react';
+import { ArchiveRestore, BookmarkPlus, CopyPlus, FileText, LayoutTemplate, Pencil, Plus } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
@@ -22,9 +22,13 @@ import {
   type DataTableColumn,
 } from '@/components/ui';
 import { api } from '@/lib/api/client';
+import { errorMessage } from '@/lib/api/errors';
 import type { PagedResult } from '@/lib/api/types';
+import { Permissions } from '@/lib/auth/permissions';
+import { useAuth } from '@/lib/auth/useAuth';
 import { fieldErrors, firstError, useClientOptions } from '../seo/common';
 import { pageKeys, type PageDetail, type PageListItem, type PageStatus, type PageTemplate } from './api';
+import { SaveAsTemplateDialog } from './TemplateLibraryPage';
 import './pages.css';
 
 export const statusTone: Record<PageStatus, 'success' | 'warning' | 'neutral'> = { Published: 'success', Draft: 'warning', Archived: 'neutral' };
@@ -35,6 +39,29 @@ export function LandingPagesListPage() {
   const [filters, setFilters] = useState<Record<string, string | undefined>>({});
   const [page, setPage] = useState(1);
   const [creating, setCreating] = useState(params.get('template') !== null);
+  const [savingTemplate, setSavingTemplate] = useState<PageListItem | null>(null);
+  const navigate = useNavigate();
+  const toast = useToast();
+  const queryClient = useQueryClient();
+  const { hasPermission } = useAuth();
+  const canSaveTemplates = hasPermission(Permissions.SettingsManage);
+  const duplicate = useMutation({
+    mutationFn: (p: PageListItem) => api.post<{ id: string; name: string; slug: string }>(`/agency/pages/landing-pages/${p.id}/duplicate`),
+    onSuccess: (copy) => {
+      toast.success('Page duplicated', `“${copy.name}” is a new draft at /${copy.slug}.`);
+      void queryClient.invalidateQueries({ queryKey: pageKeys.all });
+      navigate(copy.id);
+    },
+    onError: (e) => toast.error('Could not duplicate the page', errorMessage(e)),
+  });
+  const restore = useMutation({
+    mutationFn: (p: PageListItem) => api.post<PageDetail>(`/agency/pages/landing-pages/${p.id}/restore`),
+    onSuccess: () => {
+      toast.success('Page restored as a draft');
+      void queryClient.invalidateQueries({ queryKey: pageKeys.all });
+    },
+    onError: (e) => toast.error('Could not restore the page', errorMessage(e)),
+  });
   const clients = useClientOptions('pages');
   const queryParams = { search, clientId: filters.client, status: filters.status, page, pageSize: 25 };
   const query = useQuery({
@@ -127,7 +154,21 @@ export function LandingPagesListPage() {
               columns={columns}
               rows={query.data?.items ?? []}
               getRowId={(p) => p.id}
+              rowLabel={(p) => p.name}
               loading={query.isLoading}
+              rowActions={(p) => [
+                { id: 'open', label: 'Open builder', icon: <Pencil />, to: p.id },
+                { id: 'duplicate', label: 'Duplicate', icon: <CopyPlus />, onSelect: () => duplicate.mutate(p) },
+                {
+                  id: 'template',
+                  label: 'Save as template',
+                  icon: <BookmarkPlus />,
+                  disabled: !canSaveTemplates,
+                  description: canSaveTemplates ? undefined : 'Needs the settings.manage permission.',
+                  onSelect: () => setSavingTemplate(p),
+                },
+                ...(p.status === 'Archived' ? [{ id: 'restore', label: 'Restore as draft', icon: <ArchiveRestore />, onSelect: () => restore.mutate(p) }] : []),
+              ]}
               emptyState={
                 <EmptyState
                   icon={<LayoutTemplate />}
@@ -142,6 +183,7 @@ export function LandingPagesListPage() {
         )}
       </div>
       {creating && <CreatePageDialog initialTemplate={params.get('template') ?? undefined} onClose={() => setCreating(false)} />}
+      {savingTemplate && <SaveAsTemplateDialog kind="page" id={savingTemplate.id} defaultName={savingTemplate.name} onClose={() => setSavingTemplate(null)} />}
     </>
   );
 }

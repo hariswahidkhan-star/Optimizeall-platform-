@@ -1,5 +1,5 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { BadgeDollarSign, Plus, RefreshCw, Upload } from 'lucide-react';
+import { BadgeDollarSign, Network, Pencil, Plus, RefreshCw, Trash2, Upload } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
@@ -10,6 +10,7 @@ import {
   Card,
   CardBody,
   CardHeader,
+  ConfirmDialog,
   DataTable,
   DateTime,
   Dialog,
@@ -43,6 +44,7 @@ import {
   type OverviewRow,
 } from './api';
 import { AdsClientPicker, SourceBadge, count, daysAgo, kpiCells, money, ratio, times } from './shared';
+import { AccountEditDialog, CampaignDialog, CampaignStructureDialog } from './StructureDialogs';
 import './ads.css';
 
 function DateRange({ from, to, onFrom, onTo }: { from: string; to: string; onFrom: (v: string) => void; onTo: (v: string) => void }) {
@@ -140,6 +142,8 @@ export function AdAccountsPage() {
   const [clientId, setClientId] = useClientParam();
   const accounts = useAdAccounts(clientId);
   const [adding, setAdding] = useState(false);
+  const [editing, setEditing] = useState<AdAccount | null>(null);
+  const [deleting, setDeleting] = useState<AdAccount | null>(null);
   const toast = useToast();
   const queryClient = useQueryClient();
   const sync = useMutation({
@@ -212,12 +216,31 @@ export function AdAccountsPage() {
           rows={accounts.data ?? []}
           getRowId={(a) => a.id}
           rowLabel={(a) => a.name}
-          rowActions={(a) => [{ id: 'sync', label: 'Sync now', icon: <RefreshCw />, onSelect: () => sync.mutate(a) }]}
+          rowActions={(a) => [
+            { id: 'sync', label: 'Sync now', icon: <RefreshCw />, onSelect: () => sync.mutate(a) },
+            { id: 'edit', label: 'Edit / deactivate', icon: <Pencil />, onSelect: () => setEditing(a) },
+            { id: 'delete', label: 'Delete', icon: <Trash2 />, danger: true, onSelect: () => setDeleting(a) },
+          ]}
           loading={accounts.isLoading}
           emptyState={<EmptyState icon={<BadgeDollarSign />} headingLevel={2} title="No ad accounts" />}
         />
       )}
       {adding && <AddAccountDialog defaultClient={clientId} onClose={() => setAdding(false)} />}
+      {editing && <AccountEditDialog account={editing} onClose={() => setEditing(null)} />}
+      <ConfirmDialog
+        open={deleting !== null}
+        onClose={() => setDeleting(null)}
+        tone="danger"
+        title="Delete this ad account?"
+        description="Only accounts registered by mistake (no campaigns, imports or reported data) can be deleted. Otherwise deactivate the account so reporting keeps it."
+        confirmLabel="Delete account"
+        onConfirm={async () => {
+          if (!deleting) return;
+          await api.delete(`/agency/ads/accounts/${deleting.id}`);
+          toast.success('Ad account deleted');
+          void queryClient.invalidateQueries({ queryKey: adsKeys.all });
+        }}
+      />
     </>
   );
 }
@@ -311,6 +334,11 @@ export function AdAccountDetailPage() {
   });
   const d = query.data;
   const currency = d?.account.currency ?? 'USD';
+  const toast = useToast();
+  const queryClient = useQueryClient();
+  const [editingCampaign, setEditingCampaign] = useState<CampaignRow | 'new' | null>(null);
+  const [structureFor, setStructureFor] = useState<CampaignRow | null>(null);
+  const [deletingCampaign, setDeletingCampaign] = useState<CampaignRow | null>(null);
   const columns: DataTableColumn<CampaignRow>[] = [
     {
       id: 'name',
@@ -347,9 +375,14 @@ export function AdAccountDetailPage() {
         breadcrumbs={[{ label: 'Ad accounts', to: '/agency/ads/accounts' }, { label: d?.account.name ?? 'Account' }]}
         meta={d && <Badge>{PLATFORM_LABELS[d.account.platform]} · {d.account.currency}</Badge>}
         actions={
-          <ButtonLink to={`/agency/ads/import?account=${id}`} variant="secondary" leadingIcon={<Upload />}>
-            Import CSV
-          </ButtonLink>
+          <div className="cluster">
+            <ButtonLink to={`/agency/ads/import?account=${id}`} variant="secondary" leadingIcon={<Upload />}>
+              Import CSV
+            </ButtonLink>
+            <Button leadingIcon={<Plus />} onClick={() => setEditingCampaign('new')} disabled={!d}>
+              Plan a campaign
+            </Button>
+          </div>
         }
       />
       <div className="ad-toolbar">
@@ -403,11 +436,41 @@ export function AdAccountDetailPage() {
             columns={columns}
             rows={d.campaigns}
             getRowId={(c) => c.id}
+            rowLabel={(c) => c.name}
+            rowActions={(c) => [
+              { id: 'edit', label: 'Edit campaign', icon: <Pencil />, onSelect: () => setEditingCampaign(c) },
+              { id: 'structure', label: 'Ad groups & ads…', icon: <Network />, onSelect: () => setStructureFor(c) },
+              {
+                id: 'delete',
+                label: 'Delete',
+                icon: <Trash2 />,
+                danger: true,
+                disabled: c.source !== 'Plan' || c.totals.spend > 0,
+                description: c.source !== 'Plan' || c.totals.spend > 0 ? 'Has platform data — set its status to Removed instead.' : undefined,
+                onSelect: () => setDeletingCampaign(c),
+              },
+            ]}
             defaultSort={{ id: 'spend', desc: true }}
             emptyState={<EmptyState compact icon={<BadgeDollarSign />} headingLevel={3} title="No campaigns yet" />}
           />
         </div>
       )}
+      {editingCampaign && <CampaignDialog accountId={id} campaign={editingCampaign === 'new' ? null : editingCampaign} onClose={() => setEditingCampaign(null)} />}
+      {structureFor && d && <CampaignStructureDialog campaign={structureFor} clientId={d.account.clientAccountId} onClose={() => setStructureFor(null)} />}
+      <ConfirmDialog
+        open={deletingCampaign !== null}
+        onClose={() => setDeletingCampaign(null)}
+        tone="danger"
+        title="Delete this planned campaign?"
+        description="Its planned ad groups and ads are deleted too. Campaigns with platform data cannot be deleted."
+        confirmLabel="Delete campaign"
+        onConfirm={async () => {
+          if (!deletingCampaign) return;
+          await api.delete(`/agency/ads/campaigns/${deletingCampaign.id}`);
+          toast.success('Campaign deleted');
+          void queryClient.invalidateQueries({ queryKey: adsKeys.all });
+        }}
+      />
     </>
   );
 }

@@ -241,7 +241,7 @@ public sealed class SocialPostsController(
 
     public static async Task<IReadOnlyList<AwarenessDayDto>> AwarenessDaysAsync(AppDbContext db, DateTime from, DateTime to, string? country, CancellationToken ct)
     {
-        var all = await db.Set<SocialAwarenessDay>().AsNoTracking().ToListAsync(ct);
+        var all = await db.Set<SocialAwarenessDay>().AsNoTracking().Where(d => d.IsActive).ToListAsync(ct);
         var result = new List<AwarenessDayDto>();
         for (var year = from.Year; year <= to.Year; year++)
         {

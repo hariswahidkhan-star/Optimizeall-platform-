@@ -89,11 +89,12 @@ public sealed class TemplateService(
     EmailProviderResolver providers,
     IOptions<EmailOptions> emailOptions)
 {
-    public async Task<IReadOnlyList<TemplateListItem>> ListAsync(Guid? clientId, bool includeGlobal, CancellationToken ct)
+    public async Task<IReadOnlyList<TemplateListItem>> ListAsync(Guid? clientId, bool includeGlobal, CancellationToken ct, bool includeArchived = false)
     {
         await access.EnsureStaffWorkspaceAsync(clientId, ct);
         var key = Workspace.Key(clientId);
-        var q = db.Set<EmailTemplate>().AsNoTracking().Where(t => !t.IsArchived && (t.ScopeKey == key || (includeGlobal && t.ScopeKey == Workspace.AgencyKey)));
+        var q = db.Set<EmailTemplate>().AsNoTracking()
+            .Where(t => (includeArchived || !t.IsArchived) && (t.ScopeKey == key || (includeGlobal && t.ScopeKey == Workspace.AgencyKey)));
         return await q.OrderBy(t => t.ScopeKey == key ? 0 : 1).ThenBy(t => t.Category).ThenBy(t => t.Name)
             .Select(t => new TemplateListItem(t.Id, t.ClientAccountId, t.Name, t.Category, t.Subject, t.ClientAccountId == null, t.IsArchived, t.UpdatedAt))
             .ToListAsync(ct);
@@ -150,6 +151,18 @@ public sealed class TemplateService(
         audit.Record("email.template.duplicated", nameof(EmailTemplate), copy.Id, after: new { from = source.Id, copy.ScopeKey });
         await db.SaveChangesAsync(ct);
         return ToDto(copy);
+    }
+
+    public async Task<TemplateDto> RestoreAsync(Guid id, CancellationToken ct)
+    {
+        var template = await LoadAsync(id, ct);
+        if (template.IsArchived)
+        {
+            template.IsArchived = false;
+            audit.Record("email.template.restored", nameof(EmailTemplate), template.Id, after: new { template.Name });
+            await db.SaveChangesAsync(ct);
+        }
+        return ToDto(template);
     }
 
     public async Task ArchiveAsync(Guid id, CancellationToken ct)

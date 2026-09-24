@@ -46,6 +46,7 @@ public static class EmailMarketingModule
         // Features
         services.AddScoped<AutomationTriggers>();
         services.AddScoped<AudienceService>();
+        services.AddScoped<AudienceCatalogService>();
         services.AddScoped<ImportService>();
         services.AddScoped<SegmentQueryBuilder>();
         services.AddScoped<SegmentService>();

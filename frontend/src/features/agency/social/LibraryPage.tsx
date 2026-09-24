@@ -1,11 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Hash, Image as ImageIcon, Link2, Plus, Trash2, Upload } from 'lucide-react';
+import { Archive, ArchiveRestore, Hash, Image as ImageIcon, Link2, Pencil, Plus, Trash2, Upload } from 'lucide-react';
 import { useState } from 'react';
 import {
   Alert,
   Badge,
   Button,
   Checkbox,
+  ConfirmDialog,
   Dialog,
   EmptyState,
   FileDrop,
@@ -32,6 +33,7 @@ import {
   type SocialCampaign,
   type Snippet,
 } from './api';
+import { CampaignDialog, HashtagSetDialog, MediaEditDialog, SnippetDialog } from './LibraryDialogs';
 import { MediaImage } from './PostPreview';
 import { ClientPicker, useClientParam } from './shared';
 import './social.css';
@@ -66,13 +68,10 @@ function MediaTab({ clientId }: { clientId: string }) {
   const [search, setSearch] = useState('');
   const media = useMedia(clientId, search || undefined);
   const [adding, setAdding] = useState<'upload' | 'url' | null>(null);
+  const [editing, setEditing] = useState<Media | null>(null);
+  const [deleting, setDeleting] = useState<Media | null>(null);
   const queryClient = useQueryClient();
-  const toast = useToast();
-  const remove = useMutation({
-    mutationFn: (m: Media) => api.delete(`/agency/social/media/${m.id}`),
-    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ['social', 'media', clientId] }),
-    onError: (e) => toast.error('Not deleted', errorMessage(e)),
-  });
+  const refresh = () => void queryClient.invalidateQueries({ queryKey: ['social', 'media', clientId] });
   return (
     <div className="stack">
       <div className="cluster">
@@ -105,7 +104,10 @@ function MediaTab({ clientId }: { clientId: string }) {
                   {m.isPublic ? <Badge tone="info">Public URL</Badge> : <Badge>Private</Badge>}
                   {!m.altText && m.kind === 'Image' && <Badge tone="warning">No alt text</Badge>}
                 </span>
-                <IconButton size="sm" label={`Delete ${m.title}`} icon={<Trash2 />} onClick={() => remove.mutate(m)} />
+                <span className="cluster">
+                  <IconButton size="sm" label={`Edit ${m.title}`} icon={<Pencil />} onClick={() => setEditing(m)} />
+                  <IconButton size="sm" label={`Delete ${m.title}`} icon={<Trash2 />} onClick={() => setDeleting(m)} />
+                </span>
               </div>
             </li>
           ))}
@@ -113,6 +115,20 @@ function MediaTab({ clientId }: { clientId: string }) {
       )}
       {adding === 'upload' && <UploadDialog clientId={clientId} onClose={() => setAdding(null)} />}
       {adding === 'url' && <UrlDialog clientId={clientId} onClose={() => setAdding(null)} />}
+      {editing && <MediaEditDialog media={editing} onClose={() => setEditing(null)} onSaved={refresh} />}
+      <ConfirmDialog
+        open={deleting !== null}
+        onClose={() => setDeleting(null)}
+        tone="danger"
+        title="Delete this media item?"
+        description="Posts that still use it will fail validation until you choose other media. Published posts are not affected."
+        confirmLabel="Delete"
+        onConfirm={async () => {
+          if (!deleting) return;
+          await api.delete(`/agency/social/media/${deleting.id}`);
+          refresh();
+        }}
+      />
     </div>
   );
 }
@@ -270,17 +286,17 @@ function HashtagTab({ clientId }: { clientId: string }) {
     },
     onError: (e) => toast.error('Not saved', errorMessage(e)),
   });
-  const remove = useMutation({
-    mutationFn: (id: string) => api.delete(`/agency/social/hashtag-sets/${id}`),
-    onSuccess: () => void queryClient.invalidateQueries({ queryKey: socialKeys.hashtags(clientId) }),
-  });
+  const [editing, setEditing] = useState<HashtagSet | null>(null);
+  const [deleting, setDeleting] = useState<HashtagSet | null>(null);
+  const refresh = () => void queryClient.invalidateQueries({ queryKey: socialKeys.hashtags(clientId) });
   return (
     <div className="stack">
       <ul className="stack" style={{ listStyle: 'none', padding: 0 }}>
         {(sets.data ?? []).map((s) => (
           <li key={s.id} className="cluster">
             <strong>{s.name}:</strong> <span>{s.hashtags.join(' ')}</span>
-            <IconButton size="sm" label={`Delete ${s.name}`} icon={<Trash2 />} onClick={() => remove.mutate(s.id)} />
+            <IconButton size="sm" label={`Edit ${s.name}`} icon={<Pencil />} onClick={() => setEditing(s)} />
+            <IconButton size="sm" label={`Delete ${s.name}`} icon={<Trash2 />} onClick={() => setDeleting(s)} />
           </li>
         ))}
       </ul>
@@ -298,6 +314,20 @@ function HashtagTab({ clientId }: { clientId: string }) {
           Add hashtag set
         </Button>
       </div>
+      {editing && <HashtagSetDialog set={editing} onClose={() => setEditing(null)} onSaved={refresh} />}
+      <ConfirmDialog
+        open={deleting !== null}
+        onClose={() => setDeleting(null)}
+        tone="danger"
+        title="Delete this hashtag set?"
+        description={deleting ? `“${deleting.name}” is removed from the library. Posts keep the hashtags they already use.` : undefined}
+        confirmLabel="Delete"
+        onConfirm={async () => {
+          if (!deleting) return;
+          await api.delete(`/agency/social/hashtag-sets/${deleting.id}`);
+          refresh();
+        }}
+      />
     </div>
   );
 }
@@ -315,10 +345,9 @@ function SnippetTab({ clientId }: { clientId: string }) {
       void queryClient.invalidateQueries({ queryKey: socialKeys.snippets(clientId) });
     },
   });
-  const remove = useMutation({
-    mutationFn: (id: string) => api.delete(`/agency/social/snippets/${id}`),
-    onSuccess: () => void queryClient.invalidateQueries({ queryKey: socialKeys.snippets(clientId) }),
-  });
+  const [editing, setEditing] = useState<Snippet | null>(null);
+  const [deleting, setDeleting] = useState<Snippet | null>(null);
+  const refresh = () => void queryClient.invalidateQueries({ queryKey: socialKeys.snippets(clientId) });
   return (
     <div className="stack">
       <ul className="stack" style={{ listStyle: 'none', padding: 0 }}>
@@ -326,7 +355,8 @@ function SnippetTab({ clientId }: { clientId: string }) {
           <li key={s.id} className="stack" style={{ gap: 2 }}>
             <span className="cluster">
               <strong>{s.name}</strong>
-              <IconButton size="sm" label={`Delete ${s.name}`} icon={<Trash2 />} onClick={() => remove.mutate(s.id)} />
+              <IconButton size="sm" label={`Edit ${s.name}`} icon={<Pencil />} onClick={() => setEditing(s)} />
+              <IconButton size="sm" label={`Delete ${s.name}`} icon={<Trash2 />} onClick={() => setDeleting(s)} />
             </span>
             <p className="sm-pre sm-muted">{s.body}</p>
           </li>
@@ -343,52 +373,89 @@ function SnippetTab({ clientId }: { clientId: string }) {
           Add snippet
         </Button>
       </div>
+      {editing && <SnippetDialog snippet={editing} onClose={() => setEditing(null)} onSaved={refresh} />}
+      <ConfirmDialog
+        open={deleting !== null}
+        onClose={() => setDeleting(null)}
+        tone="danger"
+        title="Delete this snippet?"
+        description={deleting ? `“${deleting.name}” is removed from the library.` : undefined}
+        confirmLabel="Delete"
+        onConfirm={async () => {
+          if (!deleting) return;
+          await api.delete(`/agency/social/snippets/${deleting.id}`);
+          refresh();
+        }}
+      />
     </div>
   );
 }
 
 function CampaignTab({ clientId }: { clientId: string }) {
-  const campaigns = useSocialCampaigns(clientId);
-  const [name, setName] = useState('');
-  const [utmCampaign, setUtmCampaign] = useState('');
-  const [utmMedium, setUtmMedium] = useState('');
+  const [showArchived, setShowArchived] = useState(false);
+  const campaigns = useSocialCampaigns(clientId, showArchived);
+  const [editing, setEditing] = useState<SocialCampaign | 'new' | null>(null);
+  const [deleting, setDeleting] = useState<SocialCampaign | null>(null);
   const queryClient = useQueryClient();
-  const create = useMutation({
-    mutationFn: () =>
-      api.post<SocialCampaign>(`/agency/social/clients/${clientId}/campaigns`, { name, utmCampaign, utmMedium: utmMedium || null }),
-    onSuccess: () => {
-      setName('');
-      setUtmCampaign('');
-      void queryClient.invalidateQueries({ queryKey: socialKeys.campaigns(clientId) });
+  const toast = useToast();
+  const refresh = () => void queryClient.invalidateQueries({ queryKey: socialKeys.campaigns(clientId) });
+  const archive = useMutation({
+    mutationFn: (c: SocialCampaign) =>
+      api.post<SocialCampaign>(`/agency/social/campaigns/${c.id}/${c.isArchived ? 'restore' : 'archive'}`, { concurrencyStamp: c.concurrencyStamp }),
+    onSuccess: (c) => {
+      toast.success(c.isArchived ? 'Campaign archived' : 'Campaign restored', c.name);
+      refresh();
     },
+    onError: (e) => toast.error('Not changed', errorMessage(e)),
   });
+  const rows = campaigns.data ?? [];
   return (
     <div className="stack">
       <p className="sm-muted">When a post has “Append UTM parameters” on, links get utm_source = network, utm_medium and utm_campaign from its campaign.</p>
-      <ul className="stack" style={{ listStyle: 'none', padding: 0 }}>
-        {(campaigns.data ?? []).map((c) => (
-          <li key={c.id}>
-            <strong>{c.name}</strong> — utm_campaign={c.utmCampaign}
-            {c.utmMedium ? `, utm_medium=${c.utmMedium}` : ''}
-          </li>
-        ))}
-      </ul>
-      <div className="sm-grid-stats">
-        <FormField label="Campaign name">
-          <Input value={name} onChange={(e) => setName(e.target.value)} />
-        </FormField>
-        <FormField label="utm_campaign">
-          <Input value={utmCampaign} onChange={(e) => setUtmCampaign(e.target.value)} />
-        </FormField>
-        <FormField label="utm_medium" optional>
-          <Input value={utmMedium} onChange={(e) => setUtmMedium(e.target.value)} />
-        </FormField>
-      </div>
-      <div>
-        <Button leadingIcon={<Plus />} disabled={!name || !utmCampaign} loading={create.isPending} onClick={() => create.mutate()}>
-          Add campaign
+      <div className="cluster">
+        <Button leadingIcon={<Plus />} onClick={() => setEditing('new')}>
+          New campaign
         </Button>
+        <Checkbox label="Show archived campaigns" checked={showArchived} onChange={(e) => setShowArchived(e.target.checked)} />
       </div>
+      {rows.length === 0 ? (
+        <EmptyState compact headingLevel={3} title="No campaigns" description="Group posts by campaign to tag their links with UTM parameters." />
+      ) : (
+        <ul className="stack" style={{ listStyle: 'none', padding: 0 }}>
+          {rows.map((c) => (
+            <li key={c.id} className="cluster">
+              <span>
+                <strong>{c.name}</strong> — utm_campaign={c.utmCampaign}
+                {c.utmMedium ? `, utm_medium=${c.utmMedium}` : ''}
+                {c.utmSource ? `, utm_source=${c.utmSource}` : ''}
+              </span>
+              {c.isArchived && <Badge>Archived</Badge>}
+              <IconButton size="sm" label={`Edit ${c.name}`} icon={<Pencil />} onClick={() => setEditing(c)} />
+              <IconButton
+                size="sm"
+                label={c.isArchived ? `Restore ${c.name}` : `Archive ${c.name}`}
+                icon={c.isArchived ? <ArchiveRestore /> : <Archive />}
+                onClick={() => archive.mutate(c)}
+              />
+              <IconButton size="sm" label={`Delete ${c.name}`} icon={<Trash2 />} onClick={() => setDeleting(c)} />
+            </li>
+          ))}
+        </ul>
+      )}
+      {editing && <CampaignDialog clientId={clientId} campaign={editing === 'new' ? null : editing} onClose={() => setEditing(null)} onSaved={refresh} />}
+      <ConfirmDialog
+        open={deleting !== null}
+        onClose={() => setDeleting(null)}
+        tone="danger"
+        title="Delete this campaign?"
+        description="Only campaigns no post uses can be deleted; archive a used campaign instead so its posts keep their UTM values."
+        confirmLabel="Delete"
+        onConfirm={async () => {
+          if (!deleting) return;
+          await api.delete(`/agency/social/campaigns/${deleting.id}`);
+          refresh();
+        }}
+      />
     </div>
   );
 }

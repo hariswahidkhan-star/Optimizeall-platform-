@@ -54,11 +54,11 @@ public sealed class ManualEnrollRequest
 /// <summary>Journey authoring: validated step graphs, activation checks and per-step statistics.</summary>
 public sealed class AutomationService(AppDbContext db, EmailAccess access, IAuditLogger audit, AutomationTriggers triggers)
 {
-    public async Task<IReadOnlyList<AutomationListItem>> ListAsync(Guid? clientId, CancellationToken ct)
+    public async Task<IReadOnlyList<AutomationListItem>> ListAsync(Guid? clientId, CancellationToken ct, bool includeArchived = false)
     {
         await access.EnsureStaffWorkspaceAsync(clientId, ct);
         var key = Workspace.Key(clientId);
-        var automations = await db.Set<Automation>().AsNoTracking().Where(a => a.ScopeKey == key && a.Status != AutomationStatus.Archived)
+        var automations = await db.Set<Automation>().AsNoTracking().Where(a => a.ScopeKey == key && (includeArchived || a.Status != AutomationStatus.Archived))
             .OrderBy(a => a.Name).ToListAsync(ct);
         var ids = automations.Select(a => a.Id).ToList();
         var counts = await db.Set<AutomationEnrollment>().AsNoTracking().Where(e => ids.Contains(e.AutomationId))
@@ -115,6 +115,50 @@ public sealed class AutomationService(AppDbContext db, EmailAccess access, IAudi
         audit.Record("email.automation.status_changed", nameof(Automation), automation.Id, new { Status = before }, new { Status = status });
         await db.SaveChangesAsync(ct);
         return await ToDtoAsync(automation, ct);
+    }
+
+    /// <summary>Brings an archived journey back as Paused (it must be activated again, which re-validates it).</summary>
+    public async Task<AutomationDto> RestoreAsync(Guid id, CancellationToken ct)
+    {
+        var automation = await LoadAsync(id, ct);
+        if (automation.Status != AutomationStatus.Archived)
+            throw DomainException.Conflict("email.automation_not_archived", "Only archived journeys can be restored.");
+        automation.Status = AutomationStatus.Paused;
+        audit.Record("email.automation.restored", nameof(Automation), automation.Id, new { Status = AutomationStatus.Archived }, new { automation.Status });
+        await db.SaveChangesAsync(ct);
+        return await ToDtoAsync(automation, ct);
+    }
+
+    /// <summary>Copies a journey (trigger, goal and steps) into a new draft of the same workspace.</summary>
+    public async Task<AutomationDto> DuplicateAsync(Guid id, CancellationToken ct)
+    {
+        var source = await LoadAsync(id, ct);
+        var copy = new Automation
+        {
+            ClientAccountId = source.ClientAccountId, ScopeKey = source.ScopeKey, Name = Text.Truncate(source.Name + " (copy)", 150),
+            Description = source.Description, Status = AutomationStatus.Draft, Trigger = source.Trigger, TriggerConfigJson = source.TriggerConfigJson,
+            Reentry = source.Reentry, ReentryCooldownDays = source.ReentryCooldownDays, GoalJson = source.GoalJson, SenderProfileId = source.SenderProfileId,
+            EntryStepKey = source.EntryStepKey,
+        };
+        db.Set<Automation>().Add(copy);
+        ReplaceSteps(copy, await StepsAsync(source.Id, ct));
+        audit.Record("email.automation.duplicated", nameof(Automation), copy.Id, after: new { From = source.Id, copy.Name });
+        await db.SaveChangesAsync(ct);
+        return await ToDtoAsync(copy, ct);
+    }
+
+    /// <summary>Deletes a journey nobody ever entered (drafts made by mistake). Journeys with history are archived instead.</summary>
+    public async Task DeleteAsync(Guid id, CancellationToken ct)
+    {
+        var automation = await LoadAsync(id, ct);
+        if (automation.Status == AutomationStatus.Active)
+            throw DomainException.Conflict("email.automation_active", "Pause or archive the journey before deleting it.");
+        if (await db.Set<AutomationEnrollment>().AnyAsync(e => e.AutomationId == id, ct))
+            throw DomainException.Conflict("email.automation_has_history", "Contacts have entered this journey; archive it instead so its statistics are kept.");
+        await db.Set<AutomationStep>().Where(s => s.AutomationId == id).ExecuteDeleteAsync(ct);
+        db.Remove(automation);
+        audit.Record("email.automation.deleted", nameof(Automation), id, before: new { automation.Name, automation.Status });
+        await db.SaveChangesAsync(ct);
     }
 
     public async Task<IReadOnlyList<EnrollmentDto>> EnrollmentsAsync(Guid id, CancellationToken ct)

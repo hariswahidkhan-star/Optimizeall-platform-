@@ -1,5 +1,5 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Ear, Inbox, Plus, RefreshCw, Trophy } from 'lucide-react';
+import { Ear, Inbox, Pause, Pencil, Play, Plus, RefreshCw, Trash2, Trophy } from 'lucide-react';
 import { useState } from 'react';
 import {
   Alert,
@@ -8,12 +8,15 @@ import {
   Card,
   CardBody,
   CardHeader,
+  Checkbox,
+  ConfirmDialog,
   DataTable,
   DateTime,
   Dialog,
   EmptyState,
   ErrorState,
   FormField,
+  IconButton,
   Input,
   LineChart,
   PageHeader,
@@ -108,6 +111,18 @@ export function ListeningPage() {
     mutationFn: ({ id, value }: { id: string; value: Sentiment }) => api.put(`/agency/social/listening/mentions/${id}/sentiment`, { sentiment: value }),
     onSuccess: () => void refresh(),
   });
+  const [editingQuery, setEditingQuery] = useState<ListeningQuery | null>(null);
+  const [deletingQuery, setDeletingQuery] = useState<ListeningQuery | null>(null);
+  const [deletingMention, setDeletingMention] = useState<Mention | null>(null);
+  const toggleQuery = useMutation({
+    mutationFn: (q: ListeningQuery) =>
+      api.put<ListeningQuery>(`/agency/social/listening/queries/${q.id}`, { term: q.term, networks: q.networks, isActive: !q.isActive, concurrencyStamp: q.concurrencyStamp }),
+    onSuccess: (q) => {
+      toast.success(q.isActive ? 'Tracking resumed' : 'Tracking paused', q.term);
+      void refresh();
+    },
+    onError: (e) => toast.error('Not changed', errorMessage(e)),
+  });
 
   const columns: DataTableColumn<Mention>[] = [
     {
@@ -128,12 +143,14 @@ export function ListeningPage() {
     { id: 'sentiment', header: 'Sentiment', cell: (m) => <SentimentBadge sentiment={m.sentiment} automatic={m.sentimentSource === 'Automatic'} /> },
     { id: 'source', header: 'Source', hideOnMobile: true, cell: (m) => (m.source === 'Api' ? 'Provider' : 'Logged manually') },
   ];
-  const menu = (m: Mention): MenuEntry[] =>
-    (['Positive', 'Neutral', 'Negative'] as Sentiment[]).map((s) => ({
+  const menu = (m: Mention): MenuEntry[] => [
+    ...(['Positive', 'Neutral', 'Negative'] as Sentiment[]).map((s) => ({
       id: s,
       label: `Tag as ${s.toLowerCase()}`,
       onSelect: () => tag.mutate({ id: m.id, value: s }),
-    }));
+    })),
+    { id: 'delete', label: 'Delete mention', icon: <Trash2 />, danger: true, onSelect: () => setDeletingMention(m) },
+  ];
 
   return (
     <>
@@ -171,14 +188,23 @@ export function ListeningPage() {
           <Card as="section" aria-labelledby="sm-queries">
             <CardHeader title="Tracked terms" titleId="sm-queries" />
             <CardBody className="stack">
-              <div className="cluster">
+              <ul className="stack" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                 {(queries.data ?? []).map((q) => (
-                  <Badge key={q.id} tone="brand">
-                    {q.kind === 'Keyword' ? `“${q.term}”` : q.term}
-                  </Badge>
+                  <li key={q.id} className="cluster">
+                    <Badge tone={q.isActive ? 'brand' : 'neutral'}>{q.kind === 'Keyword' ? `“${q.term}”` : q.term}</Badge>
+                    {!q.isActive && <span className="sm-muted">paused</span>}
+                    <IconButton size="sm" label={`Edit ${q.term}`} icon={<Pencil />} onClick={() => setEditingQuery(q)} />
+                    <IconButton
+                      size="sm"
+                      label={q.isActive ? `Pause ${q.term}` : `Resume ${q.term}`}
+                      icon={q.isActive ? <Pause /> : <Play />}
+                      onClick={() => toggleQuery.mutate(q)}
+                    />
+                    <IconButton size="sm" label={`Stop tracking ${q.term}`} icon={<Trash2 />} onClick={() => setDeletingQuery(q)} />
+                  </li>
                 ))}
-                {(queries.data?.length ?? 0) === 0 && <span className="sm-muted">No tracked terms yet.</span>}
-              </div>
+                {(queries.data?.length ?? 0) === 0 && <li className="sm-muted">No tracked terms yet.</li>}
+              </ul>
               <div className="cluster">
                 <FormField label="Type">
                   <Select
@@ -231,7 +257,85 @@ export function ListeningPage() {
         </div>
       )}
       {logging && clientId && <LogMentionDialog clientId={clientId} onClose={() => setLogging(false)} onSaved={() => void refresh()} />}
+      {editingQuery && <QueryDialog query={editingQuery} onClose={() => setEditingQuery(null)} onSaved={() => void refresh()} />}
+      <ConfirmDialog
+        open={deletingQuery !== null}
+        onClose={() => setDeletingQuery(null)}
+        tone="danger"
+        title="Stop tracking this term?"
+        description="Mentions already logged are kept. Pause it instead to stop syncing temporarily."
+        confirmLabel="Stop tracking"
+        onConfirm={async () => {
+          if (!deletingQuery) return;
+          await api.delete(`/agency/social/listening/queries/${deletingQuery.id}`);
+          void refresh();
+        }}
+      />
+      <ConfirmDialog
+        open={deletingMention !== null}
+        onClose={() => setDeletingMention(null)}
+        tone="danger"
+        title="Delete this mention?"
+        description="It is removed from the mention log and the sentiment summary."
+        confirmLabel="Delete"
+        onConfirm={async () => {
+          if (!deletingMention) return;
+          await api.delete(`/agency/social/listening/mentions/${deletingMention.id}`);
+          void refresh();
+        }}
+      />
     </>
+  );
+}
+
+export function QueryDialog({ query, onClose, onSaved }: { query: ListeningQuery; onClose: () => void; onSaved: () => void }) {
+  const [term, setTerm] = useState(query.term);
+  const [networks, setNetworks] = useState<SocialNetwork[]>(query.networks);
+  const [isActive, setIsActive] = useState(query.isActive);
+  const save = useMutation({
+    mutationFn: () => api.put(`/agency/social/listening/queries/${query.id}`, { term, networks, isActive, concurrencyStamp: query.concurrencyStamp }),
+    onSuccess: () => {
+      onSaved();
+      onClose();
+    },
+  });
+  return (
+    <Dialog
+      open
+      onClose={onClose}
+      title="Edit tracked term"
+      footer={
+        <>
+          <Button variant="secondary" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button loading={save.isPending} disabled={term.trim().length < 2} onClick={() => save.mutate()}>
+            Save
+          </Button>
+        </>
+      }
+    >
+      <div className="stack">
+        {save.isError && <Alert tone="danger">{errorMessage(save.error)}</Alert>}
+        <FormField label="Term" hint={query.kind === 'Hashtag' ? 'Saved as a hashtag.' : query.kind === 'CompetitorHandle' ? 'Saved as an @handle.' : undefined}>
+          <Input value={term} maxLength={150} onChange={(e) => setTerm(e.target.value)} />
+        </FormField>
+        <fieldset className="stack" style={{ border: 0, padding: 0, margin: 0 }}>
+          <legend>Networks (none = all)</legend>
+          <div className="cluster">
+            {NETWORKS.map((n) => (
+              <Checkbox
+                key={n}
+                label={NETWORK_LABELS[n]}
+                checked={networks.includes(n)}
+                onChange={(e) => setNetworks(e.target.checked ? [...networks, n] : networks.filter((x) => x !== n))}
+              />
+            ))}
+          </div>
+        </fieldset>
+        <Checkbox label="Active (included in syncs)" checked={isActive} onChange={(e) => setIsActive(e.target.checked)} />
+      </div>
+    </Dialog>
   );
 }
 
@@ -546,6 +650,10 @@ export function CompetitorsPage() {
   const [network, setNetwork] = useState<SocialNetwork>('Instagram');
   const [handle, setHandle] = useState('');
   const [snapshotFor, setSnapshotFor] = useState<Competitor | null>(null);
+  const [editingCompetitor, setEditingCompetitor] = useState<Competitor | null>(null);
+  const [historyFor, setHistoryFor] = useState<Competitor | null>(null);
+  const [deletingCompetitor, setDeletingCompetitor] = useState<Competitor | null>(null);
+  const refreshCompetitors = () => void queryClient.invalidateQueries({ queryKey: socialKeys.competitors(clientId ?? '') });
   const add = useMutation({
     mutationFn: () => api.post(`/agency/social/clients/${clientId}/competitors`, { name, network, handle }),
     onSuccess: () => {
@@ -590,7 +698,12 @@ export function CompetitorsPage() {
             ]}
             rows={list}
             getRowId={(c) => c.id}
-            rowActions={(c) => [{ id: 'snap', label: 'Record snapshot…', onSelect: () => setSnapshotFor(c) }]}
+            rowActions={(c) => [
+              { id: 'snap', label: 'Record snapshot…', onSelect: () => setSnapshotFor(c) },
+              { id: 'history', label: 'Snapshots…', disabled: c.snapshots.length === 0, onSelect: () => setHistoryFor(c) },
+              { id: 'edit', label: 'Edit', icon: <Pencil />, onSelect: () => setEditingCompetitor(c) },
+              { id: 'delete', label: 'Stop tracking', icon: <Trash2 />, danger: true, onSelect: () => setDeletingCompetitor(c) },
+            ]}
             rowLabel={(c) => c.name}
             loading={competitors.isLoading}
             emptyState={<EmptyState compact icon={<Trophy />} headingLevel={3} title="No competitors tracked" />}
@@ -618,7 +731,104 @@ export function CompetitorsPage() {
           onSaved={() => void queryClient.invalidateQueries({ queryKey: socialKeys.competitors(clientId ?? '') })}
         />
       )}
+      {editingCompetitor && <CompetitorDialog competitor={editingCompetitor} onClose={() => setEditingCompetitor(null)} onSaved={refreshCompetitors} />}
+      {historyFor && (
+        <SnapshotHistoryDialog
+          competitor={list.find((c) => c.id === historyFor.id) ?? historyFor}
+          onClose={() => setHistoryFor(null)}
+          onChanged={refreshCompetitors}
+        />
+      )}
+      <ConfirmDialog
+        open={deletingCompetitor !== null}
+        onClose={() => setDeletingCompetitor(null)}
+        tone="danger"
+        title="Stop tracking this competitor?"
+        description="The competitor and all of its snapshots are removed from benchmarking."
+        confirmLabel="Stop tracking"
+        onConfirm={async () => {
+          if (!deletingCompetitor) return;
+          await api.delete(`/agency/social/competitors/${deletingCompetitor.id}`);
+          refreshCompetitors();
+        }}
+      />
     </>
+  );
+}
+
+export function CompetitorDialog({ competitor, onClose, onSaved }: { competitor: Competitor; onClose: () => void; onSaved: () => void }) {
+  const [form, setForm] = useState({ name: competitor.name, network: competitor.network, handle: competitor.handle, profileUrl: competitor.profileUrl ?? '' });
+  const save = useMutation({
+    mutationFn: () =>
+      api.put(`/agency/social/competitors/${competitor.id}`, { ...form, profileUrl: form.profileUrl || null, concurrencyStamp: competitor.concurrencyStamp }),
+    onSuccess: () => {
+      onSaved();
+      onClose();
+    },
+  });
+  return (
+    <Dialog
+      open
+      onClose={onClose}
+      title="Edit competitor"
+      footer={
+        <>
+          <Button variant="secondary" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button loading={save.isPending} disabled={!form.name || !form.handle} onClick={() => save.mutate()}>
+            Save
+          </Button>
+        </>
+      }
+    >
+      <div className="stack">
+        {save.isError && <Alert tone="danger">{errorMessage(save.error)}</Alert>}
+        <FormField label="Name" required>
+          <Input value={form.name} maxLength={200} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+        </FormField>
+        <FormField label="Network">
+          <Select value={form.network} onChange={(e) => setForm({ ...form, network: e.target.value as SocialNetwork })} options={networkOptions} />
+        </FormField>
+        <FormField label="Handle" required>
+          <Input value={form.handle} maxLength={150} onChange={(e) => setForm({ ...form, handle: e.target.value })} />
+        </FormField>
+        <FormField label="Profile URL" optional>
+          <Input type="url" value={form.profileUrl} onChange={(e) => setForm({ ...form, profileUrl: e.target.value })} />
+        </FormField>
+      </div>
+    </Dialog>
+  );
+}
+
+function SnapshotHistoryDialog({ competitor, onClose, onChanged }: { competitor: Competitor; onClose: () => void; onChanged: () => void }) {
+  const toast = useToast();
+  const remove = useMutation({
+    mutationFn: (id: string) => api.delete(`/agency/social/competitors/${competitor.id}/snapshots/${id}`),
+    onSuccess: () => {
+      toast.success('Snapshot deleted');
+      onChanged();
+    },
+    onError: (e) => toast.error('Not deleted', errorMessage(e)),
+  });
+  return (
+    <Dialog open onClose={onClose} title={`Snapshots — ${competitor.name}`}>
+      {competitor.snapshots.length === 0 ? (
+        <p className="sm-muted">No snapshots left.</p>
+      ) : (
+        <ul className="stack" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+          {[...competitor.snapshots].reverse().map((s) => (
+            <li key={s.id} className="cluster">
+              <span>
+                {s.date}: {formatNumber(s.followers)} followers{s.engagementRate != null ? ` · ${percent(s.engagementRate)}` : ''}
+              </span>
+              <SourceLabel label={s.sourceLabel} />
+              <IconButton size="sm" label={`Delete snapshot of ${s.date}`} icon={<Trash2 />} onClick={() => remove.mutate(s.id)} />
+            </li>
+          ))}
+        </ul>
+      )}
+    </Dialog>
   );
 }
 

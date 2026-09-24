@@ -191,6 +191,45 @@ public sealed class SeoLinksController(
         return NoContent();
     }
 
+    /// <summary>Edits a backlink's URLs, anchor text or rel. Changing a URL resets the check status.</summary>
+    [HttpPut("backlinks/{id:guid}")]
+    public async Task<BacklinkDto> UpdateBacklink(Guid id, BacklinkRequest request, CancellationToken ct)
+    {
+        var row = await access.OwnedAsync<SeoBacklink>(id, b => b.ClientAccountId, "Backlink", ct);
+        var site = await db.Set<SeoSite>().AsNoTracking().FirstAsync(s => s.Id == row.SiteId, ct);
+        var source = request.SourceUrl.Trim();
+        var target = request.TargetUrl.Trim();
+        if (!Uri.TryCreate(source, UriKind.Absolute, out var su) || SafeHttpFetcher.ValidateUrl(su) is not null)
+            throw new DomainException("validation.failed", "The source URL must be an absolute http(s) URL.",
+                errors: new Dictionary<string, string[]> { ["sourceUrl"] = new[] { "Enter an absolute http(s) URL." } });
+        if (!Uri.TryCreate(target, UriKind.Absolute, out var tu) || SafeHttpFetcher.ValidateUrl(tu) is not null)
+            throw new DomainException("validation.failed", "The target URL must be an absolute http(s) URL.",
+                errors: new Dictionary<string, string[]> { ["targetUrl"] = new[] { "Enter an absolute http(s) URL." } });
+        if (!RegistrableDomain.SameSite(tu.Host, site.Domain.Split(':')[0]))
+            throw new DomainException("validation.failed", $"The target must be on {site.Domain}.",
+                errors: new Dictionary<string, string[]> { ["targetUrl"] = new[] { $"The target must be on {site.Domain}." } });
+        var hash = Normalization.Sha256Hex(BacklinkChecker.Comparable(source) + "\n" + BacklinkChecker.Comparable(target));
+        if (hash != row.LinkHash && await db.Set<SeoBacklink>().AnyAsync(b => b.SiteId == row.SiteId && b.LinkHash == hash && b.Id != row.Id, ct))
+            throw DomainException.Conflict("seo.backlink_exists", "This backlink is already listed.");
+        var before = new { row.SourceUrl, row.TargetUrl, row.AnchorText, row.Rel };
+        if (hash != row.LinkHash)
+        {
+            row.Status = BacklinkStatus.Unchecked;
+            row.LastCheckedAt = null;
+            row.LastStatusCode = null;
+            row.CheckMessage = null;
+        }
+        row.SourceUrl = source;
+        row.TargetUrl = target;
+        row.LinkHash = hash;
+        row.AnchorText = string.IsNullOrWhiteSpace(request.AnchorText) ? null : request.AnchorText.Trim();
+        row.Rel = string.IsNullOrWhiteSpace(request.Rel) ? null : request.Rel.Trim();
+        if (request.FirstSeenAt is { } seen) row.FirstSeenAt = seen.ToUniversalTime();
+        audit.Record("seo.backlink_updated", nameof(SeoBacklink), row.Id, before, new { row.SourceUrl, row.TargetUrl, row.AnchorText, row.Rel });
+        await db.SaveChangesAsync(ct);
+        return ToDto(row);
+    }
+
     /// <summary>Checks this site's due backlinks now (up to 25; the daily job checks the rest).</summary>
     [HttpPost("sites/{siteId:guid}/backlinks/check")]
     public async Task<object> CheckBacklinks(Guid siteId, CancellationToken ct)
@@ -216,6 +255,7 @@ public sealed class SeoLinksController(
         var row = new SeoOutreachProspect { SiteId = site.Id, ClientAccountId = site.ClientAccountId };
         Apply(row, request);
         db.Add(row);
+        audit.Record("seo.outreach_added", nameof(SeoOutreachProspect), row.Id, after: new { row.ProspectUrl, row.Status });
         await db.SaveChangesAsync(ct);
         return ToDto(row);
     }
@@ -229,7 +269,9 @@ public sealed class SeoLinksController(
             if (stamp != row.ConcurrencyStamp) throw DomainException.Conflict("concurrency.conflict", "This prospect was changed by someone else. Reload and try again.");
             db.Entry(row).Property(o => o.ConcurrencyStamp).OriginalValue = stamp;
         }
+        var before = new { row.Status };
         Apply(row, request);
+        audit.Record("seo.outreach_updated", nameof(SeoOutreachProspect), row.Id, before, new { row.Status });
         await db.SaveChangesAsync(ct);
         return ToDto(row);
     }
@@ -239,6 +281,7 @@ public sealed class SeoLinksController(
     {
         var row = await access.OwnedAsync<SeoOutreachProspect>(id, o => o.ClientAccountId, "Prospect", ct);
         db.Remove(row);
+        audit.Record("seo.outreach_deleted", nameof(SeoOutreachProspect), id, before: new { row.ProspectUrl, row.Status });
         await db.SaveChangesAsync(ct);
         return NoContent();
     }

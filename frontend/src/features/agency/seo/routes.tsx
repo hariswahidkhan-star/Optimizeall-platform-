@@ -8,6 +8,7 @@ const AuditResultsPage = lazyPage(() => import('./AuditResultsPage'), 'AuditResu
 const OnPageAnalyzerPage = lazyPage(() => import('./OnPageAnalyzerPage'), 'OnPageAnalyzerPage');
 const SeoSitePage = lazyPage(() => import('./SeoSitePage'), 'SeoSitePage');
 const SeoSitesPage = lazyPage(() => import('./SeoSitesPage'), 'SeoSitesPage');
+const SeoSettingsPage = lazyPage(() => import('./SeoSettingsPage'), 'SeoSettingsPage');
 
 /** Every SEO page calls seo.manage APIs. */
 const seo: PermissionRequirement = { anyOf: [Permissions.SeoManage] };
@@ -26,6 +27,7 @@ export const nav: PortalNavItem[] = [
 export const routes: RouteObject[] = [
   { path: 'seo', element: <SeoSitesPage />, handle: { requires: seo } },
   { path: 'seo/analyzer', element: <OnPageAnalyzerPage />, handle: { requires: seo } },
+  { path: 'seo/settings', element: <SeoSettingsPage />, handle: { requires: seo } },
   { path: 'seo/sites/:siteId', element: <SeoSitePage />, handle: { requires: seo } },
   { path: 'seo/audits/:auditId', element: <AuditResultsPage />, handle: { requires: seo } },
 ];

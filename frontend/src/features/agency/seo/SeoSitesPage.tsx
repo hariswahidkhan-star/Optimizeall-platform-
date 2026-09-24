@@ -1,5 +1,5 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Globe, Plus, ScanSearch } from 'lucide-react';
+import { Globe, Plus, ScanSearch, Settings2 } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import {
@@ -76,6 +76,9 @@ export function SeoSitesPage() {
         description="Site audits, keyword rankings, backlinks, local SEO and content briefs for every client site."
         actions={
           <>
+            <ButtonLink to="settings" variant="ghost" leadingIcon={<Settings2 />}>
+              Settings
+            </ButtonLink>
             <ButtonLink to="analyzer" variant="secondary" leadingIcon={<ScanSearch />}>
               On-page analyzer
             </ButtonLink>

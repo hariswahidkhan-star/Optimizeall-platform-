@@ -354,6 +354,49 @@ export interface Submission {
   consentText: string | null;
   eventPublished: boolean;
   files: { id: string; fieldKey: string; fileName: string; contentType: string; sizeBytes: number }[];
+  /** Follow-up state (absent on older payloads = New). */
+  status?: SubmissionStatus;
+  note?: string | null;
+  statusChangedAt?: IsoDateTime | null;
+}
+
+export type SubmissionStatus = 'New' | 'InProgress' | 'Done' | 'Spam';
+
+/** Page template as managed in the template library (`GET /agency/pages/admin/templates`). */
+export interface PageTemplateAdmin {
+  key: string;
+  name: string;
+  category: string;
+  description: string;
+  metaTitle: string;
+  metaDescription: string;
+  formTemplateKey: string | null;
+  blockCount: number;
+  sortOrder: number;
+  isActive: boolean;
+  isCustom: boolean;
+  isCustomized: boolean;
+  pagesUsing: number;
+  concurrencyStamp: string;
+}
+
+/** Form template as managed in the template library (`GET /agency/pages/admin/form-templates`). */
+export interface FormTemplateAdmin {
+  key: string;
+  name: string;
+  description: string;
+  schema: FormSchema;
+  submitLabel: string;
+  successMessage: string;
+  consentText: string | null;
+  autoresponderSubject: string | null;
+  autoresponderBody: string | null;
+  sortOrder: number;
+  isActive: boolean;
+  isCustom: boolean;
+  isCustomized: boolean;
+  formsUsing: number;
+  concurrencyStamp: string;
 }
 
 export interface EmbedInfo {
@@ -406,4 +449,6 @@ export const pageKeys = {
   forms: (params: object) => ['agency', 'pages', 'forms', params] as const,
   form: (id: string) => ['agency', 'pages', 'form', id] as const,
   submissions: (id: string, params: object) => ['agency', 'pages', 'form', id, 'submissions', params] as const,
+  adminTemplates: ['agency', 'pages', 'admin', 'templates'] as const,
+  adminFormTemplates: ['agency', 'pages', 'admin', 'form-templates'] as const,
 };

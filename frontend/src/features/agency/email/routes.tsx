@@ -10,6 +10,7 @@ import { CampaignsPage } from './campaigns/CampaignsPage';
 const ListDetailPage = lazyPage(() => import('./audience/ListDetailPage'), 'ListDetailPage');
 const ListsPage = lazyPage(() => import('./audience/ListsPage'), 'ListsPage');
 const SubscriberPage = lazyPage(() => import('./audience/SubscriberPage'), 'SubscriberPage');
+const TagsFieldsPage = lazyPage(() => import('./audience/TagsFieldsPage'), 'TagsFieldsPage');
 const AutomationEditorPage = lazyPage(
   () => import('./automations/AutomationEditorPage'),
   'AutomationEditorPage',
@@ -66,6 +67,7 @@ export const routes: RouteObject[] = [
       { path: 'lists', element: <ListsPage /> },
       { path: 'lists/:id', element: <ListDetailPage /> },
       { path: 'contacts/:id', element: <SubscriberPage /> },
+      { path: 'tags', element: <TagsFieldsPage /> },
       { path: 'segments', element: <SegmentsPage /> },
       { path: 'segments/new', element: <SegmentEditorPage /> },
       { path: 'segments/:id', element: <SegmentEditorPage /> },
