@@ -136,6 +136,35 @@ public sealed class CampaignTests(ApiFactory api) : IClassFixture<ApiFactory>
     }
 
     [Fact]
+    public async Task The_budget_cannot_be_lowered_below_what_was_already_spent()
+    {
+        var (_, manager) = await kit.ManagerAsync();
+        var body = kit.CampaignBody("Budget floor " + Guid.NewGuid().ToString("N")[..6]);
+        body["budgetAmount"] = 100m;
+        var campaign = await kit.CreateCampaignAsync(manager, body);
+        var p = await kit.ParticipantAsync();
+        var (_, reviewer) = await kit.ReviewerAsync();
+        (await CampaignTestKit.DecideAsync(reviewer, await kit.SubmitOkAsync(p, campaign.Id), "Approve")).EnsureSuccessStatusCode();
+
+        var dto = await CampaignTestKit.GetJsonAsync(manager, $"/api/v1/admin/campaigns/{campaign.Id}");
+        Assert.Equal(5m, dto.GetProperty("spent").GetDecimal());
+        var update = kit.CampaignBody((string)body["title"]!);
+        update.Remove("rewardRules");
+        update["concurrencyStamp"] = dto.GetProperty("concurrencyStamp").GetGuid();
+        update["confirm"] = true;
+        update["reason"] = "Client cut the budget";
+
+        update["budgetAmount"] = 4.99m;
+        await (await manager.PutAsJsonAsync($"/api/v1/admin/campaigns/{campaign.Id}", update))
+            .ShouldFailAsync(400, "campaign.budget_below_spent");
+
+        // Exactly the spent amount is allowed: it stops further spending.
+        update["budgetAmount"] = 5m;
+        var stopped = await (await manager.PutAsJsonAsync($"/api/v1/admin/campaigns/{campaign.Id}", update)).ReadJsonAsync();
+        Assert.Equal(0m, stopped.GetProperty("budgetRemaining").GetDecimal());
+    }
+
+    [Fact]
     public async Task Status_transitions_follow_the_lifecycle()
     {
         var (_, manager) = await kit.ManagerAsync();
@@ -437,6 +466,35 @@ public sealed class CampaignTests(ApiFactory api) : IClassFixture<ApiFactory>
         })).ReadJsonAsync();
         Assert.Equal(2m, draftPreview.GetProperty("total").GetDecimal());
         Assert.Equal("daily_cap", draftPreview.GetProperty("appliedCaps")[0].GetString());
+    }
+
+    [Fact]
+    public async Task A_rule_change_based_on_an_outdated_version_is_refused_instead_of_replacing_the_newer_one()
+    {
+        var (_, manager) = await kit.ManagerAsync();
+        var (_, manager2) = await kit.ManagerAsync();
+        var campaign = await kit.CreateCampaignAsync(manager, publish: false);
+        object Rules(decimal amount, string reason, int? baseVersion) => new
+        {
+            currency = "USD", rules = new object[] { new { type = "BaseRate", amount } }, reason, confirm = true, baseVersion,
+        };
+        string Url() => $"/api/v1/admin/campaigns/{campaign.Id}/reward-rules";
+
+        // Both managers opened version 1; the first one saves version 2.
+        var v2 = await (await manager.PostAsJsonAsync(Url(), Rules(6m, "First editor", 1))).ReadJsonAsync();
+        Assert.Equal(2, v2.GetProperty("version").GetInt32());
+
+        // The second manager's save, still based on version 1, must not silently replace version 2.
+        await (await manager2.PostAsJsonAsync(Url(), Rules(7m, "Second editor", 1))).ShouldFailAsync(409, "reward.version_conflict");
+        var versions = await CampaignTestKit.GetJsonAsync(manager, Url());
+        Assert.Equal(new[] { 2, 1 }, versions.EnumerateArray().Select(v => v.GetProperty("version").GetInt32()));
+        Assert.Equal(6m, versions[0].GetProperty("rules")[0].GetProperty("amount").GetDecimal());
+
+        // Based on the latest version it saves; clients that send no base version keep appending as before.
+        var v3 = await (await manager2.PostAsJsonAsync(Url(), Rules(7m, "Second editor", 2))).ReadJsonAsync();
+        Assert.Equal(3, v3.GetProperty("version").GetInt32());
+        var v4 = await (await manager.PostAsJsonAsync(Url(), Rules(8m, "No base version", null))).ReadJsonAsync();
+        Assert.Equal(4, v4.GetProperty("version").GetInt32());
     }
 
     public static IEnumerable<object[]> StaffEndpoints() => new[]

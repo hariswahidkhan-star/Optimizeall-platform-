@@ -55,6 +55,13 @@ public sealed class CreateRewardRuleSetRequest : RewardRuleSetInput
 
     /// <summary>Must be true: changing rates is a sensitive action.</summary>
     public bool Confirm { get; set; }
+
+    /// <summary>
+    /// The version the editor was showing (optional). When set and a newer version has been saved since, the request is
+    /// refused with 409 reward.version_conflict instead of silently replacing the other person's change.
+    /// </summary>
+    [Range(0, int.MaxValue)]
+    public int? BaseVersion { get; set; }
 }
 
 public sealed class RewardPreviewRequest

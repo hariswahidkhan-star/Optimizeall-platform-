@@ -296,6 +296,17 @@ jobs:
           E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-participant
         run: scripts/e2e-journeys.sh
 
+      # Campaign manager + reviewer journey: editor sections, assets, disclosures, versioned reward rules, preview,
+      # publish/schedule, lifecycle, duplicate, invitation + landing page, A/B experiment, review queue races, live
+      # checks, appeals, stats, analytics and the negatives (budget, caps, archived, 403s, 409s). Baseline + Demo, SQLite.
+      - name: Campaign manager + reviewer journey (scripts/e2e-journeys.sh, E2E_SUITE=j-campaigns, SQLite)
+        env:
+          E2E_SUITE: j-campaigns
+          E2E_DB_PROVIDER: sqlite
+          E2E_SKIP_BUILD: "1"
+          E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-campaigns
+        run: scripts/e2e-journeys.sh
+
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v4
@@ -327,6 +338,8 @@ jobs:
             ${{ runner.temp }}/e2e-crawl/web.log
             ${{ runner.temp }}/e2e-j-participant/api.log
             ${{ runner.temp }}/e2e-j-participant/web.log
+            ${{ runner.temp }}/e2e-j-campaigns/api.log
+            ${{ runner.temp }}/e2e-j-campaigns/web.log
             ${{ runner.temp }}/web-smoke.log
           retention-days: 7
           if-no-files-found: ignore

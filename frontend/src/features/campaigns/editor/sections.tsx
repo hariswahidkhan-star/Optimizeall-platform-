@@ -308,6 +308,7 @@ export function TargetingSection({ form, set, errors, disabled }: SectionProps) 
           <TagInput
             value={form.countries}
             itemLabel="country"
+            itemLabelPlural="countries"
             disabled={disabled}
             normalize={(s) => (/^[A-Za-z]{2}$/.test(s.trim()) ? s.trim().toUpperCase() : '')}
             onChange={(countries) => set({ countries })}

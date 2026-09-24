@@ -82,6 +82,9 @@ export class ApiSession {
   put<T>(path: string, body?: unknown) {
     return send<T>('PUT', path, { token: this.token, body: body ?? {} });
   }
+  delete<T>(path: string) {
+    return send<T>('DELETE', path, { token: this.token });
+  }
   upload<T>(path: string, form: FormData) {
     return send<T>('POST', path, { token: this.token, form });
   }

@@ -147,6 +147,37 @@ public sealed class InvitationLandingTests(ApiFactory api) : IClassFixture<ApiFa
     }
 
     [Fact]
+    public async Task Links_of_an_ended_campaign_or_with_a_passed_expiry_can_still_be_renamed_and_switched_off()
+    {
+        var (managerUser, manager) = await api.CreateClientAsync(Role.CampaignManager);
+        var campaign = await api.CreateCampaignAsync(managerUser.Id);
+        var link = await manager.PostJsonAsync("/api/v1/marketing/invitations",
+            new { name = "Summer", campaignId = campaign.Id, expiresAt = DateTime.UtcNow.AddMinutes(10) });
+        var id = link.GetProperty("id").GetGuid();
+
+        // The campaign ends and the link's expiry passes.
+        await api.WithDbAsync(db => db.Set<Campaign>().Where(c => c.Id == campaign.Id)
+            .ExecuteUpdateAsync(s => s.SetProperty(c => c.Status, CampaignStatus.Ended)));
+        await api.WithDbAsync(db => db.Set<InvitationLink>().Where(i => i.Id == id)
+            .ExecuteUpdateAsync(s => s.SetProperty(i => i.ExpiresAt, DateTime.UtcNow.AddMinutes(-5))));
+        var stored = (await (await manager.GetAsync($"/api/v1/marketing/invitations/{id}")).ReadJsonAsync())
+            .GetProperty("expiresAt").GetDateTime();
+
+        var closed = await (await manager.PutAsJsonAsync($"/api/v1/marketing/invitations/{id}",
+            new { name = "Summer (closed)", campaignId = campaign.Id, expiresAt = stored, isActive = false })).ReadJsonAsync();
+        Assert.Equal("Summer (closed)", closed.GetProperty("name").GetString());
+        Assert.False(closed.GetProperty("isActive").GetBoolean());
+
+        // Re-activating it for the ended campaign, or moving the expiry into the past, is still refused.
+        await (await manager.PutAsJsonAsync($"/api/v1/marketing/invitations/{id}",
+                new { name = "Summer", campaignId = campaign.Id, expiresAt = stored, isActive = true }))
+            .ShouldFailAsync(400, "invitation.campaign_closed");
+        await (await manager.PutAsJsonAsync($"/api/v1/marketing/invitations/{id}",
+                new { name = "Summer", campaignId = campaign.Id, expiresAt = DateTime.UtcNow.AddDays(-2), isActive = false }))
+            .ShouldFailAsync(400, "invitation.expiry_in_past");
+    }
+
+    [Fact]
     public async Task Public_campaign_landing_serves_only_live_public_campaigns()
     {
         var manager = await api.CreateUserAsync(new[] { Role.CampaignManager });

@@ -14,6 +14,8 @@ export interface TagInputProps {
   disabled?: boolean;
   /** Noun for the remove buttons, e.g. "topic". */
   itemLabel?: string;
+  /** Plural noun for the list of selected tags; defaults to itemLabel + "s" (pass it for e.g. "countries"). */
+  itemLabelPlural?: string;
   invalid?: boolean;
   'aria-describedby'?: string;
 }
@@ -31,6 +33,7 @@ export function TagInput({
   max,
   disabled,
   itemLabel = 'item',
+  itemLabelPlural = `${itemLabel}s`,
   invalid,
   'aria-describedby': describedBy,
 }: TagInputProps) {
@@ -60,7 +63,7 @@ export function TagInput({
   return (
     <div className="mg-tags">
       {value.length > 0 && (
-        <ul className="mg-tags__list" aria-label={`Selected ${itemLabel}s`}>
+        <ul className="mg-tags__list" aria-label={`Selected ${itemLabelPlural}`}>
           {value.map((tag) => (
             <li key={tag}>
               <Badge tone="brand">

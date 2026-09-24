@@ -149,6 +149,11 @@ public sealed class RewardRulesService(
 
         var previous = await db.Set<RewardRuleSet>().AsNoTracking().Include(s => s.Rules)
             .Where(s => s.CampaignId == campaignId).OrderByDescending(s => s.Version).FirstOrDefaultAsync(ct);
+        // Checked under the campaign lock, so of two editors who opened the same version only the first one saves.
+        if (request.BaseVersion is { } baseVersion && baseVersion != (previous?.Version ?? 0))
+            throw DomainException.Conflict("reward.version_conflict",
+                $"Someone else saved new reward rules (version {previous?.Version ?? 0}) after you opened version {baseVersion}. " +
+                "Reload to see them, then make your change again.");
         var set = RewardRuleSetFactory.Build(request, campaignId, (previous?.Version ?? 0) + 1, Now, currentUser.Id, request.Reason);
         RewardEngine.EnsureValid(set);
 
