@@ -11,6 +11,8 @@ export const FINANCE_ERROR_MESSAGES: Record<string, string> = {
   'concurrency.conflict':
     'Someone else changed this while you were looking at it. Refresh to see the latest version, then try again.',
   'request.confirm_required': 'This action needs an explicit confirmation. Please confirm and try again.',
+  'auth.impersonation_forbidden_action':
+    'This can’t be done while you are viewing as another user. Exit “view as” and use your own account.',
   'user.not_found': 'We couldn’t find that user. Check the user id.',
   'submission.not_found': 'We couldn’t find that submission.',
   'supportticket.not_found': 'We couldn’t find that support ticket.',
@@ -35,7 +37,9 @@ export const FINANCE_ERROR_MESSAGES: Record<string, string> = {
   'ledger.cannot_reverse_reversal': 'A reversal can’t itself be reversed.',
   'ledger.cannot_reverse_debit': 'Debits can’t be reversed. Create a positive adjustment instead.',
   'ledger.declined': 'Declined earnings were never payable, so there is nothing to reverse.',
-  'ledger.self_approval': 'You created this earning, so a different finance user must approve or decline it.',
+  'ledger.self_approval':
+    'You created this earning (or it is credited to you), so a different finance user must approve or decline it.',
+  'ledger.self_adjustment': 'You can’t create an adjustment on your own account. Ask another finance user.',
   'ledger.awaiting_live_check':
     'This reward is waiting for the post’s live check. It can be approved once the check has passed.',
   'ledger.not_pending': 'This earning is no longer pending — someone else may have decided it already.',
@@ -81,6 +85,10 @@ export const FINANCE_ERROR_MESSAGES: Record<string, string> = {
   'payout.cannot_cancel': 'Completed or cancelled batches can’t be cancelled.',
   'payout.has_paid_items': 'This batch already has paid items, so it can’t be cancelled.',
   'payout.self_finalize': 'A different finance user must finalize a batch you prepared.',
+  'payout.conflict_of_interest':
+    'You are paid in this batch, or you created or approved one of its earnings, so a different finance user must finalize it.',
+  'payout.self_record':
+    'The system prepared this batch and you finalized it, so a different finance user must record its payments.',
   'payout.batch_not_finalized': 'This is only possible for finalized batches.',
   'payout.paid_at_in_future': 'The payment date can’t be in the future.',
   'payout.invalid_reference': 'Enter a valid payment reference (3–120 characters).',
@@ -94,7 +102,10 @@ export function financeErrorMessage(error: unknown): string {
   if (isApiError(error)) {
     const known = FINANCE_ERROR_MESSAGES[error.code];
     if (known) return known;
-    if (error.status === 403) return FINANCE_ERROR_MESSAGES['auth.forbidden']!;
+    // A missing permission gets the generic text; any other 403 is a specific refusal (segregation of duties, four-eyes,
+    // conflict of interest…) whose reason the server states — never tell that user to ask for more access.
+    if (error.status === 403 && (error.code === 'auth.forbidden' || error.code.startsWith('http_')))
+      return FINANCE_ERROR_MESSAGES['auth.forbidden']!;
     const fields = error.errors ? Object.values(error.errors).flat() : [];
     if (error.status === 400 && fields.length > 0) return fields.join(' ');
     return error.title;

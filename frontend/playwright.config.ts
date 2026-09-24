@@ -39,12 +39,18 @@ import { defineConfig, devices } from '@playwright/test';
  * calls, error boundaries and pages without an h1. It never saves anything, so its roles run in parallel
  * (E2E_CRAWL_WORKERS, default 2) on desktop only. Run it with `E2E_SUITE=crawl E2E_DB_PROVIDER=sqlite
  * scripts/e2e-journeys.sh`; each role's visited pages, empty states and findings land in test-results/crawl/.
+ * The j-finance suite walks the finance money journey end to end (ledger, four-eyes adjustments, FX, holds, schedule,
+ * a payout batch from preparation to reconciliation, the payments hub's incoming flows and the negative paths) against
+ * the Demo seed. Its steps build on each other: serial, one worker, no retries, desktop only. Run it with
+ * `E2E_SUITE=j-finance E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
  */
 const suite = process.env.E2E_SUITE ?? 'smoke';
 /** Suites whose mobile project runs only responsive.spec.ts (and whose desktop project runs everything else). */
 const responsiveSplit = suite === 'agency' || suite === 'platform';
 /** Full-stack suites share one database and build on earlier steps: serial, one worker, no retries. */
-const journeys = suite === 'journeys' || responsiveSplit;
+/** The finance money journey (serial like the journeys, desktop only: its screens are covered on phones elsewhere). */
+const finance = suite === 'j-finance';
+const journeys = suite === 'journeys' || responsiveSplit || finance;
 /** The crawl is read-only: roles run in parallel, desktop only. */
 const crawl = suite === 'crawl';
 const mobileOnly = responsiveSplit ? /responsive\.spec\.ts$/ : /participant\.spec\.ts$/;
@@ -70,6 +76,9 @@ export default defineConfig({
     // The crawl presses buttons it does not know; a covered one must fail fast, not hang until the test times out.
     ...(crawl ? { actionTimeout: 10_000, navigationTimeout: 20_000 } : {}),
     screenshot: 'only-on-failure',
+    // The finance journey types dates and times into datetime-local inputs (browser time) and compares them with UTC
+    // periods: its browsers run in UTC so the arithmetic is the same on every machine.
+    ...(finance ? { timezoneId: 'UTC', locale: 'en-US' } : {}),
   },
   projects: [
     {
@@ -77,7 +86,7 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
       ...(responsiveSplit ? { testIgnore: mobileOnly } : {}),
     },
-    ...(a11y || crawl
+    ...(a11y || crawl || finance
       ? []
       : [
           {
