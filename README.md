@@ -47,6 +47,7 @@ scripts/e2e-journeys.sh        # full-stack Playwright journeys (participant, re
 E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh                   # same, on a throwaway SQLite file (no MySQL)
 E2E_SUITE=agency E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh  # agency platform journeys on the Demo seed
 E2E_SUITE=crawl E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh   # every role walks every page + public site links
+E2E_SUITE=j-admin E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh # platform administration end to end (users, roles, login-as…)
 ```
 
 Integration tests boot the real API against a freshly migrated, uniquely named database per test class (MySQL, or SQLite

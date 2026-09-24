@@ -65,6 +65,28 @@ describe('Dialog', () => {
 });
 
 describe('ConfirmDialog', () => {
+  it('confirming inside another form never submits that form (React events bubble through the portal)', async () => {
+    // Regression: the CMS page editor renders its version history (and so "Restore version?") inside the page form;
+    // confirming the restore also saved the page, which then made the restore itself fail with a 409.
+    const user = userEvent.setup();
+    const outerSubmit = vi.fn((e: React.FormEvent) => e.preventDefault());
+    const onConfirm = vi.fn();
+    render(
+      <form aria-label="Page editor" onSubmit={outerSubmit}>
+        <ConfirmDialog
+          open
+          onClose={() => {}}
+          onConfirm={onConfirm}
+          title="Restore version 1?"
+          confirmLabel="Restore"
+        />
+      </form>,
+    );
+    await user.click(screen.getByRole('button', { name: 'Restore' }));
+    await waitFor(() => expect(onConfirm).toHaveBeenCalledTimes(1));
+    expect(outerSubmit).not.toHaveBeenCalled();
+  });
+
   it('requires the typed phrase and a reason, then passes the reason', async () => {
     const user = userEvent.setup();
     const onConfirm = vi.fn();

@@ -273,6 +273,16 @@ jobs:
           E2E_WORK_DIR: ${{ runner.temp }}/e2e-lead-to-cash
         run: scripts/e2e-journeys.sh
 
+      # The platform-administration journey end to end (users, suspensions, built-in and custom roles with guardrails,
+      # test accounts and "log in as", audit, settings, content, jobs, global search and negatives), Demo seed, SQLite.
+      - name: Admin journey (scripts/e2e-journeys.sh, E2E_SUITE=j-admin, SQLite)
+        env:
+          E2E_SUITE: j-admin
+          E2E_DB_PROVIDER: sqlite
+          E2E_SKIP_BUILD: "1"
+          E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-admin
+        run: scripts/e2e-journeys.sh
+
       # Accessibility & responsive audit (docs/ACCESSIBILITY.md): every portal's representative pages at 360/768/1280 px
       # with axe (WCAG 2.2 A/AA, light and dark contrast) and no horizontal scroll, plus keyboard/focus behaviour.
       - name: Accessibility audit (scripts/e2e-journeys.sh, E2E_SUITE=a11y, SQLite)
@@ -355,6 +365,8 @@ jobs:
             ${{ runner.temp }}/e2e-platform/web.log
             ${{ runner.temp }}/e2e-j-delivery/api.log
             ${{ runner.temp }}/e2e-j-delivery/web.log
+            ${{ runner.temp }}/e2e-j-admin/api.log
+            ${{ runner.temp }}/e2e-j-admin/web.log
             ${{ runner.temp }}/e2e-a11y/api.log
             ${{ runner.temp }}/e2e-a11y/web.log
             ${{ runner.temp }}/e2e-crawl/api.log

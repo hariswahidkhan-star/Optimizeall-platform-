@@ -142,7 +142,8 @@ Browse everything at **`/design-system`** (dev server, or builds with `VITE_SHOW
   `status 0 / code "network_error"`.
 * `lib/api/meta.ts` — `useSupportedCurrencies(current?)` (`GET /meta/currencies`; use it for every currency picker, never
   hard-code the list) and `useEligibilityDefaults()`. `lib/api/campaignOptions.ts` — `useCampaignOptions(search?)`
-  (`GET /campaigns/options`, `campaigns.view`) for staff campaign filters/pickers.
+  (`GET /campaigns/options`: `campaigns.view`, `campaigns.manage`, `ledger.view` or `submissions.review`) for staff
+  campaign filters/pickers.
 * `lib/api/query.ts` — QueryClient defaults: never retry 4xx, up to 2 retries otherwise, 30 s stale time.
 
 `AuthProvider` (inside the router) restores the session on load via a silent refresh (guards show a full-page
@@ -232,6 +233,13 @@ npm run e2e          # Playwright smoke suite (desktop-chromium + mobile-chromiu
 * Accessibility: `E2E_SUITE=a11y E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh` audits every portal's representative
   pages at 360/768/1280 px (axe WCAG 2.2 A/AA in the light and dark theme, no horizontal scroll) plus keyboard/focus
   behaviour. Conformance, known exceptions and the patterns to use are in [`docs/ACCESSIBILITY.md`](ACCESSIBILITY.md).
+* `E2E_SUITE=j-admin` (run it with `E2E_SUITE=j-admin E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`) walks platform
+  administration end to end on the Demo seed: user search/filters, suspend/reactivate and built-in role changes (the
+  person's sessions end on their next request), custom roles from every permission area with their guardrails (client/
+  staff mixing, a delegated role manager who can't escalate) and the portal/nav each role lands in, test users of every
+  role via the sign-in page's test accounts panel, "log in as" (banner on portal and public pages, blocked actions, exit,
+  audit), settings, portal texts, email templates, CMS page versions and scheduling, announcements, FAQ order, jobs,
+  notification deliveries, Ctrl+K search scoping, and negatives (403s, stale stamps, double submits, boundary values).
 * `E2E_SUITE=crawl` (run it with `E2E_SUITE=crawl E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`) signs in as every
   demo role and visits every nav link, in-page sub-nav link and tab of its portals, the first detail page of each list
   and each page's safe primary actions (opened, then cancelled — it never submits), then every public header/footer

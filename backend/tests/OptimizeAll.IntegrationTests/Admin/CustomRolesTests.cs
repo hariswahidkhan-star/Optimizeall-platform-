@@ -72,6 +72,28 @@ public sealed class CustomRolesTests(ApiFactory api) : IClassFixture<ApiFactory>
     }
 
     [Fact]
+    public async Task Campaign_options_serve_every_page_with_a_campaign_picker_for_custom_role_holders()
+    {
+        // The ledger (ledger.view), the review queue (submissions.review) and the manager portal (campaigns.manage) all
+        // filter by campaign through GET /campaigns/options: a custom role granting just that page must be able to load it.
+        var (_, admin) = await AdminAsync();
+        foreach (var permission in new[] { Permissions.LedgerView, Permissions.SubmissionsReview, Permissions.CampaignsManage })
+        {
+            var user = await api.CreateUserAsync(Array.Empty<Role>());
+            var client = await api.LoginAsync(user);
+            await (await client.GetAsync("/api/v1/campaigns/options")).ShouldFailAsync(403);
+            await AssignAsync(admin, await CreateRoleAsync(admin, permission), user.Id);
+            (await client.GetAsync("/api/v1/campaigns/options")).EnsureSuccessStatusCode();
+        }
+
+        // Pages without a campaign picker don't open it.
+        var crmOnly = await api.CreateUserAsync(Array.Empty<Role>());
+        var crmClient = await api.LoginAsync(crmOnly);
+        await AssignAsync(admin, await CreateRoleAsync(admin, Permissions.CrmView), crmOnly.Id);
+        await (await crmClient.GetAsync("/api/v1/campaigns/options")).ShouldFailAsync(403);
+    }
+
+    [Fact]
     public async Task Effective_permissions_are_the_union_with_built_in_roles()
     {
         var (_, admin) = await AdminAsync();

@@ -141,7 +141,7 @@ offending field in the problem's `errors` dictionary with a camelCase key, e.g.
 `budgetCurrency` (`campaign.budget_currency_mismatch`), `budgetAmount` (`campaign.budget_change_unconfirmed` on
 update), `trackingDestinationUrl`, `heroImageUrl`, `platforms`, `eligibility.countries`, `categoryId`, `slug`.
 
-### GET /campaigns/options?search= — `campaigns.view`
+### GET /campaigns/options?search= — any of `campaigns.view`, `campaigns.manage`, `ledger.view`, `submissions.review`
 Lightweight list for staff filters and pickers (reviewers, finance, managers): `[{ "id": "…", "title": "…", "status": "Active" }]`,
 newest first, at most 500. `search` matches title or slug (use it to reach campaigns beyond the newest 500).
 
