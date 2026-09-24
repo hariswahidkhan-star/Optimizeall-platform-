@@ -17,7 +17,11 @@ export { expect, test } from '../../platform/support/platform';
  * journey asserts is known exactly: the Demo participants' earnings land in the same batches, but the assertions only
  * ever look at the journey's own participants (or at sums the API itself reports).
  */
-const demo = (email: string, displayName: string): Credentials => ({ email, password: DEMO_PASSWORD, displayName });
+const demo = (email: string, displayName: string): Credentials => ({
+  email,
+  password: DEMO_PASSWORD,
+  displayName,
+});
 
 export const accounts = {
   /** Finance 1 (Fatima Al-Mansoori): prepares batches, creates adjustments, records payments. */
@@ -63,7 +67,12 @@ export interface FinanceState {
 
 export const STATE_FILE = join(dirname(fileURLToPath(import.meta.url)), '..', '.state', 'j-finance.json');
 /** Values one spec hands to the next (batch ids, item ids…), merged into the state file. */
-export const SHARED_FILE = join(dirname(fileURLToPath(import.meta.url)), '..', '.state', 'j-finance-shared.json');
+export const SHARED_FILE = join(
+  dirname(fileURLToPath(import.meta.url)),
+  '..',
+  '.state',
+  'j-finance-shared.json',
+);
 
 export function writeState(state: FinanceState) {
   mkdirSync(dirname(STATE_FILE), { recursive: true });

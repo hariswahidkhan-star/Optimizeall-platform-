@@ -46,20 +46,27 @@ async function openInvoice(api: ApiSession, reference: string, amount: number): 
     reference,
     lines: [{ description: `Negative paths ${reference}`, quantity: 1, unitPrice: amount }],
   });
-  return api.post<Invoice>(`/agency/billing/invoices/${draft.id}/issue`, { concurrencyStamp: draft.concurrencyStamp });
+  return api.post<Invoice>(`/agency/billing/invoices/${draft.id}/issue`, {
+    concurrencyStamp: draft.concurrencyStamp,
+  });
 }
 
 async function searchPayments(page: Page, term: string) {
   const loaded = page.waitForResponse((res) => {
     const url = new URL(res.url());
-    return url.pathname === '/api/v1/admin/payments' && (url.searchParams.get('search') ?? '') === term && res.ok();
+    return (
+      url.pathname === '/api/v1/admin/payments' && (url.searchParams.get('search') ?? '') === term && res.ok()
+    );
   });
   await page.getByRole('searchbox', { name: 'Search payments' }).fill(term);
   await loaded;
 }
 
 function balanceRow(page: Page) {
-  return page.getByRole('table', { name: 'Payments' }).getByRole('row').filter({ hasText: 'Invoice balance due' });
+  return page
+    .getByRole('table', { name: 'Payments' })
+    .getByRole('row')
+    .filter({ hasText: 'Invoice balance due' });
 }
 
 test('a billing-only user works incoming payments but cannot see or touch payouts', async ({ as }) => {
@@ -87,8 +94,16 @@ test('a billing-only user works incoming payments but cannot see or touch payout
     ['GET', `/finance/payout-batches/${batch1Id}/reconciliation`, undefined],
     ['GET', `/finance/payout-batches/${batch1Id}/payment-instructions.csv?confirm=true`, undefined],
     ['GET', '/finance/ledger', undefined],
-    ['POST', `/admin/payments/payouts/${danItemId}/mark-paid`, { paymentReference: 'NOPE-123', paidAt: new Date().toISOString() }],
-    ['POST', `/admin/payments/payout-batches/${batch1Id}/mark-paid`, { paymentReference: 'NOPE-123', paidAt: new Date().toISOString(), confirm: true }],
+    [
+      'POST',
+      `/admin/payments/payouts/${danItemId}/mark-paid`,
+      { paymentReference: 'NOPE-123', paidAt: new Date().toISOString() },
+    ],
+    [
+      'POST',
+      `/admin/payments/payout-batches/${batch1Id}/mark-paid`,
+      { paymentReference: 'NOPE-123', paidAt: new Date().toISOString(), confirm: true },
+    ],
     ['POST', '/finance/holds', { userId: s().participants.ben.id, reason: 'Not allowed' }],
   ] as const) {
     const res = await raw(api.token, method, path, body);
@@ -109,7 +124,10 @@ test('a billing-only user works incoming payments but cannot see or touch payout
   expect(summary.incoming).not.toBeNull();
 
   // The UI matches: the finance portal shows Payments only, without payout KPIs or filters.
-  const page = await as({ email: clerk.email, password: clerk.password, displayName: clerk.displayName }, /\/(agency|finance)(\/|$)/);
+  const page = await as(
+    { email: clerk.email, password: clerk.password, displayName: clerk.displayName },
+    /\/(agency|finance)(\/|$)/,
+  );
   const errors = watchErrors(page);
   await page.goto('/finance/payments');
   await expect(page.getByRole('heading', { level: 1, name: 'Payments' })).toBeVisible();
@@ -121,7 +139,9 @@ test('a billing-only user works incoming payments but cannot see or touch payout
   await expect(totals.getByRole('group', { name: 'Received this month' })).toBeVisible();
   await expect(totals.getByRole('group', { name: 'Payouts due' })).toHaveCount(0);
   await expect(page.getByRole('combobox', { name: 'Direction' })).toHaveCount(0);
-  await expect(page.getByRole('table', { name: 'Payments' }).getByRole('row').filter({ hasText: 'Participant payout' })).toHaveCount(0);
+  await expect(
+    page.getByRole('table', { name: 'Payments' }).getByRole('row').filter({ hasText: 'Participant payout' }),
+  ).toHaveCount(0);
   errors.expectClean('the payments hub (billing clerk)');
 });
 
@@ -145,13 +165,17 @@ test('an admin viewing as a finance user is refused every money action, and told
 
   await admin.goto('/finance/payments');
   await searchPayments(admin, inv.number);
-  await balanceRow(admin).getByRole('button', { name: /^Actions for / }).click();
+  await balanceRow(admin)
+    .getByRole('button', { name: /^Actions for / })
+    .click();
   await admin.getByRole('menuitem', { name: 'Record payment' }).click();
   const dialog = modal(admin, 'Record a payment');
   await dialog.getByLabel('Amount (USD)').fill('120');
   await dialog.getByLabel('Reference').fill(`IMP-${s().runId}-1`);
   await dialog.getByRole('button', { name: 'Record payment' }).click();
-  await expect(dialog.getByRole('alert')).toContainText('not available while you are viewing as another user');
+  await expect(dialog.getByRole('alert')).toContainText(
+    'not available while you are viewing as another user',
+  );
   await dialog.getByRole('button', { name: 'Cancel' }).click();
 
   // Every other money write is refused for the impersonation token too (403 auth.impersonation_forbidden_action).
@@ -163,10 +187,40 @@ test('an admin viewing as a finance user is refused every money action, and told
   const token = started.accessToken;
   const detail = await api.get<{ concurrencyStamp: string }>(`/finance/payout-batches/${batch1Id}`);
   for (const [method, path, body] of [
-    ['POST', `/admin/payments/invoices/${inv.id}/payments`, { requestId: crypto.randomUUID(), amount: 1, method: 'BankTransfer', reference: 'IMP-2', paidOn: today(), concurrencyStamp: inv.concurrencyStamp }],
-    ['POST', `/admin/payments/payouts/${danItemId}/mark-paid`, { paymentReference: 'IMP-123', paidAt: new Date().toISOString() }],
-    ['POST', '/finance/adjustments', { requestId: crypto.randomUUID(), userId: s().participants.ben.id, amount: 5, currency: 'USD', reason: 'Impersonated credit attempt', confirm: true }],
-    ['POST', `/finance/payout-batches/${batch1Id}/finalize`, { confirm: true, concurrencyStamp: detail.concurrencyStamp }],
+    [
+      'POST',
+      `/admin/payments/invoices/${inv.id}/payments`,
+      {
+        requestId: crypto.randomUUID(),
+        amount: 1,
+        method: 'BankTransfer',
+        reference: 'IMP-2',
+        paidOn: today(),
+        concurrencyStamp: inv.concurrencyStamp,
+      },
+    ],
+    [
+      'POST',
+      `/admin/payments/payouts/${danItemId}/mark-paid`,
+      { paymentReference: 'IMP-123', paidAt: new Date().toISOString() },
+    ],
+    [
+      'POST',
+      '/finance/adjustments',
+      {
+        requestId: crypto.randomUUID(),
+        userId: s().participants.ben.id,
+        amount: 5,
+        currency: 'USD',
+        reason: 'Impersonated credit attempt',
+        confirm: true,
+      },
+    ],
+    [
+      'POST',
+      `/finance/payout-batches/${batch1Id}/finalize`,
+      { confirm: true, concurrencyStamp: detail.concurrencyStamp },
+    ],
     ['GET', `/finance/payout-batches/${batch1Id}/payment-instructions.csv?confirm=true`, undefined],
   ] as const) {
     const res = await raw(token, method, path, body);
@@ -187,7 +241,9 @@ test('the session expires while the dialog is open: sign in again, nothing was r
   const finance1 = await as(accounts.finance1, FINANCE_LANDING);
   await finance1.goto('/finance/payments');
   await searchPayments(finance1, inv.number);
-  await balanceRow(finance1).getByRole('button', { name: /^Actions for / }).click();
+  await balanceRow(finance1)
+    .getByRole('button', { name: /^Actions for / })
+    .click();
   await finance1.getByRole('menuitem', { name: 'Record payment' }).click();
   let dialog = modal(finance1, 'Record a payment');
   await dialog.getByLabel('Amount (USD)').fill('75.25');
@@ -215,7 +271,9 @@ test('the session expires while the dialog is open: sign in again, nothing was r
   await finance1.getByRole('button', { name: 'Sign in', exact: true }).click();
   await expect(finance1).toHaveURL(/\/finance\/payments$/);
   await searchPayments(finance1, inv.number);
-  await balanceRow(finance1).getByRole('button', { name: /^Actions for / }).click();
+  await balanceRow(finance1)
+    .getByRole('button', { name: /^Actions for / })
+    .click();
   await finance1.getByRole('menuitem', { name: 'Record payment' }).click();
   dialog = modal(finance1, 'Record a payment');
   await dialog.getByLabel('Amount (USD)').fill('75.25');
@@ -235,7 +293,9 @@ test('interrupted and replayed requests: a closed dialog records nothing; a reus
   const finance1 = await as(accounts.finance1, FINANCE_LANDING);
   await finance1.goto('/finance/payments');
   await searchPayments(finance1, inv.number);
-  await balanceRow(finance1).getByRole('button', { name: /^Actions for / }).click();
+  await balanceRow(finance1)
+    .getByRole('button', { name: /^Actions for / })
+    .click();
   await finance1.getByRole('menuitem', { name: 'Record payment' }).click();
   const dialog = modal(finance1, 'Record a payment');
   await dialog.getByLabel('Amount (USD)').fill('300');
@@ -255,12 +315,25 @@ test('interrupted and replayed requests: a closed dialog records nothing; a reus
     paidOn: today(),
     concurrencyStamp: inv.concurrencyStamp,
   };
-  const first = await raw<{ replayed: boolean }>(api.token, 'POST', `/admin/payments/invoices/${inv.id}/payments`, body);
+  const first = await raw<{ replayed: boolean }>(
+    api.token,
+    'POST',
+    `/admin/payments/invoices/${inv.id}/payments`,
+    body,
+  );
   expect(first.status).toBe(201);
-  const retry = await raw<{ replayed: boolean }>(api.token, 'POST', `/admin/payments/invoices/${inv.id}/payments`, body);
+  const retry = await raw<{ replayed: boolean }>(
+    api.token,
+    'POST',
+    `/admin/payments/invoices/${inv.id}/payments`,
+    body,
+  );
   expect(retry.status).toBe(200);
   expect(retry.body.replayed).toBe(true);
-  const reused = await raw(api.token, 'POST', `/admin/payments/invoices/${inv.id}/payments`, { ...body, amount: 150 });
+  const reused = await raw(api.token, 'POST', `/admin/payments/invoices/${inv.id}/payments`, {
+    ...body,
+    amount: 150,
+  });
   expect(reused.status).toBe(409);
   expect(reused.body).toMatchObject({ code: 'billing.request_id_reused' });
   const fresh = await api.get<Invoice>(`/agency/billing/invoices/${inv.id}`);
@@ -271,10 +344,15 @@ test('interrupted and replayed requests: a closed dialog records nothing; a reus
 test('payout retries: the same reference again is a replay, a different one a conflict; nothing is paid twice', async () => {
   const { anaItemId, anaReference } = shared<{ anaItemId: string; anaReference: string }>();
   const api = await ApiSession.login(accounts.finance1.email, accounts.finance1.password);
-  const replay = await raw<{ replayed: boolean }>(api.token, 'POST', `/admin/payments/payouts/${anaItemId}/mark-paid`, {
-    paymentReference: anaReference,
-    paidAt: new Date().toISOString(),
-  });
+  const replay = await raw<{ replayed: boolean }>(
+    api.token,
+    'POST',
+    `/admin/payments/payouts/${anaItemId}/mark-paid`,
+    {
+      paymentReference: anaReference,
+      paidAt: new Date().toISOString(),
+    },
+  );
   expect(replay.status).toBe(200);
   expect(replay.body.replayed).toBe(true);
   const other = await raw(api.token, 'POST', `/admin/payments/payouts/${anaItemId}/mark-paid`, {

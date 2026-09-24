@@ -13,7 +13,8 @@ import { type FinanceState, type Participant, accounts, writeState } from './sup
 const PASSWORD = 'Finance-Journey#2026!';
 
 export default async function globalSetup() {
-  const hint = 'is the API running with E2E_SUITE=j-finance scripts/e2e-journeys.sh (Demo seed, dev mailbox)?';
+  const hint =
+    'is the API running with E2E_SUITE=j-finance scripts/e2e-journeys.sh (Demo seed, dev mailbox)?';
   const sessions: Record<string, ApiSession> = {};
   for (const [key, user] of Object.entries(accounts)) {
     try {
@@ -25,7 +26,11 @@ export default async function globalSetup() {
   const runId = Date.now().toString(36);
   const email = (name: string) => `${name}.${runId}@finance-journey.test`;
 
-  const register = async (key: string, displayName: string, payout?: { method: string; destination: string }) => {
+  const register = async (
+    key: string,
+    displayName: string,
+    payout?: { method: string; destination: string },
+  ) => {
     const address = email(key);
     await publicApi.post('/auth/register', {
       email: address,
@@ -52,20 +57,31 @@ export default async function globalSetup() {
   };
 
   const participants = {
-    ana: await register('ana', `Ana Finance ${runId}`, { method: 'PayPal', destination: `ana.${runId}@example.com` }),
+    ana: await register('ana', `Ana Finance ${runId}`, {
+      method: 'PayPal',
+      destination: `ana.${runId}@example.com`,
+    }),
     ben: await register('ben', `Ben Finance ${runId}`, {
       method: 'BankTransfer',
       destination: 'GB82WEST12345698765432',
     }),
-    cat: await register('cat', `Cat Finance ${runId}`, { method: 'PayPal', destination: `cat.${runId}@example.com` }),
-    dan: await register('dan', `Dan Finance ${runId}`, { method: 'PayPal', destination: `dan.${runId}@example.com` }),
+    cat: await register('cat', `Cat Finance ${runId}`, {
+      method: 'PayPal',
+      destination: `cat.${runId}@example.com`,
+    }),
+    dan: await register('dan', `Dan Finance ${runId}`, {
+      method: 'PayPal',
+      destination: `dan.${runId}@example.com`,
+    }),
     eve: await register('eve', `Eve Finance ${runId}`),
   };
 
-  const tessUser = await sessions.admin!.post<{ id: string; email: string; password: string; displayName: string }>(
-    '/admin/test-users',
-    { roles: ['Participant'], displayName: `Tess Test ${runId}`, countryCode: 'GB' },
-  );
+  const tessUser = await sessions.admin!.post<{
+    id: string;
+    email: string;
+    password: string;
+    displayName: string;
+  }>('/admin/test-users', { roles: ['Participant'], displayName: `Tess Test ${runId}`, countryCode: 'GB' });
   const tessSession = await ApiSession.login(tessUser.email, tessUser.password);
   await tessSession.put('/me/payout-profile', {
     method: 'PayPal',

@@ -19,7 +19,10 @@ export function localParts(instant: Date, timeZone: string) {
       .formatToParts(instant)
       .map((p) => [p.type, p.value]),
   );
-  return { date: `${parts.year}-${parts.month}-${parts.day}`, time: `${parts.hour}:${parts.minute}:${parts.second}` };
+  return {
+    date: `${parts.year}-${parts.month}-${parts.day}`,
+    time: `${parts.hour}:${parts.minute}:${parts.second}`,
+  };
 }
 
 /**
@@ -32,7 +35,9 @@ export async function closePeriodNow(page: Page, timeZone: string, reason: strin
   // Everything that happened before this call (approvals…) must fall inside the period: wait until the cutoff — one
   // second ago, whole seconds — is strictly after that moment.
   const notBefore = Date.now();
-  await expect.poll(() => Math.floor(Date.now() / 1000) * 1000 - 1000 > notBefore, { intervals: [100] }).toBe(true);
+  await expect
+    .poll(() => Math.floor(Date.now() / 1000) * 1000 - 1000 > notBefore, { intervals: [100] })
+    .toBe(true);
   await page.goto('/finance/schedule');
   await expect(page.getByRole('heading', { level: 1, name: 'Payout schedule' })).toBeVisible();
   await page.getByRole('button', { name: 'Change schedule' }).click();
@@ -48,6 +53,8 @@ export async function closePeriodNow(page: Page, timeZone: string, reason: strin
   await dialog.getByRole('checkbox', { name: 'I confirm this schedule change.' }).check();
   await dialog.getByRole('button', { name: 'Save schedule' }).click();
   await expect(toast(page, 'Payout schedule saved')).toBeVisible();
-  await expect(page.getByRole('region', { name: 'Current period' })).toContainText(`Last completed period${date}`);
+  await expect(page.getByRole('region', { name: 'Current period' })).toContainText(
+    `Last completed period${date}`,
+  );
   return date;
 }

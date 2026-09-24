@@ -46,14 +46,22 @@ let nimbusA: Invoice;
 let nimbusB: Invoice;
 const kpiBefore: Record<string, number> = {};
 
-async function issue(api: ApiSession, clientAccountId: string, reference: string, quantity: number, unitPrice: number) {
+async function issue(
+  api: ApiSession,
+  clientAccountId: string,
+  reference: string,
+  quantity: number,
+  unitPrice: number,
+) {
   const draft = await api.post<Invoice>('/agency/billing/invoices', {
     clientAccountId,
     reference,
     paymentTermsDays: 14,
     lines: [{ description: `Journey services ${reference}`, quantity, unitPrice }],
   });
-  return api.post<Invoice>(`/agency/billing/invoices/${draft.id}/issue`, { concurrencyStamp: draft.concurrencyStamp });
+  return api.post<Invoice>(`/agency/billing/invoices/${draft.id}/issue`, {
+    concurrencyStamp: draft.concurrencyStamp,
+  });
 }
 
 function paymentRow(page: Page, text: string | RegExp): Locator {
@@ -65,7 +73,9 @@ async function search(page: Page, term: string) {
   if ((await box.inputValue()) === term) return;
   const loaded = page.waitForResponse((res) => {
     const url = new URL(res.url());
-    return url.pathname === '/api/v1/admin/payments' && (url.searchParams.get('search') ?? '') === term && res.ok();
+    return (
+      url.pathname === '/api/v1/admin/payments' && (url.searchParams.get('search') ?? '') === term && res.ok()
+    );
   });
   await box.fill(term);
   await loaded;
@@ -97,7 +107,8 @@ test('arrange: KPIs before; finance 1 issues a GBP invoice for Wanderly and two 
 }) => {
   const finance1 = await as(accounts.finance1, FINANCE_LANDING);
   await finance1.goto('/finance/payments');
-  for (const c of ['USD', 'GBP'] as const) kpiBefore[`received:${c}`] = await kpi(finance1, 'Received this month', c);
+  for (const c of ['USD', 'GBP'] as const)
+    kpiBefore[`received:${c}`] = await kpi(finance1, 'Received this month', c);
   for (const c of ['USD', 'GBP'] as const)
     kpiBefore[`outstanding:${c}`] = await kpi(finance1, 'Outstanding receivables', c);
 
@@ -110,12 +121,18 @@ test('arrange: KPIs before; finance 1 issues a GBP invoice for Wanderly and two 
 
   // Issuing moved only the receivables, each in its own currency.
   await finance1.reload();
-  await expect.poll(() => kpi(finance1, 'Outstanding receivables', 'GBP')).toBe(sum([kpiBefore['outstanding:GBP']!, 999.99]));
-  await expect.poll(() => kpi(finance1, 'Outstanding receivables', 'USD')).toBe(sum([kpiBefore['outstanding:USD']!, 1050]));
+  await expect
+    .poll(() => kpi(finance1, 'Outstanding receivables', 'GBP'))
+    .toBe(sum([kpiBefore['outstanding:GBP']!, 999.99]));
+  await expect
+    .poll(() => kpi(finance1, 'Outstanding receivables', 'USD'))
+    .toBe(sum([kpiBefore['outstanding:USD']!, 1050]));
   expect(await kpi(finance1, 'Received this month', 'GBP')).toBe(kpiBefore['received:GBP']);
 });
 
-test('a double-clicked bank transfer is recorded once; overpayment and sub-penny amounts are refused', async ({ as }) => {
+test('a double-clicked bank transfer is recorded once; overpayment and sub-penny amounts are refused', async ({
+  as,
+}) => {
   const finance1 = await as(accounts.finance1, FINANCE_LANDING);
   const errors = watchErrors(finance1);
   errors.ignore(/HTTP 409 POST .*\/invoices\/.*\/payments$/);
@@ -135,7 +152,10 @@ test('a double-clicked bank transfer is recorded once; overpayment and sub-penny
   await dialog.getByRole('button', { name: 'Record payment' }).dblclick();
   await expect(toast(finance1, /^Payment (recorded|was already recorded)/)).toBeVisible();
   await expect(dialog).toBeHidden();
-  let fresh = await invoice(await ApiSession.login(accounts.finance1.email, accounts.finance1.password), wanderly.id);
+  let fresh = await invoice(
+    await ApiSession.login(accounts.finance1.email, accounts.finance1.password),
+    wanderly.id,
+  );
   expect(fresh.payments).toHaveLength(1);
   expect(fresh.balance).toBe(599.99);
   expect(posts).toBeGreaterThanOrEqual(1);
@@ -153,7 +173,10 @@ test('a double-clicked bank transfer is recorded once; overpayment and sub-penny
   await dialog.getByRole('button', { name: 'Record payment' }).click();
   await expect(dialog.getByRole('alert')).toContainText('Enter a valid amount for this currency.');
   await dialog.getByRole('button', { name: 'Cancel' }).click();
-  fresh = await invoice(await ApiSession.login(accounts.finance1.email, accounts.finance1.password), wanderly.id);
+  fresh = await invoice(
+    await ApiSession.login(accounts.finance1.email, accounts.finance1.password),
+    wanderly.id,
+  );
   expect(fresh.payments).toHaveLength(1);
   expect(fresh.balance).toBe(599.99);
   errors.expectClean('recording a payment');
@@ -175,7 +198,9 @@ test('edit details with a reason; the recorder cannot refund; finance 2 refunds 
   await expect(toast(finance1, 'Payment updated')).toBeVisible();
   await expect(paymentRow(finance1, ref)).toContainText(/Cheque/i);
 
-  await paymentRow(finance1, ref).getByRole('button', { name: /^Actions for / }).click();
+  await paymentRow(finance1, ref)
+    .getByRole('button', { name: /^Actions for / })
+    .click();
   await expect(finance1.getByRole('menuitem', { name: 'Edit details' })).toBeVisible();
   await expect(finance1.getByRole('menuitem', { name: 'Record refund' })).toHaveCount(0);
   await finance1.keyboard.press('Escape');
@@ -246,7 +271,9 @@ test('a stale screen: another user recorded a payment meanwhile → "changed by 
   errors.expectClean('stale record');
 });
 
-test('client "I’ve paid": a corrected confirmation (249.50) and a rejected report the client sees', async ({ as }) => {
+test('client "I’ve paid": a corrected confirmation (249.50) and a rejected report the client sees', async ({
+  as,
+}) => {
   const client = await as(accounts.nimbusBilling, CLIENT_LANDING);
   const clientErrors = watchErrors(client);
   await client.goto(`/client/billing/invoices/${nimbusB.id}`);
@@ -282,7 +309,9 @@ test('client "I’ve paid": a corrected confirmation (249.50) and a rejected rep
   await search(finance1, `CL-${s().runId}-2`);
   await rowAction(finance1, `CL-${s().runId}-2`, 'Reject report');
   const reject = modal(finance1, 'Reject the client’s payment report');
-  await reject.getByLabel('Reason (shown to the client)').fill('No transfer with this reference on our statement');
+  await reject
+    .getByLabel('Reason (shown to the client)')
+    .fill('No transfer with this reference on our statement');
   await reject.getByRole('button', { name: 'Reject report' }).click();
   await expect(toast(finance1, 'Report rejected')).toBeVisible();
   await expect(paymentRow(finance1, `CL-${s().runId}-2`)).toContainText('Voided');
@@ -291,13 +320,18 @@ test('client "I’ve paid": a corrected confirmation (249.50) and a rejected rep
 
   await client.reload();
   const reported = client.getByRole('table', { name: 'Payments you reported' });
-  await expect(reported.getByRole('row').filter({ hasText: `CL-${s().runId}-2` })).toContainText('Not matched');
+  await expect(reported.getByRole('row').filter({ hasText: `CL-${s().runId}-2` })).toContainText(
+    'Not matched',
+  );
   await expect(reported.getByRole('row').filter({ hasText: `CL-${s().runId}-2` })).toContainText(
     'No transfer with this reference on our statement',
   );
   await expect(reported.getByRole('row').filter({ hasText: `CL-${s().runId}-1` })).toContainText('Confirmed');
   await expect(
-    client.getByRole('table', { name: 'Payments received' }).getByRole('row').filter({ hasText: `CL-${s().runId}-1` }),
+    client
+      .getByRole('table', { name: 'Payments received' })
+      .getByRole('row')
+      .filter({ hasText: `CL-${s().runId}-1` }),
   ).toContainText(money(249.5));
   clientErrors.expectClean('the client portal');
   errors.expectClean('claims');
@@ -317,7 +351,9 @@ test('reminders: "send now" notifies the client once per hour; the reminder job 
   await expect(toast(finance1, 'Reminder sent')).toBeVisible();
   // The client's billing contact is notified (in-app + an email delivery the background sender picks up).
   const clientApi = await ApiSession.login(accounts.nimbusBilling.email, accounts.nimbusBilling.password);
-  const notes = await clientApi.get<{ items: { title: string; body: string }[] }>('/me/notifications?pageSize=20');
+  const notes = await clientApi.get<{ items: { title: string; body: string }[] }>(
+    '/me/notifications?pageSize=20',
+  );
   const reminder = notes.items.filter((n) => n.title === `Payment reminder: invoice ${nimbusB.number}`);
   expect(reminder).toHaveLength(1);
   expect(reminder[0]!.body).toContain('0.50 USD'); // the balance the client still owes, in the invoice's minor units
@@ -325,7 +361,9 @@ test('reminders: "send now" notifies the client once per hour; the reminder job 
   await rowAction(finance1, 'Invoice balance due', 'Send reminder now');
   dialog = modal(finance1, 'Send a payment reminder now');
   await dialog.getByRole('button', { name: 'Send reminder' }).click();
-  await expect(dialog.getByRole('alert')).toContainText('A reminder was sent for this invoice less than an hour ago.');
+  await expect(dialog.getByRole('alert')).toContainText(
+    'A reminder was sent for this invoice less than an hour ago.',
+  );
   await dialog.getByRole('button', { name: 'Cancel' }).click();
 
   // The scheduled job (run by the admin): every reminder the preview lists is sent once, and a second run sends none.
@@ -334,10 +372,15 @@ test('reminders: "send now" notifies the client once per hour; the reminder job 
   type Preview = { invoiceId: string; kind: string; alreadySent: boolean }[];
   const before = await api.get<Preview>('/admin/payments/reminders/preview');
   const due = before.filter((r) => !r.alreadySent);
-  const history = async (id: string) => (await api.get<unknown[]>(`/admin/payments/invoices/${id}/reminders`)).length;
+  const history = async (id: string) =>
+    (await api.get<unknown[]>(`/admin/payments/invoices/${id}/reminders`)).length;
   const counts = new Map<string, number>();
   for (const r of before) counts.set(r.invoiceId, await history(r.invoiceId));
-  const run1 = await raw<{ status: string }>(admin.token, 'POST', '/admin/jobs/billing.overdue-and-reminders/run');
+  const run1 = await raw<{ status: string }>(
+    admin.token,
+    'POST',
+    '/admin/jobs/billing.overdue-and-reminders/run',
+  );
   expect(run1.status).toBe(200);
   const after = await api.get<Preview>('/admin/payments/reminders/preview');
   for (const r of due) {
@@ -367,12 +410,16 @@ test('KPIs moved by exactly these amounts, per currency', async ({ as }) => {
     .poll(() => kpi(finance1, 'Outstanding receivables', 'USD'))
     .toBe(sum([kpiBefore['outstanding:USD']!, 700, 0.5]));
   await expect(
-    finance1.getByRole('group', { name: 'Payment totals' }).getByRole('group', { name: 'Received this month' }),
+    finance1
+      .getByRole('group', { name: 'Payment totals' })
+      .getByRole('group', { name: 'Received this month' }),
   ).toContainText('Refunded: £400.00');
   // The API agrees, one figure per currency.
   const api = await ApiSession.login(accounts.finance1.email, accounts.finance1.password);
   const summary = await api.get<{ incoming: { refundedThisMonth: { currency: string; amount: number }[] } }>(
     '/admin/payments/summary',
   );
-  expect(summary.incoming.refundedThisMonth.find((r) => r.currency === 'GBP')?.amount).toBeGreaterThanOrEqual(400);
+  expect(summary.incoming.refundedThisMonth.find((r) => r.currency === 'GBP')?.amount).toBeGreaterThanOrEqual(
+    400,
+  );
 });

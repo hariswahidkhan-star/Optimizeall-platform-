@@ -63,7 +63,9 @@ async function ledgerOf(api: ApiSession, userId: string) {
   return (await api.get<{ items: LedgerRow[] }>(`/finance/ledger?userId=${userId}&pageSize=100`)).items;
 }
 
-test('finance 1 sets the payout schedule: no earning hold, 10 USD minimum, no auto-prepare', async ({ as }) => {
+test('finance 1 sets the payout schedule: no earning hold, 10 USD minimum, no auto-prepare', async ({
+  as,
+}) => {
   const finance1 = await as(accounts.finance1, FINANCE_LANDING);
   const errors = watchErrors(finance1);
   await finance1.goto('/finance/schedule');
@@ -74,7 +76,9 @@ test('finance 1 sets the payout schedule: no earning hold, 10 USD minimum, no au
   await dialog.getByLabel('Minimum payout (USD)').fill('10');
   await dialog.getByRole('switch', { name: 'Prepare batches automatically after each cutoff' }).uncheck();
   await dialog.getByLabel('Effective from').fill(localMinute());
-  await dialog.getByLabel('Reason').fill(`Finance journey ${s().runId}: pay approved earnings without a hold`);
+  await dialog
+    .getByLabel('Reason')
+    .fill(`Finance journey ${s().runId}: pay approved earnings without a hold`);
   await confirmBox(dialog, 'I confirm this schedule change.');
   await dialog.getByRole('button', { name: 'Save schedule' }).click();
   await expect(toast(finance1, 'Payout schedule saved')).toBeVisible();
@@ -86,7 +90,9 @@ test('finance 1 sets the payout schedule: no earning hold, 10 USD minimum, no au
   errors.expectClean('the payout schedule');
 });
 
-test('exchange rates: finance 1 adds a direct PKR→USD rate and a newer inverse USD→AED rate', async ({ as }) => {
+test('exchange rates: finance 1 adds a direct PKR→USD rate and a newer inverse USD→AED rate', async ({
+  as,
+}) => {
   const finance1 = await as(accounts.finance1, FINANCE_LANDING);
   const errors = watchErrors(finance1);
   await finance1.goto('/finance/exchange-rates');
@@ -132,7 +138,9 @@ test('adjustments: credits in USD, PKR and AED convert to the cent, a debit appl
 
   // ---------------------------------------------------------------- 2,801 PKR credit → 2,801 × 0.00357 = 9.99957 → 10.00 USD
   dialog = await fillAdjustment(finance1, ana.id, '2801', 'PKR', 'Karachi Eats bonus paid in rupees');
-  await expect(dialog.getByText('The amount is converted to USD with the exchange rate in force now')).toBeVisible();
+  await expect(
+    dialog.getByText('The amount is converted to USD with the exchange rate in force now'),
+  ).toBeVisible();
   await dialog.getByRole('button', { name: 'Create adjustment' }).click();
   await expect(toast(finance1, 'Adjustment created')).toBeVisible();
   await expect(dialog).toBeHidden();
@@ -175,7 +183,11 @@ test('adjustments: credits in USD, PKR and AED convert to the cent, a debit appl
     exchangeRate: 0.27229408,
     settlementAmount: 27.23,
   });
-  expect(byCurrency('USD', -1)).toMatchObject({ status: 'Approved', originalAmount: -5.25, settlementAmount: -5.25 });
+  expect(byCurrency('USD', -1)).toMatchObject({
+    status: 'Approved',
+    originalAmount: -5.25,
+    settlementAmount: -5.25,
+  });
   for (const e of entries) expect(e.createdByUserId).toBe(api.user.id);
 
   // The ledger table shows the original amount, the stored rate and the settlement amount of each entry.
@@ -235,7 +247,11 @@ test('a credit whose response is lost is retried from the same dialog and record
 
   const entries = await ledgerOf(api, dan.id);
   expect(entries).toHaveLength(1);
-  expect(entries[0]).toMatchObject({ originalAmount: 15.5, settlementAmount: 15.5, status: 'PendingApproval' });
+  expect(entries[0]).toMatchObject({
+    originalAmount: 15.5,
+    settlementAmount: 15.5,
+    status: 'PendingApproval',
+  });
 });
 
 test('four-eyes: finance 1 cannot approve her own credits; finance 2 approves them', async ({ as }) => {
@@ -260,16 +276,24 @@ test('four-eyes: finance 1 cannot approve her own credits; finance 2 approves th
   const finance1 = await as(accounts.finance1, FINANCE_LANDING);
   await finance1.goto('/finance/approvals');
   await expect(finance1.getByRole('heading', { level: 1, name: 'Pending approvals' })).toBeVisible();
-  const own = finance1.getByRole('row').filter({ hasText: ana.displayName }).filter({ hasText: money(25) });
+  const own = finance1
+    .getByRole('row')
+    .filter({ hasText: ana.displayName })
+    .filter({ hasText: money(25) });
   await expect(own.getByRole('button', { name: /^Approve/ })).toBeDisabled();
   await expect(own).toContainText('You created this earning, so a different finance user must decide it.');
   // …and the server refuses it too.
-  const pending = await finance1Api.get<{ items: { id: string; user: { id: string }; concurrencyStamp: string }[] }>(
-    `/finance/pending-earnings?search=${encodeURIComponent(ana.email)}&pageSize=50`,
+  const pending = await finance1Api.get<{
+    items: { id: string; user: { id: string }; concurrencyStamp: string }[];
+  }>(`/finance/pending-earnings?search=${encodeURIComponent(ana.email)}&pageSize=50`);
+  const refused = await raw(
+    finance1Api.token,
+    'POST',
+    `/finance/pending-earnings/${pending.items[0]!.id}/approve`,
+    {
+      concurrencyStamp: pending.items[0]!.concurrencyStamp,
+    },
   );
-  const refused = await raw(finance1Api.token, 'POST', `/finance/pending-earnings/${pending.items[0]!.id}/approve`, {
-    concurrencyStamp: pending.items[0]!.concurrencyStamp,
-  });
   expect(refused.status).toBe(403);
   expect(refused.body).toMatchObject({ code: 'ledger.self_approval' });
 
@@ -277,7 +301,10 @@ test('four-eyes: finance 1 cannot approve her own credits; finance 2 approves th
   const errors = watchErrors(finance2);
   await finance2.goto('/finance/approvals');
   for (const amount of [25, 10, 27.23]) {
-    const pendingRow = finance2.getByRole('row').filter({ hasText: ana.displayName }).filter({ hasText: money(amount) });
+    const pendingRow = finance2
+      .getByRole('row')
+      .filter({ hasText: ana.displayName })
+      .filter({ hasText: money(amount) });
     await pendingRow.getByRole('button', { name: /^Approve/ }).click();
     const confirm = modal(finance2, 'Approve this earning?');
     await expect(confirm).toContainText(money(amount));
@@ -323,7 +350,9 @@ test('Ana’s balance and the ledger CSV show exactly the approved amounts', asy
     finance1.getByRole('button', { name: 'Export CSV' }).click(),
   ]);
   expect(download.suggestedFilename()).toMatch(/^ledger-.*\.csv$/);
-  const csv = readFileSync((await download.path())!, 'utf8').trim().split(/\r?\n/);
+  const csv = readFileSync((await download.path())!, 'utf8')
+    .trim()
+    .split(/\r?\n/);
   expect(csv).toHaveLength(5); // header + Ana's four entries only (the export honours the filter)
   const settlements = csv.slice(1).map((line) => line.split(',')[13]);
   expect(settlements.map(Number).sort((a, b) => a - b)).toEqual([-5.25, 10, 25, 27.23]);

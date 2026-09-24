@@ -50,7 +50,10 @@ function itemRow(page: Page, text: string): Locator {
 }
 
 function exclusion(page: Page, name: string): Locator {
-  return page.getByRole('region', { name: 'Excluded participants' }).getByRole('listitem').filter({ hasText: name });
+  return page
+    .getByRole('region', { name: 'Excluded participants' })
+    .getByRole('listitem')
+    .filter({ hasText: name });
 }
 
 test('finance 1 places a payout hold on Cat from the Holds page', async ({ as }) => {
@@ -63,11 +66,14 @@ test('finance 1 places a payout hold on Cat from the Holds page', async ({ as })
   await pickUser(dialog, cat.id);
   await dialog.getByLabel('Reason').fill('KYC documents under review');
   await dialog.getByRole('button', { name: 'Place hold' }).click();
-  await expect(finance1.getByRole('status').filter({ hasText: `Hold placed on ${cat.displayName}` })).toContainText(
-    'No draft batch items needed holding.',
-  );
   await expect(
-    finance1.getByRole('table', { name: 'Active payout holds' }).getByRole('row').filter({ hasText: cat.displayName }),
+    finance1.getByRole('status').filter({ hasText: `Hold placed on ${cat.displayName}` }),
+  ).toContainText('No draft batch items needed holding.');
+  await expect(
+    finance1
+      .getByRole('table', { name: 'Active payout holds' })
+      .getByRole('row')
+      .filter({ hasText: cat.displayName }),
   ).toContainText('KYC documents under review');
 
   // A second active hold on the same participant is refused.
@@ -78,7 +84,9 @@ test('finance 1 places a payout hold on Cat from the Holds page', async ({ as })
   errors.expectClean('the holds page');
 });
 
-test('finance 1 prepares the batch: payable items, a held item and the exclusions with their amounts', async ({ as }) => {
+test('finance 1 prepares the batch: payable items, a held item and the exclusions with their amounts', async ({
+  as,
+}) => {
   const { ana, ben, cat, dan, eve } = s().participants;
   const finance1 = await as(accounts.finance1, FINANCE_LANDING);
   const errors = watchErrors(finance1);
@@ -119,16 +127,25 @@ test('finance 1 prepares the batch: payable items, a held item and the exclusion
   const api = await ApiSession.login(accounts.finance1.email, accounts.finance1.password);
   const detail = await api.get<{
     batch: { totalAmount: number; itemCount: number };
-    items: { items: { itemId: string; user: { id: string }; amount: number; status: string }[]; total: number };
+    items: {
+      items: { itemId: string; user: { id: string }; amount: number; status: string }[];
+      total: number;
+    };
   }>(`/finance/payout-batches/${batchId}?pageSize=200`);
   const payable = detail.items.items.filter((i) => i.status === 'Pending');
   expect(detail.batch.itemCount).toBe(payable.length);
   expect(detail.batch.totalAmount).toBe(sum(payable.map((i) => i.amount)));
   const itemOf = (id: string) => detail.items.items.find((i) => i.user.id === id)!;
-  for (const excluded of [ben, cat, s().tess]) expect(detail.items.items.some((i) => i.user.id === excluded.id)).toBe(false);
+  for (const excluded of [ben, cat, s().tess])
+    expect(detail.items.items.some((i) => i.user.id === excluded.id)).toBe(false);
 
   // Retry safety: preparing the same period again returns the same batch (200, created: false).
-  const again = await raw<{ created: boolean; batch: { id: string } }>(api.token, 'POST', '/finance/payout-batches/prepare', {});
+  const again = await raw<{ created: boolean; batch: { id: string } }>(
+    api.token,
+    'POST',
+    '/finance/payout-batches/prepare',
+    {},
+  );
   expect(again.status).toBe(200);
   expect(again.body).toMatchObject({ created: false, batch: { id: batchId } });
 
@@ -150,7 +167,9 @@ test('review: finance 1 holds Dan’s item and releases it; the total follows to
   const total = finance1.getByRole('region', { name: 'Summary' });
   const before = Number(/Total\$([\d,]+\.\d{2})/.exec((await total.textContent())!)![1]!.replace(/,/g, ''));
 
-  await itemRow(finance1, dan.email).getByRole('button', { name: /^(Actions|More actions)/ }).click();
+  await itemRow(finance1, dan.email)
+    .getByRole('button', { name: /^(Actions|More actions)/ })
+    .click();
   await finance1.getByRole('menuitem', { name: 'Hold item' }).click();
   const hold = modal(finance1, `Hold ${dan.displayName}’s item?`);
   await hold.getByLabel(/Reason/).fill('Checking the PayPal account name');
@@ -158,7 +177,9 @@ test('review: finance 1 holds Dan’s item and releases it; the total follows to
   await expect(itemRow(finance1, dan.email)).toContainText('On hold');
   await expect(total).toContainText(`Total${money(before - 15.5)}`);
 
-  await itemRow(finance1, dan.email).getByRole('button', { name: /^(Actions|More actions)/ }).click();
+  await itemRow(finance1, dan.email)
+    .getByRole('button', { name: /^(Actions|More actions)/ })
+    .click();
   await finance1.getByRole('menuitem', { name: 'Release hold' }).click();
   const release = modal(finance1, /Release/);
   await release.getByRole('button', { name: /Release/ }).click();
@@ -238,7 +259,9 @@ test('finance 2 downloads the payment instructions: decrypted destinations, audi
     finance2.waitForEvent('download'),
     dialog.getByRole('button', { name: 'Download (audited)' }).click(),
   ]);
-  expect(download.suggestedFilename()).toMatch(new RegExp(`^payment-instructions-${batch1Reference}-\\d+\\.csv$`));
+  expect(download.suggestedFilename()).toMatch(
+    new RegExp(`^payment-instructions-${batch1Reference}-\\d+\\.csv$`),
+  );
   const csv = readFileSync((await download.path())!, 'utf8');
   expect(csv).toContain(`ana.${s().runId}@example.com`);
   expect(csv).toContain(`dan.${s().runId}@example.com`);
@@ -249,14 +272,16 @@ test('finance 2 downloads the payment instructions: decrypted destinations, audi
   void dan;
 
   const admin = await ApiSession.login(accounts.admin.email, accounts.admin.password);
-  const audit = await admin.get<{ items: { action: string; entityId: string; actor?: { email?: string } | null }[] }>(
-    `/admin/audit-logs?action=payout.payment_instructions_exported&pageSize=20`,
-  );
+  const audit = await admin.get<{
+    items: { action: string; entityId: string; actor?: { email?: string } | null }[];
+  }>(`/admin/audit-logs?action=payout.payment_instructions_exported&pageSize=20`);
   expect(audit.items.some((a) => a.entityId === batch1Id)).toBe(true);
   errors.expectClean('payment instructions');
 });
 
-test('finance 1 records Ana’s payment; a stale second attempt is refused as already recorded', async ({ as }) => {
+test('finance 1 records Ana’s payment; a stale second attempt is refused as already recorded', async ({
+  as,
+}) => {
   const { ana } = s().participants;
   const { batch1Id } = shared<BatchShared>();
   const reference = `PP-${s().runId}-ANA1`;
@@ -295,7 +320,10 @@ test('payments hub: Dan’s transfer is returned by the bank (re-queued); the re
   await expect(finance1.getByRole('heading', { level: 1, name: 'Payments' })).toBeVisible();
   const search = finance1.getByRole('searchbox', { name: 'Search payments' });
   await search.fill(dan.displayName);
-  const danRow = finance1.getByRole('table', { name: 'Payments' }).getByRole('row').filter({ hasText: batch1Reference });
+  const danRow = finance1
+    .getByRole('table', { name: 'Payments' })
+    .getByRole('row')
+    .filter({ hasText: batch1Reference });
   await expect(danRow).toHaveCount(1);
   await expect(danRow).toContainText(money(15.5));
   await danRow.getByRole('button', { name: /^Actions for / }).click();
@@ -309,10 +337,12 @@ test('payments hub: Dan’s transfer is returned by the bank (re-queued); the re
 
   // Dan's earning is back to Approved and unlinked: it will be picked up by the next batch.
   const api = await ApiSession.login(accounts.finance1.email, accounts.finance1.password);
-  const danLedger = await api.get<{ items: { status: string; payoutItemId: string | null; settlementAmount: number }[] }>(
-    `/finance/ledger?userId=${dan.id}`,
-  );
-  expect(danLedger.items).toEqual([expect.objectContaining({ status: 'Approved', payoutItemId: null, settlementAmount: 15.5 })]);
+  const danLedger = await api.get<{
+    items: { status: string; payoutItemId: string | null; settlementAmount: number }[];
+  }>(`/finance/ledger?userId=${dan.id}`);
+  expect(danLedger.items).toEqual([
+    expect.objectContaining({ status: 'Approved', payoutItemId: null, settlementAmount: 15.5 }),
+  ]);
   // Retrying the same "returned" report is a replay, not an error.
   const replay = await raw<{ replayed: boolean; requeued: boolean }>(
     api.token,
@@ -380,14 +410,12 @@ test('reconciliation is balanced to the cent; the batch and reconciliation CSVs 
   const eveItem = recon.items.find((i) => i.user.id === s().participants.eve.id)!;
   expect(eveItem).toMatchObject({ status: 'Held', amount: 12, ok: true, linkedEarningCount: 0 });
   expect(recon.recordedPaid).toBe(sum([recon.expected, -15.5]));
-  expect(recon.recordedPaid).toBe(
-    sum(recon.items.filter((i) => i.status === 'Paid').map((i) => i.amount)),
-  );
+  expect(recon.recordedPaid).toBe(sum(recon.items.filter((i) => i.status === 'Paid').map((i) => i.amount)));
   // The bulk reference was used on several items: a warning, never an error.
   if (recon.items.filter((i) => i.status === 'Paid').length > 2)
-    expect(recon.discrepancies.some((d) => d.type === 'duplicate_payment_reference' && d.severity === 'warning')).toBe(
-      true,
-    );
+    expect(
+      recon.discrepancies.some((d) => d.type === 'duplicate_payment_reference' && d.severity === 'warning'),
+    ).toBe(true);
 
   const finance1 = await as(accounts.finance1, FINANCE_LANDING);
   const errors = watchErrors(finance1);
@@ -400,7 +428,11 @@ test('reconciliation is balanced to the cent; the batch and reconciliation CSVs 
 
   const [reconCsv] = await Promise.all([
     finance1.waitForEvent('download'),
-    finance1.getByRole('button', { name: /Export|Download/ }).filter({ hasText: /CSV/ }).last().click(),
+    finance1
+      .getByRole('button', { name: /Export|Download/ })
+      .filter({ hasText: /CSV/ })
+      .last()
+      .click(),
   ]);
   const reconLines = readFileSync((await reconCsv.path())!, 'utf8').split(/\r?\n/);
   expect(reconLines.find((l) => l.includes(ana.email))).toMatch(/Paid,56\.98.*OK/);
@@ -425,7 +457,10 @@ test('participants see their payout status: Ana paid (reference tail only), Dan 
   const anaPage = await as(ana, PARTICIPANT_LANDING);
   const errors = watchErrors(anaPage);
   await anaPage.goto('/app/payouts');
-  const anaRow = anaPage.getByRole('table', { name: 'Payout history' }).getByRole('row').filter({ hasText: batch1Reference });
+  const anaRow = anaPage
+    .getByRole('table', { name: 'Payout history' })
+    .getByRole('row')
+    .filter({ hasText: batch1Reference });
   await expect(anaRow).toContainText('Paid');
   await expect(anaRow).toContainText(money(56.98));
   await anaRow.getByRole('link').first().click();
@@ -436,7 +471,10 @@ test('participants see their payout status: Ana paid (reference tail only), Dan 
 
   const danPage = await as(dan, PARTICIPANT_LANDING);
   await danPage.goto('/app/payouts');
-  const danRow = danPage.getByRole('table', { name: 'Payout history' }).getByRole('row').filter({ hasText: batch1Reference });
+  const danRow = danPage
+    .getByRole('table', { name: 'Payout history' })
+    .getByRole('row')
+    .filter({ hasText: batch1Reference });
   await expect(danRow).toContainText('Failed');
   await expect(danRow).toContainText(money(15.5));
 });

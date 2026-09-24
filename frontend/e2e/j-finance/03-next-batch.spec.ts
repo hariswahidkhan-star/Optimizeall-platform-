@@ -44,13 +44,20 @@ test('finance 1 releases Cat’s hold; the hold moves to “Released” with its
   await expect(toast(finance1, 'Hold released')).toBeVisible();
   await finance1.getByRole('tab', { name: 'Released' }).click();
   await expect(
-    finance1.getByRole('table', { name: 'Released payout holds' }).getByRole('row').filter({ hasText: cat.displayName }),
+    finance1
+      .getByRole('table', { name: 'Released payout holds' })
+      .getByRole('row')
+      .filter({ hasText: cat.displayName }),
   ).toContainText('KYC documents verified');
 
   // Releasing twice is refused.
   const api = await ApiSession.login(accounts.finance1.email, accounts.finance1.password);
-  const holds = await api.get<{ items: { id: string; user: { id: string } }[] }>(`/finance/holds?userId=${cat.id}`);
-  const again = await raw(api.token, 'POST', `/finance/holds/${holds.items[0]!.id}/release`, { note: 'again' });
+  const holds = await api.get<{ items: { id: string; user: { id: string } }[] }>(
+    `/finance/holds?userId=${cat.id}`,
+  );
+  const again = await raw(api.token, 'POST', `/finance/holds/${holds.items[0]!.id}/release`, {
+    note: 'again',
+  });
   expect(again.status).toBe(409);
   expect(again.body).toMatchObject({ code: 'payout.hold_not_active' });
   errors.expectClean('the holds page');
@@ -80,7 +87,11 @@ test('the next batch pays what was carried over (Ben at exactly the minimum), re
 
   const finance1 = await as(accounts.finance1, FINANCE_LANDING);
   const errors = watchErrors(finance1);
-  const periodKey = await closePeriodNow(finance1, 'Etc/GMT+12', `Finance journey ${s().runId}: close the next period`);
+  const periodKey = await closePeriodNow(
+    finance1,
+    'Etc/GMT+12',
+    `Finance journey ${s().runId}: close the next period`,
+  );
   expect(periodKey).not.toBe(shared<{ batch1Reference: string }>().batch1Reference.replace('PB-', ''));
 
   await finance1.goto('/finance/batches');
@@ -98,11 +109,16 @@ test('the next batch pays what was carried over (Ben at exactly the minimum), re
   await expect(itemRow(finance1, eve.email)).toContainText('No payout details on file');
   await expect(itemRow(finance1, ana.email)).toHaveCount(0);
   await expect(
-    finance1.getByRole('region', { name: 'Excluded participants' }).getByRole('listitem').filter({ hasText: s().tess.displayName }),
+    finance1
+      .getByRole('region', { name: 'Excluded participants' })
+      .getByRole('listitem')
+      .filter({ hasText: s().tess.displayName }),
   ).toContainText(money(30));
 
   // Ben's item: his carried-over 4.00 and the new 6.00.
-  await itemRow(finance1, ben.email).getByRole('button', { name: new RegExp(`^${ben.displayName}`) }).click();
+  await itemRow(finance1, ben.email)
+    .getByRole('button', { name: new RegExp(`^${ben.displayName}`) })
+    .click();
   const drawer = modal(finance1, ben.displayName);
   const earnings = drawer.getByRole('table', { name: `Earnings included for ${ben.displayName}` });
   const rows = earnings.getByRole('rowgroup').nth(1).getByRole('row');
@@ -124,21 +140,21 @@ test('the next batch pays what was carried over (Ben at exactly the minimum), re
   expect(danLedger.items).toEqual([expect.objectContaining({ status: 'Approved', payoutItemId: null })]);
 
   // ---------------------------------------------------------------- the period can be prepared again, deliberately
-  const again = await raw<{ created: boolean; batch: { id: string; reference: string; totalAmount: number } }>(
-    f1.token,
-    'POST',
-    '/finance/payout-batches/prepare',
-    { periodKey },
-  );
+  const again = await raw<{
+    created: boolean;
+    batch: { id: string; reference: string; totalAmount: number };
+  }>(f1.token, 'POST', '/finance/payout-batches/prepare', { periodKey });
   expect(again.status).toBe(201);
   expect(again.body.created).toBe(true);
   expect(again.body.batch.id).not.toBe(batchId);
   expect(again.body.batch.reference).toBe(`${reference}-R2`);
-  const detail = await f1.get<{ items: { items: { user: { id: string }; amount: number; status: string }[] } }>(
-    `/finance/payout-batches/${again.body.batch.id}?pageSize=200`,
-  );
+  const detail = await f1.get<{
+    items: { items: { user: { id: string }; amount: number; status: string }[] };
+  }>(`/finance/payout-batches/${again.body.batch.id}?pageSize=200`);
   const amountOf = (id: string) => detail.items.items.find((i) => i.user.id === id)?.amount;
-  expect([amountOf(ben.id), amountOf(cat.id), amountOf(dan.id), amountOf(eve.id)]).toEqual([10, 20, 15.5, 12]);
+  expect([amountOf(ben.id), amountOf(cat.id), amountOf(dan.id), amountOf(eve.id)]).toEqual([
+    10, 20, 15.5, 12,
+  ]);
   expect(amountOf(ana.id)).toBeUndefined();
   errors.expectClean('the next batch');
 });
