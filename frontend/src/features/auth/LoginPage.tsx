@@ -11,6 +11,7 @@ import { PasswordInput } from '@/components/ui/PasswordInput';
 import { isApiError } from '@/lib/api/errors';
 import { useAuth } from '@/lib/auth/useAuth';
 import { mapServerErrors, type MappedErrors } from './formErrors';
+import { ContinueWithGoogle } from './google/GoogleButton';
 import '@/app/layouts/AuthLayout.css';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -129,6 +130,8 @@ export function LoginPage() {
           )}
         </div>
       )}
+
+      <ContinueWithGoogle returnTo={safeNextPath(params.get('next'))} />
 
       <form className="auth-form" onSubmit={onSubmit} noValidate aria-label="Sign in">
         <FormField id="login-email" label="Email" error={clientErrors.email ?? server?.fields.email} required>

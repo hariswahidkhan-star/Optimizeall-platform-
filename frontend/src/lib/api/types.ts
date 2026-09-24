@@ -94,3 +94,53 @@ export interface ChangePasswordRequest {
   currentPassword: string;
   newPassword: string;
 }
+
+// ---------- Sign in with Google (Modules/Auth/Google/GoogleAuthDtos.cs) ----------
+
+export interface AuthProviders {
+  google: { enabled: boolean };
+}
+
+export interface GoogleStartResponse {
+  authorizationUrl: string;
+}
+
+export type GoogleCallbackStatus = 'signedIn' | 'needsTerms' | 'linked';
+
+export interface GoogleCallbackResponse {
+  status: GoogleCallbackStatus;
+  /** Set when signed in (the refresh cookie was set too). */
+  auth: AuthResponse | null;
+  /** Short-lived signed ticket for POST /auth/google/complete (terms step). */
+  ticket: string | null;
+  email: string | null;
+  displayName: string | null;
+  /** App-relative path to continue to (validated server side; validate again before navigating). */
+  returnTo: string | null;
+}
+
+export interface GoogleCompleteRequest {
+  ticket: string;
+  acceptTerms: boolean;
+  marketingEmailOptIn: boolean;
+  displayName?: string;
+  countryCode: string;
+  languageCode: string;
+  timeZone: string;
+  referralCode?: string;
+  inviteCode?: string;
+  deviceId?: string;
+}
+
+export interface ExternalLogin {
+  provider: 'google' | (string & {});
+  email: string;
+  createdAt: IsoDateTime;
+  lastUsedAt: IsoDateTime | null;
+}
+
+export interface SignInMethods {
+  hasPassword: boolean;
+  googleEnabled: boolean;
+  externalLogins: ExternalLogin[];
+}

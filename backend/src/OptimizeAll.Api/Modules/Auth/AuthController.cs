@@ -124,11 +124,14 @@ public sealed class AuthController(IAuthService auth, ICurrentUser currentUser, 
             throw DomainException.Forbidden("auth.csrf", "Missing request header.");
     }
 
-    private void SetRefreshCookie(string token, DateTime expiresAt) =>
-        Response.Cookies.Append(RefreshCookie, token, new CookieOptions
+    private void SetRefreshCookie(string token, DateTime expiresAt) => SetRefreshCookie(Response, security.Value, token, expiresAt);
+
+    /// <summary>Sets the rotating refresh cookie (shared with the external sign-in controllers).</summary>
+    internal static void SetRefreshCookie(HttpResponse response, SecurityOptions security, string token, DateTime expiresAt) =>
+        response.Cookies.Append(RefreshCookie, token, new CookieOptions
         {
             HttpOnly = true,
-            Secure = security.Value.SecureCookies,
+            Secure = security.SecureCookies,
             SameSite = SameSiteMode.Strict,
             Path = "/api/v1/auth",
             Expires = expiresAt,

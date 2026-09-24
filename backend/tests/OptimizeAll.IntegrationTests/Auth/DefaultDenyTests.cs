@@ -28,6 +28,11 @@ public sealed class DefaultDenyTests(ApiFactory api) : IClassFixture<ApiFactory>
         "POST api/v1/auth/logout",
         "POST api/v1/auth/forgot-password",
         "POST api/v1/auth/reset-password",
+        // Sign in with Google: provider list, start (signed state + PKCE), callback (code exchange), terms step.
+        "GET api/v1/auth/providers",
+        "POST api/v1/auth/google/start",
+        "POST api/v1/auth/google/callback",
+        "POST api/v1/auth/google/complete",
         "GET api/v1/public/invitations/{code}",
         "GET api/v1/public/campaigns/{slug}",
         "POST api/v1/public/conversions",
@@ -167,6 +172,14 @@ public sealed class DefaultDenyTests(ApiFactory api) : IClassFixture<ApiFactory>
         Assert.Equal(HttpStatusCode.OK, (await client.PostAsJsonAsync("/api/v1/auth/login", new { email = user.Email, password = user.Password })).StatusCode);
         Assert.Equal(HttpStatusCode.OK, (await client.PostAsync("/api/v1/auth/refresh", null)).StatusCode); // refresh cookie, no bearer
         Assert.Equal(HttpStatusCode.NoContent, (await client.PostAsync("/api/v1/auth/logout", null)).StatusCode);
+
+        // Google sign-in is not configured in this host: the handlers answer (disabled) instead of a challenge.
+        Assert.Equal(HttpStatusCode.OK, (await client.GetAsync("/api/v1/auth/providers")).StatusCode);
+        await (await client.PostAsJsonAsync("/api/v1/auth/google/start", new { })).ShouldFailAsync(404, "auth.google_disabled");
+        await (await client.PostAsJsonAsync("/api/v1/auth/google/callback", new { code = "c", state = "s" }))
+            .ShouldFailAsync(404, "auth.google_disabled");
+        await (await client.PostAsJsonAsync("/api/v1/auth/google/complete", new { ticket = "t", acceptTerms = true, countryCode = "PK" }))
+            .ShouldFailAsync(404, "auth.google_disabled");
 
         Assert.Equal(HttpStatusCode.OK, (await client.GetAsync("/api/v1/campaign-categories")).StatusCode);
         Assert.Equal(HttpStatusCode.OK, (await client.GetAsync("/api/v1/content/faqs")).StatusCode);

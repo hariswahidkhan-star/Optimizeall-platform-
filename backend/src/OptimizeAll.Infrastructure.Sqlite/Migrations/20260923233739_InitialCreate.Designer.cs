@@ -11,7 +11,7 @@ using OptimizeAll.Infrastructure.Persistence;
 namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260923231506_InitialCreate")]
+    [Migration("20260923233739_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -5472,6 +5472,49 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .IsUnique();
 
                     b.ToTable("stored_files", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Identity.ExternalLogin", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(254)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastUsedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Provider")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Provider", "Subject")
+                        .IsUnique();
+
+                    b.HasIndex("UserId", "Provider")
+                        .IsUnique();
+
+                    b.ToTable("external_logins", (string)null);
                 });
 
             modelBuilder.Entity("OptimizeAll.Domain.Identity.PayoutProfile", b =>
@@ -14376,6 +14419,15 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .WithMany()
                         .HasForeignKey("ClientAccountId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Identity.ExternalLogin", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Identity.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("OptimizeAll.Domain.Identity.PayoutProfile", b =>

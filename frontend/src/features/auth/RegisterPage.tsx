@@ -10,6 +10,8 @@ import { PasswordInput } from '@/components/ui/PasswordInput';
 import { Select } from '@/components/ui/Select';
 import { useAuth } from '@/lib/auth/useAuth';
 import { mapServerErrors, type MappedErrors } from './formErrors';
+import { ContinueWithGoogle } from './google/GoogleButton';
+import { rememberSignupCodes } from './google/googleApi';
 import {
   countryOptions,
   defaultCountry,
@@ -205,6 +207,8 @@ export function RegisterPage() {
           </Alert>
         </div>
       )}
+
+      <ContinueWithGoogle onBeforeRedirect={() => rememberSignupCodes({ referralCode, inviteCode })} />
 
       <form className="auth-form" onSubmit={onSubmit} noValidate aria-label="Create account">
         <FormField id="register-email" label="Email" required error={errorFor('email')}>

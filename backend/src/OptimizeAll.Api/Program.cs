@@ -34,6 +34,7 @@ using OptimizeAll.Api.Modules.Accounts;
 using OptimizeAll.Api.Modules.Admin;
 using OptimizeAll.Api.Modules.Analytics;
 using OptimizeAll.Api.Modules.Auth;
+using OptimizeAll.Api.Modules.Auth.Google;
 using OptimizeAll.Api.Modules.Campaigns;
 using OptimizeAll.Api.Modules.Content;
 using OptimizeAll.Api.Modules.Files;
@@ -171,6 +172,7 @@ services.AddScoped<IExchangeRateProvider, ExchangeRateProvider>();
 services.AddScoped<ILedgerWriter, LedgerWriter>();
 services.AddSingleton<JobRunner>();
 services.AddScoped<IAuthService, AuthService>();
+services.AddGoogleSignIn(config);
 
 services.AddSingleton<SmtpEmailSender>();
 services.AddSingleton<FileEmailSender>();

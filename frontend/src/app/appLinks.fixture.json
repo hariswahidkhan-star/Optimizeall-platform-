@@ -6,6 +6,7 @@
     { "name": "ForgotPassword", "path": "/forgot-password" },
     { "name": "VerifyEmail", "path": "/verify-email" },
     { "name": "ResetPassword", "path": "/reset-password" },
+    { "name": "GoogleCallback", "path": "/auth/google/callback" },
     { "name": "Invitation", "path": "/join/:code" },
     { "name": "PublicCampaign", "path": "/c/:slug" },
     { "name": "ParticipantHome", "path": "/app" },

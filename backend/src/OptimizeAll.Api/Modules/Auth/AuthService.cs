@@ -32,6 +32,13 @@ public interface IAuthService
 
     /// <summary>Revokes every refresh token of a user and invalidates outstanding access tokens.</summary>
     Task RevokeAllSessionsAsync(User user, string reason, CancellationToken ct);
+
+    /// <summary>
+    /// Starts a session for a user already authenticated by an external identity provider (e.g. Google). The caller
+    /// has verified the identity and loaded <paramref name="user"/> with its roles; inactive users are refused. Changes
+    /// staged in the context (link bookkeeping, audit rows) are saved together with the new refresh token.
+    /// </summary>
+    Task<LoginResult> SignInExternalAsync(User user, CancellationToken ct);
 }
 
 public sealed class AuthService(
@@ -184,6 +191,14 @@ public sealed class AuthService(
             throw InvalidCredentials();
         }
 
+        // Accounts created through an external provider (Google) have no password until they set one via reset:
+        // password sign-in is impossible for them, and it answers like any wrong password.
+        if (string.IsNullOrEmpty(user.PasswordHash))
+        {
+            hasher.VerifyHashedPassword(new User(), DummyHash.Value, request.Password);
+            throw InvalidCredentials();
+        }
+
         var verification = hasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
         if (verification == PasswordVerificationResult.Failed)
         {
@@ -208,6 +223,23 @@ public sealed class AuthService(
             .SetProperty(u => u.LastLoginAt, Now)
             .SetProperty(u => u.LastActiveAt, Now)
             .SetProperty(u => u.PasswordHash, rehash), ct);
+
+        var result = IssueSession(user, familyId: IdGenerator.NewId());
+        await db.SaveChangesAsync(ct);
+        return result;
+    }
+
+    public async Task<LoginResult> SignInExternalAsync(User user, CancellationToken ct)
+    {
+        if (user.Status != UserStatus.Active)
+            throw DomainException.Forbidden("account.suspended",
+                user.Status == UserStatus.Suspended
+                    ? "Your account is suspended. Contact support if you believe this is a mistake."
+                    : "This account has been deactivated.");
+
+        await db.Set<User>().Where(u => u.Id == user.Id).ExecuteUpdateAsync(s => s
+            .SetProperty(u => u.LastLoginAt, Now)
+            .SetProperty(u => u.LastActiveAt, Now), ct);
 
         var result = IssueSession(user, familyId: IdGenerator.NewId());
         await db.SaveChangesAsync(ct);

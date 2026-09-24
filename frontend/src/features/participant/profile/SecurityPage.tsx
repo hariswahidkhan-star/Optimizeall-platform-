@@ -7,6 +7,7 @@ import { FormField } from '@/components/ui/FormField';
 import { PasswordInput } from '@/components/ui/PasswordInput';
 import { useToast } from '@/components/ui/toastContext';
 import { mapServerErrors } from '@/features/auth/formErrors';
+import { GoogleConnectionCard } from '@/features/auth/google/GoogleConnectionCard';
 import { passwordProblem } from '@/features/auth/passwordPolicy';
 import { PasswordStrength } from '@/features/auth/PasswordStrength';
 import { api } from '@/lib/api/client';
@@ -17,7 +18,10 @@ type FieldKey = 'currentPassword' | 'newPassword' | 'confirm';
 const SERVER_FIELDS = ['currentPassword', 'newPassword', 'password'];
 const CODE_TO_FIELD = { 'auth.invalid_password': 'currentPassword', 'auth.weak_password': 'newPassword' };
 
-/** Change password. The API revokes every session, so the user is signed out and asked to sign in again. */
+/**
+ * Change password (the API revokes every session, so the user is signed out and asked to sign in again) and the
+ * Google sign-in connection.
+ */
 export function SecurityPage() {
   const { user, logout } = useAuth();
   const toast = useToast();
@@ -62,60 +66,68 @@ export function SecurityPage() {
   };
 
   return (
-    <Card as="section" aria-labelledby="security-title">
-      <CardHeader
-        titleId="security-title"
-        title="Change password"
-        description="After changing your password you’ll be signed out everywhere and asked to sign in again."
-      />
-      <CardBody>
-        <form className="stack" onSubmit={onSubmit} noValidate aria-labelledby="security-title">
-          {server?.form && (
-            <Alert tone="danger" role="alert">
-              {server.form.title}
-            </Alert>
-          )}
-          <FormField
-            id="security-currentPassword"
-            label="Current password"
-            required
-            error={errorFor('currentPassword')}
-          >
-            <PasswordInput
-              autoComplete="current-password"
-              value={current}
-              onChange={(e) => setCurrent(e.target.value)}
-            />
-          </FormField>
-          <FormField
-            id="security-newPassword"
-            label="New password"
-            required
-            error={errorFor('newPassword')}
-            hint={<PasswordStrength password={next} email={user?.email} />}
-          >
-            <PasswordInput
-              autoComplete="new-password"
-              maxLength={128}
-              value={next}
-              onChange={(e) => setNext(e.target.value)}
-            />
-          </FormField>
-          <FormField id="security-confirm" label="Confirm new password" required error={errorFor('confirm')}>
-            <PasswordInput
-              autoComplete="new-password"
-              maxLength={128}
-              value={confirm}
-              onChange={(e) => setConfirm(e.target.value)}
-            />
-          </FormField>
-          <div>
-            <Button type="submit" loading={change.isPending}>
-              Change password
-            </Button>
-          </div>
-        </form>
-      </CardBody>
-    </Card>
+    <div className="stack">
+      <Card as="section" aria-labelledby="security-title">
+        <CardHeader
+          titleId="security-title"
+          title="Change password"
+          description="After changing your password you’ll be signed out everywhere and asked to sign in again."
+        />
+        <CardBody>
+          <form className="stack" onSubmit={onSubmit} noValidate aria-labelledby="security-title">
+            {server?.form && (
+              <Alert tone="danger" role="alert">
+                {server.form.title}
+              </Alert>
+            )}
+            <FormField
+              id="security-currentPassword"
+              label="Current password"
+              required
+              error={errorFor('currentPassword')}
+            >
+              <PasswordInput
+                autoComplete="current-password"
+                value={current}
+                onChange={(e) => setCurrent(e.target.value)}
+              />
+            </FormField>
+            <FormField
+              id="security-newPassword"
+              label="New password"
+              required
+              error={errorFor('newPassword')}
+              hint={<PasswordStrength password={next} email={user?.email} />}
+            >
+              <PasswordInput
+                autoComplete="new-password"
+                maxLength={128}
+                value={next}
+                onChange={(e) => setNext(e.target.value)}
+              />
+            </FormField>
+            <FormField
+              id="security-confirm"
+              label="Confirm new password"
+              required
+              error={errorFor('confirm')}
+            >
+              <PasswordInput
+                autoComplete="new-password"
+                maxLength={128}
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+              />
+            </FormField>
+            <div>
+              <Button type="submit" loading={change.isPending}>
+                Change password
+              </Button>
+            </div>
+          </form>
+        </CardBody>
+      </Card>
+      <GoogleConnectionCard />
+    </div>
   );
 }

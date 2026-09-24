@@ -30,6 +30,49 @@ Configuration keys are documented in [`/.env.example`](../.env.example); deploym
 * Staff accounts should use strong unique passwords; enforcing SSO/MFA for staff at the identity layer is
   recommended when available.
 
+### 1.1 Sign in with Google
+
+Optional OpenID Connect sign-in (`Modules/Auth/Google`), enabled only when `Authentication:Google:ClientId` and
+`ClientSecret` are configured (the secret from the environment/secret manager or user-secrets only). Otherwise
+`GET /auth/providers` reports it disabled, the web app shows no button and the Google endpoints answer 404.
+Setup: [DEPLOYMENT.md § 5.11](DEPLOYMENT.md#511-sign-in-with-google-optional).
+
+* **Flow**: authorization code with **PKCE (S256)**, exchanged **server side** with the client secret; the browser never
+  sees Google tokens. `POST /auth/google/start` returns the Google URL whose `state` is signed and encrypted (ASP.NET
+  Data Protection, 10-minute expiry) and sets `oa_google_flow`, an HttpOnly, `SameSite=Strict`, `Secure`, 10-minute
+  cookie (path `/api/v1/auth/google`) holding the encrypted nonce and PKCE verifier. `POST /auth/google/callback`
+  requires the state to verify **and** to match that cookie (so a state from another browser — login CSRF — is
+  useless), deletes the cookie (single use) and exchanges the code. The redirect URI comes from configuration
+  (`{Email:AppBaseUrl}/auth/google/callback`), never from the request; the post-login `returnTo` is kept only if it is
+  a same-origin path (and checked again by the SPA).
+* **ID token validation**: RS256 signature against Google's JWKS (cached per `Cache-Control`, 5 min – 24 h; an
+  unknown key id forces at most one refresh per minute), issuer `accounts.google.com` / `https://accounts.google.com`,
+  audience = our client id, expiry (60 s skew, app clock), the **nonce** of this attempt (constant-time compare),
+  `email_verified = true`, and the `hd` claim when `AllowedHostedDomains` is set. `alg=none`/HMAC tokens are refused.
+* **Account resolution** (`external_logins`: provider + `sub` unique, one Google identity per user; the email is
+  only a snapshot at link time — the `sub` is the identity, emails can change hands):
+  1. A known `(google, sub)` signs in its user.
+  2. Otherwise, a user with the same email is linked **only if that user's email is verified** and the user holds
+     no staff role (only Participant/Client accounts are linked automatically). Unverified accounts are refused
+     (`auth.google_link_unverified`) and staff accounts must sign in with their password and link from the
+     profile (`auth.google_link_requires_sign_in`), so a Google account cannot take over an account whose mailbox
+     ownership was never proven or a privileged account.
+  3. Otherwise nothing is created until the user accepts the participant rules on the terms step: the callback
+     returns `needsTerms` with a signed, encrypted, 15-minute ticket and `POST /auth/google/complete` creates a
+     **Participant** (email verified, **no password**). A ticket can only create an account, never sign in to an
+     existing one. **Staff roles are never granted through Google.**
+* **Status**: suspended, deactivated and locked-out users are refused exactly as with a password, and the session
+  is issued by the same `AuthService` code (short-lived JWT + rotating refresh cookie).
+* **No-password accounts**: `PasswordHash` is empty; password sign-in answers like a wrong password (after a dummy
+  hash) until the user sets a password through "forgot password" (which proves mailbox control).
+* **Linking from the profile** (`POST /auth/external-logins/google/start`, signed in) binds the flow to the user id;
+  the callback must carry the same user's session. A Google account already linked elsewhere is refused.
+  **Unlinking** (`DELETE /auth/external-logins/google`) is refused while Google is the only sign-in method (no
+  password, no other provider).
+* **Audit**: `auth.google_sign_in`, `auth.external_login_linked` (method `verified_email_match`, `profile` or
+  `sign_up`), `auth.external_login_unlinked`, and `auth.registered` for new accounts.
+* **Rate limits**: start, callback and complete use the `auth` policy; the provider list uses `public`.
+
 ## 2. Authorization (permission-based RBAC)
 
 Endpoints authorize **by permission, never by role** (`[HasPermission(Permissions.X)]`); roles are bundles of
@@ -42,8 +85,9 @@ attribute is never public by accident. Only these endpoints carry an explicit `[
 `IntegrationTests/Auth/DefaultDenyTests`, which also sends an anonymous request to every other endpoint and expects
 `401`):
 
-* auth: `POST /auth/register|login|refresh|logout|verify-email|resend-verification|forgot-password|reset-password`
-  (`/auth/me` and `/auth/change-password` require a session);
+* auth: `POST /auth/register|login|refresh|logout|verify-email|resend-verification|forgot-password|reset-password`,
+  Google sign-in `GET /auth/providers`, `POST /auth/google/start|callback|complete` (`/auth/me`,
+  `/auth/change-password` and `/auth/external-logins/*` require a session);
 * public growth pages: `GET /public/invitations/{code}`, `GET /public/campaigns/{slug}`, `POST /public/conversions`
   (HMAC-signed), the tracking redirect `GET /t/{code}`;
 * `GET /files/{id}` (the handler checks access per file, see § 5), `GET /campaign-categories`, `GET /content/faqs`,
@@ -173,7 +217,7 @@ batch finalization, payout settings, suspensions) additionally require an explic
 ## 7. Secrets management
 
 * Secrets: `ConnectionStrings__Default`, `Jwt__SigningKey`, `Security__HashSalt`, `Tracking__PostbackSecret`,
-  `Email__SmtpPassword`, `WhatsApp__AccessToken`, `Bootstrap__AdminPassword`. Generate with
+  `Email__SmtpPassword`, `WhatsApp__AccessToken`, `Bootstrap__AdminPassword`, `Authentication__Google__ClientSecret`. Generate with
   `scripts/generate-secrets.sh --aspnet`; store in a secret manager; inject as environment variables or files
   (`*_FILE`, supported by the API image). Never commit them; `.env*` files are git-ignored.
 * Development values in `appsettings.Development.json` are public and must never be used elsewhere. The API

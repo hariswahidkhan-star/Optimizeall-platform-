@@ -58,6 +58,12 @@ services:
       # Public URL of optimizeall-web (used in email links), e.g. https://optimizeall-web.onrender.com
       - key: Email__AppBaseUrl
         sync: false
+      # Optional "Sign in with Google" (docs/RENDER.md): OAuth client from Google Cloud with the authorized redirect URI
+      # https://<web-url>/auth/google/callback. Leave both empty to keep Google sign-in off (the button stays hidden).
+      - key: Authentication__Google__ClientId
+        sync: false
+      - key: Authentication__Google__ClientSecret
+        sync: false
       # Demo email: written to files and readable at /api/v1/dev/mailbox?to=<email>. Switch to Smtp for real email.
       - key: Email__Mode
         value: File
