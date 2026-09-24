@@ -116,8 +116,10 @@ public sealed class CommunicationService(
         DeliveryRules.EnsureStamp(brief, r.ConcurrencyStamp, db);
         var status = r.Status!.Value;
         if (status == BriefStatus.Converted) throw DeliveryRules.Invalid("brief.use_convert", "status", "Use Convert to turn a brief into work.");
+        var before = brief.Status;
         brief.Status = status;
         if (!string.IsNullOrWhiteSpace(r.StaffNote)) brief.StaffNote = r.StaffNote.Trim();
+        audit.Record("brief.status_changed", nameof(Brief), id, new { Status = before }, new { brief.Status }, brief.StaffNote);
         await db.SaveChangesAsync(ct);
         return await BriefAsync(id, null, ct);
     }
@@ -197,6 +199,19 @@ public sealed class CommunicationService(
     }
 
     /// <summary>Loads a thread and marks it read for the caller (read receipt).</summary>
+    /// <summary>Renames a thread (staff only; the controller is agency-side, scope enforces the client).</summary>
+    public async Task<ThreadDto> RenameThreadAsync(Guid clientId, Guid threadId, RenameThreadRequest r, CancellationToken ct)
+    {
+        await scope.EnsureAccessAsync(clientId, ct: ct);
+        var thread = await db.Set<MessageThread>().FirstOrDefaultAsync(t => t.Id == threadId && t.ClientAccountId == clientId, ct)
+                     ?? throw DomainException.NotFound("Thread");
+        var before = thread.Subject;
+        thread.Subject = r.Subject.Trim();
+        audit.Record("message.thread_renamed", nameof(MessageThread), threadId, new { Subject = before }, new { thread.Subject });
+        await db.SaveChangesAsync(ct);
+        return await ThreadAsync(clientId, threadId, ct);
+    }
+
     public async Task<ThreadDto> ThreadAsync(Guid clientId, Guid threadId, CancellationToken ct)
     {
         await scope.EnsureAccessAsync(clientId, ct: ct);
@@ -361,6 +376,8 @@ public sealed class CommunicationService(
         meeting.AttendeeUserIds = attendees;
         meeting.ActionItems = r.ActionItems.Select(a => new MeetingActionItem(a.Id ?? Guid.NewGuid(), a.Text.Trim(), a.AssigneeUserId, a.DueDate,
             a.Id is { } aid && previous.TryGetValue(aid, out var p) ? p.TaskId : null)).ToList();
+        audit.Record(id is null ? "meeting.created" : "meeting.updated", nameof(Meeting), meeting.Id,
+            after: new { meeting.Title, meeting.Status, meeting.StartsAt, ActionItems = meeting.ActionItems.Count });
         await db.SaveChangesAsync(ct);
         return (await MeetingDtosAsync(new List<Meeting> { meeting }, ct)).Single();
     }

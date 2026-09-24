@@ -1,4 +1,4 @@
-import { Ban, Pencil, Plus, Send } from 'lucide-react';
+import { Ban, Copy, Pencil, Plus, Send, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import {
@@ -35,7 +35,17 @@ import { LineItemsEditor, LivePreviewTotals, emptyLine } from '@/features/agency
 import { addDaysIso, billingErrorMessage, formatDateOnly, todayIso } from '@/features/agency/billing/lib';
 import { isApiError } from '@/lib/api/errors';
 import { useSupportedCurrencies } from '@/lib/api/meta';
-import { useDeal, useProposal, useProposals, useSaveProposal, useSendProposal, useWithdrawProposal } from '../api/hooks';
+import {
+  useDeal,
+  useDeleteProposal,
+  useDuplicateProposal,
+  useProposal,
+  useProposalTemplates,
+  useProposals,
+  useSaveProposal,
+  useSendProposal,
+  useWithdrawProposal,
+} from '../api/hooks';
 import type { Proposal, ProposalRequest, ProposalSummary } from '../api/types';
 import { ProposalDocumentView } from '../components/ProposalDocumentView';
 import { ProposalStatusBadge } from '../lib';
@@ -127,6 +137,8 @@ export function ProposalBuilderPage() {
   const deal = useDeal(proposalId ? '' : dealId ?? '');
   const clients = useClientOptions();
   const save = useSaveProposal(proposalId);
+  const templates = useProposalTemplates();
+  const [templateId, setTemplateId] = useState('');
   const [title, setTitle] = useState('');
   const [currency, setCurrency] = useState('USD');
   const [validUntil, setValidUntil] = useState(addDaysIso(todayIso(), 30));
@@ -194,6 +206,25 @@ export function ProposalBuilderPage() {
   const willVersion = p && p.version.sentAt !== null;
   const fieldErrors = isApiError(error) ? error.errors : undefined;
 
+  /** Copies a template's title, sections, validity and lines into the builder (nothing is saved yet). */
+  const applyTemplate = (id: string) => {
+    setTemplateId(id);
+    const t = templates.data?.find((x) => x.id === id);
+    if (!t) return;
+    if (t.proposalTitle && !title.trim()) setTitle(t.proposalTitle);
+    setValidUntil(addDaysIso(todayIso(), t.validForDays));
+    setSections({
+      executiveSummary: t.executiveSummary ?? '',
+      goals: t.goals ?? '',
+      scope: t.scope ?? '',
+      deliverables: t.deliverables ?? '',
+      timeline: t.timeline ?? '',
+      terms: t.terms ?? '',
+    });
+    if (t.lines.length > 0) setLines(t.lines.map((l) => ({ ...l })));
+    toast.success(`Started from “${t.name}”`, t.currency !== currency ? `Its prices are in ${t.currency}; check them for ${currency}.` : undefined);
+  };
+
   const submit = async () => {
     setError(null);
     const body: ProposalRequest = {
@@ -239,6 +270,16 @@ export function ProposalBuilderPage() {
           <Card>
             <CardHeader title="Proposal" />
             <CardBody className="stack">
+              {!p && (templates.data?.length ?? 0) > 0 && (
+                <FormField label="Start from a template" optional hint="Fills the sections and price lines; you can change everything before saving.">
+                  <Select
+                    value={templateId}
+                    placeholder="Blank proposal"
+                    options={(templates.data ?? []).map((t) => ({ value: t.id, label: t.name }))}
+                    onChange={(e) => applyTemplate(e.target.value)}
+                  />
+                </FormField>
+              )}
               <FormField label="Title" required error={fieldErrors?.title?.[0]}>
                 <Input value={title} maxLength={200} disabled={!!locked} onChange={(e) => setTitle(e.target.value)} />
               </FormField>
@@ -361,9 +402,13 @@ export function ProposalDetailPage() {
   const [version, setVersion] = useState<number | undefined>();
   const query = useProposal(proposalId, version);
   const withdraw = useWithdrawProposal(proposalId);
+  const duplicate = useDuplicateProposal();
+  const remove = useDeleteProposal();
+  const navigate = useNavigate();
   const toast = useToast();
   const [sending, setSending] = useState(false);
   const [withdrawing, setWithdrawing] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   if (query.isError) return <ErrorState error={query.error} onRetry={() => void query.refetch()} />;
   const p = query.data;
   if (!p) return <Skeleton height="30rem" />;
@@ -392,9 +437,40 @@ export function ProposalDetailPage() {
                 Withdraw
               </Button>
             )}
+            <Button
+              variant="secondary"
+              leadingIcon={<Copy />}
+              loading={duplicate.isPending}
+              onClick={async () => {
+                try {
+                  const copy = await duplicate.mutateAsync(p.id);
+                  toast.success(`Created ${copy.number} as a draft copy`);
+                  navigate(`/agency/proposals/${copy.id}/edit`);
+                } catch (error) {
+                  toast.error('Couldn’t duplicate', billingErrorMessage(error));
+                }
+              }}
+            >
+              Duplicate
+            </Button>
+            {p.sentVersion === null && p.status === 'Draft' && (
+              <Button variant="ghost" leadingIcon={<Trash2 />} onClick={() => setDeleting(true)}>
+                Delete draft
+              </Button>
+            )}
           </div>
         }
       />
+      {p.status === 'Accepted' && (
+        <Alert tone="info" title="Accepted proposals are locked">
+          The signed version is kept as the record. To offer changes, duplicate it and send the copy as a new proposal.
+        </Alert>
+      )}
+      {p.status === 'Withdrawn' && (
+        <Alert tone="info" title="Withdrawn">
+          The client link no longer works. Duplicate it to send a revised proposal.
+        </Alert>
+      )}
       <div className="bill-two-col">
         <Card>
           <CardBody>
@@ -459,6 +535,23 @@ export function ProposalDetailPage() {
         </div>
       </div>
       <SendDialog proposal={p} open={sending} onClose={() => setSending(false)} />
+      <ConfirmDialog
+        open={deleting}
+        onClose={() => setDeleting(false)}
+        tone="danger"
+        title={`Delete ${p.number}?`}
+        description="This draft was never sent, so it’s removed completely. This can’t be undone."
+        confirmLabel="Delete draft"
+        onConfirm={async () => {
+          try {
+            await remove.mutateAsync({ id: p.id, concurrencyStamp: p.concurrencyStamp });
+          } catch (error) {
+            throw new Error(billingErrorMessage(error));
+          }
+          toast.success('Draft deleted');
+          navigate('/agency/proposals');
+        }}
+      />
       <ConfirmDialog
         open={withdrawing}
         onClose={() => setWithdrawing(false)}

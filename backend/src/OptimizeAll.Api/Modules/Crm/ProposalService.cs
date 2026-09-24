@@ -352,6 +352,61 @@ public sealed class ProposalService(
         return await GetAsync(id, ct);
     }
 
+    // ------------------------------------------------------------------ Delete & duplicate
+
+    /// <summary>
+    /// Deletes a proposal that was never sent (nothing reached the client, so there is nothing to keep). Anything that was
+    /// sent is part of the sales record: withdraw it instead.
+    /// </summary>
+    public async Task DeleteDraftAsync(Guid id, Guid? stamp, CancellationToken ct)
+    {
+        var proposal = await db.Set<Proposal>().FirstOrDefaultAsync(p => p.Id == id, ct) ?? throw DomainException.NotFound("Proposal");
+        CrmService.RequireStamp(db, proposal, stamp);
+        if (proposal.SentVersion is not null || proposal.Status != ProposalStatus.Draft)
+            throw DomainException.Conflict("proposal.not_deletable",
+                "Only a proposal that was never sent can be deleted. Withdraw it instead to disable the client's link.");
+        db.Remove(proposal);
+        audit.Record("crm.proposal_deleted", nameof(Proposal), id, before: new { proposal.Number, proposal.Title, proposal.DealId });
+        await db.SaveChangesAsync(ct);
+    }
+
+    /// <summary>Copies the proposal's latest version into a new draft (for example to re-issue a withdrawn or declined proposal).</summary>
+    public async Task<ProposalDto> DuplicateAsync(Guid id, CancellationToken ct)
+    {
+        var source = await db.Set<Proposal>().AsNoTracking().FirstOrDefaultAsync(p => p.Id == id, ct) ?? throw DomainException.NotFound("Proposal");
+        var version = await db.Set<ProposalVersion>().AsNoTracking().FirstAsync(v => v.ProposalId == id && v.VersionNumber == source.CurrentVersion, ct);
+        var lines = await db.Set<ProposalLine>().AsNoTracking().Where(l => l.ProposalVersionId == version.Id).OrderBy(l => l.Position).ToListAsync(ct);
+        var title = "Copy of " + source.Title;
+        var request = new ProposalRequest
+        {
+            Title = title.Length > 200 ? title[..200] : title,
+            DealId = source.DealId,
+            ClientAccountId = source.ClientAccountId,
+            CompanyId = source.CompanyId,
+            ContactId = source.ContactId,
+            Currency = source.Currency,
+            ValidUntil = version.ValidUntil >= Today.AddDays(7) ? version.ValidUntil : Today.AddDays(30),
+            ExecutiveSummary = version.ExecutiveSummary,
+            Goals = version.Goals,
+            Scope = version.Scope,
+            Deliverables = version.Deliverables,
+            Timeline = version.Timeline,
+            Terms = version.Terms,
+            RecipientName = source.RecipientName,
+            RecipientEmail = source.RecipientEmail,
+            InvoiceOnAcceptance = source.InvoiceOnAcceptance,
+            Lines = lines.Select(l => new PriceLineRequest
+            {
+                Description = l.Description, ServiceSlug = l.ServiceSlug, PackageSlug = l.PackageSlug, Quantity = l.Quantity, UnitPrice = l.UnitPrice,
+                DiscountType = l.DiscountType, DiscountValue = l.DiscountValue, TaxRateId = l.TaxRateId, Recurrence = l.Recurrence,
+            }).ToList(),
+        };
+        var copy = await CreateAsync(request, ct);
+        audit.Record("crm.proposal_duplicated", nameof(Proposal), copy.Id, after: new { From = source.Number, copy.Number });
+        await db.SaveChangesAsync(ct);
+        return copy;
+    }
+
     // ------------------------------------------------------------------ Public view
 
     public async Task<Proposal> FindByTokenAsync(string token, CancellationToken ct)

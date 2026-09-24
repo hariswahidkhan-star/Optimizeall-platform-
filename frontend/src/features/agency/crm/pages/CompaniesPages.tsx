@@ -16,12 +16,14 @@ import {
   Pagination,
   Skeleton,
   type DataTableColumn,
+  type SortState,
 } from '@/components/ui';
 import { Permissions } from '@/lib/auth/permissions';
 import { useAuth } from '@/lib/auth/useAuth';
 import { useCompanies, useCompany } from '../api/hooks';
 import type { CompanySummary } from '../api/types';
 import { ActivityPanel } from '../components/ActivityPanel';
+import { ArchiveButton, ArchivedBanner, ArchivedFilter, BulkActionsBar } from '../components/ArchiveControls';
 import { CompanyFormDialog, ContactFormDialog } from '../components/CrmForms';
 import { LifecycleBadge } from '../lib';
 import '@/features/agency/billing/billing.css';
@@ -32,6 +34,7 @@ const columns: DataTableColumn<CompanySummary>[] = [
     id: 'name',
     header: 'Company',
     primary: true,
+    sortable: true,
     cell: (c) => (
       <Link className="ui-link bill-strong" to={`/agency/crm/companies/${c.id}`}>
         {c.name}
@@ -39,7 +42,7 @@ const columns: DataTableColumn<CompanySummary>[] = [
     ),
   },
   { id: 'domain', header: 'Domain', cell: (c) => c.domain ?? '—' },
-  { id: 'industry', header: 'Industry', cell: (c) => c.industry ?? '—', hideOnMobile: true },
+  { id: 'industry', header: 'Industry', sortable: true, cell: (c) => c.industry ?? '—', hideOnMobile: true },
   { id: 'contacts', header: 'Contacts', align: 'right', cell: (c) => c.contacts },
   { id: 'deals', header: 'Open deals', align: 'right', cell: (c) => c.openDeals },
   { id: 'owner', header: 'Owner', cell: (c) => c.owner?.displayName ?? '—', hideOnMobile: true },
@@ -50,7 +53,11 @@ export function CompaniesPage() {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [creating, setCreating] = useState(false);
-  const query = useCompanies({ search, page, pageSize: 25 });
+  const [archived, setArchived] = useState(false);
+  const [sort, setSort] = useState<SortState>({ id: 'created', desc: true });
+  const [selected, setSelected] = useState<string[]>([]);
+  const canManage = hasPermission(Permissions.CrmManage);
+  const query = useCompanies({ search, archived: archived || undefined, sort: sort.id, desc: sort.desc, page, pageSize: 25 });
   return (
     <>
       <PageHeader
@@ -66,12 +73,38 @@ export function CompaniesPage() {
       />
       <Card>
         <CardBody className="stack">
-          <FilterBar search={search} onSearchChange={(v) => { setSearch(v); setPage(1); }} searchLabel="Search companies" searchPlaceholder="Name or domain" />
+          <div className="crm-grid">
+            <FilterBar search={search} onSearchChange={(v) => { setSearch(v); setPage(1); }} searchLabel="Search companies" searchPlaceholder="Name or domain" />
+            <ArchivedFilter value={archived} onChange={(v) => { setArchived(v); setSelected([]); setPage(1); }} />
+          </div>
           {query.isError ? (
             <ErrorState error={query.error} onRetry={() => void query.refetch()} />
           ) : (
             <>
-              <DataTable caption="Companies" columns={columns} rows={query.data?.items ?? []} getRowId={(c) => c.id} loading={query.isPending} emptyState={<EmptyState compact headingLevel={3} title="No companies" />} />
+              <DataTable
+                caption={archived ? 'Archived companies' : 'Companies'}
+                columns={columns}
+                rows={query.data?.items ?? []}
+                getRowId={(c) => c.id}
+                loading={query.isPending}
+                sort={sort}
+                onSortChange={(next) => { setSort(next); setPage(1); }}
+                rowLabel={(c) => c.name}
+                selectable={canManage}
+                selectedIds={selected}
+                onSelectionChange={setSelected}
+                bulkActions={(ids) => (
+                  <BulkActionsBar entity="companies" selectedIds={ids} archivedView={archived} onDone={() => setSelected([])} />
+                )}
+                emptyState={
+                  <EmptyState
+                    compact
+                    headingLevel={3}
+                    title={archived ? 'No archived companies' : 'No companies'}
+                    description={archived ? 'Archived companies appear here and can be restored.' : undefined}
+                  />
+                }
+              />
               {query.data && query.data.total > 25 && <Pagination page={page} pageSize={25} total={query.data.total} onPageChange={setPage} />}
             </>
           )}
@@ -105,7 +138,8 @@ export function CompanyDetailPage() {
         breadcrumbs={[{ label: 'Sales CRM', to: '/agency/crm' }, { label: 'Companies', to: '/agency/crm/companies' }, { label: c.name }]}
         description={[c.domain, c.industry, c.countryCode].filter(Boolean).join(' · ')}
         actions={
-          canManage && (
+          canManage &&
+          !c.archivedAt && (
             <div className="crm-actions">
               <Button variant="secondary" leadingIcon={<UserPlus />} onClick={() => setAdding(true)}>
                 Add contact
@@ -113,10 +147,18 @@ export function CompanyDetailPage() {
               <Button variant="secondary" leadingIcon={<Pencil />} onClick={() => setEditing(true)}>
                 Edit
               </Button>
+              <ArchiveButton
+                entity="companies"
+                id={c.id}
+                concurrencyStamp={c.concurrencyStamp}
+                archived={false}
+                disabledReason={c.clientAccountId ? 'This company is a client. Change the client’s status instead.' : undefined}
+              />
             </div>
           )
         }
       />
+      {c.archivedAt && <ArchivedBanner entity="companies" id={c.id} concurrencyStamp={c.concurrencyStamp} canManage={canManage} />}
       <div className="crm-two-col">
         <Card>
           <CardHeader title="Timeline" description="Includes activity on the company’s contacts and deals." />

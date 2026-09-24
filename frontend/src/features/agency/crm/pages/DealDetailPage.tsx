@@ -25,6 +25,7 @@ import { useAuth } from '@/lib/auth/useAuth';
 import { useDeal, useMoveDeal, useStages } from '../api/hooks';
 import type { Utm } from '../api/types';
 import { ActivityPanel } from '../components/ActivityPanel';
+import { ArchiveButton, ArchivedBanner } from '../components/ArchiveControls';
 import { DealFormDialog, LostReasonDialog } from '../components/CrmForms';
 import { DealStatusBadge, ProposalStatusBadge, SOURCE_LABELS } from '../lib';
 import '@/features/agency/billing/billing.css';
@@ -38,7 +39,7 @@ function Touch({ touch }: { touch: Utm }) {
 export function DealDetailPage() {
   const { dealId = '' } = useParams();
   const { hasPermission } = useAuth();
-  const canManage = hasPermission(Permissions.CrmManage);
+  const canManageCrm = hasPermission(Permissions.CrmManage);
   const canPropose = hasPermission(Permissions.ProposalsManage);
   const toast = useToast();
   const query = useDeal(dealId);
@@ -50,6 +51,9 @@ export function DealDetailPage() {
   if (query.isError) return <ErrorState error={query.error} onRetry={() => void query.refetch()} />;
   const deal = query.data;
   if (!deal) return <Skeleton height="24rem" />;
+  // Archived deals are read-only until restored.
+  const canManage = canManageCrm && !deal.archivedAt;
+  const awaitingClient = deal.proposals.some((p) => p.status === 'Sent' || p.status === 'Viewed');
 
   const moveTo = async (stageId: string, lostReason?: string) => {
     try {
@@ -79,14 +83,24 @@ export function DealDetailPage() {
                 Edit
               </Button>
             )}
-            {canPropose && (
+            {canPropose && !deal.archivedAt && (
               <ButtonLink to={`/agency/proposals/new?dealId=${deal.id}`} leadingIcon={<FilePlus2 />}>
                 New proposal
               </ButtonLink>
             )}
+            {canManage && (
+              <ArchiveButton
+                entity="deals"
+                id={deal.id}
+                concurrencyStamp={deal.concurrencyStamp}
+                archived={false}
+                disabledReason={awaitingClient ? 'A proposal on this deal is waiting for the client. Withdraw it before archiving.' : undefined}
+              />
+            )}
           </div>
         }
       />
+      {deal.archivedAt && <ArchivedBanner entity="deals" id={deal.id} concurrencyStamp={deal.concurrencyStamp} canManage={canManageCrm} />}
       {deal.status === 'Lost' && deal.lostReason && (
         <Alert tone="neutral" title="Lost">
           {deal.lostReason}

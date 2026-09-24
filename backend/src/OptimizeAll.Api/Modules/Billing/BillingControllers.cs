@@ -68,6 +68,13 @@ public sealed class AgencyInvoicesController(InvoiceService invoices, PaymentSer
         return NoContent();
     }
 
+    /// <summary>Copies an invoice (any status) into a new draft for the same client.</summary>
+    [HttpPost("{id:guid}/duplicate")]
+    [HasPermission(Permissions.BillingManage)]
+    [ProducesResponseType(typeof(InvoiceDto), StatusCodes.Status201Created)]
+    public async Task<IActionResult> Duplicate(Guid id, CancellationToken ct) =>
+        StatusCode(StatusCodes.Status201Created, await invoices.DuplicateAsync(id, ct));
+
     [HttpPost("{id:guid}/issue")]
     [HasPermission(Permissions.BillingManage)]
     public Task<InvoiceDto> Issue(Guid id, IssueInvoiceRequest request, CancellationToken ct) => invoices.IssueAsync(id, request, ct);
@@ -269,6 +276,29 @@ public sealed class AgencyBillingController(
         return ToDto(rate);
     }
 
+    /// <summary>
+    /// Deletes a tax rate that no document, catalog item, template or setting uses. A rate in use is deactivated instead
+    /// (issued documents keep their snapshot either way).
+    /// </summary>
+    [HttpDelete("tax-rates/{id:guid}")]
+    [HasPermission(Permissions.BillingSettings)]
+    public async Task<IActionResult> DeleteTaxRate(Guid id, CancellationToken ct)
+    {
+        var rate = await db.Set<TaxRate>().FirstOrDefaultAsync(t => t.Id == id, ct) ?? throw DomainException.NotFound("TaxRate");
+        var inUse = await db.Set<InvoiceLine>().AnyAsync(l => l.TaxRateId == id, ct) || await db.Set<ContractLine>().AnyAsync(l => l.TaxRateId == id, ct) ||
+                    await db.Set<Domain.Crm.ProposalLine>().AnyAsync(l => l.TaxRateId == id, ct) ||
+                    await db.Set<ServiceCatalogItem>().AnyAsync(i => i.TaxRateId == id, ct) ||
+                    (await settings.GetAsync(ct)).DefaultTaxRateId == id ||
+                    (await db.Set<Domain.Crm.ProposalTemplate>().AsNoTracking().Select(t => t.Lines).ToListAsync(ct)).Any(ls => ls.Any(l => l.TaxRateId == id));
+        if (inUse)
+            throw DomainException.Conflict("billing.tax_rate_in_use",
+                "This tax rate is used by documents, catalog items, templates or the default setting. Deactivate it instead.");
+        db.Remove(rate);
+        audit.Record("billing.tax_rate_deleted", nameof(TaxRate), id, before: ToDto(rate));
+        await db.SaveChangesAsync(ct);
+        return NoContent();
+    }
+
     /// <summary>Runs the recurring-invoice job now (same idempotent logic as the schedule).</summary>
     [HttpPost("jobs/recurring-invoices/run")]
     [HasPermission(Permissions.BillingManage)]
@@ -325,6 +355,14 @@ public sealed class AgencyContractsController(ContractService contracts, Recurri
 
     [HttpPost("{id:guid}/cancel")]
     public Task<ContractDto> Cancel(Guid id, CancelContractRequest request, CancellationToken ct) => contracts.CancelAsync(id, request, ct);
+
+    /// <summary>Deletes a draft contract that never billed (otherwise cancel it).</summary>
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id, [FromQuery] Guid? concurrencyStamp, CancellationToken ct)
+    {
+        await contracts.DeleteDraftAsync(id, concurrencyStamp, ct);
+        return NoContent();
+    }
 
     /// <summary>Generates any invoices that are due for this contract now (idempotent per period).</summary>
     [HttpPost("{id:guid}/generate-invoices")]

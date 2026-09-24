@@ -9,6 +9,7 @@ public static class ClientsModule
     public static IServiceCollection AddClientsModule(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<ClientService>();
+        services.AddScoped<OnboardingTemplateService>();
         services.AddScoped<ClientRelationshipService>();
         services.AddScoped<ClientHealthService>();
         services.AddScoped<IEventHandler<InvoicePaid>, InvoicePaidHealthHandler>();

@@ -11,7 +11,10 @@ import type {
   Contact,
   ContactRequest,
   ContactSummary,
+  CrmBulkRequest,
+  CrmBulkResult,
   CrmDashboard,
+  CrmOptions,
   Deal,
   DealRequest,
   DealSummary,
@@ -19,6 +22,8 @@ import type {
   Proposal,
   ProposalRequest,
   ProposalSummary,
+  ProposalTemplate,
+  ProposalTemplateRequest,
   SavedView,
   ScoringRule,
   Stage,
@@ -45,6 +50,8 @@ export const crmKeys = {
   assignees: () => ['crm', 'assignees'] as const,
   proposals: (params: QueryParams) => ['crm', 'proposals', params] as const,
   proposal: (id: string, version?: number) => ['crm', 'proposal', id, version ?? 'current'] as const,
+  options: () => ['crm', 'options'] as const,
+  proposalTemplates: (includeInactive: boolean) => ['crm', 'proposal-templates', includeInactive] as const,
 };
 
 // ---------------- Queries
@@ -205,7 +212,7 @@ export function useImportContacts() {
 export function useSaveStages() {
   const invalidate = useInvalidateCrm();
   return useMutation({
-    mutationFn: (stages: { id?: string | null; name: string; winProbability: number; kind: string; isActive: boolean }[]) =>
+    mutationFn: (stages: { id?: string | null; name: string; winProbability: number; kind: string; isActive: boolean; concurrencyStamp?: string }[]) =>
       api.put<Stage[]>(`${CRM}/stages`, { stages }),
     onSuccess: () => invalidate(),
   });
@@ -268,5 +275,87 @@ export function useWithdrawProposal(id: string) {
   return useMutation({
     mutationFn: (body: { concurrencyStamp: string; reason?: string }) => api.post<Proposal>(`/agency/proposals/${id}/withdraw`, body),
     onSuccess: () => invalidate(),
+  });
+}
+
+// ---------------- Archive, bulk actions, options, templates
+
+export type CrmEntity = 'contacts' | 'companies' | 'deals';
+
+/** Archive or restore one contact, company or deal (stamp-checked; a stale stamp answers 409). */
+export function useArchiveRecord(entity: CrmEntity) {
+  const invalidate = useInvalidateCrm();
+  return useMutation({
+    mutationFn: ({ id, archive, concurrencyStamp }: { id: string; archive: boolean; concurrencyStamp: string }) =>
+      api.post<unknown>(`${CRM}/${entity}/${id}/${archive ? 'archive' : 'restore'}`, { concurrencyStamp }),
+    onSettled: () => invalidate(),
+  });
+}
+
+export function useBulkAction(entity: CrmEntity) {
+  const invalidate = useInvalidateCrm();
+  return useMutation({
+    mutationFn: (body: CrmBulkRequest) => api.post<CrmBulkResult>(`${CRM}/${entity}/bulk`, body),
+    onSettled: () => invalidate(),
+  });
+}
+
+export function useUpdateView(entity: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, ...body }: { id: string; name: string; shared: boolean; filters?: Record<string, string> }) =>
+      api.put<SavedView>(`${CRM}/views/${id}`, body),
+    onSuccess: () => qc.invalidateQueries({ queryKey: crmKeys.views(entity) }),
+  });
+}
+
+export const useCrmOptions = () =>
+  useQuery({ queryKey: crmKeys.options(), queryFn: ({ signal }) => api.get<CrmOptions>(`${CRM}/options`, { signal }), staleTime: 60_000 });
+
+export function useSaveCrmOptions() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (body: Omit<CrmOptions, 'version'> & { version: string }) => api.put<CrmOptions>(`${CRM}/options`, body),
+    onSuccess: (data) => qc.setQueryData(crmKeys.options(), data),
+  });
+}
+
+export function useDeleteProposal() {
+  const invalidate = useInvalidateCrm();
+  return useMutation({
+    mutationFn: ({ id, concurrencyStamp }: { id: string; concurrencyStamp: string }) =>
+      api.delete<void>(`/agency/proposals/${id}`, undefined, { query: { concurrencyStamp } }),
+    onSuccess: () => invalidate(),
+  });
+}
+
+export function useDuplicateProposal() {
+  const invalidate = useInvalidateCrm();
+  return useMutation({
+    mutationFn: (id: string) => api.post<Proposal>(`/agency/proposals/${id}/duplicate`, {}),
+    onSuccess: () => invalidate(),
+  });
+}
+
+export const useProposalTemplates = (includeInactive = false) =>
+  useQuery({
+    queryKey: crmKeys.proposalTemplates(includeInactive),
+    queryFn: ({ signal }) => api.get<ProposalTemplate[]>('/agency/proposal-templates', { query: { includeInactive }, signal }),
+  });
+
+export function useSaveProposalTemplate(id?: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (body: ProposalTemplateRequest) =>
+      id ? api.put<ProposalTemplate>(`/agency/proposal-templates/${id}`, body) : api.post<ProposalTemplate>('/agency/proposal-templates', body),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['crm', 'proposal-templates'] }),
+  });
+}
+
+export function useDeleteProposalTemplate() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => api.delete<void>(`/agency/proposal-templates/${id}`),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['crm', 'proposal-templates'] }),
   });
 }

@@ -6,6 +6,7 @@ import { useSupportedCurrencies } from '@/lib/api/meta';
 import { useClientOptions, useInvoice, useSaveInvoice } from '../api/hooks';
 import type { PriceLineInput } from '../api/types';
 import { LineItemsEditor, LivePreviewTotals, emptyLine } from '../components/LineItemsEditor';
+import { PaymentTermsField } from '../components/PaymentTermsField';
 import { billingErrorMessage } from '../lib';
 import '../billing.css';
 
@@ -109,9 +110,7 @@ export function InvoiceEditorPage() {
               <FormField label="Currency" required>
                 <Select value={currency} options={currencies.options} onChange={(e) => setCurrency(e.target.value)} />
               </FormField>
-              <FormField label="Payment terms (days)" optional hint="Defaults to the billing settings.">
-                <Input type="number" min={0} max={365} value={terms} onChange={(e) => setTerms(e.target.value)} />
-              </FormField>
+              <PaymentTermsField value={terms} onChange={setTerms} />
               <FormField label="Reference" optional hint="PO number or contract reference.">
                 <Input value={reference} maxLength={100} onChange={(e) => setReference(e.target.value)} />
               </FormField>

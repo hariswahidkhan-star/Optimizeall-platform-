@@ -187,12 +187,31 @@ public sealed class DeliverableService(
         var d = await LoadAsync(id, ct);
         DeliveryRules.EnsureStamp(d, r.ConcurrencyStamp, db);
         await ValidatePeopleAsync(r.OwnerUserId, r.ReviewerUserId, ct);
+        var before = new { d.Title, d.OwnerUserId, d.ReviewerUserId };
         d.Title = r.Title.Trim();
         d.Description = r.Description?.Trim();
         d.OwnerUserId = r.OwnerUserId;
         d.ReviewerUserId = r.ReviewerUserId;
+        audit.Record("deliverable.updated", nameof(Deliverable), id, before, new { d.Title, d.OwnerUserId, d.ReviewerUserId });
         await db.SaveChangesAsync(ct);
         return await GetAsync(id, ct);
+    }
+
+    /// <summary>
+    /// Deletes a deliverable that was never sent to the client (its versions, internal comments and review log go with it).
+    /// Once the client has seen a version, the deliverable is part of the approval record and can't be deleted.
+    /// </summary>
+    public async Task DeleteAsync(Guid id, Guid? stamp, CancellationToken ct)
+    {
+        var d = await LoadAsync(id, ct);
+        if (stamp is null) throw DeliveryRules.Invalid("concurrency.stamp_required", "concurrencyStamp", "Reload the deliverable and try again.");
+        DeliveryRules.EnsureStamp(d, stamp, db);
+        if (d.LastSentVersion > 0 || !DeliverableWorkflow.IsOpen(d.Status))
+            throw DomainException.Conflict("deliverable.not_deletable",
+                "The client has already seen this deliverable, so it stays in the approval record. Add a new version instead.");
+        db.Remove(d);
+        audit.Record("deliverable.deleted", nameof(Deliverable), id, before: new { d.Title, d.ProjectId, d.Status, d.CurrentVersion });
+        await db.SaveChangesAsync(ct);
     }
 
     private async Task ValidatePeopleAsync(Guid? owner, Guid? reviewer, CancellationToken ct)

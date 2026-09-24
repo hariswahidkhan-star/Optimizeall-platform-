@@ -1,4 +1,4 @@
-import { Ban, Download, FilePen, MinusCircle, Receipt, Send, Stamp, Trash2 } from 'lucide-react';
+import { Ban, Copy, Download, FilePen, MinusCircle, Receipt, Send, Stamp, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
@@ -24,7 +24,7 @@ import {
 import { api } from '@/lib/api/client';
 import { Permissions } from '@/lib/auth/permissions';
 import { useAuth } from '@/lib/auth/useAuth';
-import { useDeleteInvoice, useInvoice, useInvoiceAction } from '../api/hooks';
+import { useDeleteInvoice, useDuplicateInvoice, useInvoice, useInvoiceAction } from '../api/hooks';
 import type { Invoice, Payment, PriceLine } from '../api/types';
 import { CreditNoteDialog, RecordPaymentDialog } from '../components/InvoiceDialogs';
 import { TotalsList } from '../components/LineItemsEditor';
@@ -71,6 +71,8 @@ export function InvoiceDetailPage() {
   const query = useInvoice(invoiceId);
   const action = useInvoiceAction(invoiceId);
   const remove = useDeleteInvoice();
+  const duplicate = useDuplicateInvoice();
+  const [deleting, setDeleting] = useState(false);
   const [paying, setPaying] = useState<Invoice | null>(null);
   const [crediting, setCrediting] = useState<Invoice | null>(null);
   const [sensitive, setSensitive] = useState<'void' | 'write-off' | null>(null);
@@ -106,18 +108,7 @@ export function InvoiceDetailPage() {
                 <Button leadingIcon={<Stamp />} loading={action.isPending} onClick={() => void run('issue', { concurrencyStamp: invoice.concurrencyStamp, send: false })}>
                   Issue
                 </Button>
-                <Button
-                  variant="ghost"
-                  leadingIcon={<Trash2 />}
-                  onClick={async () => {
-                    try {
-                      await remove.mutateAsync(invoice.id);
-                      navigate('/agency/billing/invoices');
-                    } catch (error) {
-                      toast.error('Couldn’t delete the draft', billingErrorMessage(error));
-                    }
-                  }}
-                >
+                <Button variant="ghost" leadingIcon={<Trash2 />} onClick={() => setDeleting(true)}>
                   Delete draft
                 </Button>
               </>
@@ -134,6 +125,24 @@ export function InvoiceDetailPage() {
                   Credit note
                 </Button>
               </>
+            )}
+            {canManage && (
+              <Button
+                variant="secondary"
+                leadingIcon={<Copy />}
+                loading={duplicate.isPending}
+                onClick={async () => {
+                  try {
+                    const copy = await duplicate.mutateAsync(invoice.id);
+                    toast.success('Draft copy created', 'Review it, then issue it when ready.');
+                    navigate(`/agency/billing/invoices/${copy.id}/edit`);
+                  } catch (error) {
+                    toast.error('Couldn’t duplicate the invoice', billingErrorMessage(error));
+                  }
+                }}
+              >
+                Duplicate
+              </Button>
             )}
             <Button
               variant="secondary"
@@ -155,8 +164,30 @@ export function InvoiceDetailPage() {
           </div>
         }
       />
+      <ConfirmDialog
+        open={deleting}
+        onClose={() => setDeleting(false)}
+        tone="danger"
+        title="Delete this draft invoice?"
+        description="Drafts have no number yet, so nothing is lost from the numbering sequence. This can’t be undone."
+        confirmLabel="Delete draft"
+        onConfirm={async () => {
+          try {
+            await remove.mutateAsync(invoice.id);
+          } catch (error) {
+            throw new Error(billingErrorMessage(error));
+          }
+          navigate('/agency/billing/invoices');
+        }}
+      />
       <div className="bill-two-col">
         <div className="stack">
+          {invoice.status !== 'Draft' && canManage && (
+            <Alert tone="info" title="Issued invoices are locked">
+              Numbers, lines and amounts can’t change once issued. Correct an amount with a credit note, void an unpaid invoice, or duplicate it
+              to start a corrected draft.
+            </Alert>
+          )}
           {invoice.status === 'Void' && (
             <Alert tone="neutral" title="Voided">
               {invoice.voidReason}

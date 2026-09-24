@@ -17,6 +17,8 @@ public static class CrmModule
         services.AddScoped<InboundLeadService>();
         services.AddScoped<ProposalService>();
         services.AddScoped<ProposalAcceptanceService>();
+        services.AddScoped<CrmOptionsService>();
+        services.AddScoped<ProposalTemplateService>();
 
         services.AddScoped<IEventHandler<WebsiteInquiryReceived>, WebsiteInquiryLeadHandler>();
         services.AddScoped<IEventHandler<FormSubmitted>, FormSubmittedLeadHandler>();

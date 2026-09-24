@@ -162,6 +162,9 @@ public class TaskComment : Entity
     /// <summary>Users mentioned (validated staff ids); each is notified once.</summary>
     public List<Guid> MentionedUserIds { get; set; } = new();
     public DateTime CreatedAt { get; set; }
+
+    /// <summary>Set when the author edited the comment (shown as "edited").</summary>
+    public DateTime? EditedAt { get; set; }
 }
 
 public class TaskAttachment : Entity

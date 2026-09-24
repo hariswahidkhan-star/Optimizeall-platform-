@@ -16,12 +16,14 @@ import {
   Tabs,
   useToast,
   type DataTableColumn,
+  type SortState,
 } from '@/components/ui';
 import { billingErrorMessage } from '@/features/agency/billing/lib';
 import { Permissions } from '@/lib/auth/permissions';
 import { useAuth } from '@/lib/auth/useAuth';
 import { useAssignees, useBoard, useDeals, useMoveDeal } from '../api/hooks';
 import type { DealSummary, Stage } from '../api/types';
+import { ArchivedFilter, BulkActionsBar } from '../components/ArchiveControls';
 import { DealFormDialog, LostReasonDialog } from '../components/CrmForms';
 import { KanbanBoard } from '../components/KanbanBoard';
 import { DealStatusBadge, SOURCE_LABELS, SOURCE_OPTIONS } from '../lib';
@@ -33,6 +35,7 @@ const listColumns: DataTableColumn<DealSummary>[] = [
     id: 'title',
     header: 'Deal',
     primary: true,
+    sortable: true,
     cell: (d) => (
       <Link className="ui-link bill-strong" to={`/agency/crm/deals/${d.id}`}>
         {d.title}
@@ -44,17 +47,51 @@ const listColumns: DataTableColumn<DealSummary>[] = [
   { id: 'status', header: 'Status', cell: (d) => <DealStatusBadge status={d.status} /> },
   { id: 'source', header: 'Source', cell: (d) => SOURCE_LABELS[d.source], hideOnMobile: true },
   { id: 'owner', header: 'Owner', cell: (d) => d.owner?.displayName ?? 'Unassigned', hideOnMobile: true },
-  { id: 'value', header: 'Value', align: 'right', cell: (d) => <Money amount={d.value} currency={d.currency} /> },
+  { id: 'value', header: 'Value', align: 'right', sortable: true, cell: (d) => <Money amount={d.value} currency={d.currency} /> },
+  {
+    id: 'expectedClose',
+    header: 'Expected close',
+    sortable: true,
+    hideOnMobile: true,
+    cell: (d) => d.expectedCloseDate ?? '—',
+  },
   { id: 'weighted', header: 'Weighted', align: 'right', cell: (d) => <Money amount={d.weightedValue} currency={d.currency} />, hideOnMobile: true },
 ];
 
-function DealList({ search, owner, source }: { search: string; owner?: string; source?: string }) {
+function DealList({ search, owner, source, canManage }: { search: string; owner?: string; source?: string; canManage: boolean }) {
   const [page, setPage] = useState(1);
-  const query = useDeals({ search, ownerUserId: owner, source, page, pageSize: 25 });
+  const [archived, setArchived] = useState(false);
+  const [sort, setSort] = useState<SortState>({ id: 'created', desc: true });
+  const [selected, setSelected] = useState<string[]>([]);
+  const query = useDeals({ search, ownerUserId: owner, source, archived: archived || undefined, sort: sort.id, desc: sort.desc, page, pageSize: 25 });
   if (query.isError) return <ErrorState error={query.error} onRetry={() => void query.refetch()} />;
   return (
     <div className="stack">
-      <DataTable caption="Deals" columns={listColumns} rows={query.data?.items ?? []} getRowId={(d) => d.id} loading={query.isPending} emptyState={<EmptyState compact headingLevel={3} title="No deals match" />} />
+      <div className="crm-grid">
+        <ArchivedFilter value={archived} onChange={(v) => { setArchived(v); setSelected([]); setPage(1); }} />
+      </div>
+      <DataTable
+        caption={archived ? 'Archived deals' : 'Deals'}
+        columns={listColumns}
+        rows={query.data?.items ?? []}
+        getRowId={(d) => d.id}
+        loading={query.isPending}
+        sort={sort}
+        onSortChange={(next) => { setSort(next); setPage(1); }}
+        rowLabel={(d) => d.title}
+        selectable={canManage}
+        selectedIds={selected}
+        onSelectionChange={setSelected}
+        bulkActions={(ids) => <BulkActionsBar entity="deals" selectedIds={ids} archivedView={archived} onDone={() => setSelected([])} />}
+        emptyState={
+          <EmptyState
+            compact
+            headingLevel={3}
+            title={archived ? 'No archived deals' : 'No deals match'}
+            description={archived ? 'Archived deals appear here and can be restored.' : undefined}
+          />
+        }
+      />
       {query.data && query.data.total > 25 && <Pagination page={page} pageSize={25} total={query.data.total} onPageChange={setPage} />}
     </div>
   );
@@ -139,7 +176,7 @@ export function DealsPage() {
                   />
                 ),
               },
-              { id: 'list', label: 'List', content: <DealList search={search} owner={owner} source={source} /> },
+              { id: 'list', label: 'List', content: <DealList search={search} owner={owner} source={source} canManage={canManage} /> },
             ]}
           />
         </CardBody>

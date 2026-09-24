@@ -293,6 +293,45 @@ public sealed class TimeService(
     }
 
     /// <summary>Approve or reject a submitted week (projects.manage; not your own). Conditional on the stamp; audited.</summary>
+    /// <summary>
+    /// Reopens a week so its entries can be edited again. The owner recalls their own submitted week; a project manager
+    /// reopens someone else's approved or rejected week (an approved week needs a reason). Four-eyes: nobody reopens their
+    /// own approved week.
+    /// </summary>
+    public async Task<TimesheetDto> ReopenAsync(Guid sheetId, TimesheetDecisionRequest r, CancellationToken ct)
+    {
+        var sheet = await db.Set<Timesheet>().FirstOrDefaultAsync(t => t.Id == sheetId, ct) ?? throw DomainException.NotFound("Timesheet");
+        var own = sheet.UserId == currentUser.Id;
+        if (!own && !currentUser.HasPermission(Permissions.ProjectsManage)) throw DomainException.NotFound("Timesheet");
+        DeliveryRules.EnsureStamp(sheet, r.ConcurrencyStamp, db);
+        switch (sheet.Status)
+        {
+            case TimesheetStatus.Open:
+                throw DomainException.Conflict("time.already_open", "This week is already open.");
+            case TimesheetStatus.Submitted when !own && !currentUser.HasPermission(Permissions.ProjectsManage):
+                throw DomainException.Forbidden("time.not_owner", "Only the owner can recall a submitted week.");
+            case TimesheetStatus.Approved or TimesheetStatus.Rejected when own:
+                throw DomainException.Forbidden("time.own_timesheet", "A project manager must reopen your decided timesheet.");
+            case TimesheetStatus.Approved when string.IsNullOrWhiteSpace(r.Comment):
+                throw DeliveryRules.Invalid("time.comment_required", "comment", "Say why the approved week is reopened.");
+        }
+        var before = sheet.Status;
+        sheet.Status = TimesheetStatus.Open;
+        sheet.SubmittedAt = null;
+        sheet.DecidedAt = null;
+        sheet.DecidedByUserId = null;
+        sheet.DecisionComment = string.IsNullOrWhiteSpace(r.Comment) ? null : r.Comment.Trim();
+        audit.Record("time.timesheet_reopened", nameof(Timesheet), sheet.Id, new { Status = before },
+            new { sheet.Status, sheet.UserId, sheet.WeekStart }, sheet.DecisionComment);
+        if (!own)
+            await notifications.StageAsync(new NotificationRequest(sheet.UserId, DeliveryNotificationTypes.TimesheetDecision,
+                $"Timesheet reopened (week of {sheet.WeekStart:d MMM})",
+                string.IsNullOrWhiteSpace(sheet.DecisionComment) ? "You can edit and resubmit the week." : $"You can edit and resubmit the week: {sheet.DecisionComment}",
+                DeliveryLinks.AgencyTimesheets), ct);
+        await db.SaveChangesAsync(ct);
+        return await WeekAsync(sheet.UserId, sheet.WeekStart, ct);
+    }
+
     public async Task<TimesheetDto> DecideAsync(Guid sheetId, bool approve, TimesheetDecisionRequest r, CancellationToken ct)
     {
         var sheet = await db.Set<Timesheet>().FirstOrDefaultAsync(t => t.Id == sheetId, ct) ?? throw DomainException.NotFound("Timesheet");

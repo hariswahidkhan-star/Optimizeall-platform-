@@ -47,6 +47,9 @@ public sealed class BillingSettings
     public string? PaymentInstructions { get; set; }
     public string? InvoiceFooter { get; set; }
     public Guid? DefaultTaxRateId { get; set; }
+
+    /// <summary>Payment terms (days) offered in the invoice and contract editors.</summary>
+    public List<int> PaymentTermsOptions { get; set; } = new() { 0, 7, 14, 30, 45, 60 };
 }
 
 public sealed class BillingSettingsService(ISettingsService settings)
@@ -76,6 +79,9 @@ public sealed class BillingSettingsService(ISettingsService settings)
         if (s.ReminderOffsetsDays.Count > 8 || s.ReminderOffsetsDays.Any(d => d is < -30 or > 180) ||
             s.ReminderOffsetsDays.Distinct().Count() != s.ReminderOffsetsDays.Count)
             Add("reminderOffsetsDays", "Up to 8 distinct offsets between -30 and 180 days.");
+        s.PaymentTermsOptions ??= new List<int>();
+        if (s.PaymentTermsOptions.Count > 12 || s.PaymentTermsOptions.Any(d => d is < 0 or > 365))
+            Add("paymentTermsOptions", "Up to 12 payment terms between 0 and 365 days.");
         if (string.IsNullOrWhiteSpace(s.CompanyName) || s.CompanyName.Length > 200) Add("companyName", "Enter the company name (up to 200 characters).");
         foreach (var (field, text, max) in new[] { ("companyAddress", s.CompanyAddress, 1000), ("companyTaxId", s.CompanyTaxId, 64),
                      ("companyEmail", s.CompanyEmail, 254), ("bankDetails", s.BankDetails, 2000), ("paymentLinkText", s.PaymentLinkText, 500),
@@ -85,6 +91,7 @@ public sealed class BillingSettingsService(ISettingsService settings)
             throw new DomainException("billing.invalid_settings", "Some billing settings need attention.", errors: errors);
         s.DefaultCurrency = Money.Normalize(s.DefaultCurrency);
         s.ReminderOffsetsDays = s.ReminderOffsetsDays.OrderBy(d => d).ToList();
+        s.PaymentTermsOptions = s.PaymentTermsOptions.Append(s.PaymentTermsDays).Distinct().OrderBy(d => d).ToList();
         s.InvoicePrefix = s.InvoicePrefix.ToUpperInvariant();
         s.CreditNotePrefix = s.CreditNotePrefix.ToUpperInvariant();
         s.ContractPrefix = s.ContractPrefix.ToUpperInvariant();

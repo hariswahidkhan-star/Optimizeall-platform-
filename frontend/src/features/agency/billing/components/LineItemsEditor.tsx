@@ -1,7 +1,7 @@
-import { Plus, Trash2 } from 'lucide-react';
-import { Alert, Button, FormField, IconButton, Input, Money, Select, Skeleton } from '@/components/ui';
+import { BookOpen, ChevronDown, Plus, Trash2 } from 'lucide-react';
+import { Alert, Button, DropdownMenu, FormField, IconButton, Input, Money, Select, Skeleton } from '@/components/ui';
 import { useDebouncedValue } from '@/lib/hooks/useDebouncedValue';
-import { usePricePreview, useTaxRates } from '../api/hooks';
+import { usePricePreview, useServiceCatalog, useTaxRates } from '../api/hooks';
 import type { PreviewResponse, PriceLineInput, Recurrence } from '../api/types';
 import { billingErrorMessage } from '../lib';
 
@@ -44,6 +44,25 @@ export interface LineItemsEditorProps {
  */
 export function LineItemsEditor({ lines, onChange, currency, allowRecurrence, disabled, errors }: LineItemsEditorProps) {
   const taxRates = useTaxRates();
+  const catalog = useServiceCatalog();
+  const catalogItems = catalog.data ?? [];
+  const addFromCatalog = (id: string) => {
+    const item = catalogItems.find((c) => c.id === id);
+    if (!item) return;
+    const line: PriceLineInput = {
+      description: item.description,
+      serviceSlug: item.serviceSlug,
+      quantity: item.quantity,
+      unitPrice: item.unitPrice,
+      discountType: 'None',
+      discountValue: 0,
+      taxRateId: item.taxRateId,
+      recurrence: allowRecurrence ? item.recurrence : 'OneTime',
+    };
+    // Replace a single untouched blank line instead of leaving it behind.
+    const blank = lines.length === 1 && !lines[0]!.description.trim() && !lines[0]!.unitPrice;
+    onChange(blank ? [line] : [...lines, line]);
+  };
   const update = (index: number, patch: Partial<PriceLineInput>) =>
     onChange(lines.map((line, i) => (i === index ? { ...line, ...patch } : line)));
   const rateOptions = (taxRates.data ?? []).map((r) => ({
@@ -164,7 +183,25 @@ export function LineItemsEditor({ lines, onChange, currency, allowRecurrence, di
           onClick={() => onChange([...lines, emptyLine(allowRecurrence ? 'Monthly' : 'OneTime')])}
         >
           Add line
-        </Button>
+        </Button>{' '}
+        {catalogItems.length > 0 && (
+          <DropdownMenu
+            label="Service catalog"
+            trigger={
+              <Button variant="secondary" size="sm" leadingIcon={<BookOpen />} trailingIcon={<ChevronDown />} disabled={disabled || lines.length >= 200}>
+                Add from catalog
+              </Button>
+            }
+            items={catalogItems.map((c) => ({
+              id: c.id,
+              label: c.name,
+              description: `${c.unitPrice} ${c.currency}${c.recurrence !== 'OneTime' && allowRecurrence ? ` · ${c.recurrence.toLowerCase()}` : ''}${
+                c.currency !== currency ? ` (price in ${c.currency}; check it for ${currency})` : ''
+              }`,
+              onSelect: () => addFromCatalog(c.id),
+            }))}
+          />
+        )}
       </div>
     </div>
   );

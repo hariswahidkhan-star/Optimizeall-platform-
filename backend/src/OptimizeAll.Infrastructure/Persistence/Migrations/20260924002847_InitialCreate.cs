@@ -133,6 +133,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     Fields = table.Column<string>(type: "json", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
                 },
@@ -219,6 +220,46 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_crm_pipeline_stages", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "crm_proposal_templates",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Name = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Description = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProposalTitle = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Currency = table.Column<string>(type: "char(3)", fixedLength: true, maxLength: 3, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ValidForDays = table.Column<int>(type: "int", nullable: false),
+                    ExecutiveSummary = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Goals = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Scope = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Deliverables = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Timeline = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Terms = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Lines = table.Column<string>(type: "json", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    SortOrder = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_crm_proposal_templates", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -710,6 +751,8 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Sections = table.Column<string>(type: "json", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
                 },
@@ -1267,6 +1310,42 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_website_team_members", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "service_catalog_items",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Name = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Description = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ServiceSlug = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Currency = table.Column<string>(type: "char(3)", fixedLength: true, maxLength: 3, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UnitPrice = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: false),
+                    Quantity = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: false),
+                    Recurrence = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TaxRateId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    SortOrder = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_service_catalog_items", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_service_catalog_items_tax_rates_TaxRateId",
+                        column: x => x.TaxRateId,
+                        principalTable: "tax_rates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -3114,6 +3193,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     CustomFieldsJson = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ClientAccountId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    ArchivedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
                     ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
@@ -5019,6 +5099,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     LastTouchCampaign = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LastTouchAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    ArchivedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
                     ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
@@ -6511,6 +6592,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     StageChangedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
                     ClosedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
                     ClientAccountId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    ArchivedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
                     ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
@@ -7140,7 +7222,8 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     MentionedUserIds = table.Column<string>(type: "json", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    EditedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -8221,6 +8304,11 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_crm_companies_ArchivedAt",
+                table: "crm_companies",
+                column: "ArchivedAt");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_crm_companies_ClientAccountId",
                 table: "crm_companies",
                 column: "ClientAccountId");
@@ -8240,6 +8328,11 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "IX_crm_companies_OwnerUserId",
                 table: "crm_companies",
                 column: "OwnerUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_crm_contacts_ArchivedAt",
+                table: "crm_contacts",
+                column: "ArchivedAt");
 
             migrationBuilder.CreateIndex(
                 name: "IX_crm_contacts_CompanyId",
@@ -8271,6 +8364,11 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "IX_crm_deal_contacts_ContactId",
                 table: "crm_deal_contacts",
                 column: "ContactId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_crm_deals_ArchivedAt",
+                table: "crm_deals",
+                column: "ArchivedAt");
 
             migrationBuilder.CreateIndex(
                 name: "IX_crm_deals_ClientAccountId",
@@ -8322,6 +8420,17 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "IX_crm_pipeline_stages_Position",
                 table: "crm_pipeline_stages",
                 column: "Position");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_crm_proposal_templates_Name",
+                table: "crm_proposal_templates",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_crm_proposal_templates_SortOrder",
+                table: "crm_proposal_templates",
+                column: "SortOrder");
 
             migrationBuilder.CreateIndex(
                 name: "IX_crm_saved_views_Entity_OwnerUserId",
@@ -9350,6 +9459,16 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_service_catalog_items_IsActive_SortOrder",
+                table: "service_catalog_items",
+                columns: new[] { "IsActive", "SortOrder" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_service_catalog_items_TaxRateId",
+                table: "service_catalog_items",
+                column: "TaxRateId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_sm_awareness_days_Month_Day_Name",
                 table: "sm_awareness_days",
                 columns: new[] { "Month", "Day", "Name" },
@@ -10121,6 +10240,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "crm_inbound_events");
 
             migrationBuilder.DropTable(
+                name: "crm_proposal_templates");
+
+            migrationBuilder.DropTable(
                 name: "crm_saved_views");
 
             migrationBuilder.DropTable(
@@ -10334,6 +10456,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "seo_search_performance");
 
             migrationBuilder.DropTable(
+                name: "service_catalog_items");
+
+            migrationBuilder.DropTable(
                 name: "sm_awareness_days");
 
             migrationBuilder.DropTable(
@@ -10532,9 +10657,6 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "proposal_versions");
 
             migrationBuilder.DropTable(
-                name: "tax_rates");
-
-            migrationBuilder.DropTable(
                 name: "seo_audits");
 
             migrationBuilder.DropTable(
@@ -10542,6 +10664,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "seo_keywords");
+
+            migrationBuilder.DropTable(
+                name: "tax_rates");
 
             migrationBuilder.DropTable(
                 name: "sm_competitors");

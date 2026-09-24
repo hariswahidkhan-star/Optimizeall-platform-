@@ -15,8 +15,16 @@ namespace OptimizeAll.Api.Modules.Crm;
 [ApiController]
 [Route("api/v1/agency/crm")]
 [HasPermission(Permissions.CrmView)]
-public sealed class CrmController(CrmService crm, ContactImportService import, LeadScoringService scoring) : ControllerBase
+public sealed class CrmController(CrmService crm, ContactImportService import, LeadScoringService scoring, CrmOptionsService options) : ControllerBase
 {
+    /// <summary>Agency-editable option lists (lost reasons, budget ranges, industries).</summary>
+    [HttpGet("options")]
+    public Task<CrmOptionsDto> Options(CancellationToken ct) => options.GetAsync(ct);
+
+    [HttpPut("options")]
+    [HasPermission(Permissions.CrmManage)]
+    public Task<CrmOptionsDto> UpdateOptions(CrmOptionsRequest r, CancellationToken ct) => options.SaveAsync(r, ct);
+
     [HttpGet("dashboard")]
     public Task<CrmDashboardDto> Dashboard(CancellationToken ct) => crm.DashboardAsync(ct);
 
@@ -41,6 +49,20 @@ public sealed class CrmController(CrmService crm, ContactImportService import, L
     [HttpPut("companies/{id:guid}")]
     [HasPermission(Permissions.CrmManage)]
     public Task<CompanyDto> UpdateCompany(Guid id, CompanyRequest r, CancellationToken ct) => crm.UpdateCompanyAsync(id, r, ct);
+
+    /// <summary>Hides the company from lists and pickers (history kept; restorable). A client company can't be archived.</summary>
+    [HttpPost("companies/{id:guid}/archive")]
+    [HasPermission(Permissions.CrmManage)]
+    public Task<CompanyDto> ArchiveCompany(Guid id, StampOnly r, CancellationToken ct) => crm.ArchiveCompanyAsync(id, true, r, ct);
+
+    [HttpPost("companies/{id:guid}/restore")]
+    [HasPermission(Permissions.CrmManage)]
+    public Task<CompanyDto> RestoreCompany(Guid id, StampOnly r, CancellationToken ct) => crm.ArchiveCompanyAsync(id, false, r, ct);
+
+    /// <summary>archive, restore, assignOwner, addTag or removeTag on up to 200 companies.</summary>
+    [HttpPost("companies/bulk")]
+    [HasPermission(Permissions.CrmManage)]
+    public Task<CrmBulkResultDto> BulkCompanies(CrmBulkRequest r, CancellationToken ct) => crm.BulkCompaniesAsync(r, ct);
 
     // ---------------- Contacts
 
@@ -83,6 +105,19 @@ public sealed class CrmController(CrmService crm, ContactImportService import, L
     [HasPermission(Permissions.CrmManage)]
     public Task<ContactDto> UpdateContact(Guid id, ContactRequest r, CancellationToken ct) => crm.UpdateContactAsync(id, r, ct);
 
+    [HttpPost("contacts/{id:guid}/archive")]
+    [HasPermission(Permissions.CrmManage)]
+    public Task<ContactDto> ArchiveContact(Guid id, StampOnly r, CancellationToken ct) => crm.ArchiveContactAsync(id, true, r, ct);
+
+    [HttpPost("contacts/{id:guid}/restore")]
+    [HasPermission(Permissions.CrmManage)]
+    public Task<ContactDto> RestoreContact(Guid id, StampOnly r, CancellationToken ct) => crm.ArchiveContactAsync(id, false, r, ct);
+
+    /// <summary>archive, restore, assignOwner, setLifecycle, addTag or removeTag on up to 200 contacts.</summary>
+    [HttpPost("contacts/bulk")]
+    [HasPermission(Permissions.CrmManage)]
+    public Task<CrmBulkResultDto> BulkContacts(CrmBulkRequest r, CancellationToken ct) => crm.BulkContactsAsync(r, ct);
+
     // ---------------- Pipeline & deals
 
     [HttpGet("stages")]
@@ -110,6 +145,20 @@ public sealed class CrmController(CrmService crm, ContactImportService import, L
     [HttpPut("deals/{id:guid}")]
     [HasPermission(Permissions.CrmManage)]
     public Task<DealDto> UpdateDeal(Guid id, DealRequest r, CancellationToken ct) => crm.UpdateDealAsync(id, r, ct);
+
+    /// <summary>Archives a deal (not while a proposal on it waits for the client).</summary>
+    [HttpPost("deals/{id:guid}/archive")]
+    [HasPermission(Permissions.CrmManage)]
+    public Task<DealDto> ArchiveDeal(Guid id, StampOnly r, CancellationToken ct) => crm.ArchiveDealAsync(id, true, r, ct);
+
+    [HttpPost("deals/{id:guid}/restore")]
+    [HasPermission(Permissions.CrmManage)]
+    public Task<DealDto> RestoreDeal(Guid id, StampOnly r, CancellationToken ct) => crm.ArchiveDealAsync(id, false, r, ct);
+
+    /// <summary>archive, restore or assignOwner on up to 200 deals.</summary>
+    [HttpPost("deals/bulk")]
+    [HasPermission(Permissions.CrmManage)]
+    public Task<CrmBulkResultDto> BulkDeals(CrmBulkRequest r, CancellationToken ct) => crm.BulkDealsAsync(r, ct);
 
     /// <summary>Kanban move (drag or keyboard). Lost requires <c>lostReason</c>.</summary>
     [HttpPost("deals/{id:guid}/move")]
@@ -205,6 +254,10 @@ public sealed class CrmController(CrmService crm, ContactImportService import, L
     public async Task<IActionResult> CreateView(SavedViewRequest r, CancellationToken ct) =>
         StatusCode(StatusCodes.Status201Created, await crm.CreateViewAsync(r, ct));
 
+    /// <summary>Rename, share/unshare or replace the filters of one of your views.</summary>
+    [HttpPut("views/{id:guid}")]
+    public Task<SavedViewDto> UpdateView(Guid id, UpdateSavedViewRequest r, CancellationToken ct) => crm.UpdateViewAsync(id, r, ct);
+
     [HttpDelete("views/{id:guid}")]
     public async Task<IActionResult> DeleteView(Guid id, CancellationToken ct)
     {
@@ -244,6 +297,48 @@ public sealed class AgencyProposalsController(ProposalService proposals, Invoice
 
     [HttpPost("{id:guid}/withdraw")]
     public Task<ProposalDto> Withdraw(Guid id, WithdrawProposalRequest r, CancellationToken ct) => proposals.WithdrawAsync(id, r, ct);
+
+    /// <summary>Deletes a proposal that was never sent (anything sent is withdrawn instead).</summary>
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id, [FromQuery] Guid? concurrencyStamp, CancellationToken ct)
+    {
+        await proposals.DeleteDraftAsync(id, concurrencyStamp, ct);
+        return NoContent();
+    }
+
+    /// <summary>Copies the latest version into a new draft proposal.</summary>
+    [HttpPost("{id:guid}/duplicate")]
+    [ProducesResponseType(typeof(ProposalDto), StatusCodes.Status201Created)]
+    public async Task<IActionResult> Duplicate(Guid id, CancellationToken ct) =>
+        StatusCode(StatusCodes.Status201Created, await proposals.DuplicateAsync(id, ct));
+}
+
+/// <summary>Reusable proposal templates (sections and price lines).</summary>
+[ApiController]
+[Route("api/v1/agency/proposal-templates")]
+[HasPermission(Permissions.ProposalsManage)]
+public sealed class ProposalTemplatesController(ProposalTemplateService templates) : ControllerBase
+{
+    [HttpGet]
+    public Task<IReadOnlyList<ProposalTemplateDto>> List([FromQuery] bool includeInactive, CancellationToken ct) => templates.ListAsync(includeInactive, ct);
+
+    [HttpGet("{id:guid}")]
+    public Task<ProposalTemplateDto> Get(Guid id, CancellationToken ct) => templates.GetAsync(id, ct);
+
+    [HttpPost]
+    [ProducesResponseType(typeof(ProposalTemplateDto), StatusCodes.Status201Created)]
+    public async Task<IActionResult> Create(ProposalTemplateRequest r, CancellationToken ct) =>
+        StatusCode(StatusCodes.Status201Created, await templates.CreateAsync(r, ct));
+
+    [HttpPut("{id:guid}")]
+    public Task<ProposalTemplateDto> Update(Guid id, ProposalTemplateRequest r, CancellationToken ct) => templates.UpdateAsync(id, r, ct);
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
+    {
+        await templates.DeleteAsync(id, ct);
+        return NoContent();
+    }
 }
 
 /// <summary>Public proposal page (<c>/p/{token}</c>): view (counted), accept (typed signature) or decline. Anonymous, rate limited.</summary>

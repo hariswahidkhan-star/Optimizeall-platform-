@@ -123,7 +123,7 @@ public sealed class TaskService(
         PersonDto P(Guid id) => people.TryGetValue(id, out var p) ? p : new PersonDto(id, "Former user", "");
         var minutes = await db.Set<TimeEntry>().AsNoTracking().Where(e => e.TaskId == taskId).SumAsync(e => (int?)e.Minutes, ct) ?? 0;
         return new TaskDetailDto(summary, t.Description, checklist,
-            comments.Select(c => new TaskCommentDto(c.Id, P(c.AuthorUserId), c.Body, c.MentionedUserIds.Select(P).ToList(), c.CreatedAt)).ToList(),
+            comments.Select(c => new TaskCommentDto(c.Id, P(c.AuthorUserId), c.Body, c.MentionedUserIds.Select(P).ToList(), c.CreatedAt, c.EditedAt)).ToList(),
             watcherIds.Select(P).ToList(), blockedBy, blocking,
             attachments.Select(x => new AttachmentDto(x.a.Id, DeliveryFileDto.From(x.f), P(x.a.AddedByUserId), x.a.CreatedAt)).ToList(),
             BudgetMath.Hours(minutes), t.CreatedAt, t.CompletedAt, watcherIds.Contains(currentUser.Id));
@@ -197,6 +197,36 @@ public sealed class TaskService(
         if (previous != status) await OnStatusChangeAsync(task, previous, ct);
         await db.SaveChangesAsync(ct);
         return (await SummariesAsync(new List<ProjectTask> { task }, ct)).Single();
+    }
+
+    /// <summary>The author edits their comment (mentions are kept and not notified again).</summary>
+    public async Task<TaskDetailDto> EditCommentAsync(Guid taskId, Guid commentId, EditCommentRequest r, CancellationToken ct)
+    {
+        await LoadAsync(taskId, ct, tracked: false);
+        var comment = await db.Set<TaskComment>().FirstOrDefaultAsync(c => c.Id == commentId && c.TaskId == taskId, ct)
+                      ?? throw DomainException.NotFound("Comment");
+        if (comment.AuthorUserId != currentUser.Id)
+            throw DomainException.Forbidden("task.comment_not_author", "Only the author can edit a comment.");
+        var before = comment.Body;
+        comment.Body = r.Body.Trim();
+        comment.EditedAt = Now;
+        audit.Record("task.comment_edited", nameof(TaskComment), commentId, new { Body = before }, new { comment.Body });
+        await db.SaveChangesAsync(ct);
+        return await GetAsync(taskId, ct);
+    }
+
+    /// <summary>The author, or a project manager, deletes a comment (audited with its text).</summary>
+    public async Task<TaskDetailDto> DeleteCommentAsync(Guid taskId, Guid commentId, CancellationToken ct)
+    {
+        await LoadAsync(taskId, ct, tracked: false);
+        var comment = await db.Set<TaskComment>().FirstOrDefaultAsync(c => c.Id == commentId && c.TaskId == taskId, ct)
+                      ?? throw DomainException.NotFound("Comment");
+        if (comment.AuthorUserId != currentUser.Id && !currentUser.HasPermission(Permissions.ProjectsManage))
+            throw DomainException.Forbidden("task.comment_not_author", "Only the author or a project manager can delete a comment.");
+        db.Remove(comment);
+        audit.Record("task.comment_deleted", nameof(TaskComment), commentId, before: new { comment.Body, comment.AuthorUserId });
+        await db.SaveChangesAsync(ct);
+        return await GetAsync(taskId, ct);
     }
 
     public async Task DeleteAsync(Guid taskId, CancellationToken ct)

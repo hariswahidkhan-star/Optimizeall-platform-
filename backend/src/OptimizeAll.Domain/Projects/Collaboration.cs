@@ -56,12 +56,16 @@ public class ClientReport : AuditedEntity, IConcurrencyStamped
 
 public sealed record ReportTemplateSection(string Key, string Kind, string Title, string? ProviderKey, string? Prompt);
 
-public class ReportTemplate : AuditedEntity
+public class ReportTemplate : AuditedEntity, IConcurrencyStamped
 {
     public string Key { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
     public List<ReportTemplateSection> Sections { get; set; } = new();
+
+    /// <summary>Inactive templates are hidden when creating reports (existing reports keep their copied sections).</summary>
+    public bool IsActive { get; set; } = true;
+    public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
 }
 
 // ---------------------------------------------------------------- briefs
@@ -79,7 +83,7 @@ public enum BriefFieldType
 public sealed record BriefField(string Key, string Label, BriefFieldType Type, bool Required, string? Help, List<string> Options);
 
 /// <summary>A creative brief form for one service line, with dynamic fields.</summary>
-public class BriefTemplate : AuditedEntity
+public class BriefTemplate : AuditedEntity, IConcurrencyStamped
 {
     public string Key { get; set; } = string.Empty;
     public string ServiceLine { get; set; } = string.Empty;
@@ -87,6 +91,7 @@ public class BriefTemplate : AuditedEntity
     public string? Description { get; set; }
     public List<BriefField> Fields { get; set; } = new();
     public bool IsActive { get; set; } = true;
+    public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
 }
 
 public sealed record BriefAnswer(string Key, string Label, string Value);

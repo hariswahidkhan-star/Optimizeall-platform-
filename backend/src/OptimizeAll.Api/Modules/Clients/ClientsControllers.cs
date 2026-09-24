@@ -105,6 +105,17 @@ public sealed class AgencyClientsController(
     public Task<OnboardingDto> UpdateOnboardingItem(Guid id, Guid itemId, UpdateOnboardingItemRequest request, CancellationToken ct) =>
         relationship.UpdateOnboardingItemAsync(id, itemId, request, ct);
 
+    /// <summary>Edits an item's title, description, category, owner or position.</summary>
+    [HttpPut("{id:guid}/onboarding/{itemId:guid}/details")]
+    [HasPermission(Permissions.ClientsManage)]
+    public Task<OnboardingDto> EditOnboardingItem(Guid id, Guid itemId, EditOnboardingItemRequest request, CancellationToken ct) =>
+        relationship.EditOnboardingItemAsync(id, itemId, request, ct);
+
+    [HttpDelete("{id:guid}/onboarding/{itemId:guid}")]
+    [HasPermission(Permissions.ClientsManage)]
+    public Task<OnboardingDto> DeleteOnboardingItem(Guid id, Guid itemId, CancellationToken ct) =>
+        relationship.DeleteOnboardingItemAsync(id, itemId, ct);
+
     // ---------- brand kit ----------
 
     [HttpGet("{id:guid}/brand-kit")]

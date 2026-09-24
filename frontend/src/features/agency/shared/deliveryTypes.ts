@@ -343,6 +343,8 @@ export interface TaskComment {
   body: string;
   mentions: Person[];
   createdAt: string;
+  /** Set when the author edited the comment. */
+  editedAt?: string | null;
 }
 
 export interface DeliveryFile {

@@ -135,6 +135,15 @@ public sealed class AgencyTasksController(TaskService tasks) : ControllerBase
     [HttpPost("{id:guid}/comments")]
     public Task<TaskDetailDto> Comment(Guid id, TaskCommentRequest request, CancellationToken ct) => tasks.CommentAsync(id, request, ct);
 
+    /// <summary>Edits your own comment (mentions are not re-notified).</summary>
+    [HttpPut("{id:guid}/comments/{commentId:guid}")]
+    public Task<TaskDetailDto> EditComment(Guid id, Guid commentId, EditCommentRequest request, CancellationToken ct) =>
+        tasks.EditCommentAsync(id, commentId, request, ct);
+
+    /// <summary>Deletes your own comment (project managers may delete any comment).</summary>
+    [HttpDelete("{id:guid}/comments/{commentId:guid}")]
+    public Task<TaskDetailDto> DeleteComment(Guid id, Guid commentId, CancellationToken ct) => tasks.DeleteCommentAsync(id, commentId, ct);
+
     [HttpPost("{id:guid}/watch")]
     public Task<TaskDetailDto> Watch(Guid id, CancellationToken ct) => tasks.WatchAsync(id, true, ct);
 
@@ -167,7 +176,7 @@ public sealed class AgencyTasksController(TaskService tasks) : ControllerBase
 [ApiController]
 [HasPermission(Permissions.ProjectsView)]
 [Route("api/v1/agency/templates")]
-public sealed class AgencyTemplatesController(ProjectService projects) : ControllerBase
+public sealed class AgencyTemplatesController(ProjectService projects, DeliveryTemplateService templates) : ControllerBase
 {
     [HttpGet("projects")]
     public Task<IReadOnlyList<ProjectTemplateDto>> ProjectTemplates([FromQuery] bool includeInactive, CancellationToken ct) =>
@@ -183,11 +192,60 @@ public sealed class AgencyTemplatesController(ProjectService projects) : Control
     public Task<ProjectTemplateDto> UpdateProjectTemplate(Guid id, ProjectTemplateRequest request, CancellationToken ct) =>
         projects.SaveTemplateAsync(id, request, ct);
 
+    /// <summary>Deletes a custom project template (built-in templates are deactivated instead).</summary>
+    [HttpDelete("projects/{id:guid}")]
+    [HasPermission(Permissions.ProjectsManage)]
+    public async Task<IActionResult> DeleteProjectTemplate(Guid id, CancellationToken ct)
+    {
+        await templates.DeleteProjectTemplateAsync(id, ct);
+        return NoContent();
+    }
+
     [HttpGet("briefs")]
-    public Task<IReadOnlyList<BriefTemplateDto>> BriefTemplates(CancellationToken ct) => projects.BriefTemplatesAsync(ct);
+    public Task<IReadOnlyList<BriefTemplateDto>> BriefTemplates([FromQuery] bool includeInactive, CancellationToken ct) =>
+        projects.BriefTemplatesAsync(ct, includeInactive);
+
+    [HttpPost("briefs")]
+    [HasPermission(Permissions.ProjectsManage)]
+    [ProducesResponseType(typeof(BriefTemplateDto), StatusCodes.Status201Created)]
+    public async Task<IActionResult> CreateBriefTemplate(BriefTemplateRequest request, CancellationToken ct) =>
+        StatusCode(StatusCodes.Status201Created, await templates.SaveBriefTemplateAsync(null, request, ct));
+
+    [HttpPut("briefs/{id:guid}")]
+    [HasPermission(Permissions.ProjectsManage)]
+    public Task<BriefTemplateDto> UpdateBriefTemplate(Guid id, BriefTemplateRequest request, CancellationToken ct) =>
+        templates.SaveBriefTemplateAsync(id, request, ct);
+
+    [HttpDelete("briefs/{id:guid}")]
+    [HasPermission(Permissions.ProjectsManage)]
+    public async Task<IActionResult> DeleteBriefTemplate(Guid id, CancellationToken ct)
+    {
+        await templates.DeleteBriefTemplateAsync(id, ct);
+        return NoContent();
+    }
 
     [HttpGet("reports")]
-    public Task<IReadOnlyList<ReportTemplateDto>> ReportTemplates(CancellationToken ct) => projects.ReportTemplatesAsync(ct);
+    public Task<IReadOnlyList<ReportTemplateDto>> ReportTemplates([FromQuery] bool includeInactive, CancellationToken ct) =>
+        projects.ReportTemplatesAsync(ct, includeInactive);
+
+    [HttpPost("reports")]
+    [HasPermission(Permissions.ReportsManage)]
+    [ProducesResponseType(typeof(ReportTemplateDto), StatusCodes.Status201Created)]
+    public async Task<IActionResult> CreateReportTemplate(ReportTemplateRequest request, CancellationToken ct) =>
+        StatusCode(StatusCodes.Status201Created, await templates.SaveReportTemplateAsync(null, request, ct));
+
+    [HttpPut("reports/{id:guid}")]
+    [HasPermission(Permissions.ReportsManage)]
+    public Task<ReportTemplateDto> UpdateReportTemplate(Guid id, ReportTemplateRequest request, CancellationToken ct) =>
+        templates.SaveReportTemplateAsync(id, request, ct);
+
+    [HttpDelete("reports/{id:guid}")]
+    [HasPermission(Permissions.ReportsManage)]
+    public async Task<IActionResult> DeleteReportTemplate(Guid id, CancellationToken ct)
+    {
+        await templates.DeleteReportTemplateAsync(id, ct);
+        return NoContent();
+    }
 }
 
 [ApiController]
@@ -210,6 +268,15 @@ public sealed class AgencyDeliverablesController(DeliverableService deliverables
     [HttpPut("{id:guid}")]
     [HasPermission(Permissions.DeliverablesSubmit)]
     public Task<DeliverableDetailDto> Update(Guid id, UpdateDeliverableRequest request, CancellationToken ct) => deliverables.UpdateAsync(id, request, ct);
+
+    /// <summary>Deletes a deliverable the client has never seen (anything sent to the client is part of the approval record).</summary>
+    [HttpDelete("{id:guid}")]
+    [HasPermission(Permissions.ProjectsManage)]
+    public async Task<IActionResult> Delete(Guid id, [FromQuery] Guid? concurrencyStamp, CancellationToken ct)
+    {
+        await deliverables.DeleteAsync(id, concurrencyStamp, ct);
+        return NoContent();
+    }
 
     /// <summary>New version: multipart with a file (PNG/JPEG/WebP/PDF/MP4, max 50 MB) and/or a link and/or text, plus notes.</summary>
     [HttpPost("{id:guid}/versions")]
@@ -286,6 +353,13 @@ public sealed class AgencyTimeController(TimeService time) : ControllerBase
 
     [HttpPost("timesheets/submit")]
     public Task<TimesheetDto> Submit([FromQuery] DateOnly date, CancellationToken ct) => time.SubmitAsync(date, ct);
+
+    /// <summary>
+    /// Reopens a week for editing: the owner can recall a submitted week; a project manager (never for their own week) can
+    /// reopen an approved or rejected one (a reason is required for approved weeks).
+    /// </summary>
+    [HttpPost("timesheets/{id:guid}/reopen")]
+    public Task<TimesheetDto> Reopen(Guid id, TimesheetDecisionRequest request, CancellationToken ct) => time.ReopenAsync(id, request, ct);
 
     [HttpGet("timesheets/pending")]
     [HasPermission(Permissions.ProjectsManage)]
@@ -392,6 +466,11 @@ public sealed class AgencyCommunicationController(CommunicationService communica
 
     [HttpGet("clients/{clientId:guid}/threads/{threadId:guid}")]
     public Task<ThreadDto> Thread(Guid clientId, Guid threadId, CancellationToken ct) => communication.ThreadAsync(clientId, threadId, ct);
+
+    /// <summary>Renames a thread (staff).</summary>
+    [HttpPut("clients/{clientId:guid}/threads/{threadId:guid}")]
+    public Task<ThreadDto> RenameThread(Guid clientId, Guid threadId, RenameThreadRequest request, CancellationToken ct) =>
+        communication.RenameThreadAsync(clientId, threadId, request, ct);
 
     [HttpPost("clients/{clientId:guid}/threads/{threadId:guid}/messages")]
     public Task<ThreadDto> Reply(Guid clientId, Guid threadId, NewMessageRequest request, CancellationToken ct) =>

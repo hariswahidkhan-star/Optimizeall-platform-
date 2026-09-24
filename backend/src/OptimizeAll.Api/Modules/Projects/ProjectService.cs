@@ -316,6 +316,7 @@ public sealed class ProjectService(
                 ?? throw DomainException.NotFound("Milestone");
         await db.Set<ProjectTask>().Where(t => t.MilestoneId == milestoneId).ExecuteUpdateAsync(s => s.SetProperty(t => t.MilestoneId, (Guid?)null), ct);
         db.Remove(m);
+        audit.Record("project.milestone_deleted", nameof(Milestone), milestoneId, before: new { m.Title, m.ProjectId, m.Status });
         await db.SaveChangesAsync(ct);
         return await MilestonesAsync(projectId, ct);
     }
@@ -374,13 +375,14 @@ public sealed class ProjectService(
     }
 
     private static ProjectTemplateDto ToDto(ProjectTemplate t) => new(t.Id, t.Key, t.Name, t.Description, t.ProjectType, t.ServiceLines,
-        t.DefaultBudgetHours, t.DurationDays, t.Milestones, t.Tasks, t.Recurring, t.IsActive, t.ConcurrencyStamp);
+        t.DefaultBudgetHours, t.DurationDays, t.Milestones, t.Tasks, t.Recurring, t.IsActive, t.ConcurrencyStamp,
+        DeliveryTemplateService.IsBuiltInProject(t.Key));
 
-    public async Task<IReadOnlyList<BriefTemplateDto>> BriefTemplatesAsync(CancellationToken ct) =>
-        (await db.Set<BriefTemplate>().AsNoTracking().Where(t => t.IsActive).OrderBy(t => t.Name).ToListAsync(ct))
-        .Select(t => new BriefTemplateDto(t.Id, t.Key, t.ServiceLine, t.Name, t.Description, t.Fields)).ToList();
+    public async Task<IReadOnlyList<BriefTemplateDto>> BriefTemplatesAsync(CancellationToken ct, bool includeInactive = false) =>
+        (await db.Set<BriefTemplate>().AsNoTracking().Where(t => includeInactive || t.IsActive).OrderBy(t => t.Name).ToListAsync(ct))
+        .Select(DeliveryTemplateService.ToDto).ToList();
 
-    public async Task<IReadOnlyList<ReportTemplateDto>> ReportTemplatesAsync(CancellationToken ct) =>
-        (await db.Set<ReportTemplate>().AsNoTracking().OrderBy(t => t.Name).ToListAsync(ct))
-        .Select(t => new ReportTemplateDto(t.Id, t.Key, t.Name, t.Description, t.Sections)).ToList();
+    public async Task<IReadOnlyList<ReportTemplateDto>> ReportTemplatesAsync(CancellationToken ct, bool includeInactive = false) =>
+        (await db.Set<ReportTemplate>().AsNoTracking().Where(t => includeInactive || t.IsActive).OrderBy(t => t.Name).ToListAsync(ct))
+        .Select(DeliveryTemplateService.ToDto).ToList();
 }

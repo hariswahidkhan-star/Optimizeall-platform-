@@ -61,6 +61,35 @@ public sealed partial class ClientRelationshipService(
         return await OnboardingAsync(clientId, ct);
     }
 
+    public async Task<OnboardingDto> EditOnboardingItemAsync(Guid clientId, Guid itemId, EditOnboardingItemRequest request, CancellationToken ct)
+    {
+        await scope.EnsureAccessAsync(clientId, ct: ct);
+        var item = await db.Set<ClientOnboardingItem>().FirstOrDefaultAsync(i => i.Id == itemId && i.ClientAccountId == clientId, ct)
+                   ?? throw DomainException.NotFound("OnboardingItem");
+        if (!Enum.IsDefined(request.Owner)) throw DeliveryRules.Invalid("onboarding.invalid_owner", "owner", "Choose who completes this step.");
+        var before = new { item.Title, item.Category, item.Owner, item.SortOrder };
+        item.Title = request.Title.Trim();
+        item.Description = string.IsNullOrWhiteSpace(request.Description) ? null : request.Description.Trim();
+        item.Category = string.IsNullOrWhiteSpace(request.Category) ? "Other" : request.Category.Trim();
+        item.Owner = request.Owner;
+        if (request.SortOrder is { } order) item.SortOrder = order;
+        audit.Record("client.onboarding_item_edited", nameof(ClientOnboardingItem), item.Id, before, new { item.Title, item.Category, item.Owner, item.SortOrder });
+        await db.SaveChangesAsync(ct);
+        return await OnboardingAsync(clientId, ct);
+    }
+
+    /// <summary>Removes a step from this client's checklist (mark it Not applicable to keep it visible instead).</summary>
+    public async Task<OnboardingDto> DeleteOnboardingItemAsync(Guid clientId, Guid itemId, CancellationToken ct)
+    {
+        await scope.EnsureAccessAsync(clientId, ct: ct);
+        var item = await db.Set<ClientOnboardingItem>().FirstOrDefaultAsync(i => i.Id == itemId && i.ClientAccountId == clientId, ct)
+                   ?? throw DomainException.NotFound("OnboardingItem");
+        db.Remove(item);
+        audit.Record("client.onboarding_item_deleted", nameof(ClientOnboardingItem), item.Id, before: new { item.Title, item.Status });
+        await db.SaveChangesAsync(ct);
+        return await OnboardingAsync(clientId, ct);
+    }
+
     public async Task<OnboardingDto> AddOnboardingItemAsync(Guid clientId, AddOnboardingItemRequest request, CancellationToken ct)
     {
         await scope.EnsureAccessAsync(clientId, ct: ct);

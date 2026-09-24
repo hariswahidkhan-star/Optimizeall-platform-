@@ -22,6 +22,7 @@ public static class BillingModule
         services.AddScoped<RecurringBillingService>();
         services.AddScoped<BillingReports>();
         services.AddScoped<ClientBillingService>();
+        services.AddScoped<ServiceCatalogService>();
 
         // Online payments: add a real adapter (Stripe, PayPal) here; the default reports "not configured".
         services.AddSingleton<IClientPaymentGateway, NotConfiguredPaymentGateway>();
@@ -29,6 +30,7 @@ public static class BillingModule
         services.AddRecurringJob<RecurringInvoiceJob>(TimeSpan.FromHours(1));
         services.AddRecurringJob<InvoiceOverdueJob>(TimeSpan.FromHours(1));
         services.AddScoped<ISeeder, BillingBaselineSeeder>();
+        services.AddScoped<ISeeder, SalesCatalogSeeder>();
         return services;
     }
 }

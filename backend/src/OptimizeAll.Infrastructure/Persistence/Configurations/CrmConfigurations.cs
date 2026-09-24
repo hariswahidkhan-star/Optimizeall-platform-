@@ -39,6 +39,7 @@ internal sealed class CrmCompanyConfiguration : IEntityTypeConfiguration<CrmComp
         b.HasIndex(x => x.Name);
         b.HasIndex(x => x.OwnerUserId);
         b.HasIndex(x => x.ClientAccountId);
+        b.HasIndex(x => x.ArchivedAt);
         b.HasOne<User>().WithMany().HasForeignKey(x => x.OwnerUserId).OnDelete(DeleteBehavior.SetNull);
         b.HasOne<ClientAccount>().WithMany().HasForeignKey(x => x.ClientAccountId).OnDelete(DeleteBehavior.SetNull);
     }
@@ -67,6 +68,7 @@ internal sealed class CrmContactConfiguration : IEntityTypeConfiguration<CrmCont
         b.HasIndex(x => x.OwnerUserId);
         b.HasIndex(x => x.LifecycleStage);
         b.HasIndex(x => x.CreatedAt);
+        b.HasIndex(x => x.ArchivedAt);
         b.HasOne<CrmCompany>().WithMany().HasForeignKey(x => x.CompanyId).OnDelete(DeleteBehavior.SetNull);
         b.HasOne<User>().WithMany().HasForeignKey(x => x.OwnerUserId).OnDelete(DeleteBehavior.SetNull);
     }
@@ -102,6 +104,7 @@ internal sealed class CrmDealConfiguration : IEntityTypeConfiguration<CrmDeal>
         b.HasIndex(x => x.PrimaryContactId);
         b.HasIndex(x => x.ClientAccountId);
         b.HasIndex(x => x.ClosedAt);
+        b.HasIndex(x => x.ArchivedAt);
         b.HasOne<PipelineStage>().WithMany().HasForeignKey(x => x.StageId).OnDelete(DeleteBehavior.Restrict);
         b.HasOne<CrmCompany>().WithMany().HasForeignKey(x => x.CompanyId).OnDelete(DeleteBehavior.SetNull);
         b.HasOne<CrmContact>().WithMany().HasForeignKey(x => x.PrimaryContactId).OnDelete(DeleteBehavior.SetNull);
@@ -254,5 +257,27 @@ internal sealed class ProposalLineConfiguration : IEntityTypeConfiguration<Propo
         b.MapPricedLine();
         b.Property(x => x.PackageSlug).HasMaxLength(100);
         b.HasIndex(x => new { x.ProposalVersionId, x.Position });
+    }
+}
+
+internal sealed class ProposalTemplateConfiguration : IEntityTypeConfiguration<ProposalTemplate>
+{
+    public void Configure(EntityTypeBuilder<ProposalTemplate> b)
+    {
+        b.ToTable("crm_proposal_templates");
+        b.Property(x => x.Name).HasMaxLength(120).IsRequired();
+        b.HasIndex(x => x.Name).IsUnique();
+        b.Property(x => x.Description).HasMaxLength(1000);
+        b.Property(x => x.ProposalTitle).HasMaxLength(200);
+        b.Property(x => x.Currency).HasMaxLength(3).IsFixedLength().IsRequired();
+        // Section texts are long text (validated to 20,000 characters by the API).
+        b.Property(x => x.ExecutiveSummary);
+        b.Property(x => x.Goals);
+        b.Property(x => x.Scope);
+        b.Property(x => x.Deliverables);
+        b.Property(x => x.Timeline);
+        b.Property(x => x.Terms);
+        b.Property(x => x.Lines).HasJsonList();
+        b.HasIndex(x => x.SortOrder);
     }
 }

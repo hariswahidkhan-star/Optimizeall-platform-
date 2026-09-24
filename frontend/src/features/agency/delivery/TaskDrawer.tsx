@@ -6,6 +6,7 @@ import {
   Badge,
   Button,
   Checkbox,
+  ConfirmDialog,
   DateTime,
   Drawer,
   ErrorState,
@@ -161,6 +162,92 @@ function Checklist({ detail }: { detail: TaskDetail }) {
   );
 }
 
+/** A comment: its author can edit or delete it; a project manager can delete any comment. */
+function CommentItem({ detail, comment }: { detail: TaskDetail; comment: TaskDetail['comments'][number] }) {
+  const qc = useQueryClient();
+  const { user, hasPermission } = useAuth();
+  const mine = user?.id === comment.author.id;
+  const canDelete = mine || hasPermission(Permissions.ProjectsManage);
+  const [editing, setEditing] = useState(false);
+  const [text, setText] = useState(comment.body);
+  const [deleting, setDeleting] = useState(false);
+  const url = `/agency/tasks/${detail.task.id}/comments/${comment.id}`;
+  const edit = useMutation({
+    mutationFn: () => api.put<TaskDetail>(url, { body: text }),
+    onSuccess: (d) => {
+      qc.setQueryData(dk.task(detail.task.id), d);
+      setEditing(false);
+    },
+  });
+  return (
+    <li className="dl-comment">
+      <div className="dl-comment__head">
+        <strong>{comment.author.displayName}</strong>
+        <DateTime value={comment.createdAt} format="relative" />
+        {comment.editedAt ? <span>(edited)</span> : null}
+        {comment.mentions.length > 0 ? <span>mentioned {comment.mentions.map((m) => `@${m.displayName}`).join(', ')}</span> : null}
+      </div>
+      {editing ? (
+        <form
+          className="dl-form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            edit.mutate();
+          }}
+        >
+          {edit.error ? <Alert tone="danger">{errorMessage(edit.error)}</Alert> : null}
+          <FormField label="Edit comment" hint="Mentioned teammates are not notified again.">
+            <Textarea rows={3} value={text} maxLength={10000} onChange={(e) => setText(e.target.value)} />
+          </FormField>
+          <div className="dl-row">
+            <Button type="submit" size="sm" disabled={!text.trim()} loading={edit.isPending}>
+              Save
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => {
+                setText(comment.body);
+                setEditing(false);
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
+        </form>
+      ) : (
+        <p className="dl-report__body">{comment.body}</p>
+      )}
+      {!editing && (mine || canDelete) ? (
+        <div className="dl-row">
+          {mine ? (
+            <Button size="sm" variant="ghost" onClick={() => setEditing(true)}>
+              Edit<span className="visually-hidden"> comment by {comment.author.displayName}</span>
+            </Button>
+          ) : null}
+          {canDelete ? (
+            <Button size="sm" variant="ghost" onClick={() => setDeleting(true)}>
+              Delete<span className="visually-hidden"> comment by {comment.author.displayName}</span>
+            </Button>
+          ) : null}
+        </div>
+      ) : null}
+      <ConfirmDialog
+        open={deleting}
+        onClose={() => setDeleting(false)}
+        tone="danger"
+        title="Delete this comment?"
+        description="The comment is removed for everyone. The deletion is recorded in the audit log."
+        confirmLabel="Delete"
+        onConfirm={async () => {
+          const d = await api.delete<TaskDetail>(url);
+          qc.setQueryData(dk.task(detail.task.id), d);
+        }}
+      />
+    </li>
+  );
+}
+
 function Comments({ detail }: { detail: TaskDetail }) {
   const qc = useQueryClient();
   const staff = useStaff();
@@ -180,14 +267,7 @@ function Comments({ detail }: { detail: TaskDetail }) {
       <h3 id="comments-heading">Comments</h3>
       <ol className="dl-comments" aria-label="Comments, oldest first">
         {detail.comments.map((c) => (
-          <li key={c.id} className="dl-comment">
-            <div className="dl-comment__head">
-              <strong>{c.author.displayName}</strong>
-              <DateTime value={c.createdAt} format="relative" />
-              {c.mentions.length > 0 ? <span>mentioned {c.mentions.map((m) => `@${m.displayName}`).join(', ')}</span> : null}
-            </div>
-            <p className="dl-report__body">{c.body}</p>
-          </li>
+          <CommentItem key={c.id} detail={detail} comment={c} />
         ))}
       </ol>
       <form

@@ -124,7 +124,7 @@ public sealed record TaskSummaryDto(
 
 public sealed record ChecklistItemDto(Guid Id, string Text, bool IsDone, int SortOrder);
 
-public sealed record TaskCommentDto(Guid Id, PersonDto Author, string Body, IReadOnlyList<PersonDto> Mentions, DateTime CreatedAt);
+public sealed record TaskCommentDto(Guid Id, PersonDto Author, string Body, IReadOnlyList<PersonDto> Mentions, DateTime CreatedAt, DateTime? EditedAt = null);
 
 public sealed record TaskRefDto(Guid Id, string Title, ProjectTaskStatus Status);
 
@@ -237,7 +237,7 @@ public sealed class RecurringRuleRequest
 public sealed record ProjectTemplateDto(
     Guid Id, string Key, string Name, string? Description, ProjectType ProjectType, IReadOnlyList<string> ServiceLines,
     decimal? DefaultBudgetHours, int? DurationDays, IReadOnlyList<TemplateMilestone> Milestones, IReadOnlyList<TemplateTask> Tasks,
-    IReadOnlyList<TemplateRecurring> Recurring, bool IsActive, Guid ConcurrencyStamp);
+    IReadOnlyList<TemplateRecurring> Recurring, bool IsActive, Guid ConcurrencyStamp, bool BuiltIn = false);
 
 public sealed class ProjectTemplateRequest
 {
@@ -270,9 +270,11 @@ public sealed class ProjectTemplateRequest
     public Guid? ConcurrencyStamp { get; set; }
 }
 
-public sealed record BriefTemplateDto(Guid Id, string Key, string ServiceLine, string Name, string? Description, IReadOnlyList<BriefField> Fields);
+public sealed record BriefTemplateDto(Guid Id, string Key, string ServiceLine, string Name, string? Description, IReadOnlyList<BriefField> Fields,
+    bool IsActive = true, bool BuiltIn = false, Guid ConcurrencyStamp = default);
 
-public sealed record ReportTemplateDto(Guid Id, string Key, string Name, string? Description, IReadOnlyList<ReportTemplateSection> Sections);
+public sealed record ReportTemplateDto(Guid Id, string Key, string Name, string? Description, IReadOnlyList<ReportTemplateSection> Sections,
+    bool IsActive = true, bool BuiltIn = false, Guid ConcurrencyStamp = default);
 
 // ---------------------------------------------------------------- deliverables
 

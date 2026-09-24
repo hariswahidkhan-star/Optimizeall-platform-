@@ -45,6 +45,7 @@ public sealed class ClientService(
     IAuthService auth,
     IPasswordHasher<User> hasher,
     IDatabaseDialect dialect,
+    OnboardingTemplateService onboardingTemplate,
     TimeProvider clock)
 {
     private DateTime Now => clock.GetUtcNow().UtcDateTime;
@@ -116,7 +117,7 @@ public sealed class ClientService(
         db.Set<ClientAccount>().Add(client);
 
         var sort = 0;
-        foreach (var item in OnboardingChecklistTemplate.Items)
+        foreach (var item in await onboardingTemplate.ItemsAsync(ct))
         {
             db.Set<ClientOnboardingItem>().Add(new ClientOnboardingItem
             {

@@ -1,4 +1,4 @@
-import { Bookmark, Download, Pencil, Plus, Upload } from 'lucide-react';
+import { Download, Pencil, Plus, Upload } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
@@ -20,15 +20,18 @@ import {
   Skeleton,
   useToast,
   type DataTableColumn,
+  type SortState,
 } from '@/components/ui';
 import { FormDialog } from '@/features/agency/billing/components/FormDialog';
 import { billingErrorMessage } from '@/features/agency/billing/lib';
 import { api } from '@/lib/api/client';
 import { Permissions } from '@/lib/auth/permissions';
 import { useAuth } from '@/lib/auth/useAuth';
-import { useContact, useContacts, useDeleteView, useImportContacts, useSaveView, useSavedViews } from '../api/hooks';
+import { useContact, useContacts, useImportContacts } from '../api/hooks';
 import type { ContactSummary, ImportResult, LifecycleStage } from '../api/types';
 import { ActivityPanel } from '../components/ActivityPanel';
+import { ArchiveButton, ArchivedBanner, ArchivedFilter, BulkActionsBar } from '../components/ArchiveControls';
+import { SavedViewsBar } from '../components/SavedViewsBar';
 import { ContactFormDialog } from '../components/CrmForms';
 import { CONSENT_OPTIONS, LIFECYCLE_OPTIONS, LifecycleBadge } from '../lib';
 import '@/features/agency/billing/billing.css';
@@ -39,16 +42,17 @@ const columns: DataTableColumn<ContactSummary>[] = [
     id: 'name',
     header: 'Name',
     primary: true,
+    sortable: true,
     cell: (c) => (
       <Link className="ui-link bill-strong" to={`/agency/crm/contacts/${c.id}`}>
         {c.displayName}
       </Link>
     ),
   },
-  { id: 'email', header: 'Email', cell: (c) => c.email ?? '—' },
+  { id: 'email', header: 'Email', sortable: true, cell: (c) => c.email ?? '—' },
   { id: 'company', header: 'Company', cell: (c) => c.companyName ?? '—', hideOnMobile: true },
-  { id: 'stage', header: 'Lifecycle', cell: (c) => <LifecycleBadge stage={c.lifecycleStage} /> },
-  { id: 'score', header: 'Score', align: 'right', cell: (c) => c.score },
+  { id: 'lifecycle', header: 'Lifecycle', sortable: true, cell: (c) => <LifecycleBadge stage={c.lifecycleStage} /> },
+  { id: 'score', header: 'Score', align: 'right', sortable: true, cell: (c) => c.score },
   { id: 'owner', header: 'Owner', cell: (c) => c.owner?.displayName ?? '—', hideOnMobile: true },
 ];
 
@@ -112,14 +116,13 @@ export function ContactsPage() {
   const [consentStatus, setConsent] = useState<string>('');
   const [tag, setTag] = useState('');
   const [page, setPage] = useState(1);
+  const [archived, setArchived] = useState(false);
+  const [sort, setSort] = useState<SortState>({ id: 'created', desc: true });
+  const [selected, setSelected] = useState<string[]>([]);
   const [creating, setCreating] = useState(false);
   const [importing, setImporting] = useState(false);
-  const [viewName, setViewName] = useState('');
   const filters = { search: search || undefined, lifecycleStage: lifecycleStage || undefined, consentStatus: consentStatus || undefined, tag: tag || undefined };
-  const query = useContacts({ ...filters, page, pageSize: 25 });
-  const views = useSavedViews('contacts');
-  const saveView = useSaveView();
-  const deleteView = useDeleteView('contacts');
+  const query = useContacts({ ...filters, archived: archived || undefined, sort: sort.id, desc: sort.desc, page, pageSize: 25 });
 
   const applyView = (f: Record<string, string>) => {
     setSearch(f.search ?? '');
@@ -177,46 +180,37 @@ export function ContactsPage() {
             <FormField label="Tag">
               <Input value={tag} onChange={(e) => { setTag(e.target.value); setPage(1); }} />
             </FormField>
+            <ArchivedFilter value={archived} onChange={(v) => { setArchived(v); setSelected([]); setPage(1); }} />
           </div>
-          <div className="crm-row">
-            <div className="crm-actions" aria-label="Saved views" role="group">
-              {(views.data ?? []).map((v) => (
-                <span key={v.id} className="crm-actions">
-                  <Button size="sm" variant="secondary" leadingIcon={<Bookmark />} onClick={() => applyView(v.filters)}>
-                    {v.name}
-                  </Button>
-                  {v.mine && (
-                    <Button size="sm" variant="ghost" onClick={() => void deleteView.mutateAsync(v.id)}>
-                      Remove<span className="visually-hidden"> view {v.name}</span>
-                    </Button>
-                  )}
-                </span>
-              ))}
-            </div>
-            <form
-              className="crm-actions"
-              onSubmit={async (e) => {
-                e.preventDefault();
-                if (!viewName.trim()) return;
-                const saved = Object.fromEntries(Object.entries(filters).filter(([, v]) => v)) as Record<string, string>;
-                await saveView.mutateAsync({ name: viewName.trim(), entity: 'contacts', filters: saved, shared: false });
-                setViewName('');
-                toast.success('View saved');
-              }}
-            >
-              <FormField label="Save current filters as" hideLabel>
-                <Input size="sm" placeholder="View name" value={viewName} maxLength={100} onChange={(e) => setViewName(e.target.value)} />
-              </FormField>
-              <Button size="sm" type="submit" variant="secondary" disabled={!viewName.trim()}>
-                Save view
-              </Button>
-            </form>
-          </div>
+          <SavedViewsBar entity="contacts" filters={filters} onApply={applyView} />
           {query.isError ? (
             <ErrorState error={query.error} onRetry={() => void query.refetch()} />
           ) : (
             <>
-              <DataTable caption="Contacts" columns={columns} rows={query.data?.items ?? []} getRowId={(c) => c.id} loading={query.isPending} emptyState={<EmptyState compact headingLevel={3} title="No contacts match" />} />
+              <DataTable
+                caption={archived ? 'Archived contacts' : 'Contacts'}
+                columns={columns}
+                rows={query.data?.items ?? []}
+                getRowId={(c) => c.id}
+                loading={query.isPending}
+                sort={sort}
+                onSortChange={(next) => { setSort(next); setPage(1); }}
+                rowLabel={(c) => c.displayName}
+                selectable={canManage}
+                selectedIds={selected}
+                onSelectionChange={setSelected}
+                bulkActions={(ids) => (
+                  <BulkActionsBar entity="contacts" selectedIds={ids} archivedView={archived} onDone={() => setSelected([])} />
+                )}
+                emptyState={
+                  <EmptyState
+                    compact
+                    headingLevel={3}
+                    title={archived ? 'No archived contacts' : 'No contacts match'}
+                    description={archived ? 'Archived contacts appear here and can be restored.' : 'Change the filters, or add a contact.'}
+                  />
+                }
+              />
               {query.data && query.data.total > 25 && <Pagination page={page} pageSize={25} total={query.data.total} onPageChange={setPage} />}
             </>
           )}
@@ -244,13 +238,20 @@ export function ContactDetailPage() {
         meta={<LifecycleBadge stage={c.lifecycleStage} />}
         description={[c.jobTitle, c.companyName].filter(Boolean).join(' at ')}
         actions={
-          hasPermission(Permissions.CrmManage) && (
-            <Button variant="secondary" leadingIcon={<Pencil />} onClick={() => setEditing(true)}>
-              Edit
-            </Button>
+          hasPermission(Permissions.CrmManage) &&
+          !c.archivedAt && (
+            <div className="crm-actions">
+              <Button variant="secondary" leadingIcon={<Pencil />} onClick={() => setEditing(true)}>
+                Edit
+              </Button>
+              <ArchiveButton entity="contacts" id={c.id} concurrencyStamp={c.concurrencyStamp} archived={false} />
+            </div>
           )
         }
       />
+      {c.archivedAt && (
+        <ArchivedBanner entity="contacts" id={c.id} concurrencyStamp={c.concurrencyStamp} canManage={hasPermission(Permissions.CrmManage)} />
+      )}
       <div className="crm-two-col">
         <Card>
           <CardHeader title="Timeline" />

@@ -5,6 +5,8 @@ import type {
   AgingReport,
   BillingOverview,
   BillingSettings,
+  CatalogItem,
+  CatalogItemRequest,
   ClientOption,
   CollectionsReport,
   Contract,
@@ -41,6 +43,7 @@ export const billingKeys = {
   settings: () => ['billing', 'settings'] as const,
   report: (name: string, params: QueryParams) => ['billing', 'report', name, params] as const,
   statement: (clientId: string, params: QueryParams) => ['billing', 'statement', clientId, params] as const,
+  catalog: (all: boolean) => ['billing', 'catalog', all] as const,
 };
 
 // ---------------- Queries
@@ -251,6 +254,50 @@ export function useSaveTaxRate(id?: string) {
   return useMutation({
     mutationFn: (body: Omit<TaxRate, 'id' | 'concurrencyStamp'> & { concurrencyStamp?: string }) =>
       id ? api.put<TaxRate>(`${BASE}/tax-rates/${id}`, body) : api.post<TaxRate>(`${BASE}/tax-rates`, body),
+    onSuccess: () => invalidate(),
+  });
+}
+
+// ---------------- Service catalog, duplicate / delete helpers
+
+export function useServiceCatalog(includeInactive = false) {
+  return useQuery({
+    queryKey: billingKeys.catalog(includeInactive),
+    queryFn: ({ signal }) => api.get<CatalogItem[]>(`${BASE}/catalog`, { query: { includeInactive }, signal }),
+    staleTime: 60_000,
+  });
+}
+
+export function useSaveCatalogItem(id?: string) {
+  const invalidate = useInvalidate();
+  return useMutation({
+    mutationFn: (body: CatalogItemRequest) => (id ? api.put<CatalogItem>(`${BASE}/catalog/${id}`, body) : api.post<CatalogItem>(`${BASE}/catalog`, body)),
+    onSuccess: () => invalidate(),
+  });
+}
+
+export function useDeleteCatalogItem() {
+  const invalidate = useInvalidate();
+  return useMutation({ mutationFn: (id: string) => api.delete<void>(`${BASE}/catalog/${id}`), onSuccess: () => invalidate() });
+}
+
+export function useDeleteTaxRate() {
+  const invalidate = useInvalidate();
+  return useMutation({ mutationFn: (id: string) => api.delete<void>(`${BASE}/tax-rates/${id}`), onSuccess: () => invalidate() });
+}
+
+/** Copies an invoice (any status) into a new draft. */
+export function useDuplicateInvoice() {
+  const invalidate = useInvalidate();
+  return useMutation({ mutationFn: (id: string) => api.post<Invoice>(`${BASE}/invoices/${id}/duplicate`, {}), onSuccess: () => invalidate() });
+}
+
+/** Deletes a draft contract that never billed. */
+export function useDeleteContract() {
+  const invalidate = useInvalidate();
+  return useMutation({
+    mutationFn: ({ id, concurrencyStamp }: { id: string; concurrencyStamp: string }) =>
+      api.delete<void>(`/agency/contracts/${id}`, undefined, { query: { concurrencyStamp } }),
     onSuccess: () => invalidate(),
   });
 }

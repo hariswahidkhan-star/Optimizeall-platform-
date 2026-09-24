@@ -111,3 +111,38 @@ public class ProposalLine : PricedLine
     public string? PackageSlug { get; set; }
     public Recurrence Recurrence { get; set; } = Recurrence.OneTime;
 }
+
+/// <summary>A price line stored on a <see cref="ProposalTemplate"/> (copied into the builder when the template is used).</summary>
+public sealed record ProposalTemplateLine(
+    string Description, string? ServiceSlug, decimal Quantity, decimal UnitPrice, DiscountType DiscountType, decimal DiscountValue, Guid? TaxRateId,
+    Recurrence Recurrence);
+
+/// <summary>
+/// A reusable starting point for proposals (sections and price lines), managed by the agency under CRM settings. Using a
+/// template copies its content into a new proposal; later edits to the template never change existing proposals.
+/// </summary>
+public class ProposalTemplate : AuditedEntity, IConcurrencyStamped
+{
+    public string Name { get; set; } = string.Empty;
+    public string? Description { get; set; }
+
+    /// <summary>Default proposal title (the client name can be appended by the user).</summary>
+    public string? ProposalTitle { get; set; }
+
+    /// <summary>Currency the line prices are written in (the builder keeps the numbers when used for another currency).</summary>
+    public string Currency { get; set; } = "USD";
+
+    /// <summary>Days from today the proposal stays valid.</summary>
+    public int ValidForDays { get; set; } = 30;
+
+    public string? ExecutiveSummary { get; set; }
+    public string? Goals { get; set; }
+    public string? Scope { get; set; }
+    public string? Deliverables { get; set; }
+    public string? Timeline { get; set; }
+    public string? Terms { get; set; }
+    public List<ProposalTemplateLine> Lines { get; set; } = new();
+    public int SortOrder { get; set; }
+    public bool IsActive { get; set; } = true;
+    public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
+}

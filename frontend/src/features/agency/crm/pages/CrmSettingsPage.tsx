@@ -25,6 +25,7 @@ import { Permissions } from '@/lib/auth/permissions';
 import { useAuth } from '@/lib/auth/useAuth';
 import { useDeleteRule, useRecomputeScores, useSaveRule, useSaveStages, useScoringRules, useStages } from '../api/hooks';
 import type { ScoringCategory, ScoringRule, StageKind } from '../api/types';
+import { CrmOptionsEditor, ProposalTemplatesManager } from '../components/SalesSettings';
 import '@/features/agency/billing/billing.css';
 import '../crm.css';
 
@@ -34,6 +35,8 @@ interface EditableStage {
   winProbability: number;
   kind: StageKind;
   isActive: boolean;
+  /** Stamp of the stage as loaded (a concurrent edit answers 409 instead of being overwritten). */
+  concurrencyStamp?: string;
 }
 
 function PipelineEditor({ canEdit }: { canEdit: boolean }) {
@@ -44,7 +47,7 @@ function PipelineEditor({ canEdit }: { canEdit: boolean }) {
   const [error, setError] = useState<unknown>(null);
   useEffect(() => {
     if (stages.data && rows === null)
-      setRows(stages.data.map((s) => ({ id: s.id, name: s.name, winProbability: s.winProbability, kind: s.kind, isActive: s.isActive })));
+      setRows(stages.data.map((s) => ({ id: s.id, name: s.name, winProbability: s.winProbability, kind: s.kind, isActive: s.isActive, concurrencyStamp: s.concurrencyStamp })));
   }, [stages.data, rows]);
   if (stages.isError) return <ErrorState error={stages.error} onRetry={() => void stages.refetch()} />;
   if (!rows) return <Skeleton height="12rem" />;
@@ -102,7 +105,7 @@ function PipelineEditor({ canEdit }: { canEdit: boolean }) {
               setError(null);
               try {
                 const saved = await save.mutateAsync(rows.map((r) => ({ ...r, id: r.id ?? undefined })));
-                setRows(saved.map((s) => ({ id: s.id, name: s.name, winProbability: s.winProbability, kind: s.kind, isActive: s.isActive })));
+                setRows(saved.map((s) => ({ id: s.id, name: s.name, winProbability: s.winProbability, kind: s.kind, isActive: s.isActive, concurrencyStamp: s.concurrencyStamp })));
                 toast.success('Pipeline saved');
               } catch (err) {
                 setError(err);
@@ -257,6 +260,18 @@ export function CrmSettingsPage() {
           <CardHeader title="Lead scoring" description="Scores are recalculated whenever a contact, its company or its engagement changes." />
           <CardBody>
             <ScoringRules canEdit={canEdit} />
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader title="Options" description="Lists offered in forms across the CRM. Changing them never rewrites existing records." />
+          <CardBody>
+            <CrmOptionsEditor canEdit={canEdit} />
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader title="Proposal templates" description="Reusable sections and price lines to start proposals from." />
+          <CardBody>
+            <ProposalTemplatesManager canEdit={hasPermission(Permissions.ProposalsManage)} />
           </CardBody>
         </Card>
       </div>
