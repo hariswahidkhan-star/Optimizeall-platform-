@@ -10,7 +10,7 @@ import {
   Search,
   UserRound,
 } from 'lucide-react';
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { Logo } from '@/components/brand/Logo';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -53,20 +53,16 @@ function PortalNav({
   /** Icon rail: labels are visually hidden (still the links' names) and shown as a tooltip. */
   collapsed?: boolean;
 }) {
-  const idPrefix = useId();
   const sections = groupNav(portal.id, items);
   return (
     <nav aria-label={`${portal.label} navigation`} className="portal-nav">
       {sections.map((section, index) => {
-        const headingId = `${idPrefix}-section-${index}`;
+        // The section label is plain text read in order before its links. It deliberately does not name the list
+        // (aria-labelledby): a list named "Billing" would also answer getByLabel('Billing') next to form fields.
         return (
           <div key={`${section.label ?? ''}-${index}`} className="portal-nav__section">
-            {section.label && (
-              <p id={headingId} className="portal-nav__heading">
-                {section.label}
-              </p>
-            )}
-            <ul aria-labelledby={section.label ? headingId : undefined}>
+            {section.label && <p className="portal-nav__heading">{section.label}</p>}
+            <ul>
               {section.items.map((item) => {
                 const Icon = item.icon;
                 return (
