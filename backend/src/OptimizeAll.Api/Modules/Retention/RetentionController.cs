@@ -58,7 +58,7 @@ public sealed class RetentionController(AppDbContext db, TimeProvider clock) : C
             var like = PagingExtensions.LikePattern(query.Search);
             q = q.Where(x => EF.Functions.Like(x.u.DisplayName, like, "\\") || EF.Functions.Like(x.u.Email, like, "\\"));
         }
-        return await q.OrderByDescending(x => x.l.SentAt)
+        return await q.OrderByDescending(x => x.l.SentAt).ThenByDescending(x => x.l.Id)
             .Select(x => new RetentionLogDto(x.l.Id, x.l.UserId, x.u.DisplayName, x.u.Email, x.l.Kind, x.l.DedupKey, x.l.SentAt))
             .ToPagedAsync(query, ct);
     }

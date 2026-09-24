@@ -204,7 +204,7 @@ public sealed class SocialAccountService(
                              EF.Functions.Like(x.u.DisplayName, pattern, "\\"));
         }
         // Review queue: oldest waiting first unless the caller asks for newest.
-        q = query.Desc ? q.OrderByDescending(x => x.a.UpdatedAt) : q.OrderBy(x => x.a.UpdatedAt);
+        q = query.Desc ? q.OrderByDescending(x => x.a.UpdatedAt).ThenByDescending(x => x.a.Id) : q.OrderBy(x => x.a.UpdatedAt).ThenBy(x => x.a.Id);
 
         var page = await q.ToPagedAsync(query, ct);
         return new PagedResult<ReviewSocialAccountDto>(page.Items.Select(x => ToReviewDto(x.a, x.u, now)).ToList(),

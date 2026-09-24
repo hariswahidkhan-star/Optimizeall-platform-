@@ -126,7 +126,7 @@ public sealed class PayoutHoldsController(
             var like = PagingExtensions.LikePattern(query.Search);
             holds = holds.Where(x => EF.Functions.Like(x.Email, like, "\\") || EF.Functions.Like(x.DisplayName, like, "\\"));
         }
-        var page = await holds.OrderByDescending(x => x.Hold.CreatedAt).ToPagedAsync(query, ct);
+        var page = await holds.OrderByDescending(x => x.Hold.CreatedAt).ThenByDescending(x => x.Hold.Id).ToPagedAsync(query, ct);
         return new PagedResult<PayoutHoldDto>(page.Items.Select(x => ToDto(x.Hold, x.Email, x.DisplayName)).ToList(),
             page.Total, page.Page, page.PageSize);
     }

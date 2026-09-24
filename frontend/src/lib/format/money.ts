@@ -2,8 +2,20 @@ import { browserLocale } from './locale';
 
 /**
  * Money formatting. The UI never computes money — it only formats amounts the API returns, always with their ISO
- * currency. Minor units come from Intl (JPY 0, USD 2, KWD 3, ...).
+ * currency. Minor units follow the API (JPY 0, USD 2, KWD 3, ...), not Intl: the browser's CLDR data gives some
+ * currencies fewer digits than ISO 4217 (PKR, IDR, HUF, COP → 0, IQD → 0), which would show "PKR 1,235" for an
+ * invoice the API totals as 1,234.56.
  */
+
+/**
+ * Currencies whose minor unit is not 2. Mirrors `Money.MinorUnits` in backend/src/OptimizeAll.Domain/Common/Money.cs;
+ * keep the two in sync.
+ */
+const MINOR_UNITS: Readonly<Record<string, number>> = {
+  BHD: 3, JOD: 3, KWD: 3, OMR: 3, TND: 3, IQD: 3, LYD: 3,
+  JPY: 0, KRW: 0, VND: 0, CLP: 0, ISK: 0, UGX: 0, XAF: 0, XOF: 0,
+  PYG: 0, RWF: 0, KMF: 0, GNF: 0, DJF: 0, VUV: 0, XPF: 0,
+};
 
 export interface FormatMoneyOptions {
   locale?: string;
@@ -21,12 +33,15 @@ function getFormatter(currency: string, options: FormatMoneyOptions): Intl.Numbe
   const key = JSON.stringify([currency, options]);
   let formatter = formatterCache.get(key);
   if (!formatter) {
+    const digits = currencyMinorUnits(currency);
     formatter = new Intl.NumberFormat(options.locale ?? browserLocale(), {
       style: 'currency',
       currency,
       currencyDisplay: options.currencyDisplay ?? 'symbol',
       signDisplay: options.signDisplay ?? 'auto',
-      ...(options.compact ? { notation: 'compact', maximumFractionDigits: 1 } : {}),
+      ...(options.compact
+        ? { notation: 'compact', maximumFractionDigits: 1 }
+        : { minimumFractionDigits: digits, maximumFractionDigits: digits }),
     });
     formatterCache.set(key, formatter);
   }
@@ -37,12 +52,9 @@ function toNumber(amount: number | string): number {
   return typeof amount === 'number' ? amount : Number(amount);
 }
 
-/** Number of minor-unit digits for a currency (JPY → 0, USD → 2, KWD → 3). */
+/** Number of minor-unit digits for a currency, as the API rounds it (JPY → 0, USD → 2, KWD → 3). */
 export function currencyMinorUnits(currency: string): number {
-  return (
-    new Intl.NumberFormat('en', { style: 'currency', currency: currency.toUpperCase() }).resolvedOptions()
-      .maximumFractionDigits ?? 2
-  );
+  return MINOR_UNITS[currency.toUpperCase()] ?? 2;
 }
 
 /** Formats an amount in its currency, e.g. formatMoney(1234.5, 'USD') → "$1,234.50". */

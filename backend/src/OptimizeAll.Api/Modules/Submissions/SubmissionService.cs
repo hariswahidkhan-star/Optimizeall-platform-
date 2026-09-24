@@ -247,7 +247,7 @@ public sealed class SubmissionService(
                 select new { s, c };
         if (query.Status is { } status) q = q.Where(x => x.s.Status == status);
         if (query.CampaignId is { } campaignId) q = q.Where(x => x.s.CampaignId == campaignId);
-        return await q.OrderByDescending(x => x.s.SubmittedAt)
+        return await q.OrderByDescending(x => x.s.SubmittedAt).ThenByDescending(x => x.s.Id)
             .Select(x => new MySubmissionListItemDto(x.s.Id, new CampaignRefDto(x.c.Id, x.c.Slug, x.c.Title), x.s.Platform, x.s.PostUrl,
                 x.s.Status, x.s.SubmittedAt, x.s.EstimatedRewardAmount, x.s.RewardCurrency, x.s.DecisionReason))
             .ToPagedAsync(query, ct);

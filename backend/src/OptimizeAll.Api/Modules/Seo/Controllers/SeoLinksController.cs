@@ -126,7 +126,7 @@ public sealed class SeoLinksController(
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var like = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(b => EF.Functions.Like(b.SourceUrl, like) || EF.Functions.Like(b.AnchorText!, like));
+            q = q.Where(b => EF.Functions.Like(b.SourceUrl, like, "\\") || EF.Functions.Like(b.AnchorText!, like, "\\"));
         }
         var page = await q.OrderByDescending(b => b.FirstSeenAt).ThenBy(b => b.Id).ToPagedAsync(query, ct);
         var counts = await all.GroupBy(b => b.Status).Select(g => new { g.Key, Count = g.Count() }).ToDictionaryAsync(x => x.Key, x => x.Count, ct);

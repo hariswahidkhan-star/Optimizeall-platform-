@@ -69,7 +69,7 @@ public sealed class ClientService(
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var p = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(c => EF.Functions.Like(c.Name, p) || EF.Functions.Like(c.Slug, p) || (c.Industry != null && EF.Functions.Like(c.Industry, p)));
+            q = q.Where(c => EF.Functions.Like(c.Name, p, "\\") || EF.Functions.Like(c.Slug, p, "\\") || (c.Industry != null && EF.Functions.Like(c.Industry, p, "\\")));
         }
         q = query.Sort switch
         {
@@ -77,6 +77,7 @@ public sealed class ClientService(
             "status" => query.Desc ? q.OrderByDescending(c => c.Status).ThenBy(c => c.Name) : q.OrderBy(c => c.Status).ThenBy(c => c.Name),
             _ => q.OrderBy(c => c.Name),
         };
+        q = q.ThenByKey(c => c.Id);
         var total = await q.CountAsync(ct);
         var rows = await q.Skip(query.Skip).Take(query.PageSize).ToListAsync(ct);
         var ids = rows.Select(r => r.Id).ToList();

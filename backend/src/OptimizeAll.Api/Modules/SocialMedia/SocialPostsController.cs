@@ -74,8 +74,8 @@ public sealed class SocialPostsController(
         if (query.ClientId is { } c) q = q.Where(p => p.ClientAccountId == c);
         if (query.Status is { } s) q = q.Where(p => p.Status == s);
         if (query.Network is { } n) q = q.Where(p => p.Variants.Any(v => v.Network == n));
-        if (!string.IsNullOrWhiteSpace(query.Search)) q = q.Where(p => EF.Functions.Like(p.Title, PagingExtensions.LikePattern(query.Search)));
-        var page = await q.OrderByDescending(p => p.ScheduledAt ?? p.CreatedAt).ToPagedAsync(query, ct);
+        if (!string.IsNullOrWhiteSpace(query.Search)) q = q.Where(p => EF.Functions.Like(p.Title, PagingExtensions.LikePattern(query.Search), "\\"));
+        var page = await q.OrderByDescending(p => p.ScheduledAt ?? p.CreatedAt).ThenByDescending(p => p.Id).ToPagedAsync(query, ct);
         var names = await ClientNamesAsync(page.Items.Select(p => p.ClientAccountId), ct);
         return new PagedResult<PostSummaryDto>(page.Items.Select(p => SocialPostService.Summary(p, names.GetValueOrDefault(p.ClientAccountId, ""))).ToList(),
             page.Total, page.Page, page.PageSize);
@@ -207,7 +207,7 @@ public sealed class SocialPostsController(
                         || p.Status == SocialPostStatus.Published || p.Status == SocialPostStatus.Failed);
         if (query.ClientId is { } c) q = q.Where(p => p.ClientAccountId == c);
         if (query.Status is { } s) q = q.Where(p => p.Status == s);
-        var page = await q.OrderByDescending(p => p.ScheduledAt).ToPagedAsync(query, ct);
+        var page = await q.OrderByDescending(p => p.ScheduledAt).ThenByDescending(p => p.Id).ToPagedAsync(query, ct);
         var names = await ClientNamesAsync(page.Items.Select(p => p.ClientAccountId), ct);
         var profileIds = page.Items.SelectMany(p => p.Variants).Select(v => v.ProfileId).Distinct().ToList();
         var handles = await db.Set<BrandProfile>().AsNoTracking().Where(p => profileIds.Contains(p.Id)).ToDictionaryAsync(p => p.Id, p => p.Handle, ct);

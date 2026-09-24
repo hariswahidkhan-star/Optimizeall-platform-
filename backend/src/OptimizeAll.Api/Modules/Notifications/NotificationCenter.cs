@@ -30,7 +30,7 @@ public sealed class NotificationListQuery
     public int PageSize { get; set; } = 20;
 
     /// <summary>Rows before the page, computed in 64 bits so a huge page number cannot wrap to a negative offset.</summary>
-    public int Skip => (int)Math.Min(int.MaxValue, (Page - 1L) * PageSize);
+    public int Skip => PagingExtensions.SkipFor(Page, PageSize);
 }
 
 public sealed record UnreadCountDto(int Count);

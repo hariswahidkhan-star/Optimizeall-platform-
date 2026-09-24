@@ -65,10 +65,10 @@ public sealed class DeliverableService(
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var p = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(d => EF.Functions.Like(d.Title, p));
+            q = q.Where(d => EF.Functions.Like(d.Title, p, "\\"));
         }
         var total = await q.CountAsync(ct);
-        var rows = await q.OrderByDescending(d => d.UpdatedAt).Skip(query.Skip).Take(query.PageSize).ToListAsync(ct);
+        var rows = await q.OrderByDescending(d => d.UpdatedAt).ThenByDescending(d => d.Id).Skip(query.Skip).Take(query.PageSize).ToListAsync(ct);
         return new PagedResult<DeliverableSummaryDto>(await SummariesAsync(rows, ct), total, query.Page, query.PageSize);
     }
 

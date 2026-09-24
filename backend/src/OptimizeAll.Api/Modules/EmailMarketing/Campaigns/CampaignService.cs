@@ -127,7 +127,7 @@ public sealed class CampaignService(
         var query = db.Set<EmailCampaign>().AsNoTracking().Where(c => c.ScopeKey == key && channels.Contains(c.Channel));
         if (q.Status is { } status) query = query.Where(c => c.Status == status);
         if (q.Channel is { } channel) query = query.Where(c => c.Channel == channel);
-        if (!string.IsNullOrWhiteSpace(q.Search)) { var p = PagingExtensions.LikePattern(q.Search); query = query.Where(c => EF.Functions.Like(c.Name, p)); }
+        if (!string.IsNullOrWhiteSpace(q.Search)) { var p = PagingExtensions.LikePattern(q.Search); query = query.Where(c => EF.Functions.Like(c.Name, p, "\\")); }
         var page = await query.OrderByDescending(c => c.UpdatedAt).ThenBy(c => c.Id).ToPagedAsync(q, ct);
         return new PagedResult<CampaignListItem>(await ToListItemsAsync(page.Items, ct), page.Total, page.Page, page.PageSize);
     }

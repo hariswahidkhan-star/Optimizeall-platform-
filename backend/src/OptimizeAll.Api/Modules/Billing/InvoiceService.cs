@@ -60,6 +60,7 @@ public sealed class InvoiceService(
             "issueDate" => query.Desc ? invoices.OrderByDescending(i => i.IssueDate) : invoices.OrderBy(i => i.IssueDate),
             _ => query.Desc ? invoices.OrderByDescending(i => i.CreatedAt) : invoices.OrderBy(i => i.CreatedAt),
         };
+        invoices = invoices.ThenByKey(i => i.Id, query.Desc);
         var total = await invoices.CountAsync(ct);
         var rows = await invoices.Skip(query.Skip).Take(query.PageSize).ToListAsync(ct);
         return new PagedResult<InvoiceSummaryDto>(await SummariesAsync(rows, ct), total, query.Page, query.PageSize);

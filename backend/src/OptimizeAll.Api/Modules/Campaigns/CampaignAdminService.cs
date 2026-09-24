@@ -90,6 +90,7 @@ public sealed class CampaignAdminService(
             "deadline" => query.Desc ? q.OrderByDescending(c => c.SubmissionDeadline) : q.OrderBy(c => c.SubmissionDeadline),
             _ => q.OrderByDescending(c => c.CreatedAt),
         };
+        q = q.ThenByKey(c => c.Id);
 
         var total = await q.CountAsync(ct);
         var campaigns = await q.Include(c => c.Category).Include(c => c.Platforms).AsSplitQuery()

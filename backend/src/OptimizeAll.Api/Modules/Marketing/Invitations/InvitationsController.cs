@@ -66,7 +66,7 @@ public sealed class InvitationsController(
             var like = PagingExtensions.LikePattern(query.Search);
             q = q.Where(i => EF.Functions.Like(i.Name, like, "\\") || EF.Functions.Like(i.Code, like, "\\"));
         }
-        var page = await q.OrderByDescending(i => i.CreatedAt).ToPagedAsync(query, ct);
+        var page = await q.OrderByDescending(i => i.CreatedAt).ThenByDescending(i => i.Id).ToPagedAsync(query, ct);
         var titles = await CampaignTitlesAsync(page.Items.Select(i => i.CampaignId), ct);
         return new PagedResult<InvitationDto>(page.Items.Select(i => ToDto(i, titles)).ToList(), page.Total, page.Page, page.PageSize);
     }

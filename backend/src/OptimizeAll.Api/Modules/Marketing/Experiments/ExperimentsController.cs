@@ -109,7 +109,7 @@ public sealed class ExperimentsController(
         if (query.Status is { } s) q = q.Where(e => e.Status == s);
         if (!string.IsNullOrWhiteSpace(query.Search))
             q = q.Where(e => EF.Functions.Like(e.Name, PagingExtensions.LikePattern(query.Search), "\\"));
-        var page = await q.OrderByDescending(e => e.CreatedAt).ToPagedAsync(query, ct);
+        var page = await q.OrderByDescending(e => e.CreatedAt).ThenByDescending(e => e.Id).ToPagedAsync(query, ct);
         var campaignIds = page.Items.Select(e => e.CampaignId).Distinct().ToList();
         var titles = await db.Set<Campaign>().AsNoTracking().Where(c => campaignIds.Contains(c.Id))
             .ToDictionaryAsync(c => c.Id, c => c.Title, ct);

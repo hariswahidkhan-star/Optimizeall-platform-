@@ -197,9 +197,9 @@ public sealed class CareersService(
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var p = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(x => EF.Functions.Like(x.a.Name, p) || EF.Functions.Like(x.a.Email, p));
+            q = q.Where(x => EF.Functions.Like(x.a.Name, p, "\\") || EF.Functions.Like(x.a.Email, p, "\\"));
         }
-        return await q.OrderByDescending(x => x.a.CreatedAt)
+        return await q.OrderByDescending(x => x.a.CreatedAt).ThenByDescending(x => x.a.Id)
             .Select(x => new ApplicationSummaryDto(x.a.Id, x.a.JobOpeningId, x.Title, x.a.Name, x.a.Email, x.a.Stage, x.a.CreatedAt, x.a.UpdatedAt))
             .ToPagedAsync(query, ct);
     }

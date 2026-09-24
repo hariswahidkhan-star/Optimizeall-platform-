@@ -480,7 +480,7 @@ function AvailabilityCard() {
               {current.blackouts.map((b) => (
                 <li key={b.id} className="cms-list__item">
                   <span className="cms-list__body">
-                    {formatDate(`${b.date}T12:00:00Z`)} {b.reason && <span className="text-muted">— {b.reason}</span>}
+                    {formatDate(b.date)} {b.reason && <span className="text-muted">— {b.reason}</span>}
                   </span>
                   <Button size="sm" variant="ghost" onClick={() => removeBlackout.mutate(b.id)}>
                     Remove<span className="visually-hidden"> blackout on {b.date}</span>

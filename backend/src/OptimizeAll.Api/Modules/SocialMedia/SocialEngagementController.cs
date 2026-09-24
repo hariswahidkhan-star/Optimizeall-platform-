@@ -203,8 +203,8 @@ public sealed class SocialEngagementController(
         var q = db.Set<SocialMention>().AsNoTracking().Where(m => m.ClientAccountId == clientId);
         if (sentiment is { } s) q = q.Where(m => m.Sentiment == s);
         if (queryId is { } qid) q = q.Where(m => m.QueryId == qid);
-        if (!string.IsNullOrWhiteSpace(query.Search)) q = q.Where(m => EF.Functions.Like(m.Text, PagingExtensions.LikePattern(query.Search)));
-        var page = await q.OrderByDescending(m => m.PostedAt).ToPagedAsync(query, ct);
+        if (!string.IsNullOrWhiteSpace(query.Search)) q = q.Where(m => EF.Functions.Like(m.Text, PagingExtensions.LikePattern(query.Search), "\\"));
+        var page = await q.OrderByDescending(m => m.PostedAt).ThenByDescending(m => m.Id).ToPagedAsync(query, ct);
         return new PagedResult<MentionDto>(page.Items.Select(ToDto).ToList(), page.Total, page.Page, page.PageSize);
     }
 
@@ -300,7 +300,7 @@ public sealed class SocialEngagementController(
         var q = db.Set<SocialInboxItem>().AsNoTracking().Where(i => i.ClientAccountId == clientId);
         if (status is { } s) q = q.Where(i => i.Status == s);
         if (mine) q = q.Where(i => i.AssignedToUserId == currentUser.Id);
-        var page = await q.OrderByDescending(i => i.ReceivedAt).ToPagedAsync(query, ct);
+        var page = await q.OrderByDescending(i => i.ReceivedAt).ThenByDescending(i => i.Id).ToPagedAsync(query, ct);
         return new PagedResult<InboxItemDto>(await InboxDtosAsync(page.Items, ct), page.Total, page.Page, page.PageSize);
     }
 

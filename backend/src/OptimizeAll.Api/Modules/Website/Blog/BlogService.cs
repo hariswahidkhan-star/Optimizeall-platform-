@@ -108,9 +108,9 @@ public sealed class BlogService(CmsStore store, IAuditLogger audit, WebsiteRules
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var pattern = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(p => EF.Functions.Like(p.Title, pattern) || EF.Functions.Like(p.Slug, pattern) || EF.Functions.Like(p.Excerpt, pattern));
+            q = q.Where(p => EF.Functions.Like(p.Title, pattern, "\\") || EF.Functions.Like(p.Slug, pattern, "\\") || EF.Functions.Like(p.Excerpt, pattern, "\\"));
         }
-        var rows = await q.OrderByDescending(p => p.UpdatedAt).ToListAsync(ct);
+        var rows = await q.OrderByDescending(p => p.UpdatedAt).ThenByDescending(p => p.Id).ToListAsync(ct);
         if (query.CategoryId is { } cat) rows = rows.Where(p => p.CategoryIds.Contains(cat)).ToList();
         var total = rows.Count;
         rows = rows.Skip(query.Skip).Take(query.PageSize).ToList();
@@ -366,7 +366,7 @@ public static class PublicBlogQueries
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var pattern = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(p => EF.Functions.Like(p.Title, pattern) || EF.Functions.Like(p.Excerpt, pattern) || EF.Functions.Like(p.BodyMarkdown, pattern));
+            q = q.Where(p => EF.Functions.Like(p.Title, pattern, "\\") || EF.Functions.Like(p.Excerpt, pattern, "\\") || EF.Functions.Like(p.BodyMarkdown, pattern, "\\"));
         }
         var all = await q.OrderByDescending(p => p.PublishedAt).ToListAsync(ct);
         var everything = string.IsNullOrWhiteSpace(query.Search) ? all : await Live(db, now).ToListAsync(ct);
@@ -383,7 +383,7 @@ public static class PublicBlogQueries
             filtered = filtered.Where(p => p.Tags.Contains(tag));
         }
         var list = filtered.ToList();
-        var items = list.Skip((query.Page - 1) * query.PageSize).Take(query.PageSize).Select(p => Card(p, l)).ToList();
+        var items = list.Skip(PagingExtensions.SkipFor(query.Page, query.PageSize)).Take(query.PageSize).Select(p => Card(p, l)).ToList();
         var categories = l.Categories.Values.OrderBy(c => c.SortOrder).ThenBy(c => c.Name)
             .Select(c => new BlogCategoryCountDto(c.Slug, c.Name, c.Description, everything.Count(p => p.CategoryIds.Contains(c.Id))))
             .Where(c => c.PostCount > 0).ToList();

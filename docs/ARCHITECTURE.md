@@ -153,6 +153,11 @@ Rules for all code (other agents included):
 * Keep queries translatable on both providers (no MySQL-only functions, no `DateTime` arithmetic inside SQL that
   SQLite cannot translate; compute boundaries in C# and compare). `EF.Functions.Like(x, PagingExtensions.LikePattern(q), "\\")`
   — pass the escape character; SQLite has no default one.
+* Paged lists end their `ORDER BY` with a unique key (`.ThenBy(x => x.Id)`, or `ThenByKey` after a sort switch): rows
+  that tie on the sort key (same `CreatedAt`, name, status…) otherwise come back in a different order for each
+  `LIMIT/OFFSET` on MySQL, so pages repeat some rows and never show others. `PageQuery.Skip` is capped instead of
+  overflowing for far-out pages, and a `[FromQuery]` object must not be bound under the name of one of its own
+  properties (`PageQuery page` makes MVC ignore `?page=`/`?pageSize=`); `QueryBindingTests` guards this.
 * Money on SQLite: decimals are stored as TEXT. EF Core 8 translates decimal arithmetic/comparisons itself;
   `Common/Persistence/SqliteQuerySupport.cs` adds exact `Sum`/`Average`/`Min`/`Max` (computed in .NET `decimal`),
   decimal `OrderBy` (exact collation) and `Guid.NewGuid()` inside `ExecuteUpdate`. Values read back with their column

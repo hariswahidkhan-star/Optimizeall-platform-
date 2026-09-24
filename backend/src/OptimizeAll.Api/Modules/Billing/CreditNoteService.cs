@@ -176,7 +176,7 @@ public sealed class CreditNoteService(
         if (!string.IsNullOrWhiteSpace(query.Search))
             notes = notes.Where(c => EF.Functions.Like(c.Number, PagingExtensions.LikePattern(query.Search), "\\"));
         var total = await notes.CountAsync(ct);
-        var rows = await notes.OrderByDescending(c => c.CreatedAt).Skip(query.Skip).Take(query.PageSize).ToListAsync(ct);
+        var rows = await notes.OrderByDescending(c => c.CreatedAt).ThenByDescending(c => c.Id).Skip(query.Skip).Take(query.PageSize).ToListAsync(ct);
         var dtos = new List<CreditNoteDto>();
         foreach (var row in rows) dtos.Add(await ToDtoAsync(row, ct));
         return new PagedResult<CreditNoteDto>(dtos, total, query.Page, query.PageSize);

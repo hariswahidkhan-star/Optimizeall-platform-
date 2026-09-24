@@ -140,8 +140,8 @@ public sealed class NewsletterService(
     {
         var q = db.Set<NewsletterSubscriber>().AsNoTracking();
         if (query.Status is { } status) q = q.Where(s => s.Status == status);
-        if (!string.IsNullOrWhiteSpace(query.Search)) q = q.Where(s => EF.Functions.Like(s.Email, PagingExtensions.LikePattern(query.Search)));
-        return CmsStore.Map(await q.OrderByDescending(s => s.CreatedAt).ToPagedAsync(query, ct), ToDto);
+        if (!string.IsNullOrWhiteSpace(query.Search)) q = q.Where(s => EF.Functions.Like(s.Email, PagingExtensions.LikePattern(query.Search), "\\"));
+        return CmsStore.Map(await q.OrderByDescending(s => s.CreatedAt).ThenByDescending(s => s.Id).ToPagedAsync(query, ct), ToDto);
     }
 
     /// <summary>Unsubscribes an address on the subscriber's behalf (e.g. they asked by reply). Idempotent.</summary>

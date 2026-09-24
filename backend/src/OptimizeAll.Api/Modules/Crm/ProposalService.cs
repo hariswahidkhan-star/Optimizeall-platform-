@@ -57,7 +57,7 @@ public sealed class ProposalService(
             proposals = proposals.Where(p => EF.Functions.Like(p.Title, pattern, "\\") || EF.Functions.Like(p.Number, pattern, "\\"));
         }
         var total = await proposals.CountAsync(ct);
-        var rows = await proposals.OrderByDescending(p => p.CreatedAt).Skip(q.Skip).Take(q.PageSize).ToListAsync(ct);
+        var rows = await proposals.OrderByDescending(p => p.CreatedAt).ThenByDescending(p => p.Id).Skip(q.Skip).Take(q.PageSize).ToListAsync(ct);
         return new PagedResult<ProposalSummaryDto>(await SummariesAsync(rows, ct), total, q.Page, q.PageSize);
     }
 

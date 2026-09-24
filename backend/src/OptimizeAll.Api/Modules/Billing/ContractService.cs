@@ -39,7 +39,7 @@ public sealed class ContractService(
                                              clientIds.Contains(c.ClientAccountId));
         }
         var total = await contracts.CountAsync(ct);
-        var rows = await contracts.Include(c => c.Lines).OrderByDescending(c => c.CreatedAt).Skip(query.Skip).Take(query.PageSize).ToListAsync(ct);
+        var rows = await contracts.Include(c => c.Lines).OrderByDescending(c => c.CreatedAt).ThenByDescending(c => c.Id).Skip(query.Skip).Take(query.PageSize).ToListAsync(ct);
         var names = await ClientNamesAsync(rows.Select(r => r.ClientAccountId), ct);
         return new PagedResult<ContractSummaryDto>(rows.Select(c => Summary(c, names.GetValueOrDefault(c.ClientAccountId, "—"))).ToList(),
             total, query.Page, query.PageSize);

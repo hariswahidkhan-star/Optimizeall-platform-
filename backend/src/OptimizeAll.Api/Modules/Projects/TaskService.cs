@@ -47,7 +47,7 @@ public sealed class TaskService(
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var p = Common.Http.PagingExtensions.LikePattern(query.Search);
-            q = q.Where(t => EF.Functions.Like(t.Title, p));
+            q = q.Where(t => EF.Functions.Like(t.Title, p, "\\"));
         }
         return await SummariesAsync(await q.OrderBy(t => t.Status).ThenBy(t => t.SortOrder).ToListAsync(ct), ct);
     }

@@ -364,6 +364,17 @@ jobs:
           E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-social
         run: scripts/e2e-journeys.sh
 
+      # Cross-cutting edge cases in a real browser: calendar dates with the browser at UTC+14, UTC-12 and UTC+05:45,
+      # invoices in 0/2/3-decimal currencies (JPY, PKR, KWD), and 60 identical projects paged through the list plus
+      # wildcard/quote/backslash/emoji search. Demo seed, SQLite.
+      - name: Edge-case suite (scripts/e2e-journeys.sh, E2E_SUITE=j-edge, SQLite)
+        env:
+          E2E_SUITE: j-edge
+          E2E_DB_PROVIDER: sqlite
+          E2E_SKIP_BUILD: "1"
+          E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-edge
+        run: scripts/e2e-journeys.sh
+
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v4
@@ -401,6 +412,8 @@ jobs:
             ${{ runner.temp }}/e2e-j-campaigns/web.log
             ${{ runner.temp }}/e2e-j-finance/api.log
             ${{ runner.temp }}/e2e-j-finance/web.log
+            ${{ runner.temp }}/e2e-j-edge/api.log
+            ${{ runner.temp }}/e2e-j-edge/web.log
             ${{ runner.temp }}/e2e-lead-to-cash/api.log
             ${{ runner.temp }}/e2e-lead-to-cash/web.log
             ${{ runner.temp }}/e2e-j-content/api.log

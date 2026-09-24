@@ -81,9 +81,9 @@ public sealed class SeoSitesController(
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var like = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(s => EF.Functions.Like(s.Name, like) || EF.Functions.Like(s.Domain, like));
+            q = q.Where(s => EF.Functions.Like(s.Name, like, "\\") || EF.Functions.Like(s.Domain, like, "\\"));
         }
-        var page = await q.OrderBy(s => s.Name).ToPagedAsync(query, ct);
+        var page = await q.OrderBy(s => s.Name).ThenBy(s => s.Id).ToPagedAsync(query, ct);
         return new PagedResult<SiteDto>(await ToDtosAsync(page.Items, ct), page.Total, page.Page, page.PageSize);
     }
 

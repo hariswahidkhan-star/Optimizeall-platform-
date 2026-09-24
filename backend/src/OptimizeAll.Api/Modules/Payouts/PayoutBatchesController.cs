@@ -59,7 +59,7 @@ public sealed class PayoutBatchesController(
         }
         var total = await q.CountAsync(ct);
         var items = await PayoutReadModels.SummariesAsync(db,
-            q.OrderByDescending(b => b.CutoffAt).ThenByDescending(b => b.CreatedAt).Skip(query.Skip).Take(query.PageSize), ct);
+            q.OrderByDescending(b => b.CutoffAt).ThenByDescending(b => b.CreatedAt).ThenByDescending(b => b.Id).Skip(query.Skip).Take(query.PageSize), ct);
         return new PagedResult<PayoutBatchSummaryDto>(items, total, query.Page, query.PageSize);
     }
 

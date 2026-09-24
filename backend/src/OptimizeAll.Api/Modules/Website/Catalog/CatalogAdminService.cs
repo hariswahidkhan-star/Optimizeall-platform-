@@ -88,9 +88,9 @@ public sealed class CatalogAdminService(
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var p = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(x => EF.Functions.Like(x.s.Name, p) || EF.Functions.Like(x.s.Slug, p) || EF.Functions.Like(x.s.Tagline, p));
+            q = q.Where(x => EF.Functions.Like(x.s.Name, p, "\\") || EF.Functions.Like(x.s.Slug, p, "\\") || EF.Functions.Like(x.s.Tagline, p, "\\"));
         }
-        var page = await q.OrderBy(x => x.c.SortOrder).ThenBy(x => x.s.SortOrder).ThenBy(x => x.s.Name)
+        var page = await q.OrderBy(x => x.c.SortOrder).ThenBy(x => x.s.SortOrder).ThenBy(x => x.s.Name).ThenBy(x => x.s.Id)
             .Select(x => new ServiceSummaryDto(x.s.Id, x.c.Id, x.c.Name, x.s.Slug, x.s.Name, x.s.Tagline, x.s.Icon, x.s.IsPublished, x.s.IsFeatured,
                 x.s.SortOrder, x.s.Packages.Count, x.s.UpdatedAt))
             .ToPagedAsync(query, ct);
@@ -265,9 +265,9 @@ public sealed class CatalogAdminService(
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var p = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(x => EF.Functions.Like(x.Name, p) || EF.Functions.Like(x.Slug, p));
+            q = q.Where(x => EF.Functions.Like(x.Name, p, "\\") || EF.Functions.Like(x.Slug, p, "\\"));
         }
-        return CmsStore.Map(await q.OrderBy(x => x.SortOrder).ThenBy(x => x.Name).ToPagedAsync(query, ct), ToDto);
+        return CmsStore.Map(await q.OrderBy(x => x.SortOrder).ThenBy(x => x.Name).ThenBy(x => x.Id).ToPagedAsync(query, ct), ToDto);
     }
 
     public async Task<IndustryDto> GetIndustryAsync(Guid id, CancellationToken ct) => ToDto(await store.FindAsync<Industry>(id, ct, true));
@@ -334,9 +334,9 @@ public sealed class CatalogAdminService(
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var p = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(x => EF.Functions.Like(x.Title, p) || EF.Functions.Like(x.ClientName, p) || EF.Functions.Like(x.Slug, p));
+            q = q.Where(x => EF.Functions.Like(x.Title, p, "\\") || EF.Functions.Like(x.ClientName, p, "\\") || EF.Functions.Like(x.Slug, p, "\\"));
         }
-        return CmsStore.Map(await q.OrderBy(x => x.SortOrder).ThenByDescending(x => x.CreatedAt).ToPagedAsync(query, ct), ToDto);
+        return CmsStore.Map(await q.OrderBy(x => x.SortOrder).ThenByDescending(x => x.CreatedAt).ThenBy(x => x.Id).ToPagedAsync(query, ct), ToDto);
     }
 
     public async Task<CaseStudyDto> GetCaseStudyAsync(Guid id, CancellationToken ct) => ToDto(await store.FindAsync<CaseStudy>(id, ct, true));
@@ -435,9 +435,9 @@ public sealed class CatalogAdminService(
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var p = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(x => EF.Functions.Like(x.AuthorName, p) || EF.Functions.Like(x.Quote, p) || (x.Company != null && EF.Functions.Like(x.Company, p)));
+            q = q.Where(x => EF.Functions.Like(x.AuthorName, p, "\\") || EF.Functions.Like(x.Quote, p, "\\") || (x.Company != null && EF.Functions.Like(x.Company, p, "\\")));
         }
-        return CmsStore.Map(await q.OrderBy(x => x.SortOrder).ThenByDescending(x => x.CreatedAt).ToPagedAsync(query, ct), ToDto);
+        return CmsStore.Map(await q.OrderBy(x => x.SortOrder).ThenByDescending(x => x.CreatedAt).ThenBy(x => x.Id).ToPagedAsync(query, ct), ToDto);
     }
 
     public async Task<TestimonialDto> CreateTestimonialAsync(TestimonialInput input, CancellationToken ct)

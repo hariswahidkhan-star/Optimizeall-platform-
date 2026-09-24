@@ -380,7 +380,7 @@ export function CalendarPage() {
                 <ul className="sm-issues">
                   {query.data!.awarenessDays.map((d) => (
                     <li key={`${d.date}-${d.name}`}>
-                      <DateTime value={`${d.date}T12:00:00Z`} format="date" /> — {d.name}{' '}
+                      <DateTime value={d.date} format="date" /> — {d.name}{' '}
                       <a className="ui-link" href={d.sourceUrl} target="_blank" rel="noreferrer noopener">
                         source
                       </a>

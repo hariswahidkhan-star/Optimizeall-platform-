@@ -122,7 +122,7 @@ public sealed class ReferralsController(
                              EF.Functions.Like(x.r.CodeUsed, like, "\\"));
         }
 
-        var page = await q.OrderByDescending(x => x.r.CreatedAt)
+        var page = await q.OrderByDescending(x => x.r.CreatedAt).ThenByDescending(x => x.r.Id)
             .Select(x => new
             {
                 x.r.Id, ReferrerId = x.a.Id, ReferrerName = x.a.DisplayName, ReferrerEmail = x.a.Email,

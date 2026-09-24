@@ -56,7 +56,7 @@ public sealed class PaymentsHubQueries(
     {
         RequireAny();
         var sources = await SourcesAsync(query, ct);
-        var need = (int)Math.Min(int.MaxValue, (long)query.Skip + query.PageSize); // no wrap to a negative LIMIT on huge pages
+        var need = PagingExtensions.EndFor(query.Page, query.PageSize); // rows up to the end of the page, capped (no negative LIMIT)
         var total = 0;
         var candidates = new List<Key>();
         foreach (var source in sources)

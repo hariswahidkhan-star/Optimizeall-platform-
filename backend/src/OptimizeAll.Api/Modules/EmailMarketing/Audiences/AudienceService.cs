@@ -282,13 +282,13 @@ public sealed class AudienceService(
         if (!string.IsNullOrWhiteSpace(q.Search))
         {
             var pattern = PagingExtensions.LikePattern(q.Search);
-            query = query.Where(s => EF.Functions.Like(s.Email!, pattern) || EF.Functions.Like(s.FirstName!, pattern) ||
-                                     EF.Functions.Like(s.LastName!, pattern) || EF.Functions.Like(s.Phone!, pattern));
+            query = query.Where(s => EF.Functions.Like(s.Email!, pattern, "\\") || EF.Functions.Like(s.FirstName!, pattern, "\\") ||
+                                     EF.Functions.Like(s.LastName!, pattern, "\\") || EF.Functions.Like(s.Phone!, pattern, "\\"));
         }
         query = q.Sort switch
         {
-            "email" => q.Desc ? query.OrderByDescending(s => s.Email) : query.OrderBy(s => s.Email),
-            "lastOpenAt" => q.Desc ? query.OrderByDescending(s => s.LastOpenAt) : query.OrderBy(s => s.LastOpenAt),
+            "email" => q.Desc ? query.OrderByDescending(s => s.Email).ThenByDescending(s => s.Id) : query.OrderBy(s => s.Email).ThenBy(s => s.Id),
+            "lastOpenAt" => q.Desc ? query.OrderByDescending(s => s.LastOpenAt).ThenByDescending(s => s.Id) : query.OrderBy(s => s.LastOpenAt).ThenBy(s => s.Id),
             _ => q.Desc ? query.OrderByDescending(s => s.CreatedAt).ThenByDescending(s => s.Id) : query.OrderBy(s => s.CreatedAt).ThenBy(s => s.Id),
         };
         var page = await query.ToPagedAsync(q, ct);
@@ -823,7 +823,7 @@ public sealed class AudienceService(
         var query = db.Set<Suppression>().AsNoTracking().Where(x => x.ScopeKey == key);
         if (q.Channel is { } channel) query = query.Where(x => x.Channel == channel);
         if (q.Reason is { } reason) query = query.Where(x => x.Reason == reason);
-        if (!string.IsNullOrWhiteSpace(q.Search)) { var p = PagingExtensions.LikePattern(q.Search.ToLowerInvariant()); query = query.Where(x => EF.Functions.Like(x.Value, p)); }
+        if (!string.IsNullOrWhiteSpace(q.Search)) { var p = PagingExtensions.LikePattern(q.Search.ToLowerInvariant()); query = query.Where(x => EF.Functions.Like(x.Value, p, "\\")); }
         return await query.OrderByDescending(x => x.CreatedAt).ThenBy(x => x.Id)
             .Select(x => new SuppressionDto(x.Id, x.Channel, x.Value, x.Reason, x.Source, x.Note, x.CreatedAt)).ToPagedAsync(q, ct);
     }

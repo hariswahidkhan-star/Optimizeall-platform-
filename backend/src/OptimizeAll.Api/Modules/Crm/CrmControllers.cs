@@ -74,6 +74,7 @@ public sealed class CrmController(CrmService crm, ContactImportService import, L
     {
         var rows = await crm.FilterContacts(q).OrderBy(c => c.CreatedAt).Take(50_000).ToListAsync(ct);
         var summaries = await crm.ContactSummariesAsync(rows, ct);
+        await crm.RecordContactsExportAsync(q, summaries.Count, ct);
         return Csv.File($"contacts-{DateTime.UtcNow:yyyyMMdd}.csv",
             new[] { "first_name", "last_name", "email", "phone", "job_title", "company", "lifecycle_stage", "consent", "source", "tags", "score", "owner", "created_at" },
             summaries.Select(c => new object?[] { c.FirstName, c.LastName, c.Email, c.Phone, c.JobTitle, c.CompanyName, c.LifecycleStage.ToString(),
@@ -181,11 +182,13 @@ public sealed class CrmController(CrmService crm, ContactImportService import, L
 
     /// <summary>The caller's open tasks (overdue first).</summary>
     [HttpGet("tasks/mine")]
-    public Task<PagedResult<ActivityDto>> MyTasks([FromQuery] PageQuery page, [FromQuery] bool includeCompleted, CancellationToken ct) =>
+    // The parameter must not be called "page": model binding would then read ?page= as the prefix of the whole object
+    // (page.Page, page.PageSize), silently ignoring ?page=2&pageSize=100000 and never validating them.
+    public Task<PagedResult<ActivityDto>> MyTasks([FromQuery] PageQuery query, [FromQuery] bool includeCompleted, CancellationToken ct) =>
         crm.ListActivitiesAsync(new ActivityQuery
         {
-            Assignee = "me", Type = ActivityType.Task, Due = includeCompleted ? null : "open", Page = page.Page, PageSize = page.PageSize,
-            Search = page.Search,
+            Assignee = "me", Type = ActivityType.Task, Due = includeCompleted ? null : "open", Page = query.Page, PageSize = query.PageSize,
+            Search = query.Search,
         }, ct);
 
     [HttpPost("activities")]

@@ -284,17 +284,17 @@ public sealed class PublicSiteService(AppDbContext db, SiteSettingsService setti
         var serviceIds = cat.Services.Select(s => s.Id).ToList();
 
         var services = await db.Set<AgencyService>().AsNoTracking()
-            .Where(s => serviceIds.Contains(s.Id) && (EF.Functions.Like(s.Name, pattern) || EF.Functions.Like(s.Tagline, pattern) ||
-                        (s.OverviewMarkdown != null && EF.Functions.Like(s.OverviewMarkdown, pattern))))
+            .Where(s => serviceIds.Contains(s.Id) && (EF.Functions.Like(s.Name, pattern, "\\") || EF.Functions.Like(s.Tagline, pattern, "\\") ||
+                        (s.OverviewMarkdown != null && EF.Functions.Like(s.OverviewMarkdown, pattern, "\\"))))
             .OrderBy(s => s.SortOrder).Take(10).ToListAsync(ct);
         var now = clock.GetUtcNow().UtcDateTime;
         var posts = await db.Set<BlogPost>().AsNoTracking()
             .Where(p => p.Status == BlogPostStatus.Published && p.PublishedAt <= now &&
-                        (EF.Functions.Like(p.Title, pattern) || EF.Functions.Like(p.Excerpt, pattern) || EF.Functions.Like(p.BodyMarkdown, pattern)))
+                        (EF.Functions.Like(p.Title, pattern, "\\") || EF.Functions.Like(p.Excerpt, pattern, "\\") || EF.Functions.Like(p.BodyMarkdown, pattern, "\\")))
             .OrderByDescending(p => p.PublishedAt).Take(10).ToListAsync(ct);
         var cases = await db.Set<CaseStudy>().AsNoTracking()
-            .Where(c => c.IsPublished && (EF.Functions.Like(c.Title, pattern) || EF.Functions.Like(c.Summary, pattern) ||
-                        EF.Functions.Like(c.ClientName, pattern)))
+            .Where(c => c.IsPublished && (EF.Functions.Like(c.Title, pattern, "\\") || EF.Functions.Like(c.Summary, pattern, "\\") ||
+                        EF.Functions.Like(c.ClientName, pattern, "\\")))
             .OrderBy(c => c.SortOrder).Take(10).ToListAsync(ct);
 
         // Rank title matches first.

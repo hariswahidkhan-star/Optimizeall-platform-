@@ -7,6 +7,17 @@ import { browserLocale } from './locale';
 
 export type DateInput = string | number | Date;
 
+const DATE_ONLY = /^\d{4}-\d{2}-\d{2}$/;
+
+/**
+ * True for a calendar date without a time of day ("2026-03-01", a C# DateOnly: due dates, issue dates, periods).
+ * It names the same day everywhere, so it is never shifted through a time zone (parsed as an instant it is UTC
+ * midnight, which is the previous day west of Greenwich).
+ */
+export function isDateOnly(value: unknown): value is string {
+  return typeof value === 'string' && DATE_ONLY.test(value);
+}
+
 export function toDate(value: DateInput): Date {
   return value instanceof Date ? value : new Date(value);
 }
@@ -49,6 +60,7 @@ export function formatDateTime(
   options: FormatDateOptions & { withZone?: boolean } = {},
 ): string {
   if (!isValidDate(value)) return '—';
+  if (isDateOnly(value)) return formatDate(value, options);
   // dateStyle/timeStyle can't be combined with timeZoneName, so the zoned variant spells out the components.
   const style: Intl.DateTimeFormatOptions = options.withZone
     ? {
@@ -66,12 +78,12 @@ export function formatDateTime(
   }).format(toDate(value));
 }
 
-/** "Sep 23, 2026" in the given zone. */
+/** "Sep 23, 2026" in the given zone. A date-only value ("2026-09-23") is that calendar day in every zone. */
 export function formatDate(value: DateInput, options: FormatDateOptions = {}): string {
   if (!isValidDate(value)) return '—';
   return new Intl.DateTimeFormat(options.locale ?? browserLocale(), {
     dateStyle: 'medium',
-    timeZone: safeZone(options.timeZone),
+    timeZone: isDateOnly(value) ? 'UTC' : safeZone(options.timeZone),
   }).format(toDate(value));
 }
 
@@ -109,6 +121,7 @@ export function formatRelative(value: DateInput, options: { now?: DateInput; loc
 
 /** Calendar date (YYYY-MM-DD) of an instant in a zone — for grouping and date inputs. */
 export function toZonedDateKey(value: DateInput, timeZone?: string): string {
+  if (isDateOnly(value)) return value;
   const parts = new Intl.DateTimeFormat('en-CA', {
     year: 'numeric',
     month: '2-digit',

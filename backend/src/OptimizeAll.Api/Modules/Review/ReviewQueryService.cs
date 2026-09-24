@@ -56,7 +56,7 @@ public sealed class ReviewQueryService(
         }
 
         q = (query.Sort ?? "oldest").ToLowerInvariant() == "risk"
-            ? q.OrderByDescending(s => s.RiskScore).ThenBy(s => s.SubmittedAt)
+            ? q.OrderByDescending(s => s.RiskScore).ThenBy(s => s.SubmittedAt).ThenBy(s => s.Id)
             : q.OrderBy(s => s.SubmittedAt).ThenBy(s => s.Id);
 
         var joined = from s in q
@@ -180,7 +180,7 @@ public sealed class ReviewQueryService(
                 where s.Status == SubmissionStatus.Approved && s.LiveCheckStatus == LiveCheckStatus.Pending
                 select new { s, c.Title, u.DisplayName };
         if (query.Due) q = q.Where(x => x.s.LiveCheckDueAt <= now);
-        return await q.OrderBy(x => x.s.LiveCheckDueAt)
+        return await q.OrderBy(x => x.s.LiveCheckDueAt).ThenBy(x => x.s.Id)
             .Select(x => new LiveCheckItemDto(x.s.Id, new QueueCampaignDto(x.s.CampaignId, x.Title), new PersonRefDto(x.s.UserId, x.DisplayName),
                 x.s.Platform, x.s.PostUrl, x.s.PostedAt, x.s.DecidedAt, x.s.LiveCheckDueAt, x.s.LiveCheckDueAt <= now))
             .ToPagedAsync(query, ct);
@@ -195,7 +195,7 @@ public sealed class ReviewQueryService(
                 select new { a, s.CampaignId, c.Title, u.DisplayName, s.DecidedByUserId };
         if (query.Status is { } status) q = q.Where(x => x.a.Status == status);
         var total = await q.CountAsync(ct);
-        var rows = await q.OrderBy(x => x.a.CreatedAt).Skip(query.Skip).Take(query.PageSize).ToListAsync(ct);
+        var rows = await q.OrderBy(x => x.a.CreatedAt).ThenBy(x => x.a.Id).Skip(query.Skip).Take(query.PageSize).ToListAsync(ct);
         var names = await NamesAsync(rows.Select(r => r.DecidedByUserId), ct);
         var items = rows.Select(r => new AppealListItemDto(r.a.Id, r.a.SubmissionId, new QueueCampaignDto(r.CampaignId, r.Title),
             new PersonRefDto(r.a.UserId, r.DisplayName), r.a.Status, r.a.DecisionAppealed, r.a.Reason, r.a.CreatedAt,
