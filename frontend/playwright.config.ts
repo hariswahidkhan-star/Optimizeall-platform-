@@ -72,6 +72,11 @@ import { defineConfig, devices } from '@playwright/test';
  * pages, reports and permissions) against the Demo seed. Its specs build on each other, so it runs serially on one
  * worker without retries, desktop only. Run it with `E2E_SUITE=j-email E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
  *
+ * The j-auth suite (authentication & security: registration, verification, lockout, password reset/change, sessions
+ * and refresh-token rotation, sign-out across tabs, open redirects, portal guards for every role, custom roles,
+ * impersonation, cookie flags and security headers, IDOR, XSS, Google sign-in off, rate limits) runs serially against
+ * the Demo seed on the desktop project only. Run it with `E2E_SUITE=j-auth E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
+ *
  * The a11y suite (accessibility & responsive layout: axe WCAG 2.2 A/AA in the light and dark theme, no horizontal
  * scroll at 360/768/1280 px, keyboard and focus behaviour) runs against the Demo seed too. It never changes data, so
  * its tests run in parallel (two workers); each test sets its own viewport, so only the desktop project runs it. Run
@@ -117,6 +122,7 @@ const desktopJourney = [
   'j-social',
   'j-edge',
   'j-email',
+  'j-auth',
 ].includes(suite);
 /** The finance journey compares datetime-local input (browser time) with UTC periods, so its browser runs in UTC. */
 const finance = suite === 'j-finance';

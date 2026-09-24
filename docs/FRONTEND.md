@@ -132,7 +132,10 @@ Browse everything at **`/design-system`** (dev server, or builds with `VITE_SHOW
 * The access token is held **in memory only** (`tokenStore`). The refresh token is the backend's HttpOnly
   `oa_refresh` cookie.
 * A 401 from any non-auth endpoint triggers a **single-flight** `POST /auth/refresh` (concurrent 401s share one
-  promise), then the original request is retried once. If refresh fails the token is cleared and a
+  promise), then the original request is retried once. A refresh answered `401 auth.refresh_race` (another tab
+  rotated the cookie a moment earlier; the session is intact) is retried once after 250 ms. Signing out posts a
+  `signed-out` message on the `optimizeall-auth` `BroadcastChannel` (`lib/auth/crossTab.ts`), and every other tab of
+  the app leaves for `/login?signedOut=1` at once. If refresh fails the token is cleared and a
   `session-expired` event fires; `AuthProvider` then navigates to `/login?expired=1&next=<path>` and sets the
   transient `sessionExpired` flag, which `RequireAuth` uses for its own redirect in the same render (so a forced
   sign-out, e.g. after a suspension, always shows "Your session has expired"). The flag clears once `/login` is shown

@@ -5,6 +5,7 @@ import { api, expireSession, onSessionEvent, refreshSession, tokenStore } from '
 import { isApiError } from '@/lib/api/errors';
 import type { AuthResponse, MessageResponse, RegisterRequest, SessionUser } from '@/lib/api/types';
 import { AuthContext, type AuthContextValue, type AuthStatus } from './authContext';
+import { announceSignOut, onSignOutElsewhere } from './crossTab';
 import { getDeviceId } from './deviceId';
 import { hasAnyPermission as hasAny, hasPermission as has } from './permissions';
 import { IMPERSONATION_EXIT_PATH, loginPathAfterExpiry, SIGNED_OUT_PATH } from './sessionPaths';
@@ -93,6 +94,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [navigate, queryClient],
   );
 
+  // Another tab signed out: the shared refresh cookie is gone, so leave the portal now rather than on the next refresh.
+  useEffect(
+    () =>
+      onSignOutElsewhere(() => {
+        if (statusRef.current !== 'authenticated') return;
+        tokenStore.clear();
+        setState({ status: 'anonymous', user: null, expiresAt: null, signedOut: true });
+        queryClient.clear();
+        navigate(SIGNED_OUT_PATH, { replace: true });
+      }),
+    [navigate, queryClient],
+  );
+
   // The expiry / signed-out notices are transient: once the sign-in page is shown, later redirects are ordinary ones.
   useEffect(() => {
     if ((state.expired || state.signedOut) && location.pathname === '/login')
@@ -151,6 +165,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // The local session is discarded regardless; the server cookie expires on its own.
     }
     tokenStore.clear();
+    announceSignOut();
     // Like `expired`, the flag reaches RequireAuth in the same render as the anonymous status, so the guard's own
     // redirect (which supersedes the navigation below) goes to /login?signedOut=1 too, not to /login?next=<page>.
     setState({ status: 'anonymous', user: null, expiresAt: null, signedOut: true });

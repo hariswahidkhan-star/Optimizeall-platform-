@@ -37,6 +37,12 @@ public interface ITokenService
     IssuedAccessToken CreateAccessToken(User user);
 
     /// <summary>
+    /// An access token of the sign-in session <paramref name="sessionId"/> (its refresh-token family): it stops working
+    /// when that session is signed out, not only when it expires.
+    /// </summary>
+    IssuedAccessToken CreateAccessToken(User user, Guid sessionId);
+
+    /// <summary>
     /// An access token for <paramref name="user"/> acting under an impersonation session: it carries the session id and
     /// the impersonator (<see cref="ImpersonationClaims"/>) and never outlives the session.
     /// </summary>
@@ -52,11 +58,13 @@ public sealed class TokenService(IOptions<JwtOptions> options, TimeProvider cloc
 {
     private readonly JwtOptions _options = options.Value;
 
-    public IssuedAccessToken CreateAccessToken(User user) => Create(user, null);
+    public IssuedAccessToken CreateAccessToken(User user) => Create(user, null, null);
 
-    public IssuedAccessToken CreateAccessToken(User user, ImpersonationGrant impersonation) => Create(user, impersonation);
+    public IssuedAccessToken CreateAccessToken(User user, Guid sessionId) => Create(user, null, sessionId);
 
-    private IssuedAccessToken Create(User user, ImpersonationGrant? impersonation)
+    public IssuedAccessToken CreateAccessToken(User user, ImpersonationGrant impersonation) => Create(user, impersonation, null);
+
+    private IssuedAccessToken Create(User user, ImpersonationGrant? impersonation, Guid? sessionId)
     {
         var now = clock.GetUtcNow().UtcDateTime;
         var expires = now.AddMinutes(_options.AccessTokenMinutes);
@@ -70,6 +78,7 @@ public sealed class TokenService(IOptions<JwtOptions> options, TimeProvider cloc
             new(AppClaims.EmailVerified, user.IsEmailVerified ? "1" : "0"),
         };
         claims.AddRange(user.Roles.Select(r => new Claim(AppClaims.Role, r.Role.ToString())));
+        if (sessionId is { } sid) claims.Add(new Claim(AppClaims.SessionId, sid.ToString()));
         if (impersonation is not null)
         {
             claims.Add(new Claim(ImpersonationClaims.SessionId, impersonation.SessionId.ToString()));

@@ -63,6 +63,12 @@ public sealed class AuthService(
 {
     private const int MaxFailedLogins = 5;
     private static readonly TimeSpan RotationGracePeriod = TimeSpan.FromSeconds(30);
+    private static readonly TimeSpan RefreshLockTimeout = TimeSpan.FromSeconds(15);
+    private const int MaxReplacementHops = 20;
+    /// <summary>Revocation reason of a refresh token its client presented (and received a replacement for).</summary>
+    private const string RotatedReason = "rotated";
+    /// <summary>Revocation reason of a replacement nobody presented, superseded when its predecessor came back in the grace window.</summary>
+    private const string SupersededReason = "superseded";
     public const string RefreshRaceCode = "auth.refresh_race";
     private static readonly TimeSpan LockoutDuration = TimeSpan.FromMinutes(15);
     private static readonly TimeSpan VerificationLifetime = TimeSpan.FromHours(48);
@@ -275,27 +281,43 @@ public sealed class AuthService(
         if (string.IsNullOrWhiteSpace(rawRefreshToken)) throw SessionExpired();
 
         var hash = tokens.Hash(rawRefreshToken);
-        var token = await db.Set<RefreshToken>().AsNoTracking().FirstOrDefaultAsync(t => t.TokenHash == hash, ct);
-        if (token is null) throw SessionExpired();
+        var presented = await db.Set<RefreshToken>().AsNoTracking().FirstOrDefaultAsync(t => t.TokenHash == hash, ct);
+        if (presented is null) throw SessionExpired();
 
+        // Rotations of one session family are serialized, so the grace decision below always sees the latest chain.
+        await using var familyLock = await db.Dialect().AcquireNamedLockAsync(db, $"refresh:{presented.FamilyId:N}", RefreshLockTimeout, ct);
+        var token = await db.Set<RefreshToken>().AsNoTracking().FirstAsync(t => t.Id == presented.Id, ct);
+
+        // The token whose rotation issues the new session: the presented one, or (lost response) the unused tip of its chain.
+        var rotate = token;
+        var rotateReason = RotatedReason;
         if (token.RevokedAt is not null)
         {
-            // Two tabs refreshing with the same cookie: the loser arrives just after rotation. Within the grace window
-            // this is a benign race, not theft, so the session family is kept and the winner's new cookie stays valid.
-            if (token.RevokedReason == "rotated" && token.RevokedAt >= Now.Subtract(RotationGracePeriod))
-                throw RefreshRace();
-
-            if (token.ReplacedByTokenId is not null)
+            var withinGrace = token.RevokedReason is RotatedReason or SupersededReason && token.RevokedAt >= Now.Subtract(RotationGracePeriod);
+            var (tip, replacementUsed) = await ReplacementTipAsync(token, ct);
+            if (withinGrace && tip is not null && !replacementUsed)
             {
-                // A rotated token presented again outside the grace window: likely theft. Revoke the whole family.
-                await db.Set<RefreshToken>()
-                    .Where(t => t.FamilyId == token.FamilyId && t.RevokedAt == null)
-                    .ExecuteUpdateAsync(s => s.SetProperty(t => t.RevokedAt, Now).SetProperty(t => t.RevokedReason, "reuse_detected"), ct);
-                logger.LogWarning("Refresh token reuse detected for user {UserId}; session family revoked", token.UserId);
+                // The response that carried the replacement never reached the browser (a reload or navigation aborted it,
+                // or another tab raced this one): nobody has presented the replacement yet, so it is superseded by a new
+                // sibling in the same family instead of signing the user out.
+                rotate = tip;
+                rotateReason = SupersededReason;
             }
-            throw SessionExpired();
+            else
+            {
+                if (token.ReplacedByTokenId is not null && (replacementUsed || !withinGrace))
+                {
+                    // A rotated token presented again after its replacement was used, or outside the grace window:
+                    // likely theft. Revoke the whole family.
+                    await db.Set<RefreshToken>()
+                        .Where(t => t.FamilyId == token.FamilyId && t.RevokedAt == null)
+                        .ExecuteUpdateAsync(s => s.SetProperty(t => t.RevokedAt, Now).SetProperty(t => t.RevokedReason, "reuse_detected"), ct);
+                    logger.LogWarning("Refresh token reuse detected for user {UserId}; session family revoked", token.UserId);
+                }
+                throw SessionExpired();
+            }
         }
-        if (token.ExpiresAt <= Now) throw SessionExpired();
+        if (rotate.ExpiresAt <= Now) throw SessionExpired();
 
         var user = await db.Set<User>().AsNoTracking().Include(u => u.Roles).FirstOrDefaultAsync(u => u.Id == token.UserId, ct);
         if (user is null || user.Status != UserStatus.Active) throw SessionExpired();
@@ -306,10 +328,10 @@ public sealed class AuthService(
         var result = IssueSession(user, token.FamilyId, out var newToken);
         await db.SaveChangesAsync(ct);
         var rotated = await db.Set<RefreshToken>()
-            .Where(t => t.Id == token.Id && t.RevokedAt == null)
+            .Where(t => t.Id == rotate.Id && t.RevokedAt == null)
             .ExecuteUpdateAsync(s => s
                 .SetProperty(t => t.RevokedAt, Now)
-                .SetProperty(t => t.RevokedReason, "rotated")
+                .SetProperty(t => t.RevokedReason, rotateReason)
                 .SetProperty(t => t.ReplacedByTokenId, newToken.Id), ct);
         if (rotated == 0)
         {
@@ -320,6 +342,26 @@ public sealed class AuthService(
             .ExecuteUpdateAsync(s => s.SetProperty(u => u.LastActiveAt, Now), ct);
         await tx.CommitAsync(ct);
         return result;
+    }
+
+    /// <summary>
+    /// Follows the replacement chain of a revoked token through superseded links (replacements whose response was lost)
+    /// to its tip. Returns the tip when it is still live, and whether any replacement on the way was actually presented
+    /// by a client (rotated by use), which means the presented token is stale and possibly stolen.
+    /// </summary>
+    private async Task<(RefreshToken? LiveTip, bool ReplacementUsed)> ReplacementTipAsync(RefreshToken token, CancellationToken ct)
+    {
+        var nextId = token.ReplacedByTokenId;
+        for (var hop = 0; nextId is { } id && hop < MaxReplacementHops; hop++)
+        {
+            var next = await db.Set<RefreshToken>().AsNoTracking().FirstOrDefaultAsync(t => t.Id == id && t.FamilyId == token.FamilyId, ct);
+            if (next is null) return (null, false);
+            if (next.RevokedAt is null) return (next, false);
+            if (next.RevokedReason == RotatedReason) return (null, true);
+            if (next.RevokedReason != SupersededReason) return (null, false);
+            nextId = next.ReplacedByTokenId;
+        }
+        return (null, false);
     }
 
     public async Task LogoutAsync(string? rawRefreshToken, CancellationToken ct)
@@ -367,6 +409,7 @@ public sealed class AuthService(
         user.EmailVerifiedAt ??= Now;
         audit.Record("auth.password_reset", nameof(User), user.Id);
         await RevokeAllSessionsAsync(user, "password_reset", ct);
+        await InvalidatePasswordResetLinksAsync(user.Id, ct);
         await db.SaveChangesAsync(ct);
     }
 
@@ -379,8 +422,18 @@ public sealed class AuthService(
         user.PasswordHash = hasher.HashPassword(user, request.NewPassword);
         audit.Record("auth.password_changed", nameof(User), user.Id);
         await RevokeAllSessionsAsync(user, "password_changed", ct);
+        await InvalidatePasswordResetLinksAsync(user.Id, ct);
         await db.SaveChangesAsync(ct);
     }
+
+    /// <summary>
+    /// Once the password was reset or changed, every other reset link still in someone's mailbox is spent too: an older
+    /// link (a second request, or one requested by whoever briefly had the mailbox) must not change the password again.
+    /// </summary>
+    private Task InvalidatePasswordResetLinksAsync(Guid userId, CancellationToken ct) =>
+        db.Set<UserToken>()
+            .Where(t => t.UserId == userId && t.Purpose == UserTokenPurpose.PasswordReset && t.UsedAt == null)
+            .ExecuteUpdateAsync(s => s.SetProperty(t => t.UsedAt, Now), ct);
 
     public async Task<SessionUserDto> GetSessionUserAsync(Guid userId, CancellationToken ct)
     {
@@ -453,7 +506,7 @@ public sealed class AuthService(
 
     private LoginResult IssueSession(User user, Guid familyId, out RefreshToken refreshToken)
     {
-        var access = tokens.CreateAccessToken(user);
+        var access = tokens.CreateAccessToken(user, familyId);
         var (raw, hash) = tokens.CreateOpaqueToken();
         refreshToken = new RefreshToken
         {

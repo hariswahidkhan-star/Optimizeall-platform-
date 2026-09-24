@@ -13,7 +13,9 @@ Configuration keys are documented in [`/.env.example`](../.env.example); deploym
   periodic rotation.
 * **Email verification**: a participant must verify their email before becoming eligible for campaigns
   (enforced by the eligibility rules). Verification and password-reset links carry single-use, expiring tokens
-  stored only as hashes (`user_tokens`; refresh tokens likewise). Registration, reset and sign-in responses do
+  stored only as hashes (`user_tokens`; refresh tokens likewise); verification links expire after 48 hours, reset
+  links after one hour, and resetting or changing the password spends every other outstanding reset link of the
+  account. Registration, reset and sign-in responses do
   not reveal whether an email exists: registering an existing email sends that address a "someone tried to
   register with your email" notice, and sign-in for an unknown email performs a dummy hash to equalize timing.
 * **Lockout**: repeated failed sign-ins lock the account for 15 minutes (audited as `auth.locked_out`); combined
@@ -25,8 +27,20 @@ Configuration keys are documented in [`/.env.example`](../.env.example); deploym
     with `HttpOnly`, `Secure` (production), `SameSite=Strict`, `Path=/api/v1/auth`, lifetime
     `Jwt__RefreshTokenDays` (default 14). Every refresh **rotates** the token; presenting an already-rotated
     token is treated as theft (**reuse detection**): the whole session family is revoked and a warning logged.
+    *Lost-response grace*: a page reload or navigation can abort the refresh response after the server rotated, so
+    the browser never stores the new cookie; several tabs restored at once also present the same cookie. If a
+    rotated token comes back within 30 seconds **and nobody has presented its replacement yet**, the replacement is
+    revoked as `superseded` and a new sibling token of the same family is issued (only one token of a family is ever
+    live). Presenting a rotated token after its replacement was used, or after the 30 seconds, is still reuse and
+    revokes the family. Rotations of one family are serialized by a named lock (`refresh:{familyId}`); a request
+    that still loses the conditional update answers `401 auth.refresh_race` without clearing the cookie, and the web
+    app retries the refresh once.
   * Every authenticated request re-checks the user's status and `SecurityVersion`; suspending a user,
     changing the password or "sign out everywhere" invalidates existing access tokens immediately, not at expiry.
+  * *Signing out* ends that sign-in session at once: access tokens carry the session (refresh-token family) as the
+    `sid` claim and are refused as soon as the family has no live refresh token (sign-out, reuse detection), while
+    the user's other devices keep their sessions. In the browser the signing-out tab tells the app's other tabs
+    (`BroadcastChannel`), which leave the portal for `/login?signedOut=1` immediately.
 * Staff accounts should use strong unique passwords; enforcing SSO/MFA for staff at the identity layer is
   recommended when available.
 

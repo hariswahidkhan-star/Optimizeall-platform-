@@ -388,6 +388,17 @@ jobs:
           E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-email
         run: scripts/e2e-journeys.sh
 
+      # Authentication & security journey: registration, verification, lockout, password reset/change, sessions and
+      # refresh-token rotation, cross-tab sign-out, open redirects, portal guards, impersonation, headers, IDOR/XSS and
+      # rate limits. Demo seed, SQLite.
+      - name: Authentication & security (scripts/e2e-journeys.sh, E2E_SUITE=j-auth, SQLite)
+        env:
+          E2E_SUITE: j-auth
+          E2E_DB_PROVIDER: sqlite
+          E2E_SKIP_BUILD: "1"
+          E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-auth
+        run: scripts/e2e-journeys.sh
+
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v4
@@ -435,6 +446,8 @@ jobs:
             ${{ runner.temp }}/e2e-j-social/web.log
             ${{ runner.temp }}/e2e-j-email/api.log
             ${{ runner.temp }}/e2e-j-email/web.log
+            ${{ runner.temp }}/e2e-j-auth/api.log
+            ${{ runner.temp }}/e2e-j-auth/web.log
             ${{ runner.temp }}/web-smoke.log
           retention-days: 7
           if-no-files-found: ignore
