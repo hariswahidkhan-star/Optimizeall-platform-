@@ -488,7 +488,7 @@ public sealed class CrmBillingDemoSeeder(
         db.Set<Payment>().Add(new Payment
         {
             InvoiceId = invoice.Id, ClientAccountId = invoice.ClientAccountId, Amount = amount, Currency = invoice.Currency, Method = method,
-            Reference = reference, PaidOn = _today.AddDays(-daysAgo), RequestId = Guid.NewGuid(), RecordedByUserId = recordedBy,
+            Reference = reference, ActiveReference = reference, PaidOn = _today.AddDays(-daysAgo), RequestId = Guid.NewGuid(), RecordedByUserId = recordedBy,
             CreatedAt = _now.AddDays(-daysAgo),
         });
         invoice.AmountPaid += amount;

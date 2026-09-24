@@ -87,9 +87,19 @@ internal sealed class PaymentConfiguration : IEntityTypeConfiguration<Payment>
         b.Property(x => x.Currency).HasMaxLength(3).IsFixedLength().IsRequired();
         b.Property(x => x.Reference).HasMaxLength(120).IsRequired();
         b.Property(x => x.Notes).HasMaxLength(1000);
-        // A retried request returns the original payment; the same bank reference can't be recorded twice on an invoice.
+        b.Property(x => x.ActiveReference).HasMaxLength(120);
+        b.Property(x => x.ReversalReason).HasMaxLength(1000);
+        b.Ignore(x => x.IsReversal);
+        // A retried request returns the original payment; the same bank reference can't be recorded twice on an invoice
+        // while it counts (reversed payments and reversal rows have no active reference, so a correction can reuse it).
         b.HasIndex(x => x.RequestId).IsUnique();
-        b.HasIndex(x => new { x.InvoiceId, x.Reference }).IsUnique();
+        b.HasIndex(x => new { x.InvoiceId, x.ActiveReference }).IsUnique();
+        b.HasIndex(x => new { x.InvoiceId, x.Reference });
+        // At most one reversal per payment.
+        b.HasIndex(x => x.ReversalOfPaymentId).IsUnique();
+        b.HasOne<Payment>().WithMany().HasForeignKey(x => x.ReversalOfPaymentId).OnDelete(DeleteBehavior.Restrict);
+        b.HasOne<User>().WithMany().HasForeignKey(x => x.ReversedByUserId).OnDelete(DeleteBehavior.SetNull);
+        b.HasOne<User>().WithMany().HasForeignKey(x => x.UpdatedByUserId).OnDelete(DeleteBehavior.SetNull);
         b.HasIndex(x => new { x.ClientAccountId, x.PaidOn });
         b.HasIndex(x => x.PaidOn);
         b.HasOne<Invoice>().WithMany().HasForeignKey(x => x.InvoiceId).OnDelete(DeleteBehavior.Restrict);
@@ -132,8 +142,64 @@ internal sealed class InvoiceReminderConfiguration : IEntityTypeConfiguration<In
     {
         b.ToTable("invoice_reminders");
         b.Property(x => x.Kind).HasMaxLength(20).IsRequired();
+        b.Ignore(x => x.IsManual);
         b.HasIndex(x => new { x.InvoiceId, x.Kind }).IsUnique();
+        b.HasIndex(x => x.RequestId).IsUnique();
         b.HasOne<Invoice>().WithMany().HasForeignKey(x => x.InvoiceId).OnDelete(DeleteBehavior.Cascade);
+        b.HasOne<User>().WithMany().HasForeignKey(x => x.SentByUserId).OnDelete(DeleteBehavior.SetNull);
+    }
+}
+
+internal sealed class ClientReminderPolicyConfiguration : IEntityTypeConfiguration<ClientReminderPolicy>
+{
+    public void Configure(EntityTypeBuilder<ClientReminderPolicy> b)
+    {
+        b.ToTable("client_reminder_policies");
+        b.Property(x => x.OffsetsDays).HasJsonList();
+        b.HasIndex(x => x.ClientAccountId).IsUnique();
+        b.HasOne<ClientAccount>().WithMany().HasForeignKey(x => x.ClientAccountId).OnDelete(DeleteBehavior.Cascade);
+        b.HasOne<User>().WithMany().HasForeignKey(x => x.UpdatedByUserId).OnDelete(DeleteBehavior.SetNull);
+    }
+}
+
+internal sealed class PaymentClaimConfiguration : IEntityTypeConfiguration<PaymentClaim>
+{
+    public void Configure(EntityTypeBuilder<PaymentClaim> b)
+    {
+        b.ToTable("payment_claims");
+        b.Property(x => x.Currency).HasMaxLength(3).IsFixedLength().IsRequired();
+        b.Property(x => x.Reference).HasMaxLength(120).IsRequired();
+        b.Property(x => x.Note).HasMaxLength(1000);
+        b.Property(x => x.ReviewNote).HasMaxLength(1000);
+        b.HasIndex(x => x.RequestId).IsUnique();
+        b.HasIndex(x => new { x.InvoiceId, x.Status });
+        b.HasIndex(x => new { x.Status, x.CreatedAt });
+        b.HasIndex(x => x.ClientAccountId);
+        b.HasOne<Invoice>().WithMany().HasForeignKey(x => x.InvoiceId).OnDelete(DeleteBehavior.Restrict);
+        b.HasOne<ClientAccount>().WithMany().HasForeignKey(x => x.ClientAccountId).OnDelete(DeleteBehavior.Restrict);
+        b.HasOne<User>().WithMany().HasForeignKey(x => x.SubmittedByUserId).OnDelete(DeleteBehavior.Restrict);
+        b.HasOne<User>().WithMany().HasForeignKey(x => x.ReviewedByUserId).OnDelete(DeleteBehavior.SetNull);
+        b.HasOne<Payment>().WithMany().HasForeignKey(x => x.PaymentId).OnDelete(DeleteBehavior.Restrict);
+    }
+}
+
+internal sealed class PaymentProofConfiguration : IEntityTypeConfiguration<PaymentProof>
+{
+    public void Configure(EntityTypeBuilder<PaymentProof> b)
+    {
+        b.ToTable("payment_proofs");
+        b.Property(x => x.StorageKey).HasMaxLength(200).IsRequired();
+        b.Property(x => x.ContentType).HasMaxLength(100).IsRequired();
+        b.Property(x => x.Sha256).HasMaxLength(64).IsRequired();
+        b.Property(x => x.OriginalFileName).HasMaxLength(200).IsRequired();
+        b.HasIndex(x => x.PaymentId);
+        b.HasIndex(x => x.PaymentClaimId);
+        b.HasIndex(x => x.InvoiceId);
+        b.HasOne<ClientAccount>().WithMany().HasForeignKey(x => x.ClientAccountId).OnDelete(DeleteBehavior.Restrict);
+        b.HasOne<Invoice>().WithMany().HasForeignKey(x => x.InvoiceId).OnDelete(DeleteBehavior.Restrict);
+        b.HasOne<Payment>().WithMany().HasForeignKey(x => x.PaymentId).OnDelete(DeleteBehavior.Restrict);
+        b.HasOne<PaymentClaim>().WithMany().HasForeignKey(x => x.PaymentClaimId).OnDelete(DeleteBehavior.Restrict);
+        b.HasOne<User>().WithMany().HasForeignKey(x => x.UploadedByUserId).OnDelete(DeleteBehavior.Restrict);
     }
 }
 

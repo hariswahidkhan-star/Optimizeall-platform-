@@ -181,6 +181,10 @@ public sealed class InvoiceOverdueJob(
         return best;
     }
 
+    /// <summary>The reminder schedule of a client: its own policy when it has one, otherwise the agency schedule.</summary>
+    public static IReadOnlyList<int> OffsetsFor(Guid clientAccountId, IReadOnlyDictionary<Guid, ClientReminderPolicy> policies, IReadOnlyList<int> agencyOffsets) =>
+        policies.TryGetValue(clientAccountId, out var policy) ? (policy.Enabled ? policy.OffsetsDays : Array.Empty<int>()) : agencyOffsets;
+
     public async Task<string> ExecuteAsync(CancellationToken ct)
     {
         var today = BillingDates.Today(clock);
@@ -204,12 +208,16 @@ public sealed class InvoiceOverdueJob(
         if (marked > 0) await db.SaveChangesAsync(ct);
 
         var settings = await settingsService.GetAsync(ct);
-        if (!settings.RemindersEnabled || settings.ReminderOffsetsDays.Count == 0)
+        // Per-client overrides (ClientReminderPolicy) replace the agency schedule for that client, including turning it off.
+        var policies = await db.Set<ClientReminderPolicy>().AsNoTracking().ToDictionaryAsync(p => p.ClientAccountId, ct);
+        IReadOnlyList<int> agencyOffsets = settings.RemindersEnabled ? settings.ReminderOffsetsDays : Array.Empty<int>();
+        var allOffsets = agencyOffsets.Concat(policies.Values.Where(p => p.Enabled).SelectMany(p => p.OffsetsDays)).ToList();
+        if (allOffsets.Count == 0)
             return $"Marked {marked} invoice(s) overdue; reminders are disabled.";
 
         // Every open invoice whose first reminder date has been reached; invoices that already got their latest applicable
         // reminder are skipped below (unique reminder per kind), so a long outage still sends the last reminder once.
-        var latestDue = today.AddDays(-settings.ReminderOffsetsDays.Min());
+        var latestDue = today.AddDays(-allOffsets.Min());
         var candidates = await db.Set<Invoice>().AsNoTracking()
             .Where(i => Invoice.OpenStatuses.Contains(i.Status) && i.DueDate != null && i.DueDate <= latestDue)
             .OrderBy(i => i.DueDate).Take(2000)
@@ -218,7 +226,9 @@ public sealed class InvoiceOverdueJob(
         foreach (var invoice in candidates)
         {
             if (invoice.IssueDate is { } issued && issued >= today) continue; // just issued: the invoice email itself is the reminder
-            var offset = ApplicableOffset(invoice.DueDate!.Value, today, settings.ReminderOffsetsDays);
+            var offsets = OffsetsFor(invoice.ClientAccountId, policies, agencyOffsets);
+            if (offsets.Count == 0) continue;
+            var offset = ApplicableOffset(invoice.DueDate!.Value, today, offsets);
             if (offset is null) continue;
             var kind = ReminderKind(offset.Value);
             if (await db.Set<InvoiceReminder>().AsNoTracking().AnyAsync(r => r.InvoiceId == invoice.Id && r.Kind == kind, ct)) continue;

@@ -3144,6 +3144,38 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "client_reminder_policies",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ClientAccountId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Enabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    OffsetsDays = table.Column<string>(type: "json", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UpdatedByUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_client_reminder_policies", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_client_reminder_policies_client_accounts_ClientAccountId",
+                        column: x => x.ClientAccountId,
+                        principalTable: "client_accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_client_reminder_policies_users_UpdatedByUserId",
+                        column: x => x.UpdatedByUserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "client_reports",
                 columns: table => new
                 {
@@ -7844,7 +7876,19 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     RequestId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     RecordedByUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    ActiveReference = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ReversalOfPaymentId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    ReversedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    ReversedByUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    ReversalReason = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ReversalKind = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    UpdatedByUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
                 },
                 constraints: table =>
                 {
@@ -7853,6 +7897,12 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         name: "FK_invoice_payments_client_accounts_ClientAccountId",
                         column: x => x.ClientAccountId,
                         principalTable: "client_accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_invoice_payments_invoice_payments_ReversalOfPaymentId",
+                        column: x => x.ReversalOfPaymentId,
+                        principalTable: "invoice_payments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -7867,6 +7917,18 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         principalTable: "users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_invoice_payments_users_ReversedByUserId",
+                        column: x => x.ReversedByUserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_invoice_payments_users_UpdatedByUserId",
+                        column: x => x.UpdatedByUserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -7878,7 +7940,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     InvoiceId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Kind = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    SentAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
+                    SentAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    SentByUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    RequestId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
                 },
                 constraints: table =>
                 {
@@ -7889,6 +7953,12 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         principalTable: "invoices",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_invoice_reminders_users_SentByUserId",
+                        column: x => x.SentByUserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -7916,6 +7986,129 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         name: "FK_credit_note_applications_invoices_InvoiceId",
                         column: x => x.InvoiceId,
                         principalTable: "invoices",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "payment_claims",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    InvoiceId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ClientAccountId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    SubmittedByUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Amount = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: false),
+                    Currency = table.Column<string>(type: "char(3)", fixedLength: true, maxLength: 3, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Method = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Reference = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PaidOn = table.Column<DateOnly>(type: "date", nullable: false),
+                    Note = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Status = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RequestId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ReviewedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    ReviewedByUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    ReviewNote = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PaymentId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_payment_claims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_payment_claims_client_accounts_ClientAccountId",
+                        column: x => x.ClientAccountId,
+                        principalTable: "client_accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_payment_claims_invoice_payments_PaymentId",
+                        column: x => x.PaymentId,
+                        principalTable: "invoice_payments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_payment_claims_invoices_InvoiceId",
+                        column: x => x.InvoiceId,
+                        principalTable: "invoices",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_payment_claims_users_ReviewedByUserId",
+                        column: x => x.ReviewedByUserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_payment_claims_users_SubmittedByUserId",
+                        column: x => x.SubmittedByUserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "payment_proofs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ClientAccountId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    InvoiceId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    PaymentId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    PaymentClaimId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    StorageKey = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ContentType = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    SizeBytes = table.Column<long>(type: "bigint", nullable: false),
+                    Sha256 = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    OriginalFileName = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UploadedByUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_payment_proofs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_payment_proofs_client_accounts_ClientAccountId",
+                        column: x => x.ClientAccountId,
+                        principalTable: "client_accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_payment_proofs_invoice_payments_PaymentId",
+                        column: x => x.PaymentId,
+                        principalTable: "invoice_payments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_payment_proofs_invoices_InvoiceId",
+                        column: x => x.InvoiceId,
+                        principalTable: "invoices",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_payment_proofs_payment_claims_PaymentClaimId",
+                        column: x => x.PaymentClaimId,
+                        principalTable: "payment_claims",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_payment_proofs_users_UploadedByUserId",
+                        column: x => x.UploadedByUserId,
+                        principalTable: "users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 })
@@ -8208,6 +8401,17 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 table: "client_onboarding_items",
                 columns: new[] { "ClientAccountId", "Key" },
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_client_reminder_policies_ClientAccountId",
+                table: "client_reminder_policies",
+                column: "ClientAccountId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_client_reminder_policies_UpdatedByUserId",
+                table: "client_reminder_policies",
+                column: "UpdatedByUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_client_reports_AutoKey",
@@ -8983,10 +9187,15 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 columns: new[] { "ClientAccountId", "PaidOn" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_invoice_payments_InvoiceId_ActiveReference",
+                table: "invoice_payments",
+                columns: new[] { "InvoiceId", "ActiveReference" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_invoice_payments_InvoiceId_Reference",
                 table: "invoice_payments",
-                columns: new[] { "InvoiceId", "Reference" },
-                unique: true);
+                columns: new[] { "InvoiceId", "Reference" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_invoice_payments_PaidOn",
@@ -9005,10 +9214,37 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_invoice_payments_ReversalOfPaymentId",
+                table: "invoice_payments",
+                column: "ReversalOfPaymentId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_invoice_payments_ReversedByUserId",
+                table: "invoice_payments",
+                column: "ReversedByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_invoice_payments_UpdatedByUserId",
+                table: "invoice_payments",
+                column: "UpdatedByUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_invoice_reminders_InvoiceId_Kind",
                 table: "invoice_reminders",
                 columns: new[] { "InvoiceId", "Kind" },
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_invoice_reminders_RequestId",
+                table: "invoice_reminders",
+                column: "RequestId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_invoice_reminders_SentByUserId",
+                table: "invoice_reminders",
+                column: "SentByUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_invoices_ClientAccountId_Status",
@@ -9149,6 +9385,67 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "IX_payment_attempts_PayoutItemId",
                 table: "payment_attempts",
                 column: "PayoutItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_payment_claims_ClientAccountId",
+                table: "payment_claims",
+                column: "ClientAccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_payment_claims_InvoiceId_Status",
+                table: "payment_claims",
+                columns: new[] { "InvoiceId", "Status" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_payment_claims_PaymentId",
+                table: "payment_claims",
+                column: "PaymentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_payment_claims_RequestId",
+                table: "payment_claims",
+                column: "RequestId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_payment_claims_ReviewedByUserId",
+                table: "payment_claims",
+                column: "ReviewedByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_payment_claims_Status_CreatedAt",
+                table: "payment_claims",
+                columns: new[] { "Status", "CreatedAt" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_payment_claims_SubmittedByUserId",
+                table: "payment_claims",
+                column: "SubmittedByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_payment_proofs_ClientAccountId",
+                table: "payment_proofs",
+                column: "ClientAccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_payment_proofs_InvoiceId",
+                table: "payment_proofs",
+                column: "InvoiceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_payment_proofs_PaymentClaimId",
+                table: "payment_proofs",
+                column: "PaymentClaimId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_payment_proofs_PaymentId",
+                table: "payment_proofs",
+                column: "PaymentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_payment_proofs_UploadedByUserId",
+                table: "payment_proofs",
+                column: "UploadedByUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_payout_batches_IdempotencyKey",
@@ -10261,6 +10558,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "client_onboarding_items");
 
             migrationBuilder.DropTable(
+                name: "client_reminder_policies");
+
+            migrationBuilder.DropTable(
                 name: "client_reports");
 
             migrationBuilder.DropTable(
@@ -10402,9 +10702,6 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "invoice_lines");
 
             migrationBuilder.DropTable(
-                name: "invoice_payments");
-
-            migrationBuilder.DropTable(
                 name: "invoice_reminders");
 
             migrationBuilder.DropTable(
@@ -10436,6 +10733,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "payment_attempts");
+
+            migrationBuilder.DropTable(
+                name: "payment_proofs");
 
             migrationBuilder.DropTable(
                 name: "payout_holds");
@@ -10705,6 +11005,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "onboarding_steps");
 
             migrationBuilder.DropTable(
+                name: "payment_claims");
+
+            migrationBuilder.DropTable(
                 name: "payout_items");
 
             migrationBuilder.DropTable(
@@ -10774,9 +11077,6 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "ads_campaigns");
 
             migrationBuilder.DropTable(
-                name: "invoices");
-
-            migrationBuilder.DropTable(
                 name: "project_tasks");
 
             migrationBuilder.DropTable(
@@ -10790,6 +11090,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "forms");
+
+            migrationBuilder.DropTable(
+                name: "invoice_payments");
 
             migrationBuilder.DropTable(
                 name: "payout_batches");
@@ -10819,22 +11122,25 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "ads_accounts");
 
             migrationBuilder.DropTable(
-                name: "contracts");
+                name: "project_milestones");
 
             migrationBuilder.DropTable(
-                name: "project_milestones");
+                name: "invoices");
 
             migrationBuilder.DropTable(
                 name: "campaigns");
 
             migrationBuilder.DropTable(
-                name: "proposals");
-
-            migrationBuilder.DropTable(
                 name: "projects");
 
             migrationBuilder.DropTable(
+                name: "contracts");
+
+            migrationBuilder.DropTable(
                 name: "campaign_categories");
+
+            migrationBuilder.DropTable(
+                name: "proposals");
 
             migrationBuilder.DropTable(
                 name: "crm_deals");

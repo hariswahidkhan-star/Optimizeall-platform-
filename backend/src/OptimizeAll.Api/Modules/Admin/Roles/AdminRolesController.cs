@@ -11,6 +11,7 @@ namespace OptimizeAll.Api.Modules.Admin.Roles;
 [ApiController]
 [HasPermission(Permissions.RolesManage)]
 [Route("api/v1/admin/roles")]
+[DeniedWhileImpersonating(WritesOnly = true)]
 public sealed class AdminRolesController(AdminRolesService roles) : ControllerBase
 {
     /// <summary>Built-in roles (read-only, with their permission sets) and custom roles.</summary>

@@ -175,8 +175,21 @@ public class InvoiceLine : PricedLine
     public Guid InvoiceId { get; set; }
 }
 
-/// <summary>A payment recorded against an invoice (manually by finance, or confirmed by a payment gateway).</summary>
-public class Payment : Entity
+/// <summary>Why a payment was reversed: money returned to the client (refund) or a payment recorded in error (void).</summary>
+public enum PaymentReversalKind
+{
+    /// <summary>The money was returned to the client.</summary>
+    Refund,
+    /// <summary>The payment was recorded by mistake (wrong invoice, wrong amount, never received).</summary>
+    Error,
+}
+
+/// <summary>
+/// A payment recorded against an invoice (manually by finance, or confirmed by a payment gateway). The amount never
+/// changes after insert: a correction is a reversal row (negative amount, <see cref="ReversalOfPaymentId"/> set) that
+/// marks the original as reversed, followed by a new payment. Sums over payments are therefore always net.
+/// </summary>
+public class Payment : Entity, IConcurrencyStamped
 {
     public Guid InvoiceId { get; set; }
     public Guid ClientAccountId { get; set; }
@@ -191,6 +204,27 @@ public class Payment : Entity
     public Guid RequestId { get; set; }
     public Guid? RecordedByUserId { get; set; }
     public DateTime CreatedAt { get; set; }
+
+    /// <summary>
+    /// The bank reference while the payment counts (unique per invoice); null once reversed and on reversal rows, so the
+    /// same bank reference can be recorded again after a correction.
+    /// </summary>
+    public string? ActiveReference { get; set; }
+
+    /// <summary>On a reversal row (negative amount): the payment it reverses.</summary>
+    public Guid? ReversalOfPaymentId { get; set; }
+
+    public DateTime? ReversedAt { get; set; }
+    public Guid? ReversedByUserId { get; set; }
+    public string? ReversalReason { get; set; }
+    public PaymentReversalKind? ReversalKind { get; set; }
+
+    /// <summary>Last edit of the payment's details (reference, date, method, notes). The amount is never edited.</summary>
+    public DateTime? UpdatedAt { get; set; }
+    public Guid? UpdatedByUserId { get; set; }
+    public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
+
+    public bool IsReversal => ReversalOfPaymentId is not null;
 }
 
 public enum CreditNoteStatus
@@ -232,9 +266,86 @@ public class InvoiceReminder : Entity
 {
     public Guid InvoiceId { get; set; }
 
-    /// <summary>"before-3", "due", "after-7", "after-14" (days relative to the due date).</summary>
+    /// <summary>"before-3", "due", "after-7", "after-14" (days relative to the due date); "manual-yyMMddHHmmss" when sent by staff.</summary>
     public string Kind { get; set; } = string.Empty;
     public DateTime SentAt { get; set; }
+
+    /// <summary>Staff member who sent it with "Send reminder now" (null for the scheduled job).</summary>
+    public Guid? SentByUserId { get; set; }
+
+    /// <summary>Idempotency key of a manual reminder (a retried request never sends twice).</summary>
+    public Guid? RequestId { get; set; }
+
+    public bool IsManual => SentByUserId is not null;
+}
+
+/// <summary>
+/// Per-client override of the agency reminder schedule (<c>BillingSettings.ReminderOffsetsDays</c>). Without a row the
+/// agency settings apply.
+/// </summary>
+public class ClientReminderPolicy : AuditedEntity, IConcurrencyStamped
+{
+    public Guid ClientAccountId { get; set; }
+    public bool Enabled { get; set; } = true;
+
+    /// <summary>Days relative to the due date (negative = before), e.g. 3, 7, 14.</summary>
+    public List<int> OffsetsDays { get; set; } = new();
+    public Guid? UpdatedByUserId { get; set; }
+    public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
+}
+
+public enum PaymentClaimStatus
+{
+    /// <summary>Submitted by the client, waiting for staff to check the bank statement.</summary>
+    Pending,
+    /// <summary>Staff confirmed the money arrived; a payment was recorded.</summary>
+    Confirmed,
+    /// <summary>Staff could not match the transfer.</summary>
+    Rejected,
+}
+
+/// <summary>
+/// "I've paid": a client user reports a transfer (reference, amount, date). Nothing changes on the invoice until staff
+/// confirm it, which records a payment through the normal payment rules (idempotent: the claim id is the request id).
+/// </summary>
+public class PaymentClaim : AuditedEntity, IConcurrencyStamped
+{
+    public Guid InvoiceId { get; set; }
+    public Guid ClientAccountId { get; set; }
+    public Guid SubmittedByUserId { get; set; }
+    public decimal Amount { get; set; }
+    public string Currency { get; set; } = "USD";
+    public PaymentMethod Method { get; set; } = PaymentMethod.BankTransfer;
+    public string Reference { get; set; } = string.Empty;
+    public DateOnly PaidOn { get; set; }
+    public string? Note { get; set; }
+    public PaymentClaimStatus Status { get; set; } = PaymentClaimStatus.Pending;
+
+    /// <summary>Client-generated idempotency key (a double click creates one claim).</summary>
+    public Guid RequestId { get; set; }
+    public DateTime? ReviewedAt { get; set; }
+    public Guid? ReviewedByUserId { get; set; }
+    public string? ReviewNote { get; set; }
+
+    /// <summary>The payment recorded when the claim was confirmed.</summary>
+    public Guid? PaymentId { get; set; }
+    public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
+}
+
+/// <summary>Proof of payment (bank slip, receipt: PNG/JPEG/WebP/PDF) attached to a payment or a client's payment claim.</summary>
+public class PaymentProof : Entity
+{
+    public Guid ClientAccountId { get; set; }
+    public Guid InvoiceId { get; set; }
+    public Guid? PaymentId { get; set; }
+    public Guid? PaymentClaimId { get; set; }
+    public string StorageKey { get; set; } = string.Empty;
+    public string ContentType { get; set; } = string.Empty;
+    public long SizeBytes { get; set; }
+    public string Sha256 { get; set; } = string.Empty;
+    public string OriginalFileName { get; set; } = string.Empty;
+    public Guid UploadedByUserId { get; set; }
+    public DateTime CreatedAt { get; set; }
 }
 
 /// <summary>A client retainer/contract: recurring lines invoiced every billing period by the recurring invoice job.</summary>

@@ -15,6 +15,8 @@ using OptimizeAll.Api.Modules.Billing;
 using OptimizeAll.Api.Modules.Integrations;
 using OptimizeAll.Api.Modules.Ledger;
 using OptimizeAll.Api.Modules.Payouts;
+using OptimizeAll.Api.Modules.Admin.Roles;
+using OptimizeAll.Api.Modules.PaymentsHub;
 using OptimizeAll.Domain.Identity;
 using OptimizeAll.Domain.Payouts;
 
@@ -138,13 +140,15 @@ public sealed class ImpersonationAndTestAccountRulesTests
         Assert.NotNull(Denial(typeof(ClientBillingController), nameof(ClientBillingController.Pay)));
 
         // Every write of these controllers (payout destination, payouts, holds, schedule, ledger adjustments and
-        // approvals, exchange rates, payments, credit notes, integration credentials, user/role administration, test users).
+        // approvals, exchange rates, payments (incl. the payments hub and client payment claims), credit notes, integration
+        // credentials, user and custom-role administration, test users).
         foreach (var controller in new[]
                  {
                      typeof(PayoutProfileController), typeof(PayoutBatchesController), typeof(PayoutScheduleController),
                      typeof(PayoutHoldsController), typeof(FinanceLedgerController), typeof(PendingEarningsController),
                      typeof(ExchangeRatesController), typeof(AgencyPaymentsController), typeof(AgencyCreditNotesController),
                      typeof(IntegrationsController), typeof(AdminUsersController), typeof(AdminTestUsersController),
+                     typeof(AdminRolesController), typeof(PaymentsHubController), typeof(ClientPaymentsController),
                  })
         {
             var attribute = Denial(controller);

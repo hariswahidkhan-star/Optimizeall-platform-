@@ -295,6 +295,9 @@ public sealed class InvoiceService(
             null => ($"Invoice {invoice.Number} from {settings.CompanyName}",
                 $"Invoice {invoice.Number} for {client.Name} is ready: {amount} due on {due}."),
             "due" => ($"Invoice {invoice.Number} is due today", $"A friendly reminder: {amount} for invoice {invoice.Number} is due today."),
+            // Sent by staff with "Send reminder now": wording depends on whether the invoice is past due.
+            _ when reminderKind.StartsWith("manual", StringComparison.Ordinal) && !(invoice.DueDate is { } d && d < Today) =>
+                ($"Payment reminder: invoice {invoice.Number}", $"A friendly reminder: {amount} for invoice {invoice.Number} is due on {due}."),
             _ when reminderKind.StartsWith("before", StringComparison.Ordinal) =>
                 ($"Invoice {invoice.Number} is due soon", $"A friendly reminder: {amount} for invoice {invoice.Number} is due on {due}."),
             _ => ($"Invoice {invoice.Number} is overdue",

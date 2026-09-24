@@ -28,6 +28,7 @@ import { ProposalDocumentView } from '@/features/agency/crm/components/ProposalD
 import { ProposalStatusBadge } from '@/features/agency/crm/lib';
 import { api } from '@/lib/api/client';
 import { isApiError } from '@/lib/api/errors';
+import { InvoicePaymentsPanel } from './InvoicePaymentsPanel';
 import {
   type ClientProposalSummary,
   useClientBillingSummary,
@@ -267,6 +268,9 @@ export function ClientInvoicePage() {
           </>
         }
       />
+      <div className="bill-no-print">
+        <InvoicePaymentsPanel invoiceId={invoiceId} />
+      </div>
     </>
   );
 }
