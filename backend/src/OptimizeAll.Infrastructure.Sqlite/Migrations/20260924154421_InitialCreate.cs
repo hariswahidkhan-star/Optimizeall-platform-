@@ -7920,9 +7920,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 column: "SubmissionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_form_submissions_ClientAccountId_SubmittedAt",
+                name: "IX_form_submissions_ClientAccountId_SubmittedAt_LandingPageId",
                 table: "form_submissions",
-                columns: new[] { "ClientAccountId", "SubmittedAt" });
+                columns: new[] { "ClientAccountId", "SubmittedAt", "LandingPageId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_form_submissions_EventPublishedAt",
@@ -8174,9 +8174,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_landing_page_views_ClientAccountId_ViewedAt",
+                name: "IX_landing_page_views_ClientAccountId_ViewedAt_PageId",
                 table: "landing_page_views",
-                columns: new[] { "ClientAccountId", "ViewedAt" });
+                columns: new[] { "ClientAccountId", "ViewedAt", "PageId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_landing_page_views_PageId_ViewedAt",

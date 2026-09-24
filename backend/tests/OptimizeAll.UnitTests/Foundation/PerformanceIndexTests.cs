@@ -57,9 +57,9 @@ public sealed class PerformanceIndexTests
         // Public forms and landing pages: rate limit, unique-view check, lead reports.
         ("form_submissions", new[] { "FormId", "SubmittedAt" }, false),
         ("form_submissions", new[] { "IpHash", "SubmittedAt" }, false),
-        ("form_submissions", new[] { "ClientAccountId", "SubmittedAt" }, false),
+        ("form_submissions", new[] { "ClientAccountId", "SubmittedAt", "LandingPageId" }, false),
         ("landing_page_views", new[] { "PageId", "VisitorHash", "ViewedAt" }, false),
-        ("landing_page_views", new[] { "ClientAccountId", "ViewedAt" }, false),
+        ("landing_page_views", new[] { "ClientAccountId", "ViewedAt", "PageId" }, false),
         ("tracking_clicks", new[] { "TrackingLinkId", "ClickedAt" }, false),
         ("tracking_clicks", new[] { "ClickedAt" }, false),
         // Delivery: time reports and the admin dashboard, client health.

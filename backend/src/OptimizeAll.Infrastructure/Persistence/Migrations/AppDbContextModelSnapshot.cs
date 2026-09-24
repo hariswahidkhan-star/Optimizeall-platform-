@@ -6921,8 +6921,6 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("EventPublishedAt");
 
-                    b.HasIndex("ClientAccountId", "SubmittedAt");
-
                     b.HasIndex("FormId", "Status");
 
                     b.HasIndex("FormId", "SubmittedAt");
@@ -6930,6 +6928,8 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     b.HasIndex("IpHash", "SubmittedAt");
 
                     b.HasIndex("LandingPageId", "SubmittedAt");
+
+                    b.HasIndex("ClientAccountId", "SubmittedAt", "LandingPageId");
 
                     b.ToTable("form_submissions", (string)null);
                 });
@@ -7319,9 +7319,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientAccountId", "ViewedAt");
-
                     b.HasIndex("PageId", "ViewedAt");
+
+                    b.HasIndex("ClientAccountId", "ViewedAt", "PageId");
 
                     b.HasIndex("PageId", "VisitorHash", "ViewedAt");
 

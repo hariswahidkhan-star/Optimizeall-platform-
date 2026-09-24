@@ -11,7 +11,7 @@ using OptimizeAll.Infrastructure.Persistence;
 namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260924152635_InitialCreate")]
+    [Migration("20260924154421_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -6914,8 +6914,6 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
                     b.HasIndex("EventPublishedAt");
 
-                    b.HasIndex("ClientAccountId", "SubmittedAt");
-
                     b.HasIndex("FormId", "Status");
 
                     b.HasIndex("FormId", "SubmittedAt");
@@ -6923,6 +6921,8 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.HasIndex("IpHash", "SubmittedAt");
 
                     b.HasIndex("LandingPageId", "SubmittedAt");
+
+                    b.HasIndex("ClientAccountId", "SubmittedAt", "LandingPageId");
 
                     b.ToTable("form_submissions", (string)null);
                 });
@@ -7312,9 +7312,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientAccountId", "ViewedAt");
-
                     b.HasIndex("PageId", "ViewedAt");
+
+                    b.HasIndex("ClientAccountId", "ViewedAt", "PageId");
 
                     b.HasIndex("PageId", "VisitorHash", "ViewedAt");
 

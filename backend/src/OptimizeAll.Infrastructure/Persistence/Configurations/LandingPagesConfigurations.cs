@@ -61,8 +61,9 @@ internal sealed class LandingPageViewConfiguration : IEntityTypeConfiguration<La
         b.HasIndex(x => new { x.PageId, x.ViewedAt });
         // Unique-visitor check on every public page view (page, visitor, since start of day).
         b.HasIndex(x => new { x.PageId, x.VisitorHash, x.ViewedAt });
-        // Client lead/KPI reports: views per client in a date range.
-        b.HasIndex(x => new { x.ClientAccountId, x.ViewedAt });
+        // Client lead/KPI reports: views per page for a client in a date range (covering: PageId is the only other column read,
+        // so the index wins over a scan even for a client that owns most of the rows).
+        b.HasIndex(x => new { x.ClientAccountId, x.ViewedAt, x.PageId });
         b.HasOne<LandingPage>().WithMany().HasForeignKey(x => x.PageId).OnDelete(DeleteBehavior.Cascade);
     }
 }
@@ -156,8 +157,8 @@ internal sealed class FormSubmissionConfiguration : IEntityTypeConfiguration<For
         b.Property(x => x.IpHash).HasMaxLength(64);
         b.HasIndex(x => new { x.FormId, x.SubmittedAt });
         b.HasIndex(x => new { x.LandingPageId, x.SubmittedAt });
-        // Client lead/KPI reports: submissions per client in a date range.
-        b.HasIndex(x => new { x.ClientAccountId, x.SubmittedAt });
+        // Client lead/KPI reports: submissions per page for a client in a date range (covering, see landing_page_views).
+        b.HasIndex(x => new { x.ClientAccountId, x.SubmittedAt, x.LandingPageId });
         // Per-IP rate limit on every public form submission.
         b.HasIndex(x => new { x.IpHash, x.SubmittedAt });
         b.HasIndex(x => x.EventPublishedAt);
