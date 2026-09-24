@@ -41,6 +41,38 @@ public sealed class LeadScoringService(AppDbContext db, IDatabaseDialect dialect
         return result.Score;
     }
 
+    /// <summary>
+    /// Recomputes many contacts with a fixed number of queries (contacts, companies, engagement, rules, then one update per
+    /// distinct score) instead of four or five per contact, for bulk actions over up to a few hundred rows.
+    /// </summary>
+    public async Task RecomputeManyAsync(IReadOnlyCollection<Guid> contactIds, CancellationToken ct)
+    {
+        if (contactIds.Count == 0) return;
+        var ids = contactIds.Distinct().ToList();
+        var contacts = await db.Set<CrmContact>().AsNoTracking().Where(c => ids.Contains(c.Id)).ToListAsync(ct);
+        var companyIds = contacts.Where(c => c.CompanyId.HasValue).Select(c => c.CompanyId!.Value).Distinct().ToList();
+        var companies = await db.Set<CrmCompany>().AsNoTracking().Where(c => companyIds.Contains(c.Id)).ToDictionaryAsync(c => c.Id, ct);
+        var engagement = (await db.Set<CrmEngagement>().AsNoTracking().Where(e => ids.Contains(e.ContactId))
+                .GroupBy(e => new { e.ContactId, e.Type }).Select(g => new { g.Key.ContactId, g.Key.Type, Count = g.Count() }).ToListAsync(ct))
+            .GroupBy(x => x.ContactId).ToDictionary(g => g.Key, g => g.ToDictionary(x => x.Type, x => x.Count));
+        var rules = await db.Set<LeadScoringRule>().AsNoTracking().Where(r => r.IsActive).ToListAsync(ct);
+        var now = clock.GetUtcNow().UtcDateTime;
+        var byScore = contacts.GroupBy(contact =>
+        {
+            var company = contact.CompanyId is { } cid ? companies.GetValueOrDefault(cid) : null;
+            return LeadScoring.Evaluate(rules, new ScoringFacts(company?.Industry, company?.Size.ToString(), contact.BudgetRange,
+                company?.CountryCode, contact.Source, contact.LifecycleStage.ToString(),
+                engagement.GetValueOrDefault(contact.Id) ?? new Dictionary<string, int>())).Score;
+        }, contact => contact.Id);
+        foreach (var group in byScore)
+        {
+            var groupIds = group.ToList();
+            var score = group.Key;
+            await db.Set<CrmContact>().Where(c => groupIds.Contains(c.Id))
+                .ExecuteUpdateAsync(s => s.SetProperty(c => c.Score, score).SetProperty(c => c.ScoredAt, now), ct);
+        }
+    }
+
     public async Task RecomputeCompanyAsync(Guid companyId, CancellationToken ct)
     {
         foreach (var id in await db.Set<CrmContact>().AsNoTracking().Where(c => c.CompanyId == companyId).Select(c => c.Id).ToListAsync(ct))

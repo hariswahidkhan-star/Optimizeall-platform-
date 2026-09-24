@@ -90,6 +90,9 @@ public sealed class ContentBaselineSeeder(TimeProvider clock) : ISeeder
     public async Task SeedAsync(AppDbContext db, CancellationToken ct)
     {
         var now = clock.GetUtcNow().UtcDateTime;
+        // Insert-only and seeded once: steps, FAQ entries and the welcome announcement an admin deleted (or renamed, for
+        // FAQ questions and the announcement title) are not created again on the next start.
+        var ledger = await SeedLedger.LoadAsync(db, "content_baseline", ct);
 
         var existingSteps = await db.Set<OnboardingStep>().ToListAsync(ct);
         var existingKeys = existingSteps.Select(s => s.Key).ToHashSet();
@@ -103,7 +106,9 @@ public sealed class ContentBaselineSeeder(TimeProvider clock) : ISeeder
         for (var i = 0; i < Steps.Length; i++)
         {
             var s = Steps[i];
-            if (existingKeys.Contains(s.Key)) continue;
+            var seeded = ledger.WasSeeded("step:" + s.Key);
+            ledger.Record("step:" + s.Key);
+            if (seeded || existingKeys.Contains(s.Key)) continue;
             db.Set<OnboardingStep>().Add(new OnboardingStep
             {
                 Key = s.Key, Title = s.Title, Description = s.Description, ActionLabel = s.ActionLabel, ActionUrl = s.ActionUrl,
@@ -115,14 +120,18 @@ public sealed class ContentBaselineSeeder(TimeProvider clock) : ISeeder
         for (var i = 0; i < Faqs.Length; i++)
         {
             var f = Faqs[i];
-            if (existingQuestions.Contains(f.Question)) continue;
+            var seeded = ledger.WasSeeded("faq:" + f.Question);
+            ledger.Record("faq:" + f.Question);
+            if (seeded || existingQuestions.Contains(f.Question)) continue;
             db.Set<FaqItem>().Add(new FaqItem
             {
                 Category = f.Category, Question = f.Question, Answer = f.Answer, SortOrder = (i + 1) * 10, IsPublished = true,
             });
         }
 
-        if (!await db.Set<Announcement>().AnyAsync(a => a.Title == WelcomeAnnouncementTitle, ct))
+        var welcomeSeeded = ledger.WasSeeded("announcement:welcome");
+        ledger.Record("announcement:welcome");
+        if (!welcomeSeeded && !await db.Set<Announcement>().AnyAsync(a => a.Title == WelcomeAnnouncementTitle, ct))
         {
             db.Set<Announcement>().Add(new Announcement
             {

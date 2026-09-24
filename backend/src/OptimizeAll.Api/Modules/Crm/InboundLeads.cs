@@ -143,8 +143,9 @@ public sealed class InboundLeadService(
             contact.OwnerUserId ??= owner;
             if (company is not null) company.OwnerUserId ??= owner;
 
-            // ---- Deal: reuse the contact's open deal, otherwise open a new one in the first stage
-            var deal = await db.Set<CrmDeal>().Where(d => d.PrimaryContactId == contact.Id && d.Status == DealStatus.Open)
+            // ---- Deal: reuse the contact's open deal, otherwise open a new one in the first stage. Archived deals are
+            // never reused: they are hidden from the board, so a new inquiry attached to one would never be seen.
+            var deal = await db.Set<CrmDeal>().Where(d => d.PrimaryContactId == contact.Id && d.Status == DealStatus.Open && d.ArchivedAt == null)
                 .OrderByDescending(d => d.CreatedAt).FirstOrDefaultAsync(ct);
             var services = lead.ServiceSlugs.Select(s => s.Trim().ToLowerInvariant())
                 .Where(s => s.Length is > 0 and <= 100 && s.All(ch => char.IsAsciiLetterLower(ch) || char.IsAsciiDigit(ch) || ch == '-'))

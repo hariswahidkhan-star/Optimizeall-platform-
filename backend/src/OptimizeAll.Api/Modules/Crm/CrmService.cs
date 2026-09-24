@@ -859,8 +859,9 @@ public sealed class CrmService(
         audit.Record("crm.contacts_bulk_" + r.Action, nameof(CrmContact), "bulk",
             after: new { r.Action, Ids = rows.Select(x => x.Id).ToList(), r.OwnerUserId, r.LifecycleStage, r.Tag });
         await db.SaveChangesAsync(ct);
-        if (r.Action is "setLifecycle" or "addTag" or "removeTag")
-            foreach (var c in rows) await scoring.RecomputeAsync(c.Id, ct);
+        // Only the lifecycle stage is a scoring fact (tags are not), and the batch is re-scored in a fixed number of queries.
+        if (r.Action == "setLifecycle")
+            await scoring.RecomputeManyAsync(rows.Select(c => c.Id).ToList(), ct);
         return new CrmBulkResultDto(ids.Count, updated, ids.Count - rows.Count);
     }
 

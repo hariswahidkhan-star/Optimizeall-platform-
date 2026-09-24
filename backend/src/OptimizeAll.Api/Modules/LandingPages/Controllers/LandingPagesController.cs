@@ -173,7 +173,8 @@ public sealed class LandingPagesController(
         JsonElement variants;
         if (request.TemplateKey is { } key)
         {
-            var template = await db.Set<LandingPageTemplate>().AsNoTracking().FirstOrDefaultAsync(t => t.Key == key, ct)
+            // Hidden templates can't be picked any more (the picker lists active ones only).
+            var template = await db.Set<LandingPageTemplate>().AsNoTracking().FirstOrDefaultAsync(t => t.Key == key && t.IsActive, ct)
                            ?? throw new DomainException("landing.template_not_found", "Unknown template.");
             var formId = request.FormId;
             if (formId is { } fid)

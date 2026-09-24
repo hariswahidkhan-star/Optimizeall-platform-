@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Security;
+using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Api.Modules.SocialMedia;
 using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Seo;
@@ -17,7 +18,7 @@ public sealed record AuditRuleDto(
 public sealed class AuditRuleRequest
 {
     [Required, MaxLength(150)] public string Title { get; set; } = string.Empty;
-    [Required] public SeoSeverity? Severity { get; set; }
+    [Required, DefinedEnum] public SeoSeverity? Severity { get; set; }
     [Required, MaxLength(2000)] public string WhyItMatters { get; set; } = string.Empty;
     [Required, MaxLength(2000)] public string HowToFix { get; set; } = string.Empty;
     public bool IsEnabled { get; set; } = true;

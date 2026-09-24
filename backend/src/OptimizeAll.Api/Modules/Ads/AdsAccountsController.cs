@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Security;
+using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Api.Modules.SocialMedia;
 using OptimizeAll.Domain.Ads;
 using OptimizeAll.Domain.Agency;
@@ -57,7 +58,7 @@ public sealed class CampaignInput
 public sealed class AdGroupInput
 {
     [Required, MaxLength(300)] public string Name { get; set; } = string.Empty;
-    public AdEntityStatus Status { get; set; } = AdEntityStatus.Draft;
+    [DefinedEnum] public AdEntityStatus Status { get; set; } = AdEntityStatus.Draft;
     [Range(0, 1_000_000_000)] public decimal? BudgetAmount { get; set; }
     [MaxLength(100)] public string? BidStrategy { get; set; }
     [MaxLength(2000)] public string? TargetingSummary { get; set; }
@@ -67,7 +68,7 @@ public sealed class AdGroupInput
 public sealed class AdInput
 {
     [Required, MaxLength(300)] public string Name { get; set; } = string.Empty;
-    public AdEntityStatus Status { get; set; } = AdEntityStatus.Draft;
+    [DefinedEnum] public AdEntityStatus Status { get; set; } = AdEntityStatus.Draft;
     public Guid? CreativeId { get; set; }
     public Guid? ConcurrencyStamp { get; set; }
 }

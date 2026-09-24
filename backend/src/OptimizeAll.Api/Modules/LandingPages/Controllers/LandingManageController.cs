@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Security;
+using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Api.Modules.LandingPages.Templates;
 using OptimizeAll.Api.Modules.Seo;
 using OptimizeAll.Api.Modules.SocialMedia;
@@ -60,7 +61,7 @@ public sealed class FormTemplateRequest
 
 public sealed class SubmissionUpdateRequest
 {
-    public FormSubmissionStatus? Status { get; set; }
+    [DefinedEnum] public FormSubmissionStatus? Status { get; set; }
     [MaxLength(2000)] public string? Note { get; set; }
 }
 
@@ -69,7 +70,7 @@ public sealed class SubmissionBulkRequest
     [Required, MinLength(1), MaxLength(500)] public List<Guid> Ids { get; set; } = new();
 
     /// <summary>New status for every selected submission; or set <see cref="Delete"/>.</summary>
-    public FormSubmissionStatus? Status { get; set; }
+    [DefinedEnum] public FormSubmissionStatus? Status { get; set; }
     public bool Delete { get; set; }
 }
 
@@ -192,8 +193,12 @@ public sealed class LandingManageController(
         return new SubmissionBulkResult(updated, 0);
     }
 
-    private async Task<int> DeleteSubmissionsAsync(Guid formId, IReadOnlyCollection<Guid> ids, CancellationToken ct)
+    private async Task<int> DeleteSubmissionsAsync(Guid formId, IReadOnlyCollection<Guid> requested, CancellationToken ct)
     {
+        // Only this form's submissions: ids of other forms (possibly another client's) in the request are ignored, and
+        // nothing keyed by them alone (the email outbox) may be touched.
+        var ids = await db.Set<FormSubmission>().Where(s => s.FormId == formId && requested.Contains(s.Id)).Select(s => s.Id).ToListAsync(ct);
+        if (ids.Count == 0) return 0;
         var files = await db.Set<FormSubmissionFile>().AsNoTracking().Where(f => f.FormId == formId && ids.Contains(f.SubmissionId)).ToListAsync(ct);
         await db.Set<FormSubmissionFile>().Where(f => f.FormId == formId && ids.Contains(f.SubmissionId)).ExecuteDeleteAsync(ct);
         await db.Set<FormEmailOutbox>().Where(o => ids.Contains(o.SubmissionId)).ExecuteDeleteAsync(ct);

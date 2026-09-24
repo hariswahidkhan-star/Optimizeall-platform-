@@ -295,7 +295,9 @@ public sealed class EmailTemplateService(AppDbContext db, IAuditLogger audit, IC
             if (unknown.Count > 0)
                 e.Add(field, $"Unknown variable {{{{{unknown[0]}}}}}. Available: {string.Join(", ", def.Variables.Select(v => "{{" + v.Name + "}}"))}.");
         }
-        var used = EmailTemplateRenderer.Variables(subject + "\n" + body);
+        // Required variables (the confirmation / unsubscribe links, the layout's content) must be in the email text itself:
+        // a subject line is flattened to one line and never carries the link the recipient needs.
+        var used = EmailTemplateRenderer.Variables(body);
         foreach (var required in def.Variables.Where(v => v.Required && !used.Contains(v.Name)))
             e.Add("body", $"Keep {{{{{required.Name}}}}} in the email ({required.Description.TrimEnd('.').ToLowerInvariant()}).");
         e.ThrowIfAny("email_template.invalid", "The template is invalid.");

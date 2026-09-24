@@ -23,7 +23,7 @@ public sealed record AuditIssueDto(
 
 public sealed class IssueStatusRequest
 {
-    [Required] public SeoIssueStatus? Status { get; set; }
+    [Required, DefinedEnum] public SeoIssueStatus? Status { get; set; }
     [MaxLength(1000)] public string? Note { get; set; }
 }
 

@@ -35,9 +35,8 @@ public sealed class AudienceCatalogService(AppDbContext db, EmailAccess access, 
                             where s.ScopeKey == key
                             group t by t.Tag into g
                             select new { g.Key, Count = g.Count() }).ToListAsync(ct);
-        var result = new List<AudienceKeyDto>();
-        foreach (var c in counts.OrderBy(c => c.Key, StringComparer.Ordinal)) result.Add(new AudienceKeyDto(c.Key, c.Count, await ReferencesAsync(key, c.Key, ct)));
-        return result;
+        var references = await ReferenceTextsAsync(key, ct);
+        return counts.OrderBy(c => c.Key, StringComparer.Ordinal).Select(c => new AudienceKeyDto(c.Key, c.Count, CountReferences(references, c.Key))).ToList();
     }
 
     public async Task<IReadOnlyList<AudienceKeyDto>> FieldsAsync(Guid? clientId, CancellationToken ct)
@@ -49,9 +48,8 @@ public sealed class AudienceCatalogService(AppDbContext db, EmailAccess access, 
                             where s.ScopeKey == key
                             group f by f.Key into g
                             select new { g.Key, Count = g.Count() }).ToListAsync(ct);
-        var result = new List<AudienceKeyDto>();
-        foreach (var c in counts.OrderBy(c => c.Key, StringComparer.Ordinal)) result.Add(new AudienceKeyDto(c.Key, c.Count, await ReferencesAsync(key, c.Key, ct)));
-        return result;
+        var references = await ReferenceTextsAsync(key, ct);
+        return counts.OrderBy(c => c.Key, StringComparer.Ordinal).Select(c => new AudienceKeyDto(c.Key, c.Count, CountReferences(references, c.Key))).ToList();
     }
 
     public async Task<RenameResult> RenameTagAsync(RenameKeyRequest r, CancellationToken ct)
@@ -132,6 +130,25 @@ public sealed class AudienceCatalogService(AppDbContext db, EmailAccess access, 
         audit.Record("email.field.deleted", "SubscriberField", scope, new { Key = fieldKey, removed });
         await db.SaveChangesAsync(ct);
         return removed;
+    }
+
+    /// <summary>
+    /// The JSON of the workspace's segments and live journeys, loaded once for a whole list (two queries instead of two per
+    /// key); <see cref="CountReferences"/> applies the same case-insensitive "quoted key" match as <see cref="ReferencesAsync"/>.
+    /// </summary>
+    private async Task<List<string>> ReferenceTextsAsync(string scope, CancellationToken ct)
+    {
+        var texts = await db.Set<Segment>().AsNoTracking().Where(s => s.ScopeKey == scope).Select(s => s.DefinitionJson).ToListAsync(ct);
+        var journeys = await db.Set<Automation>().AsNoTracking().Where(a => a.ScopeKey == scope && a.Status != AutomationStatus.Archived)
+            .Select(a => new { a.TriggerConfigJson, a.GoalJson }).ToListAsync(ct);
+        texts.AddRange(journeys.Select(j => j.TriggerConfigJson + "\n" + (j.GoalJson ?? string.Empty)));
+        return texts;
+    }
+
+    private static int CountReferences(List<string> texts, string key)
+    {
+        var quoted = "\"" + key + "\"";
+        return texts.Count(t => t.Contains(quoted, StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>Segments and journeys of the workspace whose JSON mentions the key (quoted), e.g. a tag rule or a TagAdded trigger.</summary>
