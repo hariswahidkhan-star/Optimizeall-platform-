@@ -62,7 +62,7 @@ public sealed class SocialSyncFixture : IAsyncLifetime
             services.AddSingleton<ISocialListeningProvider>(sp => sp.GetRequiredService<RepeatingSocialProviders>());
             services.AddSingleton<ISocialInboxProvider>(sp => sp.GetRequiredService<RepeatingSocialProviders>());
         }));
-        _ = Host.Services;
+        await Host.StartAsync();
     }
 
     public async Task DisposeAsync()

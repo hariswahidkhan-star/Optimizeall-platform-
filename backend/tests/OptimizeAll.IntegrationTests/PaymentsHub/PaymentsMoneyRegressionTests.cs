@@ -117,7 +117,8 @@ public sealed class PaymentsMoneyRegressionTests(ApiFactory api) : IClassFixture
     [Fact]
     public async Task A_reject_racing_a_confirmation_never_leaves_a_payment_on_a_rejected_report()
     {
-        var factory = api.WithWebHostBuilder(b => b.ConfigureServices(s => s.AddScoped<IEventHandler<InvoicePaid>, InvoicePaidHook>()));
+        await using var factory = api.WithWebHostBuilder(b => b.ConfigureServices(s => s.AddScoped<IEventHandler<InvoicePaid>, InvoicePaidHook>()));
+        await factory.StartAsync();
         var admin = await factory.LoginAsync(await api.CreateUserAsync(new[] { Role.Admin }));
         var finance = await factory.LoginAsync(await api.CreateUserAsync(new[] { Role.Finance }));
         var client = await api.CreateClientAccountAsync();
@@ -186,11 +187,12 @@ public sealed class PaymentRemindersRegressionTests(ApiFactory api) : IClassFixt
     [Fact]
     public async Task An_invoice_paid_while_the_job_runs_gets_no_reminder()
     {
-        var factory = api.WithWebHostBuilder(b => b.ConfigureServices(s =>
+        await using var factory = api.WithWebHostBuilder(b => b.ConfigureServices(s =>
         {
             s.RemoveAll<IEmailSender>();
             s.AddSingleton<IEmailSender, HookEmailSender>();
         }));
+        await factory.StartAsync();
         var admin = await factory.LoginAsync(await api.CreateUserAsync(new[] { Role.Admin }));
         var first = await api.CreateClientAccountAsync(billingEmail: $"ap-{Guid.NewGuid():N}@client.test");
         var second = await api.CreateClientAccountAsync();

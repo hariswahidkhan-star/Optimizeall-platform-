@@ -112,8 +112,9 @@ public sealed class GlobalSearchTests(ApiFactory api) : IClassFixture<ApiFactory
     [Fact]
     public async Task Search_is_rate_limited_per_user()
     {
-        using var limited = api.WithWebHostBuilder(b => b.ConfigureAppConfiguration((_, c) =>
+        await using var limited = api.WithWebHostBuilder(b => b.ConfigureAppConfiguration((_, c) =>
             c.AddInMemoryCollection(new Dictionary<string, string?> { ["RateLimiting:Enabled"] = "true", ["RateLimiting:SearchPerMinute"] = "3" })));
+        await limited.StartAsync();
         var user = await api.CreateUserAsync(new[] { Role.Admin });
         var client = limited.CreateClient();
         client.DefaultRequestHeaders.Add("X-Requested-With", "tests");

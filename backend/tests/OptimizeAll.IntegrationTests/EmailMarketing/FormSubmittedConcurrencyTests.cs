@@ -20,7 +20,7 @@ public sealed class FormSubmittedConcurrencyFixture : IAsyncLifetime
     {
         await Api.InitializeAsync();
         Host = Api.WithWebHostBuilder(b => b.ConfigureServices(s => s.AddLogging(l => l.AddProvider(Logs))));
-        _ = Host.Services;
+        await Host.StartAsync();
     }
 
     public async Task DisposeAsync()
