@@ -1,7 +1,7 @@
 import type { RouteObject } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { meetsRequirement, type PermissionRequirement, Permissions } from '@/lib/auth/permissions';
-import { canOpenPath, portals } from './portals';
+import { accessiblePortals, canOpenPath, defaultLandingPath, getPortal, portals } from './portals';
 import type { PortalRouteHandle } from './portalTypes';
 
 const requiresOf = (route: RouteObject) => (route.handle as PortalRouteHandle | undefined)?.requires;
@@ -81,5 +81,28 @@ describe('portal route permissions', () => {
     expect(canOpenPath([Permissions.SupportManage], '/admin/users/u1')).toBe(false);
     expect(canOpenPath([Permissions.JobsView], '/admin/jobs')).toBe(true);
     expect(canOpenPath([Permissions.SubmissionsReview], '/review/appeals/a1')).toBe(false);
+  });
+  it('decides portal access from session permissions only (custom roles): crm.view alone lands in the agency CRM', () => {
+    // A user whose only access comes from a custom role (no built-in role at all).
+    const crmOnly = [Permissions.CrmView];
+    expect(defaultLandingPath(crmOnly)).toBe('/agency');
+    expect(accessiblePortals(crmOnly).map((p) => p.id)).toEqual(['agency']);
+    const agency = getPortal('agency');
+    const visible = agency.nav
+      .filter((item) => item.to !== '' && (!item.requires || meetsRequirement(crmOnly, item.requires)))
+      .map((item) => item.to);
+    // The CRM sections plus the website leads views that sales staff (crm.view) work from; nothing else.
+    expect(visible).toEqual(['crm', 'crm/deals', 'crm/tasks', 'website/overview', 'website/inquiries']);
+    expect(canOpenPath(crmOnly, '/agency/crm/deals')).toBe(true);
+    expect(canOpenPath(crmOnly, '/agency/clients')).toBe(false);
+    expect(canOpenPath(crmOnly, '/agency/proposals')).toBe(false);
+    expect(canOpenPath(crmOnly, '/admin/users')).toBe(false);
+    expect(canOpenPath(crmOnly, '/app')).toBe(false);
+  });
+
+  it('opens the admin Roles & permissions section with roles.manage only', () => {
+    expect(canOpenPath([Permissions.RolesManage], '/admin/roles')).toBe(true);
+    expect(accessiblePortals([Permissions.RolesManage]).map((p) => p.id)).toEqual(['admin']);
+    expect(canOpenPath([Permissions.UsersView, Permissions.RolesAssign], '/admin/roles')).toBe(false);
   });
 });

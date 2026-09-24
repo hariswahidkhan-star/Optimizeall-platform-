@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Jobs;
 using OptimizeAll.Api.Common.Notifications;
+using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Domain.Identity;
 using OptimizeAll.Domain.Notifications;
 using OptimizeAll.Domain.Submissions;
@@ -12,7 +13,8 @@ namespace OptimizeAll.Api.Modules.Review;
 /// Hourly: when approved posts are due for their "still live?" check, stages at most one in-app reminder per reviewer
 /// per UTC day (deduplicated against existing ReviewLiveCheckDue notifications created today).
 /// </summary>
-public sealed class LiveCheckReminderJob(AppDbContext db, INotificationService notifications, TimeProvider clock) : IJob
+public sealed class LiveCheckReminderJob(
+    AppDbContext db, INotificationService notifications, IPermissionDirectory directory, TimeProvider clock) : IJob
 {
     public string Name => "review-live-check-reminder";
 
@@ -23,8 +25,9 @@ public sealed class LiveCheckReminderJob(AppDbContext db, INotificationService n
             s.Status == SubmissionStatus.Approved && s.LiveCheckStatus == LiveCheckStatus.Pending && s.LiveCheckDueAt <= now, ct);
         if (due == 0) return "no live checks due";
 
-        var roles = ReviewRoles.Reviewers.ToList();
-        var reviewers = await db.Set<User>().Where(u => u.Status == UserStatus.Active && u.Roles.Any(r => roles.Contains(r.Role)))
+        // Built-in or custom-role holders of submissions.review.
+        var reviewers = await (await directory.UsersWithPermissionAsync(Permissions.SubmissionsReview, ct))
+            .Where(u => u.Status == UserStatus.Active)
             .Select(u => u.Id).ToListAsync(ct);
         var dayStart = now.Date;
         var alreadyNotified = await db.Set<Notification>()

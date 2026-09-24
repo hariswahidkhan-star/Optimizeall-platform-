@@ -36,7 +36,9 @@ Modules talk to each other through:
 
 | Service | Purpose |
 |---|---|
-| `ICurrentUser` | Caller id, roles, permissions, IP. `Require(permission)` throws 403. |
+| `ICurrentUser` | Caller id, roles, **effective** permissions (built-in + custom roles, via `IPermissionResolver`), IP. `Require(permission)` throws 403. |
+| `IPermissionResolver` | Effective permissions of the caller (memoized per request; custom-role part cached per instance keyed by user + `User.PermissionVersion`) or of any user (`ForUserAsync`). Used by `[HasPermission]`, `ICurrentUser` and the session DTO. Never compute permissions with `RolePermissions.For(...)` outside it. |
+| `IPermissionDirectory` | "Who holds permission X": `UsersWithPermissionAsync(permission)` / `UsersWithAnyPermissionAsync(...)` return a composable `IQueryable<User>` of built-in **and custom-role** holders (add `Status == Active` yourself); `UserHasPermissionAsync(userId, permission)` for assignee checks. Use it for recipients, assignees and owners — never `u.Roles.Any(...)` on a role list derived from permissions. |
 | `[HasPermission(Permissions.X)]` | Endpoint authorization. **Authorize by permission, never by role.** Role→permission map: `Common/Security/Permissions.cs`. Default deny: the fallback policy requires a signed-in user, so public endpoints need an explicit `[AllowAnonymous]` (list in SECURITY.md § 2). |
 | `IAuditLogger` | `Record(action, entityType, id, before, after, reason)` stages an append-only audit row saved in the same `SaveChanges` as the change. Required for campaign edits, reviews, reward changes, payout actions, suspensions, settings. |
 | `ILedgerWriter` | The **only** way to create/approve/decline/reverse `EarningEntry` rows. Idempotent by key; converts to settlement currency and stores original amount + rate. |
@@ -176,6 +178,14 @@ require `client.portal`; agency staff endpoints live under `/api/v1/agency/...`.
 Agency staff roles: `AccountManager`, `Strategist`, `ContentCreator`, `Designer`, `SeoSpecialist`, `AdsSpecialist`,
 `SocialMediaManager`, `SalesRep` (plus `Admin`, `Finance`, `CampaignManager`); client users have `Client`. The
 role → permission map is in `Common/Security/Permissions.cs` (frontend mirror: `lib/auth/permissions.ts`).
+
+**Custom roles** (`Domain/Identity/CustomRole.cs`: `CustomRole` + `UserCustomRole`, tables `custom_roles`,
+`user_custom_roles`) are admin-defined permission bundles managed in `Modules/Admin/Roles` (`/api/v1/admin/roles`,
+`roles.manage`; UI `features/admin/roles`). Effective permissions = built-in ∪ custom (see `IPermissionResolver` above
+and SECURITY.md § 2 "Custom roles" for the guardrails). When you add a permission constant, also add it to
+`Common/Security/PermissionCatalog.cs` (area, label, description; a unit test enforces it) and to the frontend mirror.
+The web app decides portal and section access **only** from the session's `permissions`, so a custom role with e.g.
+just `crm.view` lands in the agency portal and sees only the CRM sections.
 
 ### Frontend
 

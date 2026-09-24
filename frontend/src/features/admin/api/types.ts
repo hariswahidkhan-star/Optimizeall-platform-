@@ -153,6 +153,14 @@ export interface AdminUserDetail {
   } | null;
   recentAudit: AuditLogEntry[];
   concurrencyStamp: string;
+  /** Admin-defined roles assigned to the user (see features/admin/roles). */
+  customRoles: AssignedCustomRole[];
+}
+
+export interface AssignedCustomRole {
+  id: string;
+  name: string;
+  assignedAt: IsoDateTime;
 }
 
 // ---------- Settings ----------

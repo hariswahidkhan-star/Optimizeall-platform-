@@ -5471,6 +5471,58 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.ToTable("stored_files", (string)null);
                 });
 
+            modelBuilder.Entity("OptimizeAll.Domain.Identity.CustomRole", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("CreatedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsSystem")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedName")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Permissions")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("UpdatedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique();
+
+                    b.ToTable("custom_roles", (string)null);
+                });
+
             modelBuilder.Entity("OptimizeAll.Domain.Identity.ExternalLogin", b =>
                 {
                     b.Property<Guid>("Id")
@@ -5696,6 +5748,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("PermissionVersion")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("ReferralCode")
                         .IsRequired()
                         .HasMaxLength(16)
@@ -5751,6 +5806,28 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.HasIndex("Status");
 
                     b.ToTable("users", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Identity.UserCustomRole", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CustomRoleId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("AssignedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("AssignedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("UserId", "CustomRoleId");
+
+                    b.HasIndex("CustomRoleId");
+
+                    b.ToTable("user_custom_roles", (string)null);
                 });
 
             modelBuilder.Entity("OptimizeAll.Domain.Identity.UserRole", b =>
@@ -14438,6 +14515,21 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
             modelBuilder.Entity("OptimizeAll.Domain.Identity.RefreshToken", b =>
                 {
+                    b.HasOne("OptimizeAll.Domain.Identity.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Identity.UserCustomRole", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Identity.CustomRole", null)
+                        .WithMany()
+                        .HasForeignKey("CustomRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("OptimizeAll.Domain.Identity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")

@@ -246,7 +246,8 @@ public sealed class RequireAnyPermissionAttribute(params string[] permissions) :
     {
         var principal = context.HttpContext.User;
         if (principal.Identity?.IsAuthenticated != true) return;
-        var granted = RolePermissions.For(ClaimsHelper.GetRoles(principal));
+        // Effective permissions (built-in + custom roles).
+        var granted = context.HttpContext.RequestServices.GetRequiredService<ICurrentUser>().Permissions;
         if (!Permissions.Any(granted.Contains))
             throw DomainException.Forbidden("auth.forbidden", "You do not have permission to perform this action.");
     }

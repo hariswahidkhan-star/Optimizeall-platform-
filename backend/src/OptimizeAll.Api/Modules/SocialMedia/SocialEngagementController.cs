@@ -152,7 +152,7 @@ public sealed record SyncResultDto(bool Configured, int Imported, string Message
 [Route("api/v1/agency/social")]
 public sealed class SocialEngagementController(
     AppDbContext db, SocialAccess access, ISocialListeningProvider listening, ISocialInboxProvider inbox, IDatabaseDialect dialect,
-    ICurrentUser currentUser, IAuditLogger audit, TimeProvider clock) : ControllerBase
+    ICurrentUser currentUser, IAuditLogger audit, IPermissionDirectory directory, TimeProvider clock) : ControllerBase
 {
     private DateTime Now => clock.GetUtcNow().UtcDateTime;
 
@@ -331,9 +331,10 @@ public sealed class SocialEngagementController(
         }
         if (input.AssignedToUserId is { } assignee)
         {
-            var staff = await db.Set<OptimizeAll.Domain.Identity.User>().AsNoTracking().Include(u => u.Roles).FirstOrDefaultAsync(u => u.Id == assignee, ct)
-                        ?? throw DomainException.NotFound("User");
-            if (!RolePermissions.For(staff.Roles.Select(r => r.Role)).Contains(Permissions.SocialManage))
+            if (!await db.Set<OptimizeAll.Domain.Identity.User>().AnyAsync(u => u.Id == assignee, ct))
+                throw DomainException.NotFound("User");
+            // Built-in or custom-role holders of social.manage.
+            if (!await directory.UserHasPermissionAsync(assignee, Permissions.SocialManage, ct))
                 throw new DomainException("social.assignee_invalid", "Assign to someone who manages social media.");
             item.AssignedToUserId = assignee;
             if (item.Status == InboxItemStatus.Open) item.Status = InboxItemStatus.Assigned;

@@ -21,6 +21,10 @@ public sealed class AdminUserQuery : PageQuery
     public string? Country { get; set; }
 
     public ParticipantTier? Tier { get; set; }
+
+    /// <summary>Only users holding this permission through a built-in or custom role (e.g. support.manage for assignee pickers).</summary>
+    [MaxLength(64)]
+    public string? Permission { get; set; }
 }
 
 public sealed record AdminUserListItemDto(
@@ -55,7 +59,8 @@ public sealed record AdminUserDetailDto(
     IReadOnlyList<PayoutHoldDto> ActivePayoutHolds,
     PayoutProfileSummaryDto? PayoutProfile,
     IReadOnlyList<AuditLogDto> RecentAudit,
-    Guid ConcurrencyStamp);
+    Guid ConcurrencyStamp,
+    IReadOnlyList<Roles.AssignedCustomRoleDto> CustomRoles);
 
 public class ReasonRequest
 {

@@ -78,7 +78,7 @@ Setup: [DEPLOYMENT.md § 5.11](DEPLOYMENT.md#511-sign-in-with-google-optional).
 Endpoints authorize **by permission, never by role** (`[HasPermission(Permissions.X)]`); roles are bundles of
 permissions (`backend/src/OptimizeAll.Api/Common/Security/Permissions.cs`). Participants can only access their
 own data (`/api/v1/me/...` resolves the caller from the token; object ids are always checked against the
-caller). Role grants are audited and require `roles.assign`.
+caller). Built-in role grants are audited and require `roles.assign`; custom roles (below) require `roles.manage`.
 
 **Default deny.** The authorization `FallbackPolicy` requires an authenticated user, so an endpoint without any
 attribute is never public by accident. Only these endpoints carry an explicit `[AllowAnonymous]` (asserted by
@@ -130,6 +130,7 @@ any permission that opens one of its sections, but post-login landing there is r
 | `users.manage` | | | | | ✓ |
 | `users.suspend` | | | | | ✓ |
 | `roles.assign` | | | | | ✓ |
+| `roles.manage` *(sensitive)* | | | | | ✓ |
 | `content.manage` | | | | | ✓ |
 | `settings.manage` | | | | | ✓ |
 | `support.manage` | | ✓ | | | ✓ |
@@ -139,6 +140,38 @@ any permission that opens one of its sections, but post-login landing there is r
 Keep this table in sync with `Permissions.cs` when permissions change. Sensitive actions (reward-rate changes,
 batch finalization, payout settings, suspensions) additionally require an explicit `"confirm": true` and a
 `reason`, and are audited. Grant Admin sparingly; day-to-day staff should hold the narrowest role.
+
+### Custom roles (dynamic RBAC)
+
+Besides the built-in roles above (an enum; read-only in the UI), admins can define **custom roles** — named bundles of
+exactly the permissions they choose — under **Admin → Roles & permissions** (`/api/v1/admin/roles`, requires
+`roles.manage`). A user's **effective permissions** are the union of their built-in role permissions and the
+permissions of every custom role assigned to them. Everything that checks permissions uses the effective set:
+`[HasPermission]`, `ICurrentUser.HasPermission` (and so `IClientScope.IsStaff`), the session's `permissions` list (which
+alone decides portal access in the web app), and "who holds permission X" lookups (`IPermissionDirectory`: ticket/CRM/
+review assignees, notification recipients).
+
+* **Immediate effect.** Built-in roles travel in the access token (changing them revokes sessions, as before). Custom
+  roles are resolved per request by `IPermissionResolver`: the JWT validation step reads the user's `PermissionVersion`
+  with the `SecurityVersion`, and custom-role permissions are cached per instance keyed by (user, `PermissionVersion`).
+  Every custom-role change (create/edit/delete a role, assign/unassign) bumps the affected users' version in the same
+  transaction, so the next request on any instance sees the new set — no re-login; the web app shows it on its next
+  session refresh.
+* **Guardrails** (`Modules/Admin/Roles/CustomRoleGuardrails.cs`, enforced server-side):
+  * nobody can grant a permission they don't hold themselves — this covers creating, editing, deleting, assigning and
+    unassigning a role (a role holding a permission you lack is read-only for you);
+  * `roles.manage`, `settings.manage` and `users.impersonate` can only be put into a role (or assigned through one) by a
+    user holding the **built-in Admin** role, so a delegated role manager can never mint another role manager;
+  * `client.portal` cannot be combined with staff permissions in one role, and a staff custom role cannot be assigned to
+    a user whose effective set contains `client.portal` (or vice versa) — client users stay tenant-scoped;
+  * only known permissions; names are unique (case-insensitive) and cannot reuse a built-in role name;
+  * a role still assigned to people is deleted only with `?confirm=true` (optionally `&reassignTo={roleId}` to move the
+    holders), and edits use optimistic concurrency (`concurrencyStamp`, 409 when stale).
+* **Audit.** `admin.custom_role_created|updated|deleted` (entity `CustomRole`, before/after name, description and
+  permissions; deletions list the holders and any reassignment) and `admin.custom_role_assigned|unassigned` (entity
+  `User`, before/after list of the user's custom roles).
+* The permission catalog (`GET /admin/roles/catalog`, `Common/Security/PermissionCatalog.cs`) groups every permission
+  by area with a label and description; a unit test fails when a new permission has no catalog entry.
 
 ## 3. Rate limiting and abuse controls
 

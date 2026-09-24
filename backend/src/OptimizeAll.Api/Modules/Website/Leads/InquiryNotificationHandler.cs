@@ -21,19 +21,19 @@ public static class WebsiteLinks
 /// Stages an in-app notification for every active staff member who handles leads (<c>site.manage</c> or
 /// <c>crm.manage</c>) when a website inquiry arrives. Idempotent: a second delivery of the same event adds nothing.
 /// </summary>
-public sealed class InquiryNotificationHandler(AppDbContext db, INotificationService notifications) : IEventHandler<WebsiteInquiryReceived>
+public sealed class InquiryNotificationHandler(AppDbContext db, INotificationService notifications, IPermissionDirectory directory)
+    : IEventHandler<WebsiteInquiryReceived>
 {
-    private static readonly Role[] RecipientRoles = Enum.GetValues<Role>()
-        .Where(r => RolePermissions.For(r).Contains(Permissions.SiteManage) || RolePermissions.For(r).Contains(Permissions.CrmManage))
-        .ToArray();
+    private static readonly string[] RecipientPermissions = { Permissions.SiteManage, Permissions.CrmManage };
 
     public async Task HandleAsync(WebsiteInquiryReceived e, CancellationToken ct)
     {
         var link = WebsiteLinks.Inquiry(e.InquiryId);
         if (await db.Set<Notification>().AnyAsync(n => n.Type == WebsiteLinks.InquiryNotificationType && n.LinkUrl == link, ct)) return;
 
-        var recipients = await db.Set<User>().AsNoTracking()
-            .Where(u => u.Status == UserStatus.Active && u.Roles.Any(r => RecipientRoles.Contains(r.Role)))
+        // Built-in or custom-role holders of either permission.
+        var recipients = await (await directory.UsersWithAnyPermissionAsync(RecipientPermissions, ct))
+            .Where(u => u.Status == UserStatus.Active)
             .OrderBy(u => u.CreatedAt).Select(u => u.Id).Take(100).ToListAsync(ct);
         if (recipients.Count == 0) return;
 

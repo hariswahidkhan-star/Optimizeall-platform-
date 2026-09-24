@@ -73,6 +73,13 @@ public class User : AuditedEntity, IConcurrencyStamped
     /// <summary>Incremented on password change / forced sign-out; embedded in access tokens and checked on refresh.</summary>
     public int SecurityVersion { get; set; }
 
+    /// <summary>
+    /// Incremented whenever the user's custom-role permissions change (an assignment, or an edit/deletion of a role they
+    /// hold). Read on every authenticated request, it keys the per-instance permission cache, so changes apply to
+    /// authorization immediately without re-login (unlike <see cref="SecurityVersion"/>, it does not end sessions).
+    /// </summary>
+    public int PermissionVersion { get; set; }
+
     public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
 
     public List<UserRole> Roles { get; set; } = new();

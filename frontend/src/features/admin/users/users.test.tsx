@@ -53,6 +53,7 @@ function detail(
     payoutProfile: null,
     recentAudit: [],
     concurrencyStamp: 'stamp',
+    customRoles: [],
   };
 }
 

@@ -18,6 +18,7 @@ public sealed class CrmService(
     ICurrentUser currentUser,
     IAuditLogger audit,
     LeadScoringService scoring,
+    IPermissionDirectory directory,
     TimeProvider clock)
 {
     private DateTime Now => clock.GetUtcNow().UtcDateTime;
@@ -45,18 +46,18 @@ public sealed class CrmService(
 
     private static string Like(string search) => PagingExtensions.LikePattern(search);
 
-    /// <summary>Roles whose permission set includes <c>crm.view</c> (owners and assignees must hold one).</summary>
-    public static readonly Role[] CrmRoles = Enum.GetValues<Role>().Where(r => RolePermissions.For(r).Contains(Permissions.CrmView)).ToArray();
+    /// <summary>Active holders of <c>crm.view</c> through a built-in or custom role (owners and assignees must be one).</summary>
+    private async Task<IQueryable<User>> CrmUsersAsync(CancellationToken ct) =>
+        (await directory.UsersWithPermissionAsync(Permissions.CrmView, ct)).Where(u => u.Status == UserStatus.Active);
 
     public async Task<IReadOnlyList<UserRefDto>> AssigneesAsync(CancellationToken ct) =>
-        await db.Set<User>().AsNoTracking()
-            .Where(u => u.Status == UserStatus.Active && u.Roles.Any(r => CrmRoles.Contains(r.Role)))
+        await (await CrmUsersAsync(ct))
             .OrderBy(u => u.DisplayName).Select(u => new UserRefDto(u.Id, u.DisplayName, u.Email)).ToListAsync(ct);
 
     private async Task ValidateUserAsync(Guid? userId, string field, CancellationToken ct)
     {
         if (userId is null) return;
-        var ok = await db.Set<User>().AnyAsync(u => u.Id == userId && u.Status == UserStatus.Active && u.Roles.Any(r => CrmRoles.Contains(r.Role)), ct);
+        var ok = await (await CrmUsersAsync(ct)).AnyAsync(u => u.Id == userId, ct);
         if (!ok)
             throw new DomainException("crm.invalid_user", "Choose an active team member with CRM access.",
                 errors: new Dictionary<string, string[]> { [field] = new[] { "Choose an active team member with CRM access." } });
