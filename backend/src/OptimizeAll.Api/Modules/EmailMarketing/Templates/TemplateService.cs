@@ -217,8 +217,9 @@ public sealed class TemplateService(
         var normalized = Normalization.Email(r.To);
         var staff = await db.Set<User>().AsNoTracking()
             .Where(u => u.NormalizedEmail == normalized && u.EmailVerifiedAt != null && u.Status == UserStatus.Active)
-            .Select(u => new { u.Email, u.DisplayName, Roles = u.Roles.Select(x => x.Role).ToList() }).FirstOrDefaultAsync(ct);
-        if (staff is null || !staff.Roles.Any(role => role is not (Role.Participant or Role.Client)))
+            .Select(u => new { u.Id, u.Email, u.DisplayName }).FirstOrDefaultAsync(ct);
+        // Staff = any staff permission through built-in or custom roles.
+        if (staff is null || !(await new PermissionDirectory(db).StaffAmongAsync(new[] { staff.Id }, ct)).Contains(staff.Id))
             throw new DomainException("email.test_recipient_not_allowed", "Test emails can only be sent to a verified staff email address.");
 
         var errors = ContentValidation.Errors(design, subject, preview);

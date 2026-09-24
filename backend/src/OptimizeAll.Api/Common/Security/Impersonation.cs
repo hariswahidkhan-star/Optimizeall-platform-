@@ -68,24 +68,51 @@ public static class Impersonation
             "This action is not available while you are viewing as another user. Exit the impersonation session first.");
 
     /// <summary>
+    /// Whether a user may never be impersonated: administrators and anyone whose effective permissions (built-in or
+    /// custom roles) include <c>users.impersonate</c>.
+    /// </summary>
+    public static bool IsProtectedTarget(IEnumerable<Role> builtInRoles, IReadOnlySet<string> effectivePermissions) =>
+        builtInRoles.Contains(Role.Admin) || effectivePermissions.Contains(Permissions.UsersImpersonate);
+
+    /// <summary>
     /// Token validation for impersonation tokens (called for every authenticated request): the session must exist for
     /// this subject and impersonator, not be ended or expired, and the impersonator must still be active with the
-    /// security version captured at the start. Ordinary tokens pass unchanged.
+    /// security version captured at the start. Permissions are re-checked on every request as well, because custom-role
+    /// changes do not bump the security version: the impersonator must still hold <c>users.impersonate</c> (built-in or
+    /// custom role) and the target must not have become a protected target (admin or impersonator) meanwhile.
+    /// Ordinary tokens pass unchanged.
     /// </summary>
-    public static async Task<bool> IsTokenStillValidAsync(ClaimsPrincipal principal, Guid subjectId, AppDbContext db, DateTime now,
-        CancellationToken ct)
+    public static async Task<bool> IsTokenStillValidAsync(ClaimsPrincipal principal, Guid subjectId, AppDbContext db,
+        IPermissionResolver permissions, DateTime now, CancellationToken ct)
     {
         var sessionClaim = principal.FindFirst(ImpersonationClaims.SessionId);
         var actorClaim = principal.FindFirst(ImpersonationClaims.ActorId);
         if (sessionClaim is null && actorClaim is null) return true;
         if (!Guid.TryParse(sessionClaim?.Value, out var sessionId) || !Guid.TryParse(actorClaim?.Value, out var actorId)) return false;
 
-        return await (from s in db.Set<ImpersonationSession>().AsNoTracking()
-                      join u in db.Set<User>().AsNoTracking() on s.ImpersonatorUserId equals u.Id
-                      where s.Id == sessionId && s.TargetUserId == subjectId && s.ImpersonatorUserId == actorId &&
-                            s.EndedAt == null && s.ExpiresAt > now &&
-                            u.Status == UserStatus.Active && u.SecurityVersion == s.ImpersonatorSecurityVersion
-                      select s.Id).AnyAsync(ct);
+        var live = await (from s in db.Set<ImpersonationSession>().AsNoTracking()
+                          join u in db.Set<User>().AsNoTracking() on s.ImpersonatorUserId equals u.Id
+                          where s.Id == sessionId && s.TargetUserId == subjectId && s.ImpersonatorUserId == actorId &&
+                                s.EndedAt == null && s.ExpiresAt > now &&
+                                u.Status == UserStatus.Active && u.SecurityVersion == s.ImpersonatorSecurityVersion
+                          select s.Id).AnyAsync(ct);
+        return live && await PermissionsStillAllowAsync(actorId, subjectId, db, permissions, ct);
+    }
+
+    /// <summary>
+    /// The impersonator still holds <c>users.impersonate</c> and the target is still impersonable (effective permissions,
+    /// custom roles included).
+    /// </summary>
+    public static async Task<bool> PermissionsStillAllowAsync(Guid impersonatorId, Guid targetId, AppDbContext db,
+        IPermissionResolver permissions, CancellationToken ct)
+    {
+        var ids = new[] { impersonatorId, targetId };
+        var roles = await db.Set<UserRole>().AsNoTracking().Where(r => ids.Contains(r.UserId))
+            .Select(r => new { r.UserId, r.Role }).ToListAsync(ct);
+        var actorRoles = roles.Where(r => r.UserId == impersonatorId).Select(r => r.Role).ToList();
+        if (!(await permissions.ForUserAsync(impersonatorId, actorRoles, ct)).Contains(Permissions.UsersImpersonate)) return false;
+        var targetRoles = roles.Where(r => r.UserId == targetId).Select(r => r.Role).ToList();
+        return !IsProtectedTarget(targetRoles, await permissions.ForUserAsync(targetId, targetRoles, ct));
     }
 }
 
@@ -111,20 +138,23 @@ public sealed class DeniedWhileImpersonatingAttribute : Attribute, IAuthorizatio
 }
 
 /// <summary>
-/// Records every state-changing request (non-GET/HEAD/OPTIONS) made with an impersonation token as an
-/// <c>impersonation.request</c> audit row on the impersonated user ("impersonator as user": method, path, status),
-/// including refused ones, in its own unit of work after the request finished. Business audit rows written by the
+/// Records every request made with an impersonation token on the impersonated user ("impersonator as user": method,
+/// path and query, status), including refused ones, in its own unit of work after the request finished:
+/// state-changing requests as <c>impersonation.request</c>, reads (GET/HEAD) as <c>impersonation.read</c> — so what the
+/// impersonator looked at (profiles, earnings, exports, documents) is on record too. Business audit rows written by the
 /// handlers themselves carry <see cref="AuditLog.ImpersonatorUserId"/> as well (see AuditLogger).
 /// </summary>
 public sealed class ImpersonationAuditMiddleware(RequestDelegate next, ILogger<ImpersonationAuditMiddleware> logger)
 {
+    public const string WriteAction = "impersonation.request";
+    public const string ReadAction = "impersonation.read";
+
     public async Task InvokeAsync(HttpContext context)
     {
         var method = context.Request.Method;
         var sessionId = Impersonation.SessionIdOf(context.User);
         var impersonatorId = Impersonation.ImpersonatorIdOf(context.User);
-        if (sessionId is null || impersonatorId is null || HttpMethods.IsGet(method) || HttpMethods.IsHead(method) ||
-            HttpMethods.IsOptions(method))
+        if (sessionId is null || impersonatorId is null || HttpMethods.IsOptions(method))
         {
             await next(context);
             return;
@@ -155,20 +185,24 @@ public sealed class ImpersonationAuditMiddleware(RequestDelegate next, ILogger<I
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             var clock = scope.ServiceProvider.GetRequiredService<TimeProvider>();
             var path = context.Request.Path.Value ?? string.Empty;
+            var method = context.Request.Method;
+            var isRead = HttpMethods.IsGet(method) || HttpMethods.IsHead(method);
+            var query = context.Request.QueryString.Value ?? string.Empty;
             db.Set<AuditLog>().Add(new AuditLog
             {
                 CreatedAt = clock.GetUtcNow().UtcDateTime,
                 ActorUserId = userId,
                 ImpersonatorUserId = impersonatorId,
                 ActorType = "impersonation",
-                Action = "impersonation.request",
+                Action = isRead ? ReadAction : WriteAction,
                 EntityType = nameof(User),
                 EntityId = userId.ToString(),
                 AfterJson = JsonSerializer.Serialize(new
                 {
                     sessionId,
-                    method = context.Request.Method,
+                    method,
                     path = path.Length > 300 ? path[..300] : path,
+                    query = query.Length > 300 ? query[..300] : query,
                     status,
                 }),
                 IpAddress = context.Connection.RemoteIpAddress?.ToString(),

@@ -21,6 +21,20 @@ public interface IPermissionDirectory
 
     /// <summary>True when the user (any status) holds the permission through a built-in or custom role.</summary>
     Task<bool> UserHasPermissionAsync(Guid userId, string permission, CancellationToken ct = default);
+
+    /// <summary>
+    /// "Who does this job": users holding one of the permissions through a job role — any built-in role except Admin, or
+    /// any custom role. Admin holds every permission, so routing work (round-robin lead assignment, finance
+    /// notifications…) by <see cref="UsersWithAnyPermissionAsync"/> would flood administrators; an admin is included only
+    /// when they also hold a role that grants it. Composable, untracked, any status.
+    /// </summary>
+    Task<IQueryable<User>> WorkersWithAnyPermissionAsync(IReadOnlyCollection<string> permissions, CancellationToken ct = default);
+
+    /// <summary>
+    /// The ids among <paramref name="userIds"/> that are staff: their effective permissions (built-in or custom roles)
+    /// contain at least one staff permission (anything but the participant/client portal markers). Any status.
+    /// </summary>
+    Task<HashSet<Guid>> StaffAmongAsync(IReadOnlyCollection<Guid> userIds, CancellationToken ct = default);
 }
 
 public sealed class PermissionDirectory(AppDbContext db) : IPermissionDirectory
@@ -28,9 +42,24 @@ public sealed class PermissionDirectory(AppDbContext db) : IPermissionDirectory
     public Task<IQueryable<User>> UsersWithPermissionAsync(string permission, CancellationToken ct = default) =>
         UsersWithAnyPermissionAsync(new[] { permission }, ct);
 
-    public async Task<IQueryable<User>> UsersWithAnyPermissionAsync(IReadOnlyCollection<string> permissions, CancellationToken ct = default)
+    public Task<IQueryable<User>> UsersWithAnyPermissionAsync(IReadOnlyCollection<string> permissions, CancellationToken ct = default) =>
+        HoldersAsync(permissions, BuiltInRolesWithAny(permissions), ct);
+
+    public Task<IQueryable<User>> WorkersWithAnyPermissionAsync(IReadOnlyCollection<string> permissions, CancellationToken ct = default) =>
+        HoldersAsync(permissions, BuiltInRolesWithAny(permissions).Where(r => r != Role.Admin).ToList(), ct);
+
+    public async Task<HashSet<Guid>> StaffAmongAsync(IReadOnlyCollection<Guid> userIds, CancellationToken ct = default)
     {
-        var roles = BuiltInRolesWithAny(permissions);
+        if (userIds.Count == 0) return new HashSet<Guid>();
+        var ids = userIds.Distinct().ToList();
+        var staff = await UsersWithAnyPermissionAsync(StaffPermissions, ct);
+        return (await staff.Where(u => ids.Contains(u.Id)).Select(u => u.Id).ToListAsync(ct)).ToHashSet();
+    }
+
+    private static readonly string[] StaffPermissions = Permissions.All.Where(PermissionCatalog.IsStaffPermission).ToArray();
+
+    private async Task<IQueryable<User>> HoldersAsync(IReadOnlyCollection<string> permissions, List<Role> roles, CancellationToken ct)
+    {
         var customRoleIds = await CustomRolesWithAnyAsync(permissions, ct);
         var users = db.Set<User>().AsNoTracking();
         if (customRoleIds.Count == 0)

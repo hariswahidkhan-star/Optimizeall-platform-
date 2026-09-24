@@ -139,22 +139,29 @@ internal static class DeliveryRules
 /// <summary>Staff users who may be assigned to delivery work.</summary>
 public static class StaffDirectory
 {
+    /// <summary>The built-in roles of delivery staff (for display); membership is decided by <see cref="DeliveryPermissions"/>.</summary>
     public static readonly Role[] DeliveryRoles =
     {
         Role.Admin, Role.AccountManager, Role.Strategist, Role.ContentCreator, Role.Designer, Role.SeoSpecialist,
         Role.AdsSpecialist, Role.SocialMediaManager, Role.SalesRep,
     };
 
+    /// <summary>
+    /// Delivery staff = holders of <c>projects.view</c> (the delivery team) or <c>crm.manage</c> (sales), through built-in
+    /// or custom roles — for the built-in roles exactly <see cref="DeliveryRoles"/>.
+    /// </summary>
+    public static readonly string[] DeliveryPermissions = { Permissions.ProjectsView, Permissions.CrmManage };
+
+    /// <summary>Active delivery staff (built-in or custom roles), composable and untracked.</summary>
+    public static async Task<IQueryable<User>> DeliveryStaffAsync(AppDbContext db, CancellationToken ct) =>
+        (await new PermissionDirectory(db).UsersWithAnyPermissionAsync(DeliveryPermissions, ct)).Where(u => u.Status == UserStatus.Active);
+
     /// <summary>Ids from <paramref name="ids"/> that are active staff users (anything else is rejected by callers).</summary>
     public static async Task<HashSet<Guid>> ValidStaffAsync(AppDbContext db, IEnumerable<Guid> ids, CancellationToken ct)
     {
         var list = ids.Distinct().ToList();
         if (list.Count == 0) return new HashSet<Guid>();
-        var ok = await db.Set<UserRole>().AsNoTracking()
-            .Where(r => list.Contains(r.UserId) && DeliveryRoles.Contains(r.Role))
-            .Select(r => r.UserId).Distinct().ToListAsync(ct);
-        var active = await db.Set<User>().AsNoTracking().Where(u => ok.Contains(u.Id) && u.Status == UserStatus.Active)
-            .Select(u => u.Id).ToListAsync(ct);
+        var active = await (await DeliveryStaffAsync(db, ct)).Where(u => list.Contains(u.Id)).Select(u => u.Id).ToListAsync(ct);
         return active.ToHashSet();
     }
 }

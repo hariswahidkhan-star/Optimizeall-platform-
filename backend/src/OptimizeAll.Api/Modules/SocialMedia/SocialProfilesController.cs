@@ -194,6 +194,7 @@ public sealed class SocialProfilesController(
     /// Starts the OAuth flow: returns the network's authorization URL with a signed, expiring state. Answers 409
     /// <c>social.app_credentials_required</c> when the developer app id/secret are not configured.
     /// </summary>
+    [DeniedWhileImpersonating] // integration credentials (OAuth)
     [HttpPost("profiles/{id:guid}/connect/start")]
     [HasPermission(Permissions.SocialPublish)]
     public async Task<ConnectStartDto> ConnectStart(Guid id, CancellationToken ct)
@@ -215,6 +216,7 @@ public sealed class SocialProfilesController(
     /// Completes the OAuth flow. The web app's callback page posts the provider's <c>code</c> and <c>state</c> here; the
     /// state must be untampered, unexpired and issued to the same signed-in user.
     /// </summary>
+    [DeniedWhileImpersonating] // integration credentials (OAuth)
     [HttpPost("oauth/callback")]
     [HasPermission(Permissions.SocialPublish)]
     public async Task<ProfileDto> ConnectCallback(OAuthCallbackInput input, CancellationToken ct)
@@ -251,6 +253,7 @@ public sealed class SocialProfilesController(
     }
 
     /// <summary>Stores a token obtained outside the OAuth flow (e.g. a Meta system-user Page token). Sensitive: integrations.manage.</summary>
+    [DeniedWhileImpersonating] // integration credentials
     [HttpPost("profiles/{id:guid}/token")]
     [HasPermission(Permissions.IntegrationsManage)]
     public async Task<ProfileDto> SetToken(Guid id, TokenInput input, CancellationToken ct)
@@ -267,6 +270,7 @@ public sealed class SocialProfilesController(
         return await ToDtoAsync(profile, ct);
     }
 
+    [DeniedWhileImpersonating] // integration credentials (OAuth)
     [HttpPost("profiles/{id:guid}/disconnect")]
     [HasPermission(Permissions.SocialPublish)]
     public async Task<ProfileDto> Disconnect(Guid id, CancellationToken ct)

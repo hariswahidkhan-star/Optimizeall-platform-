@@ -127,6 +127,9 @@ public sealed class AdminRolesService(
         List<Guid> holders;
         await using (var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct))
         {
+            // Row lock: serializes with concurrent assignments of this role, so a holder added meanwhile can't escape the
+            // client/staff check below (and gets the permission-version bump).
+            if (!await db.Dialect().LockRowAsync(db, "custom_roles", id, ct)) throw DomainException.NotFound("CustomRole");
             var role = await db.Set<CustomRole>().FirstOrDefaultAsync(r => r.Id == id, ct) ?? throw DomainException.NotFound("CustomRole");
             EnsureEditable(role);
             ConcurrencyGuard.Apply(db, role, stamp);
@@ -216,7 +219,9 @@ public sealed class AdminRolesService(
         {
             if (!await db.Dialect().LockRowAsync(db, "custom_roles", id, ct)) throw DomainException.NotFound("CustomRole");
             var role = await db.Set<CustomRole>().AsNoTracking().FirstAsync(r => r.Id == id, ct);
-            if (!await db.Set<User>().AnyAsync(u => u.Id == userId, ct)) throw DomainException.NotFound("User");
+            // Row lock on the user: serializes with built-in role changes (AdminUsersService.SetRolesAsync locks it too),
+            // so a Client role and a staff custom role can't be added concurrently past each other's check.
+            if (!await db.Dialect().LockRowAsync(db, "users", userId, ct)) throw DomainException.NotFound("User");
             CustomRoleGuardrails.EnsureCanGrant(ActorPermissions, ActorIsAdmin, role.Permissions);
 
             if (!await db.Set<UserCustomRole>().AnyAsync(a => a.UserId == userId && a.CustomRoleId == id, ct))

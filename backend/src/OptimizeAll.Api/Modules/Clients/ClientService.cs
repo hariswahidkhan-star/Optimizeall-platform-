@@ -384,7 +384,9 @@ public sealed class ClientService(
             }
             else
             {
-                if (user.Roles.Any(r => r.Role != Role.Client && r.Role != Role.Participant))
+                // Staff through built-in or custom roles: adding the Client role would mix client.portal with staff permissions.
+                if (user.Roles.Any(r => r.Role != Role.Client && r.Role != Role.Participant) ||
+                    (await new PermissionDirectory(db).StaffAmongAsync(new[] { user.Id }, ct)).Count > 0)
                     throw DomainException.Conflict("client.invite_staff_account", "This email belongs to an agency staff account and can't be added as a client user.");
                 if (user.Status != UserStatus.Active)
                     throw DomainException.Conflict("client.invite_inactive_account", "This account is suspended or deactivated.");

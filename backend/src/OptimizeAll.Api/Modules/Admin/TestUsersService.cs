@@ -63,6 +63,13 @@ public sealed class TestUsersService(
         // Staff roles are a privilege grant: same permission as creating staff.
         if (roles.Any(r => r is not (Role.Participant or Role.Client)) && !currentUser.HasPermission(Permissions.RolesAssign))
             throw DomainException.Forbidden("auth.forbidden", "Creating staff test users requires roles.assign.");
+        // A test user is a real, usable account whose password the creator receives: the same guardrail as granting the
+        // roles to anyone (hold every staff permission yourself; Admin only by an admin), and no client/staff mixing.
+        Roles.CustomRoleGuardrails.EnsureCanGrant(currentUser.Permissions, currentUser.Roles.Contains(Role.Admin),
+            RolePermissions.For(roles).Where(PermissionCatalog.IsStaffPermission));
+        if (Roles.CustomRoleGuardrails.MixesClientAndStaff(RolePermissions.For(roles)))
+            throw DomainException.Conflict("roles.client_staff_conflict",
+                "A user can't hold the client portal permission together with staff permissions.");
 
         ClientAccount? client = null;
         if (request.ClientAccountId is { } clientId)

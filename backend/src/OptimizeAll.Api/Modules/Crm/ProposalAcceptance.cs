@@ -315,8 +315,8 @@ public sealed class ProposalAcceptanceService(
         var user = await db.Set<User>().Include(u => u.Roles).FirstOrDefaultAsync(u => u.NormalizedEmail == normalized, ct);
         if (user is not null)
         {
-            // Never turn a staff/participant account into a client user implicitly.
-            if (!user.Roles.All(r => r.Role == Role.Client))
+            // Never turn a staff/participant account into a client user implicitly (custom staff roles included).
+            if (!user.Roles.All(r => r.Role == Role.Client) || (await new PermissionDirectory(db).StaffAmongAsync(new[] { user.Id }, ct)).Count > 0)
             {
                 logger.LogWarning("Proposal signer {Email} already has a non-client account; not added to the client organization", email.Split('@').Last());
                 return null;

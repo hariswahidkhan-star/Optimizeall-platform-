@@ -158,7 +158,12 @@ exactly the permissions they choose — under **Admin → Roles & permissions** 
 permissions of every custom role assigned to them. Everything that checks permissions uses the effective set:
 `[HasPermission]`, `ICurrentUser.HasPermission` (and so `IClientScope.IsStaff`), the session's `permissions` list (which
 alone decides portal access in the web app), and "who holds permission X" lookups (`IPermissionDirectory`: ticket/CRM/
-review assignees, notification recipients).
+review assignees, notification recipients, delivery/ads staff pickers, "is staff" checks). **Routing** lookups — inbound
+lead round-robin (`crm.manage`), payout-batch notifications (`payouts.finalize`), payment-claim notifications
+(`billing.manage`) — use `WorkersWithAnyPermissionAsync`: holders through a job role (any built-in role except Admin, or a
+custom role). Admins hold every permission, so they are routed work only when they also hold such a role; granting
+someone Admin never puts them into the lead rotation. The session (`/auth/me`, login/refresh) also lists `customRoles`
+(names) for the header badges.
 
 * **Immediate effect.** Built-in roles travel in the access token (changing them revokes sessions, as before). Custom
   roles are resolved per request by `IPermissionResolver`: the JWT validation step reads the user's `PermissionVersion`
@@ -172,7 +177,15 @@ review assignees, notification recipients).
   * `roles.manage`, `settings.manage` and `users.impersonate` can only be put into a role (or assigned through one) by a
     user holding the **built-in Admin** role, so a delegated role manager can never mint another role manager;
   * `client.portal` cannot be combined with staff permissions in one role, and a staff custom role cannot be assigned to
-    a user whose effective set contains `client.portal` (or vice versa) — client users stay tenant-scoped;
+    a user whose effective set contains `client.portal` (or vice versa) — client users stay tenant-scoped. The same
+    invariant holds for **built-in** role changes (`PUT /admin/users/{id}/roles`, staff creation, test users: 409
+    `roles.client_staff_conflict`, checked against the user's custom roles too), client invitations and proposal
+    signers (a user who is staff through a custom role is never given the Client role). Role assignment and built-in role
+    changes lock the user row, and role edits lock the role row, so concurrent changes can't slip past each other's check;
+  * built-in role grants follow the same rule: `roles.assign` (and `users.manage` for test users) only lets you grant or
+    remove built-in roles whose staff permissions you hold yourself, and the Admin role only if you are an admin (403
+    `roles.cannot_grant_unheld` / `roles.admin_only_permission`), so `roles.assign` held through a custom role can't mint
+    admins. Suspending/reactivating anyone who is staff (built-in *or* custom role) needs the built-in Admin role;
   * only known permissions; names are unique (case-insensitive) and cannot reuse a built-in role name;
   * a role still assigned to people is deleted only with `?confirm=true` (optionally `&reassignTo={roleId}` to move the
     holders), and edits use optimistic concurrency (`concurrencyStamp`, 409 when stale).
@@ -200,7 +213,11 @@ target's email to be typed) starts a time-boxed session:
   cookie and refreshes the staff member's own session. Sessions are never extended.
 * **Validation on every request.** An impersonation token is accepted only while its session exists for that subject
   and impersonator, is not ended or expired, and the impersonator is still active with the same security version
-  (suspending the impersonator, changing their password or signing them out ends it immediately). Logging out ends it.
+  (suspending the impersonator, changing their password or signing them out ends it immediately). Because custom-role
+  changes don't bump security versions, permissions are re-checked on every request and on every resume too: the
+  impersonator must still hold `users.impersonate` (built-in or custom role) and the target must not have become an
+  admin or impersonator; otherwise the token is refused (401) and the next refresh ends the session
+  (`permissions_changed`) and returns the staff member's own session. Logging out ends it.
 * **Exit.** `POST /api/v1/auth/impersonation/exit` ends the session (audited `admin.impersonation_ended`), clears the
   cookie and returns the staff member's own session from their refresh cookie (idempotent; 401 if that is gone too).
   The web app shows a persistent high-contrast banner in every layout ("You are viewing as Jane Doe (participant) —
@@ -211,12 +228,21 @@ target's email to be typed) starts a time-boxed session:
   schedule and holds, ledger adjustments/reversals, pending-earning approvals, exchange rates, the decrypted payment
   instructions export, invoice payment recording, client online payment, agency payments and credit notes,
   integration credentials (API keys), user/role/status administration and test-user management, and starting another
-  impersonation. Reads stay available so the impersonator can see what the user sees.
+  impersonation; also linking/unlinking Google sign-in, profile changes (identity, WhatsApp number, consents), invoice,
+  contract, billing-settings, tax-rate and price-catalog writes, reward rules, submission decisions/reversals and appeal
+  resolutions (they create or reverse earnings), referral rejections, platform settings and manual job runs, social
+  OAuth connections/tokens and the email provider choice, client member invitations/role changes/removals (agency and
+  client portal), client proposal acceptance, and billable rates. Reads stay available so the impersonator can see what
+  the user sees. `UnitTests/Admin/ImpersonationCoverageTests` scans every controller action by reflection: any write
+  guarded by a money/credential/identity/role/integration permission must carry the attribute (or be allow-listed with a
+  reason there), and a maintained deny list covers the endpoints that are sensitive for what they do.
 * **Audit.** `admin.impersonation_started` (with the reason) and `admin.impersonation_ended` are recorded; every
   business audit row written during the session has `ActorUserId` = the user and `ImpersonatorUserId` = the staff
-  member (`ActorType` "impersonation"; the audit log UI and CSV show "Admin X as User Y"); and every state-changing
-  request made with an impersonation token, including refused ones, is recorded as `impersonation.request` (method,
-  path, status) on the impersonated user.
+  member (`ActorType` "impersonation"; the audit log UI and CSV show "Admin X as User Y"); every state-changing
+  request made with an impersonation token, including refused ones, is recorded as `impersonation.request` and every
+  read as `impersonation.read` (method, path, query, status) on the impersonated user. Every ending is audited as
+  `admin.impersonation_ended` with its reason (`exit`, `logout`, `expired`, `replaced`, `admin_session_ended`,
+  `permissions_changed`).
 
 ### 2.2 Test accounts and the non-production test sign-in
 
@@ -230,9 +256,11 @@ target's email to be typed) starts a time-boxed session:
   they are never paid and their earnings stay unattached); analytics (funnel, posts, spend, reach, clicks,
   conversions, time series) and the marketing tracking summary/leaderboard ignore test accounts and their links.
 * **One-click test sign-in** (`GET /api/v1/dev/test-accounts`, `POST /api/v1/dev/test-login`, anonymous): answers 404
-  unless `DevTools:TestLoginEnabled` is true **and** the environment is not Production (both checks, so a copied
-  configuration cannot enable it in production). It lists and signs in only active test accounts and seeded demo
-  accounts (`@demo.optimizeall.app` and client subdomains); any other account gets 404. It issues an ordinary session
+  unless `DevTools:TestLoginEnabled` is true **and** the environment is one of `Development`, `Staging` or `Testing`
+  (an allow-list, so a misspelt or custom production environment name fails closed; the name comes from the process
+  environment, never from a request). It lists and signs in only active test accounts and seeded demo
+  accounts (`@demo.optimizeall.app` and client subdomains; plain-ASCII domains only, so look-alike Unicode never
+  matches); any other account gets 404. It issues an ordinary session
   and is audited as `auth.test_login`. Enabled by default only in `appsettings.Development.json` and
   `appsettings.Staging.json`; keep it off on any environment reachable by real users.
 

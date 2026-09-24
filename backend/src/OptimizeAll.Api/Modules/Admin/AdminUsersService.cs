@@ -30,6 +30,7 @@ public sealed class AdminUsersService(
     IPasswordHasher<User> hasher,
     AuditLogService auditLogs,
     IPermissionDirectory directory,
+    IPermissionResolver permissionResolver,
     Roles.AdminRolesService customRoles,
     TimeProvider clock)
 {
@@ -167,7 +168,7 @@ public sealed class AdminUsersService(
         var activeAdminIds = await ActiveAdminIdsAsync(ct);
 
         var user = await db.LoadUserAsync(id, ct);
-        RequireAdminForStaffTarget(user);
+        await RequireAdminForStaffTargetAsync(user, ct);
         if (user.Status == UserStatus.Suspended)
             throw DomainException.Conflict("admin.already_suspended", "This account is already suspended.");
         if (user.Roles.Any(r => r.Role == Role.Admin) && !activeAdminIds.Any(a => a != id))
@@ -192,7 +193,7 @@ public sealed class AdminUsersService(
     public async Task<AdminUserDetailDto> ReactivateAsync(Guid id, ReactivateUserRequest request, CancellationToken ct)
     {
         var user = await db.LoadUserAsync(id, ct);
-        RequireAdminForStaffTarget(user);
+        await RequireAdminForStaffTargetAsync(user, ct);
         if (user.Status == UserStatus.Active)
             throw DomainException.Conflict("admin.already_active", "This account is already active.");
 
@@ -224,8 +225,14 @@ public sealed class AdminUsersService(
         await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct);
         var adminIds = await db.Set<UserRole>().Where(r => r.Role == Role.Admin).Select(r => r.UserId).ToListAsync(ct);
 
+        // Row lock on the user: serializes with custom-role assignments (AdminRolesService.AssignAsync locks it too).
+        if (!await db.Dialect().LockRowAsync(db, "users", id, ct)) throw DomainException.NotFound("User");
         var user = await db.LoadUserAsync(id, ct);
         var oldRoles = user.Roles.Select(r => r.Role).OrderBy(r => r).ToList();
+        // Guardrail (same as custom roles): nobody grants or takes away permissions they don't hold themselves, and the
+        // Admin role (roles.manage, settings.manage, users.impersonate) only by an admin — so a roles.assign held through
+        // a custom role can't be turned into Admin.
+        EnsureCanChangeRoles(oldRoles.Except(newRoles).Concat(newRoles.Except(oldRoles)));
         var removingAdmin = oldRoles.Contains(Role.Admin) && !newRoles.Contains(Role.Admin);
         if (removingAdmin && id == currentUser.Id)
             throw DomainException.Forbidden("admin.cannot_remove_own_admin", "You can't remove your own Admin role.");
@@ -238,6 +245,13 @@ public sealed class AdminUsersService(
 
         if (!oldRoles.SequenceEqual(newRoles))
         {
+            // Client users stay tenant-scoped: client.portal never mixes with staff permissions, whether they come from
+            // built-in roles or from the user's custom roles.
+            var effective = new HashSet<string>(RolePermissions.For(newRoles), StringComparer.Ordinal);
+            effective.UnionWith(await permissionResolver.ForUserAsync(id, Array.Empty<Role>(), ct));
+            if (Roles.CustomRoleGuardrails.MixesClientAndStaff(effective))
+                throw DomainException.Conflict("roles.client_staff_conflict",
+                    "A user can't hold the client portal permission together with staff permissions.");
             var now = Now;
             user.Roles.RemoveAll(r => !newRoles.Contains(r.Role));
             foreach (var role in newRoles.Where(r => !oldRoles.Contains(r)))
@@ -276,6 +290,10 @@ public sealed class AdminUsersService(
             throw FieldRules.FieldError("admin.invalid_role", "roles", "Unknown role.");
         if (!roles.Any(r => r != Role.Participant))
             throw FieldRules.FieldError("admin.staff_role_required", "roles", "Choose at least one staff role (Reviewer, CampaignManager, Finance or Admin).");
+        EnsureCanChangeRoles(roles);
+        if (Roles.CustomRoleGuardrails.MixesClientAndStaff(RolePermissions.For(roles)))
+            throw DomainException.Conflict("roles.client_staff_conflict",
+                "A user can't hold the client portal permission together with staff permissions.");
 
         var email = request.Email.Trim();
         var normalized = Normalization.Email(email);
@@ -332,11 +350,27 @@ public sealed class AdminUsersService(
          where r.Role == Role.Admin && u.Status == UserStatus.Active
          select u.Id).ToListAsync(ct);
 
-    private void RequireAdminForStaffTarget(User target)
+    /// <summary>
+    /// Staff (and client) accounts are suspended/reactivated by admins only. "Staff" includes users who hold staff
+    /// permissions through custom roles only.
+    /// </summary>
+    private async Task RequireAdminForStaffTargetAsync(User target, CancellationToken ct)
     {
-        if (target.Roles.Any(r => r.Role != Role.Participant) && !currentUser.Roles.Contains(Role.Admin))
+        if (currentUser.Roles.Contains(Role.Admin)) return;
+        var staff = target.Roles.Any(r => r.Role != Role.Participant) ||
+                    (await permissionResolver.ForUserAsync(target.Id, Array.Empty<Role>(), ct)).Any(PermissionCatalog.IsStaffPermission);
+        if (staff)
             throw DomainException.Forbidden("admin.staff_requires_admin", "Only administrators can change the status of staff accounts.");
     }
+
+    /// <summary>
+    /// Granting or removing built-in roles follows the custom-role guardrails for their staff permissions (portal markers
+    /// such as participant.portal/client.portal are not privileges): the actor must hold each one, and admin-only
+    /// permissions need the built-in Admin role.
+    /// </summary>
+    private void EnsureCanChangeRoles(IEnumerable<Role> changed) =>
+        Roles.CustomRoleGuardrails.EnsureCanGrant(currentUser.Permissions, currentUser.Roles.Contains(Role.Admin),
+            RolePermissions.For(changed).Where(PermissionCatalog.IsStaffPermission));
 
     private static void RequireConfirm(bool confirm)
     {

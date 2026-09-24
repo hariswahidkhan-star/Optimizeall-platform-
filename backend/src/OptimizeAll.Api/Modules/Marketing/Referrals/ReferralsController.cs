@@ -143,6 +143,7 @@ public sealed class ReferralsController(
     }
 
     /// <summary>Rejects a referral; declines a pending reward or reverses an approved (unpaid) one. Audited.</summary>
+    [DeniedWhileImpersonating] // cancels referral rewards
     [HttpPost("api/v1/marketing/referrals/{id:guid}/reject")]
     [HasPermission(Permissions.MarketingManage)]
     public Task<ReferralRejectResult> Reject(Guid id, RejectReferralRequest request, CancellationToken ct) =>

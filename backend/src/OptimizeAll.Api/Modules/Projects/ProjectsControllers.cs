@@ -381,11 +381,13 @@ public sealed class AgencyTimeController(TimeService time) : ControllerBase
     [HasPermission(Permissions.TimeViewAll)]
     public Task<IReadOnlyList<HourlyRateDto>> Rates(CancellationToken ct) => time.RatesAsync(ct);
 
+    [DeniedWhileImpersonating] // billable rates are money
     [HttpPut("rates")]
     [HasPermission(Permissions.ProjectsManage)]
     [HasPermission(Permissions.TimeViewAll)]
     public Task<IReadOnlyList<HourlyRateDto>> SaveRate(HourlyRateRequest request, CancellationToken ct) => time.SaveRateAsync(request, ct);
 
+    [DeniedWhileImpersonating] // billable rates are money
     [HttpDelete("rates/{id:guid}")]
     [HasPermission(Permissions.ProjectsManage)]
     [HasPermission(Permissions.TimeViewAll)]

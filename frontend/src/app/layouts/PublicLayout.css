@@ -6,7 +6,7 @@
 
 .public-header {
   position: sticky;
-  top: 0;
+  top: var(--impersonation-banner-height, 0px); /* below the sticky impersonation banner */
   z-index: var(--z-header);
   border-bottom: 1px solid color-mix(in srgb, var(--color-border) 70%, transparent);
   background: color-mix(in srgb, var(--color-bg) 82%, transparent);

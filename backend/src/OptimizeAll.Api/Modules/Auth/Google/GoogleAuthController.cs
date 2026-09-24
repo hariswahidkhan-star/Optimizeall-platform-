@@ -66,12 +66,14 @@ public sealed class GoogleAuthController(GoogleSignInService google, ICurrentUse
     public Task<SignInMethodsResponse> SignInMethods(CancellationToken ct) => google.GetSignInMethodsAsync(currentUser.Id, ct);
 
     /// <summary>Starts connecting Google to the signed-in account (profile).</summary>
+    [DeniedWhileImpersonating] // a linked Google account is a credential
     [Authorize]
     [HttpPost("external-logins/google/start")]
     public GoogleStartResponse StartLink(GoogleStartRequest request) =>
         StartFlow(GoogleFlowProtector.FlowModeLink, currentUser.Id, request.ReturnTo);
 
     /// <summary>Disconnects Google (refused when it is the account's only sign-in method).</summary>
+    [DeniedWhileImpersonating] // a linked Google account is a credential
     [Authorize]
     [HttpDelete("external-logins/google")]
     public async Task<IActionResult> Unlink(CancellationToken ct)

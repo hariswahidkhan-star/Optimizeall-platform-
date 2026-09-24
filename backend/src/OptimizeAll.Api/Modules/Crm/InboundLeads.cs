@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Events;
 using OptimizeAll.Api.Common.Notifications;
@@ -38,8 +39,12 @@ public sealed class InboundLeadService(
 {
     public const string InboundPool = "inbound";
 
-    /// <summary>Roles that receive inbound leads (both hold crm.manage).</summary>
-    public static readonly Role[] AssignableRoles = { Role.SalesRep, Role.AccountManager };
+    /// <summary>
+    /// Inbound leads go round-robin to active users who hold <c>crm.manage</c> through a job role: a built-in role other
+    /// than Admin (SalesRep, AccountManager) or a custom role. Admins (who hold every permission) are assigned leads only
+    /// when they also hold such a role, so granting someone Admin never silently puts them into the lead rotation.
+    /// </summary>
+    public static readonly string[] AssignablePermissions = { Permissions.CrmManage };
 
     public async Task<CrmInboundEvent?> ProcessAsync(InboundLead lead, CancellationToken ct)
     {
@@ -224,15 +229,16 @@ public sealed class InboundLeadService(
         }
     }
 
-    private Task<bool> IsAssignableAsync(Guid userId, CancellationToken ct) =>
-        db.Set<User>().AnyAsync(u => u.Id == userId && u.Status == UserStatus.Active && u.Roles.Any(r => AssignableRoles.Contains(r.Role)), ct);
+    private async Task<IQueryable<User>> AssignableUsersAsync(CancellationToken ct) =>
+        (await new PermissionDirectory(db).WorkersWithAnyPermissionAsync(AssignablePermissions, ct)).Where(u => u.Status == UserStatus.Active);
+
+    private async Task<bool> IsAssignableAsync(Guid userId, CancellationToken ct) =>
+        await (await AssignableUsersAsync(ct)).AnyAsync(u => u.Id == userId, ct);
 
     /// <summary>The next eligible user after the cursor (ordered by id, wrapping around). Caller holds the cursor row lock.</summary>
     private async Task<Guid?> NextAssigneeAsync(Guid cursorId, DateTime now, CancellationToken ct)
     {
-        var candidates = await db.Set<User>().AsNoTracking()
-            .Where(u => u.Status == UserStatus.Active && u.Roles.Any(r => AssignableRoles.Contains(r.Role)))
-            .Select(u => u.Id).ToListAsync(ct);
+        var candidates = await (await AssignableUsersAsync(ct)).Select(u => u.Id).ToListAsync(ct);
         if (candidates.Count == 0) return null;
         candidates.Sort((a, b) => string.CompareOrdinal(a.ToString(), b.ToString()));
         var cursor = await db.Set<CrmAssignmentCursor>().FirstAsync(c => c.Id == cursorId, ct);
