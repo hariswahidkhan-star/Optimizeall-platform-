@@ -7,7 +7,7 @@ import type { AuthResponse, MessageResponse, RegisterRequest, SessionUser } from
 import { AuthContext, type AuthContextValue, type AuthStatus } from './authContext';
 import { getDeviceId } from './deviceId';
 import { hasAnyPermission as hasAny, hasPermission as has } from './permissions';
-import { IMPERSONATION_EXIT_PATH, loginPathAfterExpiry } from './sessionPaths';
+import { IMPERSONATION_EXIT_PATH, loginPathAfterExpiry, SIGNED_OUT_PATH } from './sessionPaths';
 
 /** Refresh this long before the access token expires. */
 const REFRESH_LEAD_MS = 60_000;
@@ -22,6 +22,8 @@ interface SessionState {
   expiresAt: string | null;
   /** Set by a forced sign-out; cleared on sign-in and once /login is shown. */
   expired?: boolean;
+  /** Set by a deliberate sign-out; cleared on sign-in and once /login is shown. */
+  signedOut?: boolean;
 }
 
 /**
@@ -91,10 +93,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [navigate, queryClient],
   );
 
-  // The expiry notice is transient: once the sign-in page is shown, later redirects are ordinary ones.
+  // The expiry / signed-out notices are transient: once the sign-in page is shown, later redirects are ordinary ones.
   useEffect(() => {
-    if (state.expired && location.pathname === '/login') setState((prev) => ({ ...prev, expired: false }));
-  }, [state.expired, location.pathname]);
+    if ((state.expired || state.signedOut) && location.pathname === '/login')
+      setState((prev) => ({ ...prev, expired: false, signedOut: false }));
+  }, [state.expired, state.signedOut, location.pathname]);
 
   // Proactive refresh shortly before the access token expires.
   useEffect(() => {
@@ -148,9 +151,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // The local session is discarded regardless; the server cookie expires on its own.
     }
     tokenStore.clear();
-    setState({ status: 'anonymous', user: null, expiresAt: null });
+    // Like `expired`, the flag reaches RequireAuth in the same render as the anonymous status, so the guard's own
+    // redirect (which supersedes the navigation below) goes to /login?signedOut=1 too, not to /login?next=<page>.
+    setState({ status: 'anonymous', user: null, expiresAt: null, signedOut: true });
     queryClient.clear();
-    navigate('/login?signedOut=1', { replace: true });
+    navigate(SIGNED_OUT_PATH, { replace: true });
   }, [navigate, queryClient]);
 
   const register = useCallback(async (request: Omit<RegisterRequest, 'deviceId'>) => {
@@ -202,6 +207,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       permissions,
       expiresAt: state.expiresAt,
       sessionExpired: !!state.expired,
+      signedOut: !!state.signedOut,
       hasPermission: (permission) => has(permissions, permission),
       hasAnyPermission: (required) => hasAny(permissions, required),
       login,
