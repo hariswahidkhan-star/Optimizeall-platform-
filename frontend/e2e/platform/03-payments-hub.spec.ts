@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import type { Locator, Page } from '@playwright/test';
 import {
   accounts,
+  ApiSession,
   expect,
   test,
   axeViolations,
@@ -160,15 +161,32 @@ test('finance records, corrects, reverses (four-eyes) and settles client payment
   await expect(paymentRow(finance, new RegExp(`${refA}(?!A)`))).toHaveCount(0);
 
   // ---------------------------------------------------------------- four-eyes: the recorder cannot refund it
-  errors.ignore(/HTTP 403 POST .*\/api\/v1\/admin\/payments\/invoice-payments\/[0-9a-f-]+\/reverse$/);
-  await rowAction(finance, refAFixed, 'Record refund');
-  const refund = modal(finance, 'Refund this payment');
-  await refund.getByLabel('Reason').fill('Client asked for the money back');
-  await refund.getByRole('button', { name: 'Record refund' }).click();
-  await expect(refund.getByRole('alert')).toHaveText(
-    'You recorded this payment, so a different finance user must record its refund.',
-  );
-  await refund.getByRole('button', { name: 'Cancel' }).click();
+  // The hub doesn't offer the recorder a refund, and the server refuses one from them anyway.
+  await paymentRow(finance, refAFixed)
+    .getByRole('button', { name: /^Actions for / })
+    .click();
+  await expect(finance.getByRole('menuitem', { name: 'Edit details' })).toBeVisible();
+  await expect(finance.getByRole('menuitem', { name: 'Record refund' })).toHaveCount(0);
+  await finance.keyboard.press('Escape');
+  const financeApi = await ApiSession.login(accounts.finance.email, accounts.finance.password);
+  const listed = await financeApi.get<{
+    items: { id: string; reference: string | null; concurrencyStamp: string }[];
+  }>(`/admin/payments?search=${encodeURIComponent(refAFixed)}`);
+  const recorded = listed.items.find((r) => r.reference === refAFixed);
+  expect(recorded, 'the corrected payment is listed').toBeTruthy();
+  const refused = await financeApi
+    .post(`/admin/payments/invoice-payments/${recorded!.id}/reverse`, {
+      requestId: crypto.randomUUID(),
+      kind: 'Refund',
+      reason: 'Client asked for the money back',
+      reversedOn: new Date().toISOString().slice(0, 10),
+      concurrencyStamp: recorded!.concurrencyStamp,
+    })
+    .then(
+      () => null,
+      (e: unknown) => e,
+    );
+  expect(refused).toMatchObject({ status: 403, code: 'billing.four_eyes' });
   await expect(paymentRow(finance, refAFixed)).toContainText('Paid');
 
   // ---------------------------------------------------------------- a second finance user reverses it
