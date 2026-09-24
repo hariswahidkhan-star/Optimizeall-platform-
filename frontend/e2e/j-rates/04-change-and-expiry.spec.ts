@@ -65,7 +65,9 @@ test.describe.serial('rate changes and deal expiry', () => {
   test('when the personal deal expires the person falls back to the group rate', async ({ as }) => {
     const [ivy] = state().participants;
     const ivySubmission = recall<string>('ivySubmission');
-    const wait = recall<number>('dealExpiresAt') - Date.now() + 5_000;
+    // submitPost dates the post 30 s in the past, and a post published while the deal was
+    // still valid is (rightly) priced with the deal, so wait until that date is past expiry too.
+    const wait = recall<number>('dealExpiresAt') - Date.now() + 45_000;
     if (wait > 0) {
       test.setTimeout(wait + 120_000);
       await new Promise((resolve) => setTimeout(resolve, wait));
