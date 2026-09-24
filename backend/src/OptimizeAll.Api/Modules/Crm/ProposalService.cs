@@ -256,6 +256,8 @@ public sealed class ProposalService(
         if (r.DealId is { } dealId)
             deal = await db.Set<CrmDeal>().AsNoTracking().FirstOrDefaultAsync(d => d.Id == dealId, ct)
                    ?? throw new DomainException("proposal.invalid_deal", "That deal doesn't exist.");
+        // An archived deal is read-only and hidden from the board: a proposal on it could be accepted without anyone seeing it.
+        if (deal is not null) CrmService.EnsureNotArchived(deal.ArchivedAt, "deal");
         var clientId = r.ClientAccountId ?? deal?.ClientAccountId;
         ClientAccount? client = null;
         if (clientId is { } cid)
@@ -278,6 +280,8 @@ public sealed class ProposalService(
         CrmService.RequireStamp(db, proposal, r.ConcurrencyStamp);
         if (proposal.Status is not (ProposalStatus.Draft or ProposalStatus.Sent or ProposalStatus.Viewed))
             throw DomainException.Conflict("proposal.not_sendable", $"A {proposal.Status.ToString().ToLowerInvariant()} proposal can't be sent.");
+        if (proposal.DealId is { } sendDealId && await db.Set<CrmDeal>().AnyAsync(d => d.Id == sendDealId && d.ArchivedAt != null, ct))
+            throw DomainException.Conflict("crm.archived", "This proposal's deal is archived. Restore the deal before sending the proposal.");
         var version = await db.Set<ProposalVersion>().FirstAsync(v => v.ProposalId == id && v.VersionNumber == proposal.CurrentVersion, ct);
         if (version.ValidUntil < Today)
             throw DomainException.Conflict("proposal.expired", "This proposal's validity date has passed. Edit it to set a new date, then send it.");

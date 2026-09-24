@@ -176,6 +176,9 @@ public sealed class SeoLocalController(AppDbContext db, SeoAccess access, IAudit
         var row = await db.Set<SeoCitation>().FirstOrDefaultAsync(c => c.SiteId == siteId && c.SourceId == sourceId, ct);
         if (row is null)
         {
+            // Hidden directories only keep the citations already tracked on them; new ones can't be started there.
+            if (!source.IsActive)
+                throw DomainException.Conflict("seo.directory_hidden", "This directory is hidden in the SEO settings; show it again to track a citation there.");
             row = new SeoCitation { SiteId = site.Id, ClientAccountId = site.ClientAccountId, SourceId = sourceId };
             db.Add(row);
         }

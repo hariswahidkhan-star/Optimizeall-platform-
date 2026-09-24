@@ -161,6 +161,9 @@ public sealed class FormsController(
     {
         var clientId = request.ClientAccountId!.Value;
         await access.EnsureAsync(clientId, "Client", ct);
+        // Templates hidden in the library can't be picked any more (the picker lists active ones only).
+        if (request.TemplateKey is { } chosen && !await db.Set<FormTemplate>().AnyAsync(t => t.Key == chosen && t.IsActive, ct))
+            throw new DomainException("forms.template_not_found", "Unknown form template.");
         var form = await forms.CreateFromTemplateAsync(clientId, request.TemplateKey ?? "contact", request.Name.Trim(), ct);
         audit.Record("forms.form_created", nameof(Form), form.Id, after: new { form.Name, form.TemplateKey, form.ClientAccountId });
         await db.SaveChangesAsync(ct);

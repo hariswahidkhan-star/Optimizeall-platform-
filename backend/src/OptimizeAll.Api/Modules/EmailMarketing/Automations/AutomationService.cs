@@ -155,6 +155,19 @@ public sealed class AutomationService(AppDbContext db, EmailAccess access, IAudi
             throw DomainException.Conflict("email.automation_active", "Pause or archive the journey before deleting it.");
         if (await db.Set<AutomationEnrollment>().AnyAsync(e => e.AutomationId == id, ct))
             throw DomainException.Conflict("email.automation_has_history", "Contacts have entered this journey; archive it instead so its statistics are kept.");
+        if (automation.SeedKey is not null && automation.ScopeKey == Workspace.AgencyKey)
+        {
+            // A ready-made agency journey is re-created by the baseline seeder when its row is missing, so "deleting" it
+            // archives it instead: it leaves the list and stays gone after a restart (restorable from the archive).
+            if (automation.Status != AutomationStatus.Archived)
+            {
+                var previous = automation.Status;
+                automation.Status = AutomationStatus.Archived;
+                audit.Record("email.automation.archived", nameof(Automation), automation.Id, new { Status = previous }, new { automation.Status });
+                await db.SaveChangesAsync(ct);
+            }
+            return;
+        }
         await db.Set<AutomationStep>().Where(s => s.AutomationId == id).ExecuteDeleteAsync(ct);
         db.Remove(automation);
         audit.Record("email.automation.deleted", nameof(Automation), id, before: new { automation.Name, automation.Status });

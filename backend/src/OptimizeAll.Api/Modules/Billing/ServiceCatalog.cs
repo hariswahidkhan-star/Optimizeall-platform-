@@ -173,7 +173,9 @@ public sealed class SalesCatalogSeeder : ISeeder
 
     public async Task SeedAsync(AppDbContext db, CancellationToken ct)
     {
-        if (!await db.Set<ServiceCatalogItem>().AnyAsync(ct))
+        // Seeded once: an agency that deleted every catalog item or template must not get the defaults back on restart.
+        var ledger = await SeedLedger.LoadAsync(db, "sales_catalog", ct);
+        if (!ledger.WasSeeded("catalog") && !await db.Set<ServiceCatalogItem>().AnyAsync(ct))
         {
             var order = 10;
             foreach (var (name, description, slug, price, recurrence) in DefaultItems)
@@ -186,7 +188,8 @@ public sealed class SalesCatalogSeeder : ISeeder
                 order += 10;
             }
         }
-        if (!await db.Set<ProposalTemplate>().AnyAsync(ct))
+        ledger.Record("catalog");
+        if (!ledger.WasSeeded("proposal-templates") && !await db.Set<ProposalTemplate>().AnyAsync(ct))
         {
             db.Set<ProposalTemplate>().Add(new ProposalTemplate
             {
@@ -216,6 +219,7 @@ public sealed class SalesCatalogSeeder : ISeeder
                 SortOrder = 20,
             });
         }
+        ledger.Record("proposal-templates");
         await db.SaveChangesAsync(ct);
     }
 }

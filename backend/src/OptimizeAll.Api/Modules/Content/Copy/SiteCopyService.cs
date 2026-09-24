@@ -51,7 +51,13 @@ public static partial class PlainText
     {
         if (string.IsNullOrEmpty(value)) return string.Empty;
         var v = value.Replace("\r\n", "\n").Replace('\r', '\n');
-        v = TagRegex().Replace(v, string.Empty);
+        // Repeat until nothing changes: a single pass turns "<<b>script>" into "<script>".
+        string previous;
+        do
+        {
+            previous = v;
+            v = TagRegex().Replace(v, string.Empty);
+        } while (v != previous);
         var sb = new StringBuilder(v.Length);
         foreach (var ch in v)
             if (ch == '\n' || ch == '\t' || !char.IsControl(ch)) sb.Append(ch);

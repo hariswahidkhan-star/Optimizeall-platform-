@@ -21,6 +21,9 @@ public sealed class WebsiteBaselineSeeder : ISeeder
 
     public async Task SeedAsync(AppDbContext db, CancellationToken ct)
     {
+        // Seeded once per slug: rows an editor deleted, or whose slug they changed, are not created again on the next start.
+        var ledger = await SeedLedger.LoadAsync(db, "website_baseline", ct);
+
         // ---- Service lines and services
         var categories = await db.Set<ServiceCategory>().ToDictionaryAsync(c => c.Slug, ct);
         var serviceSlugs = (await db.Set<AgencyService>().Select(s => s.Slug).ToListAsync(ct)).ToHashSet();
@@ -28,8 +31,16 @@ public sealed class WebsiteBaselineSeeder : ISeeder
         for (var ci = 0; ci < BaselineServices.Categories.Length; ci++)
         {
             var cs = BaselineServices.Categories[ci];
+            var categorySeeded = ledger.WasSeeded("category:" + cs.Slug);
+            ledger.Record("category:" + cs.Slug);
             if (!categories.TryGetValue(cs.Slug, out var category))
             {
+                if (categorySeeded)
+                {
+                    // The service line was removed (or renamed): its services are not brought back either.
+                    foreach (var removed in cs.Services) ledger.Record("service:" + removed.Slug);
+                    continue;
+                }
                 category = new ServiceCategory
                 {
                     Slug = cs.Slug, Name = cs.Name, Icon = cs.Icon, Description = cs.Description, SortOrder = (ci + 1) * 10, IsPublished = true,
@@ -40,7 +51,9 @@ public sealed class WebsiteBaselineSeeder : ISeeder
             for (var si = 0; si < cs.Services.Length; si++)
             {
                 var s = cs.Services[si];
-                if (serviceSlugs.Contains(s.Slug)) continue;
+                var serviceSeeded = ledger.WasSeeded("service:" + s.Slug);
+                ledger.Record("service:" + s.Slug);
+                if (serviceSeeded || serviceSlugs.Contains(s.Slug)) continue;
                 var service = new AgencyService
                 {
                     CategoryId = category.Id,
@@ -105,7 +118,9 @@ public sealed class WebsiteBaselineSeeder : ISeeder
         for (var i = 0; i < BaselinePages.Industries.Length; i++)
         {
             var ind = BaselinePages.Industries[i];
-            if (industrySlugs.Contains(ind.Slug)) continue;
+            var industrySeeded = ledger.WasSeeded("industry:" + ind.Slug);
+            ledger.Record("industry:" + ind.Slug);
+            if (industrySeeded || industrySlugs.Contains(ind.Slug)) continue;
             db.Add(new Industry
             {
                 Slug = ind.Slug, Name = ind.Name, Icon = ind.Icon, Summary = ind.Summary, BodyMarkdown = ind.Body, Challenges = ind.Challenges.ToList(),
@@ -119,7 +134,9 @@ public sealed class WebsiteBaselineSeeder : ISeeder
         var pageSlugs = (await db.Set<SitePage>().Select(p => p.Slug).ToListAsync(ct)).ToHashSet();
         foreach (var page in BaselinePages.Pages)
         {
-            if (pageSlugs.Contains(page.Slug)) continue;
+            var pageSeeded = ledger.WasSeeded("page:" + page.Slug);
+            ledger.Record("page:" + page.Slug);
+            if (pageSeeded || pageSlugs.Contains(page.Slug)) continue;
             db.Add(new SitePage
             {
                 Slug = page.Slug, Title = page.Title, Summary = page.Summary, Kind = page.Kind, BlocksJson = PageBlockValidator.Serialize(page.Blocks),
@@ -132,7 +149,9 @@ public sealed class WebsiteBaselineSeeder : ISeeder
         for (var i = 0; i < BaselinePages.BlogCategories.Length; i++)
         {
             var c = BaselinePages.BlogCategories[i];
-            if (blogSlugs.Contains(c.Slug)) continue;
+            var blogSeeded = ledger.WasSeeded("blog-category:" + c.Slug);
+            ledger.Record("blog-category:" + c.Slug);
+            if (blogSeeded || blogSlugs.Contains(c.Slug)) continue;
             db.Add(new BlogCategory { Slug = c.Slug, Name = c.Name, Description = c.Description, SortOrder = (i + 1) * 10 });
         }
 

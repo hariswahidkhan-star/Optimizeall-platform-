@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Api.Common.Security;
+using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.SocialMedia;
 using OptimizeAll.Infrastructure.Persistence;
@@ -15,7 +16,7 @@ namespace OptimizeAll.Api.Modules.SocialMedia;
 public sealed class ListeningQueryUpdateInput
 {
     [Required, MinLength(2), MaxLength(150)] public string Term { get; set; } = string.Empty;
-    [MaxLength(8)] public List<SocialNetwork> Networks { get; set; } = new();
+    [MaxLength(8), DefinedEnum] public List<SocialNetwork> Networks { get; set; } = new();
     public bool IsActive { get; set; } = true;
     public Guid? ConcurrencyStamp { get; set; }
 }
@@ -23,7 +24,7 @@ public sealed class ListeningQueryUpdateInput
 public sealed class CompetitorUpdateInput
 {
     [Required, MaxLength(200)] public string Name { get; set; } = string.Empty;
-    [Required] public SocialNetwork? Network { get; set; }
+    [Required, DefinedEnum] public SocialNetwork? Network { get; set; }
     [Required, MaxLength(150)] public string Handle { get; set; } = string.Empty;
     [MaxLength(500)] public string? ProfileUrl { get; set; }
     public Guid? ConcurrencyStamp { get; set; }
