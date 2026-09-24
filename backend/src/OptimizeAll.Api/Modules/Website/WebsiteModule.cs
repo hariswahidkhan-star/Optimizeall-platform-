@@ -7,6 +7,7 @@ using OptimizeAll.Api.Modules.Website.Catalog;
 using OptimizeAll.Api.Modules.Website.Leads;
 using OptimizeAll.Api.Modules.Website.Pages;
 using OptimizeAll.Api.Modules.Website.Public;
+using OptimizeAll.Api.Modules.Website.Redirects;
 using OptimizeAll.Api.Modules.Website.Seed;
 using OptimizeAll.Api.Modules.Website.Settings;
 using OptimizeAll.Api.Modules.Website.Shared;
@@ -23,6 +24,7 @@ public static class WebsiteModule
         services.AddScoped<CmsStore>();
         services.AddScoped<PageBlockValidator>();
         services.AddScoped<SiteSettingsService>();
+        services.AddScoped<RedirectService>();
         services.AddScoped<CatalogAdminService>();
         services.AddScoped<IServiceCatalog, ServiceCatalog>();
         services.AddScoped<PublicSiteService>();

@@ -32,11 +32,13 @@ test('staff without the content permissions get 403 in the UI and the API', asyn
   await expect(nav.getByRole('link', { name: 'Site settings' })).toHaveCount(0);
   await expect(nav.getByRole('link', { name: 'Pages', exact: true })).toHaveCount(0);
   await expect(nav.getByRole('link', { name: 'Landing pages' })).toHaveCount(0);
+  await expect(nav.getByRole('link', { name: 'Redirects' })).toHaveCount(0);
   for (const path of [
     '/agency/website/pages',
     '/agency/website/settings',
     '/agency/website/blog',
     '/agency/website/services',
+    '/agency/website/redirects',
     '/agency/pages',
   ]) {
     await am.goto(path);
@@ -48,6 +50,7 @@ test('staff without the content permissions get 403 in the UI and the API', asyn
     '/agency/website/settings',
     '/agency/website/blog/posts',
     '/agency/website/testimonials',
+    '/agency/website/redirects',
     '/agency/pages/landing-pages',
     '/agency/pages/forms',
     '/admin/content/banners',
@@ -184,6 +187,13 @@ test('impersonation: content edits are allowed as the editor, site settings are 
   const error = await refused(withToken(token, 'PUT', '/agency/website/settings', settings));
   expect(error.status).toBe(403);
   expect(error.code).toBe('auth.impersonation_forbidden_action');
+  // Redirects decide where every visitor of a public address lands: readable, but not changeable while impersonated.
+  await withToken(token, 'GET', '/agency/website/redirects');
+  const redirect = await refused(
+    withToken(token, 'POST', '/agency/website/redirects', { fromPath: `/e2e-imp-${id}`, toPath: '/contact' }),
+  );
+  expect(redirect.status).toBe(403);
+  expect(redirect.code).toBe('auth.impersonation_forbidden_action');
   // The editor themselves (not impersonated) can still save them.
   const editor = await api(state().editor);
   const own = await editor.get<{ settings: unknown; concurrencyStamp: string }>('/agency/website/settings');

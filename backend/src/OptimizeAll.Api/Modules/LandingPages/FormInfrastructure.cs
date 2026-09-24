@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.DataProtection;
@@ -5,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Jobs;
 using OptimizeAll.Api.Common.Notifications;
 using OptimizeAll.Api.Common.Security;
+using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.LandingPages;
 using OptimizeAll.Infrastructure.Persistence;
 
@@ -118,13 +120,18 @@ public sealed class CaptchaVerifier(HttpClient http, ICredentialVault vault, ICo
     }
 }
 
-/// <summary>What a valid render token vouches for: time since the form was served and the consent wording version shown.</summary>
-public sealed record FormRenderInfo(double ElapsedSeconds, int ConsentVersion);
+/// <summary>
+/// What a valid render token vouches for: time since the form was served and the consent wording version shown, plus the
+/// token's identity (<see cref="TokenHash"/>, SHA-256 hex of its random id) and when it expires, used to make each
+/// token single-use (<see cref="Domain.Website.UsedFormToken"/>).
+/// </summary>
+public sealed record FormRenderInfo(double ElapsedSeconds, int ConsentVersion, string TokenHash, DateTime ExpiresAt);
 
 /// <summary>
 /// Signed "form rendered at" tokens for the minimum-fill-time check. The token binds the form id, the server time the
-/// form was served and the consent version displayed (Data Protection), so the client can neither fake how long the visitor
-/// spent on the form nor claim agreement to a consent wording other than the one it was shown.
+/// form was served, the consent version displayed and a random id (Data Protection), so the client can neither fake how
+/// long the visitor spent on the form nor claim agreement to a consent wording other than the one it was shown. A
+/// successful submission spends the token (single use, like the website's public forms).
 /// </summary>
 public sealed class FormRenderTokens(IDataProtectionProvider protection, TimeProvider clock)
 {
@@ -132,7 +139,7 @@ public sealed class FormRenderTokens(IDataProtectionProvider protection, TimePro
     private readonly IDataProtector _protector = protection.CreateProtector("OptimizeAll.Forms.RenderToken.v1");
 
     public string Issue(Guid formId, int consentVersion) =>
-        _protector.Protect($"{formId:N}|{clock.GetUtcNow().UtcTicks}|{consentVersion}");
+        _protector.Protect($"{formId:N}|{clock.GetUtcNow().UtcTicks}|{consentVersion}|{Convert.ToHexString(RandomNumberGenerator.GetBytes(16))}");
 
     /// <summary>Null when the token is missing, forged, for another form, expired or from before consent versions were bound.</summary>
     public FormRenderInfo? Read(string? token, Guid formId)
@@ -141,10 +148,14 @@ public sealed class FormRenderTokens(IDataProtectionProvider protection, TimePro
         try
         {
             var parts = _protector.Unprotect(token).Split('|');
-            if (parts.Length != 3 || parts[0] != formId.ToString("N") || !long.TryParse(parts[1], out var ticks) ||
+            if (parts.Length is not (3 or 4) || parts[0] != formId.ToString("N") || !long.TryParse(parts[1], out var ticks) ||
                 !int.TryParse(parts[2], out var consentVersion)) return null;
-            var elapsed = clock.GetUtcNow().UtcDateTime - new DateTime(ticks, DateTimeKind.Utc);
-            return elapsed < TimeSpan.Zero || elapsed > MaxAge ? null : new FormRenderInfo(elapsed.TotalSeconds, consentVersion);
+            var issued = new DateTime(ticks, DateTimeKind.Utc);
+            var elapsed = clock.GetUtcNow().UtcDateTime - issued;
+            if (elapsed < TimeSpan.Zero || elapsed > MaxAge) return null;
+            // Tokens issued before random ids were added (3 parts) are identified by their protected form, which is unique per issue.
+            var id = parts.Length == 4 ? parts[3] : token;
+            return new FormRenderInfo(elapsed.TotalSeconds, consentVersion, Normalization.Sha256Hex("forms.render:" + id), issued + MaxAge);
         }
         catch (System.Security.Cryptography.CryptographicException)
         {

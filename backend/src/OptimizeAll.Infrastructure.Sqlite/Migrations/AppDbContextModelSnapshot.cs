@@ -14074,6 +14074,57 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.ToTable("website_page_revisions", (string)null);
                 });
 
+            modelBuilder.Entity("OptimizeAll.Domain.Website.SiteRedirect", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ContentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ContentType")
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("CreatedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FromPath")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ToPath")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("FromPath")
+                        .IsUnique();
+
+                    b.HasIndex("ToPath");
+
+                    b.ToTable("website_redirects", (string)null);
+                });
+
             modelBuilder.Entity("OptimizeAll.Domain.Website.SiteSettingsDocument", b =>
                 {
                     b.Property<Guid>("Id")

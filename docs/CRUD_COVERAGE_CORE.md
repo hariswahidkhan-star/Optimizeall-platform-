@@ -15,7 +15,7 @@ the reason in the notes). "UI" is the admin/portal screen; every mutating endpoi
 | Case studies | ✓ | ✓ filter | ✓ | ✓ | Publish/featured ✓ | **new** API + UI | |
 | Testimonials | ✓ | ✓ | ✓ | ✓ | Publish/featured ✓ | ✓ API, **new** UI | |
 | Team members (also blog authors) | ✓ | ✓ | ✓ | ✓ | Publish ✓ | ✓ API, **new** UI | |
-| CMS pages (incl. legal) | ✓ | ✓ | ✓ with live preview | ✓ | Publish ✓, **new** scheduled go-live | — (menu order is in Site settings) | **new** version history, preview old version, restore, change notes |
+| CMS pages (incl. legal) | ✓ | ✓ | ✓ with live preview | ✓ API + **new** UI (editor and list, confirmation) | Publish ✓, **new** scheduled go-live | — (menu order is in Site settings) | **new** version history, preview old version, restore, change notes; renaming a live page **new** redirects the old address (301) |
 | Blog posts | ✓ | ✓ filter, search | ✓ | ✓ | Draft → review → schedule/publish → unpublish/return ✓ | — (date ordered) | Markdown sanitised server-side |
 | Blog categories | ✓ | ✓ | ✓ | ✓ | — | **new** API + UI | |
 | Job openings | ✓ | ✓ | ✓ | ✓ | Draft/Open/Closed ✓ | — | |
@@ -25,6 +25,7 @@ the reason in the notes). "UI" is the admin/portal screen; every mutating endpoi
 | Newsletter subscribers | Public double opt-in | ✓ filter, search, CSV | — (consent is the subscriber's) | **new** erase | **new** staff unsubscribe | — | |
 | Site settings | — (singleton) | ✓ | ✓ | — | Announcement bar on/off ✓ | Menu/footer order ✓ | Navigation, footer, contact, social, SEO, analytics |
 | Page texts | — (catalog) | **new** by page + search | **new** | **new** reset to default | — | — | See DYNAMIC_CONTENT.md |
+| Redirects | **new** automatic on slug renames of live content + manual (UI) | **new** list, search, source filter | — (delete and re-add) | **new** ✓ | — | — | 301 via the web server gate; chains collapsed, loops refused; denied while impersonating |
 
 ## Platform content and settings (`content.manage`, `settings.manage`, `jobs.view`)
 

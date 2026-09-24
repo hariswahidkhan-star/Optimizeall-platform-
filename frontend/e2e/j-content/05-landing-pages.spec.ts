@@ -298,6 +298,15 @@ test.describe.serial('landing pages', () => {
       designerApi.post('/agency/pages/landing-pages', { clientAccountId: nimbus.id, name: 'Squatter', slug }),
     );
     expect(squat.status).toBe(409);
+    // A save without the concurrency stamp is refused as stale, like the website CMS (never "skip the check").
+    const noStamp = await refused(
+      designerApi.put(`/agency/pages/landing-pages/${pageId}`, {
+        ...put(page, {}),
+        concurrencyStamp: undefined,
+      }),
+    );
+    expect(noStamp.status).toBe(409);
+    expect(noStamp.code).toBe('concurrency.conflict');
 
     await openBuilder(designer, pageId);
     await expect(designer.getByText('Unpublished changes')).toBeVisible();
@@ -309,6 +318,15 @@ test.describe.serial('landing pages', () => {
     const moved = await openPublic(browser, newPath);
     await expect(moved.getByRole('heading', { level: 1, name: 'Get fit in six weeks' })).toBeVisible();
     remember('bootcampPage', { id: pageId, slug: newSlug, name });
+    // The old address now answers with a permanent redirect (a real 301 from the web server, query string kept), so
+    // links and search rankings follow the page.
+    const oldPath = `/lp/${clients.nimbus.slug}/${slug}`;
+    const hop = await moved.request.get(`${oldPath}?utm_source=e2e`, { maxRedirects: 0 });
+    expect(hop.status()).toBe(301);
+    expect(hop.headers()['location']).toBe(`${newPath}?utm_source=e2e`);
+    const followed = await openPublic(browser, oldPath);
+    await expect(followed).toHaveURL(new RegExp(`${newPath}$`));
+    await expect(followed.getByRole('heading', { level: 1, name: 'Get fit in six weeks' })).toBeVisible();
 
     // ---------------------------------------------------------------- versions: restore v1 into the draft and publish it
     const versions = await designerApi.get<{ id: string; version: number; isCurrent: boolean }[]>(

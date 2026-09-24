@@ -1334,6 +1334,30 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "website_redirects",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    FromPath = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ToPath = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Source = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ContentType = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ContentId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedByUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_website_redirects", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "website_service_categories",
                 columns: table => new
                 {
@@ -10791,6 +10815,22 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_website_redirects_CreatedAt",
+                table: "website_redirects",
+                column: "CreatedAt");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_website_redirects_FromPath",
+                table: "website_redirects",
+                column: "FromPath",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_website_redirects_ToPath",
+                table: "website_redirects",
+                column: "ToPath");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_website_service_categories_IsPublished_SortOrder",
                 table: "website_service_categories",
                 columns: new[] { "IsPublished", "SortOrder" });
@@ -11343,6 +11383,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "website_page_revisions");
+
+            migrationBuilder.DropTable(
+                name: "website_redirects");
 
             migrationBuilder.DropTable(
                 name: "website_service_packages");

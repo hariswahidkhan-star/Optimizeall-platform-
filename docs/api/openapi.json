@@ -32759,7 +32759,7 @@
         "tags": [
           "LandingPages"
         ],
-        "summary": "Publishes the current draft as a new immutable version (versions are never modified).",
+        "summary": "Publishes the current draft as a new immutable version (versions are never modified). When the published address\r\nchanges, the old address redirects (301) to the new one.",
         "parameters": [
           {
             "name": "id",
@@ -39415,6 +39415,69 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/v1/public/redirects": {
+      "get": {
+        "tags": [
+          "PublicRedirects"
+        ],
+        "summary": "Where an old public address now lives (404 `website.redirect_not_found` when it is not redirected).",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Redirects.RedirectLookupDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Redirects.RedirectLookupDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Redirects.RedirectLookupDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/public/redirects/gate": {
+      "get": {
+        "tags": [
+          "PublicRedirects"
+        ],
+        "summary": "For the web server: `301` with `Location` when the address in `X-Original-URI` is redirected, else an\r\nempty `404` (the web server then serves the app shell). Same limits as the tracking redirects: it runs on\r\nevery full page load of the public site.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "head": {
+        "tags": [
+          "PublicRedirects"
+        ],
+        "summary": "For the web server: `301` with `Location` when the address in `X-Original-URI` is redirected, else an\r\nempty `404` (the web server then serves the app shell). Same limits as the tracking redirects: it runs on\r\nevery full page load of the public site.",
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -54855,6 +54918,147 @@
             "in": "query",
             "schema": {
               "$ref": "#/components/schemas/OptimizeAll.Domain.Website.NewsletterStatus"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/agency/website/redirects": {
+      "get": {
+        "tags": [
+          "WebsiteRedirects"
+        ],
+        "parameters": [
+          {
+            "name": "Source",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Website.SiteRedirectSource"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sort",
+            "in": "query",
+            "schema": {
+              "maxLength": 50,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Desc",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Website.Redirects.RedirectDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Website.Redirects.RedirectDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Website.Redirects.RedirectDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "WebsiteRedirects"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Website.Redirects.RedirectInput"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Website.Redirects.RedirectInput"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Website.Redirects.RedirectInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/agency/website/redirects/{id}": {
+      "delete": {
+        "tags": [
+          "WebsiteRedirects"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -78547,6 +78751,36 @@
         },
         "additionalProperties": false
       },
+      "OptimizeAll.Api.Common.Http.PagedResult`1[[Website.Redirects.RedirectDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Website.Redirects.RedirectDto"
+            },
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
       "OptimizeAll.Domain.Ads.AdAccountStatus": {
         "enum": [
           "NotConnected",
@@ -80964,6 +81198,13 @@
         "enum": [
           "Standard",
           "Legal"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Website.SiteRedirectSource": {
+        "enum": [
+          "Automatic",
+          "Manual"
         ],
         "type": "string"
       },
@@ -99500,6 +99741,78 @@
             "nullable": true
           },
           "postCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Website.Redirects.RedirectDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fromPath": {
+            "type": "string",
+            "nullable": true
+          },
+          "toPath": {
+            "type": "string",
+            "nullable": true
+          },
+          "source": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Website.SiteRedirectSource"
+          },
+          "contentType": {
+            "type": "string",
+            "nullable": true
+          },
+          "contentId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Website.Redirects.RedirectInput": {
+        "required": [
+          "fromPath",
+          "toPath"
+        ],
+        "type": "object",
+        "properties": {
+          "fromPath": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          },
+          "toPath": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Website.Redirects.RedirectLookupDto": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "type": "string",
+            "nullable": true
+          },
+          "statusCode": {
             "type": "integer",
             "format": "int32"
           }

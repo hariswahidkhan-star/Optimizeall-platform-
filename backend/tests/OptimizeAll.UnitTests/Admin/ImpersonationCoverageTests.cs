@@ -40,6 +40,8 @@ public sealed class ImpersonationCoverageTests
         "AdminSettingsController.Update",
         "AdminSettingsController.Reset",
         "WebsiteContentController.UpdateSettings",
+        "WebsiteRedirectsController.Create",
+        "WebsiteRedirectsController.Delete",
         "AdminJobsController.Run",
         "ReviewController.Decide",
         "ReviewController.ResolveAppeal",

@@ -121,6 +121,14 @@ test('form builder → embeddable form → submissions → CSV export with formu
     designerApi.put(`/agency/pages/forms/${created.id}`, update(created, { name: 'Stale rename' })),
   );
   expect(stale.status).toBe(409);
+  // So is an edit without a stamp (it is never treated as "skip the check").
+  const noStamp = await refused(
+    designerApi.put(`/agency/pages/forms/${created.id}`, {
+      ...update(form, { name: 'No stamp' }),
+      concurrencyStamp: undefined,
+    }),
+  );
+  expect(noStamp.status).toBe(409);
   // An invalid schema (duplicate field key) is refused.
   const dupSchema = structuredClone(form.schema);
   dupSchema.steps[0]!.fields.push({ key: 'budget', type: 'text', label: 'Budget again' });
@@ -179,6 +187,10 @@ test('form builder → embeddable form → submissions → CSV export with formu
   // A real-looking submission that staff will mark as spam.
   const spam = await submit(form.id, { token, values });
   expect(spam.status).toBe(201);
+  // Render tokens are single use: replaying the accepted submission is refused (only one row is stored).
+  const replay = await submit(form.id, { token, values });
+  expect(replay.status).toBe(409);
+  expect(replay.body?.code).toBe('forms.already_submitted');
 
   // ---------------------------------------------------------------- staff: submissions list, spam, CSV export
   type Row = { id: string; email: string; name: string; values: Record<string, string>; status: string };

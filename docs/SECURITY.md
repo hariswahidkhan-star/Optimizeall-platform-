@@ -232,8 +232,8 @@ target's email to be typed) starts a time-boxed session:
   impersonation; also linking/unlinking Google sign-in, profile changes (identity, WhatsApp number, consents), invoice,
   contract, billing-settings, tax-rate and price-catalog writes, reward rules, submission decisions/reversals and appeal
   resolutions (they create or reverse earnings), referral rejections, platform settings, the public website's site
-  settings (they choose the tag-manager/analytics scripts on every public page and the canonical site URL) and manual
-  job runs, social
+  settings (they choose the tag-manager/analytics scripts on every public page and the canonical site URL), adding
+  and deleting website redirects (they decide where every visitor of a public address lands) and manual job runs, social
   OAuth connections/tokens and the email provider choice, client member invitations/role changes/removals (agency and
   client portal), client proposal acceptance, and billable rates. Reads stay available so the impersonator can see what
   the user sees. `UnitTests/Admin/ImpersonationCoverageTests` scans every controller action by reflection: any write

@@ -1037,6 +1037,25 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "website_redirects",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    FromPath = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
+                    ToPath = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
+                    Source = table.Column<string>(type: "TEXT", maxLength: 40, nullable: false),
+                    ContentType = table.Column<string>(type: "TEXT", maxLength: 40, nullable: true),
+                    ContentId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    CreatedByUserId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_website_redirects", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "website_service_categories",
                 columns: table => new
                 {
@@ -9350,6 +9369,22 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_website_redirects_CreatedAt",
+                table: "website_redirects",
+                column: "CreatedAt");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_website_redirects_FromPath",
+                table: "website_redirects",
+                column: "FromPath",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_website_redirects_ToPath",
+                table: "website_redirects",
+                column: "ToPath");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_website_service_categories_IsPublished_SortOrder",
                 table: "website_service_categories",
                 columns: new[] { "IsPublished", "SortOrder" });
@@ -9902,6 +9937,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
             migrationBuilder.DropTable(
                 name: "website_page_revisions");
+
+            migrationBuilder.DropTable(
+                name: "website_redirects");
 
             migrationBuilder.DropTable(
                 name: "website_service_packages");

@@ -373,6 +373,20 @@ internal sealed class UsedFormTokenConfiguration : IEntityTypeConfiguration<Used
     }
 }
 
+internal sealed class SiteRedirectConfiguration : IEntityTypeConfiguration<SiteRedirect>
+{
+    public void Configure(EntityTypeBuilder<SiteRedirect> b)
+    {
+        b.ToTable("website_redirects");
+        b.Property(x => x.FromPath).HasMaxLength(500).IsRequired();
+        b.HasIndex(x => x.FromPath).IsUnique();
+        b.Property(x => x.ToPath).HasMaxLength(500).IsRequired();
+        b.HasIndex(x => x.ToPath);
+        b.Property(x => x.ContentType).HasMaxLength(40);
+        b.HasIndex(x => x.CreatedAt);
+    }
+}
+
 internal sealed class NewsletterSubscriberConfiguration : IEntityTypeConfiguration<NewsletterSubscriber>
 {
     public void Configure(EntityTypeBuilder<NewsletterSubscriber> b)

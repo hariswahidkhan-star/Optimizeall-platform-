@@ -8,7 +8,6 @@ using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Api.Modules.LandingPages.Templates;
 using OptimizeAll.Api.Modules.Seo;
-using OptimizeAll.Api.Modules.SocialMedia;
 using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.LandingPages;
 using OptimizeAll.Infrastructure.Persistence;
@@ -225,7 +224,7 @@ public sealed class LandingManageController(
     public async Task<PageTemplateAdminDto> UpdatePageTemplate(string key, PageTemplateRequest request, CancellationToken ct)
     {
         var t = await db.Set<LandingPageTemplate>().FirstOrDefaultAsync(x => x.Key == key, ct) ?? throw DomainException.NotFound("Template");
-        StampGuard.Expect(db, t, request.ConcurrencyStamp, "template");
+        LandingStamps.Expect(db, t, request.ConcurrencyStamp, "template");
         if (request.FormTemplateKey is { Length: > 0 } fk && !await db.Set<FormTemplate>().AnyAsync(f => f.Key == fk, ct))
             throw Invalid("formTemplateKey", "Choose an existing form template.");
         var before = new { t.Name, t.IsActive };
@@ -328,7 +327,7 @@ public sealed class LandingManageController(
     public async Task<FormTemplateAdminDto> UpdateFormTemplate(string key, FormTemplateRequest request, CancellationToken ct)
     {
         var t = await db.Set<FormTemplate>().FirstOrDefaultAsync(x => x.Key == key, ct) ?? throw DomainException.NotFound("Template");
-        StampGuard.Expect(db, t, request.ConcurrencyStamp, "template");
+        LandingStamps.Expect(db, t, request.ConcurrencyStamp, "template");
         var schema = ParseSchema(request.Schema);
         var before = new { t.Name, t.IsActive };
         t.Name = request.Name.Trim();
