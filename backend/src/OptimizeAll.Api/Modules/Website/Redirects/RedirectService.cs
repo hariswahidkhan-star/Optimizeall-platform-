@@ -196,7 +196,7 @@ public sealed class RedirectService(
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var like = PagingExtensions.LikePattern(query.Search.Trim().ToLowerInvariant());
-            q = q.Where(r => EF.Functions.Like(r.FromPath, like) || EF.Functions.Like(r.ToPath, like));
+            q = q.Where(r => EF.Functions.Like(r.FromPath, like, "\\") || EF.Functions.Like(r.ToPath, like, "\\"));
         }
         var page = await q.OrderByDescending(r => r.CreatedAt).ThenBy(r => r.FromPath).ToPagedAsync(query, ct);
         return CmsStore.Map(page, ToDto);
