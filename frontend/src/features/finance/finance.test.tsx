@@ -272,6 +272,18 @@ describe('Error messages', () => {
     expect(financeErrorMessage(err('payout.settlement_currency_in_use'))).toMatch(/settlement currency/);
     expect(financeErrorMessage(err('something.new'))).toBe('raw title');
     expect(financeErrorMessage(err('http_403', 403))).toMatch(/permission/);
+    expect(financeErrorMessage(err('auth.forbidden', 403))).toMatch(/permission/);
+  });
+
+  it('explains a segregation-of-duties refusal instead of calling it a missing permission', () => {
+    const err = (code: string) => new ApiError({ status: 403, code, title: 'Server reason.' });
+    expect(financeErrorMessage(err('ledger.self_adjustment'))).toMatch(/your own account/);
+    expect(financeErrorMessage(err('payout.conflict_of_interest'))).toMatch(
+      /different finance user must finalize/,
+    );
+    expect(financeErrorMessage(err('payout.self_record'))).toMatch(/different finance user must record/);
+    // An unlisted 403 code shows the server's reason, never "ask an administrator for access".
+    expect(financeErrorMessage(err('billing.something_new'))).toBe('Server reason.');
   });
 });
 

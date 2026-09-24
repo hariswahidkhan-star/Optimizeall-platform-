@@ -31,6 +31,13 @@ public static class Money
 
     public static string Normalize(string currency) => currency.Trim().ToUpperInvariant();
 
+    /// <summary>
+    /// "12.345 KWD", "1,500 JPY", "24.50 USD": the amount rounded to the currency's minor units, with that many decimals,
+    /// culture-invariant. For amounts in messages (notifications, emails); never parse it back.
+    /// </summary>
+    public static string Format(decimal amount, string currency) =>
+        Round(amount, currency).ToString("N" + MinorUnitDigits(currency), System.Globalization.CultureInfo.InvariantCulture) + " " + currency;
+
     /// <summary>Converts and rounds to the target currency's minor unit.</summary>
     public static decimal Convert(decimal amount, decimal rate, string targetCurrency) =>
         Round(amount * rate, targetCurrency);

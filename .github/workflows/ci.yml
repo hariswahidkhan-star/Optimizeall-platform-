@@ -307,6 +307,18 @@ jobs:
           E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-campaigns
         run: scripts/e2e-journeys.sh
 
+      # Finance money journey (docs/PAYOUTS.md, docs/SALES_AND_BILLING.md#payments-hub): ledger, four-eyes adjustments,
+      # FX, holds, schedule, a biweekly batch with carry-over and exclusions, segregation of duties, audited exports,
+      # manual payments, failed → re-queued, reconciliation, the payments hub's incoming flows and the negative paths
+      # (idempotency, stale stamps, overpayment, 403s, impersonation, expired session). Demo seed, SQLite.
+      - name: Finance journey (scripts/e2e-journeys.sh, E2E_SUITE=j-finance, SQLite)
+        env:
+          E2E_SUITE: j-finance
+          E2E_DB_PROVIDER: sqlite
+          E2E_SKIP_BUILD: "1"
+          E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-finance
+        run: scripts/e2e-journeys.sh
+
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v4
@@ -340,6 +352,8 @@ jobs:
             ${{ runner.temp }}/e2e-j-participant/web.log
             ${{ runner.temp }}/e2e-j-campaigns/api.log
             ${{ runner.temp }}/e2e-j-campaigns/web.log
+            ${{ runner.temp }}/e2e-j-finance/api.log
+            ${{ runner.temp }}/e2e-j-finance/web.log
             ${{ runner.temp }}/web-smoke.log
           retention-days: 7
           if-no-files-found: ignore

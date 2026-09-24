@@ -239,7 +239,17 @@ export function hubActions(record: PaymentRecord): HubAction[] {
       danger: true,
     },
   };
-  return record.actions.filter((a) => map[a]).map((a) => ({ id: a, ...map[a]! }));
+  const actions: HubAction[] = record.actions.filter((a) => map[a]).map((a) => ({ id: a, ...map[a]! }));
+  // One bulk transfer for the whole batch: offered from any of its items the caller may mark paid.
+  if (record.kind === 'PayoutItem' && record.batchId && record.actions.includes('mark_payout_paid')) {
+    const reference = record.batchReference ?? '';
+    actions.push({
+      id: 'mark_batch_paid',
+      label: `Mark batch ${reference} paid`,
+      state: { type: 'batchPaid', batchId: record.batchId, batchReference: reference },
+    });
+  }
+  return actions;
 }
 
 function RecordDrawer({

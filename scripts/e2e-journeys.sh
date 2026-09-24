@@ -16,14 +16,16 @@
 #   E2E_SUITE=journeys    Playwright suite (frontend/e2e/<suite>): "journeys" (participant → admin, Baseline seed),
 #                         "agency" (agency platform journeys against the Demo seed's accounts and clients),
 #                         "platform" (test users, login-as, custom roles, payments hub, editing, Google sign-in off;
-#                         Demo seed), "j-delivery" (one complete client-delivery journey through the client portal,
-#                         onboarding → approvals → time → reports, with its negatives; Demo seed), "a11y"
-#                         (accessibility & responsive audit of every portal; Demo seed, read-only), "crawl" (every role
-#                         walks every page and the public website; Demo seed, read-only), "j-participant" (one
-#                         participant's full lifecycle, registration to payout, referral, support and session
-#                         handling; Baseline seed) or "j-campaigns" (campaign manager + reviewer journey; Demo seed)
+#                         Demo seed), "a11y" (accessibility & responsive audit of every portal; Demo seed,
+#                         read-only), "crawl" (every role walks every page and the public website; Demo seed,
+#                         read-only), or one of the j-* journeys (each walks one role's work end to end, with its
+#                         negatives; see the header of frontend/playwright.config.ts):
+#                           j-participant   participant lifecycle, registration to payout (Baseline seed)
+#                           j-delivery      client delivery through the client portal (Demo seed)
+#                           j-campaigns     campaign manager + reviewer (Demo seed)
+#                           j-finance       payouts and the payments hub (Demo seed)
 #   E2E_SEED              comma-separated seed profiles (default: Baseline for journeys and j-participant,
-#                         Baseline,Demo for agency, platform, j-delivery, j-campaigns, a11y and crawl)
+#                         Baseline,Demo for everything else)
 #   E2E_DB_PROVIDER=mysql mysql (default) or sqlite (a fresh file in $E2E_WORK_DIR; no MySQL server needed)
 #   DB_HOST/DB_PORT/DB_USER/DB_PASSWORD   MySQL server (defaults: 127.0.0.1:3306 optimizeall/optimizeall_dev);
 #                                         the user must be able to CREATE/DROP databases
@@ -47,8 +49,8 @@ ADMIN_EMAIL="${E2E_ADMIN_EMAIL:-e2e-admin@optimizeall.test}"
 ADMIN_PASSWORD="${E2E_ADMIN_PASSWORD:-E2e-Admin#Journey-2026}"
 E2E_SUITE="${E2E_SUITE:-journeys}"
 case "$E2E_SUITE" in
-  agency|platform|j-delivery|j-campaigns|a11y|crawl) E2E_SEED="${E2E_SEED:-Baseline,Demo}" ;;
   journeys|j-participant) E2E_SEED="${E2E_SEED:-Baseline}" ;;
+  agency|platform|a11y|crawl|j-*) E2E_SEED="${E2E_SEED:-Baseline,Demo}" ;;
   *) E2E_SEED="${E2E_SEED:-Baseline}" ;;
 esac
 E2E_DB_PROVIDER="$(printf '%s' "${E2E_DB_PROVIDER:-mysql}" | tr '[:upper:]' '[:lower:]')"

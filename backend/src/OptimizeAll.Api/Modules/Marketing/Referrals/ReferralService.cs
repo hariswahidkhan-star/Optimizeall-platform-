@@ -173,7 +173,7 @@ public sealed class ReferralService(
                 NotificationTypes.ReferralQualified,
                 "Your referral qualified",
                 entry is not null
-                    ? $"Someone you invited completed their qualifying step. A referral reward of {entry.Amount:0.00} {entry.Currency} " +
+                    ? $"Someone you invited completed their qualifying step. A referral reward of {Money.Format(entry.Amount, entry.Currency)} " +
                       (entry.Status == EarningStatus.PendingApproval ? "is pending approval." : "has been added to your earnings.")
                     : "Someone you invited completed their qualifying step. " +
                       (tracked.RejectionReason ?? "No reward applies to this referral."),

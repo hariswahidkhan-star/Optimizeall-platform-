@@ -93,7 +93,7 @@ public static class PayoutReadModels
 
         var missingDetails = allItems
             .Where(i => i.Status == PayoutItemStatus.Held && i.HoldReason == PayoutPlanner.MissingPayoutProfileReason)
-            .Select(i => new UserWarningDto(U(i.UserId), i.Id, $"No payout details on file ({i.Amount:0.00} {batch.Currency} held)."))
+            .Select(i => new UserWarningDto(U(i.UserId), i.Id, $"No payout details on file ({Money.Format(i.Amount, batch.Currency)} held)."))
             .ToList();
 
         var appeals = await db.Set<Appeal>().AsNoTracking()

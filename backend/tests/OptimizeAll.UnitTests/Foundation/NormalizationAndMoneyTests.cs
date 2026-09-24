@@ -75,6 +75,14 @@ public sealed class MoneyTests
     }
 
     [Theory]
+    [InlineData(24.5, "USD", "24.50 USD")]
+    [InlineData(12.345, "KWD", "12.345 KWD")]
+    [InlineData(1500, "JPY", "1,500 JPY")]
+    [InlineData(1234.565, "GBP", "1,234.57 GBP")]
+    public void Format_shows_the_currency_minor_units(decimal amount, string currency, string expected) =>
+        Assert.Equal(expected, Money.Format(amount, currency));
+
+    [Theory]
     [InlineData("USD", true)]
     [InlineData("usd", true)]
     [InlineData("XYZ", false)]

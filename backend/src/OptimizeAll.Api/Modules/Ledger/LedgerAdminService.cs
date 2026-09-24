@@ -137,7 +137,7 @@ public sealed class LedgerAdminService(
 
         await notifications.StageAsync(new NotificationRequest(
             entry.UserId, NotificationTypes.EarningApproved, "Earning approved",
-            $"Your {Describe(entry.Type)} of {entry.Amount:0.##} {entry.Currency} was approved and will be included in an upcoming payout.",
+            $"Your {Describe(entry.Type)} of {Money.Format(entry.Amount, entry.Currency)} was approved and will be included in an upcoming payout.",
             AppLinks.Earnings), ct);
         await db.SaveChangesAsync(ct);
         return (await LedgerQueries.SingleAsync(db, entry.Id, ct))!.ToLedgerDto();

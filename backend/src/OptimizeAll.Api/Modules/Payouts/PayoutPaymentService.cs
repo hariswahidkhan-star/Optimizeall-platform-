@@ -124,7 +124,7 @@ public sealed class PayoutPaymentService(
                 reason: note);
             await notifications.StageAsync(new NotificationRequest(item.UserId, NotificationTypes.PayoutPaid,
                 "Your payout was sent",
-                $"We sent your payout of {item.Amount:0.00} {item.Currency}. Payment reference ending {Tail(paymentReference)}.",
+                $"We sent your payout of {Money.Format(item.Amount, item.Currency)}. Payment reference ending {Tail(paymentReference)}.",
                 AppLinks.Payout(item.Id), new[] { NotificationChannel.Email }), ct);
             await db.SaveChangesAsync(ct);
             await PayoutStore.CompleteIfDoneAsync(db, batchId, now, ct);
@@ -173,7 +173,7 @@ public sealed class PayoutPaymentService(
                 after: new { Status = PayoutItemStatus.Failed, item.Amount, item.Currency, BatchId = batchId }, reason: reason);
             await notifications.StageAsync(new NotificationRequest(item.UserId, NotificationTypes.PayoutScheduled,
                 "We couldn't complete your payout",
-                $"Your payout of {item.Amount:0.00} {item.Currency} could not be completed. Please check your payout details; " +
+                $"Your payout of {Money.Format(item.Amount, item.Currency)} could not be completed. Please check your payout details; " +
                 "your earnings are safe and will be included in the next payout.",
                 AppLinks.PayoutDetails, new[] { NotificationChannel.Email }), ct);
             await db.SaveChangesAsync(ct);
