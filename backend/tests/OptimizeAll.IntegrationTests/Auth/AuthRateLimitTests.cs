@@ -43,4 +43,22 @@ public sealed class AuthRateLimitTests(ApiFactory api) : IClassFixture<ApiFactor
             (await client.PostAsJsonAsync("/api/v1/auth/register", new { email = "x@example.test" })).StatusCode);
         Assert.Equal(HttpStatusCode.Unauthorized, (await client.PostAsync("/api/v1/auth/refresh", null)).StatusCode);
     }
+
+    [Fact]
+    public async Task The_global_per_address_limit_is_configurable()
+    {
+        await using var limited = api.WithWebHostBuilder(b => b.ConfigureAppConfiguration((_, c) =>
+            c.AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["RateLimiting:Enabled"] = "true",
+                ["RateLimiting:GlobalPerMinute"] = "5",
+            })));
+        await limited.StartAsync();
+        var client = limited.CreateClient();
+
+        var statuses = (await Task.WhenAll(Enumerable.Range(0, 8).Select(_ => client.GetAsync("/api/v1/meta/currencies"))))
+            .Select(r => r.StatusCode).ToList();
+        Assert.Equal(5, statuses.Count(s => s == HttpStatusCode.OK));
+        Assert.Equal(3, statuses.Count(s => s == HttpStatusCode.TooManyRequests));
+    }
 }

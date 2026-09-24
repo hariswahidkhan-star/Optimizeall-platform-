@@ -3,7 +3,7 @@
 #
 #   1. creates a fresh database oa_e2e_<timestamp> (MySQL), or a fresh SQLite file with E2E_DB_PROVIDER=sqlite
 #   2. builds and starts the API on :$E2E_API_PORT (Development, $E2E_SEED seed profiles, file-mode email + dev mailbox,
-#      background jobs off, relaxed auth rate limit, bootstrap admin, non-production test sign-in on, Google sign-in
+#      background jobs off, relaxed auth and global rate limits, bootstrap admin, non-production test sign-in on, Google sign-in
 #      not configured)
 #   3. builds the frontend and serves it with `vite preview` on :$E2E_WEB_PORT, proxying /api/, /t/ and /e/ to the API
 #   4. waits for /health/ready and runs `E2E_SUITE=$E2E_SUITE npx playwright test` (desktop + mobile projects)
@@ -139,6 +139,7 @@ api_pid="$(cd "$ROOT" && start_bg e2e-api "$API_LOG" env \
   DevTools__MailboxEnabled=true DevTools__TestLoginEnabled=true \
   Authentication__Google__ClientId= Authentication__Google__ClientSecret= \
   RateLimiting__AuthPerMinute=1000 \
+  RateLimiting__GlobalPerMinute=2000 \
   Jobs__Enabled=false \
   Storage__RootPath="$FILES_DIR" \
   Bootstrap__AdminEmail="$ADMIN_EMAIL" Bootstrap__AdminPassword="$ADMIN_PASSWORD" \

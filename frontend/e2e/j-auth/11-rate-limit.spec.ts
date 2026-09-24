@@ -3,8 +3,8 @@ import { accounts, raw } from './support/auth';
 
 /**
  * Rate limits, last because they throttle the whole suite's address for a minute. scripts/e2e-journeys.sh relaxes the
- * 10/minute credential limit (the suites sign in far more often than that), so this spec trips the API's global
- * per-address limiter (300 requests a minute) for real, checks the 429 contract and the sign-in page's message while
+ * 10/minute credential limit and the 300/minute global one (the suites sign in and load pages far more often than one
+ * person), so this spec trips the API's global per-address limiter (RateLimiting__GlobalPerMinute) for real, checks the 429 contract and the sign-in page's message while
  * it lasts, and waits for the window to pass. The 10/minute credential policy itself is covered by
  * backend/tests/.../Auth/AuthRateLimitTests.cs.
  */

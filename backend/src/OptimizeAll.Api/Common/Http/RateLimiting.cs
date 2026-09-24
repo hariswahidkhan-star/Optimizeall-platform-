@@ -57,12 +57,14 @@ public static class RateLimitPolicies
                     "{\"status\":429,\"title\":\"Too many requests. Please wait and try again.\",\"code\":\"rate_limited\"}", ct);
             };
 
-            // Global safety net per client IP.
+            // Global safety net per client IP (RateLimiting:GlobalPerMinute, default 300).
+            var globalPerMinute = config.GetValue("RateLimiting:GlobalPerMinute", 300);
             options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(ctx =>
                 !enabled || IsHighVolume(ctx) ? RateLimitPartition.GetNoLimiter("off")
                     : RateLimitPartition.GetTokenBucketLimiter(ClientKey(ctx), _ => new TokenBucketRateLimiterOptions
                     {
-                        TokenLimit = 300, TokensPerPeriod = 300, ReplenishmentPeriod = TimeSpan.FromMinutes(1), QueueLimit = 0,
+                        TokenLimit = globalPerMinute, TokensPerPeriod = globalPerMinute, ReplenishmentPeriod = TimeSpan.FromMinutes(1),
+                        QueueLimit = 0,
                     }));
 
             options.AddPolicy(Auth, ctx => !enabled ? RateLimitPartition.GetNoLimiter("off")
