@@ -142,7 +142,8 @@ Browse everything at **`/design-system`** (dev server, or builds with `VITE_SHOW
   `status 0 / code "network_error"`.
 * `lib/api/meta.ts` — `useSupportedCurrencies(current?)` (`GET /meta/currencies`; use it for every currency picker, never
   hard-code the list) and `useEligibilityDefaults()`. `lib/api/campaignOptions.ts` — `useCampaignOptions(search?)`
-  (`GET /campaigns/options`, `campaigns.view`) for staff campaign filters/pickers.
+  (`GET /campaigns/options`: `campaigns.view`, `campaigns.manage`, `ledger.view` or `submissions.review`) for staff
+  campaign filters/pickers.
 * `lib/api/query.ts` — QueryClient defaults: never retry 4xx, up to 2 retries otherwise, 30 s stale time.
 
 `AuthProvider` (inside the router) restores the session on load via a silent refresh (guards show a full-page
