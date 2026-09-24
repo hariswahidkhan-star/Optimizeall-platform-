@@ -245,6 +245,7 @@ public sealed class PaymentClaimService(
         var finance = await (from r in db.Set<UserRole>().AsNoTracking()
                              join u in db.Set<User>().AsNoTracking() on r.UserId equals u.Id
                              where r.Role == Role.Finance && u.Status == UserStatus.Active
+                             orderby u.Id
                              select u.Id).Take(50).ToListAsync(ct);
         if (accountManager is { } am && await db.Set<User>().AnyAsync(u => u.Id == am && u.Status == UserStatus.Active, ct))
             finance.Add(am);

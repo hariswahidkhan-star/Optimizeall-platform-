@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using System.Data;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -172,7 +171,8 @@ public sealed class MySqlDialect : IDatabaseDialect
 /// </summary>
 public sealed class SqliteDialect : IDatabaseDialect
 {
-    private static readonly ConcurrentDictionary<string, SemaphoreSlim> NamedLocks = new(StringComparer.Ordinal);
+    /// <summary>In-process named locks; entries exist only while a lock is held or awaited.</summary>
+    internal static readonly KeyedAsyncLocks NamedLocks = new();
 
     public DatabaseProvider Provider => DatabaseProvider.Sqlite;
 
@@ -206,16 +206,79 @@ public sealed class SqliteDialect : IDatabaseDialect
         // write transaction until the busy timeout; enforce the acquire-before-transaction order.
         if (db.Database.CurrentTransaction is not null)
             throw new InvalidOperationException($"Acquire the named lock '{name}' before beginning the transaction.");
-        var key = $"{db.Database.GetConnectionString()}|{name}";
-        var semaphore = NamedLocks.GetOrAdd(key, _ => new SemaphoreSlim(1, 1));
-        if (!await semaphore.WaitAsync(timeout, ct))
-            throw new TimeoutException($"Could not acquire lock '{name}' within {timeout.TotalSeconds:0}s.");
+        var key = NamedLockKey(db, name);
+        return await NamedLocks.TryAcquireAsync(key, timeout, ct)
+               ?? throw new TimeoutException($"Could not acquire lock '{name}' within {timeout.TotalSeconds:0}s.");
+    }
+
+    internal static string NamedLockKey(AppDbContext db, string name) => $"{db.Database.GetConnectionString()}|{name}";
+
+    public bool IsUniqueViolation(DbUpdateException ex) => DatabaseErrors.IsUniqueViolation(ex);
+}
+
+/// <summary>
+/// Mutual-exclusion locks keyed by name, for in-process use. Each key's entry is reference counted (holder plus
+/// waiters) and removed when the last one leaves, so per-entity lock names (<c>time:{user}</c>, <c>ads:{id}</c>, ...)
+/// do not accumulate for the life of the process.
+/// </summary>
+internal sealed class KeyedAsyncLocks
+{
+    private sealed class Entry
+    {
+        public readonly SemaphoreSlim Semaphore = new(1, 1);
+        /// <summary>Holder + waiters; guarded by the dictionary lock.</summary>
+        public int References;
+    }
+
+    private readonly Dictionary<string, Entry> _entries = new(StringComparer.Ordinal);
+
+    /// <summary>Number of keys currently held or awaited.</summary>
+    public int Count
+    {
+        get { lock (_entries) return _entries.Count; }
+    }
+
+    public bool Contains(string key)
+    {
+        lock (_entries) return _entries.ContainsKey(key);
+    }
+
+    /// <summary>Acquires the lock for <paramref name="key"/>; null on timeout. Dispose the result to release.</summary>
+    public async Task<IAsyncDisposable?> TryAcquireAsync(string key, TimeSpan timeout, CancellationToken ct)
+    {
+        Entry entry;
+        lock (_entries)
+        {
+            if (!_entries.TryGetValue(key, out entry!)) _entries[key] = entry = new Entry();
+            entry.References++;
+        }
+
+        var acquired = false;
+        try
+        {
+            acquired = await entry.Semaphore.WaitAsync(timeout, ct);
+        }
+        finally
+        {
+            if (!acquired) Unreference(key, entry);
+        }
+        if (!acquired) return null;
+
         return new MySqlDialect.Release(() =>
         {
-            semaphore.Release();
+            entry.Semaphore.Release();
+            Unreference(key, entry);
             return Task.CompletedTask;
         });
     }
 
-    public bool IsUniqueViolation(DbUpdateException ex) => DatabaseErrors.IsUniqueViolation(ex);
+    private void Unreference(string key, Entry entry)
+    {
+        lock (_entries)
+        {
+            // The entry is only removed at zero references, i.e. nobody holds or awaits its semaphore; a later
+            // acquirer of the same key creates a fresh entry.
+            if (--entry.References == 0) _entries.Remove(key);
+        }
+    }
 }

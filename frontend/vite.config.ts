@@ -20,7 +20,9 @@ export default defineConfig(({ mode }) => {
     preview: { port: 5173, strictPort: true, proxy },
     build: {
       target: 'es2022',
-      sourcemap: true,
+      // No source maps in the production bundle: nginx serves dist/ publicly and there is no error-reporting
+      // pipeline that would need them (nginx also answers 404 for *.map; CI fails if the build emits any).
+      sourcemap: false,
       rollupOptions: {
         output: {
           manualChunks: {

@@ -122,6 +122,49 @@ public sealed class WebsiteFormsTests : IClassFixture<ApiFactory>
     }
 
     [Fact]
+    public async Task Form_tokens_are_single_use_for_successful_submissions()
+    {
+        var client = Client();
+        var email = $"replay-{Guid.NewGuid():N}@example.test";
+        var token = await TokenAsync(client);
+
+        // A failed validation does not spend the token.
+        await client.PostJsonAsync("/api/v1/public/inquiries/contact", WebsiteTestKit.Form(token, WebsiteTestKit.Contact("not-an-email")), 400);
+        await client.PostJsonAsync("/api/v1/public/inquiries/contact", WebsiteTestKit.Form(token, WebsiteTestKit.Contact(email)), 202);
+        // Replaying the successful request (or reusing the token for another form) is rejected.
+        var replay = await client.PostAsJsonAsync("/api/v1/public/inquiries/contact", WebsiteTestKit.Form(token, WebsiteTestKit.Contact(email)));
+        await replay.ShouldFailAsync(409, "website.form_already_submitted");
+        var quote = WebsiteTestKit.Form(token, new Dictionary<string, object?>
+        {
+            ["name"] = "Quinn", ["email"] = email, ["serviceSlugs"] = new[] { "seo" }, ["budgetRange"] = "3k-10k",
+            ["timeline"] = "asap", ["message"] = "Please quote for SEO for our store.",
+        });
+        await (await client.PostAsJsonAsync("/api/v1/public/inquiries/quote", quote)).ShouldFailAsync(409, "website.form_already_submitted");
+        Assert.Equal(1, await _api.WithDbAsync(db => db.Set<WebsiteInquiry>().CountAsync(i => i.Email == email)));
+
+        // The same request sent several times at once is stored once.
+        var burstEmail = $"burst-{Guid.NewGuid():N}@example.test";
+        var burstToken = await TokenAsync(client);
+        var responses = await Task.WhenAll(Enumerable.Range(0, 5).Select(_ =>
+            Client().PostAsJsonAsync("/api/v1/public/inquiries/contact", WebsiteTestKit.Form(burstToken, WebsiteTestKit.Contact(burstEmail)))));
+        Assert.Equal(1, responses.Count(r => r.StatusCode == HttpStatusCode.Accepted));
+        foreach (var rejected in responses.Where(r => r.StatusCode != HttpStatusCode.Accepted))
+            await rejected.ShouldFailAsync(409, "website.form_already_submitted");
+        Assert.Equal(1, await _api.WithDbAsync(db => db.Set<WebsiteInquiry>().CountAsync(i => i.Email == burstEmail)));
+
+        // Spent-token rows are removed by the cleanup job once the token has expired anyway.
+        var now = _api.Clock.GetUtcNow().UtcDateTime;
+        Task<int> LiveAsync() => _api.WithDbAsync(db => db.Set<UsedFormToken>().CountAsync(t => t.ExpiresAt > now));
+        var live = await LiveAsync();
+        Assert.True(live >= 2);
+        await _api.RunJobAsync<UsedFormTokenCleanupJob>();
+        Assert.Equal(live, await LiveAsync());
+        _api.Clock.Advance(FormGuard.TokenLifetime + TimeSpan.FromMinutes(10));
+        await _api.RunJobAsync<UsedFormTokenCleanupJob>();
+        Assert.Equal(0, await _api.WithDbAsync(db => db.Set<UsedFormToken>().CountAsync()));
+    }
+
+    [Fact]
     public async Task Forms_validate_fields_consent_services_and_options()
     {
         var client = Client();
@@ -152,6 +195,7 @@ public sealed class WebsiteFormsTests : IClassFixture<ApiFactory>
         quote["budgetRange"] = "3k-10k";
         await client.PostJsonAsync("/api/v1/public/inquiries/quote", quote, 202);
 
+        token = await TokenAsync(client); // the quote spent the previous token (single-use)
         var audit = WebsiteTestKit.Form(token, new Dictionary<string, object?>
         {
             ["name"] = "Avery", ["email"] = "avery@example.test", ["goals"] = "More qualified leads", ["budgetRange"] = "1k-3k",
@@ -232,8 +276,8 @@ public sealed class WebsiteFormsTests : IClassFixture<ApiFactory>
         var client = Client();
         var slots = await client.GetJsonAsync("/api/v1/public/consultations/slots?days=3");
         var slot = slots.GetProperty("slots")[5].GetDateTime().ToUniversalTime();
-        var token = await TokenAsync(client);
-        object Booking(string name) => WebsiteTestKit.Form(token, new Dictionary<string, object?>
+        var tokens = new Dictionary<string, string> { ["Alice"] = await TokenAsync(client), ["Bruno"] = await TokenAsync(client) };
+        object Booking(string name) => WebsiteTestKit.Form(tokens[name], new Dictionary<string, object?>
         {
             ["name"] = name, ["email"] = $"{name.ToLowerInvariant()}@example.test", ["slotStart"] = slot, ["visitorTimeZone"] = "Europe/Berlin",
             ["serviceSlugs"] = new[] { "seo" }, ["notes"] = "Keen to chat.",

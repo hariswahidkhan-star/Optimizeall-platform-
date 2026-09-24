@@ -29,6 +29,7 @@ public static class WebsiteModule
         services.AddScoped<BlogService>();
         services.AddScoped<CareersService>();
         services.AddSingleton<FormGuard>();
+        services.AddScoped<FormTokenLedger>();
         services.AddScoped<InquiryService>();
         services.AddScoped<BookingService>();
         services.AddScoped<NewsletterService>();
@@ -36,6 +37,7 @@ public static class WebsiteModule
         services.AddScoped<IEventHandler<WebsiteInquiryReceived>, InquiryNotificationHandler>();
 
         services.AddRecurringJob<BlogSchedulerJob>(TimeSpan.FromMinutes(1));
+        services.AddRecurringJob<UsedFormTokenCleanupJob>(TimeSpan.FromHours(1));
 
         services.AddScoped<ISeeder, WebsiteBaselineSeeder>();
         services.AddScoped<ISeeder, WebsiteDemoSeeder>();

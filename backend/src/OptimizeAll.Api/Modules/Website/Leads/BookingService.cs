@@ -20,7 +20,7 @@ namespace OptimizeAll.Api.Modules.Website.Leads;
 /// slot exactly one commits and the other gets 409 <c>website.slot_taken</c>. Confirmations go out by email.
 /// </summary>
 public sealed class BookingService(
-    AppDbContext db, IDatabaseDialect dialect, FormGuard guard, InquiryService inquiries, IEmailSender email, IOptions<EmailOptions> emailOptions,
+    AppDbContext db, IDatabaseDialect dialect, FormGuard guard, FormTokenLedger tokens, InquiryService inquiries, IEmailSender email, IOptions<EmailOptions> emailOptions,
     IAuditLogger audit, TimeProvider clock, ILogger<BookingService> logger, EmailTemplateService templates)
 {
     public async Task<ConsultationSettings> SettingsAsync(CancellationToken ct)
@@ -88,6 +88,7 @@ public sealed class BookingService(
         if (guard.Check(input, ConsentTexts.FormVersion) == FormCheck.Spam)
             return new BookingConfirmationDto(LeadReference.For(Guid.NewGuid()), input.SlotStart ?? default, input.SlotStart ?? default, input.VisitorTimeZone,
                 "Your consultation is booked. We've emailed you the details.");
+        await tokens.EnsureUnusedAsync(input, ct);
 
         var e = new FieldErrors();
         var contact = InquiryService.ValidateContact(input, e);
@@ -124,6 +125,7 @@ public sealed class BookingService(
         // starts (possible after the slot length changed) from both passing the availability check.
         await using (await LockSlotsAsync(ct))
         {
+            await tokens.EnsureUnusedAsync(input, ct); // again under the lock: a replayed booking is "already sent", not "slot taken"
             var available = await AvailableAsync(settings, start.AddMinutes(-1), start.AddMinutes(1), null, ct);
             if (!available.Contains(start)) throw SlotTaken();
 
@@ -131,6 +133,7 @@ public sealed class BookingService(
             {
                 db.Set<WebsiteInquiry>().Add(inquiry);
                 db.Set<ConsultationBooking>().Add(booking);
+                var spent = tokens.Spend(input); // single-use form token
                 try
                 {
                     await db.SaveChangesAsync(ct);
@@ -140,6 +143,7 @@ public sealed class BookingService(
                 {
                     await tx.RollbackAsync(CancellationToken.None);
                     db.ChangeTracker.Clear();
+                    if (await tokens.SpentElsewhereAsync(spent, ct)) throw FormTokenLedger.AlreadyUsed();
                     throw SlotTaken();
                 }
             }

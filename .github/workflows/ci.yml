@@ -116,6 +116,12 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: npm run build
+      - name: No source maps in the build (nginx serves dist/ publicly)
+        run: |
+          if find dist -name '*.map' | grep .; then
+            echo "::error::The production build emitted source maps"; exit 1
+          fi
+          grep -qF 'location ~* \.map$' nginx/default.conf.template
 
       - name: Upload build
         uses: actions/upload-artifact@v4

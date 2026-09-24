@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, type ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Checkbox } from '@/components/ui';
@@ -22,6 +22,15 @@ export function useFormToken() {
     refetchOnWindowFocus: false,
   });
   return query;
+}
+
+/**
+ * Form tokens are single-use: after a successful submission, fetch a fresh token so another form on the site (or the
+ * same form again) does not resend the spent one.
+ */
+export function useRenewFormToken() {
+  const queryClient = useQueryClient();
+  return useCallback(() => queryClient.invalidateQueries({ queryKey: ['public', 'form-token'] }), [queryClient]);
 }
 
 export interface PublicFormFields {

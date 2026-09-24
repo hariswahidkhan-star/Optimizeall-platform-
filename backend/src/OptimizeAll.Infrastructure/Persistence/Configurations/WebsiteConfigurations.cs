@@ -362,6 +362,17 @@ internal sealed class ConsultationBookingConfiguration : IEntityTypeConfiguratio
     }
 }
 
+internal sealed class UsedFormTokenConfiguration : IEntityTypeConfiguration<UsedFormToken>
+{
+    public void Configure(EntityTypeBuilder<UsedFormToken> b)
+    {
+        b.ToTable("website_used_form_tokens");
+        b.Property(x => x.TokenHash).HasMaxLength(64).IsRequired();
+        b.HasIndex(x => x.TokenHash).IsUnique();
+        b.HasIndex(x => x.ExpiresAt);
+    }
+}
+
 internal sealed class NewsletterSubscriberConfiguration : IEntityTypeConfiguration<NewsletterSubscriber>
 {
     public void Configure(EntityTypeBuilder<NewsletterSubscriber> b)

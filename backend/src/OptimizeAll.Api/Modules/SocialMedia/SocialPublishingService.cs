@@ -280,6 +280,7 @@ public sealed class SocialPublishingService(
         var cutoff = Now - StaleClaim;
         var stale = await db.Set<SocialPost>().AsNoTracking()
             .Where(p => p.Status == SocialPostStatus.Publishing && p.PublishClaimedAt < cutoff)
+            .OrderBy(p => p.PublishClaimedAt).ThenBy(p => p.Id)
             .Select(p => new { p.Id, p.PublishClaimId }).Take(50).ToListAsync(ct);
         foreach (var s in stale)
         {
@@ -323,6 +324,7 @@ public sealed class SocialEvergreenJob(AppDbContext db, IDatabaseDialect dialect
         var candidates = await db.Set<SocialPost>().AsNoTracking()
             .Where(p => p.IsEvergreen && p.RecycledFromPostId == null && p.Status == SocialPostStatus.Published
                         && p.EvergreenRepeatCount < p.EvergreenMaxRepeats)
+            .OrderBy(p => p.PublishedAt).ThenBy(p => p.Id)
             .Include(p => p.Variants).Take(200).ToListAsync(ct);
         var created = 0;
         foreach (var original in candidates)

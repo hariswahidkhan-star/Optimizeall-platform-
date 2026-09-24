@@ -147,3 +147,15 @@ public class NewsletterSubscriber : AuditedEntity
     public DateTime? ConfirmedAt { get; set; }
     public DateTime? UnsubscribedAt { get; set; }
 }
+
+/// <summary>
+/// A public form token that was spent on a successful submission (inquiry, consultation booking, job application).
+/// Only the SHA-256 of the token's random id is stored; the unique hash makes each token single-use. Rows are deleted
+/// once the token would have expired anyway.
+/// </summary>
+public class UsedFormToken : Entity
+{
+    public string TokenHash { get; set; } = string.Empty;
+    public DateTime UsedAt { get; set; }
+    public DateTime ExpiresAt { get; set; }
+}

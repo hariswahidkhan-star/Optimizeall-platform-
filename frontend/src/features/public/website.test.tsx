@@ -153,9 +153,13 @@ describe('QuotePage', () => {
     await user.type(screen.getByRole('textbox', { name: /Full name/ }), 'Ada Lovelace');
     await user.type(screen.getByRole('textbox', { name: /Work email/ }), 'ada@example.com');
     await user.click(screen.getByRole('checkbox', { name: /may use my details/ }));
+    const tokenFetches = () => calls.filter((c) => c.method === 'GET' && c.path === '/public/forms/token').length;
+    const fetchesBefore = tokenFetches();
     await user.click(screen.getByRole('button', { name: 'Request my quote' }));
 
     expect(await screen.findByText('Quote request received')).toBeInTheDocument();
+    // Form tokens are single-use on the server: a fresh one is fetched after a successful submission.
+    await waitFor(() => expect(tokenFetches()).toBeGreaterThan(fetchesBefore));
     const body = calls.find((c) => c.path === '/public/inquiries/quote')!.body as Record<string, unknown>;
     expect(body).toMatchObject({
       name: 'Ada Lovelace',

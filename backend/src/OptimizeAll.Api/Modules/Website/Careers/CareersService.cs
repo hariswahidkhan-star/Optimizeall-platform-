@@ -88,7 +88,7 @@ public sealed record ApplicationReceivedDto(string Reference, string Message);
 /// with notes. All staff actions are audited.
 /// </summary>
 public sealed class CareersService(
-    CmsStore store, IAuditLogger audit, ICurrentUser user, FormGuard guard, IPrivacyHasher hasher, PublicSiteService site, TimeProvider clock)
+    CmsStore store, IAuditLogger audit, ICurrentUser user, FormGuard guard, FormTokenLedger tokens, IPrivacyHasher hasher, PublicSiteService site, TimeProvider clock)
 {
     public const long MaxCvBytes = 5 * 1024 * 1024;
 
@@ -294,6 +294,7 @@ public sealed class CareersService(
         const string message = "Thanks for applying! We review every application and will get back to you within two weeks.";
         if (guard.Check(form, ConsentTexts.CareersVersion) == FormCheck.Spam) return new ApplicationReceivedDto(LeadReference.For(Guid.NewGuid()), message);
         var job = await OpenJobs().FirstOrDefaultAsync(x => x.Slug == slug, ct) ?? throw CmsStore.NotFound<JobOpening>();
+        await tokens.EnsureUnusedAsync(form, ct);
 
         var e = new FieldErrors();
         var email = form.Email.Trim();
@@ -331,7 +332,7 @@ public sealed class CareersService(
         };
         Db.Add(file);
         Db.Add(application);
-        await Db.SaveChangesAsync(ct);
+        await tokens.SaveAsync(tokens.Spend(form), ct); // single-use token: a replay gets 409
         return new ApplicationReceivedDto(LeadReference.For(application.Id), message);
     }
 

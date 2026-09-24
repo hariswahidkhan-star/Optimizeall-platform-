@@ -24,6 +24,10 @@ services:
     region: singapore
     plan: starter
     numInstances: 1
+    # No healthCheckPath here: Render documents HTTP health checks (healthCheckPath) for web services, and it is not
+    # established that private services (pserv) support them, so none is configured rather than guessed. The API serves
+    # /health/live and /health/ready; optimizeall-web proxies /health/ and has its own health check. The first start takes
+    # about 60 s (migrations + Baseline/Demo seed) before the API accepts requests (docs/RENDER.md).
     # One disk for all state: db/optimizeall.db (+ -wal/-shm) and files/ (uploaded screenshots, campaign images).
     # Render keeps daily snapshots of disks; a disk also means zero-downtime deploys are not possible (the old
     # instance stops before the new one starts), which SQLite requires anyway.

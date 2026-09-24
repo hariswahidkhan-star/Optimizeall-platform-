@@ -21,6 +21,15 @@ public class IntegrationConnection : AuditedEntity, IConcurrencyStamped
 {
     public string Provider { get; set; } = string.Empty;
     public Guid? ClientAccountId { get; set; }
+
+    /// <summary>
+    /// Uniqueness key of a live registry connection: the workspace key (client id or "agency", see
+    /// <c>Workspace.Key</c>) while the connection is not disconnected, otherwise null. Unique together with
+    /// <see cref="Provider"/>, so there is at most one live connection per provider and workspace even under concurrent
+    /// creates (a nullable <see cref="ClientAccountId"/> cannot be part of a portable unique index: NULLs are distinct).
+    /// Null for disconnected history rows and for per-profile social token rows, which may repeat.
+    /// </summary>
+    public string? ActiveScopeKey { get; set; }
     public string DisplayName { get; set; } = string.Empty;
 
     /// <summary>Non-secret settings (account ids, page ids, sender ids) as JSON.</summary>

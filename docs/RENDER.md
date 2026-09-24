@@ -56,7 +56,8 @@ region to use Render's private network; change `region` on all of them together 
    normally `https://optimizeall-web.onrender.com`. If Render gives the service a different URL (it adds a suffix
    when the name is taken), update `Email__AppBaseUrl` on `optimizeall-api` afterwards and redeploy the API.
 4. Wait for the services to go live (first build ≈ 10–15 min; the API migrates and seeds, with MySQL after waiting
-   for the database).
+   for the database). Even after Render shows the API as live, its **first start takes about 60 s** (migrations plus
+   the Baseline and Demo seed) before it answers; until then the web service returns 502 for `/api` requests.
 5. Open the web service URL and sign in with a demo account.
 
 Secrets (`Jwt__SigningKey`, `Security__HashSalt`, and for MySQL `MYSQL_PASSWORD`/`MYSQL_ROOT_PASSWORD`) are generated
@@ -104,6 +105,10 @@ The public agency website is the web service's root URL; no sign-in needed.
 * **Email is not sent.** The demo writes email to files. To follow a verification or reset link for a newly
   registered account, open `https://<web-url>/api/v1/dev/mailbox?to=<email>`. For real email set `Email__Mode=Smtp`,
   the `Email__Smtp*` settings and `DevTools__MailboxEnabled=false`.
+* **First start ≈ 60 s.** On a fresh disk/database the API applies migrations and seeds the demo data before it listens,
+  which takes about a minute (later restarts are quick). `https://<web-url>/health/ready` answers 200 once it is up.
+  `render.yaml` configures no health check on the private API service: Render documents `healthCheckPath` for web
+  services, and private-service support is not established, so the web service's own check (`/`) is the one Render uses.
 * **API docs** are at `https://<web-url>/api/docs`.
 * **Payments** are recorded manually; no money moves. WhatsApp shows as not configured.
 * These Blueprints are for staging/demos (demo accounts, dev mailbox, Swagger on). For production follow

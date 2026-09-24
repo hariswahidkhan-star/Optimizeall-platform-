@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Jobs;
+using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Domain.Ads;
 using OptimizeAll.Domain.Agency;
@@ -175,7 +176,7 @@ public sealed class SocialAnalyticsService(AppDbContext db, NetworkPresetProvide
 }
 
 /// <summary>CSV import of social metrics with column mapping; idempotent upserts by (profile, date) / (profile, post, date).</summary>
-public sealed class SocialMetricImporter(AppDbContext db, ICurrentUser currentUser, IAuditLogger audit, TimeProvider clock)
+public sealed class SocialMetricImporter(AppDbContext db, IDatabaseDialect dialect, ICurrentUser currentUser, IAuditLogger audit, TimeProvider clock)
 {
     public static readonly IReadOnlyList<string> ProfileFields = new[] { "date", "followers", "impressions", "reach", "engagements", "clicks", "videoViews" };
     public static readonly IReadOnlyList<string> PostFields = new[] { "postKey", "date", "publishedAt", "impressions", "reach", "engagements", "clicks", "videoViews" };
@@ -238,6 +239,8 @@ public sealed class SocialMetricImporter(AppDbContext db, ICurrentUser currentUs
         };
         var today = DateOnly.FromDateTime(now);
         var seen = new HashSet<string>();
+        // Concurrent imports (and the insights sync) of this profile would both insert the same (profile, date) rows.
+        await using var writeLock = await SocialWriteLocks.AcquireAsync(dialect, db, SocialWriteLocks.Metrics(profile.Id), ct);
         for (var r = 1; r < rows.Count; r++)
         {
             var row = rows[r];
@@ -325,8 +328,8 @@ public sealed class SocialMetricImporter(AppDbContext db, ICurrentUser currentUs
 /// Meta Insights sync (behind credentials): Page daily impressions/reach/engagements, Instagram daily reach, follower
 /// counts and lifetime metrics of posts we published. Other networks are not configured and are skipped (CSV import).
 /// </summary>
-public sealed class SocialMetricsSyncJob(AppDbContext db, MetaGraphClient graph, ProfileTokenStore tokens, ICredentialVault vault, TimeProvider clock,
-    ILogger<SocialMetricsSyncJob> logger) : IJob
+public sealed class SocialMetricsSyncJob(AppDbContext db, IDatabaseDialect dialect, MetaGraphClient graph, ProfileTokenStore tokens,
+    ICredentialVault vault, TimeProvider clock, ILogger<SocialMetricsSyncJob> logger) : IJob
 {
     public string Name => nameof(SocialMetricsSyncJob);
 
@@ -346,7 +349,8 @@ public sealed class SocialMetricsSyncJob(AppDbContext db, MetaGraphClient graph,
                 var ok = await SyncProfileAsync(profile, token, ct);
                 if (ok) synced++; else failed++;
             }
-            catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException && !ct.IsCancellationRequested)
+            catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException && !ct.IsCancellationRequested
+                                       || ex is DomainException { Code: "social.write_busy" })
             {
                 logger.LogWarning(ex, "Insights sync failed for profile {Profile}", profile.Id);
                 failed++;
@@ -396,24 +400,13 @@ public sealed class SocialMetricsSyncJob(AppDbContext db, MetaGraphClient graph,
         long? followers = info.Success && info.Body.TryGetProperty("followers_count", out var fc) && fc.TryGetInt64(out var f) ? f : null;
         if (followers is not null && !daily.ContainsKey(today)) daily[today] = new SocialProfileMetric();
 
-        foreach (var (date, values) in daily)
-        {
-            var row = await db.Set<SocialProfileMetric>().FirstOrDefaultAsync(m => m.ProfileId == profile.Id && m.Date == date, ct);
-            if (row is null)
-            {
-                row = new SocialProfileMetric { ClientAccountId = profile.ClientAccountId, ProfileId = profile.Id, Date = date };
-                db.Set<SocialProfileMetric>().Add(row);
-            }
-            row.Impressions = values.Impressions; row.Reach = values.Reach; row.Engagements = values.Engagements;
-            if (date == today && followers is not null) row.Followers = followers.Value;
-            row.Source = MetricSource.Api; row.UpdatedAt = now;
-        }
-
-        // Lifetime metrics of recent posts we published.
+        // Lifetime metrics of recent posts we published (fetched before taking the write lock).
         var cutoff = now.AddDays(-30);
         var variants = await db.Set<SocialPostVariant>().AsNoTracking()
             .Where(v => v.ProfileId == profile.Id && v.PublishStatus == VariantPublishStatus.Published && v.ExternalPostId != null && v.PublishedAt >= cutoff)
+            .OrderByDescending(v => v.PublishedAt).ThenBy(v => v.Id)
             .Take(50).ToListAsync(ct);
+        var postValues = new List<(SocialPostVariant Variant, Dictionary<string, long> Values, long Engagements)>();
         foreach (var v in variants)
         {
             var pid = Uri.EscapeDataString(v.ExternalPostId!);
@@ -434,6 +427,28 @@ public sealed class SocialMetricsSyncJob(AppDbContext db, MetaGraphClient graph,
                     engagements = Count(social.Body, "reactions") + Count(social.Body, "comments")
                                   + (social.Body.TryGetProperty("shares", out var sh) && sh.TryGetProperty("count", out var sc) && sc.TryGetInt64(out var s) ? s : 0);
             }
+            postValues.Add((v, values, engagements));
+        }
+
+        // Upserts by (profile, date) / (profile, post, date), serialized with CSV imports of the same profile.
+        await using var writeLock = await SocialWriteLocks.AcquireAsync(dialect, db, SocialWriteLocks.Metrics(profile.Id), ct);
+        foreach (var (date, values) in daily)
+        {
+            var row = await db.Set<SocialProfileMetric>().FirstOrDefaultAsync(m => m.ProfileId == profile.Id && m.Date == date, ct);
+            if (row is null)
+            {
+                row = new SocialProfileMetric { ClientAccountId = profile.ClientAccountId, ProfileId = profile.Id, Date = date };
+                db.Set<SocialProfileMetric>().Add(row);
+            }
+            row.Impressions = values.Impressions; row.Reach = values.Reach; row.Engagements = values.Engagements;
+            if (date == today && followers is not null) row.Followers = followers.Value;
+            row.Source = MetricSource.Api; row.UpdatedAt = now;
+        }
+
+        var seenPosts = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var (v, values, engagements) in postValues)
+        {
+            if (!seenPosts.Add(v.ExternalPostId!)) continue; // one row per (profile, post, date)
             var row = await db.Set<SocialPostMetric>().FirstOrDefaultAsync(m => m.ProfileId == profile.Id && m.PostKey == v.ExternalPostId && m.Date == today, ct);
             if (row is null)
             {

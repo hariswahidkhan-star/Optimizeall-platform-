@@ -91,6 +91,11 @@ server {
     # ---------------------------------------------------------------- SPA
     # Vite emits content-hashed files under /assets/: cache forever, never fall back to index.html.
     location /assets/ {
+        # Source maps are never served: the build does not emit them, and this also covers a build that did.
+        location ~* \.map$ {
+            access_log off;
+            return 404;
+        }
         try_files $uri =404;
         include /etc/nginx/snippets/security-headers.conf;
         add_header Cache-Control "public, max-age=31536000, immutable" always;

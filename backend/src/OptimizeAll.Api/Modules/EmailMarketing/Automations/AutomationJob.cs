@@ -420,6 +420,7 @@ public sealed class AutomationJob(
             var subscriberIds = await (from f in db.Set<SubscriberField>().AsNoTracking()
                                        join s in db.Set<Subscriber>() on f.SubscriberId equals s.Id
                                        where s.ScopeKey == a.ScopeKey && f.Key == field && f.Value.EndsWith(suffix)
+                                       orderby s.Id
                                        select s.Id).Take(50_000).ToListAsync(ct);
             foreach (var subscriberId in subscriberIds)
                 if (await triggers.EnrollAsync(a, subscriberId, today.Year, JsonSerializer.Serialize(new { date_field = field }), ct)) enrolled++;
@@ -431,7 +432,8 @@ public sealed class AutomationJob(
 // ---------- Domain event handlers ----------
 
 /// <summary>Landing-page form submissions become contacts (consent only when the form collected it) and start form journeys.</summary>
-public sealed class FormSubmittedEmailHandler(AudienceService audiences, AutomationTriggers triggers, ILogger<FormSubmittedEmailHandler> logger)
+public sealed class FormSubmittedEmailHandler(
+    AppDbContext db, IDatabaseDialect dialect, AudienceService audiences, AutomationTriggers triggers, ILogger<FormSubmittedEmailHandler> logger)
     : IEventHandler<FormSubmitted>
 {
     private static readonly string[] ConsentKeys = { "consent", "email_consent", "marketing_consent", "newsletter", "opt_in", "optin", "subscribe", "marketing_opt_in" };
@@ -449,6 +451,11 @@ public sealed class FormSubmittedEmailHandler(AudienceService audiences, Automat
             ? new ConsentGrant(ConsentStatus.Granted, "form", null, $"form:{e.FormId:N}", null, "Consent box on the landing-page form") : null;
         var smsConsent = phone is not null && Flag(new[] { "sms_consent", "sms_opt_in" })
             ? new ConsentGrant(ConsentStatus.Granted, "form", null, $"form:{e.FormId:N}", null, "SMS consent box on the landing-page form") : null;
+        // The same person submitting several times at once: serialize per workspace and address so the contact is created
+        // once and form journeys are entered once (instead of racing into unique-key violations). UpsertContactAsync is
+        // idempotent on its own as well; the lock only keeps concurrent submissions from colliding.
+        var identity = OptimizeAll.Domain.Common.Normalization.Sha256Hex($"{Workspace.Key(e.ClientAccountId)}|{email ?? phone}")[..32];
+        await using var contactLock = await dialect.AcquireNamedLockAsync(db, $"email-contact:{identity}", TimeSpan.FromSeconds(30), ct);
         var (subscriber, _) = await audiences.UpsertContactAsync(e.ClientAccountId, input, emailConsent, smsConsent, allowResubscribe: false, ct);
         var data = JsonSerializer.Serialize(e.Fields.Where(f => ContactRules.IsValidFieldKey(f.Key)).Take(30).ToDictionary(f => f.Key, f => Text.Truncate(f.Value, 200)));
         var enrolled = await triggers.OnFormSubmittedAsync(e.ClientAccountId, e.FormId, subscriber.Id, data.Length > 4000 ? null : data, ct);

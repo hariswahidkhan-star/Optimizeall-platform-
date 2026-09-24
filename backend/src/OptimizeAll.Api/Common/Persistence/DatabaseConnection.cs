@@ -126,6 +126,17 @@ public static class DatabaseConnection
         }
     }
 
+    /// <summary>
+    /// Development and Testing only: turns query warnings that mean nondeterministic results into exceptions, so an
+    /// unordered <c>Skip</c>/<c>Take</c> (EF warning 10102) fails in tests instead of silently returning arbitrary rows.
+    /// Production and Staging keep EF's default (a logged warning).
+    /// </summary>
+    public static void ConfigureStrictQueryWarnings(DbContextOptionsBuilder options, IHostEnvironment environment)
+    {
+        if (environment.IsDevelopment() || environment.IsEnvironment("Testing"))
+            options.ConfigureWarnings(w => w.Throw(CoreEventId.RowLimitingOperationWithoutOrderByWarning));
+    }
+
     private static string Required(IConfiguration config, string key) =>
         config[key] is { Length: > 0 } value ? value : throw new InvalidOperationException($"{key} is required when Database:Host is used.");
 }

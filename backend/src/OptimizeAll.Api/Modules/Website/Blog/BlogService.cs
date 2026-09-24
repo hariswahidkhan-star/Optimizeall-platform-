@@ -310,6 +310,7 @@ public sealed class BlogSchedulerJob(AppDbContext db, IAuditLogger audit, TimePr
         var now = clock.GetUtcNow().UtcDateTime;
         var due = await db.Set<BlogPost>().AsNoTracking()
             .Where(p => p.Status == BlogPostStatus.Scheduled && p.PublishAt != null && p.PublishAt <= now)
+            .OrderBy(p => p.PublishAt).ThenBy(p => p.Id)
             .Select(p => new { p.Id, p.PublishAt }).Take(200).ToListAsync(ct);
         var published = 0;
         foreach (var post in due)

@@ -1096,6 +1096,20 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "website_used_form_tokens",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    TokenHash = table.Column<string>(type: "TEXT", maxLength: 64, nullable: false),
+                    UsedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
+                    ExpiresAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_website_used_form_tokens", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "service_catalog_items",
                 columns: table => new
                 {
@@ -3166,6 +3180,7 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Provider = table.Column<string>(type: "TEXT", maxLength: 40, nullable: false),
                     ClientAccountId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    ActiveScopeKey = table.Column<string>(type: "TEXT", maxLength: 36, nullable: true),
                     DisplayName = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
                     SettingsJson = table.Column<string>(type: "TEXT", nullable: false),
                     EncryptedSecrets = table.Column<string>(type: "TEXT", nullable: false),
@@ -7961,6 +7976,12 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 column: "ClientAccountId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_integration_connections_Provider_ActiveScopeKey",
+                table: "integration_connections",
+                columns: new[] { "Provider", "ActiveScopeKey" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_integration_connections_Provider_ClientAccountId",
                 table: "integration_connections",
                 columns: new[] { "Provider", "ClientAccountId" });
@@ -9309,6 +9330,17 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 name: "IX_website_testimonials_ServiceId",
                 table: "website_testimonials",
                 column: "ServiceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_website_used_form_tokens_ExpiresAt",
+                table: "website_used_form_tokens",
+                column: "ExpiresAt");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_website_used_form_tokens_TokenHash",
+                table: "website_used_form_tokens",
+                column: "TokenHash",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -9802,6 +9834,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
             migrationBuilder.DropTable(
                 name: "website_testimonials");
+
+            migrationBuilder.DropTable(
+                name: "website_used_form_tokens");
 
             migrationBuilder.DropTable(
                 name: "ads_ad_groups");

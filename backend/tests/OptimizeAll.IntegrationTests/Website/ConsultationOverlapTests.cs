@@ -29,12 +29,11 @@ public sealed class ConsultationOverlapTests(ApiFactory api) : IClassFixture<Api
         var client = api.Anonymous();
         var slots = await client.GetJsonAsync("/api/v1/public/consultations/slots?days=3");
         var booked = slots.GetProperty("slots")[6].GetDateTime().ToUniversalTime();
-        var token = await api.FormTokenAsync(client);
-        object Booking(string name, DateTime at) => WebsiteTestKit.Form(token, new Dictionary<string, object?>
+        object Booking(string token, string name, DateTime at) => WebsiteTestKit.Form(token, new Dictionary<string, object?>
         {
             ["name"] = name, ["email"] = $"{name.ToLowerInvariant()}@example.test", ["slotStart"] = at, ["visitorTimeZone"] = "UTC",
         });
-        (await client.PostAsJsonAsync("/api/v1/public/consultations", Booking("Alice", booked))).EnsureSuccessStatusCode();
+        (await client.PostAsJsonAsync("/api/v1/public/consultations", Booking(await api.FormTokenAsync(client), "Alice", booked))).EnsureSuccessStatusCode();
 
         // 20-minute slots now: the grid has starts inside Alice's 30-minute consultation.
         await SettingsAsync(admin, 20);
@@ -44,7 +43,7 @@ public sealed class ConsultationOverlapTests(ApiFactory api) : IClassFixture<Api
         Assert.DoesNotContain(after, t => t < booked.AddMinutes(30) && booked < t.AddMinutes(20));
 
         var overlapping = booked.Minute == 0 ? booked.AddMinutes(20) : booked.AddMinutes(10);
-        var response = await client.PostAsJsonAsync("/api/v1/public/consultations", Booking("Bruno", overlapping));
+        var response = await client.PostAsJsonAsync("/api/v1/public/consultations", Booking(await api.FormTokenAsync(client), "Bruno", overlapping));
         await response.ShouldFailAsync(409, "website.slot_taken");
     }
 }

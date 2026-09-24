@@ -80,17 +80,7 @@ public sealed class FormGuard(IDataProtectionProvider protection, TimeProvider c
     {
         if (!string.IsNullOrWhiteSpace(input.Nickname)) return FormCheck.Spam;
 
-        DateTime issued;
-        try
-        {
-            var raw = _protector.Unprotect(input.FormToken);
-            var ticks = long.Parse(raw.Split(':')[0], CultureInfo.InvariantCulture);
-            issued = new DateTime(ticks, DateTimeKind.Utc);
-        }
-        catch (Exception ex) when (ex is System.Security.Cryptography.CryptographicException or FormatException or OverflowException or ArgumentException)
-        {
-            throw Expired();
-        }
+        var (issued, _) = Read(input.FormToken);
         var elapsed = clock.GetUtcNow().UtcDateTime - issued;
         if (elapsed > TokenLifetime || elapsed < TimeSpan.FromSeconds(-5)) throw Expired();
         if (elapsed < TimeSpan.FromSeconds(MinFillSeconds))
@@ -101,6 +91,30 @@ public sealed class FormGuard(IDataProtectionProvider protection, TimeProvider c
         else if (input.ConsentVersion != consentVersion) e.Add("consent", "The consent wording has changed. Reload the page, review it and try again.");
         e.ThrowIfAny("website.consent_required", "Please agree to how we'll use your details.");
         return FormCheck.Accepted;
+    }
+
+    /// <summary>
+    /// Identity of a token that passed <see cref="Check"/>: the SHA-256 (hex) of its random id, and when it expires.
+    /// Used to make tokens single-use (<see cref="FormTokenLedger"/>).
+    /// </summary>
+    public (string Hash, DateTime ExpiresAt) Identify(string formToken)
+    {
+        var (issued, id) = Read(formToken);
+        return (Normalization.Sha256Hex(id), issued + TokenLifetime);
+    }
+
+    private (DateTime Issued, string Id) Read(string formToken)
+    {
+        try
+        {
+            var parts = _protector.Unprotect(formToken).Split(':');
+            var ticks = long.Parse(parts[0], CultureInfo.InvariantCulture);
+            return (new DateTime(ticks, DateTimeKind.Utc), parts.Length > 1 ? parts[1] : parts[0]);
+        }
+        catch (Exception ex) when (ex is System.Security.Cryptography.CryptographicException or FormatException or OverflowException or ArgumentException)
+        {
+            throw Expired();
+        }
     }
 
     private static DomainException Expired() =>
