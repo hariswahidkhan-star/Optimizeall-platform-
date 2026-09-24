@@ -716,6 +716,8 @@ export interface AgencyDashboard {
   myTasks: TaskSummary[];
   myTaskCounts: { open: number; overdue: number; dueToday: number };
   reviewQueue: DeliverableSummary[];
+  /** Size of the whole review queue (reviewQueue lists the first 10). */
+  reviewQueueTotal: number;
   pendingClientApprovals: DeliverableSummary[];
   todaysMeetings: Meeting[];
   timer: TimeEntry | null;

@@ -104,7 +104,7 @@ function DeliveryDashboard({ data, canTrack }: { data: AgencyDashboard; canTrack
       <div className="dl-stats">
         <Stat label="Open tasks" value={data.myTaskCounts.open} measurement="Count" />
         <Stat label="Overdue" value={data.myTaskCounts.overdue} measurement="Count" />
-        <Stat label="Awaiting my review" value={data.reviewQueue.length} measurement="Count" />
+        <Stat label="Awaiting my review" value={data.reviewQueueTotal} measurement="Count" />
         <Stat label="My time this week" value={formatMinutes(data.myMinutesThisWeek)} />
       </div>
 

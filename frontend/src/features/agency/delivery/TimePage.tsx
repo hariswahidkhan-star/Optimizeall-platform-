@@ -331,6 +331,7 @@ function ReopenWeek() {
 
 function Approvals() {
   const qc = useQueryClient();
+  const { user } = useAuth();
   const [comments, setComments] = useState<Record<string, string>>({});
   const pending = useQuery({
     queryKey: ['delivery', 'week', 'pending'],
@@ -374,15 +375,29 @@ function Approvals() {
                 </li>
               ))}
             </ul>
-            <FormField label="Comment" optional hint="Required when returning a timesheet.">
-              <Textarea rows={2} value={comments[s.id!] ?? ''} onChange={(e) => setComments({ ...comments, [s.id!]: e.target.value })} />
-            </FormField>
-            <div className="dl-row">
-              <Button onClick={() => decide.mutate({ sheet: s, approve: true })}>Approve</Button>
-              <Button variant="danger" disabled={!comments[s.id!]?.trim()} onClick={() => decide.mutate({ sheet: s, approve: false })}>
-                Return for changes
-              </Button>
-            </div>
+            {s.userId === user?.id ? (
+              // Four-eyes: the API refuses a decision on your own week, so none is offered.
+              <Alert tone="info">Someone else must approve your timesheet.</Alert>
+            ) : (
+              <>
+                <FormField label="Comment" optional hint="Required when returning a timesheet.">
+                  <Textarea rows={2} value={comments[s.id!] ?? ''} onChange={(e) => setComments({ ...comments, [s.id!]: e.target.value })} />
+                </FormField>
+                <div className="dl-row">
+                  <Button loading={decide.isPending && decide.variables?.sheet.id === s.id && decide.variables.approve} onClick={() => decide.mutate({ sheet: s, approve: true })}>
+                    Approve
+                  </Button>
+                  <Button
+                    variant="danger"
+                    disabled={!comments[s.id!]?.trim()}
+                    loading={decide.isPending && decide.variables?.sheet.id === s.id && !decide.variables.approve}
+                    onClick={() => decide.mutate({ sheet: s, approve: false })}
+                  >
+                    Return for changes
+                  </Button>
+                </div>
+              </>
+            )}
           </CardBody>
         </Card>
       ))}

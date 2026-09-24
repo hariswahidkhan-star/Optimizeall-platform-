@@ -1,4 +1,5 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
+import type { Route } from '@playwright/test';
 import { join } from 'node:path';
 import {
   MAX_UPLOAD_BYTES,
@@ -103,7 +104,7 @@ test('file limits: 50 MB is the maximum, over it is refused in the API and in th
   await compose.getByLabel('Attachments').setInputFiles(png(51, 'still.png'));
   await expect(compose.getByText(/larger than 50 MB/)).toHaveCount(0);
   await compose.getByRole('button', { name: 'Start conversation' }).click();
-  await expect(approver.getByRole('list', { name: 'Messages, oldest first' })).toContainText('still.png');
+  await expect(approver.getByRole('list', { name: 'Messages, oldest first' }).getByRole('img', { name: 'still.png' })).toBeVisible();
   errors.expectClean('the composer’s file limit');
 });
 
@@ -115,17 +116,20 @@ test('an upload interrupted by a reload leaves nothing behind and can be redone'
   const subject = `Interrupted ${runId()}`;
   await owner.goto('/client/messages');
   // Hold the file upload so the reload happens mid-upload.
-  let held = false;
-  await owner.route('**/api/v1/client/orgs/*/files', async () => {
-    held = true; // never answered: the reload cancels it
+  let held: Route | null = null;
+  await owner.route('**/api/v1/client/orgs/*/files', (route) => {
+    held = route; // not answered: the reload cancels it
   });
   const compose = owner.getByRole('form', { name: 'New conversation' });
   await compose.getByLabel('Subject').fill(subject);
   await compose.getByLabel('Message').fill('Logo pack attached.');
   await compose.getByLabel('Attachments').setInputFiles(png(52, 'logo-pack.png'));
   await compose.getByRole('button', { name: 'Start conversation' }).click();
-  await expect.poll(() => held).toBe(true);
-  await owner.reload();
+  await expect.poll(() => held !== null).toBe(true);
+  const reloading = owner.reload();
+  // The browser drops the in-flight upload when the page goes away.
+  await (held as Route | null)?.abort('aborted').catch(() => undefined);
+  await reloading;
   await owner.unroute('**/api/v1/client/orgs/*/files');
   const after = await api.get<{ subject: string }[]>(`/client/orgs/${clientId}/threads`);
   expect(after.length, 'no half-sent conversation').toBe(before.length);
@@ -135,7 +139,7 @@ test('an upload interrupted by a reload leaves nothing behind and can be redone'
   await compose.getByLabel('Message').fill('Logo pack attached.');
   await compose.getByLabel('Attachments').setInputFiles(png(52, 'logo-pack.png'));
   await compose.getByRole('button', { name: 'Start conversation' }).click();
-  await expect(owner.getByRole('list', { name: 'Messages, oldest first' })).toContainText('logo-pack.png');
+  await expect(owner.getByRole('list', { name: 'Messages, oldest first' }).getByRole('img', { name: 'logo-pack.png' })).toBeVisible();
   const final = await api.get<{ subject: string }[]>(`/client/orgs/${clientId}/threads`);
   expect(final.filter((t) => t.subject === subject)).toHaveLength(1);
 });

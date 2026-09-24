@@ -67,7 +67,7 @@ test('client and account manager exchange messages with attachments and read rec
   await owner.reload();
   await expect(thread.getByRole('listitem')).toHaveCount(2);
   await expect(thread.getByRole('listitem').nth(1)).toContainText('(your agency team)');
-  await expect(thread).toContainText('hero-mock.png');
+  await expect(thread.getByRole('img', { name: 'hero-mock.png' })).toBeVisible();
   await am.reload();
   await expect(staffThread.getByRole('listitem').nth(1)).toContainText(`Read by ${clientUser('Owner').displayName}`);
 

@@ -380,6 +380,25 @@ public sealed class DeliveryOperationsTests(ApiFactory api) : IClassFixture<ApiF
     }
 
     [Fact]
+    public async Task Dashboard_counts_the_whole_review_queue_not_just_the_listed_ten()
+    {
+        var am = await api.StaffAsync();
+        var org = await api.CreateOrgAsync(am.Client);
+        var projectId = (await am.Client.CreateProjectAsync(org)).GetProperty("id").GetGuid();
+        for (var i = 0; i < 12; i++)
+        {
+            var id = (await am.Client.CreateDeliverableAsync(projectId, $"Review load {i}")).GetProperty("deliverable").GetProperty("id").GetGuid();
+            await am.Client.AddLinkVersionAsync(id);
+            (await am.Client.PostAsJsonAsync($"/api/v1/agency/deliverables/{id}/submit", new { version = 1 })).EnsureSuccessStatusCode();
+        }
+        var total = (await (await am.Client.GetAsync("/api/v1/agency/deliverables?view=review&pageSize=1")).ReadJsonAsync()).GetProperty("total").GetInt32();
+        Assert.True(total >= 12);
+        var dashboard = await (await am.Client.GetAsync("/api/v1/agency/dashboard")).ReadJsonAsync();
+        Assert.Equal(10, dashboard.GetProperty("reviewQueue").GetArrayLength());
+        Assert.Equal(total, dashboard.GetProperty("reviewQueueTotal").GetInt32());
+    }
+
+    [Fact]
     public async Task Client_portal_projects_show_only_client_visible_tasks()
     {
         var am = await api.StaffAsync();

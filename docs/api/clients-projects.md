@@ -98,8 +98,8 @@ All delivery files (task attachments, deliverable versions, brand assets, logos)
 
 ## Dashboard
 
-`GET /api/v1/agency/dashboard` (`projects.view`) — role-aware: `myTasks`, `myTaskCounts`, `reviewQueue`,
-`pendingClientApprovals`, `todaysMeetings`, `timer`, `myMinutesThisWeek`; `accountManager` (health board,
+`GET /api/v1/agency/dashboard` (`projects.view`) — role-aware: `myTasks`, `myTaskCounts`, `reviewQueue` (first 10) and
+`reviewQueueTotal` (the whole queue, shown as "Awaiting my review"), `pendingClientApprovals`, `todaysMeetings`, `timer`, `myMinutesThisWeek`; `accountManager` (health board,
 overdue by client, utilization) for users with `clients.manage`; `admin` (agency snapshot) for `settings.manage`. Other areas add tiles on the frontend via `features/agency/shared/dashboardTiles.ts`.
 
 ## Projects

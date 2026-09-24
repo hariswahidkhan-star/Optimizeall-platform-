@@ -167,7 +167,8 @@ test('the Owner answers the NPS survey; staff see NPS and CSAT', async ({ as }) 
   await survey.getByRole('radio', { name: '9' }).check();
   await survey.getByLabel("What's the main reason for your score?").fill('Responsive team.');
   await survey.getByRole('button', { name: 'Send feedback' }).click();
-  await expect(owner.getByText('Thank you!')).toBeVisible();
+  // The page switches to the answered state for this quarter.
+  await expect(owner.getByText(/with 9\/10/)).toBeVisible();
   await owner.reload();
   await expect(owner.getByText(/with 9\/10/)).toBeVisible();
   // Out-of-range and repeated answers are refused.

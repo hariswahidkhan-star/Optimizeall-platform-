@@ -203,14 +203,14 @@ test('task drawer: fields, assignees, checklist, comments and attachments', asyn
   await expect(drawer.getByRole('alert')).toContainText('Upload a PNG, JPEG, WebP, PDF or MP4 file');
   await attach.setInputFiles(png(21, 'keyword-gap.png'));
   await drawer.getByRole('button', { name: 'Upload', exact: true }).click();
-  await expect(drawer.getByText('keyword-gap.png').first()).toBeVisible();
+  await expect(drawer.getByRole('img', { name: 'keyword-gap.png' })).toBeVisible();
 
   // After a reload everything is still there.
   await am.reload();
   await expect(drawer.getByRole('form', { name: 'Task details' }).getByLabel('Priority')).toHaveValue('High');
   await expect(drawer.getByRole('checkbox', { name: staffNames.strategist })).toBeChecked();
   await expect(drawer.getByRole('checkbox', { name: 'Export Search Console queries' })).toBeChecked();
-  await expect(drawer.getByText('keyword-gap.png').first()).toBeVisible();
+  await expect(drawer.getByRole('img', { name: 'keyword-gap.png' })).toBeVisible();
 
   const api = await login(accounts.am);
   const tasks = await api.get<{ id: string; title: string; clientVisible: boolean; assignees: { displayName: string }[] }[]>(`/agency/projects/${projectId}/tasks`);
