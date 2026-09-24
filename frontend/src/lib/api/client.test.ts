@@ -95,6 +95,44 @@ describe('api client', () => {
     expect(tokenStore.get()).toBeNull();
   });
 
+  it('retries the refresh once when it lost a rotation race, and keeps the session', async () => {
+    tokenStore.set('expired');
+    let refreshes = 0;
+    mockFetch({
+      'POST /auth/refresh': () => {
+        refreshes += 1;
+        return refreshes === 1
+          ? problem(401, 'auth.refresh_race', 'Your session was refreshed in another tab. Retry the request.')
+          : json(200, session(undefined, 'fresh'));
+      },
+      'GET /me/home': (req) =>
+        req.headers.Authorization === 'Bearer fresh' ? json(200, 'home') : problem(401, 'auth.unauthorized', 'No'),
+    });
+    const listener = vi.fn();
+    const off = onSessionEvent(listener);
+
+    await expect(api.get('/me/home')).resolves.toBe('home');
+
+    off();
+    expect(refreshes).toBe(2);
+    expect(listener).not.toHaveBeenCalledWith({ type: 'session-expired' });
+    expect(tokenStore.get()).toBe('fresh');
+  });
+
+  it('gives up after one retry when the refresh race repeats', async () => {
+    tokenStore.set('expired');
+    let refreshes = 0;
+    mockFetch({
+      'POST /auth/refresh': () => {
+        refreshes += 1;
+        return problem(401, 'auth.refresh_race', 'Retry the request.');
+      },
+      'GET /me/home': () => problem(401, 'auth.unauthorized', 'No'),
+    });
+    await expect(api.get('/me/home')).rejects.toMatchObject({ status: 401, code: 'auth.session_expired' });
+    expect(refreshes).toBe(2);
+  });
+
   it('never refreshes for auth endpoints such as login', async () => {
     const { calls } = mockFetch({
       'POST /auth/login': () =>

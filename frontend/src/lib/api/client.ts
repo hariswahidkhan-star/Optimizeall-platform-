@@ -62,6 +62,10 @@ export function expireSession(): void {
 
 let refreshInFlight: Promise<AuthResponse> | null = null;
 
+/** The API's "lost a rotation race, retry" answer to POST /auth/refresh (401, the session is intact). */
+export const REFRESH_RACE_CODE = 'auth.refresh_race';
+const REFRESH_RACE_RETRY_MS = 250;
+
 /**
  * Exchanges the HttpOnly refresh cookie for a new access token. Concurrent callers share one request, so a burst of
  * 401s rotates the refresh token exactly once. Resolves with the new session; rejects with ApiError on failure
@@ -71,7 +75,16 @@ export function refreshSession(): Promise<AuthResponse> {
   if (!refreshInFlight) {
     refreshInFlight = (async () => {
       try {
-        const session = await send<AuthResponse>('POST', '/auth/refresh', { skipRefresh: true });
+        let session: AuthResponse;
+        try {
+          session = await send<AuthResponse>('POST', '/auth/refresh', { skipRefresh: true });
+        } catch (error) {
+          // Another tab (or a response this page never received) rotated the cookie a moment ago; the server kept the
+          // session and asks for a retry, which carries the cookie the browser now holds.
+          if (!(error instanceof ApiError) || error.code !== REFRESH_RACE_CODE) throw error;
+          await new Promise((resolve) => setTimeout(resolve, REFRESH_RACE_RETRY_MS));
+          session = await send<AuthResponse>('POST', '/auth/refresh', { skipRefresh: true });
+        }
         tokenStore.set(session.accessToken);
         emit({ type: 'refreshed', session });
         return session;
