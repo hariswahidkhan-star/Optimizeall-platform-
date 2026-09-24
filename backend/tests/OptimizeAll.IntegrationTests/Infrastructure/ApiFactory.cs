@@ -65,7 +65,8 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         : $"{_serverConnection.TrimEnd(';')};Database={_databaseName};Maximum Pool Size=20;";
 
     /// <summary>For CREATE/DROP DATABASE only: unpooled, so these one-off admin connections never linger idle.</summary>
-    private string AdminConnectionString => $"{_serverConnection.TrimEnd(';')};Pooling=false;";
+    /// <summary>A generous command timeout: on a busy shared server DROP DATABASE can exceed the 30 s default (class cleanup failures).</summary>
+    private string AdminConnectionString => $"{_serverConnection.TrimEnd(';')};Pooling=false;Default Command Timeout=300;";
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
