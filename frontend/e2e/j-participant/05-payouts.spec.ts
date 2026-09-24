@@ -37,7 +37,9 @@ test.describe.serial('payout details and payout', () => {
     await page.getByLabel('IBAN or account number').fill('12-34');
     await page.getByRole('button', { name: 'Save payout details' }).click();
     await expect(page.getByLabel('Account holder name')).toHaveAccessibleDescription(/full name/);
-    await expect(page.getByLabel('IBAN or account number')).toHaveAccessibleDescription(/8–34 letters and digits/);
+    await expect(page.getByLabel('IBAN or account number')).toHaveAccessibleDescription(
+      /8–34 letters and digits/,
+    );
 
     // Passes the client's shape check, but the IBAN checksum is wrong: the API says so on the field.
     await page.getByLabel('Account holder name').fill(s().pat.displayName);
@@ -71,7 +73,9 @@ test.describe.serial('payout details and payout', () => {
   test('switching to PayPal needs the destination again; the email is masked', async () => {
     await page.getByRole('radio', { name: 'PayPal' }).check();
     await page.getByRole('button', { name: 'Save payout details' }).click();
-    await expect(page.getByLabel('PayPal email address')).toHaveAccessibleDescription(/Enter where we should send/);
+    await expect(page.getByLabel('PayPal email address')).toHaveAccessibleDescription(
+      /Enter where we should send/,
+    );
 
     await page.getByLabel('PayPal email address').fill(paypal());
     await page.getByRole('button', { name: 'Save payout details' }).click();

@@ -37,7 +37,10 @@ export default async function globalSetup() {
       roles: [role],
     });
     const link = await mailLink(address, '/reset-password');
-    await publicApi.post('/auth/reset-password', { token: link.searchParams.get('token'), newPassword: PASSWORD });
+    await publicApi.post('/auth/reset-password', {
+      token: link.searchParams.get('token'),
+      newPassword: PASSWORD,
+    });
     return { id: created.profile.id, email: address, password: PASSWORD, displayName };
   };
 
@@ -48,7 +51,9 @@ export default async function globalSetup() {
   const finance2 = await createStaff('lc-finance2', 'Finn Finance', 'Finance');
 
   const financeApi = await ApiSession.login(finance1.email, finance1.password);
-  const schedule = await financeApi.get<{ current: { anchorCutoffDate: string } }>('/finance/payout-schedule');
+  const schedule = await financeApi.get<{ current: { anchorCutoffDate: string } }>(
+    '/finance/payout-schedule',
+  );
   await financeApi.put('/finance/payout-schedule', {
     frequency: 'Weekly',
     anchorCutoffDate: schedule.current.anchorCutoffDate,

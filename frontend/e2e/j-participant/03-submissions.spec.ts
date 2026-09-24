@@ -35,9 +35,13 @@ test.describe.serial('submissions', () => {
 
   const proofDialog = () => page.getByRole('dialog', { name: 'Submit proof of your post' });
   const mine = async () =>
-    (await api.get<{ items: { id: string; postUrl: string; status: string }[] }>('/me/submissions?pageSize=50'))
-      .items;
-  const withCode = async (suffix: string) => (await mine()).filter((x) => x.postUrl.includes(`/${code(suffix)}/`));
+    (
+      await api.get<{ items: { id: string; postUrl: string; status: string }[] }>(
+        '/me/submissions?pageSize=50',
+      )
+    ).items;
+  const withCode = async (suffix: string) =>
+    (await mine()).filter((x) => x.postUrl.includes(`/${code(suffix)}/`));
 
   async function openProof() {
     await page.goto(`/app/campaigns/${s().main.slug}`);
@@ -145,7 +149,9 @@ test.describe.serial('submissions', () => {
     };
     const results = await Promise.allSettled([send(205), send(206)]);
     const created = results.filter((r) => r.status === 'fulfilled');
-    const refused = results.filter((r) => r.status === 'rejected').map((r) => (r as PromiseRejectedResult).reason);
+    const refused = results
+      .filter((r) => r.status === 'rejected')
+      .map((r) => (r as PromiseRejectedResult).reason);
     expect(created).toHaveLength(1);
     expect(refused).toHaveLength(1);
     expect(refused[0]).toBeInstanceOf(ApiError);
@@ -206,15 +212,17 @@ test.describe.serial('submissions', () => {
     await expect(caption).toHaveValue(`Loving it! ${s().main.hashtag}`);
     await caption.fill('Edited but not sent');
     await page.reload();
-    await expect(page.getByRole('region', { name: 'Edit & resubmit' }).getByLabel('Caption you used')).toHaveValue(
-      `Loving it! ${s().main.hashtag}`,
-    );
+    await expect(
+      page.getByRole('region', { name: 'Edit & resubmit' }).getByLabel('Caption you used'),
+    ).toHaveValue(`Loving it! ${s().main.hashtag}`);
 
     // A link that is not a link is caught; the fixed one goes through.
     const fresh = page.getByRole('region', { name: 'Edit & resubmit' });
     await fresh.getByLabel('Link to your post').fill('instagram.com');
     await fresh.getByRole('button', { name: 'Resubmit for review' }).click();
-    await expect(fresh.getByLabel('Link to your post')).toHaveAccessibleDescription(/starting with https:\/\//);
+    await expect(fresh.getByLabel('Link to your post')).toHaveAccessibleDescription(
+      /starting with https:\/\//,
+    );
     await fresh.getByLabel('Link to your post').fill(`https://instagram.com/p/${code('A')}/`);
     await fresh.getByLabel('Caption you used').fill(`Now with ${s().main.hashtag} and #ad`);
     await fresh.getByLabel('New screenshot (optional)').setInputFiles(pngFile(208));

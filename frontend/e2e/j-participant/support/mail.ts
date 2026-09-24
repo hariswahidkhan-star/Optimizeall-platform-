@@ -15,13 +15,17 @@ export interface Mail {
 const MAIL_DIR = process.env.E2E_MAIL_DIR;
 
 function decodeWords(value: string): string {
-  return value.replace(/=\?([^?]+)\?([BbQq])\?([^?]*)\?=/g, (_m, _charset: string, enc: string, text: string) =>
-    enc.toUpperCase() === 'B'
-      ? Buffer.from(text, 'base64').toString('utf8')
-      : Buffer.from(
-          text.replace(/_/g, ' ').replace(/=([0-9A-Fa-f]{2})/g, (_x, h: string) => String.fromCharCode(parseInt(h, 16))),
-          'latin1',
-        ).toString('utf8'),
+  return value.replace(
+    /=\?([^?]+)\?([BbQq])\?([^?]*)\?=/g,
+    (_m, _charset: string, enc: string, text: string) =>
+      enc.toUpperCase() === 'B'
+        ? Buffer.from(text, 'base64').toString('utf8')
+        : Buffer.from(
+            text
+              .replace(/_/g, ' ')
+              .replace(/=([0-9A-Fa-f]{2})/g, (_x, h: string) => String.fromCharCode(parseInt(h, 16))),
+            'latin1',
+          ).toString('utf8'),
   );
 }
 
@@ -30,7 +34,10 @@ function parse(file: string): { to: string; subject: string; body: string } {
   const split = raw.search(/\r?\n\r?\n/);
   const head = raw.slice(0, split).replace(/\r?\n[ \t]+/g, ' ');
   const header = (name: string) =>
-    decodeWords(head.match(new RegExp(`^${name}:\\s*(.*)$`, 'im'))?.[1]?.trim() ?? '').replace(/\?=\s+=\?/g, '?==?');
+    decodeWords(head.match(new RegExp(`^${name}:\\s*(.*)$`, 'im'))?.[1]?.trim() ?? '').replace(
+      /\?=\s+=\?/g,
+      '?==?',
+    );
   return { to: header('To').toLowerCase(), subject: header('Subject'), body: raw.slice(split) };
 }
 

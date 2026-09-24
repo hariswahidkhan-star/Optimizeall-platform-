@@ -30,7 +30,9 @@ test.describe.serial('participant onboarding', () => {
     await expect(field('Email')).toBeFocused();
     await expect(field('Email')).toHaveAccessibleDescription(/Enter a valid email address/);
     await expect(field('Display name')).toHaveAccessibleDescription(/at least 2 characters/);
-    await expect(page.getByText('You need to accept the participant rules to create an account.')).toBeVisible();
+    await expect(
+      page.getByText('You need to accept the participant rules to create an account.'),
+    ).toBeVisible();
 
     await field('Email').fill('not-an-email');
     await field('Password').fill('short');

@@ -27,7 +27,9 @@ test.describe.serial('account and session', () => {
   async function rejectAccessTokens(until: () => boolean) {
     await page.route('**/api/v1/me/**', async (route) => {
       if (until()) return route.fallback();
-      return route.fallback({ headers: { ...route.request().headers(), authorization: 'Bearer expired.token.value' } });
+      return route.fallback({
+        headers: { ...route.request().headers(), authorization: 'Bearer expired.token.value' },
+      });
     });
   }
 
@@ -41,7 +43,8 @@ test.describe.serial('account and session', () => {
       if (r.url().endsWith('/api/v1/auth/refresh')) refreshes.push(r);
     });
     page.on('response', (r) => {
-      if (r.url().includes('/api/v1/') && r.status() >= 400 && r.status() !== 401) failures.push(`${r.status()} ${r.url()}`);
+      if (r.url().includes('/api/v1/') && r.status() >= 400 && r.status() !== 401)
+        failures.push(`${r.status()} ${r.url()}`);
     });
     await rejectAccessTokens(() => refreshes.length > 0);
 

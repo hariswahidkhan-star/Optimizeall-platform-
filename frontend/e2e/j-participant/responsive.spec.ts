@@ -60,7 +60,10 @@ test.describe.serial('participant lifecycle on a phone', () => {
     await fits('profile');
 
     await page.goto('/app/social-accounts');
-    await page.getByRole('button', { name: /^Add a (social )?profile$/ }).first().click();
+    await page
+      .getByRole('button', { name: /^Add a (social )?profile$/ })
+      .first()
+      .click();
     const dialog = page.getByRole('dialog', { name: 'Add a social profile' });
     await dialog.getByLabel('Platform').selectOption('Instagram');
     await dialog.getByLabel('Handle').fill(me().instagram);
@@ -119,7 +122,9 @@ test.describe.serial('participant lifecycle on a phone', () => {
     test(`${path} fits the phone`, async () => {
       await page.goto(path);
       await expect(
-        heading ? page.getByRole('heading', { level: 1, name: heading }) : page.getByRole('heading', { level: 1 }),
+        heading
+          ? page.getByRole('heading', { level: 1, name: heading })
+          : page.getByRole('heading', { level: 1 }),
       ).toBeVisible();
       await fits(path);
     });

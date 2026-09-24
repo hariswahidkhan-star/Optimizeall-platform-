@@ -22,7 +22,12 @@ export async function as(user: Credentials): Promise<ApiSession> {
 type Decision = 'Approve' | 'RequestCorrection' | 'Reject';
 
 /** Claims a submission as `reviewer` and records the decision (claim stamp → decision, as the workspace does). */
-export async function decide(reviewer: Credentials, submissionId: string, decision: Decision, reason?: string) {
+export async function decide(
+  reviewer: Credentials,
+  submissionId: string,
+  decision: Decision,
+  reason?: string,
+) {
   const api = await as(reviewer);
   const claim = await api.post<{ concurrencyStamp: string }>(`/review/submissions/${submissionId}/claim`);
   return api.post<{ status: string }>(`/review/submissions/${submissionId}/decision`, {
@@ -156,9 +161,12 @@ export async function payUser(userId: string, paymentReference: string) {
     confirm: true,
   });
 
-  const prepared = await f1.post<{ batch: { id: string; reference: string } }>('/finance/payout-batches/prepare', {
-    periodKey,
-  });
+  const prepared = await f1.post<{ batch: { id: string; reference: string } }>(
+    '/finance/payout-batches/prepare',
+    {
+      periodKey,
+    },
+  );
   const batchId = prepared.batch.id;
   const detail = await f2.get<{ concurrencyStamp: string }>(`/finance/payout-batches/${batchId}`);
   await f2.post(`/finance/payout-batches/${batchId}/finalize`, {

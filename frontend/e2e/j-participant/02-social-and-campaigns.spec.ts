@@ -38,7 +38,10 @@ test.describe.serial('social profiles and campaigns', () => {
 
   test('a TikTok profile 89 days old does not qualify yet — one day to go', async () => {
     await page.goto('/app/social-accounts');
-    await page.getByRole('button', { name: /^Add a (social )?profile$/ }).first().click();
+    await page
+      .getByRole('button', { name: /^Add a (social )?profile$/ })
+      .first()
+      .click();
     await expect(dialog()).toBeVisible();
     await expect(dialog()).toContainText('Profiles must be at least 90 days old');
     await fillProfile('TikTok', s().pat.tiktok, daysAgo(89), '320');
@@ -55,7 +58,10 @@ test.describe.serial('social profiles and campaigns', () => {
   });
 
   test('a creation date in the future is caught before saving', async () => {
-    await page.getByRole('button', { name: /^Add a (social )?profile$/ }).first().click();
+    await page
+      .getByRole('button', { name: /^Add a (social )?profile$/ })
+      .first()
+      .click();
     const tomorrow = new Date(Date.now() + 86_400_000).toISOString().slice(0, 10);
     await fillProfile('Instagram', s().pat.instagram, tomorrow);
     await dialog().getByRole('button', { name: 'Add profile' }).click();
@@ -74,7 +80,10 @@ test.describe.serial('social profiles and campaigns', () => {
   });
 
   test('the same handle again (other case) and another participant’s handle are refused on the Handle field', async () => {
-    await page.getByRole('button', { name: /^Add a (social )?profile$/ }).first().click();
+    await page
+      .getByRole('button', { name: /^Add a (social )?profile$/ })
+      .first()
+      .click();
     await fillProfile('Instagram', s().pat.instagram.toUpperCase(), daysAgo(400));
     await dialog().getByRole('button', { name: 'Add profile' }).click();
     const handle = dialog().getByLabel('Handle');

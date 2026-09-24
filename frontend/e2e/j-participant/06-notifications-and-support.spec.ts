@@ -168,7 +168,9 @@ test.describe.serial('notifications and support', () => {
     await expect(reply).toHaveValue('');
 
     const admin = await as(s().admin);
-    const ticket = await admin.get<{ status: string }>(`/admin/support/tickets/${ticketUrl.split('/').pop()}`);
+    const ticket = await admin.get<{ status: string }>(
+      `/admin/support/tickets/${ticketUrl.split('/').pop()}`,
+    );
     expect(ticket.status).toBe('AwaitingStaff');
   });
 });

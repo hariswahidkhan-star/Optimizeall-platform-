@@ -79,7 +79,7 @@ describe('AuthProvider', () => {
     expect(tokenStore.get()).toBeNull();
   });
 
-  it('signing out from a protected page lands on /login?signedOut=1, not on the guard\'s ?next= redirect', async () => {
+  it("signing out from a protected page lands on /login?signedOut=1, not on the guard's ?next= redirect", async () => {
     mockFetch({
       'POST /auth/refresh': () => json(200, session()),
       'POST /auth/logout': () => new Response(null, { status: 204 }),
