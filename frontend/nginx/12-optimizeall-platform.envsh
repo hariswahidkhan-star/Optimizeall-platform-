@@ -7,6 +7,14 @@
 #   REAL_IP_FROM   space-separated CIDRs of the load balancer in front of nginx (e.g. "10.0.0.0/8" on Render).
 #                  nginx then takes the client address from X-Forwarded-For sent by that load balancer, so the
 #                  API's rate limits and audit logs see the real client instead of the load balancer.
+#   API_WAIT_SECONDS
+#                  how long to wait at startup for the API host name to resolve (default 300).
+#   API_RESOLVE_INTERVAL
+#                  seconds between checks of the API host name's address (default 10; 0 turns the check off).
+#                  nginx resolves proxy_pass host names only when it loads its configuration, so after the API is
+#                  redeployed with a new private IP (Render, docker compose recreating the container) nginx would
+#                  keep proxying to the old address (502) until restarted. A small background loop resolves the
+#                  name with the system resolver (search domains included) and reloads nginx when it changes.
 
 if [ -n "${API_HOSTPORT:-}" ]; then
   export API_UPSTREAM="http://${API_HOSTPORT}"
@@ -20,3 +28,40 @@ if [ -n "${REAL_IP_FROM:-}" ]; then
     echo "real_ip_header X-Forwarded-For;"
   } > /etc/nginx/conf.d/00-real-ip.conf
 fi
+
+oa_api_host="${API_UPSTREAM#*://}"
+oa_api_host="${oa_api_host%%/*}"
+oa_api_host="${oa_api_host%:*}"
+case "$oa_api_host" in
+  ""|\[*|*[!0-9.]*) ;;
+  *) oa_api_host="" ;;  # an IPv4 literal never changes
+esac
+case "$oa_api_host" in
+  \[*) oa_api_host="" ;;  # nor does an IPv6 literal
+esac
+oa_resolve() { getent ahostsv4 "$oa_api_host" 2>/dev/null | awk '{print $1}' | sort -u | tr '\n' ' ' | sed 's/ $//'; }
+# nginx refuses to start when the API host name does not resolve yet (e.g. the API service of a new Render Blueprint
+# or compose project is still being created), so wait for it for up to API_WAIT_SECONDS (default 300).
+if [ -n "$oa_api_host" ]; then
+  oa_waited=0
+  while [ -z "$(oa_resolve)" ] && [ "$oa_waited" -lt "${API_WAIT_SECONDS:-300}" ]; do
+    [ $((oa_waited % 15)) -eq 0 ] && echo "12-optimizeall-platform: waiting for the API host $oa_api_host to resolve" >&2
+    sleep 1
+    oa_waited=$((oa_waited + 1))
+  done
+  unset oa_waited
+fi
+if [ -n "$oa_api_host" ] && [ "${API_RESOLVE_INTERVAL:-10}" != "0" ]; then
+  (
+    oa_last="$(oa_resolve)"
+    while sleep "${API_RESOLVE_INTERVAL:-10}"; do
+      oa_now="$(oa_resolve)"
+      if [ -n "$oa_now" ] && [ "$oa_now" != "$oa_last" ]; then
+        echo "12-optimizeall-platform: $oa_api_host now resolves to $oa_now (was ${oa_last:-unresolved}); reloading nginx" >&2
+        nginx -s reload && oa_last="$oa_now"
+      fi
+    done
+  ) &
+fi
+unset oa_api_host
+unset -f oa_resolve
