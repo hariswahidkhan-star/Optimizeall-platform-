@@ -125,5 +125,6 @@ describe('RegisterPage', () => {
     mockFetch(anonymous);
     const { container } = renderRegister('/register?ref=FRIEND42');
     expect(await axeViolations(container)).toEqual([]);
-  });
+    // axe walks the whole form (country and time-zone lists): ~9 s alone, far longer on a loaded runner.
+  }, 120_000);
 });

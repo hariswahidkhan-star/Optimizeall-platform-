@@ -39,24 +39,27 @@
   --brand-navy: #1f2659;
   --brand-amber: #fcb31e;
 
-  /* ---------- Surfaces & text ---------- */
-  --color-bg: light-dark(#f6f7fb, #0c0f24);
-  --color-bg-elevated: light-dark(#ffffff, #10142d);
-  --color-surface: light-dark(#ffffff, #141a36);
-  --color-surface-2: light-dark(#f1f3f9, #1b2244);
-  --color-surface-3: light-dark(#e7eaf4, #232b52);
+  /* ---------- Surfaces & text ----------
+   * Neutrals are a cool slate with only a whisper of the brand navy, so data and the few brand accents carry the
+   * colour. Dark mode is a near-black graphite (not saturated navy): surfaces step up in lightness by elevation
+   * (bg < surface < surface-2 < surface-3) and hairline borders do the separating, not shadows. */
+  --color-bg: light-dark(#f7f8fa, #0a0c14);
+  --color-bg-elevated: light-dark(#ffffff, #12151f);
+  --color-surface: light-dark(#ffffff, #10131c);
+  --color-surface-2: light-dark(#f3f4f7, #161a25);
+  --color-surface-3: light-dark(#eceef2, #1e2230);
   --color-surface-inverse: light-dark(#1f2659, #e9ebf8);
-  --color-border: light-dark(#e1e4ef, #2a3260);
-  --color-border-strong: light-dark(#c5cadc, #3a4378);
+  --color-border: light-dark(#e5e7ed, #232837);
+  --color-border-strong: light-dark(#d0d4de, #313749);
   /* Boundaries of form controls (inputs, checkboxes, radios, the switch track): ≥ 3:1 against every surface and the
    * page background in both themes (WCAG 1.4.11 non-text contrast). Decorative dividers keep --color-border. */
-  --color-border-control: light-dark(#7c829f, #6b74a8);
-  --color-overlay: light-dark(rgb(15 18 48 / 0.48), rgb(4 6 18 / 0.72));
+  --color-border-control: light-dark(#7c829f, #6b73a0);
+  --color-overlay: light-dark(rgb(15 18 38 / 0.42), rgb(2 3 8 / 0.72));
 
-  --color-heading: light-dark(#1d174c, #f4f5fd);
-  --color-text: light-dark(#2a2e4c, #e3e6f5);
-  --color-text-muted: light-dark(#545a78, #b4b9d6);
-  --color-text-subtle: light-dark(#666b88, #9097ba);
+  --color-heading: light-dark(#12152e, #f3f4f8);
+  --color-text: light-dark(#2d3148, #dfe2ec);
+  --color-text-muted: light-dark(#555a70, #a4a9bb);
+  --color-text-subtle: light-dark(#63687e, #8e93a7);
   --color-text-inverse: light-dark(#ffffff, #141a36);
   --color-text-on-accent: #1f2659;
 
@@ -118,8 +121,8 @@
   --chart-1: light-dark(#4855a3, #7d88e0);
   --chart-2: light-dark(#d18a00, #c48200);
   --chart-3: light-dark(#0e9384, #119f8f);
-  --chart-grid: light-dark(#e7eaf4, #262e57);
-  --chart-axis: light-dark(#666b88, #9097ba);
+  --chart-grid: light-dark(#eceef3, #242938);
+  --chart-axis: light-dark(#63687e, #8e93a7);
 
   /* ---------- Logo colors (see components/brand/Logo) ---------- */
   --logo-ring-primary: light-dark(#1f2659, #c9cff5);
@@ -141,6 +144,10 @@
   --text-body: 1rem;
   --text-small: 0.875rem;
   --text-xs: 0.75rem;
+  --text-2xs: 0.6875rem;
+  /* Dashboard figures: KPI values and the page title of portal screens (Inter's display optical size kicks in). */
+  --text-kpi: clamp(1.5rem, 1.35rem + 0.5vw, 1.875rem);
+  --text-page-title: clamp(1.5rem, 1.4rem + 0.45vw, 1.75rem);
 
   --leading-tight: 1.2;
   --leading-snug: 1.35;
@@ -152,6 +159,7 @@
   --weight-bold: 700;
 
   --tracking-tight: -0.02em;
+  --tracking-tighter: -0.028em;
   --tracking-wide: 0.08em;
   --tracking-brand: 0.18em;
 
@@ -171,25 +179,29 @@
   --space-24: 6rem;
 
   /* ---------- Radii ---------- */
+  /* Crisp, not bubbly: controls 8px, cards 12px, hero panels 16px. */
   --radius-xs: 4px;
   --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 20px;
-  --radius-2xl: 28px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
   --radius-full: 999px;
 
-  /* ---------- Elevation ---------- */
-  --shadow-xs: 0 1px 2px light-dark(rgb(16 24 64 / 0.06), rgb(0 0 0 / 0.4));
+  /* ---------- Elevation ----------
+   * Borders separate; shadows only hint at depth. Light mode uses soft, low-opacity layered shadows; dark mode relies
+   * on surface lightness plus a faint top highlight (inset) because dark shadows are invisible on a dark page. */
+  --shadow-xs: 0 1px 2px light-dark(rgb(16 20 40 / 0.04), rgb(0 0 0 / 0.3));
   --shadow-sm:
-    0 1px 3px light-dark(rgb(16 24 64 / 0.08), rgb(0 0 0 / 0.45)),
-    0 1px 2px light-dark(rgb(16 24 64 / 0.04), rgb(0 0 0 / 0.3));
+    0 1px 2px light-dark(rgb(16 20 40 / 0.04), rgb(0 0 0 / 0.3)),
+    0 1px 3px light-dark(rgb(16 20 40 / 0.03), rgb(0 0 0 / 0.2));
   --shadow-md:
-    0 6px 16px -4px light-dark(rgb(16 24 64 / 0.1), rgb(0 0 0 / 0.5)),
-    0 2px 6px -2px light-dark(rgb(16 24 64 / 0.06), rgb(0 0 0 / 0.35));
+    0 4px 12px -2px light-dark(rgb(16 20 40 / 0.07), rgb(0 0 0 / 0.45)),
+    0 2px 4px -2px light-dark(rgb(16 20 40 / 0.04), rgb(0 0 0 / 0.3));
   --shadow-lg:
-    0 18px 40px -12px light-dark(rgb(16 24 64 / 0.18), rgb(0 0 0 / 0.6)),
-    0 6px 14px -6px light-dark(rgb(16 24 64 / 0.08), rgb(0 0 0 / 0.4));
+    0 16px 40px -12px light-dark(rgb(16 20 40 / 0.16), rgb(0 0 0 / 0.6)),
+    0 4px 12px -4px light-dark(rgb(16 20 40 / 0.06), rgb(0 0 0 / 0.4));
+  --shadow-highlight: inset 0 1px 0 light-dark(rgb(255 255 255 / 0), rgb(255 255 255 / 0.04));
   --shadow-focus: 0 0 0 4px var(--color-focus-halo);
 
   /* ---------- Layers ---------- */
@@ -215,6 +227,11 @@
   --topbar-height: 64px;
   --bottom-nav-height: 64px;
   --gutter: var(--space-4);
+  /* Portal shell (the public website keeps --container-max / --topbar-height). */
+  --portal-max: 1280px;
+  --portal-topbar-height: 56px;
+  --portal-sidebar-width: 248px;
+  --portal-sidebar-collapsed: 64px;
 
   /*
    * Breakpoints (for reference; CSS custom properties cannot be used inside media queries):

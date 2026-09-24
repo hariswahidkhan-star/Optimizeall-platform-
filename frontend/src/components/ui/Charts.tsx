@@ -213,6 +213,8 @@ export interface LineChartProps extends BaseChartProps {
   labels: string[];
   /** Up to three series (fixed color order). */
   series: ChartSeries[];
+  /** Fill a soft gradient under the first series (an area chart). */
+  area?: boolean;
 }
 
 export function LineChart({
@@ -222,10 +224,12 @@ export function LineChart({
   description,
   height = 240,
   valueFormatter = defaultFormat,
+  area = false,
   className,
 }: LineChartProps) {
   const titleId = useId();
   const descId = useId();
+  const gradientId = `ui-area-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
   const [active, setActive] = useState<number | null>(null);
   const shown = series.slice(0, SERIES_COLORS.length);
   const max = niceMax(Math.max(0, ...shown.flatMap((s) => s.values)));
@@ -272,6 +276,21 @@ export function LineChart({
             y1={PAD.top}
             y2={PAD.top + innerH}
           />
+        )}
+        {area && shown[0] && shown[0].values.length > 1 && (
+          <>
+            <defs>
+              <linearGradient id={gradientId} x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stopColor={SERIES_COLORS[0]} stopOpacity={0.18} />
+                <stop offset="100%" stopColor={SERIES_COLORS[0]} stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <path
+              className="ui-chart__area"
+              fill={`url(#${gradientId})`}
+              d={`${shown[0].values.map((v, i) => `${i === 0 ? 'M' : 'L'}${x(i)},${y(v)}`).join(' ')} L${x(shown[0].values.length - 1)},${PAD.top + innerH} L${x(0)},${PAD.top + innerH} Z`}
+            />
+          </>
         )}
         {shown.map((s, si) => (
           <g key={s.id}>

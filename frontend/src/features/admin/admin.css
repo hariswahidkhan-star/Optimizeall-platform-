@@ -619,63 +619,44 @@
   border-block-start: 1px solid var(--color-border);
 }
 
+/* Overview "Needs attention": a KPI tile with its "View …" link as the tile's footer. */
 .admin-link-stat {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-xs), var(--shadow-highlight);
+}
+
+.admin-link-stat .ui-stat {
+  flex: 1;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .admin-link-stat__link {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: var(--space-1);
-  font-size: var(--text-small);
+  padding: var(--space-2) var(--space-5);
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface-2);
+  font-size: 0.8125rem;
+  text-decoration: none;
+}
+
+.admin-link-stat__link:hover {
+  text-decoration: underline;
 }
 
 .admin-link-stat__link svg {
   width: 14px;
   height: 14px;
-}
-
-.admin-quick-links {
-  list-style: none;
-  margin: var(--space-3) 0 0;
-  padding: 0;
-  display: grid;
-  gap: var(--space-3);
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
-}
-
-.admin-quick-link {
-  display: flex;
-  gap: var(--space-3);
-  align-items: flex-start;
-}
-
-.admin-quick-link p {
-  margin: var(--space-1) 0 0;
-}
-
-.admin-quick-link__icon {
-  display: inline-grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  flex: none;
-  border-radius: var(--radius-md);
-  background: var(--color-primary-soft);
-  color: var(--color-primary-soft-text);
-}
-
-.admin-quick-link__icon svg {
-  width: 20px;
-  height: 20px;
-}
-
-.admin-quick-link__title {
-  margin: 0;
-  font-size: var(--text-body);
-  font-weight: var(--weight-semibold);
 }
 
 /* Page sections are separated like the rest of the portal. */

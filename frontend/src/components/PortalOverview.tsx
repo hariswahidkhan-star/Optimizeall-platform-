@@ -8,7 +8,7 @@ import { firstName, humanize } from '@/lib/format/text';
 import { Badge } from './ui/Badge';
 import { Card, CardBody } from './ui/Card';
 import { PageHeader } from './ui/PageHeader';
-import './PortalOverview.css';
+import './ui/dashboard.css';
 
 /**
  * Landing page of a staff portal: a greeting, the user's roles and a card per section of the portal the user can
@@ -23,7 +23,7 @@ export function PortalOverview() {
   const name = user ? firstName(user.displayName) : '';
 
   return (
-    <>
+    <div className="ui-dash">
       <PageHeader
         eyebrow={portal.label}
         title={`${greetingFor(new Date(), user?.timeZone)}${name ? `, ${name}` : ''}`}
@@ -49,30 +49,30 @@ export function PortalOverview() {
         <h2 id="portal-sections-heading" className="visually-hidden">
           Sections
         </h2>
-        <ul className="portal-overview__grid">
+        <ul className="ui-quicklinks">
           {sections.map((item) => {
             const Icon = item.icon;
             return (
               <Card as="li" key={item.to} interactive>
-                <CardBody className="portal-overview__card">
-                  <span className="portal-overview__icon" aria-hidden="true">
+                <CardBody className="ui-quicklink">
+                  <span className="ui-quicklink__icon" aria-hidden="true">
                     <Icon />
                   </span>
-                  <div className="portal-overview__text">
-                    <h3 className="portal-overview__title">
+                  <div className="ui-quicklink__text">
+                    <h3 className="ui-quicklink__title">
                       <Link className="ui-card__link" to={`${portal.basePath}/${item.to}`}>
                         {item.label}
                       </Link>
                     </h3>
-                    {item.description && <p className="portal-overview__description">{item.description}</p>}
+                    {item.description && <p className="ui-quicklink__description">{item.description}</p>}
                   </div>
-                  <ArrowRight className="portal-overview__arrow" aria-hidden="true" />
+                  <ArrowRight className="ui-quicklink__arrow" aria-hidden="true" />
                 </CardBody>
               </Card>
             );
           })}
         </ul>
       </section>
-    </>
+    </div>
   );
 }
