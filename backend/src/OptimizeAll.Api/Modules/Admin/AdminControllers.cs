@@ -47,6 +47,7 @@ public sealed class AdminUsersController(AdminUsersService users) : ControllerBa
         StatusCode(StatusCodes.Status201Created, await users.CreateStaffAsync(request, ct));
 }
 
+[DeniedWhileImpersonating(WritesOnly = true)] // platform settings incl. the referral reward
 [ApiController]
 [HasPermission(Permissions.SettingsManage)]
 [Route("api/v1/admin/settings")]
@@ -88,6 +89,7 @@ public sealed class AdminJobsController(AdminJobsService jobs) : ControllerBase
     public Task<PagedResult<JobRunDto>> Runs([FromQuery] JobRunQuery query, CancellationToken ct) => jobs.RunsAsync(query, ct);
 
     /// <summary>Runs a job now (requires settings.manage in addition to jobs.view).</summary>
+    [DeniedWhileImpersonating] // runs jobs such as payout preparation
     [HttpPost("{name}/run")]
     [HasPermission(Permissions.SettingsManage)]
     public Task<JobRunDto> Run(string name, CancellationToken ct) => jobs.RunNowAsync(name, ct);

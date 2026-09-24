@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Errors;
 using OptimizeAll.Api.Common.Ledger;
@@ -261,8 +262,10 @@ public sealed class PayoutBatchService(
 
     private async Task NotifyFinanceAsync(PayoutBatch batch, CancellationToken ct)
     {
-        var financeUsers = await db.Set<User>().AsNoTracking()
-            .Where(u => u.Status == UserStatus.Active && u.Roles.Any(r => r.Role == Role.Finance))
+        // Whoever approves batches (payouts.finalize) through a job role: Finance or a custom role; admins only when they
+        // also hold such a role (see IPermissionDirectory.WorkersWithAnyPermissionAsync).
+        var financeUsers = await (await new PermissionDirectory(db).WorkersWithAnyPermissionAsync(new[] { Permissions.PayoutsFinalize }, ct))
+            .Where(u => u.Status == UserStatus.Active)
             .Select(u => u.Id).ToListAsync(ct);
         foreach (var userId in financeUsers)
         {

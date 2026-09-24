@@ -62,6 +62,8 @@ export interface SessionUser {
   isTestAccount?: boolean;
   /** Present while a staff member is viewing as this user ("log in as"). */
   impersonatedBy?: Impersonator | null;
+  /** Names of the custom roles assigned to the user (badges next to the built-in roles). */
+  customRoles?: string[] | null;
 }
 
 export interface Impersonator {

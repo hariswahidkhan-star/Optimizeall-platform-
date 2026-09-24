@@ -234,6 +234,7 @@ public sealed class EmailAudienceController(
     public Task<WorkspaceSettingsDto> UpdateSettings(WorkspaceSettingsRequest request, CancellationToken ct) => settings.UpdateAsync(request, ct);
 
     /// <summary>Choose the email service provider (sensitive).</summary>
+    [DeniedWhileImpersonating] // email provider (integration)
     [HttpPut("settings/provider")]
     [HasPermission(Permissions.IntegrationsManage)]
     public Task<WorkspaceSettingsDto> ChooseProvider(ProviderChoiceRequest request, CancellationToken ct) => settings.ChooseProviderAsync(request, ct);

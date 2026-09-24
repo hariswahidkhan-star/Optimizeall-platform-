@@ -372,6 +372,7 @@ public sealed class PublicProposalsController(ProposalService proposals, Proposa
 }
 
 /// <summary>Proposals in the client portal (Billing or Owner duty); another organization's proposal answers 404.</summary>
+[DeniedWhileImpersonating(WritesOnly = true)] // accepting a proposal is a financial commitment
 [ApiController]
 [Route("api/v1/client/billing/proposals")]
 [HasPermission(Permissions.ClientPortal)]

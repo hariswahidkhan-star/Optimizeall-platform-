@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Api.Common.Events;
 using OptimizeAll.Api.Common.Jobs;
 using OptimizeAll.Api.Common.Notifications;
@@ -322,9 +323,11 @@ public sealed class AutomationJob(
     private async Task<List<Guid>> StaffRecipientsAsync(State s, StepConfig c, CancellationToken ct)
     {
         var requested = c.UserIds ?? new List<Guid>();
-        var staff = await db.Set<User>().AsNoTracking().Where(u => requested.Contains(u.Id) && u.Status == UserStatus.Active)
-            .Select(u => new { u.Id, Roles = u.Roles.Select(r => r.Role).ToList() }).ToListAsync(ct);
-        var ids = staff.Where(u => u.Roles.Any(r => r is not (Role.Participant or Role.Client))).Select(u => u.Id).ToList();
+        var active = await db.Set<User>().AsNoTracking().Where(u => requested.Contains(u.Id) && u.Status == UserStatus.Active)
+            .Select(u => u.Id).ToListAsync(ct);
+        // Staff = any staff permission through built-in or custom roles.
+        var staff = await new PermissionDirectory(db).StaffAmongAsync(active, ct);
+        var ids = active.Where(staff.Contains).ToList();
         if (ids.Count == 0 && s.Automation.ClientAccountId is { } clientId &&
             await db.Set<ClientAccount>().AsNoTracking().Where(x => x.Id == clientId).Select(x => x.AccountManagerUserId).FirstOrDefaultAsync(ct) is { } manager)
             ids.Add(manager);

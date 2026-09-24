@@ -30,6 +30,7 @@ public sealed class ReviewController(IReviewQueryService queries, IReviewService
     [HasPermission(Permissions.SubmissionsReview)]
     public Task<ReviewDetailDto> Detail(Guid id, CancellationToken ct) => queries.DetailAsync(id, ct);
 
+    [DeniedWhileImpersonating] // approvals create earnings
     [HttpPost("submissions/{id:guid}/decision")]
     [HasPermission(Permissions.SubmissionsReview)]
     public Task<DecisionResultDto> Decide(Guid id, DecisionRequest request, CancellationToken ct) => review.DecideAsync(id, request, ct);
@@ -42,6 +43,7 @@ public sealed class ReviewController(IReviewQueryService queries, IReviewService
     [HasPermission(Permissions.SubmissionsReview)]
     public Task<LiveCheckResultDto> LiveCheck(Guid id, LiveCheckRequest request, CancellationToken ct) => review.LiveCheckAsync(id, request, ct);
 
+    [DeniedWhileImpersonating] // reverses earnings
     [HttpPost("submissions/{id:guid}/reverse")]
     [HasPermission(Permissions.SubmissionsReverse)]
     public Task<ReverseResultDto> Reverse(Guid id, ReverseRequest request, CancellationToken ct) => review.ReverseAsync(id, request, ct);
@@ -54,6 +56,7 @@ public sealed class ReviewController(IReviewQueryService queries, IReviewService
     [HasPermission(Permissions.AppealsResolve)]
     public Task<AppealDetailDto> Appeal(Guid id, CancellationToken ct) => queries.AppealAsync(id, ct);
 
+    [DeniedWhileImpersonating] // an upheld appeal creates earnings
     [HttpPost("appeals/{id:guid}/resolve")]
     [HasPermission(Permissions.AppealsResolve)]
     public Task<AppealResolutionDto> ResolveAppeal(Guid id, ResolveAppealRequest request, CancellationToken ct) =>

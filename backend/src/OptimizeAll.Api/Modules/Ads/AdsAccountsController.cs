@@ -106,8 +106,10 @@ public sealed class AdsAccountsController(
     [HasPermission(Permissions.AdsManage)]
     public async Task<IReadOnlyList<StaffOptionDto>> Staff(CancellationToken ct)
     {
-        var roles = new[] { Role.AdsSpecialist, Role.Strategist, Role.AccountManager, Role.Admin };
-        return await db.Set<User>().AsNoTracking().Where(u => u.Status == UserStatus.Active && u.Roles.Any(r => roles.Contains(r.Role)))
+        // Owners of ad accounts: holders of ads.manage (the ads team) or clients.manage (account managers), through
+        // built-in or custom roles — for the built-in roles AdsSpecialist, Strategist, AccountManager and Admin.
+        var holders = await new PermissionDirectory(db).UsersWithAnyPermissionAsync(new[] { Permissions.AdsManage, Permissions.ClientsManage }, ct);
+        return await holders.Where(u => u.Status == UserStatus.Active)
             .OrderBy(u => u.DisplayName).Select(u => new StaffOptionDto(u.Id, u.DisplayName)).Take(300).ToListAsync(ct);
     }
 

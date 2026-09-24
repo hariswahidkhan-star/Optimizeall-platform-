@@ -26,6 +26,7 @@ internal static class HtmlDownload
         "invoice-" + new string((number ?? "draft").Where(c => char.IsAsciiLetterOrDigit(c) || c == '-').ToArray()) + ".html";
 }
 
+[DeniedWhileImpersonating(WritesOnly = true)] // invoices are money
 [ApiController]
 [Route("api/v1/agency/billing/invoices")]
 [HasPermission(Permissions.BillingView)]
@@ -137,6 +138,7 @@ public sealed class AgencyCreditNotesController(CreditNoteService creditNotes) :
     public Task<CreditNoteDto> Apply(Guid id, ApplyCreditNoteRequest request, CancellationToken ct) => creditNotes.ApplyAsync(id, request, ct);
 }
 
+[DeniedWhileImpersonating(WritesOnly = true)] // billing settings, tax rates, recurring invoicing
 [ApiController]
 [Route("api/v1/agency/billing")]
 [HasPermission(Permissions.BillingView)]
@@ -328,6 +330,7 @@ public sealed class AgencyBillingController(
         new(t.Id, t.Name, t.RatePercent, t.Inclusive, t.CountryCode, t.IsActive, t.NeedsReview, t.Notes, t.ConcurrencyStamp);
 }
 
+[DeniedWhileImpersonating(WritesOnly = true)] // contracts generate invoices
 [ApiController]
 [Route("api/v1/agency/contracts")]
 [HasPermission(Permissions.ContractsManage)]

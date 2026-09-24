@@ -52,7 +52,17 @@ public sealed class ImpersonationAndTestAccountRulesTests
     [InlineData(true, "production", false)]
     [InlineData(false, "Development", false)]
     [InlineData(false, "Staging", false)]
-    public void Test_login_needs_the_flag_and_a_non_production_environment(bool flag, string environment, bool expected) =>
+    // Allow-list, not deny-list: misspelt or custom production names fail closed.
+    [InlineData(true, "Prod", false)]
+    [InlineData(true, "Production ", false)]
+    [InlineData(true, " production", false)]
+    [InlineData(true, "production-eu", false)]
+    [InlineData(true, "PRODUCTION", false)]
+    [InlineData(true, "", false)]
+    [InlineData(true, null, false)]
+    [InlineData(true, "Demo", false)]
+    [InlineData(true, "staging", true)]
+    public void Test_login_needs_the_flag_and_a_non_production_environment(bool flag, string? environment, bool expected) =>
         Assert.Equal(expected, TestAccounts.TestLoginAllowed(flag, environment));
 
     [Theory]
@@ -63,6 +73,18 @@ public sealed class ImpersonationAndTestAccountRulesTests
     [InlineData("x@evil-demo.optimizeall.app", false)]
     [InlineData("x@demo.optimizeall.app.evil.com", false)]
     [InlineData("not-an-email", false)]
+    // Look-alike Unicode that case-folds towards ASCII, empty labels and suffix tricks never match.
+    [InlineData("x@demo.optimızeall.app", false)]
+    [InlineData("x@DEMO.OPT\u0130MIZEALL.APP", false)]
+    [InlineData("x@demo.optimizeall.app\u200b", false)]
+    [InlineData("x@\uff44emo.optimizeall.app", false)]
+    [InlineData("x@.demo.optimizeall.app", false)]
+    [InlineData("x@a..demo.optimizeall.app", false)]
+    [InlineData("x@xdemo.optimizeall.app", false)]
+    [InlineData("x@demo.optimizeall.app.", false)]
+    [InlineData("x@", false)]
+    [InlineData("x@demo.optimizeall.app@evil.com", false)]
+    [InlineData("x@a.b.demo.optimizeall.app", true)]
     public void Demo_accounts_are_recognised_by_their_domain(string email, bool expected) =>
         Assert.Equal(expected, TestAccounts.IsDemoEmail(email));
 

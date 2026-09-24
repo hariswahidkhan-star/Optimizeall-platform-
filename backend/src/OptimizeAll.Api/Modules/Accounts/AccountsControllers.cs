@@ -5,6 +5,7 @@ using OptimizeAll.Api.Common.Security;
 namespace OptimizeAll.Api.Modules.Accounts;
 
 /// <summary>The signed-in user's own profile (any authenticated user, staff included).</summary>
+[DeniedWhileImpersonating(WritesOnly = true)] // identity and contact/consent details
 [ApiController]
 [Authorize]
 [Route("api/v1/me/profile")]

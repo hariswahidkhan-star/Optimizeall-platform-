@@ -394,7 +394,11 @@ public sealed class AuthService(
     {
         var user = await db.Set<User>().AsNoTracking().Include(u => u.Roles).FirstOrDefaultAsync(u => u.Id == userId, ct)
                    ?? throw DomainException.NotFound("User");
-        var dto = ToDto(user, await permissionResolver.ForUserAsync(user.Id, user.Roles.Select(r => r.Role), ct)) with { IsTestAccount = user.IsTestAccount };
+        var dto = ToDto(user, await permissionResolver.ForUserAsync(user.Id, user.Roles.Select(r => r.Role), ct)) with
+        {
+            IsTestAccount = user.IsTestAccount,
+            CustomRoles = await CustomRoleNamesQuery(db, user.Id).ToListAsync(ct),
+        };
         return impersonation.SessionId is { } sessionId
             ? dto with { ImpersonatedBy = await ImpersonatorAsync(db, sessionId, ct) }
             : dto;
@@ -432,14 +436,25 @@ public sealed class AuthService(
 
     /// <summary>Session user with effective permissions (built-in roles + custom roles, see <see cref="IPermissionResolver"/>).</summary>
     private SessionUserDto ToDto(User user) =>
-        ToDto(user, permissionResolver.ForUser(user.Id, user.Roles.Select(r => r.Role)));
+        ToDto(user, permissionResolver.ForUser(user.Id, user.Roles.Select(r => r.Role))) with
+        {
+            CustomRoles = CustomRoleNamesQuery(db, user.Id).ToList(),
+        };
+
+    /// <summary>Names of the user's custom roles, sorted (shown as badges next to the built-in roles).</summary>
+    public static IQueryable<string> CustomRoleNamesQuery(AppDbContext db, Guid userId) =>
+        from a in db.Set<UserCustomRole>().AsNoTracking()
+        join r in db.Set<CustomRole>().AsNoTracking() on a.CustomRoleId equals r.Id
+        where a.UserId == userId
+        orderby r.Name
+        select r.Name;
 
     public static SessionUserDto ToDto(User user, IEnumerable<string> effectivePermissions)
     {
         var roles = user.Roles.Select(r => r.Role).ToArray();
         return new SessionUserDto(user.Id, user.Email, user.DisplayName, user.IsEmailVerified, user.CountryCode,
             user.LanguageCode, user.TimeZone, user.Status.ToString(), roles.Select(r => r.ToString()).ToArray(),
-            effectivePermissions.Distinct().OrderBy(p => p).ToArray());
+            effectivePermissions.Distinct().OrderBy(p => p).ToArray(), CustomRoles: Array.Empty<string>());
     }
 
     private LoginResult IssueSession(User user, Guid familyId) => IssueSession(user, familyId, out _);

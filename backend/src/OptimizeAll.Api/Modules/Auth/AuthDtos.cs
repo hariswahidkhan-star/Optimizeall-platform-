@@ -87,7 +87,9 @@ public sealed record SessionUserDto(
     IReadOnlyCollection<string> Roles,
     IReadOnlyCollection<string> Permissions,
     bool IsTestAccount = false,
-    ImpersonatorDto? ImpersonatedBy = null);
+    ImpersonatorDto? ImpersonatedBy = null,
+    // Names of the custom roles assigned to the user, sorted (header badges); their permissions are in Permissions.
+    IReadOnlyCollection<string>? CustomRoles = null);
 
 /// <summary>Present on the session while a staff member is viewing as this user (impersonation).</summary>
 public sealed record ImpersonatorDto(Guid Id, string DisplayName, string Email, DateTime StartedAt, DateTime ExpiresAt);

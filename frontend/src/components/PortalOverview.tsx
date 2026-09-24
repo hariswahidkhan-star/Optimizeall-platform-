@@ -28,11 +28,22 @@ export function PortalOverview() {
         eyebrow={portal.label}
         title={`${greetingFor(new Date(), user?.timeZone)}${name ? `, ${name}` : ''}`}
         description={portal.description}
-        meta={user?.roles.map((role) => (
-          <Badge key={role} tone="brand" icon={<ShieldCheck />}>
-            {humanize(role)}
-          </Badge>
-        ))}
+        meta={
+          user && (
+            <>
+              {user.roles.map((role) => (
+                <Badge key={role} tone="brand" icon={<ShieldCheck />}>
+                  {humanize(role)}
+                </Badge>
+              ))}
+              {(user.customRoles ?? []).map((name) => (
+                <Badge key={`custom:${name}`} tone="neutral" icon={<ShieldCheck />}>
+                  {name}
+                </Badge>
+              ))}
+            </>
+          )
+        }
       />
       <section aria-labelledby="portal-sections-heading">
         <h2 id="portal-sections-heading" className="visually-hidden">

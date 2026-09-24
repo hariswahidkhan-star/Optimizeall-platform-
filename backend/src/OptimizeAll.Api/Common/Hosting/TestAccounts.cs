@@ -21,19 +21,38 @@ public static class TestAccounts
     private const string PasswordAlphabet = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
 
     /// <summary>
-    /// The quick "log in as test user" is available only when <c>DevTools:TestLoginEnabled</c> is on AND the host is not
-    /// Production. Both are required, so a copied configuration can never enable it in production.
+    /// Environments where the quick sign-in may be switched on. An allow-list (not "anything but Production"), so a
+    /// misspelt or custom production environment name ("Prod", "production-eu", "Production " …) fails closed.
     /// </summary>
-    public static bool TestLoginAllowed(bool configEnabled, string environmentName) =>
-        configEnabled && !string.Equals(environmentName, "Production", StringComparison.OrdinalIgnoreCase);
+    public static readonly IReadOnlySet<string> TestLoginEnvironments =
+        new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Development", "Staging", "Testing" };
 
-    /// <summary>A seeded demo account: <c>x@demo.optimizeall.app</c> or <c>x@&lt;client&gt;.demo.optimizeall.app</c>.</summary>
+    /// <summary>
+    /// The quick "log in as test user" is available only when <c>DevTools:TestLoginEnabled</c> is on AND the host runs in
+    /// one of <see cref="TestLoginEnvironments"/> (never Production). Both are required, so a copied configuration can
+    /// never enable it in production. The environment name comes from the process environment
+    /// (ASPNETCORE_ENVIRONMENT/DOTNET_ENVIRONMENT), never from a request.
+    /// </summary>
+    public static bool TestLoginAllowed(bool configEnabled, string? environmentName) =>
+        configEnabled && environmentName is not null && TestLoginEnvironments.Contains(environmentName);
+
+    /// <summary>
+    /// A seeded demo account: <c>x@demo.optimizeall.app</c> or <c>x@&lt;client&gt;.demo.optimizeall.app</c>. The domain
+    /// must be plain ASCII (letters, digits, dots, dashes): look-alike Unicode characters that case-fold to ASCII
+    /// (e.g. the Kelvin sign or dotted capital I) never match.
+    /// </summary>
     public static bool IsDemoEmail(string email)
     {
         var at = email.LastIndexOf('@');
         if (at < 0) return false;
-        var domain = email[(at + 1)..].Trim().ToLowerInvariant();
-        return domain == DemoDomain || domain.EndsWith("." + DemoDomain, StringComparison.Ordinal);
+        var raw = email[(at + 1)..].Trim();
+        if (raw.Length == 0 || !raw.All(c => char.IsAsciiLetterOrDigit(c) || c is '.' or '-')) return false;
+        var domain = raw.ToLowerInvariant();
+        if (domain == DemoDomain) return true;
+        if (!domain.EndsWith("." + DemoDomain, StringComparison.Ordinal)) return false;
+        // One or more non-empty labels before the demo domain ("..demo.optimizeall.app" is not a subdomain).
+        var prefix = domain[..^(DemoDomain.Length + 1)];
+        return prefix.Split('.').All(label => label.Length > 0);
     }
 
     /// <summary>Lower-case ASCII slug of letters/digits and single dashes, at most <paramref name="max"/> characters.</summary>

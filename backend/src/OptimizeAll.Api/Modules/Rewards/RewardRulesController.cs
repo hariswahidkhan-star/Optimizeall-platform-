@@ -3,6 +3,7 @@ using OptimizeAll.Api.Common.Security;
 
 namespace OptimizeAll.Api.Modules.Rewards;
 
+[DeniedWhileImpersonating(WritesOnly = true)] // reward rates are money
 [ApiController]
 [Route("api/v1/admin/campaigns/{campaignId:guid}/reward-rules")]
 public sealed class RewardRulesController(IRewardRulesService rules) : ControllerBase

@@ -51,7 +51,7 @@ public sealed class ImpersonationService(
     private async Task<bool> IsProtectedTargetAsync(User target, CancellationToken ct)
     {
         var roles = target.Roles.Select(r => r.Role).ToList();
-        return IsProtectedTarget(roles) || (await permissions.ForUserAsync(target.Id, roles, ct)).Contains(Permissions.UsersImpersonate);
+        return IsProtectedTarget(roles) || Impersonation.IsProtectedTarget(roles, await permissions.ForUserAsync(target.Id, roles, ct));
     }
 
     public async Task<ImpersonationStart> StartAsync(Guid targetId, ImpersonateRequest request, CancellationToken ct)
@@ -78,10 +78,10 @@ public sealed class ImpersonationService(
 
         var impersonator = await db.Set<User>().AsNoTracking().FirstAsync(u => u.Id == impersonatorId, ct);
 
-        // One impersonation at a time per staff member: starting a new one ends any other.
-        await db.Set<ImpersonationSession>()
-            .Where(s => s.ImpersonatorUserId == impersonatorId && s.EndedAt == null)
-            .ExecuteUpdateAsync(s => s.SetProperty(x => x.EndedAt, Now).SetProperty(x => x.EndedReason, "replaced"), ct);
+        // One impersonation at a time per staff member: starting a new one ends any other (audited like any ending).
+        var previous = await db.Set<ImpersonationSession>().AsNoTracking()
+            .Where(s => s.ImpersonatorUserId == impersonatorId && s.EndedAt == null).ToListAsync(ct);
+        foreach (var old in previous) await EndAndAuditAsync(old, "replaced", ct);
 
         var (raw, hash) = tokens.CreateOpaqueToken();
         var session = new ImpersonationSession
@@ -122,7 +122,7 @@ public sealed class ImpersonationService(
         if (session is null || session.EndedAt is not null) return null;
         if (session.ExpiresAt <= Now)
         {
-            await EndSessionAsync(session.Id, "expired", ct);
+            await EndAndAuditAsync(session, "expired", ct, save: true);
             return null;
         }
 
@@ -133,9 +133,16 @@ public sealed class ImpersonationService(
             t.TokenHash == refreshHash && t.UserId == session.ImpersonatorUserId && t.RevokedAt == null && t.ExpiresAt > Now, ct);
         if (impersonator is null || impersonator.Status != UserStatus.Active ||
             impersonator.SecurityVersion != session.ImpersonatorSecurityVersion || !adminSessionLive ||
-            target is null || target.Status != UserStatus.Active || await IsProtectedTargetAsync(target, ct))
+            target is null || target.Status != UserStatus.Active)
         {
-            await EndSessionAsync(session.Id, "admin_session_ended", ct);
+            await EndAndAuditAsync(session, "admin_session_ended", ct, save: true);
+            return null;
+        }
+        // Custom-role changes don't bump security versions: re-check that the impersonator still may impersonate and the
+        // target is still impersonable (not an admin or impersonator by now).
+        if (!await Impersonation.PermissionsStillAllowAsync(impersonator.Id, target.Id, db, permissions, ct))
+        {
+            await EndAndAuditAsync(session, "permissions_changed", ct, save: true);
             return null;
         }
         return Issue(target, impersonator, session);
@@ -162,18 +169,27 @@ public sealed class ImpersonationService(
         {
             var session = await db.Set<ImpersonationSession>().AsNoTracking().FirstOrDefaultAsync(s => s.Id == id, ct);
             if (session is null || session.EndedAt is not null) continue;
-            if (await EndSessionAsync(id, reason, ct) == 0) continue;
-            ended = true;
-            audit.Record("admin.impersonation_ended", nameof(User), session.TargetUserId,
-                after: new { sessionId = id, impersonatorUserId = session.ImpersonatorUserId, endedReason = reason });
+            if (await EndAndAuditAsync(session, reason, ct)) ended = true;
         }
         if (ended) await db.SaveChangesAsync(ct);
         return ended;
     }
 
-    private Task<int> EndSessionAsync(Guid id, string reason, CancellationToken ct) =>
-        db.Set<ImpersonationSession>().Where(s => s.Id == id && s.EndedAt == null)
+    /// <summary>
+    /// Ends a live session (conditional update, so concurrent enders record it once) and stages the
+    /// <c>admin.impersonation_ended</c> audit row with the reason (exit, logout, expired, replaced, admin_session_ended,
+    /// permissions_changed). With <paramref name="save"/> the audit row is saved at once.
+    /// </summary>
+    private async Task<bool> EndAndAuditAsync(ImpersonationSession session, string reason, CancellationToken ct, bool save = false)
+    {
+        var updated = await db.Set<ImpersonationSession>().Where(s => s.Id == session.Id && s.EndedAt == null)
             .ExecuteUpdateAsync(s => s.SetProperty(x => x.EndedAt, Now).SetProperty(x => x.EndedReason, reason), ct);
+        if (updated == 0) return false;
+        audit.Record("admin.impersonation_ended", nameof(User), session.TargetUserId,
+            after: new { sessionId = session.Id, impersonatorUserId = session.ImpersonatorUserId, endedReason = reason });
+        if (save) await db.SaveChangesAsync(ct);
+        return true;
+    }
 
     private AuthResponse Issue(User target, User impersonator, ImpersonationSession session)
     {
@@ -182,6 +198,7 @@ public sealed class ImpersonationService(
         var user = AuthService.ToDto(target, permissions.ForUser(target.Id, target.Roles.Select(r => r.Role))) with
         {
             IsTestAccount = target.IsTestAccount,
+            CustomRoles = AuthService.CustomRoleNamesQuery(db, target.Id).ToList(),
             ImpersonatedBy = new ImpersonatorDto(impersonator.Id, impersonator.DisplayName, impersonator.Email, session.StartedAt, session.ExpiresAt),
         };
         return new AuthResponse(access.Token, access.ExpiresAt, user);

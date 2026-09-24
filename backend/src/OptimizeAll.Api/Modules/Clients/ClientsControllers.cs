@@ -75,16 +75,19 @@ public sealed class AgencyClientsController(
     public Task<IReadOnlyList<ClientMemberDto>> Members(Guid id, CancellationToken ct) => clients.MembersAsync(id, false, ct);
 
     /// <summary>Invites a client user by email (new users receive a set-password link).</summary>
+    [DeniedWhileImpersonating] // client portal access (identity/roles)
     [HttpPost("{id:guid}/members")]
     [HasPermission(Permissions.ClientsManage)]
     public async Task<IActionResult> Invite(Guid id, InviteClientUserRequest request, CancellationToken ct) =>
         StatusCode(StatusCodes.Status201Created, await clients.InviteAsync(id, request, false, ct));
 
+    [DeniedWhileImpersonating] // client portal access (identity/roles)
     [HttpPut("{id:guid}/members/{userId:guid}")]
     [HasPermission(Permissions.ClientsManage)]
     public Task<IReadOnlyList<ClientMemberDto>> ChangeRole(Guid id, Guid userId, ChangeMemberRoleRequest request, CancellationToken ct) =>
         clients.ChangeMemberRoleAsync(id, userId, request, false, ct);
 
+    [DeniedWhileImpersonating] // client portal access (identity/roles)
     [HttpDelete("{id:guid}/members/{userId:guid}")]
     [HasPermission(Permissions.ClientsManage)]
     public Task<IReadOnlyList<ClientMemberDto>> RemoveMember(Guid id, Guid userId, CancellationToken ct) =>
@@ -153,9 +156,9 @@ public sealed class AgencyStaffController(AppDbContext db) : ControllerBase
     [HttpGet]
     public async Task<IReadOnlyList<StaffPersonDto>> List([FromQuery] string? search, CancellationToken ct)
     {
+        // Holders of the delivery permissions through built-in or custom roles (see StaffDirectory.DeliveryPermissions).
         var roles = StaffDirectory.DeliveryRoles;
-        var q = db.Set<User>().AsNoTracking().Include(u => u.Roles)
-            .Where(u => u.Status == UserStatus.Active && u.Roles.Any(r => roles.Contains(r.Role)));
+        IQueryable<User> q = (await StaffDirectory.DeliveryStaffAsync(db, ct)).Include(u => u.Roles);
         if (!string.IsNullOrWhiteSpace(search))
         {
             var p = PagingExtensions.LikePattern(search);
@@ -184,14 +187,17 @@ public sealed class ClientPortalAccountController(ClientService clients, ClientR
     public Task<IReadOnlyList<ClientMemberDto>> Members(Guid clientId, CancellationToken ct) => clients.MembersAsync(clientId, false, ct);
 
     /// <summary>Owners invite colleagues.</summary>
+    [DeniedWhileImpersonating] // client portal access (identity/roles)
     [HttpPost("orgs/{clientId:guid}/members")]
     public async Task<IActionResult> Invite(Guid clientId, InviteClientUserRequest request, CancellationToken ct) =>
         StatusCode(StatusCodes.Status201Created, await clients.InviteAsync(clientId, request, true, ct));
 
+    [DeniedWhileImpersonating] // client portal access (identity/roles)
     [HttpPut("orgs/{clientId:guid}/members/{userId:guid}")]
     public Task<IReadOnlyList<ClientMemberDto>> ChangeRole(Guid clientId, Guid userId, ChangeMemberRoleRequest request, CancellationToken ct) =>
         clients.ChangeMemberRoleAsync(clientId, userId, request, true, ct);
 
+    [DeniedWhileImpersonating] // client portal access (identity/roles)
     [HttpDelete("orgs/{clientId:guid}/members/{userId:guid}")]
     public Task<IReadOnlyList<ClientMemberDto>> Remove(Guid clientId, Guid userId, CancellationToken ct) =>
         clients.RemoveMemberAsync(clientId, userId, true, ct);

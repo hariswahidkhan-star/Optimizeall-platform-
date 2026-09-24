@@ -112,7 +112,9 @@ public sealed class GoogleSignInService(
             // Staff accounts, and addresses Google is not the authority for (a consumer Google account registered with
             // a non-Gmail address may have been verified by a previous owner of that mailbox or domain), are never
             // linked by email: the owner signs in with their password and connects Google from the profile.
-            if (existing.Roles.Any(r => !AutoLinkableRoles.Contains(r.Role)) || !IsGoogleAuthoritative(identity))
+            // Staff includes holders of staff permissions through custom roles only.
+            if (existing.Roles.Any(r => !AutoLinkableRoles.Contains(r.Role)) || !IsGoogleAuthoritative(identity) ||
+                (await new PermissionDirectory(db).StaffAmongAsync(new[] { existing.Id }, ct)).Count > 0)
                 throw DomainException.Conflict("auth.google_link_requires_sign_in",
                     "An account with this email already exists. Sign in with your password, then connect Google from " +
                     "your profile's security settings.");

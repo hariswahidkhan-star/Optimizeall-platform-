@@ -127,17 +127,18 @@ services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
                     context.Fail("session revoked");
                     return;
                 }
-                // Impersonation tokens die with their session (exit, expiry, impersonator signed out or suspended).
+                // Impersonation tokens die with their session (exit, expiry, impersonator signed out or suspended, the
+                // impersonator losing users.impersonate or the target becoming an admin/impersonator).
                 var now = context.HttpContext.RequestServices.GetRequiredService<TimeProvider>().GetUtcNow().UtcDateTime;
-                if (!await Impersonation.IsTokenStillValidAsync(context.Principal!, userId, db, now, context.HttpContext.RequestAborted))
+                var resolver = context.HttpContext.RequestServices.GetRequiredService<IPermissionResolver>();
+                if (!await Impersonation.IsTokenStillValidAsync(context.Principal!, userId, db, resolver, now, context.HttpContext.RequestAborted))
                 {
                     context.Fail("impersonation ended");
                     return;
                 }
                 // Effective permissions (built-in + custom roles) for this request, keyed by the current permission version.
                 context.HttpContext.Items[PermissionResolver.PermissionVersionItem] = (userId, state.PermissionVersion);
-                await context.HttpContext.RequestServices.GetRequiredService<IPermissionResolver>()
-                    .ResolveAsync(context.Principal!, context.HttpContext.RequestAborted);
+                await resolver.ResolveAsync(context.Principal!, context.HttpContext.RequestAborted);
             },
         };
     });

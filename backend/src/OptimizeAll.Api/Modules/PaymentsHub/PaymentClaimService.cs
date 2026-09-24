@@ -242,10 +242,11 @@ public sealed class PaymentClaimService(
     /// <summary>The client's account manager and every active Finance user (deduplicated).</summary>
     private async Task<IReadOnlyList<Guid>> StaffToNotifyAsync(Guid? accountManager, CancellationToken ct)
     {
-        var finance = await (from r in db.Set<UserRole>().AsNoTracking()
-                             join u in db.Set<User>().AsNoTracking() on r.UserId equals u.Id
-                             where r.Role == Role.Finance && u.Status == UserStatus.Active
-                             select u.Id).Take(50).ToListAsync(ct);
+        // Whoever confirms payment claims (billing.manage) through a job role: Finance or a custom role; admins only when
+        // they also hold such a role (see IPermissionDirectory.WorkersWithAnyPermissionAsync).
+        var finance = await (await new PermissionDirectory(db).WorkersWithAnyPermissionAsync(new[] { Permissions.BillingManage }, ct))
+            .Where(u => u.Status == UserStatus.Active)
+            .OrderBy(u => u.Id).Select(u => u.Id).Take(50).ToListAsync(ct);
         if (accountManager is { } am && await db.Set<User>().AnyAsync(u => u.Id == am && u.Status == UserStatus.Active, ct))
             finance.Add(am);
         return finance.Distinct().ToList();

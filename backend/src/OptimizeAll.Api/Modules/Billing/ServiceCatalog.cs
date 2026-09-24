@@ -126,6 +126,7 @@ public sealed class ServiceCatalogService(AppDbContext db, IAuditLogger audit, L
 }
 
 /// <summary>Service catalog: read by everyone who builds proposals, contracts or invoices; edited under billing settings.</summary>
+[DeniedWhileImpersonating(WritesOnly = true)] // prices
 [ApiController]
 [Route("api/v1/agency/billing/catalog")]
 [HasPermission(Permissions.BillingView)]

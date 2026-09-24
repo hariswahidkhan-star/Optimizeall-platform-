@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { tokenStore } from '@/lib/api/client';
 import { json, makeUser, mockFetch, session } from '@/test/fetchMock';
 import { axeViolations, renderWithApp } from '@/test/render';
-import { ImpersonationBanner } from './ImpersonationBanner';
+import { BANNER_OFFSET_VAR, ImpersonationBanner } from './ImpersonationBanner';
 
 const admin = makeUser({
   id: 'admin-1',
@@ -36,6 +36,37 @@ describe('ImpersonationBanner', () => {
     expect(banner).toHaveTextContent(/signed in as Platform Admin/);
     expect(within(banner).getByRole('button', { name: 'Exit' })).toBeInTheDocument();
     expect(await axeViolations(container)).toEqual([]);
+  });
+
+  it('stays visible: publishes its height for the sticky headers below it and clears it on exit', async () => {
+    const user = userEvent.setup();
+    mockFetch({
+      'POST /auth/refresh': () => json(200, session(jane, 'jane-token')),
+      'POST /auth/impersonation/exit': () => json(200, session(admin, 'admin-token')),
+    });
+    renderWithApp(<ImpersonationBanner />, {
+      route: '/app',
+      path: '/app',
+      routes: [{ path: '/admin/users', element: <p>admin users page</p> }],
+    });
+    const banner = await screen.findByRole('region', { name: 'Impersonation' });
+    expect(document.documentElement.style.getPropertyValue(BANNER_OFFSET_VAR)).toMatch(/px$/);
+    // Screen readers hear it when it appears, and the Exit button is described by the notice.
+    const status = within(banner).getByRole('status');
+    expect(status).toHaveTextContent(/You are viewing as Jane Doe/);
+    expect(within(banner).getByRole('button', { name: 'Exit' })).toHaveAttribute('aria-describedby', status.id);
+
+    await user.click(within(banner).getByRole('button', { name: 'Exit' }));
+    await screen.findByText('admin users page');
+    expect(document.documentElement.style.getPropertyValue(BANNER_OFFSET_VAR)).toBe('');
+  });
+
+  it('names a custom role when the user has no built-in staff role', async () => {
+    const lead = makeUser({ ...jane, roles: ['Participant'], customRoles: ['Support lead'], isTestAccount: false });
+    mockFetch({ 'POST /auth/refresh': () => json(200, session(lead, 'lead-token')) });
+    renderWithApp(<ImpersonationBanner />);
+    const banner = await screen.findByRole('region', { name: 'Impersonation' });
+    expect(banner).toHaveTextContent(/You are viewing as Jane Doe \(Support lead\)/);
   });
 
   it('renders nothing for an ordinary session', async () => {

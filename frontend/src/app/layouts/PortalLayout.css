@@ -126,7 +126,7 @@
 
 .portal-topbar {
   position: sticky;
-  top: 0;
+  top: var(--impersonation-banner-height, 0px); /* below the sticky impersonation banner */
   z-index: var(--z-header);
   display: flex;
   align-items: center;
