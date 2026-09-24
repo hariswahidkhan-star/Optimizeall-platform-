@@ -80,16 +80,20 @@ test.describe.serial('sessions and refresh tokens', () => {
 
     // A cross-site form post (another site's page) carries neither the header nor, with SameSite=Strict, the cookie.
     const cookieBefore = (await browserRefreshCookie(context))!.value;
+    // The app's own port under another host name (127.0.0.1 vs localhost) is another site.
+    const app = new URL(test.info().project.use.baseURL!);
+    const attackerOrigin = `http://127.0.0.1:${app.port}`;
+    const logoutUrl = new URL('/api/v1/auth/logout', app).href;
     const attacker = await context.newPage();
-    await attacker.goto('http://127.0.0.1:4731/');
+    await attacker.goto(`${attackerOrigin}/`);
     const answer = attacker.waitForResponse((r) => r.url().includes('/api/v1/auth/logout'));
-    await attacker.evaluate(() => {
+    await attacker.evaluate((action) => {
       const form = document.createElement('form');
       form.method = 'POST';
-      form.action = 'http://localhost:4731/api/v1/auth/logout';
+      form.action = action;
       document.body.appendChild(form);
       form.submit();
-    });
+    }, logoutUrl);
     expect((await answer).status()).toBe(403);
     await attacker.waitForURL(/\/api\/v1\/auth\/logout$/, { waitUntil: 'load' });
     await expect(attacker.locator('body')).toContainText('auth.csrf');
