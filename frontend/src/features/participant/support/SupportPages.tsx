@@ -331,6 +331,15 @@ function TicketView({ ticket }: { ticket: Ticket }) {
     },
   });
 
+  const reopen = useMutation({
+    mutationFn: () => api.post<Ticket>(`/me/support/tickets/${ticket.id}/reopen`),
+    onSuccess: (updated) => {
+      refresh(updated);
+      toast.success('Ticket reopened', 'Add a reply to tell us what you still need.');
+    },
+    onError: (error) => toast.error('The ticket wasn’t reopened', errorMessage(error)),
+  });
+
   const onReply = (event: FormEvent) => {
     event.preventDefault();
     if (send.isPending) return;
@@ -396,7 +405,16 @@ function TicketView({ ticket }: { ticket: Ticket }) {
                 </div>
               </form>
             ) : (
-              <Alert tone="neutral">This ticket is closed. Open a new ticket if you need more help.</Alert>
+              <Alert
+                tone="neutral"
+                actions={
+                  <Button variant="secondary" loading={reopen.isPending} onClick={() => reopen.mutate()}>
+                    Reopen ticket
+                  </Button>
+                }
+              >
+                This ticket is closed. Reopen it within 30 days of closing, or open a new ticket if you need more help.
+              </Alert>
             )}
           </CardBody>
         </Card>

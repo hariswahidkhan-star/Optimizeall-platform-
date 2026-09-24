@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { FolderTree, Pencil, Plus, Power, Trash2 } from 'lucide-react';
+import { ArrowUpDown, FolderTree, Pencil, Plus, Power, Trash2 } from 'lucide-react';
 import { useEffect, useId, useState, type FormEvent } from 'react';
 import { Alert } from '@/components/ui/Alert';
 import { Badge } from '@/components/ui/Badge';
@@ -16,7 +16,8 @@ import { api } from '@/lib/api/client';
 import { formatNumber } from '@/lib/format/money';
 import type { Category, CategoryDeleteResult } from '../api/types';
 import { orNull, QueryError } from '../shared/common';
-import { mapFieldErrors, toDisplayError } from '../shared/errors';
+import { adminErrorMessage, mapFieldErrors, toDisplayError } from '../shared/errors';
+import { ReorderList } from '../shared/ReorderList';
 import { TextAreaField, TextField } from '../content/fields';
 
 const KEY = ['admin', 'categories'] as const;
@@ -225,6 +226,16 @@ export function CategoriesPage() {
     },
   });
 
+  const [reordering, setReordering] = useState(false);
+  const reorder = useMutation({
+    mutationFn: (ids: string[]) => api.post<Category[]>('/admin/campaign-categories/reorder', { ids }),
+    onSuccess: (saved) => {
+      queryClient.setQueryData(KEY, saved);
+      toast.success('Order saved', 'Participants see the categories in the new order.');
+    },
+    onError: (error) => toast.error('Order not saved', adminErrorMessage(error)),
+  });
+
   const rows = [...(categories.data ?? [])].sort(
     (a, b) => a.sortOrder - b.sortOrder || a.name.localeCompare(b.name),
   );
@@ -235,15 +246,39 @@ export function CategoriesPage() {
         title="Campaign categories"
         description="Categories organise campaigns for participants. Inactive categories stay on existing campaigns but are hidden from browsing."
         actions={
-          <Button leadingIcon={<Plus />} onClick={() => setCreating(true)}>
-            New category
-          </Button>
+          <div className="cluster">
+            <Button
+              variant="secondary"
+              leadingIcon={<ArrowUpDown />}
+              aria-pressed={reordering}
+              onClick={() => setReordering((v) => !v)}
+            >
+              {reordering ? 'Done reordering' : 'Reorder'}
+            </Button>
+            <Button leadingIcon={<Plus />} onClick={() => setCreating(true)}>
+              New category
+            </Button>
+          </div>
         }
       />
       <Card>
         <CardBody>
           {categories.isError ? (
             <QueryError error={categories.error} onRetry={() => void categories.refetch()} />
+          ) : reordering ? (
+            <ReorderList
+              items={rows}
+              getId={(c) => c.id}
+              getLabel={(c) => c.name}
+              renderItem={(c) => (
+                <span>
+                  <strong>{c.name}</strong> {!c.isActive && <Badge tone="neutral">Inactive</Badge>}
+                </span>
+              )}
+              label="Campaign category order"
+              saving={reorder.isPending}
+              onSave={(ids) => reorder.mutateAsync(ids).catch(() => undefined)}
+            />
           ) : (
             <DataTable
               caption="Campaign categories"

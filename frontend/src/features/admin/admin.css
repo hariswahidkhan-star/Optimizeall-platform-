@@ -683,3 +683,97 @@
 .admin-analytics-group {
   margin-block-start: var(--space-2);
 }
+
+/* Editable page copy and email templates (content editors). */
+.admin-copy__toolbar {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+}
+
+.admin-copy__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-5);
+}
+
+.admin-copy__item {
+  padding-block-end: var(--space-5);
+  border-block-end: 1px solid var(--color-border);
+}
+
+.admin-copy__item:last-child {
+  border-block-end: 0;
+  padding-block-end: 0;
+}
+
+.admin-copy__preview {
+  margin: var(--space-2) 0 0;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+  font-size: var(--text-small);
+}
+
+.admin-copy__preview dt {
+  font-weight: var(--weight-semibold);
+}
+
+.admin-copy__preview dd {
+  margin: 0 0 var(--space-2);
+}
+
+.admin-copy__actions {
+  margin-block-start: var(--space-2);
+}
+
+.admin-copy__default summary {
+  cursor: pointer;
+  font-size: var(--text-small);
+}
+
+.admin-copy__default p {
+  white-space: pre-wrap;
+}
+
+.admin-email {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 1100px) {
+  .admin-email {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+.admin-email__frame {
+  width: 100%;
+  min-height: 420px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: #ffffff;
+}
+
+.admin-email__text {
+  white-space: pre-wrap;
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+  margin: 0;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+  overflow-x: auto;
+}
+
+.admin-email__vars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}

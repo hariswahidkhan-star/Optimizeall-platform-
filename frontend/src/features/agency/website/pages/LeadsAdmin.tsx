@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { CalendarClock, Download, Inbox, Mail, Newspaper, Users } from 'lucide-react';
 import { useState } from 'react';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import {
   Alert,
   Badge,
@@ -29,7 +29,7 @@ import {
 } from '@/components/ui';
 import type { Tone } from '@/components/ui';
 import { api } from '@/lib/api/client';
-import { errorMessage } from '@/lib/api/errors';
+import { errorMessage, isApiError } from '@/lib/api/errors';
 import { useAuth } from '@/lib/auth/useAuth';
 import { Permissions } from '@/lib/auth/permissions';
 import { formatDate, formatDateTime } from '@/lib/format/dates';
@@ -54,6 +54,23 @@ const INQUIRY_STATUSES: InquiryStatus[] = ['New', 'InProgress', 'Qualified', 'Co
 const INQUIRY_TYPES: InquiryType[] = ['Contact', 'Audit', 'Quote', 'Consultation'];
 const STATUS_TONE: Record<InquiryStatus, Tone> = { New: 'info', InProgress: 'warning', Qualified: 'brand', Converted: 'success', Closed: 'neutral', Spam: 'danger' };
 const human = (s: string) => s.replace(/([a-z])([A-Z])/g, '$1 $2');
+
+interface StaffPerson {
+  id: string;
+  displayName: string;
+  email: string;
+}
+
+/** Active agency staff for the assignee picker (needs clients.view; otherwise only "me" is offered). */
+function useStaff() {
+  const { hasPermission } = useAuth();
+  return useQuery({
+    queryKey: ['agency', 'staff'],
+    enabled: hasPermission(Permissions.ClientsView),
+    staleTime: 5 * 60_000,
+    queryFn: ({ signal }) => api.get<StaffPerson[]>('/agency/staff', { signal }),
+  });
+}
 
 export function InquiryStatusBadge({ status }: { status: InquiryStatus }) {
   return <Badge tone={STATUS_TONE[status]}>{human(status)}</Badge>;
@@ -134,9 +151,12 @@ export function InquiriesPage() {
   const page = Number(params.get('page') ?? 1) || 1;
   const type = params.get('type') ?? undefined;
   const status = params.get('status') ?? undefined;
+  const assignedTo = params.get('assignedTo') ?? undefined;
+  const staff = useStaff();
+  const staffName = (id: string | null) => (id ? (staff.data?.find((p) => p.id === id)?.displayName ?? 'Assigned') : '—');
   const query = useQuery({
-    queryKey: ['agency', 'website', 'inquiries', type, status, search, page],
-    queryFn: () => api.get<Paged<InquirySummary>>(`${W}/inquiries`, { query: { type, status, search, page, pageSize: 25 } }),
+    queryKey: ['agency', 'website', 'inquiries', type, status, assignedTo, search, page],
+    queryFn: () => api.get<Paged<InquirySummary>>(`${W}/inquiries`, { query: { type, status, assignedTo, search, page, pageSize: 25 } }),
     placeholderData: (previous) => previous,
   });
   const update = (key: string, value: string | undefined) => {
@@ -167,8 +187,17 @@ export function InquiriesPage() {
         filters={[
           { id: 'type', label: 'Type', options: INQUIRY_TYPES.map((t) => ({ value: t, label: t })) },
           { id: 'status', label: 'Status', options: INQUIRY_STATUSES.map((s) => ({ value: s, label: human(s) })) },
+          {
+            id: 'assignedTo',
+            label: 'Assigned to',
+            options: [
+              { value: 'me', label: 'Me' },
+              { value: 'unassigned', label: 'Unassigned' },
+              ...(staff.data ?? []).map((p) => ({ value: p.id, label: p.displayName })),
+            ],
+          },
         ]}
-        values={{ type, status }}
+        values={{ type, status, assignedTo }}
         onFilterChange={(id, v) => update(id, v)}
         onReset={() => {
           setSearch('');
@@ -190,6 +219,7 @@ export function InquiriesPage() {
               { id: 'type', header: 'Type', cell: (r) => r.type },
               { id: 'status', header: 'Status', cell: (r) => <InquiryStatusBadge status={r.status} /> },
               { id: 'services', header: 'Services', cell: (r) => r.serviceSlugs.join(', ') || '—', hideOnMobile: true },
+              { id: 'assignee', header: 'Assigned to', cell: (r) => staffName(r.assignedToUserId), hideOnMobile: true },
               { id: 'source', header: 'Source', cell: (r) => r.utmSource ?? 'direct', hideOnMobile: true },
               { id: 'received', header: 'Received', cell: (r) => formatDateTime(r.createdAt), hideOnMobile: true },
             ]}
@@ -210,29 +240,48 @@ export function InquiryDetailPage() {
   const client = useQueryClient();
   const { hasPermission } = useAuth();
   const canEdit = hasPermission(Permissions.SiteManage);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const staff = useStaff();
   const query = useQuery({ queryKey: ['agency', 'website', 'inquiry', inquiryId], queryFn: () => api.get<Inquiry>(`${W}/inquiries/${inquiryId}`) });
   const [status, setStatus] = useState<InquiryStatus | null>(null);
   const [notes, setNotes] = useState<string | null>(null);
+  const [assignee, setAssignee] = useState<string | null | undefined>(undefined);
+  const [deleting, setDeleting] = useState(false);
   const save = useMutation({
-    mutationFn: () =>
+    mutationFn: (override?: { status: InquiryStatus }) =>
       api.put<Inquiry>(`${W}/inquiries/${inquiryId}`, {
-        status: status ?? query.data!.status,
+        status: override?.status ?? status ?? query.data!.status,
         staffNotes: notes ?? query.data!.staffNotes,
-        assignedToUserId: query.data!.assignedToUserId,
+        assignedToUserId: assignee === undefined ? query.data!.assignedToUserId : assignee,
         concurrencyStamp: query.data!.concurrencyStamp,
       }),
     onSuccess: async (saved) => {
       toast.success('Inquiry updated');
       setStatus(null);
       setNotes(null);
+      setAssignee(undefined);
       client.setQueryData(['agency', 'website', 'inquiry', inquiryId], saved);
       await client.invalidateQueries({ queryKey: ['agency', 'website', 'inquiries'] });
     },
-    onError: (e) => toast.error("Couldn't update the inquiry", errorMessage(e)),
+    onError: (e) =>
+      toast.error(
+        "Couldn't update the inquiry",
+        isApiError(e) && e.code === 'concurrency.conflict' ? 'Someone else updated this inquiry. Reload the page to see their changes.' : errorMessage(e),
+      ),
   });
   if (query.isLoading) return <Skeleton height={300} />;
   if (query.isError) return <ErrorState error={query.error} />;
   const i = query.data!;
+  const currentAssignee = assignee === undefined ? i.assignedToUserId : assignee;
+  const people = staff.data ?? [];
+  const assigneeOptions = [
+    { value: '', label: 'Unassigned' },
+    ...(user && !people.some((p) => p.id === user.id) ? [{ value: user.id, label: `${user.displayName} (me)` }] : []),
+    ...people.map((p) => ({ value: p.id, label: p.id === user?.id ? `${p.displayName} (me)` : p.displayName })),
+    ...(currentAssignee && currentAssignee !== user?.id && !people.some((p) => p.id === currentAssignee) ? [{ value: currentAssignee, label: 'Current assignee' }] : []),
+  ];
+  const dirty = status !== null || notes !== null || assignee !== undefined;
   return (
     <div className="cms-page">
       <PageHeader
@@ -240,6 +289,27 @@ export function InquiryDetailPage() {
         eyebrow={`${i.type} inquiry · ${i.reference}`}
         breadcrumbs={[{ label: 'Inquiries', to: '..' }, { label: i.reference }]}
         meta={<InquiryStatusBadge status={i.status} />}
+        actions={
+          canEdit ? (
+            <Button variant="ghost" onClick={() => setDeleting(true)}>
+              Delete inquiry
+            </Button>
+          ) : undefined
+        }
+      />
+      <ConfirmDialog
+        open={deleting}
+        onClose={() => setDeleting(false)}
+        title={`Delete inquiry ${i.reference}?`}
+        description="Use this for spam or a data-erasure request. The inquiry and its details are removed permanently; a linked consultation keeps its own record. The CRM lead, if any, is not affected."
+        confirmLabel="Delete inquiry"
+        tone="danger"
+        onConfirm={async () => {
+          await api.delete(`${W}/inquiries/${inquiryId}`);
+          toast.success('Inquiry deleted');
+          await client.invalidateQueries({ queryKey: ['agency', 'website', 'inquiries'] });
+          navigate('..', { relative: 'path' });
+        }}
       />
       <div className="cms-grid-2">
         <Card>
@@ -305,13 +375,25 @@ export function InquiryDetailPage() {
                 <FormField label="Status">
                   <Select value={status ?? i.status} onChange={(e) => setStatus(e.target.value as InquiryStatus)} options={INQUIRY_STATUSES.map((s) => ({ value: s, label: human(s) }))} />
                 </FormField>
+                <FormField label="Assigned to">
+                  <Select value={currentAssignee ?? ''} onChange={(e) => setAssignee(e.target.value || null)} options={assigneeOptions} />
+                </FormField>
                 <FormField label="Internal notes" optional>
                   <Textarea rows={4} value={notes ?? i.staffNotes ?? ''} onChange={(e) => setNotes(e.target.value)} maxLength={4000} />
                 </FormField>
-                <div>
-                  <Button onClick={() => save.mutate()} loading={save.isPending} disabled={status === null && notes === null}>
+                <div className="cms-toolbar">
+                  <Button onClick={() => save.mutate(undefined)} loading={save.isPending} disabled={!dirty}>
                     Save
                   </Button>
+                  {i.status !== 'Closed' && (
+                    <Button
+                      variant="secondary"
+                      disabled={save.isPending}
+                      onClick={() => save.mutate({ status: 'Closed' })}
+                    >
+                      Mark closed
+                    </Button>
+                  )}
                 </div>
               </div>
             ) : (
@@ -556,6 +638,17 @@ export function BookingsPage() {
 // ---------------------------------------------------------------- Newsletter
 
 export function SubscribersPage() {
+  const toast = useToast();
+  const client = useQueryClient();
+  const [erasing, setErasing] = useState<Subscriber | null>(null);
+  const unsubscribe = useMutation({
+    mutationFn: (s: Subscriber) => api.post<Subscriber>(`${W}/newsletter/subscribers/${s.id}/unsubscribe`),
+    onSuccess: async (s) => {
+      toast.success('Unsubscribed', `${s.email} won't receive the newsletter any more.`);
+      await client.invalidateQueries({ queryKey: ['agency', 'website', 'subscribers'] });
+    },
+    onError: (e) => toast.error("Couldn't unsubscribe", errorMessage(e)),
+  });
   const [status, setStatus] = useState<string | undefined>();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
@@ -609,11 +702,31 @@ export function SubscribersPage() {
               { id: 'source', header: 'Source', cell: (r) => r.source ?? '—', hideOnMobile: true },
               { id: 'consent', header: 'Consent', cell: (r) => `${r.consentVersion} · ${formatDate(r.consentAt)}`, hideOnMobile: true },
             ]}
+            rowActions={(r) => [
+              ...(r.status !== 'Unsubscribed'
+                ? [{ id: 'unsubscribe', label: 'Unsubscribe', onSelect: () => unsubscribe.mutate(r) }]
+                : []),
+              { id: 'erase', label: 'Erase subscriber…', danger: true, onSelect: () => setErasing(r) },
+            ]}
             emptyState={<p className="text-muted">No subscribers yet.</p>}
           />
           {query.data && query.data.total > query.data.pageSize && <Pagination page={page} pageSize={query.data.pageSize} total={query.data.total} onPageChange={setPage} />}
         </>
       )}
+      <ConfirmDialog
+        open={!!erasing}
+        onClose={() => setErasing(null)}
+        title={`Erase ${erasing?.email ?? ''}?`}
+        description="Removes the address and its consent record permanently (for a data-erasure request). To just stop emails, unsubscribe instead."
+        confirmLabel="Erase subscriber"
+        tone="danger"
+        onConfirm={async () => {
+          await api.delete(`${W}/newsletter/subscribers/${erasing!.id}`);
+          toast.success('Subscriber erased');
+          setErasing(null);
+          await client.invalidateQueries({ queryKey: ['agency', 'website', 'subscribers'] });
+        }}
+      />
     </div>
   );
 }

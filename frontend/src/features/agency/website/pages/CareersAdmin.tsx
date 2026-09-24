@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Download } from 'lucide-react';
 import { useState } from 'react';
-import { Alert, Badge, Button, Drawer, ErrorState, FormField, KeyValueList, PageHeader, Select, Tabs, Textarea, Timeline, useToast } from '@/components/ui';
+import { Alert, Badge, Button, ConfirmDialog, Drawer, ErrorState, FormField, KeyValueList, PageHeader, Select, Tabs, Textarea, Timeline, useToast } from '@/components/ui';
 import { api } from '@/lib/api/client';
 import { errorMessage } from '@/lib/api/errors';
 import { formatDate, formatDateTime } from '@/lib/format/dates';
@@ -93,6 +93,7 @@ function ApplicationDrawer({ id, onClose }: { id: string | null; onClose: () => 
   const client = useQueryClient();
   const detail = useQuery({ queryKey: ['agency', 'website', 'application', id], queryFn: () => api.get<Application>(`${W}/careers/applications/${id}`), enabled: !!id });
   const [note, setNote] = useState('');
+  const [erasing, setErasing] = useState(false);
   const refresh = async (saved: Application) => {
     client.setQueryData(['agency', 'website', 'application', id], saved);
     await client.invalidateQueries({ queryKey: ['agency', 'website', 'applications'] });
@@ -159,11 +160,29 @@ function ApplicationDrawer({ id, onClose }: { id: string | null; onClose: () => 
           <FormField label="Add a note">
             <Textarea rows={3} value={note} onChange={(e) => setNote(e.target.value)} maxLength={4000} />
           </FormField>
-          <div>
+          <div className="cms-toolbar">
             <Button onClick={() => addNote.mutate()} disabled={!note.trim()} loading={addNote.isPending}>
               Add note
             </Button>
+            <Button variant="ghost" onClick={() => setErasing(true)}>
+              Erase application
+            </Button>
           </div>
+          <ConfirmDialog
+            open={erasing}
+            onClose={() => setErasing(false)}
+            title={`Erase ${a.name}'s application?`}
+            description="Deletes the application, its notes and the CV permanently — for a data-erasure request or when the retention period ends. This can't be undone."
+            confirmLabel="Erase application"
+            tone="danger"
+            onConfirm={async () => {
+              await api.delete(`${W}/careers/applications/${a.id}`);
+              toast.success('Application erased');
+              setErasing(false);
+              onClose();
+              await client.invalidateQueries({ queryKey: ['agency', 'website', 'applications'] });
+            }}
+          />
         </div>
       )}
     </Drawer>

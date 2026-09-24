@@ -28,8 +28,9 @@ function move<T>(list: T[], from: number, to: number): T[] {
 
 /**
  * Keyboard-accessible reordering. Each row has a handle: press Space or Enter to pick the item up, the arrow keys
- * (or Home/End) to move it, Space/Enter to drop and Escape to cancel. "Move up/down" buttons do the same for pointer
- * and switch users. Changes are announced in a live region and saved explicitly with "Save order".
+ * (or Home/End) to move it, Space/Enter to drop and Escape to cancel. Pointer users drag rows by the handle (or the
+ * row), and "Move up/down" buttons serve switch users. Changes are announced in a live region and saved explicitly
+ * with "Save order".
  */
 export function ReorderList<T>({
   items,
@@ -47,6 +48,7 @@ export function ReorderList<T>({
   const [grabOrigin, setGrabOrigin] = useState<string[] | null>(null);
   const [announcement, setAnnouncement] = useState('');
   const [focusId, setFocusId] = useState<string | null>(null);
+  const [dragging, setDragging] = useState<string | null>(null);
   const handles = useRef(new Map<string, HTMLButtonElement>());
 
   const serverOrder = items.map(getId).join('|');
@@ -73,7 +75,7 @@ export function ReorderList<T>({
     const target = Math.max(0, Math.min(order.length - 1, to));
     if (from === target) return;
     setOrder(move(order, from, target));
-    setFocusId(id);
+    if (!dragging) setFocusId(id);
     setAnnouncement(`${nameOf(id)} moved to position ${target + 1} of ${order.length}.`);
   };
 
@@ -118,8 +120,8 @@ export function ReorderList<T>({
   return (
     <div className="admin-reorder">
       <p id={instructionsId} className="text-small text-muted">
-        To reorder with the keyboard, focus a handle, press Space to pick the item up, move it with the arrow
-        keys and press Space again to drop it. Then choose “Save order”.
+        Drag a row to a new position, or with the keyboard focus a handle, press Space to pick the item up, move it
+        with the arrow keys and press Space again to drop it. Then choose “Save order”.
       </p>
       <ol className="admin-reorder__list" aria-label={label}>
         {rows.map((item, index) => {
@@ -128,7 +130,27 @@ export function ReorderList<T>({
           return (
             <li
               key={id}
-              className={clsx('admin-reorder__item', grabbed === id && 'admin-reorder__item--grabbed')}
+              className={clsx(
+                'admin-reorder__item',
+                (grabbed === id || dragging === id) && 'admin-reorder__item--grabbed',
+              )}
+              draggable={!disabled && !saving}
+              onDragStart={(event) => {
+                setDragging(id);
+                event.dataTransfer.effectAllowed = 'move';
+                event.dataTransfer.setData('text/plain', id);
+              }}
+              onDragOver={(event) => {
+                if (!dragging) return;
+                event.preventDefault();
+                if (dragging !== id) moveTo(dragging, index);
+              }}
+              onDrop={(event) => {
+                event.preventDefault();
+                if (dragging) setAnnouncement(`${nameOf(dragging)} dropped at position ${order.indexOf(dragging) + 1} of ${order.length}.`);
+                setDragging(null);
+              }}
+              onDragEnd={() => setDragging(null)}
             >
               <button
                 ref={(node) => {
