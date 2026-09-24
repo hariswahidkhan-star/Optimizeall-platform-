@@ -15,11 +15,17 @@
 .ui-chart__grid {
   stroke: var(--chart-grid);
   stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.ui-chart__area {
+  stroke: none;
 }
 
 .ui-chart__axis-label {
   fill: var(--chart-axis);
   font-size: 11px;
+  font-weight: var(--weight-medium);
   font-variant-numeric: tabular-nums;
 }
 
@@ -45,7 +51,7 @@
 
 .ui-chart__line {
   fill: none;
-  stroke-width: 2;
+  stroke-width: 1.75;
   stroke-linejoin: round;
   stroke-linecap: round;
 }
@@ -96,6 +102,7 @@
   font-size: var(--text-xs);
   pointer-events: none;
   transform: translate(-50%, calc(-100% - 10px));
+  backdrop-filter: blur(8px);
   white-space: nowrap;
 }
 
@@ -121,12 +128,12 @@
 .ui-sparkline path {
   fill: none;
   stroke: var(--chart-1);
-  stroke-width: 2;
+  stroke-width: 1.5;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
 .ui-sparkline .ui-sparkline__area {
-  fill: color-mix(in srgb, var(--chart-1) 14%, transparent);
+  fill: color-mix(in srgb, var(--chart-1) 12%, transparent);
   stroke: none;
 }

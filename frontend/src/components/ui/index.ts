@@ -18,6 +18,13 @@ export {
 export { Checkbox, type CheckboxProps } from './Checkbox';
 export { ConfirmDialog, type ConfirmDialogProps, type ConfirmResult } from './ConfirmDialog';
 export { CopyField, type CopyFieldProps } from './CopyField';
+export {
+  DashboardCell,
+  DashboardGrid,
+  MeterList,
+  StatGrid,
+  type MeterItem,
+} from './Dashboard';
 export { DataTable, type DataTableColumn, type DataTableProps, type SortState } from './DataTable';
 export { DateTime, type DateTimeProps } from './DateTime';
 export { Dialog, type DialogProps } from './Dialog';

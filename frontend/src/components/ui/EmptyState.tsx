@@ -27,8 +27,14 @@ export function EmptyState({
   const Heading = `h${headingLevel}` as const;
   return (
     <div className={clsx('ui-state', compact && 'ui-state--compact', className)}>
-      <span className="ui-state__icon" aria-hidden="true">
-        {icon ?? <Inbox />}
+      <span className="ui-state__art" aria-hidden="true">
+        {/* Soft concentric rings (an echo of the logo's rings) behind the icon tile. */}
+        <svg className="ui-state__rings" viewBox="0 0 160 160" width="160" height="160">
+          <circle cx="80" cy="80" r="36" />
+          <circle cx="80" cy="80" r="54" />
+          <circle cx="80" cy="80" r="72" />
+        </svg>
+        <span className="ui-state__icon">{icon ?? <Inbox />}</span>
       </span>
       <Heading className="ui-state__title">{title}</Heading>
       {description && <p className="ui-state__description">{description}</p>}

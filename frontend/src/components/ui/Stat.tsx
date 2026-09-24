@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { ArrowDownRight, ArrowRight, ArrowUpRight } from 'lucide-react';
 import { useId, type ReactNode } from 'react';
 import { browserLocale } from '@/lib/format/locale';
+import { Sparkline } from './Charts';
 import { Skeleton } from './Skeleton';
 import './display.css';
 
@@ -18,8 +19,14 @@ export interface StatProps {
   label: ReactNode;
   value: ReactNode;
   measurement?: Measurement;
-  /** Change vs. previous period. `value` is a signed ratio (0.12 = +12%) unless `display` is given. */
-  delta?: { value: number; display?: string; label?: string; positiveIsGood?: boolean };
+  /**
+   * Change vs. previous period. `value` is a signed ratio (0.12 = +12%) unless `display` is given. The direction is
+   * conveyed by an arrow, a tint and (for screen readers) the words "Up", "Down" or "No change" — never colour alone.
+   * `neutral` keeps the tint grey when a rise is neither good nor bad (e.g. spend).
+   */
+  delta?: { value: number; display?: string; label?: string; positiveIsGood?: boolean; neutral?: boolean };
+  /** Small trend line next to the value (decorative detail; give it an accessible summary in `label`). */
+  trend?: { values: number[]; label: string };
   icon?: ReactNode;
   hint?: ReactNode;
   loading?: boolean;
@@ -42,11 +49,23 @@ export function MeasurementTag({ measurement }: { measurement: Measurement }) {
  * KPI tile. Rendered as a `group` named by its label, so assistive tech (and tests) find e.g. the "Pending" tile and
  * read its value in context.
  */
-export function Stat({ label, value, measurement, delta, icon, hint, loading, className }: StatProps) {
+export function Stat({
+  label,
+  value,
+  measurement,
+  delta,
+  trend,
+  icon,
+  hint,
+  loading,
+  className,
+}: StatProps) {
   const labelId = useId();
   const direction = !delta ? 'flat' : delta.value > 0 ? 'up' : delta.value < 0 ? 'down' : 'flat';
   const good = delta?.positiveIsGood ?? true;
-  const deltaTone = direction === 'flat' ? 'flat' : (direction === 'up') === good ? 'up' : 'down';
+  const deltaTone =
+    direction === 'flat' || delta?.neutral ? 'flat' : (direction === 'up') === good ? 'up' : 'down';
+  const directionWord = direction === 'up' ? 'Up' : direction === 'down' ? 'Down' : 'No change';
   const deltaText =
     delta?.display ??
     (delta
@@ -74,11 +93,17 @@ export function Stat({ label, value, measurement, delta, icon, hint, loading, cl
           </span>
         )}
       </div>
-      <div className="ui-stat__value">{loading ? <Skeleton width="60%" height={30} /> : value}</div>
+      <div className="ui-stat__body">
+        <div className="ui-stat__value">{loading ? <Skeleton width="7ch" height={30} /> : value}</div>
+        {trend && !loading && (
+          <Sparkline className="ui-stat__spark" values={trend.values} label={trend.label} width={88} height={28} />
+        )}
+      </div>
       {(delta || measurement || hint) && (
         <div className="ui-stat__footer">
           {delta && !loading && (
             <span className={clsx('ui-stat__delta', `ui-stat__delta--${deltaTone}`)}>
+              <span className="visually-hidden">{directionWord} </span>
               {direction === 'up' ? (
                 <ArrowUpRight aria-hidden="true" />
               ) : direction === 'down' ? (

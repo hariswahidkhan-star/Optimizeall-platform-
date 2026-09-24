@@ -5,7 +5,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   background: var(--color-surface);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-xs), var(--shadow-highlight);
 }
 
 .ui-card--flat {
@@ -22,7 +22,6 @@
 .ui-card--interactive:hover {
   border-color: var(--color-border-strong);
   box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
 }
 
 .ui-card__header {
@@ -30,8 +29,8 @@
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--space-3);
-  padding: var(--space-5) var(--space-5) 0;
+  gap: var(--space-2) var(--space-3);
+  padding: var(--space-4) var(--space-5) 0;
 }
 
 .ui-card__heading {
@@ -40,26 +39,50 @@
 }
 
 .ui-card__title {
-  font-size: var(--text-h4);
-  letter-spacing: -0.01em;
+  font-size: 0.9375rem;
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.011em;
+  line-height: 1.4;
 }
 
 .ui-card__description {
-  margin-top: var(--space-1);
+  margin-top: 2px;
   color: var(--color-text-muted);
-  font-size: var(--text-small);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+/* Header links ("All clients", "View all") read as quiet actions, not body links. */
+.ui-card__actions > .ui-link,
+.ui-card__actions > a.ui-link {
+  font-size: 0.8125rem;
+  text-decoration: none;
+}
+
+.ui-card__actions > .ui-link:hover {
+  text-decoration: underline;
 }
 
 .ui-card__actions {
   display: flex;
+  align-items: center;
   gap: var(--space-2);
   flex-shrink: 0;
+  min-height: 22px;
 }
 
 .ui-card__body {
   flex: 1;
   padding: var(--space-5);
   min-width: 0;
+}
+
+.ui-card__header + .ui-card__body:not(.ui-card__body--flush) {
+  padding-top: var(--space-4);
+}
+
+.ui-card__header + .ui-card__body--flush {
+  margin-top: var(--space-3);
 }
 
 .ui-card__footer {
