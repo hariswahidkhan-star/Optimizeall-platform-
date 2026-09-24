@@ -16,6 +16,7 @@ import type { PortalDefinition, PortalNavItem } from '../portalTypes';
 import { EmailVerificationBanner } from './EmailVerificationBanner';
 import { CommandPalette, useCommandPaletteShortcut } from './CommandPalette';
 import { ImpersonationBanner } from './ImpersonationBanner';
+import { NotificationBell } from './NotificationBell';
 import { NotificationSettingsDialog } from './NotificationSettingsDialog';
 import './PortalLayout.css';
 
@@ -221,6 +222,8 @@ export function PortalLayout({ portal }: { portal: PortalDefinition }) {
               </button>
             )}
             <ThemeToggle />
+            {/* Participants have their own Notifications page; every other portal gets the inbox in the top bar. */}
+            {user && portal.id !== 'participant' && <NotificationBell />}
             {user && (
               <DropdownMenu
                 align="end"
