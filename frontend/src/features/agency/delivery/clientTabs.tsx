@@ -976,8 +976,13 @@ function MeetingEditor({ clientId, meeting, onClose }: { clientId: string; meeti
 
 export function MeetingsTab({ clientId }: { clientId: string }) {
   const qc = useQueryClient();
+  const { hasPermission } = useAuth();
+  // Scheduling and editing meetings need projects.view; turning an action item into a task also needs
+  // deliverables.submit (and the project list). Staff with only clients.view (finance, sales) read the meetings.
+  const canSchedule = hasPermission(Permissions.ProjectsView);
+  const canConvert = canSchedule && hasPermission(Permissions.DeliverablesSubmit);
   const [editing, setEditing] = useState<Meeting | null>(null);
-  const projects = useProjectOptions(clientId);
+  const projects = useProjectOptions(clientId, canConvert);
   const [convertProject, setConvertProject] = useState('');
   const convert = useMutation({
     mutationFn: ({ meeting, itemId }: { meeting: Meeting; itemId: string }) =>
@@ -998,11 +1003,13 @@ export function MeetingsTab({ clientId }: { clientId: string }) {
   if (meetings.isError) return <ErrorState error={meetings.error} />;
   return (
     <div className="dl-page">
-      <div>
-        <Button leadingIcon={<Plus aria-hidden="true" />} onClick={() => setOpen(true)}>
-          Schedule meeting
-        </Button>
-      </div>
+      {canSchedule ? (
+        <div>
+          <Button leadingIcon={<Plus aria-hidden="true" />} onClick={() => setOpen(true)}>
+            Schedule meeting
+          </Button>
+        </div>
+      ) : null}
       {meetings.data.length === 0 ? (
         <EmptyState compact title="No meetings yet" />
       ) : (
@@ -1015,9 +1022,11 @@ export function MeetingsTab({ clientId }: { clientId: string }) {
               actions={
                 <span className="dl-row">
                   <Badge>{labelOf(m.status)}</Badge>
-                  <Button size="sm" variant="secondary" onClick={() => setEditing(m)}>
-                    Edit<span className="visually-hidden"> {m.title}</span>
-                  </Button>
+                  {canSchedule ? (
+                    <Button size="sm" variant="secondary" onClick={() => setEditing(m)}>
+                      Edit<span className="visually-hidden"> {m.title}</span>
+                    </Button>
+                  ) : null}
                 </span>
               }
             />
@@ -1029,7 +1038,7 @@ export function MeetingsTab({ clientId }: { clientId: string }) {
                   {m.actionItems.map((a) => (
                     <li key={a.id} className="dl-row">
                       <Checkbox label={a.text} checked={Boolean(a.taskId)} readOnly description={a.taskId ? 'Task created' : undefined} />
-                      {!a.taskId ? (
+                      {!a.taskId && canConvert ? (
                         <>
                           {!m.projectId ? (
                             <Select

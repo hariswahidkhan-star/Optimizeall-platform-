@@ -232,5 +232,11 @@ npm run e2e          # Playwright smoke suite (desktop-chromium + mobile-chromiu
 * Accessibility: `E2E_SUITE=a11y E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh` audits every portal's representative
   pages at 360/768/1280 px (axe WCAG 2.2 A/AA in the light and dark theme, no horizontal scroll) plus keyboard/focus
   behaviour. Conformance, known exceptions and the patterns to use are in [`docs/ACCESSIBILITY.md`](ACCESSIBILITY.md).
+* `E2E_SUITE=crawl` (run it with `E2E_SUITE=crawl E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`) signs in as every
+  demo role and visits every nav link, in-page sub-nav link and tab of its portals, the first detail page of each list
+  and each page's safe primary actions (opened, then cancelled — it never submits), then every public header/footer
+  link and sitemap URL. It fails on console/page errors, 4xx/5xx API calls, error boundaries, not-found pages, pages
+  without an h1 and actions that do nothing; `test-results/crawl/<role>.json` lists the pages, empty states and
+  actions it saw. Set `E2E_CRAWL_DEBUG=<file>` to log each page and its timing.
 * Playwright uses the preinstalled Chromium (`PLAYWRIGHT_BROWSERS_PATH`); `@playwright/test` is pinned to 1.56 to
   match it.

@@ -62,18 +62,31 @@ export function SegmentsPage() {
   );
 }
 
+/** True while a list condition (e.g. "country is any of") has no values yet — the API refuses to count those (400). */
+export function awaitsValues(definition: SegmentDefinition): boolean {
+  return (
+    definition.conditions.some((c) => c.values !== undefined && c.values.length === 0) ||
+    definition.groups.some(awaitsValues)
+  );
+}
+
 /** Live count of contacts matching unsaved rules (debounced). */
 export function SegmentCount({ clientId, definition }: { clientId: string | null; definition: SegmentDefinition }) {
   const debounced = useDebouncedValue(definition, 400);
+  const incomplete = awaitsValues(debounced);
   const preview = useQuery({
     queryKey: ['email', 'segment-preview', clientId, debounced],
     queryFn: ({ signal }) => api.post<SegmentPreview>(`${EMAIL_API}/segments/preview`, { clientAccountId: clientId, definition: debounced }, { signal }),
     placeholderData: (prev) => prev,
     retry: false,
+    // A new segment starts with an empty "country is any of" rule: count once it has values, not before.
+    enabled: !incomplete,
   });
   return (
     <div aria-live="polite" className="stack">
-      {preview.isError ? (
+      {incomplete ? (
+        <p className="email-muted">Choose at least one value for each rule to count matching contacts.</p>
+      ) : preview.isError ? (
         <Alert tone="warning" title="Rules incomplete">
           {isApiError(preview.error) && preview.error.errors ? Object.values(preview.error.errors).flat().join(' ') : errorMessage(preview.error)}
         </Alert>

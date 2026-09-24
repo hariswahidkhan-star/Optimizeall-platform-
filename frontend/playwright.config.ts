@@ -34,12 +34,19 @@ import { defineConfig, devices } from '@playwright/test';
  * scroll at 360/768/1280 px, keyboard and focus behaviour) runs against the Demo seed too. It never changes data, so
  * its tests run in parallel (two workers); each test sets its own viewport, so only the desktop project runs it. Run
  * it with `E2E_SUITE=a11y E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh` (see docs/ACCESSIBILITY.md).
+ * The crawl suite signs in as every demo role, visits every nav link of its portals (plus the first detail page of each
+ * list and each page's primary action, cancelled) and every public website link, and fails on console errors, failed API
+ * calls, error boundaries and pages without an h1. It never saves anything, so its roles run in parallel
+ * (E2E_CRAWL_WORKERS, default 2) on desktop only. Run it with `E2E_SUITE=crawl E2E_DB_PROVIDER=sqlite
+ * scripts/e2e-journeys.sh`; each role's visited pages, empty states and findings land in test-results/crawl/.
  */
 const suite = process.env.E2E_SUITE ?? 'smoke';
 /** Suites whose mobile project runs only responsive.spec.ts (and whose desktop project runs everything else). */
 const responsiveSplit = suite === 'agency' || suite === 'platform';
 /** Full-stack suites share one database and build on earlier steps: serial, one worker, no retries. */
 const journeys = suite === 'journeys' || responsiveSplit;
+/** The crawl is read-only: roles run in parallel, desktop only. */
+const crawl = suite === 'crawl';
 const mobileOnly = responsiveSplit ? /responsive\.spec\.ts$/ : /participant\.spec\.ts$/;
 /** Read-only full-stack audit: parallel, no retries, desktop project only (tests pick their own viewports). */
 const a11y = suite === 'a11y';
@@ -54,11 +61,14 @@ export default defineConfig({
   retries: journeys || a11y ? 0 : process.env.CI ? 1 : 0,
   ...(journeys ? { workers: 1, timeout: 120_000, expect: { timeout: 15_000 } } : {}),
   ...(a11y ? { workers: 2, timeout: 120_000, expect: { timeout: 15_000 } } : {}),
+  ...(crawl ? { workers: Number(process.env.E2E_CRAWL_WORKERS ?? 2), retries: 0, timeout: 10 * 60_000 } : {}),
   reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'list',
   globalSetup: existsSync(suiteSetup) ? suiteSetup : undefined,
   use: {
     baseURL,
     trace: 'retain-on-failure',
+    // The crawl presses buttons it does not know; a covered one must fail fast, not hang until the test times out.
+    ...(crawl ? { actionTimeout: 10_000, navigationTimeout: 20_000 } : {}),
     screenshot: 'only-on-failure',
   },
   projects: [
@@ -67,7 +77,7 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
       ...(responsiveSplit ? { testIgnore: mobileOnly } : {}),
     },
-    ...(a11y
+    ...(a11y || crawl
       ? []
       : [
           {
@@ -77,12 +87,13 @@ export default defineConfig({
           },
         ]),
   ],
-  webServer: process.env.E2E_BASE_URL || process.env.PLAYWRIGHT_BASE_URL
-    ? undefined
-    : {
-        command: 'npm run build && npx vite preview --port 5173 --strictPort',
-        url: 'http://localhost:5173',
-        reuseExistingServer: !process.env.CI,
-        timeout: 180_000,
-      },
+  webServer:
+    process.env.E2E_BASE_URL || process.env.PLAYWRIGHT_BASE_URL
+      ? undefined
+      : {
+          command: 'npm run build && npx vite preview --port 5173 --strictPort',
+          url: 'http://localhost:5173',
+          reuseExistingServer: !process.env.CI,
+          timeout: 180_000,
+        },
 });

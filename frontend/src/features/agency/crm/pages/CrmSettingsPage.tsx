@@ -268,12 +268,15 @@ export function CrmSettingsPage() {
             <CrmOptionsEditor canEdit={canEdit} />
           </CardBody>
         </Card>
-        <Card>
-          <CardHeader title="Proposal templates" description="Reusable sections and price lines to start proposals from." />
-          <CardBody>
-            <ProposalTemplatesManager canEdit={hasPermission(Permissions.ProposalsManage)} />
-          </CardBody>
-        </Card>
+        {/* The proposal-templates API (reads too) needs proposals.manage; CRM viewers such as strategists lack it. */}
+        {hasPermission(Permissions.ProposalsManage) ? (
+          <Card>
+            <CardHeader title="Proposal templates" description="Reusable sections and price lines to start proposals from." />
+            <CardBody>
+              <ProposalTemplatesManager canEdit />
+            </CardBody>
+          </Card>
+        ) : null}
       </div>
     </>
   );

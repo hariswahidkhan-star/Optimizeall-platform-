@@ -228,7 +228,15 @@ export function ClientDetailPage() {
   const { hasPermission } = useAuth();
   const [params, setParams] = useSearchParams();
   const [dialog, setDialog] = useState<'status' | 'edit' | null>(null);
-  const tab = (TABS as readonly string[]).includes(params.get('tab') ?? '') ? params.get('tab')! : 'overview';
+  // Tabs whose API the user may call: Projects needs projects.view; Time reads /agency/time/entries, which is the time
+  // tracker's API (time.track) widened to everyone's entries by time.view_all. Finance and sales hold clients.view
+  // without these, and would otherwise get "You don't have access" inside the tab.
+  const hidden = new Set<string>([
+    ...(hasPermission(Permissions.ProjectsView) ? [] : ['projects']),
+    ...(hasPermission(Permissions.TimeViewAll) && hasPermission(Permissions.TimeTrack) ? [] : ['time']),
+  ]);
+  const requested = params.get('tab') ?? '';
+  const tab = (TABS as readonly string[]).includes(requested) && !hidden.has(requested) ? requested : 'overview';
   const client = useQuery({
     queryKey: dk.client(clientId),
     queryFn: ({ signal }) => api.get<ClientDetail>(`/agency/clients/${clientId}`, { signal }),
@@ -274,7 +282,7 @@ export function ClientDetailPage() {
           { id: 'briefs', label: 'Briefs', content: <BriefsTab clientId={c.id} /> },
           { id: 'meetings', label: 'Meetings', content: <MeetingsTab clientId={c.id} /> },
           { id: 'feedback', label: 'Feedback', content: <FeedbackTab clientId={c.id} /> },
-        ]}
+        ].filter((t) => !hidden.has(t.id))}
       />
       {dialog === 'status' ? <StatusDialog client={c} onClose={() => setDialog(null)} /> : null}
       {dialog === 'edit' ? <EditDialog client={c} onClose={() => setDialog(null)} /> : null}
