@@ -1,5 +1,5 @@
 import { Money } from '@/components/ui/Money';
-import { Stat, type Measurement } from '@/components/ui/Stat';
+import { Stat, type Measurement, type StatProps } from '@/components/ui/Stat';
 import { formatNumber } from '@/lib/format/money';
 import type { Metric, MetricMeasurement } from '../api/types';
 
@@ -20,7 +20,17 @@ export function MetricValue({ metric }: { metric: Metric }) {
 }
 
 /** A KPI tile for one metric, labelled with how it was obtained exactly as the API reports it. */
-export function MetricStat({ metric, label }: { metric: Metric; label?: string }) {
+export function MetricStat({
+  metric,
+  label,
+  delta,
+  trend,
+}: {
+  metric: Metric;
+  label?: string;
+  delta?: StatProps['delta'];
+  trend?: StatProps['trend'];
+}) {
   const currencySuffix = metric.unit === 'money' && metric.currency ? ` (${metric.currency})` : '';
   return (
     <Stat
@@ -28,6 +38,8 @@ export function MetricStat({ metric, label }: { metric: Metric; label?: string }
       value={<MetricValue metric={metric} />}
       measurement={measurementTag(metric.measurement)}
       hint={metric.note ?? undefined}
+      delta={delta}
+      trend={trend}
     />
   );
 }

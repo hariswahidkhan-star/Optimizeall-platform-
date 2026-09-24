@@ -49,17 +49,7 @@ export function MeasurementTag({ measurement }: { measurement: Measurement }) {
  * KPI tile. Rendered as a `group` named by its label, so assistive tech (and tests) find e.g. the "Pending" tile and
  * read its value in context.
  */
-export function Stat({
-  label,
-  value,
-  measurement,
-  delta,
-  trend,
-  icon,
-  hint,
-  loading,
-  className,
-}: StatProps) {
+export function Stat({ label, value, measurement, delta, trend, icon, hint, loading, className }: StatProps) {
   const labelId = useId();
   const direction = !delta ? 'flat' : delta.value > 0 ? 'up' : delta.value < 0 ? 'down' : 'flat';
   const good = delta?.positiveIsGood ?? true;
@@ -96,7 +86,13 @@ export function Stat({
       <div className="ui-stat__body">
         <div className="ui-stat__value">{loading ? <Skeleton width="7ch" height={30} /> : value}</div>
         {trend && !loading && (
-          <Sparkline className="ui-stat__spark" values={trend.values} label={trend.label} width={88} height={28} />
+          <Sparkline
+            className="ui-stat__spark"
+            values={trend.values}
+            label={trend.label}
+            width={88}
+            height={28}
+          />
         )}
       </div>
       {(delta || measurement || hint) && (

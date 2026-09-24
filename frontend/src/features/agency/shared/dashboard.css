@@ -69,19 +69,120 @@
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
 }
 
-/* Client home: project progress rows and the account team. */
-.dl-dash .cc-project-row {
+/* Client home. */
+.dl-dash .cc-steps {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
-  width: 100%;
+  gap: var(--space-1);
+  margin: 0;
+  padding-left: var(--space-5);
+  font-size: var(--text-small);
+}
+
+.dl-dash .cc-note {
+  padding: var(--space-3) var(--space-5);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--text-xs);
+}
+
+.dl-dash .cc-preview {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: var(--text-xs);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+}
+
+.dl-dash .cc-report {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.dl-dash .cc-report__icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-lg);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-soft-text);
+}
+
+.dl-dash .cc-report__icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.dl-dash .cc-report__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.dl-dash .cc-report__title {
+  color: var(--color-heading);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+}
+
+.dl-dash .cc-report__title:hover {
+  text-decoration: underline;
+}
+
+.dl-dash .dl-list .ui-progress {
+  max-width: 28rem;
 }
 
 .dl-dash .cc-team {
-  gap: var(--space-2);
+  grid-template-columns: 1fr;
+  gap: 0;
 }
 
 .dl-dash .cc-person {
-  border-color: var(--color-border);
-  background: var(--color-surface-2);
+  padding: var(--space-3) 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.dl-dash .cc-person + .cc-person {
+  border-top: 1px solid var(--color-border);
+}
+
+.dl-dash .cc-person:first-child {
+  padding-top: 0;
+}
+
+.dl-dash .cc-person:last-child {
+  padding-bottom: 0;
+}
+
+.dl-dash .cc-person__text {
+  gap: 1px;
+  font-size: var(--text-small);
+}
+
+.dl-dash .cc-person__text strong {
+  color: var(--color-heading);
+  font-weight: var(--weight-semibold);
+}
+
+.dl-dash .cc-person__text a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-xs);
+}
+
+.dl-dash .cc-person__text a svg {
+  flex: none;
+}
+
+/* The client shell's page header sits in a flex column with its own gap. */
+.dl-page:has(> .dl-dash) > .ui-page-header {
+  margin-bottom: 0;
 }

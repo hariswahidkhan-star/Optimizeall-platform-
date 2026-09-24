@@ -258,12 +258,15 @@ function DeliveryDashboard({ data, canTrack }: { data: AgencyDashboard; canTrack
                   {data.todaysMeetings.map((m) => (
                     <li key={m.id} className="dl-list__item">
                       <span className="dl-list__main">
-                        <Link className="dl-list__title ui-link" to={`/agency/clients/${m.clientId}?tab=meetings`}>
+                        <Link
+                          className="dl-list__title ui-link"
+                          to={`/agency/clients/${m.clientId}?tab=meetings`}
+                        >
                           {m.title}
                         </Link>
                         <span className="dl-meta">
-                          {m.clientName} · <DateTime value={m.startsAt} format="datetime" /> · {m.durationMinutes}{' '}
-                          min
+                          {m.clientName} · <DateTime value={m.startsAt} format="datetime" /> ·{' '}
+                          {m.durationMinutes} min
                           {m.location ? ` · ${m.location}` : ''}
                         </span>
                       </span>
@@ -306,7 +309,9 @@ function DeliveryDashboard({ data, canTrack }: { data: AgencyDashboard; canTrack
                             {h.clientName}
                           </Link>
                           <span className="dl-meta">
-                            {h.reasons.length === 0 ? 'No issues' : h.reasons.map((r) => r.message).join(' · ')}
+                            {h.reasons.length === 0
+                              ? 'No issues'
+                              : h.reasons.map((r) => r.message).join(' · ')}
                           </span>
                         </span>
                         <HealthBadge level={h.level} score={h.score} />
@@ -416,7 +421,8 @@ function DeliveryDashboard({ data, canTrack }: { data: AgencyDashboard; canTrack
                         {p.name}
                       </Link>
                       <span className="dl-meta">
-                        {p.clientName} · {p.overdueTasks} overdue · {p.hoursLogged}h of {p.budgetHours ?? '—'}h
+                        {p.clientName} · {p.overdueTasks} overdue · {p.hoursLogged}h of {p.budgetHours ?? '—'}
+                        h
                       </span>
                     </span>
                     <Badge tone="danger">At risk</Badge>

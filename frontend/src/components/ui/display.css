@@ -294,13 +294,21 @@
   }
 }
 
+/* Hairlines are drawn by each tile (right + bottom) and clipped at the strip's edge, so a short last row leaves
+   plain surface rather than a grey block. */
 .ui-stat-grid--strip {
-  gap: 1px;
+  gap: 0;
   overflow: hidden;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
-  background: var(--color-border);
-  box-shadow: var(--shadow-xs);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-xs), var(--shadow-highlight);
+}
+
+.ui-stat-grid--strip > * {
+  box-shadow:
+    1px 0 0 var(--color-border),
+    0 1px 0 var(--color-border);
 }
 
 .ui-stat-grid--strip > .ui-stat,
@@ -308,7 +316,16 @@
   height: 100%;
   border: 0;
   border-radius: 0;
+}
+
+.ui-stat-grid--strip > * > .ui-stat {
   box-shadow: none;
+}
+
+.ui-stat-grid--strip > .ui-stat {
+  box-shadow:
+    1px 0 0 var(--color-border),
+    0 1px 0 var(--color-border);
 }
 
 .ui-stat-grid--strip > * {
