@@ -71,7 +71,13 @@ test('settings: edit with a reason, boundary values refused, restore the default
   // The API enforces the range on its own.
   const api = await adminApi();
   expect(
-    await codeOf(api.put('/admin/settings/review.claimMinutes', { value: 241, reason: 'E2E out of range', confirm: true })),
+    await codeOf(
+      api.put('/admin/settings/review.claimMinutes', {
+        value: 241,
+        reason: 'E2E out of range',
+        confirm: true,
+      }),
+    ),
   ).toMatch(/^400\b/);
 
   // Restore the default (reason required).
@@ -118,14 +124,16 @@ test('portal texts: the help centre headline changes on the public FAQ page, the
 
   // A text that is too long is refused by the API (boundary: 300 characters for a one-line text).
   const api = await adminApi();
-  const catalog = await api.get<{ groups: { entries: { key: string; concurrencyStamp: string | null }[] }[] }>(
-    '/admin/content/copy',
-  );
+  const catalog = await api.get<{
+    groups: { entries: { key: string; concurrencyStamp: string | null }[] }[];
+  }>('/admin/content/copy');
   const entry = catalog.groups.flatMap((g) => g.entries).find((e) => e.key === 'faq.hero.title')!;
   expect(
     await codeOf(
       api.put('/admin/content/copy', {
-        changes: [{ key: 'faq.hero.title', value: 'x'.repeat(301), concurrencyStamp: entry.concurrencyStamp }],
+        changes: [
+          { key: 'faq.hero.title', value: 'x'.repeat(301), concurrencyStamp: entry.concurrencyStamp },
+        ],
       }),
     ),
   ).toMatch(/^400\b/);
@@ -133,7 +141,9 @@ test('portal texts: the help centre headline changes on the public FAQ page, the
   expect(
     await codeOf(
       api.put('/admin/content/copy', {
-        changes: [{ key: 'faq.hero.title', value: 'Stale', concurrencyStamp: '00000000-0000-0000-0000-000000000000' }],
+        changes: [
+          { key: 'faq.hero.title', value: 'Stale', concurrencyStamp: '00000000-0000-0000-0000-000000000000' },
+        ],
       }),
     ),
   ).toBe('409 concurrency.conflict');
@@ -157,7 +167,10 @@ test('email templates: required and unknown variables are enforced; preview; res
   const errors = watchErrors(admin);
   errors.ignore(/HTTP 400 (PUT|POST) .*\/api\/v1\/admin\/email-templates\//);
   await admin.goto('/admin/content?tab=emails');
-  await admin.getByRole('table', { name: 'Email templates' }).getByRole('button', { name: 'Reset password', exact: true }).click();
+  await admin
+    .getByRole('table', { name: 'Email templates' })
+    .getByRole('button', { name: 'Reset password', exact: true })
+    .click();
   // The account email (its link is the {{resetUrl}} variable), not the "Password reset" notification.
   const form = admin.getByRole('form', { name: 'Edit Reset password' });
   const preview = admin.getByRole('region', { name: 'Preview with sample values' });
@@ -176,7 +189,10 @@ test('email templates: required and unknown variables are enforced; preview; res
 
   // A valid edit: insert a variable at the cursor, preview, save.
   await body.fill(`${original}\n\nRequested for ${id}: `);
-  await form.getByRole('button', { name: /^\{\{displayName\}\}|^\{\{name\}\}/ }).first().click();
+  await form
+    .getByRole('button', { name: /^\{\{displayName\}\}|^\{\{name\}\}/ })
+    .first()
+    .click();
   await expect(body).toHaveValue(new RegExp(`Requested for ${id}: \\{\\{\\w+\\}\\}`));
   await form.getByRole('button', { name: 'Preview' }).click();
   await preview.getByText('Plain-text version').click();
@@ -234,7 +250,10 @@ test('CMS page: version history, restore an older version, scheduled go-live hid
   // History lists both versions; restore the first.
   const history = admin.getByRole('region', { name: 'Version history' });
   await expect(history.getByText(`E2E ${id}: new wording`)).toBeVisible();
-  const first = history.getByRole('listitem').filter({ hasText: /Version (0|1) / }).last();
+  const first = history
+    .getByRole('listitem')
+    .filter({ hasText: /Version (0|1) / })
+    .last();
   await first.getByRole('button', { name: /^Preview version/ }).click();
   await expect(admin.getByRole('complementary', { name: /^Preview of version/ })).toContainText(v1);
   await first.getByRole('button', { name: /^Restore version/ }).click();
@@ -295,7 +314,10 @@ test('announcements: a double-click creates one, it shows on the participant hom
   await admin.getByRole('menuitem', { name: 'Edit' }).click();
   const edit = modal(admin, 'Edit announcement');
   const item = await api.get<Record<string, unknown>>(`/admin/content/announcements/${list.items[0]!.id}`);
-  await api.put(`/admin/content/announcements/${list.items[0]!.id}`, { ...item, body: `Changed elsewhere (${id}).` });
+  await api.put(`/admin/content/announcements/${list.items[0]!.id}`, {
+    ...item,
+    body: `Changed elsewhere (${id}).`,
+  });
   await edit.getByRole('textbox', { name: 'Message' }).fill(`My edit (${id}).`);
   await edit.getByRole('button', { name: 'Save changes' }).click();
   await expect(edit.getByRole('alert')).toContainText('Someone else changed this item');

@@ -18,6 +18,8 @@ export default async function globalSetup() {
   }
   const testAccounts = await fetch(`${API_URL}/api/v1/dev/test-accounts`);
   if (testAccounts.status !== 200)
-    throw new Error(`GET /dev/test-accounts answered ${testAccounts.status}: the test sign-in is off — ${hint}`);
+    throw new Error(
+      `GET /dev/test-accounts answered ${testAccounts.status}: the test sign-in is off — ${hint}`,
+    );
   writeState({ runId: Date.now().toString(36) });
 }

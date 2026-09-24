@@ -45,12 +45,19 @@ test('run a job now; the notification deliveries it sends are listed', async ({ 
 
   await admin.getByRole('tab', { name: 'Run history' }).click();
   await expect(
-    admin.getByRole('table', { name: 'Job runs' }).getByRole('row').filter({ hasText: 'NotificationDispatchJob' }).first(),
+    admin
+      .getByRole('table', { name: 'Job runs' })
+      .getByRole('row')
+      .filter({ hasText: 'NotificationDispatchJob' })
+      .first(),
   ).toBeVisible();
 
   await admin.getByRole('tab', { name: 'Notification deliveries' }).click();
   await admin.getByRole('searchbox', { name: 'Search deliveries' }).fill(person.email);
-  const row = admin.getByRole('table', { name: 'Notification deliveries' }).getByRole('row').filter({ hasText: person.email });
+  const row = admin
+    .getByRole('table', { name: 'Notification deliveries' })
+    .getByRole('row')
+    .filter({ hasText: person.email });
   await expect(row.first()).toBeVisible();
   await expect(row.first()).toContainText(/Email/);
   await expect(row.first()).toContainText(/Sent/);
@@ -60,9 +67,9 @@ test('run a job now; the notification deliveries it sends are listed', async ({ 
   const filters = admin.getByRole('search', { name: 'Audit log filters' });
   await filters.getByLabel('Action').fill('admin.job_run_requested');
   await filters.getByRole('button', { name: 'Apply filters' }).click();
-  await expect(admin.getByRole('region', { name: 'Audit entries' }).getByRole('listitem').first()).toContainText(
-    'NotificationDispatchJob',
-  );
+  await expect(
+    admin.getByRole('region', { name: 'Audit entries' }).getByRole('listitem').first(),
+  ).toContainText('NotificationDispatchJob');
   errors.expectClean('running a job');
 });
 
@@ -90,8 +97,15 @@ test('Ctrl+K search is scoped to what the searcher may see', async ({ as }) => {
   await page.keyboard.press('Control+k');
   const box2 = modal(page, 'Search').getByRole('combobox', { name: 'Search pages and records' });
   await box2.fill('Sara');
-  await expect(page.getByRole('status').filter({ hasText: /result|No matches|Nothing/i }).first()).toBeVisible();
-  await expect(page.getByRole('listbox', { name: 'Results' }).getByRole('option', { name: /Sara Khan/ })).toHaveCount(0);
+  await expect(
+    page
+      .getByRole('status')
+      .filter({ hasText: /result|No matches|Nothing/i })
+      .first(),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('listbox', { name: 'Results' }).getByRole('option', { name: /Sara Khan/ }),
+  ).toHaveCount(0);
   const api = await ApiSession.login(crm.email, crm.password);
   const found = await api.get<{ groups: { type: string }[] }>('/search?q=Sara');
   expect(found.groups.map((g) => g.type)).not.toContain('users');
@@ -105,9 +119,16 @@ test('Ctrl+K search is scoped to what the searcher may see', async ({ as }) => {
   await editorPage.keyboard.press('Control+k');
   const box3 = modal(editorPage, 'Search').getByRole('combobox', { name: 'Search pages and records' });
   await box3.fill('Content');
-  await expect(editorPage.getByRole('listbox', { name: 'Results' }).getByRole('option', { name: /Content/ }).first()).toBeVisible();
+  await expect(
+    editorPage
+      .getByRole('listbox', { name: 'Results' })
+      .getByRole('option', { name: /Content/ })
+      .first(),
+  ).toBeVisible();
   await box3.fill('Sara');
-  await expect(editorPage.getByRole('listbox', { name: 'Results' }).getByRole('option', { name: /Sara/ })).toHaveCount(0);
+  await expect(
+    editorPage.getByRole('listbox', { name: 'Results' }).getByRole('option', { name: /Sara/ }),
+  ).toHaveCount(0);
   await editorPage.keyboard.press('Escape');
   editorErrors.expectClean('searching as a content-only editor');
 });
@@ -123,7 +144,11 @@ test('negatives: no roles.manage → 403 in UI and API; stale stamps → 409; do
   const page = await as(agent, landing.participant);
   const errors = watchErrors(page);
   await page.goto('/admin');
-  await expect(page.getByRole('navigation', { name: 'Admin navigation' }).getByRole('link', { name: 'Roles & permissions' })).toHaveCount(0);
+  await expect(
+    page
+      .getByRole('navigation', { name: 'Admin navigation' })
+      .getByRole('link', { name: 'Roles & permissions' }),
+  ).toHaveCount(0);
   await page.goto('/admin/roles');
   await expect(page.getByRole('heading', { level: 1, name: FORBIDDEN })).toBeVisible();
   // On a user's page the custom roles are read-only, and no admin actions are offered.
@@ -135,8 +160,14 @@ test('negatives: no roles.manage → 403 in UI and API; stale stamps → 409; do
   errors.expectClean('the support agent');
   const agentApi = await ApiSession.login(agent.email, agent.password);
   expect(await codeOf(agentApi.get('/admin/roles'))).toMatch(/^403\b/);
-  expect(await codeOf(agentApi.post('/admin/roles', { name: `x ${id}`, permissions: ['users.view'] }))).toMatch(/^403\b/);
-  expect(await codeOf(agentApi.put(`/admin/users/${agent.id}/roles`, { roles: ['Admin'], reason: 'escalate', confirm: true }))).toMatch(/^403\b/);
+  expect(
+    await codeOf(agentApi.post('/admin/roles', { name: `x ${id}`, permissions: ['users.view'] })),
+  ).toMatch(/^403\b/);
+  expect(
+    await codeOf(
+      agentApi.put(`/admin/users/${agent.id}/roles`, { roles: ['Admin'], reason: 'escalate', confirm: true }),
+    ),
+  ).toMatch(/^403\b/);
   expect(await codeOf(agentApi.post('/admin/test-users', { roles: ['Participant'] }))).toMatch(/^403\b/);
   expect(await statusOf(agentApi.get('/admin/users'))).toBe(200);
 
@@ -161,7 +192,11 @@ test('negatives: no roles.manage → 403 in UI and API; stale stamps → 409; do
   await expect(editor.getByRole('alert')).toContainText(/changed|someone else|reload|conflict/i);
   expect(
     await codeOf(
-      api.put(`/admin/roles/${role.id}`, { name: role.name, permissions: ['crm.view'], concurrencyStamp: role.concurrencyStamp }),
+      api.put(`/admin/roles/${role.id}`, {
+        name: role.name,
+        permissions: ['crm.view'],
+        concurrencyStamp: role.concurrencyStamp,
+      }),
     ),
   ).toMatch(/^409\b/);
   await editor.getByRole('button', { name: 'Cancel' }).click();
@@ -177,6 +212,9 @@ test('negatives: no roles.manage → 403 in UI and API; stale stamps → 409; do
   await expect(toast(admin, 'Role created')).toBeVisible();
   const all = await api.get<{ custom: { name: string }[] }>('/admin/roles');
   expect(all.custom.filter((r) => r.name === once)).toHaveLength(1);
+  // …and the second click never reached the API (no 409 "name taken" from a duplicate request).
+  adminErrors.expectClean('a double-clicked create');
+  adminErrors.ignore(/HTTP 409 POST .*\/api\/v1\/admin\/roles$/); // the duplicate name below, on purpose
 
   // Boundary values: role names of 1 and 81 characters, a duplicate (case-insensitive) and a built-in name.
   await admin.getByRole('button', { name: 'New role' }).click();
@@ -193,12 +231,22 @@ test('negatives: no roles.manage → 403 in UI and API; stale stamps → 409; do
   await bad.getByRole('button', { name: 'Create role' }).click();
   await expect(bad.getByText('This name belongs to a built-in role.')).toBeVisible();
   await bad.getByRole('button', { name: 'Cancel' }).click();
-  expect(await codeOf(api.post('/admin/roles', { name: 'y'.repeat(81), permissions: ['crm.view'] }))).toMatch(/^400\b/);
-  expect(await codeOf(api.post('/admin/roles', { name: 'y'.repeat(80), permissions: ['crm.view'] }))).toBeUndefined();
+  expect(
+    await codeOf(api.post('/admin/roles', { name: `${id}-`.padEnd(81, 'y'), permissions: ['crm.view'] })),
+  ).toMatch(/^400\b/);
+  expect(
+    await codeOf(api.post('/admin/roles', { name: `${id}-`.padEnd(80, 'y'), permissions: ['crm.view'] })),
+  ).toBeUndefined();
   // Reasons: 2 characters are refused, 500 accepted, 501 refused.
   const target = await arrangeTestUser(`E2E reasons ${id}`);
-  expect(await codeOf(api.put(`/admin/users/${target.id}/tier`, { tier: 'Gold', reason: 'ab' }))).toMatch(/^400\b/);
-  expect(await codeOf(api.put(`/admin/users/${target.id}/tier`, { tier: 'Gold', reason: 'r'.repeat(501) }))).toMatch(/^400\b/);
-  expect(await codeOf(api.put(`/admin/users/${target.id}/tier`, { tier: 'Gold', reason: 'r'.repeat(500) }))).toBeUndefined();
+  expect(await codeOf(api.put(`/admin/users/${target.id}/tier`, { tier: 'Gold', reason: 'ab' }))).toMatch(
+    /^400\b/,
+  );
+  expect(
+    await codeOf(api.put(`/admin/users/${target.id}/tier`, { tier: 'Gold', reason: 'r'.repeat(501) })),
+  ).toMatch(/^400\b/);
+  expect(
+    await codeOf(api.put(`/admin/users/${target.id}/tier`, { tier: 'Gold', reason: 'r'.repeat(500) })),
+  ).toBeUndefined();
   adminErrors.expectClean('negative paths as the admin');
 });

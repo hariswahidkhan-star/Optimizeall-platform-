@@ -43,7 +43,10 @@ test('the admin searches and filters the user directory', async ({ as }) => {
   await admin.getByLabel('Status', { exact: true }).selectOption('Suspended');
   await expect(admin).toHaveURL(/status=Suspended/);
   await expect(table.getByText('suspended.participant@demo.optimizeall.app')).toBeVisible();
-  for (const status of await table.locator('tbody tr').getByText(/^(Active|Suspended|Deactivated)$/).allInnerTexts())
+  for (const status of await table
+    .locator('tbody tr')
+    .getByText(/^(Active|Suspended|Deactivated)$/)
+    .allInnerTexts())
     expect(status).toBe('Suspended');
 
   // Filters are in the URL: a reload keeps them.

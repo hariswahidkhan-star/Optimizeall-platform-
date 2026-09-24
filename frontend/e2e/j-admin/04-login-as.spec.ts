@@ -29,15 +29,18 @@ import {
  */
 test.describe.configure({ mode: 'serial' });
 
-const BLOCKED = 'This action is not available while you are viewing as another user. Exit the impersonation session first.';
+const BLOCKED =
+  'This action is not available while you are viewing as another user. Exit the impersonation session first.';
 
 test('log in as a user: banner on every page type, blocked actions, exit, audit', async ({ as }) => {
   const id = runId();
   const target = await arrangeTestUser(`E2E Viewed ${id}`);
   const roleName = `E2E finance readers ${id}`;
-  await arrangeRole(roleName, ['ledger.view', 'payouts.view', 'payouts.prepare', 'users.view', 'roles.manage'], [
-    target.id,
-  ]);
+  await arrangeRole(
+    roleName,
+    ['ledger.view', 'payouts.view', 'payouts.prepare', 'users.view', 'roles.manage'],
+    [target.id],
+  );
   const reason = `E2E ticket ${id}: participant reports a missing payout`;
 
   const admin = await as(accounts.admin, landing.admin);
@@ -64,7 +67,14 @@ test('log in as a user: banner on every page type, blocked actions, exit, audit'
   await expect(banner).toContainText(`signed in as ${DEMO_ADMIN_NAME}`);
 
   // Every page type: finance portal, admin portal, participant portal, the public website — also after a reload.
-  for (const path of ['/finance/ledger', '/admin/roles', '/app', '/app/profile/payout-details', '/', '/services']) {
+  for (const path of [
+    '/finance/ledger',
+    '/admin/roles',
+    '/app',
+    '/app/profile/payout-details',
+    '/',
+    '/services',
+  ]) {
     await admin.goto(path);
     await expect(admin.getByRole('heading', { level: 1 }).first()).toBeVisible();
     await expect(banner, `banner on ${path}`).toBeVisible();
@@ -89,15 +99,25 @@ test('log in as a user: banner on every page type, blocked actions, exit, audit'
   expect(me.status).toBe(200);
   expect((me.body as { email?: string }).email).toBe(target.email);
   const blocked = [
-    ['POST', '/auth/change-password', { currentPassword: target.password, newPassword: `E2e-${id}-New#Passw0rd` }],
-    ['PUT', '/me/payout-profile', { method: 'PayPal', accountHolderName: 'X Y', destination: 'x@example.com', preferredCurrency: 'USD' }],
+    [
+      'POST',
+      '/auth/change-password',
+      { currentPassword: target.password, newPassword: `E2e-${id}-New#Passw0rd` },
+    ],
+    [
+      'PUT',
+      '/me/payout-profile',
+      { method: 'PayPal', accountHolderName: 'X Y', destination: 'x@example.com', preferredCurrency: 'USD' },
+    ],
     ['POST', '/finance/payout-batches/prepare', {}],
     ['POST', '/admin/roles', { name: `Sneaky ${id}`, permissions: ['ledger.view'] }],
     ['POST', '/auth/external-logins/google/start', { returnTo: '/app/profile/security' }],
   ] as const;
   for (const [method, path, body] of blocked) {
     const res = await rawApi(method, path, token, body);
-    expect(`${res.status} ${res.body.code}`, `${method} ${path}`).toBe('403 auth.impersonation_forbidden_action');
+    expect(`${res.status} ${res.body.code}`, `${method} ${path}`).toBe(
+      '403 auth.impersonation_forbidden_action',
+    );
   }
   // Reads keep working (they see what the user sees).
   expect((await rawApi('GET', '/admin/roles', token)).status).toBe(200);
@@ -136,7 +156,9 @@ test('log in as a user: banner on every page type, blocked actions, exit, audit'
   await expect(entries.filter({ hasText: reason })).toHaveCount(1);
   await filters.getByLabel('Action').fill('impersonation.request');
   await filters.getByRole('button', { name: 'Apply filters' }).click();
-  await expect(entries.filter({ hasText: `${DEMO_ADMIN_NAME} as ${target.displayName}` }).first()).toBeVisible();
+  await expect(
+    entries.filter({ hasText: `${DEMO_ADMIN_NAME} as ${target.displayName}` }).first(),
+  ).toBeVisible();
   await filters.getByLabel('Action').fill('admin.impersonation_ended');
   await filters.getByRole('button', { name: 'Apply filters' }).click();
   await expect(entries.first()).toBeVisible();
@@ -148,7 +170,10 @@ test('who can’t be impersonated, and a suspended impersonator’s session stop
   const api = await adminApi();
   const otherAdmin = await arrangeTestUser(`E2E second admin ${id}`, ['Admin']);
   const suspendedTarget = await arrangeTestUser(`E2E suspended target ${id}`);
-  await api.post(`/admin/users/${suspendedTarget.id}/suspend`, { reason: 'E2E: suspended target', confirm: true });
+  await api.post(`/admin/users/${suspendedTarget.id}/suspend`, {
+    reason: 'E2E: suspended target',
+    confirm: true,
+  });
 
   // Admins: no "Log in as" in the list or on the page, and the API refuses.
   const admin = await as(accounts.admin, landing.admin);
@@ -161,7 +186,10 @@ test('who can’t be impersonated, and a suspended impersonator’s session stop
   await expect(admin.getByRole('heading', { level: 1, name: otherAdmin.displayName })).toBeVisible();
   await expect(admin.getByRole('button', { name: 'Log in as' })).toHaveCount(0);
   const start = (userId: string) =>
-    rawApi('POST', `/admin/users/${userId}/impersonate`, api.token, { reason: 'E2E negative', confirm: true });
+    rawApi('POST', `/admin/users/${userId}/impersonate`, api.token, {
+      reason: 'E2E negative',
+      confirm: true,
+    });
   expect((await start(otherAdmin.id)).body.code).toBe('admin.impersonation_target_forbidden');
   const suspended = await start(suspendedTarget.id);
   expect(`${suspended.status} ${suspended.body.code}`).toBe('409 admin.impersonation_target_inactive');
@@ -183,7 +211,10 @@ test('who can’t be impersonated, and a suspended impersonator’s session stop
   const impersonationToken = secondBearer.current();
   expect((await rawApi('GET', '/auth/me', impersonationToken)).status).toBe(200);
 
-  await api.post(`/admin/users/${otherAdmin.id}/suspend`, { reason: `E2E ${id}: suspend the impersonator`, confirm: true });
+  await api.post(`/admin/users/${otherAdmin.id}/suspend`, {
+    reason: `E2E ${id}: suspend the impersonator`,
+    confirm: true,
+  });
   // The impersonation token is refused on its very next use, and the open page ends up on the sign-in page (its next
   // request — a background refresh or the navigation below — is refused and cannot be resumed).
   expect((await rawApi('GET', '/auth/me', impersonationToken)).status).toBe(401);

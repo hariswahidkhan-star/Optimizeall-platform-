@@ -104,7 +104,8 @@ export function trackBearer(page: Page) {
   let token: string | null = null;
   page.on('request', (req) => {
     const auth = req.headers().authorization;
-    if (auth?.startsWith('Bearer ') && new URL(req.url()).pathname.startsWith('/api/v1/')) token = auth.slice(7);
+    if (auth?.startsWith('Bearer ') && new URL(req.url()).pathname.startsWith('/api/v1/'))
+      token = auth.slice(7);
   });
   return {
     /** The latest token the page sent (fails the test when the page has not called the API yet). */

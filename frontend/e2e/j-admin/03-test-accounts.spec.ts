@@ -1,4 +1,14 @@
-import { DEMO_ADMIN_NAME, accounts, expect, landing, modal, runId, signOut, test, watchErrors } from './support/jadmin';
+import {
+  DEMO_ADMIN_NAME,
+  accounts,
+  expect,
+  landing,
+  modal,
+  runId,
+  signOut,
+  test,
+  watchErrors,
+} from './support/jadmin';
 
 /**
  * Test accounts: the admin creates a test user of each kind of role through Users → Create test user (a client user
@@ -71,7 +81,11 @@ test('a test user of each role signs in from the test accounts panel into the ri
     const panel = page.getByRole('region', { name: 'Test accounts' });
     await expect(panel.getByText('Not production')).toBeVisible();
     await panel
-      .getByRole('button', { name: new RegExp(`^Sign in as ${c.name} \\(.*${c.role.role === 'CampaignManager' ? 'Campaign Manager' : c.role.role === 'AccountManager' ? 'Account Manager' : c.role.role}.*\\), `) })
+      .getByRole('button', {
+        name: new RegExp(
+          `^Sign in as ${c.name} \\(.*${c.role.role === 'CampaignManager' ? 'Campaign Manager' : c.role.role === 'AccountManager' ? 'Account Manager' : c.role.role}.*\\), `,
+        ),
+      })
       .click();
     await expect(page, `${c.role.role} lands in its portal`).toHaveURL(c.role.landing);
     await expect(page.getByRole('heading', { level: 1 }).first()).toBeVisible();

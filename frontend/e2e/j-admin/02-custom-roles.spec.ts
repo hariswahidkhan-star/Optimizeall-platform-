@@ -63,14 +63,21 @@ test('a role built from every permission area; client portal can’t be mixed wi
   ).toBeVisible();
   // The API refuses a client/staff mix on its own (400 before the grant check).
   expect(
-    await codeOf(api.post('/admin/roles', { name: `Mixed ${id}`, permissions: ['client.portal', 'crm.view'] })),
+    await codeOf(
+      api.post('/admin/roles', { name: `Mixed ${id}`, permissions: ['client.portal', 'crm.view'] }),
+    ),
   ).toBe('400 roles.client_portal_mixed');
 
   await editor.getByRole('button', { name: 'Create role' }).click();
   await expect(toast(admin, 'Role created')).toBeVisible();
-  const row = admin.getByRole('table', { name: 'Custom roles' }).getByRole('row').filter({ hasText: roleName });
+  const row = admin
+    .getByRole('table', { name: 'Custom roles' })
+    .getByRole('row')
+    .filter({ hasText: roleName });
   await expect(row.getByRole('cell').nth(1)).toHaveText(String(expected.length));
-  const saved = (await api.get<{ custom: CustomRoleDto[] }>('/admin/roles')).custom.find((r) => r.name === roleName)!;
+  const saved = (await api.get<{ custom: CustomRoleDto[] }>('/admin/roles')).custom.find(
+    (r) => r.name === roleName,
+  )!;
   expect([...saved.permissions].sort()).toEqual(expected);
 
   // Nobody has it: deleting needs no typed confirmation.
@@ -146,7 +153,9 @@ for (const c of PORTAL_CASES) {
     await expect(toast(admin, 'Role created')).toBeVisible();
 
     await admin.goto(`/admin/users/${person.id}`);
-    const assignment = admin.getByRole('region', { name: 'Custom roles' }).getByRole('checkbox', { name: roleName });
+    const assignment = admin
+      .getByRole('region', { name: 'Custom roles' })
+      .getByRole('checkbox', { name: roleName });
     await assignment.click();
     await expect(toast(admin, 'Role assigned')).toBeVisible();
     await expect(assignment).toBeChecked();
@@ -202,7 +211,11 @@ test('client users and staff never mix: staff custom roles and built-in staff ro
   const api = await adminApi();
   expect(
     await codeOf(
-      api.put(`/admin/users/${client.id}/roles`, { roles: ['Client', 'Reviewer'], reason: 'E2E mix', confirm: true }),
+      api.put(`/admin/users/${client.id}/roles`, {
+        roles: ['Client', 'Reviewer'],
+        reason: 'E2E mix',
+        confirm: true,
+      }),
     ),
   ).toBe('409 roles.client_staff_conflict');
   errors.expectClean('refusing a client/staff mix');
@@ -268,12 +281,12 @@ test('a delegated role manager manages what they hold but can’t escalate', asy
   const api = await ApiSession.login(delegate.email, delegate.password);
   const roles = (await api.get<{ custom: CustomRoleDto[] }>('/admin/roles')).custom;
   const mgr = roles.find((r) => r.id === managerRole.id)!;
-  expect(await codeOf(api.post('/admin/roles', { name: `Escalate A ${id}`, permissions: ['crm.manage'] }))).toBe(
-    '403 roles.cannot_grant_unheld',
-  );
-  expect(await codeOf(api.post('/admin/roles', { name: `Escalate B ${id}`, permissions: ['roles.manage'] }))).toBe(
-    '403 roles.admin_only_permission',
-  );
+  expect(
+    await codeOf(api.post('/admin/roles', { name: `Escalate A ${id}`, permissions: ['crm.manage'] })),
+  ).toBe('403 roles.cannot_grant_unheld');
+  expect(
+    await codeOf(api.post('/admin/roles', { name: `Escalate B ${id}`, permissions: ['roles.manage'] })),
+  ).toBe('403 roles.admin_only_permission');
   expect(
     await codeOf(api.post('/admin/roles', { name: `Escalate C ${id}`, permissions: ['users.impersonate'] })),
   ).toBe('403 roles.admin_only_permission');
@@ -289,14 +302,41 @@ test('a delegated role manager manages what they hold but can’t escalate', asy
   expect(await codeOf(api.put(`/admin/roles/${mgr.id}/users/${colleague.id}`))).toMatch(/^403\b/);
   expect(await codeOf(api.put(`/admin/roles/${adminOnlyRole.id}/users/${delegate.id}`))).toMatch(/^403\b/);
   expect(
-    await codeOf(api.put(`/admin/users/${colleague.id}/roles`, { roles: ['Admin'], reason: 'escalate', confirm: true })),
+    await codeOf(
+      api.put(`/admin/users/${colleague.id}/roles`, { roles: ['Admin'], reason: 'escalate', confirm: true }),
+    ),
   ).toMatch(/^403\b/);
   expect(
-    await codeOf(api.put(`/admin/users/${delegate.id}/roles`, { roles: ['Admin'], reason: 'escalate', confirm: true })),
+    await codeOf(
+      api.put(`/admin/users/${delegate.id}/roles`, { roles: ['Admin'], reason: 'escalate', confirm: true }),
+    ),
   ).toMatch(/^403\b/);
-  expect(await codeOf(api.put('/admin/settings/eligibility.minFollowers', { value: 1, reason: 'escalate', confirm: true }))).toMatch(/^403\b/);
-  expect(await codeOf(api.post(`/admin/users/${colleague.id}/suspend`, { reason: 'escalate', confirm: true }))).toMatch(/^403\b/);
+  expect(
+    await codeOf(
+      api.put('/admin/settings/eligibility.minFollowers', { value: 1, reason: 'escalate', confirm: true }),
+    ),
+  ).toMatch(/^403\b/);
+  expect(
+    await codeOf(api.post(`/admin/users/${colleague.id}/suspend`, { reason: 'escalate', confirm: true })),
+  ).toMatch(/^403\b/);
   expect(await codeOf(api.delete(`/admin/roles/${adminOnlyRole.id}`))).toMatch(/^403\b/);
+  // The audit log records the delegate's assignment with the user's custom roles before and after.
+  const admin = await as(accounts.admin, landing.admin);
+  await admin.goto('/admin/audit');
+  const filters = admin.getByRole('search', { name: 'Audit log filters' });
+  await filters.getByLabel('Action').fill('admin.custom_role_assigned');
+  await filters.getByRole('button', { name: 'Apply filters' }).click();
+  const entry = admin
+    .getByRole('region', { name: 'Audit entries' })
+    .getByRole('listitem')
+    .filter({ hasText: delegate.displayName })
+    .filter({ hasText: colleague.id });
+  await expect(entry).toHaveCount(1);
+  await entry.getByRole('button', { name: /admin\.custom_role_assigned/ }).click();
+  await expect(entry.getByText('Before')).toBeVisible();
+  await expect(entry.getByText('After')).toBeVisible();
+  await expect(entry).toContainText(ownRole);
+
   // Nothing changed for them: still exactly the permissions of their roles.
   const me = await api.get<{ permissions: string[] }>('/auth/me');
   expect(me.permissions).not.toContain('settings.manage');
