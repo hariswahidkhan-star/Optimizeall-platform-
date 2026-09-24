@@ -256,7 +256,7 @@ public sealed class SendGridEmailProvider(HttpClient http, ICredentialVault vaul
     }
 }
 
-/// <summary>Mailgun <c>POST /v3/{domain}/messages</c>. Vault provider "mailgun": secrets <c>apiKey</c>, <c>webhookSigningKey</c>; settings <c>domain</c>, <c>apiBaseUrl</c> (EU: https://api.eu.mailgun.net).</summary>
+/// <summary>Mailgun <c>POST /v3/{domain}/messages</c>. Vault provider "mailgun": secrets <c>apiKey</c>, <c>webhookSigningKey</c>; settings <c>domain</c>, <c>region</c> (<c>eu</c>: https://api.eu.mailgun.net).</summary>
 public sealed class MailgunEmailProvider(HttpClient http, ICredentialVault vault, ILogger<MailgunEmailProvider> logger) : IEmailMarketingProvider
 {
     public const string ProviderKey = "mailgun";
@@ -268,8 +268,11 @@ public sealed class MailgunEmailProvider(HttpClient http, ICredentialVault vault
         if (creds is null || !creds.Secrets.TryGetValue("apiKey", out var apiKey) || string.IsNullOrWhiteSpace(apiKey) ||
             !creds.Settings.TryGetValue("domain", out var domain) || string.IsNullOrWhiteSpace(domain))
             return ProviderResult.NotConfigured("Mailgun is not configured for this workspace (integration \"mailgun\" with apiKey and domain).");
+        // EU domains live on the EU API (the "region" setting of the integration, as the connection test uses).
+        var regionBase = creds.Settings.TryGetValue("region", out var region) && string.Equals(region, "eu", StringComparison.OrdinalIgnoreCase)
+            ? "https://api.eu.mailgun.net" : "https://api.mailgun.net";
         var baseUrl = creds.Settings.TryGetValue("apiBaseUrl", out var b) && Uri.TryCreate(b, UriKind.Absolute, out var u) && u.Scheme == "https"
-            ? b.TrimEnd('/') : "https://api.mailgun.net";
+            ? b.TrimEnd('/') : regionBase;
 
         var form = new List<KeyValuePair<string, string>>
         {

@@ -66,6 +66,12 @@ import { defineConfig, devices } from '@playwright/test';
  * import, budgets and client ad reports, plus permissions, tenancy, impersonation, conflicts and double clicks). Serial
  * on one worker, desktop only, against Baseline + Demo: `E2E_SUITE=j-social E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
  *
+ * The j-email suite walks the agency's email-marketing journey in a brand-new client workspace (settings and a
+ * verified sender, lists, manual contacts and CSV imports, suppression, templates and test sends, campaigns from draft
+ * through schedule/send/pause/cancel, open/click tracking, provider webhooks, the public unsubscribe/preferences/confirm
+ * pages, reports and permissions) against the Demo seed. Its specs build on each other, so it runs serially on one
+ * worker without retries, desktop only. Run it with `E2E_SUITE=j-email E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
+ *
  * The a11y suite (accessibility & responsive layout: axe WCAG 2.2 A/AA in the light and dark theme, no horizontal
  * scroll at 360/768/1280 px, keyboard and focus behaviour) runs against the Demo seed too. It never changes data, so
  * its tests run in parallel (two workers); each test sets its own viewport, so only the desktop project runs it. Run
@@ -110,6 +116,7 @@ const desktopJourney = [
   'j-content',
   'j-social',
   'j-edge',
+  'j-email',
 ].includes(suite);
 /** The finance journey compares datetime-local input (browser time) with UTC periods, so its browser runs in UTC. */
 const finance = suite === 'j-finance';

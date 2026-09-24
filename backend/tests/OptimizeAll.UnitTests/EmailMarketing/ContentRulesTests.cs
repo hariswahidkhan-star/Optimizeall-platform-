@@ -247,4 +247,13 @@ public sealed class CsvParserTests
         Assert.Equal(';', CsvParser.DetectDelimiter("email;name\na;b"));
         Assert.Throws<FormatException>(() => CsvParser.Parse("a,\"b\nc"));
     }
+
+    [Fact]
+    public void Records_know_the_file_line_they_start_on_across_blank_lines_and_multi_line_values()
+    {
+        var records = CsvParser.ParseRecords("email,note\r\na@x.test,one\r\n\r\nb@x.test,\"two\nlines\"\r\n\r\n\r\nc@x.test,three\r\nd@x.test,four");
+        Assert.Equal(new[] { 1, 2, 4, 8, 9 }, records.Select(r => r.Line).ToArray());
+        Assert.Equal("c@x.test", records[3].Fields[0]);
+        Assert.Equal(records.Select(r => r.Fields), CsvParser.Parse("email,note\r\na@x.test,one\r\n\r\nb@x.test,\"two\nlines\"\r\n\r\n\r\nc@x.test,three\r\nd@x.test,four"));
+    }
 }

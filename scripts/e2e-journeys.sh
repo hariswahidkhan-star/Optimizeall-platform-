@@ -3,7 +3,7 @@
 #
 #   1. creates a fresh database oa_e2e_<timestamp> (MySQL), or a fresh SQLite file with E2E_DB_PROVIDER=sqlite
 #   2. builds and starts the API on :$E2E_API_PORT (Development, $E2E_SEED seed profiles, file-mode email + dev mailbox,
-#      background jobs off, relaxed auth rate limit, bootstrap admin, non-production test sign-in on, Google sign-in
+#      background jobs off, relaxed auth and per-IP rate limits, bootstrap admin, non-production test sign-in on, Google sign-in
 #      not configured)
 #   3. builds the frontend and serves it with `vite preview` on :$E2E_WEB_PORT, proxying /api/, /t/ and /e/ to the API
 #   4. waits for /health/ready and runs `E2E_SUITE=$E2E_SUITE npx playwright test` (desktop + mobile projects)
@@ -29,6 +29,8 @@
 #                           j-social        social media + paid ads; publishes through a local Graph/X API stub that
 #                                           the suite's global setup serves on $E2E_STUB_PORT (Demo seed)
 #                           j-lead-to-cash  website inquiry → CRM → proposal → contract → paid recurring invoice (Demo seed)
+#                           j-email         email marketing: settings, senders, lists and imports, templates, campaigns
+#                                           through send/pause/cancel, tracking, provider webhooks, public pages (Demo seed)
 #                           j-edge          cross-cutting edge cases: time zones, currencies, lists at volume (Demo seed)
 #   E2E_SEED              comma-separated seed profiles (default: Baseline for journeys and j-participant,
 #                         Baseline,Demo for everything else)
@@ -147,7 +149,7 @@ api_pid="$(cd "$ROOT" && start_bg e2e-api "$API_LOG" env \
   Email__Mode=File Email__PickupDirectory="$MAIL_DIR" Email__AppBaseUrl="http://localhost:$E2E_WEB_PORT" \
   DevTools__MailboxEnabled=true DevTools__TestLoginEnabled=true \
   Authentication__Google__ClientId= Authentication__Google__ClientSecret= \
-  RateLimiting__AuthPerMinute=1000 \
+  RateLimiting__AuthPerMinute=1000 RateLimiting__GlobalPerMinute=6000 \
   Jobs__Enabled=false \
   Storage__RootPath="$FILES_DIR" \
   SocialMedia__GraphApiBaseUrl="http://127.0.0.1:$E2E_STUB_PORT/graph" SocialMedia__XApiBaseUrl="http://127.0.0.1:$E2E_STUB_PORT/x" \

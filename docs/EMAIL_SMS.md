@@ -47,7 +47,10 @@ This guide covers running the email/SMS module (`backend/src/OptimizeAll.Api/Mod
 
   Removing a suppression requires a reason and is audited.
 - **Re-subscribing:** imports and forms never re-subscribe an unsubscribed, bounced, complained or suppressed
-  address.
+  address, and an import never puts a contact back on a list they unsubscribed from (only the contact can: preference
+  center or a confirmed sign-up).
+- **Senders in use:** while a scheduled, sending or paused campaign or an active journey sends from a sender, its
+  address cannot change (a new address is unverified, so every message would fail) and it cannot be deleted.
 - **Test sends:** go only to verified staff accounts.
 - **Erasure:** GDPR erasure (`DELETE /subscribers/{id}`) removes the contact, its consent history and its activity.
   Any suppression entries for the address are kept, so a suppressed address is never mailed again.
@@ -116,10 +119,12 @@ managed with `integrations.manage`:
 
 - **`sendgrid`**
   - Secret: `apiKey`.
-  - Settings: `apiBaseUrl` (EU: `https://api.eu.sendgrid.com`), `webhookPublicKey` (Signed Event Webhook).
+  - Settings: `fromEmail`, `fromName`, `webhookPublicKey` (Signed Event Webhook; without it bounce and spam-report
+    events are refused with 503).
 - **`mailgun`**
-  - Secrets: `apiKey`, `webhookSigningKey`.
-  - Settings: `domain`, `apiBaseUrl` (EU: `https://api.eu.mailgun.net`).
+  - Secrets: `apiKey`, `webhookSigningKey` (HTTP webhook signing key; without it bounce and complaint events are
+    refused with 503).
+  - Settings: `domain`, `fromEmail`, `region` (`eu` sends through `https://api.eu.mailgun.net`).
 - **`twilio`**
   - Secret: `authToken` (also verifies webhook signatures).
   - Settings: `accountSid`, and either `fromNumber` or `messagingServiceSid`.
@@ -155,5 +160,5 @@ The public pages (`/email/unsubscribe/:token`, `/email/preferences/:token`, `/em
   scanners) are counted separately and are excluded from rates and engagement tiers.
 - **Clicks:** clicks within 10 seconds of delivery, or from known scanners, are flagged as machine clicks.
 - **Delivered:** measured only when the provider's delivery webhook is configured. Otherwise it is estimated as
-  sent minus bounces, and labelled "Estimated".
+  sent minus bounces, and labelled "Estimated". Workspace KPIs apply this per campaign and add the results up.
 - **Revenue:** attributed to the last email click within 7 days before the conversion.

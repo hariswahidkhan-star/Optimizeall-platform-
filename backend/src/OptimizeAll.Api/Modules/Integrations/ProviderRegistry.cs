@@ -106,13 +106,26 @@ public static class ProviderRegistry
         new("sendgrid", "SendGrid", IntegrationCategory.Email, "Send email campaigns through Twilio SendGrid.",
             "Create an API key with Mail Send permission and verify your sender domain.",
             "https://docs.sendgrid.com/for-developers/sending-email/api-getting-started",
-            new[] { S("fromEmail", "From address", pattern: @"^[^@\s]+@[^@\s]+\.[^@\s]+$"), S("fromName", "From name", false) },
+            new[]
+            {
+                S("fromEmail", "From address", pattern: @"^[^@\s]+@[^@\s]+\.[^@\s]+$"), S("fromName", "From name", false),
+                // Read by the signed event webhook (bounces, spam reports → suppression list); without it the webhook answers 503.
+                S("webhookPublicKey", "Event webhook verification key", false,
+                    "Mail Settings → Signed Event Webhook: the public key (base64 or PEM). Bounces and spam reports are refused without it.",
+                    @"^[A-Za-z0-9+/=\s-]+$", max: 1000),
+            },
             new[] { S("apiKey", "API key", pattern: @"^SG\.[A-Za-z0-9_.-]{20,}$") }, true, true, true, false),
         new("mailgun", "Mailgun", IntegrationCategory.Email, "Send email campaigns through Mailgun.",
             "Add and verify a sending domain, then create a domain sending key or use the private API key.",
             "https://documentation.mailgun.com/docs/mailgun/api-reference/",
             new[] { S("domain", "Sending domain", pattern: @"^[a-z0-9.-]+\.[a-z]{2,}$"), S("region", "Region (us or eu)", false, pattern: "^(us|eu)$"), S("fromEmail", "From address", pattern: @"^[^@\s]+@[^@\s]+\.[^@\s]+$") },
-            new[] { S("apiKey", "API key") }, true, true, true, false),
+            new[]
+            {
+                S("apiKey", "API key"),
+                // Read by the webhook endpoint (bounces, complaints → suppression list); without it the webhook answers 503.
+                S("webhookSigningKey", "HTTP webhook signing key", false,
+                    "Sending → Webhooks → HTTP webhook signing key. Bounces and complaints are refused without it."),
+            }, true, true, true, false),
         new("dataforseo", "DataForSEO", IntegrationCategory.Seo, "Daily rank tracking (Google SERP positions, SERP features, competitors).",
             "Create a DataForSEO account and copy the API login and password from the dashboard (API Access).",
             "https://docs.dataforseo.com/v3/serp/overview/",

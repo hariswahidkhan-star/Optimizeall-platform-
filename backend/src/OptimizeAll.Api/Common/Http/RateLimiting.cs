@@ -62,7 +62,8 @@ public static class RateLimitPolicies
                 !enabled || IsHighVolume(ctx) ? RateLimitPartition.GetNoLimiter("off")
                     : RateLimitPartition.GetTokenBucketLimiter(ClientKey(ctx), _ => new TokenBucketRateLimiterOptions
                     {
-                        TokenLimit = 300, TokensPerPeriod = 300, ReplenishmentPeriod = TimeSpan.FromMinutes(1), QueueLimit = 0,
+                        TokenLimit = GlobalPerMinute(config), TokensPerPeriod = GlobalPerMinute(config), ReplenishmentPeriod = TimeSpan.FromMinutes(1),
+                        QueueLimit = 0,
                     }));
 
             options.AddPolicy(Auth, ctx => !enabled ? RateLimitPartition.GetNoLimiter("off")
@@ -110,6 +111,9 @@ public static class RateLimitPolicies
         });
         return services;
     }
+
+    /// <summary>Global per-IP budget (<c>RateLimiting:GlobalPerMinute</c>, default 300; the e2e harness, where every actor shares 127.0.0.1, raises it).</summary>
+    private static int GlobalPerMinute(IConfiguration config) => Math.Max(1, config.GetValue("RateLimiting:GlobalPerMinute", 300));
 
     private static bool IsHighVolume(HttpContext ctx) =>
         ctx.GetEndpoint()?.Metadata.GetMetadata<EnableRateLimitingAttribute>()?.PolicyName is { } policy && HighVolumePolicies.Contains(policy);

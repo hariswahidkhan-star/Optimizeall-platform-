@@ -197,8 +197,13 @@ export function SubscriberPage() {
         confirmText="ERASE"
         onConfirm={async () => {
           await api.delete(`${EMAIL_API}/subscribers/${id}`);
-          void queryClient.invalidateQueries({ queryKey: emailKeys.all });
           navigate('/agency/email/lists');
+          // The erased contact is gone: refetching its own (still mounted) query would only produce a 404.
+          const erased = emailKeys.subscriber(id ?? '').join('/');
+          void queryClient.invalidateQueries({
+            queryKey: emailKeys.all,
+            predicate: (query) => query.queryKey.join('/') !== erased,
+          });
         }}
       />
     </>

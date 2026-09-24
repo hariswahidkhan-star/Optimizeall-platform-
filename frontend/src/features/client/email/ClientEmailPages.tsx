@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Mail } from 'lucide-react';
 import { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Alert } from '@/components/ui/Alert';
 import { Button } from '@/components/ui/Button';
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
@@ -252,11 +252,20 @@ export function ClientCampaignPage() {
   });
   const pending = approvals.data?.find((a) => a.id === id);
   const [deciding, setDeciding] = useState<'approve' | 'reject' | null>(null);
+  const navigate = useNavigate();
   const decide = useMutation({
     mutationFn: (body: { approve: boolean; note: string | null }) => api.post(`${CLIENT_EMAIL_API}/campaigns/${id}/approval`, body),
     onSuccess: (_, body) => {
       toast.success(body.approve ? 'Campaign approved' : 'Changes requested', body.approve ? 'Your agency can now send it as scheduled.' : 'Your agency has been told.');
-      void queryClient.invalidateQueries({ queryKey: keys.all });
+      if (body.approve) {
+        void queryClient.invalidateQueries({ queryKey: keys.all });
+        return;
+      }
+      // Changes requested: the campaign goes back to the agency as a draft, which the portal does not show, so this page
+      // would only answer "not found". Back to the list, without refetching this campaign.
+      navigate('/client/email');
+      const gone = [keys.report(id), keys.preview(id)].map((k) => k.join('/'));
+      void queryClient.invalidateQueries({ queryKey: keys.all, predicate: (query) => !gone.includes(query.queryKey.join('/')) });
     },
   });
 
