@@ -48,7 +48,8 @@ public sealed class SearchService(AppDbContext db, ICurrentUser currentUser, ICl
     public const int DefaultPerType = 5;
     public const int MaxPerType = 10;
 
-    /// <summary>Permissions that make at least one record type searchable.</summary>
+    /// <summary>Permissions that make at least one record type searchable (mirrored by the web app's CommandPalette
+    /// SEARCH_PERMISSIONS, which skips record search without one of them).</summary>
     public static readonly string[] SearchPermissions =
     {
         Permissions.ClientsView, Permissions.CrmView, Permissions.ProjectsView, Permissions.BillingView,

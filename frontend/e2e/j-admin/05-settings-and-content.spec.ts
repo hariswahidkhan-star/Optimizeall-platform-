@@ -260,6 +260,9 @@ test('CMS page: version history, restore an older version, scheduled go-live hid
   const confirm = modal(admin, /^Restore version \d+\?$/);
   await confirm.getByRole('button', { name: 'Restore version' }).click();
   await expect(toast(admin, /Version \d+ restored/)).toBeVisible();
+  // Exactly one new version, the restore — confirming the dialog must not also save the page form around it.
+  await expect(history.getByRole('listitem').first()).toContainText('Version 3 · Restored');
+  await expect(history.getByRole('listitem')).toHaveCount(3);
   await visitor.reload();
   await expect(visitor.getByText(v1)).toBeVisible();
 

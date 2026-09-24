@@ -78,6 +78,9 @@ export function ConfirmDialog({
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    // The dialog is portalled, but React still bubbles its submit event to the React ancestors: a confirmation opened
+    // from inside another form (e.g. "Restore version?" in the CMS page editor) must not submit that form too.
+    event.stopPropagation();
     if (!reasonValid) {
       setShowReasonError(true);
       return;

@@ -26,7 +26,9 @@ const results = {
     {
       type: 'invoices',
       label: 'Invoices',
-      items: [{ id: 'i1', title: 'INV-001', subtitle: 'Acme Ltd · Issued', url: '/agency/billing/invoices/i1' }],
+      items: [
+        { id: 'i1', title: 'INV-001', subtitle: 'Acme Ltd · Issued', url: '/agency/billing/invoices/i1' },
+      ],
     },
   ],
 };
@@ -91,9 +93,35 @@ describe('CommandPalette', () => {
     const dialog = await screen.findByRole('dialog', { name: 'Search' });
     await user.type(within(dialog).getByRole('combobox'), 'invoic');
     const pages = within(dialog).getByRole('group', { name: 'Go to' });
-    expect(within(pages).getAllByRole('option').every((o) => /invoic/i.test(o.textContent ?? ''))).toBe(true);
+    expect(
+      within(pages)
+        .getAllByRole('option')
+        .every((o) => /invoic/i.test(o.textContent ?? '')),
+    ).toBe(true);
     await user.keyboard('{Escape}');
     await waitFor(() => expect(screen.queryByRole('dialog', { name: 'Search' })).not.toBeInTheDocument());
+  });
+
+  it('offers only page shortcuts, without calling GET /search, to staff with no searchable permission', async () => {
+    // Regression: a content-only admin (content.manage) got a 403 from /search on every keystroke.
+    const user = userEvent.setup();
+    const { calls } = (() => {
+      const mock = mockFetch({
+        'POST /auth/refresh': staff(['content.manage']),
+        'GET /search': () => json(403, { code: 'search.forbidden' }),
+      });
+      renderWithApp(<PortalLayout portal={getPortal('admin')} />, { route: '/admin', path: '/admin/*' });
+      return mock;
+    })();
+    await user.click(await screen.findByRole('button', { name: 'Search' }));
+    const dialog = await screen.findByRole('dialog', { name: 'Search' });
+    await user.type(within(dialog).getByRole('combobox'), 'Content');
+    const pages = await within(dialog).findByRole('group', { name: 'Go to' });
+    expect(within(pages).getByRole('option', { name: /Content/ })).toBeInTheDocument();
+    // Let the search debounce (250 ms) elapse: a record search would have been sent by now.
+    await new Promise((resolve) => setTimeout(resolve, 600));
+    expect(calls.some((c) => c.path === '/search')).toBe(false);
+    expect(within(dialog).getByRole('status')).toHaveTextContent(/\d+ results?\./);
   });
 
   it('is not offered in portals without staff search', async () => {

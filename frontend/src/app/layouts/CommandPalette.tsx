@@ -6,13 +6,25 @@ import { useNavigate } from 'react-router-dom';
 import { Dialog } from '@/components/ui/Dialog';
 import { api } from '@/lib/api/client';
 import { errorMessage } from '@/lib/api/errors';
-import { meetsRequirement } from '@/lib/auth/permissions';
+import { meetsRequirement, Permissions } from '@/lib/auth/permissions';
 import { useAuth } from '@/lib/auth/useAuth';
 import { useDebouncedValue } from '@/lib/hooks/useDebouncedValue';
 import { accessiblePortals, canOpenPath } from '../portals';
 import './CommandPalette.css';
 
 export const SEARCH_MIN_LENGTH = 2;
+/**
+ * Any of these opens record search (`GET /search`, mirrors `SearchService.SearchPermissions`); staff without one
+ * (e.g. a content editor) get the page shortcuts only, instead of a 403 on every keystroke.
+ */
+export const SEARCH_PERMISSIONS = [
+  Permissions.ClientsView,
+  Permissions.CrmView,
+  Permissions.ProjectsView,
+  Permissions.BillingView,
+  Permissions.CampaignsView,
+  Permissions.UsersView,
+] as const;
 const MAX_PAGES = 8;
 
 interface SearchHit {
@@ -96,7 +108,8 @@ function PaletteBody({
   const statusId = useId();
   const term = text.trim();
   const debounced = useDebouncedValue(term, 250);
-  const searching = debounced.length >= SEARCH_MIN_LENGTH;
+  const canSearch = SEARCH_PERMISSIONS.some((p) => permissions.includes(p));
+  const searching = canSearch && debounced.length >= SEARCH_MIN_LENGTH;
 
   const search = useQuery({
     queryKey: ['search', debounced],
@@ -164,7 +177,7 @@ function PaletteBody({
   const loading = searching && (search.isFetching || debounced !== term);
   const status = search.isError
     ? `Search failed: ${errorMessage(search.error)}`
-    : term.length > 0 && term.length < SEARCH_MIN_LENGTH
+    : canSearch && term.length > 0 && term.length < SEARCH_MIN_LENGTH
       ? `Type at least ${SEARCH_MIN_LENGTH} characters to search records.`
       : loading
         ? 'Searching…'
