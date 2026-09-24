@@ -59,6 +59,13 @@ public class ClientOnboardingItem : Entity
     public OnboardingItemStatus Status { get; set; } = OnboardingItemStatus.Pending;
     public DateTime? CompletedAt { get; set; }
     public Guid? CompletedByUserId { get; set; }
+
+    /// <summary>
+    /// True when a client-owned step was marked done by agency staff on the client's behalf (shown to the client and
+    /// kept in the audit log). False when the client completed it or for agency-owned steps.
+    /// </summary>
+    public bool CompletedOnBehalfOfClient { get; set; }
+
     public string? Note { get; set; }
 }
 

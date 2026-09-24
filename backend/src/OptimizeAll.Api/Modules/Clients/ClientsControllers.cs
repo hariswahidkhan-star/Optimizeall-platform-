@@ -108,6 +108,16 @@ public sealed class AgencyClientsController(
     public Task<OnboardingDto> UpdateOnboardingItem(Guid id, Guid itemId, UpdateOnboardingItemRequest request, CancellationToken ct) =>
         relationship.UpdateOnboardingItemAsync(id, itemId, request, ct);
 
+    /// <summary>
+    /// Marks a client-owned step done (<c>done: true</c>) or not done on the client's behalf; audited and shown to the
+    /// client as completed by the agency. Agency-owned steps: 400 <c>onboarding.not_client_item</c>.
+    /// </summary>
+    [DeniedWhileImpersonating] // acts for the client (an attestation in their name)
+    [HttpPost("{id:guid}/onboarding/{itemId:guid}/on-behalf")]
+    [HasPermission(Permissions.ClientsManage)]
+    public Task<OnboardingDto> OnBehalfOfClient(Guid id, Guid itemId, OnBehalfOnboardingRequest request, CancellationToken ct) =>
+        relationship.SetOnBehalfOfClientAsync(id, itemId, request, ct);
+
     /// <summary>Edits an item's title, description, category, owner or position.</summary>
     [HttpPut("{id:guid}/onboarding/{itemId:guid}/details")]
     [HasPermission(Permissions.ClientsManage)]
@@ -135,6 +145,8 @@ public sealed class AgencyClientsController(
     [RequestFormLimits(MultipartBodyLengthLimit = DeliveryFileValidator.MaxBytes + 1024 * 1024)]
     public Task<BrandKitDto> AddAsset(Guid id, [FromForm] BrandAssetForm form, CancellationToken ct) => relationship.AddAssetAsync(id, form, ct);
 
+    /// <summary>Removes a brand asset; its file is deleted once nothing else uses it. A second removal is a 404.</summary>
+    [DeniedWhileImpersonating] // destroys client files
     [HttpDelete("{id:guid}/brand-kit/assets/{assetId:guid}")]
     [HasPermission(Permissions.ClientsManage)]
     public Task<BrandKitDto> RemoveAsset(Guid id, Guid assetId, CancellationToken ct) => relationship.RemoveAssetAsync(id, assetId, ct);

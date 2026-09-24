@@ -134,6 +134,12 @@ public class MessageThread : AuditedEntity
     public int MessageCount { get; set; }
     public string? LastMessagePreview { get; set; }
     public Guid? LastAuthorUserId { get; set; }
+
+    /// <summary>
+    /// Staff-only thread: never listed, returned, notified or searchable for the client's users (404 by id). Set when the
+    /// thread is created and never changed, so nothing written internally can later become visible to the client.
+    /// </summary>
+    public bool IsInternal { get; set; }
 }
 
 public class ThreadMessage : Entity

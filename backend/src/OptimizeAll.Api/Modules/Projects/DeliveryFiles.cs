@@ -2,6 +2,7 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Audit;
+using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Api.Modules.Files;
 using OptimizeAll.Domain.Agency;
@@ -53,7 +54,8 @@ public sealed record DeliveryFileDto(Guid Id, string FileName, string ContentTyp
         $"/api/v1/agency/files/{f.Id}", $"/api/v1/client/orgs/{f.ClientAccountId}/files/{f.Id}");
 }
 
-public sealed class DeliveryFileService(AppDbContext db, IFileStorage storage, IClientScope scope, ICurrentUser currentUser, TimeProvider clock)
+public sealed class DeliveryFileService(
+    AppDbContext db, IFileStorage storage, IClientScope scope, ICurrentUser currentUser, IDatabaseDialect dialect, TimeProvider clock)
 {
     /// <summary>
     /// Validates and stores a private file of a client, staging its row (saved by the caller). Call <see cref="Discard"/>
@@ -149,9 +151,10 @@ public sealed class DeliveryFileService(AppDbContext db, IFileStorage storage, I
 
     /// <summary>
     /// True when a client's file belongs to internal work only and must not reach the client's users: it is the file of a
-    /// deliverable version that was never sent to the client, or a task attachment (tasks show the client only their title
-    /// and status), and it was not also shared with the client (a sent version, a message attachment, a brand asset, the
-    /// logo, or an upload by a member of the organization).
+    /// deliverable version that was never sent to the client, a task attachment (tasks show the client only their title
+    /// and status) or an attachment in an internal (staff-only) thread, and it was not also shared with the client (a sent
+    /// version, an attachment in a client-visible thread, a brand asset, the logo, or an upload by a member of the
+    /// organization).
     /// </summary>
     public async Task<bool> IsInternalOnlyAsync(DeliveryFile file, CancellationToken ct)
     {
@@ -162,15 +165,60 @@ public sealed class DeliveryFileService(AppDbContext db, IFileStorage storage, I
                               where v.FileId == id
                               select new { Sent = v.Number <= d.LastSentVersion }).ToListAsync(ct);
         if (versions.Any(v => v.Sent)) return false;
-        var internalUse = versions.Count > 0 || await db.Set<TaskAttachment>().AnyAsync(a => a.FileId == id, ct);
+        var messages = await MessageAttachmentsAsync(clientId, ct);
+        if (messages.Any(m => !m.IsInternal && m.FileIds.Contains(id))) return false;
+        var internalUse = versions.Count > 0 || messages.Any(m => m.IsInternal && m.FileIds.Contains(id))
+                          || await db.Set<TaskAttachment>().AnyAsync(a => a.FileId == id, ct);
         if (!internalUse) return false;
         if (await db.Set<ClientMember>().AnyAsync(m => m.ClientAccountId == clientId && m.UserId == file.UploadedByUserId, ct)) return false;
         if (await db.Set<ClientAccount>().AnyAsync(c => c.Id == clientId && c.LogoFileId == id, ct)) return false;
-        if (await db.Set<BrandAsset>().AnyAsync(a => a.ClientAccountId == clientId && a.FileId == id, ct)) return false;
-        // Message attachments are a JSON list column (not queryable portably): check them in memory.
-        var attachments = await db.Set<ThreadMessage>().AsNoTracking().Where(m => m.ClientAccountId == clientId)
-            .Select(m => m.AttachmentFileIds).ToListAsync(ct);
-        return !attachments.Any(list => list.Contains(id));
+        return !await db.Set<BrandAsset>().AnyAsync(a => a.ClientAccountId == clientId && a.FileId == id, ct);
+    }
+
+    private sealed record MessageAttachments(bool IsInternal, List<Guid> FileIds);
+
+    /// <summary>Attachment lists of the client's messages with their thread's visibility (a JSON list column, checked in memory).</summary>
+    private async Task<List<MessageAttachments>> MessageAttachmentsAsync(Guid clientId, CancellationToken ct)
+    {
+        var rows = await (from m in db.Set<ThreadMessage>().AsNoTracking()
+                          join t in db.Set<MessageThread>().AsNoTracking() on m.ThreadId equals t.Id
+                          where m.ClientAccountId == clientId
+                          select new { t.IsInternal, m.AttachmentFileIds }).ToListAsync(ct);
+        return rows.Where(r => r.AttachmentFileIds.Count > 0).Select(r => new MessageAttachments(r.IsInternal, r.AttachmentFileIds)).ToList();
+    }
+
+    /// <summary>
+    /// Serializes removals of a client's file references (brand assets, task attachments) with each other and with new
+    /// task attachments, so a file is never purged while it is being attached elsewhere. Acquire before
+    /// <c>BeginWriteTransactionAsync</c>.
+    /// </summary>
+    public Task<IAsyncDisposable> LockClientFilesAsync(Guid clientId, CancellationToken ct) =>
+        dialect.AcquireNamedLockAsync(db, $"delivery-files:{clientId:N}", TimeSpan.FromSeconds(30), ct);
+
+    /// <summary>
+    /// After a reference to a file was removed (and saved) inside the caller's write transaction: when nothing else refers
+    /// to the file any more (brand asset, task attachment, deliverable version, logo, message attachment), stages the
+    /// deletion of its row and returns its storage key, so the caller deletes the bytes with <see cref="DeleteStoredBytes"/>
+    /// once the transaction committed. Returns null when the file is still in use (it is kept).
+    /// </summary>
+    public async Task<string?> StageRemovalIfUnreferencedAsync(Guid fileId, CancellationToken ct)
+    {
+        var file = await db.Set<DeliveryFile>().FirstOrDefaultAsync(f => f.Id == fileId, ct);
+        if (file is null) return null;
+        if (await db.Set<BrandAsset>().AnyAsync(a => a.FileId == fileId, ct)) return null;
+        if (await db.Set<TaskAttachment>().AnyAsync(a => a.FileId == fileId, ct)) return null;
+        if (await db.Set<DeliverableVersion>().AnyAsync(v => v.FileId == fileId, ct)) return null;
+        if (await db.Set<ClientAccount>().AnyAsync(c => c.LogoFileId == fileId, ct)) return null;
+        if ((await MessageAttachmentsAsync(file.ClientAccountId, ct)).Any(m => m.FileIds.Contains(fileId))) return null;
+        db.Remove(file);
+        return file.StorageKey;
+    }
+
+    /// <summary>Deletes stored bytes after the removal of their row committed (best effort: a leftover blob is unreachable).</summary>
+    public void DeleteStoredBytes(string? storageKey)
+    {
+        if (storageKey is null) return;
+        try { storage.Delete(storageKey); } catch (IOException) { }
     }
 }
 

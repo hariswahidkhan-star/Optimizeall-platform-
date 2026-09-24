@@ -36,6 +36,7 @@ import { BrandKitView } from '../shared/BrandKitView';
 import {
   CLIENT_DUTIES,
   SERVICE_ROLES,
+  type BrandAsset,
   type BrandKit,
   type Brief,
   type ClientDetail,
@@ -76,11 +77,19 @@ function Loading() {
 
 export function OverviewTab({ client }: { client: ClientDetail }) {
   const health = useClientPart<ClientHealth>(client.id, 'health', `/agency/clients/${client.id}/health`);
-  const onboarding = useClientPart<Onboarding>(client.id, 'onboarding', `/agency/clients/${client.id}/onboarding`);
+  const onboarding = useClientPart<Onboarding>(
+    client.id,
+    'onboarding',
+    `/agency/clients/${client.id}/onboarding`,
+  );
   return (
     <div className="dl-grid dl-grid--wide">
       <Card as="section" aria-label="Health">
-        <CardHeader title="Health" headingLevel={2} actions={health.data ? <HealthBadge level={health.data.level} score={health.data.score} /> : null} />
+        <CardHeader
+          title="Health"
+          headingLevel={2}
+          actions={health.data ? <HealthBadge level={health.data.level} score={health.data.score} /> : null}
+        />
         <CardBody>
           {health.isPending ? (
             <Loading />
@@ -104,7 +113,12 @@ export function OverviewTab({ client }: { client: ClientDetail }) {
         <CardHeader title="Onboarding" headingLevel={2} />
         <CardBody>
           {onboarding.data ? (
-            <ProgressBar value={onboarding.data.percentComplete} label="Onboarding complete" valueText={`${onboarding.data.done} of ${onboarding.data.total} steps`} showValue />
+            <ProgressBar
+              value={onboarding.data.percentComplete}
+              label="Onboarding complete"
+              valueText={`${onboarding.data.done} of ${onboarding.data.total} steps`}
+              showValue
+            />
           ) : (
             <Loading />
           )}
@@ -120,13 +134,30 @@ export function OverviewTab({ client }: { client: ClientDetail }) {
               { label: 'Country / time zone', value: `${client.countryCode} · ${client.timeZone}` },
               { label: 'Currency', value: client.currency },
               { label: 'Account manager', value: client.accountManager?.displayName ?? '—' },
-              { label: 'Billing contact', value: [client.billingContactName, client.billingEmail].filter(Boolean).join(' · ') || '—' },
+              {
+                label: 'Billing contact',
+                value: [client.billingContactName, client.billingEmail].filter(Boolean).join(' · ') || '—',
+              },
               { label: 'Client feedback SLA', value: `${client.approvalSlaDays} business day(s)` },
-              { label: 'Auto-approve', value: client.autoApproveAfterDays ? `After ${client.autoApproveAfterDays} days` : 'Off' },
-              { label: 'Last invoice paid', value: client.lastInvoicePaidAt ? <DateTime value={client.lastInvoicePaidAt} format="date" /> : '—' },
+              {
+                label: 'Auto-approve',
+                value: client.autoApproveAfterDays ? `After ${client.autoApproveAfterDays} days` : 'Off',
+              },
+              {
+                label: 'Last invoice paid',
+                value: client.lastInvoicePaidAt ? (
+                  <DateTime value={client.lastInvoicePaidAt} format="date" />
+                ) : (
+                  '—'
+                ),
+              },
             ]}
           />
-          {client.statusReason ? <Alert tone="warning" title="Status reason">{client.statusReason}</Alert> : null}
+          {client.statusReason ? (
+            <Alert tone="warning" title="Status reason">
+              {client.statusReason}
+            </Alert>
+          ) : null}
         </CardBody>
       </Card>
     </div>
@@ -145,7 +176,12 @@ export function TeamTab({ clientId }: { clientId: string }) {
   const [role, setRole] = useState('Strategist');
   const onSaved = (data: TeamAssignment[]) => qc.setQueryData(dk.clientPart(clientId, 'team'), data);
   const add = useMutation({
-    mutationFn: () => api.post<TeamAssignment[]>(`/agency/clients/${clientId}/team`, { userId, serviceRole: role, isPrimary: false }),
+    mutationFn: () =>
+      api.post<TeamAssignment[]>(`/agency/clients/${clientId}/team`, {
+        userId,
+        serviceRole: role,
+        isPrimary: false,
+      }),
     onSuccess: onSaved,
   });
   const remove = useMutation({
@@ -167,7 +203,12 @@ export function TeamTab({ clientId }: { clientId: string }) {
               <Badge tone="brand">{labelOf(a.serviceRole)}</Badge>
               {a.isPrimary ? <Badge>Primary</Badge> : null}
               {canManage ? (
-                <IconButton label={`Remove ${a.user.displayName} as ${labelOf(a.serviceRole)}`} icon={<Trash2 />} variant="ghost" onClick={() => remove.mutate(a.id)} />
+                <IconButton
+                  label={`Remove ${a.user.displayName} as ${labelOf(a.serviceRole)}`}
+                  icon={<Trash2 />}
+                  variant="ghost"
+                  onClick={() => remove.mutate(a.id)}
+                />
               ) : null}
             </span>
           </li>
@@ -183,12 +224,26 @@ export function TeamTab({ clientId }: { clientId: string }) {
           }}
         >
           <FormField label="Staff member">
-            <Select value={userId} onChange={(e) => setUserId(e.target.value)} placeholder="Choose…" options={(staff.data ?? []).map((s) => ({ value: s.id, label: s.displayName }))} />
+            <Select
+              value={userId}
+              onChange={(e) => setUserId(e.target.value)}
+              placeholder="Choose…"
+              options={(staff.data ?? []).map((s) => ({ value: s.id, label: s.displayName }))}
+            />
           </FormField>
           <FormField label="Service role">
-            <Select value={role} onChange={(e) => setRole(e.target.value)} options={SERVICE_ROLES.map((r) => ({ value: r, label: labelOf(r) }))} />
+            <Select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              options={SERVICE_ROLES.map((r) => ({ value: r, label: labelOf(r) }))}
+            />
           </FormField>
-          <Button type="submit" leadingIcon={<Plus aria-hidden="true" />} disabled={!userId} loading={add.isPending}>
+          <Button
+            type="submit"
+            leadingIcon={<Plus aria-hidden="true" />}
+            disabled={!userId}
+            loading={add.isPending}
+          >
             Add
           </Button>
         </form>
@@ -217,11 +272,13 @@ export function UsersTab({ clientId }: { clientId: string }) {
     },
   });
   const change = useMutation({
-    mutationFn: ({ userId, role }: { userId: string; role: ClientDuty }) => api.put<ClientMember[]>(`/agency/clients/${clientId}/members/${userId}`, { role }),
+    mutationFn: ({ userId, role }: { userId: string; role: ClientDuty }) =>
+      api.put<ClientMember[]>(`/agency/clients/${clientId}/members/${userId}`, { role }),
     onSuccess: (data) => qc.setQueryData(dk.clientPart(clientId, 'members'), data),
   });
   const remove = useMutation({
-    mutationFn: (userId: string) => api.delete<ClientMember[]>(`/agency/clients/${clientId}/members/${userId}`),
+    mutationFn: (userId: string) =>
+      api.delete<ClientMember[]>(`/agency/clients/${clientId}/members/${userId}`),
     onSuccess: (data) => qc.setQueryData(dk.clientPart(clientId, 'members'), data),
   });
   const columns: DataTableColumn<ClientMember>[] = [
@@ -243,7 +300,16 @@ export function UsersTab({ clientId }: { clientId: string }) {
           m.role
         ),
     },
-    { id: 'signed', header: 'Signed in', cell: (m) => (m.hasSignedIn ? <DateTime value={m.lastLoginAt} format="relative" /> : <Badge tone="warning">Invitation pending</Badge>) },
+    {
+      id: 'signed',
+      header: 'Signed in',
+      cell: (m) =>
+        m.hasSignedIn ? (
+          <DateTime value={m.lastLoginAt} format="relative" />
+        ) : (
+          <Badge tone="warning">Invitation pending</Badge>
+        ),
+    },
   ];
   if (members.isPending) return <Loading />;
   if (members.isError) return <ErrorState error={members.error} />;
@@ -254,10 +320,23 @@ export function UsersTab({ clientId }: { clientId: string }) {
         columns={columns}
         rows={members.data}
         getRowId={(m) => m.userId}
-        rowActions={canManage ? (m) => [{ id: 'remove', label: 'Remove from organization', danger: true, onSelect: () => remove.mutate(m.userId) }] : undefined}
+        rowActions={
+          canManage
+            ? (m) => [
+                {
+                  id: 'remove',
+                  label: 'Remove from organization',
+                  danger: true,
+                  onSelect: () => remove.mutate(m.userId),
+                },
+              ]
+            : undefined
+        }
         emptyState={<EmptyState compact title="No client users yet" />}
       />
-      {change.error || remove.error ? <Alert tone="danger">{errorMessage(change.error ?? remove.error)}</Alert> : null}
+      {change.error || remove.error ? (
+        <Alert tone="danger">{errorMessage(change.error ?? remove.error)}</Alert>
+      ) : null}
       {canManage ? (
         <div>
           <Button leadingIcon={<Plus aria-hidden="true" />} onClick={() => setInviting(true)}>
@@ -291,13 +370,30 @@ export function UsersTab({ clientId }: { clientId: string }) {
         >
           {invite.error ? <Alert tone="danger">{errorMessage(invite.error)}</Alert> : null}
           <FormField label="Email" required>
-            <Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
+            <Input
+              type="email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              required
+            />
           </FormField>
           <FormField label="Name" required>
-            <Input value={form.displayName} onChange={(e) => setForm({ ...form, displayName: e.target.value })} required minLength={2} />
+            <Input
+              value={form.displayName}
+              onChange={(e) => setForm({ ...form, displayName: e.target.value })}
+              required
+              minLength={2}
+            />
           </FormField>
-          <FormField label="Duty" hint="Viewer: read-only. Approver: approves deliverables and submits briefs. Billing: invoices. Owner: everything, including users.">
-            <Select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value as ClientDuty })} options={CLIENT_DUTIES.map((d) => ({ value: d, label: d }))} />
+          <FormField
+            label="Duty"
+            hint="Viewer: read-only. Approver: approves deliverables and submits briefs. Billing: invoices. Owner: everything, including users."
+          >
+            <Select
+              value={form.role}
+              onChange={(e) => setForm({ ...form, role: e.target.value as ClientDuty })}
+              options={CLIENT_DUTIES.map((d) => ({ value: d, label: d }))}
+            />
           </FormField>
         </form>
       </Dialog>
@@ -309,10 +405,29 @@ export function UsersTab({ clientId }: { clientId: string }) {
 
 type OnboardingItemRow = Onboarding['items'][number];
 
-function OnboardingItemDialog({ clientId, item, onClose, onSaved }: { clientId: string; item: OnboardingItemRow; onClose: () => void; onSaved: (d: Onboarding) => void }) {
-  const [form, setForm] = useState({ title: item.title, description: item.description ?? '', category: item.category, owner: item.owner });
+function OnboardingItemDialog({
+  clientId,
+  item,
+  onClose,
+  onSaved,
+}: {
+  clientId: string;
+  item: OnboardingItemRow;
+  onClose: () => void;
+  onSaved: (d: Onboarding) => void;
+}) {
+  const [form, setForm] = useState({
+    title: item.title,
+    description: item.description ?? '',
+    category: item.category,
+    owner: item.owner,
+  });
   const save = useMutation({
-    mutationFn: () => api.put<Onboarding>(`/agency/clients/${clientId}/onboarding/${item.id}/details`, { ...form, description: form.description || null }),
+    mutationFn: () =>
+      api.put<Onboarding>(`/agency/clients/${clientId}/onboarding/${item.id}/details`, {
+        ...form,
+        description: form.description || null,
+      }),
     onSuccess: (d) => {
       onSaved(d);
       onClose();
@@ -328,7 +443,12 @@ function OnboardingItemDialog({ clientId, item, onClose, onSaved }: { clientId: 
           <Button variant="secondary" onClick={onClose}>
             Cancel
           </Button>
-          <Button type="submit" form="onboarding-item-form" loading={save.isPending} disabled={form.title.trim().length < 2}>
+          <Button
+            type="submit"
+            form="onboarding-item-form"
+            loading={save.isPending}
+            disabled={form.title.trim().length < 2}
+          >
             Save
           </Button>
         </>
@@ -344,14 +464,27 @@ function OnboardingItemDialog({ clientId, item, onClose, onSaved }: { clientId: 
       >
         {save.error ? <Alert tone="danger">{errorMessage(save.error)}</Alert> : null}
         <FormField label="Title" required>
-          <Input value={form.title} maxLength={200} onChange={(e) => setForm({ ...form, title: e.target.value })} />
+          <Input
+            value={form.title}
+            maxLength={200}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+          />
         </FormField>
         <FormField label="Description" optional>
-          <Textarea rows={3} value={form.description} maxLength={2000} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+          <Textarea
+            rows={3}
+            value={form.description}
+            maxLength={2000}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
+          />
         </FormField>
         <div className="dl-form__row">
           <FormField label="Category">
-            <Input value={form.category} maxLength={64} onChange={(e) => setForm({ ...form, category: e.target.value })} />
+            <Input
+              value={form.category}
+              maxLength={64}
+              onChange={(e) => setForm({ ...form, category: e.target.value })}
+            />
           </FormField>
           <FormField label="Who completes it">
             <Select
@@ -378,9 +511,17 @@ export function OnboardingTab({ clientId }: { clientId: string }) {
   const [owner, setOwner] = useState<'Agency' | 'Client'>('Agency');
   const [editing, setEditing] = useState<OnboardingItemRow | null>(null);
   const [removing, setRemoving] = useState<OnboardingItemRow | null>(null);
+  // A client-owned step ticked (or un-ticked) by staff is done on the client's behalf: confirmed, audited, shown to the client.
+  const [onBehalf, setOnBehalf] = useState<{ item: OnboardingItemRow; done: boolean } | null>(null);
   const save = (d: Onboarding) => qc.setQueryData(dk.clientPart(clientId, 'onboarding'), d);
+  const changeStatus = (item: OnboardingItemRow, status: OnboardingStatus) => {
+    if (item.owner === 'Client' && (status === 'Done' || (status === 'Pending' && item.status === 'Done')))
+      setOnBehalf({ item, done: status === 'Done' });
+    else update.mutate({ id: item.id, status });
+  };
   const update = useMutation({
-    mutationFn: ({ id, status }: { id: string; status: OnboardingStatus }) => api.put<Onboarding>(`/agency/clients/${clientId}/onboarding/${id}`, { status }),
+    mutationFn: ({ id, status }: { id: string; status: OnboardingStatus }) =>
+      api.put<Onboarding>(`/agency/clients/${clientId}/onboarding/${id}`, { status }),
     onSuccess: save,
   });
   const add = useMutation({
@@ -394,7 +535,12 @@ export function OnboardingTab({ clientId }: { clientId: string }) {
   if (data.isError) return <ErrorState error={data.error} />;
   return (
     <div className="dl-page">
-      <ProgressBar value={data.data.percentComplete} label="Onboarding complete" valueText={`${data.data.done} of ${data.data.total} steps`} showValue />
+      <ProgressBar
+        value={data.data.percentComplete}
+        label="Onboarding complete"
+        valueText={`${data.data.done} of ${data.data.total} steps`}
+        showValue
+      />
       <ul className="dl-list" aria-label="Onboarding checklist">
         {data.data.items.map((i) => (
           <li key={i.id} className="dl-list__item">
@@ -407,6 +553,7 @@ export function OnboardingTab({ clientId }: { clientId: string }) {
                   <span>
                     Done <DateTime value={i.completedAt} format="date" />
                     {i.completedBy ? ` by ${i.completedBy}` : ''}
+                    {i.completedOnBehalfOfClient ? ' on behalf of the client' : ''}
                   </span>
                 ) : null}
               </span>
@@ -418,15 +565,27 @@ export function OnboardingTab({ clientId }: { clientId: string }) {
                   size="sm"
                   aria-label={`Status of ${i.title}`}
                   value={i.status}
-                  onChange={(e) => update.mutate({ id: i.id, status: e.target.value as OnboardingStatus })}
+                  onChange={(e) => changeStatus(i, e.target.value as OnboardingStatus)}
                   options={[
                     { value: 'Pending', label: 'Pending' },
                     { value: 'Done', label: 'Done' },
                     { value: 'NotApplicable', label: 'Not applicable' },
                   ]}
                 />
-                <IconButton size="sm" variant="ghost" label={`Edit ${i.title}`} icon={<Pencil />} onClick={() => setEditing(i)} />
-                <IconButton size="sm" variant="ghost" label={`Remove ${i.title}`} icon={<Trash2 />} onClick={() => setRemoving(i)} />
+                <IconButton
+                  size="sm"
+                  variant="ghost"
+                  label={`Edit ${i.title}`}
+                  icon={<Pencil />}
+                  onClick={() => setEditing(i)}
+                />
+                <IconButton
+                  size="sm"
+                  variant="ghost"
+                  label={`Remove ${i.title}`}
+                  icon={<Trash2 />}
+                  onClick={() => setRemoving(i)}
+                />
               </span>
             ) : (
               <Badge tone={i.status === 'Done' ? 'success' : 'neutral'}>{labelOf(i.status)}</Badge>
@@ -460,8 +619,41 @@ export function OnboardingTab({ clientId }: { clientId: string }) {
           </Button>
         </form>
       ) : null}
-      {update.error || add.error ? <Alert tone="danger">{errorMessage(update.error ?? add.error)}</Alert> : null}
-      {editing ? <OnboardingItemDialog clientId={clientId} item={editing} onClose={() => setEditing(null)} onSaved={save} /> : null}
+      {update.error || add.error ? (
+        <Alert tone="danger">{errorMessage(update.error ?? add.error)}</Alert>
+      ) : null}
+      {editing ? (
+        <OnboardingItemDialog
+          clientId={clientId}
+          item={editing}
+          onClose={() => setEditing(null)}
+          onSaved={save}
+        />
+      ) : null}
+      <ConfirmDialog
+        open={onBehalf !== null}
+        onClose={() => setOnBehalf(null)}
+        title={
+          onBehalf?.done
+            ? `Mark “${onBehalf.item.title}” done on the client’s behalf?`
+            : `Mark “${onBehalf?.item.title ?? ''}” not done again?`
+        }
+        description={
+          onBehalf?.done
+            ? 'This is the client’s step. The client will see that you completed it for them, with your name and the date. The change is audited.'
+            : 'The step goes back to the client’s to-do list. The change is audited.'
+        }
+        confirmLabel={onBehalf?.done ? 'Mark done for the client' : 'Mark not done'}
+        onConfirm={async () => {
+          if (!onBehalf) return;
+          save(
+            await api.post<Onboarding>(
+              `/agency/clients/${clientId}/onboarding/${onBehalf.item.id}/on-behalf`,
+              { done: onBehalf.done },
+            ),
+          );
+        }}
+      />
       <ConfirmDialog
         open={removing !== null}
         onClose={() => setRemoving(null)}
@@ -480,13 +672,19 @@ export function OnboardingTab({ clientId }: { clientId: string }) {
 
 // ---------------------------------------------------------------- brand kit
 
-const splitLines = (value: string) => value.split('\n').map((v) => v.trim()).filter(Boolean);
+const splitLines = (value: string) =>
+  value
+    .split('\n')
+    .map((v) => v.trim())
+    .filter(Boolean);
 
 export function BrandKitTab({ clientId }: { clientId: string }) {
   const qc = useQueryClient();
   const { hasPermission } = useAuth();
   const canEdit = hasPermission(Permissions.DeliverablesSubmit);
+  const canRemove = hasPermission(Permissions.ClientsManage);
   const kit = useClientPart<BrandKit>(clientId, 'brand', `/agency/clients/${clientId}/brand-kit`);
+  const [removingAsset, setRemovingAsset] = useState<BrandAsset | null>(null);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState<Record<string, string>>({});
   const [file, setFile] = useState<File | null>(null);
@@ -544,7 +742,11 @@ export function BrandKitTab({ clientId }: { clientId: string }) {
   };
   const field = (key: string, label: string, hint?: string) => (
     <FormField label={label} hint={hint}>
-      <Textarea rows={4} value={draft[key] ?? ''} onChange={(e) => setDraft({ ...draft, [key]: e.target.value })} />
+      <Textarea
+        rows={4}
+        value={draft[key] ?? ''}
+        onChange={(e) => setDraft({ ...draft, [key]: e.target.value })}
+      />
     </FormField>
   );
   return (
@@ -590,8 +792,29 @@ export function BrandKitTab({ clientId }: { clientId: string }) {
           </div>
         </form>
       ) : (
-        <BrandKitView kit={k} audience="staff" />
+        <BrandKitView kit={k} audience="staff" onRemoveAsset={canRemove ? setRemovingAsset : undefined} />
       )}
+      <ConfirmDialog
+        open={removingAsset !== null}
+        onClose={() => setRemovingAsset(null)}
+        tone="danger"
+        title={`Remove “${removingAsset?.label ?? ''}” from the brand kit?`}
+        description="The client and your team will no longer see it. The file is deleted unless it is also used elsewhere (a message or a task). The removal is audited."
+        confirmLabel="Remove asset"
+        onConfirm={async () => {
+          if (!removingAsset) return;
+          try {
+            qc.setQueryData(
+              dk.clientPart(clientId, 'brand'),
+              await api.delete<BrandKit>(`/agency/clients/${clientId}/brand-kit/assets/${removingAsset.id}`),
+            );
+          } catch (error) {
+            // Someone else may have removed it already: show the current kit behind the error.
+            void qc.invalidateQueries({ queryKey: dk.clientPart(clientId, 'brand') });
+            throw error;
+          }
+        }}
+      />
       {canEdit ? (
         <form
           className="dl-toolbar"
@@ -602,7 +825,11 @@ export function BrandKitTab({ clientId }: { clientId: string }) {
           }}
         >
           <FormField label="Upload an asset" hint="PNG, JPEG, WebP, PDF or MP4 up to 50 MB.">
-            <Input type="file" accept="image/png,image/jpeg,image/webp,application/pdf,video/mp4" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
+            <Input
+              type="file"
+              accept="image/png,image/jpeg,image/webp,application/pdf,video/mp4"
+              onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+            />
           </FormField>
           <Button type="submit" disabled={!file} loading={upload.isPending}>
             Upload
@@ -620,7 +847,18 @@ export function ProjectsTab({ clientId }: { clientId: string }) {
   const projects = useProjectOptions(clientId);
   if (projects.isPending) return <Loading />;
   if (projects.isError) return <ErrorState error={projects.error} />;
-  if (projects.data.length === 0) return <EmptyState compact title="No projects yet" action={<Link className="ui-link" to={`/agency/projects?new=1&clientId=${clientId}`}>Create a project</Link>} />;
+  if (projects.data.length === 0)
+    return (
+      <EmptyState
+        compact
+        title="No projects yet"
+        action={
+          <Link className="ui-link" to={`/agency/projects?new=1&clientId=${clientId}`}>
+            Create a project
+          </Link>
+        }
+      />
+    );
   return (
     <ul className="dl-list" aria-label="Projects">
       {projects.data.map((p: ProjectSummary) => (
@@ -652,7 +890,10 @@ export function TimeTab({ clientId }: { clientId: string }) {
       const to = new Date();
       const from = new Date(Date.now() - 30 * 86_400_000);
       const iso = (d: Date) => d.toISOString().slice(0, 10);
-      return api.get<TimeEntry[]>('/agency/time/entries', { query: { clientId, from: iso(from), to: iso(to) }, signal });
+      return api.get<TimeEntry[]>('/agency/time/entries', {
+        query: { clientId, from: iso(from), to: iso(to) },
+        signal,
+      });
     },
     enabled: canSee,
   });
@@ -676,7 +917,12 @@ export function TimeTab({ clientId }: { clientId: string }) {
           { id: 'user', header: 'Person', primary: true, cell: (e) => e.userName },
           { id: 'project', header: 'Project', cell: (e) => e.projectName },
           { id: 'time', header: 'Time', align: 'right', cell: (e) => formatMinutes(e.minutes) },
-          { id: 'billable', header: 'Billable', cell: (e) => (e.billable ? 'Yes' : 'No'), hideOnMobile: true },
+          {
+            id: 'billable',
+            header: 'Billable',
+            cell: (e) => (e.billable ? 'Yes' : 'No'),
+            hideOnMobile: true,
+          },
         ]}
         emptyState={<EmptyState compact title="No time logged" />}
       />
@@ -689,13 +935,25 @@ export function ReportsTab({ clientId }: { clientId: string }) {
   const can = hasPermission(Permissions.ReportsManage);
   const reports = useQuery({
     queryKey: dk.reports({ clientId }),
-    queryFn: ({ signal }) => api.get<PagedResult<ReportSummary>>('/agency/reports', { query: { clientId, pageSize: 50 }, signal }),
+    queryFn: ({ signal }) =>
+      api.get<PagedResult<ReportSummary>>('/agency/reports', { query: { clientId, pageSize: 50 }, signal }),
     enabled: can,
   });
   if (!can) return <Alert tone="info">Reports need the reports.manage permission.</Alert>;
   if (reports.isPending) return <Loading />;
   if (reports.isError) return <ErrorState error={reports.error} />;
-  if (reports.data.items.length === 0) return <EmptyState compact title="No reports yet" action={<Link className="ui-link" to="/agency/reports">Create a report</Link>} />;
+  if (reports.data.items.length === 0)
+    return (
+      <EmptyState
+        compact
+        title="No reports yet"
+        action={
+          <Link className="ui-link" to="/agency/reports">
+            Create a report
+          </Link>
+        }
+      />
+    );
   return (
     <ul className="dl-list" aria-label="Reports">
       {reports.data.items.map((r) => (
@@ -723,7 +981,10 @@ export function BriefsTab({ clientId }: { clientId: string }) {
   const [taskTitles, setTaskTitles] = useState('');
   const setStatus = useMutation({
     mutationFn: ({ brief, status }: { brief: Brief; status: string }) =>
-      api.post<Brief>(`/agency/briefs/${brief.id}/status`, { status, concurrencyStamp: brief.concurrencyStamp }),
+      api.post<Brief>(`/agency/briefs/${brief.id}/status`, {
+        status,
+        concurrencyStamp: brief.concurrencyStamp,
+      }),
     onSuccess: () => void qc.invalidateQueries({ queryKey: dk.clientPart(clientId, 'briefs') }),
   });
   const convert = useMutation({
@@ -741,7 +1002,8 @@ export function BriefsTab({ clientId }: { clientId: string }) {
   });
   if (briefs.isPending) return <Loading />;
   if (briefs.isError) return <ErrorState error={briefs.error} />;
-  if (briefs.data.length === 0) return <EmptyState compact title="No briefs yet" description="Clients submit briefs in their portal." />;
+  if (briefs.data.length === 0)
+    return <EmptyState compact title="No briefs yet" description="Clients submit briefs in their portal." />;
   return (
     <div className="dl-page">
       {setStatus.error ? <Alert tone="danger">{errorMessage(setStatus.error)}</Alert> : null}
@@ -785,7 +1047,12 @@ export function BriefsTab({ clientId }: { clientId: string }) {
             }
           />
           <CardBody>
-            <KeyValueList items={b.answers.map((a) => ({ label: a.label, value: <span className="dl-report__body">{a.value}</span> }))} />
+            <KeyValueList
+              items={b.answers.map((a) => ({
+                label: a.label,
+                value: <span className="dl-report__body">{a.value}</span>,
+              }))}
+            />
             {b.deadline ? <p className="dl-meta">Deadline {formatDateOnly(b.deadline)}</p> : null}
           </CardBody>
         </Card>
@@ -815,7 +1082,12 @@ export function BriefsTab({ clientId }: { clientId: string }) {
         >
           {convert.error ? <Alert tone="danger">{errorMessage(convert.error)}</Alert> : null}
           <FormField label="Project" required>
-            <Select value={projectId} onChange={(e) => setProjectId(e.target.value)} placeholder="Choose…" options={(projects.data ?? []).map((p) => ({ value: p.id, label: p.name }))} />
+            <Select
+              value={projectId}
+              onChange={(e) => setProjectId(e.target.value)}
+              placeholder="Choose…"
+              options={(projects.data ?? []).map((p) => ({ value: p.id, label: p.name }))}
+            />
           </FormField>
           <FormField label="Tasks" hint="One task per line.">
             <Textarea rows={4} value={taskTitles} onChange={(e) => setTaskTitles(e.target.value)} />
@@ -828,7 +1100,13 @@ export function BriefsTab({ clientId }: { clientId: string }) {
 
 // ---------------------------------------------------------------- meetings
 
-type EditableActionItem = { id: string | null; text: string; assigneeUserId: string | null; dueDate: string | null; taskId: string | null };
+type EditableActionItem = {
+  id: string | null;
+  text: string;
+  assigneeUserId: string | null;
+  dueDate: string | null;
+  taskId: string | null;
+};
 
 const toLocalInput = (iso: string) => {
   const d = new Date(iso);
@@ -837,7 +1115,15 @@ const toLocalInput = (iso: string) => {
 };
 
 /** Edit a meeting: details, notes, status (held / cancelled) and action items. */
-function MeetingEditor({ clientId, meeting, onClose }: { clientId: string; meeting: Meeting; onClose: () => void }) {
+function MeetingEditor({
+  clientId,
+  meeting,
+  onClose,
+}: {
+  clientId: string;
+  meeting: Meeting;
+  onClose: () => void;
+}) {
   const qc = useQueryClient();
   const [form, setForm] = useState({
     title: meeting.title,
@@ -859,7 +1145,9 @@ function MeetingEditor({ clientId, meeting, onClose }: { clientId: string; meeti
         projectId: meeting.projectId,
         startsAt: new Date(form.startsAt).toISOString(),
         attendeeUserIds: meeting.attendees.map((a) => a.id),
-        actionItems: items.filter((i) => i.text.trim()).map((i) => ({ id: i.id, text: i.text, assigneeUserId: i.assigneeUserId, dueDate: i.dueDate })),
+        actionItems: items
+          .filter((i) => i.text.trim())
+          .map((i) => ({ id: i.id, text: i.text, assigneeUserId: i.assigneeUserId, dueDate: i.dueDate })),
         concurrencyStamp: meeting.concurrencyStamp,
       }),
     onSuccess: () => {
@@ -894,7 +1182,13 @@ function MeetingEditor({ clientId, meeting, onClose }: { clientId: string; meeti
       >
         {save.error ? <Alert tone="danger">{errorMessage(save.error)}</Alert> : null}
         <FormField label="Title" required>
-          <Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required minLength={2} maxLength={200} />
+          <Input
+            value={form.title}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+            required
+            minLength={2}
+            maxLength={200}
+          />
         </FormField>
         <div className="dl-form__row">
           <FormField label="Status">
@@ -912,24 +1206,52 @@ function MeetingEditor({ clientId, meeting, onClose }: { clientId: string; meeti
             <Select
               value={form.kind}
               onChange={(e) => setForm({ ...form, kind: e.target.value })}
-              options={['Kickoff', 'MonthlyReview', 'Strategy', 'Creative', 'Other'].map((k) => ({ value: k, label: labelOf(k) }))}
+              options={['Kickoff', 'MonthlyReview', 'Strategy', 'Creative', 'Other'].map((k) => ({
+                value: k,
+                label: labelOf(k),
+              }))}
             />
           </FormField>
           <FormField label="Starts" required>
-            <Input type="datetime-local" value={form.startsAt} onChange={(e) => setForm({ ...form, startsAt: e.target.value })} required />
+            <Input
+              type="datetime-local"
+              value={form.startsAt}
+              onChange={(e) => setForm({ ...form, startsAt: e.target.value })}
+              required
+            />
           </FormField>
           <FormField label="Minutes">
-            <Input type="number" min={5} max={600} value={form.durationMinutes} onChange={(e) => setForm({ ...form, durationMinutes: Number(e.target.value) })} />
+            <Input
+              type="number"
+              min={5}
+              max={600}
+              value={form.durationMinutes}
+              onChange={(e) => setForm({ ...form, durationMinutes: Number(e.target.value) })}
+            />
           </FormField>
         </div>
         <FormField label="Location or link" optional>
-          <Input value={form.location} maxLength={500} onChange={(e) => setForm({ ...form, location: e.target.value })} />
+          <Input
+            value={form.location}
+            maxLength={500}
+            onChange={(e) => setForm({ ...form, location: e.target.value })}
+          />
         </FormField>
         <FormField label="Agenda" optional>
-          <Textarea rows={3} value={form.agenda} maxLength={8000} onChange={(e) => setForm({ ...form, agenda: e.target.value })} />
+          <Textarea
+            rows={3}
+            value={form.agenda}
+            maxLength={8000}
+            onChange={(e) => setForm({ ...form, agenda: e.target.value })}
+          />
         </FormField>
         <FormField label="Notes" optional>
-          <Textarea rows={4} value={form.notes} maxLength={20000} onChange={(e) => setForm({ ...form, notes: e.target.value })} />
+          <Textarea
+            rows={4}
+            value={form.notes}
+            maxLength={20000}
+            onChange={(e) => setForm({ ...form, notes: e.target.value })}
+          />
         </FormField>
         <fieldset className="dl-form">
           <legend>Action items</legend>
@@ -939,7 +1261,9 @@ function MeetingEditor({ clientId, meeting, onClose }: { clientId: string; meeti
                 <Input
                   value={item.text}
                   maxLength={500}
-                  onChange={(e) => setItems(items.map((x, i) => (i === index ? { ...x, text: e.target.value } : x)))}
+                  onChange={(e) =>
+                    setItems(items.map((x, i) => (i === index ? { ...x, text: e.target.value } : x)))
+                  }
                 />
               </FormField>
               {item.taskId ? <Badge tone="success">Task created</Badge> : null}
@@ -961,7 +1285,10 @@ function MeetingEditor({ clientId, meeting, onClose }: { clientId: string; meeti
               variant="secondary"
               disabled={!newItem.trim()}
               onClick={() => {
-                setItems([...items, { id: null, text: newItem.trim(), assigneeUserId: null, dueDate: null, taskId: null }]);
+                setItems([
+                  ...items,
+                  { id: null, text: newItem.trim(), assigneeUserId: null, dueDate: null, taskId: null },
+                ]);
                 setNewItem('');
               }}
             >
@@ -986,14 +1313,24 @@ export function MeetingsTab({ clientId }: { clientId: string }) {
   const [convertProject, setConvertProject] = useState('');
   const convert = useMutation({
     mutationFn: ({ meeting, itemId }: { meeting: Meeting; itemId: string }) =>
-      api.post(`/agency/meetings/${meeting.id}/action-items/${itemId}/convert`, { projectId: meeting.projectId ?? convertProject }),
+      api.post(`/agency/meetings/${meeting.id}/action-items/${itemId}/convert`, {
+        projectId: meeting.projectId ?? convertProject,
+      }),
     onSuccess: () => void qc.invalidateQueries({ queryKey: dk.clientPart(clientId, 'meetings') }),
   });
   const meetings = useClientPart<Meeting[]>(clientId, 'meetings', `/agency/meetings?clientId=${clientId}`);
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ title: '', kind: 'MonthlyReview', startsAt: '', durationMinutes: 30, location: '', agenda: '' });
+  const [form, setForm] = useState({
+    title: '',
+    kind: 'MonthlyReview',
+    startsAt: '',
+    durationMinutes: 30,
+    location: '',
+    agenda: '',
+  });
   const create = useMutation({
-    mutationFn: () => api.post('/agency/meetings', { ...form, clientId, startsAt: new Date(form.startsAt).toISOString() }),
+    mutationFn: () =>
+      api.post('/agency/meetings', { ...form, clientId, startsAt: new Date(form.startsAt).toISOString() }),
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: dk.clientPart(clientId, 'meetings') });
       setOpen(false);
@@ -1037,7 +1374,12 @@ export function MeetingsTab({ clientId }: { clientId: string }) {
                 <ul className="dl-checklist" aria-label="Action items">
                   {m.actionItems.map((a) => (
                     <li key={a.id} className="dl-row">
-                      <Checkbox label={a.text} checked={Boolean(a.taskId)} readOnly description={a.taskId ? 'Task created' : undefined} />
+                      <Checkbox
+                        label={a.text}
+                        checked={Boolean(a.taskId)}
+                        readOnly
+                        description={a.taskId ? 'Task created' : undefined}
+                      />
                       {!a.taskId && canConvert ? (
                         <>
                           {!m.projectId ? (
@@ -1070,7 +1412,9 @@ export function MeetingsTab({ clientId }: { clientId: string }) {
           </Card>
         ))
       )}
-      {editing ? <MeetingEditor clientId={clientId} meeting={editing} onClose={() => setEditing(null)} /> : null}
+      {editing ? (
+        <MeetingEditor clientId={clientId} meeting={editing} onClose={() => setEditing(null)} />
+      ) : null}
       <Dialog
         open={open}
         onClose={() => setOpen(false)}
@@ -1096,28 +1440,51 @@ export function MeetingsTab({ clientId }: { clientId: string }) {
         >
           {create.error ? <Alert tone="danger">{errorMessage(create.error)}</Alert> : null}
           <FormField label="Title" required>
-            <Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required minLength={2} />
+            <Input
+              value={form.title}
+              onChange={(e) => setForm({ ...form, title: e.target.value })}
+              required
+              minLength={2}
+            />
           </FormField>
           <div className="dl-form__row">
             <FormField label="Type">
               <Select
                 value={form.kind}
                 onChange={(e) => setForm({ ...form, kind: e.target.value })}
-                options={['Kickoff', 'MonthlyReview', 'Strategy', 'Creative', 'Other'].map((k) => ({ value: k, label: labelOf(k) }))}
+                options={['Kickoff', 'MonthlyReview', 'Strategy', 'Creative', 'Other'].map((k) => ({
+                  value: k,
+                  label: labelOf(k),
+                }))}
               />
             </FormField>
             <FormField label="Starts" required>
-              <Input type="datetime-local" value={form.startsAt} onChange={(e) => setForm({ ...form, startsAt: e.target.value })} required />
+              <Input
+                type="datetime-local"
+                value={form.startsAt}
+                onChange={(e) => setForm({ ...form, startsAt: e.target.value })}
+                required
+              />
             </FormField>
             <FormField label="Minutes">
-              <Input type="number" min={5} max={600} value={form.durationMinutes} onChange={(e) => setForm({ ...form, durationMinutes: Number(e.target.value) })} />
+              <Input
+                type="number"
+                min={5}
+                max={600}
+                value={form.durationMinutes}
+                onChange={(e) => setForm({ ...form, durationMinutes: Number(e.target.value) })}
+              />
             </FormField>
           </div>
           <FormField label="Location or link" optional>
             <Input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
           </FormField>
           <FormField label="Agenda" optional>
-            <Textarea rows={3} value={form.agenda} onChange={(e) => setForm({ ...form, agenda: e.target.value })} />
+            <Textarea
+              rows={3}
+              value={form.agenda}
+              onChange={(e) => setForm({ ...form, agenda: e.target.value })}
+            />
           </FormField>
         </form>
       </Dialog>
@@ -1135,8 +1502,18 @@ export function FeedbackTab({ clientId }: { clientId: string }) {
   return (
     <div className="dl-page">
       <div className="dl-stats">
-        <Stat label="Average CSAT" value={f.averageCsat !== null ? `${f.averageCsat.toFixed(1)} / 5` : '—'} measurement="Measured" hint={`${f.csatResponses} responses`} />
-        <Stat label="NPS" value={f.npsScore ?? '—'} measurement="Measured" hint={`${f.promoters} promoters · ${f.passives} passives · ${f.detractors} detractors`} />
+        <Stat
+          label="Average CSAT"
+          value={f.averageCsat !== null ? `${f.averageCsat.toFixed(1)} / 5` : '—'}
+          measurement="Measured"
+          hint={`${f.csatResponses} responses`}
+        />
+        <Stat
+          label="NPS"
+          value={f.npsScore ?? '—'}
+          measurement="Measured"
+          hint={`${f.promoters} promoters · ${f.passives} passives · ${f.detractors} detractors`}
+        />
       </div>
       {f.recent.length === 0 ? (
         <EmptyState compact title="No feedback yet" />

@@ -48,9 +48,10 @@ All under `/api/v1/agency/clients`, class permission `clients.view`; writes need
 | `GET /{id}/health` | clients.view | `{ score, level: Green\|Amber\|Red, reasons: [{ code, level, message, penalty }] }` |
 | `GET/POST /{id}/team`, `DELETE /{id}/team/{assignmentId}` | clients.manage for writes | Service roles: `AccountManager`, `Strategist`, `Seo`, `Ads`, `Social`, `Content`, `Design` |
 | `GET/POST /{id}/members`, `PUT/DELETE /{id}/members/{userId}` | clients.manage for writes | Invite by email: creates a client user and sends a set-password email (`client.member_exists`, `client.invite_staff_account`, `client.last_owner`) |
-| `GET/POST /{id}/onboarding`, `PUT /{id}/onboarding/{itemId}` | clients.manage for writes | Checklist items with owner `Client`/`Agency`, status `Pending`/`Done`/`NotApplicable` |
+| `GET/POST /{id}/onboarding`, `PUT /{id}/onboarding/{itemId}` | clients.manage for writes | Checklist items with owner `Client`/`Agency`, status `Pending`/`Done`/`NotApplicable`, `completedBy`, `completedAt`, `completedOnBehalfOfClient`. Ticking or un-ticking a **client-owned** step with `PUT` is refused (`400 onboarding.client_item`): use `on-behalf` |
+| `POST /{id}/onboarding/{itemId}/on-behalf` | clients.manage; denied while impersonating | `{ done: bool, note? }`: marks a client-owned step done (or back to Pending) on the client's behalf. Records who and when, sets `completedOnBehalfOfClient` (shown to the client) and audits `client.onboarding_item_completed_on_behalf` / `…_reopened_on_behalf` (reason "Completed by staff on behalf of client"). Idempotent. Agency-owned step: `400 onboarding.not_client_item` |
 | `GET/PUT /{id}/brand-kit` | deliverables.submit for PUT | Colors (hex, ≤ 24), fonts, voice, personas (≤ 12), competitors, do/don't |
-| `POST /{id}/brand-kit/assets`, `DELETE .../assets/{assetId}` | deliverables.submit / clients.manage | multipart `file`, `kind`, `name` |
+| `POST /{id}/brand-kit/assets`, `DELETE .../assets/{assetId}` | deliverables.submit / clients.manage (DELETE denied while impersonating) | multipart `file`, `kind`, `name`. DELETE returns the brand kit; audited `client.brand_asset_removed`; the file (row and bytes) is deleted unless it is still used elsewhere; a second or concurrent removal is a 404 |
 | `GET /{id}/feedback` | clients.view | CSAT/NPS responses + summary (avg CSAT 90 days, NPS by quarter) |
 
 `GET /api/v1/agency/staff` (`clients.view`) — active staff directory `[{ id, displayName, email, roles }]` for pickers.
@@ -132,7 +133,7 @@ Under `/api/v1/agency/tasks` (`projects.view`).
 | `POST /{id}/comments` | projects.view | `@mentions` by user id in `mentionedUserIds` (must be project members/assignees; `task.invalid_mention`) — mentioned users are notified |
 | `POST/DELETE /{id}/watch` | projects.view | Watchers are notified of comments and status changes |
 | `POST /{id}/checklist`, `PUT/DELETE .../checklist/{itemId}` | deliverables.submit | ≤ 50 items |
-| `POST /{id}/attachments`, `DELETE .../attachments/{attachmentId}` | deliverables.submit | `{ fileId }` from the upload endpoint |
+| `POST /{id}/attachments`, `DELETE .../attachments/{attachmentId}` | deliverables.submit (DELETE denied while impersonating) | `{ fileId }` from the upload endpoint. Both audited (`task.attachment_added` / `task.attachment_removed`). DELETE deletes the file (row and bytes) unless it is still used elsewhere; a second or concurrent removal is a 404 |
 
 Statuses: `Todo`, `InProgress`, `InReview`, `Blocked`, `Done`.
 
@@ -224,7 +225,7 @@ Under `/api/v1/agency` (`clients.view`).
 | `GET /briefs`, `POST /briefs`, `GET /briefs/{id}` | clients.view / deliverables.submit | Answers validated against the brief template fields |
 | `POST /briefs/{id}/status` | projects.manage | `InReview`, `Accepted`, `Declined` |
 | `POST /briefs/{id}/convert` | projects.manage | Creates a project (from template) or tasks/deliverables in an existing project; once only (`brief.already_converted`) |
-| `GET/POST /clients/{clientId}/threads`, `GET .../threads/{threadId}`, `POST .../messages` | clients.view | Per-client threads, `isInternal` threads hidden from clients; opening a thread records a read receipt; `readBy` per message |
+| `GET/POST /clients/{clientId}/threads`, `GET .../threads/{threadId}`, `POST .../messages` | clients.view | Per-client threads. `POST` takes `{ subject, body, projectId?, attachmentFileIds, isInternal }`. `isInternal: true` creates a staff-only thread (set once, audited `message.internal_thread_created`). It is never listed or returned to client users (404 by id), its messages notify only the account team, and its attachments stay staff-only. Summaries and threads carry `isInternal`; a thread also carries `canReply`. Opening a thread records a read receipt; `readBy` per message |
 | `GET /meetings`, `POST /meetings`, `PUT /meetings/{id}` | projects.view | Agenda, notes, attendees, `actionItems` |
 | `POST /meetings/{id}/action-items/{itemId}/convert` | deliverables.submit | Turns an action item into a task (once) |
 
@@ -244,7 +245,7 @@ published reports, non-internal threads/comments.
 | `POST /deliverables/{id}/comments` | Approver/Owner |
 | `GET /reports`, `GET /reports/{id}` | member (published only) |
 | `GET /brief-templates`, `GET/POST /briefs`, `GET /briefs/{id}` | Approver/Owner to submit |
-| `GET/POST /threads`, `GET /threads/{threadId}`, `POST /threads/{threadId}/messages` | Approver/Owner to write |
+| `GET/POST /threads`, `GET /threads/{threadId}`, `POST /threads/{threadId}/messages` | Any member reads; only Approver/Owner write (Viewer and Billing: `403 client.insufficient_role`). Internal threads are never returned (404). `isInternal: true` from a client: `400 message.internal_not_allowed` |
 | `GET /meetings` | member |
 
 ## Background jobs

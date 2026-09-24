@@ -179,11 +179,31 @@ public sealed class CommunicationService(
 
     // ------------------------------------------------------------------ messages
 
+    /// <summary>
+    /// Who may post in the client's threads: staff, and client users with the Approver or Owner duty. Viewer and Billing
+    /// members read only (docs/CLIENT_DELIVERY.md, "Who does what"); there are no billing-typed threads.
+    /// </summary>
+    private const ClientMemberRole ClientWriterDuty = ClientMemberRole.Approver;
+
+    /// <summary>Threads of a client the caller may see: client users never get internal (staff-only) threads.</summary>
+    private IQueryable<MessageThread> VisibleThreads(Guid clientId)
+    {
+        var q = db.Set<MessageThread>().Where(t => t.ClientAccountId == clientId);
+        return scope.IsStaff ? q : q.Where(t => !t.IsInternal);
+    }
+
+    private async Task<bool> CanPostAsync(Guid clientId, CancellationToken ct)
+    {
+        if (scope.IsStaff) return true;
+        var role = await scope.MemberRoleAsync(clientId, ct);
+        return role is ClientMemberRole.Owner or ClientWriterDuty;
+    }
+
     public async Task<IReadOnlyList<ThreadSummaryDto>> ThreadsAsync(Guid clientId, CancellationToken ct)
     {
         await scope.EnsureAccessAsync(clientId, ct: ct);
         var me = currentUser.Id;
-        var threads = await db.Set<MessageThread>().AsNoTracking().Where(t => t.ClientAccountId == clientId)
+        var threads = await VisibleThreads(clientId).AsNoTracking()
             .OrderByDescending(t => t.LastMessageAt).Take(200).ToListAsync(ct);
         var ids = threads.Select(t => t.Id).ToList();
         var unread = await (from m in db.Set<ThreadMessage>().AsNoTracking()
@@ -195,15 +215,14 @@ public sealed class CommunicationService(
         var people = await lookup.PeopleAsync(threads.Select(t => t.LastAuthorUserId), ct);
         return threads.Select(t => new ThreadSummaryDto(t.Id, t.ClientAccountId, t.Subject, t.ProjectId, t.LastMessageAt, t.MessageCount,
             unread.GetValueOrDefault(t.Id), t.LastMessagePreview,
-            t.LastAuthorUserId is { } a && people.TryGetValue(a, out var p) ? p.DisplayName : null)).ToList();
+            t.LastAuthorUserId is { } a && people.TryGetValue(a, out var p) ? p.DisplayName : null, t.IsInternal)).ToList();
     }
 
-    /// <summary>Loads a thread and marks it read for the caller (read receipt).</summary>
     /// <summary>Renames a thread (staff only; the controller is agency-side, scope enforces the client).</summary>
     public async Task<ThreadDto> RenameThreadAsync(Guid clientId, Guid threadId, RenameThreadRequest r, CancellationToken ct)
     {
         await scope.EnsureAccessAsync(clientId, ct: ct);
-        var thread = await db.Set<MessageThread>().FirstOrDefaultAsync(t => t.Id == threadId && t.ClientAccountId == clientId, ct)
+        var thread = await VisibleThreads(clientId).FirstOrDefaultAsync(t => t.Id == threadId, ct)
                      ?? throw DomainException.NotFound("Thread");
         var before = thread.Subject;
         thread.Subject = r.Subject.Trim();
@@ -212,10 +231,11 @@ public sealed class CommunicationService(
         return await ThreadAsync(clientId, threadId, ct);
     }
 
+    /// <summary>Loads a thread and marks it read for the caller (read receipt). An internal thread is a 404 for client users.</summary>
     public async Task<ThreadDto> ThreadAsync(Guid clientId, Guid threadId, CancellationToken ct)
     {
         await scope.EnsureAccessAsync(clientId, ct: ct);
-        var thread = await db.Set<MessageThread>().AsNoTracking().FirstOrDefaultAsync(t => t.Id == threadId && t.ClientAccountId == clientId, ct)
+        var thread = await VisibleThreads(clientId).AsNoTracking().FirstOrDefaultAsync(t => t.Id == threadId, ct)
                      ?? throw DomainException.NotFound("Thread");
         await MarkReadAsync(threadId, ct);
         var messages = await db.Set<ThreadMessage>().AsNoTracking().Where(m => m.ThreadId == threadId).OrderBy(m => m.CreatedAt).ToListAsync(ct);
@@ -231,7 +251,8 @@ public sealed class CommunicationService(
                 m.AttachmentFileIds.Where(fileRows.ContainsKey).Select(f => DeliveryFileDto.From(fileRows[f])).ToList(), m.CreatedAt,
                 reads.Where(r => r.UserId != m.AuthorUserId && r.LastReadAt >= m.CreatedAt).Select(r => P(r.UserId).DisplayName).OrderBy(n => n).ToList()))
                 .ToList(),
-            messages.Select(m => m.AuthorUserId).Distinct().Select(P).ToList());
+            messages.Select(m => m.AuthorUserId).Distinct().Select(P).ToList(),
+            thread.IsInternal, await CanPostAsync(clientId, ct));
     }
 
     private async Task MarkReadAsync(Guid threadId, CancellationToken ct)
@@ -251,26 +272,38 @@ public sealed class CommunicationService(
         }
     }
 
+    /// <summary>
+    /// Starts a thread. Client users need the Approver or Owner duty (403 <c>client.insufficient_role</c>) and can't
+    /// start an internal thread (400 <c>message.internal_not_allowed</c>).
+    /// </summary>
     public async Task<ThreadDto> NewThreadAsync(Guid clientId, NewThreadRequest r, CancellationToken ct)
     {
-        await scope.EnsureAccessAsync(clientId, ct: ct);
+        await scope.EnsureAccessAsync(clientId, scope.IsStaff ? ClientMemberRole.Viewer : ClientWriterDuty, ct);
+        if (r.IsInternal && !scope.IsStaff)
+            throw DeliveryRules.Invalid("message.internal_not_allowed", "isInternal", "Only your agency team can start internal conversations.");
         if (r.ProjectId is { } pid && !await db.Set<Project>().AnyAsync(p => p.Id == pid && p.ClientAccountId == clientId, ct))
             throw DeliveryRules.Invalid("message.invalid_project", "projectId", "That project wasn't found.");
         var thread = new MessageThread
         {
             ClientAccountId = clientId, ProjectId = r.ProjectId, Subject = r.Subject.Trim(), CreatedByUserId = currentUser.Id, LastMessageAt = Now,
+            IsInternal = r.IsInternal,
         };
         db.Set<MessageThread>().Add(thread);
+        if (thread.IsInternal)
+            audit.Record("message.internal_thread_created", nameof(MessageThread), thread.Id, after: new { thread.ClientAccountId, thread.ProjectId, thread.Subject });
         await AddMessageAsync(thread, r.Body, r.AttachmentFileIds, ct);
         await db.SaveChangesAsync(ct);
         return await ThreadAsync(clientId, thread.Id, ct);
     }
 
+    /// <summary>Replies in a thread. Client users need the Approver or Owner duty; an internal thread is a 404 for them.</summary>
     public async Task<ThreadDto> ReplyAsync(Guid clientId, Guid threadId, NewMessageRequest r, CancellationToken ct)
     {
         await scope.EnsureAccessAsync(clientId, ct: ct);
-        var thread = await db.Set<MessageThread>().FirstOrDefaultAsync(t => t.Id == threadId && t.ClientAccountId == clientId, ct)
+        var thread = await VisibleThreads(clientId).FirstOrDefaultAsync(t => t.Id == threadId, ct)
                      ?? throw DomainException.NotFound("Thread");
+        // Duty check after the visibility check, so an internal thread stays a 404 (not a 403) for every client user.
+        await scope.EnsureAccessAsync(clientId, scope.IsStaff ? ClientMemberRole.Viewer : ClientWriterDuty, ct);
         await AddMessageAsync(thread, r.Body, r.AttachmentFileIds, ct);
         await db.SaveChangesAsync(ct);
         return await ThreadAsync(clientId, threadId, ct);
@@ -278,7 +311,8 @@ public sealed class CommunicationService(
 
     /// <summary>
     /// Adds a message and notifies the other side: client messages go to the account team, staff messages to the client's
-    /// users (in-app + email via the outbox). Attachments must be files of the same client.
+    /// users (in-app + email via the outbox). Messages in an internal thread notify only the account team, never the
+    /// client's users. Attachments must be files of the same client.
     /// </summary>
     private async Task AddMessageAsync(MessageThread thread, string body, List<Guid> attachments, CancellationToken ct)
     {
@@ -298,12 +332,14 @@ public sealed class CommunicationService(
         thread.LastMessagePreview = body.Trim().Length > 140 ? body.Trim()[..140] + "…" : body.Trim();
         var author = await db.Set<User>().AsNoTracking().Where(u => u.Id == currentUser.Id).Select(u => u.DisplayName).FirstAsync(ct);
         var preview = body.Trim().Length > 200 ? body.Trim()[..200] + "…" : body.Trim();
-        var recipients = fromClient
+        var toAgency = fromClient || thread.IsInternal;
+        var recipients = toAgency
             ? await lookup.ClientTeamAsync(thread.ClientAccountId, ct)
             : await db.Set<ClientMember>().AsNoTracking().Where(m => m.ClientAccountId == thread.ClientAccountId).Select(m => m.UserId).ToListAsync(ct);
+        var title = thread.IsInternal ? $"{author} (internal): {thread.Subject}" : $"{author}: {thread.Subject}";
         foreach (var u in recipients.Where(u => u != currentUser.Id))
-            await notifications.StageAsync(new NotificationRequest(u, DeliveryNotificationTypes.Message, $"{author}: {thread.Subject}", preview,
-                fromClient ? DeliveryLinks.AgencyThread(thread.ClientAccountId, thread.Id) : DeliveryLinks.ClientThread(thread.ClientAccountId, thread.Id),
+            await notifications.StageAsync(new NotificationRequest(u, DeliveryNotificationTypes.Message, title, preview,
+                toAgency ? DeliveryLinks.AgencyThread(thread.ClientAccountId, thread.Id) : DeliveryLinks.ClientThread(thread.ClientAccountId, thread.Id),
                 new[] { NotificationChannel.Email }), ct);
         // The author has read everything up to their own message.
         var state = await db.Set<ThreadReadState>().FirstOrDefaultAsync(r => r.ThreadId == thread.Id && r.UserId == currentUser.Id, ct);

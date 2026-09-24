@@ -1,6 +1,7 @@
 import {
   accounts,
   clientUser,
+  errorOf,
   expect,
   fakePng,
   landing,
@@ -39,14 +40,19 @@ test('client and account manager exchange messages with attachments and read rec
   const thread = owner.getByRole('list', { name: 'Messages, oldest first' });
   await expect(thread.getByRole('listitem')).toHaveCount(1);
   await expect(thread).toContainText('launch-timeline.pdf');
-  await expect(owner.getByRole('list', { name: 'Conversations' }).getByRole('button', { name: subject() })).toHaveCount(1);
+  await expect(
+    owner.getByRole('list', { name: 'Conversations' }).getByRole('button', { name: subject() }),
+  ).toHaveCount(1);
   ownerErrors.expectClean('starting a conversation');
 
   // The account manager sees it unread, replies with an image; a fake image is refused.
   const am = await as(accounts.am, landing.agency);
   const amErrors = watchErrors(am);
   await am.goto(`/agency/clients/${clientId}?tab=messages`);
-  const item = am.getByRole('list', { name: 'Conversations' }).getByRole('listitem').filter({ hasText: subject() });
+  const item = am
+    .getByRole('list', { name: 'Conversations' })
+    .getByRole('listitem')
+    .filter({ hasText: subject() });
   await expect(item).toContainText('1 unread');
   await item.getByRole('button', { name: subject() }).click();
   await expect(am.getByRole('list', { name: 'Messages, oldest first' })).toContainText('(client)');
@@ -69,7 +75,9 @@ test('client and account manager exchange messages with attachments and read rec
   await expect(thread.getByRole('listitem').nth(1)).toContainText('(your agency team)');
   await expect(thread.getByRole('img', { name: 'hero-mock.png' })).toBeVisible();
   await am.reload();
-  await expect(staffThread.getByRole('listitem').nth(1)).toContainText(`Read by ${clientUser('Owner').displayName}`);
+  await expect(staffThread.getByRole('listitem').nth(1)).toContainText(
+    `Read by ${clientUser('Owner').displayName}`,
+  );
 
   // Shared vs internal files: the conversation's files reach every member; internal files don't.
   const viewer = await login(clientUser('Viewer'));
@@ -80,11 +88,23 @@ test('client and account manager exchange messages with attachments and read rec
   for (const file of t.messages.flatMap((m) => m.attachments))
     expect((await raw(viewer, 'GET', `/client/orgs/${clientId}/files/${file.id}`)).status).toBe(200);
   const internal = need('internalTask');
-  expect((await raw(viewer, 'GET', `/client/orgs/${clientId}/files/${internal.attachmentFileId}`)).status).toBe(404);
-  // …and a client can't smuggle an internal file into a message.
   expect(
-    await statusOf(viewer.post(`/client/orgs/${clientId}/threads`, { subject: 'x', body: 'x', attachmentFileIds: [internal.attachmentFileId] })),
-  ).toBe(400);
+    (await raw(viewer, 'GET', `/client/orgs/${clientId}/files/${internal.attachmentFileId}`)).status,
+  ).toBe(404);
+  // …and a client can't smuggle an internal file into a message (the Viewer can't post at all: read-only duty).
+  const approver = await login(clientUser('Approver'));
+  expect(
+    await errorOf(
+      approver.post(`/client/orgs/${clientId}/threads`, {
+        subject: 'Internal files',
+        body: 'See attached',
+        attachmentFileIds: [internal.attachmentFileId],
+      }),
+    ),
+  ).toEqual({ status: 400, code: 'file.invalid_attachment' });
+  expect(
+    await statusOf(viewer.post(`/client/orgs/${clientId}/threads`, { subject: 'A question', body: 'Hello' })),
+  ).toBe(403);
 });
 
 test('meeting with notes and action items; an action item becomes a task', async ({ as }) => {
@@ -122,15 +142,21 @@ test('meeting with notes and action items; an action item becomes a task', async
 
   await card.getByLabel('Project for “Draft the Q4 content calendar”').selectOption({ label: projectName });
   await card.getByRole('button', { name: 'Create task for Draft the Q4 content calendar' }).click();
-  await expect(actions.getByRole('listitem').filter({ hasText: 'Draft the Q4 content calendar' })).toContainText('Task created');
+  await expect(
+    actions.getByRole('listitem').filter({ hasText: 'Draft the Q4 content calendar' }),
+  ).toContainText('Task created');
   const api = await login(accounts.am);
   const tasks = await api.get<{ title: string }[]>(`/agency/projects/${projectId}/tasks`);
   expect(tasks.filter((t) => t.title === 'Draft the Q4 content calendar')).toHaveLength(1);
   // Converting the same action item twice is refused.
-  const meetings = await api.get<{ id: string; title: string; actionItems: { id: string; text: string }[] }[]>(`/agency/meetings?clientId=${clientId}`);
+  const meetings = await api.get<
+    { id: string; title: string; actionItems: { id: string; text: string }[] }[]
+  >(`/agency/meetings?clientId=${clientId}`);
   const m = meetings.find((x) => x.title === meeting)!;
   const converted = m.actionItems.find((a) => a.text === 'Draft the Q4 content calendar')!;
-  expect(await statusOf(api.post(`/agency/meetings/${m.id}/action-items/${converted.id}/convert`, { projectId }))).toBe(409);
+  expect(
+    await statusOf(api.post(`/agency/meetings/${m.id}/action-items/${converted.id}/convert`, { projectId })),
+  ).toBe(409);
   errors.expectClean('the meeting and its action items');
 
   // The client sees the upcoming meeting but not the internal notes.
@@ -138,7 +164,9 @@ test('meeting with notes and action items; an action item becomes a task', async
   const upcoming = owner.getByRole('list', { name: 'Upcoming meetings' });
   await expect(upcoming).toContainText(meeting);
   const ownerApi = await login(clientUser('Owner'));
-  const clientMeetings = await ownerApi.get<{ title: string; notes: string | null; actionItems: unknown[] }[]>(`/client/orgs/${clientId}/meetings`);
+  const clientMeetings = await ownerApi.get<
+    { title: string; notes: string | null; actionItems: unknown[] }[]
+  >(`/client/orgs/${clientId}/meetings`);
   const seen = clientMeetings.find((x) => x.title === meeting)!;
   expect(seen.notes).toBeNull();
   expect(seen.actionItems).toEqual([]);

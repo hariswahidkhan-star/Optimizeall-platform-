@@ -1374,6 +1374,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.Property<Guid?>("CompletedByUserId")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("CompletedOnBehalfOfClient")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Description")
                         .HasMaxLength(2000)
                         .HasColumnType("TEXT");
@@ -9200,6 +9203,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
                     b.Property<Guid>("CreatedByUserId")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsInternal")
+                        .HasColumnType("INTEGER");
 
                     b.Property<Guid?>("LastAuthorUserId")
                         .HasColumnType("TEXT");

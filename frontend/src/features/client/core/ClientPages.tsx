@@ -39,7 +39,12 @@ import {
   type Report,
   type ReportSummary,
 } from '@/features/agency/shared/deliveryTypes';
-import { formatDateOnly, labelOf, ProjectStatusBadge, TaskStatusBadge } from '@/features/agency/shared/deliveryUi';
+import {
+  formatDateOnly,
+  labelOf,
+  ProjectStatusBadge,
+  TaskStatusBadge,
+} from '@/features/agency/shared/deliveryUi';
 import { api } from '@/lib/api/client';
 import { errorMessage, isApiError } from '@/lib/api/errors';
 import { ClientShell } from './ClientShell';
@@ -50,7 +55,9 @@ import { clientKeys } from './useClientOrg';
 export function ClientProjectsPage() {
   return (
     <ClientShell title="Projects" description="Progress and milestones of the work we're doing for you.">
-      {({ base, org, link }) => <ProjectList key={org.clientId} base={base} orgId={org.clientId} link={link} />}
+      {({ base, org, link }) => (
+        <ProjectList key={org.clientId} base={base} orgId={org.clientId} link={link} />
+      )}
     </ClientShell>
   );
 }
@@ -77,13 +84,19 @@ function ProjectList({ base, orgId, link }: { base: string; orgId: string; link:
             actions={<ProjectStatusBadge status={p.status} />}
           />
           <CardBody className="dl-page">
-            <ProgressBar value={p.progressPercent} label="Progress" valueText={`${p.doneTasks} of ${p.visibleTasks} shared tasks done`} showValue />
+            <ProgressBar
+              value={p.progressPercent}
+              label="Progress"
+              valueText={`${p.doneTasks} of ${p.visibleTasks} shared tasks done`}
+              showValue
+            />
             <span className="dl-meta">
               {labelOf(p.type)} · {formatDateOnly(p.startDate)} – {formatDateOnly(p.endDate)}
             </span>
             {p.nextMilestone ? (
               <span>
-                Next milestone: <strong>{p.nextMilestone.title}</strong> ({formatDateOnly(p.nextMilestone.dueDate)})
+                Next milestone: <strong>{p.nextMilestone.title}</strong> (
+                {formatDateOnly(p.nextMilestone.dueDate)})
               </span>
             ) : null}
           </CardBody>
@@ -96,8 +109,13 @@ function ProjectList({ base, orgId, link }: { base: string; orgId: string; link:
 export function ClientProjectPage() {
   const { projectId = '' } = useParams();
   return (
-    <ClientShell title="Project" breadcrumbs={[{ label: 'Projects', to: '/client/projects' }, { label: 'Project' }]}>
-      {({ base, org }) => <ProjectDetail key={org.clientId + projectId} base={base} orgId={org.clientId} id={projectId} />}
+    <ClientShell
+      title="Project"
+      breadcrumbs={[{ label: 'Projects', to: '/client/projects' }, { label: 'Project' }]}
+    >
+      {({ base, org }) => (
+        <ProjectDetail key={org.clientId + projectId} base={base} orgId={org.clientId} id={projectId} />
+      )}
     </ClientShell>
   );
 }
@@ -114,7 +132,12 @@ function ProjectDetail({ base, orgId, id }: { base: string; orgId: string; id: s
     <div className="dl-page">
       <h2>{d.project.name}</h2>
       {d.description ? <p>{d.description}</p> : null}
-      <ProgressBar value={d.project.progressPercent} label="Overall progress" valueText={`${d.project.progressPercent}%`} showValue />
+      <ProgressBar
+        value={d.project.progressPercent}
+        label="Overall progress"
+        valueText={`${d.project.progressPercent}%`}
+        showValue
+      />
       <Card as="section" aria-label="Milestones">
         <CardHeader title="Milestones" headingLevel={3} />
         <CardBody>
@@ -130,7 +153,9 @@ function ProjectDetail({ base, orgId, id }: { base: string; orgId: string; id: s
                       Due {formatDateOnly(m.dueDate)} · {m.doneCount}/{m.taskCount} done
                     </span>
                   </span>
-                  <Badge tone={m.status === 'Done' ? 'success' : 'neutral'}>{m.status === 'Done' ? 'Done' : 'In progress'}</Badge>
+                  <Badge tone={m.status === 'Done' ? 'success' : 'neutral'}>
+                    {m.status === 'Done' ? 'Done' : 'In progress'}
+                  </Badge>
                 </li>
               ))}
             </ul>
@@ -145,7 +170,12 @@ function ProjectDetail({ base, orgId, id }: { base: string; orgId: string; id: s
           { id: 'title', header: 'Task', primary: true, cell: (t) => t.title },
           { id: 'status', header: 'Status', cell: (t) => <TaskStatusBadge status={t.status} /> },
           { id: 'due', header: 'Due', cell: (t) => formatDateOnly(t.dueDate) },
-          { id: 'milestone', header: 'Milestone', cell: (t) => d.milestones.find((m) => m.id === t.milestoneId)?.title ?? '—', hideOnMobile: true },
+          {
+            id: 'milestone',
+            header: 'Milestone',
+            cell: (t) => d.milestones.find((m) => m.id === t.milestoneId)?.title ?? '—',
+            hideOnMobile: true,
+          },
         ]}
         emptyState={<EmptyState compact title="No tasks shared yet" />}
       />
@@ -167,7 +197,8 @@ function BriefForm({ base, orgId, onClose }: { base: string; orgId: string; onCl
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const template = templates.data?.find((t) => t.key === key);
   const submit = useMutation({
-    mutationFn: () => api.post<Brief>(`${base}/briefs`, { templateKey: key, title, deadline: deadline || null, answers }),
+    mutationFn: () =>
+      api.post<Brief>(`${base}/briefs`, { templateKey: key, title, deadline: deadline || null, answers }),
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: clientKeys.part(orgId, 'briefs') });
       onClose();
@@ -186,7 +217,12 @@ function BriefForm({ base, orgId, onClose }: { base: string; orgId: string; onCl
           <Button variant="secondary" onClick={onClose}>
             Cancel
           </Button>
-          <Button type="submit" form="brief-form" loading={submit.isPending} disabled={!template || title.trim().length < 2}>
+          <Button
+            type="submit"
+            form="brief-form"
+            loading={submit.isPending}
+            disabled={!template || title.trim().length < 2}
+          >
             Submit brief
           </Button>
         </>
@@ -202,21 +238,44 @@ function BriefForm({ base, orgId, onClose }: { base: string; orgId: string; onCl
       >
         {submit.error ? <Alert tone="danger">{errorMessage(submit.error)}</Alert> : null}
         <FormField label="Type of work" required>
-          <Select value={key} onChange={(e) => setKey(e.target.value)} placeholder="Choose…" options={(templates.data ?? []).map((t) => ({ value: t.key, label: t.name }))} />
+          <Select
+            value={key}
+            onChange={(e) => setKey(e.target.value)}
+            placeholder="Choose…"
+            options={(templates.data ?? []).map((t) => ({ value: t.key, label: t.name }))}
+          />
         </FormField>
         <FormField label="Title" required>
-          <Input value={title} onChange={(e) => setTitle(e.target.value)} required minLength={2} maxLength={200} />
+          <Input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            minLength={2}
+            maxLength={200}
+          />
         </FormField>
         {template?.fields.map((f) => {
           const error = fieldErrors?.[`answers.${f.key}`] ?? fieldErrors?.[`answers.${f.key.toLowerCase()}`];
           const value = answers[f.key] ?? '';
           const set = (v: string) => setAnswers({ ...answers, [f.key]: v });
           return (
-            <FormField key={f.key} label={f.label} required={f.required} optional={!f.required} hint={f.help ?? (f.type === 'List' || f.type === 'Url' ? 'One per line.' : undefined)} error={error}>
+            <FormField
+              key={f.key}
+              label={f.label}
+              required={f.required}
+              optional={!f.required}
+              hint={f.help ?? (f.type === 'List' || f.type === 'Url' ? 'One per line.' : undefined)}
+              error={error}
+            >
               {f.type === 'LongText' || f.type === 'List' || f.type === 'Url' ? (
                 <Textarea rows={3} value={value} onChange={(e) => set(e.target.value)} />
               ) : f.type === 'Select' ? (
-                <Select value={value} onChange={(e) => set(e.target.value)} placeholder="Choose…" options={f.options.map((o) => ({ value: o, label: o }))} />
+                <Select
+                  value={value}
+                  onChange={(e) => set(e.target.value)}
+                  placeholder="Choose…"
+                  options={f.options.map((o) => ({ value: o, label: o }))}
+                />
               ) : f.type === 'Date' ? (
                 <Input type="date" value={value} onChange={(e) => set(e.target.value)} />
               ) : (
@@ -265,10 +324,19 @@ function Briefs({ base, orgId, canSubmit }: { base: string; orgId: string; canSu
               title={b.title}
               headingLevel={2}
               description={`${b.templateName} · submitted by ${b.submittedBy.displayName}`}
-              actions={<Badge tone={b.status === 'Converted' ? 'success' : 'info'}>{b.status === 'Converted' ? 'In progress' : labelOf(b.status)}</Badge>}
+              actions={
+                <Badge tone={b.status === 'Converted' ? 'success' : 'info'}>
+                  {b.status === 'Converted' ? 'In progress' : labelOf(b.status)}
+                </Badge>
+              }
             />
             <CardBody>
-              <KeyValueList items={b.answers.map((a) => ({ label: a.label, value: <span className="dl-report__body">{a.value}</span> }))} />
+              <KeyValueList
+                items={b.answers.map((a) => ({
+                  label: a.label,
+                  value: <span className="dl-report__body">{a.value}</span>,
+                }))}
+              />
             </CardBody>
           </Card>
         ))
@@ -281,7 +349,9 @@ function Briefs({ base, orgId, canSubmit }: { base: string; orgId: string; canSu
 export function ClientBriefsPage() {
   return (
     <ClientShell title="Briefs" description="Request new work from your agency team.">
-      {({ base, org, canApprove }) => <Briefs key={org.clientId} base={base} orgId={org.clientId} canSubmit={canApprove} />}
+      {({ base, org, canApprove }) => (
+        <Briefs key={org.clientId} base={base} orgId={org.clientId} canSubmit={canApprove} />
+      )}
     </ClientShell>
   );
 }
@@ -303,7 +373,13 @@ function Reports({ base, orgId, link }: { base: string; orgId: string; link: (p:
   });
   if (reports.isPending) return <Skeleton height={160} />;
   if (reports.isError) return <ErrorState error={reports.error} />;
-  if (reports.data.length === 0) return <EmptyState title="No reports yet" description="Your first monthly report appears here once it's published." />;
+  if (reports.data.length === 0)
+    return (
+      <EmptyState
+        title="No reports yet"
+        description="Your first monthly report appears here once it's published."
+      />
+    );
   return (
     <ul className="dl-list" aria-label="Reports">
       {reports.data.map((r) => (
@@ -312,7 +388,9 @@ function Reports({ base, orgId, link }: { base: string; orgId: string; link: (p:
             <Link className="dl-list__title ui-link" to={link(`/client/reports/${r.id}`)}>
               {r.title}
             </Link>
-            <span className="dl-meta">{formatDateOnly(r.periodStart, { month: 'long', year: 'numeric' })}</span>
+            <span className="dl-meta">
+              {formatDateOnly(r.periodStart, { month: 'long', year: 'numeric' })}
+            </span>
           </span>
           {r.publishedAt ? <DateTime value={r.publishedAt} format="date" /> : null}
         </li>
@@ -328,12 +406,19 @@ export function ClientReportPage() {
       title="Report"
       breadcrumbs={[{ label: 'Reports', to: '/client/reports' }, { label: 'Report' }]}
       actions={
-        <Button variant="secondary" className="dl-no-print" leadingIcon={<Printer aria-hidden="true" />} onClick={() => window.print()}>
+        <Button
+          variant="secondary"
+          className="dl-no-print"
+          leadingIcon={<Printer aria-hidden="true" />}
+          onClick={() => window.print()}
+        >
           Print
         </Button>
       }
     >
-      {({ base, org }) => <ReportDetail key={org.clientId + reportId} base={base} orgId={org.clientId} id={reportId} />}
+      {({ base, org }) => (
+        <ReportDetail key={org.clientId + reportId} base={base} orgId={org.clientId} id={reportId} />
+      )}
     </ClientShell>
   );
 }
@@ -384,7 +469,11 @@ function Brand({ base, orgId, isOwner }: { base: string; orgId: string; isOwner:
       <BrandKitView kit={kit.data} audience="client" />
       {isOwner ? (
         <Card as="section" aria-label="Upload brand assets">
-          <CardHeader title="Upload brand assets" headingLevel={2} description="Logos, brand guidelines (PDF), fonts previews and photography." />
+          <CardHeader
+            title="Upload brand assets"
+            headingLevel={2}
+            description="Logos, brand guidelines (PDF), fonts previews and photography."
+          />
           <CardBody>
             <form
               className="dl-toolbar"
@@ -394,7 +483,11 @@ function Brand({ base, orgId, isOwner }: { base: string; orgId: string; isOwner:
               }}
             >
               <FormField label="File" hint="PNG, JPEG, WebP, PDF or MP4, up to 50 MB.">
-                <Input type="file" accept="image/png,image/jpeg,image/webp,application/pdf,video/mp4" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
+                <Input
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp,application/pdf,video/mp4"
+                  onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                />
               </FormField>
               <FormField label="Label" optional>
                 <Input value={label} onChange={(e) => setLabel(e.target.value)} maxLength={200} />
@@ -413,8 +506,13 @@ function Brand({ base, orgId, isOwner }: { base: string; orgId: string; isOwner:
 
 export function ClientBrandKitPage() {
   return (
-    <ClientShell title="Brand kit" description="Colours, fonts, voice and assets your agency team works with.">
-      {({ base, org, isOwner }) => <Brand key={org.clientId} base={base} orgId={org.clientId} isOwner={isOwner} />}
+    <ClientShell
+      title="Brand kit"
+      description="Colours, fonts, voice and assets your agency team works with."
+    >
+      {({ base, org, isOwner }) => (
+        <Brand key={org.clientId} base={base} orgId={org.clientId} isOwner={isOwner} />
+      )}
     </ClientShell>
   );
 }
@@ -424,7 +522,16 @@ export function ClientBrandKitPage() {
 export function ClientMessagesPage() {
   return (
     <ClientShell title="Messages" description="Talk to your account team. Attach files up to 50 MB.">
-      {({ base, org }) => <MessagesPanel key={org.clientId} base={base} audience="client" />}
+      {({ base, org, canApprove }) => (
+        <>
+          {canApprove ? null : (
+            <Alert tone="info">
+              Your role is read-only here: an Approver or Owner in your organization can send messages.
+            </Alert>
+          )}
+          <MessagesPanel key={org.clientId} base={base} audience="client" canWrite={canApprove} />
+        </>
+      )}
     </ClientShell>
   );
 }
@@ -453,7 +560,8 @@ function Team({ base, orgId, isOwner }: { base: string; orgId: string; isOwner: 
     },
   });
   const change = useMutation({
-    mutationFn: ({ userId, role }: { userId: string; role: ClientDuty }) => api.put<ClientMember[]>(`${base}/members/${userId}`, { role }),
+    mutationFn: ({ userId, role }: { userId: string; role: ClientDuty }) =>
+      api.put<ClientMember[]>(`${base}/members/${userId}`, { role }),
     onSuccess: setMembers,
   });
   const remove = useMutation({
@@ -476,7 +584,9 @@ function Team({ base, orgId, isOwner }: { base: string; orgId: string; isOwner: 
                   <Avatar name={p.displayName} size={48} decorative />
                   <span className="cc-person__text">
                     <strong>{p.displayName}</strong>
-                    <span className="dl-meta">{p.isAccountManager ? 'Account manager' : p.roles.map(labelOf).join(', ')}</span>
+                    <span className="dl-meta">
+                      {p.isAccountManager ? 'Account manager' : p.roles.map(labelOf).join(', ')}
+                    </span>
                     <a className="ui-link" href={`mailto:${p.email}`}>
                       <Mail aria-hidden="true" size={14} /> {p.email}
                     </a>
@@ -500,7 +610,9 @@ function Team({ base, orgId, isOwner }: { base: string; orgId: string; isOwner: 
           }
         />
         <CardBody>
-          {change.error || remove.error ? <Alert tone="danger">{errorMessage(change.error ?? remove.error)}</Alert> : null}
+          {change.error || remove.error ? (
+            <Alert tone="danger">{errorMessage(change.error ?? remove.error)}</Alert>
+          ) : null}
           {members.isPending ? (
             <Skeleton height={120} />
           ) : members.isError ? (
@@ -522,7 +634,9 @@ function Team({ base, orgId, isOwner }: { base: string; orgId: string; isOwner: 
                         size="sm"
                         aria-label={`Role of ${m.displayName}`}
                         value={m.role}
-                        onChange={(e) => change.mutate({ userId: m.userId, role: e.target.value as ClientDuty })}
+                        onChange={(e) =>
+                          change.mutate({ userId: m.userId, role: e.target.value as ClientDuty })
+                        }
                         options={CLIENT_DUTIES.map((d) => ({ value: d, label: d }))}
                       />
                     ) : (
@@ -530,7 +644,18 @@ function Team({ base, orgId, isOwner }: { base: string; orgId: string; isOwner: 
                     ),
                 },
               ]}
-              rowActions={isOwner ? (m) => [{ id: 'remove', label: 'Remove', danger: true, onSelect: () => remove.mutate(m.userId) }] : undefined}
+              rowActions={
+                isOwner
+                  ? (m) => [
+                      {
+                        id: 'remove',
+                        label: 'Remove',
+                        danger: true,
+                        onSelect: () => remove.mutate(m.userId),
+                      },
+                    ]
+                  : undefined
+              }
             />
           )}
         </CardBody>
@@ -561,13 +686,30 @@ function Team({ base, orgId, isOwner }: { base: string; orgId: string; isOwner: 
         >
           {invite.error ? <Alert tone="danger">{errorMessage(invite.error)}</Alert> : null}
           <FormField label="Email" required>
-            <Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
+            <Input
+              type="email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              required
+            />
           </FormField>
           <FormField label="Name" required>
-            <Input value={form.displayName} onChange={(e) => setForm({ ...form, displayName: e.target.value })} required minLength={2} />
+            <Input
+              value={form.displayName}
+              onChange={(e) => setForm({ ...form, displayName: e.target.value })}
+              required
+              minLength={2}
+            />
           </FormField>
-          <FormField label="Role" hint="Viewer: read-only. Approver: approves work and submits briefs. Billing: invoices. Owner: everything.">
-            <Select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value as ClientDuty })} options={CLIENT_DUTIES.map((d) => ({ value: d, label: d }))} />
+          <FormField
+            label="Role"
+            hint="Viewer: read-only. Approver: approves work and submits briefs. Billing: invoices. Owner: everything."
+          >
+            <Select
+              value={form.role}
+              onChange={(e) => setForm({ ...form, role: e.target.value as ClientDuty })}
+              options={CLIENT_DUTIES.map((d) => ({ value: d, label: d }))}
+            />
           </FormField>
         </form>
       </Dialog>
@@ -578,7 +720,9 @@ function Team({ base, orgId, isOwner }: { base: string; orgId: string; isOwner: 
 export function ClientTeamPage() {
   return (
     <ClientShell title="Team" description="Your agency team and the people in your organization.">
-      {({ base, org, isOwner }) => <Team key={org.clientId} base={base} orgId={org.clientId} isOwner={isOwner} />}
+      {({ base, org, isOwner }) => (
+        <Team key={org.clientId} base={base} orgId={org.clientId} isOwner={isOwner} />
+      )}
     </ClientShell>
   );
 }

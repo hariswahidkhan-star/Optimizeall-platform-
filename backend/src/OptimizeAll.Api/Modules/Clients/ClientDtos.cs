@@ -152,7 +152,7 @@ public sealed record MyOrganizationDto(Guid ClientId, string Name, string Slug, 
 
 public sealed record OnboardingItemDto(
     Guid Id, string Key, string Title, string? Description, string Category, OnboardingOwner Owner, int SortOrder,
-    OnboardingItemStatus Status, DateTime? CompletedAt, string? CompletedBy, string? Note);
+    OnboardingItemStatus Status, DateTime? CompletedAt, string? CompletedBy, string? Note, bool CompletedOnBehalfOfClient);
 
 public sealed record OnboardingDto(IReadOnlyList<OnboardingItemDto> Items, int Done, int Total, int PercentComplete);
 
@@ -160,6 +160,16 @@ public sealed class UpdateOnboardingItemRequest
 {
     [Required]
     public OnboardingItemStatus? Status { get; set; }
+
+    [MaxLength(1000)]
+    public string? Note { get; set; }
+}
+
+/// <summary>Staff tick (<c>done: true</c>) or un-tick a client-owned onboarding step on the client's behalf.</summary>
+public sealed class OnBehalfOnboardingRequest
+{
+    [Required]
+    public bool? Done { get; set; }
 
     [MaxLength(1000)]
     public string? Note { get; set; }

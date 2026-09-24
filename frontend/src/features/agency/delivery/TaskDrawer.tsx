@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Eye, EyeOff, X } from 'lucide-react';
+import { Eye, EyeOff, Trash2, X } from 'lucide-react';
 import { useState } from 'react';
 import {
   Alert,
@@ -67,7 +67,10 @@ function Editor({ detail, projectId }: { detail: TaskDetail; projectId: string }
     },
   });
   const toggleAssignee = (id: string, on: boolean) =>
-    setForm((f) => ({ ...f, assigneeUserIds: on ? [...f.assigneeUserIds, id] : f.assigneeUserIds.filter((x) => x !== id) }));
+    setForm((f) => ({
+      ...f,
+      assigneeUserIds: on ? [...f.assigneeUserIds, id] : f.assigneeUserIds.filter((x) => x !== id),
+    }));
   return (
     <form
       className="dl-form"
@@ -79,30 +82,63 @@ function Editor({ detail, projectId }: { detail: TaskDetail; projectId: string }
     >
       {save.error ? <Alert tone="danger">{errorMessage(save.error)}</Alert> : null}
       <FormField label="Title" required>
-        <Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required minLength={2} maxLength={300} />
+        <Input
+          value={form.title}
+          onChange={(e) => setForm({ ...form, title: e.target.value })}
+          required
+          minLength={2}
+          maxLength={300}
+        />
       </FormField>
       <div className="dl-form__row">
         <FormField label="Status">
-          <Select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value as TaskStatus })} options={TASK_STATUSES.map((s) => ({ value: s, label: taskStatusLabel(s) }))} />
+          <Select
+            value={form.status}
+            onChange={(e) => setForm({ ...form, status: e.target.value as TaskStatus })}
+            options={TASK_STATUSES.map((s) => ({ value: s, label: taskStatusLabel(s) }))}
+          />
         </FormField>
         <FormField label="Priority">
-          <Select value={form.priority} onChange={(e) => setForm({ ...form, priority: e.target.value as TaskPriority })} options={TASK_PRIORITIES.map((p) => ({ value: p, label: p }))} />
+          <Select
+            value={form.priority}
+            onChange={(e) => setForm({ ...form, priority: e.target.value as TaskPriority })}
+            options={TASK_PRIORITIES.map((p) => ({ value: p, label: p }))}
+          />
         </FormField>
         <FormField label="Due date">
-          <Input type="date" value={form.dueDate} onChange={(e) => setForm({ ...form, dueDate: e.target.value })} />
+          <Input
+            type="date"
+            value={form.dueDate}
+            onChange={(e) => setForm({ ...form, dueDate: e.target.value })}
+          />
         </FormField>
         <FormField label="Estimate (hours)">
-          <Input type="number" min={0} step="0.25" value={form.estimateHours} onChange={(e) => setForm({ ...form, estimateHours: e.target.value })} />
+          <Input
+            type="number"
+            min={0}
+            step="0.25"
+            value={form.estimateHours}
+            onChange={(e) => setForm({ ...form, estimateHours: e.target.value })}
+          />
         </FormField>
       </div>
       <FormField label="Description" hint="Markdown supported.">
-        <Textarea rows={5} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+        <Textarea
+          rows={5}
+          value={form.description}
+          onChange={(e) => setForm({ ...form, description: e.target.value })}
+        />
       </FormField>
       <fieldset className="dl-form">
         <legend>Assignees</legend>
         <div className="dl-form__row">
           {(staff.data ?? []).map((s) => (
-            <Checkbox key={s.id} label={s.displayName} checked={form.assigneeUserIds.includes(s.id)} onChange={(e) => toggleAssignee(s.id, e.target.checked)} />
+            <Checkbox
+              key={s.id}
+              label={s.displayName}
+              checked={form.assigneeUserIds.includes(s.id)}
+              onChange={(e) => toggleAssignee(s.id, e.target.checked)}
+            />
           ))}
         </div>
       </fieldset>
@@ -143,7 +179,11 @@ function Checklist({ detail }: { detail: TaskDetail }) {
       <ul className="dl-checklist">
         {detail.checklist.map((c) => (
           <li key={c.id}>
-            <Checkbox label={c.text} checked={c.isDone} onChange={(e) => toggle.mutate({ id: c.id, text: c.text, isDone: e.target.checked })} />
+            <Checkbox
+              label={c.text}
+              checked={c.isDone}
+              onChange={(e) => toggle.mutate({ id: c.id, text: c.text, isDone: e.target.checked })}
+            />
           </li>
         ))}
       </ul>
@@ -188,7 +228,9 @@ function CommentItem({ detail, comment }: { detail: TaskDetail; comment: TaskDet
         <strong>{comment.author.displayName}</strong>
         <DateTime value={comment.createdAt} format="relative" />
         {comment.editedAt ? <span>(edited)</span> : null}
-        {comment.mentions.length > 0 ? <span>mentioned {comment.mentions.map((m) => `@${m.displayName}`).join(', ')}</span> : null}
+        {comment.mentions.length > 0 ? (
+          <span>mentioned {comment.mentions.map((m) => `@${m.displayName}`).join(', ')}</span>
+        ) : null}
       </div>
       {editing ? (
         <form
@@ -257,7 +299,8 @@ function Comments({ detail }: { detail: TaskDetail }) {
   const [body, setBody] = useState('');
   const [mentions, setMentions] = useState<string[]>([]);
   const post = useMutation({
-    mutationFn: () => api.post<TaskDetail>(`/agency/tasks/${detail.task.id}/comments`, { body, mentionUserIds: mentions }),
+    mutationFn: () =>
+      api.post<TaskDetail>(`/agency/tasks/${detail.task.id}/comments`, { body, mentionUserIds: mentions }),
     onSuccess: (d) => {
       qc.setQueryData(dk.task(detail.task.id), d);
       setBody('');
@@ -293,7 +336,8 @@ function Comments({ detail }: { detail: TaskDetail }) {
                 if (!id) return;
                 setMentions((m) => [...m, id]);
                 const person = staff.data?.find((s) => s.id === id);
-                if (person && !body.includes(`@${person.displayName}`)) setBody((b) => `${b}${b && !b.endsWith(' ') ? ' ' : ''}@${person.displayName} `);
+                if (person && !body.includes(`@${person.displayName}`))
+                  setBody((b) => `${b}${b && !b.endsWith(' ') ? ' ' : ''}@${person.displayName} `);
               }}
               placeholder="Choose a teammate…"
               options={mentionOptions.map((s) => ({ value: s.id, label: s.displayName }))}
@@ -304,7 +348,13 @@ function Comments({ detail }: { detail: TaskDetail }) {
             return (
               <Badge key={id} tone="brand">
                 @{person?.displayName ?? 'someone'}{' '}
-                <IconButton size="sm" variant="ghost" label={`Remove mention of ${person?.displayName ?? 'teammate'}`} icon={<X />} onClick={() => setMentions((m) => m.filter((x) => x !== id))} />
+                <IconButton
+                  size="sm"
+                  variant="ghost"
+                  label={`Remove mention of ${person?.displayName ?? 'teammate'}`}
+                  icon={<X />}
+                  onClick={() => setMentions((m) => m.filter((x) => x !== id))}
+                />
               </Badge>
             );
           })}
@@ -322,6 +372,7 @@ function Comments({ detail }: { detail: TaskDetail }) {
 function Attachments({ detail, clientId }: { detail: TaskDetail; clientId: string }) {
   const qc = useQueryClient();
   const [file, setFile] = useState<File | null>(null);
+  const [removing, setRemoving] = useState<TaskDetail['attachments'][number] | null>(null);
   const upload = useMutation({
     mutationFn: async () => {
       const form = new FormData();
@@ -338,8 +389,38 @@ function Attachments({ detail, clientId }: { detail: TaskDetail; clientId: strin
     <section aria-labelledby="attachments-heading" className="dl-form">
       <h3 id="attachments-heading">Attachments</h3>
       {detail.attachments.map((a) => (
-        <FilePreview key={a.id} file={a.file} url={a.file.staffUrl} alt={a.file.fileName} />
+        <div key={a.id} className="dl-row">
+          <FilePreview file={a.file} url={a.file.staffUrl} alt={a.file.fileName} />
+          <IconButton
+            size="sm"
+            variant="ghost"
+            label={`Remove attachment ${a.file.fileName}`}
+            icon={<Trash2 />}
+            onClick={() => setRemoving(a)}
+          />
+        </div>
       ))}
+      <ConfirmDialog
+        open={removing !== null}
+        onClose={() => setRemoving(null)}
+        tone="danger"
+        title={`Remove “${removing?.file.fileName ?? ''}” from this task?`}
+        description="The file is deleted unless it is also used elsewhere (a message, a deliverable or the brand kit). The removal is audited."
+        confirmLabel="Remove attachment"
+        onConfirm={async () => {
+          if (!removing) return;
+          try {
+            qc.setQueryData(
+              dk.task(detail.task.id),
+              await api.delete<TaskDetail>(`/agency/tasks/${detail.task.id}/attachments/${removing.id}`),
+            );
+          } catch (error) {
+            // Someone else may have removed it already: refresh the task behind the error.
+            void qc.invalidateQueries({ queryKey: dk.task(detail.task.id) });
+            throw error;
+          }
+        }}
+      />
       <form
         className="dl-toolbar"
         onSubmit={(e) => {
@@ -348,7 +429,11 @@ function Attachments({ detail, clientId }: { detail: TaskDetail; clientId: strin
         }}
       >
         <FormField label="Attach a file" hint="PNG, JPEG, WebP, PDF or MP4, up to 50 MB.">
-          <Input type="file" accept="image/png,image/jpeg,image/webp,application/pdf,video/mp4" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
+          <Input
+            type="file"
+            accept="image/png,image/jpeg,image/webp,application/pdf,video/mp4"
+            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+          />
         </FormField>
         <Button type="submit" variant="secondary" disabled={!file} loading={upload.isPending}>
           Upload
@@ -360,7 +445,17 @@ function Attachments({ detail, clientId }: { detail: TaskDetail; clientId: strin
 }
 
 /** Task details in a side drawer: fields, checklist, comments with @mentions, watchers, dependencies, attachments. */
-export function TaskDrawer({ taskId, projectId, clientId, onClose }: { taskId: string; projectId: string; clientId: string; onClose: () => void }) {
+export function TaskDrawer({
+  taskId,
+  projectId,
+  clientId,
+  onClose,
+}: {
+  taskId: string;
+  projectId: string;
+  clientId: string;
+  onClose: () => void;
+}) {
   const qc = useQueryClient();
   const { hasPermission } = useAuth();
   const canEdit = hasPermission(Permissions.DeliverablesSubmit);
@@ -369,7 +464,10 @@ export function TaskDrawer({ taskId, projectId, clientId, onClose }: { taskId: s
     queryFn: ({ signal }) => api.get<TaskDetail>(`/agency/tasks/${taskId}`, { signal }),
   });
   const watch = useMutation({
-    mutationFn: (on: boolean) => (on ? api.post<TaskDetail>(`/agency/tasks/${taskId}/watch`) : api.delete<TaskDetail>(`/agency/tasks/${taskId}/watch`)),
+    mutationFn: (on: boolean) =>
+      on
+        ? api.post<TaskDetail>(`/agency/tasks/${taskId}/watch`)
+        : api.delete<TaskDetail>(`/agency/tasks/${taskId}/watch`),
     onSuccess: (d) => qc.setQueryData(dk.task(taskId), d),
   });
   return (
@@ -404,7 +502,11 @@ export function TaskDrawer({ taskId, projectId, clientId, onClose }: { taskId: s
               </ul>
             </Alert>
           ) : null}
-          {canEdit ? <Editor key={detail.data.task.concurrencyStamp} detail={detail.data} projectId={projectId} /> : <p className="dl-report__body">{detail.data.description}</p>}
+          {canEdit ? (
+            <Editor key={detail.data.task.concurrencyStamp} detail={detail.data} projectId={projectId} />
+          ) : (
+            <p className="dl-report__body">{detail.data.description}</p>
+          )}
           <Checklist detail={detail.data} />
           <Comments detail={detail.data} />
           {canEdit ? <Attachments detail={detail.data} clientId={clientId} /> : null}

@@ -35,13 +35,17 @@ public sealed partial class ClientRelationshipService(
         var people = await db.Set<User>().AsNoTracking()
             .Where(u => completedBy.Contains(u.Id)).ToDictionaryAsync(u => u.Id, u => u.DisplayName, ct);
         var items = rows.Select(i => new OnboardingItemDto(i.Id, i.Key, i.Title, i.Description, i.Category, i.Owner, i.SortOrder, i.Status,
-            i.CompletedAt, i.CompletedByUserId is { } u && people.TryGetValue(u, out var n) ? n : null, i.Note)).ToList();
+            i.CompletedAt, i.CompletedByUserId is { } u && people.TryGetValue(u, out var n) ? n : null, i.Note, i.CompletedOnBehalfOfClient)).ToList();
         var applicable = items.Where(i => i.Status != OnboardingItemStatus.NotApplicable).ToList();
         var done = applicable.Count(i => i.Status == OnboardingItemStatus.Done);
         return new OnboardingDto(items, done, applicable.Count, applicable.Count == 0 ? 100 : (int)Math.Round(done * 100.0 / applicable.Count));
     }
 
-    /// <summary>Staff update any item; a client Owner may tick off items the client owns.</summary>
+    /// <summary>
+    /// Staff (clients.manage) update any item's status, except that ticking or un-ticking a client-owned step goes through
+    /// <see cref="SetOnBehalfOfClientAsync"/> (audited as done on the client's behalf). A client Owner may tick off items
+    /// the client owns.
+    /// </summary>
     public async Task<OnboardingDto> UpdateOnboardingItemAsync(Guid clientId, Guid itemId, UpdateOnboardingItemRequest request, CancellationToken ct)
     {
         await scope.EnsureAccessAsync(clientId, scope.IsStaff ? ClientMemberRole.Viewer : ClientMemberRole.Owner, ct);
@@ -51,12 +55,46 @@ public sealed partial class ClientRelationshipService(
         if (!Enum.IsDefined(status)) throw DeliveryRules.Invalid("onboarding.invalid_status", "status", "Choose a status.");
         if (!scope.IsStaff && (item.Owner != OnboardingOwner.Client || status == OnboardingItemStatus.NotApplicable))
             throw DomainException.Forbidden("onboarding.agency_item", "Your account team completes this step.");
+        if (scope.IsStaff && item.Owner == OnboardingOwner.Client
+            && (status == OnboardingItemStatus.Done || (status == OnboardingItemStatus.Pending && item.Status == OnboardingItemStatus.Done)))
+            throw DeliveryRules.Invalid("onboarding.client_item", "status",
+                "This step is the client's. Mark it done (or not done) on the client's behalf instead.");
         var before = new { item.Status, item.Note };
         item.Status = status;
         item.Note = string.IsNullOrWhiteSpace(request.Note) ? item.Note : request.Note.Trim();
         item.CompletedAt = status == OnboardingItemStatus.Done ? Now : null;
         item.CompletedByUserId = status == OnboardingItemStatus.Done ? currentUser.Id : null;
+        item.CompletedOnBehalfOfClient = false;
         audit.Record("client.onboarding_item_updated", nameof(ClientOnboardingItem), item.Id, before, new { item.Status, item.Note });
+        await db.SaveChangesAsync(ct);
+        return await OnboardingAsync(clientId, ct);
+    }
+
+    /// <summary>
+    /// Staff mark a client-owned step done (or not done again) on the client's behalf, e.g. when the client confirmed by
+    /// phone. Recorded who and when, flagged "completed by staff on behalf of client" (shown to the client) and audited.
+    /// Idempotent: repeating the current state changes nothing.
+    /// </summary>
+    public async Task<OnboardingDto> SetOnBehalfOfClientAsync(Guid clientId, Guid itemId, OnBehalfOnboardingRequest request, CancellationToken ct)
+    {
+        await scope.EnsureAccessAsync(clientId, ct: ct);
+        if (!scope.IsStaff) throw DomainException.NotFound("OnboardingItem");
+        var item = await db.Set<ClientOnboardingItem>().FirstOrDefaultAsync(i => i.Id == itemId && i.ClientAccountId == clientId, ct)
+                   ?? throw DomainException.NotFound("OnboardingItem");
+        if (item.Owner != OnboardingOwner.Client)
+            throw DeliveryRules.Invalid("onboarding.not_client_item", "itemId", "This step is the agency's; set its status directly.");
+        var done = request.Done!.Value;
+        if (done == (item.Status == OnboardingItemStatus.Done)) return await OnboardingAsync(clientId, ct);
+        var before = new { item.Status, item.CompletedAt, item.CompletedByUserId, item.CompletedOnBehalfOfClient, item.Note };
+        item.Status = done ? OnboardingItemStatus.Done : OnboardingItemStatus.Pending;
+        item.CompletedAt = done ? Now : null;
+        item.CompletedByUserId = done ? currentUser.Id : null;
+        item.CompletedOnBehalfOfClient = done;
+        if (!string.IsNullOrWhiteSpace(request.Note)) item.Note = request.Note.Trim();
+        audit.Record(done ? "client.onboarding_item_completed_on_behalf" : "client.onboarding_item_reopened_on_behalf",
+            nameof(ClientOnboardingItem), item.Id, before,
+            new { item.ClientAccountId, item.Title, item.Status, item.CompletedAt, item.CompletedByUserId, item.CompletedOnBehalfOfClient, item.Note },
+            done ? "Completed by staff on behalf of client" : "Reopened by staff on behalf of client");
         await db.SaveChangesAsync(ct);
         return await OnboardingAsync(clientId, ct);
     }
@@ -188,14 +226,30 @@ public sealed partial class ClientRelationshipService(
         return await BrandKitAsync(clientId, ct);
     }
 
+    /// <summary>
+    /// Removes a brand asset (staff with clients.manage). Concurrency-safe: removals of the client's files are serialized
+    /// and the row is locked, so a second (or concurrent) removal is a 404. The file itself is deleted (row and bytes)
+    /// once nothing else refers to it; a file still used elsewhere (a message, a task) is kept.
+    /// </summary>
     public async Task<BrandKitDto> RemoveAssetAsync(Guid clientId, Guid assetId, CancellationToken ct)
     {
         await scope.EnsureAccessAsync(clientId, ct: ct);
-        var asset = await db.Set<BrandAsset>().FirstOrDefaultAsync(a => a.Id == assetId && a.ClientAccountId == clientId, ct)
-                    ?? throw DomainException.NotFound("BrandAsset");
-        db.Remove(asset);
-        audit.Record("client.brand_asset_removed", nameof(BrandAsset), asset.Id, before: new { asset.Kind, asset.Label, asset.FileId });
-        await db.SaveChangesAsync(ct);
+        string? purged;
+        await using (await files.LockClientFilesAsync(clientId, ct))
+        {
+            await using var tx = await dialect.BeginWriteTransactionAsync(db, ct);
+            if (!await dialect.LockRowAsync(db, "brand_assets", assetId, ct)) throw DomainException.NotFound("BrandAsset");
+            var asset = await db.Set<BrandAsset>().FirstOrDefaultAsync(a => a.Id == assetId && a.ClientAccountId == clientId, ct)
+                        ?? throw DomainException.NotFound("BrandAsset");
+            db.Remove(asset);
+            await db.SaveChangesAsync(ct);
+            purged = await files.StageRemovalIfUnreferencedAsync(asset.FileId, ct);
+            audit.Record("client.brand_asset_removed", nameof(BrandAsset), asset.Id,
+                before: new { asset.ClientAccountId, asset.Kind, asset.Label, asset.FileId }, after: new { FileDeleted = purged is not null });
+            await db.SaveChangesAsync(ct);
+            await tx.CommitAsync(ct);
+        }
+        files.DeleteStoredBytes(purged);
         return await BrandKitAsync(clientId, ct);
     }
 

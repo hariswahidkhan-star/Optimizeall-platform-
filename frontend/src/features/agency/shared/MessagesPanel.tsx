@@ -6,6 +6,7 @@ import {
   Alert,
   Badge,
   Button,
+  Checkbox,
   DateTime,
   EmptyState,
   ErrorState,
@@ -30,8 +31,19 @@ interface Props {
 const MAX_BYTES = 50 * 1024 * 1024;
 const MAX_FILES = 10;
 
-function Composer({ base, onSent, threadId }: { base: string; threadId?: string; onSent: (thread: Thread) => void }) {
+function Composer({
+  base,
+  onSent,
+  threadId,
+  audience,
+}: {
+  base: string;
+  threadId?: string;
+  audience: 'staff' | 'client';
+  onSent: (thread: Thread) => void;
+}) {
   const [subject, setSubject] = useState('');
+  const [internal, setInternal] = useState(false);
   const [body, setBody] = useState('');
   const [files, setFiles] = useState<File[]>([]);
   // Files the composer can't send, named so nothing is silently left out of the message.
@@ -53,12 +65,17 @@ function Composer({ base, onSent, threadId }: { base: string; threadId?: string;
       const payload = { body, attachmentFileIds: uploaded.map((f) => f.id) };
       return threadId
         ? api.post<Thread>(`${base}/threads/${threadId}/messages`, payload)
-        : api.post<Thread>(`${base}/threads`, { ...payload, subject });
+        : api.post<Thread>(`${base}/threads`, {
+            ...payload,
+            subject,
+            isInternal: audience === 'staff' && internal,
+          });
     },
     onSuccess: (thread) => {
       setBody('');
       setSubject('');
       setFiles([]);
+      setInternal(false);
       onSent(thread);
     },
   });
@@ -73,11 +90,23 @@ function Composer({ base, onSent, threadId }: { base: string; threadId?: string;
     >
       {!threadId ? (
         <FormField label="Subject" required>
-          <Input value={subject} onChange={(e) => setSubject(e.target.value)} required minLength={2} maxLength={200} />
+          <Input
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
+            required
+            minLength={2}
+            maxLength={200}
+          />
         </FormField>
       ) : null}
       <FormField label={threadId ? 'Your reply' : 'Message'} required>
-        <Textarea value={body} onChange={(e) => setBody(e.target.value)} required rows={3} maxLength={10000} />
+        <Textarea
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
+          required
+          rows={3}
+          maxLength={10000}
+        />
       </FormField>
       <FormField label="Attachments" optional hint="PNG, JPEG, WebP, PDF or MP4, up to 50 MB each.">
         <Input
@@ -87,10 +116,21 @@ function Composer({ base, onSent, threadId }: { base: string; threadId?: string;
           onChange={(e) => setFiles([...(e.target.files ?? [])])}
         />
       </FormField>
+      {!threadId && audience === 'staff' ? (
+        <Checkbox
+          label="Internal — only the agency team sees this conversation"
+          checked={internal}
+          onChange={(e) => setInternal(e.target.checked)}
+        />
+      ) : null}
       {fileProblem ? <Alert tone="danger">{fileProblem}</Alert> : null}
       {send.error ? <Alert tone="danger">{errorMessage(send.error)}</Alert> : null}
       <div className="dl-row">
-        <Button type="submit" loading={send.isPending} disabled={!body.trim() || (!threadId && subject.trim().length < 2) || fileProblem !== null}>
+        <Button
+          type="submit"
+          loading={send.isPending}
+          disabled={!body.trim() || (!threadId && subject.trim().length < 2) || fileProblem !== null}
+        >
           {threadId ? 'Send reply' : 'Start conversation'}
         </Button>
       </div>
@@ -99,7 +139,15 @@ function Composer({ base, onSent, threadId }: { base: string; threadId?: string;
 }
 
 /** Staff rename a conversation (the subject both sides see). */
-function RenameThread({ base, thread, onRenamed }: { base: string; thread: Thread; onRenamed: (t: Thread) => void }) {
+function RenameThread({
+  base,
+  thread,
+  onRenamed,
+}: {
+  base: string;
+  thread: Thread;
+  onRenamed: (t: Thread) => void;
+}) {
   const [editing, setEditing] = useState(false);
   const [subject, setSubject] = useState(thread.subject);
   const rename = useMutation({
@@ -201,7 +249,10 @@ export function MessagesPanel({ base, audience, canWrite = true }: Props) {
                   </span>
                   {t.lastMessagePreview ? <span className="dl-muted">{t.lastMessagePreview}</span> : null}
                 </span>
-                {t.unreadCount > 0 ? <Badge tone="brand">{t.unreadCount} unread</Badge> : null}
+                <span className="dl-row">
+                  {t.isInternal ? <Badge tone="warning">Internal</Badge> : null}
+                  {t.unreadCount > 0 ? <Badge tone="brand">{t.unreadCount} unread</Badge> : null}
+                </span>
               </li>
             ))}
           </ul>
@@ -217,7 +268,7 @@ export function MessagesPanel({ base, audience, canWrite = true }: Props) {
           canWrite ? (
             <>
               <h2>New conversation</h2>
-              <Composer base={base} onSent={onSent} />
+              <Composer base={base} audience={audience} onSent={onSent} />
             </>
           ) : (
             <p className="dl-muted">Choose a conversation.</p>
@@ -230,6 +281,9 @@ export function MessagesPanel({ base, audience, canWrite = true }: Props) {
           <>
             <div className="dl-row">
               <h2>{thread.data.subject}</h2>
+              {thread.data.isInternal ? (
+                <Badge tone="warning">Internal — not visible to the client</Badge>
+              ) : null}
               {audience === 'staff' && canWrite ? (
                 <RenameThread
                   base={base}
@@ -246,21 +300,37 @@ export function MessagesPanel({ base, audience, canWrite = true }: Props) {
                 <li key={m.id} className="dl-comment">
                   <div className="dl-comment__head">
                     <strong>{m.author.displayName}</strong>
-                    <span>{m.fromClient ? (audience === 'client' ? '' : '(client)') : audience === 'client' ? '(your agency team)' : ''}</span>
+                    <span>
+                      {m.fromClient
+                        ? audience === 'client'
+                          ? ''
+                          : '(client)'
+                        : audience === 'client'
+                          ? '(your agency team)'
+                          : ''}
+                    </span>
                     <DateTime value={m.createdAt} format="both" />
                   </div>
                   <p className="dl-report__body">{m.body}</p>
                   {m.attachments.map((f) => (
                     <div key={f.id} className="dl-row">
                       <Paperclip aria-hidden="true" size={16} />
-                      <FilePreview file={f} url={audience === 'staff' ? f.staffUrl : f.clientUrl} alt={f.fileName} />
+                      <FilePreview
+                        file={f}
+                        url={audience === 'staff' ? f.staffUrl : f.clientUrl}
+                        alt={f.fileName}
+                      />
                     </div>
                   ))}
-                  {m.readBy.length > 0 ? <p className="dl-kpi__source">Read by {m.readBy.join(', ')}</p> : null}
+                  {m.readBy.length > 0 ? (
+                    <p className="dl-kpi__source">Read by {m.readBy.join(', ')}</p>
+                  ) : null}
                 </li>
               ))}
             </ol>
-            {canWrite ? <Composer base={base} threadId={thread.data.id} onSent={onSent} /> : null}
+            {canWrite && thread.data.canReply ? (
+              <Composer base={base} audience={audience} threadId={thread.data.id} onSent={onSent} />
+            ) : null}
           </>
         )}
       </section>
