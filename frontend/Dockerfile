@@ -11,6 +11,7 @@
 #   API_UPSTREAM    base URL of the API (scheme://host:port, no path). Default http://api:8080.
 #   IMG_SRC_EXTRA   extra CSP img-src sources, space separated (e.g. "https://images.example.com"). Default empty.
 #                   Must match the API's Content:AllowedImageHosts.
+#   API_HOSTPORT, REAL_IP_FROM, API_WAIT_SECONDS, API_RESOLVE_INTERVAL: see nginx/12-optimizeall-platform.envsh (Render: docs/RENDER.md).
 
 ARG NODE_VERSION=22
 ARG NGINX_VERSION=1.27

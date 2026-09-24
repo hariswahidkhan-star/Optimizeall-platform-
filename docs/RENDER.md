@@ -111,14 +111,39 @@ The public agency website is the web service's root URL; no sign-in needed.
 
 ## Verified locally
 
-Both topologies were reproduced with Docker before publishing.
+Both Blueprints were reproduced end to end with Docker, most recently on **2026-09-24** (images built from
+`backend/Dockerfile` and `frontend/Dockerfile`; every `envVars` entry translated to container environment, random
+values for `generateValue` keys, `Email__AppBaseUrl` set, the Google keys left empty; a private network in
+`10.0.0.0/8` like Render's; every disk an empty volume containing a root-owned `lost+found`; the API container started
+as root, as Render does). All checks went through the web container only, as the internet would reach it.
 
-* **MySQL:** MySQL on a disk containing `lost+found` (initialized into `data/`), the API started as root on a
-  root-owned storage disk (the entrypoint fixes ownership and runs the app as the non-root `app` user), discrete
-  `Database__*` settings with a password containing `;`, `=` and `"`, nginx reaching the API through `API_HOSTPORT`,
-  the demo seed, sign-in for every role, and private screenshot delivery through nginx.
-* **SQLite:** the API image started as root on an empty root-owned disk containing `lost+found` with the Blueprint's
-  settings (`Database__Provider=Sqlite`, `Database__SqlitePath=/app/storage/db/optimizeall.db`): the entrypoint gave
-  the app user `db/`, `files/` and `mail/`, the process runs as `app`, the SQLite migrations applied, Baseline + Demo
-  seeded, `/health/ready` answered 200, sign-in worked for participant, reviewer, manager, finance and admin, and a
-  restart skipped the already-present demo data.
+* **SQLite (`render.yaml`):** the entrypoint gave the `app` user (uid 1654) `db/`, `files/`, `mail/` and even
+  `lost+found`, and the API runs as `app`; every file on the disk is owned by `app`. The SQLite migrations applied,
+  Baseline + Demo seeded (≈ 60 s on first start), `/health/ready` answered 200.
+* **MySQL (`deploy/render/render-mysql.yaml`):** MySQL 8.0 started with the Blueprint's `dockerCommand` on a disk
+  with `lost+found` (initialized into `data/`); the API, started at the same time as MySQL, waited for it, applied the
+  MySQL migrations and seeded; same results for every check below.
+* **Through nginx (`API_HOSTPORT`, `REAL_IP_FROM`, `PORT=8080`):** `/` returns the app shell (`no-cache`, CSP) and
+  its hashed JS bundle (`immutable`); client routes fall back to the shell and unknown `/assets/*` are 404;
+  `/api/v1/public/site`, `/api/v1/public/home`, `/robots.txt`, `/sitemap.xml` (74 URLs on `Email__AppBaseUrl`),
+  `/health/live`, `/health/ready`, `/healthz`; `/e/o/x.gif` answers `image/gif` with `Cache-Control: no-store`;
+  `/api/v1/auth/providers` reports Google disabled; `/api/v1/content/copy`; `/api/docs` (Swagger on).
+* **Sign-in** (`POST /api/v1/auth/login`, refresh cookie `Secure`) for the participant, reviewer, manager, finance,
+  admin, `am@`, `seo@` and `owner@nimbus` accounts, with 2–7 authenticated GETs per portal (submissions, earnings,
+  review queue, campaigns, calendar, ledger, payout batches, payments hub list + summary, admin users, roles list +
+  catalog, audit log, copy editor, agency dashboard/clients/projects/tasks, SEO sites, client org team/onboarding) all
+  200; a participant gets 403 and anonymous 401 on admin endpoints.
+* **Dev tools:** a password-reset email appears in `/api/v1/dev/mailbox?to=…` with a link on `Email__AppBaseUrl`.
+  `/api/v1/dev/test-accounts` answers (58 demo accounts): `appsettings.Staging.json` sets
+  `DevTools:TestLoginEnabled=true`, which is intended for this demo Blueprint (one-click sign-in on the login page, see
+  [DEMO.md](DEMO.md)); set `DevTools__TestLoginEnabled=false` on `optimizeall-api` to turn it off.
+* **Client IP:** with `REAL_IP_FROM`, the API's per-IP sign-in rate limit applies to the address the load balancer
+  puts in `X-Forwarded-For`, not to the load balancer.
+* **Restarts:** restarting the API (and, for MySQL, the database) kept all data; migrations were reported up to date
+  and every demo seeder skipped (no duplicates).
+* **API redeploys:** when the API came back on a new private IP, nginx (which resolves `proxy_pass` names only at
+  start) kept proxying to the old address and answered 502 until restarted. Fixed in
+  `frontend/nginx/12-optimizeall-platform.envsh`: the web container re-resolves the API host every
+  `API_RESOLVE_INTERVAL` seconds (default 10) and reloads nginx when the address changes; at startup it waits up to
+  `API_WAIT_SECONDS` (default 300) for the API host to resolve instead of exiting with `host not found in upstream`
+  (e.g. when the web service of a new Blueprint starts before the API exists). Both cases were re-tested.
