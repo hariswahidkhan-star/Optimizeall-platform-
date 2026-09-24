@@ -11,18 +11,33 @@ import { accounts, raw } from './support/auth';
 test('too many requests: a real 429 with Retry-After, and a friendly message on the sign-in form', async ({
   page,
 }) => {
-  test.setTimeout(240_000);
+  test.setTimeout(360_000);
   await page.goto('/login');
   await expect(page.getByRole('button', { name: 'Sign in', exact: true })).toBeVisible();
 
-  // Burn the address's budget with a cheap public endpoint until the API refuses, and keep burning (the bucket refills
-  // once a minute) while the sign-in form is submitted.
+  // Burn the address's budget with a cheap public endpoint until the API refuses, and keep burning while the sign-in
+  // form is submitted. The global bucket refills in full once a minute at a moment the client cannot see, so the form
+  // is submitted only after a refill was observed (a 200 after an all-429 batch) and the budget is gone again, well
+  // before the next refill: otherwise, with the e2e harness's large budget, the refill can land between the last 429
+  // and the sign-in.
   let limited: Awaited<ReturnType<typeof raw>> | undefined;
+  let exhausted = false;
+  let refilledAt: number | undefined;
+  let exhaustedSinceRefill = false;
   let burning = true;
   const burn = async () => {
     while (burning) {
       const batch = await Promise.all(Array.from({ length: 20 }, () => raw('GET', '/meta/currencies')));
-      limited ??= batch.find((r) => r.status === 429);
+      const hit = batch.find((r) => r.status === 429);
+      limited ??= hit;
+      if (batch.every((r) => r.status === 429)) {
+        exhausted = true;
+        if (refilledAt !== undefined) exhaustedSinceRefill = true;
+      } else if (exhausted && batch.some((r) => r.status === 200)) {
+        exhausted = false;
+        refilledAt = Date.now();
+        exhaustedSinceRefill = false;
+      }
     }
   };
   const burner = burn();
@@ -30,6 +45,12 @@ test('too many requests: a real 429 with Retry-After, and a friendly message on 
   expect(limited!.json).toMatchObject({ status: 429, code: 'rate_limited' });
   expect(limited!.headers.get('content-type')).toContain('application/problem+json');
   expect(Number(limited!.headers.get('retry-after'))).toBeGreaterThan(0);
+  await expect
+    .poll(() => exhaustedSinceRefill && Date.now() - refilledAt! < 40_000, {
+      timeout: 180_000,
+      intervals: [100],
+    })
+    .toBe(true);
 
   // The sign-in form now gets a 429 as well and says so in words, keeping what was typed.
   await page.getByLabel('Email', { exact: true }).fill(accounts.participant.email);
