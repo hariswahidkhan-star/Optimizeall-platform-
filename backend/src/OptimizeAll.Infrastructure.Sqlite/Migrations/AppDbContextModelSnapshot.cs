@@ -1493,6 +1493,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasMaxLength(60)
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("ImpersonatorUserId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("IpAddress")
                         .HasMaxLength(64)
                         .HasColumnType("TEXT");
@@ -1508,6 +1511,8 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.HasIndex("ActorUserId");
 
                     b.HasIndex("CreatedAt");
+
+                    b.HasIndex("ImpersonatorUserId");
 
                     b.HasIndex("EntityType", "EntityId");
 
@@ -5566,6 +5571,64 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.ToTable("external_logins", (string)null);
                 });
 
+            modelBuilder.Entity("OptimizeAll.Domain.Identity.ImpersonationSession", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("EndedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EndedReason")
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ImpersonatorSecurityVersion")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("ImpersonatorUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("IpAddress")
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("StartedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("TargetUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TokenHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT")
+                        .IsFixedLength();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TargetUserId");
+
+                    b.HasIndex("TokenHash")
+                        .IsUnique();
+
+                    b.HasIndex("ImpersonatorUserId", "EndedAt");
+
+                    b.ToTable("impersonation_sessions", (string)null);
+                });
+
             modelBuilder.Entity("OptimizeAll.Domain.Identity.PayoutProfile", b =>
                 {
                     b.Property<Guid>("Id")
@@ -5718,6 +5781,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsTestAccount")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("LanguageCode")
                         .IsRequired()
                         .HasMaxLength(10)
@@ -5796,6 +5862,8 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedAt");
+
+                    b.HasIndex("IsTestAccount");
 
                     b.HasIndex("NormalizedEmail")
                         .IsUnique();
@@ -14501,6 +14569,21 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Identity.ImpersonationSession", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Identity.User", null)
+                        .WithMany()
+                        .HasForeignKey("ImpersonatorUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OptimizeAll.Domain.Identity.User", null)
+                        .WithMany()
+                        .HasForeignKey("TargetUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 

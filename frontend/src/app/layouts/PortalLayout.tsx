@@ -14,6 +14,7 @@ import { PortalContext } from '../portalContext';
 import { accessiblePortals, getPortal } from '../portals';
 import type { PortalDefinition, PortalNavItem } from '../portalTypes';
 import { EmailVerificationBanner } from './EmailVerificationBanner';
+import { ImpersonationBanner } from './ImpersonationBanner';
 import './PortalLayout.css';
 
 function itemPath(portal: PortalDefinition, item: PortalNavItem): string {
@@ -153,6 +154,7 @@ export function PortalLayout({ portal }: { portal: PortalDefinition }) {
         </Drawer>
 
         <div className="portal-main-col">
+          <ImpersonationBanner />
           <header className="portal-topbar">
             <IconButton
               className="portal-topbar__menu"

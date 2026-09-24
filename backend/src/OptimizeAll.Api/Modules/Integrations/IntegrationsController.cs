@@ -70,6 +70,7 @@ public sealed record ConnectionDto(
 [ApiController]
 [HasPermission(Permissions.IntegrationsManage)]
 [Route("api/v1/agency/integrations")]
+[DeniedWhileImpersonating(WritesOnly = true)] // third-party API keys / credentials
 public sealed class IntegrationsController(
     AppDbContext db, SeoAccess access, ICredentialVault vault, IntegrationVerifier verifier, IAuditLogger audit, TimeProvider clock) : ControllerBase
 {

@@ -25,6 +25,7 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
         b.Property(x => x.WhatsAppNumber).HasMaxLength(20);
         b.HasIndex(x => x.Status);
         b.HasIndex(x => x.CreatedAt);
+        b.HasIndex(x => x.IsTestAccount);
         b.HasMany(x => x.Roles).WithOne().HasForeignKey(r => r.UserId).OnDelete(DeleteBehavior.Cascade);
         b.Ignore(x => x.IsEmailVerified);
     }
@@ -52,6 +53,23 @@ internal sealed class RefreshTokenConfiguration : IEntityTypeConfiguration<Refre
         b.Property(x => x.CreatedByIp).HasMaxLength(64);
         b.Property(x => x.UserAgent).HasMaxLength(300);
         b.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
+    }
+}
+
+internal sealed class ImpersonationSessionConfiguration : IEntityTypeConfiguration<ImpersonationSession>
+{
+    public void Configure(EntityTypeBuilder<ImpersonationSession> b)
+    {
+        b.ToTable("impersonation_sessions");
+        b.Property(x => x.Reason).HasMaxLength(500).IsRequired();
+        b.Property(x => x.TokenHash).HasMaxLength(64).IsFixedLength().IsRequired();
+        b.HasIndex(x => x.TokenHash).IsUnique();
+        b.HasIndex(x => new { x.ImpersonatorUserId, x.EndedAt });
+        b.HasIndex(x => x.TargetUserId);
+        b.Property(x => x.EndedReason).HasMaxLength(40);
+        b.Property(x => x.IpAddress).HasMaxLength(64);
+        b.HasOne<User>().WithMany().HasForeignKey(x => x.ImpersonatorUserId).OnDelete(DeleteBehavior.Restrict);
+        b.HasOne<User>().WithMany().HasForeignKey(x => x.TargetUserId).OnDelete(DeleteBehavior.Restrict);
     }
 }
 

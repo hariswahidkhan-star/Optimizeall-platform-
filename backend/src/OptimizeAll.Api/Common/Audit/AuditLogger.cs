@@ -18,7 +18,11 @@ public interface IAuditLogger
     void RecordSystem(string action, string entityType, object entityId, object? after = null, string? reason = null);
 }
 
-public sealed class AuditLogger(AppDbContext db, ICurrentUser currentUser, TimeProvider clock) : IAuditLogger
+/// <remarks>
+/// During an impersonation session the actor is the impersonated user and <see cref="AuditLog.ImpersonatorUserId"/> the
+/// staff member acting as them ("Admin X as User Y"); <see cref="AuditLog.ActorType"/> is then "impersonation".
+/// </remarks>
+public sealed class AuditLogger(AppDbContext db, ICurrentUser currentUser, IImpersonationContext impersonation, TimeProvider clock) : IAuditLogger
 {
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
     {
@@ -31,11 +35,14 @@ public sealed class AuditLogger(AppDbContext db, ICurrentUser currentUser, TimeP
     public void Record(string action, string entityType, object entityId, object? before = null, object? after = null, string? reason = null)
     {
         var roles = currentUser.Roles;
+        var impersonatorId = currentUser.IsAuthenticated ? impersonation.ImpersonatorId : null;
         db.Set<AuditLog>().Add(new AuditLog
         {
             CreatedAt = clock.GetUtcNow().UtcDateTime,
             ActorUserId = currentUser.IdOrNull,
+            ImpersonatorUserId = impersonatorId,
             ActorType = !currentUser.IsAuthenticated ? "anonymous"
+                : impersonatorId is not null ? "impersonation"
                 : roles.Contains(OptimizeAll.Domain.Identity.Role.Admin) ? "Admin"
                 : roles.Count > 0 ? roles.First().ToString() : "user",
             Action = action,

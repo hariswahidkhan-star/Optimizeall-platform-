@@ -109,7 +109,10 @@ public sealed class TrackingService(AppDbContext db, MarketingUrls urls, TimePro
     public async Task<TrackingSummaryDto> SummaryAsync(Guid? campaignId, DateRange range, CancellationToken ct)
     {
         var (start, end) = (range.From, range.To);
-        var links = db.Set<TrackingLink>().AsNoTracking().Where(l => campaignId == null || l.CampaignId == campaignId);
+        // Test accounts' links are left out of the KPIs and the top-participants leaderboard.
+        var testUsers = db.Set<User>().Where(u => u.IsTestAccount).Select(u => u.Id);
+        var links = db.Set<TrackingLink>().AsNoTracking().Where(l => (campaignId == null || l.CampaignId == campaignId) &&
+            (l.UserId == null || !testUsers.Contains(l.UserId.Value)));
         var clicks = from k in db.Set<TrackingClick>().AsNoTracking()
                      join l in links on k.TrackingLinkId equals l.Id
                      where k.ClickedAt >= start && k.ClickedAt <= end

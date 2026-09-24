@@ -36,6 +36,12 @@ public interface ITokenService
 {
     IssuedAccessToken CreateAccessToken(User user);
 
+    /// <summary>
+    /// An access token for <paramref name="user"/> acting under an impersonation session: it carries the session id and
+    /// the impersonator (<see cref="ImpersonationClaims"/>) and never outlives the session.
+    /// </summary>
+    IssuedAccessToken CreateAccessToken(User user, ImpersonationGrant impersonation);
+
     /// <summary>Creates an opaque random token and returns (raw token, SHA-256 hash). Only the hash is persisted.</summary>
     (string Raw, string Hash) CreateOpaqueToken();
 
@@ -46,10 +52,15 @@ public sealed class TokenService(IOptions<JwtOptions> options, TimeProvider cloc
 {
     private readonly JwtOptions _options = options.Value;
 
-    public IssuedAccessToken CreateAccessToken(User user)
+    public IssuedAccessToken CreateAccessToken(User user) => Create(user, null);
+
+    public IssuedAccessToken CreateAccessToken(User user, ImpersonationGrant impersonation) => Create(user, impersonation);
+
+    private IssuedAccessToken Create(User user, ImpersonationGrant? impersonation)
     {
         var now = clock.GetUtcNow().UtcDateTime;
         var expires = now.AddMinutes(_options.AccessTokenMinutes);
+        if (impersonation is not null && impersonation.SessionExpiresAt < expires) expires = impersonation.SessionExpiresAt;
 
         var claims = new List<Claim>
         {
@@ -59,6 +70,12 @@ public sealed class TokenService(IOptions<JwtOptions> options, TimeProvider cloc
             new(AppClaims.EmailVerified, user.IsEmailVerified ? "1" : "0"),
         };
         claims.AddRange(user.Roles.Select(r => new Claim(AppClaims.Role, r.Role.ToString())));
+        if (impersonation is not null)
+        {
+            claims.Add(new Claim(ImpersonationClaims.SessionId, impersonation.SessionId.ToString()));
+            claims.Add(new Claim(ImpersonationClaims.ActorId, impersonation.ImpersonatorId.ToString()));
+            claims.Add(new Claim(ImpersonationClaims.ActorName, impersonation.ImpersonatorName));
+        }
 
         var token = new JwtSecurityToken(
             issuer: _options.Issuer,

@@ -181,14 +181,15 @@ public sealed class PayoutBatchService(
         var userIds = earnings.Select(e => e.UserId).Distinct().ToList();
 
         var users = await db.Set<User>().AsNoTracking().Where(u => userIds.Contains(u.Id))
-            .Select(u => new { u.Id, u.Status }).ToListAsync(ct);
+            .Select(u => new { u.Id, u.Status, u.IsTestAccount }).ToListAsync(ct);
         var held = (await db.Set<PayoutHold>().AsNoTracking()
             .Where(h => userIds.Contains(h.UserId) && h.ReleasedAt == null).Select(h => h.UserId).ToListAsync(ct)).ToHashSet();
         var withProfile = (await db.Set<PayoutProfile>().AsNoTracking()
             .Where(p => userIds.Contains(p.UserId)).Select(p => p.UserId).ToListAsync(ct)).ToHashSet();
 
         var participants = users.ToDictionary(u => u.Id,
-            u => new PlannerParticipant(u.Id, u.Status == UserStatus.Active, held.Contains(u.Id), withProfile.Contains(u.Id)));
+            u => new PlannerParticipant(u.Id, u.Status == UserStatus.Active, held.Contains(u.Id), withProfile.Contains(u.Id),
+                IsTestAccount: u.IsTestAccount));
         return PayoutPlanner.Plan(earnings, participants, minimum, currency);
     }
 

@@ -13,6 +13,12 @@ public sealed class DevToolsOptions
 
     /// <summary>Exposes the file-mode mailbox over HTTP for staging demos and E2E tests. Refused in Production.</summary>
     public bool MailboxEnabled { get; set; }
+
+    /// <summary>
+    /// One-click sign-in as a test or demo account on the login page (<c>/api/v1/dev/test-login</c>). Only honoured
+    /// outside Production, whatever this says.
+    /// </summary>
+    public bool TestLoginEnabled { get; set; }
 }
 
 /// <summary>

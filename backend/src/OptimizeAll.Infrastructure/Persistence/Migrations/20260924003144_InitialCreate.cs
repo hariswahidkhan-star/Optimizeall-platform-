@@ -76,6 +76,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
                     ActorUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    ImpersonatorUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     ActorType = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Action = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
@@ -964,6 +965,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     SecurityVersion = table.Column<int>(type: "int", nullable: false),
                     PermissionVersion = table.Column<int>(type: "int", nullable: false),
                     ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    IsTestAccount = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
                 },
@@ -1491,6 +1493,44 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         principalTable: "users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "impersonation_sessions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ImpersonatorUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    TargetUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Reason = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TokenHash = table.Column<string>(type: "char(64)", fixedLength: true, maxLength: 64, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ImpersonatorSecurityVersion = table.Column<int>(type: "int", nullable: false),
+                    StartedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    ExpiresAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    EndedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    EndedReason = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IpAddress = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_impersonation_sessions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_impersonation_sessions_users_ImpersonatorUserId",
+                        column: x => x.ImpersonatorUserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_impersonation_sessions_users_TargetUserId",
+                        column: x => x.TargetUserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -8041,6 +8081,11 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 columns: new[] { "EntityType", "EntityId" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_audit_logs_ImpersonatorUserId",
+                table: "audit_logs",
+                column: "ImpersonatorUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_billing_number_sequences_Key",
                 table: "billing_number_sequences",
                 column: "Key",
@@ -8879,6 +8924,22 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "IX_hourly_rates_UserId",
                 table: "hourly_rates",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_impersonation_sessions_ImpersonatorUserId_EndedAt",
+                table: "impersonation_sessions",
+                columns: new[] { "ImpersonatorUserId", "EndedAt" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_impersonation_sessions_TargetUserId",
+                table: "impersonation_sessions",
+                column: "TargetUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_impersonation_sessions_TokenHash",
+                table: "impersonation_sessions",
+                column: "TokenHash",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_integration_connections_ClientAccountId",
@@ -9869,6 +9930,11 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 column: "CreatedAt");
 
             migrationBuilder.CreateIndex(
+                name: "IX_users_IsTestAccount",
+                table: "users",
+                column: "IsTestAccount");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_users_NormalizedEmail",
                 table: "users",
                 column: "NormalizedEmail",
@@ -10322,6 +10388,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "hourly_rates");
+
+            migrationBuilder.DropTable(
+                name: "impersonation_sessions");
 
             migrationBuilder.DropTable(
                 name: "integration_connections");

@@ -5,6 +5,7 @@ import { axeViolations } from '@/test/render';
 import type { AuditLogEntry } from '../api/types';
 import { changedPaths, diffLines, JsonDiff } from '../shared/JsonDiff';
 import { json, mockAdminApi, renderAdmin } from '../test/helpers';
+import { AuditEntry } from './AuditEntry';
 import { AuditLogPage } from './AuditLogPage';
 
 const entry: AuditLogEntry = {
@@ -107,5 +108,27 @@ describe('Audit log page', () => {
     await user.type(screen.getByLabelText('Actor user id'), 'not-a-guid');
     await user.click(screen.getByRole('button', { name: 'Apply filters' }));
     expect(screen.getByLabelText('Actor user id')).toHaveAttribute('aria-invalid', 'true');
+  });
+});
+
+describe('Audit entry — impersonation', () => {
+  it('reads "impersonator as user" for actions taken while viewing as someone else', () => {
+    render(
+      <ul>
+        <AuditEntry
+          entry={{
+            ...entry,
+            actorUserId: 'u-42',
+            actorEmail: 'jane@example.com',
+            actorDisplayName: 'Jane Doe',
+            actorType: 'impersonation',
+            action: 'impersonation.request',
+            impersonatorUserId: 'admin-1',
+            impersonatorDisplayName: 'Platform Admin',
+          }}
+        />
+      </ul>,
+    );
+    expect(screen.getByText(/Platform Admin as Jane Doe/)).toBeInTheDocument();
   });
 });

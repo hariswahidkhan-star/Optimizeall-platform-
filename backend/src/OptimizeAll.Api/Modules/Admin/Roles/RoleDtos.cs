@@ -4,7 +4,7 @@ namespace OptimizeAll.Api.Modules.Admin.Roles;
 
 public sealed record BuiltInRoleDto(string Name, string Label, IReadOnlyList<string> Permissions, int UserCount);
 
-/// <param name="CanManage">True when the caller may edit, delete, assign and unassign this role (see the guardrails).</param>
+/// <summary>A custom role; <c>CanManage</c> is true when the caller may edit, delete, assign and unassign it (see the guardrails).</summary>
 public sealed record CustomRoleDto(
     Guid Id, string Name, string? Description, IReadOnlyList<string> Permissions, bool IsSystem, int UserCount,
     DateTime CreatedAt, Guid? CreatedByUserId, string? CreatedByName, DateTime UpdatedAt, Guid ConcurrencyStamp, bool CanManage);
@@ -19,6 +19,7 @@ public sealed record PermissionInfoDto(string Key, string Label, string Descript
 
 public sealed record PermissionAreaDto(string Area, IReadOnlyList<PermissionInfoDto> Permissions);
 
+/// <param name="Areas">Permissions grouped by area.</param>
 /// <param name="CallerIsAdmin">Whether the caller holds the built-in Admin role (needed to grant admin-only permissions).</param>
 public sealed record PermissionCatalogDto(IReadOnlyList<PermissionAreaDto> Areas, bool CallerIsAdmin);
 

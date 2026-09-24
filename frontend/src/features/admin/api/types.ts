@@ -68,6 +68,8 @@ export interface AdminUserListItem {
   emailVerified: boolean;
   createdAt: IsoDateTime;
   lastActiveAt: IsoDateTime | null;
+  /** QA/demo account: never paid, left out of KPIs. */
+  isTestAccount?: boolean;
 }
 
 export interface AdminUserProfile {
@@ -91,6 +93,7 @@ export interface AdminUserProfile {
   lastLoginAt: IsoDateTime | null;
   lastActiveAt: IsoDateTime | null;
   createdAt: IsoDateTime;
+  isTestAccount?: boolean;
 }
 
 export interface StatusHistoryEntry {
@@ -205,6 +208,9 @@ export interface AuditLogEntry {
   reason: string | null;
   ipAddress: string | null;
   correlationId: string | null;
+  /** Set when the action was taken while impersonating: read the actor as "impersonator as actor". */
+  impersonatorUserId?: string | null;
+  impersonatorDisplayName?: string | null;
 }
 
 // ---------- Jobs & notifications ----------

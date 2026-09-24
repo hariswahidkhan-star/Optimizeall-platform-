@@ -6,7 +6,7 @@ namespace OptimizeAll.Domain.Payouts;
 public sealed record PlannerEarning(Guid EarningId, Guid UserId, decimal SettlementAmount);
 
 /// <summary>Per-user facts needed to decide whether a participant is paid in a batch.</summary>
-public sealed record PlannerParticipant(Guid UserId, bool IsActive, bool HasActiveHold, bool HasPayoutProfile);
+public sealed record PlannerParticipant(Guid UserId, bool IsActive, bool HasActiveHold, bool HasPayoutProfile, bool IsTestAccount = false);
 
 public enum PayoutExclusionReason
 {
@@ -18,6 +18,8 @@ public enum PayoutExclusionReason
     NonPositiveBalance,
     /// <summary>Net balance is below the schedule's minimum payout amount; carried over.</summary>
     BelowMinimum,
+    /// <summary>A test account (QA/demo): never paid, whatever its balance.</summary>
+    TestAccount,
 }
 
 public sealed record PlannedItem(Guid UserId, decimal Amount, IReadOnlyList<Guid> EarningIds, bool HeldForMissingPayoutProfile);
@@ -28,7 +30,7 @@ public sealed record PayoutPlan(IReadOnlyList<PlannedItem> Items, IReadOnlyList<
 
 /// <summary>
 /// Pure grouping rules for a payout batch. Per participant: net = Σ settlement amounts (credits and clawbacks).
-/// Precedence: active hold → inactive account → net ≤ 0 → net &lt; minimum → (missing payout profile ⇒ Held item)
+/// Precedence: test account → active hold → inactive account → net ≤ 0 → net &lt; minimum → (missing payout profile ⇒ Held item)
 /// → payable item. Amounts are rounded with <see cref="Money.Round"/> in the batch currency.
 /// </summary>
 public static class PayoutPlanner
@@ -52,6 +54,7 @@ public static class PayoutPlanner
             p ??= new PlannerParticipant(group.Key, IsActive: false, HasActiveHold: false, HasPayoutProfile: false);
 
             PayoutExclusionReason? reason =
+                p.IsTestAccount ? PayoutExclusionReason.TestAccount :
                 p.HasActiveHold ? PayoutExclusionReason.PayoutHold :
                 !p.IsActive ? PayoutExclusionReason.AccountInactive :
                 net <= 0 ? PayoutExclusionReason.NonPositiveBalance :

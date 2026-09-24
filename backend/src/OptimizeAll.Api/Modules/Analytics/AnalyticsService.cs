@@ -74,10 +74,12 @@ public sealed class AnalyticsService(AppDbContext db, ISettingsService settings)
         var (start, end) = (f.Range.From, f.Range.To);
         var cid = f.CampaignId;
         var platform = f.Platform;
+        // Test accounts (QA/demo) never count: not in the funnel, posts, spend, reach, clicks or conversions.
+        var testUsers = db.Set<User>().Where(u => u.IsTestAccount).Select(u => u.Id);
 
         // ---------- Funnel: cohort of participants registered in range ----------
         var cohort = db.Set<User>().AsNoTracking()
-            .Where(u => u.CreatedAt >= start && u.CreatedAt <= end && u.Roles.Any(r => r.Role == Role.Participant));
+            .Where(u => u.CreatedAt >= start && u.CreatedAt <= end && !u.IsTestAccount && u.Roles.Any(r => r.Role == Role.Participant));
         var registrations = await cohort.CountAsync(ct);
         var verified = await cohort.CountAsync(u => u.EmailVerifiedAt != null, ct);
         var withSocial = await cohort.CountAsync(u => db.Set<SocialAccount>().Any(s =>
@@ -99,7 +101,7 @@ public sealed class AnalyticsService(AppDbContext db, ISettingsService settings)
 
         // ---------- Posts: submissions made in range ----------
         var posts = db.Set<Submission>().AsNoTracking().Where(s => s.SubmittedAt >= start && s.SubmittedAt <= end &&
-            (cid == null || s.CampaignId == cid) && (platform == null || s.Platform == platform));
+            (cid == null || s.CampaignId == cid) && (platform == null || s.Platform == platform) && !testUsers.Contains(s.UserId));
         var statusCounts = await posts.GroupBy(s => s.Status).Select(g => new { g.Key, Count = g.Count() })
             .ToDictionaryAsync(x => x.Key, x => x.Count, ct);
         int S(SubmissionStatus status) => statusCounts.TryGetValue(status, out var c) ? c : 0;
@@ -159,7 +161,8 @@ public sealed class AnalyticsService(AppDbContext db, ISettingsService settings)
         // ---------- Traffic (measured) ----------
         var clicks = from k in db.Set<TrackingClick>().AsNoTracking()
                      join l in db.Set<TrackingLink>() on k.TrackingLinkId equals l.Id
-                     where k.ClickedAt >= start && k.ClickedAt <= end && (cid == null || l.CampaignId == cid)
+                     where k.ClickedAt >= start && k.ClickedAt <= end && (cid == null || l.CampaignId == cid) &&
+                           (l.UserId == null || !testUsers.Contains(l.UserId.Value))
                      select new { l.CampaignId, k.IsSuspectedBot, k.IsUnique, k.ClickedAt };
         var clicksByCampaign = await clicks.GroupBy(x => x.CampaignId).Select(g => new
         {
@@ -182,7 +185,8 @@ public sealed class AnalyticsService(AppDbContext db, ISettingsService settings)
         // ---------- Conversions (measured, signature-verified only) ----------
         var conversions = from v in db.Set<TrackingConversion>().AsNoTracking()
                           join l in db.Set<TrackingLink>() on v.TrackingLinkId equals l.Id
-                          where v.VerifiedAt != null && v.OccurredAt >= start && v.OccurredAt <= end && (cid == null || l.CampaignId == cid)
+                          where v.VerifiedAt != null && v.OccurredAt >= start && v.OccurredAt <= end && (cid == null || l.CampaignId == cid) &&
+                                (l.UserId == null || !testUsers.Contains(l.UserId.Value))
                           select new { l.CampaignId, v.Value, v.Currency };
         var conversionsByCampaign = await conversions.GroupBy(x => x.CampaignId)
             .Select(g => new { CampaignId = g.Key, Count = g.Count() }).ToListAsync(ct);
@@ -202,7 +206,8 @@ public sealed class AnalyticsService(AppDbContext db, ISettingsService settings)
         var subByDay = await posts.GroupBy(s => s.SubmittedAt.Date).Select(g => new { Day = g.Key, Count = g.Count() }).ToListAsync(ct);
         var apprByDay = await db.Set<Submission>().AsNoTracking()
             .Where(s => s.Status == SubmissionStatus.Approved && s.DecidedAt != null && s.DecidedAt >= start && s.DecidedAt <= end &&
-                        (cid == null || s.CampaignId == cid) && (platform == null || s.Platform == platform))
+                        (cid == null || s.CampaignId == cid) && (platform == null || s.Platform == platform) &&
+                        !testUsers.Contains(s.UserId))
             .GroupBy(s => s.DecidedAt!.Value.Date).Select(g => new { Day = g.Key, Count = g.Count() }).ToListAsync(ct);
         var clickByDay = await clicks.Where(x => !x.IsSuspectedBot).GroupBy(x => x.ClickedAt.Date)
             .Select(g => new { Day = g.Key, Count = g.Count() }).ToListAsync(ct);

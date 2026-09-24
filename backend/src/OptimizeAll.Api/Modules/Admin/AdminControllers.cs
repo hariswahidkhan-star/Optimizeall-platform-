@@ -6,6 +6,7 @@ namespace OptimizeAll.Api.Modules.Admin;
 
 [ApiController]
 [Route("api/v1/admin/users")]
+[DeniedWhileImpersonating(WritesOnly = true)]
 public sealed class AdminUsersController(AdminUsersService users) : ControllerBase
 {
     [HttpGet]

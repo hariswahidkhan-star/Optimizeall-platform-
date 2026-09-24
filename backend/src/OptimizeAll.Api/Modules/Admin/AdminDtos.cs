@@ -25,17 +25,19 @@ public sealed class AdminUserQuery : PageQuery
     /// <summary>Only users holding this permission through a built-in or custom role (e.g. support.manage for assignee pickers).</summary>
     [MaxLength(64)]
     public string? Permission { get; set; }
+    /// <summary>true: only test accounts; false: only real accounts; omitted: both.</summary>
+    public bool? IsTestAccount { get; set; }
 }
 
 public sealed record AdminUserListItemDto(
     Guid Id, string Email, string DisplayName, string CountryCode, UserStatus Status, ParticipantTier Tier,
-    IReadOnlyList<Role> Roles, bool EmailVerified, DateTime CreatedAt, DateTime? LastActiveAt);
+    IReadOnlyList<Role> Roles, bool EmailVerified, DateTime CreatedAt, DateTime? LastActiveAt, bool IsTestAccount = false);
 
 public sealed record AdminUserProfileDto(
     Guid Id, string Email, string DisplayName, string CountryCode, string LanguageCode, string TimeZone,
     IReadOnlyList<string> Interests, UserStatus Status, string? StatusReason, DateTime? StatusChangedAt, ParticipantTier Tier,
     string ReferralCode, bool EmailVerified, DateTime? EmailVerifiedAt, bool MarketingEmailOptIn, bool WhatsAppOptIn,
-    string? WhatsAppNumberHint, DateTime? LastLoginAt, DateTime? LastActiveAt, DateTime CreatedAt);
+    string? WhatsAppNumberHint, DateTime? LastLoginAt, DateTime? LastActiveAt, DateTime CreatedAt, bool IsTestAccount = false);
 
 public sealed record StatusHistoryDto(DateTime At, string Action, Guid? ActorUserId, string? ActorDisplayName, string? Reason);
 
@@ -145,7 +147,8 @@ public sealed class AuditLogQuery : PageQuery
 public sealed record AuditLogDto(
     long Id, DateTime CreatedAt, Guid? ActorUserId, string? ActorEmail, string? ActorDisplayName, string ActorType,
     string Action, string EntityType, string EntityId, JsonElement? Before, JsonElement? After, string? Reason,
-    string? IpAddress, string? CorrelationId);
+    string? IpAddress, string? CorrelationId,
+    Guid? ImpersonatorUserId = null, string? ImpersonatorDisplayName = null);
 
 // ---------- Jobs ----------
 

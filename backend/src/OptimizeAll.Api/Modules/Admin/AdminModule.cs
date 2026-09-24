@@ -7,6 +7,7 @@ public static class AdminModule
     {
         services.AddScoped<AuditLogService>();
         services.AddScoped<AdminUsersService>();
+        services.AddScoped<TestUsersService>();
         services.AddScoped<AdminSettingsService>();
         services.AddScoped<AdminJobsService>();
         services.AddScoped<Roles.AdminRolesService>();

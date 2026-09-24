@@ -35,6 +35,7 @@ public sealed class MyEarningsController(AppDbContext db, IEarningsSummaryServic
 /// <summary>Finance ledger: search, export, balances, adjustments and reversals.</summary>
 [ApiController]
 [Route("api/v1/finance")]
+[DeniedWhileImpersonating(WritesOnly = true)]
 public sealed class FinanceLedgerController(
     AppDbContext db, IEarningsSummaryService summaries, LedgerAdminService service) : ControllerBase
 {
@@ -84,6 +85,7 @@ public sealed class FinanceLedgerController(
 [ApiController]
 [Route("api/v1/finance/pending-earnings")]
 [HasPermission(Permissions.RewardsApproveBonus)]
+[DeniedWhileImpersonating(WritesOnly = true)]
 public sealed class PendingEarningsController(AppDbContext db, LedgerAdminService service) : ControllerBase
 {
     [HttpGet]
@@ -131,6 +133,7 @@ public sealed class PendingEarningsController(AppDbContext db, LedgerAdminServic
 /// <summary>Immutable exchange-rate history used to convert earnings into the settlement currency.</summary>
 [ApiController]
 [Route("api/v1/finance/exchange-rates")]
+[DeniedWhileImpersonating(WritesOnly = true)]
 public sealed class ExchangeRatesController(AppDbContext db, LedgerAdminService service) : ControllerBase
 {
     [HttpGet]

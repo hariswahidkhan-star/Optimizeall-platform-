@@ -64,6 +64,8 @@ services.Configure<DatabaseOptions>(config.GetSection(DatabaseOptions.Section));
 services.Configure<BootstrapOptions>(config.GetSection(BootstrapOptions.Section));
 services.Configure<JobOptions>(config.GetSection(JobOptions.Section));
 services.Configure<DevToolsOptions>(config.GetSection(DevToolsOptions.Section));
+services.Configure<ImpersonationOptions>(config.GetSection(ImpersonationOptions.Section));
+services.Configure<TestAccountOptions>(config.GetSection(TestAccountOptions.Section));
 
 // ---------- Persistence ----------
 services.AddSingleton(TimeProvider.System);
@@ -124,6 +126,13 @@ services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
                     context.Fail("session revoked");
                     return;
                 }
+                // Impersonation tokens die with their session (exit, expiry, impersonator signed out or suspended).
+                var now = context.HttpContext.RequestServices.GetRequiredService<TimeProvider>().GetUtcNow().UtcDateTime;
+                if (!await Impersonation.IsTokenStillValidAsync(context.Principal!, userId, db, now, context.HttpContext.RequestAborted))
+                {
+                    context.Fail("impersonation ended");
+                    return;
+                }
                 // Effective permissions (built-in + custom roles) for this request, keyed by the current permission version.
                 context.HttpContext.Items[PermissionResolver.PermissionVersionItem] = (userId, state.PermissionVersion);
                 await context.HttpContext.RequestServices.GetRequiredService<IPermissionResolver>()
@@ -155,6 +164,7 @@ services.AddAuthorization(options =>
 
 services.AddHttpContextAccessor();
 services.AddScoped<ICurrentUser, HttpCurrentUser>();
+services.AddScoped<IImpersonationContext, HttpImpersonationContext>();
 services.AddScoped<IClientScope, ClientScope>();
 services.AddScoped<ICredentialVault, CredentialVault>();
 services.AddSingleton<ITokenService, TokenService>();
@@ -183,6 +193,7 @@ services.AddScoped<ILedgerWriter, LedgerWriter>();
 services.AddSingleton<JobRunner>();
 services.AddScoped<IAuthService, AuthService>();
 services.AddGoogleSignIn(config);
+services.AddScoped<ImpersonationService>();
 
 services.AddSingleton<SmtpEmailSender>();
 services.AddSingleton<FileEmailSender>();
@@ -293,6 +304,7 @@ if (app.Configuration.GetValue("Swagger:Enabled", !app.Environment.IsProduction(
 
 app.UseCors();
 app.UseAuthentication();
+app.UseMiddleware<ImpersonationAuditMiddleware>();
 app.UseRateLimiter();
 app.UseAuthorization();
 

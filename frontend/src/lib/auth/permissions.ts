@@ -34,6 +34,7 @@ export const Permissions = {
   UsersSuspend: 'users.suspend',
   RolesAssign: 'roles.assign',
   RolesManage: 'roles.manage',
+  UsersImpersonate: 'users.impersonate',
   ContentManage: 'content.manage',
   SettingsManage: 'settings.manage',
   SupportManage: 'support.manage',

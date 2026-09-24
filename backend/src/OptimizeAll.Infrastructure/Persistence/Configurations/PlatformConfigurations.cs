@@ -155,6 +155,7 @@ internal sealed class AuditLogConfiguration : IEntityTypeConfiguration<AuditLog>
         b.HasIndex(x => x.CreatedAt);
         b.HasIndex(x => new { x.EntityType, x.EntityId });
         b.HasIndex(x => x.ActorUserId);
+        b.HasIndex(x => x.ImpersonatorUserId);
         b.HasIndex(x => x.Action);
     }
 }

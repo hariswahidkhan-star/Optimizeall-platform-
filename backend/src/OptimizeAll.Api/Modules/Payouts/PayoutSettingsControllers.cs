@@ -20,6 +20,7 @@ namespace OptimizeAll.Api.Modules.Payouts;
 /// <summary>Versioned payout schedule (frequency, cutoff, minimum, settlement currency, hold period).</summary>
 [ApiController]
 [Route("api/v1/finance/payout-schedule")]
+[DeniedWhileImpersonating(WritesOnly = true)]
 public sealed class PayoutScheduleController(
     AppDbContext db, IPayoutScheduleProvider schedules, IAuditLogger audit, ICurrentUser currentUser, TimeProvider clock) : ControllerBase
 {
@@ -107,6 +108,7 @@ public sealed class PayoutScheduleController(
 [ApiController]
 [Route("api/v1/finance/holds")]
 [HasPermission(Permissions.PayoutsHold)]
+[DeniedWhileImpersonating(WritesOnly = true)]
 public sealed class PayoutHoldsController(
     AppDbContext db, IAuditLogger audit, INotificationService notifications, ICurrentUser currentUser, TimeProvider clock) : ControllerBase
 {

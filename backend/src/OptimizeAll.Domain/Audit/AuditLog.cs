@@ -10,6 +10,12 @@ public class AuditLog
     public DateTime CreatedAt { get; set; }
     public Guid? ActorUserId { get; set; }
 
+    /// <summary>
+    /// Set when the action was performed during an impersonation session: the staff member who was "viewing as"
+    /// <see cref="ActorUserId"/>. Read the actor as "impersonator as actor".
+    /// </summary>
+    public Guid? ImpersonatorUserId { get; set; }
+
     /// <summary>"system" for background jobs, otherwise the actor's primary role at the time.</summary>
     public string ActorType { get; set; } = "user";
 

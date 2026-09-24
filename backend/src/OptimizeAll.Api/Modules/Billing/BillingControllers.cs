@@ -89,6 +89,7 @@ public sealed class AgencyInvoicesController(InvoiceService invoices, PaymentSer
     /// <summary>Records a manual payment. Idempotent by <c>requestId</c>; 409 on overpayment or a stale invoice stamp.</summary>
     [HttpPost("{id:guid}/payments")]
     [HasPermission(Permissions.BillingManage)]
+    [DeniedWhileImpersonating]
     public async Task<IActionResult> RecordPayment(Guid id, RecordPaymentRequest request, CancellationToken ct)
     {
         var result = await payments.RecordAsync(id, request, ct);
@@ -99,6 +100,7 @@ public sealed class AgencyInvoicesController(InvoiceService invoices, PaymentSer
 [ApiController]
 [Route("api/v1/agency/billing/payments")]
 [HasPermission(Permissions.BillingView)]
+[DeniedWhileImpersonating(WritesOnly = true)]
 public sealed class AgencyPaymentsController(PaymentService payments) : ControllerBase
 {
     [HttpGet]
@@ -108,6 +110,7 @@ public sealed class AgencyPaymentsController(PaymentService payments) : Controll
 [ApiController]
 [Route("api/v1/agency/billing/credit-notes")]
 [HasPermission(Permissions.BillingView)]
+[DeniedWhileImpersonating(WritesOnly = true)]
 public sealed class AgencyCreditNotesController(CreditNoteService creditNotes) : ControllerBase
 {
     [HttpGet]
@@ -360,6 +363,7 @@ public sealed class ClientBillingController(ClientBillingService billing) : Cont
 
     /// <summary>Online payment through the configured gateway; reports "not available" when none is configured.</summary>
     [HttpPost("invoices/{id:guid}/pay")]
+    [DeniedWhileImpersonating]
     public Task<OnlinePaymentDto> Pay(Guid id, CancellationToken ct) => billing.PayOnlineAsync(id, ct);
 
     [HttpGet("payment-instructions")]

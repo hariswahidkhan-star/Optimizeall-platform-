@@ -92,8 +92,8 @@ attribute is never public by accident. Only these endpoints carry an explicit `[
   (HMAC-signed), the tracking redirect `GET /t/{code}`;
 * `GET /files/{id}` (the handler checks access per file, see § 5), `GET /campaign-categories`, `GET /content/faqs`,
   `GET /meta/currencies`;
-* the dev mailbox `GET /dev/mailbox` (404 unless enabled outside Production) and the health checks
-  `/health/live`, `/health/ready`.
+* the dev mailbox `GET /dev/mailbox` (404 unless enabled outside Production), the non-production test sign-in
+  `GET /dev/test-accounts` / `POST /dev/test-login` (§ 2.2) and the health checks `/health/live`, `/health/ready`.
 
 **`users.view` for staff.** Reviewers, campaign managers and finance hold `users.view` so they can look people up
 while doing their job (a reviewer checking a participant's history, finance resolving a hold, a manager answering a
@@ -131,6 +131,7 @@ any permission that opens one of its sections, but post-login landing there is r
 | `users.suspend` | | | | | ✓ |
 | `roles.assign` | | | | | ✓ |
 | `roles.manage` *(sensitive)* | | | | | ✓ |
+| `users.impersonate` *(sensitive)* | | | | | ✓ |
 | `content.manage` | | | | | ✓ |
 | `settings.manage` | | | | | ✓ |
 | `support.manage` | | ✓ | | | ✓ |
@@ -172,6 +173,60 @@ review assignees, notification recipients).
   `User`, before/after list of the user's custom roles).
 * The permission catalog (`GET /admin/roles/catalog`, `Common/Security/PermissionCatalog.cs`) groups every permission
   by area with a label and description; a unit test fails when a new permission has no catalog entry.
+### 2.1 Impersonation ("Log in as user")
+
+Support and QA sometimes need to see exactly what a user sees. `POST /api/v1/admin/users/{id}/impersonate`
+(`users.impersonate`, Admin only by default; `reason` of 5+ characters and `"confirm": true`; the UI also asks for the
+target's email to be typed) starts a time-boxed session:
+
+* **Who can be impersonated.** Not yourself (`admin.impersonation_self`), not Admins or anyone whose effective permissions (built-in or custom roles) include
+  `users.impersonate` (`admin.impersonation_target_forbidden`), not suspended/deactivated accounts
+  (`admin.impersonation_target_inactive`, 409 — reactivate first). Starting a new session ends the caller's previous one.
+* **Session design.** An `impersonation_sessions` row (impersonator, target, reason, SHA-256 of an opaque token,
+  impersonator's security version, 60-minute hard expiry `Impersonation:SessionMinutes`, capped at 60) and a separate
+  HttpOnly cookie `oa_impersonation` (same flags and path as `oa_refresh`). The staff member's own refresh cookie is
+  **kept and not rotated**, so their session is preserved. Access tokens for the target carry `imp_sid` (session id),
+  `act_sub` (impersonator id) and `act_name` (impersonator name — RFC 8693 "act" semantics, flattened), and expire at
+  the earlier of the normal 15 minutes and the session end. `POST /auth/refresh` first resumes a live impersonation —
+  only together with a live, unrevoked refresh token **of the impersonator** — otherwise drops the impersonation
+  cookie and refreshes the staff member's own session. Sessions are never extended.
+* **Validation on every request.** An impersonation token is accepted only while its session exists for that subject
+  and impersonator, is not ended or expired, and the impersonator is still active with the same security version
+  (suspending the impersonator, changing their password or signing them out ends it immediately). Logging out ends it.
+* **Exit.** `POST /api/v1/auth/impersonation/exit` ends the session (audited `admin.impersonation_ended`), clears the
+  cookie and returns the staff member's own session from their refresh cookie (idempotent; 401 if that is gone too).
+  The web app shows a persistent high-contrast banner in every layout ("You are viewing as Jane Doe (participant) —
+  Exit", with TEST for test accounts); Exit lands on Admin → Users.
+* **Blocked while impersonating** (403 `auth.impersonation_forbidden_action`, `[DeniedWhileImpersonating]`): changing
+  the password (and any future email/2FA change endpoints must carry the attribute too), changing the payout
+  destination, every write of payout batches (prepare, hold, finalize, dispatch, record payment, mark failed), payout
+  schedule and holds, ledger adjustments/reversals, pending-earning approvals, exchange rates, the decrypted payment
+  instructions export, invoice payment recording, client online payment, agency payments and credit notes,
+  integration credentials (API keys), user/role/status administration and test-user management, and starting another
+  impersonation. Reads stay available so the impersonator can see what the user sees.
+* **Audit.** `admin.impersonation_started` (with the reason) and `admin.impersonation_ended` are recorded; every
+  business audit row written during the session has `ActorUserId` = the user and `ImpersonatorUserId` = the staff
+  member (`ActorType` "impersonation"; the audit log UI and CSV show "Admin X as User Y"); and every state-changing
+  request made with an impersonation token, including refused ones, is recorded as `impersonation.request` (method,
+  path, status) on the impersonated user.
+
+### 2.2 Test accounts and the non-production test sign-in
+
+* **Test users** (`users.manage`; staff roles additionally need `roles.assign`): `POST /api/v1/admin/test-users` creates
+  a verified account with `User.IsTestAccount = true`, any role(s), optional client organization membership for the
+  Client role, a generated email `test+<slug>-<random>@<TestAccounts:EmailDomain>` and a random password returned
+  **once** (never stored in clear, never audited). The flag can only be set at creation — no endpoint changes it on an
+  existing account. `DELETE /api/v1/admin/test-users/{id}` deactivates a test account (409 for real accounts).
+  Admin lists filter with `?isTestAccount=true|false` and label them TEST.
+* **Excluded from money and metrics.** Payout batch planning excludes test accounts first (`PayoutExclusionReason.TestAccount`:
+  they are never paid and their earnings stay unattached); analytics (funnel, posts, spend, reach, clicks,
+  conversions, time series) and the marketing tracking summary/leaderboard ignore test accounts and their links.
+* **One-click test sign-in** (`GET /api/v1/dev/test-accounts`, `POST /api/v1/dev/test-login`, anonymous): answers 404
+  unless `DevTools:TestLoginEnabled` is true **and** the environment is not Production (both checks, so a copied
+  configuration cannot enable it in production). It lists and signs in only active test accounts and seeded demo
+  accounts (`@demo.optimizeall.app` and client subdomains); any other account gets 404. It issues an ordinary session
+  and is audited as `auth.test_login`. Enabled by default only in `appsettings.Development.json` and
+  `appsettings.Staging.json`; keep it off on any environment reachable by real users.
 
 ## 3. Rate limiting and abuse controls
 
@@ -281,7 +336,8 @@ review assignees, notification recipients).
   in the **same transaction** as the change they describe.
 * Audited: campaign edits and publishing, reward rule changes, review decisions and reversals, appeals, ledger
   adjustments, payout batch actions (prepare, hold, finalize, record payment, cancel), payout settings, role
-  grants, suspensions, settings changes, lockouts.
+  grants, suspensions, settings changes, lockouts, impersonation (start/end, every write made while impersonating,
+  with the impersonator in `ImpersonatorUserId`), test-user creation/deletion and test sign-ins.
 * Viewable/exportable by `audit.view`. Retain at least as long as financial records. For stronger tamper
   evidence, ship audit rows to a write-once store (e.g. object storage with object lock) as well.
 

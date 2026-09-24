@@ -50,6 +50,7 @@ export const EXCLUSION_LABELS: Record<PayoutExclusionReason, { label: string; he
     label: 'Below minimum',
     help: 'Below the minimum payout amount; carried over to a later batch.',
   },
+  TestAccount: { label: 'Test account', help: 'Test accounts are never paid.' },
 };
 
 export function exclusionLabel(reason: string): string {
