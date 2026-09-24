@@ -14,6 +14,8 @@ export interface AuthContextValue {
    * the sign-in page is reached, so guards that redirect to /login keep the "session expired" notice (`expired=1`).
    */
   sessionExpired: boolean;
+  /** True from a deliberate sign-out until the sign-in page is reached, so guards redirect to /login?signedOut=1. */
+  signedOut: boolean;
   hasPermission: (permission: string) => boolean;
   hasAnyPermission: (permissions: readonly string[]) => boolean;
   login: (email: string, password: string) => Promise<SessionUser>;

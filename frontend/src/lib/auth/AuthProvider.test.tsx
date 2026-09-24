@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { api, tokenStore } from '@/lib/api/client';
 import { json, makeUser, mockFetch, problem, session } from '@/test/fetchMock';
+import { RequireAuth } from '@/app/guards';
 import { renderWithApp } from '@/test/render';
 import { useAuth } from './useAuth';
 
@@ -76,5 +77,24 @@ describe('AuthProvider', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/login'));
     expect(calls.some((c) => c.path === '/auth/logout')).toBe(true);
     expect(tokenStore.get()).toBeNull();
+  });
+
+  it("signing out from a protected page lands on /login?signedOut=1, not on the guard's ?next= redirect", async () => {
+    mockFetch({
+      'POST /auth/refresh': () => json(200, session()),
+      'POST /auth/logout': () => new Response(null, { status: 204 }),
+    });
+    const { router } = renderWithApp(
+      <RequireAuth>
+        <Probe />
+      </RequireAuth>,
+      { route: '/app/earnings', path: '/app/*', routes: [{ path: '/login', element: <p>login page</p> }] },
+    );
+    await screen.findByText('status:authenticated');
+
+    await userEvent.click(screen.getByRole('button', { name: 'sign out' }));
+
+    expect(await screen.findByText('login page')).toBeInTheDocument();
+    await waitFor(() => expect(router.state.location.search).toBe('?signedOut=1'));
   });
 });

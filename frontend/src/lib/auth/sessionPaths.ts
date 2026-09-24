@@ -3,5 +3,8 @@ export function loginPathAfterExpiry(next: string): string {
   return `/login?expired=1&next=${encodeURIComponent(next)}`;
 }
 
+/** Sign-in URL after a deliberate sign-out: shows "You've been signed out." */
+export const SIGNED_OUT_PATH = '/login?signedOut=1';
+
 /** Where "Exit" (or the end of an impersonation session) takes the staff member: the admin users page. */
 export const IMPERSONATION_EXIT_PATH = '/admin/users';

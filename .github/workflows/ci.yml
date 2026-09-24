@@ -135,7 +135,7 @@ jobs:
     name: End-to-end (Playwright, Chromium)
     needs: [backend, frontend]
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     services:
       mysql:
         image: mysql:8.0
@@ -271,6 +271,19 @@ jobs:
           E2E_WORK_DIR: ${{ runner.temp }}/e2e-crawl
         run: scripts/e2e-journeys.sh
 
+      # One participant's whole lifecycle: registration and email verification, profile, social profiles at the 90-day
+      # boundary, campaign filters, submissions through correction/withdrawal/rejection/appeal/approval (with
+      # duplicate, double-click and parallel-request checks), earnings, payout details and a paid payout, referral,
+      # notifications and preferences, support, session refresh/expiry, password change, sign-out; plus a phone pass.
+      # The staff side is driven through the API. Baseline seed, SQLite.
+      - name: Participant lifecycle (scripts/e2e-journeys.sh, E2E_SUITE=j-participant, SQLite)
+        env:
+          E2E_SUITE: j-participant
+          E2E_DB_PROVIDER: sqlite
+          E2E_SKIP_BUILD: "1"
+          E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-participant
+        run: scripts/e2e-journeys.sh
+
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v4
@@ -298,6 +311,8 @@ jobs:
             ${{ runner.temp }}/e2e-a11y/web.log
             ${{ runner.temp }}/e2e-crawl/api.log
             ${{ runner.temp }}/e2e-crawl/web.log
+            ${{ runner.temp }}/e2e-j-participant/api.log
+            ${{ runner.temp }}/e2e-j-participant/web.log
             ${{ runner.temp }}/web-smoke.log
           retention-days: 7
           if-no-files-found: ignore

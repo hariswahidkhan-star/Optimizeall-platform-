@@ -30,6 +30,13 @@ import { defineConfig, devices } from '@playwright/test';
  * responsive.spec.ts, which the mobile project runs alone (390×844). Run it with
  * `E2E_SUITE=platform E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
  *
+ * The j-participant suite walks one participant's whole lifecycle (registration and email verification, profile,
+ * social profiles and eligibility, campaigns, submissions through correction/withdrawal/rejection/appeal/approval,
+ * earnings, payout details and a paid payout, referrals, notifications and preferences, support, password change,
+ * sign-out and session refresh) against the Baseline seed, with the staff side driven through the API. It runs like
+ * the agency suite (serial, one worker, no retries): desktop runs everything but responsive.spec.ts, which the mobile
+ * project runs alone. Run it with `E2E_SUITE=j-participant E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
+ *
  * The a11y suite (accessibility & responsive layout: axe WCAG 2.2 A/AA in the light and dark theme, no horizontal
  * scroll at 360/768/1280 px, keyboard and focus behaviour) runs against the Demo seed too. It never changes data, so
  * its tests run in parallel (two workers); each test sets its own viewport, so only the desktop project runs it. Run
@@ -42,7 +49,7 @@ import { defineConfig, devices } from '@playwright/test';
  */
 const suite = process.env.E2E_SUITE ?? 'smoke';
 /** Suites whose mobile project runs only responsive.spec.ts (and whose desktop project runs everything else). */
-const responsiveSplit = suite === 'agency' || suite === 'platform';
+const responsiveSplit = suite === 'agency' || suite === 'platform' || suite === 'j-participant';
 /** Full-stack suites share one database and build on earlier steps: serial, one worker, no retries. */
 const journeys = suite === 'journeys' || responsiveSplit;
 /** The crawl is read-only: roles run in parallel, desktop only. */
