@@ -347,6 +347,7 @@ test('FAQ reorder: the saved order is the public order', async ({ as }) => {
     (await handles.nth(i).getAttribute('aria-label'))!.replace(/^Reorder (.*), position .*$/, '$1');
   const first = await nameOf(0);
   const second = await nameOf(1);
+  const total = await handles.count();
   await admin.getByRole('button', { name: `Move ${second} up` }).click();
   await expect(admin.getByText('Unsaved order changes')).toBeVisible();
   await admin.getByRole('button', { name: 'Save order' }).click();
@@ -355,7 +356,7 @@ test('FAQ reorder: the saved order is the public order', async ({ as }) => {
   await admin.getByRole('button', { name: 'Reorder' }).click();
   await expect(list.getByRole('button', { name: /^Reorder / }).first()).toHaveAttribute(
     'aria-label',
-    `Reorder ${second}, position 1 of ${await handles.count()}`,
+    `Reorder ${second}, position 1 of ${total}`,
   );
   // The public FAQ page (grouped by category, in sort order) lists them in the new order.
   const res = await fetch(`${process.env.E2E_API_URL}/api/v1/content/faqs`);

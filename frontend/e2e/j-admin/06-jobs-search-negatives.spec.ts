@@ -139,7 +139,7 @@ test('negatives: no roles.manage → 403 in UI and API; stale stamps → 409; do
   const id = runId();
   // A support agent (users.view + support.manage, no roles.manage).
   const agent = await arrangeTestUser(`E2E support agent ${id}`);
-  await arrangeRole(`E2E support ${id}`, ['users.view', 'support.manage'], [agent.id]);
+  await arrangeRole(`E2E support agents ${id}`, ['users.view', 'support.manage'], [agent.id]);
   // Also a participant: lands in the participant app and opens the admin portal from there.
   const page = await as(agent, landing.participant);
   const errors = watchErrors(page);
@@ -154,7 +154,7 @@ test('negatives: no roles.manage → 403 in UI and API; stale stamps → 409; do
   // On a user's page the custom roles are read-only, and no admin actions are offered.
   await page.goto(`/admin/users/${agent.id}`);
   await expect(page.getByRole('region', { name: 'Custom roles' }).getByRole('checkbox')).toHaveCount(0);
-  await expect(page.getByRole('region', { name: 'Custom roles' })).toContainText(`E2E support ${id}`);
+  await expect(page.getByRole('region', { name: 'Custom roles' })).toContainText(`E2E support agents ${id}`);
   for (const name of ['Suspend', 'Change roles', 'Change tier', 'Log in as'])
     await expect(page.getByRole('button', { name, exact: true })).toHaveCount(0);
   errors.expectClean('the support agent');
