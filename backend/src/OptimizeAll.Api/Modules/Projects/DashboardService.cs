@@ -19,7 +19,7 @@ public sealed record AdminSnapshotDto(int ActiveClients, int OnboardingClients, 
 
 /// <summary>The agency home dashboard. Sections for account managers (clients.manage) and admins (settings.manage) are null otherwise.</summary>
 public sealed record AgencyDashboardDto(
-    IReadOnlyList<TaskSummaryDto> MyTasks, TaskCountsDto MyTaskCounts, IReadOnlyList<DeliverableSummaryDto> ReviewQueue,
+    IReadOnlyList<TaskSummaryDto> MyTasks, TaskCountsDto MyTaskCounts, IReadOnlyList<DeliverableSummaryDto> ReviewQueue, int ReviewQueueTotal,
     IReadOnlyList<DeliverableSummaryDto> PendingClientApprovals, IReadOnlyList<MeetingDto> TodaysMeetings, TimeEntryDto? Timer,
     int MyMinutesThisWeek, AccountManagerPanelDto? AccountManager, AdminSnapshotDto? Admin);
 
@@ -59,7 +59,9 @@ public sealed class DashboardService(
         var counts = new TaskCountsDto(mine.Count, mine.Count(t => t.IsOverdue), mine.Count(t => t.DueDate is { } d && d <= today));
         var upcoming = mine.Where(t => t.DueDate is { } d && d <= today.AddDays(7)).Take(10).ToList();
 
-        var review = (await deliverables.ListAsync(new DeliverableListQuery { View = "review", PageSize = 10 }, ct)).Items;
+        // The list shows the first 10; the count is the whole queue.
+        var reviewPage = await deliverables.ListAsync(new DeliverableListQuery { View = "review", PageSize = 10 }, ct);
+        var review = reviewPage.Items;
 
         // Clients I work with: account manager, account team or project member (admins: all).
         var isAdmin = currentUser.HasPermission(Permissions.SettingsManage);
@@ -113,7 +115,7 @@ public sealed class DashboardService(
                 await db.Set<Deliverable>().CountAsync(d => d.Status == DeliverableStatus.ClientReview, ct));
         }
 
-        return new AgencyDashboardDto(upcoming, counts, review, pending, meetings, timer, weekMinutes, am, admin);
+        return new AgencyDashboardDto(upcoming, counts, review, reviewPage.Total, pending, meetings, timer, weekMinutes, am, admin);
     }
 
     private async Task<List<Guid>> MyClientIdsAsync(Guid me, CancellationToken ct)

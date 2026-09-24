@@ -28,11 +28,20 @@ interface Props {
 }
 
 const MAX_BYTES = 50 * 1024 * 1024;
+const MAX_FILES = 10;
 
 function Composer({ base, onSent, threadId }: { base: string; threadId?: string; onSent: (thread: Thread) => void }) {
   const [subject, setSubject] = useState('');
   const [body, setBody] = useState('');
   const [files, setFiles] = useState<File[]>([]);
+  // Files the composer can't send, named so nothing is silently left out of the message.
+  const tooLarge = files.filter((f) => f.size > MAX_BYTES);
+  const fileProblem =
+    tooLarge.length > 0
+      ? `${tooLarge.map((f) => f.name).join(', ')} ${tooLarge.length === 1 ? 'is' : 'are'} larger than 50 MB. Share a link to it instead.`
+      : files.length > MAX_FILES
+        ? `At most ${MAX_FILES} attachments per message.`
+        : null;
   const send = useMutation({
     mutationFn: async () => {
       const uploaded: DeliveryFile[] = [];
@@ -75,12 +84,13 @@ function Composer({ base, onSent, threadId }: { base: string; threadId?: string;
           type="file"
           multiple
           accept="image/png,image/jpeg,image/webp,application/pdf,video/mp4"
-          onChange={(e) => setFiles([...(e.target.files ?? [])].filter((f) => f.size <= MAX_BYTES).slice(0, 10))}
+          onChange={(e) => setFiles([...(e.target.files ?? [])])}
         />
       </FormField>
+      {fileProblem ? <Alert tone="danger">{fileProblem}</Alert> : null}
       {send.error ? <Alert tone="danger">{errorMessage(send.error)}</Alert> : null}
       <div className="dl-row">
-        <Button type="submit" loading={send.isPending} disabled={!body.trim() || (!threadId && subject.trim().length < 2)}>
+        <Button type="submit" loading={send.isPending} disabled={!body.trim() || (!threadId && subject.trim().length < 2) || fileProblem !== null}>
           {threadId ? 'Send reply' : 'Start conversation'}
         </Button>
       </div>

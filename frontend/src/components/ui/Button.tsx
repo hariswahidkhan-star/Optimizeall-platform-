@@ -7,7 +7,10 @@ import './Button.css';
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
-  /** Shows a spinner, sets aria-busy and ignores clicks while keeping the button's size and accessible name. */
+  /**
+   * Shows a spinner, sets aria-busy and ignores clicks while keeping the button's size and accessible name. The second
+   * click of a double click is always ignored, so an action is never sent twice.
+   */
   loading?: boolean;
   leadingIcon?: ReactNode;
   trailingIcon?: ReactNode;
@@ -41,7 +44,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       aria-busy={loading || undefined}
       aria-disabled={loading || undefined}
       onClick={(event) => {
-        if (loading) {
+        // `detail` counts rapid clicks: the second click of a double click arrives before the pending state renders
+        // (`loading` is still false), so it would send the action or submit the form a second time.
+        if (loading || event.detail > 1) {
           event.preventDefault();
           return;
         }

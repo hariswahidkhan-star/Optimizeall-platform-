@@ -250,6 +250,18 @@ jobs:
           E2E_WORK_DIR: ${{ runner.temp }}/e2e-platform
         run: scripts/e2e-journeys.sh
 
+      # One complete client-delivery journey through the client portal (docs/CLIENT_DELIVERY.md): onboarding a new client,
+      # a user per duty via the dev mailbox, project from a template and kanban, deliverable versions and approvals, time and
+      # timesheets, messages, meetings, reports, briefs, feedback, dashboard numbers, and the negatives (tenancy, duties,
+      # conflicts, double clicks, interrupted uploads, file limits, expired session). Demo seed, SQLite.
+      - name: Client delivery journey (scripts/e2e-journeys.sh, E2E_SUITE=j-delivery, SQLite)
+        env:
+          E2E_SUITE: j-delivery
+          E2E_DB_PROVIDER: sqlite
+          E2E_SKIP_BUILD: "1"
+          E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-delivery
+        run: scripts/e2e-journeys.sh
+
       # Accessibility & responsive audit (docs/ACCESSIBILITY.md): every portal's representative pages at 360/768/1280 px
       # with axe (WCAG 2.2 A/AA, light and dark contrast) and no horizontal scroll, plus keyboard/focus behaviour.
       - name: Accessibility audit (scripts/e2e-journeys.sh, E2E_SUITE=a11y, SQLite)
@@ -307,6 +319,8 @@ jobs:
             ${{ runner.temp }}/e2e-agency/web.log
             ${{ runner.temp }}/e2e-platform/api.log
             ${{ runner.temp }}/e2e-platform/web.log
+            ${{ runner.temp }}/e2e-j-delivery/api.log
+            ${{ runner.temp }}/e2e-j-delivery/web.log
             ${{ runner.temp }}/e2e-a11y/api.log
             ${{ runner.temp }}/e2e-a11y/web.log
             ${{ runner.temp }}/e2e-crawl/api.log

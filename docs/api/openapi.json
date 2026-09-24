@@ -83161,6 +83161,10 @@
             },
             "nullable": true
           },
+          "reviewQueueTotal": {
+            "type": "integer",
+            "format": "int32"
+          },
           "pendingClientApprovals": {
             "type": "array",
             "items": {

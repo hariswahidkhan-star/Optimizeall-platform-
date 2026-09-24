@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AlertTriangle, CheckSquare, MessageSquare } from 'lucide-react';
-import { useId, useState, type DragEvent, type KeyboardEvent } from 'react';
+import { useEffect, useId, useRef, useState, type DragEvent, type KeyboardEvent } from 'react';
 import { Alert, Avatar, Badge, FormField, Select } from '@/components/ui';
 import { api } from '@/lib/api/client';
 import { errorMessage } from '@/lib/api/errors';
@@ -92,51 +92,78 @@ export function Kanban({ projectId, tasks, onOpen, canEdit }: Props) {
   const [dropTarget, setDropTarget] = useState<TaskStatus | null>(null);
   const [mobileColumn, setMobileColumn] = useState<TaskStatus>('Todo');
 
+  // The card to focus once it has re-rendered in its new place (a move to another column mounts a new element).
+  const [focus, setFocus] = useState<{ id: string; status: TaskStatus; sortOrder: number } | null>(null);
+  // Arrow keys pressed while a move is still saving: applied in order once it is saved, on the saved task (its new
+  // column and concurrency stamp), so two quick presses move a card two columns instead of failing with a conflict.
+  const queued = useRef<{ taskId: string; key: string }[]>([]);
+  const saving = useRef(false);
+
+  useEffect(() => {
+    if (!focus) return;
+    // Wait until the board shows the saved position (the card may still sit in its old column for a render).
+    const shown = tasks.find((t) => t.id === focus.id);
+    if (!shown || shown.status !== focus.status || shown.sortOrder !== focus.sortOrder) return;
+    document.querySelector<HTMLElement>(`[data-task-id="${focus.id}"]`)?.focus();
+    setFocus(null);
+  }, [focus, tasks]);
+
   const move = useMutation({
     mutationFn: ({ task, status, afterTaskId }: MoveArgs) =>
       api.post<TaskSummary>(`/agency/tasks/${task.id}/move`, { status, afterTaskId, concurrencyStamp: task.concurrencyStamp }),
     onSuccess: (updated, { task }) => {
-      qc.setQueryData<TaskSummary[]>(dk.tasks(projectId), (old) => old?.map((t) => (t.id === updated.id ? updated : t)));
-      const column = columnOf(
-        (qc.getQueryData<TaskSummary[]>(dk.tasks(projectId)) ?? []).map((t) => (t.id === updated.id ? updated : t)),
-        updated.status,
-      );
+      const current = (qc.getQueryData<TaskSummary[]>(dk.tasks(projectId)) ?? tasks).map((t) => (t.id === updated.id ? updated : t));
+      qc.setQueryData<TaskSummary[]>(dk.tasks(projectId), current);
+      const column = columnOf(current, updated.status);
       const position = column.findIndex((t) => t.id === updated.id) + 1;
       setAnnouncement(`Moved ${task.title} to ${taskStatusLabel(updated.status)}, position ${position} of ${column.length}.`);
       // Keep keyboard focus on the moved card (it re-renders in its new column).
-      window.requestAnimationFrame(() => document.querySelector<HTMLElement>(`[data-task-id="${updated.id}"]`)?.focus());
+      setFocus({ id: updated.id, status: updated.status, sortOrder: updated.sortOrder });
+      saving.current = false;
+      const next = queued.current.shift();
+      if (next) {
+        const queuedTask = current.find((t) => t.id === next.taskId);
+        if (queuedTask && applyKey(next.key, queuedTask, current)) return;
+      }
+      queued.current = [];
       void qc.invalidateQueries({ queryKey: dk.tasks(projectId) });
     },
     onError: (error) => {
+      saving.current = false;
+      queued.current = [];
       setAnnouncement(`Couldn't move the task: ${errorMessage(error)}`);
       void qc.invalidateQueries({ queryKey: dk.tasks(projectId) });
     },
   });
 
-  const moveTo = (task: TaskSummary, status: TaskStatus, index?: number) => {
-    const column = columnOf(tasks, status).filter((t) => t.id !== task.id);
+  const moveTo = (task: TaskSummary, status: TaskStatus, index?: number, all: TaskSummary[] = tasks) => {
+    const column = columnOf(all, status).filter((t) => t.id !== task.id);
     const at = index === undefined ? column.length : Math.max(0, Math.min(index, column.length));
+    saving.current = true;
     move.mutate({ task, status, afterTaskId: at === 0 ? null : column[at - 1]!.id });
   };
 
-  const onKeyDown = (e: KeyboardEvent<HTMLElement>, task: TaskSummary) => {
-    if (!canEdit) return;
+  /** Applies an arrow key to `task` within `all`; false when the key does nothing (edge of the board). */
+  const applyKey = (key: string, task: TaskSummary, all: TaskSummary[]) => {
     const col = TASK_STATUSES.indexOf(task.status);
-    const column = columnOf(tasks, task.status);
+    const column = columnOf(all, task.status);
     const index = column.findIndex((t) => t.id === task.id);
-    if (e.key === 'ArrowRight' && col < TASK_STATUSES.length - 1) {
+    if (key === 'ArrowRight' && col < TASK_STATUSES.length - 1) moveTo(task, TASK_STATUSES[col + 1]!, undefined, all);
+    else if (key === 'ArrowLeft' && col > 0) moveTo(task, TASK_STATUSES[col - 1]!, undefined, all);
+    else if (key === 'ArrowUp' && index > 0) moveTo(task, task.status, index - 1, all);
+    else if (key === 'ArrowDown' && index < column.length - 1) moveTo(task, task.status, index + 1, all);
+    else return false;
+    return true;
+  };
+
+  const onKeyDown = (e: KeyboardEvent<HTMLElement>, task: TaskSummary) => {
+    if (!canEdit || !['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'].includes(e.key)) return;
+    if (saving.current) {
       e.preventDefault();
-      moveTo(task, TASK_STATUSES[col + 1]!);
-    } else if (e.key === 'ArrowLeft' && col > 0) {
-      e.preventDefault();
-      moveTo(task, TASK_STATUSES[col - 1]!);
-    } else if (e.key === 'ArrowUp' && index > 0) {
-      e.preventDefault();
-      moveTo(task, task.status, index - 1);
-    } else if (e.key === 'ArrowDown' && index < column.length - 1) {
-      e.preventDefault();
-      moveTo(task, task.status, index + 1);
+      queued.current.push({ taskId: task.id, key: e.key });
+      return;
     }
+    if (applyKey(e.key, task, tasks)) e.preventDefault();
   };
 
   const onDrop = (e: DragEvent, status: TaskStatus) => {

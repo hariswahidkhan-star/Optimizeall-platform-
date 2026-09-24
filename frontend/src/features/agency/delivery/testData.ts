@@ -164,6 +164,7 @@ export function dashboard(overrides: Partial<AgencyDashboard> = {}): AgencyDashb
     myTasks: [task({ title: 'Write two blog posts', isOverdue: true, dueDate: '2026-09-20' })],
     myTaskCounts: { open: 5, overdue: 1, dueToday: 2 },
     reviewQueue: [deliverable({ id: 'd2', title: 'Retargeting creatives', status: 'InternalReview' })],
+    reviewQueueTotal: 1,
     pendingClientApprovals: [deliverable()],
     todaysMeetings: [],
     timer: null,

@@ -145,3 +145,25 @@ describe('Timesheet recall', () => {
     expect(await axeViolations(container)).toEqual([]);
   });
 });
+
+describe('Timesheet approvals', () => {
+  it('offers no decision on my own submitted week (someone else approves it) but does on a colleague’s', async () => {
+    const user = userEvent.setup();
+    mockStaffApi({
+      'GET /agency/time/timer': () => json(204),
+      'GET /agency/time/timesheets/week': () => json(200, week({ status: 'Open' })),
+      'GET /agency/time/timesheets/pending': () =>
+        json(200, [week({ id: 'mine' }), week({ id: 'theirs', userId: 'st-1', userName: 'Daniel Okafor' })]),
+      'GET /agency/projects': () => json(200, { items: [], total: 0, page: 1, pageSize: 200, totalPages: 0 }),
+      'GET /agency/staff': () => json(200, []),
+    });
+    renderWithApp(<TimePage />, { route: '/agency/time' });
+    await user.click(await screen.findByRole('tab', { name: 'Approvals' }));
+    const mine = await screen.findByRole('article', { name: /^Amira Haddad, week of/ });
+    expect(within(mine).queryByRole('button', { name: 'Approve' })).not.toBeInTheDocument();
+    expect(within(mine).queryByRole('button', { name: 'Return for changes' })).not.toBeInTheDocument();
+    expect(mine).toHaveTextContent('Someone else must approve your timesheet');
+    const theirs = screen.getByRole('article', { name: /^Daniel Okafor, week of/ });
+    expect(within(theirs).getByRole('button', { name: 'Approve' })).toBeInTheDocument();
+  });
+});
