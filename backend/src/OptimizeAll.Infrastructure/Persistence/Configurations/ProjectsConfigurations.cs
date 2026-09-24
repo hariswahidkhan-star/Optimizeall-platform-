@@ -251,6 +251,8 @@ internal sealed class TimeEntryConfiguration : IEntityTypeConfiguration<TimeEntr
         b.HasIndex(x => new { x.UserId, x.Date });
         b.HasIndex(x => new { x.ProjectId, x.Date });
         b.HasIndex(x => new { x.ClientAccountId, x.Date });
+        // Agency-wide ranges (admin dashboard week totals, utilization report).
+        b.HasIndex(x => x.Date);
         // One running timer per user: NULL for stopped entries (NULLs never collide in a unique index on MySQL or SQLite).
         b.HasIndex(x => x.RunningUserId).IsUnique();
         b.HasOne<Project>().WithMany().HasForeignKey(x => x.ProjectId).OnDelete(DeleteBehavior.Restrict);
@@ -358,6 +360,8 @@ internal sealed class ThreadMessageConfiguration : IEntityTypeConfiguration<Thre
         b.Property(x => x.Body).IsRequired();
         b.Property(x => x.AttachmentFileIds).HasJsonList();
         b.HasIndex(x => new { x.ThreadId, x.CreatedAt });
+        // Client health "last activity": newest message per client.
+        b.HasIndex(x => new { x.ClientAccountId, x.CreatedAt });
         b.HasOne<MessageThread>().WithMany().HasForeignKey(x => x.ThreadId).OnDelete(DeleteBehavior.Cascade);
     }
 }

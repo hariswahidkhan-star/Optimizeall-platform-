@@ -5,6 +5,7 @@ using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Domain.Events;
 using OptimizeAll.Domain.Identity;
 using OptimizeAll.Domain.Notifications;
+using OptimizeAll.Domain.Website;
 using OptimizeAll.Infrastructure.Persistence;
 
 namespace OptimizeAll.Api.Modules.Website.Leads;
@@ -29,7 +30,13 @@ public sealed class InquiryNotificationHandler(AppDbContext db, INotificationSer
     public async Task HandleAsync(WebsiteInquiryReceived e, CancellationToken ct)
     {
         var link = WebsiteLinks.Inquiry(e.InquiryId);
-        if (await db.Set<Notification>().AnyAsync(n => n.Type == WebsiteLinks.InquiryNotificationType && n.LinkUrl == link, ct)) return;
+        // Notifications about an inquiry are created after it was received, so the dedup check only reads that type's
+        // notifications since then (IX_notifications_Type_CreatedAt) instead of scanning every inquiry notification.
+        var receivedAt = await db.Set<WebsiteInquiry>().AsNoTracking().Where(i => i.Id == e.InquiryId)
+            .Select(i => (DateTime?)i.CreatedAt).FirstOrDefaultAsync(ct);
+        var since = receivedAt?.AddHours(-1) ?? DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc);
+        if (await db.Set<Notification>().AnyAsync(n => n.Type == WebsiteLinks.InquiryNotificationType && n.CreatedAt >= since && n.LinkUrl == link, ct))
+            return;
 
         // Built-in or custom-role holders of either permission.
         var recipients = await (await directory.UsersWithAnyPermissionAsync(RecipientPermissions, ct))

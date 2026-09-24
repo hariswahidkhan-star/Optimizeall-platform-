@@ -67,6 +67,8 @@ internal sealed class SubmissionEventConfiguration : IEntityTypeConfiguration<Su
         b.Property(x => x.Action).HasMaxLength(60).IsRequired();
         b.Property(x => x.Reason).HasMaxLength(1000);
         b.HasIndex(x => new { x.SubmissionId, x.CreatedAt });
+        // Reviewer stats: decisions per reviewer today.
+        b.HasIndex(x => new { x.ActorUserId, x.CreatedAt });
     }
 }
 

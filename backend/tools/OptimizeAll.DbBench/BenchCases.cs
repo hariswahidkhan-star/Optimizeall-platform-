@@ -13,7 +13,6 @@ using OptimizeAll.Domain.Projects;
 using OptimizeAll.Domain.Social;
 using OptimizeAll.Domain.Submissions;
 using OptimizeAll.Infrastructure.Persistence;
-using EmailCampaignStatus = OptimizeAll.Domain.EmailMarketing.CampaignStatus;
 
 namespace OptimizeAll.DbBench;
 
@@ -132,7 +131,13 @@ public static class BenchCases
         new("notifications.inquiry-dedup", "InquiryNotificationHandler (per website inquiry)", async (db, c) =>
         {
             var link = "/agency/website/inquiries/" + Guid.NewGuid();
-            await db.Set<Notification>().AnyAsync(n => n.Type == "website.inquiry" && n.LinkUrl == link);
+            if (Legacy)
+                await db.Set<Notification>().AnyAsync(n => n.Type == "website.inquiry" && n.LinkUrl == link);
+            else
+            {
+                var since = c.Now.AddHours(-1); // inquiry received just now (PK lookup of the inquiry not measured)
+                await db.Set<Notification>().AnyAsync(n => n.Type == "website.inquiry" && n.CreatedAt >= since && n.LinkUrl == link);
+            }
         }),
         new("notifications.live-check-dedup", "LiveCheckReminderJob (hourly)", async (db, c) =>
         {
@@ -183,8 +188,14 @@ public static class BenchCases
         new("email.send-candidates", "CampaignSendJob (every 30 s, per sending campaign)", async (db, c) =>
         {
             var windowStart = c.Now.AddMinutes(-1);
-            await db.Set<CampaignRecipient>().CountAsync(r => r.CampaignId == c.EmailCampaignId &&
-                (r.Status == RecipientStatus.Sending || (r.SentAt != null && r.SentAt > windowStart)));
+            if (Legacy)
+                await db.Set<CampaignRecipient>().CountAsync(r => r.CampaignId == c.EmailCampaignId &&
+                    (r.Status == RecipientStatus.Sending || (r.SentAt != null && r.SentAt > windowStart)));
+            else
+            {
+                await db.Set<CampaignRecipient>().CountAsync(r => r.CampaignId == c.EmailCampaignId && r.Status == RecipientStatus.Sending);
+                await db.Set<CampaignRecipient>().CountAsync(r => r.CampaignId == c.EmailCampaignId && r.SentAt > windowStart && r.Status != RecipientStatus.Sending);
+            }
             await db.Set<CampaignRecipient>().AsNoTracking()
                 .Where(r => r.CampaignId == c.EmailCampaignId && r.Status == RecipientStatus.Pending && r.DueAt <= c.Now && (r.LockedUntil == null || r.LockedUntil < c.Now))
                 .OrderBy(r => r.DueAt).ThenBy(r => r.Id).Select(r => r.Id).Take(600).ToListAsync();
@@ -214,7 +225,7 @@ public static class BenchCases
             var clientId = (Guid?)c.EmailClientId;
             await db.Set<EngagementEvent>().AsNoTracking().Where(e => e.Type == EngagementType.Conversion && e.OccurredAt >= start && e.OccurredAt <= c.Now &&
                 (e.CampaignId != null || e.AutomationId != null) && e.ClientAccountId == clientId).CountAsync();
-            await db.Set<Subscriber>().AsNoTracking().CountAsync(s => s.ScopeKey == key && s.Status == SubscriberStatus.Subscribed && s.EmailConsent == ConsentStatus.Granted);
+            await db.Set<Subscriber>().AsNoTracking().CountAsync(s => s.ScopeKey == key && s.Status == SubscriberStatus.Subscribed && s.EmailConsent == OptimizeAll.Domain.EmailMarketing.ConsentStatus.Granted);
         }),
         new("email.subscribers", "GET /email/subscribers (page 1, newest first)", async (db, c) =>
         {

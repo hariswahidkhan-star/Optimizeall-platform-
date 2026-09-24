@@ -82,7 +82,12 @@ internal sealed class NotificationConfiguration : IEntityTypeConfiguration<Notif
         b.Property(x => x.Title).HasMaxLength(200).IsRequired();
         b.Property(x => x.Body).HasMaxLength(2000).IsRequired();
         b.Property(x => x.LinkUrl).HasMaxLength(500);
+        // Unread count / unread list.
         b.HasIndex(x => new { x.UserId, x.ReadAt, x.CreatedAt });
+        // Notification list (newest first) without a filesort of all of the user's notifications.
+        b.HasIndex(x => new { x.UserId, x.CreatedAt });
+        // Per-type dedup checks (live-check reminders per day, one notification per website inquiry).
+        b.HasIndex(x => new { x.Type, x.CreatedAt });
         b.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
     }
 }
@@ -172,6 +177,10 @@ internal sealed class JobRunConfiguration : IEntityTypeConfiguration<JobRun>
         b.Property(x => x.InstanceId).HasMaxLength(100);
         b.HasIndex(x => new { x.JobName, x.RunKey, x.Attempt }).IsUnique();
         b.HasIndex(x => new { x.Status, x.StartedAt });
+        // Admin job list: last run of each job; run log filtered by job, newest first.
+        b.HasIndex(x => new { x.JobName, x.StartedAt });
+        // Unfiltered run log (newest first) and DataRetentionJob (oldest first).
+        b.HasIndex(x => x.StartedAt);
     }
 }
 
