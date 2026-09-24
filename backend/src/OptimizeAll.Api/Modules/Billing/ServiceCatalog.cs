@@ -129,6 +129,7 @@ public sealed class ServiceCatalogService(AppDbContext db, IAuditLogger audit, L
 [ApiController]
 [Route("api/v1/agency/billing/catalog")]
 [HasPermission(Permissions.BillingView)]
+[DeniedWhileImpersonating(WritesOnly = true)]
 public sealed class ServiceCatalogController(ServiceCatalogService catalog) : ControllerBase
 {
     [HttpGet]

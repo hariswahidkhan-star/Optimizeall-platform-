@@ -29,6 +29,7 @@ internal static class HtmlDownload
 [ApiController]
 [Route("api/v1/agency/billing/invoices")]
 [HasPermission(Permissions.BillingView)]
+[DeniedWhileImpersonating(WritesOnly = true)] // issue, void, write-off: four-eyes must be two real people
 public sealed class AgencyInvoicesController(InvoiceService invoices, PaymentService payments, ClientBillingService clientBilling) : ControllerBase
 {
     [HttpGet]
@@ -140,6 +141,7 @@ public sealed class AgencyCreditNotesController(CreditNoteService creditNotes) :
 [ApiController]
 [Route("api/v1/agency/billing")]
 [HasPermission(Permissions.BillingView)]
+[DeniedWhileImpersonating(WritesOnly = true)]
 public sealed class AgencyBillingController(
     AppDbContext db,
     BillingReports reports,
@@ -331,6 +333,7 @@ public sealed class AgencyBillingController(
 [ApiController]
 [Route("api/v1/agency/contracts")]
 [HasPermission(Permissions.ContractsManage)]
+[DeniedWhileImpersonating(WritesOnly = true)]
 public sealed class AgencyContractsController(ContractService contracts, RecurringBillingService recurring) : ControllerBase
 {
     [HttpGet]

@@ -57,6 +57,12 @@ public sealed class PaymentReminderService(
                     $"A reminder for this invoice was sent at {at:HH:mm} UTC. Wait at least {ManualCooldown.TotalMinutes:0} minutes before sending another.");
 
             await using var tx = await dialect.BeginWriteTransactionAsync(db, ct);
+            // Re-read under the row lock: the invoice may have been paid (or voided) since it was loaded, and the email
+            // quotes the balance.
+            if (!await dialect.LockRowAsync(db, "invoices", invoiceId, ct)) throw DomainException.NotFound("Invoice");
+            invoice = await db.Set<Invoice>().AsNoTracking().FirstAsync(i => i.Id == invoiceId, ct);
+            if (!Invoice.IsOpen(invoice.Status) || invoice.Balance <= 0)
+                throw DomainException.Conflict("billing.invoice_not_open", "Reminders can only be sent for issued invoices with a balance.");
             reminder = new InvoiceReminder
             {
                 InvoiceId = invoiceId, Kind = $"manual-{now:yyMMddHHmmss}", SentAt = now, SentByUserId = currentUser.Id, RequestId = requestId,
