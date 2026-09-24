@@ -19,7 +19,8 @@ public sealed class TrackingRateLimitTests(ApiFactory api) : IClassFixture<ApiFa
     [Fact]
     public async Task Open_pixels_and_webhooks_are_not_capped_by_the_global_per_ip_limit()
     {
-        using var limited = Limited();
+        await using var limited = Limited();
+        await limited.StartAsync();
         var client = limited.CreateClient();
 
         var pixels = new List<HttpStatusCode>();
@@ -38,7 +39,8 @@ public sealed class TrackingRateLimitTests(ApiFactory api) : IClassFixture<ApiFa
     [Fact]
     public async Task Other_public_email_endpoints_keep_the_public_limit()
     {
-        using var limited = Limited();
+        await using var limited = Limited();
+        await limited.StartAsync();
         var client = limited.CreateClient();
         var statuses = new List<HttpStatusCode>();
         for (var i = 0; i < 125; i++) statuses.Add((await client.GetAsync($"/api/v1/public/email/preferences/not-a-token-{i}")).StatusCode);

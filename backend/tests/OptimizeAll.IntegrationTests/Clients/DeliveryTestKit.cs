@@ -40,6 +40,7 @@ public static class DeliveryTestKit
 
     public static async Task<HttpClient> LoginOnAsync(this WebApplicationFactory<Program> host, TestUser user)
     {
+        await host.StartAsync();
         var client = host.CreateClient(new WebApplicationFactoryClientOptions { HandleCookies = true });
         client.DefaultRequestHeaders.Add("X-Requested-With", "tests");
         var response = await client.PostAsJsonAsync("/api/v1/auth/login", new { email = user.Email, password = user.Password });

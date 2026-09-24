@@ -40,7 +40,8 @@ Setup: [DEPLOYMENT.md § 5.11](DEPLOYMENT.md#511-sign-in-with-google-optional).
 * **Flow**: authorization code with **PKCE (S256)**, exchanged **server side** with the client secret; the browser never
   sees Google tokens. `POST /auth/google/start` returns the Google URL whose `state` is signed and encrypted (ASP.NET
   Data Protection, 10-minute expiry) and sets `oa_google_flow`, an HttpOnly, `SameSite=Strict`, `Secure`, 10-minute
-  cookie (path `/api/v1/auth/google`) holding the encrypted nonce and PKCE verifier. `POST /auth/google/callback`
+  cookie (sent as `Max-Age`, so a browser clock running ahead of the server's does not drop it; the session cookies
+  use `Max-Age` too) (path `/api/v1/auth/google`) holding the encrypted nonce and PKCE verifier. `POST /auth/google/callback`
   requires the state to verify **and** to match that cookie (so a state from another browser — login CSRF — is
   useless), deletes the cookie (single use) and exchanges the code. The redirect URI comes from configuration
   (`{Email:AppBaseUrl}/auth/google/callback`), never from the request; the post-login `returnTo` is kept only if it is
@@ -331,7 +332,9 @@ target's email to be typed) starts a time-boxed session:
   stored in clear for display. Decryption happens only for finance workflows (payment instructions export),
   which are permission-gated and audited.
 * The data-protection **key ring is stored in MySQL** (`data_protection_keys`) so all instances share it; keys
-  rotate automatically (90 days) and old keys remain for decryption.
+  rotate automatically (90 days) and old keys remain for decryption. The first key is created at startup under a
+  named lock (database initialization), so instances starting together on an empty key ring share one key instead of
+  each activating its own.
 * **Production recommendation:** protect the key ring itself (the API logs "No XML encryptor configured" until
   this is done), e.g. `ProtectKeysWithCertificate(...)`, Azure Key Vault (`ProtectKeysWithAzureKeyVault`) or an
   AWS KMS-backed XML encryptor, so a database dump alone cannot decrypt payout data. Until then, database

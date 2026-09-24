@@ -41,7 +41,7 @@ public sealed class DemoSeedFixture : IAsyncLifetime
         await Api.InitializeAsync();
         Demo = Api.WithWebHostBuilder(builder => builder.ConfigureAppConfiguration((_, config) =>
             config.AddInMemoryCollection(new Dictionary<string, string?> { ["Database:Seed:1"] = "Demo" })));
-        _ = Demo.Services; // boots the host: migrations + Baseline + Demo
+        await Demo.StartAsync(); // boots the host: migrations + Baseline + Demo
     }
 
     public async Task DisposeAsync()

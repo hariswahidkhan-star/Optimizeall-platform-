@@ -25,8 +25,9 @@ public sealed class DevTestLoginTests(ApiFactory api) : IClassFixture<ApiFactory
             }));
         });
 
-    private static HttpClient Browser(WebApplicationFactory<Program> factory)
+    private static async Task<HttpClient> BrowserAsync(WebApplicationFactory<Program> factory)
     {
+        await factory.StartAsync();
         var client = factory.CreateClient(new WebApplicationFactoryClientOptions { HandleCookies = true });
         client.DefaultRequestHeaders.Add("X-Requested-With", "tests");
         return client;
@@ -55,7 +56,7 @@ public sealed class DevTestLoginTests(ApiFactory api) : IClassFixture<ApiFactory
         var demo = await api.CreateUserAsync(email: $"qa-{Guid.NewGuid():N}@demo.optimizeall.app");
         var real = await api.CreateUserAsync();
         await using var factory = With(enabled: true);
-        var browser = Browser(factory);
+        var browser = await BrowserAsync(factory);
 
         var accounts = await (await browser.GetAsync("/api/v1/dev/test-accounts")).ReadJsonAsync();
         var ids = accounts.EnumerateArray().Select(a => a.GetProperty("id").GetGuid()).ToList();
@@ -83,7 +84,7 @@ public sealed class DevTestLoginTests(ApiFactory api) : IClassFixture<ApiFactory
     {
         var testUserId = await CreateTestUserAsync();
         await using var factory = With(enabled: true, environment: "Production");
-        var browser = Browser(factory);
+        var browser = await BrowserAsync(factory);
         Assert.Equal(HttpStatusCode.NotFound, (await browser.GetAsync("/api/v1/dev/test-accounts")).StatusCode);
         var response = await browser.PostAsJsonAsync("/api/v1/dev/test-login", new { userId = testUserId });
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);

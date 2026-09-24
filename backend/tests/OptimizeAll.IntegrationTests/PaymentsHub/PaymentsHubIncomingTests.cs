@@ -48,7 +48,7 @@ public sealed class PaymentsHubIncomingTests(ApiFactory api) : IClassFixture<Api
     [Fact]
     public async Task Two_admins_recording_the_last_balance_at_once_one_wins_and_mark_paid_is_idempotent()
     {
-        var factory = api.WithInvoicePaidCounter();
+        await using var factory = api.WithInvoicePaidCounter();
         var admin1 = await factory.LoginAsync(await api.CreateUserAsync(new[] { Role.Admin }));
         var admin2 = await factory.LoginAsync(await api.CreateUserAsync(new[] { Role.Finance }));
         var client = await api.CreateClientAccountAsync();

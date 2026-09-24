@@ -102,7 +102,7 @@ public sealed class EmailFixture : IAsyncLifetime
                 services.AddSingleton<ISmsProvider>(Sms);
             });
         });
-        _ = App.Services;
+        await App.StartAsync();
     }
 
     public async Task DisposeAsync()

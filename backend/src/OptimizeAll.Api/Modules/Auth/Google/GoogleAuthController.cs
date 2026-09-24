@@ -92,7 +92,8 @@ public sealed class GoogleAuthController(GoogleSignInService google, ICurrentUse
             // The callback is a same-origin fetch from the SPA page Google redirected to, so Strict still sends it.
             SameSite = SameSiteMode.Strict,
             Path = FlowCookiePath,
-            Expires = start.FlowExpiresAt,
+            // Relative, not an absolute date: see AuthCookies (a fast browser clock would drop an Expires cookie).
+            MaxAge = AuthCookies.LifetimeUntil(Response, start.FlowExpiresAt),
             IsEssential = true,
         });
         return new GoogleStartResponse(start.AuthorizationUrl);

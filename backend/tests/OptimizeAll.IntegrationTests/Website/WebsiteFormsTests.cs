@@ -37,7 +37,7 @@ public sealed class CapturedWebsiteEvents : IEventHandler<WebsiteInquiryReceived
 }
 
 /// <summary>Public lead forms, anti-spam checks, events, newsletter double opt-in, consultation booking and careers.</summary>
-public sealed class WebsiteFormsTests : IClassFixture<ApiFactory>
+public sealed class WebsiteFormsTests : IClassFixture<ApiFactory>, IAsyncLifetime
 {
     private readonly ApiFactory _api;
     private readonly WebApplicationFactory<Program> _host;
@@ -51,6 +51,10 @@ public sealed class WebsiteFormsTests : IClassFixture<ApiFactory>
             services.AddScoped<IEventHandler<NewsletterSubscribed>, CapturedWebsiteEvents>();
         }));
     }
+
+    public Task InitializeAsync() => _host.StartAsync();
+
+    public async Task DisposeAsync() => await _host.DisposeAsync();
 
     private HttpClient Client()
     {
@@ -214,8 +218,9 @@ public sealed class WebsiteFormsTests : IClassFixture<ApiFactory>
     [Fact]
     public async Task Public_forms_are_rate_limited_per_ip()
     {
-        using var limited = _api.WithWebHostBuilder(b => b.ConfigureAppConfiguration((_, c) =>
+        await using var limited = _api.WithWebHostBuilder(b => b.ConfigureAppConfiguration((_, c) =>
             c.AddInMemoryCollection(new Dictionary<string, string?> { ["RateLimiting:Enabled"] = "true" })));
+        await limited.StartAsync();
         var client = limited.CreateClient();
         var statuses = new List<HttpStatusCode>();
         for (var i = 0; i < 125; i++) statuses.Add((await client.GetAsync("/api/v1/public/forms/token")).StatusCode);

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Domain.Common;
@@ -67,6 +68,7 @@ public static class DatabaseInitializer
                 throw new InvalidOperationException($"Unknown Database:InitializationMode '{options.InitializationMode}'.");
         }
 
+        await EnsureDataProtectionKeyAsync(sp, db, logger, ct);
         await EnsureBootstrapAdminAsync(sp, db, logger, ct);
 
         var seeders = sp.GetServices<ISeeder>().OrderBy(s => s.Order).ToList();
@@ -104,6 +106,27 @@ public static class DatabaseInitializer
                 await Task.Delay(TimeSpan.FromSeconds(3), ct);
             }
         }
+    }
+
+    /// <summary>
+    /// Creates the first Data Protection key at startup, under an application-wide named lock, unless a usable key
+    /// already exists. Left to Data Protection, every API instance sharing the database creates its own first key on
+    /// first use when the key ring is empty; two instances doing so at once each activate a different key, and a token
+    /// protected by one (Google sign-in state, form tokens, public links) fails to unprotect on the other until its
+    /// cached key ring refreshes (Data Protection only re-reads on an unknown key during the first minutes after start).
+    /// Later keys are created by Data Protection itself ahead of their activation, so every instance sees them in time.
+    /// </summary>
+    private static async Task EnsureDataProtectionKeyAsync(IServiceProvider sp, AppDbContext db, ILogger logger, CancellationToken ct)
+    {
+        var keys = sp.GetRequiredService<IKeyManager>();
+        await using var _ = await sp.GetRequiredService<IDatabaseDialect>()
+            .AcquireNamedLockAsync(db, "data-protection-first-key", TimeSpan.FromSeconds(60), ct);
+        // Data Protection runs on the real clock, not the app's TimeProvider.
+        var now = DateTimeOffset.UtcNow;
+        if (keys.GetAllKeys().Any(k => !k.IsRevoked && k.ActivationDate <= now && k.ExpirationDate > now)) return;
+        var lifetime = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<KeyManagementOptions>>().Value.NewKeyLifetime;
+        var key = keys.CreateNewKey(now, now.Add(lifetime));
+        logger.LogInformation("Created the Data Protection key {KeyId}", key.KeyId);
     }
 
     private static async Task EnsureBootstrapAdminAsync(IServiceProvider sp, AppDbContext db, ILogger logger, CancellationToken ct)

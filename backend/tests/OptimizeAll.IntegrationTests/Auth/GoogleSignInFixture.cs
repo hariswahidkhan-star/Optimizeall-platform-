@@ -41,7 +41,7 @@ public sealed class GoogleSignInFixture : IAsyncLifetime
             builder.ConfigureServices(services =>
                 services.AddHttpClient(GoogleEndpoints.HttpClientName).ConfigurePrimaryHttpMessageHandler(() => Google));
         });
-        _ = App.Services;
+        await App.StartAsync();
     }
 
     public async Task DisposeAsync()

@@ -92,6 +92,7 @@ public static class DerivedFactoryAuth
     /// <summary>Signs a user in against any factory (e.g. one derived with WithWebHostBuilder).</summary>
     public static async Task<HttpClient> LoginAsync(this WebApplicationFactory<Program> factory, TestUser user)
     {
+        await factory.StartAsync();
         var client = factory.CreateClient(new WebApplicationFactoryClientOptions { HandleCookies = true });
         client.DefaultRequestHeaders.Add("X-Requested-With", "tests");
         var response = await client.PostAsJsonAsync("/api/v1/auth/login", new { email = user.Email, password = user.Password });
