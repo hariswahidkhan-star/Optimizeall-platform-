@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Notifications;
 using OptimizeAll.Api.Common.Security;
+using OptimizeAll.Api.Modules.Accounts;
 using OptimizeAll.Domain.Ads;
 using OptimizeAll.Domain.Agency;
 using OptimizeAll.Domain.Common;
@@ -179,6 +180,9 @@ public sealed class SocialPostService(
         var before = Snapshot(post);
         var previousStatus = post.Status;
         await ApplyAsync(post, input, ct);
+        // Most edits change only the variants (text, media, hashtags): the post row must still be saved so its
+        // ConcurrencyStamp advances and a concurrent editor still holding the old stamp gets 409 instead of overwriting.
+        ConcurrencyGuard.Touch(db, post);
         if (previousStatus != SocialPostStatus.Draft)
         {
             // Content changed after review: the approvals no longer apply.
@@ -563,9 +567,12 @@ public sealed class SocialPostService(
             var link = EffectiveLink(v.Link, post.AutoAppendUtm, v.Network, campaign, settings, post.Title);
             var validation = PostValidator.Validate(Content(v.Network, v.Text, v.Title, v.MediaIds, v.AltTexts, link, v.FirstComment,
                 v.Hashtags, v.Mentions, media), await presets.ForAsync(v.Network, ct));
+            // Clients see a failed variant as still pending (the agency is handling it), like their calendar and lists.
+            var hideFailure = forClient && v.PublishStatus == VariantPublishStatus.Failed;
             variants.Add(new VariantDto(v.Id, v.ProfileId, profile?.Handle ?? string.Empty, profile?.DisplayName ?? string.Empty, v.Network,
-                v.Text, v.Title, v.MediaIds, v.AltTexts, v.Link, link, v.FirstComment, v.Hashtags, v.Mentions, v.PublishStatus, v.Attempts,
-                v.NextAttemptAt, v.FailureKind, forClient ? null : v.FailureReason, v.ExternalPostId, v.PublishedUrl, v.PublishedAt,
+                v.Text, v.Title, v.MediaIds, v.AltTexts, v.Link, link, v.FirstComment, v.Hashtags, v.Mentions,
+                hideFailure ? VariantPublishStatus.Pending : v.PublishStatus, v.Attempts, v.NextAttemptAt,
+                forClient ? PublishFailureKind.None : v.FailureKind, forClient ? null : v.FailureReason, v.ExternalPostId, v.PublishedUrl, v.PublishedAt,
                 v.PublishedManually, validation));
         }
         var allowed = forClient
@@ -574,7 +581,8 @@ public sealed class SocialPostService(
         if (!forClient && settings.RequireClientApproval && post.Status is SocialPostStatus.Approved or SocialPostStatus.Failed
             && !await IsClientApprovedAsync(db, post.ClientAccountId, post.ApprovedByUserId, ct))
             allowed = allowed.Where(a => a is not ("schedule" or "queue" or "retry")).ToList();
-        return new PostDto(post.Id, post.ClientAccountId, client, post.Title, post.Status, post.ScheduledAt, post.CampaignId, post.AutoAppendUtm,
+        var status = forClient && post.Status == SocialPostStatus.Failed ? SocialPostStatus.Scheduled : post.Status;
+        return new PostDto(post.Id, post.ClientAccountId, client, post.Title, status, post.ScheduledAt, post.CampaignId, post.AutoAppendUtm,
             post.IsEvergreen, post.EvergreenIntervalDays, post.EvergreenMaxRepeats, post.EvergreenRepeatCount, post.RecycledFromPostId,
             post.RecycleNumber, post.PublishedAt, forClient ? null : post.FailureReason, settings.RequireClientApproval,
             variants.All(v => v.Validation.IsValid), allowed, variants,

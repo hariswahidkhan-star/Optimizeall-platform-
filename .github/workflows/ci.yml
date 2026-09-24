@@ -351,6 +351,19 @@ jobs:
           E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-content
         run: scripts/e2e-journeys.sh
 
+      # Social media + paid ads journey: profiles and connections (manual/expired tokens, OAuth refusals), the content
+      # calendar (compose, per-network limits, media, reschedule, delete), internal + client approvals, the publishing
+      # job against a local Graph API stub (idempotent, retries, failures, manual publishing), post analytics, ad
+      # accounts, CSV spend import, budgets and client-facing ad reports, plus permissions, tenancy, impersonation,
+      # conflicts and double clicks. Baseline + Demo, SQLite.
+      - name: Social + ads journey (scripts/e2e-journeys.sh, E2E_SUITE=j-social, SQLite)
+        env:
+          E2E_SUITE: j-social
+          E2E_DB_PROVIDER: sqlite
+          E2E_SKIP_BUILD: "1"
+          E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-social
+        run: scripts/e2e-journeys.sh
+
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v4
@@ -392,6 +405,8 @@ jobs:
             ${{ runner.temp }}/e2e-lead-to-cash/web.log
             ${{ runner.temp }}/e2e-j-content/api.log
             ${{ runner.temp }}/e2e-j-content/web.log
+            ${{ runner.temp }}/e2e-j-social/api.log
+            ${{ runner.temp }}/e2e-j-social/web.log
             ${{ runner.temp }}/web-smoke.log
           retention-days: 7
           if-no-files-found: ignore

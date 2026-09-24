@@ -161,7 +161,7 @@ CSV import.
 | GET | `/organizations` | the caller's organizations with `role` and `canApprove` |
 | GET | `/calendar` | `clientId, from, to` — posts from ClientApproval onwards (no internal drafts) |
 | GET | `/approvals` | posts awaiting client approval |
-| GET | `/posts/{id}` | variants and non-internal comments |
+| GET | `/posts/{id}` | variants and non-internal comments; a Failed post reads `Scheduled` (variants `Pending`, `failureKind: None`, no failure reasons), as in the calendar and lists |
 | POST | `/posts/{id}/approve` | Approver/Owner; ClientApproval → Approved |
 | POST | `/posts/{id}/request-changes` | Approver/Owner; `{ comment }` required; back to Draft |
 | POST | `/posts/{id}/comments` | |
@@ -253,6 +253,8 @@ Validation issue codes (inside `issues[]`): `social.text_too_long`, `social.titl
 `social.too_many_mentions`, `social.first_comment_unsupported`, `social.first_comment_too_long`,
 `social.link_not_clickable`, `social.alt_text_too_long`, `social.empty`.
 
-Ads: `ads.naming_convention`, `ads.client_mismatch`, `ads.currency_unsupported`, `ads.experiment_counts` (400);
+Ads: `ads.naming_convention`, `ads.client_mismatch`, `ads.currency_unsupported`, `ads.experiment_counts`,
+`ads.amount_too_small` (a budget amount that rounds to 0 in its currency, e.g. 0.4 JPY) (400);
 `import.invalid`, `import.mapping_required`, `import.empty`, `import.csv`, `import.template_unknown` (400).
-Common: `concurrency.conflict` (409), `<entity>.not_found` (404).
+Common: `concurrency.conflict` (409; a post edit that changes only its variants also advances the post's `concurrencyStamp`),
+`<entity>.not_found` (404); an enum value that is not a member of the enum (e.g. `"network": 99`) is a 400 validation error.

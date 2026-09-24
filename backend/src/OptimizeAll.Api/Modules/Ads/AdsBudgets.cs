@@ -280,6 +280,11 @@ public sealed class AdsBudgetsController(AppDbContext db, SocialAccess access, P
             throw new DomainException("ads.thresholds_invalid", "The under-pacing threshold must be below the over-pacing threshold.");
         if (input.CampaignId is { } cid && !await db.Set<AdCampaign>().AnyAsync(c => c.Id == cid && c.ClientAccountId == budget.ClientAccountId, ct))
             throw DomainException.NotFound("Campaign");
+        // Validation allows 0.01, but the amount is stored in the currency's minor unit: 0.4 JPY would become a budget
+        // of 0, which pacing treats as "no budget".
+        if (Money.Round(input.Amount, currency) <= 0)
+            throw new DomainException("ads.amount_too_small", $"The budget rounds to 0 {currency}; enter a larger amount.",
+                errors: new Dictionary<string, string[]> { ["amount"] = new[] { $"The amount rounds to 0 {currency}." } });
         budget.Month = new DateOnly(input.Month!.Value.Year, input.Month.Value.Month, 1);
         budget.Platform = input.Platform;
         budget.CampaignId = input.CampaignId;

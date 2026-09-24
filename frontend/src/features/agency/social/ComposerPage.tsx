@@ -119,6 +119,10 @@ export function ComposerPage() {
     queryKey: socialKeys.post(id ?? 'new'),
     queryFn: () => api.get<Post>(`/agency/social/posts/${id}`),
     enabled: !isNew,
+    // The editor is re-created for each new concurrency stamp. A background refetch (switching back to the tab) must
+    // not replace what the user is typing with someone else's version: their save gets a 409 and they reload instead.
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
   if (!isNew && postQuery.isLoading) return <Skeleton height="30rem" />;
   if (!isNew && postQuery.isError) return <ErrorState error={postQuery.error} onRetry={() => void postQuery.refetch()} />;
@@ -228,6 +232,9 @@ function Composer({ post }: { post: Post | null }) {
     mutationFn: () =>
       post ? api.put<Post>(`/agency/social/posts/${post.id}`, body) : api.post<Post>('/agency/social/posts', body),
     onSuccess: (saved) => {
+      // Show the saved version (and its new concurrency stamp) at once, not after a background refetch: the editor
+      // is re-created for a new stamp, and a dialog opened in between would be lost.
+      queryClient.setQueryData(socialKeys.post(saved.id), saved);
       toast.success(post ? 'Post saved' : 'Draft created');
       void queryClient.invalidateQueries({ queryKey: socialKeys.all });
       if (!post) navigate(`/agency/social/posts/${saved.id}`, { replace: true });
@@ -251,11 +258,18 @@ function Composer({ post }: { post: Post | null }) {
     if (kind === 'delete') {
       await api.delete(`/agency/social/posts/${post.id}`);
       toast.success('Post deleted');
-      await queryClient.invalidateQueries({ queryKey: socialKeys.all });
       navigate('/agency/social');
+      // Refresh everything but the deleted post itself: refetching it (still observed until the page unmounts) is a 404.
+      const deleted = socialKeys.post(post.id);
+      await queryClient.invalidateQueries({
+        queryKey: socialKeys.all,
+        predicate: (q) => !(q.queryKey[1] === deleted[1] && q.queryKey[2] === deleted[2]),
+      });
+      queryClient.removeQueries({ queryKey: deleted });
       return;
     }
-    await api.post<Post>(`/agency/social/posts/${post.id}/${path}`, { concurrencyStamp: post.concurrencyStamp, ...payload });
+    const updated = await api.post<Post>(`/agency/social/posts/${post.id}/${path}`, { concurrencyStamp: post.concurrencyStamp, ...payload });
+    queryClient.setQueryData(socialKeys.post(post.id), updated);
     toast.success(`${ACTION_LABELS[kind]}: done`);
     await queryClient.invalidateQueries({ queryKey: socialKeys.all });
   };

@@ -26,6 +26,8 @@
 #                           j-finance       payouts and the payments hub (Demo seed)
 #                           j-admin         platform administration: users, roles, test users, log-in-as (Demo seed)
 #                           j-content       site content, SEO, landing-page and form builders (Demo seed)
+#                           j-social        social media + paid ads; publishes through a local Graph/X API stub that
+#                                           the suite's global setup serves on $E2E_STUB_PORT (Demo seed)
 #                           j-lead-to-cash  website inquiry → CRM → proposal → contract → paid recurring invoice (Demo seed)
 #   E2E_SEED              comma-separated seed profiles (default: Baseline for journeys and j-participant,
 #                         Baseline,Demo for everything else)
@@ -33,6 +35,8 @@
 #   DB_HOST/DB_PORT/DB_USER/DB_PASSWORD   MySQL server (defaults: 127.0.0.1:3306 optimizeall/optimizeall_dev);
 #                                         the user must be able to CREATE/DROP databases
 #   E2E_API_PORT=5099  E2E_WEB_PORT=4173
+#   E2E_STUB_PORT      local stand-in for the Meta Graph / X APIs (default E2E_API_PORT+2000): the API never calls the
+#                      real networks during a run
 #   E2E_SKIP_BUILD=1   reuse existing API (Release) and frontend (dist/) builds (CI builds them in earlier steps)
 #   E2E_KEEP_DB=1      keep the database after the run (for debugging)
 #   E2E_WORK_DIR       where mail, uploaded files and server logs go (default: a new mktemp directory)
@@ -42,6 +46,7 @@ set -uo pipefail
 
 E2E_API_PORT="${E2E_API_PORT:-5099}"
 E2E_WEB_PORT="${E2E_WEB_PORT:-4173}"
+E2E_STUB_PORT="${E2E_STUB_PORT:-$((E2E_API_PORT + 2000))}"
 E2E_DB_NAME="${E2E_DB_NAME:-oa_e2e_$(date +%Y%m%d%H%M%S)_$$}"
 E2E_WORK_DIR="${E2E_WORK_DIR:-$(mktemp -d "${TMPDIR:-/tmp}/oa-e2e.XXXXXX")}"
 MAIL_DIR="$E2E_WORK_DIR/mail"
@@ -144,6 +149,7 @@ api_pid="$(cd "$ROOT" && start_bg e2e-api "$API_LOG" env \
   RateLimiting__AuthPerMinute=1000 \
   Jobs__Enabled=false \
   Storage__RootPath="$FILES_DIR" \
+  SocialMedia__GraphApiBaseUrl="http://127.0.0.1:$E2E_STUB_PORT/graph" SocialMedia__XApiBaseUrl="http://127.0.0.1:$E2E_STUB_PORT/x" \
   Bootstrap__AdminEmail="$ADMIN_EMAIL" Bootstrap__AdminPassword="$ADMIN_PASSWORD" \
   dotnet run --project "$API_PROJECT" -c Release --no-build --no-launch-profile)"
 
@@ -165,7 +171,7 @@ set +e
 (cd "$FRONTEND_DIR" && \
   E2E_SUITE="$E2E_SUITE" E2E_DB_PROVIDER="$E2E_DB_PROVIDER" \
   PLAYWRIGHT_BASE_URL="http://localhost:$E2E_WEB_PORT" E2E_BASE_URL="http://localhost:$E2E_WEB_PORT" \
-  E2E_API_URL="http://localhost:$E2E_API_PORT" E2E_MAIL_DIR="$MAIL_DIR" \
+  E2E_API_URL="http://localhost:$E2E_API_PORT" E2E_MAIL_DIR="$MAIL_DIR" E2E_STUB_PORT="$E2E_STUB_PORT" \
   E2E_ADMIN_EMAIL="$ADMIN_EMAIL" E2E_ADMIN_PASSWORD="$ADMIN_PASSWORD" \
   E2E_DB_NAME="$E2E_DB_NAME" E2E_DB_HOST="$DB_HOST" E2E_DB_PORT="$DB_PORT" \
   E2E_DB_USER="$DB_USER" E2E_DB_PASSWORD="$DB_PASSWORD" \
