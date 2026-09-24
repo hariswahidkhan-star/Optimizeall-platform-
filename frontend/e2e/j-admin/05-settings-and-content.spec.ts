@@ -40,15 +40,15 @@ test('settings: edit with a reason, boundary values refused, restore the default
   const errors = watchErrors(admin);
   await admin.goto('/admin/settings');
   const setting = admin.getByRole('region', { name: 'Reviewer claim duration' });
-  await expect(setting.getByText('Default', { exact: true })).toBeVisible();
+  await expect(setting.locator('.ui-badge').filter({ hasText: /^Default$/ })).toBeVisible();
   const input = setting.getByLabel('New value');
   const original = await input.inputValue();
 
   // Out of range (1–240) and unchanged values are refused before anything is sent.
-  for (const bad of ['0', '241', '-5']) {
+  for (const bad of ['0', '241', '-5', '2.5']) {
     await input.fill(bad);
     await setting.getByRole('button', { name: 'Save…' }).click();
-    await expect(setting.getByText(/between 1 and 240|1 to 240|at least 1|at most 240/i).first()).toBeVisible();
+    await expect(setting.getByText('Use a whole number from 1 to 240.')).toBeVisible();
     await expect(modal(admin, 'Change Reviewer claim duration?')).toHaveCount(0);
   }
   await input.fill(original);
@@ -81,7 +81,7 @@ test('settings: edit with a reason, boundary values refused, restore the default
   await reset.getByLabel('Reason').fill(resetReason);
   await reset.getByRole('button', { name: 'Restore default' }).click();
   await expect(toast(admin, 'Default restored')).toBeVisible();
-  await expect(setting.getByText('Default', { exact: true })).toBeVisible();
+  await expect(setting.locator('.ui-badge').filter({ hasText: /^Default$/ })).toBeVisible();
   await expect(input).toHaveValue(original);
 
   // Audit: both changes with their reasons and before/after values.
@@ -157,8 +157,9 @@ test('email templates: required and unknown variables are enforced; preview; res
   const errors = watchErrors(admin);
   errors.ignore(/HTTP 400 (PUT|POST) .*\/api\/v1\/admin\/email-templates\//);
   await admin.goto('/admin/content?tab=emails');
-  await admin.getByRole('table', { name: 'Email templates' }).getByRole('button', { name: 'Password reset' }).click();
-  const form = admin.getByRole('form', { name: 'Edit Password reset' });
+  await admin.getByRole('table', { name: 'Email templates' }).getByRole('button', { name: 'Reset password', exact: true }).click();
+  // The account email (its link is the {{resetUrl}} variable), not the "Password reset" notification.
+  const form = admin.getByRole('form', { name: 'Edit Reset password' });
   const preview = admin.getByRole('region', { name: 'Preview with sample values' });
   const body = form.getByLabel('Email text');
   const original = await body.inputValue();
@@ -167,11 +168,11 @@ test('email templates: required and unknown variables are enforced; preview; res
   // Dropping the required reset link is refused (on preview and on save).
   await body.fill(original.replaceAll('{{resetUrl}}', ''));
   await form.getByRole('button', { name: 'Save template' }).click();
-  await expect(form.getByText(/Keep \{\{resetUrl\}\} in the email/)).toBeVisible();
+  await expect(form.getByText(/^Keep \{\{resetUrl\}\} in the email/)).toBeVisible();
   // An unknown variable is refused too.
   await body.fill(`${original}\n\nHello {{favouriteColour}}`);
   await form.getByRole('button', { name: 'Save template' }).click();
-  await expect(form.getByText(/Unknown variable \{\{favouriteColour\}\}/)).toBeVisible();
+  await expect(form.getByText(/^Unknown variable \{\{favouriteColour\}\}/)).toBeVisible();
 
   // A valid edit: insert a variable at the cursor, preview, save.
   await body.fill(`${original}\n\nRequested for ${id}: `);
@@ -223,7 +224,7 @@ test('CMS page: version history, restore an older version, scheduled go-live hid
   const errors = watchErrors(admin);
   await admin.goto(`/agency/website/pages/${created.id}`);
   const editor = admin.getByRole('form', { name: 'Page editor' });
-  await editor.getByLabel('Content').fill(v2);
+  await editor.getByRole('textbox', { name: 'Content' }).fill(v2);
   await editor.getByLabel('Change note').fill(`E2E ${id}: new wording`);
   await editor.getByRole('button', { name: 'Save page' }).click();
   await expect(toast(admin, 'Page saved')).toBeVisible();
@@ -253,7 +254,7 @@ test('CMS page: version history, restore an older version, scheduled go-live hid
   await expect(toast(admin, 'Page saved')).toBeVisible();
   await visitor.reload();
   await expect(visitor.getByText(v1)).toHaveCount(0);
-  await expect(visitor.getByRole('heading', { level: 1 })).toContainText(/not found|can’t find|doesn’t exist/i);
+  await expect(visitor.getByRole('heading', { level: 1 })).toHaveText('We couldn’t find that page');
   await goLive.fill('');
   await editor.getByRole('button', { name: 'Save page' }).click();
   await expect(toast(admin, 'Page saved')).toBeVisible();
@@ -273,8 +274,8 @@ test('announcements: a double-click creates one, it shows on the participant hom
   await admin.goto('/admin/content?tab=announcements');
   await admin.getByRole('button', { name: 'New announcement' }).click();
   const dialog = modal(admin, 'New announcement');
-  await dialog.getByLabel('Title').fill(title);
-  await dialog.getByLabel('Message').fill(`Payouts run late this week (${id}).`);
+  await dialog.getByRole('textbox', { name: 'Title' }).fill(title);
+  await dialog.getByRole('textbox', { name: 'Message' }).fill(`Payouts run late this week (${id}).`);
   await dialog.getByRole('button', { name: 'Create announcement' }).dblclick();
   await expect(toast(admin, 'Announcement created')).toBeVisible();
   await expect(dialog).toBeHidden();
@@ -295,11 +296,11 @@ test('announcements: a double-click creates one, it shows on the participant hom
   const edit = modal(admin, 'Edit announcement');
   const item = await api.get<Record<string, unknown>>(`/admin/content/announcements/${list.items[0]!.id}`);
   await api.put(`/admin/content/announcements/${list.items[0]!.id}`, { ...item, body: `Changed elsewhere (${id}).` });
-  await edit.getByLabel('Message').fill(`My edit (${id}).`);
+  await edit.getByRole('textbox', { name: 'Message' }).fill(`My edit (${id}).`);
   await edit.getByRole('button', { name: 'Save changes' }).click();
   await expect(edit.getByRole('alert')).toContainText('Someone else changed this item');
   await edit.getByRole('button', { name: 'Load latest version' }).click();
-  await expect(edit.getByLabel('Message')).toHaveValue(`Changed elsewhere (${id}).`);
+  await expect(edit.getByRole('textbox', { name: 'Message' })).toHaveValue(`Changed elsewhere (${id}).`);
   await edit.getByLabel('Active').click();
   await edit.getByRole('button', { name: 'Save changes' }).click();
   await expect(toast(admin, 'Changes saved')).toBeVisible();
@@ -317,7 +318,10 @@ test('FAQ reorder: the saved order is the public order', async ({ as }) => {
   const list = admin.getByRole('list', { name: 'FAQs order' });
   const handles = list.getByRole('button', { name: /^Reorder / });
   await expect(handles.nth(1)).toBeVisible();
-  const second = (await handles.nth(1).getAttribute('aria-label'))!.replace(/^Reorder (.*), position .*$/, '$1');
+  const nameOf = async (i: number) =>
+    (await handles.nth(i).getAttribute('aria-label'))!.replace(/^Reorder (.*), position .*$/, '$1');
+  const first = await nameOf(0);
+  const second = await nameOf(1);
   await admin.getByRole('button', { name: `Move ${second} up` }).click();
   await expect(admin.getByText('Unsaved order changes')).toBeVisible();
   await admin.getByRole('button', { name: 'Save order' }).click();
@@ -328,10 +332,14 @@ test('FAQ reorder: the saved order is the public order', async ({ as }) => {
     'aria-label',
     `Reorder ${second}, position 1 of ${await handles.count()}`,
   );
-  // The public FAQ endpoint answers in the new order.
+  // The public FAQ page (grouped by category, in sort order) lists them in the new order.
   const res = await fetch(`${process.env.E2E_API_URL}/api/v1/content/faqs`);
-  const faqs = (await res.json()) as { question: string }[] | { items: { question: string }[] };
-  const questions = (Array.isArray(faqs) ? faqs : faqs.items).map((f) => f.question);
-  expect(questions[0]).toBe(second);
+  const faqs = (await res.json()) as { categories: { category: string; items: { question: string }[] }[] };
+  const questions = faqs.categories.flatMap((c) => c.items.map((f) => f.question));
+  expect(questions.indexOf(second)).toBeGreaterThanOrEqual(0);
+  const sameCategory = faqs.categories.find((c) => c.items.some((f) => f.question === second))!;
+  // (The seeded first two FAQs share a category, so their relative order is visible publicly.)
+  expect(sameCategory.items.map((f) => f.question)).toContain(first);
+  expect(questions.indexOf(second)).toBeLessThan(questions.indexOf(first));
   errors.expectClean('reordering FAQs');
 });
