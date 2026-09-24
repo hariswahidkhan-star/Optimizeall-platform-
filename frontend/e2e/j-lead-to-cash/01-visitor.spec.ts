@@ -25,7 +25,10 @@ import {
 test.describe.configure({ mode: 'serial' });
 
 /** Waits until the form token the page fetched on mount is old enough, then clicks `submit`. */
-async function submitWhenFilled(token: { minFillSeconds: number; issuedAt: number }, submit: () => Promise<void>) {
+async function submitWhenFilled(
+  token: { minFillSeconds: number; issuedAt: number },
+  submit: () => Promise<void>,
+) {
   await expect
     .poll(() => Date.now() - token.issuedAt, { message: 'form token older than the minimum fill time' })
     .toBeGreaterThanOrEqual(token.minFillSeconds * 1000 + 250);
@@ -53,7 +56,9 @@ test('the visitor browses the site and sends the contact, audit and quote forms'
 
   await visitor.goto('/pricing');
   await expect(visitor.getByRole('heading', { level: 1 })).toBeVisible();
-  const packageLinks = visitor.getByRole('main').getByRole('link', { name: /^(Get started|Request a quote) with / });
+  const packageLinks = visitor
+    .getByRole('main')
+    .getByRole('link', { name: /^(Get started|Request a quote) with / });
   await expect(packageLinks.first()).toBeVisible();
 
   await visitor.goto('/case-studies');
@@ -64,7 +69,12 @@ test('the visitor browses the site and sends the contact, audit and quote forms'
   await expect(visitor.getByRole('heading', { level: 1 })).toBeVisible();
 
   await visitor.goto('/blog');
-  const firstPost = visitor.getByRole('main').getByRole('article').first().getByRole('heading', { level: 2 }).getByRole('link');
+  const firstPost = visitor
+    .getByRole('main')
+    .getByRole('article')
+    .first()
+    .getByRole('heading', { level: 2 })
+    .getByRole('link');
   const postTitle = (await firstPost.textContent())!.trim();
   await firstPost.click();
   await expect(visitor.getByRole('heading', { level: 1, name: postTitle })).toBeVisible();
@@ -79,17 +89,23 @@ test('the visitor browses the site and sends the contact, audit and quote forms'
   await contact.getByLabel('Work email').fill(lead.email);
   await contact.getByLabel('Company').fill(lead.company);
   await contact.getByLabel('Website').fill(lead.website);
-  await contact.getByLabel('How can we help?').fill('We need SEO and paid social for our spring launch — can we talk budgets?');
+  await contact
+    .getByLabel('How can we help?')
+    .fill('We need SEO and paid social for our spring launch — can we talk budgets?');
   await contact.getByRole('checkbox', { name: /^I agree that Optimize All may use/ }).check();
   if (Date.now() - contactToken.issuedAt < contactToken.minFillSeconds * 1000 - 500) {
     // A bot-fast submission is refused with a clear message (the server enforces the minimum fill time).
     errors.ignore(/HTTP 400 POST .*\/public\/inquiries\/contact$/);
     await contact.getByRole('button', { name: 'Send message' }).click();
-    await expect(contact.getByText('That was quick! Please check your answers and send the form again.')).toBeVisible();
+    await expect(
+      contact.getByText('That was quick! Please check your answers and send the form again.'),
+    ).toBeVisible();
   }
   await submitWhenFilled(contactToken, () => contact.getByRole('button', { name: 'Send message' }).click());
   await expect(visitor.getByRole('heading', { name: 'Thanks — message received' })).toBeVisible();
-  const contactRef = (await visitor.getByText(/^Your reference: OA-/).textContent())!.replace('Your reference: ', '').trim();
+  const contactRef = (await visitor.getByText(/^Your reference: OA-/).textContent())!
+    .replace('Your reference: ', '')
+    .trim();
 
   // ---------------------------------------------------------------- free audit
   const auditToken = await pageFormToken(visitor, () => visitor.goto('/free-audit'));
@@ -102,22 +118,34 @@ test('the visitor browses the site and sends the contact, audit and quote forms'
   await audit.getByLabel('What are your goals?').fill('Rank for our top 20 commercial keywords');
   await audit.getByLabel('Monthly marketing budget').selectOption({ label: '$3,000 – $10,000 / month' });
   await audit.getByRole('checkbox', { name: /^I agree that Optimize All may use/ }).check();
-  await submitWhenFilled(auditToken, () => audit.getByRole('button', { name: 'Request my free audit' }).click());
+  await submitWhenFilled(auditToken, () =>
+    audit.getByRole('button', { name: 'Request my free audit' }).click(),
+  );
   await expect(visitor.getByRole('heading', { name: 'Your audit request is in' })).toBeVisible();
 
   // ---------------------------------------------------------------- quote for a pricing package (3 steps)
   await visitor.goto('/pricing');
-  const tokenForQuote = visitor.waitForResponse((r) => r.url().includes('/api/v1/public/forms/token') && r.ok());
-  const pkg = visitor.getByRole('main').getByRole('link', { name: /^Get started with / }).first();
+  const tokenForQuote = visitor.waitForResponse(
+    (r) => r.url().includes('/api/v1/public/forms/token') && r.ok(),
+  );
+  const pkg = visitor
+    .getByRole('main')
+    .getByRole('link', { name: /^Get started with / })
+    .first();
   await pkg.click();
   await expect(visitor).toHaveURL(/\/get-a-quote\?.*package=/);
-  const quoteToken = { ...((await (await tokenForQuote).json()) as { minFillSeconds: number }), issuedAt: Date.now() };
+  const quoteToken = {
+    ...((await (await tokenForQuote).json()) as { minFillSeconds: number }),
+    issuedAt: Date.now(),
+  };
   const quote = visitor.getByRole('form', { name: /^Step 1 of 3/ });
   await expect(quote.getByRole('checkbox', { checked: true }).first()).toBeVisible(); // the package's service is preselected
   await visitor.getByRole('button', { name: 'Next' }).click();
   await visitor.getByLabel('Monthly budget').selectOption({ label: '$3,000 – $10,000 / month' });
   await visitor.getByRole('radio', { name: 'In 1–3 months' }).check();
-  await visitor.getByLabel('Project details').fill('Launching a new product line in spring; need a retainer.');
+  await visitor
+    .getByLabel('Project details')
+    .fill('Launching a new product line in spring; need a retainer.');
   await visitor.getByRole('button', { name: 'Next' }).click();
   await visitor.getByLabel('Full name').fill(lead.name);
   await visitor.getByLabel('Work email').fill(lead.email);
@@ -146,13 +174,21 @@ test('the visitor books a consultation; a second visitor racing for the same slo
   ]);
   for (const page of [first, second]) {
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-    await expect(page.getByRole('group', { name: /^Times on / }).getByRole('button').first()).toBeVisible();
+    await expect(
+      page
+        .getByRole('group', { name: /^Times on / })
+        .getByRole('button')
+        .first(),
+    ).toBeVisible();
   }
 
   // Pick the second day's first time (both see it), so the slot is well past the minimum notice.
   const pick = async (page: Page) => {
     await page.getByRole('group', { name: 'Day' }).getByRole('button').nth(1).click();
-    const slot = page.getByRole('group', { name: /^Times on / }).getByRole('button').first();
+    const slot = page
+      .getByRole('group', { name: /^Times on / })
+      .getByRole('button')
+      .first();
     const label = (await slot.textContent())!.trim();
     await slot.click();
     await expect(slot).toHaveAttribute('aria-pressed', 'true');
@@ -183,19 +219,25 @@ test('the visitor books a consultation; a second visitor racing for the same slo
 
   // The second visitor, still looking at the stale slot list, loses the race: 409, the list refreshes, the slot is gone.
   secondErrors.ignore(/HTTP 409 POST .*\/public\/consultations$/);
-  const refreshed = second.waitForResponse((r) => r.url().includes('/api/v1/public/consultations/slots') && r.ok());
+  const refreshed = second.waitForResponse(
+    (r) => r.url().includes('/api/v1/public/consultations/slots') && r.ok(),
+  );
   await submitWhenFilled(secondToken, () => secondForm.getByRole('button', { name: /^Book / }).click());
   await expect(second.getByRole('status', { name: 'That time was just taken' })).toBeVisible();
   await refreshed;
   await expect(secondForm.getByRole('button', { name: 'Book my call' })).toBeVisible(); // the selection was cleared
   await second.getByRole('group', { name: 'Day' }).getByRole('button').nth(1).click();
-  await expect(second.getByRole('group', { name: /^Times on / }).getByRole('button', { name: firstSlot, exact: true })).toHaveCount(0);
+  await expect(
+    second.getByRole('group', { name: /^Times on / }).getByRole('button', { name: firstSlot, exact: true }),
+  ).toHaveCount(0);
 
   firstErrors.expectClean('the booking page');
   secondErrors.expectClean('the second visitor’s booking page');
 });
 
-test('the visitor subscribes to the newsletter and confirms from the email (double opt-in)', async ({ anonymous }) => {
+test('the visitor subscribes to the newsletter and confirms from the email (double opt-in)', async ({
+  anonymous,
+}) => {
   const lead = prospect();
   const visitor = await anonymous();
   const errors = watchErrors(visitor);
@@ -205,12 +247,17 @@ test('the visitor subscribes to the newsletter and confirms from the email (doub
   await signup.getByLabel('Email address').fill(lead.email);
   await signup.getByRole('checkbox', { name: /^Send me Optimize All/ }).check();
   await submitWhenFilled(token, () => signup.getByRole('button', { name: 'Subscribe' }).click());
-  await expect(visitor.getByText('Almost there! Check your inbox and click the link to confirm your subscription.')).toBeVisible();
+  await expect(
+    visitor.getByText('Almost there! Check your inbox and click the link to confirm your subscription.'),
+  ).toBeVisible();
 
   const mail = await latestMail(lead.email, /Confirm your Optimize All newsletter subscription/);
   const confirmLink = mail.links.find((l) => l.includes('/newsletter/confirm'));
   expect(confirmLink, 'the email carries the confirmation link').toBeTruthy();
-  expect(mail.links.some((l) => l.includes('/newsletter/unsubscribe')), 'and an unsubscribe link').toBe(true);
+  expect(
+    mail.links.some((l) => l.includes('/newsletter/unsubscribe')),
+    'and an unsubscribe link',
+  ).toBe(true);
 
   // Opening the link does not confirm by itself (mail scanners open links); the visitor presses the button.
   await visitor.goto(pathOf(confirmLink!));
@@ -228,7 +275,9 @@ test('the visitor subscribes to the newsletter and confirms from the email (doub
     consentVersion: 'newsletter-2026-09',
   });
   expect(again.status).toBe(202);
-  expect(again.body.message).toBe('Almost there! Check your inbox and click the link to confirm your subscription.');
+  expect(again.body.message).toBe(
+    'Almost there! Check your inbox and click the link to confirm your subscription.',
+  );
   errors.expectClean('the newsletter signup');
 });
 
@@ -260,7 +309,10 @@ test('spam and replay protections on the public forms', async () => {
   expect(noConsent.body.errors).toHaveProperty('consent');
 
   // Honeypot: the bot is told "thanks" but nothing is stored, and the token is not spent.
-  const bot = await postPublic('/public/inquiries/contact', envelope(fast.token, { nickname: 'http://spam.example' }));
+  const bot = await postPublic(
+    '/public/inquiries/contact',
+    envelope(fast.token, { nickname: 'http://spam.example' }),
+  );
   expect(bot.status).toBe(202);
 
   // Single-use tokens: the first real submission is accepted, an identical replay is a 409.
@@ -280,17 +332,26 @@ test('spam and replay protections on the public forms', async () => {
   const race = await formToken();
   await waitMinFill(race);
   const body = envelope(race.token, { email: `race.${id}@spamcheck-${id}.test` });
-  const results = await Promise.all([postPublic('/public/inquiries/contact', body), postPublic('/public/inquiries/contact', body)]);
+  const results = await Promise.all([
+    postPublic('/public/inquiries/contact', body),
+    postPublic('/public/inquiries/contact', body),
+  ]);
   expect(results.map((r) => r.status).sort()).toEqual([202, 409]);
 
   // Boundary values: the name must have 2+ characters, the message 10+, the email must be an address.
   const bounds = await formToken();
   await waitMinFill(bounds);
-  const invalid = await postPublic('/public/inquiries/contact', envelope(bounds.token, { name: 'A', email: 'not-an-email', message: 'short' }));
+  const invalid = await postPublic(
+    '/public/inquiries/contact',
+    envelope(bounds.token, { name: 'A', email: 'not-an-email', message: 'short' }),
+  );
   expect(invalid.status).toBe(400);
   expect(Object.keys(invalid.body.errors as object).map((k) => k.toLowerCase())).toEqual(
     expect.arrayContaining(['name', 'message']),
   );
-  const exact = await postPublic('/public/inquiries/contact', envelope(bounds.token, { name: 'Al', message: '0123456789' }));
+  const exact = await postPublic(
+    '/public/inquiries/contact',
+    envelope(bounds.token, { name: 'Al', message: '0123456789' }),
+  );
   expect(exact.status).toBe(202);
 });

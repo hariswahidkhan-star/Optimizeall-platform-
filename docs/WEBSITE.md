@@ -163,8 +163,8 @@ in this workstream.
 
 - Scheduled posts: `BlogSchedulerJob` runs every minute through the job runner; it is idempotent and safe on several
   instances.
-- Staff notifications: each website inquiry notifies users with `site.manage` (in-app, linking to
-  `/agency/website/inquiries/{id}`).
+- Staff notifications: each website inquiry notifies users with `site.manage` or `crm.manage` (in-app, linking to
+  `/agency/website/inquiries/{id}`); staff and client portals show them under the bell in the top bar.
 - Booking conflicts are prevented by a unique slot key; the loser of a race gets `409 website.slot_taken` and the page
   refreshes the slot list.
 - Configuration: `Website:MinFormFillSeconds` (default 3), `Content:AllowedImageHosts`, `Email:AppBaseUrl`.

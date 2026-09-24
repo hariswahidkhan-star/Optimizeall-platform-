@@ -38,7 +38,9 @@ The same submission is never processed twice.
 
 **Lead scoring.** Under *CRM → Settings → Scoring*, rules add points for **fit** (industry, company size, budget
 range, country, source, lifecycle stage) and **engagement** (website inquiries, form submissions, email opens and
-clicks, proposal views, booked meetings, newsletter sign-ups). Each rule can
+clicks, proposal views, booked meetings, newsletter sign-ups). A booked consultation counts as a meeting, the first
+view of each proposal counts for its contact and a confirmed (double opt-in) newsletter signup counts for the contact
+with that email, each once. Each rule can
 be capped at a maximum number of occurrences. The score shows on contacts and deals, with a breakdown. After changing
 rules, press *Recompute* to update every contact.
 

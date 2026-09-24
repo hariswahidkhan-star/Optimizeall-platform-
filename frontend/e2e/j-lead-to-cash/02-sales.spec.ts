@@ -43,7 +43,9 @@ test('the inquiry reaches staff: notification, assignment and status', async ({ 
   await expect(note).toBeVisible();
   await note.click();
   await expect(admin).toHaveURL(/\/agency\/website\/inquiries\/[0-9a-f-]{36}$/);
-  await expect(admin.getByRole('heading', { level: 1, name: `${lead.name} — ${lead.company}` })).toBeVisible();
+  await expect(
+    admin.getByRole('heading', { level: 1, name: `${lead.name} — ${lead.company}` }),
+  ).toBeVisible();
   await expect(admin.getByText('We need SEO and paid social for our spring launch')).toBeVisible();
   // Attribution from the landing visit (?utm_…) was carried to the form.
   await expect(admin.getByText('l2c-' + runId())).toBeVisible();
@@ -53,7 +55,9 @@ test('the inquiry reaches staff: notification, assignment and status', async ({ 
   const stale = await admin.context().newPage();
   const staleErrors = watchErrors(stale);
   await stale.goto(inquiryUrl);
-  await expect(stale.getByRole('heading', { level: 1, name: `${lead.name} — ${lead.company}` })).toBeVisible();
+  await expect(
+    stale.getByRole('heading', { level: 1, name: `${lead.name} — ${lead.company}` }),
+  ).toBeVisible();
 
   await admin.getByLabel('Status').selectOption('InProgress');
   await admin.getByLabel('Assigned to').selectOption({ label: accounts.sales.displayName });
@@ -64,18 +68,31 @@ test('the inquiry reaches staff: notification, assignment and status', async ({ 
   staleErrors.ignore(/HTTP 409 PUT .*\/agency\/website\/inquiries\//);
   await stale.getByLabel('Status').selectOption('Closed');
   await stale.getByRole('button', { name: 'Save', exact: true }).click();
-  await expect(toast(stale, 'Someone else updated this inquiry. Reload the page to see their changes.')).toBeVisible();
+  await expect(
+    toast(stale, 'Someone else updated this inquiry. Reload the page to see their changes.'),
+  ).toBeVisible();
   await stale.reload();
   await expect(stale.getByLabel('Status')).toHaveValue('InProgress');
   await expect(stale.getByLabel('Assigned to')).toHaveValue(/[0-9a-f-]{36}/);
 
   // The inbox filters by assignee.
   await admin.goto('/agency/website/inquiries');
-  const filtered = admin.waitForResponse((r) => new URL(r.url()).pathname.endsWith('/agency/website/inquiries') && new URL(r.url()).searchParams.has('assignedTo') && r.ok());
-  await admin.getByRole('combobox', { name: 'Assigned to' }).selectOption({ label: accounts.sales.displayName });
+  const filtered = admin.waitForResponse(
+    (r) =>
+      new URL(r.url()).pathname.endsWith('/agency/website/inquiries') &&
+      new URL(r.url()).searchParams.has('assignedTo') &&
+      r.ok(),
+  );
+  await admin
+    .getByRole('combobox', { name: 'Assigned to' })
+    .selectOption({ label: accounts.sales.displayName });
   await filtered;
   // Of this lead's four inquiries, only the assigned one is listed.
-  await expect(admin.getByRole('table', { name: 'Website inquiries' }).getByRole('link', { name: `${lead.name} — ${lead.company}` })).toHaveCount(1);
+  await expect(
+    admin
+      .getByRole('table', { name: 'Website inquiries' })
+      .getByRole('link', { name: `${lead.name} — ${lead.company}` }),
+  ).toHaveCount(1);
 
   errors.expectClean('the inquiry handling');
   staleErrors.expectClean('the stale inquiry tab');
@@ -92,12 +109,17 @@ test('the sales rep works the CRM lead: contact, company, score, pipeline and a 
     `/agency/website/inquiries?search=${encodeURIComponent(lead.email)}`,
   );
   expect(inquiries.items.length).toBeGreaterThanOrEqual(4); // contact, audit, quote, consultation
-  expect(await statusOf(salesApi.put(`/agency/website/inquiries/${inquiries.items[0]!.id}`, { status: 'Closed' }))).toMatchObject({ status: 403 });
+  expect(
+    await statusOf(salesApi.put(`/agency/website/inquiries/${inquiries.items[0]!.id}`, { status: 'Closed' })),
+  ).toMatchObject({ status: 403 });
 
   // ---------------------------------------------------------------- contact → company, lead score
   await sales.goto('/agency/crm/contacts');
   await sales.getByRole('searchbox').first().fill(lead.email);
-  await sales.getByRole('main').getByRole('link', { name: new RegExp(lead.name) }).click();
+  await sales
+    .getByRole('main')
+    .getByRole('link', { name: new RegExp(lead.name) })
+    .click();
   await expect(sales.getByRole('heading', { level: 1, name: lead.name })).toBeVisible();
   const scoreHeading = sales.getByRole('heading', { name: /^Lead score: \d+$/ });
   await expect(scoreHeading).toBeVisible();
@@ -111,7 +133,10 @@ test('the sales rep works the CRM lead: contact, company, score, pipeline and a 
 
   // ---------------------------------------------------------------- the deal: pipeline moves and a task
   await sales.goto('/agency/crm/deals');
-  const dealLink = sales.getByRole('main').getByRole('link', { name: new RegExp(`^${lead.company} — `) }).first();
+  const dealLink = sales
+    .getByRole('main')
+    .getByRole('link', { name: new RegExp(`^${lead.company} — `) })
+    .first();
   await dealLink.click();
   await expect(sales).toHaveURL(/\/agency\/crm\/deals\/[0-9a-f-]{36}$/);
   const dealUrl = sales.url();
@@ -139,9 +164,18 @@ test('the sales rep works the CRM lead: contact, company, score, pipeline and a 
   await log.getByLabel('Due').fill(`${isoDate(1)}T10:00`);
   await log.getByRole('button', { name: 'Add task' }).click();
   await expect(toast(sales, 'Task added')).toBeVisible();
-  await expect(sales.getByRole('list', { name: 'Activity timeline' }).getByText(`Send proposal to ${lead.name}`, { exact: true })).toBeVisible();
+  await expect(
+    sales
+      .getByRole('list', { name: 'Activity timeline' })
+      .getByText(`Send proposal to ${lead.name}`, { exact: true }),
+  ).toBeVisible();
   // The inquiry itself is on the deal's timeline.
-  await expect(sales.getByRole('list', { name: 'Activity timeline' }).getByText(/received$/).first()).toBeVisible();
+  await expect(
+    sales
+      .getByRole('list', { name: 'Activity timeline' })
+      .getByText(/received$/)
+      .first(),
+  ).toBeVisible();
 
   await sales.goto('/agency/crm/tasks');
   await expect(sales.getByText(`Send proposal to ${lead.name}`, { exact: true })).toBeVisible();
@@ -157,7 +191,11 @@ test('a second lead is lost with a configured reason, archived and read-only', a
 
   await sales.goto('/agency/crm/deals');
   // The public-form checks in part 1 created this lead ("Spam Check <run>").
-  await sales.getByRole('main').getByRole('link', { name: new RegExp(`^spamcheck-${id}\\.test — `) }).first().click();
+  await sales
+    .getByRole('main')
+    .getByRole('link', { name: new RegExp(`^spamcheck-${id}\\.test — `) })
+    .first()
+    .click();
   await expect(sales).toHaveURL(/\/agency\/crm\/deals\/[0-9a-f-]{36}$/);
   const dealId = sales.url().split('/').pop()!;
 
@@ -169,10 +207,16 @@ test('a second lead is lost with a configured reason, archived and read-only', a
   await lost.getByLabel('Details').fill('Only $500/month available');
   await lost.getByRole('button', { name: 'Mark as lost' }).click();
   await expect(toast(sales, 'Stage updated')).toBeVisible();
-  await expect(sales.getByRole('status', { name: 'Lost' })).toContainText('Budget: Only $500/month available');
+  await expect(sales.getByRole('status', { name: 'Lost' })).toContainText(
+    'Budget: Only $500/month available',
+  );
 
   await sales.getByRole('button', { name: 'Archive' }).click();
-  await sales.getByRole('alertdialog').or(sales.getByRole('dialog')).getByRole('button', { name: 'Archive' }).click();
+  await sales
+    .getByRole('alertdialog')
+    .or(sales.getByRole('dialog'))
+    .getByRole('button', { name: 'Archive' })
+    .click();
   await expect(sales.getByRole('link', { name: 'New proposal' })).toHaveCount(0);
   await expect(sales.getByLabel('Move to stage')).toHaveCount(0);
 
@@ -190,7 +234,9 @@ test('a second lead is lost with a configured reason, archived and read-only', a
   errors.expectClean('the lost deal');
 });
 
-test('the sales rep builds a proposal from a template, the service catalog and tax, and sends it', async ({ as }) => {
+test('the sales rep builds a proposal from a template, the service catalog and tax, and sends it', async ({
+  as,
+}) => {
   const lead = prospect();
   const dealUrl = recall('dealUrl');
   const sales = await as(accounts.sales, landing.agency);
@@ -210,7 +256,11 @@ test('the sales rep builds a proposal from a template, the service catalog and t
   // Remove the template's one-time lines: this retainer bills monthly from the contract.
   for (let i = (await lines.count()) - 1; i >= 0; i--) {
     const billing = lines.nth(i).getByLabel('Billing');
-    if ((await billing.inputValue()) === 'OneTime') await lines.nth(i).getByRole('button', { name: /^Remove line/ }).click();
+    if ((await billing.inputValue()) === 'OneTime')
+      await lines
+        .nth(i)
+        .getByRole('button', { name: /^Remove line/ })
+        .click();
   }
   await sales.getByRole('button', { name: 'Add from catalog' }).click();
   await sales.getByRole('menuitem', { name: /^Social media management/ }).click();
@@ -235,7 +285,9 @@ test('the sales rep builds a proposal from a template, the service catalog and t
   await expect(sales).toHaveURL(/\/agency\/proposals\/[0-9a-f-]{36}$/);
   const proposalUrl = sales.url();
   const salesApi = await apiAs(accounts.sales);
-  const created = await salesApi.get<{ items: unknown[] }>(`/agency/proposals?search=${encodeURIComponent(`${lead.company} growth retainer`)}`);
+  const created = await salesApi.get<{ items: unknown[] }>(
+    `/agency/proposals?search=${encodeURIComponent(`${lead.company} growth retainer`)}`,
+  );
   expect(created.items).toHaveLength(1);
 
   await sales.getByRole('button', { name: 'Send', exact: true }).click();
@@ -245,7 +297,10 @@ test('the sales rep builds a proposal from a template, the service catalog and t
   await expect(toast(sales, `Emailed to ${lead.email}`)).toBeVisible();
   const proposalLink = await send.getByLabel('Proposal link').inputValue();
   expect(proposalLink).toMatch(/\/p\/[\w-]+$/);
-  await send.getByRole('button', { name: /^(Close|Cancel)$/ }).first().click();
+  await send
+    .getByRole('button', { name: /^(Close|Cancel)$/ })
+    .first()
+    .click();
 
   // Finance can't build proposals (proposals.manage); the account manager can.
   const financeApi = await apiAs(accounts.finance);

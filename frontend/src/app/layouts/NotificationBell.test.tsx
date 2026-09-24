@@ -21,7 +21,8 @@ describe('NotificationBell', () => {
     const user = userEvent.setup();
     const { calls } = mockFetch({
       'GET /me/notifications/unread-count': () => json(200, { count: 1 }),
-      'GET /me/notifications': () => json(200, { items: [inquiry], total: 1, page: 1, pageSize: 20, totalPages: 1 }),
+      'GET /me/notifications': () =>
+        json(200, { items: [inquiry], total: 1, page: 1, pageSize: 20, totalPages: 1 }),
       'POST /me/notifications/n1/read': () => json(204, null),
     });
     const { baseElement } = renderWithApp(<NotificationBell />, { withAuth: false });
@@ -33,6 +34,8 @@ describe('NotificationBell', () => {
     expect(await axeViolations(baseElement)).toEqual([]);
 
     await user.click(link);
-    await waitFor(() => expect(calls.some((c) => c.method === 'POST' && c.path === '/me/notifications/n1/read')).toBe(true));
+    await waitFor(() =>
+      expect(calls.some((c) => c.method === 'POST' && c.path === '/me/notifications/n1/read')).toBe(true),
+    );
   });
 });

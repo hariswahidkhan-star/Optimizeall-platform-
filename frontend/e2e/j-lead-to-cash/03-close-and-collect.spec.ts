@@ -36,7 +36,10 @@ async function openInbox(page: Page) {
   return page.getByRole('dialog', { name: 'Notifications' });
 }
 
-test('the prospect opens and accepts the proposal; the client account and owner invitation follow', async ({ as, anonymous }) => {
+test('the prospect opens and accepts the proposal; the client account and owner invitation follow', async ({
+  as,
+  anonymous,
+}) => {
   const lead = prospect();
   const proposalLink = recall('proposalLink');
   const client = await anonymous();
@@ -56,12 +59,16 @@ test('the prospect opens and accepts the proposal; the client account and owner 
 
   const accept = client.getByRole('form', { name: 'Accept proposal' });
   await accept.getByRole('button', { name: 'Accept proposal' }).click(); // nothing typed: refused client-side
-  await expect(accept.getByRole('checkbox', { name: 'I agree to the terms of this proposal' })).not.toBeChecked();
+  await expect(
+    accept.getByRole('checkbox', { name: 'I agree to the terms of this proposal' }),
+  ).not.toBeChecked();
   await accept.getByLabel('Full name').fill(lead.name);
   await accept.getByLabel('Job title').fill('Head of Marketing');
   await accept.getByRole('checkbox', { name: 'I agree to the terms of this proposal' }).check();
   await accept.getByRole('button', { name: 'Accept proposal' }).dblclick(); // a double click accepts once
-  await expect(client.getByRole('status', { name: 'Proposal accepted' })).toContainText(`Accepted by ${lead.name}`);
+  await expect(client.getByRole('status', { name: 'Proposal accepted' })).toContainText(
+    `Accepted by ${lead.name}`,
+  );
 
   // Accepting again (a second tab, a replayed request) is refused.
   const token = pathOf(proposalLink).split('/p/')[1]!;
@@ -81,7 +88,10 @@ test('the prospect opens and accepts the proposal; the client account and owner 
   await expect(sales.getByText(`${lead.name} (Head of Marketing) · v1`, { exact: false })).toBeVisible();
   await expect(sales.getByRole('link', { name: 'Contract 1' })).toBeVisible();
   await expect(sales.getByRole('link', { name: 'Open first invoice' })).toHaveCount(0);
-  const contractUrl = new URL((await sales.getByRole('link', { name: 'Contract 1' }).getAttribute('href'))!, 'http://x').pathname;
+  const contractUrl = new URL(
+    (await sales.getByRole('link', { name: 'Contract 1' }).getAttribute('href'))!,
+    'http://x',
+  ).pathname;
   await sales.goto(recall('dealUrl'));
   await expect(sales.getByText(/ · Won \(100%\)$/)).toBeVisible();
 
@@ -102,7 +112,9 @@ test('the prospect opens and accepts the proposal; the client account and owner 
   await client.goto('/client/billing');
   await expect(client.getByRole('heading', { level: 1, name: 'Billing' })).toBeVisible();
   await client.getByRole('tab', { name: 'Contracts' }).click();
-  await expect(client.getByRole('table', { name: 'Contracts' }).getByRole('row').nth(1)).toContainText('Active');
+  await expect(client.getByRole('table', { name: 'Contracts' }).getByRole('row').nth(1)).toContainText(
+    'Active',
+  );
 
   remember({ contractUrl });
 });
@@ -118,7 +130,9 @@ test('the recurring invoice job issues the retainer invoice exactly once', async
   const am = await as(accounts.am, landing.agency);
   const errors = watchErrors(am);
   await am.goto(contractUrl);
-  await expect(am.getByRole('heading', { level: 1, name: new RegExp(`growth retainer — Monthly retainer$`) })).toBeVisible();
+  await expect(
+    am.getByRole('heading', { level: 1, name: new RegExp(`growth retainer — Monthly retainer$`) }),
+  ).toBeVisible();
   const contractId = contractUrl.split('/').pop()!;
   const amApi = await apiAs(accounts.am);
   const before = await amApi.get<{ concurrencyStamp: string }>(`/agency/contracts/${contractId}`);
@@ -129,11 +143,18 @@ test('the recurring invoice job issues the retainer invoice exactly once', async
   await expect(toast(am, 'Contract saved')).toBeVisible();
 
   // A stale edit (the stamp read before the save) is a 409.
-  const stale = await statusOf(amApi.put(`/agency/contracts/${contractId}`, { ...(before as object), concurrencyStamp: before.concurrencyStamp }));
+  const stale = await statusOf(
+    amApi.put(`/agency/contracts/${contractId}`, {
+      ...(before as object),
+      concurrencyStamp: before.concurrencyStamp,
+    }),
+  );
   expect(stale.status).toBe(409);
 
   // Account managers see billing but can't issue or record payments (billing.manage).
-  expect(await statusOf(amApi.post('/agency/billing/jobs/recurring-invoices/run'))).toMatchObject({ status: 403 });
+  expect(await statusOf(amApi.post('/agency/billing/jobs/recurring-invoices/run'))).toMatchObject({
+    status: 403,
+  });
 
   // The admin runs the recurring invoice job (Admin → Jobs → Run now), twice.
   const admin = await as(accounts.admin, landing.admin);
@@ -141,13 +162,19 @@ test('the recurring invoice job issues the retainer invoice exactly once', async
   for (let i = 0; i < 2; i++) {
     await admin.goto('/admin/jobs');
     await admin.getByRole('button', { name: 'Run RecurringInvoiceJob now' }).click();
-    const ran = admin.waitForResponse((r) => r.request().method() === 'POST' && /\/admin\/jobs\/.+\/run$/.test(new URL(r.url()).pathname));
+    const ran = admin.waitForResponse(
+      (r) => r.request().method() === 'POST' && /\/admin\/jobs\/.+\/run$/.test(new URL(r.url()).pathname),
+    );
     await modal(admin, 'Run RecurringInvoiceJob now?').getByRole('button', { name: 'Run now' }).click();
     expect((await ran).ok()).toBe(true);
-    await expect(admin.getByRole('row').filter({ hasText: 'RecurringInvoiceJob' })).toContainText(i === 0 ? /Created [1-9]\d* invoice/ : /Created 0 invoice/); // the rerun creates nothing
+    await expect(admin.getByRole('row').filter({ hasText: 'RecurringInvoiceJob' })).toContainText(
+      i === 0 ? /Created [1-9]\d* invoice/ : /Created 0 invoice/,
+    ); // the rerun creates nothing
   }
 
-  const contract = await amApi.get<{ invoices: { id: string; number: string | null; status: string }[] }>(`/agency/contracts/${contractId}`);
+  const contract = await amApi.get<{ invoices: { id: string; number: string | null; status: string }[] }>(
+    `/agency/contracts/${contractId}`,
+  );
   expect(contract.invoices, 'one invoice for the first period, even after two runs').toHaveLength(1);
   const invoice = contract.invoices[0]!;
   expect(invoice.status).toBe('Issued');
@@ -158,7 +185,10 @@ test('the recurring invoice job issues the retainer invoice exactly once', async
   const adminApi = await apiAs(accounts.admin);
   await adminApi.post('/admin/jobs/NotificationDispatchJob/run');
   const mail = await latestMail(lead.email, new RegExp(`Invoice ${invoice.number}`));
-  expect(mail.links.some((l) => new URL(l).pathname === `/client/billing/invoices/${invoice.id}`), 'the email links the portal invoice').toBe(true);
+  expect(
+    mail.links.some((l) => new URL(l).pathname === `/client/billing/invoices/${invoice.id}`),
+    'the email links the portal invoice',
+  ).toBe(true);
 
   // The private /i/ link finance shares ("Client view link").
   const financeApi = await apiAs(accounts.finance);
@@ -180,13 +210,18 @@ async function searchPayments(page: Page, term: string) {
   const search = page.getByRole('searchbox', { name: 'Search payments' });
   const loaded = page.waitForResponse((res) => {
     const url = new URL(res.url());
-    return url.pathname === '/api/v1/admin/payments' && (url.searchParams.get('search') ?? '') === term && res.ok();
+    return (
+      url.pathname === '/api/v1/admin/payments' && (url.searchParams.get('search') ?? '') === term && res.ok()
+    );
   });
   await search.fill(term);
   await loaded;
 }
 
-test('the client pays: public invoice, portal "I’ve paid", finance confirms, invoice Paid', async ({ as, anonymous }) => {
+test('the client pays: public invoice, portal "I’ve paid", finance confirms, invoice Paid', async ({
+  as,
+  anonymous,
+}) => {
   const lead = prospect();
   const invoiceId = recall('invoiceId');
   const invoiceNumber = recall('invoiceNumber');
@@ -201,10 +236,15 @@ test('the client pays: public invoice, portal "I’ve paid", finance confirms, i
   viewerErrors.expectClean('the public invoice page');
 
   // The client owner reports the payment in the portal (a double click sends one report).
-  const client = await as({ email: lead.email, password: lead.password, displayName: lead.name }, landing.client);
+  const client = await as(
+    { email: lead.email, password: lead.password, displayName: lead.name },
+    landing.client,
+  );
   const clientErrors = watchErrors(client);
   await client.goto(`/client/billing/invoices/${invoiceId}`);
-  await expect(client.getByRole('heading', { level: 1, name: `Invoice ${invoiceNumber}` }).first()).toBeVisible();
+  await expect(
+    client.getByRole('heading', { level: 1, name: `Invoice ${invoiceNumber}` }).first(),
+  ).toBeVisible();
   await client.getByRole('button', { name: 'I’ve paid' }).click();
   const claim = modal(client, 'I’ve paid this invoice');
   const amount = await claim.getByLabel(/^Amount paid/).inputValue();
@@ -214,7 +254,9 @@ test('the client pays: public invoice, portal "I’ve paid", finance confirms, i
   await expect(toast(client, 'Thanks! We’ll confirm your payment shortly.')).toBeVisible();
   const reported = client.getByRole('table', { name: 'Payments you reported' });
   await expect(reported.getByRole('row').filter({ hasText: claimRef })).toHaveCount(1);
-  await expect(reported.getByRole('row').filter({ hasText: claimRef })).toContainText('Waiting for confirmation');
+  await expect(reported.getByRole('row').filter({ hasText: claimRef })).toContainText(
+    'Waiting for confirmation',
+  );
 
   // Finance is notified and confirms it in the payments hub.
   const finance = await as(accounts.finance, FINANCE_LANDING);
@@ -225,7 +267,9 @@ test('the client pays: public invoice, portal "I’ve paid", finance confirms, i
   await finance.goto('/finance/payments');
   await searchPayments(finance, claimRef);
   await expect(paymentRow(finance, claimRef)).toContainText('Pending');
-  await paymentRow(finance, claimRef).getByRole('button', { name: /^Actions for / }).click();
+  await paymentRow(finance, claimRef)
+    .getByRole('button', { name: /^Actions for / })
+    .click();
   await finance.getByRole('menuitem', { name: 'Confirm payment' }).click();
   const confirm = modal(finance, 'Confirm the client’s payment');
   await confirm.getByRole('button', { name: 'Confirm and record' }).click();
@@ -252,14 +296,20 @@ test('tenancy, permissions and dead links', async ({ anonymous }) => {
   // Another organisation's client sees nothing of this client (404, not 403).
   const nimbus = await apiAs(accounts.nimbusOwner);
   expect(await statusOf(nimbus.get(`/client/billing/invoices/${invoiceId}`))).toMatchObject({ status: 404 });
-  expect(await statusOf(nimbus.get(`/client/billing/invoices/${invoiceId}/payments`))).toMatchObject({ status: 404 });
+  expect(await statusOf(nimbus.get(`/client/billing/invoices/${invoiceId}/payments`))).toMatchObject({
+    status: 404,
+  });
   const nimbusInvoices = await nimbus.get<{ items: { id: string }[] }>('/client/billing/invoices');
   expect(nimbusInvoices.items.map((i) => i.id)).not.toContain(invoiceId);
   const proposals = await apiAs(accounts.am).then((am) =>
-    am.get<{ items: { id: string; title: string }[] }>(`/agency/proposals?search=${encodeURIComponent(lead.company)}`),
+    am.get<{ items: { id: string; title: string }[] }>(
+      `/agency/proposals?search=${encodeURIComponent(lead.company)}`,
+    ),
   );
   const proposalId = proposals.items[0]!.id;
-  expect(await statusOf(nimbus.get(`/client/billing/proposals/${proposalId}`))).toMatchObject({ status: 404 });
+  expect(await statusOf(nimbus.get(`/client/billing/proposals/${proposalId}`))).toMatchObject({
+    status: 404,
+  });
   // …and can't report a payment on it.
   expect(
     await statusOf(
@@ -276,10 +326,18 @@ test('tenancy, permissions and dead links', async ({ anonymous }) => {
   // Staff permissions: sales can view invoices but not issue or record payments; finance can't send proposals.
   const sales = await apiAs(accounts.sales);
   expect(await statusOf(sales.get(`/agency/billing/invoices/${invoiceId}`))).toMatchObject({ status: 200 });
-  expect(await statusOf(sales.post(`/agency/billing/invoices/${invoiceId}/send`))).toMatchObject({ status: 403 });
-  expect(await statusOf(sales.post(`/admin/payments/invoices/${invoiceId}/mark-paid`, {}))).toMatchObject({ status: 403 });
+  expect(await statusOf(sales.post(`/agency/billing/invoices/${invoiceId}/send`))).toMatchObject({
+    status: 403,
+  });
+  expect(await statusOf(sales.post(`/admin/payments/invoices/${invoiceId}/mark-paid`, {}))).toMatchObject({
+    status: 403,
+  });
   const finance = await apiAs(accounts.finance);
-  expect(await statusOf(finance.post(`/agency/proposals/${proposalId}/withdraw`, { concurrencyStamp: crypto.randomUUID() }))).toMatchObject({ status: 403 });
+  expect(
+    await statusOf(
+      finance.post(`/agency/proposals/${proposalId}/withdraw`, { concurrencyStamp: crypto.randomUUID() }),
+    ),
+  ).toMatchObject({ status: 403 });
 
   // A withdrawn proposal's link stops working.
   const draft = await sales.post<{ id: string; concurrencyStamp: string }>('/agency/proposals', {
@@ -290,18 +348,28 @@ test('tenancy, permissions and dead links', async ({ anonymous }) => {
     terms: 'Standard terms',
     lines: [{ description: 'One-off audit', quantity: 1, unitPrice: 900, recurrence: 'OneTime' }],
   });
-  const sent = await sales.post<{ shareUrl: string; proposal: { concurrencyStamp: string } }>(`/agency/proposals/${draft.id}/send`, {
-    concurrencyStamp: draft.concurrencyStamp,
-    email: false,
+  const sent = await sales.post<{ shareUrl: string; proposal: { concurrencyStamp: string } }>(
+    `/agency/proposals/${draft.id}/send`,
+    {
+      concurrencyStamp: draft.concurrencyStamp,
+      email: false,
+    },
+  );
+  await sales.post(`/agency/proposals/${draft.id}/withdraw`, {
+    concurrencyStamp: sent.proposal.concurrencyStamp,
+    reason: 'Superseded',
   });
-  await sales.post(`/agency/proposals/${draft.id}/withdraw`, { concurrencyStamp: sent.proposal.concurrencyStamp, reason: 'Superseded' });
   const visitor = await anonymous();
   const errors = watchErrors(visitor);
   errors.ignore(/HTTP 404 GET .*\/public\/proposals\//);
   await visitor.goto(pathOf(sent.shareUrl));
-  await expect(visitor.getByRole('heading', { level: 1, name: 'This proposal link isn’t valid' })).toBeVisible();
+  await expect(
+    visitor.getByRole('heading', { level: 1, name: 'This proposal link isn’t valid' }),
+  ).toBeVisible();
   // A tampered token is the same dead end.
   await visitor.goto(`${pathOf(sent.shareUrl)}x`);
-  await expect(visitor.getByRole('heading', { level: 1, name: 'This proposal link isn’t valid' })).toBeVisible();
+  await expect(
+    visitor.getByRole('heading', { level: 1, name: 'This proposal link isn’t valid' }),
+  ).toBeVisible();
   errors.expectClean('the dead proposal links');
 });

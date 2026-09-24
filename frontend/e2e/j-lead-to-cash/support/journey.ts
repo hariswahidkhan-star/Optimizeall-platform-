@@ -27,7 +27,11 @@ export { API_URL, ApiError, ApiSession, latestMail, mailLink };
  * the client accepts it, and billing collects the first recurring invoice. Every record carries the run id so reruns
  * against a kept database never collide.
  */
-const demo = (email: string, displayName: string): Credentials => ({ email, password: DEMO_PASSWORD, displayName });
+const demo = (email: string, displayName: string): Credentials => ({
+  email,
+  password: DEMO_PASSWORD,
+  displayName,
+});
 
 export const accounts = {
   ...agencyAccounts,
@@ -42,7 +46,12 @@ export const FINANCE_LANDING = /\/(finance|agency)(\/|$)/;
 
 // ------------------------------------------------------------------ run state (written by global-setup.ts)
 
-export const STATE_FILE = join(dirname(fileURLToPath(import.meta.url)), '..', '.state', 'j-lead-to-cash.json');
+export const STATE_FILE = join(
+  dirname(fileURLToPath(import.meta.url)),
+  '..',
+  '.state',
+  'j-lead-to-cash.json',
+);
 
 export interface JourneyState {
   runId: string;
@@ -66,7 +75,8 @@ export function remember(values: Record<string, string>) {
 /** A value an earlier spec remembered; fails clearly when that spec did not get that far. */
 export function recall(key: string): string {
   const value = readState()[key];
-  if (!value) throw new Error(`"${key}" was not recorded — an earlier lead-to-cash spec failed before recording it`);
+  if (!value)
+    throw new Error(`"${key}" was not recorded — an earlier lead-to-cash spec failed before recording it`);
   return value;
 }
 
@@ -111,7 +121,10 @@ export async function waitMinFill(token: FormToken & { issuedAt: number }) {
 }
 
 /** POSTs a public form as an anonymous visitor; returns status and body (never throws on 4xx). */
-export async function postPublic(path: string, body: unknown): Promise<{ status: number; body: { code?: string } & Record<string, unknown> }> {
+export async function postPublic(
+  path: string,
+  body: unknown,
+): Promise<{ status: number; body: { code?: string } & Record<string, unknown> }> {
   const res = await fetch(`${API_BASE}${path}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'fetch' },
