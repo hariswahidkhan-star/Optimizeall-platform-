@@ -270,6 +270,8 @@ public sealed class WebsiteCmsTests(ApiFactory api) : IClassFixture<ApiFactory>
         new object[] { "GET", "/api/v1/agency/website/team" },
         new object[] { "GET", "/api/v1/agency/website/pages" },
         new object[] { "GET", "/api/v1/agency/website/settings" },
+        new object[] { "GET", "/api/v1/agency/website/redirects" },
+        new object[] { "POST", "/api/v1/agency/website/redirects" },
         new object[] { "GET", "/api/v1/agency/website/inquiries" },
         new object[] { "GET", "/api/v1/agency/website/overview" },
         new object[] { "GET", "/api/v1/agency/website/bookings" },

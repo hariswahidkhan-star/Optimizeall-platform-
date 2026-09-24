@@ -3,6 +3,7 @@ using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Api.Modules.Website.Pages;
+using OptimizeAll.Api.Modules.Website.Redirects;
 using OptimizeAll.Api.Modules.Website.Shared;
 using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Website;
@@ -11,10 +12,13 @@ namespace OptimizeAll.Api.Modules.Website.Catalog;
 
 /// <summary>
 /// Staff CMS for service categories, services and packages, industries, case studies, testimonials, team members and
-/// pages (<c>site.manage</c>). Every change is validated server-side and audited.
+/// pages (<c>site.manage</c>). Every change is validated server-side and audited. When the live address of a page,
+/// service, service line, case study or industry changes, the old address is redirected to the new one
+/// (<see cref="RedirectService"/>, in the same transaction as the change).
 /// </summary>
 public sealed class CatalogAdminService(
-    CmsStore store, IAuditLogger audit, WebsiteRules rules, PageBlockValidator blocks, TimeProvider clock, ICurrentUser currentUser)
+    CmsStore store, IAuditLogger audit, WebsiteRules rules, PageBlockValidator blocks, TimeProvider clock, ICurrentUser currentUser,
+    RedirectService redirects)
 {
     private Microsoft.EntityFrameworkCore.DbContext Db => store.Db;
 
@@ -35,7 +39,7 @@ public sealed class CatalogAdminService(
         await store.EnsureSlugFreeAsync<ServiceCategory>(c.Slug, null, ct);
         Db.Add(c);
         audit.Record("website.category_created", nameof(ServiceCategory), c.Id, after: ToDto(c, 0));
-        await store.SaveAsync(ct);
+        await redirects.SaveAsync(Address(c, null), () => store.SaveAsync(ct), ct);
         return ToDto(c, 0);
     }
 
@@ -44,10 +48,11 @@ public sealed class CatalogAdminService(
         var c = await store.FindAsync<ServiceCategory>(id, ct);
         CmsStore.CheckStamp(store.Db, c, input.ConcurrencyStamp);
         var before = ToDto(c, 0);
+        var wasAt = LiveAddress(c);
         Apply(c, input);
         await store.EnsureSlugFreeAsync<ServiceCategory>(c.Slug, c.Id, ct);
         audit.Record("website.category_updated", nameof(ServiceCategory), c.Id, before, ToDto(c, 0));
-        await store.SaveAsync(ct);
+        await redirects.SaveAsync(Address(c, wasAt), () => store.SaveAsync(ct), ct);
         return ToDto(c, await Db.Set<AgencyService>().CountAsync(s => s.CategoryId == id, ct));
     }
 
@@ -72,6 +77,10 @@ public sealed class CatalogAdminService(
         c.SortOrder = r.SortOrder;
         c.IsPublished = r.IsPublished;
     }
+
+    private static string? LiveAddress(ServiceCategory c) => c.IsPublished ? RedirectPaths.ServiceLinePath(c.Slug) : null;
+
+    private static AddressChange Address(ServiceCategory c, string? wasAt) => new(RedirectPaths.ServiceLine, c.Id, wasAt, LiveAddress(c));
 
     public static ServiceCategoryDto ToDto(ServiceCategory c, int count) =>
         new(c.Id, c.Slug, c.Name, c.Description, c.Icon, c.SortOrder, c.IsPublished, count, c.UpdatedAt, c.ConcurrencyStamp);
@@ -111,7 +120,7 @@ public sealed class CatalogAdminService(
         await store.EnsureSlugFreeAsync<AgencyService>(s.Slug, null, ct);
         Db.Add(s);
         audit.Record("website.service_created", nameof(AgencyService), s.Id, after: ToDto(s));
-        await store.SaveAsync(ct);
+        await redirects.SaveAsync(new AddressChange(RedirectPaths.Service, s.Id, null, await LiveAddressAsync(s, ct)), () => store.SaveAsync(ct), ct);
         return ToDto(s);
     }
 
@@ -121,12 +130,17 @@ public sealed class CatalogAdminService(
             ?? throw CmsStore.NotFound<AgencyService>();
         CmsStore.CheckStamp(store.Db, s, input.ConcurrencyStamp);
         var before = ToDto(s);
+        var wasAt = await LiveAddressAsync(s, ct);
         await ApplyAsync(s, input, ct);
         await store.EnsureSlugFreeAsync<AgencyService>(s.Slug, s.Id, ct);
         audit.Record("website.service_updated", nameof(AgencyService), s.Id, before, ToDto(s));
-        await store.SaveAsync(ct);
+        await redirects.SaveAsync(new AddressChange(RedirectPaths.Service, s.Id, wasAt, await LiveAddressAsync(s, ct)), () => store.SaveAsync(ct), ct);
         return ToDto(s);
     }
+
+    /// <summary>/services/{slug} while the service and its service line are published.</summary>
+    private async Task<string?> LiveAddressAsync(AgencyService s, CancellationToken ct) =>
+        s.IsPublished && await Db.Set<ServiceCategory>().AnyAsync(c => c.Id == s.CategoryId && c.IsPublished, ct) ? RedirectPaths.ServicePath(s.Slug) : null;
 
     public Task DeleteServiceAsync(Guid id, CancellationToken ct) =>
         store.DeleteAsync<AgencyService>(id, "website.service_deleted", s => new { s.Id, s.Slug, s.Name }, ct);
@@ -279,7 +293,7 @@ public sealed class CatalogAdminService(
         await store.EnsureSlugFreeAsync<Industry>(x.Slug, null, ct);
         Db.Add(x);
         audit.Record("website.industry_created", nameof(Industry), x.Id, after: ToDto(x));
-        await store.SaveAsync(ct);
+        await redirects.SaveAsync(Address(x, null), () => store.SaveAsync(ct), ct);
         return ToDto(x);
     }
 
@@ -288,12 +302,17 @@ public sealed class CatalogAdminService(
         var x = await store.FindAsync<Industry>(id, ct);
         CmsStore.CheckStamp(store.Db, x, input.ConcurrencyStamp);
         var before = ToDto(x);
+        var wasAt = LiveAddress(x);
         await ApplyAsync(x, input, ct);
         await store.EnsureSlugFreeAsync<Industry>(x.Slug, x.Id, ct);
         audit.Record("website.industry_updated", nameof(Industry), x.Id, before, ToDto(x));
-        await store.SaveAsync(ct);
+        await redirects.SaveAsync(Address(x, wasAt), () => store.SaveAsync(ct), ct);
         return ToDto(x);
     }
+
+    private static string? LiveAddress(Industry x) => x.IsPublished ? RedirectPaths.IndustryPath(x.Slug) : null;
+
+    private static AddressChange Address(Industry x, string? wasAt) => new(RedirectPaths.Industry, x.Id, wasAt, LiveAddress(x));
 
     public Task DeleteIndustryAsync(Guid id, CancellationToken ct) =>
         store.DeleteAsync<Industry>(id, "website.industry_deleted", x => new { x.Id, x.Slug, x.Name }, ct);
@@ -348,7 +367,7 @@ public sealed class CatalogAdminService(
         await store.EnsureSlugFreeAsync<CaseStudy>(x.Slug, null, ct);
         Db.Add(x);
         audit.Record("website.case_study_created", nameof(CaseStudy), x.Id, after: ToDto(x));
-        await store.SaveAsync(ct);
+        await redirects.SaveAsync(Address(x, null), () => store.SaveAsync(ct), ct);
         return ToDto(x);
     }
 
@@ -357,12 +376,17 @@ public sealed class CatalogAdminService(
         var x = await store.FindAsync<CaseStudy>(id, ct);
         CmsStore.CheckStamp(store.Db, x, input.ConcurrencyStamp);
         var before = ToDto(x);
+        var wasAt = LiveAddress(x);
         await ApplyAsync(x, input, ct);
         await store.EnsureSlugFreeAsync<CaseStudy>(x.Slug, x.Id, ct);
         audit.Record("website.case_study_updated", nameof(CaseStudy), x.Id, before, ToDto(x));
-        await store.SaveAsync(ct);
+        await redirects.SaveAsync(Address(x, wasAt), () => store.SaveAsync(ct), ct);
         return ToDto(x);
     }
+
+    private static string? LiveAddress(CaseStudy x) => x.IsPublished ? RedirectPaths.CaseStudyPath(x.Slug) : null;
+
+    private static AddressChange Address(CaseStudy x, string? wasAt) => new(RedirectPaths.CaseStudy, x.Id, wasAt, LiveAddress(x));
 
     public Task DeleteCaseStudyAsync(Guid id, CancellationToken ct) =>
         store.DeleteAsync<CaseStudy>(id, "website.case_study_deleted", x => new { x.Id, x.Slug, x.Title }, ct);
@@ -583,7 +607,7 @@ public sealed class CatalogAdminService(
         Db.Add(x);
         AddRevision(x, "created", input.RevisionNote);
         audit.Record("website.page_created", nameof(SitePage), x.Id, after: new { x.Slug, x.Title, x.Kind, x.IsPublished, x.PublishAt });
-        await store.SaveAsync(ct);
+        await redirects.SaveAsync(Address(x, null), () => store.SaveAsync(ct), ct);
         return ToDto(x);
     }
 
@@ -592,14 +616,21 @@ public sealed class CatalogAdminService(
         var x = await store.FindAsync<SitePage>(id, ct);
         CmsStore.CheckStamp(store.Db, x, input.ConcurrencyStamp);
         var before = new { x.Slug, x.Title, x.Kind, x.IsPublished, x.PublishAt, Blocks = x.BlocksJson };
+        var wasAt = LiveAddress(x);
         await EnsureBaselineRevisionAsync(x, ct);
         Apply(x, input);
         await store.EnsureSlugFreeAsync<SitePage>(x.Slug, x.Id, ct);
         AddRevision(x, "updated", input.RevisionNote);
         audit.Record("website.page_updated", nameof(SitePage), x.Id, before, new { x.Slug, x.Title, x.Kind, x.IsPublished, x.PublishAt, Blocks = x.BlocksJson });
-        await store.SaveAsync(ct);
+        await redirects.SaveAsync(Address(x, wasAt), () => store.SaveAsync(ct), ct);
         return ToDto(x);
     }
+
+    /// <summary>/{slug} while the page is published and its go-live time (if any) has passed.</summary>
+    private string? LiveAddress(SitePage x) =>
+        x.IsPublished && (x.PublishAt is null || x.PublishAt <= clock.GetUtcNow().UtcDateTime) ? RedirectPaths.PagePath(x.Slug) : null;
+
+    private AddressChange Address(SitePage x, string? wasAt) => new(RedirectPaths.Page, x.Id, wasAt, LiveAddress(x));
 
     public Task DeletePageAsync(Guid id, CancellationToken ct) =>
         store.DeleteAsync<SitePage>(id, "website.page_deleted", x => new { x.Slug, x.Title, Blocks = x.BlocksJson }, ct);
@@ -641,6 +672,7 @@ public sealed class CatalogAdminService(
         await EnsureBaselineRevisionAsync(x, ct);
         await store.EnsureSlugFreeAsync<SitePage>(r.Slug, x.Id, ct);
         var before = new { x.Slug, x.Title, x.Version, Blocks = x.BlocksJson };
+        var wasAt = LiveAddress(x);
         x.Slug = r.Slug;
         x.Title = r.Title;
         x.Summary = r.Summary;
@@ -649,7 +681,7 @@ public sealed class CatalogAdminService(
         x.Seo = ParseSeo(r.SeoJson);
         AddRevision(x, "restored", WebsiteRules.Clean(input.Note) ?? $"Restored version {r.Version}");
         audit.Record("website.page_restored", nameof(SitePage), x.Id, before, new { x.Slug, x.Title, RestoredVersion = r.Version, x.Version });
-        await store.SaveAsync(ct);
+        await redirects.SaveAsync(Address(x, wasAt), () => store.SaveAsync(ct), ct);
         return ToDto(x);
     }
 

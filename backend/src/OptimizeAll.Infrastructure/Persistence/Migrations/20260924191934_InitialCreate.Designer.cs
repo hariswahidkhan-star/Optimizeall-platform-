@@ -12,7 +12,7 @@ using OptimizeAll.Infrastructure.Persistence;
 namespace OptimizeAll.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260924172622_InitialCreate")]
+    [Migration("20260924191934_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -14086,6 +14086,57 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("website_page_revisions", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Website.SiteRedirect", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid?>("ContentId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("ContentType")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("CreatedByUserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("FromPath")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)");
+
+                    b.Property<string>("ToPath")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("FromPath")
+                        .IsUnique();
+
+                    b.HasIndex("ToPath");
+
+                    b.ToTable("website_redirects", (string)null);
                 });
 
             modelBuilder.Entity("OptimizeAll.Domain.Website.SiteSettingsDocument", b =>

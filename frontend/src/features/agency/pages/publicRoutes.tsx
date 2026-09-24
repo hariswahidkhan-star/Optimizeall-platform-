@@ -3,6 +3,7 @@ import { useEffect, useLayoutEffect, useRef } from 'react';
 import { useParams, useSearchParams, type RouteObject } from 'react-router-dom';
 import { ErrorState, Skeleton } from '@/components/ui';
 import { getVisitorId } from '@/features/public/landing/landingApi';
+import { MovedOrNotFound } from '@/features/public/site/redirects';
 import { api } from '@/lib/api/client';
 import { isApiError } from '@/lib/api/errors';
 import type { PublicForm, PublicLandingPage } from './api';
@@ -79,7 +80,12 @@ export function PublicLandingPageView() {
   useMeta('twitter:card', data?.ogImageUrl ? 'summary_large_image' : null);
 
   if (query.isError) {
-    if (isApiError(query.error) && query.error.status === 404) return <Unavailable what="page" />;
+    if (isApiError(query.error) && query.error.status === 404)
+      return (
+        <MovedOrNotFound>
+          <Unavailable what="page" />
+        </MovedOrNotFound>
+      );
     return (
       <main className="lp-shell" id="main">
         <div className="lp-block">

@@ -20,6 +20,7 @@ frontend/
       appLinks.fixture.json  web paths the backend links to (AppLinks.cs); appLinks.test.ts resolves each one
       portalContext.ts       useCurrentPortal()
       redirects.ts           safeNextPath() — open-redirect defence for ?next=
+      devProxy.ts            vite/vite preview proxy rules (mirror nginx) + redirectGate plugin (301 for moved public addresses)
       layouts/               PublicLayout, AuthLayout, PortalLayout, EmailVerificationBanner
     components/
       ui/                    design system (see catalog below), `index.ts` barrel

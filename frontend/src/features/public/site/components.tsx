@@ -18,6 +18,7 @@ import type {
 } from './api';
 import { useSiteCopy } from './copy';
 import { SiteIcon } from './icons';
+import { MovedOrNotFound } from './redirects';
 
 export const PERIOD_SUFFIX: Record<BillingPeriod, string> = {
   OneTime: 'one-time',
@@ -368,18 +369,20 @@ export function PublicQueryState({ error, isLoading, notFoundTitle, children }: 
   if (error) {
     if (isApiError(error) && error.status === 404)
       return (
-        <div className="container site-loading">
-          <EmptyState
-            title={notFoundTitle}
-            headingLevel={2}
-            description={copy.text('shared.notFound.description')}
-            action={
-              <ButtonLink to="/" variant="secondary">
-                Go to the homepage
-              </ButtonLink>
-            }
-          />
-        </div>
+        <MovedOrNotFound>
+          <div className="container site-loading">
+            <EmptyState
+              title={notFoundTitle}
+              headingLevel={2}
+              description={copy.text('shared.notFound.description')}
+              action={
+                <ButtonLink to="/" variant="secondary">
+                  Go to the homepage
+                </ButtonLink>
+              }
+            />
+          </div>
+        </MovedOrNotFound>
       );
     return (
       <div className="container site-loading">

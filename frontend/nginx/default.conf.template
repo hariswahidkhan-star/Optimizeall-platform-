@@ -109,9 +109,28 @@ server {
     }
 
     # Client-side routes fall back to the app shell; other static files (favicon, robots.txt) get a short cache.
+    # Before the shell is served, the API's redirect gate is asked whether the address has moved (Website → Redirects,
+    # docs/WEBSITE.md): a moved public address gets a real 301 to its new address; anything else (404, or the API being
+    # unreachable/slow) serves the shell as before.
     location / {
-        try_files $uri /index.html;
+        try_files $uri @redirect_gate;
         include /etc/nginx/snippets/security-headers.conf;
         add_header Cache-Control "public, max-age=3600" always;
+    }
+
+    location @redirect_gate {
+        rewrite ^ /api/v1/public/redirects/gate? break;
+        proxy_pass ${API_UPSTREAM};
+        include /etc/nginx/snippets/proxy-api.conf;
+        proxy_set_header X-Original-URI $request_uri;
+        proxy_pass_request_body off;
+        proxy_set_header Content-Length "";
+        proxy_read_timeout 5s;
+        proxy_intercept_errors on;
+        error_page 400 401 403 404 405 429 500 502 503 504 = @app_shell;
+    }
+
+    location @app_shell {
+        rewrite ^ /index.html last;
     }
 }

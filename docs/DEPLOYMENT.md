@@ -37,6 +37,10 @@ controls are in [SECURITY.md](SECURITY.md); every configuration key is documente
 
 * **Single origin.** The browser only talks to the web container; nginx proxies the API. No CORS is needed and
   the refresh cookie (`SameSite=Strict`, path `/api/v1/auth`) works without cross-site exceptions.
+* **Redirect gate.** Before nginx serves the app shell for a page address it asks the API
+  (`/api/v1/public/redirects/gate`, 5 s timeout) whether the address has moved (Website → Redirects) and answers
+  moved public addresses with a 301. If the API is down or slow the shell is served as before. A web server other
+  than the bundled nginx needs the same rule for real 301s (see [WEBSITE.md](WEBSITE.md#marketer-guide)).
 * **Stateless API.** Sessions are JWT access tokens + refresh tokens stored in MySQL. ASP.NET Data Protection
   keys (used to encrypt payout destinations) are stored in the `data_protection_keys` table, so every instance
   shares them. Background jobs coordinate through database leases (`job_leases`), so any number of API

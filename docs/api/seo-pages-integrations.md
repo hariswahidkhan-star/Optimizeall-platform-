@@ -5,7 +5,9 @@ values are `yyyy-MM-dd`. Errors are RFC 7807 problem responses `{ status, title,
 errors use camelCase paths (`domain`, `variants[0].blocks[2].props.headline`, `schema.steps[0].fields[1].key`,
 `settings.pageId`, `secrets.apiKey`). List endpoints take `?page=&pageSize=&search=` and return
 `{ items, total, page, pageSize, totalPages }`. Editable resources carry `concurrencyStamp`; a stale stamp returns
-`409 concurrency.conflict`.
+`409 concurrency.conflict`. For landing pages, forms and the template library (`PUT /landing-pages/{id}`,
+`PUT /forms/{id}`, `PUT /admin/templates/{key}`, `PUT /admin/form-templates/{key}`) the stamp is required: a missing
+stamp is treated as stale (409), as in the website CMS.
 
 **Tenancy.** Every staff route resolves the resource's client through `IClientScope`. A client outside the caller's
 scope answers **404** (not 403), so ids cannot be probed. `GET …/client-options` lists the clients the caller may
@@ -109,7 +111,7 @@ to clients.
 | `GET /landing-pages?clientId=&status=&search=` | paged |
 | `POST /landing-pages` | `{ clientAccountId, name, slug?, templateKey?, formId?, createForm = true }` — with a template that has a form, a new form is created from the matching form template unless `formId` is given |
 | `GET /landing-pages/{id}` · `PUT /landing-pages/{id}` | `PUT { name, slug, metaTitle?, metaDescription?, ogImageUrl?, noIndex, experimentEnabled, variants: [{ key: A–D, name, weight 1–100, blocks[] }], concurrencyStamp }` saves the **draft** |
-| `POST /landing-pages/{id}/publish` | validates and writes an immutable `LandingPageVersion` snapshot (content hash); the public URL serves only published versions |
+| `POST /landing-pages/{id}/publish` | validates and writes an immutable `LandingPageVersion` snapshot (content hash); the public URL serves only published versions. Publishing a new slug records a 301 redirect from the old `/lp/{client}/{slug}` address (Website → Redirects, [website.md](website.md#redirects-sitemanage)) |
 | `POST /landing-pages/{id}/unpublish` · `DELETE /landing-pages/{id}` (archive) · `POST /landing-pages/{id}/restore` | |
 | `GET /landing-pages/{id}/versions` · `GET /landing-pages/{id}/versions/{versionId}` · `POST …/versions/{versionId}/restore` | restore copies a snapshot into the draft |
 | `POST /landing-pages/{id}/experiment/reset` | starts a new experiment id (fresh assignments and results) |
@@ -149,7 +151,7 @@ server re-evaluates visibility: hidden fields are never required and their value
 |---|---|
 | `GET /public/lp/{clientSlug}/{pageSlug}` | the published version with the visitor's variant. Send `X-Visitor-Id` (random id kept in `localStorage`) for sticky A/B assignment; bots are neither assigned nor counted. Returns blocks plus the public definition of each form used. `404` unless published. |
 | `GET /public/forms/{formId}` | form definition + signed render token. When framed, send `X-Embed-Origin`; it must be in `allowedOrigins` (or the app origin) → else `403 forms.origin_not_allowed`. |
-| `POST /public/forms/{formId}/submissions` | JSON `{ values, hp, token, captchaToken?, landingPageId?, variantKey?, utmSource…utmContent, referrer? }` or multipart (`payload` JSON part + one file part per file field). Checks in order: origin allow-list (Origin/Referer/X-Embed-Origin), honeypot (`hp` must be empty — bots get a fake success), signed min-fill-time token (`forms.token_invalid`, `forms.too_fast`), per-IP limit (5 per form and 20 overall per 10 minutes, `429 forms.rate_limited`), CAPTCHA when configured, schema validation, file magic-byte checks (PDF/JPEG/PNG/WebP/GIF). Success `{ ok, message, redirectUrl }`. |
+| `POST /public/forms/{formId}/submissions` | JSON `{ values, hp, token, captchaToken?, landingPageId?, variantKey?, utmSource…utmContent, referrer? }` or multipart (`payload` JSON part + one file part per file field). Checks in order: origin allow-list (Origin/Referer/X-Embed-Origin), honeypot (`hp` must be empty — bots get a fake success), signed min-fill-time token (`forms.token_invalid`, `forms.too_fast`; single use — a replay, even concurrent or from another network, is `409 forms.already_submitted`, while honeypot hits, validation errors and rate-limited attempts do not spend it), per-IP limit (5 per form and 20 overall per 10 minutes, `429 forms.rate_limited`), CAPTCHA when configured, schema validation, file magic-byte checks (PDF/JPEG/PNG/WebP/GIF). Success `{ ok, message, redirectUrl }`. |
 
 After commit a `FormSubmitted` event is published exactly once (claimed via `EventPublishedAt`; `FormEventRetryJob`
 retries unpublished submissions every 5 minutes) so CRM lead capture and automations can react. Staff notifications

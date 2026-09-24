@@ -152,3 +152,18 @@ public sealed partial class LandingPageService(AppDbContext db, ImageUrlPolicy i
     [GeneratedRegex("[^a-z0-9]+")]
     private static partial Regex NonSlugRegex();
 }
+
+/// <summary>
+/// Stale-edit checks for the landing-page builder's updates (pages, forms, template library), with the website CMS's
+/// convention: the stamp from the last read must be sent, and a missing stamp is refused like a stale one (409
+/// <c>concurrency.conflict</c>) instead of skipping the check.
+/// </summary>
+public static class LandingStamps
+{
+    public static void Expect<T>(DbContext db, T entity, Guid? stamp, string what) where T : class, IConcurrencyStamped
+    {
+        if (stamp is not { } expected || expected != entity.ConcurrencyStamp)
+            throw DomainException.Conflict("concurrency.conflict", $"This {what} was changed by someone else. Reload and try again.");
+        db.Entry(entity).Property(e => e.ConcurrencyStamp).OriginalValue = expected;
+    }
+}

@@ -78,7 +78,34 @@ See [DYNAMIC_CONTENT.md](DYNAMIC_CONTENT.md).
 
 **Page history and scheduling.** Every save of a page is kept as a version (with an optional change note). Preview an
 old version in the editor and restore it as a new version — handy for legal pages. A published page can get a
-*Go live at* time; it stays hidden (and out of the sitemap) until then.
+*Go live at* time; it stays hidden (and out of the sitemap) until then. **Delete page** (editor header, or the row
+menu in the Pages list; `site.manage`, audited as `website.page_deleted`) removes a page and its version history after
+a confirmation; unpublish instead to keep it.
+
+**Redirects.** Changing the slug of *live* content — a published page, blog post, service, service line, case study
+or industry, or publishing a landing page under a new address — records a permanent (301) redirect from the old
+address to the new one, in the same transaction as the change, so links and search rankings keep working. The
+sitemap lists only the new address. **Website → Redirects** (`site.manage`) lists them (automatic and manual, with
+search), adds manual ones (e.g. after a site migration: old path → new path, both same-site paths) and deletes any;
+every change is audited (`website.redirect_created|updated|removed|deleted`) and adding/deleting is refused while
+impersonating (redirects decide where every visitor of an address lands, like the site settings). Rules:
+
+- Chains are collapsed: renaming A → B → C leaves A → C and B → C; a manual redirect to a redirected address points at
+  its final address, and one that would lead back to itself is refused (`website.redirect_loop`).
+- An address that shows live content is never redirected: publishing content at a redirected address removes the
+  redirect (`website.redirect_removed`), a manual redirect from a live address is refused
+  (`website.redirect_source_live`), and lookups check liveness again (scheduled pages that just went live win).
+- Renames of drafts, and renames that unpublish at the same time, record nothing (there is nothing live to send
+  visitors to). Built-in pages (`/`, `/services`, `/blog`, `/pricing`, …) and the portals, API and short links
+  (`/agency`, `/api`, `/t`, …) are never redirect sources.
+- A service line is addressed as `/services?category={slug}`; other query parameters (UTM tags) are carried over to
+  the target.
+- How it is served: the web server asks `GET /api/v1/public/redirects/gate` (header `X-Original-URI`) before it
+  serves the app shell and answers a moved address with a real **301** (nginx `location @redirect_gate` in
+  `frontend/nginx/default.conf.template`; the same gate is a Vite plugin in `frontend/src/app/devProxy.ts` for `vite`
+  and `vite preview`). If the API is unreachable, the shell is served as before. Inside the app, a not-found public
+  page asks `GET /api/v1/public/redirects?path=` and navigates to the new address (client-side navigation). If you
+  serve the web app another way, add the same gate or accept client-side redirects only.
 
 **Ordering.** Service lines, services, industries, case studies, testimonials, team members and blog categories have a
 *Reorder* button: drag rows, or use the keyboard (Space to pick up, arrow keys to move, Space to drop).
@@ -99,7 +126,10 @@ in the web server's `IMG_SRC_EXTRA`, see below).
   inquiry, consultation booking or job application stores the SHA-256 of the token id (`website_used_form_tokens`),
   and a replay gets 409 `website.form_already_submitted` (the site fetches a fresh token after each success; the
   newsletter form, which is idempotent per address, does not spend tokens). `UsedFormTokenCleanupJob` deletes the
-  rows hourly once the token has expired.
+  rows hourly once the token has expired. Landing-page and embedded forms (`/lp/…`, `/f/…`) work the same way: each
+  rendered form carries a single-use render token (random id inside the signed token), spent in the submission's
+  transaction; a replay — even concurrent, even from another network — gets 409 `forms.already_submitted`, while
+  honeypot hits, validation errors and rate-limited attempts leave the token unspent.
 - Consent is explicit (unticked checkbox) and stored with its text version (`forms-2026-09`, `newsletter-2026-09`,
   `careers-2026-09`) and time. Change the text in `Leads/FormGuard.cs` → bump the version.
 - CVs must be real PDFs (checked by content) up to 5 MB, stored privately in the database; downloads are audited.

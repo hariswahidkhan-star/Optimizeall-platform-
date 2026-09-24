@@ -383,8 +383,16 @@ test.describe.serial('CMS pages', () => {
     const gone = await openPublic(browser, `/${slug}`);
     await expect(notFound(gone)).toBeVisible();
 
-    // Delete (API only: the editor has no delete button for pages) → the admin API 404s as well.
-    await editorApi.delete(`/agency/website/pages/${created.id}`);
+    // Delete from the editor (confirmation first) → back on the list, and the admin API 404s as well.
+    const pageErrors = watchErrors(editor);
+    await editor.getByRole('button', { name: 'Delete page' }).click();
+    const confirm = modal(editor, `Delete “Launch notes ${id}”?`);
+    await expect(confirm).toContainText('version history');
+    await confirm.getByRole('button', { name: 'Delete page' }).click();
+    await expect(toast(editor, 'Page deleted')).toBeVisible();
+    await expect(editor).toHaveURL(/\/agency\/website\/pages$/);
+    await expect(editor.getByRole('row').filter({ hasText: `Launch notes ${id}` })).toHaveCount(0);
+    pageErrors.expectClean('deleting a page');
     expect((await refused(editorApi.get(`/agency/website/pages/${created.id}`))).status).toBe(404);
     // The slug is free again.
     const reused = await editorApi.post<SitePage>('/agency/website/pages', {

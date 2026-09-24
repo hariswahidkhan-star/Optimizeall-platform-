@@ -8,6 +8,7 @@ using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Api.Modules.Files;
 using OptimizeAll.Api.Modules.Seo;
+using OptimizeAll.Api.Modules.Website.Redirects;
 using OptimizeAll.Domain.Agency;
 using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Files;
@@ -102,7 +103,8 @@ public sealed class PageListQuery : PageQuery
 [Route("api/v1/agency/pages")]
 public sealed class LandingPagesController(
     AppDbContext db, SeoAccess access, IClientScope scope, LandingPageService pages, FormService forms, ImageUrlPolicy images,
-    IDatabaseDialect dialect, IAuditLogger audit, ICurrentUser currentUser, IFileService files, TimeProvider clock) : ControllerBase
+    IDatabaseDialect dialect, IAuditLogger audit, ICurrentUser currentUser, IFileService files, RedirectService redirects, TimeProvider clock)
+    : ControllerBase
 {
     private DateTime Now => clock.GetUtcNow().UtcDateTime;
 
@@ -213,11 +215,8 @@ public sealed class LandingPagesController(
     {
         var page = await LoadAsync(id, ct, tracked: true);
         if (page.Status == LandingPageStatus.Archived) throw DomainException.Conflict("landing.archived", "Restore the page before editing it.");
-        if (request.ConcurrencyStamp is { } stamp)
-        {
-            if (stamp != page.ConcurrencyStamp) throw DomainException.Conflict("concurrency.conflict", "This page was changed by someone else. Reload and try again.");
-            db.Entry(page).Property(p => p.ConcurrencyStamp).OriginalValue = stamp;
-        }
+        // Like the website CMS, a missing stamp is treated as stale (409), never as "skip the check".
+        LandingStamps.Expect(db, page, request.ConcurrencyStamp, "page");
         var slug = request.Slug.Trim().ToLowerInvariant();
         if (!LandingPageService.IsValidSlug(slug)) throw SlugError();
         if (slug != page.Slug && await pages.SlugTakenAsync(page.ClientAccountId, slug, id, ct)) throw SlugTaken();
@@ -245,14 +244,23 @@ public sealed class LandingPagesController(
         return await ToDetailAsync(page, ct);
     }
 
-    /// <summary>Publishes the current draft as a new immutable version (versions are never modified).</summary>
+    /// <summary>
+    /// Publishes the current draft as a new immutable version (versions are never modified). When the published address
+    /// changes, the old address redirects (301) to the new one.
+    /// </summary>
     [HttpPost("landing-pages/{id:guid}/publish")]
     public async Task<PageDetailDto> Publish(Guid id, CancellationToken ct)
     {
+        // Redirect bookkeeping is serialized by its named lock, taken before the write transaction.
+        await using var redirectLock = await redirects.LockAsync(ct);
         await using var tx = await dialect.BeginWriteTransactionAsync(db, ct);
         if (!await dialect.LockRowAsync(db, "landing_pages", id, ct)) throw DomainException.NotFound("Page");
         var page = await LoadAsync(id, ct, tracked: true);
         if (page.Status == LandingPageStatus.Archived) throw DomainException.Conflict("landing.archived", "Restore the page before publishing it.");
+        var clientSlug = await db.Set<ClientAccount>().AsNoTracking().Where(c => c.Id == page.ClientAccountId).Select(c => c.Slug).FirstAsync(ct);
+        var wasAt = page.Status == LandingPageStatus.Published
+            ? (await pages.LiveSlugsAsync(new[] { page }, ct)).GetValueOrDefault(page.Id) is { } liveSlug ? PublicPath(clientSlug, liveSlug) : null
+            : null;
         // Re-validate against the current forms/images (a form may have been archived since the draft was saved).
         using (var draft = JsonDocument.Parse(page.VariantsJson))
             await pages.ParseVariantsAsync(page.ClientAccountId, draft.RootElement, ct);
@@ -271,6 +279,7 @@ public sealed class LandingPagesController(
         page.Status = LandingPageStatus.Published;
         page.HasUnpublishedChanges = false;
         audit.Record("landing.page_published", nameof(LandingPage), page.Id, after: new { version.Version, version.ContentHash, page.Slug });
+        await redirects.StageAsync(new AddressChange(RedirectPaths.LandingPage, page.Id, wasAt, PublicPath(clientSlug, page.Slug)), ct);
         await db.SaveChangesAsync(ct);
         await tx.CommitAsync(ct);
         return await ToDetailAsync(page, ct);
