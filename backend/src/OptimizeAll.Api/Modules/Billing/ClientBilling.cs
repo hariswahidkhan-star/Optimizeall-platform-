@@ -60,7 +60,7 @@ public sealed class ClientBillingService(
         if (query.Status is { } status) rows = rows.Where(i => i.Status == status);
         if (query.OpenOnly == true) rows = rows.Where(i => Invoice.OpenStatuses.Contains(i.Status));
         var total = await rows.CountAsync(ct);
-        var page = await rows.OrderByDescending(i => i.IssueDate).ThenByDescending(i => i.CreatedAt).Skip(query.Skip).Take(query.PageSize).ToListAsync(ct);
+        var page = await rows.OrderByDescending(i => i.IssueDate).ThenByDescending(i => i.CreatedAt).ThenByDescending(i => i.Id).Skip(query.Skip).Take(query.PageSize).ToListAsync(ct);
         return new PagedResult<InvoiceSummaryDto>(await invoices.SummariesAsync(page, ct), total, query.Page, query.PageSize);
     }
 

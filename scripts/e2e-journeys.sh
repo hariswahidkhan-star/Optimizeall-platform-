@@ -26,6 +26,7 @@
 #                           j-finance       payouts and the payments hub (Demo seed)
 #                           j-admin         platform administration: users, roles, test users, log-in-as (Demo seed)
 #                           j-lead-to-cash  website inquiry → CRM → proposal → contract → paid recurring invoice (Demo seed)
+#                           j-edge          cross-cutting edge cases: time zones, currencies, lists at volume (Demo seed)
 #   E2E_SEED              comma-separated seed profiles (default: Baseline for journeys and j-participant,
 #                         Baseline,Demo for everything else)
 #   E2E_DB_PROVIDER=mysql mysql (default) or sqlite (a fresh file in $E2E_WORK_DIR; no MySQL server needed)

@@ -100,6 +100,7 @@ public sealed class CrmService(
             "updated" => q.Desc ? companies.OrderByDescending(c => c.UpdatedAt) : companies.OrderBy(c => c.UpdatedAt),
             _ => q.Desc ? companies.OrderByDescending(c => c.CreatedAt) : companies.OrderBy(c => c.CreatedAt),
         };
+        companies = companies.ThenByKey(c => c.Id, q.Desc);
         var total = await companies.CountAsync(ct);
         var rows = await companies.Skip(q.Skip).Take(q.PageSize).ToListAsync(ct);
         var ids = rows.Select(r => r.Id).ToList();
@@ -192,9 +193,18 @@ public sealed class CrmService(
             "updated" => q.Desc ? contacts.OrderByDescending(c => c.UpdatedAt) : contacts.OrderBy(c => c.UpdatedAt),
             _ => q.Desc ? contacts.OrderByDescending(c => c.CreatedAt) : contacts.OrderBy(c => c.CreatedAt),
         };
+        contacts = contacts.ThenByKey(c => c.Id, q.Desc);
         var total = await contacts.CountAsync(ct);
         var rows = await contacts.Skip(q.Skip).Take(q.PageSize).ToListAsync(ct);
         return new PagedResult<ContactSummaryDto>(await ContactSummariesAsync(rows, ct), total, q.Page, q.PageSize);
+    }
+
+    /// <summary>Bulk exports of personal data are audited (who took which slice of the contact base, and how much).</summary>
+    public async Task RecordContactsExportAsync(ContactQuery q, int rows, CancellationToken ct)
+    {
+        audit.Record("crm.contacts_exported", nameof(CrmContact), "bulk",
+            after: new { rows, q.Search, q.Tag, q.LifecycleStage, q.OwnerUserId, q.CompanyId, q.ConsentStatus, q.MinScore, q.Archived });
+        await db.SaveChangesAsync(ct);
     }
 
     public IQueryable<CrmContact> FilterContacts(ContactQuery q)
@@ -389,6 +399,7 @@ public sealed class CrmService(
             "value" => q.Desc ? deals.OrderByDescending(d => d.Value) : deals.OrderBy(d => d.Value),
             _ => q.Desc ? deals.OrderByDescending(d => d.CreatedAt) : deals.OrderBy(d => d.CreatedAt),
         };
+        deals = deals.ThenByKey(d => d.Id, q.Desc);
         var total = await deals.CountAsync(ct);
         var rows = await deals.Skip(q.Skip).Take(q.PageSize).ToListAsync(ct);
         return new PagedResult<DealSummaryDto>(await DealSummariesAsync(rows, ct), total, q.Page, q.PageSize);
@@ -628,6 +639,7 @@ public sealed class CrmService(
         activities = q.Due is "open" or "overdue" or "today"
             ? activities.OrderBy(a => a.DueAt ?? a.OccursAt)
             : activities.OrderByDescending(a => a.CreatedAt);
+        activities = activities.ThenByKey(a => a.Id);
         var total = await activities.CountAsync(ct);
         var rows = await activities.Skip(q.Skip).Take(q.PageSize).ToListAsync(ct);
         return new PagedResult<ActivityDto>(await ActivityDtosAsync(rows, ct), total, q.Page, q.PageSize);

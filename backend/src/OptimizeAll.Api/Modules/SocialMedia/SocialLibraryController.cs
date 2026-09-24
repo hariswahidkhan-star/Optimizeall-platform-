@@ -80,8 +80,8 @@ public sealed class SocialLibraryController(
         await access.ClientAsync(clientId, ct);
         var q = db.Set<SocialMediaAsset>().AsNoTracking().Where(m => m.ClientAccountId == clientId);
         if (kind is { } k) q = q.Where(m => m.Kind == k);
-        if (!string.IsNullOrWhiteSpace(query.Search)) q = q.Where(m => EF.Functions.Like(m.Title, PagingExtensions.LikePattern(query.Search)));
-        var page = await q.OrderByDescending(m => m.CreatedAt).ToPagedAsync(query, ct);
+        if (!string.IsNullOrWhiteSpace(query.Search)) q = q.Where(m => EF.Functions.Like(m.Title, PagingExtensions.LikePattern(query.Search), "\\"));
+        var page = await q.OrderByDescending(m => m.CreatedAt).ThenByDescending(m => m.Id).ToPagedAsync(query, ct);
         return new PagedResult<MediaDto>(page.Items.Select(m => ToDto(m, staff: true)).ToList(), page.Total, page.Page, page.PageSize);
     }
 

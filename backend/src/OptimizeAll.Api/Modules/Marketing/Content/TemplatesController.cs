@@ -66,6 +66,7 @@ public sealed class TemplatesController(AppDbContext db, IAuditLogger audit, ICu
             (_, false) => q.OrderBy(t => t.UpdatedAt),
             _ => q.OrderByDescending(t => t.UpdatedAt),
         };
+        q = q.ThenByKey(t => t.Id);
         return await Project(q).ToPagedAsync(query, ct);
     }
 

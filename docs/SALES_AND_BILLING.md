@@ -91,6 +91,8 @@ creates one invoice per period: exactly one per period, even if the job is run t
 - **Resume** continues from the next period.
 - **Cancel** needs a reason and confirmation.
 - A contract past its end date is **Ended**, unless it auto-renews, in which case it is extended by the renewal term.
+  Terms are counted from the day after the original end date, so a month-end contract stays on month ends (Jan 31 →
+  Feb 28 → Mar 31, and Feb 28, 2027 + 12 months → Feb 29, 2028) instead of drifting to the 28th.
 
 *Generate invoices now*, on a contract, runs the same logic for that contract only.
 

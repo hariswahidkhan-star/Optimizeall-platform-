@@ -67,9 +67,11 @@ public sealed class ClientHealthService(
             .GroupBy(d => d.ClientAccountId).Select(g => new { g.Key, Count = g.Count(), Oldest = g.Min(d => d.SentToClientAt) })
             .ToDictionaryAsync(x => x.Key, ct);
 
-        // Last activity: newest message, task change, deliverable change or time entry.
-        var lastMessage = await db.Set<ThreadMessage>().AsNoTracking().Where(m => ids.Contains(m.ClientAccountId))
-            .GroupBy(m => m.ClientAccountId).Select(g => new { g.Key, At = g.Max(m => m.CreatedAt) }).ToDictionaryAsync(x => x.Key, x => x.At, ct);
+        // Last activity: newest message in a client-visible thread, task change, deliverable change or time entry.
+        // Internal (staff-only) threads are the team talking among themselves, not an exchange with the client, so a
+        // busy internal thread must not mask a client that has gone quiet.
+        var lastMessage = await db.Set<MessageThread>().AsNoTracking().Where(t => ids.Contains(t.ClientAccountId) && !t.IsInternal && t.MessageCount > 0)
+            .GroupBy(t => t.ClientAccountId).Select(g => new { g.Key, At = g.Max(t => t.LastMessageAt) }).ToDictionaryAsync(x => x.Key, x => x.At, ct);
         var lastTask = await db.Set<ProjectTask>().AsNoTracking().Where(t => ids.Contains(t.ClientAccountId))
             .GroupBy(t => t.ClientAccountId).Select(g => new { g.Key, At = g.Max(t => t.UpdatedAt) }).ToDictionaryAsync(x => x.Key, x => x.At, ct);
         var lastDeliverable = await db.Set<Deliverable>().AsNoTracking().Where(t => ids.Contains(t.ClientAccountId))

@@ -75,6 +75,7 @@ public sealed class AdminUsersService(
             "lastactiveat" => query.Desc ? q.OrderByDescending(u => u.LastActiveAt) : q.OrderBy(u => u.LastActiveAt),
             _ => query.Desc ? q.OrderByDescending(u => u.CreatedAt) : q.OrderBy(u => u.CreatedAt),
         };
+        q = q.ThenByKey(u => u.Id, query.Desc);
         var total = await q.CountAsync(ct);
         var users = await q.Include(u => u.Roles).Skip(query.Skip).Take(query.PageSize).ToListAsync(ct);
         return new PagedResult<AdminUserListItemDto>(users.Select(ToListItem).ToList(), total, query.Page, query.PageSize);
@@ -82,7 +83,10 @@ public sealed class AdminUsersService(
 
     public async Task<FileContentResult> ExportCsvAsync(AdminUserQuery query, CancellationToken ct)
     {
-        var users = await (await FilterAsync(query, ct)).Include(u => u.Roles).OrderBy(u => u.CreatedAt).Take(MaxExportRows).ToListAsync(ct);
+        var users = await (await FilterAsync(query, ct)).Include(u => u.Roles).OrderBy(u => u.CreatedAt).ThenBy(u => u.Id).Take(MaxExportRows).ToListAsync(ct);
+        audit.Record("admin.users_exported", nameof(User), "bulk",
+            after: new { rows = users.Count, query.Search, query.Role, query.Status, query.Country, query.Tier, query.Permission });
+        await db.SaveChangesAsync(ct);
         return Csv.File($"users-{Now:yyyyMMdd-HHmmss}.csv",
             new[] { "id", "email", "displayName", "countryCode", "languageCode", "status", "tier", "roles", "emailVerified", "createdAt", "lastActiveAt", "isTestAccount" },
             users.Select(u => new object?[]

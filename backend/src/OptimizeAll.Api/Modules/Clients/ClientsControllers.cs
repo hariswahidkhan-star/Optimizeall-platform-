@@ -174,7 +174,7 @@ public sealed class AgencyStaffController(AppDbContext db) : ControllerBase
         if (!string.IsNullOrWhiteSpace(search))
         {
             var p = PagingExtensions.LikePattern(search);
-            q = q.Where(u => EF.Functions.Like(u.DisplayName, p) || EF.Functions.Like(u.Email, p));
+            q = q.Where(u => EF.Functions.Like(u.DisplayName, p, "\\") || EF.Functions.Like(u.Email, p, "\\"));
         }
         var users = await q.OrderBy(u => u.DisplayName).Take(200).ToListAsync(ct);
         return users.Select(u => new StaffPersonDto(u.Id, u.DisplayName, u.Email,

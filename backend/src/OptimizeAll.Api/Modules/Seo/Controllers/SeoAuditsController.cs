@@ -75,7 +75,7 @@ public sealed class SeoAuditsController(
     public async Task<PagedResult<AuditSummaryDto>> History(Guid siteId, [FromQuery] PageQuery query, CancellationToken ct)
     {
         await access.SiteAsync(siteId, ct);
-        var page = await db.Set<SeoAudit>().AsNoTracking().Where(a => a.SiteId == siteId).OrderByDescending(a => a.QueuedAt).ToPagedAsync(query, ct);
+        var page = await db.Set<SeoAudit>().AsNoTracking().Where(a => a.SiteId == siteId).OrderByDescending(a => a.QueuedAt).ThenByDescending(a => a.Id).ToPagedAsync(query, ct);
         return new PagedResult<AuditSummaryDto>(page.Items.Select(ToSummary).ToList(), page.Total, page.Page, page.PageSize);
     }
 
@@ -144,7 +144,7 @@ public sealed class SeoAuditsController(
     {
         await access.OwnedAsync<SeoAudit>(id, a => a.ClientAccountId, "Audit", ct, tracked: false);
         var q = db.Set<SeoAuditPage>().AsNoTracking().Where(p => p.AuditId == id);
-        if (!string.IsNullOrWhiteSpace(query.Search)) q = q.Where(p => EF.Functions.Like(p.Url, PagingExtensions.LikePattern(query.Search)));
+        if (!string.IsNullOrWhiteSpace(query.Search)) q = q.Where(p => EF.Functions.Like(p.Url, PagingExtensions.LikePattern(query.Search), "\\"));
         q = query.Status switch
         {
             "ok" => q.Where(p => p.StatusCode >= 200 && p.StatusCode < 300 && p.RedirectChain == null),
@@ -154,7 +154,7 @@ public sealed class SeoAuditsController(
             "failed" => q.Where(p => p.FetchError != null),
             _ => q,
         };
-        var page = await q.OrderBy(p => p.Depth).ThenBy(p => p.Url).ToPagedAsync(query, ct);
+        var page = await q.OrderBy(p => p.Depth).ThenBy(p => p.Url).ThenBy(p => p.Id).ToPagedAsync(query, ct);
         return new PagedResult<AuditPageDto>(page.Items.Select(p => new AuditPageDto(p.Id, p.Url, p.StatusCode, p.Depth, p.ResponseTimeMs,
             p.ContentLength, p.Title, p.MetaDescription, p.H1Count, p.WordCount, p.Canonical, p.IsNoindex, p.InSitemap, p.InboundLinks,
             p.RedirectChain, p.FetchError)).ToList(), page.Total, page.Page, page.PageSize);

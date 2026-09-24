@@ -45,7 +45,7 @@ public sealed class SupportService(
             var p = PagingExtensions.LikePattern(query.Search);
             q = q.Where(t => EF.Functions.Like(t.Subject, p, "\\") || EF.Functions.Like(t.Reference, p, "\\"));
         }
-        return await q.OrderByDescending(t => t.UpdatedAt)
+        return await q.OrderByDescending(t => t.UpdatedAt).ThenByDescending(t => t.Id)
             .Select(t => new TicketSummaryDto(t.Id, t.Reference, t.Subject, t.Category, t.Status, t.Priority, t.CreatedAt, t.UpdatedAt))
             .ToPagedAsync(query, ct);
     }
@@ -192,7 +192,7 @@ public sealed class SupportService(
             var p = PagingExtensions.LikePattern(query.Search);
             q = q.Where(x => EF.Functions.Like(x.t.Subject, p, "\\") || EF.Functions.Like(x.t.Reference, p, "\\") || EF.Functions.Like(x.u.Email, p, "\\"));
         }
-        q = query.Desc ? q.OrderByDescending(x => x.t.UpdatedAt) : q.OrderBy(x => x.t.UpdatedAt);
+        q = query.Desc ? q.OrderByDescending(x => x.t.UpdatedAt).ThenByDescending(x => x.t.Id) : q.OrderBy(x => x.t.UpdatedAt).ThenBy(x => x.t.Id);
 
         return await q.Select(x => new StaffTicketSummaryDto(x.t.Id, x.t.Reference, x.t.Subject, x.t.Category, x.t.Status, x.t.Priority,
                 new TicketPersonDto(x.u.Id, x.u.DisplayName, x.u.Email),

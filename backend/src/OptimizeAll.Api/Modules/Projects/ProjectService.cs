@@ -87,7 +87,7 @@ public sealed class ProjectService(
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var pattern = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(p => EF.Functions.Like(p.Name, pattern));
+            q = q.Where(p => EF.Functions.Like(p.Name, pattern, "\\"));
         }
         q = query.Sort switch
         {
@@ -95,6 +95,7 @@ public sealed class ProjectService(
             "endDate" => query.Desc ? q.OrderByDescending(p => p.EndDate) : q.OrderBy(p => p.EndDate),
             _ => q.OrderBy(p => p.Status).ThenByDescending(p => p.CreatedAt),
         };
+        q = q.ThenByKey(p => p.Id);
         var total = await q.CountAsync(ct);
         var rows = await q.Skip(query.Skip).Take(query.PageSize).ToListAsync(ct);
         return new PagedResult<ProjectSummaryDto>(await SummariesAsync(rows, ct), total, query.Page, query.PageSize);

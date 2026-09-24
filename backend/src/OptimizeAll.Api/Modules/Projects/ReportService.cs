@@ -129,7 +129,7 @@ public sealed class ReportService(
         if (query.ClientId is { } cid) q = q.Where(r => r.ClientAccountId == cid);
         if (query.Status is { } s) q = q.Where(r => r.Status == s);
         var total = await q.CountAsync(ct);
-        var rows = await q.OrderByDescending(r => r.PeriodStart).ThenBy(r => r.Title).Skip(query.Skip).Take(query.PageSize).ToListAsync(ct);
+        var rows = await q.OrderByDescending(r => r.PeriodStart).ThenBy(r => r.Title).ThenBy(r => r.Id).Skip(query.Skip).Take(query.PageSize).ToListAsync(ct);
         return new PagedResult<ReportSummaryDto>(await SummariesAsync(rows, ct), total, query.Page, query.PageSize);
     }
 

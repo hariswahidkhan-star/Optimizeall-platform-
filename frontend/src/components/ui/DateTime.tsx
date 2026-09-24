@@ -5,6 +5,7 @@ import {
   formatDate,
   formatDateTime,
   formatRelative,
+  isDateOnly,
   isValidDate,
   toDate,
   type DateInput,
@@ -30,9 +31,11 @@ export function DateTime({ value, format = 'datetime', timeZone, withZone, class
   if (!isValidDate(value ?? null)) return <span className={className}>—</span>;
   const date = toDate(value as DateInput);
   const zone = timeZone ?? auth?.user?.timeZone ?? browserTimeZone();
+  // A calendar date (e.g. a due date) is the same day in every zone: format the string, not the UTC-midnight instant.
+  const dateOnly = isDateOnly(value);
   const absolute =
-    format === 'date'
-      ? formatDate(date, { timeZone: zone })
+    format === 'date' || dateOnly
+      ? formatDate(dateOnly ? value : date, { timeZone: zone })
       : formatDateTime(date, { timeZone: zone, withZone });
   const relative = formatRelative(date);
 
@@ -50,8 +53,14 @@ export function DateTime({ value, format = 'datetime', timeZone, withZone, class
 
   return (
     <time
-      dateTime={date.toISOString()}
-      title={format === 'relative' ? formatDateTime(date, { timeZone: zone, withZone: true }) : undefined}
+      dateTime={dateOnly ? value : date.toISOString()}
+      title={
+        format === 'relative'
+          ? dateOnly
+            ? absolute
+            : formatDateTime(date, { timeZone: zone, withZone: true })
+          : undefined
+      }
       className={clsx('tabular', className)}
     >
       {text}

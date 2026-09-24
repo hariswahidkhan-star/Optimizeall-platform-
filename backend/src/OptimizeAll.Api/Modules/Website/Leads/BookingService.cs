@@ -288,9 +288,9 @@ public sealed class BookingService(
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var p = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(b => EF.Functions.Like(b.Name, p) || EF.Functions.Like(b.Email, p) || (b.Company != null && EF.Functions.Like(b.Company, p)));
+            q = q.Where(b => EF.Functions.Like(b.Name, p, "\\") || EF.Functions.Like(b.Email, p, "\\") || (b.Company != null && EF.Functions.Like(b.Company, p, "\\")));
         }
-        return CmsStore.Map(await q.OrderBy(b => b.SlotStart).ToPagedAsync(query, ct), ToDto);
+        return CmsStore.Map(await q.OrderBy(b => b.SlotStart).ThenBy(b => b.Id).ToPagedAsync(query, ct), ToDto);
     }
 
     public async Task<BookingDto> CancelAsync(Guid id, CancelBookingInput input, CancellationToken ct)

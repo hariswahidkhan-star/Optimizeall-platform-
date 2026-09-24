@@ -83,8 +83,7 @@ public sealed class RecurringBillingService(
                     await tx.CommitAsync(ct);
                     return new PeriodOutcome(false, Ended: true);
                 }
-                var renewedTo = end;
-                while (start > renewedTo) renewedTo = renewedTo.AddMonths(contract.RenewalTermMonths);
+                var renewedTo = BillingPeriods.RenewedEnd(end, contract.RenewalTermMonths, start);
                 contract.EndDate = renewedTo;
                 renewedNow = true;
                 audit.RecordSystem("billing.contract_renewed", nameof(Contract), contract.Id,

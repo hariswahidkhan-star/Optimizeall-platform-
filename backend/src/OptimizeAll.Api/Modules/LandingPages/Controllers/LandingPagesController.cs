@@ -142,9 +142,9 @@ public sealed class LandingPagesController(
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var like = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(p => EF.Functions.Like(p.Name, like) || EF.Functions.Like(p.Slug, like));
+            q = q.Where(p => EF.Functions.Like(p.Name, like, "\\") || EF.Functions.Like(p.Slug, like, "\\"));
         }
-        var page = await q.OrderByDescending(p => p.UpdatedAt).ToPagedAsync(query, ct);
+        var page = await q.OrderByDescending(p => p.UpdatedAt).ThenByDescending(p => p.Id).ToPagedAsync(query, ct);
         var clients = await ClientsAsync(page.Items.Select(p => p.ClientAccountId), ct);
         return new PagedResult<PageListItemDto>(page.Items.Select(p =>
         {

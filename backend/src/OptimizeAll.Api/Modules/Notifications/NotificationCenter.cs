@@ -212,7 +212,7 @@ public sealed class NotificationCenterService(
         if (query.UnreadOnly) q = q.Where(n => n.ReadAt == null);
         var total = await q.CountAsync(ct);
         var items = await q.OrderByDescending(n => n.CreatedAt).ThenByDescending(n => n.Id)
-            .Skip((query.Page - 1) * query.PageSize).Take(query.PageSize)
+            .Skip(PagingExtensions.SkipFor(query.Page, query.PageSize)).Take(query.PageSize)
             .Select(n => new NotificationDto(n.Id, n.Type, n.Title, n.Body, n.LinkUrl, n.CreatedAt, n.ReadAt, n.ReadAt != null))
             .ToListAsync(ct);
         return new PagedResult<NotificationDto>(items, total, query.Page, query.PageSize);

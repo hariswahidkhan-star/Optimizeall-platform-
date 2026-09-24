@@ -138,8 +138,8 @@ public sealed class FormsController(
         if (query.ClientId is { } c) q = q.Where(f => f.ClientAccountId == c);
         if (query.Status is { } s) q = q.Where(f => f.Status == s);
         else q = q.Where(f => f.Status != FormStatus.Archived);
-        if (!string.IsNullOrWhiteSpace(query.Search)) q = q.Where(f => EF.Functions.Like(f.Name, PagingExtensions.LikePattern(query.Search)));
-        var page = await q.OrderByDescending(f => f.UpdatedAt).ToPagedAsync(query, ct);
+        if (!string.IsNullOrWhiteSpace(query.Search)) q = q.Where(f => EF.Functions.Like(f.Name, PagingExtensions.LikePattern(query.Search), "\\"));
+        var page = await q.OrderByDescending(f => f.UpdatedAt).ThenByDescending(f => f.Id).ToPagedAsync(query, ct);
         var ids = page.Items.Select(f => f.Id).ToList();
         var stats = await db.Set<FormSubmission>().AsNoTracking().Where(s => ids.Contains(s.FormId)).GroupBy(s => s.FormId)
             .Select(g => new { g.Key, Count = g.Count(), Last = g.Max(s => s.SubmittedAt) }).ToDictionaryAsync(x => x.Key, ct);
@@ -211,7 +211,7 @@ public sealed class FormsController(
     {
         var form = await LoadAsync(id, ct, tracked: false);
         var q = Filter(id, query);
-        var page = await q.OrderByDescending(s => s.SubmittedAt).ToPagedAsync(query, ct);
+        var page = await q.OrderByDescending(s => s.SubmittedAt).ThenByDescending(s => s.Id).ToPagedAsync(query, ct);
         return new PagedResult<SubmissionDto>(await ToDtosAsync(form, page.Items, ct), page.Total, page.Page, page.PageSize);
     }
 
@@ -291,7 +291,7 @@ public sealed class FormsController(
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var like = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(s => EF.Functions.Like(s.Email!, like) || EF.Functions.Like(s.Name!, like) || EF.Functions.Like(s.Phone!, like));
+            q = q.Where(s => EF.Functions.Like(s.Email!, like, "\\") || EF.Functions.Like(s.Name!, like, "\\") || EF.Functions.Like(s.Phone!, like, "\\"));
         }
         return q;
     }

@@ -226,9 +226,9 @@ public sealed class InquiryService(
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var p = PagingExtensions.LikePattern(query.Search);
-            q = q.Where(i => EF.Functions.Like(i.Name, p) || EF.Functions.Like(i.Email, p) || (i.Company != null && EF.Functions.Like(i.Company, p)));
+            q = q.Where(i => EF.Functions.Like(i.Name, p, "\\") || EF.Functions.Like(i.Email, p, "\\") || (i.Company != null && EF.Functions.Like(i.Company, p, "\\")));
         }
-        q = q.OrderByDescending(i => i.CreatedAt);
+        q = q.OrderByDescending(i => i.CreatedAt).ThenByDescending(i => i.Id);
         if (!string.IsNullOrWhiteSpace(query.Service))
         {
             // Service slugs live in a JSON list: filter in memory (inbox volumes are small).
@@ -281,7 +281,10 @@ public sealed class InquiryService(
         var q = db.Set<WebsiteInquiry>().AsNoTracking();
         if (query.Type is { } type) q = q.Where(i => i.Type == type);
         if (query.Status is { } status) q = q.Where(i => i.Status == status);
-        return await q.OrderByDescending(i => i.CreatedAt).Take(10000).ToListAsync(ct);
+        var rows = await q.OrderByDescending(i => i.CreatedAt).ThenByDescending(i => i.Id).Take(10000).ToListAsync(ct);
+        audit.Record("website.inquiries_exported", nameof(WebsiteInquiry), "bulk", after: new { rows = rows.Count, query.Type, query.Status });
+        await db.SaveChangesAsync(ct);
+        return rows;
     }
 
     private static InquirySummaryDto Summary(WebsiteInquiry i) => new(

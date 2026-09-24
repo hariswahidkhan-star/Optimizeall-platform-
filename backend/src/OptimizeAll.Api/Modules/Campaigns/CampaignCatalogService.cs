@@ -59,9 +59,9 @@ public sealed class CampaignCatalogService(AppDbContext db, IParticipantEligibil
 
         filtered = (query.Sort ?? "deadline").ToLowerInvariant() switch
         {
-            "reward" => filtered.OrderByDescending(r => BaseAmount(r) ?? 0m).ThenBy(r => r.Campaign.SubmissionDeadline),
-            "newest" => filtered.OrderByDescending(r => r.Campaign.PublishedAt ?? r.Campaign.CreatedAt),
-            _ => filtered.OrderBy(r => r.Campaign.SubmissionDeadline).ThenBy(r => r.Campaign.Title),
+            "reward" => filtered.OrderByDescending(r => BaseAmount(r) ?? 0m).ThenBy(r => r.Campaign.SubmissionDeadline).ThenBy(r => r.Campaign.Id),
+            "newest" => filtered.OrderByDescending(r => r.Campaign.PublishedAt ?? r.Campaign.CreatedAt).ThenBy(r => r.Campaign.Id),
+            _ => filtered.OrderBy(r => r.Campaign.SubmissionDeadline).ThenBy(r => r.Campaign.Title).ThenBy(r => r.Campaign.Id),
         };
 
         var list = filtered.ToList();

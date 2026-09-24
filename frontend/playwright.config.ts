@@ -77,6 +77,11 @@ import { defineConfig, devices } from '@playwright/test';
  * portal → "I've paid" → finance confirms → paid; plus spam, replay, permission, tenancy and concurrency negatives. Its
  * specs build on each other (serial, one worker, desktop only). Run it with
  * `E2E_SUITE=j-lead-to-cash E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
+ *
+ * The j-edge suite covers cross-cutting edge cases that need a real browser against the Demo seed: calendar dates with
+ * the browser at UTC+14, UTC-12 and UTC+05:45, invoices in currencies with 0/2/3 minor units, and a list of identical
+ * rows paged through plus wildcard/quote/backslash/emoji search. Serial, one worker, desktop only. Run it with
+ * `E2E_SUITE=j-edge E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
  */
 const suite = process.env.E2E_SUITE ?? 'smoke';
 /** Suites whose mobile project runs only responsive.spec.ts (and whose desktop project runs everything else). */
@@ -86,7 +91,7 @@ const responsiveSplit =
  * Serial journeys run on desktop only: their screens are staff tools (campaign manager/reviewer, finance, admin…) whose
  * phone layouts are covered by the a11y and responsive specs.
  */
-const desktopJourney = ['j-campaigns', 'j-finance', 'j-lead-to-cash', 'j-admin'].includes(suite);
+const desktopJourney = ['j-campaigns', 'j-finance', 'j-lead-to-cash', 'j-admin', 'j-edge'].includes(suite);
 /** The finance journey compares datetime-local input (browser time) with UTC periods, so its browser runs in UTC. */
 const finance = suite === 'j-finance';
 /** Full-stack suites share one database and build on earlier steps: serial, one worker, no retries. */

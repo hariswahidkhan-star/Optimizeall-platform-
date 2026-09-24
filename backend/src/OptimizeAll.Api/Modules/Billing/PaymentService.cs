@@ -159,7 +159,7 @@ public sealed class PaymentService(
             payments = payments.Where(p => EF.Functions.Like(p.Reference, pattern, "\\"));
         }
         var total = await payments.CountAsync(ct);
-        var rows = await payments.OrderByDescending(p => p.PaidOn).ThenByDescending(p => p.CreatedAt)
+        var rows = await payments.OrderByDescending(p => p.PaidOn).ThenByDescending(p => p.CreatedAt).ThenByDescending(p => p.Id)
             .Skip(query.Skip).Take(query.PageSize).ToListAsync(ct);
         return new PagedResult<PaymentDto>(await ToDtosAsync(rows, ct), total, query.Page, query.PageSize);
     }

@@ -234,6 +234,22 @@ public static class BillingPeriods
     public static DateOnly PeriodEnd(DateOnly contractStart, BillingFrequency frequency, int index) =>
         PeriodStart(contractStart, frequency, index + 1).AddDays(-1);
 
+    /// <summary>
+    /// The end date after auto-renewing a contract that ended on <paramref name="endDate"/> by whole terms of
+    /// <paramref name="termMonths"/> until it covers <paramref name="mustCover"/>. Each term is counted from the day after
+    /// the original end (not from the previous, possibly clamped, end), so month-end contracts stay on month ends:
+    /// Jan 31 + 1 month → Feb 28, then Mar 31 (not Mar 28, Apr 28, ...), and Feb 28 2027 + 12 months → Feb 29 2028.
+    /// </summary>
+    public static DateOnly RenewedEnd(DateOnly endDate, int termMonths, DateOnly mustCover)
+    {
+        if (termMonths <= 0) throw new ArgumentOutOfRangeException(nameof(termMonths), "The renewal term must be at least one month.");
+        var anchor = endDate.AddDays(1);
+        var renewed = endDate;
+        for (var terms = 1; mustCover > renewed; terms++)
+            renewed = anchor.AddMonths(checked(terms * termMonths)).AddDays(-1);
+        return renewed;
+    }
+
     /// <summary>Idempotency key of the invoice for one contract period (unique in the invoices table).</summary>
     public static string InvoiceKey(Guid contractId, DateOnly periodStart) => $"contract:{contractId}:{periodStart:yyyy-MM-dd}";
 }

@@ -379,7 +379,9 @@ target's email to be typed) starts a time-boxed session:
 * Audited: campaign edits and publishing, reward rule changes, review decisions and reversals, appeals, ledger
   adjustments, payout batch actions (prepare, hold, finalize, record payment, cancel), payout settings, role
   grants, suspensions, settings changes, lockouts, impersonation (start/end, every write made while impersonating,
-  with the impersonator in `ImpersonatorUserId`), test-user creation/deletion and test sign-ins.
+  with the impersonator in `ImpersonatorUserId`), test-user creation/deletion and test sign-ins, and bulk exports of
+  personal data (users, CRM contacts, website inquiries, newsletter subscribers, email lists, form submissions: who,
+  which filters, how many rows).
 * Viewable/exportable by `audit.view`. Retain at least as long as financial records. For stronger tamper
   evidence, ship audit rows to a write-once store (e.g. object storage with object lock) as well.
 

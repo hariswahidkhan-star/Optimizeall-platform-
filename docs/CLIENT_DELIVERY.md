@@ -50,7 +50,9 @@ changes between them (the choice is remembered on that device and can be linked 
 Every client has a Green / Amber / Red health badge with a 0–100 score. The badge always lists its reasons, for
 example "6 overdue tasks", "2 deliverables waiting on the client, oldest 8 days", "No activity for 16 days",
 "Average CSAT 3.1/5", "Latest NPS response is 4/10". Other areas (such as billing) can add their own reasons. The
-account-manager dashboard shows every client worst-first.
+account-manager dashboard shows every client worst-first. *Activity* is the newest message in a conversation the client
+can see, task or deliverable change, or time entry; messages in internal (staff-only) threads don't count, so the team
+discussing a quiet client never makes it look active.
 
 ## Projects and tasks
 
