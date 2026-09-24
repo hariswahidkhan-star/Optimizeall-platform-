@@ -7,12 +7,13 @@ import {
   Hand,
   Hourglass,
   Inbox,
+  PenLine,
   Radar,
   Scale,
   TriangleAlert,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Card, CardBody, ErrorState, PageHeader, Stat } from '@/components/ui';
+import { ButtonLink, Card, CardBody, ErrorState, PageHeader, Stat, StatGrid } from '@/components/ui';
 import { Permissions } from '@/lib/auth/permissions';
 import { useAuth } from '@/lib/auth/useAuth';
 import { greetingFor } from '@/lib/format/dates';
@@ -81,27 +82,27 @@ export function OverviewPage() {
   ].filter((l) => l.show);
 
   return (
-    <>
+    <div className="ui-dash">
       <PageHeader
         eyebrow="Review"
         title={`${greetingFor(new Date(), user?.timeZone)}${name ? `, ${name}` : ''}`}
         description="Your review workload at a glance. Numbers refresh every minute."
+        actions={
+          <ButtonLink to="/review/queue" trailingIcon={<ArrowRight />}>
+            Start reviewing
+          </ButtonLink>
+        }
       />
       {stats.isError ? (
-        <ErrorState error={stats.error} onRetry={() => void stats.refetch()} retrying={stats.isFetching} />
+        <Card flat>
+          <ErrorState error={stats.error} onRetry={() => void stats.refetch()} retrying={stats.isFetching} />
+        </Card>
       ) : (
         <section aria-labelledby="rv-stats-heading" className="stack">
           <h2 id="rv-stats-heading" className="visually-hidden">
             Workload
           </h2>
-          <div className="rv-stat-grid">
-            <Stat
-              label="My decisions today"
-              value={data?.myDecisionsToday ?? 0}
-              icon={<CheckCheck />}
-              measurement="Count"
-              loading={loading}
-            />
+          <StatGrid strip min="190px">
             <Stat
               label="Pending"
               value={byStatus.Pending ?? 0}
@@ -118,17 +119,27 @@ export function OverviewPage() {
               loading={loading}
             />
             <Stat
-              label="Needs correction"
-              value={byStatus.NeedsCorrection ?? 0}
-              measurement="Count"
-              hint="Waiting for participants"
-              loading={loading}
-            />
-            <Stat
               label="Oldest pending"
               value={formatAgeHours(data?.oldestPendingAgeHours)}
               icon={<Clock />}
               measurement="Measured"
+              loading={loading}
+            />
+            <Stat
+              label="My decisions today"
+              value={data?.myDecisionsToday ?? 0}
+              icon={<CheckCheck />}
+              measurement="Count"
+              loading={loading}
+            />
+          </StatGrid>
+          <StatGrid min="190px">
+            <Stat
+              label="Needs correction"
+              value={byStatus.NeedsCorrection ?? 0}
+              icon={<PenLine />}
+              measurement="Count"
+              hint="Waiting for participants"
               loading={loading}
             />
             <Stat
@@ -147,38 +158,40 @@ export function OverviewPage() {
                 loading={loading}
               />
             )}
-          </div>
+          </StatGrid>
         </section>
       )}
 
-      <section aria-labelledby="rv-links-heading" className="rv-section">
-        <h2 id="rv-links-heading" className="rv-section__title">
-          Quick links
-        </h2>
-        <ul className="rv-link-grid">
+      <section aria-labelledby="rv-links-heading">
+        <div className="ui-dash-head">
+          <h2 id="rv-links-heading" className="ui-dash-head__title">
+            Quick links
+          </h2>
+        </div>
+        <ul className="ui-quicklinks">
           {links.map((link) => {
             const Icon = link.icon;
             return (
               <Card as="li" key={link.to} interactive>
-                <CardBody className="rv-link-card">
-                  <span className="rv-link-card__icon" aria-hidden="true">
+                <CardBody className="ui-quicklink">
+                  <span className="ui-quicklink__icon" aria-hidden="true">
                     <Icon />
                   </span>
-                  <div>
-                    <h3 className="rv-link-card__title">
+                  <div className="ui-quicklink__text">
+                    <h3 className="ui-quicklink__title">
                       <Link className="ui-card__link" to={link.to}>
                         {link.title}
                       </Link>
                     </h3>
-                    <p className="text-muted text-small">{link.text}</p>
+                    <p className="ui-quicklink__description">{link.text}</p>
                   </div>
-                  <ArrowRight aria-hidden="true" className="rv-link-card__arrow" />
+                  <ArrowRight aria-hidden="true" className="ui-quicklink__arrow" />
                 </CardBody>
               </Card>
             );
           })}
         </ul>
       </section>
-    </>
+    </div>
   );
 }

@@ -25,6 +25,8 @@ export interface PortalNavItem {
   description?: string;
   /** Hide the item unless the user meets this requirement (same as the route's `handle.requires`). */
   requires?: PermissionRequirement;
+  /** Sidebar section label; defaults to the portal's rules in app/navGroups.ts. */
+  group?: string;
   /** Shown in the mobile bottom tab bar (participant portal). */
   mobilePrimary?: boolean;
 }

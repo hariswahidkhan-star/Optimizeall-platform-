@@ -1,14 +1,5 @@
 /* Reviewer portal. Uses design tokens only; class prefix `rv-`. */
 
-.rv-section {
-  margin-top: var(--space-8);
-}
-
-.rv-section__title {
-  margin-bottom: var(--space-3);
-  font-size: var(--text-h3);
-}
-
 .rv-subheading {
   margin-bottom: var(--space-2);
   color: var(--color-text-muted);
@@ -68,59 +59,6 @@
 }
 
 /* ---------- Overview ---------- */
-
-.rv-stat-grid {
-  display: grid;
-  gap: var(--space-4);
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr));
-}
-
-.rv-link-grid {
-  display: grid;
-  gap: var(--space-4);
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.rv-link-card {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-4);
-}
-
-.rv-link-card > div {
-  flex: 1;
-  min-width: 0;
-}
-
-.rv-link-card__icon {
-  display: grid;
-  flex-shrink: 0;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-lg);
-  background: var(--color-primary-soft);
-  color: var(--color-primary-soft-text);
-}
-
-.rv-link-card__icon svg {
-  width: 20px;
-  height: 20px;
-}
-
-.rv-link-card__title {
-  font-size: var(--text-h4);
-}
-
-.rv-link-card__arrow {
-  flex-shrink: 0;
-  width: 18px;
-  height: 18px;
-  color: var(--color-text-subtle);
-}
 
 /* ---------- Workspace ---------- */
 

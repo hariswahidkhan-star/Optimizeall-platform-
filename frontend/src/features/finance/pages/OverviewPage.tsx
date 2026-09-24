@@ -7,6 +7,8 @@ import {
   Card,
   CardBody,
   CardHeader,
+  DashboardCell,
+  DashboardGrid,
   DataTable,
   DateTime,
   KeyValueList,
@@ -14,6 +16,7 @@ import {
   PageHeader,
   Skeleton,
   Stat,
+  StatGrid,
   StatusBadge,
   type DataTableColumn,
 } from '@/components/ui';
@@ -128,14 +131,17 @@ export function OverviewPage() {
   const period = s?.currentPeriod;
 
   return (
-    <>
+    <div className="ui-dash">
       <PageHeader
         eyebrow="Finance"
         title={`${greetingFor(new Date(), user?.timeZone)}${user ? `, ${firstName(user.displayName)}` : ''}`}
         description="Payouts are paid manually outside Optimize All. Preparing or finalizing a batch never sends money."
       />
-      <div className="stack fin-page">
-        <div className="fin-stats">
+      <section aria-labelledby="ov-glance">
+        <h2 id="ov-glance" className="visually-hidden">
+          At a glance
+        </h2>
+        <StatGrid strip min="200px">
           <Stat
             label="Days until cutoff"
             icon={<CalendarClock />}
@@ -185,10 +191,12 @@ export function OverviewPage() {
             value={finalized.data ? finalized.data.total : '—'}
             measurement="Count"
           />
-        </div>
+        </StatGrid>
+      </section>
 
-        {can.viewPayouts && (
-          <div className="fin-two-col">
+      {can.viewPayouts && (
+        <DashboardGrid>
+          <DashboardCell span={7}>
             <Card as="section" aria-labelledby="ov-period">
               <CardHeader
                 titleId="ov-period"
@@ -227,6 +235,8 @@ export function OverviewPage() {
                 ) : null}
               </CardBody>
             </Card>
+          </DashboardCell>
+          <DashboardCell span={5}>
             <Card as="section" aria-labelledby="ov-schedule">
               <CardHeader titleId="ov-schedule" title="Schedule summary" />
               <CardBody>
@@ -263,11 +273,8 @@ export function OverviewPage() {
                 )}
               </CardBody>
             </Card>
-          </div>
-        )}
-
-        {can.viewPayouts && (
-          <div className="fin-two-col">
+          </DashboardCell>
+          <DashboardCell span={7}>
             <Card as="section" aria-labelledby="ov-latest">
               <CardHeader
                 titleId="ov-latest"
@@ -294,6 +301,8 @@ export function OverviewPage() {
                 )}
               </CardBody>
             </Card>
+          </DashboardCell>
+          <DashboardCell span={5}>
             <Card as="section" aria-labelledby="ov-open">
               <CardHeader
                 titleId="ov-open"
@@ -308,9 +317,9 @@ export function OverviewPage() {
                 )}
               </CardBody>
             </Card>
-          </div>
-        )}
-      </div>
-    </>
+          </DashboardCell>
+        </DashboardGrid>
+      )}
+    </div>
   );
 }

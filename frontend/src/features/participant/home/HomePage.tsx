@@ -107,10 +107,10 @@ function StateSection({ home, email }: { home: ParticipantHome; email: string })
           <div className="pp-two-col">
             <div className="stack">
               {attention.isSuccess && <AttentionList items={attention.data} />}
-              {attention.isPending && <Skeleton height={180} />}
+              {attention.isPending && <Skeleton height={180} radius="var(--radius-xl)" />}
             </div>
             {summary.isSuccess && <NextPayoutCard summary={summary.data} />}
-            {summary.isPending && <Skeleton height={240} />}
+            {summary.isPending && <Skeleton height={240} radius="var(--radius-xl)" />}
           </div>
           {recommendations}
         </>
@@ -130,7 +130,7 @@ export function HomePage() {
   const copy = useSiteCopy();
 
   return (
-    <div className="pp-page">
+    <div className="pp-page pp-home ui-dash">
       <PageHeader
         title={`${greetingFor(new Date(), user?.timeZone)}${name ? `, ${name}` : ''}`}
         description={copy.text('participant.home.description')}
@@ -149,7 +149,7 @@ export function HomePage() {
           <span className="visually-hidden" role="status">
             Loading your home page…
           </span>
-          <Skeleton height={160} />
+          <Skeleton height={112} radius="var(--radius-xl)" />
           <Card flat className="pp-pad">
             <SkeletonText lines={4} />
           </Card>

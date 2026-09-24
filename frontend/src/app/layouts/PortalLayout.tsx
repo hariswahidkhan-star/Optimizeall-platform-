@@ -1,5 +1,15 @@
 import clsx from 'clsx';
-import { Bell, ChevronsUpDown, LogOut, Menu, MoreHorizontal, Search, UserRound } from 'lucide-react';
+import {
+  Bell,
+  ChevronsUpDown,
+  LogOut,
+  Menu,
+  MoreHorizontal,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Search,
+  UserRound,
+} from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { Logo } from '@/components/brand/Logo';
@@ -9,7 +19,9 @@ import { Drawer } from '@/components/ui/Drawer';
 import { DropdownMenu, type MenuEntry } from '@/components/ui/DropdownMenu';
 import { IconButton } from '@/components/ui/IconButton';
 import { meetsRequirement, Permissions } from '@/lib/auth/permissions';
+import { safeStorage } from '@/lib/hooks/storage';
 import { useAuth } from '@/lib/auth/useAuth';
+import { groupNav } from '../navGroups';
 import { PortalContext } from '../portalContext';
 import { accessiblePortals, getPortal } from '../portals';
 import type { PortalDefinition, PortalNavItem } from '../portalTypes';
@@ -27,35 +39,51 @@ function itemPath(portal: PortalDefinition, item: PortalNavItem): string {
   return item.to ? `${portal.basePath}/${item.to}` : portal.basePath;
 }
 
+const SIDEBAR_KEY = 'oa.sidebar';
+
 function PortalNav({
   portal,
   items,
   onNavigate,
+  collapsed = false,
 }: {
   portal: PortalDefinition;
   items: PortalNavItem[];
   onNavigate?: () => void;
+  /** Icon rail: labels are visually hidden (still the links' names) and shown as a tooltip. */
+  collapsed?: boolean;
 }) {
+  const sections = groupNav(portal.id, items);
   return (
     <nav aria-label={`${portal.label} navigation`} className="portal-nav">
-      <ul>
-        {items.map((item) => {
-          const Icon = item.icon;
-          return (
-            <li key={item.to}>
-              <NavLink
-                to={itemPath(portal, item)}
-                end={item.to === ''}
-                className={({ isActive }) => clsx('portal-nav__link', isActive && 'is-active')}
-                onClick={onNavigate}
-              >
-                <Icon aria-hidden="true" />
-                <span>{item.label}</span>
-              </NavLink>
-            </li>
-          );
-        })}
-      </ul>
+      {sections.map((section, index) => {
+        // The section label is plain text read in order before its links. It deliberately does not name the list
+        // (aria-labelledby): a list named "Billing" would also answer getByLabel('Billing') next to form fields.
+        return (
+          <div key={`${section.label ?? ''}-${index}`} className="portal-nav__section">
+            {section.label && <p className="portal-nav__heading">{section.label}</p>}
+            <ul>
+              {section.items.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <li key={item.to}>
+                    <NavLink
+                      to={itemPath(portal, item)}
+                      end={item.to === ''}
+                      className={({ isActive }) => clsx('portal-nav__link', isActive && 'is-active')}
+                      title={collapsed ? item.label : undefined}
+                      onClick={onNavigate}
+                    >
+                      <Icon aria-hidden="true" />
+                      <span className="portal-nav__label">{item.label}</span>
+                    </NavLink>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        );
+      })}
     </nav>
   );
 }
@@ -70,6 +98,13 @@ export function PortalLayout({ portal }: { portal: PortalDefinition }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [notificationSettingsOpen, setNotificationSettingsOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
+  // Desktop only: the sidebar folds into an icon rail. Remembered per browser.
+  const [collapsed, setCollapsed] = useState(() => safeStorage.get(SIDEBAR_KEY) === 'collapsed');
+  const toggleSidebar = () =>
+    setCollapsed((was) => {
+      safeStorage.set(SIDEBAR_KEY, was ? 'expanded' : 'collapsed');
+      return !was;
+    });
   const hasPalette = PALETTE_PORTALS.has(portal.id);
   const openPalette = useCallback(() => setPaletteOpen(true), []);
   useCommandPaletteShortcut(hasPalette, openPalette);
@@ -148,20 +183,44 @@ export function PortalLayout({ portal }: { portal: PortalDefinition }) {
 
   return (
     <PortalContext.Provider value={portal}>
-      <div className={clsx('portal-layout', mobileItems.length > 0 && 'portal-layout--bottom-nav')}>
+      <div
+        className={clsx(
+          'portal-layout',
+          mobileItems.length > 0 && 'portal-layout--bottom-nav',
+          collapsed && 'portal-layout--collapsed',
+        )}
+      >
         <a className="skip-link" href="#main">
           Skip to content
         </a>
 
-        <aside className="portal-sidebar">
-          <Link to={portal.basePath} className="portal-sidebar__brand" aria-label={`${portal.label} home`}>
-            <Logo size={30} title="" />
-          </Link>
+        <aside className="portal-sidebar" id="portal-sidebar">
+          <div className="portal-sidebar__head">
+            <Link to={portal.basePath} className="portal-sidebar__brand" aria-label={`${portal.label} home`}>
+              <Logo size={26} title="" className="portal-sidebar__logo" />
+              <Logo variant="mark" size={26} title="" className="portal-sidebar__mark" />
+            </Link>
+          </div>
           <p className="portal-sidebar__portal">
-            <PortalIcon aria-hidden="true" />
-            {portal.label}
+            <span className="portal-sidebar__portal-icon" aria-hidden="true">
+              <PortalIcon />
+            </span>
+            <span className="portal-sidebar__portal-label">{portal.label}</span>
           </p>
-          <PortalNav portal={portal} items={items} />
+          <PortalNav portal={portal} items={items} collapsed={collapsed} />
+          <div className="portal-sidebar__foot">
+            <button
+              type="button"
+              className="portal-sidebar__collapse"
+              aria-controls="portal-sidebar"
+              aria-expanded={!collapsed}
+              title={collapsed ? 'Expand sidebar' : undefined}
+              onClick={toggleSidebar}
+            >
+              {collapsed ? <PanelLeftOpen aria-hidden="true" /> : <PanelLeftClose aria-hidden="true" />}
+              <span className="portal-nav__label">{collapsed ? 'Expand sidebar' : 'Collapse sidebar'}</span>
+            </button>
+          </div>
         </aside>
 
         <Drawer
@@ -171,8 +230,10 @@ export function PortalLayout({ portal }: { portal: PortalDefinition }) {
           headerContent={<Logo size={26} title="" />}
         >
           <p className="portal-sidebar__portal">
-            <PortalIcon aria-hidden="true" />
-            {portal.label}
+            <span className="portal-sidebar__portal-icon" aria-hidden="true">
+              <PortalIcon />
+            </span>
+            <span className="portal-sidebar__portal-label">{portal.label}</span>
           </p>
           <PortalNav portal={portal} items={items} onNavigate={() => setDrawerOpen(false)} />
         </Drawer>
@@ -190,6 +251,19 @@ export function PortalLayout({ portal }: { portal: PortalDefinition }) {
             <Link to={portal.basePath} className="portal-topbar__logo" aria-label={`${portal.label} home`}>
               <Logo variant="mark" size={28} title="" />
             </Link>
+            {hasPalette && (
+              <button
+                type="button"
+                className="portal-search"
+                aria-keyshortcuts="Control+K Meta+K"
+                aria-haspopup="dialog"
+                onClick={openPalette}
+              >
+                <Search aria-hidden="true" />
+                <span className="portal-search__label">Search</span>
+                <kbd aria-hidden="true">Ctrl K</kbd>
+              </button>
+            )}
             <div className="portal-topbar__spacer" />
             {available.length > 1 && (
               <DropdownMenu
@@ -208,19 +282,6 @@ export function PortalLayout({ portal }: { portal: PortalDefinition }) {
                 }
               />
             )}
-            {hasPalette && (
-              <button
-                type="button"
-                className="portal-search"
-                aria-keyshortcuts="Control+K Meta+K"
-                aria-haspopup="dialog"
-                onClick={openPalette}
-              >
-                <Search aria-hidden="true" />
-                <span className="portal-search__label">Search</span>
-                <kbd aria-hidden="true">Ctrl K</kbd>
-              </button>
-            )}
             <ThemeToggle />
             {/* Participants have their own Notifications page; every other portal gets the inbox in the top bar. */}
             {user && portal.id !== 'participant' && <NotificationBell />}
@@ -234,7 +295,7 @@ export function PortalLayout({ portal }: { portal: PortalDefinition }) {
                     className="portal-account"
                     aria-label={`Account menu for ${user.displayName}`}
                   >
-                    <Avatar name={user.displayName} size={32} decorative />
+                    <Avatar name={user.displayName} size={28} decorative />
                     <span className="portal-account__name">{user.displayName}</span>
                   </button>
                 }

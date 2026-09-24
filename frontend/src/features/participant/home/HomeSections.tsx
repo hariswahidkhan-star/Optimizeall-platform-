@@ -1,5 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowRight, Award, Bell, Hourglass, LifeBuoy, MailCheck, UserPlus, Wallet } from 'lucide-react';
+import {
+  ArrowRight,
+  Award,
+  Banknote,
+  Bell,
+  CircleCheck,
+  Hourglass,
+  LifeBuoy,
+  MailCheck,
+  UserPlus,
+} from 'lucide-react';
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { Alert } from '@/components/ui/Alert';
@@ -12,6 +22,7 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { Money } from '@/components/ui/Money';
 import { ProgressBar } from '@/components/ui/Progress';
 import { ScrollArea } from '@/components/ui/ScrollArea';
+import { StatGrid } from '@/components/ui/Dashboard';
 import { Stat } from '@/components/ui/Stat';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { Stepper, type Step } from '@/components/ui/Stepper';
@@ -377,16 +388,16 @@ export function EarningsSnapshot({ summary }: { summary: EarningsSummary }) {
           See all earnings
         </Link>
       </div>
-      <div className="pp-stats">
+      <StatGrid strip min="190px">
         <Stat
           label="Pending review"
-          icon={<Wallet />}
+          icon={<Hourglass />}
           measurement="Estimated"
           value={<Money amount={summary.pending} currency={c} />}
         />
         <Stat
           label="Approved"
-          icon={<Wallet />}
+          icon={<CircleCheck />}
           value={<Money amount={summary.approved} currency={c} />}
           hint={
             summary.onHold > 0 ? (
@@ -396,13 +407,13 @@ export function EarningsSnapshot({ summary }: { summary: EarningsSummary }) {
             ) : undefined
           }
         />
-        <Stat label="Paid to date" icon={<Wallet />} value={<Money amount={summary.paid} currency={c} />} />
+        <Stat label="Paid to date" icon={<Banknote />} value={<Money amount={summary.paid} currency={c} />} />
         <Stat
           label="Lifetime earned"
           icon={<Award />}
           value={<Money amount={summary.lifetimeEarned} currency={c} />}
         />
-      </div>
+      </StatGrid>
     </section>
   );
 }
