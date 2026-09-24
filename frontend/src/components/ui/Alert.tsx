@@ -15,8 +15,9 @@ export interface AlertProps {
   onDismiss?: () => void;
   /**
    * `alert` interrupts screen readers — use for errors that appear after a user action. `status` is polite.
-   * Defaults: an alert with a `title` is `alert` for the danger tone and `status` otherwise (named by its title via
-   * aria-labelledby); an untitled callout has no role.
+   * Defaults: the danger tone is always `alert` (an error that appears after an action — e.g. a failed save shown as
+   * `<Alert tone="danger">{message}</Alert>` — must be announced, WCAG 4.1.3); other tones are `status` with a `title`
+   * (named by it via aria-labelledby) and have no role when untitled.
    */
   role?: 'alert' | 'status';
   className?: string;
@@ -45,7 +46,7 @@ export function Alert({
   id,
 }: AlertProps) {
   const titleId = useId();
-  const resolvedRole = role ?? (title ? (tone === 'danger' ? 'alert' : 'status') : undefined);
+  const resolvedRole = role ?? (tone === 'danger' ? 'alert' : title ? 'status' : undefined);
   return (
     <div
       id={id}

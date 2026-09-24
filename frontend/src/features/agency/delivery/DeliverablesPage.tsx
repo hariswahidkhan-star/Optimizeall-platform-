@@ -155,7 +155,7 @@ function NewVersion({ id, onSaved }: { id: string; onSaved: (d: DeliverableDetai
     >
       {save.error ? <Alert tone="danger">{errorMessage(save.error)}</Alert> : null}
       <FormField label="File" optional hint="PNG, JPEG, WebP, PDF or MP4, up to 50 MB. Hosted videos, Figma or docs: use a link.">
-        <input type="file" accept="image/png,image/jpeg,image/webp,application/pdf,video/mp4" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
+        <Input type="file" accept="image/png,image/jpeg,image/webp,application/pdf,video/mp4" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
       </FormField>
       <FormField label="Link" optional>
         <Input type="url" value={link} onChange={(e) => setLink(e.target.value)} placeholder="https://" />

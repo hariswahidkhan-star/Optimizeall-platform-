@@ -449,16 +449,22 @@
   font-size: var(--text-h4);
 }
 
+.pp-strip-scroll {
+  /* Contains absolutely positioned descendants (visually hidden text) so they cannot widen the page. */
+  position: relative;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: var(--space-2);
+}
+
 .pp-strip {
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: minmax(200px, 1fr);
   gap: var(--space-3);
   margin: 0;
-  padding: 0 0 var(--space-2);
+  padding: 0;
   list-style: none;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
 }
 
 .pp-strip > li {

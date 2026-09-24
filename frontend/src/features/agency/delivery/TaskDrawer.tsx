@@ -348,7 +348,7 @@ function Attachments({ detail, clientId }: { detail: TaskDetail; clientId: strin
         }}
       >
         <FormField label="Attach a file" hint="PNG, JPEG, WebP, PDF or MP4, up to 50 MB.">
-          <input type="file" accept="image/png,image/jpeg,image/webp,application/pdf,video/mp4" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
+          <Input type="file" accept="image/png,image/jpeg,image/webp,application/pdf,video/mp4" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
         </FormField>
         <Button type="submit" variant="secondary" disabled={!file} loading={upload.isPending}>
           Upload

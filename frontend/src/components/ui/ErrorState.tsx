@@ -12,7 +12,7 @@ export interface ErrorStateProps {
   onRetry?: () => void;
   retrying?: boolean;
   compact?: boolean;
-  headingLevel?: 2 | 3 | 4;
+  headingLevel?: 1 | 2 | 3 | 4;
   action?: ReactNode;
   className?: string;
 }

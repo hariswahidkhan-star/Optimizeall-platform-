@@ -25,3 +25,8 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
 }
+
+/* An h2 in the outline (the page's sections), sized like the h3 it replaced. */
+.dl-editor-section__title {
+  font-size: var(--text-h3);
+}

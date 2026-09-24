@@ -71,7 +71,7 @@ function Composer({ base, onSent, threadId }: { base: string; threadId?: string;
         <Textarea value={body} onChange={(e) => setBody(e.target.value)} required rows={3} maxLength={10000} />
       </FormField>
       <FormField label="Attachments" optional hint="PNG, JPEG, WebP, PDF or MP4, up to 50 MB each.">
-        <input
+        <Input
           type="file"
           multiple
           accept="image/png,image/jpeg,image/webp,application/pdf,video/mp4"

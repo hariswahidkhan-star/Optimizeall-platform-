@@ -1,6 +1,6 @@
 import { Printer } from 'lucide-react';
 import type { ReactNode } from 'react';
-import { Alert, Button, Money } from '@/components/ui';
+import { Alert, Button, Money, ScrollArea } from '@/components/ui';
 import type { PublicInvoice } from '../api/types';
 import { InvoiceStatusBadge, formatDateOnly } from '../lib';
 import '../billing.css';
@@ -14,7 +14,18 @@ function Multiline({ text }: { text: string | null | undefined }) {
  * Print-friendly invoice (client portal and the public `/i/:token` page). Everything is rendered as text by React — no
  * HTML from the API is injected.
  */
-export function InvoiceDocumentView({ invoice, actions }: { invoice: PublicInvoice; actions?: ReactNode }) {
+export function InvoiceDocumentView({
+  invoice,
+  actions,
+  headingLevel = 1,
+}: {
+  invoice: PublicInvoice;
+  actions?: ReactNode;
+  /** 2 when the page already has its own h1 (the client portal); the document's sections then use h3. */
+  headingLevel?: 1 | 2;
+}) {
+  const H = headingLevel === 1 ? 'h1' : 'h2';
+  const Sub = headingLevel === 1 ? 'h2' : 'h3';
   const c = invoice.currency;
   const p = invoice.payment;
   const open = ['Issued', 'PartiallyPaid', 'Overdue'].includes(invoice.status);
@@ -33,7 +44,7 @@ export function InvoiceDocumentView({ invoice, actions }: { invoice: PublicInvoi
           {p.companyTaxId && <p className="bill-muted">Tax ID: {p.companyTaxId}</p>}
         </div>
         <div>
-          <h1 id="invoice-title">Invoice {invoice.number}</h1>
+          <H id="invoice-title">Invoice {invoice.number}</H>
           <p>
             <InvoiceStatusBadge status={invoice.status} />
           </p>
@@ -48,44 +59,46 @@ export function InvoiceDocumentView({ invoice, actions }: { invoice: PublicInvoi
         </div>
       </header>
       <section aria-label="Bill to">
-        <h2 className="bill-strong">Bill to</h2>
+        <Sub className="bill-strong">Bill to</Sub>
         <p>{invoice.clientName}</p>
         <Multiline text={invoice.clientAddress} />
         {invoice.clientTaxId && <p className="bill-muted">Tax ID: {invoice.clientTaxId}</p>}
       </section>
-      <table>
-        <caption className="visually-hidden">Invoice lines</caption>
-        <thead>
-          <tr>
-            <th scope="col">Description</th>
-            <th scope="col" className="num">
-              Qty
-            </th>
-            <th scope="col" className="num">
-              Unit price
-            </th>
-            <th scope="col">Tax</th>
-            <th scope="col" className="num">
-              Amount
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {invoice.lines.map((l) => (
-            <tr key={l.id}>
-              <td>{l.description}</td>
-              <td className="num">{l.quantity}</td>
-              <td className="num">
-                <Money amount={l.unitPrice} currency={c} />
-              </td>
-              <td>{l.taxPercent > 0 ? `${l.taxName ?? 'Tax'} ${l.taxPercent}%${l.taxInclusive ? ' incl.' : ''}` : '—'}</td>
-              <td className="num">
-                <Money amount={l.total} currency={c} />
-              </td>
+      <ScrollArea className="bill-table-scroll" label="Invoice lines">
+        <table>
+          <caption className="visually-hidden">Invoice lines</caption>
+          <thead>
+            <tr>
+              <th scope="col">Description</th>
+              <th scope="col" className="num">
+                Qty
+              </th>
+              <th scope="col" className="num">
+                Unit price
+              </th>
+              <th scope="col">Tax</th>
+              <th scope="col" className="num">
+                Amount
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {invoice.lines.map((l) => (
+              <tr key={l.id}>
+                <td>{l.description}</td>
+                <td className="num">{l.quantity}</td>
+                <td className="num">
+                  <Money amount={l.unitPrice} currency={c} />
+                </td>
+                <td>{l.taxPercent > 0 ? `${l.taxName ?? 'Tax'} ${l.taxPercent}%${l.taxInclusive ? ' incl.' : ''}` : '—'}</td>
+                <td className="num">
+                  <Money amount={l.total} currency={c} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </ScrollArea>
       <dl className="bill-totals">
         <div>
           <dt>Subtotal</dt>
@@ -134,13 +147,13 @@ export function InvoiceDocumentView({ invoice, actions }: { invoice: PublicInvoi
       </dl>
       {invoice.notes && (
         <section aria-label="Notes">
-          <h2 className="bill-strong">Notes</h2>
+          <Sub className="bill-strong">Notes</Sub>
           <Multiline text={invoice.notes} />
         </section>
       )}
       {open && (p.bankDetails || p.paymentInstructions || p.paymentLinkText) && (
         <section aria-label="How to pay">
-          <h2 className="bill-strong">How to pay</h2>
+          <Sub className="bill-strong">How to pay</Sub>
           <Multiline text={p.paymentInstructions} />
           <Multiline text={p.bankDetails} />
           <Multiline text={p.paymentLinkText} />

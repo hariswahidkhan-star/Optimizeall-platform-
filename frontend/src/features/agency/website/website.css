@@ -1,5 +1,7 @@
 .cms-page {
   display: grid;
+  /* One shrinkable column: a wide child (tabs, a board, a table) scrolls inside itself instead of widening the page. */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-6);
 }
 
@@ -132,6 +134,8 @@
 }
 
 .cms-board {
+  /* Contains absolutely positioned descendants (visually hidden text) so they cannot widen the page. */
+  position: relative;
   display: grid;
   gap: var(--space-3);
   grid-auto-flow: column;
@@ -150,7 +154,7 @@
   background: var(--color-surface-2);
 }
 
-.cms-board__col h3 {
+.cms-board__title {
   display: flex;
   justify-content: space-between;
   font-size: var(--text-small);
@@ -181,11 +185,16 @@
 .cms-editor__preview {
   position: sticky;
   top: calc(var(--topbar-height) + var(--space-4));
-  max-height: calc(100vh - var(--topbar-height) - 32px);
-  overflow: auto;
+  overflow: hidden;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   background: var(--color-bg);
+}
+
+.cms-editor__preview-scroll {
+  position: relative;
+  max-height: calc(100vh - var(--topbar-height) - 32px);
+  overflow: auto;
 }
 
 .cms-editor__preview-label {

@@ -220,9 +220,9 @@ function ApplicationsTab() {
           const items = (apps.data?.items ?? []).filter((a) => a.stage === stage);
           return (
             <section key={stage} className="cms-board__col" aria-label={`${stage} (${items.length})`}>
-              <h3>
+              <h2 className="cms-board__title">
                 {stage} <Badge>{items.length}</Badge>
-              </h3>
+              </h2>
               {items.map((a) => (
                 <article key={a.id} className="cms-board__card">
                   <button type="button" className="site-linkbutton" onClick={() => setOpen(a.id)}>

@@ -13,6 +13,7 @@ import {
   Input,
   Money,
   PageHeader,
+  ScrollArea,
   Select,
   Skeleton,
   Stat,
@@ -134,41 +135,43 @@ function StatementTab({ organizations }: { organizations: { clientAccountId: str
         <Skeleton height="8rem" />
       ) : (
         <div className="bill-document">
-          <table>
-            <caption>
-              Statement of account · {query.data.clientName} · {query.data.currency}
-            </caption>
-            <thead>
-              <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Type</th>
-                <th scope="col">Reference</th>
-                <th scope="col" className="num">Charges</th>
-                <th scope="col" className="num">Payments & credits</th>
-                <th scope="col" className="num">Balance</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colSpan={5}>Opening balance</td>
-                <td className="num"><Money amount={query.data.openingBalance} currency={query.data.currency} /></td>
-              </tr>
-              {query.data.lines.map((l, i) => (
-                <tr key={`${l.reference}-${i}`}>
-                  <td>{formatDateOnly(l.date)}</td>
-                  <td>{l.type}</td>
-                  <td>{l.reference}</td>
-                  <td className="num">{l.debit ? <Money amount={l.debit} currency={query.data.currency} /> : ''}</td>
-                  <td className="num">{l.credit ? <Money amount={l.credit} currency={query.data.currency} /> : ''}</td>
-                  <td className="num"><Money amount={l.balance} currency={query.data.currency} /></td>
+          <ScrollArea className="bill-table-scroll" label="Statement">
+            <table>
+              <caption>
+                Statement of account · {query.data.clientName} · {query.data.currency}
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Date</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Reference</th>
+                  <th scope="col" className="num">Charges</th>
+                  <th scope="col" className="num">Payments & credits</th>
+                  <th scope="col" className="num">Balance</th>
                 </tr>
-              ))}
-              <tr>
-                <td colSpan={5} className="bill-strong">Closing balance</td>
-                <td className="num bill-strong"><Money amount={query.data.closingBalance} currency={query.data.currency} /></td>
-              </tr>
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colSpan={5}>Opening balance</td>
+                  <td className="num"><Money amount={query.data.openingBalance} currency={query.data.currency} /></td>
+                </tr>
+                {query.data.lines.map((l, i) => (
+                  <tr key={`${l.reference}-${i}`}>
+                    <td>{formatDateOnly(l.date)}</td>
+                    <td>{l.type}</td>
+                    <td>{l.reference}</td>
+                    <td className="num">{l.debit ? <Money amount={l.debit} currency={query.data.currency} /> : ''}</td>
+                    <td className="num">{l.credit ? <Money amount={l.credit} currency={query.data.currency} /> : ''}</td>
+                    <td className="num"><Money amount={l.balance} currency={query.data.currency} /></td>
+                  </tr>
+                ))}
+                <tr>
+                  <td colSpan={5} className="bill-strong">Closing balance</td>
+                  <td className="num bill-strong"><Money amount={query.data.closingBalance} currency={query.data.currency} /></td>
+                </tr>
+              </tbody>
+            </table>
+          </ScrollArea>
         </div>
       )}
     </div>
@@ -227,6 +230,7 @@ export function ClientInvoicePage() {
       <PageHeader title={`Invoice ${invoice.number}`} breadcrumbs={[{ label: 'Billing', to: '/client/billing' }, { label: invoice.number ?? 'Invoice' }]} />
       <InvoiceDocumentView
         invoice={invoice}
+        headingLevel={2}
         actions={
           <>
             <Button

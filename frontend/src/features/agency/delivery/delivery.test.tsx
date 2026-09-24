@@ -122,7 +122,11 @@ describe('Timer', () => {
     await userEvent.selectOptions(project, 'p1');
     await userEvent.type(screen.getByLabelText(/What are you working on/), 'Keyword research');
     await userEvent.click(screen.getByRole('button', { name: 'Start timer' }));
-    expect(await screen.findByRole('timer', { name: 'Elapsed time' })).toHaveTextContent(/0:01:0\d/);
+    const clock = await screen.findByRole('timer', { name: 'Elapsed time' });
+    expect(clock).toHaveTextContent(/0:01:0\d/);
+    // The ticking clock is not inside a live region (it would be read out every second); the start is announced once.
+    expect(clock.closest('[aria-live]:not([aria-live="off"])')).toBeNull();
+    expect(screen.getByRole('status')).toHaveTextContent('Timer running for');
     expect(calls.find((c) => c.path === '/agency/time/timer/start')?.body).toEqual({ projectId: 'p1', note: 'Keyword research', billable: true });
     await userEvent.click(screen.getByRole('button', { name: 'Stop timer' }));
     expect(await screen.findByRole('button', { name: 'Start timer' })).toBeInTheDocument();

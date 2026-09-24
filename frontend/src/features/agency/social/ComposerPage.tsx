@@ -525,13 +525,17 @@ function VariantEditor({
         id={textId}
         label={`${NETWORK_LABELS[profile.network]} text`}
         labelAside={
-          <span id={counterId} className={`sm-counter ${over ? 'sm-counter--over' : ''}`} aria-live="polite">
+          <span id={counterId} className={`sm-counter ${over ? 'sm-counter--over' : ''}`}>
             {counterText} characters{over ? ' (over the limit)' : ''}
           </span>
         }
       >
         <Textarea rows={6} value={form.text} onChange={(e) => onChange({ text: e.target.value })} disabled={disabled} aria-describedby={counterId} />
       </FormField>
+      {/* The count is read with the field (aria-describedby); only crossing the limit is announced, not every keystroke. */}
+      <span className="visually-hidden" role="status">
+        {over ? `${NETWORK_LABELS[profile.network]} text is over the character limit.` : ''}
+      </span>
       <div className="cluster">
         <Button size="sm" variant="secondary" leadingIcon={<Copy />} onClick={onCopyToAll} disabled={disabled}>
           Use this text for all networks

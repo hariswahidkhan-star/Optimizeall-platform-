@@ -284,6 +284,8 @@
 /* ---- kanban ---- */
 
 .dl-kanban {
+  /* Contains absolutely positioned descendants (visually hidden text) so they cannot widen the page. */
+  position: relative;
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: minmax(15rem, 1fr);
@@ -316,6 +318,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: var(--text-h3);
   font-weight: 600;
 }
 

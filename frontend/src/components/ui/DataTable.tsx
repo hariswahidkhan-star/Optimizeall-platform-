@@ -5,6 +5,7 @@ import { useIsMobile } from '@/lib/hooks/useMediaQuery';
 import { Checkbox } from './Checkbox';
 import { DropdownMenu, type MenuEntry } from './DropdownMenu';
 import { EmptyState } from './EmptyState';
+import { ScrollArea } from './ScrollArea';
 import { IconButton } from './IconButton';
 import { Skeleton } from './Skeleton';
 import './DataTable.css';
@@ -213,12 +214,15 @@ export function DataTable<T>({
   return (
     <div className={className}>
       {toolbar}
-      <div
+      <ScrollArea
         className={clsx('ui-table-wrap', maxHeight && 'ui-table-wrap--scroll')}
         style={maxHeight ? ({ '--table-max-height': maxHeight } as CSSProperties) : undefined}
+        labelledBy={captionId}
       >
         <table className="ui-table" aria-busy={loading || undefined}>
-          <caption className={showCaption ? undefined : 'visually-hidden'}>{caption}</caption>
+          <caption id={captionId} className={showCaption ? undefined : 'visually-hidden'}>
+            {caption}
+          </caption>
           <thead>
             <tr>
               {selectable && (
@@ -316,7 +320,7 @@ export function DataTable<T>({
                 })}
           </tbody>
         </table>
-      </div>
+      </ScrollArea>
     </div>
   );
 }

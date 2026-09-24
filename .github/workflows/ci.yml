@@ -244,6 +244,16 @@ jobs:
           E2E_WORK_DIR: ${{ runner.temp }}/e2e-platform
         run: scripts/e2e-journeys.sh
 
+      # Accessibility & responsive audit (docs/ACCESSIBILITY.md): every portal's representative pages at 360/768/1280 px
+      # with axe (WCAG 2.2 A/AA, light and dark contrast) and no horizontal scroll, plus keyboard/focus behaviour.
+      - name: Accessibility audit (scripts/e2e-journeys.sh, E2E_SUITE=a11y, SQLite)
+        env:
+          E2E_SUITE: a11y
+          E2E_DB_PROVIDER: sqlite
+          E2E_SKIP_BUILD: "1"
+          E2E_WORK_DIR: ${{ runner.temp }}/e2e-a11y
+        run: scripts/e2e-journeys.sh
+
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v4
@@ -267,6 +277,8 @@ jobs:
             ${{ runner.temp }}/e2e-agency/web.log
             ${{ runner.temp }}/e2e-platform/api.log
             ${{ runner.temp }}/e2e-platform/web.log
+            ${{ runner.temp }}/e2e-a11y/api.log
+            ${{ runner.temp }}/e2e-a11y/web.log
             ${{ runner.temp }}/web-smoke.log
           retention-days: 7
           if-no-files-found: ignore

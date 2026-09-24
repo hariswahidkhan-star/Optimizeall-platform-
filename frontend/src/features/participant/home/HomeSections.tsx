@@ -11,6 +11,7 @@ import { DateTime } from '@/components/ui/DateTime';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Money } from '@/components/ui/Money';
 import { ProgressBar } from '@/components/ui/Progress';
+import { ScrollArea } from '@/components/ui/ScrollArea';
 import { Stat } from '@/components/ui/Stat';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { Stepper, type Step } from '@/components/ui/Stepper';
@@ -555,29 +556,31 @@ export function AchievementStrip({ achievements }: { achievements: Achievement[]
           View all
         </Link>
       </div>
-      <ul className="pp-strip">
-        {shown.map((a) => (
-          <li key={a.key}>
-            <div className="pp-achievement-mini">
-              <span className="pp-achievement__icon" aria-hidden="true">
-                <AchievementIcon name={a.icon} />
-              </span>
-              <div>
-                <p className="pp-achievement-mini__name">{a.name}</p>
-                <p className="text-small pp-muted">
-                  {a.awardedAt ? (
-                    <>
-                      Earned <DateTime value={a.awardedAt} format="date" />
-                    </>
-                  ) : (
-                    `${Math.min(a.progress, a.threshold)} / ${a.threshold}`
-                  )}
-                </p>
+      <ScrollArea className="pp-strip-scroll" label="Achievements">
+        <ul className="pp-strip">
+          {shown.map((a) => (
+            <li key={a.key}>
+              <div className="pp-achievement-mini">
+                <span className="pp-achievement__icon" aria-hidden="true">
+                  <AchievementIcon name={a.icon} />
+                </span>
+                <div>
+                  <p className="pp-achievement-mini__name">{a.name}</p>
+                  <p className="text-small pp-muted">
+                    {a.awardedAt ? (
+                      <>
+                        Earned <DateTime value={a.awardedAt} format="date" />
+                      </>
+                    ) : (
+                      `${Math.min(a.progress, a.threshold)} / ${a.threshold}`
+                    )}
+                  </p>
+                </div>
               </div>
-            </div>
-          </li>
-        ))}
-      </ul>
+            </li>
+          ))}
+        </ul>
+      </ScrollArea>
     </section>
   );
 }

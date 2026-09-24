@@ -211,7 +211,7 @@ function EditDialog({ client, onClose }: { client: ClientDetail; onClose: () => 
           </div>
         </div>
         <FormField label="Logo" optional hint="PNG, JPEG or WebP.">
-          <input type="file" accept="image/png,image/jpeg,image/webp" onChange={(e) => setLogo(e.target.files?.[0] ?? null)} />
+          <Input type="file" accept="image/png,image/jpeg,image/webp" onChange={(e) => setLogo(e.target.files?.[0] ?? null)} />
         </FormField>
         <FormField label="Internal notes" optional>
           <Textarea rows={3} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} />

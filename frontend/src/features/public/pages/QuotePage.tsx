@@ -25,15 +25,14 @@ export function QuotePage() {
   const [contact, setContact] = useState<ContactValues>(EMPTY_CONTACT);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const firstRender = useRef(true);
+  // The step the heading was last focused for (StrictMode-safe, unlike a "first render" flag).
+  const focusedStep = useRef(step);
   const copy = useSiteCopy();
   useDocumentHead({ title: copy.text('quote.seo.title'), description: copy.text('quote.seo.description') });
 
   useEffect(() => {
-    if (firstRender.current) {
-      firstRender.current = false;
-      return;
-    }
+    if (focusedStep.current === step) return;
+    focusedStep.current = step;
     headingRef.current?.focus();
   }, [step]);
 

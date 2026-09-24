@@ -142,10 +142,15 @@
   --btn-fg-hover: var(--color-link-hover);
   --btn-bg-active: transparent;
   min-height: auto;
+  max-width: 100%;
   padding: 0;
   text-decoration: underline;
   text-underline-offset: 0.2em;
   font-weight: var(--weight-medium);
+  /* Link buttons often carry record titles: wrap them rather than widen the page on phones. */
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: start;
 }
 
 .ui-button--link:active:not(:disabled) {

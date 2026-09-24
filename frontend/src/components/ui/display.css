@@ -1,5 +1,7 @@
 /* ---------- Tabs ---------- */
 .ui-tabs__list {
+  /* Contains absolutely positioned descendants (visually hidden text) so they cannot widen the page. */
+  position: relative;
   display: flex;
   gap: var(--space-1);
   overflow-x: auto;

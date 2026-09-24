@@ -53,7 +53,7 @@ function ToastView({ toast, onDismiss }: { toast: ToastItem; onDismiss: (id: str
 
 /**
  * Toast notifications in a polite live region (announced without stealing focus). Hovering or focusing a toast
- * pauses its auto-dismiss timer.
+ * pauses its auto-dismiss timer; error toasts do not auto-dismiss.
  */
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
@@ -74,7 +74,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       title: input.title,
       description: input.description,
       tone: input.tone ?? 'info',
-      duration: input.duration ?? (input.tone === 'danger' ? 8000 : 5000),
+      // Errors stay until dismissed (WCAG 2.2.1): they explain why something failed and may need more time to read.
+      duration: input.duration ?? (input.tone === 'danger' ? 0 : 5000),
     };
     setToasts((current) => [...current, item].slice(-MAX_VISIBLE));
     return id;

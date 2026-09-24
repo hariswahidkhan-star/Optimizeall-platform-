@@ -172,3 +172,16 @@
     max-width: none;
   }
 }
+
+/* Line tables scroll inside the document on phones instead of widening the page. */
+.bill-table-scroll {
+  position: relative;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+@media print {
+  .bill-table-scroll {
+    overflow: visible;
+  }
+}

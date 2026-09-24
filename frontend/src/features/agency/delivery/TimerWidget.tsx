@@ -42,7 +42,8 @@ export function TimerWidget() {
     void qc.invalidateQueries({ queryKey: ['delivery', 'week'] });
   };
   const start = useMutation({
-    mutationFn: () => api.post<TimeEntry>('/agency/time/timer/start', { projectId, note: note || null, billable: true }),
+    mutationFn: () =>
+      api.post<TimeEntry>('/agency/time/timer/start', { projectId, note: note || null, billable: true }),
     onSuccess: (entry) => {
       qc.setQueryData(dk.timer, entry);
       setNote('');
@@ -59,51 +60,77 @@ export function TimerWidget() {
 
   if (timer.isPending) return <Skeleton height={48} />;
   const running = timer.data;
+  // Announces starting and stopping only. The clock itself ticks every second and must not sit in a live region (a
+  // screen reader would read out every second); role="timer" is not live by default.
+  const status = (
+    <p className="visually-hidden" role="status">
+      {running ? `Timer running for ${running.projectName}.` : ''}
+    </p>
+  );
   if (running)
     return (
-      <div className="dl-timer" aria-live="polite">
-        <RunningClock startedAt={running.startedAt ?? running.date} />
-        <span className="dl-list__main">
-          <span className="dl-list__title">{running.projectName}</span>
-          <span className="dl-meta">
-            {running.clientName}
-            {running.note ? ` · ${running.note}` : ''}
+      <>
+        {status}
+        <div className="dl-timer">
+          <RunningClock startedAt={running.startedAt ?? running.date} />
+          <span className="dl-list__main">
+            <span className="dl-list__title">{running.projectName}</span>
+            <span className="dl-meta">
+              {running.clientName}
+              {running.note ? ` · ${running.note}` : ''}
+            </span>
           </span>
-        </span>
-        <Button variant="danger" leadingIcon={<Square aria-hidden="true" />} loading={stop.isPending} onClick={() => stop.mutate()}>
-          Stop timer
-        </Button>
-        {stop.error ? <Alert tone="danger">{errorMessage(stop.error)}</Alert> : null}
-      </div>
+          <Button
+            variant="danger"
+            leadingIcon={<Square aria-hidden="true" />}
+            loading={stop.isPending}
+            onClick={() => stop.mutate()}
+          >
+            Stop timer
+          </Button>
+          {stop.error ? <Alert tone="danger">{errorMessage(stop.error)}</Alert> : null}
+        </div>
+      </>
     );
 
   return (
-    <form
-      className="dl-form"
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (projectId) start.mutate();
-      }}
-    >
-      <div className="dl-form__row">
-        <FormField label="Project" required>
-          <Select
-            value={projectId}
-            onChange={(e) => setProjectId(e.target.value)}
-            placeholder="Choose a project…"
-            options={(projects.data ?? []).map((p) => ({ value: p.id, label: `${p.clientName} — ${p.name}` }))}
-          />
-        </FormField>
-        <FormField label="What are you working on?" optional>
-          <Input value={note} onChange={(e) => setNote(e.target.value)} maxLength={1000} />
-        </FormField>
-      </div>
-      <div className="dl-row">
-        <Button type="submit" leadingIcon={<Play aria-hidden="true" />} loading={start.isPending} disabled={!projectId}>
-          Start timer
-        </Button>
-      </div>
-      {start.error ? <Alert tone="danger">{errorMessage(start.error)}</Alert> : null}
-    </form>
+    <>
+      {status}
+      <form
+        className="dl-form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (projectId) start.mutate();
+        }}
+      >
+        <div className="dl-form__row">
+          <FormField label="Project" required>
+            <Select
+              value={projectId}
+              onChange={(e) => setProjectId(e.target.value)}
+              placeholder="Choose a project…"
+              options={(projects.data ?? []).map((p) => ({
+                value: p.id,
+                label: `${p.clientName} — ${p.name}`,
+              }))}
+            />
+          </FormField>
+          <FormField label="What are you working on?" optional>
+            <Input value={note} onChange={(e) => setNote(e.target.value)} maxLength={1000} />
+          </FormField>
+        </div>
+        <div className="dl-row">
+          <Button
+            type="submit"
+            leadingIcon={<Play aria-hidden="true" />}
+            loading={start.isPending}
+            disabled={!projectId}
+          >
+            Start timer
+          </Button>
+        </div>
+        {start.error ? <Alert tone="danger">{errorMessage(start.error)}</Alert> : null}
+      </form>
+    </>
   );
 }

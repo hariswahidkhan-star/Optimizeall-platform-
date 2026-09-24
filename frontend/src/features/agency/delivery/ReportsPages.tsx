@@ -213,7 +213,9 @@ function SectionEditor({
   return (
     <section className="dl-editor-section" aria-labelledby={`edit-${section.key}`}>
       <div className="dl-row">
-        <h3 id={`edit-${section.key}`}>{section.title}</h3>
+        <h2 id={`edit-${section.key}`} className="dl-editor-section__title">
+          {section.title}
+        </h2>
         {section.providerKey ? (
           <Button size="sm" variant="ghost" leadingIcon={<RefreshCw aria-hidden="true" />} loading={refreshing} onClick={onRefresh}>
             Refresh data

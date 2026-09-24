@@ -394,7 +394,7 @@ function Brand({ base, orgId, isOwner }: { base: string; orgId: string; isOwner:
               }}
             >
               <FormField label="File" hint="PNG, JPEG, WebP, PDF or MP4, up to 50 MB.">
-                <input type="file" accept="image/png,image/jpeg,image/webp,application/pdf,video/mp4" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
+                <Input type="file" accept="image/png,image/jpeg,image/webp,application/pdf,video/mp4" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
               </FormField>
               <FormField label="Label" optional>
                 <Input value={label} onChange={(e) => setLabel(e.target.value)} maxLength={200} />

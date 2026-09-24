@@ -6,7 +6,7 @@ import { FilePreview } from './deliveryUi';
 function Items({ title, items }: { title: string; items: string[] }) {
   return (
     <Card as="section" aria-label={title}>
-      <CardHeader title={title} headingLevel={3} />
+      <CardHeader title={title} headingLevel={2} />
       <CardBody>
         {items.length === 0 ? (
           <p className="dl-muted">Not set yet.</p>
@@ -28,7 +28,7 @@ export function BrandKitView({ kit, audience }: { kit: BrandKit; audience: 'staf
     <div className="dl-page">
       <div className="dl-grid dl-grid--wide">
         <Card as="section" aria-label="Colours">
-          <CardHeader title="Colours" headingLevel={3} />
+          <CardHeader title="Colours" headingLevel={2} />
           <CardBody>
             {kit.colors.length === 0 ? (
               <p className="dl-muted">Not set yet.</p>
@@ -48,7 +48,7 @@ export function BrandKitView({ kit, audience }: { kit: BrandKit; audience: 'staf
         </Card>
         <Items title="Fonts" items={kit.fonts} />
         <Card as="section" aria-label="Tone of voice">
-          <CardHeader title="Tone of voice" headingLevel={3} />
+          <CardHeader title="Tone of voice" headingLevel={2} />
           <CardBody>
             <p className="dl-report__body">{kit.toneOfVoice ?? 'Not set yet.'}</p>
           </CardBody>
@@ -58,7 +58,7 @@ export function BrandKitView({ kit, audience }: { kit: BrandKit; audience: 'staf
         <Items title="Don't" items={kit.donts} />
         <Items title="Competitors" items={kit.competitors} />
         <Card as="section" aria-label="Audience personas">
-          <CardHeader title="Audience personas" headingLevel={3} />
+          <CardHeader title="Audience personas" headingLevel={2} />
           <CardBody>
             {kit.personas.length === 0 ? (
               <p className="dl-muted">Not set yet.</p>
@@ -78,7 +78,7 @@ export function BrandKitView({ kit, audience }: { kit: BrandKit; audience: 'staf
         </Card>
       </div>
       <section aria-labelledby="brand-assets-heading" className="dl-page">
-        <h3 id="brand-assets-heading">Assets</h3>
+        <h2 id="brand-assets-heading">Assets</h2>
         {kit.assets.length === 0 ? (
           <EmptyState compact title="No brand assets yet" description="Logos, guidelines and photography appear here." />
         ) : (

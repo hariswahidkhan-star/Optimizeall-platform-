@@ -10,8 +10,8 @@ export interface EmptyStateProps {
   /** Primary call to action (Button / ButtonLink). */
   action?: ReactNode;
   compact?: boolean;
-  /** Heading level for the title (defaults to h2; use h3 inside cards). */
-  headingLevel?: 2 | 3 | 4;
+  /** Heading level for the title (defaults to h2; use h3 inside cards, h1 when it is the whole page). */
+  headingLevel?: 1 | 2 | 3 | 4;
   className?: string;
 }
 
