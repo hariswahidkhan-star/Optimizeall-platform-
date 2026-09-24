@@ -65,7 +65,7 @@ test.describe.serial('participant journey', () => {
     await expect(page).toHaveURL(/\/login/);
     await page.getByLabel('Email', { exact: true }).fill(me().email);
     await page.getByLabel('Password', { exact: true }).fill(me().password);
-    await page.getByRole('button', { name: 'Sign in' }).click();
+    await page.getByRole('button', { name: 'Sign in', exact: true }).click();
 
     await expect(page).toHaveURL(/\/app$/);
     await expect(page.getByRole('heading', { name: 'Add the social profile you post from' })).toBeVisible();

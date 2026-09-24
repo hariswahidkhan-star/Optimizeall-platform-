@@ -13,6 +13,8 @@ coverage/
 playwright-report/
 test-results/
 .vite/
+# Run state written by the full-stack Playwright suites' global setups
+frontend/e2e/*/.state/
 
 # Env / secrets
 .env

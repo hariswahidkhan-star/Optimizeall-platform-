@@ -105,7 +105,7 @@ test.describe.serial('admin journey', () => {
 
     await pat.getByLabel('Email', { exact: true }).fill(participant.email);
     await pat.getByLabel('Password', { exact: true }).fill(participant.password);
-    await pat.getByRole('button', { name: 'Sign in' }).click();
+    await pat.getByRole('button', { name: 'Sign in', exact: true }).click();
     await expect(pat).toHaveURL(/\/app$/);
     await expect(pat.getByRole('heading', { level: 1, name: /Pat/ })).toBeVisible();
   });

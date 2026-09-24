@@ -74,7 +74,7 @@ test('agency staff only reach the areas their role allows', async ({ browser }) 
 test('signed-out visitors are sent to sign in', async ({ page }) => {
   await page.goto('/agency/crm/deals');
   await expect(page).toHaveURL(/\/login/);
-  await expect(page.getByRole('button', { name: 'Sign in' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Sign in', exact: true })).toBeVisible();
 });
 
 /** Inside a portal the user may open, a forbidden route renders the 403 page within the portal chrome. */
