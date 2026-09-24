@@ -349,6 +349,28 @@ Errors: `billing.invalid_settings` (400 with `errors`), `billing.invalid_tax`, `
 Viewer and Approver members get `403 client.insufficient_role` (the portal explains the restriction). Another
 organization's records answer 404.
 
+## Payments hub — `/admin/payments` (see `docs/SALES_AND_BILLING.md` and `docs/PAYOUTS.md`)
+
+One place for incoming client payments and outgoing participant payouts. Reads need `billing.view` (incoming) or
+`payouts.view` (outgoing); `GET /admin/payments/capabilities` tells the UI which parts the caller has.
+
+| Method & path | Permission | What it does |
+|---|---|---|
+| `GET /admin/payments`, `GET …/summary`, `GET …/records/{kind}/{id}`, `GET …/export.csv` | billing.view / payouts.view | unified list, totals, one record, CSV |
+| `POST …/invoices/{invoiceId}/payments`, `POST …/invoices/{invoiceId}/mark-paid` | billing.manage | record a payment / settle the balance |
+| `PATCH …/invoice-payments/{paymentId}`, `POST …/invoice-payments/{paymentId}/reverse` | billing.manage | correct or reverse a recorded payment |
+| `POST …/invoice-payments/{paymentId}/proofs`, `GET …/proofs/{proofId}` | billing.manage / billing.view | attach and read payment proofs |
+| `POST …/invoices/{invoiceId}/reminders`, `GET …/invoices/{invoiceId}/reminders` | billing.manage / billing.view | send a reminder now (idempotent per request id) and its history |
+| `GET …/reminders/preview`, `GET/PUT …/reminder-policies/{clientAccountId}` | billing.view / billing.settings | what the reminder job would send; per-client schedule |
+| `GET …/claims`, `POST …/claims/{claimId}/confirm`, `POST …/claims/{claimId}/reject` | billing.view / billing.manage | client "I've paid" reports |
+| `POST …/payouts/{itemId}/mark-paid`, `…/mark-failed`, `POST …/payout-batches/{batchId}/mark-paid` | payouts.record_payment | outgoing payouts |
+
+Client side (`/client/billing`, `client.portal` + Billing/Owner duty): `GET invoices/{id}/payments`,
+`POST invoices/{id}/payment-claims` (report a payment), `POST payment-claims/{claimId}/proofs`,
+`GET payment-proofs/{proofId}`. Notifications: `billing.payment_claimed` (finance and the account manager),
+`billing.payment_claim_reviewed` (the reporting client user), `billing.invoice_reminder`, `billing.invoice_paid` — all
+listed in the notification preference matrix of the users who receive them.
+
 ## Public invoice — `/public/invoices/{token}` (anonymous, rate limited)
 
 | Method & path | Response |
@@ -372,7 +394,9 @@ Drafts, and malformed or unknown tokens, answer 404 `invoice.not_found`. A voide
 
 Notification types (in-app; email where the recipient's preferences allow): `crm.lead_assigned`,
 `crm.task_reminder`, `crm.task_overdue`, `crm.proposal_viewed`, `crm.proposal_accepted`, `crm.proposal_declined`,
-`billing.invoice_issued`, `billing.invoice_reminder`, `billing.invoice_paid`, `billing.proposal_received`.
+`billing.invoice_issued`, `billing.invoice_reminder`, `billing.invoice_paid`, `billing.proposal_received`,
+`billing.payment_claimed`, `billing.payment_claim_reviewed`. Recipients choose email per kind in their notification
+preferences (`/me/notification-preferences`; staff and client users open it from the account menu).
 
 Domain events published: `ProposalAccepted`, `InvoicePaid`. Events handled: `WebsiteInquiryReceived`,
 `FormSubmitted`, `ContactEngagementRecorded`.
