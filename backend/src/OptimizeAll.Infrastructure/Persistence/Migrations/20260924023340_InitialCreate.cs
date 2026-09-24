@@ -1409,6 +1409,22 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "website_used_form_tokens",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    TokenHash = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UsedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    ExpiresAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_website_used_form_tokens", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "service_catalog_items",
                 columns: table => new
                 {
@@ -3970,6 +3986,8 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     Provider = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ClientAccountId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    ActiveScopeKey = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     DisplayName = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     SettingsJson = table.Column<string>(type: "longtext", nullable: false)
@@ -9399,6 +9417,12 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 column: "ClientAccountId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_integration_connections_Provider_ActiveScopeKey",
+                table: "integration_connections",
+                columns: new[] { "Provider", "ActiveScopeKey" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_integration_connections_Provider_ClientAccountId",
                 table: "integration_connections",
                 columns: new[] { "Provider", "ClientAccountId" });
@@ -10747,6 +10771,17 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "IX_website_testimonials_ServiceId",
                 table: "website_testimonials",
                 column: "ServiceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_website_used_form_tokens_ExpiresAt",
+                table: "website_used_form_tokens",
+                column: "ExpiresAt");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_website_used_form_tokens_TokenHash",
+                table: "website_used_form_tokens",
+                column: "TokenHash",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -11240,6 +11275,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "website_testimonials");
+
+            migrationBuilder.DropTable(
+                name: "website_used_form_tokens");
 
             migrationBuilder.DropTable(
                 name: "ads_ad_groups");

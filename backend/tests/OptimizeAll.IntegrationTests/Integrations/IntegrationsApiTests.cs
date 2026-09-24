@@ -152,6 +152,39 @@ public sealed class IntegrationsApiTests(IntegrationsFixture fx) : IClassFixture
     }
 
     [Fact]
+    public async Task Concurrent_creates_for_the_same_provider_and_client_yield_one_connection_and_friendly_409s()
+    {
+        var admin = await AdminAsync();
+        var client = (await fx.Api.CreateClientAccountAsync()).Id;
+        object Body(string name) => new
+        {
+            provider = "meta", clientAccountId = client, displayName = name,
+            settings = new { pageId = "1234567890" }, secrets = new { pageAccessToken = "token-" + name.Replace(' ', '-') },
+        };
+
+        var responses = await Task.WhenAll(Enumerable.Range(0, 8).Select(i =>
+            admin.PostAsJsonAsync("/api/v1/agency/integrations/connections", Body($"Meta {i}"))));
+        var codes = responses.Select(r => (int)r.StatusCode).ToList();
+        Assert.Equal(1, codes.Count(c => c == 201));
+        Assert.Equal(7, codes.Count(c => c == 409));
+        foreach (var conflict in responses.Where(r => r.StatusCode == HttpStatusCode.Conflict))
+            await conflict.ShouldFailAsync(409, "integrations.exists");
+        var rows = await fx.Api.WithDbAsync(db => db.Set<IntegrationConnection>().AsNoTracking()
+            .Where(c => c.Provider == "meta" && c.ClientAccountId == client).ToListAsync());
+        var live = Assert.Single(rows);
+        Assert.Equal(client.ToString("D"), live.ActiveScopeKey);
+
+        // A disconnected connection is history: a new one may be created, and the old one cannot be revived next to it.
+        (await admin.PostAsync($"/api/v1/agency/integrations/connections/{live.Id}/disconnect", null)).EnsureSuccessStatusCode();
+        Assert.Null((await fx.Api.WithDbAsync(db => db.Set<IntegrationConnection>().AsNoTracking().SingleAsync(c => c.Id == live.Id))).ActiveScopeKey);
+        (await admin.PostAsJsonAsync("/api/v1/agency/integrations/connections", Body("Meta again"))).EnsureSuccessStatusCode();
+        await (await admin.PutAsJsonAsync($"/api/v1/agency/integrations/connections/{live.Id}", new
+        {
+            displayName = "Revived", settings = new { pageId = "1234567890" }, secrets = new { pageAccessToken = "revived" },
+        })).ShouldFailAsync(409, "integrations.exists");
+    }
+
+    [Fact]
     public async Task Settings_and_secrets_are_validated_against_the_provider_descriptor()
     {
         var admin = await AdminAsync();

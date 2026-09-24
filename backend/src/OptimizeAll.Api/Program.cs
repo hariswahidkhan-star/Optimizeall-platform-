@@ -73,7 +73,10 @@ services.AddSingleton(TimeProvider.System);
 // Configuration is read lazily (per service resolution) so hosts/tests can override it before the app starts.
 // Database:Provider = MySql (default) | Sqlite; see DatabaseConnection.
 services.AddDbContext<AppDbContext>((sp, options) =>
-    DatabaseConnection.Configure(options, sp.GetRequiredService<IConfiguration>()));
+{
+    DatabaseConnection.Configure(options, sp.GetRequiredService<IConfiguration>());
+    DatabaseConnection.ConfigureStrictQueryWarnings(options, sp.GetRequiredService<IHostEnvironment>());
+});
 services.AddSingleton<IDatabaseDialect>(sp =>
     DatabaseDialects.For(DatabaseConnection.Provider(sp.GetRequiredService<IConfiguration>())));
 

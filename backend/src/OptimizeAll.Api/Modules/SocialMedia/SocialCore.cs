@@ -2,6 +2,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Domain.Agency;
 using OptimizeAll.Domain.Common;
@@ -235,5 +236,29 @@ internal static class UserNames
         if (list.Count == 0) return new Dictionary<Guid, string>();
         return await db.Set<User>().AsNoTracking().Where(u => list.Contains(u.Id))
             .ToDictionaryAsync(u => u.Id, u => u.DisplayName, ct);
+    }
+}
+
+/// <summary>
+/// Named locks that serialize writers of the same social data (metric imports and the insights sync per profile,
+/// listening and inbox syncs per client), so their check-then-insert upserts cannot race into unique-key violations.
+/// Acquire before any write transaction; dispose after saving.
+/// </summary>
+public static class SocialWriteLocks
+{
+    public static string Metrics(Guid profileId) => $"social-metrics:{profileId:N}";
+    public static string Listening(Guid clientId) => $"social-listening:{clientId:N}";
+    public static string Inbox(Guid clientId) => $"social-inbox:{clientId:N}";
+
+    public static async Task<IAsyncDisposable> AcquireAsync(IDatabaseDialect dialect, AppDbContext db, string name, CancellationToken ct)
+    {
+        try
+        {
+            return await dialect.AcquireNamedLockAsync(db, name, TimeSpan.FromSeconds(30), ct);
+        }
+        catch (TimeoutException)
+        {
+            throw DomainException.Conflict("social.write_busy", "This data is being updated right now. Try again in a moment.");
+        }
     }
 }

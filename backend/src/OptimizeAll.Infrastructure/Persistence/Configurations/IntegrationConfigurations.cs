@@ -15,7 +15,9 @@ internal sealed class IntegrationConnectionConfiguration : IEntityTypeConfigurat
         b.Property(x => x.SettingsJson).IsRequired();
         b.Property(x => x.EncryptedSecrets).IsRequired();
         b.Property(x => x.StatusMessage).HasMaxLength(1000);
+        b.Property(x => x.ActiveScopeKey).HasMaxLength(36);
         b.HasIndex(x => new { x.Provider, x.ClientAccountId });
+        b.HasIndex(x => new { x.Provider, x.ActiveScopeKey }).IsUnique();
         b.HasOne<ClientAccount>().WithMany().HasForeignKey(x => x.ClientAccountId).OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -547,10 +547,15 @@ public sealed class AudienceService(
             {
                 await db.SaveChangesAsync(ct);
             }
-            catch (DbUpdateException ex) when (dialect.IsUniqueViolation(ex) && attempt < 2)
+            catch (DbUpdateException ex) when ((DatabaseErrors.IsUniqueViolation(ex) || ex is DbUpdateConcurrencyException) && attempt < 2)
             {
-                // Created concurrently (same email): retry as an update.
-                db.ChangeTracker.Clear();
+                // Created (or updated) concurrently: detach what this attempt staged for the contact, then reload the current
+                // row and retry as an update. Other tracked entities of the caller are left alone.
+                var subscriberId = s.Id;
+                foreach (var entry in db.ChangeTracker.Entries().Where(x =>
+                             (x.Entity == s && created) || (x.Entity is ConsentRecord c && c.SubscriberId == subscriberId && x.State == EntityState.Added)).ToList())
+                    entry.State = EntityState.Detached;
+                if (!created) db.Entry(s).State = EntityState.Detached; // reload the current row (and its concurrency stamp)
                 continue;
             }
             if (input.CustomFields is { Count: > 0 }) { await ApplyFieldsAsync(s.Id, input.CustomFields, ct); await db.SaveChangesAsync(ct); }

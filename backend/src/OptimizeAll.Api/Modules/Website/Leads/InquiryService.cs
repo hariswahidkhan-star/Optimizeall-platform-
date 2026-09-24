@@ -28,7 +28,7 @@ internal sealed record ContactDetails(string Name, string Email, string? Phone, 
 /// (the CRM creates leads from it; this module notifies staff).
 /// </summary>
 public sealed class InquiryService(
-    AppDbContext db, FormGuard guard, IPrivacyHasher hasher, ICurrentUser user, IEventPublisher events, IAuditLogger audit, TimeProvider clock)
+    AppDbContext db, FormGuard guard, FormTokenLedger tokens, IPrivacyHasher hasher, ICurrentUser user, IEventPublisher events, IAuditLogger audit, TimeProvider clock)
 {
     public const string SpamMessage = "Thanks! We've received your message and will reply within one business day.";
 
@@ -77,6 +77,7 @@ public sealed class InquiryService(
     {
         if (guard.Check(input, ConsentTexts.FormVersion) == FormCheck.Spam)
             return new InquiryAcceptedDto(LeadReference.For(Guid.NewGuid()), SpamMessage);
+        await tokens.EnsureUnusedAsync(input, ct);
 
         var e = new FieldErrors();
         var contact = ValidateContact(input, e);
@@ -85,7 +86,7 @@ public sealed class InquiryService(
         e.ThrowIfAny();
 
         db.Set<WebsiteInquiry>().Add(inquiry);
-        await db.SaveChangesAsync(ct);
+        await tokens.SaveAsync(tokens.Spend(input), ct); // single-use token: a replay gets 409
         await PublishAsync(inquiry, ct);
         return new InquiryAcceptedDto(LeadReference.For(inquiry.Id), SpamMessage);
     }

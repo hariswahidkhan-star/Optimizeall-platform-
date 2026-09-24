@@ -3,10 +3,12 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Audit;
+using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Api.Modules.Seo;
 using OptimizeAll.Domain.Agency;
 using OptimizeAll.Domain.Common;
+using OptimizeAll.Domain.EmailMarketing;
 using OptimizeAll.Domain.Integrations;
 using OptimizeAll.Infrastructure.Persistence;
 
@@ -117,18 +119,19 @@ public sealed class IntegrationsController(
         Validate(descriptor, settings, secrets, new HashSet<string>());
         if (await db.Set<IntegrationConnection>().AnyAsync(x => x.Provider == descriptor.Key && x.ClientAccountId == request.ClientAccountId &&
                                                                x.Status != IntegrationStatus.Disconnected, ct))
-            throw DomainException.Conflict("integrations.exists", $"A {descriptor.Name} connection already exists here; update it instead.");
+            throw AlreadyExists(descriptor);
 
         var row = new IntegrationConnection
         {
-            Provider = descriptor.Key, ClientAccountId = request.ClientAccountId, DisplayName = request.DisplayName.Trim(),
+            Provider = descriptor.Key, ClientAccountId = request.ClientAccountId, ActiveScopeKey = Workspace.Key(request.ClientAccountId),
+            DisplayName = request.DisplayName.Trim(),
             SettingsJson = JsonSerializer.Serialize(settings), EncryptedSecrets = vault.Protect(secrets),
             Status = IntegrationStatus.Unverified, StatusMessage = "Saved — not verified yet.", ExpiresAt = request.ExpiresAt?.ToUniversalTime(),
         };
         db.Add(row);
         audit.Record("integration.created", nameof(IntegrationConnection), row.Id,
             after: new { row.Provider, row.ClientAccountId, row.DisplayName, Settings = settings, SecretsSaved = secrets.Keys.OrderBy(k => k), row.ExpiresAt });
-        await db.SaveChangesAsync(ct);
+        await SaveUniqueAsync(descriptor, ct); // a concurrent create of the same provider + workspace loses here
         return CreatedAtAction(nameof(Get), new { id = row.Id }, (await ToDtosAsync(new List<IntegrationConnection> { row }, ct))[0]);
     }
 
@@ -158,6 +161,7 @@ public sealed class IntegrationsController(
         row.SettingsJson = JsonSerializer.Serialize(settings);
         row.EncryptedSecrets = vault.Protect(existing);
         row.ExpiresAt = request.ExpiresAt?.ToUniversalTime();
+        row.ActiveScopeKey = Workspace.Key(row.ClientAccountId); // reconnecting a disconnected row makes it live again
         if (secretsChanged || row.Status == IntegrationStatus.Disconnected || !beforeSettings.OrderBy(k => k.Key).SequenceEqual(settings.OrderBy(k => k.Key)))
         {
             row.Status = IntegrationStatus.Unverified;
@@ -166,7 +170,7 @@ public sealed class IntegrationsController(
         audit.Record("integration.updated", nameof(IntegrationConnection), row.Id,
             before: new { Settings = beforeSettings },
             after: new { row.DisplayName, Settings = settings, SecretsReplaced = incoming.Keys.OrderBy(k => k), SecretsCleared = cleared.OrderBy(k => k), row.ExpiresAt });
-        await db.SaveChangesAsync(ct);
+        await SaveUniqueAsync(descriptor, ct);
         return (await ToDtosAsync(new List<IntegrationConnection> { row }, ct))[0];
     }
 
@@ -192,6 +196,7 @@ public sealed class IntegrationsController(
     {
         var row = await LoadAsync(id, ct, true);
         row.Status = IntegrationStatus.Disconnected;
+        row.ActiveScopeKey = null; // history row: a new connection for this provider + workspace may be created
         row.StatusMessage = "Disconnected — credentials removed.";
         row.EncryptedSecrets = vault.Protect(new Dictionary<string, string>());
         audit.Record("integration.disconnected", nameof(IntegrationConnection), row.Id, after: new { row.Provider, row.ClientAccountId });
@@ -207,6 +212,22 @@ public sealed class IntegrationsController(
         audit.Record("integration.deleted", nameof(IntegrationConnection), row.Id, before: new { row.Provider, row.ClientAccountId, row.DisplayName });
         await db.SaveChangesAsync(ct);
         return NoContent();
+    }
+
+    private static DomainException AlreadyExists(ProviderDescriptor descriptor) =>
+        DomainException.Conflict("integrations.exists", $"A {descriptor.Name} connection already exists here; update it instead.");
+
+    /// <summary>Saves, turning a violation of the one-live-connection-per-provider-and-workspace index into a 409.</summary>
+    private async Task SaveUniqueAsync(ProviderDescriptor descriptor, CancellationToken ct)
+    {
+        try
+        {
+            await db.SaveChangesAsync(ct);
+        }
+        catch (DbUpdateException ex) when (DatabaseErrors.IsUniqueViolation(ex))
+        {
+            throw AlreadyExists(descriptor);
+        }
     }
 
     private async Task<IntegrationConnection> LoadAsync(Guid id, CancellationToken ct, bool tracked)

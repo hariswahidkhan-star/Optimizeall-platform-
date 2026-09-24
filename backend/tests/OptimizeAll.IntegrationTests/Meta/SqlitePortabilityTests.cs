@@ -131,7 +131,10 @@ public sealed class SqlitePortabilityTests : IAsyncLifetime
         }
         await using (await _dialect.AcquireNamedLockAsync(b, "portability", TimeSpan.FromSeconds(1), CancellationToken.None))
         {
+            Assert.True(SqliteDialect.NamedLocks.Contains(SqliteDialect.NamedLockKey(b, "portability")));
         }
+        // Released locks leave no entry behind (per-entity lock names must not accumulate).
+        Assert.False(SqliteDialect.NamedLocks.Contains(SqliteDialect.NamedLockKey(b, "portability")));
 
         await using var tx = await _dialect.BeginWriteTransactionAsync(a, CancellationToken.None);
         await Assert.ThrowsAsync<InvalidOperationException>(() =>

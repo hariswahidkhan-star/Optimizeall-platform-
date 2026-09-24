@@ -92,7 +92,11 @@ in the web server's `IMG_SRC_EXTRA`, see below).
 
 - Every public form fetches a signed token (`GET /public/forms/token`). Submissions faster than
   `Website:MinFormFillSeconds` (default 3 s) or with a token older than 24 hours are rejected; a hidden honeypot
-  field silently drops bots; the `public` rate limit (120/min per IP) applies.
+  field silently drops bots; the `public` rate limit (120/min per IP) applies. Tokens are single-use: a successful
+  inquiry, consultation booking or job application stores the SHA-256 of the token id (`website_used_form_tokens`),
+  and a replay gets 409 `website.form_already_submitted` (the site fetches a fresh token after each success; the
+  newsletter form, which is idempotent per address, does not spend tokens). `UsedFormTokenCleanupJob` deletes the
+  rows hourly once the token has expired.
 - Consent is explicit (unticked checkbox) and stored with its text version (`forms-2026-09`, `newsletter-2026-09`,
   `careers-2026-09`) and time. Change the text in `Leads/FormGuard.cs` → bump the version.
 - CVs must be real PDFs (checked by content) up to 5 MB, stored privately in the database; downloads are audited.

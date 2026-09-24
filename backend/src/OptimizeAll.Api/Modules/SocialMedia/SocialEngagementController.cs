@@ -268,9 +268,13 @@ public sealed class SocialEngagementController(
         var result = await listening.FetchAsync(clientId, queries, Now.AddDays(-7), ct);
         if (!result.Configured) return new SyncResultDto(false, 0, result.Message);
         var imported = 0;
+        // Concurrent syncs of this client would both insert the same mentions (unique on client + dedupe key).
+        await using var writeLock = await SocialWriteLocks.AcquireAsync(dialect, db, SocialWriteLocks.Listening(clientId), ct);
+        var batchKeys = new HashSet<string>(StringComparer.Ordinal);
         foreach (var item in result.Items)
         {
             var key = $"{item.Network}:{item.ExternalId}";
+            if (!batchKeys.Add(key)) continue; // the provider returned the same item twice
             if (await db.Set<SocialMention>().AnyAsync(m => m.ClientAccountId == clientId && m.DedupeKey == key, ct)) continue;
             var m = new SocialMention
             {
@@ -381,6 +385,7 @@ public sealed class SocialEngagementController(
         var imported = 0;
         var messages = new List<string>();
         var configured = false;
+        var fetched = new List<(BrandProfile Profile, IngestedInboxItem Item)>();
         foreach (var profile in profiles)
         {
             var result = await inbox.FetchAsync(profile, Now.AddDays(-7), ct);
@@ -390,18 +395,24 @@ public sealed class SocialEngagementController(
                 continue;
             }
             configured = true;
-            foreach (var i in result.Items)
+            fetched.AddRange(result.Items.Select(i => (profile, i)));
+        }
+
+        // Concurrent syncs of this client would both insert the same items (unique on client + dedupe key).
+        await using var writeLock = await SocialWriteLocks.AcquireAsync(dialect, db, SocialWriteLocks.Inbox(clientId), ct);
+        var batchKeys = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var (profile, i) in fetched)
+        {
+            var key = $"{i.Network}:{i.ExternalId}";
+            if (!batchKeys.Add(key)) continue; // the provider returned the same item twice
+            if (await db.Set<SocialInboxItem>().AnyAsync(x => x.ClientAccountId == clientId && x.DedupeKey == key, ct)) continue;
+            db.Set<SocialInboxItem>().Add(new SocialInboxItem
             {
-                var key = $"{i.Network}:{i.ExternalId}";
-                if (await db.Set<SocialInboxItem>().AnyAsync(x => x.ClientAccountId == clientId && x.DedupeKey == key, ct)) continue;
-                db.Set<SocialInboxItem>().Add(new SocialInboxItem
-                {
-                    ClientAccountId = clientId, ProfileId = profile.Id, Network = i.Network, Kind = i.Kind, AuthorHandle = Normalization.Handle(i.AuthorHandle),
-                    Text = i.Text, Url = SafeUrl(i.Url), ReceivedAt = i.ReceivedAt, Source = IngestSource.Api, DedupeKey = key,
-                    Sentiment = SentimentScorer.Score(i.Text).Sentiment,
-                });
-                imported++;
-            }
+                ClientAccountId = clientId, ProfileId = profile.Id, Network = i.Network, Kind = i.Kind, AuthorHandle = Normalization.Handle(i.AuthorHandle),
+                Text = i.Text, Url = SafeUrl(i.Url), ReceivedAt = i.ReceivedAt, Source = IngestSource.Api, DedupeKey = key,
+                Sentiment = SentimentScorer.Score(i.Text).Sentiment,
+            });
+            imported++;
         }
         await db.SaveChangesAsync(ct);
         return new SyncResultDto(configured, imported, messages.Count == 0 ? $"Imported {imported} item(s)." : string.Join(" ", messages.Distinct()));

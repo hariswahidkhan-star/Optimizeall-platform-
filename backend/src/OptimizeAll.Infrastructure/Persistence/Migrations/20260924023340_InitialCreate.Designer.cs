@@ -12,7 +12,7 @@ using OptimizeAll.Infrastructure.Persistence;
 namespace OptimizeAll.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260924005811_InitialCreate")]
+    [Migration("20260924023340_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -6485,6 +6485,10 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("ActiveScopeKey")
+                        .HasMaxLength(36)
+                        .HasColumnType("varchar(36)");
+
                     b.Property<Guid?>("ClientAccountId")
                         .HasColumnType("char(36)");
 
@@ -6538,6 +6542,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClientAccountId");
+
+                    b.HasIndex("Provider", "ActiveScopeKey")
+                        .IsUnique();
 
                     b.HasIndex("Provider", "ClientAccountId");
 
@@ -14207,6 +14214,35 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     b.HasIndex("IsPublished", "SortOrder");
 
                     b.ToTable("website_testimonials", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Website.UsedFormToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("TokenHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<DateTime>("UsedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExpiresAt");
+
+                    b.HasIndex("TokenHash")
+                        .IsUnique();
+
+                    b.ToTable("website_used_form_tokens", (string)null);
                 });
 
             modelBuilder.Entity("OptimizeAll.Domain.Website.WebsiteInquiry", b =>

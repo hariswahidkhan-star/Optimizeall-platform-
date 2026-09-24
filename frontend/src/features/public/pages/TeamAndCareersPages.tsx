@@ -11,7 +11,7 @@ import { isExternalHref } from '@/lib/safeHref';
 import { type EmploymentType, type PublicJob, useJob, useJobs, useSite, useTeam, type WorkplaceType } from '../site/api';
 import { useSiteCopy } from '../site/copy';
 import { CtaBand, formatPublished, PageHero, PublicQueryState, Section } from '../site/components';
-import { ConsentCheckbox, fieldErrorsOf, Honeypot, useFormToken } from '../site/forms';
+import { ConsentCheckbox, fieldErrorsOf, Honeypot, useFormToken, useRenewFormToken } from '../site/forms';
 import { headFromSeo, useDocumentHead } from '../site/head';
 import { Markdown } from '../site/Markdown';
 
@@ -205,6 +205,7 @@ function ApplicationForm({ job }: { job: PublicJob }) {
   const { data: site } = useSite();
   const copy = useSiteCopy();
   const token = useFormToken();
+  const renewToken = useRenewFormToken();
   const id = useId();
   const [values, setValues] = useState({ name: '', email: '', phone: '', portfolioUrl: '', coverLetter: '' });
   const [cv, setCv] = useState<File | null>(null);
@@ -224,6 +225,7 @@ function ApplicationForm({ job }: { job: PublicJob }) {
       if (cv) form.append('cv', cv);
       return api.upload<{ reference: string; message: string }>(`/public/careers/${encodeURIComponent(job.slug)}/applications`, form);
     },
+    onSuccess: () => void renewToken(),
     onError: (e) => setErrors(fieldErrorsOf(e)),
   });
 

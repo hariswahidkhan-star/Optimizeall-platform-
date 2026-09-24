@@ -5,7 +5,7 @@ import { Alert, ButtonLink, Checkbox, FormField, Input } from '@/components/ui';
 import { api } from '@/lib/api/client';
 import { errorMessage, isApiError } from '@/lib/api/errors';
 import { type ServiceCategoryGroup, useSite } from '../site/api';
-import { ConsentCheckbox, fieldErrorsOf, Honeypot, useFormToken, withFormEnvelope } from '../site/forms';
+import { ConsentCheckbox, fieldErrorsOf, Honeypot, useFormToken, useRenewFormToken, withFormEnvelope } from '../site/forms';
 
 export interface ContactValues {
   name: string;
@@ -109,6 +109,7 @@ export function ServicePicker({
 /** Submission plumbing shared by the contact, audit and quote forms. */
 export function useLeadForm<T extends object>(path: string) {
   const token = useFormToken();
+  const renewToken = useRenewFormToken();
   const { data: site } = useSite();
   const [nickname, setNickname] = useState('');
   const [consent, setConsent] = useState(false);
@@ -117,6 +118,7 @@ export function useLeadForm<T extends object>(path: string) {
   const mutation = useMutation({
     mutationFn: (body: T) =>
       api.post<{ reference: string; message: string }>(path, withFormEnvelope(body, token.data?.token, consentVersion, { nickname, consent })),
+    onSuccess: () => void renewToken(),
     onError: (error) => setServerErrors(fieldErrorsOf(error)),
   });
   const consentField = (error?: string) => (

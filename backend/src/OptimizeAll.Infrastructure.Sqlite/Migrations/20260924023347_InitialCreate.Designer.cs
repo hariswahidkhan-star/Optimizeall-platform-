@@ -11,7 +11,7 @@ using OptimizeAll.Infrastructure.Persistence;
 namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260924005819_InitialCreate")]
+    [Migration("20260924023347_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -6475,6 +6475,10 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ActiveScopeKey")
+                        .HasMaxLength(36)
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid?>("ClientAccountId")
                         .HasColumnType("TEXT");
 
@@ -6528,6 +6532,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClientAccountId");
+
+                    b.HasIndex("Provider", "ActiveScopeKey")
+                        .IsUnique();
 
                     b.HasIndex("Provider", "ClientAccountId");
 
@@ -14196,6 +14203,35 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.HasIndex("IsPublished", "SortOrder");
 
                     b.ToTable("website_testimonials", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Website.UsedFormToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TokenHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UsedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExpiresAt");
+
+                    b.HasIndex("TokenHash")
+                        .IsUnique();
+
+                    b.ToTable("website_used_form_tokens", (string)null);
                 });
 
             modelBuilder.Entity("OptimizeAll.Domain.Website.WebsiteInquiry", b =>
