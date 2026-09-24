@@ -32,6 +32,7 @@ public sealed class SettingsService(AppDbContext db, TimeProvider clock) : ISett
         [SettingKeys.AppealWindowDays] = 14,
         [SettingKeys.InactivityDays] = 30,
         [SettingKeys.RetentionEnabled] = true,
+        [SettingKeys.RatesFourEyesIncreasePercent] = 0,
         [SettingKeys.ReferralProgram] = new ReferralProgramSettings(),
     };
 

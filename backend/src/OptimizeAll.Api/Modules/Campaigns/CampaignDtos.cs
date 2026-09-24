@@ -38,7 +38,7 @@ public sealed record CampaignCardDto(
     Guid Id, string Slug, string Title, string Summary, CategoryRefDto? Category, IReadOnlyList<string> Topics,
     IReadOnlyList<SocialPlatform> Platforms, CampaignStatus Status, bool Upcoming, DateTime StartsAt, DateTime EndsAt,
     DateTime SubmissionDeadline, string? HeroImageUrl, CardRewardDto? Reward, CardEligibilityDto Eligibility,
-    int MySubmissionCount, int RemainingSubmissions);
+    int MySubmissionCount, int RemainingSubmissions, Rates.YourRateDto? YourRate = null);
 
 public sealed record RecommendedCampaignDto(CampaignCardDto Campaign, double Score, string Reason);
 
@@ -76,7 +76,7 @@ public sealed record CampaignDetailDto(
     string Description, string PostingInstructions, string? RequiredHashtags, string? RequiredMentions,
     IReadOnlyList<CampaignAssetDto> Assets, IReadOnlyList<ResolvedDisclosureDto> Disclosures, RewardTermsDto? RewardTerms,
     DetailEligibilityDto Eligibility, IReadOnlyList<MySubmissionRefDto> MySubmissions, int MySubmissionCount, int RemainingSubmissions,
-    bool TrackingEnabled);
+    bool TrackingEnabled, Rates.YourRateDto? YourRate = null);
 
 // ---------------------------------------------------------------- staff
 

@@ -35,6 +35,8 @@ public static class SettingDefinitions
         Int(SettingKeys.ReviewClaimMinutes, 1, 240, "Minutes a reviewer's claim on a submission lasts before it returns to the queue."),
         Int(SettingKeys.AppealWindowDays, 1, 365, "Days after a decision during which the participant may appeal."),
         Int(SettingKeys.InactivityDays, 7, 365, "Days without activity after which a participant counts as inactive (retention and content audiences)."),
+        Int(SettingKeys.RatesFourEyesIncreasePercent, 0, 1000,
+            "Rate card changes that raise any rate by more than this percentage need approval by a second person (0 = off)."),
         new Definition(SettingKeys.RetentionEnabled, "boolean",
             "Whether retention automations (onboarding reminders, reactivation, campaign alerts) run.",
             v => v.ValueKind is JsonValueKind.True or JsonValueKind.False ? (v.GetBoolean(), null) : (null, "Use true or false.")),

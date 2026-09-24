@@ -28,6 +28,9 @@ public sealed class CreateSubmissionForm
     [MaxLength(5000)]
     public string? CaptionText { get; set; }
 
+    /// <summary>Optional content format; inferred from the URL when omitted (400 submission.format_mismatch if it contradicts it).</summary>
+    public ContentFormat? Format { get; set; }
+
     public Guid? ExperimentVariantId { get; set; }
 
     public IFormFile? Screenshot { get; set; }
@@ -92,4 +95,5 @@ public sealed record MySubmissionDetailDto(
     string? CaptionText, string? ScreenshotUrl, SubmissionStatus Status, DateTime SubmittedAt, DateTime? DecidedAt,
     string? DecisionReason, int CorrectionCount, decimal EstimatedReward, string Currency, int RewardRuleSetVersion,
     LiveCheckDto LiveCheck, IReadOnlyList<TimelineEntryDto> Timeline, IReadOnlyList<SubmissionEarningDto> Earnings,
-    AppealSummaryDto? Appeal, bool CanEdit, bool CanAppeal, DateTime? AppealDeadline, bool CanWithdraw);
+    AppealSummaryDto? Appeal, bool CanEdit, bool CanAppeal, DateTime? AppealDeadline, bool CanWithdraw,
+    ContentFormat? Format = null, string? RateKind = null);

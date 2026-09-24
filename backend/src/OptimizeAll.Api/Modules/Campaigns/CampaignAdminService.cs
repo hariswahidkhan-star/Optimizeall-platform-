@@ -59,6 +59,7 @@ public sealed class CampaignAdminService(
     IEventPublisher events,
     IRewardQuoteService quotes,
     IRewardRulesService rewardRules,
+    Rates.IPersonRatesService personRates,
     ImageUrlPolicy images,
     TimeProvider clock) : ICampaignAdminService
 {
@@ -419,6 +420,10 @@ public sealed class CampaignAdminService(
         if (problems.Count > 0)
             throw new DomainException("campaign.incomplete", "The campaign is not ready to publish: " + string.Join(" ", problems),
                 errors: new Dictionary<string, string[]> { ["campaign"] = problems.ToArray() });
+        // Person-level rates that can apply here must convert into the campaign currency: refuse now rather than fail
+        // (or price at 0) when a participant submits.
+        var fxProblems = await personRates.CampaignFxProblemsAsync(id, set!.Currency, ct);
+        if (fxProblems.Count > 0) throw Rates.PersonalRateService.FxMissing(fxProblems.ToList());
 
         var target = campaign.StartsAt > now ? CampaignStatus.Scheduled : CampaignStatus.Active;
         await using (var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct))

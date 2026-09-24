@@ -60,6 +60,17 @@ public class EarningEntry : Entity, IConcurrencyStamped
     public int? RewardRuleSetVersion { get; set; }
     public Guid? RewardRuleId { get; set; }
 
+    /// <summary>
+    /// For post rewards: where the rate came from (campaign rules or a person-level rate card / group / custom rate) and
+    /// which card version, group and assignment. Null on bonuses, manual entries and entries written before rate cards.
+    /// </summary>
+    public OptimizeAll.Domain.Rewards.RateSourceLevel? RateSource { get; set; }
+    public string? RateSourceLabel { get; set; }
+    public Guid? RateCardId { get; set; }
+    public int? RateCardVersion { get; set; }
+    public Guid? RateGroupId { get; set; }
+    public Guid? RateAssignmentId { get; set; }
+
     /// <summary>Unique key that makes creation idempotent, e.g. "submission:{id}:PostReward".</summary>
     public string IdempotencyKey { get; set; } = string.Empty;
 
@@ -92,6 +103,7 @@ public class EarningEntry : Entity, IConcurrencyStamped
         nameof(UserId), nameof(CampaignId), nameof(SubmissionId), nameof(ReferralId), nameof(Type),
         nameof(Amount), nameof(Currency), nameof(ExchangeRate), nameof(ExchangeRateId), nameof(SettlementAmount),
         nameof(SettlementCurrency), nameof(RewardRuleSetId), nameof(RewardRuleSetVersion), nameof(RewardRuleId),
+        nameof(RateSource), nameof(RateSourceLabel), nameof(RateCardId), nameof(RateCardVersion), nameof(RateGroupId), nameof(RateAssignmentId),
         nameof(IdempotencyKey), nameof(ReversesEntryId), nameof(CreatedAt), nameof(CreatedByUserId),
     };
 }

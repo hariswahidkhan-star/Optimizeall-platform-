@@ -30,6 +30,7 @@ internal sealed class EarningEntryConfiguration : IEntityTypeConfiguration<Earni
         b.HasIndex(x => x.IdempotencyKey).IsUnique();
         b.Property(x => x.Description).HasMaxLength(300).IsRequired();
         b.Property(x => x.Reason).HasMaxLength(1000);
+        b.Property(x => x.RateSourceLabel).HasMaxLength(200);
 
         b.HasIndex(x => new { x.UserId, x.Status });
         b.HasIndex(x => new { x.Status, x.AvailableAt });

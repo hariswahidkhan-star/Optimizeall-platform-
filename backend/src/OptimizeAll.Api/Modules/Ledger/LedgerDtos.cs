@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Ledger;
+using OptimizeAll.Domain.Rewards;
 
 namespace OptimizeAll.Api.Modules.Ledger;
 
@@ -84,7 +85,13 @@ public sealed record LedgerRowDto(
     Guid? ReversesEntryId,
     Guid? ReversedByEntryId,
     string? Reason,
-    Guid ConcurrencyStamp);
+    Guid ConcurrencyStamp,
+    RateSourceLevel? RateSource = null,
+    string? RateSourceLabel = null,
+    Guid? RateCardId = null,
+    int? RateCardVersion = null,
+    Guid? RateGroupId = null,
+    Guid? RateAssignmentId = null);
 
 public class MyEarningsQuery : PageQuery
 {

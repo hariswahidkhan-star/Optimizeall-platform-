@@ -26,6 +26,8 @@ public static class RewardRuleSetFactory
             DailyCapPerParticipant = input.DailyCapPerParticipant,
             WeeklyCapPerParticipant = input.WeeklyCapPerParticipant,
             CampaignCapPerParticipant = input.CampaignCapPerParticipant,
+            PersonalRatesMode = input.PersonalRatesMode,
+            PersonalRateMaxMultiplier = input.PersonalRatesMode == PersonalRatesMode.CampaignRatesOnly ? null : input.PersonalRateMaxMultiplier,
             EffectiveFrom = nowUtc,
             CreatedAt = nowUtc,
             CreatedByUserId = createdBy,
@@ -60,6 +62,7 @@ public static class RewardRuleSetFactory
             DailyCapPerParticipant = source.DailyCapPerParticipant,
             WeeklyCapPerParticipant = source.WeeklyCapPerParticipant,
             CampaignCapPerParticipant = source.CampaignCapPerParticipant,
+            PersonalRatesMode = source.PersonalRatesMode, PersonalRateMaxMultiplier = source.PersonalRateMaxMultiplier,
             EffectiveFrom = nowUtc, CreatedAt = nowUtc, CreatedByUserId = createdBy, ChangeReason = reason,
         };
         foreach (var r in source.Rules)
@@ -86,6 +89,7 @@ public static class RewardRuleSetFactory
     public static object Snapshot(RewardRuleSet s) => new
     {
         s.Version, s.Currency, s.DailyCapPerParticipant, s.WeeklyCapPerParticipant, s.CampaignCapPerParticipant,
+        PersonalRatesMode = s.PersonalRatesMode.ToString(), s.PersonalRateMaxMultiplier,
         Summary = RewardEngine.Summarize(s),
         Rules = s.Rules.Select(r => new { r.Type, r.Amount, r.Platform, r.CountryCode, r.Tier, r.ValidFrom, r.ValidTo, r.ApprovalMode, r.Priority, r.Label }),
     };
@@ -133,7 +137,8 @@ public sealed class RewardRulesService(
     public static RewardRuleSetDto ToDto(RewardRuleSet s, int inUse, UserRefDto? createdBy, bool isCurrent) => new(
         s.Id, s.Version, s.Currency, s.DailyCapPerParticipant, s.WeeklyCapPerParticipant, s.CampaignCapPerParticipant,
         s.EffectiveFrom, s.CreatedAt, createdBy, s.ChangeReason, RewardEngine.Summarize(s), isCurrent, inUse,
-        s.Rules.OrderBy(r => r.Type).ThenBy(r => r.Id).Select(RewardRuleDto.From).ToList());
+        s.Rules.OrderBy(r => r.Type).ThenBy(r => r.Id).Select(RewardRuleDto.From).ToList(),
+        s.PersonalRatesMode, s.PersonalRateMaxMultiplier);
 
     public async Task<RewardRuleSetDto> CreateVersionAsync(Guid campaignId, CreateRewardRuleSetRequest request, CancellationToken ct)
     {

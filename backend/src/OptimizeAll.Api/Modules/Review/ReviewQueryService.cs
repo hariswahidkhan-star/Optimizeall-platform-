@@ -122,7 +122,8 @@ public sealed class ReviewQueryService(
         try
         {
             var priced = await quotes.QuoteSubmissionAsync(s, null, ct);
-            quote = RewardQuoteDto.From(priced.Quote, priced.RuleSet.Id, priced.RuleSet.Version);
+            quote = RewardQuoteDto.From(priced.Quote, priced.RuleSet.Id, priced.RuleSet.Version, priced.Rate,
+                currentUser.HasPermission(Permissions.RatesView));
         }
         catch (DomainException)
         {

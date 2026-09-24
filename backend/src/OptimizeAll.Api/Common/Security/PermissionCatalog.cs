@@ -55,6 +55,9 @@ public static class PermissionCatalog
         new(Permissions.CampaignsPublish, Campaigns, "Publish campaigns", "Publish, pause and close campaigns."),
         new(Permissions.RewardsEdit, Campaigns, "Edit reward rules", "Change reward rates, bonuses and caps (creates a new rule version).", Sensitive: true),
         new(Permissions.RewardsApproveBonus, Campaigns, "Approve bonuses", "Approve or decline quality and referral bonuses."),
+        new(Permissions.RatesView, Campaigns, "View person-level rates", "See rate cards, rate groups, assignments and each person's effective rates (commercial terms)."),
+        new(Permissions.RatesManage, Campaigns, "Manage rate cards", "Create, version, archive and approve rate cards, rate groups and negotiated custom rates.", Sensitive: true),
+        new(Permissions.RatesAssign, Campaigns, "Assign rates", "Assign rate cards to people and groups and manage group members (bulk, CSV).", Sensitive: true),
 
         new(Permissions.SubmissionsReview, Review, "Review submissions", "Claim and decide participant submissions."),
         new(Permissions.SubmissionsReverse, Review, "Reverse submissions", "Reverse approved submissions and their earnings."),

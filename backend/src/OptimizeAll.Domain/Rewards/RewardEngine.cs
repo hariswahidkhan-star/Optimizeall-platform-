@@ -24,7 +24,26 @@ public sealed record RewardContext
 
     /// <summary>Discretionary quality bonus a reviewer proposes; null or 0 = none.</summary>
     public decimal? QualityBonusRequested { get; init; }
+
+    /// <summary>
+    /// The person-level rate resolved for this post (already converted to the rule set currency), or null when none
+    /// applies. Resolved outside the engine (see PersonalRateResolver) so the engine stays pure.
+    /// </summary>
+    public PersonalRateInput? PersonalRate { get; init; }
 }
+
+/// <summary>
+/// A person-level post rate in the rule set currency. <see cref="SourceId"/> identifies the rate card line; caps are
+/// the card's per-participant caps (converted) and apply in addition to the campaign's.
+/// </summary>
+public sealed record PersonalRateInput(
+    decimal Amount,
+    Guid SourceId,
+    string Label,
+    bool StackCampaignBonuses = true,
+    decimal? DailyCap = null,
+    decimal? WeeklyCap = null,
+    decimal? CampaignCap = null);
 
 /// <summary>One priced component of a reward. <see cref="Amount"/> is after caps; <see cref="UncappedAmount"/> before.</summary>
 public sealed record RewardLine(
@@ -33,14 +52,28 @@ public sealed record RewardLine(
     decimal Amount,
     decimal UncappedAmount,
     bool RequiresApproval,
-    string Label);
+    string Label,
+    bool FromPersonalRate = false);
+
+/// <summary>
+/// How the post rate was chosen: the campaign rule that would apply, and whether a person-level rate replaced it
+/// (<see cref="PersonalIgnoredReason"/> says why a supplied personal rate was not used).
+/// </summary>
+public sealed record RewardPostRate(
+    decimal CampaignAmount,
+    Guid CampaignRuleId,
+    bool PersonalApplied,
+    decimal? PersonalAmount,
+    bool PersonalLimited,
+    string? PersonalIgnoredReason);
 
 public sealed record RewardQuote(
     string Currency,
     IReadOnlyList<RewardLine> Lines,
     decimal Total,
     IReadOnlyList<string> AppliedCaps,
-    string RuleSetSummary);
+    string RuleSetSummary,
+    RewardPostRate? PostRate = null);
 
 /// <summary>Cap identifiers reported in <see cref="RewardQuote.AppliedCaps"/>.</summary>
 public static class RewardCaps
@@ -49,6 +82,12 @@ public static class RewardCaps
     public const string Weekly = "weekly_cap";
     public const string Campaign = "campaign_cap";
     public const string Budget = "campaign_budget";
+
+    /// <summary>The person-level rate was limited to the campaign's maximum multiplier.</summary>
+    public const string PersonalRateLimit = "personal_rate_limit";
+    public const string CardDaily = "rate_card_daily_cap";
+    public const string CardWeekly = "rate_card_weekly_cap";
+    public const string CardCampaign = "rate_card_campaign_cap";
 }
 
 /// <summary>
@@ -69,6 +108,8 @@ public static class RewardEngine
         CheckCap(ruleSet.DailyCapPerParticipant, "Daily cap", errors);
         CheckCap(ruleSet.WeeklyCapPerParticipant, "Weekly cap", errors);
         CheckCap(ruleSet.CampaignCapPerParticipant, "Campaign cap", errors);
+        if (ruleSet.PersonalRateMaxMultiplier is { } multiplier && (multiplier <= 0m || multiplier > 100m))
+            errors.Add("The maximum personal rate multiplier must be greater than 0 and at most 100.");
 
         var baseRates = ruleSet.Rules.Where(r => r.Type == RewardRuleType.BaseRate).ToList();
         if (baseRates.Count == 0)
@@ -138,23 +179,57 @@ public static class RewardEngine
         EnsureValid(ruleSet);
         var currency = Money.Normalize(ruleSet.Currency);
         var candidates = new List<(RewardRule Rule, EarningType Type, decimal Amount, string Label)>();
+        var applied = new List<string>();
 
-        // 1. Post rate: most specific matching override, else the base rate.
+        // 1. Post rate: most specific matching override, else the base rate — unless a person-level rate applies.
         var baseRate = ruleSet.Rules.Single(r => r.Type == RewardRuleType.BaseRate);
         var rateRule = SelectRateRule(ruleSet, context) ?? baseRate;
-        candidates.Add((rateRule, EarningType.PostReward, rateRule.Amount,
-            rateRule.Label ?? (ReferenceEquals(rateRule, baseRate) ? "Post reward" : DescribeOverride(rateRule))));
+        var personal = context.PersonalRate;
+        string? ignored = null;
+        if (personal is not null && ruleSet.PersonalRatesMode == PersonalRatesMode.CampaignRatesOnly)
+        {
+            ignored = "This campaign uses campaign rates only.";
+            personal = null;
+        }
+
+        RewardRule? personalRule = null;
+        var limited = false;
+        if (personal is not null)
+        {
+            var amount = Math.Max(personal.Amount, 0m);
+            // The campaign's ceiling on person-level rates, relative to the campaign rate the post would otherwise get.
+            if (ruleSet.PersonalRateMaxMultiplier is { } multiplier)
+            {
+                var ceiling = FloorToMinorUnit(rateRule.Amount * multiplier, currency);
+                if (amount > ceiling)
+                {
+                    amount = ceiling;
+                    limited = true;
+                    applied.Add(RewardCaps.PersonalRateLimit);
+                }
+            }
+            personalRule = new RewardRule { Id = personal.SourceId, Type = RewardRuleType.RateOverride, Amount = amount };
+            candidates.Add((personalRule, EarningType.PostReward, amount, personal.Label));
+        }
+        else
+        {
+            candidates.Add((rateRule, EarningType.PostReward, rateRule.Amount,
+                rateRule.Label ?? (ReferenceEquals(rateRule, baseRate) ? "Post reward" : DescribeOverride(rateRule))));
+        }
+
+        // A person-level rate may be configured not to stack the campaign's first-post and time-limited bonuses.
+        var stackBonuses = personal is null || personal.StackCampaignBonuses;
 
         // 2. Time-limited bonuses whose window contains the post time.
         foreach (var bonus in ruleSet.Rules
-                     .Where(r => r.Type == RewardRuleType.TimeLimitedBonus && ConditionsMatch(r, context) && WindowContains(r, context.PostedAtUtc))
+                     .Where(r => stackBonuses && r.Type == RewardRuleType.TimeLimitedBonus && ConditionsMatch(r, context) && WindowContains(r, context.PostedAtUtc))
                      .OrderBy(r => r.ValidFrom).ThenBy(r => r.Id))
         {
             candidates.Add((bonus, EarningType.TimeLimitedBonus, bonus.Amount, bonus.Label ?? "Time-limited bonus"));
         }
 
         // 3. First approved post in the campaign.
-        if (context.IsFirstApprovedPostInCampaign)
+        if (context.IsFirstApprovedPostInCampaign && stackBonuses)
         {
             var first = ruleSet.Rules.FirstOrDefault(r => r.Type == RewardRuleType.FirstPostBonus);
             if (first is not null)
@@ -179,10 +254,16 @@ public static class RewardEngine
             headrooms.Add((RewardCaps.Weekly, weekly - context.EarnedThisWeekInCampaign));
         if (ruleSet.CampaignCapPerParticipant is { } campaignCap)
             headrooms.Add((RewardCaps.Campaign, campaignCap - context.EarnedInCampaignTotal));
+        // Caps of the person's rate card apply on top of the campaign's (same per-participant campaign aggregates).
+        if (personal?.DailyCap is { } cardDaily)
+            headrooms.Add((RewardCaps.CardDaily, cardDaily - context.EarnedTodayInCampaign));
+        if (personal?.WeeklyCap is { } cardWeekly)
+            headrooms.Add((RewardCaps.CardWeekly, cardWeekly - context.EarnedThisWeekInCampaign));
+        if (personal?.CampaignCap is { } cardCampaign)
+            headrooms.Add((RewardCaps.CardCampaign, cardCampaign - context.EarnedInCampaignTotal));
         if (context.CampaignBudgetRemaining is { } budget)
             headrooms.Add((RewardCaps.Budget, budget));
 
-        var applied = new List<string>();
         var lines = new List<RewardLine>();
         foreach (var candidate in candidates)
         {
@@ -205,10 +286,13 @@ public static class RewardEngine
 
             if (amount <= 0m) continue;
             lines.Add(new RewardLine(candidate.Type, candidate.Rule.Id, amount, uncapped,
-                candidate.Rule.ApprovalMode == BonusApprovalMode.ManualApproval, candidate.Label));
+                candidate.Rule.ApprovalMode == BonusApprovalMode.ManualApproval, candidate.Label,
+                FromPersonalRate: ReferenceEquals(candidate.Rule, personalRule)));
         }
 
-        return new RewardQuote(currency, lines, lines.Sum(l => l.Amount), applied, Summarize(ruleSet));
+        var postRate = new RewardPostRate(Money.Round(rateRule.Amount, currency), rateRule.Id, personalRule is not null,
+            context.PersonalRate is null ? null : Money.Round(context.PersonalRate.Amount, currency), limited, ignored);
+        return new RewardQuote(currency, lines, lines.Sum(l => l.Amount), applied, Summarize(ruleSet), postRate);
     }
 
     /// <summary>Most specific matching rate override (ties: higher priority, higher amount, lower id), or null.</summary>
@@ -248,6 +332,8 @@ public static class RewardEngine
         if (ruleSet.DailyCapPerParticipant is { } d) parts.Add($"daily cap {Format(d, currency)}");
         if (ruleSet.WeeklyCapPerParticipant is { } w) parts.Add($"weekly cap {Format(w, currency)}");
         if (ruleSet.CampaignCapPerParticipant is { } c) parts.Add($"campaign cap {Format(c, currency)}");
+        if (ruleSet.PersonalRatesMode == PersonalRatesMode.CampaignRatesOnly) parts.Add("campaign rates only");
+        else if (ruleSet.PersonalRateMaxMultiplier is { } m) parts.Add($"personal rates ≤ {m.ToString("0.##", CultureInfo.InvariantCulture)}× campaign rate");
         return $"v{ruleSet.Version} {currency}: {string.Join("; ", parts)}";
     }
 

@@ -25,7 +25,8 @@ public sealed class LedgerRow
         Entry.Description, Campaign(), Entry.SubmissionId, Entry.Amount, Entry.Currency, Entry.ExchangeRate,
         Entry.ExchangeRateId, Entry.SettlementAmount, Entry.SettlementCurrency, Entry.RewardRuleSetVersion,
         Entry.AvailableAt, Entry.ApprovedAt, Entry.ApprovedByUserId, Entry.CreatedByUserId, Entry.PayoutItemId,
-        Entry.PaidAt, Entry.ReversedAt, Entry.ReversesEntryId, Entry.ReversedByEntryId, Entry.Reason, Entry.ConcurrencyStamp);
+        Entry.PaidAt, Entry.ReversedAt, Entry.ReversesEntryId, Entry.ReversedByEntryId, Entry.Reason, Entry.ConcurrencyStamp,
+        Entry.RateSource, Entry.RateSourceLabel, Entry.RateCardId, Entry.RateCardVersion, Entry.RateGroupId, Entry.RateAssignmentId);
 
     private CampaignRefDto? Campaign() =>
         Entry.CampaignId is { } id ? new CampaignRefDto(id, CampaignTitle ?? string.Empty) : null;

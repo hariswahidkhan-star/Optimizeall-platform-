@@ -36,6 +36,9 @@ public class Submission : AuditedEntity, IConcurrencyStamped
     public Guid SocialAccountId { get; set; }
     public SocialPlatform Platform { get; set; }
 
+    /// <summary>Content format (post, story, short/long video, carousel); null when unknown (e.g. older submissions).</summary>
+    public ContentFormat? Format { get; set; }
+
     public string PostUrl { get; set; } = string.Empty;
 
     /// <summary>

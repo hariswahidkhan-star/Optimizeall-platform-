@@ -19,6 +19,12 @@ public static class Permissions
     public const string RewardsEdit = "rewards.edit";
     /// <summary>Approve/decline bonuses that need separate approval (quality, referral).</summary>
     public const string RewardsApproveBonus = "rewards.approve_bonus";
+    /// <summary>Read person-level pricing: rate cards, rate groups, assignments and effective rates (commercial terms).</summary>
+    public const string RatesView = "rates.view";
+    /// <summary>Sensitive (money): create/version/archive rate cards and groups, negotiated custom rates, four-eyes approvals.</summary>
+    public const string RatesManage = "rates.manage";
+    /// <summary>Sensitive (money): assign rate cards to people/groups and manage group membership.</summary>
+    public const string RatesAssign = "rates.assign";
 
     // Review
     public const string SubmissionsReview = "submissions.review";
@@ -128,7 +134,7 @@ public static class RolePermissions
         {
             Permissions.CampaignsView, Permissions.CampaignsManage, Permissions.CampaignsPublish, Permissions.RewardsEdit,
             Permissions.RewardsApproveBonus, Permissions.MarketingManage, Permissions.AnalyticsView, Permissions.ReviewAssign,
-            Permissions.UsersView,
+            Permissions.UsersView, Permissions.RatesView, Permissions.RatesManage, Permissions.RatesAssign,
         },
         [Role.Finance] = new[]
         {
@@ -137,7 +143,7 @@ public static class RolePermissions
             Permissions.PayoutSettingsEdit, Permissions.RewardsApproveBonus, Permissions.SubmissionsReverse,
             Permissions.AnalyticsView, Permissions.UsersView, Permissions.AuditView,
             Permissions.BillingView, Permissions.BillingManage, Permissions.BillingSettings, Permissions.ClientsView,
-            Permissions.TimeViewAll,
+            Permissions.TimeViewAll, Permissions.RatesView,
         },
         [Role.Admin] = Permissions.All.Where(p => p != Permissions.ClientPortal && p != Permissions.ParticipantPortal)
             .Append(Permissions.ParticipantPortal).ToArray(),

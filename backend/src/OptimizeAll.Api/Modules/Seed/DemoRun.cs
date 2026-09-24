@@ -52,6 +52,7 @@ internal sealed partial class DemoRun
     private readonly DemoAuditLogger _audit;
     private readonly LedgerWriter _ledger;
     private readonly RewardQuoteService _quotes;
+    private readonly Rates.PersonalRateService _personalRates;
     private readonly SettingsService _settings;
     private readonly NotificationService _notifications;
     private readonly PayoutScheduleProvider _schedules;
@@ -83,6 +84,7 @@ internal sealed partial class DemoRun
         // The production ledger writer (conversion, rounding, hold periods, idempotency), driven by the simulated clock.
         _ledger = new LedgerWriter(db, _schedules, new ExchangeRateProvider(db), _audit, _clock);
         _quotes = new RewardQuoteService(db);
+        _personalRates = new Rates.PersonalRateService(db, new ExchangeRateProvider(db), _clock);
         _settings = new SettingsService(db, _clock);
         _notifications = new NotificationService(db, _clock);
     }
@@ -102,6 +104,7 @@ internal sealed partial class DemoRun
         await CreateExchangeRatesAsync(ct);
         await CreateParticipantsAsync(ct);
         await CreateCampaignsAsync(ct);
+        await CreateRatesAsync(ct);
         await CreateReferralsAsync(ct);
         await CreateExperimentsAsync(ct);
 
