@@ -28,6 +28,7 @@ import { ProposalDocumentView } from '@/features/agency/crm/components/ProposalD
 import { ProposalStatusBadge } from '@/features/agency/crm/lib';
 import { api } from '@/lib/api/client';
 import { isApiError } from '@/lib/api/errors';
+import { useClientOrg } from '../core/useClientOrg';
 import { InvoicePaymentsPanel } from './InvoicePaymentsPanel';
 import {
   type ClientProposalSummary,
@@ -42,15 +43,18 @@ import {
 } from './api';
 import '@/features/agency/billing/billing.css';
 
+function NoBillingAccess() {
+  return (
+    <Alert tone="info" title="Billing isn’t available to you">
+      Invoices, proposals and contracts are visible to people with the Billing or Owner role in your organization. Ask your
+      organization’s owner if you need access.
+    </Alert>
+  );
+}
+
 /** Friendly explanation when the member's duty doesn't include billing (API answers 403 client.insufficient_role). */
 function BillingError({ error, onRetry }: { error: unknown; onRetry: () => void }) {
-  if (isApiError(error) && error.status === 403)
-    return (
-      <Alert tone="info" title="Billing isn’t available to you">
-        Invoices, proposals and contracts are visible to people with the Billing or Owner role in your organization. Ask your
-        organization’s owner if you need access.
-      </Alert>
-    );
+  if (isApiError(error) && error.status === 403) return <NoBillingAccess />;
   return <ErrorState error={error} onRetry={onRetry} />;
 }
 
@@ -175,8 +179,31 @@ function StatementTab({ organizations }: { organizations: { clientAccountId: str
   );
 }
 
-/** Client portal billing home: balances, invoices, proposals to review, contracts and the statement of account. */
+/**
+ * Client portal billing home. Members whose duty in every organization is Viewer or Approver get the explanation straight
+ * away, without asking the billing API for data it would refuse (403) — the nav shows Billing to every client user.
+ */
 export function ClientBillingPage() {
+  const { orgs, isPending } = useClientOrg();
+  if (isPending)
+    return (
+      <>
+        <PageHeader title="Billing" />
+        <Skeleton height="8rem" />
+      </>
+    );
+  if (orgs.length > 0 && !orgs.some((o) => o.role === 'Billing' || o.role === 'Owner'))
+    return (
+      <>
+        <PageHeader title="Billing" />
+        <NoBillingAccess />
+      </>
+    );
+  return <ClientBillingHome />;
+}
+
+/** Balances, invoices, proposals to review, contracts and the statement of account. */
+function ClientBillingHome() {
   const summary = useClientBillingSummary();
   if (summary.isError) {
     return (

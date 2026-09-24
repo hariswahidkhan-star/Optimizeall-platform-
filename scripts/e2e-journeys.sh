@@ -16,7 +16,8 @@
 #   E2E_SUITE=journeys    Playwright suite (frontend/e2e/<suite>): "journeys" (participant → admin, Baseline seed),
 #                         "agency" (agency platform journeys against the Demo seed's accounts and clients) or
 #                         "platform" (test users, login-as, custom roles, payments hub, editing, Google sign-in off;
-#                         Demo seed)
+#                         Demo seed) or "crawl" (every role walks every page and the public website; Demo seed,
+#                         read-only)
 #   E2E_SEED              comma-separated seed profiles (default: Baseline for journeys, Baseline,Demo for agency and
 #                         platform)
 #   E2E_DB_PROVIDER=mysql mysql (default) or sqlite (a fresh file in $E2E_WORK_DIR; no MySQL server needed)
@@ -42,7 +43,7 @@ ADMIN_EMAIL="${E2E_ADMIN_EMAIL:-e2e-admin@optimizeall.test}"
 ADMIN_PASSWORD="${E2E_ADMIN_PASSWORD:-E2e-Admin#Journey-2026}"
 E2E_SUITE="${E2E_SUITE:-journeys}"
 case "$E2E_SUITE" in
-  agency|platform) E2E_SEED="${E2E_SEED:-Baseline,Demo}" ;;
+  agency|platform|crawl) E2E_SEED="${E2E_SEED:-Baseline,Demo}" ;;
   *) E2E_SEED="${E2E_SEED:-Baseline}" ;;
 esac
 E2E_DB_PROVIDER="$(printf '%s' "${E2E_DB_PROVIDER:-mysql}" | tr '[:upper:]' '[:lower:]')"

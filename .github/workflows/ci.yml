@@ -244,6 +244,17 @@ jobs:
           E2E_WORK_DIR: ${{ runner.temp }}/e2e-platform
         run: scripts/e2e-journeys.sh
 
+      # Every demo role walks every page of its portals (nav, sub-nav, tabs, first detail page, primary actions opened
+      # and cancelled) and the public website's header/footer links and sitemap: no console errors, failed API calls,
+      # error boundaries or pages without an h1. Read-only, on the Demo seed and SQLite.
+      - name: Crawl every page per role (scripts/e2e-journeys.sh, E2E_SUITE=crawl, SQLite)
+        env:
+          E2E_SUITE: crawl
+          E2E_DB_PROVIDER: sqlite
+          E2E_SKIP_BUILD: "1"
+          E2E_WORK_DIR: ${{ runner.temp }}/e2e-crawl
+        run: scripts/e2e-journeys.sh
+
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v4
@@ -267,6 +278,8 @@ jobs:
             ${{ runner.temp }}/e2e-agency/web.log
             ${{ runner.temp }}/e2e-platform/api.log
             ${{ runner.temp }}/e2e-platform/web.log
+            ${{ runner.temp }}/e2e-crawl/api.log
+            ${{ runner.temp }}/e2e-crawl/web.log
             ${{ runner.temp }}/web-smoke.log
           retention-days: 7
           if-no-files-found: ignore

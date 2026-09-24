@@ -227,5 +227,11 @@ npm run e2e          # Playwright smoke suite (desktop-chromium + mobile-chromiu
   every `/api/v1/**` call with `page.route` (`e2e/support/mockApi.ts`); `e2e/smoke/landing.spec.ts` covers the
   public `/join/:code` and `/c/:slug` pages. Full-stack journeys go in
   `e2e/journeys/*.spec.ts` and run with `E2E_SUITE=journeys E2E_BASE_URL=…`.
+* `E2E_SUITE=crawl` (run it with `E2E_SUITE=crawl E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`) signs in as every
+  demo role and visits every nav link, in-page sub-nav link and tab of its portals, the first detail page of each list
+  and each page's safe primary actions (opened, then cancelled — it never submits), then every public header/footer
+  link and sitemap URL. It fails on console/page errors, 4xx/5xx API calls, error boundaries, not-found pages, pages
+  without an h1 and actions that do nothing; `test-results/crawl/<role>.json` lists the pages, empty states and
+  actions it saw. Set `E2E_CRAWL_DEBUG=<file>` to log each page and its timing.
 * Playwright uses the preinstalled Chromium (`PLAYWRIGHT_BROWSERS_PATH`); `@playwright/test` is pinned to 1.56 to
   match it.

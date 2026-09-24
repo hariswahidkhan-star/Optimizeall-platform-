@@ -29,12 +29,20 @@ import { defineConfig, devices } from '@playwright/test';
  * off) runs the same way against the Demo seed with the non-production test sign-in on: desktop runs everything but
  * responsive.spec.ts, which the mobile project runs alone (390×844). Run it with
  * `E2E_SUITE=platform E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
+ *
+ * The crawl suite signs in as every demo role, visits every nav link of its portals (plus the first detail page of each
+ * list and each page's primary action, cancelled) and every public website link, and fails on console errors, failed API
+ * calls, error boundaries and pages without an h1. It never saves anything, so its roles run in parallel
+ * (E2E_CRAWL_WORKERS, default 2) on desktop only. Run it with `E2E_SUITE=crawl E2E_DB_PROVIDER=sqlite
+ * scripts/e2e-journeys.sh`; each role's visited pages, empty states and findings land in test-results/crawl/.
  */
 const suite = process.env.E2E_SUITE ?? 'smoke';
 /** Suites whose mobile project runs only responsive.spec.ts (and whose desktop project runs everything else). */
 const responsiveSplit = suite === 'agency' || suite === 'platform';
 /** Full-stack suites share one database and build on earlier steps: serial, one worker, no retries. */
 const journeys = suite === 'journeys' || responsiveSplit;
+/** The crawl is read-only: roles run in parallel, desktop only. */
+const crawl = suite === 'crawl';
 const mobileOnly = responsiveSplit ? /responsive\.spec\.ts$/ : /participant\.spec\.ts$/;
 const baseURL = process.env.E2E_BASE_URL || process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:5173';
 const suiteSetup = `./e2e/${suite}/global-setup.ts`;
@@ -46,11 +54,14 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: journeys ? 0 : process.env.CI ? 1 : 0,
   ...(journeys ? { workers: 1, timeout: 120_000, expect: { timeout: 15_000 } } : {}),
+  ...(crawl ? { workers: Number(process.env.E2E_CRAWL_WORKERS ?? 2), retries: 0, timeout: 10 * 60_000 } : {}),
   reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'list',
   globalSetup: existsSync(suiteSetup) ? suiteSetup : undefined,
   use: {
     baseURL,
     trace: 'retain-on-failure',
+    // The crawl presses buttons it does not know; a covered one must fail fast, not hang until the test times out.
+    ...(crawl ? { actionTimeout: 10_000, navigationTimeout: 20_000 } : {}),
     screenshot: 'only-on-failure',
   },
   projects: [
@@ -59,18 +70,23 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
       ...(responsiveSplit ? { testIgnore: mobileOnly } : {}),
     },
-    {
-      name: 'mobile-chromium',
-      use: { ...devices['Pixel 7'] },
-      ...(journeys ? { testMatch: mobileOnly } : {}),
-    },
+    ...(crawl
+      ? []
+      : [
+          {
+            name: 'mobile-chromium',
+            use: { ...devices['Pixel 7'] },
+            ...(journeys ? { testMatch: mobileOnly } : {}),
+          },
+        ]),
   ],
-  webServer: process.env.E2E_BASE_URL || process.env.PLAYWRIGHT_BASE_URL
-    ? undefined
-    : {
-        command: 'npm run build && npx vite preview --port 5173 --strictPort',
-        url: 'http://localhost:5173',
-        reuseExistingServer: !process.env.CI,
-        timeout: 180_000,
-      },
+  webServer:
+    process.env.E2E_BASE_URL || process.env.PLAYWRIGHT_BASE_URL
+      ? undefined
+      : {
+          command: 'npm run build && npx vite preview --port 5173 --strictPort',
+          url: 'http://localhost:5173',
+          reuseExistingServer: !process.env.CI,
+          timeout: 180_000,
+        },
 });
