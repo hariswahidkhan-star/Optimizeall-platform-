@@ -93,7 +93,11 @@ rule).
   `/lp/{clientSlug}/{pageSlug}` only ever serves the published version; drafts are never visible. The URL slug is part
   of the published snapshot too: renaming a published page in the draft keeps it live at its old address (and "View
   live"/`publicPath` keep pointing there) until the rename is published; meanwhile no other page of the client can
-  take either address (409 `landing.slug_taken`). The public page writes the page's title, description and Open Graph
+  take either address (409 `landing.slug_taken`). Publishing the rename records a permanent (301) redirect from the old
+  `/lp/{client}/{old}` address to the new one (Website → Redirects, see [WEBSITE.md](WEBSITE.md#marketer-guide));
+  another page published at the old address later takes it over (the redirect is removed). Saving a page, form or
+  template needs the `concurrencyStamp` from the last read: a stale or missing stamp is 409 `concurrency.conflict`,
+  like the website CMS. The public page writes the page's title, description and Open Graph
   image (absolute URL) as `og:*`/`twitter:card` tags; landing pages are never listed in the site's sitemap.
 * **Content safety:** blocks are strict typed JSON; text is rendered as text (React escaping, no
   `dangerouslySetInnerHTML`); HTML tags, `javascript:`/`data:` URLs and event handlers are rejected server-side;
@@ -114,8 +118,11 @@ Submission pipeline (`FormSubmissionService`):
    `allowedOrigins` (https, or http on localhost).
 2. **Honeypot** — the hidden `company_website` input (`hp`); bots that fill it get a normal-looking success and
    nothing is stored.
-3. **Minimum fill time** — the form definition carries a Data-Protection-signed render token; submissions faster
-   than `minFillSeconds` (default 3) or with an invalid/expired (24 h) token are rejected.
+3. **Minimum fill time, single use** — the form definition carries a Data-Protection-signed render token (form id,
+   render time, consent version, random id); submissions faster than `minFillSeconds` (default 3) or with an
+   invalid/expired (24 h) token are rejected. A successful submission spends the token (SHA-256 of its id in
+   `website_used_form_tokens`, unique, saved in the submission's transaction), so a replay or a concurrent duplicate
+   gets 409 `forms.already_submitted`; honeypot hits, validation errors and rate-limited attempts do not spend it.
 4. **Rate limit** — per hashed IP: 5 per form and 20 overall per 10 minutes (plus the `Public` rate-limit policy).
 5. **CAPTCHA (optional)** — hCaptcha or Cloudflare Turnstile, keys from the `hcaptcha` / `turnstile` integration of
    the client; verification fails closed.

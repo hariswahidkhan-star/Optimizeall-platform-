@@ -238,6 +238,15 @@ public sealed class ImpersonationTests(ApiFactory api) : IClassFixture<ApiFactor
         // Everyday content work stays possible (and is audited as the impersonator).
         (await Impersonating.SendAsync(admin, HttpMethod.Post, "/api/v1/agency/website/testimonials", token,
             new { quote = "Great team.", authorName = "Ivy", isPublished = false, isFeatured = false, sortOrder = 0 })).EnsureSuccessStatusCode();
+
+        // Redirects decide where every visitor of a public address ends up: readable, but not changeable while impersonated.
+        (await Impersonating.SendAsync(admin, HttpMethod.Get, "/api/v1/agency/website/redirects", token)).EnsureSuccessStatusCode();
+        await (await Impersonating.SendAsync(admin, HttpMethod.Post, "/api/v1/agency/website/redirects", token,
+            new { fromPath = "/old-campaign", toPath = "/contact" })).ShouldFailAsync(403, "auth.impersonation_forbidden_action");
+        var redirect = await (await admin.PostAsJsonAsync("/api/v1/agency/website/redirects",
+            new { fromPath = "/old-campaign-" + Guid.NewGuid().ToString("N")[..6], toPath = "/contact" })).ReadJsonAsync();
+        await (await Impersonating.SendAsync(admin, HttpMethod.Delete, $"/api/v1/agency/website/redirects/{redirect.GetProperty("id").GetGuid()}", token))
+            .ShouldFailAsync(403, "auth.impersonation_forbidden_action");
     }
 
     [Fact]

@@ -174,11 +174,8 @@ public sealed class FormsController(
     public async Task<FormDetailDto> Update(Guid id, UpdateFormRequest request, CancellationToken ct)
     {
         var form = await LoadAsync(id, ct, tracked: true);
-        if (request.ConcurrencyStamp is { } stamp)
-        {
-            if (stamp != form.ConcurrencyStamp) throw DomainException.Conflict("concurrency.conflict", "This form was changed by someone else. Reload and try again.");
-            db.Entry(form).Property(f => f.ConcurrencyStamp).OriginalValue = stamp;
-        }
+        // Like the website CMS, a missing stamp is treated as stale (409), never as "skip the check".
+        LandingStamps.Expect(db, form, request.ConcurrencyStamp, "form");
         var before = Snapshot(form);
         await forms.ApplyAsync(form, new FormInput
         {

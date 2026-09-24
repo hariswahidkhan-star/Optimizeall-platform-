@@ -55,6 +55,8 @@ Contents: [Public site](#public-site) · [Public forms](#public-forms) · [SEO f
 | `GET /api/v1/public/blog/{slug}` | Post with sanitized `bodyMarkdown`, author, related posts, `seo`, `jsonLd` (BlogPosting + BreadcrumbList). |
 | `GET /api/v1/public/blog/rss.xml` | RSS 2.0 feed of the 30 latest posts (`application/rss+xml`). |
 | `GET /api/v1/public/careers` · `/careers/{slug}` | Open jobs / job detail with requirements, benefits, optional salary range and JobPosting JSON-LD. |
+| `GET /api/v1/public/redirects?path=/old-page` | Where a moved public address lives now: `{ location, statusCode: 301 }` (other query parameters of `path` carried over), else 404 `website.redirect_not_found`. The web app asks this when a public page is not found and navigates client-side. |
+| `GET\|HEAD /api/v1/public/redirects/gate` | For the web server (not the app): the request target in `X-Original-URI` → `301` + `Location` when moved, else an empty `404` (serve the app shell). nginx and the Vite dev/preview server ask it before serving the shell. `tracking` rate-limit policy. |
 
 Example (`GET /public/services/seo`, trimmed):
 
@@ -153,7 +155,7 @@ Base path `/api/v1/agency/website`.
 |---|---|
 | `GET /pages` · `GET /pages/{id}` | Summaries / full page. |
 | `POST /pages` · `PUT /pages/{id}` | `{ slug?, title, summary?, kind: Standard \| Legal, blocks: [{ type, data }], seo, isPublished, sortOrder }`. Reserved slugs (routes the web app owns, e.g. `services`, `blog`, `careers`) are rejected. |
-| `DELETE /pages/{id}` | |
+| `DELETE /pages/{id}` | Deletes the page and its versions (audited `website.page_deleted`). No reason is required. |
 | `POST /pages/preview` | Validates and normalizes `blocks` without saving (the editor's live preview uses the same renderer as the site). |
 
 Block types (`type` → `data`), all validated server-side (links, images, lengths, at most 40 blocks):
@@ -164,6 +166,21 @@ button) · `logos` (title, items[name, imageUrl, url]) · `gallery` (images[url,
 
 Legal pages (privacy policy, terms, cookie policy, accessibility, refund policy) are seeded as templates marked for
 review by counsel; the web app shows their `updatedAt`.
+
+Renaming the slug of live content (pages, posts, services, service lines, case studies, industries — and publishing
+a renamed landing page) records a 301 redirect from the old address in the same transaction; see
+[Redirects](#redirects-sitemanage).
+
+## Redirects (`site.manage`)
+
+| Method & path | Notes |
+|---|---|
+| `GET /redirects?search=&source=Automatic\|Manual&page=&pageSize=` | `{ items: [{ id, fromPath, toPath, source, contentType?, contentId?, createdAt, updatedAt }], total, page, pageSize }`, newest first. |
+| `POST /redirects` | `{ fromPath, toPath }` — same-site paths (`/old-page`, `/services?category=old-line`). Normalized (lower case, no trailing slash). `400 website.invalid_redirect` (built-in page, portal/API path, not a same-site path), `409 website.redirect_exists`, `409 website.redirect_source_live` (the address shows published content), `409 website.redirect_loop`. A target that is itself redirected is replaced by its final address; redirects to `fromPath` are re-pointed at the target. Denied while impersonating. |
+| `DELETE /redirects/{id}` | `204`. Denied while impersonating. |
+
+Every change is audited (`website.redirect_created`, `website.redirect_updated` when a chain is collapsed,
+`website.redirect_removed` when live content claims the address again, `website.redirect_deleted`).
 
 ## Site settings (`site.manage`)
 
@@ -252,4 +269,6 @@ Published through `IEventPublisher` after the transaction commits (types in `Dom
 `website.booking_disabled` (400) · `website.booking_not_active` (409) · `website.blackout_exists` (409) ·
 `website.newsletter_invalid_token` (400) · `blog.invalid`, `blog.incomplete` (400) · `blog.invalid_transition` (409) ·
 `blog.publish_required` (403) · `careers.invalid` (400) · `careers.job_has_applications` (409) ·
-`concurrency.conflict` (409) · `auth.forbidden` (403).
+`concurrency.conflict` (409) · `auth.forbidden` (403) · `website.redirect_not_found` (404) ·
+`website.invalid_redirect` (400) · `website.redirect_exists`, `website.redirect_source_live`, `website.redirect_loop`,
+`website.redirects_busy` (409).

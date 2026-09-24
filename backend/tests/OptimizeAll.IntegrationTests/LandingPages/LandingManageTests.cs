@@ -160,7 +160,7 @@ public sealed class LandingManageTests(LandingPagesFixture fx) : IClassFixture<L
         await (await admin.PutAsJsonAsync("/api/v1/agency/pages/admin/form-templates/contact", new
         {
             name = "Contact", description = "d", schema = new { steps = new[] { new { id = "s1", fields = new[] { new { key = "Bad Key!", type = "nope", label = "x" } } } } },
-            submitLabel = "Send", successMessage = "Thanks",
+            submitLabel = "Send", successMessage = "Thanks", concurrencyStamp = contact.GetProperty("concurrencyStamp").GetGuid(),
         })).ShouldFailAsync(400);
         var updated = await (await admin.PutAsJsonAsync("/api/v1/agency/pages/admin/form-templates/contact", new
         {

@@ -8,6 +8,7 @@ using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Events;
 using OptimizeAll.Domain.LandingPages;
 using OptimizeAll.Domain.Notifications;
+using OptimizeAll.Domain.Website;
 using OptimizeAll.Infrastructure.Persistence;
 
 namespace OptimizeAll.Api.Modules.LandingPages;
@@ -45,10 +46,10 @@ public static class FormLinks
 }
 
 /// <summary>
-/// Public form submission pipeline: origin allow-list, honeypot, signed minimum-fill-time token, per-IP rate limit,
-/// optional CAPTCHA, schema validation with conditional logic, file checks, landing-page attribution, then one write
-/// transaction (submission, files, staff notifications, autoresponder outbox). After commit the submission is claimed
-/// with a conditional update and <see cref="FormSubmitted"/> is published exactly once.
+/// Public form submission pipeline: origin allow-list, honeypot, signed minimum-fill-time token (single use), per-IP rate
+/// limit, optional CAPTCHA, schema validation with conditional logic, file checks, landing-page attribution, then one
+/// write transaction (submission, files, staff notifications, autoresponder outbox, the spent token). After commit the
+/// submission is claimed with a conditional update and <see cref="FormSubmitted"/> is published exactly once.
 /// </summary>
 public sealed class FormSubmissionService(
     AppDbContext db, IDatabaseDialect dialect, IPrivacyHasher hasher, FormRenderTokens tokens, CaptchaVerifier captcha,
@@ -103,6 +104,9 @@ public sealed class FormSubmissionService(
                        ?? throw new DomainException("forms.token_invalid", "This form has expired. Reload the page and try again.");
         if (rendered.ElapsedSeconds < form.MinFillSeconds)
             throw new DomainException("forms.too_fast", "That was quick! Please take a moment to review your answers and submit again.");
+        // Single use: a replayed (or double-clicked) submission is refused before any other work. The unique token hash
+        // saved with the submission is the real guard against concurrent replays.
+        if (await db.Set<UsedFormToken>().AnyAsync(t => t.TokenHash == rendered.TokenHash, ct)) throw AlreadySubmitted();
 
         var ipHash = hasher.Hash(context.IpAddress);
         // Cheap early check (spares the CAPTCHA call); the authoritative check is repeated under the lock below.
@@ -162,6 +166,7 @@ public sealed class FormSubmissionService(
                 }
                 await EnforceRateLimitAsync(formId, ipHash, ct);
             }
+            if (await db.Set<UsedFormToken>().AnyAsync(t => t.TokenHash == rendered.TokenHash, ct)) throw AlreadySubmitted();
             await using var tx = await dialect.BeginWriteTransactionAsync(db, ct);
             db.Add(submission);
             foreach (var file in result.Files)
@@ -179,7 +184,18 @@ public sealed class FormSubmissionService(
                 });
             }
             await StageFollowUpsAsync(form, submission, values, ct);
-            await db.SaveChangesAsync(ct);
+            // Spent with the submission (same transaction): failed validations, rate limits and honeypots never spend a token.
+            var spent = new UsedFormToken { TokenHash = rendered.TokenHash, UsedAt = Now, ExpiresAt = rendered.ExpiresAt };
+            db.Add(spent);
+            try
+            {
+                await db.SaveChangesAsync(ct);
+            }
+            catch (DbUpdateException ex) when (dialect.IsUniqueViolation(ex))
+            {
+                // Another request spent the same token between the check above and this insert.
+                throw AlreadySubmitted();
+            }
             await tx.CommitAsync(ct);
         }
         catch
@@ -196,6 +212,9 @@ public sealed class FormSubmissionService(
         await PublishOnceAsync(submission.Id, ct);
         return accepted with { SubmissionId = submission.Id };
     }
+
+    public static DomainException AlreadySubmitted() => DomainException.Conflict("forms.already_submitted",
+        "This form has already been sent. Reload the page if you'd like to send another response.");
 
     private async Task EnforceRateLimitAsync(Guid formId, string? ipHash, CancellationToken ct)
     {

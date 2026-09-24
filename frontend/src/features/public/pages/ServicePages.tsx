@@ -7,6 +7,7 @@ import { FaqList } from '../site/Blocks';
 import { useSiteCopy } from '../site/copy';
 import { CaseStudyCard, CtaBand, PackageCard, PageHero, PublicQueryState, Section, ServiceCard, TestimonialCarousel } from '../site/components';
 import { headFromSeo, useDocumentHead } from '../site/head';
+import { RedirectIfMoved } from '../site/redirects';
 import { SiteIcon } from '../site/icons';
 import { Markdown } from '../site/Markdown';
 
@@ -18,9 +19,12 @@ export function ServicesPage() {
   const copy = useSiteCopy();
   useDocumentHead({ title: copy.text('services.seo.title'), description: copy.text('services.seo.description') });
   const groups = (data ?? []).filter((g) => !active || g.slug === active);
+  // A service line that was renamed: follow its redirect to the new filter.
+  const unknownCategory = !!active && !!data && !data.some((g) => g.slug === active);
 
   return (
     <>
+      <RedirectIfMoved when={unknownCategory} />
       <PageHero
         eyebrow={copy.text('services.hero.eyebrow')}
         title={copy.text('services.hero.title')}

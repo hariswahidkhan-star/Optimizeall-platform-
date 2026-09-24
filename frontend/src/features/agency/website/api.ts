@@ -175,6 +175,19 @@ export interface TeamMember {
   concurrencyStamp: string;
 }
 
+/** A 301 redirect of an old public address (`/agency/website/redirects`). */
+export interface SiteRedirect {
+  id: string;
+  fromPath: string;
+  toPath: string;
+  source: 'Automatic' | 'Manual';
+  /** What moved, for automatic redirects: page, post, service, service-line, case-study, industry, landing-page. */
+  contentType: string | null;
+  contentId: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface SitePageSummary {
   id: string;
   slug: string;

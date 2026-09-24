@@ -294,11 +294,20 @@ public sealed class LandingPagesApiTests(LandingPagesFixture fx) : IClassFixture
         await fx.Host.Services.GetRequiredService<JobRunner>().RunAsync<FormEmailDispatchJob>();
         Assert.Equal(OutboxEmailStatus.Sent, await fx.WithDbAsync(db => db.Set<FormEmailOutbox>().Where(o => o.Id == outbox.Id).Select(o => o.Status).SingleAsync()));
 
-        // Per-IP rate limit (5 per form per 10 minutes).
+        // Render tokens are single use: sending the accepted submission again is refused.
+        await (await visitor.PostAsJsonAsync(submitPath, Submission(valid))).ShouldFailAsync(409, "forms.already_submitted");
+
+        // Per-IP rate limit (5 per form per 10 minutes), each submission with a freshly rendered form.
+        async Task<string> FreshTokenAsync() =>
+            (await (await visitor.GetAsync($"/api/v1/public/forms/{created.FormId}")).ReadJsonAsync()).GetProperty("token").GetString()!;
+        var fresh = new List<string>();
+        for (var i = 0; i < 6; i++) fresh.Add(await FreshTokenAsync());
+        fx.Api.Clock.Advance(TimeSpan.FromSeconds(5));
         for (var i = 0; i < 4; i++)
-            Assert.Equal(HttpStatusCode.Created, (await visitor.PostAsJsonAsync(submitPath, Submission(valid))).StatusCode);
-        await (await visitor.PostAsJsonAsync(submitPath, Submission(valid))).ShouldFailAsync(429, "forms.rate_limited");
-        Assert.Equal(HttpStatusCode.Created, (await fx.Anonymous(ip: "198.51.100.21").PostAsJsonAsync(submitPath, Submission(valid))).StatusCode);
+            Assert.Equal(HttpStatusCode.Created, (await visitor.PostAsJsonAsync(submitPath, Submission(valid, tok: fresh[i]))).StatusCode);
+        await (await visitor.PostAsJsonAsync(submitPath, Submission(valid, tok: fresh[4]))).ShouldFailAsync(429, "forms.rate_limited");
+        // The rate-limited token was not spent: it still works from another network.
+        Assert.Equal(HttpStatusCode.Created, (await fx.Anonymous(ip: "198.51.100.21").PostAsJsonAsync(submitPath, Submission(valid, tok: fresh[4]))).StatusCode);
 
         // Staff see the submission, can export it, and the client portal counts the lead for its own organization only.
         var list = await (await staff.GetAsync($"/api/v1/agency/pages/forms/{created.FormId}/submissions")).ReadJsonAsync();
@@ -417,7 +426,11 @@ public sealed class LandingPagesApiTests(LandingPagesFixture fx) : IClassFixture
         Assert.Equal(HttpStatusCode.Created, (await Embedded("https://www.client-site.example").PostAsJsonAsync($"/api/v1/public/forms/{formId}/submissions", body)).StatusCode);
         var sameSite = fx.Anonymous(ip: "198.51.100.62");
         sameSite.DefaultRequestHeaders.Add("Origin", "http://app.test");
-        Assert.Equal(HttpStatusCode.Created, (await sameSite.PostAsJsonAsync($"/api/v1/public/forms/{formId}/submissions", body)).StatusCode);
+        // A second submission needs a freshly rendered form (render tokens are single use).
+        var rendered = await (await sameSite.GetAsync($"/api/v1/public/forms/{formId}")).ReadJsonAsync();
+        fx.Api.Clock.Advance(TimeSpan.FromSeconds(10));
+        Assert.Equal(HttpStatusCode.Created, (await sameSite.PostAsJsonAsync($"/api/v1/public/forms/{formId}/submissions",
+            body with { token = rendered.GetProperty("token").GetString() })).StatusCode);
         var stored = await fx.WithDbAsync(db => db.Set<FormSubmission>().Where(s => s.FormId == formId).Select(s => s.EmbedOrigin).ToListAsync());
         Assert.Contains("https://www.client-site.example", stored);
 
@@ -439,11 +452,14 @@ public sealed class LandingPagesApiTests(LandingPagesFixture fx) : IClassFixture
         (await staff.PutAsync($"/api/v1/agency/pages/forms/{formId}", JsonBody(update))).EnsureSuccessStatusCode();
 
         var visitor = fx.Anonymous(ip: "198.51.100.77");
-        var token = (await (await visitor.GetAsync($"/api/v1/public/forms/{formId}")).ReadJsonAsync()).GetProperty("token").GetString();
+        // One rendered form per submission (render tokens are single use).
+        var tokens = new List<string>();
+        for (var i = 0; i < 12; i++)
+            tokens.Add((await (await visitor.GetAsync($"/api/v1/public/forms/{formId}")).ReadJsonAsync()).GetProperty("token").GetString()!);
         var path = $"/api/v1/public/forms/{formId}/submissions";
-        var body = new { token, values = new { name = "Burst", email = "burst@example.com", topic = "support", message = "Hello there", consent = "on" } };
+        object Body(string token) => new { token, values = new { name = "Burst", email = "burst@example.com", topic = "support", message = "Hello there", consent = "on" } };
 
-        var responses = await Task.WhenAll(Enumerable.Range(0, 12).Select(_ => visitor.PostAsJsonAsync(path, body)));
+        var responses = await Task.WhenAll(tokens.Select(t => visitor.PostAsJsonAsync(path, Body(t))));
 
         Assert.Equal(FormSubmissionService.MaxPerFormPerIp, responses.Count(r => r.StatusCode == HttpStatusCode.Created));
         Assert.All(responses.Where(r => r.StatusCode != HttpStatusCode.Created), r => Assert.Equal(HttpStatusCode.TooManyRequests, r.StatusCode));

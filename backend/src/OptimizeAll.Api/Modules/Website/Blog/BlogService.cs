@@ -7,6 +7,7 @@ using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Api.Common.Jobs;
 using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Api.Modules.Website.Public;
+using OptimizeAll.Api.Modules.Website.Redirects;
 using OptimizeAll.Api.Modules.Website.Shared;
 using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Website;
@@ -16,9 +17,10 @@ namespace OptimizeAll.Api.Modules.Website.Blog;
 
 /// <summary>
 /// Blog editorial workflow. <c>blog.write</c> drafts, edits drafts/in-review posts and submits them for review;
-/// <c>blog.publish</c> publishes, schedules, unpublishes, returns posts to draft and edits live posts. Audited.
+/// <c>blog.publish</c> publishes, schedules, unpublishes, returns posts to draft and edits live posts. Audited. Renaming a
+/// live post redirects its old address to the new one (<see cref="RedirectService"/>).
 /// </summary>
-public sealed class BlogService(CmsStore store, IAuditLogger audit, WebsiteRules rules, ICurrentUser user, TimeProvider clock)
+public sealed class BlogService(CmsStore store, IAuditLogger audit, WebsiteRules rules, ICurrentUser user, TimeProvider clock, RedirectService redirects)
 {
     private AppDbContext Db => store.Db;
 
@@ -149,10 +151,11 @@ public sealed class BlogService(CmsStore store, IAuditLogger audit, WebsiteRules
         // Editing what readers see (or will see at a scheduled time) is publishing.
         if (p.Status is BlogPostStatus.Published or BlogPostStatus.Scheduled or BlogPostStatus.Archived) RequirePublish();
         var before = Snapshot(p);
+        var wasAt = LiveAddress(p);
         await ApplyAsync(p, input, ct);
         await store.EnsureSlugFreeAsync<BlogPost>(p.Slug, p.Id, ct);
         audit.Record("blog.post_updated", nameof(BlogPost), p.Id, before, Snapshot(p));
-        await store.SaveAsync(ct);
+        await redirects.SaveAsync(Address(p, wasAt), () => store.SaveAsync(ct), ct);
         return ToDto(p);
     }
 
@@ -224,9 +227,10 @@ public sealed class BlogService(CmsStore store, IAuditLogger audit, WebsiteRules
         var p = await store.FindAsync<BlogPost>(id, ct);
         CmsStore.CheckStamp(Db, p, input.ConcurrencyStamp);
         var before = new { p.Status, p.PublishAt, p.PublishedAt };
+        var wasAt = LiveAddress(p);
         change(p);
         audit.Record(action, nameof(BlogPost), p.Id, before, new { p.Status, p.PublishAt, p.PublishedAt }, WebsiteRules.Clean(input.Note));
-        await Db.SaveChangesAsync(ct);
+        await redirects.SaveAsync(Address(p, wasAt), () => Db.SaveChangesAsync(ct), ct);
         return ToDto(p);
     }
 
@@ -240,6 +244,12 @@ public sealed class BlogService(CmsStore store, IAuditLogger audit, WebsiteRules
             e.Add("coverImageAlt", "Describe the cover image for screen-reader users before publishing.");
         e.ThrowIfAny("blog.incomplete", "This post isn't ready to publish yet.");
     }
+
+    /// <summary>/blog/{slug} while the post is published (and its publish time has passed).</summary>
+    private string? LiveAddress(BlogPost p) =>
+        p.Status == BlogPostStatus.Published && p.PublishedAt <= clock.GetUtcNow().UtcDateTime ? RedirectPaths.PostPath(p.Slug) : null;
+
+    private AddressChange Address(BlogPost p, string? wasAt) => new(RedirectPaths.Post, p.Id, wasAt, LiveAddress(p));
 
     private static DomainException InvalidTransition(string message) => DomainException.Conflict("blog.invalid_transition", message);
 

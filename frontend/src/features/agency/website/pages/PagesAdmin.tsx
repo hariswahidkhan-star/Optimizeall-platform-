@@ -8,6 +8,8 @@ import type { PageBlock } from '@/features/public/site/api';
 import { Blocks } from '@/features/public/site/Blocks';
 import { api } from '@/lib/api/client';
 import { errorMessage, isApiError } from '@/lib/api/errors';
+import { Permissions } from '@/lib/auth/permissions';
+import { useAuth } from '@/lib/auth/useAuth';
 import { formatDate } from '@/lib/format/dates';
 import { type SitePage, type SitePageRevision, type SitePageRevisionSummary, type SitePageSummary, W } from '../api';
 import { AreaField, EMPTY_SEO, type Errors, ImageField, ListEditor, MarkdownField, SelectField, SeoFields, SwitchField, TextField, toErrors } from '../shared/fields';
@@ -293,9 +295,39 @@ function PageHistory({
   );
 }
 
+/** Confirms and deletes a CMS page (site.manage; audited). The API needs no reason; the page's history goes with it. */
+function DeletePageDialog({ page, onClose, onDeleted }: { page: { id: string; title: string; slug: string; isPublished: boolean } | null; onClose: () => void; onDeleted: () => void | Promise<void> }) {
+  const toast = useToast();
+  const client = useQueryClient();
+  return (
+    <ConfirmDialog
+      open={!!page}
+      onClose={onClose}
+      title={`Delete “${page?.title ?? ''}”?`}
+      description={
+        page?.isPublished
+          ? `The page and its version history are removed, and /${page.slug} stops working for visitors. This can't be undone — unpublish it instead to keep a copy.`
+          : "The page and its version history are removed. This can't be undone."
+      }
+      confirmLabel="Delete page"
+      tone="danger"
+      onConfirm={async () => {
+        await api.delete(`${W}/pages/${page!.id}`);
+        toast.success('Page deleted', page!.title);
+        // The page's own queries are left to expire: removing them while the editor is still mounted (navigation
+        // is a transition) would refetch the deleted page.
+        await onDeleted();
+        await client.invalidateQueries({ queryKey: ['agency', 'website', 'pages'] });
+      }}
+    />
+  );
+}
+
 /** List of CMS pages. */
 export function PagesAdminPage() {
   const query = useQuery({ queryKey: ['agency', 'website', 'pages'], queryFn: () => api.get<SitePageSummary[]>(`${W}/pages`) });
+  const canManage = useAuth().hasPermission(Permissions.SiteManage);
+  const [deleting, setDeleting] = useState<SitePageSummary | null>(null);
   return (
     <div className="cms-page">
       <PageHeader
@@ -331,8 +363,11 @@ export function PagesAdminPage() {
             { id: 'version', header: 'Version', cell: (r) => (r.version > 0 ? `v${r.version}` : '—'), hideOnMobile: true },
             { id: 'updated', header: 'Updated', cell: (r) => formatDate(r.updatedAt), hideOnMobile: true },
           ]}
+          rowActions={canManage ? (r) => [{ id: 'delete', label: 'Delete page…', danger: true, onSelect: () => setDeleting(r) }] : undefined}
+          emptyState={<p className="text-muted">No pages yet.</p>}
         />
       )}
+      <DeletePageDialog page={deleting} onClose={() => setDeleting(null)} onDeleted={() => setDeleting(null)} />
     </div>
   );
 }
@@ -352,6 +387,8 @@ export function PageEditorPage() {
   const [newType, setNewType] = useState('richText');
   const [note, setNote] = useState('');
   const [preview, setPreview] = useState<SitePageRevision | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const canManage = useAuth().hasPermission(Permissions.SiteManage);
   const current: PageDraft | null =
     draft ??
     (isNew
@@ -408,12 +445,26 @@ export function PageEditorPage() {
         title={isNew ? 'New page' : `Edit “${current.title}”`}
         breadcrumbs={[{ label: 'Pages', to: '..' }, { label: isNew ? 'New page' : current.title }]}
         actions={
-          !isNew && current.isPublished ? (
-            <a className="ui-button ui-button--secondary ui-button--md" href={`/${current.slug}`} target="_blank" rel="noopener noreferrer">
-              <ExternalLink aria-hidden="true" width={16} height={16} /> View page<span className="visually-hidden"> (opens in a new tab)</span>
-            </a>
+          !isNew ? (
+            <>
+              {current.isPublished && (
+                <a className="ui-button ui-button--secondary ui-button--md" href={`/${current.slug}`} target="_blank" rel="noopener noreferrer">
+                  <ExternalLink aria-hidden="true" width={16} height={16} /> View page<span className="visually-hidden"> (opens in a new tab)</span>
+                </a>
+              )}
+              {canManage && detail.data && (
+                <Button variant="ghost" leadingIcon={<Trash2 />} onClick={() => setDeleting(true)}>
+                  Delete page
+                </Button>
+              )}
+            </>
           ) : undefined
         }
+      />
+      <DeletePageDialog
+        page={deleting && detail.data ? detail.data : null}
+        onClose={() => setDeleting(false)}
+        onDeleted={() => navigate('..', { replace: true, relative: 'path' })}
       />
       <div className="cms-editor cms-editor--split">
         <form className="cms-form" onSubmit={submit} noValidate aria-label="Page editor">
