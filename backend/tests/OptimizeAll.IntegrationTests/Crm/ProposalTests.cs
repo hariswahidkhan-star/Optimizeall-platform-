@@ -232,6 +232,25 @@ public sealed class ProposalTests(ApiFactory api) : IClassFixture<ApiFactory>
     }
 
     [Fact]
+    public async Task Opening_the_public_proposal_scores_a_proposal_view_once_for_the_contact()
+    {
+        var (sales, deal) = await DealAsync();
+        var created = await (await sales.PostAsJsonAsync("/api/v1/agency/proposals", ProposalBody(deal.GetGuid("id")))).ReadJsonAsync();
+        var (_, token) = await SendAsync(sales, created);
+        var contactId = created.GetGuid("contactId");
+        var anonymous = api.CreateClient();
+
+        await anonymous.GetAsync($"/api/v1/public/proposals/{token}");
+        await anonymous.GetAsync($"/api/v1/public/proposals/{token}"); // a second view of the same proposal adds nothing
+
+        var views = await api.WithDbAsync(db => db.Set<CrmEngagement>().AsNoTracking()
+            .CountAsync(e => e.ContactId == contactId && e.Type == "proposal_viewed"));
+        Assert.Equal(1, views);
+        var contact = await (await sales.GetAsync($"/api/v1/agency/crm/contacts/{contactId}")).ReadJsonAsync();
+        Assert.Contains(contact.GetProperty("scoreBreakdown").EnumerateArray(), l => l.ToString().Contains("Proposal viewed"));
+    }
+
+    [Fact]
     public async Task Signer_ip_is_stored_only_as_a_keyed_hash()
     {
         var (sales, deal) = await DealAsync();

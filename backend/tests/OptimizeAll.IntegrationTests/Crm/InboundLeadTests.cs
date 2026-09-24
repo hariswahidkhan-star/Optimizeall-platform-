@@ -69,6 +69,25 @@ public sealed class InboundLeadTests(ApiFactory api) : IClassFixture<ApiFactory>
     }
 
     [Fact]
+    public async Task A_booked_consultation_and_a_confirmed_newsletter_signup_count_as_engagement()
+    {
+        await api.CreateUserAsync(new[] { Role.SalesRep });
+        var email = $"booker.{Guid.NewGuid():N}@acme-inbound.example";
+        var booking = Inquiry(email, type: "Consultation");
+
+        await api.PublishAsync(booking);
+        await api.PublishAsync(booking); // duplicate delivery
+        await api.PublishAsync(new NewsletterSubscribed(Guid.NewGuid(), email.ToUpperInvariant(), api.UtcNow()));
+
+        var types = await api.WithDbAsync(async db =>
+        {
+            var contactId = await db.Set<CrmContact>().Where(c => c.NormalizedEmail == email.ToUpperInvariant()).Select(c => c.Id).SingleAsync();
+            return await db.Set<CrmEngagement>().AsNoTracking().Where(e => e.ContactId == contactId).Select(e => e.Type).ToListAsync();
+        });
+        Assert.Equal(new[] { "meeting_booked", "newsletter_subscribed", "website_inquiry" }, types.Order().ToArray());
+    }
+
+    [Fact]
     public async Task Leads_are_assigned_round_robin_to_sales_reps_and_account_managers()
     {
         var rep = await api.CreateUserAsync(new[] { Role.SalesRep });

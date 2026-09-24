@@ -22,7 +22,9 @@ public static class CrmModule
 
         services.AddScoped<IEventHandler<WebsiteInquiryReceived>, WebsiteInquiryLeadHandler>();
         services.AddScoped<IEventHandler<FormSubmitted>, FormSubmittedLeadHandler>();
-        services.AddScoped<IEventHandler<ContactEngagementRecorded>, ContactEngagementHandler>();
+        services.AddScoped<ContactEngagementHandler>();
+        services.AddScoped<IEventHandler<ContactEngagementRecorded>>(sp => sp.GetRequiredService<ContactEngagementHandler>());
+        services.AddScoped<IEventHandler<NewsletterSubscribed>, NewsletterEngagementHandler>();
 
         services.AddRecurringJob<CrmTaskReminderJob>(TimeSpan.FromMinutes(5));
         services.AddScoped<ISeeder, CrmBaselineSeeder>();

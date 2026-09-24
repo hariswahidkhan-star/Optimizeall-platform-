@@ -257,13 +257,30 @@ public sealed class InboundLeadService(
         string.IsNullOrWhiteSpace(slug) ? null : char.ToUpperInvariant(slug.Trim()[0]) + slug.Trim()[1..].Replace('-', ' ').Replace('_', ' ');
 }
 
-/// <summary>Website contact / audit / quote / consultation forms → CRM lead.</summary>
-public sealed class WebsiteInquiryLeadHandler(InboundLeadService inbound) : IEventHandler<WebsiteInquiryReceived>
+/// <summary>
+/// Website contact / audit / quote / consultation forms → CRM lead. A consultation booking also counts as a booked
+/// meeting for lead scoring (the "Meeting booked" engagement rule), once per booking.
+/// </summary>
+public sealed class WebsiteInquiryLeadHandler(InboundLeadService inbound, LeadScoringService scoring) : IEventHandler<WebsiteInquiryReceived>
 {
-    public Task HandleAsync(WebsiteInquiryReceived e, CancellationToken ct) =>
-        inbound.ProcessAsync(new InboundLead($"inquiry:{e.InquiryId}", DealSource.WebsiteInquiry, e.InquiryType, e.Name, e.Email, e.Phone,
-            e.Company, e.Website, e.Message, e.ServiceSlugs, e.BudgetRange, e.UtmSource, e.UtmMedium, e.UtmCampaign, "website_inquiry",
+    public const string ConsultationType = "Consultation";
+
+    public async Task HandleAsync(WebsiteInquiryReceived e, CancellationToken ct)
+    {
+        var result = await inbound.ProcessAsync(new InboundLead($"inquiry:{e.InquiryId}", DealSource.WebsiteInquiry, e.InquiryType, e.Name, e.Email,
+            e.Phone, e.Company, e.Website, e.Message, e.ServiceSlugs, e.BudgetRange, e.UtmSource, e.UtmMedium, e.UtmCampaign, "website_inquiry",
             e.OccurredAt), ct);
+        if (e.InquiryType == ConsultationType && result?.ContactId is { } contactId &&
+            await scoring.RecordEngagementAsync(contactId, "meeting_booked", $"meeting_booked:inquiry:{e.InquiryId}", e.OccurredAt, ct))
+            await scoring.RecomputeAsync(contactId, ct);
+    }
+}
+
+/// <summary>A confirmed (double opt-in) newsletter signup counts as engagement for a contact with that email.</summary>
+public sealed class NewsletterEngagementHandler(ContactEngagementHandler engagement) : IEventHandler<NewsletterSubscribed>
+{
+    public Task HandleAsync(NewsletterSubscribed e, CancellationToken ct) =>
+        engagement.HandleAsync(new ContactEngagementRecorded(e.Email, "newsletter_subscribed", $"newsletter:{e.SubscriberId}", e.OccurredAt), ct);
 }
 
 /// <summary>
