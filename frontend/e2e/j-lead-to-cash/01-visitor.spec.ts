@@ -200,11 +200,11 @@ test('the visitor subscribes to the newsletter and confirms from the email (doub
   const visitor = await anonymous();
   const errors = watchErrors(visitor);
 
-  await visitor.goto('/blog');
-  const signup = visitor.getByRole('form', { name: 'Newsletter signup' });
+  const token = await pageFormToken(visitor, () => visitor.goto('/blog'));
+  const signup = visitor.getByRole('form', { name: 'Newsletter signup', exact: true });
   await signup.getByLabel('Email address').fill(lead.email);
   await signup.getByRole('checkbox', { name: /^Send me Optimize All/ }).check();
-  await signup.getByRole('button', { name: 'Subscribe' }).click();
+  await submitWhenFilled(token, () => signup.getByRole('button', { name: 'Subscribe' }).click());
   await expect(visitor.getByText('Almost there! Check your inbox and click the link to confirm your subscription.')).toBeVisible();
 
   const mail = await latestMail(lead.email, /Confirm your Optimize All newsletter subscription/);
@@ -217,11 +217,9 @@ test('the visitor subscribes to the newsletter and confirms from the email (doub
   const confirm = visitor.getByRole('button', { name: 'Confirm subscription' });
   await expect(confirm).toBeVisible();
   await confirm.dblclick(); // a double click confirms once
-  await expect(visitor.getByRole('heading', { name: 'You’re subscribed' })).toBeVisible();
+  await expect(visitor.getByRole('heading', { name: "You're subscribed" })).toBeVisible();
 
   // Subscribing again never reveals that the address is already on the list.
-  const token = await formToken();
-  await waitMinFill(token);
   const again = await postPublic('/public/newsletter/subscribe', {
     email: lead.email,
     source: 'footer',

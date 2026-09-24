@@ -1,4 +1,4 @@
-import { act, screen, waitFor, within } from '@testing-library/react';
+import { act, fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { ReactElement } from 'react';
 import { Outlet } from 'react-router-dom';
@@ -339,5 +339,22 @@ describe('Newsletter email links', () => {
     const posts = calls.filter((c) => c.method === 'POST' && c.path.includes('/newsletter/'));
     expect(posts).toHaveLength(1);
     expect(posts[0].body).toEqual({ token: 'tok-1' });
+  });
+
+  it('confirms once on a double click (the single-use token must not be sent twice and show an error)', async () => {
+    let confirms = 0;
+    const { calls } = mockFetch({
+      'POST /public/newsletter/confirm': () =>
+        ++confirms === 1
+          ? json(200, { status: 'confirmed', message: "You're subscribed. Thanks for joining!" })
+          : json(400, { code: 'website.newsletter_invalid_token', title: 'This confirmation link is invalid or has expired.' }),
+    });
+    renderWithApp(<NewsletterConfirmPage />, { route: '/newsletter/confirm?token=tok-2', path: '/newsletter/confirm', withAuth: false });
+    const confirm = await screen.findByRole('button', { name: 'Confirm subscription' });
+    // Two clicks in the same frame, before React re-renders the button as busy (what a real double click does).
+    fireEvent.click(confirm);
+    fireEvent.click(confirm);
+    expect(await screen.findByRole('heading', { name: "You're subscribed" })).toBeInTheDocument();
+    expect(calls.filter((c) => c.method === 'POST' && c.path === '/public/newsletter/confirm')).toHaveLength(1);
   });
 });

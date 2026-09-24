@@ -55,14 +55,14 @@ test('the inquiry reaches staff: notification, assignment and status', async ({ 
   await stale.goto(inquiryUrl);
   await expect(stale.getByRole('heading', { level: 1, name: `${lead.name} — ${lead.company}` })).toBeVisible();
 
-  await admin.getByLabel('Status').selectOption({ label: 'In progress' });
+  await admin.getByLabel('Status').selectOption('InProgress');
   await admin.getByLabel('Assigned to').selectOption({ label: accounts.sales.displayName });
   await admin.getByLabel('Internal notes').fill('Hot lead — spring launch, booked a call.');
   await admin.getByRole('button', { name: 'Save', exact: true }).click();
   await expect(toast(admin, 'Inquiry updated')).toBeVisible();
 
   staleErrors.ignore(/HTTP 409 PUT .*\/agency\/website\/inquiries\//);
-  await stale.getByLabel('Status').selectOption({ label: 'Closed' });
+  await stale.getByLabel('Status').selectOption('Closed');
   await stale.getByRole('button', { name: 'Save', exact: true }).click();
   await expect(toast(stale, 'Someone else updated this inquiry. Reload the page to see their changes.')).toBeVisible();
   await stale.reload();
@@ -71,8 +71,11 @@ test('the inquiry reaches staff: notification, assignment and status', async ({ 
 
   // The inbox filters by assignee.
   await admin.goto('/agency/website/inquiries');
+  const filtered = admin.waitForResponse((r) => new URL(r.url()).pathname.endsWith('/agency/website/inquiries') && new URL(r.url()).searchParams.has('assignedTo') && r.ok());
   await admin.getByRole('combobox', { name: 'Assigned to' }).selectOption({ label: accounts.sales.displayName });
-  await expect(admin.getByRole('table', { name: 'Website inquiries' }).getByRole('link', { name: `${lead.name} — ${lead.company}` })).toBeVisible();
+  await filtered;
+  // Of this lead's four inquiries, only the assigned one is listed.
+  await expect(admin.getByRole('table', { name: 'Website inquiries' }).getByRole('link', { name: `${lead.name} — ${lead.company}` })).toHaveCount(1);
 
   errors.expectClean('the inquiry handling');
   staleErrors.expectClean('the stale inquiry tab');
@@ -100,11 +103,11 @@ test('the sales rep works the CRM lead: contact, company, score, pipeline and a 
   await expect(scoreHeading).toBeVisible();
   const score = Number((await scoreHeading.textContent())!.replace(/\D/g, ''));
   // Four website inquiries (capped at 3 × 20) plus the booked consultation (25).
-  const breakdown = scoreHeading.locator('xpath=ancestor::*[contains(@class,"ui-card")][1]');
-  await expect(breakdown.getByText('Website inquiry')).toBeVisible();
-  await expect(breakdown.getByText('Meeting booked')).toBeVisible();
+  const breakdown = sales.getByRole('listitem');
+  await expect(breakdown.filter({ hasText: 'Website inquiry' }).filter({ hasText: '+60' })).toBeVisible();
+  await expect(breakdown.filter({ hasText: 'Meeting booked' }).filter({ hasText: '+25' })).toBeVisible();
   expect(score).toBeGreaterThanOrEqual(85);
-  await expect(sales.getByRole('main').getByRole('link', { name: lead.company })).toBeVisible();
+  await expect(sales.getByRole('main').getByRole('link', { name: lead.company, exact: true })).toBeVisible();
 
   // ---------------------------------------------------------------- the deal: pipeline moves and a task
   await sales.goto('/agency/crm/deals');
@@ -112,26 +115,26 @@ test('the sales rep works the CRM lead: contact, company, score, pipeline and a 
   await dealLink.click();
   await expect(sales).toHaveURL(/\/agency\/crm\/deals\/[0-9a-f-]{36}$/);
   const dealUrl = sales.url();
-  await expect(sales.getByText(/New \(5%\)/)).toBeVisible();
+  await expect(sales.getByText(/ · New \(5%\)$/)).toBeVisible();
   const stage = sales.getByLabel('Move to stage');
   await stage.selectOption({ label: 'Qualified (25%)' });
   await expect(toast(sales, 'Stage updated')).toBeVisible();
-  await expect(sales.getByText(/Qualified \(25%\)/).first()).toBeVisible();
+  await expect(sales.getByText(/ · Qualified \(25%\)$/)).toBeVisible();
   await stage.selectOption({ label: 'Discovery call (40%)' });
-  await expect(sales.getByText(/Discovery call \(40%\)/).first()).toBeVisible();
+  await expect(sales.getByText(/ · Discovery call \(40%\)$/)).toBeVisible();
 
   const log = sales.getByRole('form', { name: 'Log activity' });
   await log.getByLabel('Type').selectOption({ label: 'Task' });
-  await log.getByLabel('Subject').fill(`Send proposal to ${lead.firstName}`);
+  await log.getByLabel('Subject').fill(`Send proposal to ${lead.name}`);
   await log.getByLabel('Due').fill(`${isoDate(1)}T10:00`);
   await log.getByRole('button', { name: 'Add task' }).click();
   await expect(toast(sales, 'Task added')).toBeVisible();
-  await expect(sales.getByRole('list', { name: 'Activity timeline' }).getByText(`Send proposal to ${lead.firstName}`)).toBeVisible();
+  await expect(sales.getByRole('list', { name: 'Activity timeline' }).getByText(`Send proposal to ${lead.name}`, { exact: true })).toBeVisible();
   // The inquiry itself is on the deal's timeline.
   await expect(sales.getByRole('list', { name: 'Activity timeline' }).getByText(/received$/).first()).toBeVisible();
 
   await sales.goto('/agency/crm/tasks');
-  await expect(sales.getByText(`Send proposal to ${lead.firstName}`)).toBeVisible();
+  await expect(sales.getByText(`Send proposal to ${lead.name}`, { exact: true })).toBeVisible();
 
   errors.expectClean('the CRM work');
   remember({ dealUrl });

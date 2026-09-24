@@ -83,7 +83,7 @@ test('the prospect opens and accepts the proposal; the client account and owner 
   await expect(sales.getByRole('link', { name: 'Open first invoice' })).toHaveCount(0);
   const contractUrl = new URL((await sales.getByRole('link', { name: 'Contract 1' }).getAttribute('href'))!, 'http://x').pathname;
   await sales.goto(recall('dealUrl'));
-  await expect(sales.getByText(/Won \(100%\)/).first()).toBeVisible();
+  await expect(sales.getByText(/ · Won \(100%\)$/)).toBeVisible();
 
   // The signer was invited as the new client's Owner: set a password from the email and sign in.
   const invite = await latestMail(lead.email, /password/i);
