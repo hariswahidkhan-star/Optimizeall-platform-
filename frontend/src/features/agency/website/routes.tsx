@@ -11,6 +11,7 @@ import {
   Package,
   Settings2,
   Trophy,
+  Type,
   UsersRound,
 } from 'lucide-react';
 import type { ComponentType } from 'react';
@@ -60,6 +61,7 @@ export const nav: PortalNavItem[] = [
   { to: 'website/careers', label: 'Careers', icon: Briefcase, description: 'Job openings and applications.', requires: requires.careers },
   { to: 'website/bookings', label: 'Consultations', icon: CalendarClock, description: 'Booked consultations and availability.', requires: requires.site },
   { to: 'website/newsletter', label: 'Newsletter', icon: Mail, description: 'Double opt-in subscribers.', requires: requires.site },
+  { to: 'website/copy', label: 'Page texts', icon: Type, description: 'Headlines, introductions and buttons of the built-in pages.', requires: requires.site },
   { to: 'website/settings', label: 'Site settings', icon: Settings2, description: 'Navigation, footer, SEO defaults and analytics.', requires: requires.site },
 ];
 
@@ -79,6 +81,7 @@ export const routes: RouteObject[] = [
   page('website/careers', () => import('./pages/CareersAdmin'), 'CareersAdminPage', requires.careers),
   page('website/bookings', leads, 'BookingsPage', requires.site),
   page('website/newsletter', leads, 'SubscribersPage', requires.site),
+  page('website/copy', () => import('./pages/CopyAdmin'), 'SiteCopyPage', requires.site),
   page('website/settings', () => import('./pages/SettingsAdmin'), 'SiteSettingsPage', requires.site),
 ];
 

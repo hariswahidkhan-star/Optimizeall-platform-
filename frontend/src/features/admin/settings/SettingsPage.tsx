@@ -118,6 +118,7 @@ function SettingCard({ setting }: { setting: Setting }) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [pending, setPending] = useState<SettingValue | undefined>(undefined);
+  const [resetting, setResetting] = useState(false);
 
   const serialized = JSON.stringify(setting.value);
   useEffect(() => {
@@ -364,8 +365,33 @@ function SettingCard({ setting }: { setting: Setting }) {
           >
             Discard changes
           </Button>
+          {!setting.isDefault && (
+            <Button variant="ghost" disabled={save.isPending} onClick={() => setResetting(true)}>
+              Restore default…
+            </Button>
+          )}
         </CardFooter>
       </form>
+      <ConfirmDialog
+        open={resetting}
+        onClose={() => setResetting(false)}
+        tone="danger"
+        title={`Restore the default for ${meta?.label ?? setting.key}?`}
+        description="The saved value is removed and the built-in default applies immediately for everyone."
+        confirmLabel="Restore default"
+        requireReason
+        onConfirm={async ({ reason }) => {
+          try {
+            const updated = await api.post<Setting>(`/admin/settings/${encodeURIComponent(setting.key)}/reset`, { reason, confirm: true });
+            queryClient.setQueryData<Setting[]>(settingsQueryKey, (list) => list?.map((s) => (s.key === updated.key ? updated : s)));
+            toast.success('Default restored', `${meta?.label ?? setting.key} is now ${formatValue(updated, updated.value)}.`);
+          } catch (error) {
+            throw toDisplayError(error);
+          }
+        }}
+      >
+        <KeyChange from={formatValue(setting, setting.value)} to={formatValue(setting, setting.defaultValue)} />
+      </ConfirmDialog>
       <ConfirmDialog
         open={pending !== undefined}
         onClose={() => setPending(undefined)}

@@ -61,9 +61,24 @@ canonical URL or *noindex*.
 
 **Leads.** Contact, audit, quote and booking submissions land in **Website inquiries** with their UTM source,
 referrer and landing page, and CRM receives each one as a lead (`WebsiteInquiryReceived`). Set the status and notes,
-or export CSV. **Consultations** holds the weekly availability, slot length, minimum notice, blackout days and the
-booking list (cancel, reschedule, mark completed or no-show). **Newsletter** lists double opt-in subscribers; only
-confirmed ones are exported for sending, and every email must carry the unsubscribe link.
+assign it to a teammate, filter by assignee, mark it closed, erase it (spam or a data-erasure request) or export CSV.
+**Consultations** holds the weekly availability, slot length, minimum notice, blackout days and the booking list (cancel, reschedule, mark completed or no-show). **Newsletter** lists double opt-in subscribers; only
+confirmed ones are exported for sending, and every email must carry the unsubscribe link. Staff can unsubscribe an
+address on request or erase it entirely. Job applications can be erased with their notes and CV. The wording of the
+newsletter-confirmation and consultation emails is edited in Admin → Content → Email templates.
+
+**Page texts.** Every headline, introduction, button label, checklist and SEO title of the built-in pages (home,
+services, pricing, industries, case studies, blog, team, careers, the contact/audit/quote/booking forms, the creators
+page, the footer newsletter and the cookie banner) is edited under **Page texts**, grouped by page. Lists take one item
+per line; steps, rules and FAQ teasers take `Title | Text` per line. *Reset to default* restores the original wording.
+See [DYNAMIC_CONTENT.md](DYNAMIC_CONTENT.md).
+
+**Page history and scheduling.** Every save of a page is kept as a version (with an optional change note). Preview an
+old version in the editor and restore it as a new version — handy for legal pages. A published page can get a
+*Go live at* time; it stays hidden (and out of the sitemap) until then.
+
+**Ordering.** Service lines, services, industries, case studies, testimonials, team members and blog categories have a
+*Reorder* button: drag rows, or use the keyboard (Space to pick up, arrow keys to move, Space to drop).
 
 **Site settings.** Navigation, footer, contact and social, announcement bar, SEO defaults (site URL, title template,
 default description and image), the organization details used in structured data, analytics ids, home stats and

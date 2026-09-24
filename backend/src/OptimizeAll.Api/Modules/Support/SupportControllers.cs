@@ -31,6 +31,10 @@ public sealed class MySupportTicketsController(SupportService support, ICurrentU
 
     [HttpPost("{id:guid}/close")]
     public Task<ParticipantTicketDto> Close(Guid id, CancellationToken ct) => support.CloseAsParticipantAsync(currentUser.Id, id, ct);
+
+    /// <summary>Reopens a resolved or closed ticket (within 30 days of it being closed).</summary>
+    [HttpPost("{id:guid}/reopen")]
+    public Task<ParticipantTicketDto> Reopen(Guid id, CancellationToken ct) => support.ReopenAsParticipantAsync(currentUser.Id, id, ct);
 }
 
 [ApiController]

@@ -78,7 +78,30 @@ function useMarkRead() {
   });
 }
 
-function NotificationRow({ n, onRead }: { n: NotificationItem; onRead: (id: string) => void }) {
+/** Marks a read notification unread again, so it stays on the "Unread" list as a reminder. */
+function useMarkUnread() {
+  const client = useQueryClient();
+  const toast = useToast();
+  return useMutation({
+    mutationFn: (id: string) => api.post(`/me/notifications/${id}/unread`),
+    onError: (error) => toast.error('Couldn’t mark as unread', errorMessage(error)),
+    onSettled: () => {
+      void client.invalidateQueries({ queryKey: qk.notifications });
+      void client.invalidateQueries({ queryKey: qk.unreadCount });
+      void client.invalidateQueries({ queryKey: qk.home });
+    },
+  });
+}
+
+function NotificationRow({
+  n,
+  onRead,
+  onUnread,
+}: {
+  n: NotificationItem;
+  onRead: (id: string) => void;
+  onUnread: (id: string) => void;
+}) {
   const link = n.linkUrl;
   return (
     <li className="pp-list__item pp-notification" data-unread={!n.isRead}>
@@ -108,6 +131,11 @@ function NotificationRow({ n, onRead }: { n: NotificationItem; onRead: (id: stri
           Mark read
         </Button>
       )}
+      {n.isRead && (
+        <Button size="sm" variant="ghost" onClick={() => onUnread(n.id)} aria-label={`Mark “${n.title}” as unread`}>
+          Mark unread
+        </Button>
+      )}
     </li>
   );
 }
@@ -119,6 +147,7 @@ export function NotificationsPage() {
   const list = useNotifications({ unreadOnly, page, pageSize: PAGE_SIZE });
   const unread = useUnreadCount();
   const markRead = useMarkRead();
+  const markUnread = useMarkUnread();
   const unreadCount = unread.data?.count ?? 0;
 
   return (
@@ -189,7 +218,7 @@ export function NotificationsPage() {
               <Card>
                 <ul className="pp-list" aria-label="Notifications">
                   {data.items.map((n) => (
-                    <NotificationRow key={n.id} n={n} onRead={(id) => markRead.mutate(id)} />
+                    <NotificationRow key={n.id} n={n} onRead={(id) => markRead.mutate(id)} onUnread={(id) => markUnread.mutate(id)} />
                   ))}
                 </ul>
               </Card>

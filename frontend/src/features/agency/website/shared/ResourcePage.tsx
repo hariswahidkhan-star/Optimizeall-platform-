@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ExternalLink, Pencil, Plus, Trash2 } from 'lucide-react';
+import { ArrowUpDown, ExternalLink, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useState, type FormEvent, type ReactNode } from 'react';
 import { Alert, Button, ConfirmDialog, DataTable, type DataTableColumn, Drawer, ErrorState, PageHeader, useToast } from '@/components/ui';
+import { ReorderList } from '@/features/admin/shared/ReorderList';
 import { errorMessage, isApiError } from '@/lib/api/errors';
 import { type Errors, toErrors } from './fields';
 import '../website.css';
@@ -30,6 +31,8 @@ export interface ResourcePageProps<Row, Detail, Draft> {
   Form: (props: ResourceFormProps<Draft>) => ReactNode;
   actions?: ReactNode;
   emptyText?: string;
+  /** Enables "Reorder" (drag and drop or keyboard): saves the ids in display order. */
+  reorder?: (ids: string[]) => Promise<unknown>;
 }
 
 /**
@@ -37,7 +40,7 @@ export interface ResourcePageProps<Row, Detail, Draft> {
  * on the fields, 409 conflicts explained), and delete with confirmation.
  */
 export function ResourcePage<Row, Detail = Row, Draft = unknown>(props: ResourcePageProps<Row, Detail, Draft>) {
-  const { title, description, singular, queryKey, list, columns, getId, rowLabel, load, toDraft, save, remove, publicUrl, Form, actions, emptyText } = props;
+  const { title, description, singular, queryKey, list, columns, getId, rowLabel, load, toDraft, save, remove, publicUrl, Form, actions, emptyText, reorder } = props;
   const toast = useToast();
   const client = useQueryClient();
   const query = useQuery({ queryKey, queryFn: list });
@@ -45,6 +48,15 @@ export function ResourcePage<Row, Detail = Row, Draft = unknown>(props: Resource
   const [errors, setErrors] = useState<Errors>({});
   const [deleting, setDeleting] = useState<Row | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [reordering, setReordering] = useState(false);
+  const reorderMutation = useMutation({
+    mutationFn: (ids: string[]) => reorder!(ids),
+    onSuccess: async () => {
+      toast.success('Order saved', `${title} appear in the new order on the site.`);
+      await client.invalidateQueries({ queryKey });
+    },
+    onError: (e) => toast.error('Order not saved', errorMessage(e)),
+  });
 
   const open = async (row: Row | null) => {
     setErrors({});
@@ -113,6 +125,11 @@ export function ResourcePage<Row, Detail = Row, Draft = unknown>(props: Resource
         actions={
           <>
             {actions}
+            {reorder && (
+              <Button variant="secondary" leadingIcon={<ArrowUpDown />} aria-pressed={reordering} onClick={() => setReordering((v) => !v)}>
+                {reordering ? 'Done reordering' : 'Reorder'}
+              </Button>
+            )}
             <Button leadingIcon={<Plus />} onClick={() => void open(null)}>
               New {singular.toLowerCase()}
             </Button>
@@ -126,6 +143,16 @@ export function ResourcePage<Row, Detail = Row, Draft = unknown>(props: Resource
       )}
       {query.isError ? (
         <ErrorState error={query.error} onRetry={() => void query.refetch()} />
+      ) : reordering && reorder ? (
+        <ReorderList
+          items={query.data ?? []}
+          getId={getId}
+          getLabel={rowLabel}
+          renderItem={(row) => rowLabel(row)}
+          label={`${title} order`}
+          saving={reorderMutation.isPending}
+          onSave={(ids) => reorderMutation.mutateAsync(ids).catch(() => undefined)}
+        />
       ) : (
         <DataTable
           caption={title}

@@ -315,3 +315,10 @@ public sealed record CategoryDto(Guid Id, string Name, string Slug, string? Desc
 public sealed record AdminCategoryDto(Guid Id, string Name, string Slug, string? Description, string? Icon, int SortOrder, bool IsActive, int CampaignCount);
 
 public sealed record CategoryDeleteResultDto(bool Deleted, bool Deactivated, int CampaignCount);
+
+public sealed class ReorderCategoriesRequest
+{
+    /// <summary>Category ids in the desired display order.</summary>
+    [System.ComponentModel.DataAnnotations.Required, System.ComponentModel.DataAnnotations.MinLength(1), System.ComponentModel.DataAnnotations.MaxLength(200)]
+    public List<Guid> Ids { get; set; } = new();
+}

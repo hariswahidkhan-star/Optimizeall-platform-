@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { BRAND_TAGLINE, Logo } from '@/components/brand/Logo';
 import { isExternalHref, isInternalHref } from '@/lib/safeHref';
 import { type SiteLink, useSite } from './api';
+import { useSiteCopy } from './copy';
 import { NewsletterSignup } from './NewsletterSignup';
 
 const FALLBACK_COLUMNS: { title: string; links: SiteLink[] }[] = [
@@ -53,6 +54,7 @@ export function FooterLink({ link }: { link: SiteLink }) {
 /** CMS-driven footer: blurb, link columns, contact details, social profiles, newsletter and legal links. */
 export function SiteFooter({ onCookieSettings }: { onCookieSettings: () => void }) {
   const { data: site } = useSite();
+  const copy = useSiteCopy();
   const columns = site?.footer.columns.length ? site.footer.columns : FALLBACK_COLUMNS;
   const legal = site?.footer.legalLinks.length ? site.footer.legalLinks : FALLBACK_LEGAL;
   const contact = site?.contact;
@@ -128,14 +130,14 @@ export function SiteFooter({ onCookieSettings }: { onCookieSettings: () => void 
         </nav>
         <section className="site-footer__newsletter" aria-labelledby="footer-newsletter">
           <h2 id="footer-newsletter" className="public-footer__heading">
-            Marketing insights, twice a month
+            {copy.text('shared.footer.newsletterTitle')}
           </h2>
-          <p className="text-small text-muted">Practical playbooks from our strategists. No spam, unsubscribe any time.</p>
+          <p className="text-small text-muted">{copy.text('shared.footer.newsletterText')}</p>
           <NewsletterSignup source="footer" compact />
         </section>
       </div>
       <div className="container public-footer__legal site-footer__legal">
-        <p>© {year} Optimize All. Paid creator posts are always disclosed.</p>
+        <p>{copy.text('shared.footer.copyright', { year })}</p>
         <ul>
           {legal.map((link) => (
             <li key={link.url}>

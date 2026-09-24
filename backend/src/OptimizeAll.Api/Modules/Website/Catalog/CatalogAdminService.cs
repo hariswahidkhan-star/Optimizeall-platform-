@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Http;
+using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Api.Modules.Website.Pages;
 using OptimizeAll.Api.Modules.Website.Shared;
 using OptimizeAll.Domain.Common;
@@ -12,7 +13,8 @@ namespace OptimizeAll.Api.Modules.Website.Catalog;
 /// Staff CMS for service categories, services and packages, industries, case studies, testimonials, team members and
 /// pages (<c>site.manage</c>). Every change is validated server-side and audited.
 /// </summary>
-public sealed class CatalogAdminService(CmsStore store, IAuditLogger audit, WebsiteRules rules, PageBlockValidator blocks, TimeProvider clock)
+public sealed class CatalogAdminService(
+    CmsStore store, IAuditLogger audit, WebsiteRules rules, PageBlockValidator blocks, TimeProvider clock, ICurrentUser currentUser)
 {
     private Microsoft.EntityFrameworkCore.DbContext Db => store.Db;
 
@@ -462,6 +464,12 @@ public sealed class CatalogAdminService(CmsStore store, IAuditLogger audit, Webs
     public Task DeleteTestimonialAsync(Guid id, CancellationToken ct) =>
         store.DeleteAsync<Testimonial>(id, "website.testimonial_deleted", x => ToDto(x), ct);
 
+    public async Task<ReorderResult> ReorderIndustriesAsync(ReorderInput input, CancellationToken ct) =>
+        new(await store.ReorderAsync<Industry>(input.Ids, "website.industries_reordered", (x, o) => x.SortOrder = o, ct));
+
+    public async Task<ReorderResult> ReorderCaseStudiesAsync(ReorderInput input, CancellationToken ct) =>
+        new(await store.ReorderAsync<CaseStudy>(input.Ids, "website.case_studies_reordered", (x, o) => x.SortOrder = o, ct));
+
     public async Task<ReorderResult> ReorderTestimonialsAsync(ReorderInput input, CancellationToken ct) =>
         new(await store.ReorderAsync<Testimonial>(input.Ids, "website.testimonials_reordered", (t, o) => t.SortOrder = o, ct));
 
@@ -561,7 +569,8 @@ public sealed class CatalogAdminService(CmsStore store, IAuditLogger audit, Webs
     public async Task<IReadOnlyList<SitePageSummaryDto>> ListPagesAsync(CancellationToken ct)
     {
         var pages = await Db.Set<SitePage>().AsNoTracking().OrderBy(p => p.Kind).ThenBy(p => p.SortOrder).ThenBy(p => p.Title).ToListAsync(ct);
-        return pages.Select(p => new SitePageSummaryDto(p.Id, p.Slug, p.Title, p.Kind, p.IsPublished, PageBlockValidator.Parse(p.BlocksJson).Count, p.UpdatedAt)).ToList();
+        return pages.Select(p => new SitePageSummaryDto(p.Id, p.Slug, p.Title, p.Kind, p.IsPublished, PageBlockValidator.Parse(p.BlocksJson).Count,
+            p.UpdatedAt, p.PublishAt, p.Version)).ToList();
     }
 
     public async Task<SitePageDto> GetPageAsync(Guid id, CancellationToken ct) => ToDto(await store.FindAsync<SitePage>(id, ct, true));
@@ -572,7 +581,8 @@ public sealed class CatalogAdminService(CmsStore store, IAuditLogger audit, Webs
         Apply(x, input);
         await store.EnsureSlugFreeAsync<SitePage>(x.Slug, null, ct);
         Db.Add(x);
-        audit.Record("website.page_created", nameof(SitePage), x.Id, after: new { x.Slug, x.Title, x.Kind, x.IsPublished });
+        AddRevision(x, "created", input.RevisionNote);
+        audit.Record("website.page_created", nameof(SitePage), x.Id, after: new { x.Slug, x.Title, x.Kind, x.IsPublished, x.PublishAt });
         await store.SaveAsync(ct);
         return ToDto(x);
     }
@@ -581,16 +591,107 @@ public sealed class CatalogAdminService(CmsStore store, IAuditLogger audit, Webs
     {
         var x = await store.FindAsync<SitePage>(id, ct);
         CmsStore.CheckStamp(store.Db, x, input.ConcurrencyStamp);
-        var before = new { x.Slug, x.Title, x.Kind, x.IsPublished, Blocks = x.BlocksJson };
+        var before = new { x.Slug, x.Title, x.Kind, x.IsPublished, x.PublishAt, Blocks = x.BlocksJson };
+        await EnsureBaselineRevisionAsync(x, ct);
         Apply(x, input);
         await store.EnsureSlugFreeAsync<SitePage>(x.Slug, x.Id, ct);
-        audit.Record("website.page_updated", nameof(SitePage), x.Id, before, new { x.Slug, x.Title, x.Kind, x.IsPublished, Blocks = x.BlocksJson });
+        AddRevision(x, "updated", input.RevisionNote);
+        audit.Record("website.page_updated", nameof(SitePage), x.Id, before, new { x.Slug, x.Title, x.Kind, x.IsPublished, x.PublishAt, Blocks = x.BlocksJson });
         await store.SaveAsync(ct);
         return ToDto(x);
     }
 
     public Task DeletePageAsync(Guid id, CancellationToken ct) =>
         store.DeleteAsync<SitePage>(id, "website.page_deleted", x => new { x.Slug, x.Title, Blocks = x.BlocksJson }, ct);
+
+    /// <summary>The page's saved versions, newest first.</summary>
+    public async Task<IReadOnlyList<SitePageRevisionSummaryDto>> ListRevisionsAsync(Guid pageId, CancellationToken ct)
+    {
+        var page = await store.FindAsync<SitePage>(pageId, ct, true);
+        var rows = await Db.Set<SitePageRevision>().AsNoTracking().Where(r => r.PageId == pageId)
+            .OrderByDescending(r => r.Version).Take(200).ToListAsync(ct);
+        var names = await AuthorNamesAsync(rows.Select(r => r.AuthorUserId), ct);
+        return rows.Select(r => new SitePageRevisionSummaryDto(r.Version, r.Action, r.Note, r.Title, r.IsPublished, r.PublishAt, r.AuthorUserId,
+            r.AuthorUserId is { } a ? names.GetValueOrDefault(a) : null, r.CreatedAt, r.Version == page.Version)).ToList();
+    }
+
+    public async Task<SitePageRevisionDto> GetRevisionAsync(Guid pageId, int version, CancellationToken ct)
+    {
+        var page = await store.FindAsync<SitePage>(pageId, ct, true);
+        var r = await Db.Set<SitePageRevision>().AsNoTracking().FirstOrDefaultAsync(x => x.PageId == pageId && x.Version == version, ct)
+                ?? throw new DomainException("website.not_found", "That version of the page was not found.", DomainErrorKind.NotFound);
+        var names = await AuthorNamesAsync(new[] { r.AuthorUserId }, ct);
+        return new SitePageRevisionDto(r.Version, r.Action, r.Note, r.Slug, r.Title, r.Summary, r.Kind, PageBlockValidator.Parse(r.BlocksJson),
+            SeoDto.From(ParseSeo(r.SeoJson)), r.IsPublished, r.PublishAt, r.AuthorUserId,
+            r.AuthorUserId is { } a ? names.GetValueOrDefault(a) : null, r.CreatedAt, r.Version == page.Version);
+    }
+
+    /// <summary>
+    /// Restores the content (slug, title, summary, kind, blocks, SEO) of an earlier version as a new version. Publishing state
+    /// and schedule stay as they are, so restoring never publishes or hides a page by surprise.
+    /// </summary>
+    public async Task<SitePageDto> RestoreRevisionAsync(Guid pageId, int version, RestorePageRevisionInput input, CancellationToken ct)
+    {
+        var x = await store.FindAsync<SitePage>(pageId, ct);
+        CmsStore.CheckStamp(store.Db, x, input.ConcurrencyStamp);
+        var r = await Db.Set<SitePageRevision>().AsNoTracking().FirstOrDefaultAsync(v => v.PageId == pageId && v.Version == version, ct)
+                ?? throw new DomainException("website.not_found", "That version of the page was not found.", DomainErrorKind.NotFound);
+        if (r.Version == x.Version)
+            throw DomainException.Conflict("website.revision_current", "This version is already the current one.");
+        await EnsureBaselineRevisionAsync(x, ct);
+        await store.EnsureSlugFreeAsync<SitePage>(r.Slug, x.Id, ct);
+        var before = new { x.Slug, x.Title, x.Version, Blocks = x.BlocksJson };
+        x.Slug = r.Slug;
+        x.Title = r.Title;
+        x.Summary = r.Summary;
+        x.Kind = r.Kind;
+        x.BlocksJson = r.BlocksJson;
+        x.Seo = ParseSeo(r.SeoJson);
+        AddRevision(x, "restored", WebsiteRules.Clean(input.Note) ?? $"Restored version {r.Version}");
+        audit.Record("website.page_restored", nameof(SitePage), x.Id, before, new { x.Slug, x.Title, RestoredVersion = r.Version, x.Version });
+        await store.SaveAsync(ct);
+        return ToDto(x);
+    }
+
+    /// <summary>Pages saved before revisions existed (e.g. seeded legal pages) get their current content recorded as version 0 first.</summary>
+    private async Task EnsureBaselineRevisionAsync(SitePage x, CancellationToken ct)
+    {
+        if (x.Version > 0 || await Db.Set<SitePageRevision>().AnyAsync(r => r.PageId == x.Id, ct)) return;
+        Db.Add(Snapshot(x, 0, "initial", "Content before version history was enabled"));
+    }
+
+    private void AddRevision(SitePage x, string action, string? note)
+    {
+        x.Version += 1;
+        Db.Add(Snapshot(x, x.Version, action, WebsiteRules.Clean(note)));
+    }
+
+    private SitePageRevision Snapshot(SitePage x, int version, string action, string? note) => new()
+    {
+        PageId = x.Id, Version = version, Slug = x.Slug, Title = x.Title, Summary = x.Summary, Kind = x.Kind, BlocksJson = x.BlocksJson,
+        SeoJson = System.Text.Json.JsonSerializer.Serialize(x.Seo), IsPublished = x.IsPublished, PublishAt = x.PublishAt, Action = action,
+        Note = note, AuthorUserId = currentUser.IdOrNull, CreatedAt = clock.GetUtcNow().UtcDateTime,
+    };
+
+    private static SeoMeta ParseSeo(string json)
+    {
+        try
+        {
+            return System.Text.Json.JsonSerializer.Deserialize<SeoMeta>(json) ?? new SeoMeta();
+        }
+        catch (System.Text.Json.JsonException)
+        {
+            return new SeoMeta();
+        }
+    }
+
+    private async Task<Dictionary<Guid, string>> AuthorNamesAsync(IEnumerable<Guid?> ids, CancellationToken ct)
+    {
+        var list = ids.OfType<Guid>().Distinct().ToList();
+        if (list.Count == 0) return new Dictionary<Guid, string>();
+        return await Db.Set<Domain.Identity.User>().AsNoTracking().Where(u => list.Contains(u.Id))
+            .ToDictionaryAsync(u => u.Id, u => u.DisplayName, ct);
+    }
 
     /// <summary>Validates blocks without saving (live preview in the editor shows the normalized result).</summary>
     public IReadOnlyList<PageBlock> PreviewBlocks(IReadOnlyList<PageBlockInput> input)
@@ -618,6 +719,7 @@ public sealed class CatalogAdminService(CmsStore store, IAuditLogger audit, Webs
         x.BlocksJson = PageBlockValidator.Serialize(validated);
         x.Seo = seo;
         x.IsPublished = r.IsPublished;
+        x.PublishAt = r.IsPublished ? WebsiteRules.Utc(r.PublishAt) : null;
         x.SortOrder = r.SortOrder;
     }
 
@@ -631,7 +733,7 @@ public sealed class CatalogAdminService(CmsStore store, IAuditLogger audit, Webs
 
     public static SitePageDto ToDto(SitePage x) => new(
         x.Id, x.Slug, x.Title, x.Summary, x.Kind, PageBlockValidator.Parse(x.BlocksJson), SeoDto.From(x.Seo), x.IsPublished, x.SortOrder,
-        x.UpdatedAt, x.ConcurrencyStamp);
+        x.UpdatedAt, x.ConcurrencyStamp, x.PublishAt, x.Version);
 
     // ---------------------------------------------------------------- Shared
 

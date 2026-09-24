@@ -221,8 +221,44 @@ public class SitePage : AuditedEntity, IConcurrencyStamped, ISlugged
     public string BlocksJson { get; set; } = "[]";
     public SeoMeta Seo { get; set; } = new();
     public bool IsPublished { get; set; }
+
+    /// <summary>Scheduled go-live (UTC). A published page stays hidden from the public site until this time.</summary>
+    public DateTime? PublishAt { get; set; }
+
     public int SortOrder { get; set; }
+
+    /// <summary>Incremented on every save; the matching <see cref="SitePageRevision"/> holds that version's content.</summary>
+    public int Version { get; set; }
+
     public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
+}
+
+/// <summary>
+/// An immutable snapshot of a <see cref="SitePage"/> as saved (one per version), so editors can compare and restore
+/// earlier versions — legal pages in particular keep a full history of what was published when.
+/// </summary>
+public class SitePageRevision : Entity
+{
+    public Guid PageId { get; set; }
+    public int Version { get; set; }
+    public string Slug { get; set; } = string.Empty;
+    public string Title { get; set; } = string.Empty;
+    public string? Summary { get; set; }
+    public SitePageKind Kind { get; set; }
+    public string BlocksJson { get; set; } = "[]";
+
+    /// <summary>The page's SEO settings at this version, as JSON.</summary>
+    public string SeoJson { get; set; } = "{}";
+
+    public bool IsPublished { get; set; }
+    public DateTime? PublishAt { get; set; }
+
+    /// <summary>What happened: created, updated, restored (from version N).</summary>
+    public string Action { get; set; } = "updated";
+
+    public string? Note { get; set; }
+    public Guid? AuthorUserId { get; set; }
+    public DateTime CreatedAt { get; set; }
 }
 
 /// <summary>

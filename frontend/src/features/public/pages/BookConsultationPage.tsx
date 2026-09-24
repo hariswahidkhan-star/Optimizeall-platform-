@@ -7,6 +7,7 @@ import { isApiError } from '@/lib/api/errors';
 import { browserTimeZone } from '@/lib/format/dates';
 import { type Slots, useServices } from '../site/api';
 import { PageHero } from '../site/components';
+import { useSiteCopy } from '../site/copy';
 import { useDocumentHead } from '../site/head';
 import { ContactFields, type ContactValues, EMPTY_CONTACT, FormSuccess, ServicePicker, useLeadForm, validateContact } from './leadForm';
 
@@ -36,7 +37,8 @@ export function BookConsultationPage() {
   const [notes, setNotes] = useState('');
   const [slugs, setSlugs] = useState<string[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  useDocumentHead({ title: 'Book a consultation', description: 'Book a free 30-minute strategy call with an Optimize All strategist at a time that suits you.' });
+  const copy = useSiteCopy();
+  useDocumentHead({ title: copy.text('booking.seo.title'), description: copy.text('booking.seo.description') });
 
   const days = useMemo(() => groupSlotsByDay(slotsQuery.data?.slots ?? [], timeZone), [slotsQuery.data, timeZone]);
   const activeDay = days.find((d) => d.key === day) ?? days[0];
@@ -69,9 +71,9 @@ export function BookConsultationPage() {
     const booked = form.mutation.data as unknown as { reference: string; slotStart: string };
     return (
       <>
-        <PageHero eyebrow="Book a consultation" title="You're booked in" breadcrumbs={[{ label: 'Home', to: '/' }, { label: 'Book a consultation' }]} />
+        <PageHero eyebrow={copy.text('booking.hero.eyebrow')} title={copy.text('booking.success.hero')} breadcrumbs={[{ label: 'Home', to: '/' }, { label: 'Book a consultation' }]} />
         <div className="container site-form-layout">
-          <FormSuccess title="See you soon" reference={booked.reference}>
+          <FormSuccess title={copy.text('booking.success.title')} reference={booked.reference}>
             <p>
               Your call is on <strong>{fmtDay(booked.slotStart)}</strong> at <strong>{fmtTime(booked.slotStart)}</strong> ({timeZone}). We've
               emailed you the details.
@@ -85,9 +87,9 @@ export function BookConsultationPage() {
   return (
     <>
       <PageHero
-        eyebrow="Book a consultation"
-        title="Book a free 30-minute strategy call"
-        lead="Talk through your goals with a senior strategist. No sales pitch — just an honest view of where your growth can come from."
+        eyebrow={copy.text('booking.hero.eyebrow')}
+        title={copy.text('booking.hero.title')}
+        lead={copy.text('booking.hero.lead')}
         breadcrumbs={[{ label: 'Home', to: '/' }, { label: 'Book a consultation' }]}
       />
       <div className="container site-form-layout">
@@ -99,7 +101,7 @@ export function BookConsultationPage() {
             {slotsQuery.isLoading ? (
               <Skeleton height={120} />
             ) : days.length === 0 ? (
-              <EmptyState compact title="No free slots right now" headingLevel={3} description="Please use the contact form and we'll find a time." />
+              <EmptyState compact title={copy.text('booking.empty.title')} headingLevel={3} description={copy.text('booking.empty.description')} />
             ) : (
               <>
                 <div className="site-days" role="group" aria-label="Day">
@@ -146,16 +148,16 @@ export function BookConsultationPage() {
           {form.consentField(errors.consent)}
           {!slotTaken && form.generalError}
           <Button type="submit" size="lg" variant="highlight" loading={form.mutation.isPending} disabled={form.token.isLoading}>
-            {slot ? `Book ${fmtDay(slot)} at ${fmtTime(slot)}` : 'Book my call'}
+            {slot ? `Book ${fmtDay(slot)} at ${fmtTime(slot)}` : copy.text('booking.submit')}
           </Button>
         </form>
         <aside className="site-aside">
           <div className="site-hero__panel">
-            <h2 className="public-footer__heading">On the call</h2>
+            <h2 className="public-footer__heading">{copy.text('booking.agenda.title')}</h2>
             <ul className="site-prose">
-              <li>Your goals and current marketing</li>
-              <li>Quick wins we can see straight away</li>
-              <li>Whether we're the right fit — honestly</li>
+              {copy.list('booking.agenda.items').map((item) => (
+                <li key={item}>{item}</li>
+              ))}
             </ul>
           </div>
         </aside>

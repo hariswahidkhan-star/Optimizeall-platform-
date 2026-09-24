@@ -2,6 +2,7 @@ import { Cookie } from 'lucide-react';
 import { useEffect, useId, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Switch } from '@/components/ui';
+import { useSiteCopy } from './copy';
 import { type AnalyticsIds, applyConsent, hasAnyTag, saveConsent, useConsent } from './consent';
 
 /**
@@ -15,6 +16,7 @@ export function CookieConsent({ ids, open, onClose }: { ids: AnalyticsIds | null
   const [analytics, setAnalytics] = useState(choice?.analytics ?? false);
   const [marketing, setMarketing] = useState(choice?.marketing ?? false);
   const titleId = useId();
+  const copy = useSiteCopy();
 
   useEffect(() => {
     applyConsent(choice, ids);
@@ -41,18 +43,16 @@ export function CookieConsent({ ids, open, onClose }: { ids: AnalyticsIds | null
     <section className="site-consent" aria-labelledby={titleId}>
       <div className="site-consent__head">
         <Cookie aria-hidden="true" />
-        <h2 id={titleId}>Your privacy choices</h2>
+        <h2 id={titleId}>{copy.text('shared.cookies.title')}</h2>
       </div>
       <p>
-        We use necessary cookies to run this site. With your permission we'd also like to use analytics cookies to
-        understand how it's used, and marketing cookies to measure our advertising. See our{' '}
-        <Link to="/cookie-policy">cookie policy</Link>.
+        {copy.text('shared.cookies.text')} <Link to="/cookie-policy">{copy.text('shared.cookies.policyLink')}</Link>.
       </p>
       {customize && (
         <div className="site-consent__options">
-          <Switch checked disabled onCheckedChange={() => undefined} label="Necessary" description="Security and remembering your choices. Always on." />
-          <Switch checked={analytics} onCheckedChange={setAnalytics} label="Analytics" description="Google Analytics 4: anonymous usage statistics." />
-          <Switch checked={marketing} onCheckedChange={setMarketing} label="Marketing" description="Google Tag Manager and Meta Pixel: ad measurement." />
+          <Switch checked disabled onCheckedChange={() => undefined} label="Necessary" description={copy.text('shared.cookies.necessary')} />
+          <Switch checked={analytics} onCheckedChange={setAnalytics} label="Analytics" description={copy.text('shared.cookies.analytics')} />
+          <Switch checked={marketing} onCheckedChange={setMarketing} label="Marketing" description={copy.text('shared.cookies.marketing')} />
         </div>
       )}
       <div className="site-consent__actions">

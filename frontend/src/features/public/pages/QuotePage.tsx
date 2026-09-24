@@ -4,6 +4,7 @@ import { Button, Checkbox, FormField, RadioGroup, Select, Textarea } from '@/com
 import { formatMoney } from '@/lib/format/money';
 import { usePricing, useServices } from '../site/api';
 import { PageHero, PERIOD_SUFFIX } from '../site/components';
+import { useSiteCopy } from '../site/copy';
 import { useDocumentHead } from '../site/head';
 import { ContactFields, type ContactValues, EMPTY_CONTACT, FormSuccess, ServicePicker, useLeadForm, validateContact } from './leadForm';
 
@@ -25,7 +26,8 @@ export function QuotePage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const headingRef = useRef<HTMLHeadingElement>(null);
   const firstRender = useRef(true);
-  useDocumentHead({ title: 'Get a quote', description: 'Tell us what you need and get a tailored proposal from Optimize All within two business days.' });
+  const copy = useSiteCopy();
+  useDocumentHead({ title: copy.text('quote.seo.title'), description: copy.text('quote.seo.description') });
 
   useEffect(() => {
     if (firstRender.current) {
@@ -92,15 +94,15 @@ export function QuotePage() {
   return (
     <>
       <PageHero
-        eyebrow="Get a quote"
-        title="Tell us what you need"
-        lead="Three quick steps. A strategist will send a tailored proposal within two business days."
+        eyebrow={copy.text('quote.hero.eyebrow')}
+        title={copy.text('quote.hero.title')}
+        lead={copy.text('quote.hero.lead')}
         breadcrumbs={[{ label: 'Home', to: '/' }, { label: 'Get a quote' }]}
       />
       <div className="container site-form-layout">
         {form.mutation.isSuccess ? (
-          <FormSuccess title="Quote request received" reference={form.mutation.data.reference}>
-            <p>Thanks! We'll review your requirements and send a proposal within two business days.</p>
+          <FormSuccess title={copy.text('quote.success.title')} reference={form.mutation.data.reference}>
+            <p>{copy.text('quote.success.text')}</p>
           </FormSuccess>
         ) : (
           <form className="site-form" onSubmit={submit} noValidate aria-labelledby="quote-step-title">
@@ -184,7 +186,7 @@ export function QuotePage() {
                 </Button>
               ) : (
                 <Button type="submit" variant="highlight" loading={form.mutation.isPending} disabled={form.token.isLoading}>
-                  Request my quote
+                  {copy.text('quote.submit')}
                 </Button>
               )}
             </div>
@@ -192,11 +194,11 @@ export function QuotePage() {
         )}
         <aside className="site-aside">
           <div className="site-hero__panel">
-            <h2 className="public-footer__heading">What happens next</h2>
+            <h2 className="public-footer__heading">{copy.text('quote.next.title')}</h2>
             <ol className="site-prose">
-              <li>A strategist reviews your request.</li>
-              <li>We may ask a few clarifying questions.</li>
-              <li>You receive a tailored proposal with clear pricing.</li>
+              {copy.list('quote.next.items').map((item) => (
+                <li key={item}>{item}</li>
+              ))}
             </ol>
           </div>
         </aside>

@@ -86,6 +86,9 @@ public sealed class AdminCampaignsController(ICampaignAdminService campaigns) : 
     [HttpPost("{id:guid}/archive")]
     public Task<AdminCampaignDto> Archive(Guid id, CancellationToken ct) => campaigns.ArchiveAsync(id, ct);
 
+    [HttpPost("{id:guid}/unarchive")]
+    public Task<AdminCampaignDto> Unarchive(Guid id, CancellationToken ct) => campaigns.UnarchiveAsync(id, ct);
+
     [HttpPost("{id:guid}/duplicate")]
     public async Task<ActionResult<AdminCampaignDto>> Duplicate(Guid id, CancellationToken ct)
     {
@@ -134,6 +137,10 @@ public sealed class AdminCampaignCategoriesController(ICampaignAdminService camp
 
     [HttpPut("{id:guid}")]
     public Task<AdminCategoryDto> Update(Guid id, CategoryInput input, CancellationToken ct) => campaigns.UpdateCategoryAsync(id, input, ct);
+
+    [HttpPost("reorder")]
+    public Task<IReadOnlyList<AdminCategoryDto>> Reorder(ReorderCategoriesRequest request, CancellationToken ct) =>
+        campaigns.ReorderCategoriesAsync(request, ct);
 
     /// <summary>Deletes an unused category; a category referenced by campaigns is deactivated instead.</summary>
     [HttpDelete("{id:guid}")]

@@ -21,7 +21,7 @@ import { api } from '@/lib/api/client';
 import { Permissions } from '@/lib/auth/permissions';
 import { useAuth } from '@/lib/auth/useAuth';
 import { humanize } from '@/lib/format/text';
-import { TICKET_PRIORITIES, TICKET_STATUSES, type StaffMessage, type StaffTicket } from '../api/types';
+import { TICKET_CATEGORIES, TICKET_PRIORITIES, TICKET_STATUSES, type StaffMessage, type StaffTicket } from '../api/types';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { statusMeta } from '@/components/ui/statusMap';
 import { AdminBadge } from '../shared/badges';
@@ -166,12 +166,14 @@ function UpdatePanel({
   const [status, setStatus] = useState(ticket.status);
   const [priority, setPriority] = useState(ticket.priority);
   const [assignee, setAssignee] = useState(ticket.assignedTo?.id ?? '');
+  const [category, setCategory] = useState(ticket.category);
 
   useEffect(() => {
     setStatus(ticket.status);
     setPriority(ticket.priority);
     setAssignee(ticket.assignedTo?.id ?? '');
-  }, [ticket.concurrencyStamp, ticket.status, ticket.priority, ticket.assignedTo?.id]);
+    setCategory(ticket.category);
+  }, [ticket.concurrencyStamp, ticket.status, ticket.priority, ticket.assignedTo?.id, ticket.category]);
 
   const update = useMutation({
     mutationFn: () =>
@@ -179,6 +181,8 @@ function UpdatePanel({
         status,
         priority,
         assignedToUserId: assignee || null,
+        // Only sent when re-filed; the API keeps the category otherwise.
+        ...(category !== ticket.category ? { category } : {}),
         concurrencyStamp: ticket.concurrencyStamp,
       }),
     onSuccess: (updated) => {
@@ -192,11 +196,14 @@ function UpdatePanel({
   });
 
   const conflict = isConflict(update.error);
-  const server = mapFieldErrors(update.error, ['status', 'priority', 'assignedToUserId'], {
+  const server = mapFieldErrors(update.error, ['status', 'priority', 'assignedToUserId', 'category'], {
     'support.invalid_assignee': 'assignedToUserId',
   });
   const dirty =
-    status !== ticket.status || priority !== ticket.priority || assignee !== (ticket.assignedTo?.id ?? '');
+    status !== ticket.status ||
+    priority !== ticket.priority ||
+    assignee !== (ticket.assignedTo?.id ?? '') ||
+    category !== ticket.category;
 
   const assigneeOptions = [
     { value: '', label: 'Unassigned' },
@@ -210,7 +217,7 @@ function UpdatePanel({
 
   return (
     <Card as="section" aria-labelledby="ticket-update">
-      <CardHeader titleId="ticket-update" title="Status & assignment" headingLevel={2} />
+      <CardHeader titleId="ticket-update" title="Status, category & assignment" headingLevel={2} />
       <CardBody>
         <form
           className="stack"
@@ -262,6 +269,9 @@ function UpdatePanel({
               options={enumOptions(TICKET_PRIORITIES)}
               onChange={(e) => setPriority(e.target.value)}
             />
+          </FormField>
+          <FormField label="Category" error={server.fields.category}>
+            <Select value={category} options={enumOptions(TICKET_CATEGORIES)} onChange={(e) => setCategory(e.target.value)} />
           </FormField>
           <FormField
             label="Assignee"

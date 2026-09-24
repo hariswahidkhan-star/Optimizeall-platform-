@@ -2,26 +2,19 @@ import { ArrowRight, BadgeCheck, CheckCircle2, Wallet } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ButtonLink, Skeleton } from '@/components/ui';
 import { useHome } from '../site/api';
+import { useSiteCopy } from '../site/copy';
 import { LogoCloud, StatsGrid } from '../site/Blocks';
 import { CaseStudyCard, CtaBand, PackageCard, PostCard, Section, TestimonialCarousel } from '../site/components';
 import { headFromSeo, useDocumentHead } from '../site/head';
 import { SiteIcon } from '../site/icons';
 import { NewsletterSignup } from '../site/NewsletterSignup';
 
-const PROCESS = [
-  { title: 'Audit', text: 'An honest look at your marketing, tracking and competitors — shared with you whether or not you hire us.' },
-  { title: 'Strategy', text: 'A prioritised 90-day plan with targets, budget and owners, before any work begins.' },
-  { title: 'Execution', text: 'Specialists deliver the work; you approve drafts and creatives in your client portal.' },
-  { title: 'Reporting', text: 'Live dashboards and a monthly review of results, learnings and next steps.' },
-];
-
 /** Agency homepage: value proposition, proof, services, results, process, industries, pricing, blog and creators. */
 export function HomePage() {
   const { data, isLoading } = useHome();
+  const copy = useSiteCopy();
   useDocumentHead(
-    data
-      ? headFromSeo({ ...data.seo, title: '' }, data.jsonLd)
-      : { title: null, description: 'Full-service digital marketing agency: SEO, social, paid media, content, email and web.' },
+    data ? headFromSeo({ ...data.seo, title: '' }, data.jsonLd) : { title: null, description: copy.text('home.seo.description') },
   );
 
   return (
@@ -29,39 +22,32 @@ export function HomePage() {
       <header className="site-hero site-home-hero">
         <div className="container site-hero__inner">
           <div className="site-hero__copy">
-            <p className="site-hero__eyebrow">Full-service digital marketing agency</p>
+            <p className="site-hero__eyebrow">{copy.text('home.hero.eyebrow')}</p>
             <h1 className="site-hero__title">
-              Marketing that grows revenue — <span className="site-hero__highlight">and proves it</span>
+              {copy.text('home.hero.title')} <span className="site-hero__highlight">{copy.text('home.hero.titleHighlight')}</span>
             </h1>
-            <p className="site-hero__lead">
-              Search, social, paid media, content, email, brand and web from one accountable team. Every result reported in
-              plain numbers, clearly labelled measured or estimated.
-            </p>
+            <p className="site-hero__lead">{copy.text('home.hero.lead')}</p>
             <div className="site-hero__actions">
               <ButtonLink to="/free-audit" variant="highlight" size="lg" trailingIcon={<ArrowRight />}>
-                Get a free audit
+                {copy.text('home.hero.primaryCta')}
               </ButtonLink>
               <ButtonLink to="/book-a-consultation" variant="secondary" size="lg">
-                Book a call
+                {copy.text('home.hero.secondaryCta')}
               </ButtonLink>
             </div>
             <ul className="site-hero__proof">
-              <li>
-                <CheckCircle2 aria-hidden="true" /> No long lock-ins
-              </li>
-              <li>
-                <CheckCircle2 aria-hidden="true" /> Your accounts, your data
-              </li>
-              <li>
-                <CheckCircle2 aria-hidden="true" /> Senior strategists on every account
-              </li>
+              {copy.list('home.hero.proof').map((item) => (
+                <li key={item}>
+                  <CheckCircle2 aria-hidden="true" /> {item}
+                </li>
+              ))}
             </ul>
           </div>
           <div className="site-hero__aside">
             <div className="site-hero__panel">
-              <p className="eyebrow">What you get in your free audit</p>
+              <p className="eyebrow">{copy.text('home.audit.title')}</p>
               <ul className="site-checklist">
-                {['Tracking and analytics health check', 'Search visibility vs. your top competitors', 'Paid media waste and quick wins', 'A prioritised 90-day action plan'].map((item) => (
+                {copy.list('home.audit.items').map((item) => (
                   <li key={item}>
                     <BadgeCheck aria-hidden="true" />
                     {item}
@@ -69,7 +55,7 @@ export function HomePage() {
                 ))}
               </ul>
               <ButtonLink to="/free-audit" variant="primary" fullWidth>
-                Request my audit
+                {copy.text('home.audit.cta')}
               </ButtonLink>
             </div>
           </div>
@@ -79,12 +65,22 @@ export function HomePage() {
       {data && data.trustLogos.length > 0 && (
         <div className="site-section site-section--tight">
           <div className="container">
-            <LogoCloud logos={data.trustLogos} title="Trusted by growing brands" />
+            <LogoCloud logos={data.trustLogos} title={copy.text('home.logos.title')} />
           </div>
         </div>
       )}
 
-      <Section id="services" eyebrow="What we do" title="Every channel, one accountable team" intro="Pick a single service or combine them into an integrated growth programme." actions={<ButtonLink to="/services" variant="secondary">All services</ButtonLink>}>
+      <Section
+        id="services"
+        eyebrow={copy.text('home.services.eyebrow')}
+        title={copy.text('home.services.title')}
+        intro={copy.text('home.services.intro')}
+        actions={
+          <ButtonLink to="/services" variant="secondary">
+            {copy.text('home.services.cta')}
+          </ButtonLink>
+        }
+      >
         {isLoading ? (
           <div className="site-grid site-grid--3">
             {Array.from({ length: 6 }, (_, i) => (
@@ -118,13 +114,21 @@ export function HomePage() {
       </Section>
 
       {data && data.stats.length > 0 && (
-        <Section eyebrow="Results" title="Numbers we're proud of" tone="muted" intro="Each figure is labelled: measured from tracked data, or estimated.">
+        <Section eyebrow={copy.text('home.results.eyebrow')} title={copy.text('home.results.title')} tone="muted" intro={copy.text('home.results.intro')}>
           <StatsGrid items={data.stats} />
         </Section>
       )}
 
       {data && data.featuredCaseStudies.length > 0 && (
-        <Section eyebrow="Case studies" title="Real work, real results" actions={<ButtonLink to="/case-studies" variant="secondary">All case studies</ButtonLink>}>
+        <Section
+          eyebrow={copy.text('home.caseStudies.eyebrow')}
+          title={copy.text('home.caseStudies.title')}
+          actions={
+            <ButtonLink to="/case-studies" variant="secondary">
+              {copy.text('home.caseStudies.cta')}
+            </ButtonLink>
+          }
+        >
           <ul className="site-grid site-grid--3">
             {data.featuredCaseStudies.map((c) => (
               <li key={c.slug}>
@@ -135,9 +139,19 @@ export function HomePage() {
         </Section>
       )}
 
-      <Section id="how-we-work" eyebrow="How we work" title="A process built for accountability" tone="muted" actions={<ButtonLink to="/how-we-work" variant="secondary">Our process</ButtonLink>}>
+      <Section
+        id="how-we-work"
+        eyebrow={copy.text('home.process.eyebrow')}
+        title={copy.text('home.process.title')}
+        tone="muted"
+        actions={
+          <ButtonLink to="/how-we-work" variant="secondary">
+            {copy.text('home.process.cta')}
+          </ButtonLink>
+        }
+      >
         <ol className="site-steps">
-          {PROCESS.map((step) => (
+          {copy.pairs('home.process.steps').map((step) => (
             <li key={step.title}>
               <h3>{step.title}</h3>
               <p>{step.text}</p>
@@ -147,7 +161,15 @@ export function HomePage() {
       </Section>
 
       {data && data.industries.length > 0 && (
-        <Section eyebrow="Industries" title="Specialists in your market" actions={<ButtonLink to="/industries" variant="secondary">All industries</ButtonLink>}>
+        <Section
+          eyebrow={copy.text('home.industries.eyebrow')}
+          title={copy.text('home.industries.title')}
+          actions={
+            <ButtonLink to="/industries" variant="secondary">
+              {copy.text('home.industries.cta')}
+            </ButtonLink>
+          }
+        >
           <ul className="site-grid site-grid--3">
             {data.industries.slice(0, 6).map((industry) => (
               <li key={industry.slug}>
@@ -169,13 +191,22 @@ export function HomePage() {
       )}
 
       {data && data.testimonials.length > 0 && (
-        <Section eyebrow="Testimonials" title="What clients say" tone="muted">
+        <Section eyebrow={copy.text('home.testimonials.eyebrow')} title={copy.text('home.testimonials.title')} tone="muted">
           <TestimonialCarousel items={data.testimonials} />
         </Section>
       )}
 
       {data && data.pricingTeaser.length > 0 && (
-        <Section eyebrow="Pricing" title="Transparent pricing, no surprises" intro="Clear starting packages for every service. Ad spend is always billed at cost." actions={<ButtonLink to="/pricing" variant="secondary">See all pricing</ButtonLink>}>
+        <Section
+          eyebrow={copy.text('home.pricing.eyebrow')}
+          title={copy.text('home.pricing.title')}
+          intro={copy.text('home.pricing.intro')}
+          actions={
+            <ButtonLink to="/pricing" variant="secondary">
+              {copy.text('home.pricing.cta')}
+            </ButtonLink>
+          }
+        >
           <div className="site-packages">
             {data.pricingTeaser.map((t) => (
               <PackageCard key={t.package.id} pkg={t.package} serviceName={t.serviceName} serviceSlug={t.serviceSlug} />
@@ -185,7 +216,15 @@ export function HomePage() {
       )}
 
       {data && data.latestPosts.length > 0 && (
-        <Section eyebrow="From the blog" title="Playbooks and insights" actions={<ButtonLink to="/blog" variant="secondary">Read the blog</ButtonLink>}>
+        <Section
+          eyebrow={copy.text('home.blog.eyebrow')}
+          title={copy.text('home.blog.title')}
+          actions={
+            <ButtonLink to="/blog" variant="secondary">
+              {copy.text('home.blog.cta')}
+            </ButtonLink>
+          }
+        >
           <ul className="site-grid site-grid--3">
             {data.latestPosts.map((p) => (
               <li key={p.slug}>
@@ -196,20 +235,20 @@ export function HomePage() {
         </Section>
       )}
 
-      <Section eyebrow="For creators" title="Become an Optimize All creator" tone="brand" intro="Have an established social account? Share campaigns from brands you believe in and get paid for every approved, clearly disclosed post.">
+      <Section eyebrow={copy.text('home.creators.eyebrow')} title={copy.text('home.creators.title')} tone="brand" intro={copy.text('home.creators.intro')}>
         <div className="site-hero__actions">
           <ButtonLink to="/register" variant="highlight" size="lg" leadingIcon={<Wallet />}>
-            Join as a creator
+            {copy.text('home.creators.primaryCta')}
           </ButtonLink>
           <ButtonLink to="/creators" variant="secondary" size="lg">
-            How the creator program works
+            {copy.text('home.creators.secondaryCta')}
           </ButtonLink>
         </div>
       </Section>
 
       <CtaBand />
 
-      <Section title="Get marketing insights in your inbox" intro="Two practical emails a month from our strategists. Unsubscribe any time.">
+      <Section title={copy.text('home.newsletter.title')} intro={copy.text('home.newsletter.intro')}>
         <div className="site-narrow">
           <NewsletterSignup source="home" />
         </div>

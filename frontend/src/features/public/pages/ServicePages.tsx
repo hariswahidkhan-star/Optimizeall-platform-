@@ -4,6 +4,7 @@ import { ButtonLink, Skeleton } from '@/components/ui';
 import { isExternalHref, isInternalHref } from '@/lib/safeHref';
 import { useService, useServices } from '../site/api';
 import { FaqList } from '../site/Blocks';
+import { useSiteCopy } from '../site/copy';
 import { CaseStudyCard, CtaBand, PackageCard, PageHero, PublicQueryState, Section, ServiceCard, TestimonialCarousel } from '../site/components';
 import { headFromSeo, useDocumentHead } from '../site/head';
 import { SiteIcon } from '../site/icons';
@@ -14,18 +15,16 @@ export function ServicesPage() {
   const { data, isLoading, error } = useServices();
   const [params, setParams] = useSearchParams();
   const active = params.get('category');
-  useDocumentHead({
-    title: 'Services',
-    description: 'SEO, social media, paid media, content, email, branding, web, growth, reputation and analytics services.',
-  });
+  const copy = useSiteCopy();
+  useDocumentHead({ title: copy.text('services.seo.title'), description: copy.text('services.seo.description') });
   const groups = (data ?? []).filter((g) => !active || g.slug === active);
 
   return (
     <>
       <PageHero
-        eyebrow="Services"
-        title="Everything you need to grow, under one roof"
-        lead="Nine service lines delivered by specialists who work as one team. Start with one service or build an integrated programme."
+        eyebrow={copy.text('services.hero.eyebrow')}
+        title={copy.text('services.hero.title')}
+        lead={copy.text('services.hero.lead')}
         breadcrumbs={[{ label: 'Home', to: '/' }, { label: 'Services' }]}
       />
       <div className="site-section site-section--tight">
@@ -55,7 +54,7 @@ export function ServicesPage() {
           </Section>
         ))}
       </PublicQueryState>
-      <CtaBand title="Not sure where to start?" text="Tell us your goals and we'll recommend the right mix of services — free." />
+      <CtaBand title={copy.text('services.cta.title')} text={copy.text('services.cta.text')} />
     </>
   );
 }
@@ -81,6 +80,7 @@ function ServiceCta({ label, url }: { label: string | null; url: string | null }
 export function ServiceDetailPage() {
   const { slug = '' } = useParams();
   const { data: s, isLoading, error } = useService(slug);
+  const copy = useSiteCopy();
   useDocumentHead(s ? headFromSeo(s.seo, s.jsonLd) : { title: 'Service' });
 
   return (
@@ -99,12 +99,12 @@ export function ServiceDetailPage() {
             actions={
               <>
                 <ButtonLink to={`/get-a-quote?service=${encodeURIComponent(s.slug)}`} variant="highlight" size="lg" trailingIcon={<ArrowRight />}>
-                  Get a quote
+                  {copy.text('services.detail.quoteCta')}
                 </ButtonLink>
                 <ServiceCta label={s.ctaLabel} url={s.ctaUrl} />
                 {!s.ctaLabel && (
                   <ButtonLink to="/book-a-consultation" variant="secondary" size="lg">
-                    Book a call
+                    {copy.text('services.detail.callCta')}
                   </ButtonLink>
                 )}
               </>
@@ -115,7 +115,7 @@ export function ServiceDetailPage() {
             ) : (
               s.kpis.length > 0 && (
                 <div className="site-hero__panel">
-                  <p className="eyebrow">Results we move</p>
+                  <p className="eyebrow">{copy.text('services.detail.kpisTitle')}</p>
                   <ul className="site-checklist">
                     {s.kpis.map((k) => (
                       <li key={k}>
@@ -138,7 +138,7 @@ export function ServiceDetailPage() {
           )}
 
           {s.problemsSolved.length > 0 && (
-            <Section title="Problems we solve" tone="muted">
+            <Section title={copy.text('services.detail.problemsTitle')} tone="muted">
               <ul className="site-grid site-grid--2">
                 {s.problemsSolved.map((p) => (
                   <li key={p} className="site-card">
@@ -150,7 +150,7 @@ export function ServiceDetailPage() {
           )}
 
           {s.deliverables.length > 0 && (
-            <Section title="What's included">
+            <Section title={copy.text('services.detail.includedTitle')}>
               <ul className="site-checklist site-grid site-grid--2">
                 {s.deliverables.map((d) => (
                   <li key={d}>
@@ -161,7 +161,7 @@ export function ServiceDetailPage() {
               </ul>
               {s.tools.length > 0 && (
                 <>
-                  <h3 className="site-subheading">Tools and platforms</h3>
+                  <h3 className="site-subheading">{copy.text('services.detail.toolsTitle')}</h3>
                   <ul className="site-chips">
                     {s.tools.map((t) => (
                       <li key={t} className="site-chip">
@@ -175,7 +175,7 @@ export function ServiceDetailPage() {
           )}
 
           {s.processSteps.length > 0 && (
-            <Section title="How it works" tone="muted">
+            <Section title={copy.text('services.detail.processTitle')} tone="muted">
               <ol className="site-steps">
                 {s.processSteps.map((step) => (
                   <li key={step.title}>
@@ -188,7 +188,7 @@ export function ServiceDetailPage() {
           )}
 
           {s.packages.length > 0 && (
-            <Section id="pricing" title="Packages and pricing" intro="Prices exclude taxes and third-party costs such as ad spend, which are billed at cost.">
+            <Section id="pricing" title={copy.text('services.detail.pricingTitle')} intro={copy.text('services.detail.pricingIntro')}>
               <div className="site-packages">
                 {s.packages.map((p) => (
                   <PackageCard key={p.id} pkg={p} serviceSlug={s.slug} />
@@ -198,7 +198,7 @@ export function ServiceDetailPage() {
           )}
 
           {s.caseStudies.length > 0 && (
-            <Section title="Related case studies" tone="muted">
+            <Section title={copy.text('services.detail.caseStudiesTitle')} tone="muted">
               <ul className="site-grid site-grid--3">
                 {s.caseStudies.map((c) => (
                   <li key={c.slug}>
@@ -210,7 +210,7 @@ export function ServiceDetailPage() {
           )}
 
           {s.testimonials.length > 0 && (
-            <Section title="What clients say">
+            <Section title={copy.text('services.detail.testimonialsTitle')}>
               <TestimonialCarousel items={s.testimonials} />
             </Section>
           )}
@@ -218,13 +218,13 @@ export function ServiceDetailPage() {
           {s.faqs.length > 0 && (
             <div className="site-section">
               <div className="container site-narrow">
-                <FaqList title="Frequently asked questions" items={s.faqs} />
+                <FaqList title={copy.text('services.detail.faqTitle')} items={s.faqs} />
               </div>
             </div>
           )}
 
           {s.relatedServices.length > 0 && (
-            <Section title="Related services" tone="muted">
+            <Section title={copy.text('services.detail.relatedTitle')} tone="muted">
               <ul className="site-grid site-grid--3">
                 {s.relatedServices.map((r) => (
                   <li key={r.slug}>
@@ -235,7 +235,7 @@ export function ServiceDetailPage() {
             </Section>
           )}
 
-          <CtaBand title={`Let's talk about ${s.name}`} />
+          <CtaBand title={copy.text('services.detail.ctaTitle', { name: s.name })} />
         </>
       )}
     </PublicQueryState>

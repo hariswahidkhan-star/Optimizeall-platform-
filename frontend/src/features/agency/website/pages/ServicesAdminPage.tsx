@@ -201,6 +201,7 @@ function ServicesTab() {
         return existing ? api.put(`${W}/services/${existing.id}`, { ...body, concurrencyStamp: existing.concurrencyStamp }) : api.post(`${W}/services`, body);
       }}
       remove={(r) => api.delete(`${W}/services/${r.id}`)}
+      reorder={(ids) => api.post(`${W}/services/reorder`, { ids })}
       Form={({ draft, setDraft, errors }) => {
         const set = <K extends keyof ServiceDraft>(k: K, v: ServiceDraft[K]) => setDraft({ ...draft, [k]: v });
         return (
@@ -301,6 +302,7 @@ function CategoriesTab() {
           : api.post(`${W}/service-categories`, draft)
       }
       remove={(r) => api.delete(`${W}/service-categories/${r.id}`)}
+      reorder={(ids) => api.post(`${W}/service-categories/reorder`, { ids })}
       Form={({ draft, setDraft, errors }) => (
         <>
           <TextField label="Name" required value={draft.name} onChange={(v) => setDraft({ ...draft, name: v })} error={errors.name} />

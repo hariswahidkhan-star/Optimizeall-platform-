@@ -6,6 +6,7 @@ import { useDebouncedValue } from '@/lib/hooks/useDebouncedValue';
 import { initials } from '@/lib/format/text';
 import { isExternalHref } from '@/lib/safeHref';
 import { useBlog, usePost, useSite } from '../site/api';
+import { useSiteCopy } from '../site/copy';
 import { CtaBand, formatPublished, PageHero, PostCard, PublicQueryState, Section } from '../site/components';
 import { absoluteUrl, headFromSeo, useDocumentHead } from '../site/head';
 import { extractHeadings, Markdown } from '../site/Markdown';
@@ -20,7 +21,8 @@ export function BlogPage() {
   const [search, setSearch] = useState(params.get('q') ?? '');
   const debounced = useDebouncedValue(search, 300);
   const { data, isLoading, error } = useBlog({ page, category, tag, search: debounced || undefined });
-  useDocumentHead({ title: 'Blog', description: 'Marketing playbooks, research and news from the Optimize All team.' });
+  const copy = useSiteCopy();
+  useDocumentHead({ title: copy.text('blog.seo.title'), description: copy.text('blog.seo.description') });
 
   const update = (changes: Record<string, string | undefined>) => {
     const next = new URLSearchParams(params);
@@ -35,9 +37,9 @@ export function BlogPage() {
   return (
     <>
       <PageHero
-        eyebrow="Blog"
-        title="Marketing playbooks that actually work"
-        lead="Practical guides from our strategists on search, paid media, social, content, email and analytics."
+        eyebrow={copy.text('blog.hero.eyebrow')}
+        title={copy.text('blog.hero.title')}
+        lead={copy.text('blog.hero.lead')}
         breadcrumbs={[{ label: 'Home', to: '/' }, { label: 'Blog' }]}
         actions={
           <a className="site-chip" href="/api/v1/public/blog/rss.xml">
@@ -94,7 +96,7 @@ export function BlogPage() {
         <div className="site-section">
           <div className="container">
             {data && data.items.length === 0 ? (
-              <EmptyState title="No articles found" headingLevel={2} description="Try another topic or search term." />
+              <EmptyState title={copy.text('blog.empty.title')} headingLevel={2} description={copy.text('blog.empty.description')} />
             ) : (
               <ul className="site-grid site-grid--3">
                 {(data?.items ?? []).map((p) => (
@@ -130,7 +132,7 @@ export function BlogPage() {
           </div>
         </div>
       </PublicQueryState>
-      <Section title="Get new articles by email" tone="muted">
+      <Section title={copy.text('blog.newsletter.title')} tone="muted">
         <div className="site-narrow">
           <NewsletterSignup source="blog" />
         </div>
@@ -144,6 +146,7 @@ export function BlogPostPage() {
   const { slug = '' } = useParams();
   const { data: post, isLoading, error } = usePost(slug);
   const { data: site } = useSite();
+  const copy = useSiteCopy();
   useDocumentHead(post ? headFromSeo(post.seo, post.jsonLd, 'article') : { title: 'Blog' });
   const headings = useMemo(() => (post ? extractHeadings(post.bodyMarkdown) : []), [post]);
   const url = post ? absoluteUrl(`/blog/${post.slug}`, site?.seo.siteUrl) ?? '' : '';
@@ -245,7 +248,7 @@ export function BlogPostPage() {
             </aside>
           </div>
           {post.related.length > 0 && (
-            <Section title="Related articles" tone="muted">
+            <Section title={copy.text('blog.detail.relatedTitle')} tone="muted">
               <ul className="site-grid site-grid--3">
                 {post.related.map((r) => (
                   <li key={r.slug}>

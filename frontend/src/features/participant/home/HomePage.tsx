@@ -31,6 +31,7 @@ import {
   VerifyEmailHero,
 } from './HomeSections';
 import '../participant.css';
+import { useSiteCopy } from '@/features/public/site/copy';
 
 /** Submissions that need the participant: corrections first, then the most recent decisions. */
 function useAttentionItems(enabled: boolean) {
@@ -126,12 +127,13 @@ export function HomePage() {
   const achievements = useAchievements();
   const announcements = useAnnouncements();
   const name = user ? firstName(user.displayName) : '';
+  const copy = useSiteCopy();
 
   return (
     <div className="pp-page">
       <PageHeader
         title={`${greetingFor(new Date(), user?.timeZone)}${name ? `, ${name}` : ''}`}
-        description="Here’s what’s happening with your campaigns and earnings."
+        description={copy.text('participant.home.description')}
         actions={
           home.isSuccess ? (
             <UnreadNotice

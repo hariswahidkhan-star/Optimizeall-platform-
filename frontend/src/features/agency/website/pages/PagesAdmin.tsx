@@ -1,14 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ArrowDown, ArrowUp, ExternalLink, Plus, Trash2 } from 'lucide-react';
+import { ArrowDown, ArrowUp, Eye, ExternalLink, History, Plus, RotateCcw, Trash2 } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Alert, Badge, Button, ButtonLink, DataTable, ErrorState, IconButton, PageHeader, Select, Skeleton, useToast } from '@/components/ui';
+import { Alert, Badge, Button, ButtonLink, ConfirmDialog, DataTable, DateTime, ErrorState, IconButton, PageHeader, Select, Skeleton, useToast } from '@/components/ui';
+import { isoToLocalInput, localInputToIso } from '@/features/admin/shared/common';
 import type { PageBlock } from '@/features/public/site/api';
 import { Blocks } from '@/features/public/site/Blocks';
 import { api } from '@/lib/api/client';
 import { errorMessage, isApiError } from '@/lib/api/errors';
 import { formatDate } from '@/lib/format/dates';
-import { type SitePage, type SitePageSummary, W } from '../api';
+import { type SitePage, type SitePageRevision, type SitePageRevisionSummary, type SitePageSummary, W } from '../api';
 import { AreaField, EMPTY_SEO, type Errors, ImageField, ListEditor, MarkdownField, SelectField, SeoFields, SwitchField, TextField, toErrors } from '../shared/fields';
 import { ICON_OPTIONS } from './ContentPages';
 import '@/features/public/site/site.css';
@@ -173,6 +174,125 @@ function BlockForm({ block, update, errors, index }: { block: PageBlock; update:
   }
 }
 
+/** Published pages with a go-live time in the future are scheduled. */
+function pageStatus(p: { isPublished: boolean; publishAt: string | null }): { label: string; tone: 'success' | 'info' | 'neutral' } {
+  if (!p.isPublished) return { label: 'Draft', tone: 'neutral' };
+  if (p.publishAt && new Date(p.publishAt).getTime() > Date.now()) return { label: 'Scheduled', tone: 'info' };
+  return { label: 'Published', tone: 'success' };
+}
+
+const ACTION_LABEL: Record<string, string> = {
+  initial: 'Original content',
+  created: 'Created',
+  updated: 'Saved',
+  restored: 'Restored',
+};
+
+/**
+ * Version history of a page: every save is kept. Preview shows an older version in the live preview; restoring copies
+ * its content into a new version (publishing state and schedule stay as they are).
+ */
+function PageHistory({
+  pageId,
+  stamp,
+  onPreview,
+  previewing,
+}: {
+  pageId: string;
+  stamp: string;
+  onPreview: (revision: SitePageRevision | null) => void;
+  previewing: number | null;
+}) {
+  const toast = useToast();
+  const client = useQueryClient();
+  const [restoring, setRestoring] = useState<SitePageRevisionSummary | null>(null);
+  const history = useQuery({
+    queryKey: ['agency', 'website', 'page', pageId, 'revisions'],
+    queryFn: () => api.get<SitePageRevisionSummary[]>(`${W}/pages/${pageId}/revisions`),
+  });
+  const load = useMutation({
+    mutationFn: (version: number) => api.get<SitePageRevision>(`${W}/pages/${pageId}/revisions/${version}`),
+    onSuccess: (r) => onPreview(r),
+  });
+
+  return (
+    <section aria-labelledby="history-title" className="cms-form">
+      <h2 id="history-title">
+        <History aria-hidden="true" width={18} height={18} /> Version history
+      </h2>
+      {history.isError ? (
+        <ErrorState error={history.error} onRetry={() => void history.refetch()} />
+      ) : history.isLoading ? (
+        <Skeleton height={80} />
+      ) : (history.data ?? []).length === 0 ? (
+        <p className="text-muted">No saved versions yet. Every save from now on is kept here.</p>
+      ) : (
+        <ol className="cms-history">
+          {(history.data ?? []).map((r) => (
+            <li key={r.version} className="cms-history__item">
+              <div>
+                <strong>Version {r.version}</strong> · {ACTION_LABEL[r.action] ?? r.action}
+                {r.isCurrent && (
+                  <>
+                    {' '}
+                    <Badge tone="success">Current</Badge>
+                  </>
+                )}
+                {previewing === r.version && (
+                  <>
+                    {' '}
+                    <Badge tone="info">In preview</Badge>
+                  </>
+                )}
+                <div className="text-small text-muted">
+                  <DateTime value={r.createdAt} format="datetime" />
+                  {r.authorName && <> · {r.authorName}</>}
+                  {r.note && <> · {r.note}</>}
+                </div>
+              </div>
+              <div className="cms-toolbar">
+                <Button size="sm" variant="ghost" leadingIcon={<Eye />} loading={load.isPending && load.variables === r.version} onClick={() => (previewing === r.version ? onPreview(null) : load.mutate(r.version))}>
+                  {previewing === r.version ? 'Close preview' : 'Preview'}
+                  <span className="visually-hidden"> version {r.version}</span>
+                </Button>
+                {!r.isCurrent && (
+                  <Button size="sm" variant="secondary" leadingIcon={<RotateCcw />} onClick={() => setRestoring(r)}>
+                    Restore<span className="visually-hidden"> version {r.version}</span>
+                  </Button>
+                )}
+              </div>
+            </li>
+          ))}
+        </ol>
+      )}
+      <ConfirmDialog
+        open={!!restoring}
+        onClose={() => setRestoring(null)}
+        title={`Restore version ${restoring?.version ?? ''}?`}
+        description="Its title, address, blocks and SEO settings become a new version. Whether the page is published, and its schedule, stay as they are now."
+        confirmLabel="Restore version"
+        onConfirm={async () => {
+          if (!restoring) return;
+          try {
+            const saved = await api.post<SitePage>(`${W}/pages/${pageId}/revisions/${restoring.version}/restore`, { concurrencyStamp: stamp });
+            client.setQueryData(['agency', 'website', 'page', pageId], saved);
+          } catch (error) {
+            throw new Error(
+              isApiError(error) && error.status === 409 && error.code === 'concurrency.conflict'
+                ? 'Someone else saved this page since you opened it. Reload the page, then try again.'
+                : errorMessage(error),
+            );
+          }
+          onPreview(null);
+          toast.success(`Version ${restoring.version} restored`, 'It is now the current version.');
+          await client.invalidateQueries({ queryKey: ['agency', 'website', 'page', pageId, 'revisions'] });
+          await client.invalidateQueries({ queryKey: ['agency', 'website', 'pages'] });
+        }}
+      />
+    </section>
+  );
+}
+
 /** List of CMS pages. */
 export function PagesAdminPage() {
   const query = useQuery({ queryKey: ['agency', 'website', 'pages'], queryFn: () => api.get<SitePageSummary[]>(`${W}/pages`) });
@@ -200,7 +320,15 @@ export function PagesAdminPage() {
             { id: 'title', header: 'Page', primary: true, cell: (r) => <ButtonLink to={r.id} variant="link">{r.title}</ButtonLink> },
             { id: 'slug', header: 'Address', cell: (r) => <code>/{r.slug}</code>, hideOnMobile: true },
             { id: 'kind', header: 'Kind', cell: (r) => r.kind },
-            { id: 'status', header: 'Status', cell: (r) => <Badge tone={r.isPublished ? 'success' : 'neutral'}>{r.isPublished ? 'Published' : 'Draft'}</Badge> },
+            {
+              id: 'status',
+              header: 'Status',
+              cell: (r) => {
+                const st = pageStatus(r);
+                return <Badge tone={st.tone}>{st.label}</Badge>;
+              },
+            },
+            { id: 'version', header: 'Version', cell: (r) => (r.version > 0 ? `v${r.version}` : '—'), hideOnMobile: true },
             { id: 'updated', header: 'Updated', cell: (r) => formatDate(r.updatedAt), hideOnMobile: true },
           ]}
         />
@@ -209,7 +337,7 @@ export function PagesAdminPage() {
   );
 }
 
-type PageDraft = Omit<SitePage, 'id' | 'updatedAt' | 'concurrencyStamp'>;
+type PageDraft = Omit<SitePage, 'id' | 'updatedAt' | 'concurrencyStamp' | 'version'>;
 
 /** Block editor with add / reorder / remove and a live preview rendered by the public site's block renderer. */
 export function PageEditorPage() {
@@ -222,21 +350,35 @@ export function PageEditorPage() {
   const [draft, setDraft] = useState<PageDraft | null>(null);
   const [errors, setErrors] = useState<Errors>({});
   const [newType, setNewType] = useState('richText');
+  const [note, setNote] = useState('');
+  const [preview, setPreview] = useState<SitePageRevision | null>(null);
   const current: PageDraft | null =
-    draft ?? (isNew ? { slug: '', title: '', summary: null, kind: 'Standard', blocks: [], seo: EMPTY_SEO, isPublished: false, sortOrder: 0 } : detail.data ? { ...detail.data } : null);
+    draft ??
+    (isNew
+      ? { slug: '', title: '', summary: null, kind: 'Standard', blocks: [], seo: EMPTY_SEO, isPublished: false, sortOrder: 0, publishAt: null }
+      : detail.data
+        ? { ...detail.data }
+        : null);
 
   const save = useMutation({
     mutationFn: () => {
-      const body = { ...current!, blocks: current!.blocks.map((b) => ({ id: b.id, type: b.type, data: b.data })) };
+      const body = {
+        ...current!,
+        publishAt: current!.isPublished ? current!.publishAt : null,
+        revisionNote: note.trim() || null,
+        blocks: current!.blocks.map((b) => ({ id: b.id, type: b.type, data: b.data })),
+      };
       return isNew
         ? api.post<SitePage>(`${W}/pages`, body)
         : api.put<SitePage>(`${W}/pages/${pageId}`, { ...body, concurrencyStamp: detail.data!.concurrencyStamp });
     },
     onSuccess: async (saved) => {
-      toast.success('Page saved');
+      toast.success('Page saved', `Saved as version ${saved.version}.`);
       setDraft(null);
       setErrors({});
+      setNote('');
       await client.invalidateQueries({ queryKey: ['agency', 'website', 'pages'] });
+      await client.invalidateQueries({ queryKey: ['agency', 'website', 'page', saved.id, 'revisions'] });
       client.setQueryData(['agency', 'website', 'page', saved.id], saved);
       if (isNew) navigate(`../pages/${saved.id}`, { replace: true, relative: 'path' });
     },
@@ -323,9 +465,31 @@ export function PageEditorPage() {
 
           <SeoFields value={current.seo} onChange={(v) => set('seo', v)} errors={errors} />
           <SwitchField label="Published" checked={current.isPublished} onChange={(v) => set('isPublished', v)} />
+          {current.isPublished && (
+            <TextField
+              label="Go live at"
+              type="datetime-local"
+              value={isoToLocalInput(current.publishAt)}
+              onChange={(v) => set('publishAt', localInputToIso(v))}
+              error={errors.publishAt}
+              hint="Optional. Leave empty to publish as soon as you save; a future time keeps the page hidden until then (your local time)."
+            />
+          )}
+          {!isNew && (
+            <TextField
+              label="Change note"
+              value={note}
+              onChange={setNote}
+              maxLength={300}
+              error={errors.revisionNote}
+              hint="Optional. Shown in the version history, e.g. “Updated data retention period”."
+            />
+          )}
           {save.isError && !Object.keys(errors).length && (
             <Alert tone="danger" title="Couldn't save the page">
-              {errorMessage(save.error)}
+              {isApiError(save.error) && save.error.code === 'concurrency.conflict'
+                ? 'Someone else saved this page since you opened it. Copy your changes, reload the page and apply them again.'
+                : errorMessage(save.error)}
             </Alert>
           )}
           {save.isError && Object.keys(errors).length > 0 && (
@@ -343,20 +507,23 @@ export function PageEditorPage() {
               </Button>
             )}
           </div>
+          {!isNew && detail.data && (
+            <PageHistory pageId={pageId} stamp={detail.data.concurrencyStamp} onPreview={setPreview} previewing={preview?.version ?? null} />
+          )}
         </form>
-        <aside className="cms-editor__preview" aria-label="Live preview">
-          <p className="cms-editor__preview-label">Live preview</p>
+        <aside className="cms-editor__preview" aria-label={preview ? `Preview of version ${preview.version}` : 'Live preview'}>
+          <p className="cms-editor__preview-label">{preview ? `Version ${preview.version} (read only)` : 'Live preview'}</p>
           <div className="site-layout">
-            {current.blocks[0]?.type !== 'hero' && (
+            {(preview ?? current).blocks[0]?.type !== 'hero' && (
               <div className="site-hero">
                 <div className="container">
                   <p className="site-hero__title">
-                    {current.title || 'Page title'}
+                    {(preview ?? current).title || 'Page title'}
                   </p>
                 </div>
               </div>
             )}
-            <Blocks blocks={current.blocks} context={{ pageTitle: current.title }} />
+            <Blocks blocks={(preview ?? current).blocks} context={{ pageTitle: (preview ?? current).title }} />
           </div>
         </aside>
       </div>

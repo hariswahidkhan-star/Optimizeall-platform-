@@ -183,6 +183,9 @@ export interface SitePageSummary {
   isPublished: boolean;
   blockCount: number;
   updatedAt: string;
+  /** Scheduled go-live of a published page (UTC). */
+  publishAt: string | null;
+  version: number;
 }
 
 export interface SitePage {
@@ -197,7 +200,31 @@ export interface SitePage {
   sortOrder: number;
   updatedAt: string;
   concurrencyStamp: string;
+  publishAt: string | null;
+  version: number;
 }
+
+export interface SitePageRevisionSummary {
+  version: number;
+  action: 'initial' | 'created' | 'updated' | 'restored' | string;
+  note: string | null;
+  title: string;
+  isPublished: boolean;
+  publishAt: string | null;
+  authorUserId: string | null;
+  authorName: string | null;
+  createdAt: string;
+  isCurrent: boolean;
+}
+
+export interface SitePageRevision extends SitePageRevisionSummary {
+  slug: string;
+  summary: string | null;
+  kind: 'Standard' | 'Legal';
+  blocks: PageBlock[];
+  seo: Seo;
+}
+
 
 export type BlogStatus = 'Draft' | 'InReview' | 'Scheduled' | 'Published' | 'Archived';
 

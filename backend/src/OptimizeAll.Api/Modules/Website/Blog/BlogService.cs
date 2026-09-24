@@ -79,6 +79,12 @@ public sealed class BlogService(CmsStore store, IAuditLogger audit, WebsiteRules
         await store.DeleteAsync<BlogCategory>(id, "blog.category_deleted", c => ToDto(c, 0), ct);
     }
 
+    public async Task<ReorderResult> ReorderCategoriesAsync(ReorderInput input, CancellationToken ct)
+    {
+        RequirePublish();
+        return new(await store.ReorderAsync<BlogCategory>(input.Ids, "blog.categories_reordered", (c, o) => c.SortOrder = o, ct));
+    }
+
     private static void Apply(BlogCategory c, BlogCategoryInput r)
     {
         var e = new FieldErrors();

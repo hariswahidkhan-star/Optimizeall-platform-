@@ -125,6 +125,11 @@ public sealed class UpdateSettingRequest : ReasonRequest
     public bool Confirm { get; set; }
 }
 
+public sealed class ResetSettingRequest : ReasonRequest
+{
+    public bool Confirm { get; set; }
+}
+
 // ---------- Audit ----------
 
 public sealed class AuditLogQuery : PageQuery

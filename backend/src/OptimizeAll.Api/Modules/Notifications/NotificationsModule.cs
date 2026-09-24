@@ -1,4 +1,5 @@
 using OptimizeAll.Api.Common.Jobs;
+using OptimizeAll.Api.Modules.Notifications.Templates;
 
 namespace OptimizeAll.Api.Modules.Notifications;
 
@@ -9,6 +10,7 @@ public static class NotificationsModule
     {
         services.AddOptions<WhatsAppOptions>().Configure<IConfiguration>((o, config) => config.GetSection(WhatsAppOptions.Section).Bind(o));
         services.AddScoped<NotificationCenterService>();
+        services.AddScoped<EmailTemplateService>();
 
         // Channel adapters. The dispatch job uses the last registered sender per channel.
         services.AddScoped<INotificationChannelSender, EmailChannelSender>();

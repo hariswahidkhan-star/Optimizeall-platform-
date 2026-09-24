@@ -25,6 +25,13 @@ public sealed class MyNotificationsController(NotificationCenterService center, 
         return NoContent();
     }
 
+    [HttpPost("notifications/{id:guid}/unread")]
+    public async Task<IActionResult> MarkUnread(Guid id, CancellationToken ct)
+    {
+        await center.MarkUnreadAsync(currentUser.Id, id, ct);
+        return NoContent();
+    }
+
     [HttpPost("notifications/read-all")]
     public Task<ReadAllResponse> MarkAllRead(CancellationToken ct) => center.MarkAllReadAsync(currentUser.Id, ct);
 

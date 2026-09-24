@@ -34,6 +34,7 @@ public interface ICampaignAdminService
     Task<AdminCampaignDto> ResumeAsync(Guid id, CancellationToken ct);
     Task<AdminCampaignDto> EndAsync(Guid id, string? reason, CancellationToken ct);
     Task<AdminCampaignDto> ArchiveAsync(Guid id, CancellationToken ct);
+    Task<AdminCampaignDto> UnarchiveAsync(Guid id, CancellationToken ct);
     Task<AdminCampaignDto> DuplicateAsync(Guid id, CancellationToken ct);
 
     Task<CampaignAssetDto> AddAssetAsync(Guid campaignId, AssetInput input, CancellationToken ct);
@@ -48,6 +49,7 @@ public interface ICampaignAdminService
     Task<AdminCategoryDto> CreateCategoryAsync(CategoryInput input, CancellationToken ct);
     Task<AdminCategoryDto> UpdateCategoryAsync(Guid id, CategoryInput input, CancellationToken ct);
     Task<CategoryDeleteResultDto> DeleteCategoryAsync(Guid id, CancellationToken ct);
+    Task<IReadOnlyList<AdminCategoryDto>> ReorderCategoriesAsync(ReorderCategoriesRequest request, CancellationToken ct);
 }
 
 public sealed class CampaignAdminService(
@@ -446,6 +448,11 @@ public sealed class CampaignAdminService(
         TransitionAsync(id, new[] { CampaignStatus.Draft, CampaignStatus.Ended }, _ => CampaignStatus.Archived,
             "campaign.archived", null, ct);
 
+    /// <summary>Restores an archived campaign: to Ended when it was ever published, otherwise back to Draft.</summary>
+    public Task<AdminCampaignDto> UnarchiveAsync(Guid id, CancellationToken ct) =>
+        TransitionAsync(id, new[] { CampaignStatus.Archived }, c => c.PublishedAt is null ? CampaignStatus.Draft : CampaignStatus.Ended,
+            "campaign.unarchived", null, ct);
+
     private static string RequireReason(string? reason) =>
         string.IsNullOrWhiteSpace(reason) || reason.Trim().Length < 5
             ? throw new DomainException("reason.required", "A reason (at least 5 characters) is required.")
@@ -726,6 +733,22 @@ public sealed class CampaignAdminService(
         audit.Record("campaign_category.deleted", nameof(CampaignCategory), id, before: CategoryDto.From(category));
         await db.SaveChangesAsync(ct);
         return new CategoryDeleteResultDto(true, false, 0);
+    }
+
+    /// <summary>Sets the display order of categories (listed ids get 10, 20, 30…; unlisted keep theirs).</summary>
+    public async Task<IReadOnlyList<AdminCategoryDto>> ReorderCategoriesAsync(ReorderCategoriesRequest request, CancellationToken ct)
+    {
+        var ids = request.Ids.Distinct().ToList();
+        if (ids.Count != request.Ids.Count)
+            throw new DomainException("category.reorder_duplicates", "Each category can appear only once.");
+        var categories = await db.Set<CampaignCategory>().Where(c => ids.Contains(c.Id)).ToListAsync(ct);
+        if (categories.Count != ids.Count)
+            throw new DomainException("category.reorder_unknown", "Some categories no longer exist. Reload and try again.");
+        var byId = categories.ToDictionary(c => c.Id);
+        for (var i = 0; i < ids.Count; i++) byId[ids[i]].SortOrder = (i + 1) * 10;
+        audit.Record("campaign_category.reordered", nameof(CampaignCategory), "bulk", after: new { order = ids });
+        await db.SaveChangesAsync(ct);
+        return await ListCategoriesAsync(ct);
     }
 
     private async Task SaveCategoryAsync(CancellationToken ct)

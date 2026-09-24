@@ -3,17 +3,19 @@ import { useState, type FormEvent } from 'react';
 import { Button, FormField, Select, Textarea } from '@/components/ui';
 import { usePage, useServices, useSite } from '../site/api';
 import { Blocks } from '../site/Blocks';
+import { useSiteCopy } from '../site/copy';
 import { PageHero } from '../site/components';
 import { useDocumentHead } from '../site/head';
 import { ContactFields, type ContactValues, EMPTY_CONTACT, FormSuccess, ServicePicker, useLeadForm, validateContact } from './leadForm';
 
 function ContactDetails() {
   const { data: site } = useSite();
+  const copy = useSiteCopy();
   const c = site?.contact;
   if (!c) return null;
   return (
     <div className="site-hero__panel">
-      <h2 className="public-footer__heading">Other ways to reach us</h2>
+      <h2 className="public-footer__heading">{copy.text('contact.details.title')}</h2>
       <ul className="site-checklist">
         {c.email && (
           <li>
@@ -57,7 +59,8 @@ export function ContactPage() {
   const [message, setMessage] = useState('');
   const [slugs, setSlugs] = useState<string[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  useDocumentHead({ title: 'Contact', description: 'Talk to Optimize All about your marketing. A strategist replies within one business day.' });
+  const copy = useSiteCopy();
+  useDocumentHead({ title: copy.text('contact.seo.title'), description: copy.text('contact.seo.description') });
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
@@ -71,10 +74,10 @@ export function ContactPage() {
 
   return (
     <>
-      <PageHero eyebrow="Contact" title="Let's talk about your growth" breadcrumbs={[{ label: 'Home', to: '/' }, { label: 'Contact' }]} />
+      <PageHero eyebrow={copy.text('contact.hero.eyebrow')} title={copy.text('contact.hero.title')} breadcrumbs={[{ label: 'Home', to: '/' }, { label: 'Contact' }]} />
       <div className="container site-form-layout">
         {form.mutation.isSuccess ? (
-          <FormSuccess title="Thanks — message received" reference={form.mutation.data.reference}>
+          <FormSuccess title={copy.text('contact.success.title')} reference={form.mutation.data.reference}>
             <p>{form.mutation.data.message}</p>
           </FormSuccess>
         ) : (
@@ -87,7 +90,7 @@ export function ContactPage() {
             {form.consentField(errors.consent)}
             {form.generalError}
             <Button type="submit" size="lg" loading={form.mutation.isPending} disabled={form.token.isLoading}>
-              Send message
+              {copy.text('contact.submit')}
             </Button>
           </form>
         )}
@@ -110,10 +113,8 @@ export function FreeAuditPage() {
   const [competitors, setCompetitors] = useState('');
   const [slugs, setSlugs] = useState<string[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  useDocumentHead({
-    title: 'Free marketing audit',
-    description: 'Get a free, no-obligation audit of your website, tracking, search visibility and paid media from a senior strategist.',
-  });
+  const copy = useSiteCopy();
+  useDocumentHead({ title: copy.text('audit.seo.title'), description: copy.text('audit.seo.description') });
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
@@ -131,15 +132,15 @@ export function FreeAuditPage() {
   return (
     <>
       <PageHero
-        eyebrow="Free marketing audit"
-        title="Find out where your growth is hiding"
-        lead="A senior strategist reviews your website, tracking, search visibility and paid media, then walks you through a prioritised action plan. Free, with no obligation."
+        eyebrow={copy.text('audit.hero.eyebrow')}
+        title={copy.text('audit.hero.title')}
+        lead={copy.text('audit.hero.lead')}
         breadcrumbs={[{ label: 'Home', to: '/' }, { label: 'Free audit' }]}
       />
       <div className="container site-form-layout">
         {form.mutation.isSuccess ? (
-          <FormSuccess title="Your audit request is in" reference={form.mutation.data.reference}>
-            <p>We'll review your marketing and get back to you within two business days to schedule the walkthrough.</p>
+          <FormSuccess title={copy.text('audit.success.title')} reference={form.mutation.data.reference}>
+            <p>{copy.text('audit.success.text')}</p>
           </FormSuccess>
         ) : (
           <form className="site-form" onSubmit={submit} noValidate aria-label="Free audit request">
@@ -157,19 +158,17 @@ export function FreeAuditPage() {
             {form.consentField(errors.consent)}
             {form.generalError}
             <Button type="submit" size="lg" variant="highlight" loading={form.mutation.isPending} disabled={form.token.isLoading}>
-              Request my free audit
+              {copy.text('audit.submit')}
             </Button>
           </form>
         )}
         <aside className="site-aside">
           <div className="site-hero__panel">
-            <h2 className="public-footer__heading">What's included</h2>
+            <h2 className="public-footer__heading">{copy.text('audit.included.title')}</h2>
             <ul className="site-checklist">
-              <li>Tracking and analytics health check</li>
-              <li>SEO visibility vs. your competitors</li>
-              <li>Paid media waste and quick wins</li>
-              <li>Website conversion review</li>
-              <li>A prioritised 90-day plan</li>
+              {copy.list('audit.included.items').map((item) => (
+                <li key={item}>{item}</li>
+              ))}
             </ul>
           </div>
         </aside>

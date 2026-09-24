@@ -15,71 +15,22 @@ import {
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ButtonLink } from '@/components/ui/ButtonLink';
+import { useSiteCopy } from './site/copy';
 import './LandingPage.css';
 
-const STEPS = [
-  {
-    icon: Megaphone,
-    title: 'Pick a campaign',
-    text: 'Browse campaigns from companies that match your audience. Each one comes with approved content and clear rules.',
-  },
-  {
-    icon: Upload,
-    title: 'Share and submit proof',
-    text: 'Post the content from your established account, then submit the post link and a screenshot.',
-  },
-  {
-    icon: Wallet,
-    title: 'Get paid for approved posts',
-    text: 'A reviewer checks every post. Approved earnings are paid out on a predictable biweekly schedule.',
-  },
-];
-
-const RULES = [
-  {
-    icon: UserCheck,
-    title: 'Established accounts only',
-    text: 'Real accounts with a genuine history and audience. We verify every connected account — no bots, no bought followers.',
-  },
-  {
-    icon: Hash,
-    title: 'Disclosure is required',
-    text: 'Every paid post is clearly labelled (for example #ad or the platform’s paid-partnership tag). Your audience always knows.',
-  },
-  {
-    icon: Eye,
-    title: 'Human review',
-    text: 'People, not just algorithms, review each submission. If something needs fixing you get specific feedback and a chance to correct it.',
-  },
-  {
-    icon: CalendarClock,
-    title: 'Transparent biweekly payouts',
-    text: 'See exactly what is pending, approved and scheduled. Payouts run every two weeks with a full history of every amount.',
-  },
-];
-
-const FAQ_TEASER = [
-  {
-    q: 'Who can join?',
-    a: 'Anyone with an established, genuine social account in a supported country. New or inactive accounts may not qualify for every campaign.',
-  },
-  {
-    q: 'How much can I earn?',
-    a: 'Each campaign shows its reward per approved post up front, so you know what you’ll earn before you share.',
-  },
-  {
-    q: 'When do I get paid?',
-    a: 'Approved earnings are included in the next biweekly payout once you reach the minimum payout amount.',
-  },
-];
+/** Icons for the editable steps and rules (by position; extra items reuse them in order). */
+const STEP_ICONS = [Megaphone, Upload, Wallet];
+const RULE_ICONS = [UserCheck, Hash, Eye, CalendarClock];
 
 /** Marketing home page for prospective participants. */
 export function LandingPage() {
   const { hash } = useLocation();
+  const copy = useSiteCopy();
+  const browserTitle = copy.text('creators.seo.title');
 
   useEffect(() => {
-    document.title = 'Optimize All — Get paid to share brands you believe in';
-  }, []);
+    document.title = browserTitle;
+  }, [browserTitle]);
 
   // Router links to /#section: scroll to the section and move focus there for keyboard users.
   useEffect(() => {
@@ -98,34 +49,26 @@ export function LandingPage() {
           <div className="landing-hero__copy">
             <p className="landing-hero__eyebrow">
               <span className="landing-hero__dot" aria-hidden="true" />
-              Paid sharing campaigns, done right
+              {copy.text('creators.hero.eyebrow')}
             </p>
             <h1 id="hero-title" className="landing-hero__title">
-              Get paid to share brands <span className="landing-hero__accent">you believe in</span>
+              {copy.text('creators.hero.title')} <span className="landing-hero__accent">{copy.text('creators.hero.titleAccent')}</span>
             </h1>
-            <p className="landing-hero__lead">
-              Optimize All connects creators and everyday influencers with companies that want authentic reach. Share
-              approved content from your own established accounts, submit proof, and get paid for every approved
-              post.
-            </p>
+            <p className="landing-hero__lead">{copy.text('creators.hero.lead')}</p>
             <div className="landing-hero__ctas">
               <ButtonLink to="/register" variant="highlight" size="lg" trailingIcon={<ArrowRight />}>
-                Create your free account
+                {copy.text('creators.hero.primaryCta')}
               </ButtonLink>
               <ButtonLink to="/#how-it-works" variant="secondary" size="lg">
-                See how it works
+                {copy.text('creators.hero.secondaryCta')}
               </ButtonLink>
             </div>
             <ul className="landing-hero__trust">
-              <li>
-                <CheckCircle2 aria-hidden="true" /> Free to join
-              </li>
-              <li>
-                <CheckCircle2 aria-hidden="true" /> Every post reviewed by a person
-              </li>
-              <li>
-                <CheckCircle2 aria-hidden="true" /> Paid every two weeks
-              </li>
+              {copy.list('creators.hero.trust').map((item) => (
+                <li key={item}>
+                  <CheckCircle2 aria-hidden="true" /> {item}
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -135,7 +78,7 @@ export function LandingPage() {
                 <span className="hero-card__label">Next payout</span>
                 <span className="hero-card__pill">Scheduled</span>
               </div>
-              <p className="hero-card__amount">Every other Friday</p>
+              <p className="hero-card__amount">{copy.text('creators.hero.payoutSchedule')}</p>
               <div className="hero-card__bar">
                 <span style={{ width: '72%' }} />
               </div>
@@ -166,13 +109,15 @@ export function LandingPage() {
       <section id="how-it-works" tabIndex={-1} className="landing-section" aria-labelledby="how-title">
         <div className="container">
           <div className="landing-section__header">
-            <p className="eyebrow">How it works</p>
+            <p className="eyebrow">{copy.text('creators.how.eyebrow')}</p>
             <h2 id="how-title" className="landing-section__title">
-              Three steps from post to payout
+              {copy.text('creators.how.title')}
             </h2>
           </div>
           <ol className="landing-steps">
-            {STEPS.map(({ icon: Icon, title, text }, index) => (
+            {copy.pairs('creators.how.steps').map(({ title, text }, index) => {
+              const Icon = STEP_ICONS[index % STEP_ICONS.length];
+              return (
               <li key={title} className="landing-step">
                 <span className="landing-step__number" aria-hidden="true">
                   {index + 1}
@@ -186,7 +131,8 @@ export function LandingPage() {
                 </h3>
                 <p className="landing-step__text">{text}</p>
               </li>
-            ))}
+              );
+            })}
           </ol>
         </div>
       </section>
@@ -194,16 +140,16 @@ export function LandingPage() {
       <section id="rules" tabIndex={-1} className="landing-section landing-section--alt" aria-labelledby="rules-title">
         <div className="container">
           <div className="landing-section__header">
-            <p className="eyebrow">Trust & rules</p>
+            <p className="eyebrow">{copy.text('creators.rules.eyebrow')}</p>
             <h2 id="rules-title" className="landing-section__title">
-              Fair for you, honest with your audience
+              {copy.text('creators.rules.title')}
             </h2>
-            <p className="landing-section__lead">
-              The rules protect your reputation and the companies you work with. They are the same for everyone.
-            </p>
+            <p className="landing-section__lead">{copy.text('creators.rules.lead')}</p>
           </div>
           <ul className="landing-rules">
-            {RULES.map(({ icon: Icon, title, text }) => (
+            {copy.pairs('creators.rules.items').map(({ title, text }, index) => {
+              const Icon = RULE_ICONS[index % RULE_ICONS.length];
+              return (
               <li key={title} className="landing-rule">
                 <span className="landing-rule__icon" aria-hidden="true">
                   <Icon />
@@ -211,7 +157,8 @@ export function LandingPage() {
                 <h3 className="landing-rule__title">{title}</h3>
                 <p className="landing-rule__text">{text}</p>
               </li>
-            ))}
+              );
+            })}
           </ul>
         </div>
       </section>
@@ -219,20 +166,20 @@ export function LandingPage() {
       <section className="landing-section" aria-labelledby="faq-title">
         <div className="container landing-faq">
           <div className="landing-section__header landing-faq__header">
-            <p className="eyebrow">Questions</p>
+            <p className="eyebrow">{copy.text('creators.faq.eyebrow')}</p>
             <h2 id="faq-title" className="landing-section__title">
-              Good to know
+              {copy.text('creators.faq.title')}
             </h2>
-            <p className="landing-section__lead">Quick answers to what people ask most.</p>
+            <p className="landing-section__lead">{copy.text('creators.faq.lead')}</p>
             <ButtonLink to="/faq" variant="secondary" trailingIcon={<ArrowRight />}>
-              Read all FAQs
+              {copy.text('creators.faq.cta')}
             </ButtonLink>
           </div>
           <dl className="landing-faq__list">
-            {FAQ_TEASER.map((item) => (
-              <div key={item.q} className="landing-faq__item">
-                <dt>{item.q}</dt>
-                <dd>{item.a}</dd>
+            {copy.pairs('creators.faq.items').map((item) => (
+              <div key={item.title} className="landing-faq__item">
+                <dt>{item.title}</dt>
+                <dd>{item.text}</dd>
               </div>
             ))}
           </dl>
@@ -243,12 +190,12 @@ export function LandingPage() {
         <div className="container landing-cta__inner">
           <div>
             <h2 id="cta-title" className="landing-cta__title">
-              Ready to earn from the brands you already love?
+              {copy.text('creators.cta.title')}
             </h2>
-            <p className="landing-cta__text">It takes two minutes to create an account and connect your first profile.</p>
+            <p className="landing-cta__text">{copy.text('creators.cta.text')}</p>
           </div>
           <ButtonLink to="/register" variant="highlight" size="lg" trailingIcon={<ArrowRight />}>
-            Get started
+            {copy.text('creators.cta.button')}
           </ButtonLink>
         </div>
       </section>

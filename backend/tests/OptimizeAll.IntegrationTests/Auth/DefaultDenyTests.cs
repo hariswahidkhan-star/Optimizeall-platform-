@@ -43,6 +43,7 @@ public sealed class DefaultDenyTests(ApiFactory api) : IClassFixture<ApiFactory>
         "GET api/v1/files/{id:guid}",
         "GET api/v1/campaign-categories",
         "GET api/v1/content/faqs",
+        "GET api/v1/content/copy",
         "GET api/v1/meta/currencies",
         "GET api/v1/dev/mailbox",
         // Non-production quick sign-in as a test/demo account (404 unless DevTools:TestLoginEnabled and not Production).

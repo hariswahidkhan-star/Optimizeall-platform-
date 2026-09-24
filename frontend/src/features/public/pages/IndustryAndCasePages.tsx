@@ -6,20 +6,19 @@ import { CaseStudyCard, CtaBand, formatPublished, MetricValue, PageHero, PublicQ
 import { headFromSeo, useDocumentHead } from '../site/head';
 import { SiteIcon } from '../site/icons';
 import { Markdown } from '../site/Markdown';
+import { useSiteCopy } from '../site/copy';
 
 /** /industries */
 export function IndustriesPage() {
   const { data, isLoading, error } = useIndustries();
-  useDocumentHead({
-    title: 'Industries',
-    description: 'Digital marketing expertise for e-commerce, SaaS, real estate, healthcare, education, hospitality, finance and local businesses.',
-  });
+  const copy = useSiteCopy();
+  useDocumentHead({ title: copy.text('industries.seo.title'), description: copy.text('industries.seo.description') });
   return (
     <>
       <PageHero
-        eyebrow="Industries"
-        title="Marketing that speaks your industry's language"
-        lead="Every market has its own buyers, rules and seasons. Our teams bring sector experience — and the playbooks that go with it."
+        eyebrow={copy.text('industries.hero.eyebrow')}
+        title={copy.text('industries.hero.title')}
+        lead={copy.text('industries.hero.lead')}
         breadcrumbs={[{ label: 'Home', to: '/' }, { label: 'Industries' }]}
       />
       <PublicQueryState error={error} isLoading={isLoading} notFoundTitle="Industries unavailable">
@@ -54,14 +53,15 @@ export function IndustriesPage() {
 export function IndustryDetailPage() {
   const { slug = '' } = useParams();
   const { data: i, isLoading, error } = useIndustry(slug);
+  const copy = useSiteCopy();
   useDocumentHead(i ? headFromSeo(i.seo, i.jsonLd) : { title: 'Industry' });
   return (
     <PublicQueryState error={error} isLoading={isLoading} notFoundTitle="We couldn't find that industry">
       {i && (
         <>
           <PageHero
-            eyebrow="Industries"
-            title={`Digital marketing for ${i.name}`}
+            eyebrow={copy.text('industries.hero.eyebrow')}
+            title={copy.text('industries.detail.title', { name: i.name })}
             lead={i.summary}
             breadcrumbs={[{ label: 'Home', to: '/' }, { label: 'Industries', to: '/industries' }, { label: i.name }]}
           >
@@ -75,7 +75,7 @@ export function IndustryDetailPage() {
             </div>
           )}
           {i.challenges.length > 0 && (
-            <Section title="Challenges we help with" tone="muted">
+            <Section title={copy.text('industries.detail.challengesTitle')} tone="muted">
               <ul className="site-grid site-grid--2">
                 {i.challenges.map((c) => (
                   <li key={c} className="site-card">
@@ -86,7 +86,7 @@ export function IndustryDetailPage() {
             </Section>
           )}
           {i.services.length > 0 && (
-            <Section title="Recommended services">
+            <Section title={copy.text('industries.detail.servicesTitle')}>
               <ul className="site-grid site-grid--3">
                 {i.services.map((s) => (
                   <li key={s.slug}>
@@ -97,7 +97,7 @@ export function IndustryDetailPage() {
             </Section>
           )}
           {i.caseStudies.length > 0 && (
-            <Section title={`${i.name} case studies`} tone="muted">
+            <Section title={copy.text('industries.detail.caseStudiesTitle', { name: i.name })} tone="muted">
               <ul className="site-grid site-grid--3">
                 {i.caseStudies.map((c) => (
                   <li key={c.slug}>
@@ -107,7 +107,7 @@ export function IndustryDetailPage() {
               </ul>
             </Section>
           )}
-          <CtaBand title={`Growing a ${i.name.toLowerCase()} business?`} />
+          <CtaBand title={copy.text('industries.detail.ctaTitle', { name: i.name.toLowerCase() })} />
         </>
       )}
     </PublicQueryState>
@@ -122,7 +122,8 @@ export function CaseStudiesPage() {
   const { data, isLoading, error } = useCaseStudies({ service: service || undefined, industry: industry || undefined });
   const services = useServices();
   const industries = useIndustries();
-  useDocumentHead({ title: 'Case studies', description: 'How we have helped brands grow: strategy, execution and results, clearly labelled measured or estimated.' });
+  const copy = useSiteCopy();
+  useDocumentHead({ title: copy.text('caseStudies.seo.title'), description: copy.text('caseStudies.seo.description') });
 
   const update = (key: string, value: string) => {
     const next = new URLSearchParams(params);
@@ -134,9 +135,9 @@ export function CaseStudiesPage() {
   return (
     <>
       <PageHero
-        eyebrow="Case studies"
-        title="Proof, not promises"
-        lead="The challenge, what we did and what changed. Every figure says whether it was measured or estimated."
+        eyebrow={copy.text('caseStudies.hero.eyebrow')}
+        title={copy.text('caseStudies.hero.title')}
+        lead={copy.text('caseStudies.hero.lead')}
         breadcrumbs={[{ label: 'Home', to: '/' }, { label: 'Case studies' }]}
       />
       <div className="site-section site-section--tight">
@@ -163,7 +164,7 @@ export function CaseStudiesPage() {
         <div className="site-section">
           <div className="container">
             {data && data.length === 0 ? (
-              <EmptyState title="No case studies match these filters yet" headingLevel={2} description="Try another service or industry." />
+              <EmptyState title={copy.text('caseStudies.empty.title')} headingLevel={2} description={copy.text('caseStudies.empty.description')} />
             ) : (
               <ul className="site-grid site-grid--3" aria-label="Case studies">
                 {(data ?? []).map((c) => (
@@ -185,6 +186,7 @@ export function CaseStudiesPage() {
 export function CaseStudyDetailPage() {
   const { slug = '' } = useParams();
   const { data: c, isLoading, error } = useCaseStudy(slug);
+  const copy = useSiteCopy();
   useDocumentHead(c ? headFromSeo(c.seo, c.jsonLd, 'article') : { title: 'Case study' });
   const hasEstimate = c?.metrics.some((m) => m.measurement === 'Estimated');
   return (
@@ -201,7 +203,7 @@ export function CaseStudyDetailPage() {
           </PageHero>
 
           {c.metrics.length > 0 && (
-            <Section title="Results" tone="muted" intro={hasEstimate ? 'Figures marked “Estimated” are projections or modelled values, not direct measurements.' : undefined}>
+            <Section title={copy.text('caseStudies.detail.resultsTitle')} tone="muted" intro={hasEstimate ? copy.text('caseStudies.detail.estimateNote') : undefined}>
               <div className="site-stats">
                 {c.metrics.map((m) => (
                   <MetricValue key={m.label} metric={m} />
@@ -215,7 +217,7 @@ export function CaseStudyDetailPage() {
               {c.challengeMarkdown && (
                 <section aria-labelledby="cs-challenge">
                   <h2 id="cs-challenge" className="site-section__title">
-                    The challenge
+                    {copy.text('caseStudies.detail.challengeTitle')}
                   </h2>
                   <Markdown source={c.challengeMarkdown} minLevel={3} />
                 </section>
@@ -223,7 +225,7 @@ export function CaseStudyDetailPage() {
               {c.strategyMarkdown && (
                 <section aria-labelledby="cs-strategy">
                   <h2 id="cs-strategy" className="site-section__title">
-                    Our strategy
+                    {copy.text('caseStudies.detail.strategyTitle')}
                   </h2>
                   <Markdown source={c.strategyMarkdown} minLevel={3} />
                 </section>
@@ -231,7 +233,7 @@ export function CaseStudyDetailPage() {
               {c.executionMarkdown && (
                 <section aria-labelledby="cs-execution">
                   <h2 id="cs-execution" className="site-section__title">
-                    Execution
+                    {copy.text('caseStudies.detail.executionTitle')}
                   </h2>
                   <Markdown source={c.executionMarkdown} minLevel={3} />
                 </section>
@@ -255,7 +257,7 @@ export function CaseStudyDetailPage() {
           </div>
 
           {c.galleryImageUrls.length > 0 && (
-            <Section title="Gallery" tone="muted">
+            <Section title={copy.text('caseStudies.detail.galleryTitle')} tone="muted">
               <div className="site-gallery">
                 {c.galleryImageUrls.map((url, index) => (
                   <img key={url} src={url} alt={`${c.title} — gallery ${index + 1} of ${c.galleryImageUrls.length}`} loading="lazy" decoding="async" width={440} height={330} />
@@ -265,7 +267,7 @@ export function CaseStudyDetailPage() {
           )}
 
           {c.services.length > 0 && (
-            <Section title="Services used">
+            <Section title={copy.text('caseStudies.detail.servicesTitle')}>
               <ul className="site-grid site-grid--3">
                 {c.services.map((s) => (
                   <li key={s.slug}>
@@ -277,7 +279,7 @@ export function CaseStudyDetailPage() {
           )}
 
           {c.related.length > 0 && (
-            <Section title="More case studies" tone="muted">
+            <Section title={copy.text('caseStudies.detail.moreTitle')} tone="muted">
               <ul className="site-grid site-grid--3">
                 {c.related.map((r) => (
                   <li key={r.slug}>
@@ -287,7 +289,7 @@ export function CaseStudyDetailPage() {
               </ul>
             </Section>
           )}
-          <CtaBand title="Want results like these?" />
+          <CtaBand title={copy.text('caseStudies.detail.ctaTitle')} />
         </>
       )}
     </PublicQueryState>

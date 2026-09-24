@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { Archive, Copy, Pause, Pencil, Play, Square } from 'lucide-react';
+import { Archive, ArchiveRestore, Copy, Pause, Pencil, Play, Square } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ConfirmDialog, useToast, type MenuEntry } from '@/components/ui';
@@ -9,7 +9,7 @@ import { useAuth } from '@/lib/auth/useAuth';
 import { qk } from '../api/queries';
 import type { AdminCampaign, CampaignStatus } from '../api/types';
 
-export type CampaignAction = 'pause' | 'resume' | 'end' | 'archive' | 'duplicate';
+export type CampaignAction = 'pause' | 'resume' | 'end' | 'archive' | 'unarchive' | 'duplicate';
 
 interface ActionTarget {
   id: string;
@@ -60,6 +60,15 @@ const SPECS: Record<CampaignAction, ActionSpec> = {
     requireReason: false,
     success: 'Campaign archived',
   },
+  unarchive: {
+    title: (t) => `Restore “${t.title}”?`,
+    description:
+      'The campaign leaves the archive: a campaign that was never published returns to Draft, a published one to Ended.',
+    confirmLabel: 'Restore campaign',
+    tone: 'primary',
+    requireReason: false,
+    success: 'Campaign restored',
+  },
   duplicate: {
     title: (t) => `Duplicate “${t.title}”?`,
     description:
@@ -77,6 +86,7 @@ export function allowedActions(status: CampaignStatus): CampaignAction[] {
   if (status === 'Paused') actions.push('resume');
   if (status === 'Active' || status === 'Paused' || status === 'Scheduled') actions.push('end');
   if (status === 'Draft' || status === 'Ended') actions.push('archive');
+  if (status === 'Archived') actions.push('unarchive');
   actions.push('duplicate');
   return actions;
 }
@@ -86,6 +96,7 @@ const ICONS: Record<CampaignAction, ReactNode> = {
   resume: <Play />,
   end: <Square />,
   archive: <Archive />,
+  unarchive: <ArchiveRestore />,
   duplicate: <Copy />,
 };
 
@@ -94,11 +105,12 @@ const LABELS: Record<CampaignAction, string> = {
   resume: 'Resume…',
   end: 'End…',
   archive: 'Archive…',
+  unarchive: 'Restore from archive…',
   duplicate: 'Duplicate…',
 };
 
 /**
- * Status actions (pause/resume/end/archive/duplicate) with their confirmation dialogs. Pause and End require a
+ * Status actions (pause/resume/end/archive/restore/duplicate) with their confirmation dialogs. Pause and End require a
  * reason (audited). Returns menu entries for a campaign and the dialog element to render once.
  */
 export function useCampaignActions(

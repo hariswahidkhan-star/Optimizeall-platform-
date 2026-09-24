@@ -64,6 +64,7 @@ export function IndustriesAdminPage() {
         existing ? api.put(`${W}/industries/${existing.id}`, { ...draft, concurrencyStamp: existing.concurrencyStamp }) : api.post(`${W}/industries`, draft)
       }
       remove={(r) => api.delete(`${W}/industries/${r.id}`)}
+      reorder={(ids) => api.post(`${W}/industries/reorder`, { ids })}
       Form={({ draft, setDraft, errors }) => {
         const set = <K extends keyof IndustryDraft>(k: K, v: IndustryDraft[K]) => setDraft({ ...draft, [k]: v });
         return (
@@ -133,6 +134,7 @@ export function CaseStudiesAdminPage() {
         existing ? api.put(`${W}/case-studies/${existing.id}`, { ...draft, concurrencyStamp: existing.concurrencyStamp }) : api.post(`${W}/case-studies`, draft)
       }
       remove={(r) => api.delete(`${W}/case-studies/${r.id}`)}
+      reorder={(ids) => api.post(`${W}/case-studies/reorder`, { ids })}
       Form={({ draft, setDraft, errors }) => {
         const set = <K extends keyof CaseDraft>(k: K, v: CaseDraft[K]) => setDraft({ ...draft, [k]: v });
         return (
@@ -230,6 +232,7 @@ export function TestimonialsAdminPage() {
         existing ? api.put(`${W}/testimonials/${existing.id}`, { ...draft, concurrencyStamp: existing.concurrencyStamp }) : api.post(`${W}/testimonials`, draft)
       }
       remove={(r) => api.delete(`${W}/testimonials/${r.id}`)}
+      reorder={(ids) => api.post(`${W}/testimonials/reorder`, { ids })}
       Form={({ draft, setDraft, errors }) => {
         const set = <K extends keyof TestimonialDraft>(k: K, v: TestimonialDraft[K]) => setDraft({ ...draft, [k]: v });
         return (
@@ -290,6 +293,7 @@ export function TeamAdminPage() {
         existing ? api.put(`${W}/team/${existing.id}`, { ...draft, concurrencyStamp: existing.concurrencyStamp }) : api.post(`${W}/team`, draft)
       }
       remove={(r) => api.delete(`${W}/team/${r.id}`)}
+      reorder={(ids) => api.post(`${W}/team/reorder`, { ids })}
       Form={({ draft, setDraft, errors }) => {
         const set = <K extends keyof TeamDraft>(k: K, v: TeamDraft[K]) => setDraft({ ...draft, [k]: v });
         return (

@@ -36,6 +36,7 @@ import { PlatformTag } from '../components/Platform';
 import { AchievementIcon } from '../achievements/AchievementIcon';
 import { SafeExternalLink } from '@/components/SafeExternalLink';
 import { isInternalHref } from '@/lib/safeHref';
+import { useSiteCopy } from '@/features/public/site/copy';
 
 // ---------------------------------------------------------------- state heroes
 
@@ -75,11 +76,12 @@ export function VerifyEmailHero({ email }: { email: string }) {
     onSuccess: (response) => toast.success('Verification email sent', response?.message ?? `Check ${email}.`),
     onError: (error) => toast.error('Couldn’t send the email', errorMessage(error)),
   });
+  const copy = useSiteCopy();
   return (
     <Hero
       titleId="hero-verify"
       icon={<MailCheck />}
-      title="Verify your email to get started"
+      title={copy.text('participant.home.verifyEmail.title')}
       actions={
         <Button variant="highlight" loading={resend.isPending} onClick={() => resend.mutate()}>
           Resend verification email
@@ -98,11 +100,12 @@ export function VerifyEmailHero({ email }: { email: string }) {
 }
 
 export function AddSocialAccountHero({ minAgeDays }: { minAgeDays: number }) {
+  const copy = useSiteCopy();
   return (
     <Hero
       titleId="hero-add-social"
       icon={<UserPlus />}
-      title="Add the social profile you post from"
+      title={copy.text('participant.home.addSocial.title')}
       actions={
         <ButtonLink to="/app/social-accounts?add=1" variant="highlight" trailingIcon={<ArrowRight />}>
           Add a social profile
@@ -186,6 +189,7 @@ export function AwaitingEligibilityHero({
 
 export function OnboardingCard({ onboarding }: { onboarding: ParticipantHome['onboarding'] }) {
   const toast = useToast();
+  const copy = useSiteCopy();
   const client = useQueryClient();
   const dismiss = useMutation({
     mutationFn: (step: OnboardingStep) => api.post(`/me/onboarding/${step.id}/complete`),
@@ -236,7 +240,7 @@ export function OnboardingCard({ onboarding }: { onboarding: ParticipantHome['on
     <Card as="section" aria-labelledby="onboarding-title">
       <CardHeader
         titleId="onboarding-title"
-        title="Get set up"
+        title={copy.text('participant.home.onboarding.title')}
         description={`${onboarding.completedCount} of ${onboarding.totalCount} steps done`}
       />
       <CardBody className="stack">
@@ -319,6 +323,7 @@ export function Recommendations({
   title?: string;
   description?: string;
 }) {
+  const copy = useSiteCopy();
   return (
     <section aria-labelledby="recommended-title" className="pp-section">
       <div className="pp-section__head">
@@ -337,8 +342,8 @@ export function Recommendations({
           <EmptyState
             compact
             headingLevel={3}
-            title="No recommendations right now"
-            description="New campaigns open regularly. Browse everything that’s live, or add interests to your profile for better matches."
+            title={copy.text('participant.home.recommendations.empty.title')}
+            description={copy.text('participant.home.recommendations.empty.description')}
             action={
               <ButtonLink to="/app/campaigns" variant="secondary">
                 Browse campaigns
@@ -409,14 +414,15 @@ export function NextPayoutCard({
   headingLevel?: 2 | 3;
 }) {
   const next = summary.nextPayout;
+  const copy = useSiteCopy();
   const c = summary.currency;
   return (
     <Card as="section" aria-labelledby="next-payout-title">
       <CardHeader
         titleId="next-payout-title"
         headingLevel={headingLevel}
-        title="Next payout"
-        description="Payouts run every two weeks for approved earnings that are past their hold period."
+        title={copy.text('participant.home.nextPayout.title')}
+        description={copy.text('participant.home.nextPayout.description')}
       />
       <CardBody className="stack">
         {summary.activeHold && (
@@ -479,11 +485,12 @@ function formatMoneyText(amount: number, currency: string) {
 }
 
 export function AttentionList({ items }: { items: SubmissionListItem[] }) {
+  const copy = useSiteCopy();
   return (
     <Card as="section" aria-labelledby="attention-title">
       <CardHeader
         titleId="attention-title"
-        title="Submissions needing attention"
+        title={copy.text('participant.home.attention.title')}
         actions={
           <Link to="/app/submissions" className="ui-link text-small">
             All submissions
@@ -495,8 +502,8 @@ export function AttentionList({ items }: { items: SubmissionListItem[] }) {
           <EmptyState
             compact
             headingLevel={3}
-            title="You’re all caught up"
-            description="Nothing needs your action. We’ll notify you when a reviewer responds."
+            title={copy.text('participant.home.attention.empty.title')}
+            description={copy.text('participant.home.attention.empty.description')}
           />
         ) : (
           <ul className="pp-list">

@@ -1,14 +1,16 @@
 import { Compass } from 'lucide-react';
 import { ButtonLink } from '@/components/ui/ButtonLink';
+import { useSiteCopy } from './site/copy';
 import { StatusPage } from './StatusPage';
 
 export function NotFound() {
+  const copy = useSiteCopy();
   return (
     <StatusPage
       code="404"
       icon={<Compass />}
-      title="We couldn’t find that page"
-      description="The link may be out of date, or the page may have moved."
+      title={copy.text('shared.page404.title')}
+      description={copy.text('shared.page404.description')}
       actions={
         <>
           <ButtonLink to="/">Back to the home page</ButtonLink>

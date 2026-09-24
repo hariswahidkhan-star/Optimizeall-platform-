@@ -57,6 +57,10 @@ public sealed class AdminSettingsController(AdminSettingsService settings) : Con
 
     [HttpPut("{key}")]
     public Task<SettingDto> Update(string key, UpdateSettingRequest request, CancellationToken ct) => settings.UpdateAsync(key, request, ct);
+
+    /// <summary>Restores the built-in default value.</summary>
+    [HttpPost("{key}/reset")]
+    public Task<SettingDto> Reset(string key, ResetSettingRequest request, CancellationToken ct) => settings.ResetAsync(key, request, ct);
 }
 
 [ApiController]

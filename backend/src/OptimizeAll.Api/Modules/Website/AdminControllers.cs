@@ -124,6 +124,9 @@ public sealed class WebsiteContentController(CatalogAdminService catalog, SiteSe
         return NoContent();
     }
 
+    [HttpPost("industries/reorder")]
+    public Task<ReorderResult> ReorderIndustries(ReorderInput input, CancellationToken ct) => catalog.ReorderIndustriesAsync(input, ct);
+
     [HttpGet("case-studies")]
     public Task<PagedResult<CaseStudyDto>> CaseStudies([FromQuery] CmsQuery query, CancellationToken ct) => catalog.ListCaseStudiesAsync(query, ct);
 
@@ -143,6 +146,9 @@ public sealed class WebsiteContentController(CatalogAdminService catalog, SiteSe
         await catalog.DeleteCaseStudyAsync(id, ct);
         return NoContent();
     }
+
+    [HttpPost("case-studies/reorder")]
+    public Task<ReorderResult> ReorderCaseStudies(ReorderInput input, CancellationToken ct) => catalog.ReorderCaseStudiesAsync(input, ct);
 
     [HttpGet("testimonials")]
     public Task<PagedResult<TestimonialDto>> Testimonials([FromQuery] CmsQuery query, CancellationToken ct) => catalog.ListTestimonialsAsync(query, ct);
@@ -203,6 +209,16 @@ public sealed class WebsiteContentController(CatalogAdminService catalog, SiteSe
         await catalog.DeletePageAsync(id, ct);
         return NoContent();
     }
+
+    [HttpGet("pages/{id:guid}/revisions")]
+    public Task<IReadOnlyList<SitePageRevisionSummaryDto>> PageRevisions(Guid id, CancellationToken ct) => catalog.ListRevisionsAsync(id, ct);
+
+    [HttpGet("pages/{id:guid}/revisions/{version:int}")]
+    public Task<SitePageRevisionDto> PageRevision(Guid id, int version, CancellationToken ct) => catalog.GetRevisionAsync(id, version, ct);
+
+    [HttpPost("pages/{id:guid}/revisions/{version:int}/restore")]
+    public Task<SitePageDto> RestorePageRevision(Guid id, int version, RestorePageRevisionInput input, CancellationToken ct) =>
+        catalog.RestoreRevisionAsync(id, version, input, ct);
 
     /// <summary>Validates and normalizes blocks without saving (editor live preview).</summary>
     [HttpPost("pages/preview")]
@@ -268,6 +284,9 @@ public sealed class WebsiteBlogController(BlogService blog) : ControllerBase
     public async Task<IActionResult> CreateCategory(BlogCategoryInput input, CancellationToken ct) =>
         StatusCode(StatusCodes.Status201Created, await blog.CreateCategoryAsync(input, ct));
 
+    [HttpPost("categories/reorder")]
+    public Task<ReorderResult> ReorderCategories(ReorderInput input, CancellationToken ct) => blog.ReorderCategoriesAsync(input, ct);
+
     [HttpPut("categories/{id:guid}")]
     public Task<BlogCategoryDto> UpdateCategory(Guid id, BlogCategoryInput input, CancellationToken ct) => blog.UpdateCategoryAsync(id, input, ct);
 
@@ -320,6 +339,14 @@ public sealed class WebsiteCareersController(CareersService careers) : Controlle
 
     [HttpPost("applications/{id:guid}/move")]
     public Task<ApplicationDto> Move(Guid id, MoveApplicationInput input, CancellationToken ct) => careers.MoveAsync(id, input, ct);
+
+    /// <summary>Erases the application, its notes and its CV.</summary>
+    [HttpDelete("applications/{id:guid}")]
+    public async Task<IActionResult> DeleteApplication(Guid id, CancellationToken ct)
+    {
+        await careers.DeleteApplicationAsync(id, ct);
+        return NoContent();
+    }
 
     [HttpPost("applications/{id:guid}/notes")]
     public Task<ApplicationDto> AddNote(Guid id, ApplicationNoteInput input, CancellationToken ct) => careers.AddNoteAsync(id, input, ct);
@@ -375,6 +402,14 @@ public sealed class WebsiteLeadsController(
     [HasPermission(Permissions.SiteManage)]
     public Task<InquiryDto> UpdateInquiry(Guid id, UpdateInquiryInput input, CancellationToken ct) => inquiries.UpdateAsync(id, input, ct);
 
+    [HttpDelete("inquiries/{id:guid}")]
+    [HasPermission(Permissions.SiteManage)]
+    public async Task<IActionResult> DeleteInquiry(Guid id, CancellationToken ct)
+    {
+        await inquiries.DeleteAsync(id, ct);
+        return NoContent();
+    }
+
     [HttpGet("bookings/settings")]
     [HasPermission(Permissions.SiteManage)]
     public Task<ConsultationSettingsDto> BookingSettings(CancellationToken ct) => bookings.GetSettingsAsync(ct);
@@ -420,6 +455,18 @@ public sealed class WebsiteLeadsController(
     [HttpGet("newsletter/subscribers")]
     [HasPermission(Permissions.SiteManage)]
     public Task<PagedResult<SubscriberDto>> Subscribers([FromQuery] SubscriberQuery query, CancellationToken ct) => newsletter.ListAsync(query, ct);
+
+    [HttpPost("newsletter/subscribers/{id:guid}/unsubscribe")]
+    [HasPermission(Permissions.SiteManage)]
+    public Task<SubscriberDto> UnsubscribeSubscriber(Guid id, CancellationToken ct) => newsletter.UnsubscribeByStaffAsync(id, ct);
+
+    [HttpDelete("newsletter/subscribers/{id:guid}")]
+    [HasPermission(Permissions.SiteManage)]
+    public async Task<IActionResult> DeleteSubscriber(Guid id, CancellationToken ct)
+    {
+        await newsletter.DeleteSubscriberAsync(id, ct);
+        return NoContent();
+    }
 
     [HttpGet("newsletter/subscribers/export.csv")]
     [HasPermission(Permissions.SiteManage)]

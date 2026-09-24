@@ -4,11 +4,13 @@ import { Alert, Button, FormField, Input } from '@/components/ui';
 import { api } from '@/lib/api/client';
 import { errorMessage } from '@/lib/api/errors';
 import { useSite } from './api';
+import { useSiteCopy } from './copy';
 import { ConsentCheckbox, fieldErrorsOf, Honeypot, useFormToken, withFormEnvelope } from './forms';
 
 /** Newsletter signup (double opt-in: the API emails a confirmation link). */
 export function NewsletterSignup({ source, compact }: { source: string; compact?: boolean }) {
   const { data: site } = useSite();
+  const copy = useSiteCopy();
   const token = useFormToken();
   const [email, setEmail] = useState('');
   const [consent, setConsent] = useState(false);
@@ -36,7 +38,7 @@ export function NewsletterSignup({ source, compact }: { source: string; compact?
 
   if (subscribe.isSuccess)
     return (
-      <Alert tone="success" title="Check your inbox">
+      <Alert tone="success" title={copy.text('shared.newsletter.success')}>
         {subscribe.data.message}
       </Alert>
     );

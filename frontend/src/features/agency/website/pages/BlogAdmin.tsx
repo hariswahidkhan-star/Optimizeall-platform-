@@ -112,6 +112,7 @@ function CategoriesTab() {
         existing ? api.put(`${W}/blog/categories/${existing.id}`, { ...draft, concurrencyStamp: existing.concurrencyStamp }) : api.post(`${W}/blog/categories`, draft)
       }
       remove={(r) => api.delete(`${W}/blog/categories/${r.id}`)}
+      reorder={(ids) => api.post(`${W}/blog/categories/reorder`, { ids })}
       Form={({ draft, setDraft, errors }) => (
         <>
           <TextField label="Name" required value={draft.name} onChange={(v) => setDraft({ ...draft, name: v })} error={errors.name} />
