@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Lock } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Alert } from '@/components/ui/Alert';
 import { Button } from '@/components/ui/Button';
@@ -23,7 +23,14 @@ const CHANNELS: { id: NotificationChannel; label: string }[] = [
 
 const key = (type: string, channel: string) => `${type}::${channel}`;
 
-function PreferencesMatrix({ prefs }: { prefs: NotificationPreferences }) {
+interface MatrixProps {
+  prefs: NotificationPreferences;
+  /** Where the user adds a WhatsApp number (null when the portal has no profile page). */
+  profileLink?: string | null;
+}
+
+/** The per-kind channel matrix (in-app is always on). Shared by the participant profile and the staff account menu. */
+export function PreferencesMatrix({ prefs, profileLink = '/app/profile' }: MatrixProps) {
   const toast = useToast();
   const client = useQueryClient();
   const [draft, setDraft] = useState<Record<string, boolean>>({});
@@ -54,16 +61,22 @@ function PreferencesMatrix({ prefs }: { prefs: NotificationPreferences }) {
   });
 
   const whatsApp = prefs.channels.find((c) => c.channel === 'WhatsApp');
+  const grouped = new Set(prefs.types.map((t) => t.group).filter(Boolean)).size > 1;
 
   return (
     <div className="stack" style={{ ['--stack-gap' as string]: 'var(--space-5)' }}>
       {whatsApp && !whatsApp.available && (
         <Alert tone="neutral" title="WhatsApp isn’t available">
-          {whatsApp.reason ?? 'WhatsApp notifications are not available.'}{' '}
-          <Link to="/app/profile" className="ui-link">
-            Add your WhatsApp number in your profile
-          </Link>
-          .
+          {whatsApp.reason ?? 'WhatsApp notifications are not available.'}
+          {profileLink && (
+            <>
+              {' '}
+              <Link to={profileLink} className="ui-link">
+                Add your WhatsApp number in your profile
+              </Link>
+              .
+            </>
+          )}
         </Alert>
       )}
       <Card as="section" aria-labelledby="prefs-title">
@@ -86,58 +99,67 @@ function PreferencesMatrix({ prefs }: { prefs: NotificationPreferences }) {
               </tr>
             </thead>
             <tbody>
-              {prefs.types.map((row) => (
-                <tr key={row.type}>
-                  <th scope="row">
-                    <span className="pp-matrix__type">
-                      <span className="pp-matrix__label">{row.label}</span>
-                      <span className="pp-matrix__desc">{row.description}</span>
-                      {row.marketing && (
-                        <span className="pp-matrix__desc">
-                          Email also needs marketing emails turned on in your profile.
-                        </span>
-                      )}
-                    </span>
-                  </th>
-                  {CHANNELS.map((c) => {
-                    const cell = row.channels.find((x) => x.channel === c.id);
-                    if (!cell) return <td key={c.id} data-align="center" data-channel={c.label} />;
-                    const k = key(row.type, c.id);
-                    const checked = draft[k] ?? cell.enabled;
-                    const label = `${c.label} for ${row.label}`;
-                    if (cell.locked) {
+              {prefs.types.map((row, index) => (
+                <Fragment key={row.type}>
+                  {grouped && row.group && row.group !== prefs.types[index - 1]?.group && (
+                    <tr className="pp-matrix__group">
+                      <th scope="colgroup" colSpan={CHANNELS.length + 1}>
+                        {row.group}
+                      </th>
+                    </tr>
+                  )}
+                  <tr>
+                    <th scope="row">
+                      <span className="pp-matrix__type">
+                        <span className="pp-matrix__label">{row.label}</span>
+                        <span className="pp-matrix__desc">{row.description}</span>
+                        {row.marketing && (
+                          <span className="pp-matrix__desc">
+                            Email also needs marketing emails turned on in your profile.
+                          </span>
+                        )}
+                      </span>
+                    </th>
+                    {CHANNELS.map((c) => {
+                      const cell = row.channels.find((x) => x.channel === c.id);
+                      if (!cell) return <td key={c.id} data-align="center" data-channel={c.label} />;
+                      const k = key(row.type, c.id);
+                      const checked = draft[k] ?? cell.enabled;
+                      const label = `${c.label} for ${row.label}`;
+                      if (cell.locked) {
+                        return (
+                          <td key={c.id} data-align="center" data-channel={c.label}>
+                            <span className="pp-lock">
+                              <Lock aria-hidden="true" />
+                              <span>
+                                {!cell.available ? 'Unavailable' : cell.enabled ? 'Always on' : 'Off'}
+                              </span>
+                              <span className="visually-hidden">
+                                : {label} is essential and can’t be changed
+                              </span>
+                            </span>
+                          </td>
+                        );
+                      }
                       return (
                         <td key={c.id} data-align="center" data-channel={c.label}>
-                          <span className="pp-lock">
-                            <Lock aria-hidden="true" />
-                            <span>
-                              {!cell.available ? 'Unavailable' : cell.enabled ? 'Always on' : 'Off'}
-                            </span>
-                            <span className="visually-hidden">
-                              : {label} is essential and can’t be changed
-                            </span>
-                          </span>
+                          <Checkbox
+                            label={
+                              <span className="visually-hidden">
+                                {cell.available
+                                  ? label
+                                  : `${label} (unavailable${whatsApp?.reason ? `: ${whatsApp.reason}` : ''})`}
+                              </span>
+                            }
+                            checked={checked && cell.available}
+                            disabled={!cell.available || save.isPending}
+                            onChange={(e) => setDraft((d) => ({ ...d, [k]: e.target.checked }))}
+                          />
                         </td>
                       );
-                    }
-                    return (
-                      <td key={c.id} data-align="center" data-channel={c.label}>
-                        <Checkbox
-                          label={
-                            <span className="visually-hidden">
-                              {cell.available
-                                ? label
-                                : `${label} (unavailable${whatsApp?.reason ? `: ${whatsApp.reason}` : ''})`}
-                            </span>
-                          }
-                          checked={checked && cell.available}
-                          disabled={!cell.available || save.isPending}
-                          onChange={(e) => setDraft((d) => ({ ...d, [k]: e.target.checked }))}
-                        />
-                      </td>
-                    );
-                  })}
-                </tr>
+                    })}
+                  </tr>
+                </Fragment>
               ))}
             </tbody>
           </table>

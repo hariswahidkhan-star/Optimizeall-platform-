@@ -657,6 +657,13 @@
   text-align: center;
 }
 
+.pp-matrix__group th {
+  padding-top: var(--space-5);
+  color: var(--color-heading);
+  font-size: var(--text-small);
+  font-weight: var(--weight-semibold);
+}
+
 .pp-matrix__type {
   display: flex;
   flex-direction: column;

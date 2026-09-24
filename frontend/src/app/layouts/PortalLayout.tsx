@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { ChevronsUpDown, LogOut, Menu, MoreHorizontal, UserRound } from 'lucide-react';
+import { Bell, ChevronsUpDown, LogOut, Menu, MoreHorizontal, UserRound } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { Logo } from '@/components/brand/Logo';
@@ -15,6 +15,7 @@ import { accessiblePortals, getPortal } from '../portals';
 import type { PortalDefinition, PortalNavItem } from '../portalTypes';
 import { EmailVerificationBanner } from './EmailVerificationBanner';
 import { ImpersonationBanner } from './ImpersonationBanner';
+import { NotificationSettingsDialog } from './NotificationSettingsDialog';
 import './PortalLayout.css';
 
 function itemPath(portal: PortalDefinition, item: PortalNavItem): string {
@@ -62,6 +63,7 @@ export function PortalLayout({ portal }: { portal: PortalDefinition }) {
   const { user, permissions, logout } = useAuth();
   const location = useLocation();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [notificationSettingsOpen, setNotificationSettingsOpen] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
   const firstRender = useRef(true);
 
@@ -99,8 +101,21 @@ export function PortalLayout({ portal }: { portal: PortalDefinition }) {
             icon: <UserRound />,
             to: `${participant.basePath}/profile`,
           },
+          {
+            id: 'notification-settings',
+            label: 'Notification settings',
+            icon: <Bell />,
+            to: `${participant.basePath}/profile/notification-preferences`,
+          },
         ]
-      : []),
+      : [
+          {
+            id: 'notification-settings',
+            label: 'Notification settings',
+            icon: <Bell />,
+            onSelect: () => setNotificationSettingsOpen(true),
+          },
+        ]),
     { type: 'separator', id: 'sep' },
     { id: 'logout', label: 'Sign out', icon: <LogOut />, onSelect: () => void logout() },
   ];
@@ -209,6 +224,11 @@ export function PortalLayout({ portal }: { portal: PortalDefinition }) {
             <Outlet />
           </main>
         </div>
+
+        <NotificationSettingsDialog
+          open={notificationSettingsOpen}
+          onClose={() => setNotificationSettingsOpen(false)}
+        />
 
         {mobileItems.length > 0 && (
           <nav aria-label="Quick navigation" className="portal-bottom-nav">

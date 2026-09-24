@@ -5,6 +5,8 @@ using Microsoft.Extensions.Options;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Api.Common.Security;
+using OptimizeAll.Api.Modules.Billing;
+using OptimizeAll.Api.Modules.Projects;
 using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Identity;
 using OptimizeAll.Domain.Notifications;
@@ -36,7 +38,8 @@ public sealed record ChannelAvailabilityDto(NotificationChannel Channel, bool Av
 
 public sealed record PreferenceCellDto(NotificationChannel Channel, bool Enabled, bool Locked, bool Available);
 
-public sealed record PreferenceRowDto(string Type, string Label, string Description, bool Essential, bool Marketing, IReadOnlyList<PreferenceCellDto> Channels);
+public sealed record PreferenceRowDto(string Type, string Label, string Description, bool Essential, bool Marketing, IReadOnlyList<PreferenceCellDto> Channels,
+    string Group);
 
 public sealed record NotificationPreferencesDto(IReadOnlyList<ChannelAvailabilityDto> Channels, IReadOnlyList<PreferenceRowDto> Types);
 
@@ -71,56 +74,123 @@ public sealed record DeliveryDto(
 
 // ---------- Catalog ----------
 
-/// <summary>Human-readable labels for every notification type (the preference matrix rows).</summary>
+/// <summary>One kind of notification in the preference matrix.</summary>
+/// <param name="Audience">
+/// The permissions of which the user needs at least one to receive this kind (and to see it in the matrix); empty = everyone.
+/// </param>
+public sealed record NotificationKind(string Type, string Group, string Label, string Description, IReadOnlyList<string> Audience);
+
+/// <summary>
+/// Every notification kind the platform sends, with the label and description shown in the preference matrix and the
+/// audience that receives it. Kinds are raised by many modules (participant program, review, payouts, CRM, billing,
+/// payments hub, delivery, marketing execution); <see cref="INotificationService"/> applies the user's per-kind channel
+/// choices to all of them.
+/// </summary>
 public static class NotificationCatalog
 {
-    private static readonly Dictionary<string, (string Label, string Description)> Labels = new()
+    public const string GroupAccount = "Account";
+    public const string GroupParticipant = "Creator program";
+    public const string GroupReview = "Review and payouts (staff)";
+    public const string GroupSales = "Sales, billing and payments";
+    public const string GroupDelivery = "Projects and delivery";
+    public const string GroupMarketing = "Marketing services";
+
+    private static readonly string[] Everyone = Array.Empty<string>();
+    private static readonly string[] Participants = { Permissions.ParticipantPortal };
+    private static readonly string[] ClientUsers = { Permissions.ClientPortal };
+    private static readonly string[] DeliveryStaff = { Permissions.ProjectsView, Permissions.TimeTrack, Permissions.DeliverablesSubmit };
+    private static readonly string[] DeliveryStaffAndClients =
+        { Permissions.ProjectsView, Permissions.TimeTrack, Permissions.DeliverablesSubmit, Permissions.ClientPortal };
+
+    private static readonly IReadOnlyList<NotificationKind> Kinds = new List<NotificationKind>
     {
-        [NotificationTypes.AccountEmailVerification] = ("Email verification", "Links to confirm your email address."),
-        [NotificationTypes.AccountPasswordReset] = ("Password reset", "Links to reset your password."),
-        [NotificationTypes.AccountStatusChanged] = ("Account status", "When your account is suspended or reactivated."),
-        [NotificationTypes.SocialAccountVerified] = ("Social profile verification", "When a reviewer verifies or rejects one of your social profiles."),
-        [NotificationTypes.SubmissionReceived] = ("Submission received", "Confirmation that we received your post submission."),
-        [NotificationTypes.SubmissionDecision] = ("Submission decisions", "When a submission is approved, rejected or needs correction."),
-        [NotificationTypes.SubmissionReversed] = ("Reversed approvals", "When an approved submission is reversed."),
-        [NotificationTypes.AppealResolved] = ("Appeal outcomes", "When an appeal you filed is resolved."),
-        [NotificationTypes.EarningApproved] = ("Earnings approved", "When a reward or bonus becomes payable."),
-        [NotificationTypes.PayoutScheduled] = ("Payout scheduled", "When your earnings are included in an upcoming payout."),
-        [NotificationTypes.PayoutPaid] = ("Payout paid", "When a payout has been sent to you."),
-        [NotificationTypes.PayoutHold] = ("Payout holds", "When a payout is put on hold or released."),
-        [NotificationTypes.CampaignAlert] = ("New campaigns", "New campaigns you're eligible for (marketing)."),
-        [NotificationTypes.OnboardingReminder] = ("Getting-started reminders", "Reminders to finish setting up your account."),
-        [NotificationTypes.Reactivation] = ("We miss you", "Occasional messages when you haven't been active (marketing)."),
-        [NotificationTypes.Achievement] = ("Achievements", "Badges and milestones you unlock."),
-        [NotificationTypes.ReferralQualified] = ("Referrals", "When someone you referred qualifies."),
-        [NotificationTypes.SupportReply] = ("Support replies", "When our team replies to your support ticket."),
-        [NotificationTypes.ReviewLiveCheckDue] = ("Live checks due (staff)", "Submissions waiting for a live-post check."),
-        [NotificationTypes.BatchPrepared] = ("Payout batch prepared (staff)", "A payout batch is ready for finance review."),
+        new(NotificationTypes.AccountEmailVerification, GroupAccount, "Email verification", "Links to confirm your email address.", Everyone),
+        new(NotificationTypes.AccountPasswordReset, GroupAccount, "Password reset", "Links to reset your password.", Everyone),
+        new(NotificationTypes.AccountStatusChanged, GroupAccount, "Account status", "When your account is suspended or reactivated.", Everyone),
+
+        new(NotificationTypes.SocialAccountVerified, GroupParticipant, "Social profile verification", "When a reviewer verifies or rejects one of your social profiles.", Participants),
+        new(NotificationTypes.SubmissionReceived, GroupParticipant, "Submission received", "Confirmation that we received your post submission.", Participants),
+        new(NotificationTypes.SubmissionDecision, GroupParticipant, "Submission decisions", "When a submission is approved, rejected or needs correction.", Participants),
+        new(NotificationTypes.SubmissionReversed, GroupParticipant, "Reversed approvals", "When an approved submission is reversed.", Participants),
+        new(NotificationTypes.AppealResolved, GroupParticipant, "Appeal outcomes", "When an appeal you filed is resolved.", Participants),
+        new(NotificationTypes.EarningApproved, GroupParticipant, "Earnings approved", "When a reward or bonus becomes payable.", Participants),
+        new(NotificationTypes.PayoutScheduled, GroupParticipant, "Payout scheduled", "When your earnings are included in an upcoming payout.", Participants),
+        new(NotificationTypes.PayoutPaid, GroupParticipant, "Payout paid", "When a payout has been sent to you.", Participants),
+        new(NotificationTypes.PayoutHold, GroupParticipant, "Payout holds", "When a payout is put on hold or released.", Participants),
+        new(NotificationTypes.CampaignAlert, GroupParticipant, "New campaigns", "New campaigns you're eligible for (marketing).", Participants),
+        new(NotificationTypes.OnboardingReminder, GroupParticipant, "Getting-started reminders", "Reminders to finish setting up your account.", Participants),
+        new(NotificationTypes.Reactivation, GroupParticipant, "We miss you", "Occasional messages when you haven't been active (marketing).", Participants),
+        new(NotificationTypes.Achievement, GroupParticipant, "Achievements", "Badges and milestones you unlock.", Participants),
+        new(NotificationTypes.ReferralQualified, GroupParticipant, "Referrals", "When someone you referred qualifies.", Participants),
+        new(NotificationTypes.SupportReply, GroupParticipant, "Support replies", "When our team replies to your support ticket.", Participants),
+
+        new(NotificationTypes.ReviewLiveCheckDue, GroupReview, "Live checks due (staff)", "Submissions waiting for a live-post check.", new[] { Permissions.SubmissionsReview }),
+        new(NotificationTypes.BatchPrepared, GroupReview, "Payout batch prepared (staff)", "A payout batch is ready for finance review.", new[] { Permissions.PayoutsView }),
+
+        new(Website.Leads.WebsiteLinks.InquiryNotificationType, GroupSales, "Website inquiries (staff)",
+            "When someone submits a contact, audit, quote or booking form on the website.", new[] { Permissions.SiteManage, Permissions.CrmManage }),
+        new(BillingNotificationTypes.LeadAssigned, GroupSales, "Leads assigned to you", "When a lead or deal is assigned to you.", new[] { Permissions.CrmView }),
+        new(BillingNotificationTypes.TaskReminder, GroupSales, "CRM task reminders", "Reminders for your scheduled calls, meetings and tasks.", new[] { Permissions.CrmView }),
+        new(BillingNotificationTypes.TaskOverdue, GroupSales, "Overdue CRM tasks", "When one of your CRM tasks is overdue.", new[] { Permissions.CrmView }),
+        new(BillingNotificationTypes.ProposalViewed, GroupSales, "Proposal viewed", "When a client opens a proposal you sent.", new[] { Permissions.CrmView }),
+        new(BillingNotificationTypes.ProposalAccepted, GroupSales, "Proposal accepted", "When a proposal is accepted (and the welcome message for new clients).",
+            new[] { Permissions.CrmView, Permissions.ClientPortal }),
+        new(BillingNotificationTypes.ProposalDeclined, GroupSales, "Proposal declined", "When a client declines a proposal.", new[] { Permissions.CrmView }),
+        new(BillingNotificationTypes.ProposalReceived, GroupSales, "New proposals", "When the agency sends you a proposal.", ClientUsers),
+        new(BillingNotificationTypes.InvoiceIssued, GroupSales, "New invoices", "When the agency issues an invoice to your organization.", ClientUsers),
+        new(BillingNotificationTypes.InvoiceReminder, GroupSales, "Payment reminders", "Reminders about invoices that are due or overdue.", ClientUsers),
+        new(PaymentsHub.PaymentClaimService.ClaimReviewedType, GroupSales, "Your payment reports", "When finance confirms or can't match a payment you reported.", ClientUsers),
+        new(PaymentsHub.PaymentClaimService.ClaimSubmittedType, GroupSales, "Client payment reports (staff)",
+            "When a client reports that they paid an invoice (payments hub).", new[] { Permissions.BillingView, Permissions.ClientsView }),
+        new(BillingNotificationTypes.InvoicePaid, GroupSales, "Invoices paid (staff)", "When a client's invoice is paid in full.", new[] { Permissions.BillingView, Permissions.ClientsView }),
+
+        new(DeliveryNotificationTypes.ClientInvited, GroupDelivery, "Client portal invitations", "When you're invited to an organization's client portal.", ClientUsers),
+        new(DeliveryNotificationTypes.TaskAssigned, GroupDelivery, "Tasks assigned to you", "New and recurring project tasks assigned to you.", DeliveryStaff),
+        new(DeliveryNotificationTypes.TaskMention, GroupDelivery, "Mentions", "When someone mentions you in a task comment.", DeliveryStaff),
+        new(DeliveryNotificationTypes.TaskComment, GroupDelivery, "Task comments", "New comments on tasks you watch.", DeliveryStaff),
+        new(DeliveryNotificationTypes.DeliverableInternalReview, GroupDelivery, "Deliverables to review", "Deliverables waiting for internal review.", DeliveryStaff),
+        new(DeliveryNotificationTypes.DeliverableAwaitingClient, GroupDelivery, "Deliverables awaiting approval", "Deliverables waiting for the client's approval.", DeliveryStaffAndClients),
+        new(DeliveryNotificationTypes.DeliverableDecision, GroupDelivery, "Deliverable decisions", "When a deliverable is approved or changes are requested.", DeliveryStaffAndClients),
+        new(DeliveryNotificationTypes.DeliverableReminder, GroupDelivery, "Feedback reminders", "Reminders when deliverable feedback is due or overdue.", DeliveryStaffAndClients),
+        new(DeliveryNotificationTypes.TimesheetDecision, GroupDelivery, "Timesheet decisions", "When your timesheet is approved or returned.", new[] { Permissions.TimeTrack, Permissions.TimeViewAll }),
+        new(DeliveryNotificationTypes.ReportPublished, GroupDelivery, "Reports published", "When a performance report is published.", DeliveryStaffAndClients),
+        new(DeliveryNotificationTypes.Message, GroupDelivery, "Messages", "New messages in project conversations.", DeliveryStaffAndClients),
+        new(DeliveryNotificationTypes.BriefSubmitted, GroupDelivery, "Briefs submitted", "When a client submits a brief.", DeliveryStaffAndClients),
+
+        new("social.approval_requested", GroupMarketing, "Social posts to approve", "Social posts waiting for your approval.", ClientUsers),
+        new("social.post_reviewed", GroupMarketing, "Social post reviews", "When a social post you created is approved or sent back.", new[] { Permissions.SocialManage, Permissions.SocialPublish }),
+        new("social.publish_failed", GroupMarketing, "Social publishing failures", "When a scheduled social post fails to publish.", new[] { Permissions.SocialManage, Permissions.SocialPublish }),
+        new("email.campaign_approval", GroupMarketing, "Email campaigns to approve", "Email and SMS campaigns waiting for your approval.", ClientUsers),
+        new("email.campaign_approval_decided", GroupMarketing, "Email campaign approvals", "When a client approves or rejects a campaign you prepared.",
+            new[] { Permissions.EmailManage, Permissions.EmailSend, Permissions.SmsManage }),
+        new("email.automation_alert", GroupMarketing, "Automation alerts", "Staff alerts raised by email automation journeys.", new[] { Permissions.EmailManage, Permissions.ClientsView }),
+        new("ads.alert", GroupMarketing, "Ad budget alerts", "Budget pacing and spend alerts for ad accounts you manage.", new[] { Permissions.AdsManage, Permissions.ClientsView }),
+        new("forms.submission", GroupMarketing, "Form submissions", "New submissions of landing-page forms that notify you.", new[] { Permissions.FormsManage, Permissions.ClientsView }),
+        new("integrations.expiring", GroupMarketing, "Expiring integrations", "When a connected integration's access is about to expire.", new[] { Permissions.IntegrationsManage }),
     };
 
-    /// <summary>Every constant declared in <see cref="NotificationTypes"/>, in declaration order.</summary>
-    public static readonly IReadOnlyList<string> AllTypes = typeof(NotificationTypes)
-        .GetFields(BindingFlags.Public | BindingFlags.Static)
-        .Where(f => f.IsLiteral && f.FieldType == typeof(string))
-        .Select(f => (string)f.GetRawConstantValue()!)
-        .ToArray();
+    private static readonly Dictionary<string, NotificationKind> ByType = Kinds.ToDictionary(k => k.Type);
+
+    /// <summary>Every notification kind, in display order (the constants of <see cref="NotificationTypes"/> first).</summary>
+    public static readonly IReadOnlyList<string> AllTypes = Kinds.Select(k => k.Type).ToArray();
 
     /// <summary>
-    /// Staff-only kinds and the permission a user needs to receive them. Users without it never get these
-    /// notifications, so the preference matrix leaves them out.
+    /// Kinds that only some users receive and the permissions (any of) needed to receive them. Users without one never
+    /// get these notifications, so the preference matrix leaves them out.
     /// </summary>
-    public static readonly IReadOnlyDictionary<string, string> StaffTypes = new Dictionary<string, string>
-    {
-        [NotificationTypes.ReviewLiveCheckDue] = Permissions.SubmissionsReview,
-        [NotificationTypes.BatchPrepared] = Permissions.PayoutsView,
-    };
+    public static readonly IReadOnlyDictionary<string, IReadOnlyList<string>> StaffTypes =
+        Kinds.Where(k => k.Audience.Count > 0).ToDictionary(k => k.Type, k => k.Audience);
+
+    public static NotificationKind? Find(string type) => ByType.GetValueOrDefault(type);
 
     /// <summary>The kinds shown in the preference matrix of a user with <paramref name="permissions"/>.</summary>
     public static IEnumerable<string> TypesFor(IReadOnlySet<string> permissions) =>
-        AllTypes.Where(t => !StaffTypes.TryGetValue(t, out var needed) || permissions.Contains(needed));
+        Kinds.Where(k => k.Audience.Count == 0 || k.Audience.Any(permissions.Contains)).Select(k => k.Type);
 
     public static (string Label, string Description) Describe(string type) =>
-        Labels.TryGetValue(type, out var d) ? d : (type, string.Empty);
+        ByType.TryGetValue(type, out var k) ? (k.Label, k.Description) : (type, string.Empty);
+
+    public static string GroupOf(string type) => ByType.TryGetValue(type, out var k) ? k.Group : GroupAccount;
 
     public static readonly NotificationChannel[] ConfigurableChannels = { NotificationChannel.Email, NotificationChannel.WhatsApp };
 }
@@ -205,7 +275,8 @@ public sealed class NotificationCenterService(
                 essential, emailReason is null));
             cells.Add(new PreferenceCellDto(NotificationChannel.WhatsApp, essential || !disabled.Contains((type, NotificationChannel.WhatsApp)),
                 essential, whatsAppReason is null));
-            return new PreferenceRowDto(type, label, description, essential, NotificationTypes.Marketing.Contains(type), cells);
+            return new PreferenceRowDto(type, label, description, essential, NotificationTypes.Marketing.Contains(type), cells,
+                NotificationCatalog.GroupOf(type));
         }).ToList();
 
         return new NotificationPreferencesDto(channels, types);

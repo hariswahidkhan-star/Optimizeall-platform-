@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using OptimizeAll.Domain.Identity;
 using OptimizeAll.Domain.Notifications;
 using OptimizeAll.Infrastructure.Persistence;
@@ -23,7 +24,13 @@ public interface INotificationService
     Task<Notification> StageAsync(NotificationRequest request, CancellationToken ct = default);
 }
 
-public sealed class NotificationService(AppDbContext db, TimeProvider clock) : INotificationService
+/// <remarks>
+/// WhatsApp follows email: when a sender asks for email and WhatsApp is configured, users who opted in to WhatsApp
+/// (with a number) also get the notification on WhatsApp unless they turned WhatsApp off for that kind in their
+/// notification preferences. Marketing kinds additionally need marketing consent on every external channel.
+/// </remarks>
+public sealed class NotificationService(
+    AppDbContext db, TimeProvider clock, IOptions<Modules.Notifications.WhatsAppOptions>? whatsApp = null) : INotificationService
 {
     public async Task<Notification> StageAsync(NotificationRequest request, CancellationToken ct = default)
     {
@@ -40,8 +47,11 @@ public sealed class NotificationService(AppDbContext db, TimeProvider clock) : I
         db.Set<Notification>().Add(notification);
 
         var channels = (request.Channels ?? Array.Empty<NotificationChannel>())
-            .Where(c => c != NotificationChannel.InApp).Distinct().ToArray();
-        if (channels.Length == 0) return notification;
+            .Where(c => c != NotificationChannel.InApp).Distinct().ToList();
+        var whatsAppFollowsEmail = channels.Contains(NotificationChannel.Email) && !channels.Contains(NotificationChannel.WhatsApp) &&
+                                   whatsApp?.Value.IsConfigured == true;
+        if (whatsAppFollowsEmail) channels.Add(NotificationChannel.WhatsApp);
+        if (channels.Count == 0) return notification;
 
         var essential = NotificationTypes.Essential.Contains(request.Type);
         var muted = essential
@@ -52,7 +62,7 @@ public sealed class NotificationService(AppDbContext db, TimeProvider clock) : I
 
         var user = await db.Set<User>().AsNoTracking()
             .Where(u => u.Id == request.UserId)
-            .Select(u => new { u.WhatsAppOptIn, u.MarketingEmailOptIn })
+            .Select(u => new { u.WhatsAppOptIn, u.WhatsAppNumber, u.MarketingEmailOptIn })
             .FirstOrDefaultAsync(ct);
         if (user is null) return notification;
 
@@ -61,7 +71,8 @@ public sealed class NotificationService(AppDbContext db, TimeProvider clock) : I
         {
             if (muted.Contains(channel)) continue;
             if (channel == NotificationChannel.WhatsApp && !user.WhatsAppOptIn) continue;
-            if (isMarketing && channel == NotificationChannel.Email && !user.MarketingEmailOptIn) continue;
+            if (channel == NotificationChannel.WhatsApp && whatsAppFollowsEmail && string.IsNullOrWhiteSpace(user.WhatsAppNumber)) continue;
+            if (isMarketing && channel != NotificationChannel.InApp && !user.MarketingEmailOptIn) continue;
 
             db.Set<NotificationDelivery>().Add(new NotificationDelivery
             {

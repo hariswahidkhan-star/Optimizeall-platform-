@@ -31,9 +31,8 @@ public static class EmailTemplateCatalog
 
     public static string NotificationKey(string type) => NotificationPrefix + type;
 
-    /// <summary>Notification kinds with their own template (the participant notification catalog plus website inquiries).</summary>
-    public static IReadOnlyList<string> TemplatedTypes =>
-        NotificationCatalog.AllTypes.Append(Website.Leads.WebsiteLinks.InquiryNotificationType).Distinct().ToArray();
+    /// <summary>Notification kinds with their own template: every kind in the notification catalog.</summary>
+    public static IReadOnlyList<string> TemplatedTypes => NotificationCatalog.AllTypes;
 
     private static readonly Lazy<IReadOnlyList<EmailTemplateDefinition>> LazyAll = new(Build);
 
@@ -62,9 +61,7 @@ public static class EmailTemplateCatalog
 
         foreach (var type in TemplatedTypes)
         {
-            var (label, description) = type == Website.Leads.WebsiteLinks.InquiryNotificationType
-                ? ("Website inquiries (staff)", "When someone submits a contact, audit, quote or booking form on the website.")
-                : NotificationCatalog.Describe(type);
+            var (label, description) = NotificationCatalog.Describe(type);
             list.Add(new EmailTemplateDefinition(NotificationKey(type), GroupNotifications, label,
                 string.IsNullOrEmpty(description) ? $"Notification type {type}." : description,
                 "{{title}}", "{{body}}", null,

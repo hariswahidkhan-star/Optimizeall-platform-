@@ -614,6 +614,8 @@ export interface NotificationPreferences {
     essential: boolean;
     marketing: boolean;
     channels: { channel: NotificationChannel; enabled: boolean; locked: boolean; available: boolean }[];
+    /** Section of the matrix (e.g. "Creator program", "Sales, billing and payments"). */
+    group?: string;
   }[];
 }
 
