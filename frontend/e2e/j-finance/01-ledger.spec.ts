@@ -193,6 +193,16 @@ test('adjustments: credits in USD, PKR and AED convert to the cent, a debit appl
   errors.ignore(/HTTP 403 POST .*\/finance\/adjustments/);
   await dialog.getByRole('button', { name: 'Cancel' }).click();
   expect(await ledgerOf(api, api.user.id)).toHaveLength(0);
+
+  // ---------------------------------------------------------------- cross-currency without a rate is refused
+  dialog = await fillAdjustment(finance1, ana.id, '10', 'EUR', 'Bonus agreed in euros last week');
+  await dialog.getByRole('button', { name: 'Create adjustment' }).click();
+  await expect(dialog.getByRole('alert')).toContainText(
+    'There is no exchange rate from this currency to the settlement currency.',
+  );
+  errors.ignore(/HTTP 409 POST .*\/finance\/adjustments/);
+  await dialog.getByRole('button', { name: 'Cancel' }).click();
+  expect(await ledgerOf(api, ana.id)).toHaveLength(4);
   errors.expectClean('the ledger');
 });
 
