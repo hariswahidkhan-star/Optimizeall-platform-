@@ -79,7 +79,11 @@ test.describe.serial('participant lifecycle on a phone', () => {
     await page.goto('/app/campaigns');
     await fits('campaigns');
     await page.getByRole('button', { name: /^Filters/ }).click();
-    await page.getByRole('checkbox', { name: /Only campaigns I.m eligible for/ }).check();
+    // The checkbox mirrors the URL, which updates in a transition: click, then wait for the checked state (check()
+    // verifies synchronously and races the URL update).
+    const eligibleOnly = page.getByRole('checkbox', { name: /Only campaigns I.m eligible for/ });
+    await eligibleOnly.click();
+    await expect(eligibleOnly).toBeChecked();
     await expect(page).toHaveURL(/eligible=1/);
     await expect(page.getByRole('link', { name: main.title })).toBeVisible();
     await expect(page.getByRole('link', { name: other.title })).toBeHidden();

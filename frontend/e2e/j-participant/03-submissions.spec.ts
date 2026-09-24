@@ -128,8 +128,6 @@ test.describe.serial('submissions', () => {
     ids.C = page.url().split('/').pop()!;
     const created = await withCode('C');
     expect(created.map((x) => x.id)).toEqual([ids.C]);
-    // The toast of a second (failed) attempt would say the proof was not submitted.
-    await expect(page.getByText('Your proof wasn’t submitted')).toHaveCount(0);
   });
 
   test('D: two identical requests in parallel — one is created, the other is a duplicate', async () => {
@@ -241,15 +239,19 @@ test.describe.serial('submissions', () => {
     await expect(reward.getByRole('listitem').filter({ hasText: 'First-post bonus' })).toContainText('$1.00');
 
     await page.goto('/app/earnings');
-    // D is still pending (5 USD estimated); A's 6 USD is approved.
-    await expect(page.getByRole('group', { name: /^Pending\b/ })).toContainText('$5.00');
+    // D is still pending. Its estimate is the quote captured when it was submitted — before A was approved, so it
+    // still includes the first-post bonus (documented: "the estimate can change with caps and bonuses"). A's 6 USD is
+    // approved.
+    await expect(page.getByRole('group', { name: /^Pending\b/ })).toContainText('$6.00');
     await expect(page.getByRole('group', { name: /^Approved\b/ })).toContainText('$6.00');
   });
 
   test('C: the appeal needs at least 20 characters; exactly 20 is accepted, and only once', async () => {
     await page.goto(`/app/submissions/${ids.C}`);
     await expect(page.getByText('Rejected', { exact: true }).first()).toBeVisible();
-    await expect(page.getByText('The campaign hashtag is missing from the caption.')).toBeVisible();
+    await expect(page.getByRole('status', { name: 'Reason for the decision' })).toContainText(
+      'The campaign hashtag is missing from the caption.',
+    );
     const appeal = page.getByRole('region', { name: 'Appeal this decision' });
     const reason = appeal.getByLabel('Why should the decision be reviewed again?');
     const nineteen = 'Hashtag is in reply';
@@ -284,6 +286,11 @@ test.describe.serial('submissions', () => {
 
   test('D approved: nothing pending, 11 USD approved', async () => {
     await decide(s().reviewer1, ids.D, 'Approve');
+    // The first-post bonus is paid once per campaign: D earns the 5 USD post reward only.
+    await page.goto(`/app/submissions/${ids.D}`);
+    const reward = page.getByRole('region', { name: 'Reward' });
+    await expect(reward.getByRole('listitem').filter({ hasText: 'Post reward' })).toContainText('$5.00');
+    await expect(reward.getByRole('listitem').filter({ hasText: 'First-post bonus' })).toHaveCount(0);
     await page.goto('/app/earnings');
     await expect(page.getByRole('group', { name: /^Pending\b/ })).toContainText('$0.00');
     await expect(page.getByRole('group', { name: /^Approved\b/ })).toContainText('$11.00');

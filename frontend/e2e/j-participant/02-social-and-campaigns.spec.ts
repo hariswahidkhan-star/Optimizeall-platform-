@@ -128,7 +128,11 @@ test.describe.serial('social profiles and campaigns', () => {
     await platform.selectOption('');
 
     // Pat has no X profile, so only the main campaign is open to Pat.
-    await page.getByRole('checkbox', { name: /Only campaigns I.m eligible for/ }).check();
+    // The checkbox mirrors the URL, which updates in a transition: click, then wait for the checked state (check()
+    // verifies synchronously and races the URL update).
+    const eligibleOnly = page.getByRole('checkbox', { name: /Only campaigns I.m eligible for/ });
+    await eligibleOnly.click();
+    await expect(eligibleOnly).toBeChecked();
     await expect(page).toHaveURL(/eligible=1/);
     await expect(mainCard).toBeVisible();
     await expect(otherCard).toBeHidden();
