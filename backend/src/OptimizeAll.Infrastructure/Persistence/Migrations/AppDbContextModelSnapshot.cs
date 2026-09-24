@@ -1382,6 +1382,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     b.Property<Guid?>("CompletedByUserId")
                         .HasColumnType("char(36)");
 
+                    b.Property<bool>("CompletedOnBehalfOfClient")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Description")
                         .HasMaxLength(2000)
                         .HasColumnType("varchar(2000)");
@@ -9210,6 +9213,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
                     b.Property<Guid>("CreatedByUserId")
                         .HasColumnType("char(36)");
+
+                    b.Property<bool>("IsInternal")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<Guid?>("LastAuthorUserId")
                         .HasColumnType("char(36)");

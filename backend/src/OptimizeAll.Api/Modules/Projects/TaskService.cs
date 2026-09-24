@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Notifications;
+using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Api.Modules.Clients;
 using OptimizeAll.Domain.Agency;
@@ -19,6 +20,8 @@ public sealed class TaskService(
     IAuditLogger audit,
     INotificationService notifications,
     ProjectService projects,
+    DeliveryFileService files,
+    IDatabaseDialect dialect,
     TimeProvider clock)
 {
     private const double Gap = 1000d;
@@ -413,20 +416,42 @@ public sealed class TaskService(
     public async Task<TaskDetailDto> AttachAsync(Guid taskId, Guid fileId, CancellationToken ct)
     {
         var task = await LoadAsync(taskId, ct, tracked: false);
-        if (!await db.Set<DeliveryFile>().AnyAsync(f => f.Id == fileId && f.ClientAccountId == task.ClientAccountId, ct))
-            throw DeliveryRules.Invalid("file.invalid_attachment", "fileId", "Upload the file for this client first.");
-        db.Set<TaskAttachment>().Add(new TaskAttachment { TaskId = taskId, FileId = fileId, AddedByUserId = currentUser.Id, CreatedAt = Now });
-        await db.SaveChangesAsync(ct);
+        // Serialized with removals of the client's files, so the file can't be purged while it is being attached.
+        await using (await files.LockClientFilesAsync(task.ClientAccountId, ct))
+        {
+            if (!await db.Set<DeliveryFile>().AnyAsync(f => f.Id == fileId && f.ClientAccountId == task.ClientAccountId, ct))
+                throw DeliveryRules.Invalid("file.invalid_attachment", "fileId", "Upload the file for this client first.");
+            db.Set<TaskAttachment>().Add(new TaskAttachment { TaskId = taskId, FileId = fileId, AddedByUserId = currentUser.Id, CreatedAt = Now });
+            audit.Record("task.attachment_added", nameof(ProjectTask), taskId, after: new { FileId = fileId });
+            await db.SaveChangesAsync(ct);
+        }
         return await GetAsync(taskId, ct);
     }
 
+    /// <summary>
+    /// Removes an attachment from a task. Concurrency-safe (serialized per client, row locked; a second removal is a 404)
+    /// and audited. The file (row and bytes) is deleted once nothing else refers to it; a file still used elsewhere is kept.
+    /// </summary>
     public async Task<TaskDetailDto> DetachAsync(Guid taskId, Guid attachmentId, CancellationToken ct)
     {
-        await LoadAsync(taskId, ct, tracked: false);
-        var row = await db.Set<TaskAttachment>().FirstOrDefaultAsync(a => a.Id == attachmentId && a.TaskId == taskId, ct)
-                  ?? throw DomainException.NotFound("Attachment");
-        db.Remove(row);
-        await db.SaveChangesAsync(ct);
+        var task = await LoadAsync(taskId, ct, tracked: false);
+        string? purged;
+        await using (await files.LockClientFilesAsync(task.ClientAccountId, ct))
+        {
+            await using var tx = await dialect.BeginWriteTransactionAsync(db, ct);
+            if (!await dialect.LockRowAsync(db, "task_attachments", attachmentId, ct)) throw DomainException.NotFound("Attachment");
+            var row = await db.Set<TaskAttachment>().FirstOrDefaultAsync(a => a.Id == attachmentId && a.TaskId == taskId, ct)
+                      ?? throw DomainException.NotFound("Attachment");
+            var fileName = await db.Set<DeliveryFile>().AsNoTracking().Where(f => f.Id == row.FileId).Select(f => f.OriginalFileName).FirstOrDefaultAsync(ct);
+            db.Remove(row);
+            await db.SaveChangesAsync(ct);
+            purged = await files.StageRemovalIfUnreferencedAsync(row.FileId, ct);
+            audit.Record("task.attachment_removed", nameof(ProjectTask), taskId,
+                before: new { AttachmentId = row.Id, row.FileId, FileName = fileName }, after: new { FileDeleted = purged is not null });
+            await db.SaveChangesAsync(ct);
+            await tx.CommitAsync(ct);
+        }
+        files.DeleteStoredBytes(purged);
         return await GetAsync(taskId, ct);
     }
 

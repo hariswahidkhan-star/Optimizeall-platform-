@@ -1,6 +1,7 @@
-import { Card, CardBody, CardHeader, EmptyState } from '@/components/ui';
+import { Trash2 } from 'lucide-react';
+import { Card, CardBody, CardHeader, EmptyState, IconButton } from '@/components/ui';
 import { formatBytes } from '@/lib/format/text';
-import type { BrandKit } from './deliveryTypes';
+import type { BrandAsset, BrandKit } from './deliveryTypes';
 import { FilePreview } from './deliveryUi';
 
 function Items({ title, items }: { title: string; items: string[] }) {
@@ -22,8 +23,16 @@ function Items({ title, items }: { title: string; items: string[] }) {
   );
 }
 
-/** Read-only brand kit (client portal and staff view). */
-export function BrandKitView({ kit, audience }: { kit: BrandKit; audience: 'staff' | 'client' }) {
+/** Brand kit (client portal and staff view). `onRemoveAsset` adds a remove action to each asset (staff with clients.manage). */
+export function BrandKitView({
+  kit,
+  audience,
+  onRemoveAsset,
+}: {
+  kit: BrandKit;
+  audience: 'staff' | 'client';
+  onRemoveAsset?: (asset: BrandAsset) => void;
+}) {
   return (
     <div className="dl-page">
       <div className="dl-grid dl-grid--wide">
@@ -80,17 +89,40 @@ export function BrandKitView({ kit, audience }: { kit: BrandKit; audience: 'staf
       <section aria-labelledby="brand-assets-heading" className="dl-page">
         <h2 id="brand-assets-heading">Assets</h2>
         {kit.assets.length === 0 ? (
-          <EmptyState compact title="No brand assets yet" description="Logos, guidelines and photography appear here." />
+          <EmptyState
+            compact
+            title="No brand assets yet"
+            description="Logos, guidelines and photography appear here."
+          />
         ) : (
           <ul className="dl-grid" aria-label="Brand assets">
             {kit.assets.map((a) => (
               <li key={a.id} className="dl-compare__pane">
-                <strong>{a.label}</strong>
+                <span className="dl-row">
+                  <strong>{a.label}</strong>
+                  {onRemoveAsset ? (
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      label={`Remove ${a.label}`}
+                      icon={<Trash2 />}
+                      onClick={() => onRemoveAsset(a)}
+                    />
+                  ) : null}
+                </span>
                 <span className="dl-meta">
                   {a.kind} · {formatBytes(a.sizeBytes)}
                 </span>
                 <FilePreview
-                  file={{ id: a.fileId, fileName: a.fileName, contentType: a.contentType, sizeBytes: a.sizeBytes, createdAt: a.createdAt, staffUrl: a.staffUrl, clientUrl: a.clientUrl }}
+                  file={{
+                    id: a.fileId,
+                    fileName: a.fileName,
+                    contentType: a.contentType,
+                    sizeBytes: a.sizeBytes,
+                    createdAt: a.createdAt,
+                    staffUrl: a.staffUrl,
+                    clientUrl: a.clientUrl,
+                  }}
                   url={audience === 'staff' ? a.staffUrl : a.clientUrl}
                   alt={a.label}
                 />

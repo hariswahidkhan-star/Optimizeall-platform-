@@ -9300,6 +9300,75 @@
         }
       }
     },
+    "/api/v1/agency/clients/{id}/onboarding/{itemId}/on-behalf": {
+      "post": {
+        "tags": [
+          "AgencyClients"
+        ],
+        "summary": "Marks a client-owned step done (`done: true`) or not done on the client's behalf; audited and shown to the\r\nclient as completed by the agency. Agency-owned steps: 400 `onboarding.not_client_item`.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "itemId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Clients.OnBehalfOnboardingRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Clients.OnBehalfOnboardingRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Clients.OnBehalfOnboardingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Clients.OnboardingDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Clients.OnboardingDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Clients.OnboardingDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/agency/clients/{id}/onboarding/{itemId}/details": {
       "put": {
         "tags": [
@@ -9544,6 +9613,7 @@
         "tags": [
           "AgencyClients"
         ],
+        "summary": "Removes a brand asset; its file is deleted once nothing else uses it. A second removal is a 404.",
         "parameters": [
           {
             "name": "id",
@@ -15465,6 +15535,7 @@
         "tags": [
           "AgencyTasks"
         ],
+        "summary": "Removes an attachment; its file is deleted once nothing else uses it. A second removal is a 404.",
         "parameters": [
           {
             "name": "id",
@@ -60013,6 +60084,13 @@
           },
           "impersonatedBy": {
             "$ref": "#/components/schemas/Auth.ImpersonatorDto"
+          },
+          "customRoles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -64567,6 +64645,24 @@
         },
         "additionalProperties": false
       },
+      "Clients.OnBehalfOnboardingRequest": {
+        "required": [
+          "done"
+        ],
+        "type": "object",
+        "properties": {
+          "done": {
+            "type": "boolean"
+          },
+          "note": {
+            "maxLength": 1000,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Staff tick (`done: true`) or un-tick a client-owned onboarding step on the client's behalf."
+      },
       "Clients.OnboardingDto": {
         "type": "object",
         "properties": {
@@ -64637,6 +64733,9 @@
           "note": {
             "type": "string",
             "nullable": true
+          },
+          "completedOnBehalfOfClient": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -84720,6 +84819,10 @@
               "format": "uuid"
             },
             "nullable": true
+          },
+          "isInternal": {
+            "type": "boolean",
+            "description": "Staff only: an internal thread the client's users never see. Fixed at creation. A client user sending true gets\r\n`400 message.internal_not_allowed`."
           }
         },
         "additionalProperties": false
@@ -85814,9 +85917,16 @@
               "$ref": "#/components/schemas/Clients.PersonDto"
             },
             "nullable": true
+          },
+          "isInternal": {
+            "type": "boolean"
+          },
+          "canReply": {
+            "type": "boolean"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "description": "`IsInternal`: staff-only thread (never returned to client users). `CanReply`: whether the caller may post."
       },
       "Projects.ThreadSummaryDto": {
         "type": "object",
@@ -85857,6 +85967,9 @@
           "lastAuthor": {
             "type": "string",
             "nullable": true
+          },
+          "isInternal": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -87534,6 +87647,14 @@
           "confirm": {
             "type": "boolean",
             "description": "Must be true: changing rates is a sensitive action."
+          },
+          "baseVersion": {
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer",
+            "description": "The version the editor was showing (optional). When set and a newer version has been saved since, the request is\r\nrefused with 409 reward.version_conflict instead of silently replacing the other person's change.",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false

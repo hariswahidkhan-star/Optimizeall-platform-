@@ -594,11 +594,13 @@ public sealed class BriefStatusRequest
     public Guid? ConcurrencyStamp { get; set; }
 }
 
-public sealed record ThreadSummaryDto(Guid Id, Guid ClientId, string Subject, Guid? ProjectId, DateTime LastMessageAt, int MessageCount, int UnreadCount, string? LastMessagePreview, string? LastAuthor);
+public sealed record ThreadSummaryDto(Guid Id, Guid ClientId, string Subject, Guid? ProjectId, DateTime LastMessageAt, int MessageCount, int UnreadCount, string? LastMessagePreview, string? LastAuthor, bool IsInternal);
 
 public sealed record MessageDto(Guid Id, PersonDto Author, bool FromClient, string Body, IReadOnlyList<DeliveryFileDto> Attachments, DateTime CreatedAt, IReadOnlyList<string> ReadBy);
 
-public sealed record ThreadDto(Guid Id, Guid ClientId, string Subject, Guid? ProjectId, IReadOnlyList<MessageDto> Messages, IReadOnlyList<PersonDto> Participants);
+/// <summary><c>IsInternal</c>: staff-only thread (never returned to client users). <c>CanReply</c>: whether the caller may post.</summary>
+public sealed record ThreadDto(Guid Id, Guid ClientId, string Subject, Guid? ProjectId, IReadOnlyList<MessageDto> Messages, IReadOnlyList<PersonDto> Participants,
+    bool IsInternal, bool CanReply);
 
 public sealed class NewThreadRequest
 {
@@ -611,6 +613,12 @@ public sealed class NewThreadRequest
     public string Body { get; set; } = string.Empty;
 
     public List<Guid> AttachmentFileIds { get; set; } = new();
+
+    /// <summary>
+    /// Staff only: an internal thread the client's users never see. Fixed at creation. A client user sending true gets
+    /// <c>400 message.internal_not_allowed</c>.
+    /// </summary>
+    public bool IsInternal { get; set; }
 }
 
 public sealed class NewMessageRequest

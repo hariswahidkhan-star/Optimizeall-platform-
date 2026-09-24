@@ -2653,6 +2653,7 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     Status = table.Column<string>(type: "TEXT", maxLength: 40, nullable: false),
                     CompletedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
                     CompletedByUserId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    CompletedOnBehalfOfClient = table.Column<bool>(type: "INTEGER", nullable: false),
                     Note = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true)
                 },
                 constraints: table =>
@@ -3253,6 +3254,7 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     MessageCount = table.Column<int>(type: "INTEGER", nullable: false),
                     LastMessagePreview = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
                     LastAuthorUserId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    IsInternal = table.Column<bool>(type: "INTEGER", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false)
                 },

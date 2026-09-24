@@ -3329,6 +3329,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CompletedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
                     CompletedByUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    CompletedOnBehalfOfClient = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     Note = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
@@ -4077,6 +4078,7 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     LastMessagePreview = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LastAuthorUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    IsInternal = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
                 },

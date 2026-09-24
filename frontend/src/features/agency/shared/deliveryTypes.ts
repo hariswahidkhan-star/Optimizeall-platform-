@@ -16,7 +16,15 @@ export type HealthLevel = 'Green' | 'Amber' | 'Red';
 
 export const CLIENT_STATUSES: ClientStatus[] = ['Onboarding', 'Active', 'Paused', 'Churned'];
 export const CLIENT_DUTIES: ClientDuty[] = ['Viewer', 'Approver', 'Billing', 'Owner'];
-export const SERVICE_ROLES: ServiceRole[] = ['AccountManager', 'Strategist', 'Seo', 'Ads', 'Social', 'Content', 'Design'];
+export const SERVICE_ROLES: ServiceRole[] = [
+  'AccountManager',
+  'Strategist',
+  'Seo',
+  'Ads',
+  'Social',
+  'Content',
+  'Design',
+];
 
 export interface ClientSummary {
   id: string;
@@ -133,6 +141,8 @@ export interface OnboardingItem {
   completedAt: string | null;
   completedBy: string | null;
   note: string | null;
+  /** A client-owned step that agency staff marked done on the client's behalf. */
+  completedOnBehalfOfClient: boolean;
 }
 
 export interface Onboarding {
@@ -393,7 +403,14 @@ export interface ProjectTemplate {
   durationDays: number | null;
   milestones: { key: string; title: string; offsetDays: number }[];
   tasks: TemplateTask[];
-  recurring: { title: string; description: string | null; dayOfMonth: number; dueInDays: number; estimateHours: number | null; labels: string[] }[];
+  recurring: {
+    title: string;
+    description: string | null;
+    dayOfMonth: number;
+    dueInDays: number;
+    estimateHours: number | null;
+    labels: string[];
+  }[];
   isActive: boolean;
   concurrencyStamp: string;
 }
@@ -410,7 +427,8 @@ export type DeliverableType =
   | 'LandingPage'
   | 'SocialPostSet'
   | 'Other';
-export type DeliverableStatus = 'Draft' | 'InternalReview' | 'ClientReview' | 'ChangesRequested' | 'Approved' | 'Published';
+export type DeliverableStatus =
+  'Draft' | 'InternalReview' | 'ClientReview' | 'ChangesRequested' | 'Approved' | 'Published';
 
 export const DELIVERABLE_TYPES: DeliverableType[] = [
   'Copy',
@@ -634,7 +652,14 @@ export interface BriefTemplate {
   serviceLine: string;
   name: string;
   description: string | null;
-  fields: { key: string; label: string; type: BriefFieldType; required: boolean; help: string | null; options: string[] }[];
+  fields: {
+    key: string;
+    label: string;
+    type: BriefFieldType;
+    required: boolean;
+    help: string | null;
+    options: string[];
+  }[];
 }
 
 export type BriefStatus = 'Submitted' | 'InReview' | 'Accepted' | 'Converted' | 'Declined';
@@ -669,6 +694,8 @@ export interface ThreadSummary {
   unreadCount: number;
   lastMessagePreview: string | null;
   lastAuthor: string | null;
+  /** Staff-only thread; never returned to client users. */
+  isInternal: boolean;
 }
 
 export interface Message {
@@ -688,6 +715,9 @@ export interface Thread {
   projectId: string | null;
   messages: Message[];
   participants: Person[];
+  isInternal: boolean;
+  /** Whether the caller may post (client Viewer and Billing members read only). */
+  canReply: boolean;
 }
 
 export type MeetingKind = 'Kickoff' | 'MonthlyReview' | 'Strategy' | 'Creative' | 'Other';
@@ -706,7 +736,13 @@ export interface Meeting {
   notes: string | null;
   status: 'Scheduled' | 'Held' | 'Cancelled';
   attendees: Person[];
-  actionItems: { id: string; text: string; assigneeUserId: string | null; dueDate: string | null; taskId: string | null }[];
+  actionItems: {
+    id: string;
+    text: string;
+    assigneeUserId: string | null;
+    dueDate: string | null;
+    taskId: string | null;
+  }[];
   concurrencyStamp: string;
 }
 
@@ -724,7 +760,12 @@ export interface AgencyDashboard {
   myMinutesThisWeek: number;
   accountManager: {
     healthBoard: ClientHealth[];
-    overdueByClient: { clientId: string; clientName: string; overdueTasks: number; overdueApprovals: number }[];
+    overdueByClient: {
+      clientId: string;
+      clientName: string;
+      overdueTasks: number;
+      overdueApprovals: number;
+    }[];
     utilization: Utilization;
   } | null;
   admin: {
@@ -755,7 +796,14 @@ export interface ClientProjectDetail {
   project: ClientProjectSummary;
   description: string | null;
   milestones: Milestone[];
-  tasks: { id: string; title: string; status: TaskStatus; dueDate: string | null; milestoneId: string | null; completedAt: string | null }[];
+  tasks: {
+    id: string;
+    title: string;
+    status: TaskStatus;
+    dueDate: string | null;
+    milestoneId: string | null;
+    completedAt: string | null;
+  }[];
 }
 
 export interface ClientHome {

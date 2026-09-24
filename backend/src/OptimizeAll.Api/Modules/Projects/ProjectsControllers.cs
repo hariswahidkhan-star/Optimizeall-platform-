@@ -168,6 +168,8 @@ public sealed class AgencyTasksController(TaskService tasks) : ControllerBase
     [HasPermission(Permissions.DeliverablesSubmit)]
     public Task<TaskDetailDto> Attach(Guid id, AttachFileRequest request, CancellationToken ct) => tasks.AttachAsync(id, request.FileId!.Value, ct);
 
+    /// <summary>Removes an attachment; its file is deleted once nothing else uses it. A second removal is a 404.</summary>
+    [DeniedWhileImpersonating] // destroys client files
     [HttpDelete("{id:guid}/attachments/{attachmentId:guid}")]
     [HasPermission(Permissions.DeliverablesSubmit)]
     public Task<TaskDetailDto> Detach(Guid id, Guid attachmentId, CancellationToken ct) => tasks.DetachAsync(id, attachmentId, ct);

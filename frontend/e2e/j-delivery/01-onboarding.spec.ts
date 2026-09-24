@@ -34,13 +34,19 @@ import {
 const clientName = () => `Lumen Labs ${runId()}`;
 
 async function openClientTab(am: Page, tab: string) {
-  await am.getByRole('tablist', { name: 'Client sections' }).getByRole('tab', { name: tab, exact: true }).click();
+  await am
+    .getByRole('tablist', { name: 'Client sections' })
+    .getByRole('tab', { name: tab, exact: true })
+    .click();
 }
 
 test('the account manager creates the client with its details, SLA and logo', async ({ as }) => {
   const am = await as(accounts.am, landing.agency);
   const errors = watchErrors(am);
-  await am.getByRole('navigation', { name: 'Agency navigation' }).getByRole('link', { name: 'Clients' }).click();
+  await am
+    .getByRole('navigation', { name: 'Agency navigation' })
+    .getByRole('link', { name: 'Clients' })
+    .click();
   await expect(am.getByRole('heading', { level: 1, name: 'Clients' })).toBeVisible();
   await am.getByRole('button', { name: 'New client' }).click();
   const dialog = modal(am, 'New client');
@@ -59,8 +65,13 @@ test('the account manager creates the client with its details, SLA and logo', as
   saveState({ client: { id: clientId, name: clientName() } });
 
   const api = await login(accounts.am);
-  const list = await api.get<{ items: { id: string }[] }>(`/agency/clients?search=${encodeURIComponent(clientName())}`);
-  expect(list.items.map((c) => c.id), 'one client per double click').toEqual([clientId]);
+  const list = await api.get<{ items: { id: string }[] }>(
+    `/agency/clients?search=${encodeURIComponent(clientName())}`,
+  );
+  expect(
+    list.items.map((c) => c.id),
+    'one client per double click',
+  ).toEqual([clientId]);
 
   // A new client starts Onboarding, in its own currency and time zone, with the default 3-day SLA.
   await expect(am.getByText('Onboarding', { exact: true }).first()).toBeVisible();
@@ -83,7 +94,9 @@ test('the account manager creates the client with its details, SLA and logo', as
   await expect(profile).toContainText('Lena Park');
 
   // Boundaries of the SLA (1–30 business days) and auto-approve (1–60) are enforced by the API too.
-  const detail = await api.get<Record<string, unknown> & { concurrencyStamp: string }>(`/agency/clients/${clientId}`);
+  const detail = await api.get<Record<string, unknown> & { concurrencyStamp: string }>(
+    `/agency/clients/${clientId}`,
+  );
   const base = {
     name: clientName(),
     countryCode: 'GB',
@@ -93,12 +106,20 @@ test('the account manager creates the client with its details, SLA and logo', as
     autoApproveAfterDays: null,
     concurrencyStamp: detail.concurrencyStamp,
   };
-  expect((await errorOf(api.put(`/agency/clients/${clientId}`, { ...base, approvalSlaDays: 0 }))).status).toBe(400);
-  expect((await errorOf(api.put(`/agency/clients/${clientId}`, { ...base, approvalSlaDays: 31 }))).status).toBe(400);
-  expect((await errorOf(api.put(`/agency/clients/${clientId}`, { ...base, autoApproveAfterDays: 61 }))).status).toBe(400);
+  expect(
+    (await errorOf(api.put(`/agency/clients/${clientId}`, { ...base, approvalSlaDays: 0 }))).status,
+  ).toBe(400);
+  expect(
+    (await errorOf(api.put(`/agency/clients/${clientId}`, { ...base, approvalSlaDays: 31 }))).status,
+  ).toBe(400);
+  expect(
+    (await errorOf(api.put(`/agency/clients/${clientId}`, { ...base, autoApproveAfterDays: 61 }))).status,
+  ).toBe(400);
   // A stale concurrency stamp (someone else saved in between) is a conflict, not a silent overwrite.
   await api.put(`/agency/clients/${clientId}`, { ...base, summary: 'Smart lighting for homes.' });
-  expect((await errorOf(api.put(`/agency/clients/${clientId}`, { ...base, summary: 'Overwritten?' }))).status).toBe(409);
+  expect(
+    (await errorOf(api.put(`/agency/clients/${clientId}`, { ...base, summary: 'Overwritten?' }))).status,
+  ).toBe(409);
   errors.expectClean('creating and editing the client');
 });
 
@@ -131,14 +152,24 @@ test('the account manager builds the account team and works the onboarding check
   const progress = am.getByRole('progressbar', { name: 'Onboarding complete' });
   await expect(progress).toHaveAttribute('aria-valuetext', `0 of ${items} steps`);
 
-  // Tick the first step.
-  const firstTitle = (await checklist.getByRole('listitem').first().locator('.dl-list__title').innerText()).trim();
+  // Tick the first step. It is the client's (GA4 access), so ticking it is confirmed as done on the client's behalf.
+  const firstTitle = (
+    await checklist.getByRole('listitem').first().locator('.dl-list__title').innerText()
+  ).trim();
+  await expect(checklist.getByRole('listitem').first()).toContainText('Client action');
   await am.getByLabel(`Status of ${firstTitle}`).selectOption('Done');
+  await modal(am, /done on the client’s behalf\?$/)
+    .getByRole('button', { name: 'Mark done for the client' })
+    .click();
   await expect(progress).toHaveAttribute('aria-valuetext', `1 of ${items} steps`);
-  await expect(checklist.getByRole('listitem').first()).toContainText(`by ${staffNames.am}`);
+  await expect(checklist.getByRole('listitem').first()).toContainText(
+    `by ${staffNames.am} on behalf of the client`,
+  );
 
   // Edit the second step: new title, description, and hand it to the client.
-  const secondTitle = (await checklist.getByRole('listitem').nth(1).locator('.dl-list__title').innerText()).trim();
+  const secondTitle = (
+    await checklist.getByRole('listitem').nth(1).locator('.dl-list__title').innerText()
+  ).trim();
   const edited = `Grant GA4 and Search Console access (${runId()})`;
   await am.getByRole('button', { name: `Edit ${secondTitle}` }).click();
   const editDialog = modal(am, 'Edit onboarding step');
@@ -157,9 +188,17 @@ test('the account manager builds the account team and works the onboarding check
   await am.getByLabel('Who completes it').selectOption('Client');
   await am.getByRole('button', { name: 'Add step' }).click();
   await expect(checklist.getByRole('listitem').filter({ hasText: added })).toContainText('Client action');
-  const lastTitle = (await checklist.getByRole('listitem').nth(items - 1).locator('.dl-list__title').innerText()).trim();
+  const lastTitle = (
+    await checklist
+      .getByRole('listitem')
+      .nth(items - 1)
+      .locator('.dl-list__title')
+      .innerText()
+  ).trim();
   await am.getByRole('button', { name: `Remove ${lastTitle}` }).click();
-  await modal(am, /from this client’s checklist\?$/).getByRole('button', { name: 'Remove step' }).click();
+  await modal(am, /from this client’s checklist\?$/)
+    .getByRole('button', { name: 'Remove step' })
+    .click();
   await expect(checklist.getByRole('listitem').filter({ hasText: lastTitle })).toHaveCount(0);
   await expect(progress).toHaveAttribute('aria-valuetext', `1 of ${items} steps`);
 
@@ -169,10 +208,18 @@ test('the account manager builds the account team and works the onboarding check
   await expect(checklist.getByRole('listitem').filter({ hasText: added })).toBeVisible();
   // A blank title is refused by the API (the dialog disables Save too).
   const api = await login(accounts.am);
-  const onboarding = await api.get<{ items: { id: string; title: string }[] }>(`/agency/clients/${clientId}/onboarding`);
+  const onboarding = await api.get<{ items: { id: string; title: string }[] }>(
+    `/agency/clients/${clientId}/onboarding`,
+  );
   const target = onboarding.items.find((i) => i.title === added)!;
   expect(
-    await statusOf(api.put(`/agency/clients/${clientId}/onboarding/${target.id}/details`, { title: ' ', category: 'Access', owner: 'Client' })),
+    await statusOf(
+      api.put(`/agency/clients/${clientId}/onboarding/${target.id}/details`, {
+        title: ' ',
+        category: 'Access',
+        owner: 'Client',
+      }),
+    ),
   ).toBe(400);
   errors.expectClean('the account team and onboarding checklist');
 });
@@ -223,7 +270,10 @@ async function acceptInvitation(page: Page, email: string, displayName: string) 
   await expect(page.getByRole('heading', { level: 1, name: 'Choose a new password' })).toBeVisible();
   await page.getByLabel('New password', { exact: true }).fill(CLIENT_PASSWORD);
   await page.getByLabel('Confirm new password').fill(CLIENT_PASSWORD);
-  await page.getByRole('button', { name: /password/i }).last().click();
+  await page
+    .getByRole('button', { name: /password/i })
+    .last()
+    .click();
   await expect(page).toHaveURL(/\/login\?reset=1/);
   await page.getByLabel('Email', { exact: true }).fill(email);
   await page.getByLabel('Password', { exact: true }).fill(CLIENT_PASSWORD);
@@ -233,14 +283,18 @@ async function acceptInvitation(page: Page, email: string, displayName: string) 
   await expect(page.getByRole('button', { name: `Account menu for ${displayName}` })).toBeVisible();
 }
 
-test('the account manager invites one client user per duty; each sets a password and signs in', async ({ as, anonymous }) => {
+test('the account manager invites one client user per duty; each sets a password and signs in', async ({
+  as,
+  anonymous,
+}) => {
   const { id: clientId, name } = need('client');
   const am = await as(accounts.am, landing.agency);
   const errors = watchErrors(am);
   await am.goto(`/agency/clients/${clientId}?tab=users`);
   await expect(am.getByText('No client users yet')).toBeVisible();
 
-  const users: Partial<Record<Duty, { id: string; email: string; password: string; displayName: string }>> = {};
+  const users: Partial<Record<Duty, { id: string; email: string; password: string; displayName: string }>> =
+    {};
   for (const duty of DUTIES) {
     const email = `${duty.toLowerCase()}.${runId()}@lumen.e2e.optimizeall.test`;
     const displayName = `Lumen ${duty} ${runId()}`;
@@ -269,8 +323,15 @@ test('the account manager invites one client user per duty; each sets a password
   // Staff accounts can't become client users.
   const api = await login(accounts.am);
   expect(
-    (await errorOf(api.post(`/agency/clients/${clientId}/members`, { email: accounts.strategist.email, displayName: 'Staff', role: 'Viewer' })))
-      .code,
+    (
+      await errorOf(
+        api.post(`/agency/clients/${clientId}/members`, {
+          email: accounts.strategist.email,
+          displayName: 'Staff',
+          role: 'Viewer',
+        }),
+      )
+    ).code,
   ).toBe('client.invite_staff_account');
 
   // Each invited person sets a password from the email and signs in to the client portal.
@@ -284,14 +345,18 @@ test('the account manager invites one client user per duty; each sets a password
     await expect(page.getByLabel('Organization')).toHaveCount(0);
     clientErrors.expectClean(`the ${duty}'s first sign-in`);
   }
-  const members = await api.get<{ userId: string; email: string; role: Duty; hasSignedIn: boolean }[]>(`/agency/clients/${clientId}/members`);
+  const members = await api.get<{ userId: string; email: string; role: Duty; hasSignedIn: boolean }[]>(
+    `/agency/clients/${clientId}/members`,
+  );
   for (const duty of DUTIES) {
     const member = members.find((m) => m.email === users[duty]!.email)!;
     expect(member.role).toBe(duty);
     expect(member.hasSignedIn).toBe(true);
     users[duty]!.id = member.userId;
   }
-  saveState({ users: users as Record<Duty, { id: string; email: string; password: string; displayName: string }> });
+  saveState({
+    users: users as Record<Duty, { id: string; email: string; password: string; displayName: string }>,
+  });
   await am.reload();
   await expect(am.getByText('Invitation pending')).toHaveCount(0);
   errors.expectClean('inviting the client users');
@@ -316,7 +381,13 @@ test('the Owner sees the account team and manages colleagues; other duties canno
   for (const duty of ['Approver', 'Billing', 'Viewer'] as const) {
     const api = await login(clientUser(duty));
     expect(
-      await statusOf(api.post(`/client/orgs/${clientId}/members`, { email: `x.${duty}.${runId()}@e2e.optimizeall.test`, displayName: 'Xavier Test', role: 'Viewer' })),
+      await statusOf(
+        api.post(`/client/orgs/${clientId}/members`, {
+          email: `x.${duty}.${runId()}@e2e.optimizeall.test`,
+          displayName: 'Xavier Test',
+          role: 'Viewer',
+        }),
+      ),
       `${duty} invites a colleague`,
     ).toBe(403);
   }
@@ -328,7 +399,11 @@ test('the Owner sees the account team and manages colleagues; other duties canno
   // The last Owner can't demote themselves (every organization keeps an Owner).
   const ownerApi = await login(clientUser('Owner'));
   expect(
-    (await raw(ownerApi, 'PUT', `/client/orgs/${clientId}/members/${clientUser('Owner').id}`, { json: { role: 'Viewer' } })).status,
+    (
+      await raw(ownerApi, 'PUT', `/client/orgs/${clientId}/members/${clientUser('Owner').id}`, {
+        json: { role: 'Viewer' },
+      })
+    ).status,
   ).toBe(409);
 
   // Brand kit: the Owner uploads an asset in the portal; the Viewer only reads.
@@ -346,7 +421,9 @@ test('the Owner sees the account team and manages colleagues; other duties canno
   const form = new FormData();
   form.append('file', new Blob([png(14).buffer], { type: 'image/png' }), 'viewer.png');
   form.append('kind', 'Logo');
-  expect((await raw(viewerApi, 'POST', `/client/orgs/${clientId}/brand-kit/assets`, { form })).status).toBe(403);
+  expect((await raw(viewerApi, 'POST', `/client/orgs/${clientId}/brand-kit/assets`, { form })).status).toBe(
+    403,
+  );
 
   // Home: onboarding progress with the steps waiting on the client.
   await owner.goto('/client');
@@ -376,7 +453,13 @@ test('the account manager activates the client once onboarding is done', async (
   const detail = await api.get<{ concurrencyStamp: string; status: string }>(`/agency/clients/${clientId}`);
   expect(detail.status).toBe('Active');
   expect(
-    await statusOf(api.post(`/agency/clients/${clientId}/status`, { status: 'Paused', reason: null, concurrencyStamp: detail.concurrencyStamp })),
+    await statusOf(
+      api.post(`/agency/clients/${clientId}/status`, {
+        status: 'Paused',
+        reason: null,
+        concurrencyStamp: detail.concurrencyStamp,
+      }),
+    ),
   ).toBe(400);
   errors.expectClean('activating the client');
 });
