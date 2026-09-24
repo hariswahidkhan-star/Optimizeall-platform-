@@ -78,6 +78,10 @@ export function ConfirmDialog({
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    // The dialog is portalled to <body>, but React still bubbles its submit event through the component tree: without
+    // this, confirming a dialog opened from inside another form (e.g. "Restore version" in the page editor, "Delete post"
+    // in the post editor) also submitted — and saved — that form.
+    event.stopPropagation();
     if (!reasonValid) {
       setShowReasonError(true);
       return;

@@ -146,12 +146,14 @@ public sealed class LandingPagesController(
         }
         var page = await q.OrderByDescending(p => p.UpdatedAt).ToPagedAsync(query, ct);
         var clients = await ClientsAsync(page.Items.Select(p => p.ClientAccountId), ct);
+        var live = await pages.LiveSlugsAsync(page.Items, ct);
         return new PagedResult<PageListItemDto>(page.Items.Select(p =>
         {
             var client = clients.GetValueOrDefault(p.ClientAccountId);
             using var doc = JsonDocument.Parse(p.VariantsJson);
             return new PageListItemDto(p.Id, p.ClientAccountId, client.Name ?? string.Empty, client.Slug ?? string.Empty, p.Name, p.Slug, p.Status,
-                p.HasUnpublishedChanges, p.ExperimentEnabled, doc.RootElement.GetArrayLength(), p.PublishedAt, PublicPath(client.Slug, p.Slug), p.UpdatedAt);
+                p.HasUnpublishedChanges, p.ExperimentEnabled, doc.RootElement.GetArrayLength(), p.PublishedAt,
+                PublicPath(client.Slug, live.GetValueOrDefault(p.Id, p.Slug)), p.UpdatedAt);
         }).ToList(), page.Total, page.Page, page.PageSize);
     }
 
@@ -165,8 +167,7 @@ public sealed class LandingPagesController(
         await access.EnsureAsync(clientId, "Client", ct);
         var slug = string.IsNullOrWhiteSpace(request.Slug) ? LandingPageService.Slugify(request.Name) : request.Slug.Trim().ToLowerInvariant();
         if (!LandingPageService.IsValidSlug(slug)) throw SlugError();
-        if (await db.Set<LandingPage>().AnyAsync(p => p.ClientAccountId == clientId && p.Slug == slug, ct))
-            throw DomainException.Conflict("landing.slug_taken", "This client already has a page with that URL slug.");
+        if (await pages.SlugTakenAsync(clientId, slug, null, ct)) throw SlugTaken();
 
         await using var tx = await dialect.BeginWriteTransactionAsync(db, ct);
         var page = new LandingPage { ClientAccountId = clientId, Name = request.Name.Trim(), Slug = slug, CreatedByUserId = currentUser.Id };
@@ -219,8 +220,7 @@ public sealed class LandingPagesController(
         }
         var slug = request.Slug.Trim().ToLowerInvariant();
         if (!LandingPageService.IsValidSlug(slug)) throw SlugError();
-        if (slug != page.Slug && await db.Set<LandingPage>().AnyAsync(p => p.ClientAccountId == page.ClientAccountId && p.Slug == slug && p.Id != id, ct))
-            throw DomainException.Conflict("landing.slug_taken", "This client already has a page with that URL slug.");
+        if (slug != page.Slug && await pages.SlugTakenAsync(page.ClientAccountId, slug, id, ct)) throw SlugTaken();
         var metaErrors = LandingPageService.ValidateMeta(request.OgImageUrl, images);
         if (metaErrors.Count > 0)
             throw new DomainException("landing.invalid_content", "The page settings are invalid.", DomainErrorKind.Validation,
@@ -256,6 +256,8 @@ public sealed class LandingPagesController(
         // Re-validate against the current forms/images (a form may have been archived since the draft was saved).
         using (var draft = JsonDocument.Parse(page.VariantsJson))
             await pages.ParseVariantsAsync(page.ClientAccountId, draft.RootElement, ct);
+        // The draft may carry a new address; another page's live address cannot be taken over.
+        if (await pages.FindLiveAsync(page.ClientAccountId, page.Slug, ct, page.Id) is not null) throw SlugTaken();
         var next = (await db.Set<LandingPageVersion>().Where(v => v.PageId == id).MaxAsync(v => (int?)v.Version, ct) ?? 0) + 1;
         var snapshot = LandingPageService.BuildSnapshot(page);
         var version = new LandingPageVersion
@@ -451,13 +453,17 @@ public sealed class LandingPagesController(
         int? version = p.PublishedVersionId is { } vid
             ? await db.Set<LandingPageVersion>().AsNoTracking().Where(v => v.Id == vid).Select(v => (int?)v.Version).FirstOrDefaultAsync(ct)
             : null;
+        var liveSlug = (await pages.LiveSlugsAsync(new[] { p }, ct)).GetValueOrDefault(p.Id, p.Slug);
         using var doc = JsonDocument.Parse(p.VariantsJson);
         return new PageDetailDto(p.Id, p.ClientAccountId, client.Name ?? string.Empty, client.Slug ?? string.Empty, p.Name, p.Slug, p.Status, p.MetaTitle,
             p.MetaDescription, p.OgImageUrl, p.NoIndex, p.TemplateKey, doc.RootElement.Clone(), p.ExperimentEnabled, p.ExperimentId, p.ExperimentStartedAt,
-            p.PublishedVersionId, version, p.PublishedAt, p.HasUnpublishedChanges, PublicPath(client.Slug, p.Slug), p.ConcurrencyStamp, p.CreatedAt, p.UpdatedAt);
+            p.PublishedVersionId, version, p.PublishedAt, p.HasUnpublishedChanges, PublicPath(client.Slug, liveSlug), p.ConcurrencyStamp, p.CreatedAt, p.UpdatedAt);
     }
 
     public static string PublicPath(string? clientSlug, string slug) => $"/lp/{clientSlug}/{slug}";
+
+    private static DomainException SlugTaken() =>
+        DomainException.Conflict("landing.slug_taken", "This client already has a page with that URL slug.");
 
     private static DomainException SlugError() => new("landing.invalid_slug",
         "Slugs use lower-case letters, digits and dashes (max 80), e.g. spring-offer.", DomainErrorKind.Validation,

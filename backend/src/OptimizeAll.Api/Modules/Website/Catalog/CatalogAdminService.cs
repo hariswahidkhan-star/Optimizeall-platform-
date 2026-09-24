@@ -723,12 +723,22 @@ public sealed class CatalogAdminService(
         x.SortOrder = r.SortOrder;
     }
 
-    /// <summary>Slugs of built-in routes a CMS page must not shadow.</summary>
+    /// <summary>
+    /// First path segments of the web app's own routes (frontend app/router.tsx and features/*/routes.tsx): a CMS page at
+    /// one of these would never render (the built-in route wins) while the sitemap advertised it. "pricing" and "contact"
+    /// are deliberately absent: the built-in /pricing and /contact pages embed the CMS page of that slug (seeded).
+    /// </summary>
     public static readonly IReadOnlySet<string> ReservedSlugs = new HashSet<string>(StringComparer.Ordinal)
     {
+        // public website
         "services", "industries", "case-studies", "team", "careers", "blog", "free-audit", "get-a-quote",
-        "book-a-consultation", "newsletter", "login", "register", "app", "agency", "client", "admin", "finance", "review", "manage",
-        "api", "faq", "creators", "join", "c", "t", "search",
+        "book-a-consultation", "newsletter", "search", "faq", "creators", "design-system",
+        // sign-in and account emails
+        "login", "register", "check-email", "verify-email", "forgot-password", "reset-password", "auth",
+        // portals and the API
+        "app", "agency", "client", "admin", "finance", "review", "manage", "api",
+        // short links: invitations, campaigns, tracking, proposals, invoices, email links, landing pages and forms
+        "join", "c", "t", "e", "p", "i", "email", "lp", "f",
     };
 
     public static SitePageDto ToDto(SitePage x) => new(

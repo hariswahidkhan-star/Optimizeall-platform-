@@ -36,7 +36,7 @@ public sealed record SubmissionResultDto(bool Ok, string Message, string? Redire
 [Route("api/v1/public")]
 public sealed class PublicPagesController(
     AppDbContext db, IDatabaseDialect dialect, IPrivacyHasher hasher, FormRenderTokens tokens, CaptchaVerifier captcha,
-    FormSubmissionService submissions, IConfiguration configuration, TimeProvider clock) : ControllerBase
+    FormSubmissionService submissions, LandingPageService pages, IConfiguration configuration, TimeProvider clock) : ControllerBase
 {
     public const string VisitorHeader = "X-Visitor-Id";
     public const string EmbedOriginHeader = "X-Embed-Origin";
@@ -55,11 +55,9 @@ public sealed class PublicPagesController(
         Response.Headers.CacheControl = "no-store";
         var client = await db.Set<ClientAccount>().AsNoTracking().Where(c => c.Slug == clientSlug).Select(c => new { c.Id, c.Name, c.Slug })
             .FirstOrDefaultAsync(ct) ?? throw DomainException.NotFound("Page");
-        var page = await db.Set<LandingPage>().AsNoTracking()
-            .FirstOrDefaultAsync(p => p.ClientAccountId == client.Id && p.Slug == pageSlug && p.Status == LandingPageStatus.Published, ct);
-        if (page?.PublishedVersionId is not { } versionId) throw DomainException.NotFound("Page");
-        var version = await db.Set<LandingPageVersion>().AsNoTracking().FirstAsync(v => v.Id == versionId, ct);
-        var snapshot = LandingPageService.ReadSnapshot(version);
+        // Matched on the published snapshot's slug: a rename saved in the draft is not live until it is published.
+        var live = await pages.FindLiveAsync(client.Id, pageSlug, ct) ?? throw DomainException.NotFound("Page");
+        var (page, version, snapshot) = (live.Page, live.Version, live.Snapshot);
         var variants = LandingPageService.Variants(snapshot.Variants);
 
         var userAgent = Request.Headers.UserAgent.ToString();

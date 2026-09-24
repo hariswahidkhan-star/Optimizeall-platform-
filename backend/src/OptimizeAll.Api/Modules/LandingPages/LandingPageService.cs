@@ -14,6 +14,9 @@ public sealed record PageSnapshot(
     string Name, string Slug, string? MetaTitle, string? MetaDescription, string? OgImageUrl, bool NoIndex, bool ExperimentEnabled,
     Guid ExperimentId, JsonElement Variants);
 
+/// <summary>A published page with the version that is live and its snapshot.</summary>
+public sealed record LivePage(LandingPage Page, LandingPageVersion Version, PageSnapshot Snapshot);
+
 /// <summary>Landing-page content rules shared by the staff API and the public renderer.</summary>
 public sealed partial class LandingPageService(AppDbContext db, ImageUrlPolicy images)
 {
@@ -34,6 +37,47 @@ public sealed partial class LandingPageService(AppDbContext db, ImageUrlPolicy i
             throw new DomainException("landing.invalid_content", "The page content is invalid.", DomainErrorKind.Validation, ex.Errors);
         }
     }
+
+    /// <summary>
+    /// The published page answering <c>/lp/{client}/{slug}</c>. The address is part of the published snapshot: renaming the
+    /// slug in the draft neither moves nor breaks the live page until the rename is published. Only pages whose draft slug
+    /// matches, or whose draft differs from what is live, need their snapshot read.
+    /// </summary>
+    public async Task<LivePage?> FindLiveAsync(Guid clientAccountId, string slug, CancellationToken ct, Guid? exceptPageId = null)
+    {
+        var candidates = await db.Set<LandingPage>().AsNoTracking()
+            .Where(p => p.ClientAccountId == clientAccountId && p.Status == LandingPageStatus.Published && p.PublishedVersionId != null &&
+                        p.Id != exceptPageId && (p.Slug == slug || p.HasUnpublishedChanges))
+            .ToListAsync(ct);
+        foreach (var page in candidates.OrderByDescending(p => p.Slug == slug).ThenBy(p => p.Id))
+        {
+            var version = await db.Set<LandingPageVersion>().AsNoTracking().FirstOrDefaultAsync(v => v.Id == page.PublishedVersionId, ct);
+            if (version is null) continue;
+            var snapshot = ReadSnapshot(version);
+            if (snapshot.Slug == slug) return new LivePage(page, version, snapshot);
+        }
+        return null;
+    }
+
+    /// <summary>The live (published) slug of each page, for the pages among <paramref name="pages"/> that are published.</summary>
+    public async Task<Dictionary<Guid, string>> LiveSlugsAsync(IEnumerable<LandingPage> pages, CancellationToken ct)
+    {
+        var published = pages.Where(p => p.Status == LandingPageStatus.Published && p.PublishedVersionId is not null).ToList();
+        var result = published.Where(p => !p.HasUnpublishedChanges).ToDictionary(p => p.Id, p => p.Slug);
+        var diverged = published.Where(p => p.HasUnpublishedChanges).Select(p => p.PublishedVersionId!.Value).ToList();
+        if (diverged.Count == 0) return result;
+        foreach (var version in await db.Set<LandingPageVersion>().AsNoTracking().Where(v => diverged.Contains(v.Id)).ToListAsync(ct))
+            result[version.PageId] = ReadSnapshot(version).Slug;
+        return result;
+    }
+
+    /// <summary>
+    /// Whether <paramref name="slug"/> is taken for the client by another page, as its draft address or as its live one (a page
+    /// whose rename is not published yet still holds its old address).
+    /// </summary>
+    public async Task<bool> SlugTakenAsync(Guid clientAccountId, string slug, Guid? exceptPageId, CancellationToken ct) =>
+        await db.Set<LandingPage>().AnyAsync(p => p.ClientAccountId == clientAccountId && p.Slug == slug && p.Id != exceptPageId, ct)
+        || await FindLiveAsync(clientAccountId, slug, ct, exceptPageId) is not null;
 
     public static IReadOnlyList<string> ValidateMeta(string? ogImageUrl, ImageUrlPolicy images)
     {

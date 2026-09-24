@@ -196,7 +196,7 @@ export function PostEditorPage() {
         : api.put<BlogPost>(`${W}/blog/posts/${postId}`, { ...current, concurrencyStamp: post.data!.concurrencyStamp }),
     onSuccess: async (saved) => {
       await afterChange(saved, 'Post saved');
-      if (isNew) navigate(`../blog/${saved.id}`, { replace: true, relative: 'path' });
+      if (isNew) navigate(`../${saved.id}`, { replace: true, relative: 'path' });
     },
     onError: (e) => isApiError(e) && setErrors(toErrors(e.errors)),
   });

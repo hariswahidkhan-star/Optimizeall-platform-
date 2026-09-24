@@ -1,9 +1,10 @@
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { json, makeUser, mockFetch, problem, session } from '@/test/fetchMock';
 import { axeViolations, renderWithApp } from '@/test/render';
-import type { SitePage, SitePageRevision, SitePageRevisionSummary, Testimonial } from '../api';
+import type { BlogPost, SitePage, SitePageRevision, SitePageRevisionSummary, Testimonial } from '../api';
+import { PostEditorPage } from './BlogAdmin';
 import { TestimonialsAdminPage } from './ContentPages';
 import { PageEditorPage } from './PagesAdmin';
 
@@ -119,5 +120,51 @@ describe('CMS reorder', () => {
     expect(await axeViolations(container)).toEqual([]);
     await user.click(screen.getByRole('button', { name: 'Save order' }));
     expect(calls.find((c) => c.path === '/agency/website/testimonials/reorder')?.body).toEqual({ ids: ['t2', 't1'] });
+  });
+});
+
+describe('creating a page or a post', () => {
+  // The editors live at /agency/website/pages/new and /agency/website/blog/new; after the first save they must move to
+  // the new record's own address, not /pages/pages/:id (no such route: the editor vanished into a 404).
+  it('opens the new page at /agency/website/pages/:id after the first save', async () => {
+    const user = userEvent.setup();
+    const created: SitePage = { ...page, id: 'p9', slug: 'about-us', title: 'About us', version: 1 };
+    mockFetch({
+      'POST /auth/refresh': () => json(200, session(staff)),
+      'POST /agency/website/pages': () => json(201, created),
+      'GET /agency/website/pages/p9': () => json(200, created),
+      'GET /agency/website/pages/p9/revisions': () => json(200, []),
+      'GET /agency/website/pages': () => json(200, []),
+    });
+    const { router } = renderWithApp(<PageEditorPage />, { route: '/agency/website/pages/new', path: '/agency/website/pages/:pageId' });
+    const form = await screen.findByRole('form', { name: 'Page editor' });
+    await user.type(within(form).getAllByLabelText('Title')[0]!, 'About us');
+    await user.type(within(form).getByLabelText('Slug'), 'about-us');
+    await user.click(within(form).getByRole('button', { name: 'Save page' }));
+    await vi.waitFor(() => expect(router.state.location.pathname).toBe('/agency/website/pages/p9'));
+  });
+
+  it('opens the new post at /agency/website/blog/:id after the first save', async () => {
+    const user = userEvent.setup();
+    const post: BlogPost = {
+      id: 'b9', slug: 'hello', title: 'Hello', excerpt: 'Hi', bodyMarkdown: 'Body', coverImageUrl: null, coverImageAlt: null, authorId: null,
+      categoryIds: [], tags: [], readingMinutes: 1, status: 'Draft', publishAt: null, publishedAt: null, relatedPostIds: [], seo: page.seo,
+      createdAt: '2026-09-20T10:00:00Z', updatedAt: '2026-09-20T10:00:00Z', concurrencyStamp: 's1',
+      can: { edit: true, submit: true, publish: false, schedule: false, unpublish: false, returnToDraft: false, delete: true },
+    };
+    mockFetch({
+      'POST /auth/refresh': () => json(200, session(staff)),
+      'GET /agency/website/blog/categories': () => json(200, []),
+      'GET /agency/website/blog/authors': () => json(200, []),
+      'POST /agency/website/blog/posts': () => json(201, post),
+      'GET /agency/website/blog/posts/b9': () => json(200, post),
+      'GET /agency/website/blog/posts': () => json(200, { items: [], total: 0, page: 1, pageSize: 100, totalPages: 0 }),
+    });
+    const { router } = renderWithApp(<PostEditorPage />, { route: '/agency/website/blog/new', path: '/agency/website/blog/:postId' });
+    const form = await screen.findByRole('form', { name: 'Post editor' });
+    await user.type(within(form).getByLabelText('Title'), 'Hello');
+    await user.type(within(form).getByLabelText('Slug'), 'hello');
+    await user.click(within(form).getByRole('button', { name: 'Create draft' }));
+    await vi.waitFor(() => expect(router.state.location.pathname).toBe('/agency/website/blog/b9'));
   });
 });

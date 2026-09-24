@@ -380,7 +380,7 @@ export function PageEditorPage() {
       await client.invalidateQueries({ queryKey: ['agency', 'website', 'pages'] });
       await client.invalidateQueries({ queryKey: ['agency', 'website', 'page', saved.id, 'revisions'] });
       client.setQueryData(['agency', 'website', 'page', saved.id], saved);
-      if (isNew) navigate(`../pages/${saved.id}`, { replace: true, relative: 'path' });
+      if (isNew) navigate(`../${saved.id}`, { replace: true, relative: 'path' });
     },
     onError: (e) => isApiError(e) && setErrors(toErrors(e.errors)),
   });

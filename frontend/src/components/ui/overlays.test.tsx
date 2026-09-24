@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { useState } from 'react';
+import { type FormEvent, useState } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it, vi } from 'vitest';
 import { Button } from './Button';
@@ -115,6 +115,26 @@ describe('ConfirmDialog', () => {
     await user.click(screen.getByRole('button', { name: 'Confirm' }));
     expect(await screen.findByRole('alert')).toHaveTextContent('Batch was changed by someone else.');
     expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it('confirming does not submit a form the dialog was opened from (React bubbles events through portals)', async () => {
+    const user = userEvent.setup();
+    const onConfirm = vi.fn();
+    const onOuterSubmit = vi.fn((e: FormEvent) => e.preventDefault());
+    render(
+      <form aria-label="Page editor" onSubmit={onOuterSubmit}>
+        <ConfirmDialog
+          open
+          onClose={() => undefined}
+          onConfirm={onConfirm}
+          title="Restore version 2?"
+          confirmLabel="Restore version"
+        />
+      </form>,
+    );
+    await user.click(screen.getByRole('button', { name: 'Restore version' }));
+    await waitFor(() => expect(onConfirm).toHaveBeenCalled());
+    expect(onOuterSubmit).not.toHaveBeenCalled();
   });
 });
 

@@ -28,7 +28,9 @@ const page: PublicLandingPage = {
 
 afterEach(() => {
   window.localStorage.clear();
-  document.head.querySelectorAll('meta[name="robots"],meta[name="description"]').forEach((m) => m.remove());
+  document.head
+    .querySelectorAll('meta[name="robots"],meta[name="description"],meta[name="twitter:card"],meta[property^="og:"]')
+    .forEach((m) => m.remove());
 });
 
 describe('public landing page (/lp/:client/:slug)', () => {
@@ -45,6 +47,21 @@ describe('public landing page (/lp/:client/:slug)', () => {
     const request = calls.find((c) => c.path.startsWith('/public/lp/'));
     expect(request?.headers['X-Visitor-Id']).toBeTruthy();
     expect(await axeViolations(container)).toEqual([]);
+  });
+
+  it('writes the page’s Open Graph tags (title, description and the image as an absolute URL)', async () => {
+    mockFetch({
+      'GET /public/lp/wanderly-travel/autumn-city-breaks': () =>
+        json(200, { ...page, noIndex: false, ogImageUrl: '/api/v1/files/0b7f1b1e-6f39-4f0e-9d59-2f6e1d7b8a11' }),
+    });
+    renderWithApp(<PublicLandingPageView />, { withAuth: false, route: '/lp/wanderly-travel/autumn-city-breaks', path: '/lp/:client/:slug' });
+    expect(await screen.findByRole('heading', { level: 1, name: 'Autumn city breaks from £299' })).toBeInTheDocument();
+    const og = (key: string) => document.head.querySelector(`meta[property="${key}"]`)?.getAttribute('content');
+    expect(og('og:title')).toBe('Autumn city breaks · Wanderly');
+    expect(og('og:description')).toBe('Three-night city breaks with flights and hotel.');
+    expect(og('og:image')).toBe(`${window.location.origin}/api/v1/files/0b7f1b1e-6f39-4f0e-9d59-2f6e1d7b8a11`);
+    expect(document.head.querySelector('meta[name="twitter:card"]')).toHaveAttribute('content', 'summary_large_image');
+    expect(document.head.querySelector('meta[name="robots"]')).toBeNull();
   });
 
   it('shows a friendly message when the page is not published', async () => {

@@ -6,6 +6,7 @@ import { json, makeUser, mockFetch, problem, session } from '@/test/fetchMock';
 import { renderWithApp } from '@/test/render';
 import { RequireAuth, RequirePermission } from './guards';
 import { canOpenPath, defaultLandingPath } from './portals';
+import { guardPortalRoutes } from './router';
 import { safeNextPath } from './redirects';
 
 const Protected = () => (
@@ -42,6 +43,37 @@ describe('route guards', () => {
     });
     renderWithApp(<Protected />, { route: '/review/queue', path: '/review/*' });
     expect(await screen.findByText('review queue')).toBeInTheDocument();
+  });
+});
+
+describe('portal route guards (guardPortalRoutes)', () => {
+  // Agency → Website pages are lazy routes (`lazy: () => ({ Component })`); React Router renders a lazy Component
+  // instead of the route's element, so wrapping the element alone let anyone open them.
+  const lazyPage = guardPortalRoutes([
+    {
+      path: '/agency/website/pages',
+      handle: { requires: { anyOf: ['site.manage'] } },
+      lazy: async () => ({ Component: () => <p>pages admin</p> }),
+    },
+  ]);
+
+  it('answers 403 on a lazy route without the permission', async () => {
+    mockFetch({
+      'POST /auth/refresh': () =>
+        json(200, session(makeUser({ roles: ['AccountManager'], permissions: ['crm.view'] }))),
+    });
+    renderWithApp(<p>elsewhere</p>, { route: '/agency/website/pages', path: '/elsewhere', routes: lazyPage });
+    expect(await screen.findByRole('heading', { name: /don’t have access/i })).toBeInTheDocument();
+    expect(screen.queryByText('pages admin')).not.toBeInTheDocument();
+  });
+
+  it('renders the lazy page with the permission', async () => {
+    mockFetch({
+      'POST /auth/refresh': () =>
+        json(200, session(makeUser({ roles: ['Admin'], permissions: ['site.manage'] }))),
+    });
+    renderWithApp(<p>elsewhere</p>, { route: '/agency/website/pages', path: '/elsewhere', routes: lazyPage });
+    expect(await screen.findByText('pages admin')).toBeInTheDocument();
   });
 });
 
@@ -112,7 +144,9 @@ describe('post-login landing', () => {
     expect(defaultLandingPath(admin)).toBe('/admin');
     expect(defaultLandingPath(['payouts.view', 'ledger.view', 'users.view', 'audit.view'])).toBe('/finance');
     // The Finance role also holds agency billing/client permissions; it still lands in /finance.
-    expect(defaultLandingPath(['payouts.view', 'ledger.view', 'billing.view', 'billing.manage', 'clients.view'])).toBe('/finance');
+    expect(
+      defaultLandingPath(['payouts.view', 'ledger.view', 'billing.view', 'billing.manage', 'clients.view']),
+    ).toBe('/finance');
     expect(defaultLandingPath(['crm.view', 'billing.view', 'clients.view'])).toBe('/agency');
     expect(defaultLandingPath(['campaigns.manage', 'users.view'])).toBe('/manage');
     expect(defaultLandingPath(['submissions.review', 'users.view'])).toBe('/review');

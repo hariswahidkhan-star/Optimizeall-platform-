@@ -227,7 +227,12 @@ public sealed class WebsiteContentController(CatalogAdminService catalog, SiteSe
     [HttpGet("settings")]
     public Task<SiteSettingsDto> Settings(CancellationToken ct) => settings.GetForEditAsync(ct);
 
+    /// <summary>
+    /// Denied while impersonating: the settings choose the tag-manager / analytics scripts loaded on every public page and
+    /// the canonical site URL used by links, the sitemap and robots.txt (platform-wide configuration, like admin settings).
+    /// </summary>
     [HttpPut("settings")]
+    [DeniedWhileImpersonating]
     public Task<SiteSettingsDto> UpdateSettings(UpdateSiteSettingsRequest request, CancellationToken ct) => settings.UpdateAsync(request, ct);
 }
 

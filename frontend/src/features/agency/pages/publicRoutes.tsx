@@ -10,16 +10,16 @@ import { BlockRenderer } from './BlockRenderer';
 import { FormRenderer } from './FormRenderer';
 import './pages.css';
 
-/** Sets (or removes) a `<meta name=…>` tag while the page is mounted. */
-function useMeta(name: string, content: string | null | undefined) {
+/** Sets a `<meta name=…>` (or `<meta property=…>` for Open Graph) tag while the page is mounted. */
+function useMeta(name: string, content: string | null | undefined, attr: 'name' | 'property' = 'name') {
   useEffect(() => {
     if (!content) return;
-    let tag = document.head.querySelector<HTMLMetaElement>(`meta[name="${name}"]`);
+    let tag = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${name}"]`);
     const created = !tag;
     const previous = tag?.content;
     if (!tag) {
       tag = document.createElement('meta');
-      tag.name = name;
+      tag.setAttribute(attr, name);
       document.head.appendChild(tag);
     }
     tag.content = content;
@@ -27,7 +27,13 @@ function useMeta(name: string, content: string | null | undefined) {
       if (created) tag.remove();
       else if (previous !== undefined) tag.content = previous;
     };
-  }, [name, content]);
+  }, [name, content, attr]);
+}
+
+/** An upload path (/api/v1/files/…) as an absolute URL: Open Graph images must be absolute for social previews. */
+function absolute(url: string | null | undefined): string | null {
+  if (!url) return null;
+  return /^https?:\/\//i.test(url) ? url : `${window.location.origin}${url.startsWith('/') ? '' : '/'}${url}`;
 }
 
 function Unavailable({ what }: { what: string }) {
@@ -65,6 +71,12 @@ export function PublicLandingPageView() {
   }, [data]);
   useMeta('description', data?.metaDescription);
   useMeta('robots', data?.noIndex ? 'noindex, nofollow' : null);
+  // The builder's SEO settings (title, description, Open Graph image) also drive the social preview tags.
+  useMeta('og:title', data?.title, 'property');
+  useMeta('og:description', data?.metaDescription, 'property');
+  useMeta('og:image', absolute(data?.ogImageUrl), 'property');
+  useMeta('og:type', data ? 'website' : null, 'property');
+  useMeta('twitter:card', data?.ogImageUrl ? 'summary_large_image' : null);
 
   if (query.isError) {
     if (isApiError(query.error) && query.error.status === 404) return <Unavailable what="page" />;

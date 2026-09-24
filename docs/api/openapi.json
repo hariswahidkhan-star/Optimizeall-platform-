@@ -53589,6 +53589,7 @@
         "tags": [
           "WebsiteContent"
         ],
+        "summary": "Denied while impersonating: the settings choose the tag-manager / analytics scripts loaded on every public page and\nthe canonical site URL used by links, the sitemap and robots.txt (platform-wide configuration, like admin settings).",
         "requestBody": {
           "content": {
             "application/json": {
