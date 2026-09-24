@@ -116,6 +116,16 @@ test('the sales rep works the CRM lead: contact, company, score, pipeline and a 
   await expect(sales).toHaveURL(/\/agency\/crm\/deals\/[0-9a-f-]{36}$/);
   const dealUrl = sales.url();
   await expect(sales.getByText(/ · New \(5%\)$/)).toBeVisible();
+  // The inquiry was assigned to this rep; the round-robin may have given the CRM deal to someone else: take it over,
+  // with a value for the pipeline.
+  await sales.getByRole('button', { name: 'Edit' }).click();
+  const editDeal = modal(sales, 'Edit deal');
+  await editDeal.getByLabel('Owner').selectOption({ label: accounts.sales.displayName });
+  await editDeal.getByLabel('Value').fill('18000');
+  await editDeal.getByRole('button', { name: 'Save deal' }).click();
+  await expect(toast(sales, 'Deal saved')).toBeVisible();
+  await expect(sales.getByText(/^\$18,000\.00 · New \(5%\)$/)).toBeVisible();
+
   const stage = sales.getByLabel('Move to stage');
   await stage.selectOption({ label: 'Qualified (25%)' });
   await expect(toast(sales, 'Stage updated')).toBeVisible();
