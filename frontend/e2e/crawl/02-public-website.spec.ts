@@ -27,8 +27,9 @@ async function chromeLinks(page: Page) {
  * per page would refetch the site settings and copy every time and trip the API's per-IP rate limit, which every
  * request of the run shares).
  */
-async function audit(page: Page, watcher: PageWatcher, path: string) {
+async function audit(page: Page, watcher: PageWatcher, path: string, retry = true) {
   watcher.path = path;
+  const before = watcher.findings.length;
   const loaded = await page.evaluate(() => Boolean(document.querySelector('#root > *'))).catch(() => false);
   if (!loaded || !page.url().startsWith('http')) await page.goto(path);
   else
@@ -39,6 +40,15 @@ async function audit(page: Page, watcher: PageWatcher, path: string) {
   await page.waitForURL((url) => `${url.pathname}${url.search}` === path);
   await watcher.settle();
   await auditPage(page, watcher);
+  // The API limits public requests per IP (RateLimiting.Public, 120/min) and the whole run, portal crawls included,
+  // comes from one address. A 429 is the limiter doing its job, not a broken page: wait for the window and look again.
+  const mine = watcher.findings.slice(before);
+  if (retry && mine.some((f) => / 429 /.test(f.detail))) {
+    watcher.findings.splice(before);
+    await page.waitForTimeout(61_000);
+    await page.goto(path);
+    await audit(page, watcher, path, false);
+  }
 }
 
 test('every header and footer link opens a real page', async ({ page }) => {

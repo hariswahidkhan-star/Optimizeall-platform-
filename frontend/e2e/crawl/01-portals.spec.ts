@@ -11,6 +11,9 @@ import {
   navLinks,
   portalBases,
   headerLinks,
+  linkShape,
+  navigate,
+  mainLinks,
   primaryActions,
   roles,
   signIn,
@@ -45,7 +48,7 @@ async function open(page: Page, watcher: PageWatcher, path: string) {
       .click({ timeout: 5_000 })
       .then(() => true)
       .catch(() => false));
-  if (!clicked) await page.goto(path);
+  if (!clicked) await navigate(page, path);
   await page.waitForURL((url) => url.pathname === path.split('?')[0], { timeout: 10_000 }).catch(() => {});
   await watcher.settle();
 }
@@ -66,6 +69,8 @@ for (const role of roles) {
     };
     const visited = new Set<string>();
     let navPaths = new Set<string>();
+    /** Every in-app link seen in <main>, one per shape (ids replaced), to check that none leads nowhere. */
+    const linkShapes = new Map<string, string>();
 
     async function recordEmpty(key: string) {
       const empty = await emptyStates(page);
@@ -92,6 +97,8 @@ for (const role of roles) {
       await open(page, watcher, path);
       await auditPage(page, watcher);
       await recordEmpty(path);
+      for (const href of await mainLinks(page))
+        if (!linkShapes.has(linkShape(href))) linkShapes.set(linkShape(href), href);
       // Where to go next, as the page first shows (before tabs or filters change the list).
       const subNav = depth > 1 ? [] : await subNavLinks(page, portal);
       const forms = depth > 1 ? [] : await headerLinks(page, portal);
@@ -137,13 +144,27 @@ for (const role of roles) {
     for (const base of portalBases) {
       debug(`portal ${role.key} ${base}`);
       watcher.path = base;
-      await page.goto(base);
+      await navigate(page, base);
+      await page.waitForURL((url) => url.pathname !== '/login', { timeout: 10_000 }).catch(() => {});
       await watcher.settle();
       if (!new URL(page.url()).pathname.startsWith(base)) continue;
       if (!(await page.locator('nav.portal-nav').count())) continue;
       const nav = await navLinks(page);
       navPaths = new Set(nav);
       for (const path of nav) await visit(path, 0, base);
+    }
+
+    // Every other kind of link the pages offer (row links, "View all", cross-links between areas) opens a real page.
+    const visitedShapes = new Set(report.visited.map(linkShape));
+    for (const [shape, href] of linkShapes) {
+      // Public website links are the public spec's job.
+      if (!portalBases.some((b) => href === b || href.startsWith(`${b}/`))) continue;
+      if (visitedShapes.has(shape) || visited.has(href)) continue;
+      visitedShapes.add(shape);
+      report.visited.push(href);
+      debug(`> ${role.key} link ${href}`);
+      await open(page, watcher, href);
+      await auditPage(page, watcher);
     }
 
     writeReport(role.key, report);

@@ -147,6 +147,23 @@ export class PageWatcher {
   }
 }
 
+/**
+ * Goes to `path` inside the running app (history.pushState + popstate, what a router link does), falling back to a full
+ * load when the app is not up. Full loads re-run the session probe (POST /auth/refresh, limited to 60 a minute per IP)
+ * and every role of the run shares one IP, so the crawl avoids them.
+ */
+export async function navigate(page: Page, path: string) {
+  const running = await page.evaluate(() => Boolean(document.querySelector('#root > *'))).catch(() => false);
+  if (!running || !page.url().startsWith('http')) {
+    await page.goto(path);
+    return;
+  }
+  await page.evaluate((to) => {
+    window.history.pushState({}, '', to);
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  }, path);
+}
+
 /** Audits the page on screen: error boundary, 404 page, error states and the page's h1. */
 export async function auditPage(page: Page, watcher: PageWatcher) {
   const main = page.locator('main').first();
@@ -179,6 +196,37 @@ export async function emptyStates(page: Page): Promise<string[]> {
   return page
     .locator('main .ui-state:not(.ui-state--error) .ui-state__title, main .ui-table-empty')
     .evaluateAll((els) => els.map((e) => (e.textContent ?? '').replace(/\s+/g, ' ').trim()).filter(Boolean));
+}
+
+/**
+ * In-app links in <main> (paths, without the hash). API downloads (/api/…) and tracking redirects (/t/…, /e/…) are
+ * not pages.
+ */
+export async function mainLinks(page: Page): Promise<string[]> {
+  const hrefs = await page
+    .locator('main a[href]')
+    .evaluateAll((els) => els.map((e) => (e as HTMLAnchorElement).getAttribute('href') ?? ''));
+  return [
+    ...new Set(
+      hrefs
+        .filter((h) => h.startsWith('/') && !h.startsWith('//') && !/^\/(api|t|e)\//.test(h))
+        .map((h) => h.split('#')[0]!)
+        .filter(Boolean),
+    ),
+  ];
+}
+
+/** A link's shape: its path with ids (GUIDs, numbers, long tokens) replaced, so one link per kind is checked. */
+export function linkShape(href: string): string {
+  const path = href.split(/[?#]/)[0]!;
+  return path
+    .split('/')
+    .map((segment) =>
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(segment) || /^\d+$/.test(segment)
+        ? ':id'
+        : segment,
+    )
+    .join('/');
 }
 
 /** Nav links of the portal on screen (the sidebar), as absolute paths in DOM order. */
@@ -358,7 +406,8 @@ export async function exercise(page: Page, watcher: PageWatcher, name: string): 
       .catch(() => false);
     if (!closed) {
       watcher.add('dialog', `"${name}": the dialog does not close with Cancel/Escape`);
-      await page.goto(before);
+      await page.keyboard.press('Escape');
+      await navigate(page, new URL(before).pathname + new URL(before).search);
     }
     return role === 'menu' ? 'menu' : 'dialog';
   }
