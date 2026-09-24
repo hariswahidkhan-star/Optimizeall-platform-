@@ -75,6 +75,10 @@ public sealed record DeliveryDto(
 // ---------- Catalog ----------
 
 /// <summary>One kind of notification in the preference matrix.</summary>
+/// <param name="Type">The notification type key stored on notifications and preferences.</param>
+/// <param name="Group">The heading it is listed under in the preference matrix.</param>
+/// <param name="Label">Short name shown to the user.</param>
+/// <param name="Description">One-line explanation of when it is sent.</param>
 /// <param name="Audience">
 /// The permissions of which the user needs at least one to receive this kind (and to see it in the matrix); empty = everyone.
 /// </param>
@@ -83,7 +87,7 @@ public sealed record NotificationKind(string Type, string Group, string Label, s
 /// <summary>
 /// Every notification kind the platform sends, with the label and description shown in the preference matrix and the
 /// audience that receives it. Kinds are raised by many modules (participant program, review, payouts, CRM, billing,
-/// payments hub, delivery, marketing execution); <see cref="INotificationService"/> applies the user's per-kind channel
+/// payments hub, delivery, marketing execution); <see cref="OptimizeAll.Api.Common.Notifications.INotificationService"/> applies the user's per-kind channel
 /// choices to all of them.
 /// </summary>
 public static class NotificationCatalog
