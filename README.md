@@ -128,6 +128,7 @@ achievements, onboarding reminders, campaign alerts and reactivation messages; p
 | [PAYOUTS.md](docs/PAYOUTS.md) | Earnings lifecycle, periods, batches, double-payment protection, segregation of duties, finance runbook |
 | [GROWTH.md](docs/GROWTH.md) | Referrals, tracking/UTM & postbacks, experiments, retention, metric definitions |
 | [SECURITY.md](docs/SECURITY.md) | Authentication, RBAC matrix, uploads, encryption, audit, financial controls |
+| [DATABASE.md](docs/DATABASE.md) | Table inventory, index catalogue and the queries they serve, EXPLAIN before/after, retention settings, benchmark tool |
 | [DEPLOYMENT.md](docs/DEPLOYMENT.md) / [OPERATIONS.md](docs/OPERATIONS.md) | Staging/production deployment, migrations, rollback, jobs, runbooks |
 | [FRONTEND.md](docs/FRONTEND.md) | Frontend structure, design tokens, components, testing |
 | [DEMO.md](docs/DEMO.md) | Demo accounts and scripted walkthroughs |

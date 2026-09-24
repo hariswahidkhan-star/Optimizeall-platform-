@@ -1,3 +1,6 @@
+using OptimizeAll.Api.Common.Jobs;
+using OptimizeAll.Api.Modules.Admin.Housekeeping;
+
 namespace OptimizeAll.Api.Modules.Admin;
 
 public static class AdminModule
@@ -11,6 +14,9 @@ public static class AdminModule
         services.AddScoped<AdminSettingsService>();
         services.AddScoped<AdminJobsService>();
         services.AddScoped<Roles.AdminRolesService>();
+        services.AddOptions<DataRetentionOptions>()
+            .Configure<IConfiguration>((o, config) => config.GetSection(DataRetentionOptions.Section).Bind(o));
+        services.AddRecurringJob<DataRetentionJob>(TimeSpan.FromHours(1));
         return services;
     }
 }

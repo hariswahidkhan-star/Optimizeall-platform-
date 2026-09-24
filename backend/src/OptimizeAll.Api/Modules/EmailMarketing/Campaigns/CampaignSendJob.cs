@@ -202,8 +202,11 @@ public sealed class CampaignSendJob(
         if (campaign.Status != CampaignStatus.Sending || campaign.ExpandedAt is null) return new(0, 0, 0);
         var now = clock.GetUtcNow().UtcDateTime;
         var windowStart = now.AddMinutes(-1);
-        var recent = await db.Set<CampaignRecipient>().CountAsync(r => r.CampaignId == campaignId &&
-            (r.Status == RecipientStatus.Sending || (r.SentAt != null && r.SentAt > windowStart)), ct);
+        // In flight + sent in the last minute, as two index range counts ((CampaignId, Status, …) and (CampaignId, SentAt))
+        // instead of one OR over every recipient of the campaign.
+        var recent = await db.Set<CampaignRecipient>().CountAsync(r => r.CampaignId == campaignId && r.Status == RecipientStatus.Sending, ct) +
+                     await db.Set<CampaignRecipient>().CountAsync(r => r.CampaignId == campaignId && r.SentAt > windowStart &&
+                                                                       r.Status != RecipientStatus.Sending, ct);
         var budget = campaign.ThrottlePerMinute - recent;
         if (budget <= 0) return new(0, 0, 0);
 

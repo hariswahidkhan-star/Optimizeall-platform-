@@ -45,6 +45,8 @@ internal sealed class SubscriberConfiguration : IEntityTypeConfiguration<Subscri
         b.HasIndex(x => new { x.ScopeKey, x.NormalizedEmail }).IsUnique();
         b.HasIndex(x => new { x.ScopeKey, x.Phone });
         b.HasIndex(x => new { x.ScopeKey, x.Status });
+        // Subscriber list (default sort: newest first) per workspace.
+        b.HasIndex(x => new { x.ScopeKey, x.CreatedAt });
         b.HasOne<ClientAccount>().WithMany().HasForeignKey(x => x.ClientAccountId).OnDelete(DeleteBehavior.Cascade);
     }
 }
@@ -248,6 +250,8 @@ internal sealed class CampaignRecipientConfiguration : IEntityTypeConfiguration<
         b.HasIndex(x => new { x.CampaignId, x.SubscriberId }).IsUnique();
         b.HasIndex(x => new { x.CampaignId, x.Status, x.DueAt });
         b.HasIndex(x => new { x.SubscriberId, x.SentAt });
+        // Send throttle ("sent in the last minute" per campaign, CampaignSendJob) and KPI ranges by send time.
+        b.HasIndex(x => new { x.CampaignId, x.SentAt });
         b.HasIndex(x => x.ProviderMessageId);
         b.HasOne<EmailCampaign>().WithMany().HasForeignKey(x => x.CampaignId).OnDelete(DeleteBehavior.Cascade);
         b.HasOne<Subscriber>().WithMany().HasForeignKey(x => x.SubscriberId).OnDelete(DeleteBehavior.Cascade);

@@ -130,7 +130,7 @@ public sealed class IntegrationExpiryJob(
         {
             var reason = $"expires:{c.ExpiresAt:yyyy-MM-ddTHH:mm:ssZ}";
             var id = c.Id.ToString();
-            if (await db.Set<AuditLog>().AnyAsync(a => a.Action == WarningAction && a.EntityId == id && a.Reason == reason, ct)) continue;
+            if (await db.Set<AuditLog>().AnyAsync(a => a.EntityType == nameof(IntegrationConnection) && a.EntityId == id && a.Action == WarningAction && a.Reason == reason, ct)) continue;
             var name = ProviderRegistry.Find(c.Provider)?.Name ?? c.Provider;
             foreach (var userId in managers)
                 await notifications.StageAsync(new NotificationRequest(userId, "integrations.expiring",

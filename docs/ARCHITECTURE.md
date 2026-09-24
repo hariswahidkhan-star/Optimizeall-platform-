@@ -79,6 +79,8 @@ Modules talk to each other through:
 * Submissions capture `RewardRuleSetId/Version` when created; approval computes earnings from that version.
 * Unique indexes: canonical per-platform post key (binary collation; a post can be claimed once), `(Platform, NormalizedHandle)` social
   profiles, earning idempotency keys, one payout item per user per batch, batch idempotency key per period.
+* Indexes follow queries: see [DATABASE.md](DATABASE.md) (index catalogue, guard test `PerformanceIndexTests`,
+  retention of high-volume tables by `DataRetentionJob`).
 * Schema changes: edit the entity + its `IEntityTypeConfiguration`, then add the migration for **both** providers
   with one command: `scripts/regenerate-migrations.sh --add <Name>` (see "Database portability" below).
 

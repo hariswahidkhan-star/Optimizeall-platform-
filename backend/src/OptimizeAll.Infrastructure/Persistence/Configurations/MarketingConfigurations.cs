@@ -66,6 +66,8 @@ internal sealed class TrackingClickConfiguration : IEntityTypeConfiguration<Trac
         b.Property(x => x.VisitorHash).HasMaxLength(64).IsFixedLength();
         b.Property(x => x.Referrer).HasMaxLength(500);
         b.HasIndex(x => new { x.TrackingLinkId, x.ClickedAt });
+        // Tracking/analytics summaries over a date range across all links; tracking-event retention.
+        b.HasIndex(x => x.ClickedAt);
         b.HasIndex(x => new { x.TrackingLinkId, x.VisitorHash });
         b.HasOne<TrackingLink>().WithMany().HasForeignKey(x => x.TrackingLinkId).OnDelete(DeleteBehavior.Cascade);
     }

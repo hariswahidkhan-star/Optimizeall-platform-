@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Test-only tool (never deployed): synthetic volume generator + MySQL query-plan benchmark. See docs/DATABASE.md. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>OptimizeAll.DbBench</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\OptimizeAll.Infrastructure\OptimizeAll.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

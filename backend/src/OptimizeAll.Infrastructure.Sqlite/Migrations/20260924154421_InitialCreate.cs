@@ -7631,6 +7631,11 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 columns: new[] { "Status", "Trigger" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_email_campaign_recipients_CampaignId_SentAt",
+                table: "email_campaign_recipients",
+                columns: new[] { "CampaignId", "SentAt" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_email_campaign_recipients_CampaignId_Status_DueAt",
                 table: "email_campaign_recipients",
                 columns: new[] { "CampaignId", "Status", "DueAt" });
@@ -7782,6 +7787,11 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 column: "ClientAccountId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_email_subscribers_ScopeKey_CreatedAt",
+                table: "email_subscribers",
+                columns: new[] { "ScopeKey", "CreatedAt" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_email_subscribers_ScopeKey_NormalizedEmail",
                 table: "email_subscribers",
                 columns: new[] { "ScopeKey", "NormalizedEmail" },
@@ -7910,9 +7920,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 column: "SubmissionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_form_submissions_ClientAccountId",
+                name: "IX_form_submissions_ClientAccountId_SubmittedAt_LandingPageId",
                 table: "form_submissions",
-                column: "ClientAccountId");
+                columns: new[] { "ClientAccountId", "SubmittedAt", "LandingPageId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_form_submissions_EventPublishedAt",
@@ -7928,6 +7938,11 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 name: "IX_form_submissions_FormId_SubmittedAt",
                 table: "form_submissions",
                 columns: new[] { "FormId", "SubmittedAt" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_form_submissions_IpHash_SubmittedAt",
+                table: "form_submissions",
+                columns: new[] { "IpHash", "SubmittedAt" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_form_submissions_LandingPageId_SubmittedAt",
@@ -8127,6 +8142,16 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_job_runs_JobName_StartedAt",
+                table: "job_runs",
+                columns: new[] { "JobName", "StartedAt" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_job_runs_StartedAt",
+                table: "job_runs",
+                column: "StartedAt");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_job_runs_Status_StartedAt",
                 table: "job_runs",
                 columns: new[] { "Status", "StartedAt" });
@@ -8149,9 +8174,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_landing_page_views_ClientAccountId",
+                name: "IX_landing_page_views_ClientAccountId_ViewedAt_PageId",
                 table: "landing_page_views",
-                column: "ClientAccountId");
+                columns: new[] { "ClientAccountId", "ViewedAt", "PageId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_landing_page_views_PageId_ViewedAt",
@@ -8159,9 +8184,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 columns: new[] { "PageId", "ViewedAt" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_landing_page_views_PageId_VisitorHash",
+                name: "IX_landing_page_views_PageId_VisitorHash_ViewedAt",
                 table: "landing_page_views",
-                columns: new[] { "PageId", "VisitorHash" });
+                columns: new[] { "PageId", "VisitorHash", "ViewedAt" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_landing_pages_ClientAccountId_Slug",
@@ -8189,6 +8214,16 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 name: "IX_notification_deliveries_Status_NextAttemptAt",
                 table: "notification_deliveries",
                 columns: new[] { "Status", "NextAttemptAt" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_notifications_Type_CreatedAt",
+                table: "notifications",
+                columns: new[] { "Type", "CreatedAt" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_notifications_UserId_CreatedAt",
+                table: "notifications",
+                columns: new[] { "UserId", "CreatedAt" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_notifications_UserId_ReadAt_CreatedAt",
@@ -8851,6 +8886,11 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_submission_events_ActorUserId_CreatedAt",
+                table: "submission_events",
+                columns: new[] { "ActorUserId", "CreatedAt" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_submission_events_SubmissionId_CreatedAt",
                 table: "submission_events",
                 columns: new[] { "SubmissionId", "CreatedAt" });
@@ -8871,14 +8911,19 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 columns: new[] { "CampaignId", "Status" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_submissions_ClaimedByUserId_ClaimExpiresAt",
+                table: "submissions",
+                columns: new[] { "ClaimedByUserId", "ClaimExpiresAt" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_submissions_ContentHash",
                 table: "submissions",
                 column: "ContentHash");
 
             migrationBuilder.CreateIndex(
-                name: "IX_submissions_LiveCheckStatus_LiveCheckDueAt",
+                name: "IX_submissions_LiveCheckStatus_Status_LiveCheckDueAt",
                 table: "submissions",
-                columns: new[] { "LiveCheckStatus", "LiveCheckDueAt" });
+                columns: new[] { "LiveCheckStatus", "Status", "LiveCheckDueAt" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_submissions_NormalizedPostUrl",
@@ -8907,14 +8952,29 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 column: "SocialAccountId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_submissions_Status_DecidedAt",
+                table: "submissions",
+                columns: new[] { "Status", "DecidedAt" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_submissions_Status_SubmittedAt",
                 table: "submissions",
                 columns: new[] { "Status", "SubmittedAt" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_submissions_SubmittedAt",
+                table: "submissions",
+                column: "SubmittedAt");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_submissions_UserId_CampaignId",
                 table: "submissions",
                 columns: new[] { "UserId", "CampaignId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_submissions_UserId_SubmittedAt",
+                table: "submissions",
+                columns: new[] { "UserId", "SubmittedAt" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_support_messages_TicketId_CreatedAt",
@@ -8973,6 +9033,11 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_thread_messages_ClientAccountId_CreatedAt",
+                table: "thread_messages",
+                columns: new[] { "ClientAccountId", "CreatedAt" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_thread_messages_ThreadId_CreatedAt",
                 table: "thread_messages",
                 columns: new[] { "ThreadId", "CreatedAt" });
@@ -8981,6 +9046,11 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 name: "IX_time_entries_ClientAccountId_Date",
                 table: "time_entries",
                 columns: new[] { "ClientAccountId", "Date" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_time_entries_Date",
+                table: "time_entries",
+                column: "Date");
 
             migrationBuilder.CreateIndex(
                 name: "IX_time_entries_ProjectId_Date",
@@ -9013,6 +9083,11 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 table: "timesheets",
                 columns: new[] { "UserId", "WeekStart" },
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tracking_clicks_ClickedAt",
+                table: "tracking_clicks",
+                column: "ClickedAt");
 
             migrationBuilder.CreateIndex(
                 name: "IX_tracking_clicks_TrackingLinkId_ClickedAt",

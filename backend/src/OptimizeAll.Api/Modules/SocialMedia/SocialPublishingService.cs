@@ -327,10 +327,15 @@ public sealed class SocialEvergreenJob(AppDbContext db, IDatabaseDialect dialect
             .OrderBy(p => p.PublishedAt).ThenBy(p => p.Id)
             .Include(p => p.Variants).Take(200).ToListAsync(ct);
         var created = 0;
+        // Existing copies of all candidates in one query (was one query per candidate).
+        var candidateIds = candidates.Select(p => p.Id).ToList();
+        var copiesByOriginal = (await db.Set<SocialPost>().AsNoTracking()
+                .Where(p => p.RecycledFromPostId != null && candidateIds.Contains(p.RecycledFromPostId.Value))
+                .Select(p => new { OriginalId = p.RecycledFromPostId!.Value, p.Status, p.PublishedAt }).ToListAsync(ct))
+            .ToLookup(p => p.OriginalId);
         foreach (var original in candidates)
         {
-            var copies = await db.Set<SocialPost>().AsNoTracking().Where(p => p.RecycledFromPostId == original.Id)
-                .Select(p => new { p.Status, p.PublishedAt }).ToListAsync(ct);
+            var copies = copiesByOriginal[original.Id].ToList();
             if (copies.Any(c => c.Status is not (SocialPostStatus.Published or SocialPostStatus.Failed))) continue; // one pending copy at a time
             var lastPublished = copies.Select(c => c.PublishedAt).Append(original.PublishedAt).Max();
             var repeat = EvergreenRules.DueRepeat(original.IsEvergreen, original.EvergreenRepeatCount, original.EvergreenMaxRepeats,

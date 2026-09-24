@@ -22,7 +22,9 @@ public sealed class AuditLogService(AppDbContext db)
         public string? ImpersonatorDisplayName { get; init; }
     }
 
-    private IQueryable<Row> Query(AuditLogQuery q)
+    private IQueryable<Row> Query(AuditLogQuery q) => WithActors(Filter(q));
+
+    private IQueryable<AuditLog> Filter(AuditLogQuery q)
     {
         var logs = db.Set<AuditLog>().AsNoTracking();
         if (!string.IsNullOrWhiteSpace(q.Action)) logs = logs.Where(l => l.Action.StartsWith(q.Action.Trim()));
@@ -37,7 +39,7 @@ public sealed class AuditLogService(AppDbContext db)
             logs = logs.Where(l => EF.Functions.Like(l.Action, p, "\\") || EF.Functions.Like(l.EntityId, p, "\\") || (l.Reason != null && EF.Functions.Like(l.Reason, p, "\\")));
         }
 
-        return WithActors(logs);
+        return logs;
     }
 
     /// <summary>Joins the actor and, for actions taken while impersonating, the impersonator ("X as Y").</summary>
@@ -58,8 +60,12 @@ public sealed class AuditLogService(AppDbContext db)
 
     public async Task<PagedResult<AuditLogDto>> ListAsync(AuditLogQuery query, CancellationToken ct)
     {
-        var page = await Query(query).ToPagedAsync(query, ct);
-        return new PagedResult<AuditLogDto>(page.Items.Select(ToDto).ToList(), page.Total, page.Page, page.PageSize);
+        // The total counts the filtered audit rows only: the actor joins are left joins on primary keys and never change
+        // the row count, but counting through them costs two lookups per audit row (the table grows forever).
+        var logs = Filter(query);
+        var total = await logs.CountAsync(ct);
+        var rows = await WithActors(logs).Skip(query.Skip).Take(query.PageSize).ToListAsync(ct);
+        return new PagedResult<AuditLogDto>(rows.Select(ToDto).ToList(), total, query.Page, query.PageSize);
     }
 
     /// <summary>
