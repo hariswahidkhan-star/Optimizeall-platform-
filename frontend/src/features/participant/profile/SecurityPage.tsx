@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState, type FormEvent } from 'react';
 import { Alert } from '@/components/ui/Alert';
 import { Button } from '@/components/ui/Button';
@@ -8,10 +8,11 @@ import { PasswordInput } from '@/components/ui/PasswordInput';
 import { useToast } from '@/components/ui/toastContext';
 import { mapServerErrors } from '@/features/auth/formErrors';
 import { GoogleConnectionCard } from '@/features/auth/google/GoogleConnectionCard';
+import { signInMethodsQueryKey } from '@/features/auth/google/googleApi';
 import { passwordProblem } from '@/features/auth/passwordPolicy';
 import { PasswordStrength } from '@/features/auth/PasswordStrength';
 import { api } from '@/lib/api/client';
-import type { MessageResponse } from '@/lib/api/types';
+import type { MessageResponse, SignInMethods } from '@/lib/api/types';
 import { useAuth } from '@/lib/auth/useAuth';
 
 type FieldKey = 'currentPassword' | 'newPassword' | 'confirm';
@@ -19,12 +20,55 @@ const SERVER_FIELDS = ['currentPassword', 'newPassword', 'password'];
 const CODE_TO_FIELD = { 'auth.invalid_password': 'currentPassword', 'auth.weak_password': 'newPassword' };
 
 /**
- * Change password (the API revokes every session, so the user is signed out and asked to sign in again) and the
- * Google sign-in connection.
+ * Accounts created with Google have no password: changing one (which needs the current password) is impossible, so
+ * they get a link, sent to their verified address, to set a first password through the reset flow instead.
+ */
+function SetPasswordCard({ email }: { email: string | undefined }) {
+  const send = useMutation({
+    mutationFn: () => api.post<MessageResponse>('/auth/forgot-password', { email }),
+  });
+  return (
+    <Card as="section" aria-labelledby="set-password-title">
+      <CardHeader
+        titleId="set-password-title"
+        title="Set a password"
+        description="You sign in with Google and don’t have a password yet. Add one to also sign in with your email address."
+      />
+      <CardBody className="stack">
+        {send.isSuccess ? (
+          <Alert tone="success" title="Check your email">
+            We’ve sent a link to <strong>{email}</strong> to set your password. It expires in one hour.
+          </Alert>
+        ) : (
+          <>
+            {send.isError && (
+              <Alert tone="danger" role="alert">
+                Couldn’t send the link. Please try again.
+              </Alert>
+            )}
+            <div>
+              <Button onClick={() => send.mutate()} loading={send.isPending}>
+                Email me a link to set a password
+              </Button>
+            </div>
+          </>
+        )}
+      </CardBody>
+    </Card>
+  );
+}
+
+/**
+ * Change password (the API revokes every session, so the user is signed out and asked to sign in again), or set a
+ * first one for accounts created with Google, and the Google sign-in connection.
  */
 export function SecurityPage() {
   const { user, logout } = useAuth();
   const toast = useToast();
+  const methods = useQuery({
+    queryKey: signInMethodsQueryKey,
+    queryFn: () => api.get<SignInMethods>('/auth/external-logins'),
+  });
   const [current, setCurrent] = useState('');
   const [next, setNext] = useState('');
   const [confirm, setConfirm] = useState('');
@@ -64,6 +108,14 @@ export function SecurityPage() {
     }
     change.mutate();
   };
+
+  if (methods.data?.hasPassword === false)
+    return (
+      <div className="stack">
+        <SetPasswordCard email={user?.email} />
+        <GoogleConnectionCard />
+      </div>
+    );
 
   return (
     <div className="stack">

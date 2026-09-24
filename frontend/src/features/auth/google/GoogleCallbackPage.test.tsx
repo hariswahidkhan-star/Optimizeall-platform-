@@ -118,6 +118,22 @@ describe('GoogleCallbackPage', () => {
     expect(screen.getByRole('link', { name: 'Back to sign in' })).toHaveAttribute('href', '/login');
   });
 
+  it('sends a signed-in user whose link failed back to their account, not to the sign-in page', async () => {
+    mockFetch({
+      'POST /auth/refresh': () => json(200, session(makeUser())),
+      'POST /auth/google/callback': () =>
+        problem(
+          409,
+          'auth.google_already_linked',
+          'This Google account is already connected to another Optimize All account.',
+        ),
+    });
+    renderCallback();
+    expect(await screen.findByRole('alert')).toHaveTextContent('already connected to another');
+    expect(screen.getByRole('link', { name: 'Back to your account' })).toHaveAttribute('href', '/app');
+    expect(screen.queryByRole('link', { name: 'Back to sign in' })).not.toBeInTheDocument();
+  });
+
   it('does not call the API when the user cancelled at Google', async () => {
     const { calls } = mockFetch(anonymous);
     renderCallback('/auth/google/callback?error=access_denied&state=signed-state');

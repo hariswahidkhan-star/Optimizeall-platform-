@@ -46,17 +46,22 @@ Setup: [DEPLOYMENT.md § 5.11](DEPLOYMENT.md#511-sign-in-with-google-optional).
   (`{Email:AppBaseUrl}/auth/google/callback`), never from the request; the post-login `returnTo` is kept only if it is
   a same-origin path (and checked again by the SPA).
 * **ID token validation**: RS256 signature against Google's JWKS (cached per `Cache-Control`, 5 min – 24 h; an
-  unknown key id forces at most one refresh per minute), issuer `accounts.google.com` / `https://accounts.google.com`,
-  audience = our client id, expiry (60 s skew, app clock), the **nonce** of this attempt (constant-time compare),
+  unknown key id forces at most one refresh per minute; during a JWKS outage the last good keys are kept and the
+  endpoint is retried at most once a minute), issuer `accounts.google.com` / `https://accounts.google.com`,
+  audience = only our client id (extra audiences, or an `azp` naming another client, are refused), expiry (60 s skew, app clock), the **nonce** of this attempt (constant-time compare),
   `email_verified = true`, and the `hd` claim when `AllowedHostedDomains` is set. `alg=none`/HMAC tokens are refused.
 * **Account resolution** (`external_logins`: provider + `sub` unique, one Google identity per user; the email is
   only a snapshot at link time — the `sub` is the identity, emails can change hands):
   1. A known `(google, sub)` signs in its user.
   2. Otherwise, a user with the same email is linked **only if that user's email is verified** and the user holds
-     no staff role (only Participant/Client accounts are linked automatically). Unverified accounts are refused
-     (`auth.google_link_unverified`) and staff accounts must sign in with their password and link from the
-     profile (`auth.google_link_requires_sign_in`), so a Google account cannot take over an account whose mailbox
-     ownership was never proven or a privileged account.
+     no staff role (only Participant/Client accounts are linked automatically) **and Google is authoritative for
+     the address**: a `@gmail.com`/`@googlemail.com` address or a Workspace-managed account (`hd` claim). A
+     consumer Google account registered with any other address only proves that the address was verified once,
+     possibly by a previous owner of the mailbox or of a lapsed/reclaimed domain. Unverified accounts are refused
+     (`auth.google_link_unverified`); staff accounts and non-authoritative addresses must sign in with their
+     password and link from the profile (`auth.google_link_requires_sign_in`), so a Google account cannot take over
+     an account whose mailbox ownership was never proven, a privileged account, or an account whose address Google
+     cannot vouch for today.
   3. Otherwise nothing is created until the user accepts the participant rules on the terms step: the callback
      returns `needsTerms` with a signed, encrypted, 15-minute ticket and `POST /auth/google/complete` creates a
      **Participant** (email verified, **no password**). A ticket can only create an account, never sign in to an
@@ -66,7 +71,10 @@ Setup: [DEPLOYMENT.md § 5.11](DEPLOYMENT.md#511-sign-in-with-google-optional).
 * **No-password accounts**: `PasswordHash` is empty; password sign-in answers like a wrong password (after a dummy
   hash) until the user sets a password through "forgot password" (which proves mailbox control).
 * **Linking from the profile** (`POST /auth/external-logins/google/start`, signed in) binds the flow to the user id;
-  the callback must carry the same user's session. A Google account already linked elsewhere is refused.
+  the callback must carry the same user's session. A Google account already linked elsewhere is refused. The
+  unique indexes settle concurrent links: the losing request re-reads the database and gets the same answer as a
+  sequential one (`auth.google_already_linked` / `auth.google_other_account`, or simply signed in when another tab
+  linked the same identity to the same user), never a bare duplicate-record error.
   **Unlinking** (`DELETE /auth/external-logins/google`) is refused while Google is the only sign-in method (no
   password, no other provider).
 * **Audit**: `auth.google_sign_in`, `auth.external_login_linked` (method `verified_email_match`, `profile` or

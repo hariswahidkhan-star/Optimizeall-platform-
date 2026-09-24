@@ -5,6 +5,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using OptimizeAll.Domain.Audit;
 using OptimizeAll.Domain.Identity;
 using OptimizeAll.IntegrationTests.Infrastructure;
@@ -26,7 +27,8 @@ public sealed class GoogleSignInTests(GoogleSignInFixture fx) : IClassFixture<Go
     }
 
     private static string NewSubject() => "1" + Random.Shared.NextInt64(10_000_000_000, 99_999_999_999).ToString();
-    private static string NewEmail(string tag) => $"{tag}-{Guid.NewGuid():N}@gmail.test";
+    // Gmail: Google is the authority for these addresses (see IsGoogleAuthoritative), so they can be linked by email.
+    private static string NewEmail(string tag, string domain = "gmail.com") => $"{tag}-{Guid.NewGuid():N}@{domain}";
 
     private async Task<Attempt> StartAsync(HttpClient? client = null, string? returnTo = null, string path = "/api/v1/auth/google/start")
     {
@@ -44,11 +46,11 @@ public sealed class GoogleSignInTests(GoogleSignInFixture fx) : IClassFixture<Go
     }
 
     private Task<HttpResponseMessage> CallbackAsync(Attempt attempt, string subject, string email, bool emailVerified = true,
-        string? nonce = null, string? state = null, string? challenge = null)
+        string? nonce = null, string? state = null, string? challenge = null, string? hostedDomain = null)
     {
         fx.Google.Now = Api.Clock.GetUtcNow().UtcDateTime;
         var code = fx.Google.IssueCode(challenge ?? attempt.Challenge,
-            fx.Google.IdToken(subject, email, nonce ?? attempt.Nonce, emailVerified, name: "Amina Siddiqui"));
+            fx.Google.IdToken(subject, email, nonce ?? attempt.Nonce, emailVerified, name: "Amina Siddiqui", hostedDomain: hostedDomain));
         return attempt.Client.PostAsJsonAsync("/api/v1/auth/google/callback", new { code, state = state ?? attempt.State });
     }
 
@@ -112,7 +114,8 @@ public sealed class GoogleSignInTests(GoogleSignInFixture fx) : IClassFixture<Go
         Assert.Equal("/app/campaigns?tab=open", callback.GetProperty("returnTo").GetString());
         Assert.Equal(JsonValueKind.Null, callback.GetProperty("auth").ValueKind);
         // Nothing is created before the terms are accepted.
-        Assert.False(await Api.WithDbAsync(db => db.Set<User>().AnyAsync(u => u.NormalizedEmail == email.ToLowerInvariant())));
+        var normalizedEmail = OptimizeAll.Domain.Common.Normalization.Email(email);
+        Assert.False(await Api.WithDbAsync(db => db.Set<User>().AnyAsync(u => u.NormalizedEmail == normalizedEmail)));
 
         var ticket = callback.GetProperty("ticket").GetString()!;
         await (await attempt.Client.PostAsJsonAsync("/api/v1/auth/google/complete", Completion(ticket, acceptTerms: false)))
@@ -198,6 +201,109 @@ public sealed class GoogleSignInTests(GoogleSignInFixture fx) : IClassFixture<Go
         var attempt = await StartAsync();
         await (await CallbackAsync(attempt, NewSubject(), staff.Email)).ShouldFailAsync(409, "auth.google_link_requires_sign_in");
         Assert.Empty(await LoginsAsync(staff.Id));
+    }
+
+    [Fact]
+    public async Task Existing_account_is_not_linked_by_email_when_google_is_not_the_authority_for_the_address()
+    {
+        // A consumer Google account registered with a non-Gmail address: email_verified only means the address was
+        // verified once (possibly by a previous owner of the mailbox or of a reclaimed domain). No automatic link.
+        var existing = await Api.CreateUserAsync(email: NewEmail("corp", "company.example"));
+        await (await CallbackAsync(await StartAsync(), NewSubject(), existing.Email))
+            .ShouldFailAsync(409, "auth.google_link_requires_sign_in");
+        Assert.Empty(await LoginsAsync(existing.Id));
+
+        // The same address managed by a Google Workspace organization (hd claim): Google is authoritative.
+        var subject = NewSubject();
+        var linked = await (await CallbackAsync(await StartAsync(), subject, existing.Email, hostedDomain: "company.example")).ReadJsonAsync();
+        Assert.Equal(existing.Id.ToString(), linked.GetProperty("auth").GetProperty("user").GetProperty("id").GetString());
+        Assert.Equal(subject, Assert.Single(await LoginsAsync(existing.Id)).Subject);
+    }
+
+    [Fact]
+    public async Task Concurrent_link_of_the_same_google_account_by_email_signs_in_instead_of_failing()
+    {
+        var existing = await Api.CreateUserAsync(email: NewEmail("race-signin"));
+        var subject = NewSubject();
+        await using var racing = new RacingApp(fx);
+        // Another tab's sign-in links the same Google account to the same user between our check and our insert.
+        racing.BeforeLinkSaved = () => Api.WithDbAsync(db => AddLinkAsync(db, existing.Id, subject));
+
+        var result = await (await CallbackAsync(await StartAsync(racing.Client()), subject, existing.Email)).ReadJsonAsync();
+
+        Assert.Equal("signedIn", result.GetProperty("status").GetString());
+        Assert.Equal(existing.Id.ToString(), result.GetProperty("auth").GetProperty("user").GetProperty("id").GetString());
+        Assert.Single(await LoginsAsync(existing.Id));
+    }
+
+    [Fact]
+    public async Task Concurrent_profile_link_of_the_same_google_account_gets_the_friendly_conflict()
+    {
+        var winner = await Api.CreateUserAsync(email: NewEmail("race-winner"));
+        var loser = await Api.CreateUserAsync(email: NewEmail("race-loser"));
+        var subject = NewSubject();
+        await using var racing = new RacingApp(fx);
+        racing.BeforeLinkSaved = () => Api.WithDbAsync(db => AddLinkAsync(db, winner.Id, subject));
+
+        var client = racing.Client();
+        var session = await (await client.PostAsJsonAsync("/api/v1/auth/login", new { email = loser.Email, password = loser.Password })).ReadJsonAsync();
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session.GetProperty("accessToken").GetString());
+        var attempt = await StartAsync(client, path: "/api/v1/auth/external-logins/google/start");
+
+        await (await CallbackAsync(attempt, subject, NewEmail("x"))).ShouldFailAsync(409, "auth.google_already_linked");
+        Assert.Empty(await LoginsAsync(loser.Id));
+        Assert.Single(await LoginsAsync(winner.Id));
+    }
+
+    private static async Task AddLinkAsync(OptimizeAll.Infrastructure.Persistence.AppDbContext db, Guid userId, string subject)
+    {
+        db.Set<ExternalLogin>().Add(new ExternalLogin
+        {
+            UserId = userId, Provider = ExternalLoginProviders.Google, Subject = subject, Email = "winner@gmail.com",
+            CreatedAt = DateTime.UtcNow,
+        });
+        await db.SaveChangesAsync();
+    }
+
+    /// <summary>
+    /// The Google-enabled API with a hook that runs once right before a new Google link is saved (when its audit row is
+    /// staged), to reproduce deterministically a concurrent request winning the unique index.
+    /// </summary>
+    private sealed class RacingApp : IAsyncDisposable
+    {
+        private readonly WebApplicationFactory<Program> _app;
+        private int _fired;
+
+        public Func<Task>? BeforeLinkSaved { get; set; }
+
+        public RacingApp(GoogleSignInFixture fx)
+        {
+            _app = fx.App.WithWebHostBuilder(b => b.ConfigureServices(services =>
+                services.AddScoped<OptimizeAll.Api.Common.Audit.IAuditLogger>(sp => new Hook(
+                    ActivatorUtilities.CreateInstance<OptimizeAll.Api.Common.Audit.AuditLogger>(sp), this))));
+        }
+
+        public HttpClient Client()
+        {
+            var client = _app.CreateClient(new WebApplicationFactoryClientOptions { HandleCookies = true });
+            client.DefaultRequestHeaders.Add("X-Requested-With", "tests");
+            return client;
+        }
+
+        public ValueTask DisposeAsync() => _app.DisposeAsync();
+
+        private sealed class Hook(OptimizeAll.Api.Common.Audit.IAuditLogger inner, RacingApp owner) : OptimizeAll.Api.Common.Audit.IAuditLogger
+        {
+            public void Record(string action, string entityType, object entityId, object? before = null, object? after = null, string? reason = null)
+            {
+                inner.Record(action, entityType, entityId, before, after, reason);
+                if (action == "auth.external_login_linked" && owner.BeforeLinkSaved is { } hook && Interlocked.Exchange(ref owner._fired, 1) == 0)
+                    hook().GetAwaiter().GetResult();
+            }
+
+            public void RecordSystem(string action, string entityType, object entityId, object? after = null, string? reason = null) =>
+                inner.RecordSystem(action, entityType, entityId, after, reason);
+        }
     }
 
     [Fact]

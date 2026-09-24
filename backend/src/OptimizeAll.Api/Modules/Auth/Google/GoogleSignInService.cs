@@ -22,7 +22,8 @@ public sealed record GoogleCallbackResult(GoogleCallbackResponse Response, Login
 /// <list type="number">
 /// <item>A known Google identity (provider + <c>sub</c>) signs in its user.</item>
 /// <item>Otherwise a user with the same email is linked automatically only when that user's email is verified and the
-/// user holds no staff role; else the caller must sign in with their password and link from the profile.</item>
+/// user holds no staff role, and Google is authoritative for the address (Gmail or Workspace, see
+/// <see cref="IsGoogleAuthoritative"/>); else the caller must sign in with their password and link from the profile.</item>
 /// <item>Otherwise the caller must accept the terms (<see cref="CompleteAsync"/>) and a Participant account with a
 /// verified email and no password is created. Staff roles are never granted here.</item>
 /// </list>
@@ -85,7 +86,7 @@ public sealed class GoogleSignInService(
             : await SignInAsync(identity, flow.ReturnTo, ct);
     }
 
-    private async Task<GoogleCallbackResult> SignInAsync(GoogleIdentity identity, string? returnTo, CancellationToken ct)
+    private async Task<GoogleCallbackResult> SignInAsync(GoogleIdentity identity, string? returnTo, CancellationToken ct, bool retried = false)
     {
         var login = await db.Set<ExternalLogin>()
             .FirstOrDefaultAsync(l => l.Provider == Provider && l.Subject == identity.Subject, ct);
@@ -108,7 +109,10 @@ public sealed class GoogleSignInService(
                 throw DomainException.Conflict("auth.google_link_unverified",
                     "An account with this email already exists, but its email address hasn't been verified. Sign in with " +
                     "your password, then connect Google from your profile's security settings.");
-            if (existing.Roles.Any(r => !AutoLinkableRoles.Contains(r.Role)))
+            // Staff accounts, and addresses Google is not the authority for (a consumer Google account registered with
+            // a non-Gmail address may have been verified by a previous owner of that mailbox or domain), are never
+            // linked by email: the owner signs in with their password and connects Google from the profile.
+            if (existing.Roles.Any(r => !AutoLinkableRoles.Contains(r.Role)) || !IsGoogleAuthoritative(identity))
                 throw DomainException.Conflict("auth.google_link_requires_sign_in",
                     "An account with this email already exists. Sign in with your password, then connect Google from " +
                     "your profile's security settings.");
@@ -119,7 +123,18 @@ public sealed class GoogleSignInService(
             audit.Record("auth.external_login_linked", nameof(User), existing.Id,
                 after: new { provider = Provider, method = "verified_email_match" });
             audit.Record("auth.google_sign_in", nameof(User), existing.Id, after: new { provider = Provider });
-            var session = await auth.SignInExternalAsync(existing, ct);
+            LoginResult session;
+            try
+            {
+                session = await auth.SignInExternalAsync(existing, ct);
+            }
+            catch (DbUpdateException ex) when (!retried && Common.Errors.ProblemExceptionHandler.IsUniqueViolation(ex))
+            {
+                // A concurrent sign-in (another tab) linked this Google account first, or linked another one to this
+                // user: re-evaluate against the database instead of answering a bare "duplicate record".
+                db.ChangeTracker.Clear();
+                return await SignInAsync(identity, returnTo, ct, retried: true);
+            }
             return new GoogleCallbackResult(new GoogleCallbackResponse(GoogleCallbackStatus.SignedIn, session.Response, ReturnTo: returnTo), session);
         }
 
@@ -129,7 +144,8 @@ public sealed class GoogleSignInService(
             Email: identity.Email, DisplayName: SuggestedDisplayName(identity.Name, identity.Email), ReturnTo: returnTo), null);
     }
 
-    private async Task<GoogleCallbackResult> LinkToSignedInUserAsync(Guid userId, GoogleIdentity identity, string? returnTo, CancellationToken ct)
+    private async Task<GoogleCallbackResult> LinkToSignedInUserAsync(Guid userId, GoogleIdentity identity, string? returnTo,
+        CancellationToken ct, bool retried = false)
     {
         var user = await LoadUserAsync(userId, ct);
         EnsureCanSignIn(user);
@@ -147,7 +163,17 @@ public sealed class GoogleSignInService(
 
         AddLink(userId, identity);
         audit.Record("auth.external_login_linked", nameof(User), userId, after: new { provider = Provider, method = "profile" });
-        await db.SaveChangesAsync(ct);
+        try
+        {
+            await db.SaveChangesAsync(ct);
+        }
+        catch (DbUpdateException ex) when (!retried && Common.Errors.ProblemExceptionHandler.IsUniqueViolation(ex))
+        {
+            // A concurrent link won the unique index (provider + sub, or user + provider): re-evaluate against the
+            // database so the caller gets the same answer as in the sequential case.
+            db.ChangeTracker.Clear();
+            return await LinkToSignedInUserAsync(userId, identity, returnTo, ct, retried: true);
+        }
         return new GoogleCallbackResult(new GoogleCallbackResponse(GoogleCallbackStatus.Linked, ReturnTo: returnTo), null);
     }
 
@@ -238,6 +264,21 @@ public sealed class GoogleSignInService(
         db.Set<ExternalLogin>().Remove(login);
         audit.Record("auth.external_login_unlinked", nameof(User), userId, before: new { provider = Provider, email = login.Email });
         await db.SaveChangesAsync(ct);
+    }
+
+    /// <summary>
+    /// Whether Google is the authority for the token's email address (Google's guidance): a Gmail address, or an account
+    /// managed by a Google Workspace organization (<c>hd</c> claim). For any other address <c>email_verified</c> only
+    /// says the address was verified once, possibly by a previous owner of the mailbox or domain.
+    /// </summary>
+    public static bool IsGoogleAuthoritative(GoogleIdentity identity)
+    {
+        if (!string.IsNullOrWhiteSpace(identity.HostedDomain)) return true;
+        var at = identity.Email.LastIndexOf('@');
+        if (at < 0) return false;
+        var domain = identity.Email[(at + 1)..].Trim();
+        return domain.Equals("gmail.com", StringComparison.OrdinalIgnoreCase) ||
+               domain.Equals("googlemail.com", StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>A usable password exists (accounts created through Google have none until they set one).</summary>

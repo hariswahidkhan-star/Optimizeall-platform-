@@ -29,7 +29,7 @@ function googleErrorMessage(error: string): string {
  * account, or returns to the profile after linking.
  */
 export function GoogleCallbackPage() {
-  const { status, startSession } = useAuth();
+  const { status, user, startSession } = useAuth();
   const navigate = useNavigate();
   const toast = useToast();
   const [params] = useSearchParams();
@@ -115,9 +115,16 @@ export function GoogleCallbackPage() {
             role="alert"
             title={phase.title}
             actions={
-              <Link className="ui-link" to="/login">
-                Back to sign in
-              </Link>
+              // A signed-in user was linking Google from the profile: /login would just bounce them.
+              user ? (
+                <Link className="ui-link" to={defaultLandingPath(user.permissions, null)}>
+                  Back to your account
+                </Link>
+              ) : (
+                <Link className="ui-link" to="/login">
+                  Back to sign in
+                </Link>
+              )
             }
           >
             {phase.message}

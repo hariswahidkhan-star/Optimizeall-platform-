@@ -188,6 +188,52 @@ public sealed class GoogleIdTokenValidatorTests
     }
 
     [Fact]
+    public async Task Tokens_with_extra_audiences_or_another_authorized_party_are_rejected()
+    {
+        // Multiple audiences: OIDC requires rejecting audiences the client doesn't trust.
+        var multi = Token(c => c["aud"] = new[] { ClientId, "someone-else.apps.googleusercontent.com" }, audience: null!);
+        Assert.Equal("auth.google_token_invalid", (await Rejects(Validator().ValidateAsync(multi, Nonce, default))).Code);
+
+        var otherAzp = Token(c => c["azp"] = "someone-else.apps.googleusercontent.com");
+        Assert.Equal("auth.google_token_invalid", (await Rejects(Validator().ValidateAsync(otherAzp, Nonce, default))).Code);
+
+        var ownAzp = Token(c => c["azp"] = ClientId);
+        Assert.Equal("sara@example.com", (await Validator().ValidateAsync(ownAzp, Nonce, default)).Email);
+    }
+
+    [Fact]
+    public async Task A_jwks_outage_keeps_the_last_keys_and_backs_off()
+    {
+        var validator = Validator();
+        await validator.ValidateAsync(Token(), Nonce, default);
+        Assert.Equal(1, _handler.Requests);
+
+        // The cache expires while Google's JWKS endpoint is failing: the last good keys keep working...
+        _handler.Status = HttpStatusCode.ServiceUnavailable;
+        _clock.Advance(TimeSpan.FromHours(2));
+        for (var i = 0; i < 5; i++)
+            await validator.ValidateAsync(Token(), Nonce, default);
+        // ...and the endpoint is retried at most once a minute, not on every sign-in.
+        Assert.Equal(2, _handler.Requests);
+
+        _clock.Advance(TimeSpan.FromMinutes(2));
+        _handler.Status = HttpStatusCode.OK;
+        await validator.ValidateAsync(Token(), Nonce, default);
+        await validator.ValidateAsync(Token(), Nonce, default);
+        Assert.Equal(3, _handler.Requests);
+    }
+
+    [Theory]
+    [InlineData("amina@gmail.com", null, true)]
+    [InlineData("Amina@GoogleMail.com", null, true)]
+    [InlineData("amina@company.example", "company.example", true)]
+    [InlineData("amina@company.example", null, false)]
+    [InlineData("amina@gmail.com.evil.example", null, false)]
+    [InlineData("amina@evil-gmail.com", null, false)]
+    public void Google_is_authoritative_only_for_gmail_and_workspace_addresses(string email, string? hd, bool expected) =>
+        Assert.Equal(expected, GoogleSignInService.IsGoogleAuthoritative(new GoogleIdentity("1", email, true, null, hd)));
+
+    [Fact]
     public void Pkce_challenge_follows_rfc7636()
     {
         // RFC 7636 appendix B.
@@ -224,11 +270,13 @@ public sealed class GoogleIdTokenValidatorTests
     {
         public Func<string> Respond { get; set; } = respond;
         public int Requests { get; private set; }
+        public HttpStatusCode Status { get; set; } = HttpStatusCode.OK;
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             Assert.Equal(GoogleEndpoints.Jwks, request.RequestUri!.ToString());
             Requests++;
+            if (Status != HttpStatusCode.OK) return Task.FromResult(new HttpResponseMessage(Status));
             var response = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(Respond(), Encoding.UTF8, "application/json") };
             response.Headers.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue { Public = true, MaxAge = TimeSpan.FromHours(1) };
             return Task.FromResult(response);
