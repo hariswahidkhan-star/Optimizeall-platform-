@@ -105,7 +105,7 @@ public sealed class InvitationsController(
     public async Task<InvitationDto> Update(Guid id, InvitationRequest request, CancellationToken ct)
     {
         var link = await db.Set<InvitationLink>().FirstOrDefaultAsync(i => i.Id == id, ct) ?? throw DomainException.NotFound("Invitation");
-        await ValidateAsync(request, ct);
+        await ValidateAsync(request, ct, link);
         var before = new { link.Name, link.CampaignId, link.ExpiresAt, link.MaxUses, link.IsActive };
         Apply(link, request);
         audit.Record("invitation.updated", nameof(InvitationLink), id, before, new { request.Name, request.CampaignId, request.ExpiresAt, request.MaxUses, request.IsActive });
@@ -131,16 +131,26 @@ public sealed class InvitationsController(
         return new InvitationDeleteResult(false, true);
     }
 
-    private async Task ValidateAsync(InvitationRequest request, CancellationToken ct)
+    /// <summary>
+    /// A new or active link must point at a campaign that has not ended. An existing link of an ended campaign can still be
+    /// renamed or switched off (<paramref name="existing"/> keeps its campaign and <c>IsActive</c> is false), and an
+    /// existing link keeps an expiry that has already passed unless the expiry is changed.
+    /// </summary>
+    private async Task ValidateAsync(InvitationRequest request, CancellationToken ct, InvitationLink? existing = null)
     {
-        if (request.CampaignId is { } campaignId)
+        var closingExisting = existing is not null && existing.CampaignId == request.CampaignId && !request.IsActive;
+        if (request.CampaignId is { } campaignId && !closingExisting)
         {
             var status = await db.Set<Campaign>().Where(c => c.Id == campaignId).Select(c => (CampaignStatus?)c.Status).FirstOrDefaultAsync(ct);
             if (status is null) throw new DomainException("invitation.campaign_not_found", "The campaign does not exist.");
             if (status is CampaignStatus.Archived or CampaignStatus.Ended)
                 throw new DomainException("invitation.campaign_closed", "Invitations can only link to campaigns that have not ended.");
         }
-        if (request.ExpiresAt is { } expires && expires.ToUniversalTime() <= Now)
+        // An unchanged expiry of an existing link may already have passed (renaming or switching off an expired link).
+        // The editor round-trips it at minute precision, so "unchanged" means within the same minute.
+        var expiryUnchanged = existing?.ExpiresAt is { } stored && request.ExpiresAt is { } sent &&
+                              (sent.ToUniversalTime() - stored).Duration() < TimeSpan.FromMinutes(1);
+        if (request.ExpiresAt is { } expires && !expiryUnchanged && expires.ToUniversalTime() <= Now)
             throw new DomainException("invitation.expiry_in_past", "The expiry must be in the future.");
     }
 

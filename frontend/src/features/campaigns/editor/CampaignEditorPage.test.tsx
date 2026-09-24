@@ -59,7 +59,45 @@ describe('CampaignEditorPage', () => {
       reason: 'Rate increase for launch',
       currency: 'USD',
       rules: [{ type: 'BaseRate', amount: 6 }],
+      baseVersion: 1,
     });
+
+    // The next change builds on the version just saved.
+    await user.clear(amount);
+    await user.type(amount, '7');
+    await user.click(screen.getByRole('button', { name: 'Save as new version' }));
+    const again = await screen.findByRole('alertdialog', { name: /Save reward rules as a new version/ });
+    await user.type(within(again).getByLabelText(/Reason for the change/), 'Second increase');
+    await user.click(within(again).getByRole('button', { name: 'Save new version' }));
+    await waitFor(() =>
+      expect(calls.filter((c) => c.method === 'POST' && c.path.endsWith('/reward-rules'))).toHaveLength(2),
+    );
+    expect(
+      calls.filter((c) => c.method === 'POST' && c.path.endsWith('/reward-rules'))[1]!.body,
+    ).toMatchObject({
+      baseVersion: 2,
+    });
+  });
+
+  it('tells the manager when someone else saved newer reward rules in the meantime', async () => {
+    const user = userEvent.setup();
+    setup(makeCampaign(), {
+      'POST /admin/campaigns/c1/reward-rules': () =>
+        problem(
+          409,
+          'reward.version_conflict',
+          'Someone else saved new reward rules (version 2) after you opened version 1. Reload to see them, then make your change again.',
+        ),
+    });
+    await user.click(await screen.findByRole('tab', { name: 'Rewards' }));
+    const amount = screen.getAllByLabelText(/^Amount \(USD\)/)[0]!;
+    await user.clear(amount);
+    await user.type(amount, '6');
+    await user.click(screen.getByRole('button', { name: 'Save as new version' }));
+    const dialog = await screen.findByRole('alertdialog', { name: /Save reward rules as a new version/ });
+    await user.type(within(dialog).getByLabelText(/Reason for the change/), 'Rate increase for launch');
+    await user.click(within(dialog).getByRole('button', { name: 'Save new version' }));
+    expect(await within(dialog).findByRole('alert')).toHaveTextContent(/Someone else saved new reward rules/);
   });
 
   it('offers a reload when the save hits a concurrency conflict', async () => {
@@ -116,6 +154,46 @@ describe('CampaignEditorPage', () => {
     await user.type(title, '!');
     await user.click(screen.getByRole('button', { name: 'Save changes' }));
     await waitFor(() => expect(screen.getByLabelText(/Slug/)).toHaveAttribute('aria-invalid', 'true'));
+  });
+
+  it('keeps the new stamp when the campaign saved but the disclosure overrides were refused', async () => {
+    const user = userEvent.setup();
+    let disclosureCalls = 0;
+    const { calls } = setup(makeCampaign(), {
+      'PUT /admin/campaigns/c1': (req) =>
+        json(
+          200,
+          makeCampaign({ summary: (req.body as { summary: string }).summary, concurrencyStamp: 'stamp-2' }),
+        ),
+      'PUT /admin/campaigns/c1/disclosures': () => {
+        disclosureCalls += 1;
+        return disclosureCalls === 1
+          ? problem(
+              400,
+              'campaign.duplicate_disclosure',
+              'Each platform/country combination can only have one disclosure.',
+            )
+          : json(200, [{ id: 'd1', platform: 'Instagram', countryCode: null, text: '#ad IG' }]);
+      },
+    });
+    await user.type(await screen.findByLabelText(/^Summary/), ' More.');
+    await user.click(screen.getByRole('tab', { name: 'Content' }));
+    await user.click(screen.getByRole('button', { name: 'Add override' }));
+    await user.type(screen.getByLabelText('Disclosure text'), '#ad IG');
+    await user.click(screen.getByRole('button', { name: 'Save changes' }));
+    expect(
+      (await screen.findAllByText('Each platform/country combination can only have one disclosure.')).length,
+    ).toBeGreaterThan(0);
+
+    // The campaign fields were saved (stamp-2): saving again must not be reported as someone else's change.
+    await user.click(screen.getByRole('button', { name: 'Save changes' }));
+    await waitFor(() => expect(disclosureCalls).toBe(2));
+    const puts = calls.filter((c) => c.method === 'PUT' && c.path === '/admin/campaigns/c1');
+    expect(puts.map((c) => (c.body as { concurrencyStamp: string }).concurrencyStamp)).toEqual([
+      'stamp-1',
+      'stamp-2',
+    ]);
+    expect(screen.queryByText('Someone else changed this campaign')).not.toBeInTheDocument();
   });
 
   it('uses the platform eligibility defaults from the API', async () => {

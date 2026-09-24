@@ -104,7 +104,9 @@ the applied caps are returned and written into the approval event reason.
 
 * Saving rules (`POST /api/v1/admin/campaigns/{id}/reward-rules`, `rewards.edit` + `confirm` + `reason`) inserts
   version `max + 1` in a transaction that locks the campaign row; the unique `(CampaignId, Version)` index is the
-  final guard (409 `reward.version_conflict`). Versions are never updated or deleted.
+  final guard (409 `reward.version_conflict`). Versions are never updated or deleted. The editor sends the version it
+  started from as `baseVersion`; if another version was saved in the meantime the save is refused with the same 409
+  (checked under the campaign lock), so two managers editing at once can't silently replace each other's rates.
 * A submission records `RewardRuleSetId/Version` in force when it was **created** (highest version with
   `EffectiveFrom ≤ now`) and keeps it through corrections. Approval prices it with that version — later rate
   changes do not affect it.

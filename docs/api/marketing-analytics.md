@@ -119,7 +119,8 @@ Returns an invitation object. `404 invitation.not_found`.
 ```
 
 `201` with the invitation object; the code is 8 random URL-safe characters (unique). Errors:
-`400 invitation.campaign_not_found`, `400 invitation.campaign_closed` (campaign Ended/Archived),
+`400 invitation.campaign_not_found`, `400 invitation.campaign_closed` (campaign Ended/Archived; an existing link of such a campaign can still be renamed or
+switched off, and an unchanged expiry that has passed is accepted on edit),
 `400 invitation.expiry_in_past`. Audited.
 
 ### `PUT /api/v1/marketing/invitations/{id}` — `marketing.manage`

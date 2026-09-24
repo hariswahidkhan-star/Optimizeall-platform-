@@ -218,6 +218,15 @@ public sealed class CampaignAdminService(
             if (!request.Confirm || string.IsNullOrWhiteSpace(request.Reason) || request.Reason.Trim().Length < 5)
                 throw FieldError("budgetAmount", "campaign.budget_change_unconfirmed",
                     "Changing the budget requires \"confirm\": true and a reason (at least 5 characters).");
+            // Earnings already recorded stay recorded, so a budget below them could never be met (and would show a
+            // negative remaining budget). Setting it to exactly what was spent stops further spending.
+            if (request.BudgetAmount is { } newBudget)
+            {
+                var spent = (await SpentAsync(new List<Guid> { id }, ct)).GetValueOrDefault(id);
+                if (newBudget < spent)
+                    throw FieldError("budgetAmount", "campaign.budget_below_spent",
+                        $"The budget can't be lower than what has already been spent ({spent:0.00} {campaign.BudgetCurrency}).");
+            }
         }
 
         var before = Snapshot(campaign);

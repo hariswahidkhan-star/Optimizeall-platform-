@@ -73,6 +73,7 @@ export const CAMPAIGN_CODE_FIELDS: Record<string, string> = {
   'campaign.invalid_time_zone': 'timeZone',
   'campaign.budget_currency_mismatch': 'budgetAmount',
   'campaign.budget_change_unconfirmed': 'budgetAmount',
+  'campaign.budget_below_spent': 'budgetAmount',
   'campaign.disclosure_required': 'defaultDisclosureText',
   'campaign.invalid_tracking_url': 'trackingDestinationUrl',
   'campaign.invalid_image_url': 'heroImageUrl',
@@ -175,6 +176,8 @@ export function CampaignEditor({ campaign, refetch }: EditorProps) {
     campaign ? rulesFromSet(campaign.currentRuleSet, campaign.timeZone) : emptyRules(),
   );
   const [rulesBaseline, setRulesBaseline] = useState<RulesForm>(rules);
+  /** The saved version the rules editor started from (sent as baseVersion so a concurrent save is refused, not lost). */
+  const [rulesVersion, setRulesVersion] = useState<number>(campaign?.currentRuleSet?.version ?? 0);
   const [stamp, setStamp] = useState(campaign?.concurrencyStamp ?? '');
   const [errors, setErrors] = useState<FieldErrorMap>({});
   const [summaryErrors, setSummaryErrors] = useState<string[]>([]);
@@ -214,6 +217,7 @@ export function CampaignEditor({ campaign, refetch }: EditorProps) {
       const nextRules = rulesFromSet(campaign.currentRuleSet, campaign.timeZone);
       setRules(nextRules);
       setRulesBaseline(nextRules);
+      setRulesVersion(campaign.currentRuleSet?.version ?? 0);
     }
     // Only react to new server data, not to local edits.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -246,6 +250,7 @@ export function CampaignEditor({ campaign, refetch }: EditorProps) {
     const nextRules = rulesFromSet(data.currentRuleSet, data.timeZone);
     setRules(nextRules);
     setRulesBaseline(nextRules);
+    setRulesVersion(data.currentRuleSet?.version ?? 0);
   };
 
   const create = async () => {
@@ -287,6 +292,10 @@ export function CampaignEditor({ campaign, refetch }: EditorProps) {
       }
       throw err;
     }
+    // The campaign itself is saved from here on: keep its new stamp even if the disclosure overrides are refused
+    // below, or the next save would be reported as someone else's change.
+    setStamp(saved.concurrencyStamp);
+    queryClient.setQueryData(qk.campaign(campaign.id), saved);
     const disclosures = disclosuresFromForm(form.disclosures);
     if (disclosureKey(disclosures) !== disclosureKey(saved.disclosures)) {
       const list = await api.put<Disclosure[]>(`/admin/campaigns/${campaign.id}/disclosures`, {
@@ -337,11 +346,13 @@ export function CampaignEditor({ campaign, refetch }: EditorProps) {
         ...rulesToInput(rules, timeZone),
         reason,
         confirm: true,
+        baseVersion: rulesVersion,
       });
       toast.success(`Reward rules saved as version ${created.version}`);
       const nextRules = rulesFromSet(created, timeZone);
       setRules(nextRules);
       setRulesBaseline(nextRules);
+      setRulesVersion(created.version);
       adoptNextStamp.current = true;
       await queryClient.invalidateQueries({ queryKey: qk.campaign(campaign.id) });
     } catch (err) {
