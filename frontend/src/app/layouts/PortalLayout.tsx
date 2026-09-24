@@ -73,7 +73,9 @@ export function PortalLayout({ portal }: { portal: PortalDefinition }) {
   const openPalette = useCallback(() => setPaletteOpen(true), []);
   useCommandPaletteShortcut(hasPalette, openPalette);
   const mainRef = useRef<HTMLElement>(null);
-  const firstRender = useRef(true);
+  // The path focus was last moved for. Comparing paths (not a "first render" flag) keeps a fresh page load — and React
+  // StrictMode's effect replay in development — from stealing focus from the skip link.
+  const focusedPath = useRef(location.pathname);
 
   const items = portal.nav.filter((item) => !item.requires || meetsRequirement(permissions, item.requires));
   const available = accessiblePortals(permissions);
@@ -86,10 +88,8 @@ export function PortalLayout({ portal }: { portal: PortalDefinition }) {
   // Move focus to the page content after client-side navigation so screen readers announce the new page.
   useEffect(() => {
     setDrawerOpen(false);
-    if (firstRender.current) {
-      firstRender.current = false;
-      return;
-    }
+    if (focusedPath.current === location.pathname) return;
+    focusedPath.current = location.pathname;
     mainRef.current?.focus({ preventScroll: true });
     window.scrollTo({ top: 0 });
   }, [location.pathname]);

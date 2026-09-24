@@ -41,6 +41,11 @@ describe('Alert', () => {
     expect(screen.getByRole('status', { name: 'Heads up' })).toBeInTheDocument();
   });
 
+  it('an untitled danger alert (a failed save message) is still announced as an alert', () => {
+    render(<Alert tone="danger">Couldn’t save the task: it changed meanwhile.</Alert>);
+    expect(screen.getByRole('alert')).toHaveTextContent('Couldn’t save the task');
+  });
+
   it('without a title stays a plain callout', () => {
     const { container } = render(<Alert>Just a note.</Alert>);
     expect(container.firstElementChild).not.toHaveAttribute('role');

@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ArrowDown, ArrowUp, Eye, ExternalLink, History, Plus, RotateCcw, Trash2 } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Alert, Badge, Button, ButtonLink, ConfirmDialog, DataTable, DateTime, ErrorState, IconButton, PageHeader, Select, Skeleton, useToast } from '@/components/ui';
+import { Alert, Badge, Button, ButtonLink, ConfirmDialog, DataTable, DateTime, ErrorState, IconButton, PageHeader, ScrollArea, Select, Skeleton, useToast } from '@/components/ui';
 import { isoToLocalInput, localInputToIso } from '@/features/admin/shared/common';
 import type { PageBlock } from '@/features/public/site/api';
 import { Blocks } from '@/features/public/site/Blocks';
@@ -512,19 +512,22 @@ export function PageEditorPage() {
           )}
         </form>
         <aside className="cms-editor__preview" aria-label={preview ? `Preview of version ${preview.version}` : 'Live preview'}>
-          <p className="cms-editor__preview-label">{preview ? `Version ${preview.version} (read only)` : 'Live preview'}</p>
-          <div className="site-layout">
-            {(preview ?? current).blocks[0]?.type !== 'hero' && (
-              <div className="site-hero">
-                <div className="container">
-                  <p className="site-hero__title">
-                    {(preview ?? current).title || 'Page title'}
-                  </p>
+          {/* A long preview scrolls on its own; keyboard users can focus and scroll it (it holds no links of its own). */}
+          <ScrollArea className="cms-editor__preview-scroll" label="Preview content">
+            <p className="cms-editor__preview-label">{preview ? `Version ${preview.version} (read only)` : 'Live preview'}</p>
+            <div className="site-layout">
+              {(preview ?? current).blocks[0]?.type !== 'hero' && (
+                <div className="site-hero">
+                  <div className="container">
+                    <p className="site-hero__title">
+                      {(preview ?? current).title || 'Page title'}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            )}
-            <Blocks blocks={(preview ?? current).blocks} context={{ pageTitle: (preview ?? current).title }} />
-          </div>
+              )}
+              <Blocks blocks={(preview ?? current).blocks} context={{ pageTitle: (preview ?? current).title }} />
+            </div>
+          </ScrollArea>
         </aside>
       </div>
     </div>

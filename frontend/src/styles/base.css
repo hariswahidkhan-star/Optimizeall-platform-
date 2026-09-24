@@ -159,6 +159,11 @@ hr {
   border-radius: var(--radius-xs);
 }
 
+/* Focusable scroll regions (ScrollArea): draw the ring inside, so a clipping parent cannot hide it. */
+[data-scrollable]:focus-visible {
+  outline-offset: -2px;
+}
+
 /* Programmatic focus targets (main landmarks, headings, sections) don't need a visible ring. */
 :where([tabindex='-1']):focus,
 :where([tabindex='-1']):focus-visible {

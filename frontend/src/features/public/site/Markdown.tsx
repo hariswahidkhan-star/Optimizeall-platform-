@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { Fragment, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
+import { ScrollArea } from '@/components/ui/ScrollArea';
 import { isExternalHref, isInternalHref } from '@/lib/safeHref';
 
 /**
@@ -259,7 +260,7 @@ export function Markdown({ source, className, minLevel = 2 }: MarkdownProps) {
             );
           case 'table':
             return (
-              <div key={key} className="site-prose__table">
+              <ScrollArea key={key} className="site-prose__table" label="Table">
                 <table>
                   <thead>
                     <tr>
@@ -280,7 +281,7 @@ export function Markdown({ source, className, minLevel = 2 }: MarkdownProps) {
                     ))}
                   </tbody>
                 </table>
-              </div>
+              </ScrollArea>
             );
           case 'rule':
             return <hr key={key} />;

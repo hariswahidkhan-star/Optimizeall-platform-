@@ -160,8 +160,8 @@ export function MetricValue({ metric }: { metric: Metric }) {
   );
 }
 
-export function CaseStudyCard({ study, headingLevel = 3 }: { study: CaseStudyCardData; headingLevel?: 3 | 4 }) {
-  const H = `h${headingLevel}` as 'h3';
+export function CaseStudyCard({ study, headingLevel = 3 }: { study: CaseStudyCardData; headingLevel?: 2 | 3 | 4 }) {
+  const H = `h${headingLevel}` as 'h2' | 'h3' | 'h4';
   return (
     <article className="site-card site-card--case">
       {study.coverImageUrl && (

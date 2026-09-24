@@ -38,6 +38,7 @@ export { Pagination, type PaginationProps } from './Pagination';
 export { PasswordInput } from './PasswordInput';
 export { ProgressBar, ProgressRing, type ProgressBarProps, type ProgressRingProps } from './Progress';
 export { RadioGroup, type RadioGroupProps, type RadioOption } from './RadioGroup';
+export { ScrollArea, type ScrollAreaProps } from './ScrollArea';
 export { Select, type SelectOption, type SelectOptionGroup, type SelectProps } from './Select';
 export { Skeleton, SkeletonText, type SkeletonProps } from './Skeleton';
 export { Spinner, type SpinnerProps } from './Spinner';

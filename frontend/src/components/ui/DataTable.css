@@ -154,6 +154,8 @@
   min-width: 0;
   color: var(--color-heading);
   font-weight: var(--weight-semibold);
+  /* Long unbroken values (URLs, ids, e-mail addresses) wrap instead of widening the page on phones. */
+  overflow-wrap: anywhere;
 }
 
 .ui-table-card__fields {

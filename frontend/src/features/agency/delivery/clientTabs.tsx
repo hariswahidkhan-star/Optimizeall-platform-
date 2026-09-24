@@ -602,7 +602,7 @@ export function BrandKitTab({ clientId }: { clientId: string }) {
           }}
         >
           <FormField label="Upload an asset" hint="PNG, JPEG, WebP, PDF or MP4 up to 50 MB.">
-            <input type="file" accept="image/png,image/jpeg,image/webp,application/pdf,video/mp4" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
+            <Input type="file" accept="image/png,image/jpeg,image/webp,application/pdf,video/mp4" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
           </FormField>
           <Button type="submit" disabled={!file} loading={upload.isPending}>
             Upload
@@ -749,7 +749,7 @@ export function BriefsTab({ clientId }: { clientId: string }) {
         <Card key={b.id} as="article" aria-label={b.title}>
           <CardHeader
             title={b.title}
-            headingLevel={3}
+            headingLevel={2}
             description={`${b.templateName} · ${b.submittedByClient ? 'from the client' : 'by the agency'} · ${b.submittedBy.displayName}`}
             actions={
               <span className="dl-row">
@@ -1010,7 +1010,7 @@ export function MeetingsTab({ clientId }: { clientId: string }) {
           <Card key={m.id} as="article" aria-label={m.title}>
             <CardHeader
               title={m.title}
-              headingLevel={3}
+              headingLevel={2}
               description={<DateTime value={m.startsAt} format="both" />}
               actions={
                 <span className="dl-row">

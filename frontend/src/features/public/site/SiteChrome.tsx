@@ -1,5 +1,5 @@
 import { X } from 'lucide-react';
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { isInternalHref } from '@/lib/safeHref';
 import { safeStorage } from '@/lib/hooks/storage';
@@ -50,10 +50,21 @@ export function SiteChrome({ children }: { children: ReactNode }) {
   const { data: site } = useSite();
   const location = useLocation();
   const [consentOpen, setConsentOpen] = useState(false);
+  const mainRef = useRef<HTMLElement>(null);
+  const focusedPath = useRef(location.pathname);
 
   useEffect(() => {
     captureAttribution({ pathname: location.pathname, search: location.search });
   }, [location.pathname, location.search]);
+
+  // After a client-side navigation, move focus to the new page's content so screen readers announce it and keyboard
+  // users continue from the top of the page (a fresh page load keeps focus where the browser puts it).
+  useEffect(() => {
+    if (focusedPath.current === location.pathname) return;
+    focusedPath.current = location.pathname;
+    if (location.hash) return; // in-page anchors (#section) handle their own scrolling and focus
+    mainRef.current?.focus({ preventScroll: true });
+  }, [location.pathname, location.hash]);
 
   return (
     <div className="public-layout site-layout">
@@ -62,7 +73,7 @@ export function SiteChrome({ children }: { children: ReactNode }) {
       </a>
       <AnnouncementBar />
       <SiteHeader />
-      <main id="main" tabIndex={-1} className="public-main">
+      <main id="main" ref={mainRef} tabIndex={-1} className="public-main">
         {children}
       </main>
       <SiteFooter onCookieSettings={() => setConsentOpen(true)} />

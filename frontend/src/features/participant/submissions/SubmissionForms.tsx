@@ -205,8 +205,9 @@ export function AppealForm({ submission }: { submission: SubmissionDetail }) {
             label="Why should the decision be reviewed again?"
             required
             error={error}
+            // The count is part of the field's description (read on focus); a live region would announce every keystroke.
             hint={
-              <span aria-live="polite">
+              <span>
                 {length} / {APPEAL_MAX} characters (minimum {APPEAL_MIN})
               </span>
             }

@@ -46,6 +46,7 @@ frontend/
     smoke/                   Playwright smoke suite (API mocked with page.route)
     support/mockApi.ts       mock helpers
     journeys/                full-stack journeys (added later)
+    a11y/                    accessibility & responsive audit of every portal (see docs/ACCESSIBILITY.md)
 ```
 
 ## Brand & design tokens
@@ -62,7 +63,7 @@ toggle (persisted in `localStorage` key `oa.theme`) sets `<html data-theme="ligh
 | Group | Tokens |
 |---|---|
 | Brand scales | `--primary-50…950` (brand = 800), `--accent-50…950` (brand = 400, text-safe amber = 700 `#9A6200`) |
-| Surfaces/text | `--color-bg`, `--color-surface(-2/-3)`, `--color-border(-strong)`, `--color-heading`, `--color-text(-muted/-subtle)` |
+| Surfaces/text | `--color-bg`, `--color-surface(-2/-3)`, `--color-border(-strong)`, `--color-border-control` (form control boundaries, ≥ 3:1), `--color-heading`, `--color-text(-muted/-subtle)` |
 | Interactive | `--color-primary(-hover/-active)`, `--color-on-primary`, `--color-primary-soft(-text)`, `--color-link`, `--color-accent*`, `--color-focus`, `--color-focus-halo` |
 | Semantic | `--{success,warning,danger,info,neutral,brand}-{bg,fg,border}` (+ `-solid`) — all fg/bg pairs ≥ 4.5:1 |
 | Charts | `--chart-1..3` (navy, amber, teal — validated for CVD separation in light and dark), `--chart-grid`, `--chart-axis` |
@@ -99,12 +100,13 @@ Utilities in `base.css`: `.visually-hidden`, `.skip-link`, `.container`, `.stack
 | `Drawer` | `open`, `onClose`, `title`, `side`, `headerContent` |
 | `DropdownMenu` | `trigger` (a button element), `items` (`{id,label,icon,to|onSelect,danger,disabled,current}` / separator / label), `align`, `placement` |
 | `Tooltip` | `content`, single focusable child; hover + focus, Escape |
-| Toasts | `useToast().success/error/info(title, description)`; polite live region, pause on hover/focus |
-| `Alert` | `tone`, `title`, `actions`, `onDismiss`, `role`. With a `title` it is `role="status"` (`alert` for the danger tone) named by the title (`aria-labelledby`); pass `role` to override. Untitled callouts have no role |
+| Toasts | `useToast().success/error/info(title, description)`; polite live region, pause on hover/focus; errors stay until dismissed |
+| `Alert` | `tone`, `title`, `actions`, `onDismiss`, `role`. The danger tone is always `role="alert"` (errors after an action are announced, titled or not); other tones with a `title` are `role="status"`, named by the title (`aria-labelledby`); untitled non-danger callouts have no role. Pass `role` to override |
 | `Skeleton`, `SkeletonText`, `Spinner` | decorative placeholders; Spinner has role=status unless `decorative` |
 | `EmptyState` / `ErrorState` | `icon`, `title`, `description`, `action`; ErrorState takes `error` and shows the ApiError title + trace id, `onRetry` |
 | `Pagination` | `page`, `pageSize`, `total`, `onPageChange`, optional `onPageSizeChange` |
-| `DataTable<T>` | `columns[{id,header,cell,sortable,sortValue,align,primary,hideOnMobile}]`, `rows`, `getRowId`, `caption`, `sort`/`onSortChange` (server) or local sort, `loading`, `emptyState`, `rowActions`, `selectable`/`selectedIds`/`onSelectionChange`/`bulkActions`, `maxHeight` (sticky header); stacked cards below md |
+| `DataTable<T>` | `columns[{id,header,cell,sortable,sortValue,align,primary,hideOnMobile}]`, `rows`, `getRowId`, `caption`, `sort`/`onSortChange` (server) or local sort, `loading`, `emptyState`, `rowActions`, `selectable`/`selectedIds`/`onSelectionChange`/`bulkActions`, `maxHeight` (sticky header); stacked cards below md; a table wider than its container scrolls inside a focusable group named by the caption |
+| `ScrollArea` | `label` or `labelledBy`; a scroll container (wide tables, previews, carousels) that becomes a focusable, named group only while its content overflows — use it for any `overflow: auto` box without focusable content |
 | `FilterBar` | `search`/`onSearchChange` (debounced), `filters`, `values`, `onFilterChange`, `onReset`, `actions`; active filters as removable chips |
 | `Stat` | `label`, `value`, `measurement` Measured·Estimated·Count, `delta{value,label,positiveIsGood}`, `icon`, `hint`, `loading`. A `role="group"` named by its label (query tiles with `getByRole('group', { name: /^Pending/ })`) |
 | `ProgressBar` / `ProgressRing` | `value`, `max`, `label`, `valueText` |
@@ -210,7 +212,7 @@ To add or replace a page:
 ```bash
 cd frontend
 npm ci
-npm run dev          # http://localhost:5173, proxies /api and /t to VITE_API_PROXY_TARGET (default http://127.0.0.1:5080)
+npm run dev          # http://localhost:5173, proxies /api/, /t/ and /e/ to VITE_API_PROXY_TARGET (default http://127.0.0.1:5080)
 npm run typecheck    # tsc -b
 npm run lint         # eslint (typescript-eslint, react-hooks, jsx-a11y)
 npm run format       # prettier
@@ -227,5 +229,8 @@ npm run e2e          # Playwright smoke suite (desktop-chromium + mobile-chromiu
   every `/api/v1/**` call with `page.route` (`e2e/support/mockApi.ts`); `e2e/smoke/landing.spec.ts` covers the
   public `/join/:code` and `/c/:slug` pages. Full-stack journeys go in
   `e2e/journeys/*.spec.ts` and run with `E2E_SUITE=journeys E2E_BASE_URL=…`.
+* Accessibility: `E2E_SUITE=a11y E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh` audits every portal's representative
+  pages at 360/768/1280 px (axe WCAG 2.2 A/AA in the light and dark theme, no horizontal scroll) plus keyboard/focus
+  behaviour. Conformance, known exceptions and the patterns to use are in [`docs/ACCESSIBILITY.md`](ACCESSIBILITY.md).
 * Playwright uses the preinstalled Chromium (`PLAYWRIGHT_BROWSERS_PATH`); `@playwright/test` is pinned to 1.56 to
   match it.

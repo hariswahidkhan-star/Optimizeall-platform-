@@ -1,6 +1,6 @@
 import { Printer } from 'lucide-react';
 import type { ReactNode } from 'react';
-import { Button, Money } from '@/components/ui';
+import { Button, Money, ScrollArea } from '@/components/ui';
 import { formatDateOnly } from '@/features/agency/billing/lib';
 import type { ProposalVersion } from '../api/types';
 import '@/features/agency/billing/billing.css';
@@ -68,47 +68,49 @@ export function ProposalDocumentView({
       })}
       <section aria-label="Investment">
         <Sub className="bill-strong">Investment</Sub>
-        <table>
-          <caption className="visually-hidden">Proposal pricing</caption>
-          <thead>
-            <tr>
-              <th scope="col">Item</th>
-              <th scope="col">Billing</th>
-              <th scope="col" className="num">
-                Qty
-              </th>
-              <th scope="col" className="num">
-                Price
-              </th>
-              <th scope="col" className="num">
-                Total
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {version.lines.map((l) => (
-              <tr key={l.id}>
-                <td>
-                  {l.description}
-                  {l.discountAmount > 0 && (
-                    <span className="bill-muted">
-                      {' '}
-                      (discount <Money amount={l.discountAmount} currency={c} />)
-                    </span>
-                  )}
-                </td>
-                <td>{RECURRENCE_LABEL[l.recurrence] ?? l.recurrence}</td>
-                <td className="num">{l.quantity}</td>
-                <td className="num">
-                  <Money amount={l.unitPrice} currency={c} />
-                </td>
-                <td className="num">
-                  <Money amount={l.total} currency={c} />
-                </td>
+        <ScrollArea className="bill-table-scroll" label="Proposal pricing">
+          <table>
+            <caption className="visually-hidden">Proposal pricing</caption>
+            <thead>
+              <tr>
+                <th scope="col">Item</th>
+                <th scope="col">Billing</th>
+                <th scope="col" className="num">
+                  Qty
+                </th>
+                <th scope="col" className="num">
+                  Price
+                </th>
+                <th scope="col" className="num">
+                  Total
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {version.lines.map((l) => (
+                <tr key={l.id}>
+                  <td>
+                    {l.description}
+                    {l.discountAmount > 0 && (
+                      <span className="bill-muted">
+                        {' '}
+                        (discount <Money amount={l.discountAmount} currency={c} />)
+                      </span>
+                    )}
+                  </td>
+                  <td>{RECURRENCE_LABEL[l.recurrence] ?? l.recurrence}</td>
+                  <td className="num">{l.quantity}</td>
+                  <td className="num">
+                    <Money amount={l.unitPrice} currency={c} />
+                  </td>
+                  <td className="num">
+                    <Money amount={l.total} currency={c} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ScrollArea>
         <dl className="bill-totals">
           {version.totals.taxes.map((t) => (
             <div key={`${t.name}-${t.ratePercent}`}>

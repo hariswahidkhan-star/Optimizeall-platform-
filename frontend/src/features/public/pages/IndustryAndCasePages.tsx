@@ -169,7 +169,7 @@ export function CaseStudiesPage() {
               <ul className="site-grid site-grid--3" aria-label="Case studies">
                 {(data ?? []).map((c) => (
                   <li key={c.slug}>
-                    <CaseStudyCard study={c} headingLevel={3} />
+                    <CaseStudyCard study={c} headingLevel={2} />
                   </li>
                 ))}
               </ul>

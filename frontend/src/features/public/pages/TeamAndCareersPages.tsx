@@ -266,9 +266,9 @@ function ApplicationForm({ job }: { job: PublicJob }) {
         <Input type="url" value={values.portfolioUrl} onChange={(e) => set('portfolioUrl')(e.target.value)} />
       </FormField>
       <FormField label="CV" required hint="PDF only, up to 5 MB." error={errors.cv}>
-        <input
+        <Input
           type="file"
-          className="ui-input site-file"
+          className="site-file"
           accept={PDF_TYPES.join(',')}
           onChange={(e) => {
             const file = e.target.files?.[0] ?? null;

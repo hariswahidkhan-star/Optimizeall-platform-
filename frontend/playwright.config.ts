@@ -29,6 +29,11 @@ import { defineConfig, devices } from '@playwright/test';
  * off) runs the same way against the Demo seed with the non-production test sign-in on: desktop runs everything but
  * responsive.spec.ts, which the mobile project runs alone (390×844). Run it with
  * `E2E_SUITE=platform E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
+ *
+ * The a11y suite (accessibility & responsive layout: axe WCAG 2.2 A/AA in the light and dark theme, no horizontal
+ * scroll at 360/768/1280 px, keyboard and focus behaviour) runs against the Demo seed too. It never changes data, so
+ * its tests run in parallel (two workers); each test sets its own viewport, so only the desktop project runs it. Run
+ * it with `E2E_SUITE=a11y E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh` (see docs/ACCESSIBILITY.md).
  */
 const suite = process.env.E2E_SUITE ?? 'smoke';
 /** Suites whose mobile project runs only responsive.spec.ts (and whose desktop project runs everything else). */
@@ -36,6 +41,8 @@ const responsiveSplit = suite === 'agency' || suite === 'platform';
 /** Full-stack suites share one database and build on earlier steps: serial, one worker, no retries. */
 const journeys = suite === 'journeys' || responsiveSplit;
 const mobileOnly = responsiveSplit ? /responsive\.spec\.ts$/ : /participant\.spec\.ts$/;
+/** Read-only full-stack audit: parallel, no retries, desktop project only (tests pick their own viewports). */
+const a11y = suite === 'a11y';
 const baseURL = process.env.E2E_BASE_URL || process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:5173';
 const suiteSetup = `./e2e/${suite}/global-setup.ts`;
 
@@ -44,8 +51,9 @@ export default defineConfig({
   outputDir: './test-results',
   fullyParallel: !journeys,
   forbidOnly: !!process.env.CI,
-  retries: journeys ? 0 : process.env.CI ? 1 : 0,
+  retries: journeys || a11y ? 0 : process.env.CI ? 1 : 0,
   ...(journeys ? { workers: 1, timeout: 120_000, expect: { timeout: 15_000 } } : {}),
+  ...(a11y ? { workers: 2, timeout: 120_000, expect: { timeout: 15_000 } } : {}),
   reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'list',
   globalSetup: existsSync(suiteSetup) ? suiteSetup : undefined,
   use: {
@@ -59,11 +67,15 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
       ...(responsiveSplit ? { testIgnore: mobileOnly } : {}),
     },
-    {
-      name: 'mobile-chromium',
-      use: { ...devices['Pixel 7'] },
-      ...(journeys ? { testMatch: mobileOnly } : {}),
-    },
+    ...(a11y
+      ? []
+      : [
+          {
+            name: 'mobile-chromium',
+            use: { ...devices['Pixel 7'] },
+            ...(journeys ? { testMatch: mobileOnly } : {}),
+          },
+        ]),
   ],
   webServer: process.env.E2E_BASE_URL || process.env.PLAYWRIGHT_BASE_URL
     ? undefined

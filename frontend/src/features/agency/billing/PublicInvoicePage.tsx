@@ -33,9 +33,9 @@ export function PublicInvoicePage() {
   return (
     <div className="container stack bill-public">
       {notFound ? (
-        <EmptyState title="This invoice link isn’t valid" description="Check the link in your email, or ask us to send the invoice again." />
+        <EmptyState headingLevel={1} title="This invoice link isn’t valid" description="Check the link in your email, or ask us to send the invoice again." />
       ) : query.isError ? (
-        <ErrorState error={query.error} onRetry={() => void query.refetch()} />
+        <ErrorState headingLevel={1} error={query.error} onRetry={() => void query.refetch()} />
       ) : !query.data ? (
         <Skeleton height="30rem" />
       ) : (

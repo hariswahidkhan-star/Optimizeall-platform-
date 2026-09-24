@@ -1166,6 +1166,8 @@ button.site-chip {
 }
 
 .site-prose__table {
+  /* Contains absolutely positioned descendants (visually hidden text) so they cannot widen the page. */
+  position: relative;
   overflow-x: auto;
 }
 
@@ -1348,6 +1350,8 @@ button.site-chip {
 
 /* ---------- Booking ---------- */
 .site-days {
+  /* Contains absolutely positioned descendants (visually hidden text) so they cannot widen the page. */
+  position: relative;
   display: flex;
   gap: var(--space-2);
   overflow-x: auto;

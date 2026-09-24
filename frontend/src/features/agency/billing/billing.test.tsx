@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { json, makeUser, mockFetch, problem, session } from '@/test/fetchMock';
 import { axeViolations, renderWithApp } from '@/test/render';
-import { ClientBillingPage } from '@/features/client/billing/ClientBillingPages';
+import { ClientBillingPage, ClientInvoicePage } from '@/features/client/billing/ClientBillingPages';
 import type { Invoice, PublicInvoice } from './api/types';
 import { InvoiceDetailPage } from './pages/InvoiceDetailPage';
 import { BillingSettingsPage } from './pages/BillingSettingsPage';
@@ -182,10 +182,26 @@ describe('Public invoice page', () => {
     expect(await axeViolations(container)).toEqual([]);
   });
 
+  it('in the client portal the document sits below the page heading: one h1, the document title is an h2', async () => {
+    const billing = makeUser({ id: 'billing', roles: ['Client'], permissions: ['client.portal'] });
+    mockFetch({
+      'POST /auth/refresh': () => json(200, session(billing)),
+      'GET /client/billing/invoices/inv1': () => json(200, view),
+    });
+    const { container } = renderWithApp(<ClientInvoicePage />, {
+      route: '/client/billing/invoices/inv1',
+      path: '/client/billing/invoices/:invoiceId',
+    });
+    expect(await screen.findByRole('heading', { level: 2, name: 'Invoice OA-2026-0042' })).toBeInTheDocument();
+    expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
+    expect(screen.getByRole('heading', { level: 3, name: 'Bill to' })).toBeInTheDocument();
+    expect(await axeViolations(container)).toEqual([]);
+  });
+
   it('shows a friendly page for unknown links', async () => {
     mockFetch({ [`GET /public/invoices/${token}`]: () => problem(404, 'invoice.not_found', 'Not found'), 'POST /auth/refresh': () => problem(401, 'x', 'No session') });
     renderWithApp(<PublicInvoicePage />, { route: `/i/${token}`, path: '/i/:token' });
-    expect(await screen.findByText('This invoice link isn’t valid')).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { level: 1, name: 'This invoice link isn’t valid' })).toBeInTheDocument();
   });
 });
 

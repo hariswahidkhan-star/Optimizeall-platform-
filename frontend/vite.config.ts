@@ -6,9 +6,12 @@ import { defineConfig, loadEnv } from 'vite';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   const apiTarget = env.VITE_API_PROXY_TARGET || 'http://127.0.0.1:5080';
+  // Mirrors nginx: /api/, the tracking short links /t/ and email tracking /e/. String keys are prefix matches, so
+  // each ends with a slash — "/t" would also send app routes such as /team and /terms to the API.
   const proxy = {
-    '/api': { target: apiTarget, changeOrigin: false },
-    '/t': { target: apiTarget, changeOrigin: false },
+    '/api/': { target: apiTarget, changeOrigin: false },
+    '/t/': { target: apiTarget, changeOrigin: false },
+    '/e/': { target: apiTarget, changeOrigin: false },
   };
 
   return {

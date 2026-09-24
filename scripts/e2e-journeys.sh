@@ -5,7 +5,7 @@
 #   2. builds and starts the API on :$E2E_API_PORT (Development, $E2E_SEED seed profiles, file-mode email + dev mailbox,
 #      background jobs off, relaxed auth rate limit, bootstrap admin, non-production test sign-in on, Google sign-in
 #      not configured)
-#   3. builds the frontend and serves it with `vite preview` on :$E2E_WEB_PORT, proxying /api and /t to the API
+#   3. builds the frontend and serves it with `vite preview` on :$E2E_WEB_PORT, proxying /api/, /t/ and /e/ to the API
 #   4. waits for /health/ready and runs `E2E_SUITE=$E2E_SUITE npx playwright test` (desktop + mobile projects)
 #   5. always tears down (kills the servers by PID, drops the database) and exits with Playwright's exit code
 #
@@ -14,11 +14,11 @@
 #
 # Environment:
 #   E2E_SUITE=journeys    Playwright suite (frontend/e2e/<suite>): "journeys" (participant → admin, Baseline seed),
-#                         "agency" (agency platform journeys against the Demo seed's accounts and clients) or
+#                         "agency" (agency platform journeys against the Demo seed's accounts and clients),
 #                         "platform" (test users, login-as, custom roles, payments hub, editing, Google sign-in off;
-#                         Demo seed)
-#   E2E_SEED              comma-separated seed profiles (default: Baseline for journeys, Baseline,Demo for agency and
-#                         platform)
+#                         Demo seed) or "a11y" (accessibility & responsive audit of every portal; Demo seed, read-only)
+#   E2E_SEED              comma-separated seed profiles (default: Baseline for journeys, Baseline,Demo for agency,
+#                         platform and a11y)
 #   E2E_DB_PROVIDER=mysql mysql (default) or sqlite (a fresh file in $E2E_WORK_DIR; no MySQL server needed)
 #   DB_HOST/DB_PORT/DB_USER/DB_PASSWORD   MySQL server (defaults: 127.0.0.1:3306 optimizeall/optimizeall_dev);
 #                                         the user must be able to CREATE/DROP databases
@@ -42,7 +42,7 @@ ADMIN_EMAIL="${E2E_ADMIN_EMAIL:-e2e-admin@optimizeall.test}"
 ADMIN_PASSWORD="${E2E_ADMIN_PASSWORD:-E2e-Admin#Journey-2026}"
 E2E_SUITE="${E2E_SUITE:-journeys}"
 case "$E2E_SUITE" in
-  agency|platform) E2E_SEED="${E2E_SEED:-Baseline,Demo}" ;;
+  agency|platform|a11y) E2E_SEED="${E2E_SEED:-Baseline,Demo}" ;;
   *) E2E_SEED="${E2E_SEED:-Baseline}" ;;
 esac
 E2E_DB_PROVIDER="$(printf '%s' "${E2E_DB_PROVIDER:-mysql}" | tr '[:upper:]' '[:lower:]')"

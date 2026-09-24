@@ -1,10 +1,13 @@
-import { screen, within } from '@testing-library/react';
+import { act, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { StrictMode } from 'react';
+import { Outlet } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { json, makeUser, mockFetch, problem, session } from '@/test/fetchMock';
 import { axeViolations, renderWithApp } from '@/test/render';
 import { setViewportWidth } from '@/test/viewport';
 import { LandingPage } from '@/features/public/LandingPage';
+import { SiteChrome } from '@/features/public/site/SiteChrome';
 import { PublicLayout } from './layouts/PublicLayout';
 import { PortalLayout } from './layouts/PortalLayout';
 import { getPortal } from './portals';
@@ -101,5 +104,53 @@ describe('PortalLayout', () => {
       'aria-current',
       'true',
     );
+  });
+});
+
+describe('focus after navigation', () => {
+  it('the portal moves focus to <main> after a client-side navigation, but not on the first load (even in StrictMode)', async () => {
+    mockFetch({ 'POST /auth/refresh': () => json(200, session(makeUser())) });
+    const { router } = renderWithApp(
+      <StrictMode>
+        <PortalLayout portal={getPortal('participant')} />
+      </StrictMode>,
+      { route: '/app', path: '/app/*' },
+    );
+    const main = await screen.findByRole('main');
+    // The first load leaves focus where the browser put it, so the first Tab reaches the skip link.
+    expect(main).not.toHaveFocus();
+    await act(() => router.navigate('/app/earnings'));
+    await waitFor(() => expect(main).toHaveFocus());
+  });
+
+  it('the public site moves focus to <main> after a client-side navigation', async () => {
+    mockFetch({
+      'POST /auth/refresh': () => problem(401, 'auth.session_expired', 'Expired'),
+      'GET /public/site': () => problem(404, 'x', 'Not found'),
+    });
+    const { router } = renderWithApp(<p>unused</p>, {
+      route: '/',
+      path: '/unused',
+      routes: [
+        {
+          element: (
+            <StrictMode>
+              <SiteChrome>
+                <Outlet />
+              </SiteChrome>
+            </StrictMode>
+          ),
+          children: [
+            { path: '/', element: <h1>Home</h1> },
+            { path: '/contact', element: <h1>Contact</h1> },
+          ],
+        },
+      ],
+    });
+    const main = screen.getByRole('main');
+    expect(main).not.toHaveFocus();
+    await act(() => router.navigate('/contact'));
+    expect(await screen.findByRole('heading', { level: 1, name: 'Contact' })).toBeInTheDocument();
+    await waitFor(() => expect(main).toHaveFocus());
   });
 });

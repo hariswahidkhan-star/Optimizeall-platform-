@@ -184,10 +184,10 @@ export function Kanban({ projectId, tasks, onOpen, canEdit }: Props) {
               onDragLeave={() => setDropTarget(null)}
               onDrop={(e) => onDrop(e, status)}
             >
-              <h3 id={headingId} className="dl-kanban__head">
+              <h2 id={headingId} className="dl-kanban__head">
                 <span>{taskStatusLabel(status)}</span>
                 <Badge size="sm">{column.length}</Badge>
-              </h3>
+              </h2>
               <ul className="dl-kanban__list" aria-label={`${taskStatusLabel(status)} tasks`}>
                 {column.map((task) => (
                   <li

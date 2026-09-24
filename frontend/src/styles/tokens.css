@@ -48,6 +48,9 @@
   --color-surface-inverse: light-dark(#1f2659, #e9ebf8);
   --color-border: light-dark(#e1e4ef, #2a3260);
   --color-border-strong: light-dark(#c5cadc, #3a4378);
+  /* Boundaries of form controls (inputs, checkboxes, radios, the switch track): ≥ 3:1 against every surface and the
+   * page background in both themes (WCAG 1.4.11 non-text contrast). Decorative dividers keep --color-border. */
+  --color-border-control: light-dark(#7c829f, #6b74a8);
   --color-overlay: light-dark(rgb(15 18 48 / 0.48), rgb(4 6 18 / 0.72));
 
   --color-heading: light-dark(#1d174c, #f4f5fd);

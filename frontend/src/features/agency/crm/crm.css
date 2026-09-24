@@ -12,6 +12,8 @@
 }
 
 .crm-board-wrap {
+  /* Contains absolutely positioned descendants (visually hidden text) so they cannot widen the page. */
+  position: relative;
   overflow-x: auto;
   padding-bottom: var(--space-2);
 }

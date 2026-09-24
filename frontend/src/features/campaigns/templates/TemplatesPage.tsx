@@ -351,8 +351,9 @@ function TemplateDialog({
         <FormField
           label="Body"
           required
+          // Read with the field's description on focus; a live region would announce every keystroke.
           hint={
-            <span aria-live="polite">
+            <span>
               {form.body.length}/{BODY_MAX} characters
             </span>
           }

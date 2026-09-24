@@ -13,6 +13,7 @@ import { FormField } from '@/components/ui/FormField';
 import { IconButton } from '@/components/ui/IconButton';
 import { Input } from '@/components/ui/Input';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { ScrollArea } from '@/components/ui/ScrollArea';
 import { Select } from '@/components/ui/Select';
 import { SkeletonText } from '@/components/ui/Skeleton';
 import { Textarea } from '@/components/ui/Textarea';
@@ -478,33 +479,35 @@ function AutomationForm({ automation }: { automation: Automation | null }) {
               ))}
             </ol>
             {automation && steps.some((s) => stats.has(s.key)) && (
-              <table className="ui-table">
-                <caption>Step results</caption>
-                <thead>
-                  <tr>
-                    <th scope="col">Step</th>
-                    <th scope="col">Runs</th>
-                    <th scope="col">Sent</th>
-                    <th scope="col">Opened</th>
-                    <th scope="col">Clicked</th>
-                    <th scope="col">Skipped</th>
-                    <th scope="col">Failed</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {automation.steps.map((s) => (
-                    <tr key={s.key}>
-                      <th scope="row">{s.key}</th>
-                      <td>{formatNumber(s.stats.runs)}</td>
-                      <td>{formatNumber(s.stats.sent)}</td>
-                      <td>{formatNumber(s.stats.opened)}</td>
-                      <td>{formatNumber(s.stats.clicked)}</td>
-                      <td>{formatNumber(s.stats.skipped)}</td>
-                      <td>{formatNumber(s.stats.failed)}</td>
+              <ScrollArea className="ui-table-wrap" label="Step results">
+                <table className="ui-table">
+                  <caption>Step results</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Step</th>
+                      <th scope="col">Runs</th>
+                      <th scope="col">Sent</th>
+                      <th scope="col">Opened</th>
+                      <th scope="col">Clicked</th>
+                      <th scope="col">Skipped</th>
+                      <th scope="col">Failed</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {automation.steps.map((s) => (
+                      <tr key={s.key}>
+                        <th scope="row">{s.key}</th>
+                        <td>{formatNumber(s.stats.runs)}</td>
+                        <td>{formatNumber(s.stats.sent)}</td>
+                        <td>{formatNumber(s.stats.opened)}</td>
+                        <td>{formatNumber(s.stats.clicked)}</td>
+                        <td>{formatNumber(s.stats.skipped)}</td>
+                        <td>{formatNumber(s.stats.failed)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </ScrollArea>
             )}
             <div className="cluster">
               <Button type="button" variant="secondary" leadingIcon={<Plus />} onClick={addStep} disabled={steps.length >= 50}>

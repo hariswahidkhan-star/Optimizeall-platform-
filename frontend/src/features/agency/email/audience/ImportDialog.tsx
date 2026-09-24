@@ -6,6 +6,7 @@ import { Checkbox } from '@/components/ui/Checkbox';
 import { Dialog } from '@/components/ui/Dialog';
 import { FormField } from '@/components/ui/FormField';
 import { Input } from '@/components/ui/Input';
+import { ScrollArea } from '@/components/ui/ScrollArea';
 import { Select } from '@/components/ui/Select';
 import { Stepper } from '@/components/ui/Stepper';
 import { api } from '@/lib/api/client';
@@ -176,23 +177,25 @@ export function ImportDialog({ open, onClose, listId }: { open: boolean; onClose
               {formatNumber(result.failed)} failed
             </Alert>
             {result.errors.length > 0 && (
-              <table className="ui-table">
-                <caption>Rows with problems</caption>
-                <thead>
-                  <tr>
-                    <th scope="col">Row</th>
-                    <th scope="col">Problem</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {result.errors.map((e) => (
-                    <tr key={`${e.row}-${e.message}`}>
-                      <td>{e.row}</td>
-                      <td>{e.message}</td>
+              <ScrollArea className="ui-table-wrap" label="Rows with problems">
+                <table className="ui-table">
+                  <caption>Rows with problems</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Row</th>
+                      <th scope="col">Problem</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {result.errors.map((e) => (
+                      <tr key={`${e.row}-${e.message}`}>
+                        <td>{e.row}</td>
+                        <td>{e.message}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </ScrollArea>
             )}
           </>
         )}
