@@ -111,11 +111,91 @@ creates one invoice per period: exactly one per period, even if the job is run t
 - **Void** and **write-off** need a reason and confirmation, and must be done by a different person from the one who
   issued the invoice (four-eyes).
 - **Reminders:** when enabled, the client gets one reminder 3 days before the due date, on the due date, 7 days after
-  and 14 days after. The schedule can be changed in settings. At most one reminder is sent per run, so a client never
-  receives several at once.
+  and 14 days after. The schedule can be changed in settings, and per client (see *Payments hub*). At most one reminder
+  is sent per run, so a client never receives several at once.
+- **Correcting a payment:** the reference, date, method and notes of a payment can be edited (with a reason). The
+  amount can't: reverse the payment and record it again. See *Payments hub*.
 
 Every total is calculated on the server, rounded to the currency's minor units (for example 0 decimals for JPY and 3
 for KWD). Amounts are never converted between currencies: overviews and reports show one figure per currency.
+
+## Payments hub
+
+*Finance → Payments* (`/finance/payments`) is one list of every payment: money received from clients (invoice
+payments, open balances, client "I've paid" reports) and participant payouts (see [PAYOUTS.md](PAYOUTS.md#payments-hub)).
+It is for Finance and Admin. Who sees and does what:
+
+| What | Permission |
+|---|---|
+| See incoming records and KPIs (client-scoped) | `billing.view` |
+| See outgoing records (payouts) | `payouts.view` |
+| Record, edit, reverse, refund, mark paid, confirm/reject client reports, send reminders | `billing.manage` |
+| Mark payouts paid, failed or returned | `payouts.record_payment` |
+| Per-client reminder schedule | `billing.settings` |
+
+The page opens in the finance portal for users with `payouts.view` or `billing.manage`. Account managers and sales reps
+keep using *Agency → Billing*.
+
+**What you see.** KPIs per currency (amounts in different currencies are never added up or converted): received this
+month (net of refunds and reversals), outstanding receivables by age (current, 1–30, 31–60, 61–90, 90+ days), payouts
+due in batches, the next payout cycle's estimate and what was paid out this month. The table can be filtered by
+direction, status, type, method, client, participant, invoice, batch, dates and "overdue only", and exported as CSV
+(formula-safe; at most 20,000 rows). Click a row for its detail: the invoice's payments, proof files, reminders sent and
+the audit history.
+
+Statuses: **Scheduled** (payout in a draft batch), **Pending** (an open invoice balance, an unconfirmed client report
+or a payout awaiting payment), **Paid**, **Failed** (a payout that bounced), **Refunded** and **Voided** (reversed as an
+error, rejected report, cancelled payout).
+
+**Manual actions** (every one asks for what it needs, is audited, and is safe to retry — each dialog sends one
+idempotency key, so a double click or a retry after a timeout never records twice; a stale screen gets "changed by
+someone else"):
+
+- **Record payment** — bank transfer, cash, cheque, card (offline terminal), PayPal, Stripe or other, with reference,
+  date, amount and notes. Overpayments are refused, as everywhere in billing. Attach a proof file (PDF, PNG, JPEG or
+  WebP, up to 10 MB) from the row afterwards.
+- **Mark paid in full** — records the remaining balance as one payment.
+- **Edit** — reference, date, method, notes, with a reason. Never the amount.
+- **Reverse** (recorded in error) or **Refund** (money sent back) — with a reason. A negative reversal row is added,
+  the original stays visible as Voided/Refunded, and the invoice balance goes back up (a paid invoice reopens and can be
+  paid again, even with the same bank reference). A refund must be recorded by someone other than the person who
+  recorded the payment (four-eyes); reversing your own entry error is allowed.
+- **Send reminder now** — emails the client's billing contacts (same template and delivery as the scheduled reminders;
+  in `Email:Mode=File` nothing leaves the server). At most one per invoice per hour.
+- **Confirm / reject client report** — see below.
+
+**Client "I've paid".** In the client portal each invoice shows its payment history and an *I've paid* button (Billing
+or Owner members, open invoices only). The client enters the amount, method, transfer reference, date and optionally a
+proof file. Nothing changes on the invoice yet: Finance users and the account manager are notified, the report appears
+in the hub as Pending, and a finance user confirms it once the money is on the bank statement (the amount can be
+corrected) — which records the payment — or rejects it with a reason the client sees.
+
+**Reminder schedule per client.** `PUT /admin/payments/reminder-policies/{clientId}` sets days relative to the due date
+(e.g. 3, 7, 14), turns reminders off for that client, or goes back to the agency schedule. The hourly job uses the
+client's schedule when there is one and still sends each stage once per invoice. `GET /admin/payments/reminders/preview`
+shows what the job would send today without sending anything.
+
+API (`/api/v1/admin/payments`): `GET /` (list), `GET /summary`, `GET /capabilities`, `GET /records/{kind}/{id}`,
+`GET /export.csv`, `POST /invoices/{id}/payments`, `POST /invoices/{id}/mark-paid`, `PATCH /invoice-payments/{id}`,
+`POST /invoice-payments/{id}/reverse`, `POST /invoice-payments/{id}/proofs`, `GET /proofs/{id}`,
+`POST|GET /invoices/{id}/reminders`, `GET /claims`, `POST /claims/{id}/confirm`, `POST /claims/{id}/reject`,
+`GET /reminders/preview`, `GET|PUT /reminder-policies/{clientId}`, `POST /payouts/{itemId}/mark-paid`,
+`POST /payouts/{itemId}/mark-failed`, `POST /payout-batches/{id}/mark-paid`. Client portal:
+`GET /client/billing/invoices/{id}/payments`, `POST /client/billing/invoices/{id}/payment-claims`,
+`POST /client/billing/payment-claims/{id}/proofs`, `GET /client/billing/payment-proofs/{id}`.
+
+### Runbook: incoming payments
+
+1. Each morning open *Finance → Payments*, filter *Status: Pending*. Check client reports ("I've paid") against the
+   bank statement: **Confirm** the ones you find (correct the amount if the bank shows a different one), **Reject** the
+   others with a clear reason.
+2. For money that arrived without a report, **Record payment** on the invoice (or **Mark paid in full**) with the bank
+   reference and the value date. Attach the bank slip for cash and cheques.
+3. Filter *Overdue invoices only*: send a reminder where the scheduled ones were not enough, or agree a different
+   cadence for the client (per-client reminder schedule).
+4. A payment on the wrong invoice or with the wrong amount: **Reverse** it (recorded in error) with the reason, then
+   record it correctly. Money sent back to a client: ask a second finance user to **Refund** it.
+5. Month end: export the CSV for the month and reconcile *Received this month* per currency with the bank.
 
 ## Reports
 
@@ -169,5 +249,7 @@ USD, GBP, AED and PKR (paid, partially paid, overdue, not yet due) and an applie
 - Finance manages billing (`billing.view`, `billing.manage`, `billing.settings`) and can read client accounts
   (`clients.view`); account managers and sales reps can view invoices. Voids and write-offs need a second person;
   credit notes do not, so a person who issued an invoice can credit its balance themselves (audited).
-- Revenue reports show gross invoiced amounts and don't net out credit notes.
+- Revenue reports show gross invoiced amounts and don't net out credit notes. Collections and revenue reports count a
+  reversal or refund as a negative payment on its date, so their totals are net.
+- Overpayments are refused (record the balance and refund the rest); there is no client credit balance yet.
 - Service slugs on lines are free text. They are not yet validated against the website's service catalog.

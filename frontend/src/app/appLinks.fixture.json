@@ -24,6 +24,7 @@
     { "name": "SupportTicket", "path": "/app/support/:id" },
     { "name": "ReviewSubmission", "path": "/review/queue/:id" },
     { "name": "ReviewLiveChecks", "path": "/review/live-checks" },
-    { "name": "FinanceBatch", "path": "/finance/batches/:id" }
+    { "name": "FinanceBatch", "path": "/finance/batches/:id" },
+    { "name": "FinancePayments", "path": "/finance/payments" }
   ]
 }

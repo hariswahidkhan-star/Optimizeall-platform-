@@ -22,6 +22,7 @@ using OptimizeAll.Api.Common.Settings;
 using OptimizeAll.Api.Modules.Website;
 using OptimizeAll.Api.Modules.Crm;
 using OptimizeAll.Api.Modules.Billing;
+using OptimizeAll.Api.Modules.PaymentsHub;
 using OptimizeAll.Api.Modules.Clients;
 using OptimizeAll.Api.Modules.Projects;
 using OptimizeAll.Api.Modules.EmailMarketing;
@@ -203,6 +204,7 @@ services
     .AddWebsiteModule(config)
     .AddCrmModule(config)
     .AddBillingModule(config)
+    .AddPaymentsHubModule(config)
     .AddClientsModule(config)
     .AddProjectsModule(config)
     .AddEmailMarketingModule(config)

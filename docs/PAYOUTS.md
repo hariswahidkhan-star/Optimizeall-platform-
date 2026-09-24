@@ -309,6 +309,50 @@ and mark-failed released them. A Draft `Held` item with no linked earnings was h
 8. Mistakes: a wrongly recorded payment cannot be "un-paid" in the UI (by design). Record a compensating adjustment
    (with the support ticket) and document it; for an unpaid batch prepared in error, cancel it.
 
+## Payments hub
+
+*Finance → Payments* (`/finance/payments`, API `/api/v1/admin/payments`, module `Api/Modules/PaymentsHub`) lists every
+payout item next to incoming client payments (see [SALES_AND_BILLING.md](SALES_AND_BILLING.md#payments-hub)). Outgoing
+records need `payouts.view`; actions need `payouts.record_payment`. The hub owns no payout logic: every action calls
+`PayoutPaymentService`, so everything in sections 3–5 applies unchanged (four-eyes for system-prepared batches, holds
+and override reasons, conditional `AwaitingPayment → Paid/Failed`, notifications, `PayoutItemPaid` event, audit).
+
+| Payout item | Hub status |
+|---|---|
+| `Pending` (draft), `Held` in a draft | Scheduled |
+| `AwaitingPayment` | Pending |
+| `Paid` | Paid |
+| `Failed` | Failed |
+| `Cancelled`, `Held` in a finalized batch | Voided |
+
+Actions:
+
+- **Mark paid** (`POST /payouts/{itemId}/mark-paid {paymentReference, paidAt, note?, overrideReason?}`) — same as
+  `record-payment`. Sending the same reference again for an item that is already paid answers `replayed: true` instead
+  of 409 (a retried request never pays twice); a different reference is still 409 `payout.already_recorded`.
+- **Mark failed / returned** (`POST /payouts/{itemId}/mark-failed {kind: Failed|Returned, reason}`) — same as
+  `mark-failed`; the reason is stored as "Failed: …" or "Returned by the bank: …". The earnings go back to `Approved`
+  and are picked up by the next batch (**re-queued**, `requeued: true`). A retry with the same reason is a replay.
+- **Mark batch paid** (`POST /payout-batches/{batchId}/mark-paid {paymentReference, paidAt, confirm:true}`) — records
+  every item awaiting payment with one bulk-transfer reference through `record-payments`; per item `recorded`,
+  `already_recorded` or `invalid` (e.g. participant on hold, finalizer of a system batch). Reconciliation will warn
+  `duplicate_payment_reference` (expected for a bulk transfer).
+
+KPIs: payouts due (items `Pending` + `AwaitingPayment`, per currency), the next cycle's estimate (approved, unbatched
+earnings available by the next cutoff, before minimum-threshold checks), paid out and failed this month.
+
+The participant portal already shows each payout's status, scheduled payment date, paid date and the reference's last
+four characters (`/app/payouts`).
+
+### Runbook: paying payouts from the hub
+
+1. After finalizing a batch (section 3), open *Finance → Payments*, filter *Direction: Outgoing*, *Status: Pending*.
+2. Pay each participant in the bank/wallet portal, then **Mark paid** with the transaction reference and the actual time
+   (or **Mark batch paid** for one bulk transfer). Items refused (hold, four-eyes) stay Pending with the reason.
+3. A transfer that bounces: **Mark failed / returned** with the bank's reason code; the money returns to the
+   participant's balance for the next batch. Tell the participant to check their payout details if needed.
+4. Reconcile the batch (section 6) as usual.
+
 ## 8. Payment provider integration layer
 
 `Api/Modules/Payouts/Providers/`:

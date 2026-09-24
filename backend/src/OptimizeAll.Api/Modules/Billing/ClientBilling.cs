@@ -144,7 +144,11 @@ public sealed class ClientBillingService(
                 entries.Add((DateOnly.FromDateTime(w), 3, "Write-off", i.Number ?? "—", "Balance written off", 0, i.AmountWrittenOff));
         }
         foreach (var p in paid)
-            entries.Add((p.PaidOn, 1, "Payment", p.Reference, $"Payment for {numbers.GetValueOrDefault(p.InvoiceId) ?? "invoice"} ({p.Method})", 0, p.Amount));
+            entries.Add(p.ReversalOfPaymentId is null
+                ? (p.PaidOn, 1, "Payment", p.Reference, $"Payment for {numbers.GetValueOrDefault(p.InvoiceId) ?? "invoice"} ({p.Method})", 0, p.Amount)
+                : (p.PaidOn, 1, p.ReversalKind == PaymentReversalKind.Refund ? "Refund" : "Payment reversal", p.Reference,
+                    $"{(p.ReversalKind == PaymentReversalKind.Refund ? "Refund" : "Reversal")} of a payment for {numbers.GetValueOrDefault(p.InvoiceId) ?? "invoice"}",
+                    -p.Amount, 0));
         foreach (var c in credits)
             entries.Add((DateOnly.FromDateTime(c.AppliedAt), 2, "Credit note", c.Number, $"Credit applied to {c.InvoiceNumber}", 0, c.Amount));
 

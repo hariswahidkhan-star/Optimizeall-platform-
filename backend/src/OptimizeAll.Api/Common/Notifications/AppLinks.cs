@@ -50,4 +50,7 @@ public static class AppLinks
 
     // ---------- Finance portal (/finance) ----------
     public static string FinanceBatch(Guid batchId) => $"/finance/batches/{batchId}";
+
+    /// <summary>Payments hub (incoming and outgoing payments, client "I've paid" reports).</summary>
+    public const string FinancePayments = "/finance/payments";
 }

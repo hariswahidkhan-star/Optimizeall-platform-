@@ -7,6 +7,7 @@ import {
   Layers,
   LayoutDashboard,
   PauseCircle,
+  Wallet,
 } from 'lucide-react';
 import type { RouteObject } from 'react-router-dom';
 import type { PortalNavItem } from '@/app/portalTypes';
@@ -21,6 +22,7 @@ const BatchesPage = lazyPage(() => import('./pages/BatchesPage'), 'BatchesPage')
 const ExchangeRatesPage = lazyPage(() => import('./pages/ExchangeRatesPage'), 'ExchangeRatesPage');
 const HoldsPage = lazyPage(() => import('./pages/HoldsPage'), 'HoldsPage');
 const OverviewPage = lazyPage(() => import('./pages/OverviewPage'), 'OverviewPage');
+const PaymentsPage = lazyPage(() => import('./payments/PaymentsPage'), 'PaymentsPage');
 const SchedulePage = lazyPage(() => import('./pages/SchedulePage'), 'SchedulePage');
 
 /**
@@ -30,6 +32,9 @@ const SchedulePage = lazyPage(() => import('./pages/SchedulePage'), 'SchedulePag
  */
 const requires = {
   batches: { anyOf: [Permissions.PayoutsView] },
+  // Payments hub: outgoing payouts (payouts.view) and/or incoming client payments. billing.view alone (account managers,
+  // sales reps) is served by Agency → Billing, so the finance portal opens the hub for billing managers only.
+  payments: { anyOf: [Permissions.PayoutsView, Permissions.BillingManage] },
   ledger: { anyOf: [Permissions.LedgerView] },
   approvals: { anyOf: [Permissions.RewardsApproveBonus] },
   holds: { anyOf: [Permissions.PayoutsHold] },
@@ -44,6 +49,13 @@ export const portalRequires: PermissionRequirement = {
 
 export const nav: PortalNavItem[] = [
   { to: '', label: 'Overview', icon: LayoutDashboard },
+  {
+    to: 'payments',
+    label: 'Payments',
+    icon: Wallet,
+    description: 'Every incoming and outgoing payment: record, correct, reverse, mark paid, send reminders.',
+    requires: requires.payments,
+  },
   {
     to: 'batches',
     label: 'Payout batches',
@@ -90,6 +102,7 @@ export const nav: PortalNavItem[] = [
 
 export const routes: RouteObject[] = [
   { index: true, element: <OverviewPage /> },
+  { path: 'payments', handle: { requires: requires.payments }, element: <PaymentsPage /> },
   {
     path: 'batches',
     handle: { requires: requires.batches },

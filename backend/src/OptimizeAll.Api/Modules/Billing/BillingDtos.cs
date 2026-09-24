@@ -120,7 +120,9 @@ public sealed record InvoiceSummaryDto(
 
 public sealed record PaymentDto(
     Guid Id, Guid InvoiceId, string? InvoiceNumber, Guid ClientAccountId, string? ClientName, decimal Amount, string Currency,
-    PaymentMethod Method, string Reference, DateOnly PaidOn, string? Notes, Guid RequestId, string? RecordedBy, DateTime CreatedAt);
+    PaymentMethod Method, string Reference, DateOnly PaidOn, string? Notes, Guid RequestId, string? RecordedBy, DateTime CreatedAt,
+    Guid? ReversalOfPaymentId = null, DateTime? ReversedAt = null, PaymentReversalKind? ReversalKind = null, string? ReversalReason = null,
+    DateTime? UpdatedAt = null, Guid ConcurrencyStamp = default);
 
 public sealed record CreditApplicationDto(Guid CreditNoteId, string CreditNoteNumber, Guid InvoiceId, string? InvoiceNumber, decimal Amount, DateTime AppliedAt);
 
@@ -161,6 +163,53 @@ public sealed class RecordPaymentRequest
 }
 
 public sealed record PaymentRecordedDto(PaymentDto Payment, InvoiceDto Invoice, bool Replayed);
+
+/// <summary>Edit of a payment's details. The amount is not editable (reverse and record again instead).</summary>
+public sealed class UpdatePaymentDetailsRequest
+{
+    [StringLength(120, MinimumLength = 1)]
+    public string? Reference { get; set; }
+
+    public DateOnly? PaidOn { get; set; }
+
+    public PaymentMethod? Method { get; set; }
+
+    /// <summary>New notes; an empty string clears them, null leaves them unchanged.</summary>
+    [MaxLength(1000)]
+    public string? Notes { get; set; }
+
+    [Required, StringLength(1000, MinimumLength = 5)]
+    public string Reason { get; set; } = string.Empty;
+
+    /// <summary>The payment's stamp the user saw.</summary>
+    [Required]
+    public Guid? ConcurrencyStamp { get; set; }
+}
+
+public sealed class ReversePaymentRequest
+{
+    /// <summary>Idempotency key of the reversal (a retried request never reverses twice).</summary>
+    [Required]
+    public Guid? RequestId { get; set; }
+
+    [Required]
+    public PaymentReversalKind? Kind { get; set; }
+
+    [Required, StringLength(1000, MinimumLength = 5)]
+    public string Reason { get; set; } = string.Empty;
+
+    /// <summary>Date of the refund / correction (defaults to today).</summary>
+    public DateOnly? ReversedOn { get; set; }
+
+    public bool Confirm { get; set; }
+
+    /// <summary>The payment's stamp the user saw.</summary>
+    [Required]
+    public Guid? ConcurrencyStamp { get; set; }
+}
+
+public sealed record PaymentReversedDto(PaymentDto Payment, PaymentDto Reversal, InvoiceDto Invoice, bool Replayed);
+
 
 public sealed class PaymentQuery : PageQuery
 {
