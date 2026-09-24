@@ -126,14 +126,17 @@ test.describe.serial('sessions and refresh tokens', () => {
     const cookieBefore = (await browserRefreshCookie(context))!.value;
 
     // The server rotates, but the response (and its Set-Cookie) never reaches the browser.
+    let intercepted = false;
     let aborted = 0;
     await page.route('**/api/v1/auth/refresh', async (route) => {
-      if (aborted > 0) return route.fallback();
-      aborted++;
+      if (intercepted) return route.fallback();
+      intercepted = true;
       // Forward the browser's request (its cookie) to the API, which rotates; then drop the response.
       const forwarded = await refreshWith(`oa_refresh=${cookieBefore}`);
       expect(forwarded.status).toBe(200);
-      return route.abort('connectionreset');
+      // (If the browser already gave up on the request, it never saw the response either.)
+      await route.abort('connectionreset').catch(() => undefined);
+      aborted++;
     });
     await page.reload();
     await expect.poll(() => aborted).toBe(1);

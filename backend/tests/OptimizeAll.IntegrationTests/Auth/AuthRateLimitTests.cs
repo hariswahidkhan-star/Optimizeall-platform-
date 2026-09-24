@@ -23,24 +23,20 @@ public sealed class AuthRateLimitTests(ApiFactory api) : IClassFixture<ApiFactor
         var client = limited.CreateClient(new WebApplicationFactoryClientOptions { HandleCookies = false });
         client.DefaultRequestHeaders.Add("X-Requested-With", "tests");
 
-        var statuses = new List<HttpStatusCode>();
-        for (var i = 0; i < 10; i++)
-        {
-            // Mixed credential endpoints share one budget.
-            var response = i % 2 == 0
-                ? await client.PostAsJsonAsync("/api/v1/auth/login", new { email = "nobody@example.test", password = "Wrong-Password-1" })
-                : await client.PostAsJsonAsync("/api/v1/auth/forgot-password", new { email = "nobody@example.test" });
-            statuses.Add(response.StatusCode);
-        }
+        // Sent together so they land in one fixed window; mixed credential endpoints share one budget.
+        var statuses = (await Task.WhenAll(Enumerable.Range(0, 10).Select(i => i % 2 == 0
+            ? client.PostAsJsonAsync("/api/v1/auth/login", new { email = "nobody@example.test", password = "Wrong-Password-1" })
+            : client.PostAsJsonAsync("/api/v1/auth/forgot-password", new { email = "nobody@example.test" }))))
+            .Select(r => r.StatusCode).ToList();
         Assert.DoesNotContain(HttpStatusCode.TooManyRequests, statuses);
 
         var refused = await client.PostAsJsonAsync("/api/v1/auth/login", new { email = "nobody@example.test", password = "Wrong-Password-1" });
         Assert.Equal(HttpStatusCode.TooManyRequests, refused.StatusCode);
         Assert.Equal("application/problem+json", refused.Content.Headers.ContentType?.MediaType);
         Assert.True(refused.Headers.RetryAfter is not null, "Retry-After header");
-        var body = await refused.ReadJsonAsync();
-        Assert.Equal("rate_limited", body.GetProperty("code").GetString());
-        Assert.Equal("Too many requests. Please wait and try again.", body.GetProperty("title").GetString());
+        using var body = System.Text.Json.JsonDocument.Parse(await refused.Content.ReadAsStringAsync());
+        Assert.Equal("rate_limited", body.RootElement.GetProperty("code").GetString());
+        Assert.Equal("Too many requests. Please wait and try again.", body.RootElement.GetProperty("title").GetString());
 
         // Registration is a credential endpoint too; the session refresh has its own, larger budget.
         Assert.Equal(HttpStatusCode.TooManyRequests,
