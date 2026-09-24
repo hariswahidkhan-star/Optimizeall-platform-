@@ -106,11 +106,11 @@ export function timelineTone(status: SubmissionStatus | null | undefined): Tone 
 export function qualifyingActionLabel(action: string): string {
   switch (action) {
     case 'EmailVerified':
-      return 'verifies their email address';
+      return 'verify their email address';
     case 'FirstApprovedSubmission':
-      return 'gets their first post approved';
+      return 'get their first post approved';
     case 'FirstPaidPayout':
-      return 'receives their first payout';
+      return 'receive their first payout';
     default:
       return humanize(action).toLowerCase();
   }

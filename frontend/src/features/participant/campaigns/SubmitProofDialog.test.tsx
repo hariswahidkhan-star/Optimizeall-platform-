@@ -74,6 +74,31 @@ describe('SubmitProofDialog', () => {
     expect(screen.getByText('shot.png')).toBeInTheDocument();
   });
 
+  it('clears the server error of the link once the link is edited, and shows a new one after resubmitting', async () => {
+    const user = userEvent.setup();
+    renderDialog(() =>
+      problem(
+        409,
+        'submission.duplicate_url',
+        'This post has already been submitted. Each post can only be claimed once.',
+      ),
+    );
+    await screen.findByRole('dialog');
+    await fillValid(user);
+    await user.click(screen.getByRole('button', { name: 'Submit proof' }));
+    const link = screen.getByLabelText(/Link to your post/);
+    await waitFor(() => expect(link).toHaveAttribute('aria-invalid', 'true'));
+
+    await user.clear(link);
+    await user.type(link, 'https://www.instagram.com/p/other456/');
+    expect(link).not.toHaveAttribute('aria-invalid', 'true');
+    expect(link).not.toHaveAccessibleDescription(expect.stringContaining('already been submitted'));
+
+    await user.click(screen.getByRole('button', { name: 'Submit proof' }));
+    await waitFor(() => expect(link).toHaveAttribute('aria-invalid', 'true'));
+    expect(link).toHaveAccessibleDescription(expect.stringContaining('already been submitted'));
+  });
+
   it('sends one multipart request even when submitted twice, with UTC time and variant id', async () => {
     const user = userEvent.setup();
     let resolve!: (r: Response) => void;

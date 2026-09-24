@@ -75,7 +75,10 @@ export function SubmitProofDialog({ open, onClose, campaign, experimentVariantId
   });
 
   const server = submit.isError ? mapProofErrors(submit.error) : null;
-  const errorFor = (field: ProofField) => clientErrors[field] ?? firstMessage(server?.fields[field]);
+  // A server message describes the value that was sent: once the participant edits that field it no longer applies.
+  const [editedSinceError, setEditedSinceError] = useState<ReadonlySet<ProofField>>(() => new Set());
+  const errorFor = (field: ProofField) =>
+    clientErrors[field] ?? (editedSinceError.has(field) ? undefined : firstMessage(server?.fields[field]));
 
   const validate = (): Errors => {
     const found: Errors = {};
@@ -108,11 +111,14 @@ export function SubmitProofDialog({ open, onClose, campaign, experimentVariantId
     if (caption.trim()) form.append('captionText', caption.trim());
     if (experimentVariantId) form.append('experimentVariantId', experimentVariantId);
     if (screenshot) form.append('screenshot', screenshot, screenshot.name);
+    setEditedSinceError(new Set());
     submit.mutate(form);
   };
 
-  const clearFieldError = (field: ProofField) =>
+  const clearFieldError = (field: ProofField) => {
     setClientErrors((current) => (current[field] ? { ...current, [field]: undefined } : current));
+    setEditedSinceError((current) => (current.has(field) ? current : new Set(current).add(field)));
+  };
 
   return (
     <Dialog
@@ -217,7 +223,15 @@ export function SubmitProofDialog({ open, onClose, campaign, experimentVariantId
         </FormField>
 
         <FormField id="proof-captionText" label="Caption you used" optional error={errorFor('captionText')}>
-          <Textarea value={caption} maxLength={5000} rows={3} onChange={(e) => setCaption(e.target.value)} />
+          <Textarea
+            value={caption}
+            maxLength={5000}
+            rows={3}
+            onChange={(e) => {
+              setCaption(e.target.value);
+              clearFieldError('captionText');
+            }}
+          />
         </FormField>
 
         <div id="proof-screenshot" tabIndex={-1}>
