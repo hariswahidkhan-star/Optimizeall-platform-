@@ -1,14 +1,16 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { FileCheck2, Send, ThumbsDown, ThumbsUp, Upload } from 'lucide-react';
+import { FileCheck2, Pencil, Send, ThumbsDown, ThumbsUp, Trash2, Upload } from 'lucide-react';
 import { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   Alert,
   Button,
   Card,
   CardBody,
   CardHeader,
+  ConfirmDialog,
   DataTable,
+  Dialog,
   DateTime,
   EmptyState,
   ErrorState,
@@ -17,6 +19,7 @@ import {
   Input,
   PageHeader,
   Pagination,
+  Select,
   Skeleton,
   Switch,
   Textarea,
@@ -29,7 +32,9 @@ import type { PagedResult } from '@/lib/api/types';
 import { VersionCompare } from '../shared/VersionCompare';
 import { DELIVERABLE_STATUSES, type DeliverableDetail, type DeliverableSummary } from '../shared/deliveryTypes';
 import { DeliverableStatusBadge, deliverableStatusLabel, labelOf } from '../shared/deliveryUi';
-import { dk } from './api';
+import { Permissions } from '@/lib/auth/permissions';
+import { useAuth } from '@/lib/auth/useAuth';
+import { dk, useStaff } from './api';
 
 const columns: DataTableColumn<DeliverableSummary>[] = [
   {
@@ -170,12 +175,80 @@ function NewVersion({ id, onSaved }: { id: string; onSaved: (d: DeliverableDetai
   );
 }
 
+/** Title, description, owner and internal reviewer of a deliverable. */
+function EditDeliverableDialog({ detail, onClose, onSaved }: { detail: DeliverableDetail; onClose: () => void; onSaved: (d: DeliverableDetail) => void }) {
+  const s = detail.deliverable;
+  const staff = useStaff();
+  const [form, setForm] = useState({ title: s.title, description: detail.description ?? '', ownerUserId: s.owner?.id ?? '', reviewerUserId: s.reviewer?.id ?? '' });
+  const save = useMutation({
+    mutationFn: () =>
+      api.put<DeliverableDetail>(`/agency/deliverables/${s.id}`, {
+        title: form.title,
+        description: form.description || null,
+        ownerUserId: form.ownerUserId || null,
+        reviewerUserId: form.reviewerUserId || null,
+        concurrencyStamp: s.concurrencyStamp,
+      }),
+    onSuccess: (d) => {
+      onSaved(d);
+      onClose();
+    },
+  });
+  const people = [{ value: '', label: 'Nobody' }, ...(staff.data ?? []).map((p) => ({ value: p.id, label: p.displayName }))];
+  return (
+    <Dialog
+      open
+      onClose={onClose}
+      title="Edit deliverable"
+      footer={
+        <>
+          <Button variant="secondary" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button type="submit" form="edit-deliverable-form" loading={save.isPending} disabled={form.title.trim().length < 2}>
+            Save
+          </Button>
+        </>
+      }
+    >
+      <form
+        id="edit-deliverable-form"
+        className="dl-form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          save.mutate();
+        }}
+      >
+        {save.error ? <Alert tone="danger">{errorMessage(save.error)}</Alert> : null}
+        <FormField label="Title" required>
+          <Input value={form.title} maxLength={300} onChange={(e) => setForm({ ...form, title: e.target.value })} />
+        </FormField>
+        <FormField label="Description" optional>
+          <Textarea rows={3} value={form.description} maxLength={4000} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+        </FormField>
+        <div className="dl-form__row">
+          <FormField label="Owner">
+            <Select value={form.ownerUserId} options={people} onChange={(e) => setForm({ ...form, ownerUserId: e.target.value })} />
+          </FormField>
+          <FormField label="Internal reviewer" hint="Nobody: any project manager can review.">
+            <Select value={form.reviewerUserId} options={people} onChange={(e) => setForm({ ...form, reviewerUserId: e.target.value })} />
+          </FormField>
+        </div>
+      </form>
+    </Dialog>
+  );
+}
+
 /** Deliverable review workspace: side-by-side versions, pinned comments, internal approval / send to client. */
 export function DeliverableReviewPage() {
   const { deliverableId = '' } = useParams();
   const qc = useQueryClient();
   const [comment, setComment] = useState('');
   const [internalOnly, setInternalOnly] = useState(true);
+  const [editing, setEditing] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const navigate = useNavigate();
+  const { hasPermission } = useAuth();
   const detail = useQuery({
     queryKey: dk.deliverable(deliverableId),
     queryFn: ({ signal }) => api.get<DeliverableDetail>(`/agency/deliverables/${deliverableId}`, { signal }),
@@ -199,10 +272,26 @@ export function DeliverableReviewPage() {
   const can = (a: string) => d.allowedActions.includes(a as never);
   const version = s.currentVersion;
   const act = (path: string, extra: object = {}) => action.mutate({ path, body: { version, comment: comment || null, ...extra } });
+  // Once the client has seen a version, the deliverable is part of the approval record.
+  const deletable = s.sentToClientAt === null && s.status !== 'Approved' && s.status !== 'Published';
   return (
     <div className="dl-page">
       <PageHeader
         title={s.title}
+        actions={
+          <span className="dl-row">
+            {hasPermission(Permissions.DeliverablesSubmit) ? (
+              <Button variant="secondary" leadingIcon={<Pencil />} onClick={() => setEditing(true)}>
+                Edit details
+              </Button>
+            ) : null}
+            {hasPermission(Permissions.ProjectsManage) && deletable ? (
+              <Button variant="ghost" leadingIcon={<Trash2 />} onClick={() => setDeleting(true)}>
+                Delete
+              </Button>
+            ) : null}
+          </span>
+        }
         breadcrumbs={[
           { label: 'Deliverables', to: '/agency/deliverables' },
           { label: s.projectName, to: `/agency/projects/${s.projectId}` },
@@ -224,6 +313,25 @@ export function DeliverableReviewPage() {
         }
       />
       {action.error ? <Alert tone="danger">{errorMessage(action.error)}</Alert> : null}
+      {editing ? <EditDeliverableDialog detail={d} onClose={() => setEditing(false)} onSaved={onSaved} /> : null}
+      <ConfirmDialog
+        open={deleting}
+        onClose={() => setDeleting(false)}
+        tone="danger"
+        title={`Delete “${s.title}”?`}
+        description="The client has never seen it, so its versions, internal comments and review log are removed. This can’t be undone."
+        confirmLabel="Delete deliverable"
+        onConfirm={async () => {
+          await api.delete(`/agency/deliverables/${s.id}`, undefined, { query: { concurrencyStamp: s.concurrencyStamp } });
+          void qc.invalidateQueries({ queryKey: ['delivery', 'deliverables'] });
+          navigate('/agency/deliverables');
+        }}
+      />
+      {d.approvedVersion ? (
+        <Alert tone="info" title="Approved versions are locked">
+          The approved version stays exactly as the client approved it. To change the work, add a new version to a new round of review.
+        </Alert>
+      ) : null}
       {d.approvedVersion ? (
         <Alert tone="success" title={d.autoApproved ? 'Approved automatically' : 'Approved by the client'}>
           Version {d.approvedVersion}

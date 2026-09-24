@@ -2441,6 +2441,75 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.ToTable("payment_proofs", (string)null);
                 });
 
+            modelBuilder.Entity("OptimizeAll.Domain.Billing.ServiceCatalogItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("TEXT")
+                        .IsFixedLength();
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Quantity")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Recurrence")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ServiceSlug")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("TaxRateId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TaxRateId");
+
+                    b.HasIndex("IsActive", "SortOrder");
+
+                    b.ToTable("service_catalog_items", (string)null);
+                });
+
             modelBuilder.Entity("OptimizeAll.Domain.Billing.TaxRate", b =>
                 {
                     b.Property<Guid>("Id")
@@ -3265,6 +3334,10 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("ArchivedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid?>("ClientAccountId")
                         .HasColumnType("TEXT");
 
@@ -3321,6 +3394,8 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ArchivedAt");
+
                     b.HasIndex("ClientAccountId");
 
                     b.HasIndex("Domain")
@@ -3337,6 +3412,10 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ArchivedAt")
+                        .HasPrecision(6)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("BudgetRange")
@@ -3422,6 +3501,8 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ArchivedAt");
+
                     b.HasIndex("CompanyId");
 
                     b.HasIndex("CreatedAt");
@@ -3440,6 +3521,10 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ArchivedAt")
+                        .HasPrecision(6)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("BudgetRange")
@@ -3522,6 +3607,8 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ArchivedAt");
 
                     b.HasIndex("ClientAccountId");
 
@@ -4001,6 +4088,84 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.HasIndex("ProposalVersionId", "Position");
 
                     b.ToTable("proposal_lines", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Crm.ProposalTemplate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("TEXT")
+                        .IsFixedLength();
+
+                    b.Property<string>("Deliverables")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ExecutiveSummary")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Goals")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Lines")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProposalTitle")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Scope")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Terms")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Timeline")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ValidForDays")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("SortOrder");
+
+                    b.ToTable("crm_proposal_templates", (string)null);
                 });
 
             modelBuilder.Entity("OptimizeAll.Domain.Crm.ProposalVersion", b =>
@@ -8337,6 +8502,10 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasPrecision(6)
                         .HasColumnType("TEXT");
@@ -9280,6 +9449,10 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasPrecision(6)
                         .HasColumnType("TEXT");
@@ -9287,6 +9460,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(2000)
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -9401,6 +9577,10 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("EditedAt")
                         .HasPrecision(6)
                         .HasColumnType("TEXT");
 
@@ -14291,6 +14471,14 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasForeignKey("UploadedByUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Billing.ServiceCatalogItem", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Billing.TaxRate", null)
+                        .WithMany()
+                        .HasForeignKey("TaxRateId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("OptimizeAll.Domain.Campaigns.Campaign", b =>

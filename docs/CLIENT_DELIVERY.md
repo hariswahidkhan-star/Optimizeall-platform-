@@ -119,6 +119,21 @@ Comments marked *Internal* are never shown to the client.
 
 Viewers and Billing users see the same pages read-only.
 
+## Editing and templates
+
+- **Templates** (*Delivery → Templates*): project, brief and report templates can be created, edited, deactivated and —
+  for your own templates — deleted; built-in templates can be edited or deactivated. The **Onboarding checklist** tab
+  sets the steps every new client starts with (existing clients keep theirs); on a client, steps can be edited or
+  removed.
+- **Milestones and recurring tasks** can be edited and deleted; recurring tasks can be paused and resumed.
+- **Task comments** can be edited by their author and deleted by the author or a project manager.
+- **Deliverables** can be edited (title, description, owner, reviewer); one the client never saw can be deleted.
+  Approved versions never change: add a new version instead.
+- **Time**: entries can be edited until the week is submitted. The owner can *Recall* a submitted week; a project
+  manager can reopen someone else's approved (with a reason) or returned week.
+- **Briefs** get a status (In review, Accepted, Declined); **meetings** can be edited (notes, status, action items) and
+  an action item can become a task; staff can rename a **conversation**.
+
 ## Files and privacy
 
 Uploads accept PNG, JPEG, WebP, PDF and MP4 up to 50 MB; the file content is checked, not just the extension.

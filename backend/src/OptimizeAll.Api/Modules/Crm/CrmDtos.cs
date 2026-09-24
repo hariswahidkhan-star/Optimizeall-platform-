@@ -43,16 +43,20 @@ public sealed class CompanyQuery : PageQuery
     public Guid? OwnerUserId { get; set; }
     public string? Industry { get; set; }
     public string? Tag { get; set; }
+
+    /// <summary>false/omitted: active records only; true: archived records only.</summary>
+    public bool? Archived { get; set; }
 }
 
 public sealed record CompanySummaryDto(
     Guid Id, string Name, string? Domain, string? Industry, CompanySize Size, string? CountryCode, UserRefDto? Owner,
-    IReadOnlyList<string> Tags, int Contacts, int OpenDeals, Guid? ClientAccountId, DateTime CreatedAt);
+    IReadOnlyList<string> Tags, int Contacts, int OpenDeals, Guid? ClientAccountId, DateTime CreatedAt, DateTime? ArchivedAt = null,
+    Guid ConcurrencyStamp = default);
 
 public sealed record CompanyDto(
     Guid Id, string Name, string? Domain, string? Industry, CompanySize Size, string? CountryCode, UserRefDto? Owner,
     IReadOnlyList<string> Tags, string CustomFields, Guid? ClientAccountId, IReadOnlyList<ContactSummaryDto> Contacts,
-    IReadOnlyList<DealSummaryDto> Deals, DateTime CreatedAt, DateTime UpdatedAt, Guid ConcurrencyStamp);
+    IReadOnlyList<DealSummaryDto> Deals, DateTime CreatedAt, DateTime UpdatedAt, Guid ConcurrencyStamp, DateTime? ArchivedAt = null);
 
 // ---------------------------------------------------------------- Contacts
 
@@ -98,12 +102,15 @@ public sealed class ContactQuery : PageQuery
     public string? Tag { get; set; }
     public ConsentStatus? ConsentStatus { get; set; }
     public int? MinScore { get; set; }
+
+    /// <summary>false/omitted: active records only; true: archived records only.</summary>
+    public bool? Archived { get; set; }
 }
 
 public sealed record ContactSummaryDto(
     Guid Id, string FirstName, string? LastName, string DisplayName, string? Email, string? Phone, string? JobTitle, Guid? CompanyId,
     string? CompanyName, LifecycleStage LifecycleStage, UserRefDto? Owner, ConsentStatus ConsentStatus, IReadOnlyList<string> Tags,
-    string? Source, int Score, DateTime CreatedAt);
+    string? Source, int Score, DateTime CreatedAt, DateTime? ArchivedAt = null, Guid ConcurrencyStamp = default);
 
 public sealed record ScoreLineDto(string Rule, ScoringCategory Category, int Points);
 
@@ -112,7 +119,7 @@ public sealed record ContactDto(
     string? CompanyName, LifecycleStage LifecycleStage, UserRefDto? Owner, ConsentStatus ConsentStatus, DateTime? ConsentChangedAt,
     IReadOnlyList<string> Tags, string? Source, string? BudgetRange, int Score, IReadOnlyList<ScoreLineDto> ScoreBreakdown,
     UtmDto FirstTouch, UtmDto LastTouch, IReadOnlyList<DealSummaryDto> Deals, IReadOnlyDictionary<string, int> Engagement,
-    DateTime CreatedAt, DateTime UpdatedAt, Guid ConcurrencyStamp);
+    DateTime CreatedAt, DateTime UpdatedAt, Guid ConcurrencyStamp, DateTime? ArchivedAt = null);
 
 // ---------------------------------------------------------------- Pipeline & deals
 
@@ -131,6 +138,9 @@ public sealed class StageRequest
 
     public StageKind Kind { get; set; } = StageKind.Open;
     public bool IsActive { get; set; } = true;
+
+    /// <summary>Optional: the stamp of the stage as loaded (a stale stamp answers 409 instead of overwriting another edit).</summary>
+    public Guid? ConcurrencyStamp { get; set; }
 }
 
 public sealed class UpdatePipelineRequest
@@ -198,13 +208,16 @@ public sealed class DealQuery : PageQuery
     public DealSource? Source { get; set; }
     public Guid? CompanyId { get; set; }
     public Guid? ContactId { get; set; }
+
+    /// <summary>false/omitted: active records only; true: archived records only.</summary>
+    public bool? Archived { get; set; }
 }
 
 public sealed record DealSummaryDto(
     Guid Id, string Title, Guid StageId, string StageName, DealStatus Status, decimal Value, string Currency, int WinProbability,
     decimal WeightedValue, DateOnly? ExpectedCloseDate, Guid? CompanyId, string? CompanyName, Guid? PrimaryContactId, string? ContactName,
     UserRefDto? Owner, DealSource Source, IReadOnlyList<string> ServiceSlugs, int? Score, DateTime StageChangedAt, DateTime CreatedAt,
-    Guid ConcurrencyStamp);
+    Guid ConcurrencyStamp, DateTime? ArchivedAt = null);
 
 public sealed record DealContactDto(Guid ContactId, string DisplayName, string? Email, string? JobTitle, string? Role, bool Primary);
 
@@ -216,7 +229,8 @@ public sealed record DealDto(
     int WinProbability, decimal WeightedValue, DateOnly? ExpectedCloseDate, Guid? CompanyId, string? CompanyName, Guid? PrimaryContactId,
     UserRefDto? Owner, DealSource Source, string? SourceDetail, string? BudgetRange, IReadOnlyList<string> ServiceSlugs, UtmDto FirstTouch,
     UtmDto LastTouch, string? LostReason, DateTime? ClosedAt, Guid? ClientAccountId, IReadOnlyList<DealContactDto> Contacts,
-    IReadOnlyList<DealProposalDto> Proposals, DateTime StageChangedAt, DateTime CreatedAt, DateTime UpdatedAt, Guid ConcurrencyStamp);
+    IReadOnlyList<DealProposalDto> Proposals, DateTime StageChangedAt, DateTime CreatedAt, DateTime UpdatedAt, Guid ConcurrencyStamp,
+    DateTime? ArchivedAt = null);
 
 public sealed record BoardColumnDto(StageDto Stage, int Count, IReadOnlyList<CurrencyValue> Totals, IReadOnlyList<DealSummaryDto> Deals);
 
@@ -343,3 +357,73 @@ public sealed record ImportRowResultDto(int Row, string Status, string? Email, G
 public sealed record ImportResultDto(bool DryRun, int TotalRows, int Created, int Updated, int Skipped, int Failed, IReadOnlyList<ImportRowResultDto> Rows);
 
 public sealed record TimelineEntryDto(string Kind, DateTime At, string Title, string? Body, ActivityDto? Activity);
+
+// ---------------------------------------------------------------- Archive, bulk actions, options
+
+/// <summary>A bulk action on up to 200 contacts, companies or deals.</summary>
+public sealed class CrmBulkRequest
+{
+    [Required, MinLength(1), MaxLength(200)]
+    public List<Guid> Ids { get; set; } = new();
+
+    /// <summary>archive, restore, assignOwner (ownerUserId; null = unassign), setLifecycle (contacts), addTag / removeTag (contacts, companies).</summary>
+    [Required, RegularExpression("^(archive|restore|assignOwner|setLifecycle|addTag|removeTag)$")]
+    public string Action { get; set; } = string.Empty;
+
+    public Guid? OwnerUserId { get; set; }
+    public LifecycleStage? LifecycleStage { get; set; }
+
+    [MaxLength(40)]
+    public string? Tag { get; set; }
+}
+
+public sealed record CrmBulkResultDto(int Requested, int Updated, int NotFound);
+
+public sealed class UpdateSavedViewRequest
+{
+    [Required, StringLength(100, MinimumLength = 1)]
+    public string Name { get; set; } = string.Empty;
+
+    /// <summary>Null keeps the saved filters.</summary>
+    public Dictionary<string, string>? Filters { get; set; }
+
+    public bool Shared { get; set; }
+}
+
+/// <summary>Agency-editable CRM option lists (setting <c>crm.options</c>).</summary>
+public sealed class CrmOptions
+{
+    /// <summary>Reasons offered when a deal is moved to Lost (free text is always allowed as "Other").</summary>
+    public List<string> LostReasons { get; set; } = new()
+    {
+        "Budget", "Chose a competitor", "No decision / went silent", "Timing: not a priority now", "Not a fit for our services", "Price too high",
+    };
+
+    /// <summary>Budget ranges offered on contacts and deals (and matched by fit scoring rules).</summary>
+    public List<string> BudgetRanges { get; set; } = new() { "<2k", "2k-5k", "5k-10k", "10k-25k", "25k+" };
+
+    /// <summary>Industries suggested on companies (free text is still accepted).</summary>
+    public List<string> Industries { get; set; } = new()
+    {
+        "Retail & e-commerce", "Health & fitness", "Travel & hospitality", "Beauty & skincare", "Food & beverage", "Professional services",
+        "Technology & SaaS", "Real estate", "Education", "Finance",
+    };
+}
+
+public sealed class CrmOptionsRequest
+{
+    [Required, MaxLength(50)]
+    public List<string> LostReasons { get; set; } = new();
+
+    [Required, MaxLength(50)]
+    public List<string> BudgetRanges { get; set; } = new();
+
+    [Required, MaxLength(100)]
+    public List<string> Industries { get; set; } = new();
+
+    /// <summary>The <see cref="CrmOptionsDto.Version"/> that was edited (409 when someone saved in between).</summary>
+    [Required, StringLength(64)]
+    public string? Version { get; set; }
+}
+
+public sealed record CrmOptionsDto(IReadOnlyList<string> LostReasons, IReadOnlyList<string> BudgetRanges, IReadOnlyList<string> Industries, string Version);

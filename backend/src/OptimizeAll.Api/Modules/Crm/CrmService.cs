@@ -87,6 +87,7 @@ public sealed class CrmService(
     public async Task<PagedResult<CompanySummaryDto>> ListCompaniesAsync(CompanyQuery q, CancellationToken ct)
     {
         var companies = db.Set<CrmCompany>().AsNoTracking();
+        companies = q.Archived == true ? companies.Where(c => c.ArchivedAt != null) : companies.Where(c => c.ArchivedAt == null);
         if (!string.IsNullOrWhiteSpace(q.Search))
             companies = companies.Where(c => EF.Functions.Like(c.Name, Like(q.Search), "\\") || EF.Functions.Like(c.Domain!, Like(q.Search), "\\"));
         if (q.OwnerUserId is { } owner) companies = companies.Where(c => c.OwnerUserId == owner);
@@ -95,6 +96,8 @@ public sealed class CrmService(
         companies = q.Sort switch
         {
             "name" => q.Desc ? companies.OrderByDescending(c => c.Name) : companies.OrderBy(c => c.Name),
+            "industry" => q.Desc ? companies.OrderByDescending(c => c.Industry) : companies.OrderBy(c => c.Industry),
+            "updated" => q.Desc ? companies.OrderByDescending(c => c.UpdatedAt) : companies.OrderBy(c => c.UpdatedAt),
             _ => q.Desc ? companies.OrderByDescending(c => c.CreatedAt) : companies.OrderBy(c => c.CreatedAt),
         };
         var total = await companies.CountAsync(ct);
@@ -106,7 +109,8 @@ public sealed class CrmService(
             .GroupBy(d => d.CompanyId).Select(g => new { g.Key, Count = g.Count() }).ToDictionaryAsync(x => x.Key!.Value, x => x.Count, ct);
         var users = await UsersAsync(rows.Select(r => r.OwnerUserId), ct);
         return new PagedResult<CompanySummaryDto>(rows.Select(c => new CompanySummaryDto(c.Id, c.Name, c.Domain, c.Industry, c.Size, c.CountryCode,
-            Ref(users, c.OwnerUserId), c.Tags, contacts.GetValueOrDefault(c.Id), deals.GetValueOrDefault(c.Id), c.ClientAccountId, c.CreatedAt)).ToList(),
+            Ref(users, c.OwnerUserId), c.Tags, contacts.GetValueOrDefault(c.Id), deals.GetValueOrDefault(c.Id), c.ClientAccountId, c.CreatedAt, c.ArchivedAt,
+            c.ConcurrencyStamp)).ToList(),
             total, q.Page, q.PageSize);
     }
 
@@ -117,7 +121,7 @@ public sealed class CrmService(
         var deals = await ListDealsAsync(new DealQuery { CompanyId = id, PageSize = 200 }, ct);
         var users = await UsersAsync(new[] { c.OwnerUserId }, ct);
         return new CompanyDto(c.Id, c.Name, c.Domain, c.Industry, c.Size, c.CountryCode, Ref(users, c.OwnerUserId), c.Tags, c.CustomFieldsJson,
-            c.ClientAccountId, contacts.Items, deals.Items, c.CreatedAt, c.UpdatedAt, c.ConcurrencyStamp);
+            c.ClientAccountId, contacts.Items, deals.Items, c.CreatedAt, c.UpdatedAt, c.ConcurrencyStamp, c.ArchivedAt);
     }
 
     public async Task<CompanyDto> CreateCompanyAsync(CompanyRequest r, CancellationToken ct)
@@ -134,6 +138,7 @@ public sealed class CrmService(
     {
         var company = await db.Set<CrmCompany>().FirstOrDefaultAsync(c => c.Id == id, ct) ?? throw DomainException.NotFound("Company");
         RequireStamp(db, company, r.ConcurrencyStamp);
+        EnsureNotArchived(company.ArchivedAt, "company");
         var before = new { company.Name, company.Domain, company.Industry, company.Size, company.OwnerUserId };
         await ApplyAsync(company, r, ct);
         audit.Record("crm.company_updated", nameof(CrmCompany), id, before,
@@ -182,6 +187,9 @@ public sealed class CrmService(
         {
             "name" => q.Desc ? contacts.OrderByDescending(c => c.FirstName).ThenByDescending(c => c.LastName) : contacts.OrderBy(c => c.FirstName).ThenBy(c => c.LastName),
             "score" => q.Desc ? contacts.OrderByDescending(c => c.Score) : contacts.OrderBy(c => c.Score),
+            "email" => q.Desc ? contacts.OrderByDescending(c => c.Email) : contacts.OrderBy(c => c.Email),
+            "lifecycle" => q.Desc ? contacts.OrderByDescending(c => c.LifecycleStage) : contacts.OrderBy(c => c.LifecycleStage),
+            "updated" => q.Desc ? contacts.OrderByDescending(c => c.UpdatedAt) : contacts.OrderBy(c => c.UpdatedAt),
             _ => q.Desc ? contacts.OrderByDescending(c => c.CreatedAt) : contacts.OrderBy(c => c.CreatedAt),
         };
         var total = await contacts.CountAsync(ct);
@@ -192,6 +200,7 @@ public sealed class CrmService(
     public IQueryable<CrmContact> FilterContacts(ContactQuery q)
     {
         var contacts = db.Set<CrmContact>().AsNoTracking();
+        contacts = q.Archived == true ? contacts.Where(c => c.ArchivedAt != null) : contacts.Where(c => c.ArchivedAt == null);
         if (!string.IsNullOrWhiteSpace(q.Search))
         {
             var p = Like(q.Search);
@@ -214,7 +223,7 @@ public sealed class CrmService(
         var users = await UsersAsync(rows.Select(r => r.OwnerUserId), ct);
         return rows.Select(c => new ContactSummaryDto(c.Id, c.FirstName, c.LastName, c.DisplayName, c.Email, c.Phone, c.JobTitle, c.CompanyId,
             c.CompanyId is { } cid ? companies.GetValueOrDefault(cid) : null, c.LifecycleStage, Ref(users, c.OwnerUserId), c.ConsentStatus, c.Tags,
-            c.Source, c.Score, c.CreatedAt)).ToList();
+            c.Source, c.Score, c.CreatedAt, c.ArchivedAt, c.ConcurrencyStamp)).ToList();
     }
 
     public async Task<ContactDto> GetContactAsync(Guid id, CancellationToken ct)
@@ -227,7 +236,7 @@ public sealed class CrmService(
         return new ContactDto(c.Id, c.FirstName, c.LastName, c.DisplayName, c.Email, c.Phone, c.JobTitle, c.CompanyId, companyName, c.LifecycleStage,
             Ref(users, c.OwnerUserId), c.ConsentStatus, c.ConsentChangedAt, c.Tags, c.Source, c.BudgetRange, c.Score,
             score.Lines.Select(l => new ScoreLineDto(l.Rule, l.Category, l.Points)).ToList(), ToDto(c.FirstTouch), ToDto(c.LastTouch), deals.Items,
-            await scoring.EngagementCountsAsync(id, ct), c.CreatedAt, c.UpdatedAt, c.ConcurrencyStamp);
+            await scoring.EngagementCountsAsync(id, ct), c.CreatedAt, c.UpdatedAt, c.ConcurrencyStamp, c.ArchivedAt);
     }
 
     public async Task<ContactDto> CreateContactAsync(ContactRequest r, CancellationToken ct)
@@ -245,6 +254,7 @@ public sealed class CrmService(
     {
         var contact = await db.Set<CrmContact>().FirstOrDefaultAsync(c => c.Id == id, ct) ?? throw DomainException.NotFound("Contact");
         RequireStamp(db, contact, r.ConcurrencyStamp);
+        EnsureNotArchived(contact.ArchivedAt, "contact");
         var before = new { contact.Email, contact.LifecycleStage, contact.OwnerUserId, contact.ConsentStatus, contact.CompanyId };
         await ApplyAsync(contact, r, ct);
         audit.Record("crm.contact_updated", nameof(CrmContact), id, before,
@@ -310,6 +320,9 @@ public sealed class CrmService(
             throw new DomainException("crm.invalid_pipeline", "Stage names must be unique.");
 
         var existing = await db.Set<PipelineStage>().ToListAsync(ct);
+        foreach (var s in input.Where(s => s.Id.HasValue && s.ConcurrencyStamp.HasValue))
+            if (existing.FirstOrDefault(e => e.Id == s.Id) is { } current && current.ConcurrencyStamp != s.ConcurrencyStamp)
+                throw DomainException.Conflict("concurrency.conflict", "The pipeline was changed by someone else. Reload and try again.");
         var keptIds = input.Where(s => s.Id.HasValue).Select(s => s.Id!.Value).ToHashSet();
         if (keptIds.Any(id => existing.All(e => e.Id != id)))
             throw DomainException.NotFound("Stage");
@@ -351,6 +364,7 @@ public sealed class CrmService(
     public async Task<PagedResult<DealSummaryDto>> ListDealsAsync(DealQuery q, CancellationToken ct)
     {
         var deals = db.Set<CrmDeal>().AsNoTracking();
+        deals = q.Archived == true ? deals.Where(d => d.ArchivedAt != null) : deals.Where(d => d.ArchivedAt == null);
         if (!string.IsNullOrWhiteSpace(q.Search))
         {
             var p = Like(q.Search);
@@ -372,6 +386,7 @@ public sealed class CrmService(
             "title" => q.Desc ? deals.OrderByDescending(d => d.Title) : deals.OrderBy(d => d.Title),
             "expectedClose" => q.Desc ? deals.OrderByDescending(d => d.ExpectedCloseDate) : deals.OrderBy(d => d.ExpectedCloseDate),
             "stageChanged" => q.Desc ? deals.OrderByDescending(d => d.StageChangedAt) : deals.OrderBy(d => d.StageChangedAt),
+            "value" => q.Desc ? deals.OrderByDescending(d => d.Value) : deals.OrderBy(d => d.Value),
             _ => q.Desc ? deals.OrderByDescending(d => d.CreatedAt) : deals.OrderBy(d => d.CreatedAt),
         };
         var total = await deals.CountAsync(ct);
@@ -395,14 +410,14 @@ public sealed class CrmService(
             return new DealSummaryDto(d.Id, d.Title, d.StageId, stage?.Name ?? "—", d.Status, d.Value, d.Currency, probability,
                 Money.Round(d.Value * probability / 100m, d.Currency), d.ExpectedCloseDate, d.CompanyId,
                 d.CompanyId is { } cid ? companies.GetValueOrDefault(cid) : null, d.PrimaryContactId, contact?.DisplayName, Ref(users, d.OwnerUserId),
-                d.Source, d.ServiceSlugs, contact?.Score, d.StageChangedAt, d.CreatedAt, d.ConcurrencyStamp);
+                d.Source, d.ServiceSlugs, contact?.Score, d.StageChangedAt, d.CreatedAt, d.ConcurrencyStamp, d.ArchivedAt);
         }).ToList();
     }
 
     public async Task<BoardDto> BoardAsync(DealQuery q, CancellationToken ct)
     {
         var stages = await db.Set<PipelineStage>().AsNoTracking().Where(s => s.IsActive).OrderBy(s => s.Position).ToListAsync(ct);
-        var deals = db.Set<CrmDeal>().AsNoTracking();
+        var deals = db.Set<CrmDeal>().AsNoTracking().Where(d => d.ArchivedAt == null);
         if (q.OwnerUserId is { } owner) deals = deals.Where(d => d.OwnerUserId == owner);
         if (!string.IsNullOrWhiteSpace(q.Search)) deals = deals.Where(d => EF.Functions.Like(d.Title, Like(q.Search), "\\"));
         // Open deals, plus deals closed in the last 30 days (so a just-won deal stays visible in the Won column).
@@ -445,7 +460,7 @@ public sealed class CrmService(
             proposals.Select(p => new DealProposalDto(p.Id, p.Number, p.Title, p.Status, p.CurrentVersion,
                 versions.FirstOrDefault(v => v.ProposalId == p.Id && v.VersionNumber == p.CurrentVersion)?.Total ?? 0, p.Currency, p.SentAt,
                 p.AcceptedAt)).ToList(),
-            d.StageChangedAt, d.CreatedAt, d.UpdatedAt, d.ConcurrencyStamp);
+            d.StageChangedAt, d.CreatedAt, d.UpdatedAt, d.ConcurrencyStamp, d.ArchivedAt);
     }
 
     public async Task<DealDto> CreateDealAsync(DealRequest r, CancellationToken ct)
@@ -468,6 +483,7 @@ public sealed class CrmService(
     {
         var deal = await db.Set<CrmDeal>().FirstOrDefaultAsync(d => d.Id == id, ct) ?? throw DomainException.NotFound("Deal");
         RequireStamp(db, deal, r.ConcurrencyStamp);
+        EnsureNotArchived(deal.ArchivedAt, "deal");
         var before = new { deal.Title, deal.Value, deal.Currency, deal.OwnerUserId, deal.ExpectedCloseDate };
         await ApplyAsync(deal, r, ct);
         if (r.FirstTouch is not null) deal.FirstTouch = FromDto(r.FirstTouch);
@@ -519,6 +535,7 @@ public sealed class CrmService(
     {
         var deal = await db.Set<CrmDeal>().FirstOrDefaultAsync(d => d.Id == id, ct) ?? throw DomainException.NotFound("Deal");
         RequireStamp(db, deal, r.ConcurrencyStamp);
+        EnsureNotArchived(deal.ArchivedAt, "deal");
         var target = await db.Set<PipelineStage>().AsNoTracking().FirstOrDefaultAsync(s => s.Id == r.StageId && s.IsActive, ct)
                      ?? throw new DomainException("crm.invalid_stage", "Choose an active pipeline stage.");
         var from = await db.Set<PipelineStage>().AsNoTracking().FirstAsync(s => s.Id == deal.StageId, ct);
@@ -734,6 +751,205 @@ public sealed class CrmService(
         if (deleted == 0) throw DomainException.NotFound("View");
     }
 
+    /// <summary>Renames a view, changes whether it is shared, or replaces its filters (owner only; others get 404).</summary>
+    public async Task<SavedViewDto> UpdateViewAsync(Guid id, UpdateSavedViewRequest r, CancellationToken ct)
+    {
+        var view = await db.Set<CrmSavedView>().FirstOrDefaultAsync(v => v.Id == id && v.OwnerUserId == currentUser.Id, ct)
+                   ?? throw DomainException.NotFound("View");
+        if (r.Filters is { } filters)
+        {
+            if (filters.Count > 20 || filters.Any(kv => kv.Key.Length > 40 || kv.Value.Length > 200 || !kv.Key.All(char.IsAsciiLetterOrDigit)))
+                throw new DomainException("crm.invalid_view", "A view can hold up to 20 simple filters.");
+            view.FiltersJson = JsonSerializer.Serialize(filters);
+        }
+        view.Name = r.Name.Trim();
+        view.Shared = r.Shared;
+        await db.SaveChangesAsync(ct);
+        return new SavedViewDto(view.Id, view.Name, view.Entity, ParseFilters(view.FiltersJson), view.Shared, true, view.CreatedAt);
+    }
+
+    // ================================================================ Archive & bulk actions
+
+    /// <summary>Archived records are read-only until restored (edits answer 409 with the reason).</summary>
+    public static void EnsureNotArchived(DateTime? archivedAt, string what)
+    {
+        if (archivedAt is not null)
+            throw DomainException.Conflict("crm.archived", $"This {what} is archived. Restore it before making changes.");
+    }
+
+    private DateTime? ToggleArchive(DateTime? current, bool archive)
+    {
+        if (archive && current is not null) throw DomainException.Conflict("crm.already_archived", "This record is already archived.");
+        if (!archive && current is null) throw DomainException.Conflict("crm.not_archived", "This record isn't archived.");
+        return archive ? Now : null;
+    }
+
+    public async Task<CompanyDto> ArchiveCompanyAsync(Guid id, bool archive, StampOnly r, CancellationToken ct)
+    {
+        var company = await db.Set<CrmCompany>().FirstOrDefaultAsync(c => c.Id == id, ct) ?? throw DomainException.NotFound("Company");
+        RequireStamp(db, company, r.ConcurrencyStamp);
+        if (archive && company.ClientAccountId is not null)
+            throw DomainException.Conflict("crm.company_is_client",
+                "This company is a client. Change the client's status instead of archiving the company.");
+        company.ArchivedAt = ToggleArchive(company.ArchivedAt, archive);
+        audit.Record(archive ? "crm.company_archived" : "crm.company_restored", nameof(CrmCompany), id);
+        await db.SaveChangesAsync(ct);
+        db.ChangeTracker.Clear();
+        return await GetCompanyAsync(id, ct);
+    }
+
+    public async Task<ContactDto> ArchiveContactAsync(Guid id, bool archive, StampOnly r, CancellationToken ct)
+    {
+        var contact = await db.Set<CrmContact>().FirstOrDefaultAsync(c => c.Id == id, ct) ?? throw DomainException.NotFound("Contact");
+        RequireStamp(db, contact, r.ConcurrencyStamp);
+        contact.ArchivedAt = ToggleArchive(contact.ArchivedAt, archive);
+        audit.Record(archive ? "crm.contact_archived" : "crm.contact_restored", nameof(CrmContact), id);
+        await db.SaveChangesAsync(ct);
+        db.ChangeTracker.Clear();
+        return await GetContactAsync(id, ct);
+    }
+
+    public async Task<DealDto> ArchiveDealAsync(Guid id, bool archive, StampOnly r, CancellationToken ct)
+    {
+        var deal = await db.Set<CrmDeal>().FirstOrDefaultAsync(d => d.Id == id, ct) ?? throw DomainException.NotFound("Deal");
+        RequireStamp(db, deal, r.ConcurrencyStamp);
+        if (archive && await db.Set<Proposal>().AnyAsync(p => p.DealId == id && (p.Status == ProposalStatus.Sent || p.Status == ProposalStatus.Viewed), ct))
+            throw DomainException.Conflict("crm.deal_has_open_proposal",
+                "A proposal on this deal is waiting for the client. Withdraw it before archiving the deal.");
+        deal.ArchivedAt = ToggleArchive(deal.ArchivedAt, archive);
+        audit.Record(archive ? "crm.deal_archived" : "crm.deal_restored", nameof(CrmDeal), id);
+        await db.SaveChangesAsync(ct);
+        db.ChangeTracker.Clear();
+        return await GetDealAsync(id, ct);
+    }
+
+    /// <summary>
+    /// Applies one action to many contacts. Unknown ids are counted as not found, rows the action doesn't apply to (already
+    /// archived, unchanged) are skipped, and the batch is audited once.
+    /// </summary>
+    public async Task<CrmBulkResultDto> BulkContactsAsync(CrmBulkRequest r, CancellationToken ct)
+    {
+        await ValidateBulkAsync(r, ct);
+        var ids = r.Ids.Distinct().ToList();
+        var rows = await db.Set<CrmContact>().Where(c => ids.Contains(c.Id)).ToListAsync(ct);
+        var updated = 0;
+        foreach (var c in rows)
+        {
+            var changed = r.Action switch
+            {
+                "archive" => Apply(c.ArchivedAt is null, () => c.ArchivedAt = Now),
+                "restore" => Apply(c.ArchivedAt is not null, () => c.ArchivedAt = null),
+                "assignOwner" => Apply(c.ArchivedAt is null && c.OwnerUserId != r.OwnerUserId, () => c.OwnerUserId = r.OwnerUserId),
+                "setLifecycle" => Apply(c.ArchivedAt is null && c.LifecycleStage != r.LifecycleStage,
+                    () => c.LifecycleStage = r.LifecycleStage!.Value),
+                "addTag" => Apply(c.ArchivedAt is null && !c.Tags.Contains(BulkTag(r)), () =>
+                {
+                    c.Tags = CrmNormalization.Tags(c.Tags.Append(BulkTag(r)));
+                    c.TagIndex = TagIndex(c.Tags);
+                }),
+                "removeTag" => Apply(c.ArchivedAt is null && c.Tags.Contains(BulkTag(r)), () =>
+                {
+                    c.Tags = c.Tags.Where(t => t != BulkTag(r)).ToList();
+                    c.TagIndex = TagIndex(c.Tags);
+                }),
+                _ => throw InvalidBulk("contacts"),
+            };
+            if (changed) updated++;
+        }
+        audit.Record("crm.contacts_bulk_" + r.Action, nameof(CrmContact), "bulk",
+            after: new { r.Action, Ids = rows.Select(x => x.Id).ToList(), r.OwnerUserId, r.LifecycleStage, r.Tag });
+        await db.SaveChangesAsync(ct);
+        if (r.Action is "setLifecycle" or "addTag" or "removeTag")
+            foreach (var c in rows) await scoring.RecomputeAsync(c.Id, ct);
+        return new CrmBulkResultDto(ids.Count, updated, ids.Count - rows.Count);
+    }
+
+    public async Task<CrmBulkResultDto> BulkCompaniesAsync(CrmBulkRequest r, CancellationToken ct)
+    {
+        if (r.Action == "setLifecycle") throw InvalidBulk("companies");
+        await ValidateBulkAsync(r, ct);
+        var ids = r.Ids.Distinct().ToList();
+        var rows = await db.Set<CrmCompany>().Where(c => ids.Contains(c.Id)).ToListAsync(ct);
+        var updated = 0;
+        foreach (var c in rows)
+        {
+            var changed = r.Action switch
+            {
+                // Client companies are skipped: they follow the client's status instead.
+                "archive" => Apply(c.ArchivedAt is null && c.ClientAccountId is null, () => c.ArchivedAt = Now),
+                "restore" => Apply(c.ArchivedAt is not null, () => c.ArchivedAt = null),
+                "assignOwner" => Apply(c.ArchivedAt is null && c.OwnerUserId != r.OwnerUserId, () => c.OwnerUserId = r.OwnerUserId),
+                "addTag" => Apply(c.ArchivedAt is null && !c.Tags.Contains(BulkTag(r)), () =>
+                {
+                    c.Tags = CrmNormalization.Tags(c.Tags.Append(BulkTag(r)));
+                    c.TagIndex = TagIndex(c.Tags);
+                }),
+                "removeTag" => Apply(c.ArchivedAt is null && c.Tags.Contains(BulkTag(r)), () =>
+                {
+                    c.Tags = c.Tags.Where(t => t != BulkTag(r)).ToList();
+                    c.TagIndex = TagIndex(c.Tags);
+                }),
+                _ => throw InvalidBulk("companies"),
+            };
+            if (changed) updated++;
+        }
+        audit.Record("crm.companies_bulk_" + r.Action, nameof(CrmCompany), "bulk",
+            after: new { r.Action, Ids = rows.Select(x => x.Id).ToList(), r.OwnerUserId, r.Tag });
+        await db.SaveChangesAsync(ct);
+        return new CrmBulkResultDto(ids.Count, updated, ids.Count - rows.Count);
+    }
+
+    public async Task<CrmBulkResultDto> BulkDealsAsync(CrmBulkRequest r, CancellationToken ct)
+    {
+        if (r.Action is "setLifecycle" or "addTag" or "removeTag") throw InvalidBulk("deals");
+        await ValidateBulkAsync(r, ct);
+        var ids = r.Ids.Distinct().ToList();
+        var rows = await db.Set<CrmDeal>().Where(d => ids.Contains(d.Id)).ToListAsync(ct);
+        // Deals with a proposal waiting for the client are skipped when archiving.
+        var awaiting = r.Action == "archive"
+            ? (await db.Set<Proposal>().Where(p => p.DealId != null && ids.Contains(p.DealId.Value) &&
+                                                   (p.Status == ProposalStatus.Sent || p.Status == ProposalStatus.Viewed))
+                .Select(p => p.DealId!.Value).ToListAsync(ct)).ToHashSet()
+            : new HashSet<Guid>();
+        var updated = 0;
+        foreach (var d in rows)
+        {
+            var changed = r.Action switch
+            {
+                "archive" => Apply(d.ArchivedAt is null && !awaiting.Contains(d.Id), () => d.ArchivedAt = Now),
+                "restore" => Apply(d.ArchivedAt is not null, () => d.ArchivedAt = null),
+                "assignOwner" => Apply(d.ArchivedAt is null && d.OwnerUserId != r.OwnerUserId, () => d.OwnerUserId = r.OwnerUserId),
+                _ => throw InvalidBulk("deals"),
+            };
+            if (changed) updated++;
+        }
+        audit.Record("crm.deals_bulk_" + r.Action, nameof(CrmDeal), "bulk",
+            after: new { r.Action, Ids = rows.Select(x => x.Id).ToList(), r.OwnerUserId });
+        await db.SaveChangesAsync(ct);
+        return new CrmBulkResultDto(ids.Count, updated, ids.Count - rows.Count);
+    }
+
+    private async Task ValidateBulkAsync(CrmBulkRequest r, CancellationToken ct)
+    {
+        if (r.Action == "assignOwner") await ValidateUserAsync(r.OwnerUserId, "ownerUserId", ct);
+        if (r.Action == "setLifecycle" && (r.LifecycleStage is null || !Enum.IsDefined(r.LifecycleStage.Value)))
+            throw new DomainException("crm.invalid_bulk", "Choose a lifecycle stage.",
+                errors: new Dictionary<string, string[]> { ["lifecycleStage"] = new[] { "Choose a lifecycle stage." } });
+        if (r.Action is "addTag" or "removeTag" && CrmNormalization.Tags(new[] { r.Tag ?? string.Empty }).Count == 0)
+            throw new DomainException("crm.invalid_bulk", "Enter a tag (up to 40 characters).",
+                errors: new Dictionary<string, string[]> { ["tag"] = new[] { "Enter a tag (up to 40 characters)." } });
+    }
+
+    private static string BulkTag(CrmBulkRequest r) => CrmNormalization.Tags(new[] { r.Tag ?? string.Empty }).Single();
+
+    private static bool Apply(bool condition, Action apply)
+    {
+        if (condition) apply();
+        return condition;
+    }
+
+    private static DomainException InvalidBulk(string entity) => new("crm.invalid_bulk", $"That action isn't available for {entity}.");
+
     private static IReadOnlyDictionary<string, string> ParseFilters(string json)
     {
         try
@@ -752,7 +968,7 @@ public sealed class CrmService(
     {
         var now = Now;
         var stages = await db.Set<PipelineStage>().AsNoTracking().Where(s => s.IsActive).OrderBy(s => s.Position).ToListAsync(ct);
-        var open = await db.Set<CrmDeal>().AsNoTracking().Where(d => d.Status == DealStatus.Open)
+        var open = await db.Set<CrmDeal>().AsNoTracking().Where(d => d.Status == DealStatus.Open && d.ArchivedAt == null)
             .Select(d => new { d.StageId, d.Value, d.Currency }).ToListAsync(ct);
         var probability = stages.ToDictionary(s => s.Id, s => s.WinProbability);
         var pipeline = stages.Where(s => s.Kind == StageKind.Open).Select(s =>

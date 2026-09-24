@@ -197,6 +197,32 @@ public sealed class InvoiceService(
         return await GetAsync(id, ct);
     }
 
+    /// <summary>
+    /// Copies an invoice's lines, terms, notes and reference into a new draft for the same client (any status: used to
+    /// re-bill after a void, or to start next month's one-off invoice). The source is never changed.
+    /// </summary>
+    public async Task<InvoiceDto> DuplicateAsync(Guid id, CancellationToken ct)
+    {
+        var source = await LoadScopedAsync(id, ct);
+        var lines = await db.Set<InvoiceLine>().AsNoTracking().Where(l => l.InvoiceId == id).OrderBy(l => l.Position).ToListAsync(ct);
+        var copy = await CreateDraftAsync(new InvoiceDraftRequest
+        {
+            ClientAccountId = source.ClientAccountId,
+            Currency = source.Currency,
+            PaymentTermsDays = source.PaymentTermsDays,
+            Notes = source.Notes,
+            Reference = source.Reference,
+            Lines = lines.Select(l => new PriceLineRequest
+            {
+                Description = l.Description, ServiceSlug = l.ServiceSlug, Quantity = l.Quantity, UnitPrice = l.UnitPrice, DiscountType = l.DiscountType,
+                DiscountValue = l.DiscountValue, TaxRateId = l.TaxRateId,
+            }).ToList(),
+        }, ct);
+        audit.Record("billing.invoice_duplicated", nameof(Invoice), copy.Id, after: new { From = id, SourceNumber = source.Number });
+        await db.SaveChangesAsync(ct);
+        return copy;
+    }
+
     public async Task DeleteDraftAsync(Guid id, CancellationToken ct)
     {
         var existing = await LoadScopedAsync(id, ct);

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ChevronLeft, ChevronRight, Download, Trash2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Download, Pencil, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import {
   Alert,
@@ -10,6 +10,7 @@ import {
   CardHeader,
   Checkbox,
   DataTable,
+  Dialog,
   EmptyState,
   ErrorState,
   FormField,
@@ -26,9 +27,9 @@ import { api } from '@/lib/api/client';
 import { errorMessage } from '@/lib/api/errors';
 import { Permissions } from '@/lib/auth/permissions';
 import { useAuth } from '@/lib/auth/useAuth';
-import type { Timesheet, TimesheetStatus, Utilization } from '../shared/deliveryTypes';
+import type { TimeEntry, Timesheet, TimesheetStatus, Utilization } from '../shared/deliveryTypes';
 import { formatDateOnly, formatMinutes, todayIso } from '../shared/deliveryUi';
-import { dk, useProjectOptions } from './api';
+import { dk, useProjectOptions, useStaff } from './api';
 import { TimerWidget } from './TimerWidget';
 
 const sheetTone: Record<TimesheetStatus, 'neutral' | 'info' | 'success' | 'danger'> = {
@@ -42,6 +43,72 @@ function shiftDate(iso: string, days: number): string {
   const [y, m, d] = iso.split('-').map(Number);
   const date = new Date(Date.UTC(y!, m! - 1, d! + days));
   return date.toISOString().slice(0, 10);
+}
+
+/** Edits a logged entry (hours, date, billable, note). Entries of a submitted or approved week are locked. */
+function EditEntryDialog({ entry, onClose, onSaved }: { entry: TimeEntry; onClose: () => void; onSaved: () => void }) {
+  const [form, setForm] = useState({
+    date: entry.date,
+    hours: String(Math.round((entry.minutes / 60) * 100) / 100),
+    billable: entry.billable,
+    note: entry.note ?? '',
+  });
+  const save = useMutation({
+    mutationFn: () =>
+      api.put(`/agency/time/entries/${entry.id}`, {
+        projectId: entry.projectId,
+        taskId: entry.taskId,
+        date: form.date,
+        minutes: Math.round(Number(form.hours) * 60),
+        billable: form.billable,
+        note: form.note || null,
+        concurrencyStamp: entry.concurrencyStamp,
+      }),
+    onSuccess: () => {
+      onSaved();
+      onClose();
+    },
+  });
+  return (
+    <Dialog
+      open
+      onClose={onClose}
+      title={`Edit time: ${entry.projectName}`}
+      footer={
+        <>
+          <Button variant="secondary" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button type="submit" form="edit-entry-form" loading={save.isPending} disabled={Number(form.hours) <= 0}>
+            Save
+          </Button>
+        </>
+      }
+    >
+      <form
+        id="edit-entry-form"
+        className="dl-form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          save.mutate();
+        }}
+      >
+        {save.error ? <Alert tone="danger">{errorMessage(save.error)}</Alert> : null}
+        <div className="dl-form__row">
+          <FormField label="Date">
+            <Input type="date" value={form.date} max={todayIso()} onChange={(e) => setForm({ ...form, date: e.target.value })} />
+          </FormField>
+          <FormField label="Hours">
+            <Input type="number" min={0.25} max={24} step={0.25} value={form.hours} onChange={(e) => setForm({ ...form, hours: e.target.value })} />
+          </FormField>
+        </div>
+        <FormField label="Note" optional>
+          <Input value={form.note} onChange={(e) => setForm({ ...form, note: e.target.value })} maxLength={1000} />
+        </FormField>
+        <Checkbox label="Billable" checked={form.billable} onChange={(e) => setForm({ ...form, billable: e.target.checked })} />
+      </form>
+    </Dialog>
+  );
 }
 
 function ManualEntry({ date, onSaved }: { date: string; onSaved: () => void }) {
@@ -116,6 +183,11 @@ function MyWeek() {
     mutationFn: (id: string) => api.delete(`/agency/time/entries/${id}`),
     onSuccess: refresh,
   });
+  const recall = useMutation({
+    mutationFn: (sheet: Timesheet) => api.post<Timesheet>(`/agency/time/timesheets/${sheet.id}/reopen`, { concurrencyStamp: sheet.concurrencyStamp }),
+    onSuccess: refresh,
+  });
+  const [editingEntry, setEditingEntry] = useState<TimeEntry | null>(null);
   if (week.isPending) return <Skeleton height={200} />;
   if (week.isError) return <ErrorState error={week.error} />;
   const w = week.data;
@@ -156,7 +228,10 @@ function MyWeek() {
             header: <span className="visually-hidden">Actions</span>,
             cell: (e) =>
               e.locked || e.isRunning ? null : (
-                <IconButton label={`Delete entry of ${formatDateOnly(e.date)}`} icon={<Trash2 />} variant="ghost" onClick={() => remove.mutate(e.id)} />
+                <span className="dl-row">
+                  <IconButton label={`Edit entry of ${formatDateOnly(e.date)}`} icon={<Pencil />} variant="ghost" onClick={() => setEditingEntry(e)} />
+                  <IconButton label={`Delete entry of ${formatDateOnly(e.date)}`} icon={<Trash2 />} variant="ghost" onClick={() => remove.mutate(e.id)} />
+                </span>
               ),
           },
         ]}
@@ -172,8 +247,85 @@ function MyWeek() {
           </div>
         </>
       ) : null}
-      {submit.error || remove.error ? <Alert tone="danger">{errorMessage(submit.error ?? remove.error)}</Alert> : null}
+      {w.status === 'Submitted' ? (
+        <Alert tone="info" title="Submitted: entries are locked while your manager reviews the week">
+          <p>Need to change something? Recall the week, edit it and submit it again.</p>
+          <Button size="sm" variant="secondary" loading={recall.isPending} onClick={() => recall.mutate(w)}>
+            Recall week
+          </Button>
+        </Alert>
+      ) : null}
+      {w.status === 'Approved' ? (
+        <Alert tone="success" title="Approved: this week is locked">
+          A project manager can reopen it if a correction is needed.
+        </Alert>
+      ) : null}
+      {submit.error || remove.error || recall.error ? <Alert tone="danger">{errorMessage(submit.error ?? remove.error ?? recall.error)}</Alert> : null}
+      {editingEntry ? <EditEntryDialog entry={editingEntry} onClose={() => setEditingEntry(null)} onSaved={refresh} /> : null}
     </div>
+  );
+}
+
+/** A project manager reopens someone else's approved or rejected week (a reason is required for approved weeks). */
+function ReopenWeek() {
+  const qc = useQueryClient();
+  const staff = useStaff();
+  const [userId, setUserId] = useState('');
+  const [date, setDate] = useState(todayIso());
+  const [reason, setReason] = useState('');
+  const week = useQuery({
+    queryKey: dk.week(date, userId),
+    queryFn: ({ signal }) => api.get<Timesheet>('/agency/time/timesheets/week', { query: { date, userId }, signal }),
+    enabled: !!userId,
+  });
+  const reopen = useMutation({
+    mutationFn: (sheet: Timesheet) =>
+      api.post<Timesheet>(`/agency/time/timesheets/${sheet.id}/reopen`, { comment: reason || null, concurrencyStamp: sheet.concurrencyStamp }),
+    onSuccess: () => {
+      setReason('');
+      void qc.invalidateQueries({ queryKey: ['delivery', 'week'] });
+    },
+  });
+  const w = week.data;
+  const decided = w && (w.status === 'Approved' || w.status === 'Rejected');
+  return (
+    <Card as="section" aria-label="Reopen a decided week">
+      <CardHeader title="Reopen a week" headingLevel={3} description="Unlock someone’s approved or returned week so they can correct it and submit it again." />
+      <CardBody className="dl-form">
+        <div className="dl-form__row">
+          <FormField label="Person">
+            <Select
+              value={userId}
+              placeholder="Choose…"
+              options={(staff.data ?? []).map((p) => ({ value: p.id, label: p.displayName }))}
+              onChange={(e) => setUserId(e.target.value)}
+            />
+          </FormField>
+          <FormField label="Any day in the week">
+            <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+          </FormField>
+        </div>
+        {w ? (
+          <p className="dl-meta">
+            Week of {formatDateOnly(w.weekStart)}: <Badge tone={sheetTone[w.status]}>{w.status}</Badge> · {formatMinutes(w.totalMinutes)}
+          </p>
+        ) : null}
+        {w && !decided ? <p className="dl-meta">Only approved or returned weeks can be reopened here.</p> : null}
+        {decided ? (
+          <>
+            <FormField label="Reason" optional={w.status !== 'Approved'} hint="Shared with the person and kept in the audit log.">
+              <Textarea rows={2} value={reason} maxLength={1000} onChange={(e) => setReason(e.target.value)} />
+            </FormField>
+            <div className="dl-row">
+              <Button variant="secondary" loading={reopen.isPending} disabled={w.status === 'Approved' && !reason.trim()} onClick={() => reopen.mutate(w)}>
+                Reopen week
+              </Button>
+            </div>
+          </>
+        ) : null}
+        {reopen.error ? <Alert tone="danger">{errorMessage(reopen.error)}</Alert> : null}
+      </CardBody>
+    </Card>
   );
 }
 
@@ -194,7 +346,13 @@ function Approvals() {
   });
   if (pending.isPending) return <Skeleton height={160} />;
   if (pending.isError) return <ErrorState error={pending.error} />;
-  if (pending.data.length === 0) return <EmptyState compact title="No timesheets waiting for approval" />;
+  if (pending.data.length === 0)
+    return (
+      <div className="dl-page">
+        <EmptyState compact title="No timesheets waiting for approval" />
+        <ReopenWeek />
+      </div>
+    );
   return (
     <div className="dl-page">
       {decide.error ? <Alert tone="danger">{errorMessage(decide.error)}</Alert> : null}
@@ -228,6 +386,7 @@ function Approvals() {
           </CardBody>
         </Card>
       ))}
+      <ReopenWeek />
     </div>
   );
 }

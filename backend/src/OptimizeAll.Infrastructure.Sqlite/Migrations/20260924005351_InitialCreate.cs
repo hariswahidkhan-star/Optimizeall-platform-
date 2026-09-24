@@ -102,6 +102,7 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     Description = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: true),
                     Fields = table.Column<string>(type: "TEXT", nullable: false),
                     IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
+                    ConcurrencyStamp = table.Column<Guid>(type: "TEXT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false)
                 },
@@ -176,6 +177,34 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_crm_pipeline_stages", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "crm_proposal_templates",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 120, nullable: false),
+                    Description = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
+                    ProposalTitle = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
+                    Currency = table.Column<string>(type: "TEXT", fixedLength: true, maxLength: 3, nullable: false),
+                    ValidForDays = table.Column<int>(type: "INTEGER", nullable: false),
+                    ExecutiveSummary = table.Column<string>(type: "TEXT", nullable: true),
+                    Goals = table.Column<string>(type: "TEXT", nullable: true),
+                    Scope = table.Column<string>(type: "TEXT", nullable: true),
+                    Deliverables = table.Column<string>(type: "TEXT", nullable: true),
+                    Timeline = table.Column<string>(type: "TEXT", nullable: true),
+                    Terms = table.Column<string>(type: "TEXT", nullable: true),
+                    Lines = table.Column<string>(type: "TEXT", nullable: false),
+                    SortOrder = table.Column<int>(type: "INTEGER", nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
+                    ConcurrencyStamp = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_crm_proposal_templates", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -576,6 +605,8 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     Name = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
                     Description = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: true),
                     Sections = table.Column<string>(type: "TEXT", nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
+                    ConcurrencyStamp = table.Column<Guid>(type: "TEXT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false)
                 },
@@ -1005,6 +1036,36 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_website_team_members", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "service_catalog_items",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 120, nullable: false),
+                    Description = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
+                    ServiceSlug = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
+                    Currency = table.Column<string>(type: "TEXT", fixedLength: true, maxLength: 3, nullable: false),
+                    UnitPrice = table.Column<decimal>(type: "TEXT", precision: 19, scale: 4, nullable: false),
+                    Quantity = table.Column<decimal>(type: "TEXT", precision: 19, scale: 4, nullable: false),
+                    Recurrence = table.Column<string>(type: "TEXT", maxLength: 40, nullable: false),
+                    TaxRateId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    SortOrder = table.Column<int>(type: "INTEGER", nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
+                    ConcurrencyStamp = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_service_catalog_items", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_service_catalog_items_tax_rates_TaxRateId",
+                        column: x => x.TaxRateId,
+                        principalTable: "tax_rates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -2609,6 +2670,7 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     TagIndex = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: false),
                     CustomFieldsJson = table.Column<string>(type: "TEXT", nullable: false),
                     ClientAccountId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    ArchivedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
                     ConcurrencyStamp = table.Column<Guid>(type: "TEXT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false)
@@ -4172,6 +4234,7 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     LastTouchMedium = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
                     LastTouchCampaign = table.Column<string>(type: "TEXT", maxLength: 150, nullable: true),
                     LastTouchAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
+                    ArchivedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
                     ConcurrencyStamp = table.Column<Guid>(type: "TEXT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false)
@@ -5434,6 +5497,7 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     StageChangedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
                     ClosedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
                     ClientAccountId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    ArchivedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
                     ConcurrencyStamp = table.Column<Guid>(type: "TEXT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false)
@@ -5984,7 +6048,8 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     AuthorUserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Body = table.Column<string>(type: "TEXT", nullable: false),
                     MentionedUserIds = table.Column<string>(type: "TEXT", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
+                    EditedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -7153,6 +7218,11 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_crm_companies_ArchivedAt",
+                table: "crm_companies",
+                column: "ArchivedAt");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_crm_companies_ClientAccountId",
                 table: "crm_companies",
                 column: "ClientAccountId");
@@ -7172,6 +7242,11 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 name: "IX_crm_companies_OwnerUserId",
                 table: "crm_companies",
                 column: "OwnerUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_crm_contacts_ArchivedAt",
+                table: "crm_contacts",
+                column: "ArchivedAt");
 
             migrationBuilder.CreateIndex(
                 name: "IX_crm_contacts_CompanyId",
@@ -7203,6 +7278,11 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 name: "IX_crm_deal_contacts_ContactId",
                 table: "crm_deal_contacts",
                 column: "ContactId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_crm_deals_ArchivedAt",
+                table: "crm_deals",
+                column: "ArchivedAt");
 
             migrationBuilder.CreateIndex(
                 name: "IX_crm_deals_ClientAccountId",
@@ -7254,6 +7334,17 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 name: "IX_crm_pipeline_stages_Position",
                 table: "crm_pipeline_stages",
                 column: "Position");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_crm_proposal_templates_Name",
+                table: "crm_proposal_templates",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_crm_proposal_templates_SortOrder",
+                table: "crm_proposal_templates",
+                column: "SortOrder");
 
             migrationBuilder.CreateIndex(
                 name: "IX_crm_saved_views_Entity_OwnerUserId",
@@ -8409,6 +8500,16 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_service_catalog_items_IsActive_SortOrder",
+                table: "service_catalog_items",
+                columns: new[] { "IsActive", "SortOrder" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_service_catalog_items_TaxRateId",
+                table: "service_catalog_items",
+                column: "TaxRateId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_sm_awareness_days_Month_Day_Name",
                 table: "sm_awareness_days",
                 columns: new[] { "Month", "Day", "Name" },
@@ -9193,6 +9294,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 name: "crm_inbound_events");
 
             migrationBuilder.DropTable(
+                name: "crm_proposal_templates");
+
+            migrationBuilder.DropTable(
                 name: "crm_saved_views");
 
             migrationBuilder.DropTable(
@@ -9412,6 +9516,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 name: "seo_search_performance");
 
             migrationBuilder.DropTable(
+                name: "service_catalog_items");
+
+            migrationBuilder.DropTable(
                 name: "sm_awareness_days");
 
             migrationBuilder.DropTable(
@@ -9616,9 +9723,6 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 name: "proposal_versions");
 
             migrationBuilder.DropTable(
-                name: "tax_rates");
-
-            migrationBuilder.DropTable(
                 name: "seo_audits");
 
             migrationBuilder.DropTable(
@@ -9626,6 +9730,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
             migrationBuilder.DropTable(
                 name: "seo_keywords");
+
+            migrationBuilder.DropTable(
+                name: "tax_rates");
 
             migrationBuilder.DropTable(
                 name: "sm_competitors");

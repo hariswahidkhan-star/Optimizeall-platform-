@@ -11,6 +11,7 @@ public static class ProjectsModule
         services.AddScoped<DeliveryLookup>();
         services.AddScoped<DeliveryFileService>();
         services.AddScoped<ProjectService>();
+        services.AddScoped<DeliveryTemplateService>();
         services.AddScoped<TaskService>();
         services.AddScoped<DeliverableService>();
         services.AddScoped<TimeService>();

@@ -24,11 +24,21 @@ import {
 import { useSupportedCurrencies } from '@/lib/api/meta';
 import { Permissions } from '@/lib/auth/permissions';
 import { useAuth } from '@/lib/auth/useAuth';
-import { useBillingSettings, useSaveSettings, useSaveTaxRate, useTaxRates } from '../api/hooks';
+import { useBillingSettings, useDeleteTaxRate, useSaveSettings, useSaveTaxRate, useTaxRates } from '../api/hooks';
+import { ServiceCatalogManager } from '../components/ServiceCatalogManager';
 import type { BillingSettings, TaxRate } from '../api/types';
 import { billingErrorMessage } from '../lib';
 import { FormDialog } from '../components/FormDialog';
 import '../billing.css';
+
+/** "3, 7, 14" → [3, 7, 14]; invalid entries are dropped (the server validates the range). */
+function parseDays(text: string): number[] {
+  return text
+    .split(/[,\s]+/)
+    .map((v) => v.trim())
+    .filter((v) => v !== '' && !Number.isNaN(Number(v)))
+    .map((v) => Math.trunc(Number(v)));
+}
 
 function TaxRateDialog({ rate, open, onClose }: { rate: TaxRate | null; open: boolean; onClose: () => void }) {
   const save = useSaveTaxRate(rate?.id);
@@ -94,10 +104,18 @@ export function BillingSettingsPage() {
   const [confirming, setConfirming] = useState(false);
   const [editingRate, setEditingRate] = useState<TaxRate | null>(null);
   const [rateOpen, setRateOpen] = useState(false);
+  const [deletingRate, setDeletingRate] = useState<TaxRate | null>(null);
+  const [reminderText, setReminderText] = useState('');
+  const [termsText, setTermsText] = useState('');
+  const deleteRate = useDeleteTaxRate();
   const currencies = useSupportedCurrencies(form?.defaultCurrency);
 
   useEffect(() => {
-    if (settings.data && !form) setForm(settings.data);
+    if (settings.data && !form) {
+      setForm(settings.data);
+      setReminderText(settings.data.reminderOffsetsDays.join(', '));
+      setTermsText((settings.data.paymentTermsOptions ?? []).join(', '));
+    }
   }, [settings.data, form]);
 
   if (settings.isError) return <ErrorState error={settings.error} onRetry={() => void settings.refetch()} />;
@@ -125,16 +143,21 @@ export function BillingSettingsPage() {
       align: 'right',
       cell: (r) =>
         canEdit ? (
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => {
-              setEditingRate(r);
-              setRateOpen(true);
-            }}
-          >
-            Edit <span className="visually-hidden">{r.name}</span>
-          </Button>
+          <span className="bill-actions">
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => {
+                setEditingRate(r);
+                setRateOpen(true);
+              }}
+            >
+              Edit <span className="visually-hidden">{r.name}</span>
+            </Button>
+            <Button size="sm" variant="ghost" onClick={() => setDeletingRate(r)}>
+              Delete <span className="visually-hidden">{r.name}</span>
+            </Button>
+          </span>
         ) : null,
     },
   ];
@@ -157,8 +180,37 @@ export function BillingSettingsPage() {
             <FormField label="Credit note prefix">
               <Input value={form.creditNotePrefix} disabled={!canEdit} maxLength={10} onChange={(e) => set('creditNotePrefix', e.target.value.toUpperCase())} />
             </FormField>
-            <FormField label="Payment terms (days)">
+            <FormField label="Contract prefix">
+              <Input value={form.contractPrefix} disabled={!canEdit} maxLength={10} onChange={(e) => set('contractPrefix', e.target.value.toUpperCase())} />
+            </FormField>
+            <FormField label="Proposal prefix">
+              <Input value={form.proposalPrefix} disabled={!canEdit} maxLength={10} onChange={(e) => set('proposalPrefix', e.target.value.toUpperCase())} />
+            </FormField>
+            <FormField label="Number digits" hint="3 to 8, e.g. 4 gives 0001">
+              <Input type="number" min={3} max={8} value={String(form.numberPadding)} disabled={!canEdit} onChange={(e) => set('numberPadding', Number(e.target.value))} />
+            </FormField>
+            <FormField label="Default payment terms (days)">
               <Input type="number" min={0} max={365} value={String(form.paymentTermsDays)} disabled={!canEdit} onChange={(e) => set('paymentTermsDays', Number(e.target.value))} />
+            </FormField>
+            <FormField label="Payment terms offered" hint="Days, separated by commas (e.g. 0, 7, 14, 30). 0 means due on receipt.">
+              <Input
+                value={termsText}
+                disabled={!canEdit}
+                onChange={(e) => {
+                  setTermsText(e.target.value);
+                  set('paymentTermsOptions', parseDays(e.target.value));
+                }}
+              />
+            </FormField>
+            <FormField label="Reminder schedule" hint="Days relative to the due date, separated by commas (negative = before). Up to 8.">
+              <Input
+                value={reminderText}
+                disabled={!canEdit}
+                onChange={(e) => {
+                  setReminderText(e.target.value);
+                  set('reminderOffsetsDays', parseDays(e.target.value));
+                }}
+              />
             </FormField>
             <FormField label="Default currency">
               <Select value={form.defaultCurrency} options={currencies.options} disabled={!canEdit} onChange={(e) => set('defaultCurrency', e.target.value)} />
@@ -222,8 +274,31 @@ export function BillingSettingsPage() {
             <DataTable caption="Tax rates" columns={rateColumns} rows={rates.data ?? []} getRowId={(r) => r.id} loading={rates.isPending} />
           </CardBody>
         </Card>
+        <Card>
+          <CardHeader title="Service catalog" description="What you sell, with list prices. Offered as “Add from catalog” in proposals, contracts and invoices." />
+          <CardBody>
+            <ServiceCatalogManager canEdit={canEdit} />
+          </CardBody>
+        </Card>
       </div>
       <TaxRateDialog rate={editingRate} open={rateOpen} onClose={() => setRateOpen(false)} />
+      <ConfirmDialog
+        open={deletingRate !== null}
+        onClose={() => setDeletingRate(null)}
+        tone="danger"
+        title={`Delete the tax rate “${deletingRate?.name ?? ''}”?`}
+        description="Only a rate that nothing uses can be deleted. A rate used by documents, catalog items or templates can be deactivated instead; issued documents keep their tax either way."
+        confirmLabel="Delete"
+        onConfirm={async () => {
+          if (!deletingRate) return;
+          try {
+            await deleteRate.mutateAsync(deletingRate.id);
+            toast.success('Tax rate deleted');
+          } catch (error) {
+            throw new Error(billingErrorMessage(error));
+          }
+        }}
+      />
       <ConfirmDialog
         open={confirming}
         onClose={() => setConfirming(false)}

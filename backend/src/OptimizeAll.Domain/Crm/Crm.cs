@@ -105,6 +105,8 @@ public class CrmCompany : AuditedEntity, IConcurrencyStamped
 
     /// <summary>Set when the company became a client.</summary>
     public Guid? ClientAccountId { get; set; }
+    /// <summary>Set when the record was archived (hidden from lists and pickers; restorable, history kept).</summary>
+    public DateTime? ArchivedAt { get; set; }
     public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
 }
 
@@ -137,6 +139,8 @@ public class CrmContact : AuditedEntity, IConcurrencyStamped
 
     public UtmTouch FirstTouch { get; set; } = new();
     public UtmTouch LastTouch { get; set; } = new();
+    /// <summary>Set when the record was archived (hidden from lists and pickers; restorable, history kept).</summary>
+    public DateTime? ArchivedAt { get; set; }
     public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
 
     public string DisplayName => string.IsNullOrWhiteSpace(LastName) ? FirstName : $"{FirstName} {LastName}";
@@ -182,6 +186,8 @@ public class CrmDeal : AuditedEntity, IConcurrencyStamped
 
     /// <summary>Client account created from (or linked to) this deal.</summary>
     public Guid? ClientAccountId { get; set; }
+    /// <summary>Set when the record was archived (hidden from lists and pickers; restorable, history kept).</summary>
+    public DateTime? ArchivedAt { get; set; }
     public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
 }
 

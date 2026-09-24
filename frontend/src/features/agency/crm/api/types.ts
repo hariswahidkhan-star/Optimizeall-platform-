@@ -68,6 +68,8 @@ export interface DealSummary {
   stageChangedAt: string;
   createdAt: string;
   concurrencyStamp: string;
+  /** Set when the deal is archived (read-only until restored). */
+  archivedAt?: string | null;
 }
 
 export interface BoardColumn {
@@ -149,6 +151,8 @@ export interface ContactSummary {
   source: string | null;
   score: number;
   createdAt: string;
+  archivedAt?: string | null;
+  concurrencyStamp?: string;
 }
 
 export interface Contact extends ContactSummary {
@@ -192,6 +196,8 @@ export interface CompanySummary {
   openDeals: number;
   clientAccountId: string | null;
   createdAt: string;
+  archivedAt?: string | null;
+  concurrencyStamp?: string;
 }
 
 export interface Company extends Omit<CompanySummary, 'contacts' | 'openDeals'> {
@@ -425,4 +431,81 @@ export interface AcceptProposalResponse {
   invitationSent: boolean;
   contractsCreated: number;
   invoiceCreated: boolean;
+}
+
+// ---------------- Archive, bulk actions, options, templates
+
+export type CrmBulkAction = 'archive' | 'restore' | 'assignOwner' | 'setLifecycle' | 'addTag' | 'removeTag';
+
+export interface CrmBulkRequest {
+  ids: string[];
+  action: CrmBulkAction;
+  ownerUserId?: string | null;
+  lifecycleStage?: LifecycleStage;
+  tag?: string;
+}
+
+export interface CrmBulkResult {
+  requested: number;
+  updated: number;
+  notFound: number;
+}
+
+/** Agency-editable CRM option lists. `version` is the concurrency stamp of the list. */
+export interface CrmOptions {
+  lostReasons: string[];
+  budgetRanges: string[];
+  industries: string[];
+  version: string;
+}
+
+export type Recurrence = 'OneTime' | 'Monthly' | 'Quarterly' | 'Annually';
+
+export interface ProposalTemplateLine {
+  description: string;
+  serviceSlug: string | null;
+  quantity: number;
+  unitPrice: number;
+  discountType: 'None' | 'Percent' | 'Amount';
+  discountValue: number;
+  taxRateId: string | null;
+  recurrence: Recurrence;
+}
+
+export interface ProposalTemplate {
+  id: string;
+  name: string;
+  description: string | null;
+  proposalTitle: string | null;
+  currency: string;
+  validForDays: number;
+  executiveSummary: string | null;
+  goals: string | null;
+  scope: string | null;
+  deliverables: string | null;
+  timeline: string | null;
+  terms: string | null;
+  lines: ProposalTemplateLine[];
+  sortOrder: number;
+  isActive: boolean;
+  updatedAt: string;
+  concurrencyStamp: string;
+}
+
+export interface ProposalTemplateRequest {
+  name: string;
+  description?: string | null;
+  proposalTitle?: string | null;
+  currency: string;
+  validForDays: number;
+  executiveSummary?: string | null;
+  goals?: string | null;
+  scope?: string | null;
+  deliverables?: string | null;
+  timeline?: string | null;
+  terms?: string | null;
+  lines: PriceLineInput[];
+  sortOrder: number;
+  isActive: boolean;
+  concurrencyStamp?: string;
 }

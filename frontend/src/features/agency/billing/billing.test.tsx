@@ -224,3 +224,75 @@ describe('Client portal billing', () => {
     expect(await axeViolations(container)).toEqual([]);
   });
 });
+
+describe('Invoice editing actions', () => {
+  const invoiceRoutes = [
+    { path: '/agency/billing/invoices', element: <p>Invoices</p> },
+    { path: '/agency/billing/invoices/:invoiceId/edit', element: <p>Editor</p> },
+  ];
+
+  it('explains why an issued invoice is locked and duplicates it into a draft', async () => {
+    const user = userEvent.setup();
+    const { calls } = mockFetch({
+      ...signedIn,
+      'GET /agency/billing/invoices/inv1': () => json(200, invoice()),
+      'POST /agency/billing/invoices/inv1/duplicate': () => json(201, invoice({ id: 'inv2', number: null, status: 'Draft' })),
+    });
+    renderWithApp(<InvoiceDetailPage />, { route: '/agency/billing/invoices/inv1', path: '/agency/billing/invoices/:invoiceId', routes: invoiceRoutes });
+    expect(await screen.findByText('Issued invoices are locked')).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Edit' })).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Duplicate' }));
+    await waitFor(() => expect(calls.some((c) => c.method === 'POST' && c.path === '/agency/billing/invoices/inv1/duplicate')).toBe(true));
+  });
+
+  it('deletes a draft only after confirmation', async () => {
+    const user = userEvent.setup();
+    const { calls } = mockFetch({
+      ...signedIn,
+      'GET /agency/billing/invoices/inv1': () => json(200, invoice({ status: 'Draft', number: null, issueDate: null, dueDate: null })),
+      'DELETE /agency/billing/invoices/inv1': () => json(204),
+    });
+    renderWithApp(<InvoiceDetailPage />, { route: '/agency/billing/invoices/inv1', path: '/agency/billing/invoices/:invoiceId', routes: invoiceRoutes });
+    await user.click(await screen.findByRole('button', { name: 'Delete draft' }));
+    expect(calls.some((c) => c.method === 'DELETE')).toBe(false);
+    const dialog = await screen.findByRole('alertdialog', { name: 'Delete this draft invoice?' });
+    expect(await axeViolations(dialog)).toEqual([]);
+    await user.click(within(dialog).getByRole('button', { name: 'Delete draft' }));
+    await waitFor(() => expect(calls.some((c) => c.method === 'DELETE' && c.path === '/agency/billing/invoices/inv1')).toBe(true));
+  });
+});
+
+describe('Service catalog settings', () => {
+  it('shows the payment term options and confirms before deleting a catalog item', async () => {
+    const user = userEvent.setup();
+    const { calls } = mockFetch({
+      ...signedIn,
+      'GET /agency/billing/settings': () =>
+        json(200, {
+          invoicePrefix: 'OA', creditNotePrefix: 'CN', contractPrefix: 'CT', proposalPrefix: 'PR', numberPadding: 4, paymentTermsDays: 14,
+          defaultCurrency: 'USD', invoiceOnAcceptance: true, autoIssueInvoices: false, remindersEnabled: true, reminderOffsetsDays: [-3, 0, 7, 14],
+          companyName: 'Optimize All', companyAddress: null, companyTaxId: null, companyEmail: null, bankDetails: null, paymentLinkText: null,
+          paymentInstructions: null, invoiceFooter: null, defaultTaxRateId: null, paymentTermsOptions: [0, 14, 30],
+        }),
+      'GET /agency/billing/tax-rates': () => json(200, []),
+      'GET /meta/currencies': () => json(200, [{ code: 'USD', minorUnits: 2 }]),
+      'GET /agency/billing/catalog': () =>
+        json(200, [
+          {
+            id: 'cat1', name: 'SEO retainer', description: 'Monthly SEO retainer', serviceSlug: 'seo', currency: 'USD', unitPrice: 1500, quantity: 1,
+            recurrence: 'Monthly', taxRateId: null, taxName: null, sortOrder: 10, isActive: true, updatedAt: '2026-09-01T00:00:00Z', concurrencyStamp: 's',
+          },
+        ]),
+      'DELETE /agency/billing/catalog/cat1': () => json(204),
+    });
+    const { container } = renderWithApp(<BillingSettingsPage />);
+    expect(await screen.findByLabelText(/Payment terms offered/)).toHaveValue('0, 14, 30');
+    const table = await screen.findByRole('table', { name: 'Service catalog' });
+    await user.click(await within(table).findByRole('button', { name: /SEO retainer/ }));
+    await user.click(await screen.findByRole('menuitem', { name: 'Delete' }));
+    const dialog = await screen.findByRole('alertdialog', { name: /Delete “SEO retainer”/ });
+    await user.click(within(dialog).getByRole('button', { name: 'Delete' }));
+    await waitFor(() => expect(calls.some((c) => c.method === 'DELETE' && c.path === '/agency/billing/catalog/cat1')).toBe(true));
+    expect(await axeViolations(container)).toEqual([]);
+  });
+});

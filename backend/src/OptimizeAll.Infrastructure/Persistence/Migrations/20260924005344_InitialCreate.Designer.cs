@@ -12,7 +12,7 @@ using OptimizeAll.Infrastructure.Persistence;
 namespace OptimizeAll.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260924004819_InitialCreate")]
+    [Migration("20260924005344_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -2454,6 +2454,75 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     b.ToTable("payment_proofs", (string)null);
                 });
 
+            modelBuilder.Entity("OptimizeAll.Domain.Billing.ServiceCatalogItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("char(3)")
+                        .IsFixedLength();
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)");
+
+                    b.Property<decimal>("Quantity")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("decimal(19,4)");
+
+                    b.Property<string>("Recurrence")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)");
+
+                    b.Property<string>("ServiceSlug")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("TaxRateId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("decimal(19,4)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TaxRateId");
+
+                    b.HasIndex("IsActive", "SortOrder");
+
+                    b.ToTable("service_catalog_items", (string)null);
+                });
+
             modelBuilder.Entity("OptimizeAll.Domain.Billing.TaxRate", b =>
                 {
                     b.Property<Guid>("Id")
@@ -3278,6 +3347,10 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<DateTime?>("ArchivedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
                     b.Property<Guid?>("ClientAccountId")
                         .HasColumnType("char(36)");
 
@@ -3334,6 +3407,8 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ArchivedAt");
+
                     b.HasIndex("ClientAccountId");
 
                     b.HasIndex("Domain")
@@ -3351,6 +3426,10 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("ArchivedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("BudgetRange")
                         .HasMaxLength(60)
@@ -3435,6 +3514,8 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ArchivedAt");
+
                     b.HasIndex("CompanyId");
 
                     b.HasIndex("CreatedAt");
@@ -3454,6 +3535,10 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("ArchivedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("BudgetRange")
                         .HasMaxLength(60)
@@ -3535,6 +3620,8 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasColumnType("decimal(19,4)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ArchivedAt");
 
                     b.HasIndex("ClientAccountId");
 
@@ -4014,6 +4101,84 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     b.HasIndex("ProposalVersionId", "Position");
 
                     b.ToTable("proposal_lines", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Crm.ProposalTemplate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("char(3)")
+                        .IsFixedLength();
+
+                    b.Property<string>("Deliverables")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<string>("ExecutiveSummary")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Goals")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Lines")
+                        .IsRequired()
+                        .HasColumnType("json");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)");
+
+                    b.Property<string>("ProposalTitle")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Scope")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Terms")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Timeline")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("ValidForDays")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("SortOrder");
+
+                    b.ToTable("crm_proposal_templates", (string)null);
                 });
 
             modelBuilder.Entity("OptimizeAll.Domain.Crm.ProposalVersion", b =>
@@ -8350,6 +8515,10 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("char(36)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasPrecision(6)
                         .HasColumnType("datetime(6)");
@@ -9293,6 +9462,10 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("char(36)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasPrecision(6)
                         .HasColumnType("datetime(6)");
@@ -9300,6 +9473,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(2000)
                         .HasColumnType("varchar(2000)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -9414,6 +9590,10 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("EditedAt")
                         .HasPrecision(6)
                         .HasColumnType("datetime(6)");
 
@@ -14305,6 +14485,14 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasForeignKey("UploadedByUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Billing.ServiceCatalogItem", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Billing.TaxRate", null)
+                        .WithMany()
+                        .HasForeignKey("TaxRateId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("OptimizeAll.Domain.Campaigns.Campaign", b =>

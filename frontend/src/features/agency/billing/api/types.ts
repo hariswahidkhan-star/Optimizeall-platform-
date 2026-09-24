@@ -303,6 +303,8 @@ export interface BillingSettings {
   paymentInstructions: string | null;
   invoiceFooter: string | null;
   defaultTaxRateId: string | null;
+  /** Payment terms (days) offered in the invoice and contract editors. */
+  paymentTermsOptions?: number[];
 }
 
 export interface ClientOption {
@@ -420,3 +422,23 @@ export interface Statement {
   lines: { date: string; type: string; reference: string; description: string; debit: number; credit: number; balance: number }[];
   closingBalance: number;
 }
+
+/** A service catalog entry (line-item preset) offered in the proposal, contract and invoice editors. */
+export interface CatalogItem {
+  id: string;
+  name: string;
+  description: string;
+  serviceSlug: string | null;
+  currency: string;
+  unitPrice: number;
+  quantity: number;
+  recurrence: Recurrence;
+  taxRateId: string | null;
+  taxName: string | null;
+  sortOrder: number;
+  isActive: boolean;
+  updatedAt: string;
+  concurrencyStamp: string;
+}
+
+export type CatalogItemRequest = Omit<CatalogItem, 'id' | 'taxName' | 'updatedAt' | 'concurrencyStamp'> & { concurrencyStamp?: string };

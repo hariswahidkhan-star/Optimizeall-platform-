@@ -88,6 +88,52 @@ function Composer({ base, onSent, threadId }: { base: string; threadId?: string;
   );
 }
 
+/** Staff rename a conversation (the subject both sides see). */
+function RenameThread({ base, thread, onRenamed }: { base: string; thread: Thread; onRenamed: (t: Thread) => void }) {
+  const [editing, setEditing] = useState(false);
+  const [subject, setSubject] = useState(thread.subject);
+  const rename = useMutation({
+    mutationFn: () => api.put<Thread>(`${base}/threads/${thread.id}`, { subject }),
+    onSuccess: (t) => {
+      onRenamed(t);
+      setEditing(false);
+    },
+  });
+  if (!editing)
+    return (
+      <Button
+        size="sm"
+        variant="ghost"
+        onClick={() => {
+          setSubject(thread.subject);
+          setEditing(true);
+        }}
+      >
+        Rename<span className="visually-hidden"> conversation {thread.subject}</span>
+      </Button>
+    );
+  return (
+    <form
+      className="dl-toolbar"
+      onSubmit={(e) => {
+        e.preventDefault();
+        rename.mutate();
+      }}
+    >
+      {rename.error ? <Alert tone="danger">{errorMessage(rename.error)}</Alert> : null}
+      <FormField label="Subject">
+        <Input value={subject} minLength={2} maxLength={200} onChange={(e) => setSubject(e.target.value)} />
+      </FormField>
+      <Button type="submit" size="sm" loading={rename.isPending} disabled={subject.trim().length < 2}>
+        Save
+      </Button>
+      <Button size="sm" variant="ghost" onClick={() => setEditing(false)}>
+        Cancel
+      </Button>
+    </form>
+  );
+}
+
 /**
  * Client ↔ account-team conversations (separate from participant support tickets): thread list, messages with
  * attachments and read receipts, composer. The open thread id lives in `?thread=`.
@@ -172,7 +218,19 @@ export function MessagesPanel({ base, audience, canWrite = true }: Props) {
           <ErrorState error={thread.error} />
         ) : (
           <>
-            <h2>{thread.data.subject}</h2>
+            <div className="dl-row">
+              <h2>{thread.data.subject}</h2>
+              {audience === 'staff' && canWrite ? (
+                <RenameThread
+                  base={base}
+                  thread={thread.data}
+                  onRenamed={(t) => {
+                    qc.setQueryData(['delivery', 'thread', base, t.id], t);
+                    void qc.invalidateQueries({ queryKey: ['delivery', 'threads', base] });
+                  }}
+                />
+              ) : null}
+            </div>
             <ol className="dl-comments" aria-label="Messages, oldest first">
               {thread.data.messages.map((m) => (
                 <li key={m.id} className="dl-comment">

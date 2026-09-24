@@ -108,6 +108,8 @@ public sealed class InboundLeadService(
             {
                 company.Domain = domain;
             }
+            // A new inquiry brings an archived company or contact back into the active lists.
+            if (company is not null) company.ArchivedAt = null;
 
             // ---- Contact (dedupe by normalized email; fill blanks, never overwrite what the team entered)
             var contact = await db.Set<CrmContact>().FirstOrDefaultAsync(c => c.NormalizedEmail == normalized, ct);
@@ -126,6 +128,7 @@ public sealed class InboundLeadService(
                 contact.LastTouch = Copy(touch);
                 if (contact.FirstTouch.IsEmpty && contact.FirstTouch.At is null) contact.FirstTouch = Copy(touch);
                 if (contact.LifecycleStage == LifecycleStage.Subscriber) contact.LifecycleStage = LifecycleStage.Lead;
+                contact.ArchivedAt = null;
             }
             contact.Phone ??= CrmService.Trim(lead.Phone, 40);
             contact.BudgetRange ??= CrmService.Trim(lead.BudgetRange, 60);

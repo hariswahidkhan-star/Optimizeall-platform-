@@ -9,6 +9,7 @@ import {
   Card,
   CardBody,
   CardHeader,
+  ConfirmDialog,
   DataTable,
   DateTime,
   Dialog,
@@ -158,6 +159,22 @@ function MilestonesTab({ project, canManage }: { project: ProjectDetail; canMana
       api.put(`/agency/projects/${project.id}/milestones/${m.id}`, { title: m.title, dueDate: m.dueDate, clientVisible: m.clientVisible, status: m.status === 'Done' ? 'Open' : 'Done' }),
     onSuccess: () => void qc.invalidateQueries({ queryKey: dk.project(project.id) }),
   });
+  const [editing, setEditing] = useState<Milestone | null>(null);
+  const [editForm, setEditForm] = useState({ title: '', dueDate: '', clientVisible: true });
+  const [removing, setRemoving] = useState<Milestone | null>(null);
+  const update = useMutation({
+    mutationFn: (m: Milestone) =>
+      api.put(`/agency/projects/${project.id}/milestones/${m.id}`, {
+        title: editForm.title,
+        dueDate: editForm.dueDate || null,
+        clientVisible: editForm.clientVisible,
+        status: m.status,
+      }),
+    onSuccess: () => {
+      setEditing(null);
+      void qc.invalidateQueries({ queryKey: dk.project(project.id) });
+    },
+  });
   return (
     <div className="dl-page">
       {project.milestones.length === 0 ? (
@@ -175,9 +192,24 @@ function MilestonesTab({ project, canManage }: { project: ProjectDetail; canMana
               <span className="dl-row">
                 <Badge tone={m.status === 'Done' ? 'success' : 'neutral'}>{m.status}</Badge>
                 {canManage ? (
-                  <Button size="sm" variant="secondary" onClick={() => toggle.mutate(m)}>
-                    {m.status === 'Done' ? 'Reopen' : 'Mark done'}
-                  </Button>
+                  <>
+                    <Button size="sm" variant="secondary" onClick={() => toggle.mutate(m)}>
+                      {m.status === 'Done' ? 'Reopen' : 'Mark done'}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => {
+                        setEditForm({ title: m.title, dueDate: m.dueDate ?? '', clientVisible: m.clientVisible });
+                        setEditing(m);
+                      }}
+                    >
+                      Edit<span className="visually-hidden"> {m.title}</span>
+                    </Button>
+                    <Button size="sm" variant="ghost" onClick={() => setRemoving(m)}>
+                      Delete<span className="visually-hidden"> {m.title}</span>
+                    </Button>
+                  </>
                 ) : null}
               </span>
             </li>
@@ -203,6 +235,54 @@ function MilestonesTab({ project, canManage }: { project: ProjectDetail; canMana
           </Button>
         </form>
       ) : null}
+      {editing ? (
+        <Dialog
+          open
+          onClose={() => setEditing(null)}
+          title="Edit milestone"
+          footer={
+            <>
+              <Button variant="secondary" onClick={() => setEditing(null)}>
+                Cancel
+              </Button>
+              <Button type="submit" form="milestone-form" loading={update.isPending} disabled={editForm.title.trim().length < 2}>
+                Save
+              </Button>
+            </>
+          }
+        >
+          <form
+            id="milestone-form"
+            className="dl-form"
+            onSubmit={(e) => {
+              e.preventDefault();
+              update.mutate(editing);
+            }}
+          >
+            {update.error ? <Alert tone="danger">{errorMessage(update.error)}</Alert> : null}
+            <FormField label="Title" required>
+              <Input value={editForm.title} maxLength={200} onChange={(e) => setEditForm({ ...editForm, title: e.target.value })} />
+            </FormField>
+            <FormField label="Due" optional>
+              <Input type="date" value={editForm.dueDate} onChange={(e) => setEditForm({ ...editForm, dueDate: e.target.value })} />
+            </FormField>
+            <Switch checked={editForm.clientVisible} onCheckedChange={(v) => setEditForm({ ...editForm, clientVisible: v })} label="Visible to the client" />
+          </form>
+        </Dialog>
+      ) : null}
+      <ConfirmDialog
+        open={removing !== null}
+        onClose={() => setRemoving(null)}
+        tone="danger"
+        title={`Delete the milestone “${removing?.title ?? ''}”?`}
+        description="Its tasks are kept and simply lose the milestone."
+        confirmLabel="Delete milestone"
+        onConfirm={async () => {
+          if (!removing) return;
+          await api.delete(`/agency/projects/${project.id}/milestones/${removing.id}`);
+          void qc.invalidateQueries({ queryKey: dk.project(project.id) });
+        }}
+      />
     </div>
   );
 }
@@ -438,15 +518,47 @@ function SettingsTab({ project }: { project: ProjectDetail }) {
   );
 }
 
+interface RecurringRule {
+  id: string;
+  title: string;
+  description: string | null;
+  dayOfMonth: number;
+  dueInDays: number;
+  isActive: boolean;
+  clientVisible: boolean;
+  estimateHours: number | null;
+  labels: string[];
+  assignee: { id: string; displayName: string } | null;
+}
+
 function RecurringSection({ projectId }: { projectId: string }) {
   const qc = useQueryClient();
+  const key = [...dk.project(projectId), 'recurring'];
   const rules = useQuery({
-    queryKey: [...dk.project(projectId), 'recurring'],
-    queryFn: ({ signal }) =>
-      api.get<{ id: string; title: string; dayOfMonth: number; dueInDays: number; isActive: boolean; assignee: { displayName: string } | null }[]>(
-        `/agency/projects/${projectId}/recurring-tasks`,
-        { signal },
-      ),
+    queryKey: key,
+    queryFn: ({ signal }) => api.get<RecurringRule[]>(`/agency/projects/${projectId}/recurring-tasks`, { signal }),
+  });
+  const [editing, setEditing] = useState<RecurringRule | null>(null);
+  const [ruleForm, setRuleForm] = useState({ title: '', dayOfMonth: '1', dueInDays: '5' });
+  const [removing, setRemoving] = useState<RecurringRule | null>(null);
+  const saveRule = useMutation({
+    mutationFn: ({ rule, patch }: { rule: RecurringRule; patch: Partial<{ title: string; dayOfMonth: number; dueInDays: number; isActive: boolean }> }) =>
+      api.put(`/agency/projects/${projectId}/recurring-tasks/${rule.id}`, {
+        title: rule.title,
+        description: rule.description,
+        dayOfMonth: rule.dayOfMonth,
+        dueInDays: rule.dueInDays,
+        assigneeUserId: rule.assignee?.id ?? null,
+        estimateHours: rule.estimateHours,
+        labels: rule.labels,
+        clientVisible: rule.clientVisible,
+        isActive: rule.isActive,
+        ...patch,
+      }),
+    onSuccess: () => {
+      setEditing(null);
+      void qc.invalidateQueries({ queryKey: key });
+    },
   });
   const [title, setTitle] = useState('');
   const [day, setDay] = useState('1');
@@ -464,9 +576,29 @@ function RecurringSection({ projectId }: { projectId: string }) {
         <ul className="dl-list" aria-label="Recurring task rules">
           {(rules.data ?? []).map((r) => (
             <li key={r.id} className="dl-list__item">
-              <span className="dl-list__title">{r.title}</span>
-              <span className="dl-meta">
-                Day {r.dayOfMonth} · due {r.dueInDays} days later {r.assignee ? `· ${r.assignee.displayName}` : ''} {r.isActive ? '' : '· paused'}
+              <span className="dl-list__main">
+                <span className="dl-list__title">{r.title}</span>
+                <span className="dl-meta">
+                  Day {r.dayOfMonth} · due {r.dueInDays} days later {r.assignee ? `· ${r.assignee.displayName}` : ''} {r.isActive ? '' : '· paused'}
+                </span>
+              </span>
+              <span className="dl-row">
+                <Button size="sm" variant="secondary" onClick={() => saveRule.mutate({ rule: r, patch: { isActive: !r.isActive } })}>
+                  {r.isActive ? 'Pause' : 'Resume'}<span className="visually-hidden"> {r.title}</span>
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => {
+                    setRuleForm({ title: r.title, dayOfMonth: String(r.dayOfMonth), dueInDays: String(r.dueInDays) });
+                    setEditing(r);
+                  }}
+                >
+                  Edit<span className="visually-hidden"> {r.title}</span>
+                </Button>
+                <Button size="sm" variant="ghost" onClick={() => setRemoving(r)}>
+                  Delete<span className="visually-hidden"> {r.title}</span>
+                </Button>
               </span>
             </li>
           ))}
@@ -482,6 +614,54 @@ function RecurringSection({ projectId }: { projectId: string }) {
             Add recurring task
           </Button>
         </div>
+        {saveRule.error ? <Alert tone="danger">{errorMessage(saveRule.error)}</Alert> : null}
+        {editing ? (
+          <div className="dl-form" role="group" aria-label={`Edit recurring task ${editing.title}`}>
+            <div className="dl-form__row">
+              <FormField label="Title">
+                <Input value={ruleForm.title} maxLength={300} onChange={(e) => setRuleForm({ ...ruleForm, title: e.target.value })} />
+              </FormField>
+              <FormField label="Day of month">
+                <Input type="number" min={1} max={28} value={ruleForm.dayOfMonth} onChange={(e) => setRuleForm({ ...ruleForm, dayOfMonth: e.target.value })} />
+              </FormField>
+              <FormField label="Due after (days)">
+                <Input type="number" min={0} max={60} value={ruleForm.dueInDays} onChange={(e) => setRuleForm({ ...ruleForm, dueInDays: e.target.value })} />
+              </FormField>
+            </div>
+            <div className="dl-row">
+              <Button
+                type="button"
+                size="sm"
+                loading={saveRule.isPending}
+                disabled={ruleForm.title.trim().length < 2}
+                onClick={() =>
+                  saveRule.mutate({
+                    rule: editing,
+                    patch: { title: ruleForm.title, dayOfMonth: Number(ruleForm.dayOfMonth) || 1, dueInDays: Number(ruleForm.dueInDays) || 0 },
+                  })
+                }
+              >
+                Save recurring task
+              </Button>
+              <Button type="button" size="sm" variant="ghost" onClick={() => setEditing(null)}>
+                Cancel
+              </Button>
+            </div>
+          </div>
+        ) : null}
+        <ConfirmDialog
+          open={removing !== null}
+          onClose={() => setRemoving(null)}
+          tone="danger"
+          title={`Delete the recurring task “${removing?.title ?? ''}”?`}
+          description="Tasks it already created are kept. Pause it instead to stop it temporarily."
+          confirmLabel="Delete"
+          onConfirm={async () => {
+            if (!removing) return;
+            await api.delete(`/agency/projects/${projectId}/recurring-tasks/${removing.id}`);
+            void qc.invalidateQueries({ queryKey: key });
+          }}
+        />
       </CardBody>
     </Card>
   );

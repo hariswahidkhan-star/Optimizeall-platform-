@@ -3,12 +3,23 @@ import { FormField, Input, Select, Textarea, useToast } from '@/components/ui';
 import { FormDialog } from '@/features/agency/billing/components/FormDialog';
 import { isApiError } from '@/lib/api/errors';
 import { useSupportedCurrencies } from '@/lib/api/meta';
-import { useAssignees, useCompanies, useSaveCompany, useSaveContact, useSaveDeal } from '../api/hooks';
+import { useAssignees, useCompanies, useCrmOptions, useSaveCompany, useSaveContact, useSaveDeal } from '../api/hooks';
 import type { Company, CompanySize, ConsentStatus, Contact, Deal, DealSource, LifecycleStage } from '../api/types';
 import { CONSENT_OPTIONS, LIFECYCLE_OPTIONS, SOURCE_OPTIONS, splitTags } from '../lib';
 
 function fieldError(error: unknown, field: string): string | undefined {
   return isApiError(error) ? error.fieldError(field) : undefined;
+}
+
+/** Suggestions for a free-text input (agency-editable lists from CRM settings). */
+function OptionList({ id, values }: { id: string; values?: string[] }) {
+  return (
+    <datalist id={id}>
+      {(values ?? []).map((v) => (
+        <option key={v} value={v} />
+      ))}
+    </datalist>
+  );
 }
 
 function useOwnerOptions() {
@@ -120,6 +131,7 @@ export function ContactFormDialog({
   contact?: Contact;
   defaultCompanyId?: string;
 }) {
+  const options = useCrmOptions();
   const save = useSaveContact(contact?.id);
   const toast = useToast();
   const owners = useOwnerOptions();
@@ -215,8 +227,9 @@ export function ContactFormDialog({
       <FormField label="Owner">
         <Select value={form.ownerUserId} options={owners} onChange={(e) => set('ownerUserId', e.target.value)} />
       </FormField>
-      <FormField label="Budget range" optional hint="e.g. 5k-10k">
-        <Input value={form.budgetRange} maxLength={60} onChange={(e) => set('budgetRange', e.target.value)} />
+      <FormField label="Budget range" optional hint="Choose a range; the list is edited under CRM settings.">
+        <Input list="crm-budget-ranges" value={form.budgetRange} maxLength={60} onChange={(e) => set('budgetRange', e.target.value)} />
+        <OptionList id="crm-budget-ranges" values={options.data?.budgetRanges} />
       </FormField>
       <FormField label="Tags" optional hint="Comma-separated">
         <Input value={form.tags} onChange={(e) => set('tags', e.target.value)} />
@@ -236,6 +249,7 @@ const SIZE_OPTIONS: { value: CompanySize; label: string }[] = [
 ];
 
 export function CompanyFormDialog({ open, onClose, company }: { open: boolean; onClose: () => void; company?: Company }) {
+  const options = useCrmOptions();
   const save = useSaveCompany(company?.id);
   const toast = useToast();
   const owners = useOwnerOptions();
@@ -289,8 +303,9 @@ export function CompanyFormDialog({ open, onClose, company }: { open: boolean; o
       <FormField label="Website or domain" optional error={fieldError(error, 'domain')}>
         <Input value={form.domain} maxLength={300} onChange={(e) => set('domain', e.target.value)} />
       </FormField>
-      <FormField label="Industry" optional>
-        <Input value={form.industry} maxLength={100} onChange={(e) => set('industry', e.target.value)} />
+      <FormField label="Industry" optional hint="Pick a suggestion or type your own.">
+        <Input list="crm-industries" value={form.industry} maxLength={100} onChange={(e) => set('industry', e.target.value)} />
+        <OptionList id="crm-industries" values={options.data?.industries} />
       </FormField>
       <FormField label="Company size">
         <Select value={form.size} options={SIZE_OPTIONS} onChange={(e) => set('size', e.target.value)} />
@@ -312,16 +327,27 @@ export function CompanyFormDialog({ open, onClose, company }: { open: boolean; o
 }
 
 /** Asks why a deal was lost before moving it to the Lost stage (the API requires a reason). */
+const OTHER = '__other__';
+
+/**
+ * Asks why a deal was lost: one of the agency's configured reasons (CRM settings) plus optional detail, or a free-text
+ * reason.
+ */
 export function LostReasonDialog({ open, dealTitle, onClose, onConfirm }: { open: boolean; dealTitle: string; onClose: () => void; onConfirm: (reason: string) => Promise<void> }) {
-  const [reason, setReason] = useState('');
+  const options = useCrmOptions();
+  const reasons = options.data?.lostReasons ?? [];
+  const [choice, setChoice] = useState('');
+  const [detail, setDetail] = useState('');
   const [touched, setTouched] = useState(false);
   useEffect(() => {
     if (open) {
-      setReason('');
+      setChoice('');
+      setDetail('');
       setTouched(false);
     }
   }, [open]);
-  const error = reason.trim().length === 0 ? 'Say why the deal was lost.' : null;
+  const reason = choice === OTHER || choice === '' ? detail.trim() : detail.trim() ? `${choice}: ${detail.trim()}` : choice;
+  const error = reason.length === 0 ? 'Say why the deal was lost.' : null;
   return (
     <FormDialog
       open={open}
@@ -332,11 +358,26 @@ export function LostReasonDialog({ open, dealTitle, onClose, onConfirm }: { open
       onSubmit={async () => {
         setTouched(true);
         if (error) return false;
-        await onConfirm(reason.trim());
+        await onConfirm(reason.slice(0, 500));
       }}
     >
-      <FormField label="Lost reason" required error={touched ? error : null}>
-        <Textarea rows={3} maxLength={500} value={reason} onChange={(e) => setReason(e.target.value)} />
+      {reasons.length > 0 && (
+        <FormField label="Reason" required error={touched && !choice && !detail.trim() ? error : null}>
+          <Select
+            value={choice}
+            placeholder="Choose a reason"
+            options={[...reasons.map((r) => ({ value: r, label: r })), { value: OTHER, label: 'Other (describe below)' }]}
+            onChange={(e) => setChoice(e.target.value)}
+          />
+        </FormField>
+      )}
+      <FormField
+        label={reasons.length > 0 ? 'Details' : 'Lost reason'}
+        required={reasons.length === 0 || choice === OTHER}
+        optional={reasons.length > 0 && choice !== OTHER}
+        error={touched && (reasons.length === 0 || choice === OTHER) ? error : null}
+      >
+        <Textarea rows={3} maxLength={450} value={detail} onChange={(e) => setDetail(e.target.value)} />
       </FormField>
     </FormDialog>
   );

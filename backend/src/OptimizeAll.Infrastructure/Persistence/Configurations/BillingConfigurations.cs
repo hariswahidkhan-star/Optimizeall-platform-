@@ -233,3 +233,17 @@ internal sealed class ContractLineConfiguration : IEntityTypeConfiguration<Contr
         b.HasIndex(x => new { x.ContractId, x.Position });
     }
 }
+
+internal sealed class ServiceCatalogItemConfiguration : IEntityTypeConfiguration<ServiceCatalogItem>
+{
+    public void Configure(EntityTypeBuilder<ServiceCatalogItem> b)
+    {
+        b.ToTable("service_catalog_items");
+        b.Property(x => x.Name).HasMaxLength(120).IsRequired();
+        b.Property(x => x.Description).HasMaxLength(500).IsRequired();
+        b.Property(x => x.ServiceSlug).HasMaxLength(100);
+        b.Property(x => x.Currency).HasMaxLength(3).IsFixedLength().IsRequired();
+        b.HasIndex(x => new { x.IsActive, x.SortOrder });
+        b.HasOne<TaxRate>().WithMany().HasForeignKey(x => x.TaxRateId).OnDelete(DeleteBehavior.SetNull);
+    }
+}

@@ -1,4 +1,4 @@
-import { Pause, Play, Plus, Repeat, XCircle } from 'lucide-react';
+import { Pause, Play, Plus, Repeat, Trash2, XCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
@@ -26,7 +26,8 @@ import {
   useToast,
   type DataTableColumn,
 } from '@/components/ui';
-import { useClientOptions, useContract, useContractAction, useContracts, useSaveContract } from '@/features/agency/billing/api/hooks';
+import { useClientOptions, useContract, useContractAction, useContracts, useDeleteContract, useSaveContract } from '@/features/agency/billing/api/hooks';
+import { PaymentTermsField } from '@/features/agency/billing/components/PaymentTermsField';
 import type { BillingFrequency, ContractSummary, InvoiceSummary, PriceLineInput } from '@/features/agency/billing/api/types';
 import { LineItemsEditor, LivePreviewTotals, emptyLine } from '@/features/agency/billing/components/LineItemsEditor';
 import { LinesTable } from '@/features/agency/billing/pages/InvoiceDetailPage';
@@ -117,6 +118,9 @@ export function ContractEditorPage() {
   const [frequency, setFrequency] = useState<BillingFrequency>('Monthly');
   const [autoRenew, setAutoRenew] = useState(true);
   const [notice, setNotice] = useState('30');
+  const [renewalMonths, setRenewalMonths] = useState('12');
+  const [terms, setTerms] = useState('');
+  const [autoIssue, setAutoIssue] = useState('');
   const [notes, setNotes] = useState('');
   const [lines, setLines] = useState<PriceLineInput[]>([emptyLine()]);
   const [loaded, setLoaded] = useState(!contractId);
@@ -134,6 +138,9 @@ export function ContractEditorPage() {
     setFrequency(c.billingFrequency);
     setAutoRenew(c.autoRenew);
     setNotice(String(c.noticePeriodDays));
+    setRenewalMonths(String(c.renewalTermMonths));
+    setTerms(String(c.paymentTermsDays));
+    setAutoIssue(c.autoIssueInvoices === null ? '' : c.autoIssueInvoices ? 'yes' : 'no');
     setNotes(c.notes ?? '');
     setLines(c.lines.map((l) => ({ description: l.description, serviceSlug: l.serviceSlug, quantity: l.quantity, unitPrice: l.unitPrice, discountType: l.discountType, discountValue: l.discountValue, taxRateId: l.taxRateId })));
     setLoaded(true);
@@ -181,7 +188,24 @@ export function ContractEditorPage() {
               <FormField label="Notice period (days)">
                 <Input type="number" min={0} max={365} value={notice} onChange={(e) => setNotice(e.target.value)} />
               </FormField>
+              <PaymentTermsField value={terms} onChange={setTerms} />
+              <FormField label="Generated invoices">
+                <Select
+                  value={autoIssue}
+                  options={[
+                    { value: '', label: 'Follow billing settings' },
+                    { value: 'yes', label: 'Issue automatically' },
+                    { value: 'no', label: 'Keep as drafts for review' },
+                  ]}
+                  onChange={(e) => setAutoIssue(e.target.value)}
+                />
+              </FormField>
               <Checkbox label="Auto-renew at the end date" checked={autoRenew} onChange={(e) => setAutoRenew(e.target.checked)} />
+              {autoRenew && (
+                <FormField label="Renewal term (months)">
+                  <Input type="number" min={1} max={60} value={renewalMonths} onChange={(e) => setRenewalMonths(e.target.value)} />
+                </FormField>
+              )}
             </CardBody>
           </Card>
           <Card>
@@ -218,8 +242,10 @@ export function ContractEditorPage() {
                     endDate: endDate || null,
                     billingFrequency: frequency,
                     autoRenew,
-                    renewalTermMonths: 12,
+                    renewalTermMonths: Number(renewalMonths) || 12,
                     noticePeriodDays: Number(notice) || 0,
+                    paymentTermsDays: terms === '' ? undefined : Number(terms),
+                    autoIssueInvoices: autoIssue === '' ? null : autoIssue === 'yes',
                     notes: notes.trim() || undefined,
                     lines,
                     concurrencyStamp: existing.data?.concurrencyStamp,
@@ -251,8 +277,11 @@ export function ContractDetailPage() {
   const { contractId = '' } = useParams();
   const query = useContract(contractId);
   const action = useContractAction(contractId);
+  const remove = useDeleteContract();
+  const navigate = useNavigate();
   const toast = useToast();
   const [cancelling, setCancelling] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   if (query.isError) return <ErrorState error={query.error} onRetry={() => void query.refetch()} />;
   const c = query.data;
   if (!c) return <Skeleton height="24rem" />;
@@ -284,9 +313,19 @@ export function ContractDetailPage() {
             )}
             {c.status === 'Paused' && <Button leadingIcon={<Play />} onClick={() => void run('resume', 'Contract resumed')}>Resume</Button>}
             {!closed && <Button variant="ghost" leadingIcon={<XCircle />} onClick={() => setCancelling(true)}>Cancel contract</Button>}
+            {c.status === 'Draft' && !c.proposalId && c.invoices.length === 0 && (
+              <Button variant="ghost" leadingIcon={<Trash2 />} onClick={() => setDeleting(true)}>
+                Delete draft
+              </Button>
+            )}
           </div>
         }
       />
+      {c.status === 'Draft' && c.proposalId && (
+        <Alert tone="info" title="Created from an accepted proposal">
+          This draft can be edited and activated, or cancelled with a reason. It can’t be deleted, so the acceptance record stays complete.
+        </Alert>
+      )}
       <div className="bill-two-col">
         <div className="stack">
           <Card>
@@ -322,6 +361,23 @@ export function ContractDetailPage() {
           </CardBody>
         </Card>
       </div>
+      <ConfirmDialog
+        open={deleting}
+        onClose={() => setDeleting(false)}
+        tone="danger"
+        title={`Delete draft ${c.number}?`}
+        description="The draft never billed anything, so it’s removed completely. This can’t be undone."
+        confirmLabel="Delete draft"
+        onConfirm={async () => {
+          try {
+            await remove.mutateAsync({ id: c.id, concurrencyStamp: c.concurrencyStamp });
+          } catch (error) {
+            throw new Error(billingErrorMessage(error));
+          }
+          toast.success('Draft contract deleted');
+          navigate('/agency/contracts');
+        }}
+      />
       <ConfirmDialog
         open={cancelling}
         onClose={() => setCancelling(false)}

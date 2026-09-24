@@ -243,6 +243,24 @@ USD, GBP, AED and PKR (paid, partially paid, overdue, not yet due) and an applie
 | `billing@nimbus.demo.optimizeall.app` | Nimbus Fitness Billing: sees billing |
 | `approver@nimbus.demo.optimizeall.app` | Nimbus Fitness Approver: billing hidden |
 
+## Editing, archiving and configurable lists
+
+- **Archive instead of delete.** Contacts, companies and deals can be archived (and restored) from their page or in bulk
+  from the lists (select rows, then archive, restore, assign an owner, set the lifecycle stage, or add/remove a tag).
+  Archived records are hidden from lists and pickers and are read-only until restored; the *Show: Archived* filter lists
+  them. A company that is a client can't be archived, nor a deal with a proposal waiting for the client.
+- **Options** under *CRM → Settings*: lost reasons (offered when a deal is lost), budget ranges and industries.
+- **Proposal templates** under *CRM → Settings* (sections and price lines); pick one with *Start from a template* in the
+  proposal builder. A proposal that was never sent can be deleted; any proposal can be **duplicated** into a new draft.
+- **Service catalog** under *Billing → Settings*: what you sell and its list price. Every line editor (proposals,
+  contracts, invoices) has *Add from catalog*. Editing the catalog never changes existing documents.
+- **Payment terms offered** and the **reminder schedule** are edited under *Billing → Settings*; invoice and contract
+  editors offer the configured terms.
+- A **draft contract** that never billed can be deleted; an invoice in any status can be **duplicated** into a new
+  draft. An unused tax rate can be deleted; a used one is deactivated instead.
+
+See [`CRUD_COVERAGE_SALES_DELIVERY.md`](CRUD_COVERAGE_SALES_DELIVERY.md) for the full coverage table.
+
 ## Known limitations
 
 - Online card payment needs a payment gateway; until one is configured, clients pay by bank transfer.

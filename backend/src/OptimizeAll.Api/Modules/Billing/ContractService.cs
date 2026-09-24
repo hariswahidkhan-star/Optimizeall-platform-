@@ -176,6 +176,27 @@ public sealed class ContractService(
             new[] { ContractStatus.Draft, ContractStatus.Active, ContractStatus.Paused }, ContractStatus.Cancelled, request.Reason.Trim(), ct);
     }
 
+    /// <summary>
+    /// Deletes a draft contract that never billed anything. Contracts that were activated, invoiced or created by an
+    /// accepted proposal are part of the billing record and are cancelled instead.
+    /// </summary>
+    public async Task DeleteDraftAsync(Guid id, Guid? stamp, CancellationToken ct)
+    {
+        await GetAsync(id, ct); // tenancy: another client's contract answers 404
+        var contract = await db.Set<Contract>().Include(c => c.Lines).FirstAsync(c => c.Id == id, ct);
+        invoices.RequireStamp(contract, stamp);
+        if (contract.Status != ContractStatus.Draft || contract.ActivatedAt is not null)
+            throw DomainException.Conflict("billing.contract_not_deletable", "Only a draft contract can be deleted. Cancel it instead.");
+        if (contract.ProposalId is not null)
+            throw DomainException.Conflict("billing.contract_from_proposal",
+                "This contract was created when the client accepted a proposal. Cancel it instead so the acceptance record stays complete.");
+        if (await db.Set<Invoice>().AnyAsync(i => i.ContractId == id, ct))
+            throw DomainException.Conflict("billing.contract_invoiced", "This contract already has invoices. Cancel it instead.");
+        db.Remove(contract);
+        audit.Record("billing.contract_deleted", nameof(Contract), id, before: new { contract.Number, contract.Title, contract.ClientAccountId });
+        await db.SaveChangesAsync(ct);
+    }
+
     private async Task<ContractDto> TransitionAsync(Guid id, Guid? stamp, ContractStatus[] from, ContractStatus to, string? reason, CancellationToken ct)
     {
         await GetAsync(id, ct);
