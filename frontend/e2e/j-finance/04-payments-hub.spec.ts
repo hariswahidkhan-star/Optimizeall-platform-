@@ -5,7 +5,6 @@ import {
   FINANCE_LANDING,
   accounts,
   expect,
-  latestMail,
   modal,
   money,
   raw,
@@ -23,7 +22,7 @@ import {
  *   are refused → she corrects the method (with a reason) → she may not refund her own payment; finance 2 refunds it
  *   (four-eyes) → the invoice balance is back to 999.99 and she marks it paid in full → a stale screen gets "changed by
  *   someone else" → Nimbus reports "I've paid" 250.00; the bank shows 249.50, so finance confirms 249.50 (balance
- *   0.50) → the client's second report is rejected with a reason the client sees → "send reminder now" emails the
+ *   0.50) → the client's second report is rejected with a reason the client sees → "send reminder now" notifies the
  *   client once (a second one within the hour is refused) → the reminder job sends each due stage once → the KPIs moved
  *   by exactly these amounts, per currency (GBP never mixed with USD).
  */
@@ -93,9 +92,15 @@ async function invoice(api: ApiSession, id: string) {
   return api.get<Invoice>(`/agency/billing/invoices/${id}`);
 }
 
-test('arrange: finance 1 issues a GBP invoice for Wanderly and two USD invoices for Nimbus; KPIs before', async ({
+test('arrange: KPIs before; finance 1 issues a GBP invoice for Wanderly and two USD invoices for Nimbus', async ({
   as,
 }) => {
+  const finance1 = await as(accounts.finance1, FINANCE_LANDING);
+  await finance1.goto('/finance/payments');
+  for (const c of ['USD', 'GBP'] as const) kpiBefore[`received:${c}`] = await kpi(finance1, 'Received this month', c);
+  for (const c of ['USD', 'GBP'] as const)
+    kpiBefore[`outstanding:${c}`] = await kpi(finance1, 'Outstanding receivables', c);
+
   const api = await ApiSession.login(accounts.finance1.email, accounts.finance1.password);
   wanderly = await issue(api, s().clientIds.wanderly, `W-${s().runId}`, 3, 333.33);
   nimbusA = await issue(api, s().clientIds.nimbus, `NA-${s().runId}`, 1, 800);
@@ -103,11 +108,11 @@ test('arrange: finance 1 issues a GBP invoice for Wanderly and two USD invoices 
   expect(wanderly.balance).toBe(999.99);
   expect([nimbusA.balance, nimbusB.balance]).toEqual([800, 250]);
 
-  const finance1 = await as(accounts.finance1, FINANCE_LANDING);
-  await finance1.goto('/finance/payments');
-  for (const c of ['USD', 'GBP'] as const) kpiBefore[`received:${c}`] = await kpi(finance1, 'Received this month', c);
-  for (const c of ['USD', 'GBP'] as const)
-    kpiBefore[`outstanding:${c}`] = await kpi(finance1, 'Outstanding receivables', c);
+  // Issuing moved only the receivables, each in its own currency.
+  await finance1.reload();
+  await expect.poll(() => kpi(finance1, 'Outstanding receivables', 'GBP')).toBe(sum([kpiBefore['outstanding:GBP']!, 999.99]));
+  await expect.poll(() => kpi(finance1, 'Outstanding receivables', 'USD')).toBe(sum([kpiBefore['outstanding:USD']!, 1050]));
+  expect(await kpi(finance1, 'Received this month', 'GBP')).toBe(kpiBefore['received:GBP']);
 });
 
 test('a double-clicked bank transfer is recorded once; overpayment and sub-penny amounts are refused', async ({ as }) => {
@@ -298,7 +303,7 @@ test('client "I’ve paid": a corrected confirmation (249.50) and a rejected rep
   errors.expectClean('claims');
 });
 
-test('reminders: "send now" emails the client once per hour; the reminder job sends each due stage once', async ({
+test('reminders: "send now" notifies the client once per hour; the reminder job sends each due stage once', async ({
   as,
 }) => {
   const finance1 = await as(accounts.finance1, FINANCE_LANDING);
@@ -310,8 +315,12 @@ test('reminders: "send now" emails the client once per hour; the reminder job se
   let dialog = modal(finance1, 'Send a payment reminder now');
   await dialog.getByRole('button', { name: 'Send reminder' }).click();
   await expect(toast(finance1, 'Reminder sent')).toBeVisible();
-  const mail = await latestMail(accounts.nimbusBilling.email, new RegExp(nimbusB.number));
-  expect(mail.text).toContain(nimbusB.number);
+  // The client's billing contact is notified (in-app + an email delivery the background sender picks up).
+  const clientApi = await ApiSession.login(accounts.nimbusBilling.email, accounts.nimbusBilling.password);
+  const notes = await clientApi.get<{ items: { title: string; body: string }[] }>('/me/notifications?pageSize=20');
+  const reminder = notes.items.filter((n) => n.title === `Payment reminder: invoice ${nimbusB.number}`);
+  expect(reminder).toHaveLength(1);
+  expect(reminder[0]!.body).toContain('0.50 USD'); // the balance the client still owes, in the invoice's minor units
 
   await rowAction(finance1, 'Invoice balance due', 'Send reminder now');
   dialog = modal(finance1, 'Send a payment reminder now');

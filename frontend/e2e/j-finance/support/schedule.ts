@@ -29,6 +29,10 @@ export function localParts(instant: Date, timeZone: string) {
  * journey gets two distinct completed periods minutes apart. Returns the period key.
  */
 export async function closePeriodNow(page: Page, timeZone: string, reason: string): Promise<string> {
+  // Everything that happened before this call (approvals…) must fall inside the period: wait until the cutoff — one
+  // second ago, whole seconds — is strictly after that moment.
+  const notBefore = Date.now();
+  await expect.poll(() => Math.floor(Date.now() / 1000) * 1000 - 1000 > notBefore, { intervals: [100] }).toBe(true);
   await page.goto('/finance/schedule');
   await expect(page.getByRole('heading', { level: 1, name: 'Payout schedule' })).toBeVisible();
   await page.getByRole('button', { name: 'Change schedule' }).click();
