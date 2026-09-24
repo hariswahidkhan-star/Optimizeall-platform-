@@ -12,7 +12,6 @@ import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
 import { useToast } from '@/components/ui/toastContext';
 import { api } from '@/lib/api/client';
-import { errorMessage } from '@/lib/api/errors';
 import { useAuth } from '@/lib/auth/useAuth';
 import { pluralize } from '@/lib/format/text';
 import { invalidateAfterSubmission, qk } from '../api/queries';
@@ -68,8 +67,9 @@ export function SubmitProofDialog({ open, onClose, campaign, experimentVariantId
       navigate(`/app/submissions/${created.id}`);
     },
     onError: (error) => {
+      // Every error is shown inside the dialog (on its field, or in the alert at the top). No toast: a persistent error
+      // toast sat on top of the dialog's footer and covered "Submit proof", so the participant couldn't retry.
       const mapped = mapProofErrors(error);
-      toast.error('Your proof wasn’t submitted', errorMessage(error));
       if (mapped) focusFirstError('proof', PROOF_FIELDS, mapped.fields);
     },
   });

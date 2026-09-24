@@ -88,6 +88,8 @@ describe('SubmitProofDialog', () => {
     await user.click(screen.getByRole('button', { name: 'Submit proof' }));
     const link = screen.getByLabelText(/Link to your post/);
     await waitFor(() => expect(link).toHaveAttribute('aria-invalid', 'true'));
+    // The error is shown on the field only: a persistent error toast would cover the dialog's "Submit proof" button.
+    expect(screen.queryByText('Your proof wasn’t submitted')).not.toBeInTheDocument();
 
     await user.clear(link);
     await user.type(link, 'https://www.instagram.com/p/other456/');
