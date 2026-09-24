@@ -357,7 +357,7 @@ function Home({ base, orgId, link }: { base: string; orgId: string; link: (p: st
 
       {h.nps.due ? <NpsSurvey base={base} orgId={orgId} period={h.nps.period} /> : null}
 
-      <DashboardGrid>
+      <DashboardGrid className="ui-dash-grid--start">
         <DashboardCell span={7}>
           <Card as="section" aria-label="Recent deliverables">
             <CardHeader title="Recent deliverables" headingLevel={2} />

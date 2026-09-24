@@ -221,6 +221,10 @@
   height: 40px;
 }
 
+.ui-state--error > .ui-state__icon {
+  margin-bottom: var(--space-2);
+}
+
 .ui-state--error .ui-state__icon {
   background: var(--danger-bg);
   color: var(--danger-fg);

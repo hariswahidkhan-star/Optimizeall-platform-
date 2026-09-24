@@ -67,9 +67,10 @@ toggle (persisted in `localStorage` key `oa.theme`) sets `<html data-theme="ligh
 | Interactive | `--color-primary(-hover/-active)`, `--color-on-primary`, `--color-primary-soft(-text)`, `--color-link`, `--color-accent*`, `--color-focus`, `--color-focus-halo` |
 | Semantic | `--{success,warning,danger,info,neutral,brand}-{bg,fg,border}` (+ `-solid`) — all fg/bg pairs ≥ 4.5:1 |
 | Charts | `--chart-1..3` (navy, amber, teal — validated for CVD separation in light and dark), `--chart-grid`, `--chart-axis` |
-| Type | Inter Variable (self-hosted via `@fontsource-variable/inter`); `--text-display/h1/h2/h3/h4/body/small/xs` |
+| Type | Inter Variable with the optical-size axis (self-hosted via `@fontsource-variable/inter/opsz.css`); `--text-display/h1/h2/h3/h4/body/small/xs/2xs`, `--text-kpi`, `--text-page-title`, `--tracking-tighter` |
 | Spacing | `--space-0…24` on a 4px base |
-| Radii / shadows | `--radius-xs…2xl/full`, `--shadow-xs/sm/md/lg/focus` |
+| Radii / shadows | `--radius-xs…2xl/full` (4/6/8/10/12/16 px), `--shadow-xs/sm/md/lg/focus`, `--shadow-highlight` (dark-mode top edge) |
+| Portal layout | `--portal-max` (1280), `--portal-topbar-height` (56), `--portal-sidebar-width` (248), `--portal-sidebar-collapsed` (64) |
 | Layers / motion | `--z-*`, `--duration-*` (zeroed under `prefers-reduced-motion`), `--ease-*` |
 | Breakpoints | sm 640, md 768, lg 1024, xl 1280 (mirrored in `lib/hooks/useMediaQuery.ts`) |
 
@@ -108,7 +109,10 @@ Utilities in `base.css`: `.visually-hidden`, `.skip-link`, `.container`, `.stack
 | `DataTable<T>` | `columns[{id,header,cell,sortable,sortValue,align,primary,hideOnMobile}]`, `rows`, `getRowId`, `caption`, `sort`/`onSortChange` (server) or local sort, `loading`, `emptyState`, `rowActions`, `selectable`/`selectedIds`/`onSelectionChange`/`bulkActions`, `maxHeight` (sticky header); stacked cards below md; a table wider than its container scrolls inside a focusable group named by the caption |
 | `ScrollArea` | `label` or `labelledBy`; a scroll container (wide tables, previews, carousels) that becomes a focusable, named group only while its content overflows — use it for any `overflow: auto` box without focusable content |
 | `FilterBar` | `search`/`onSearchChange` (debounced), `filters`, `values`, `onFilterChange`, `onReset`, `actions`; active filters as removable chips |
-| `Stat` | `label`, `value`, `measurement` Measured·Estimated·Count, `delta{value,label,positiveIsGood}`, `icon`, `hint`, `loading`. A `role="group"` named by its label (query tiles with `getByRole('group', { name: /^Pending/ })`) |
+| `Stat` | `label`, `value`, `measurement` Measured·Estimated·Count, `delta{value,display,label,positiveIsGood,neutral}` (arrow + tint + spoken "Up/Down/No change"), `trend{values,label}` (sparkline), `icon`, `hint`, `loading`. A `role="group"` named by its label (query tiles with `getByRole('group', { name: /^Pending/ })`) |
+| `StatGrid` | Grid of `Stat` tiles; `strip` joins them into one hairline-divided surface; `min` column width. Two per row on phones |
+| `DashboardGrid` / `DashboardCell` | 12-column dashboard grid (2 columns at md, 1 on phones); `span` 3·4·5·6·7·8·12; the last card in a cell stretches so a row shares one height |
+| `MeterList` | `label`, `items[{id,label,to,percent,valueText,meta}]`, `tone`; horizontal bars whose values are always printed as text |
 | `ProgressBar` / `ProgressRing` | `value`, `max`, `label`, `valueText` |
 | `Stepper` | `steps[{id,title,description,status,action}]`, `label` |
 | `Avatar` | `name`, `src`, `size`, `decorative` |
@@ -119,9 +123,77 @@ Utilities in `base.css`: `.visually-hidden`, `.skip-link`, `.container`, `.stack
 | `DateTime` | `value`, `format` datetime·date·relative·both, `timeZone` (defaults to the user’s profile zone), `withZone`; renders `<time dateTime>` |
 | `CopyField` | `label`, `value`; clipboard with fallback + polite announcement |
 | `KeyValueList` | `items[{label,value}]`, `layout` stacked·inline |
-| `BarChart` / `LineChart` / `Sparkline` | SVG, `title` + `description` (`<title>`/`<desc>`), hidden data table, hover tooltip; ≤3 series in fixed color order |
+| `BarChart` / `LineChart` / `Sparkline` | SVG, `title` + `description` (`<title>`/`<desc>`), hidden data table, hover tooltip; ≤3 series in fixed color order; `LineChart area` fills a gradient under the first series |
 
 Browse everything at **`/design-system`** (dev server, or builds with `VITE_SHOW_DESIGN_SYSTEM=true`).
+
+## Dashboard design
+
+Every portal home and the shared shell follow one set of rules — calm, spacious, data first (think Linear, Stripe,
+Vercel). Screenshots of every dashboard before and after the redesign (desktop 1440 and phone 390, light and dark) are
+in [`docs/screenshots/dashboards/`](screenshots/dashboards/).
+Files are named `<portal>-<desktop|mobile>-<light|dark>-<before|after>.png` (full-page captures of the Demo seed;
+the phone captures show the participant tab bar mid-page because it is fixed to the viewport):
+
+| Dashboard | Desktop light | Desktop dark | Phone light | Phone dark |
+|---|---|---|---|---|
+| Participant | [before](screenshots/dashboards/participant-desktop-light-before.png) · [after](screenshots/dashboards/participant-desktop-light-after.png) | [before](screenshots/dashboards/participant-desktop-dark-before.png) · [after](screenshots/dashboards/participant-desktop-dark-after.png) | [before](screenshots/dashboards/participant-mobile-light-before.png) · [after](screenshots/dashboards/participant-mobile-light-after.png) | [before](screenshots/dashboards/participant-mobile-dark-before.png) · [after](screenshots/dashboards/participant-mobile-dark-after.png) |
+| Reviewer | [before](screenshots/dashboards/reviewer-desktop-light-before.png) · [after](screenshots/dashboards/reviewer-desktop-light-after.png) | [before](screenshots/dashboards/reviewer-desktop-dark-before.png) · [after](screenshots/dashboards/reviewer-desktop-dark-after.png) | [before](screenshots/dashboards/reviewer-mobile-light-before.png) · [after](screenshots/dashboards/reviewer-mobile-light-after.png) | [before](screenshots/dashboards/reviewer-mobile-dark-before.png) · [after](screenshots/dashboards/reviewer-mobile-dark-after.png) |
+| Campaign manager | [before](screenshots/dashboards/manager-desktop-light-before.png) · [after](screenshots/dashboards/manager-desktop-light-after.png) | [before](screenshots/dashboards/manager-desktop-dark-before.png) · [after](screenshots/dashboards/manager-desktop-dark-after.png) | [before](screenshots/dashboards/manager-mobile-light-before.png) · [after](screenshots/dashboards/manager-mobile-light-after.png) | [before](screenshots/dashboards/manager-mobile-dark-before.png) · [after](screenshots/dashboards/manager-mobile-dark-after.png) |
+| Finance | [before](screenshots/dashboards/finance-desktop-light-before.png) · [after](screenshots/dashboards/finance-desktop-light-after.png) | [before](screenshots/dashboards/finance-desktop-dark-before.png) · [after](screenshots/dashboards/finance-desktop-dark-after.png) | [before](screenshots/dashboards/finance-mobile-light-before.png) · [after](screenshots/dashboards/finance-mobile-light-after.png) | [before](screenshots/dashboards/finance-mobile-dark-before.png) · [after](screenshots/dashboards/finance-mobile-dark-after.png) |
+| Admin | [before](screenshots/dashboards/admin-desktop-light-before.png) · [after](screenshots/dashboards/admin-desktop-light-after.png) | [before](screenshots/dashboards/admin-desktop-dark-before.png) · [after](screenshots/dashboards/admin-desktop-dark-after.png) | [before](screenshots/dashboards/admin-mobile-light-before.png) · [after](screenshots/dashboards/admin-mobile-light-after.png) | [before](screenshots/dashboards/admin-mobile-dark-before.png) · [after](screenshots/dashboards/admin-mobile-dark-after.png) |
+| Agency (account manager) | [before](screenshots/dashboards/agency-desktop-light-before.png) · [after](screenshots/dashboards/agency-desktop-light-after.png) | [before](screenshots/dashboards/agency-desktop-dark-before.png) · [after](screenshots/dashboards/agency-desktop-dark-after.png) | [before](screenshots/dashboards/agency-mobile-light-before.png) · [after](screenshots/dashboards/agency-mobile-light-after.png) | [before](screenshots/dashboards/agency-mobile-dark-before.png) · [after](screenshots/dashboards/agency-mobile-dark-after.png) |
+| Client portal | [before](screenshots/dashboards/client-desktop-light-before.png) · [after](screenshots/dashboards/client-desktop-light-after.png) | [before](screenshots/dashboards/client-desktop-dark-before.png) · [after](screenshots/dashboards/client-desktop-dark-after.png) | [before](screenshots/dashboards/client-mobile-light-before.png) · [after](screenshots/dashboards/client-mobile-light-after.png) | [before](screenshots/dashboards/client-mobile-dark-before.png) · [after](screenshots/dashboards/client-mobile-dark-after.png) |
+
+**Colour.** Neutrals are a cool slate with a whisper of the brand navy; dark mode is a near-black graphite (not a
+saturated navy) whose surfaces get lighter with elevation (`bg < surface < surface-2 < surface-3`). Colour is
+reserved for meaning: deltas (success/danger tint), status badges, the amber active-nav icon and chart series. Icons
+in KPI tiles and quick links are neutral. Every text/background pair stays ≥ 4.5:1 in both themes (the a11y suite
+runs axe in light and dark).
+
+**Type.** Inter with its optical-size axis, so page titles and KPI figures get Inter Display's tighter shapes
+automatically. Page titles use `--text-page-title` (24–28 px, semibold, `--tracking-tighter`); card titles are 15 px
+semibold; labels 13 px medium muted; section labels in the sidebar 11 px uppercase. Figures are always tabular.
+
+**Surfaces.** Borders separate, shadows only hint (`--shadow-xs` plus a faint top highlight in dark mode). Cards are
+12 px radius, controls 8 px. Lists inside cards are hairline-divided rows that run edge to edge (`CardBody flush`)
+instead of boxed items; row titles are quiet links that underline on hover.
+
+**Shell.** The sidebar and top bar sit on the page background, divided from the content by a hairline. Nav items are
+grouped under section labels (`app/navGroups.ts` — labels only name runs of consecutive items, the nav order never
+changes), the active item is a raised white pill with an amber icon plus `aria-current`, and the sidebar folds into a
+64 px icon rail on desktop (remembered in `localStorage` key `oa.sidebar`; link names stay in the accessibility tree
+and show as tooltips). Below lg the same grouped nav opens in the drawer; participants keep the bottom tab bar, whose
+active tab gets a pill behind the icon and a heavier label. The top bar holds the search field (left), then portal
+switcher, theme, notifications and account.
+
+**Page anatomy.** `PageHeader` (eyebrow, title, one-line description, primary action) → a KPI strip (`StatGrid
+strip`) → the work: a `DashboardGrid` with the main list on the left (7–8 columns) and supporting panels on the right
+(4–5) → secondary sections under a small `ui-dash-head` heading → quick links. Pages use `ui-dash` for vertical
+rhythm (24 px, 32 px from lg).
+
+**Data display.** KPI tiles show one figure, its measurement tag (Count · Measured · Estimated, never hidden), and
+where the data exists a delta vs the previous period and a sparkline. The manager and admin homes fetch the analytics
+overview for the previous 30 days and compare metric by metric (`lib/format/delta.ts`): counts and money as a relative
+change (money only in the same currency), percentages in points (“+4.2 pts”); spend is neutral grey and costs are
+lower-is-better. Sparklines come from the overview's daily timeseries. The direction is never colour alone: arrow,
+tint and the words “Up/Down/No change” for screen readers.
+
+**States.** Loading placeholders keep the final layout (a KPI-strip-sized block plus card-sized blocks) so nothing
+shifts; empty states show an icon tile over soft concentric rings (an echo of the logo) with a title, one line and,
+where useful, the next action; errors sit in a card with a retry.
+
+**Per portal.**
+
+| Portal | Home |
+|---|---|
+| Participant `/app` | Greeting + unread/support shortcuts, banners, earnings strip (pending · approved · paid · lifetime), submissions needing attention beside the next-payout panel, recommendations, achievements, announcements |
+| Reviewer `/review` | “Start reviewing” action, workload strip (pending · under review · oldest · my decisions), secondary counts, quick links to each queue |
+| Campaign manager `/manage` | Last-30-days strip with deltas and sparklines, active campaigns table, submissions area chart beside spend-by-campaign meters |
+| Finance `/finance` | Strip (cutoff countdown · approvals · holds · batches awaiting payment), current period beside the schedule, latest batches beside reconciliation |
+| Admin `/admin` | Last-30-days strip with deltas and sparklines, “Needs attention” tiles with footer links, quick links |
+| Agency `/agency` | My work strip, tasks beside the timer, internal reviews beside client approvals, today's meetings, then Accounts (client health, overdue by client, utilization meters) and the agency snapshot for admins; registered area tiles last |
+| Client `/client` | Onboarding, at-a-glance strip, approvals beside latest report and meetings, projects beside messages, NPS survey, recent deliverables beside the account team |
 
 ## API client & auth flow
 

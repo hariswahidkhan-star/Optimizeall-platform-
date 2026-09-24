@@ -137,6 +137,23 @@
   max-width: 28rem;
 }
 
+/* The project name is the row title right above; the bar's own label stays for assistive tech only. */
+.dl-dash .dl-list .ui-progress__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.dl-dash .dl-list .ui-progress__meta {
+  justify-content: flex-end;
+  margin-bottom: -6px;
+  font-size: var(--text-xs);
+}
+
 .dl-dash .cc-team {
   grid-template-columns: 1fr;
   gap: 0;
