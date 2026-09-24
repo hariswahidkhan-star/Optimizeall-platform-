@@ -40,7 +40,9 @@ public sealed class GoogleSignInService(
     IEventPublisher events,
     IPrivacyHasher privacyHasher,
     IOptions<GoogleAuthOptions> options,
-    TimeProvider clock)
+    TimeProvider clock,
+    Notifications.Templates.AccountEmails accountEmails,
+    ILogger<GoogleSignInService> logger)
 {
     private const string Provider = ExternalLoginProviders.Google;
     public static readonly TimeSpan FlowLifetime = TimeSpan.FromMinutes(10);
@@ -135,6 +137,7 @@ public sealed class GoogleSignInService(
                 db.ChangeTracker.Clear();
                 return await SignInAsync(identity, returnTo, ct, retried: true);
             }
+            await SendLinkedNoticeAsync(existing, identity.Email, ct);
             return new GoogleCallbackResult(new GoogleCallbackResponse(GoogleCallbackStatus.SignedIn, session.Response, ReturnTo: returnTo), session);
         }
 
@@ -174,7 +177,22 @@ public sealed class GoogleSignInService(
             db.ChangeTracker.Clear();
             return await LinkToSignedInUserAsync(userId, identity, returnTo, ct, retried: true);
         }
+        await SendLinkedNoticeAsync(user, identity.Email, ct);
         return new GoogleCallbackResult(new GoogleCallbackResponse(GoogleCallbackStatus.Linked, ReturnTo: returnTo), null);
+    }
+
+    /// <summary>Security notice to the account owner (editable template "auth.google_linked"); best effort.</summary>
+    private async Task SendLinkedNoticeAsync(User user, string googleEmail, CancellationToken ct)
+    {
+        try
+        {
+            var result = await accountEmails.SendGoogleLinkedAsync(user, googleEmail, ct);
+            if (!result.Success) logger.LogWarning("Google-connected notice for user {UserId} failed: {Error}", user.Id, result.Error);
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            logger.LogWarning(ex, "Google-connected notice for user {UserId} failed", user.Id);
+        }
     }
 
     /// <summary>Creates the Participant account of a new Google user after they accepted the terms, and signs them in.</summary>

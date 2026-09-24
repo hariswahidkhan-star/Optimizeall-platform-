@@ -16,10 +16,15 @@ public static class EmailTemplateCatalog
     public const string BookingConfirmed = "website.booking_confirmed";
     public const string BookingCancelled = "website.booking_cancelled";
     public const string BookingRescheduled = "website.booking_rescheduled";
+    public const string AuthVerifyEmail = "auth.verify_email";
+    public const string AuthPasswordReset = "auth.password_reset";
+    public const string AuthDuplicateRegistration = "auth.duplicate_registration";
+    public const string AuthGoogleLinked = "auth.google_linked";
 
     public const string GroupLayout = "Notification layout";
     public const string GroupNotifications = "Notification emails";
     public const string GroupWebsite = "Website emails";
+    public const string GroupAccount = "Account emails";
 
     private static readonly EmailVariable SiteName = new("siteName", "The site name from site settings.", "Optimize All");
     private static readonly EmailVariable DisplayName = new("displayName", "The recipient's display name.", "Ada Lovelace");
@@ -120,6 +125,70 @@ public static class EmailTemplateCatalog
             "Your consultation with Optimize All has a new time",
             "Hi {{name}},\n\nYour consultation has been moved to {{when}}.\n\nIf the new time doesn't work, reply to this email.\n\n— The Optimize All team",
             null, bookingVars, HasHtml: false));
+
+        AddAccountEmails(list);
         return list;
+    }
+
+    /// <summary>
+    /// Sign-up and sign-in emails sent by the Auth module (<see cref="AccountEmails"/>). The defaults are the texts the
+    /// Auth module sent before they became editable, word for word (unit test <c>AccountEmailTemplateTests</c>). Each
+    /// must keep its action link.
+    /// </summary>
+    private static void AddAccountEmails(List<EmailTemplateDefinition> list)
+    {
+        var forgotUrl = new EmailVariable("forgotPasswordUrl", "The \"forgot password\" page.", "https://app.example.com/forgot-password", Required: true);
+
+        // The display name is attacker-controlled until the address is verified, so it is not offered here.
+        list.Add(new EmailTemplateDefinition(AuthVerifyEmail, GroupAccount, "Verify email address",
+            "Sent after someone registers with an email and password, and when they ask for a new verification link.",
+            "Verify your Optimize All email",
+            "Welcome to Optimize All!\n\nConfirm your email address to start joining paid campaigns:\n{{verifyUrl}}\n\n" +
+            "This link expires in {{hours}} hours.",
+            null,
+            new[]
+            {
+                new EmailVariable("verifyUrl", "The verification link.", "https://app.example.com/verify-email?token=abc", Required: true),
+                new EmailVariable("hours", "How long the link stays valid.", "48"),
+                SiteName,
+            },
+            HasHtml: false));
+
+        list.Add(new EmailTemplateDefinition(AuthPasswordReset, GroupAccount, "Reset password",
+            "Sent when someone asks to reset their password (\"Forgot password?\").",
+            "Reset your Optimize All password",
+            "Hi {{displayName}},\n\nUse this link within one hour to choose a new password:\n{{resetUrl}}\n\n" +
+            "If you didn't ask for this, you can ignore this email; your password won't change.",
+            null,
+            new[]
+            {
+                new EmailVariable("resetUrl", "The password-reset link (valid for one hour).", "https://app.example.com/reset-password?token=abc", Required: true),
+                DisplayName, SiteName,
+            },
+            HasHtml: false));
+
+        list.Add(new EmailTemplateDefinition(AuthDuplicateRegistration, GroupAccount, "Someone tried to register with your email",
+            "Sent to the owner of an existing account when someone registers with the same email address (at most once a day).",
+            "Someone tried to register with your email",
+            "Hi {{displayName}},\n\nSomeone tried to create an Optimize All account with this email address. " +
+            "If it was you, sign in or reset your password at {{forgotPasswordUrl}}.\n\n" +
+            "If it wasn't you, you can ignore this message.",
+            null,
+            new[] { forgotUrl, DisplayName, SiteName },
+            HasHtml: false));
+
+        list.Add(new EmailTemplateDefinition(AuthGoogleLinked, GroupAccount, "Google sign-in connected",
+            "Security notice sent when a Google account is connected to an existing account (from the profile, or automatically by a matching verified email).",
+            "Google sign-in was connected to your Optimize All account",
+            "Hi {{displayName}},\n\nThe Google account {{googleEmail}} can now be used to sign in to your Optimize All account.\n\n" +
+            "If this wasn't you, reset your password at {{forgotPasswordUrl}} right away and disconnect Google in your " +
+            "profile's security settings.",
+            null,
+            new[]
+            {
+                new EmailVariable("googleEmail", "The email address of the connected Google account.", "ada@gmail.com"),
+                forgotUrl, DisplayName, SiteName,
+            },
+            HasHtml: false));
     }
 }

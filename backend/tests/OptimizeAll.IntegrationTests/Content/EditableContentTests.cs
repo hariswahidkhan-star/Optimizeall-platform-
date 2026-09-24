@@ -216,4 +216,47 @@ public sealed class EditableContentTests(ApiFactory api) : IClassFixture<ApiFact
         });
         await broken.ShouldFailAsync(400, "email_template.invalid");
     }
+
+    [Fact]
+    public async Task Account_email_templates_are_listed_require_their_link_and_reach_sent_auth_emails()
+    {
+        var admin = await api.AdminAsync();
+        var list = await admin.GetJsonAsync("/api/v1/admin/email-templates");
+        var account = list.EnumerateArray().Where(t => t.GetProperty("group").GetString() == "Account emails")
+            .Select(t => t.GetProperty("key").GetString()).ToList();
+        Assert.Contains("auth.verify_email", account);
+        Assert.Contains("auth.password_reset", account);
+        Assert.Contains("auth.duplicate_registration", account);
+        Assert.Contains("auth.google_linked", account);
+
+        // The reset link cannot be edited away.
+        var missing = await admin.PutAsJsonAsync("/api/v1/admin/email-templates/auth.password_reset", new
+        {
+            subject = "Reset", body = "Hi {{displayName}}, reset your password.", concurrencyStamp = (Guid?)null,
+        });
+        await missing.ShouldFailAsync(400, "email_template.invalid");
+        Assert.Contains("resetUrl", await missing.Content.ReadAsStringAsync());
+
+        var saved = await admin.PutJsonAsync("/api/v1/admin/email-templates/auth.password_reset", new
+        {
+            subject = "Choose a new {{siteName}} password",
+            body = "Hello {{displayName}},\n\nPick a new password here: {{resetUrl}}",
+            concurrencyStamp = (Guid?)null,
+        });
+        var stamp = saved.GetProperty("concurrencyStamp").GetGuid();
+
+        var user = await api.CreateUserAsync();
+        var anon = api.Anonymous();
+        Assert.Equal(202, (int)(await anon.PostAsJsonAsync("/api/v1/auth/forgot-password", new { email = user.Email })).StatusCode);
+        var mail = await anon.GetJsonAsync($"/api/v1/dev/mailbox?to={Uri.EscapeDataString(user.Email)}");
+        Assert.Equal("Choose a new Optimize All password", mail.GetProperty("subject").GetString());
+        Assert.Contains(mail.GetProperty("links").EnumerateArray(), l => l.GetString()!.Contains("/reset-password?token="));
+
+        Assert.Equal(204, (int)(await admin.DeleteAsync($"/api/v1/admin/email-templates/auth.password_reset?concurrencyStamp={stamp}")).StatusCode);
+        var (_, participant) = await api.CreateClientAsync(Role.Participant);
+        await (await participant.PutAsJsonAsync("/api/v1/admin/email-templates/auth.password_reset", new
+        {
+            subject = "x", body = "{{resetUrl}}", concurrencyStamp = (Guid?)null,
+        })).ShouldFailAsync(403);
+    }
 }

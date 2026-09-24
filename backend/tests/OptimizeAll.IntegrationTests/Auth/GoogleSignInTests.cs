@@ -181,6 +181,9 @@ public sealed class GoogleSignInTests(GoogleSignInFixture fx) : IClassFixture<Go
         var login = Assert.Single(await LoginsAsync(existing.Id));
         Assert.Equal(subject, login.Subject);
         Assert.Contains("auth.external_login_linked", await AuditActionsAsync(existing.Id));
+        // The owner gets the (editable) security notice.
+        var notice = await (await NewClient().GetAsync($"/api/v1/dev/mailbox?to={Uri.EscapeDataString(existing.Email)}")).ReadJsonAsync();
+        Assert.Equal("Google sign-in was connected to your Optimize All account", notice.GetProperty("subject").GetString());
         // The password keeps working.
         await Api.LoginAsync(existing);
     }
