@@ -286,7 +286,7 @@ public sealed class SmsSegmentRequest
 {
     [MaxLength(1600)] public string Text { get; set; } = string.Empty;
     [Range(0, 10_000_000)] public int Recipients { get; set; }
-    [Range(0, 10)] public decimal CostPerSegment { get; set; }
+    [Range(typeof(decimal), "0", "10")] public decimal CostPerSegment { get; set; }
 }
 
 public sealed record SmsSegmentResult(string Encoding, int Characters, int Segments, int PerSegment, int Remaining, decimal EstimatedCost)

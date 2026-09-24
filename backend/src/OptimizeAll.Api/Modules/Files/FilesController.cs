@@ -35,6 +35,7 @@ public sealed class FilesController(IFileService files, ICurrentUser currentUser
     /// <summary>Uploads a public campaign/content image (PNG, JPEG or WebP, max 10 MB, 200–10000 px per side).</summary>
     [Authorize]
     [HttpPost("api/v1/admin/files")]
+    [RequireAnyPermission(Permissions.CampaignsManage, Permissions.ContentManage)]
     [RequestSizeLimit(12 * 1024 * 1024)]
     public async Task<ActionResult<StoredFileDto>> Upload([FromForm] UploadFileForm form, CancellationToken ct)
     {

@@ -45,13 +45,13 @@ public sealed class CampaignInput
     [MaxLength(100)] public string? Objective { get; set; }
     public AdEntityStatus Status { get; set; } = AdEntityStatus.Draft;
     public BudgetType BudgetType { get; set; } = BudgetType.Daily;
-    [Range(0, 1_000_000_000)] public decimal? BudgetAmount { get; set; }
+    [Range(typeof(decimal), "0", "1000000000")] public decimal? BudgetAmount { get; set; }
     [MaxLength(100)] public string? BidStrategy { get; set; }
     public DateOnly? StartDate { get; set; }
     public DateOnly? EndDate { get; set; }
     [MaxLength(2000)] public string? TargetingSummary { get; set; }
-    [Range(0, 1_000_000)] public decimal? TargetCpa { get; set; }
-    [Range(0, 1000)] public decimal? TargetRoas { get; set; }
+    [Range(typeof(decimal), "0", "1000000")] public decimal? TargetCpa { get; set; }
+    [Range(typeof(decimal), "0", "1000")] public decimal? TargetRoas { get; set; }
     public Guid? ConcurrencyStamp { get; set; }
 }
 
@@ -59,7 +59,7 @@ public sealed class AdGroupInput
 {
     [Required, MaxLength(300)] public string Name { get; set; } = string.Empty;
     [DefinedEnum] public AdEntityStatus Status { get; set; } = AdEntityStatus.Draft;
-    [Range(0, 1_000_000_000)] public decimal? BudgetAmount { get; set; }
+    [Range(typeof(decimal), "0", "1000000000")] public decimal? BudgetAmount { get; set; }
     [MaxLength(100)] public string? BidStrategy { get; set; }
     [MaxLength(2000)] public string? TargetingSummary { get; set; }
     public Guid? ConcurrencyStamp { get; set; }
@@ -440,6 +440,7 @@ public sealed class AdsAccountsController(
 
     /// <summary>Ads KPIs of one client for reports (reports.manage or ads.manage); see docs/api/social-ads.md.</summary>
     [HttpGet("clients/{clientId:guid}/kpis")]
+    [RequireAnyPermission(Permissions.ReportsManage, Permissions.AdsManage)]
     public async Task<ClientAdsKpisDto> ClientKpis(Guid clientId, [FromQuery] DateOnly? from, [FromQuery] DateOnly? to, CancellationToken ct)
     {
         if (!currentUser.HasPermission(Permissions.ReportsManage) && !currentUser.HasPermission(Permissions.AdsManage))

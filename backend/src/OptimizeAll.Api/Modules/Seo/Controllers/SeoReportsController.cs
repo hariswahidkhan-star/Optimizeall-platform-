@@ -25,6 +25,7 @@ public sealed record ClientSeoOverviewDto(DateOnly From, DateOnly To, IReadOnlyL
 public sealed class SeoReportsController(AppDbContext db, SeoAccess access, ICurrentUser currentUser, TimeProvider clock) : ControllerBase
 {
     [HttpGet("api/v1/agency/seo/clients/{clientId:guid}/kpis")]
+    [RequireAnyPermission(Permissions.SeoManage, Permissions.ReportsManage)]
     public async Task<ClientSeoKpisDto> Kpis(Guid clientId, [FromQuery] DateOnly? from, [FromQuery] DateOnly? to, CancellationToken ct)
     {
         if (!currentUser.HasPermission(Permissions.SeoManage) && !currentUser.HasPermission(Permissions.ReportsManage))

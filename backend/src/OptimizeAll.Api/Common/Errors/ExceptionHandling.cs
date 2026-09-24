@@ -61,3 +61,22 @@ public sealed class ProblemExceptionHandler(ILogger<ProblemExceptionHandler> log
     /// <summary>Unique/primary-key violation on either provider (MySQL ER_DUP_ENTRY, SQLite constraint 2067/1555).</summary>
     public static bool IsUniqueViolation(DbUpdateException ex) => Persistence.DatabaseErrors.IsUniqueViolation(ex);
 }
+
+/// <summary>
+/// Completes every problem response the same way, whoever produced it (the exception handler, model validation, a
+/// <c>NotFound()</c>, or the status-code pages for bodiless 401/403/404/405/415 answers): a machine-readable <c>code</c>
+/// (<c>validation_failed</c> for field errors, otherwise <c>http_{status}</c>, the web client's own fallbacks) and the
+/// <c>traceId</c> of the request.
+/// </summary>
+public static class ProblemDefaults
+{
+    public static void Apply(ProblemDetailsContext context)
+    {
+        var problem = context.ProblemDetails;
+        problem.Status ??= context.HttpContext.Response.StatusCode;
+        if (!problem.Extensions.ContainsKey("code"))
+            problem.Extensions["code"] = problem is HttpValidationProblemDetails { Errors.Count: > 0 } ? "validation_failed" : $"http_{problem.Status}";
+        if (!problem.Extensions.ContainsKey("traceId"))
+            problem.Extensions["traceId"] = context.HttpContext.TraceIdentifier;
+    }
+}

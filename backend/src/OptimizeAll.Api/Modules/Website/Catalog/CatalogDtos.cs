@@ -39,10 +39,10 @@ public sealed class PackageInput : StampedInput
 {
     [Required, MaxLength(80)] public string Name { get; set; } = string.Empty;
     [MaxLength(500)] public string? Description { get; set; }
-    [Range(0, 10_000_000)] public decimal? Price { get; set; }
+    [Range(typeof(decimal), "0", "10000000")] public decimal? Price { get; set; }
     [Required, MaxLength(3)] public string Currency { get; set; } = "USD";
     [Required] public PackageBillingPeriod? BillingPeriod { get; set; }
-    [Range(0, 10_000_000)] public decimal? SetupFee { get; set; }
+    [Range(typeof(decimal), "0", "10000000")] public decimal? SetupFee { get; set; }
     public List<string?>? Features { get; set; }
     public bool IsMostPopular { get; set; }
     public bool IsCustomQuote { get; set; }

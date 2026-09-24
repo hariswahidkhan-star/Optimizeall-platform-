@@ -31,16 +31,20 @@ public sealed class PaymentsHubController(
     AppDbContext db) : ControllerBase
 {
     [HttpGet]
+    [RequireAnyPermission(Permissions.BillingView, Permissions.PayoutsView)]
     public Task<PagedResult<PaymentRecordDto>> List([FromQuery] PaymentHubQuery query, CancellationToken ct) => queries.ListAsync(query, ct);
 
     [HttpGet("summary")]
+    [RequireAnyPermission(Permissions.BillingView, Permissions.PayoutsView)]
     public Task<PaymentsSummaryDto> Summary(CancellationToken ct) => queries.SummaryAsync(ct);
 
     [HttpGet("records/{kind}/{id:guid}")]
+    [RequireAnyPermission(Permissions.BillingView, Permissions.PayoutsView)]
     public Task<PaymentRecordDetailDto> Detail(PaymentRecordKind kind, Guid id, CancellationToken ct) => queries.DetailAsync(kind, id, ct);
 
     /// <summary>CSV of every record matching the filters (formula-safe; at most 20,000 rows).</summary>
     [HttpGet("export.csv")]
+    [RequireAnyPermission(Permissions.BillingView, Permissions.PayoutsView)]
     public async Task<FileContentResult> Export([FromQuery] PaymentHubQuery query, CancellationToken ct)
     {
         var rows = await queries.ExportAsync(query, ct);
@@ -181,6 +185,7 @@ public sealed class PaymentsHubController(
 
     /// <summary>Who is calling and what they may do (drives the page's sections and buttons).</summary>
     [HttpGet("capabilities")]
+    [RequireAnyPermission(Permissions.BillingView, Permissions.PayoutsView)]
     public object Capabilities()
     {
         queries.RequireAny();
