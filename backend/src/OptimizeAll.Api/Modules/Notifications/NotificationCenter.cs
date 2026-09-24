@@ -353,11 +353,21 @@ public sealed class NotificationCenterService(
         }
         q = query.Desc ? q.OrderByDescending(x => x.d.CreatedAt).ThenByDescending(x => x.d.Id) : q.OrderBy(x => x.d.CreatedAt).ThenBy(x => x.d.Id);
 
-        var page = await q.Select(x => new DeliveryDto(x.d.Id, x.d.NotificationId, x.d.UserId, x.u == null ? null : x.u.Email,
-                x.n == null ? null : x.n.Type, x.n == null ? null : x.n.Title, x.d.Channel, x.d.Status, x.d.Attempts, x.d.NextAttemptAt,
-                x.d.LockedUntil, x.d.LastError, x.d.ProviderMessageId, x.d.CreatedAt, x.d.SentAt))
-            .ToPagedAsync(query, ct);
-        return page;
+        var rows = q.Select(x => new DeliveryDto(x.d.Id, x.d.NotificationId, x.d.UserId, x.u == null ? null : x.u.Email,
+            x.n == null ? null : x.n.Type, x.n == null ? null : x.n.Title, x.d.Channel, x.d.Status, x.d.Attempts, x.d.NextAttemptAt,
+            x.d.LockedUntil, x.d.LastError, x.d.ProviderMessageId, x.d.CreatedAt, x.d.SentAt));
+        if (!string.IsNullOrWhiteSpace(query.Search)) return await rows.ToPagedAsync(query, ct);
+
+        // Without a search the left joins (primary-key lookups) never change the row count: count the deliveries alone
+        // instead of joining every delivery to its notification and user just to count them.
+        var deliveries = db.Set<NotificationDelivery>().AsNoTracking();
+        if (id is { } onlyId) deliveries = deliveries.Where(d => d.Id == onlyId);
+        if (query.Status is { } byStatus) deliveries = deliveries.Where(d => d.Status == byStatus);
+        if (query.Channel is { } byChannel) deliveries = deliveries.Where(d => d.Channel == byChannel);
+        if (query.UserId is { } byUser) deliveries = deliveries.Where(d => d.UserId == byUser);
+        var total = await deliveries.CountAsync(ct);
+        var items = await rows.Skip(query.Skip).Take(query.PageSize).ToListAsync(ct);
+        return new PagedResult<DeliveryDto>(items, total, query.Page, query.PageSize);
     }
 
     /// <summary>Returns a permanently failed delivery to the queue (fresh attempt budget). Only Failed deliveries can be retried.</summary>

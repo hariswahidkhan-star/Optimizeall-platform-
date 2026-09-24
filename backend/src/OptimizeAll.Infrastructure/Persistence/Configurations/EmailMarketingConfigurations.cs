@@ -45,6 +45,8 @@ internal sealed class SubscriberConfiguration : IEntityTypeConfiguration<Subscri
         b.HasIndex(x => new { x.ScopeKey, x.NormalizedEmail }).IsUnique();
         b.HasIndex(x => new { x.ScopeKey, x.Phone });
         b.HasIndex(x => new { x.ScopeKey, x.Status });
+        // Subscriber list (default sort: newest first) per workspace.
+        b.HasIndex(x => new { x.ScopeKey, x.CreatedAt });
         b.HasOne<ClientAccount>().WithMany().HasForeignKey(x => x.ClientAccountId).OnDelete(DeleteBehavior.Cascade);
     }
 }

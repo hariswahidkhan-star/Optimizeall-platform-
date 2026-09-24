@@ -160,7 +160,8 @@ public static class BenchCases
                     select new { d, n, u };
             var ordered = q.OrderByDescending(x => x.d.CreatedAt).ThenByDescending(x => x.d.Id)
                 .Select(x => new { x.d.Id, Email = x.u == null ? null : x.u.Email, Type = x.n == null ? null : x.n.Type, x.d.Status });
-            await ordered.CountAsync();
+            if (Legacy) await ordered.CountAsync();
+            else await db.Set<NotificationDelivery>().AsNoTracking().CountAsync();
             await ordered.Skip(0).Take(25).ToListAsync();
         }),
 
@@ -394,17 +395,24 @@ public static class BenchCases
         new("retention.job-runs", "DataRetentionJob: job runs older than 30 days (batch of ids)", async (db, c) =>
         {
             var cutoff = c.Now.AddDays(-30);
-            await db.Set<JobRun>().Where(r => r.StartedAt < cutoff && r.Status != JobRunStatus.Running).OrderBy(r => r.StartedAt).Select(r => r.Id).Take(1000).ToListAsync();
+            await db.Set<JobRun>().AsNoTracking().Where(r => r.StartedAt < cutoff && r.Status != JobRunStatus.Running).OrderBy(r => r.StartedAt).Select(r => r.Id).Take(1000).ToListAsync();
         }),
         new("retention.notifications", "DataRetentionJob: read notifications older than 180 days (batch of ids)", async (db, c) =>
         {
-            var cutoff = c.Now.AddDays(-180);
-            await db.Set<Notification>().Where(n => n.CreatedAt < cutoff && n.ReadAt != null).OrderBy(n => n.CreatedAt).Select(n => n.Id).Take(1000).ToListAsync();
+            var readCutoff = c.Now.AddDays(-180);
+            var allCutoff = c.Now.AddDays(-365);
+            var bound = OptimizeAll.Domain.Common.IdGenerator.LowerBound(readCutoff);
+            var deliveries = db.Set<NotificationDelivery>();
+            await db.Set<Notification>().AsNoTracking()
+                .Where(n => n.Id.CompareTo(bound) < 0 && ((n.ReadAt != null && n.CreatedAt < readCutoff) || n.CreatedAt < allCutoff) &&
+                            !deliveries.Any(d => d.NotificationId == n.Id && (d.Status == DeliveryStatus.Pending || d.Status == DeliveryStatus.Sending)))
+                .OrderBy(n => n.Id).Select(n => n.Id).Take(1000).ToListAsync();
         }),
         new("retention.refresh-tokens", "DataRetentionJob: expired refresh tokens (batch of ids)", async (db, c) =>
         {
-            var cutoff = c.Now.AddDays(-7);
-            await db.Set<RefreshToken>().Where(t => t.ExpiresAt < cutoff).OrderBy(t => t.ExpiresAt).Select(t => t.Id).Take(1000).ToListAsync();
+            var cutoff = c.Now.AddDays(-30);
+            var bound = OptimizeAll.Domain.Common.IdGenerator.LowerBound(cutoff);
+            await db.Set<RefreshToken>().AsNoTracking().Where(t => t.Id.CompareTo(bound) < 0 && t.ExpiresAt < cutoff).OrderBy(t => t.Id).Select(t => t.Id).Take(1000).ToListAsync();
         }),
     };
 

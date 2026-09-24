@@ -31,9 +31,17 @@ internal sealed class SubmissionConfiguration : IEntityTypeConfiguration<Submiss
 
         b.HasIndex(x => new { x.Status, x.SubmittedAt });
         b.HasIndex(x => new { x.UserId, x.CampaignId });
+        // Participant's own list (newest first) and the 24-hour submission velocity risk signal.
+        b.HasIndex(x => new { x.UserId, x.SubmittedAt });
         b.HasIndex(x => new { x.CampaignId, x.Status });
-        b.HasIndex(x => new { x.LiveCheckStatus, x.LiveCheckDueAt });
+        // Live checks: every query also filters Status = Approved (list ordered by due date, due count, reminder job).
+        b.HasIndex(x => new { x.LiveCheckStatus, x.Status, x.LiveCheckDueAt });
         b.HasIndex(x => x.AssignedReviewerId);
+        // Reviewer's own active claims (review stats, "claimed by me" filter).
+        b.HasIndex(x => new { x.ClaimedByUserId, x.ClaimExpiresAt });
+        // Analytics: posts submitted / approvals decided in a date range.
+        b.HasIndex(x => x.SubmittedAt);
+        b.HasIndex(x => new { x.Status, x.DecidedAt });
 
         b.HasOne<Campaign>().WithMany().HasForeignKey(x => x.CampaignId).OnDelete(DeleteBehavior.Restrict);
         b.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Restrict);
