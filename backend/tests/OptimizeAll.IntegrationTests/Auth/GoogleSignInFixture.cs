@@ -70,13 +70,14 @@ public sealed class FakeGoogle : HttpMessageHandler
     }
 
     public string IdToken(string subject, string email, string nonce, bool emailVerified = true, string? name = "Google User",
-        string audience = GoogleSignInFixture.ClientId, RSA? signWith = null)
+        string audience = GoogleSignInFixture.ClientId, RSA? signWith = null, string? hostedDomain = null)
     {
         var claims = new Dictionary<string, object>
         {
             ["sub"] = subject, ["email"] = email, ["email_verified"] = emailVerified, ["nonce"] = nonce,
         };
         if (name is not null) claims["name"] = name;
+        if (hostedDomain is not null) claims["hd"] = hostedDomain;
         return new JsonWebTokenHandler().CreateToken(new SecurityTokenDescriptor
         {
             Issuer = "https://accounts.google.com",

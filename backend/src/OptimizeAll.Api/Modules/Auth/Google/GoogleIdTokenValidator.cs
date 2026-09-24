@@ -44,7 +44,7 @@ public sealed class GoogleJwksProvider(IHttpClientFactory httpClients, TimeProvi
             if (!response.IsSuccessStatusCode)
             {
                 logger.LogWarning("Fetching Google signing keys failed with {Status}", (int)response.StatusCode);
-                if (_keys is not null) return _keys; // keep serving the last good set
+                if (_keys is not null) return KeepStaleKeys(now); // keep serving the last good set
                 throw Unavailable();
             }
             var json = await response.Content.ReadAsStringAsync(ct);
@@ -60,7 +60,7 @@ public sealed class GoogleJwksProvider(IHttpClientFactory httpClients, TimeProvi
         {
             if (ct.IsCancellationRequested) throw;
             logger.LogWarning(ex, "Fetching Google signing keys failed");
-            if (_keys is not null) return _keys;
+            if (_keys is not null) return KeepStaleKeys(clock.GetUtcNow());
             throw Unavailable();
         }
         finally
@@ -69,13 +69,24 @@ public sealed class GoogleJwksProvider(IHttpClientFactory httpClients, TimeProvi
         }
     }
 
+    /// <summary>
+    /// Google's JWKS endpoint is failing: keep the last good keys and wait before trying again, so an outage doesn't
+    /// make every sign-in queue behind a fresh (timing-out) fetch.
+    /// </summary>
+    private IReadOnlyList<SecurityKey> KeepStaleKeys(DateTimeOffset now)
+    {
+        _lastFetch = now;
+        if (_expiresAt < now + ForcedRefreshInterval) _expiresAt = now + ForcedRefreshInterval;
+        return _keys!;
+    }
+
     private static DomainException Unavailable() =>
         new("auth.google_unavailable", "Google sign-in is temporarily unavailable. Try again in a moment.");
 }
 
 /// <summary>
 /// Validates a Google ID token: RS256 signature against Google's JWKS, issuer (<c>accounts.google.com</c> or
-/// <c>https://accounts.google.com</c>), audience = the configured client id, expiry (against the app clock, 60 s skew),
+/// <c>https://accounts.google.com</c>), audience = only the configured client id (and <c>azp</c>, when present), expiry (against the app clock, 60 s skew),
 /// the nonce bound to this sign-in attempt, <c>email_verified = true</c> and, when configured, the hosted domain.
 /// </summary>
 public sealed class GoogleIdTokenValidator(GoogleJwksProvider jwks, IOptions<GoogleAuthOptions> options, TimeProvider clock)
@@ -106,6 +117,11 @@ public sealed class GoogleIdTokenValidator(GoogleJwksProvider jwks, IOptions<Goo
         if (!result.IsValid) throw Invalid();
 
         if (result.SecurityToken is not JsonWebToken claims) throw Invalid();
+        // OIDC Core 3.1.3.7: the token must not list audiences this client doesn't trust, and an authorized party, when
+        // present, must be this client (the library only checks that the client id is among the audiences).
+        if (claims.Audiences.Any(a => !string.Equals(a, config.ClientId, StringComparison.Ordinal))) throw Invalid();
+        var azp = StringClaim(claims, "azp");
+        if (azp is not null && !string.Equals(azp, config.ClientId, StringComparison.Ordinal)) throw Invalid();
         var nonce = StringClaim(claims, "nonce");
         if (nonce is null || !FixedTimeEquals(nonce, expectedNonce)) throw Invalid();
 
