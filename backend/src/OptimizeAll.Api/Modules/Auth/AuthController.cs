@@ -56,6 +56,7 @@ public sealed class AuthController(
     }
 
     /// <summary>Rotates the refresh cookie. Requires the X-Requested-With header (CSRF defence in depth with SameSite=Strict).</summary>
+    /// <remarks>A rotated cookie presented again within 30 seconds while its replacement is still unused (a reload aborted the response, or several tabs refreshed at once) gets a new sibling session token instead of an error. After its replacement was used, or after 30 seconds, it is treated as reuse: the whole session is revoked (401 auth.session_expired). 401 auth.refresh_race (cookie kept) means another request won the rotation: retry once.</remarks>
     [AllowAnonymous]
     [HttpPost("refresh")]
     [EnableRateLimiting(RateLimitPolicies.Refresh)]

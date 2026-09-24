@@ -97,4 +97,41 @@ describe('AuthProvider', () => {
     expect(await screen.findByText('login page')).toBeInTheDocument();
     await waitFor(() => expect(router.state.location.search).toBe('?signedOut=1'));
   });
+
+  it('another tab signing out takes this tab to /login?signedOut=1 at once', async () => {
+    mockFetch({ 'POST /auth/refresh': () => json(200, session()) });
+    const { router } = renderWithApp(
+      <RequireAuth>
+        <Probe />
+      </RequireAuth>,
+      { route: '/app/earnings', path: '/app/*', routes: [{ path: '/login', element: <p>login page</p> }] },
+    );
+    await screen.findByText('status:authenticated');
+
+    // What the other tab's AuthProvider posts when its user signs out.
+    const otherTab = new BroadcastChannel('optimizeall-auth');
+    otherTab.postMessage({ type: 'signed-out' });
+    otherTab.close();
+
+    expect(await screen.findByText('login page')).toBeInTheDocument();
+    await waitFor(() => expect(router.state.location.search).toBe('?signedOut=1'));
+    expect(tokenStore.get()).toBeNull();
+  });
+
+  it('announces its own sign-out to the other tabs', async () => {
+    mockFetch({
+      'POST /auth/refresh': () => json(200, session()),
+      'POST /auth/logout': () => new Response(null, { status: 204 }),
+    });
+    const received: unknown[] = [];
+    const otherTab = new BroadcastChannel('optimizeall-auth');
+    otherTab.onmessage = (event: MessageEvent) => received.push(event.data);
+    renderWithApp(<Probe />, { routes: [{ path: '/login', element: <p>login page</p> }] });
+    await screen.findByText('status:authenticated');
+
+    await userEvent.click(screen.getByRole('button', { name: 'sign out' }));
+
+    await waitFor(() => expect(received).toEqual([{ type: 'signed-out' }]));
+    otherTab.close();
+  });
 });

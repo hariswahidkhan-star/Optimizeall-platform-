@@ -106,7 +106,9 @@ describe('api client', () => {
           : json(200, session(undefined, 'fresh'));
       },
       'GET /me/home': (req) =>
-        req.headers.Authorization === 'Bearer fresh' ? json(200, 'home') : problem(401, 'auth.unauthorized', 'No'),
+        req.headers.Authorization === 'Bearer fresh'
+          ? json(200, 'home')
+          : problem(401, 'auth.unauthorized', 'No'),
     });
     const listener = vi.fn();
     const off = onSessionEvent(listener);

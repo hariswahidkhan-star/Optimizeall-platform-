@@ -123,10 +123,23 @@ services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
                 var sub = context.Principal?.FindFirst(AppClaims.UserId)?.Value;
                 var sv = context.Principal?.FindFirst(AppClaims.SecurityVersion)?.Value;
                 if (!Guid.TryParse(sub, out var userId)) { context.Fail("invalid subject"); return; }
+                // Tokens of a sign-in session die with it (sign-out, reuse detection), not only at expiry.
+                var sidClaim = context.Principal?.FindFirst(AppClaims.SessionId)?.Value;
+                Guid? sessionId = null;
+                if (sidClaim is not null)
+                {
+                    if (!Guid.TryParse(sidClaim, out var sid)) { context.Fail("invalid session"); return; }
+                    sessionId = sid;
+                }
                 var db = context.HttpContext.RequestServices.GetRequiredService<AppDbContext>();
                 var state = await db.Set<User>().AsNoTracking().Where(u => u.Id == userId)
-                    .Select(u => new { u.Status, u.SecurityVersion, u.PermissionVersion }).FirstOrDefaultAsync(context.HttpContext.RequestAborted);
-                if (state is null || state.Status != UserStatus.Active || state.SecurityVersion.ToString() != sv)
+                    .Select(u => new
+                    {
+                        u.Status, u.SecurityVersion, u.PermissionVersion,
+                        SessionLive = sessionId == null || db.Set<RefreshToken>()
+                            .Any(t => t.UserId == u.Id && t.FamilyId == sessionId && t.RevokedAt == null),
+                    }).FirstOrDefaultAsync(context.HttpContext.RequestAborted);
+                if (state is null || state.Status != UserStatus.Active || state.SecurityVersion.ToString() != sv || !state.SessionLive)
                 {
                     context.Fail("session revoked");
                     return;

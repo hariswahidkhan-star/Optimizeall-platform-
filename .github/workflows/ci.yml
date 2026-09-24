@@ -296,6 +296,14 @@ jobs:
           E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-participant
         run: scripts/e2e-journeys.sh
 
+      - name: Authentication & security (scripts/e2e-journeys.sh, E2E_SUITE=j-auth, SQLite)
+        env:
+          E2E_SUITE: j-auth
+          E2E_DB_PROVIDER: sqlite
+          E2E_SKIP_BUILD: "1"
+          E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-auth
+        run: scripts/e2e-journeys.sh
+
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v4
@@ -327,6 +335,8 @@ jobs:
             ${{ runner.temp }}/e2e-crawl/web.log
             ${{ runner.temp }}/e2e-j-participant/api.log
             ${{ runner.temp }}/e2e-j-participant/web.log
+            ${{ runner.temp }}/e2e-j-auth/api.log
+            ${{ runner.temp }}/e2e-j-auth/web.log
             ${{ runner.temp }}/web-smoke.log
           retention-days: 7
           if-no-files-found: ignore

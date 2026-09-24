@@ -10,6 +10,12 @@ public static class AppClaims
     public const string Role = "role";
     public const string SecurityVersion = "sv";
     public const string EmailVerified = "ev";
+
+    /// <summary>
+    /// The sign-in session (refresh-token family) an access token belongs to. The token is refused as soon as that
+    /// session has no live refresh token any more (signed out, reuse detected), not only when it expires.
+    /// </summary>
+    public const string SessionId = "sid";
 }
 
 public static class ClaimsHelper

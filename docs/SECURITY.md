@@ -37,6 +37,10 @@ Configuration keys are documented in [`/.env.example`](../.env.example); deploym
     app retries the refresh once.
   * Every authenticated request re-checks the user's status and `SecurityVersion`; suspending a user,
     changing the password or "sign out everywhere" invalidates existing access tokens immediately, not at expiry.
+  * *Signing out* ends that sign-in session at once: access tokens carry the session (refresh-token family) as the
+    `sid` claim and are refused as soon as the family has no live refresh token (sign-out, reuse detection), while
+    the user's other devices keep their sessions. In the browser the signing-out tab tells the app's other tabs
+    (`BroadcastChannel`), which leave the portal for `/login?signedOut=1` immediately.
 * Staff accounts should use strong unique passwords; enforcing SSO/MFA for staff at the identity layer is
   recommended when available.
 

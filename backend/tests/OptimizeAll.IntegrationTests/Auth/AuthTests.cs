@@ -334,6 +334,55 @@ public sealed class AuthTests(ApiFactory api) : IClassFixture<ApiFactory>
         (await anon.PostAsJsonAsync("/api/v1/auth/login", new { email = user.Email, password = "Brand-New-Secret-77" })).EnsureSuccessStatusCode();
     }
 
+    private async Task<HttpStatusCode> MeStatusAsync(HttpClient client, string accessToken)
+    {
+        using var me = new HttpRequestMessage(HttpMethod.Get, "/api/v1/auth/me");
+        me.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        return (await client.SendAsync(me)).StatusCode;
+    }
+
+    [Fact]
+    public async Task Signing_out_ends_the_access_tokens_of_that_session_only()
+    {
+        var user = await api.CreateUserAsync();
+        var client = CookielessClient();
+        var login = await client.PostAsJsonAsync("/api/v1/auth/login", new { email = user.Email, password = user.Password });
+        login.EnsureSuccessStatusCode();
+        var access = (await login.ReadJsonAsync()).GetProperty("accessToken").GetString()!;
+        var otherLogin = await client.PostAsJsonAsync("/api/v1/auth/login", new { email = user.Email, password = user.Password });
+        var otherAccess = (await otherLogin.ReadJsonAsync()).GetProperty("accessToken").GetString()!;
+        // A refreshed token of the first session belongs to the same session.
+        var refreshed = await client.SendAsync(RefreshWith(RefreshCookieOf(login)));
+        refreshed.EnsureSuccessStatusCode();
+        var refreshedAccess = (await refreshed.ReadJsonAsync()).GetProperty("accessToken").GetString()!;
+        Assert.Equal(HttpStatusCode.OK, await MeStatusAsync(client, access));
+
+        using var logout = new HttpRequestMessage(HttpMethod.Post, "/api/v1/auth/logout");
+        logout.Headers.Add("Cookie", RefreshCookieOf(refreshed));
+        (await client.SendAsync(logout)).EnsureSuccessStatusCode();
+
+        // Signed out: that session's access tokens stop working at once, not when they expire; other devices go on.
+        Assert.Equal(HttpStatusCode.Unauthorized, await MeStatusAsync(client, access));
+        Assert.Equal(HttpStatusCode.Unauthorized, await MeStatusAsync(client, refreshedAccess));
+        Assert.Equal(HttpStatusCode.OK, await MeStatusAsync(client, otherAccess));
+    }
+
+    [Fact]
+    public async Task Reuse_detection_also_ends_the_access_tokens_of_the_session()
+    {
+        var user = await api.CreateUserAsync();
+        var client = CookielessClient();
+        var login = await client.PostAsJsonAsync("/api/v1/auth/login", new { email = user.Email, password = user.Password });
+        var first = RefreshCookieOf(login);
+        var r1 = await client.SendAsync(RefreshWith(first));
+        r1.EnsureSuccessStatusCode();
+        var access = (await r1.ReadJsonAsync()).GetProperty("accessToken").GetString()!;
+
+        api.Clock.Advance(TimeSpan.FromMinutes(1));
+        await (await client.SendAsync(RefreshWith(first))).ShouldFailAsync(401, "auth.session_expired");
+        Assert.Equal(HttpStatusCode.Unauthorized, await MeStatusAsync(client, access));
+    }
+
     [Fact]
     public async Task A_password_reset_invalidates_every_other_outstanding_reset_link()
     {

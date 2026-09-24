@@ -506,7 +506,7 @@ public sealed class AuthService(
 
     private LoginResult IssueSession(User user, Guid familyId, out RefreshToken refreshToken)
     {
-        var access = tokens.CreateAccessToken(user);
+        var access = tokens.CreateAccessToken(user, familyId);
         var (raw, hash) = tokens.CreateOpaqueToken();
         refreshToken = new RefreshToken
         {
