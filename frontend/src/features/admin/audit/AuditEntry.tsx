@@ -10,8 +10,12 @@ export function AuditEntry({ entry, headingLevel = 3 }: { entry: AuditLogEntry; 
   const [open, setOpen] = useState(false);
   const panelId = useId();
   const Heading = `h${headingLevel}` as const;
-  const actor =
+  const actedAs =
     entry.actorDisplayName ?? entry.actorEmail ?? (entry.actorType === 'System' ? 'System' : 'Unknown');
+  // Actions taken while impersonating read "Admin X as User Y".
+  const actor = entry.impersonatorUserId
+    ? `${entry.impersonatorDisplayName ?? 'Unknown staff member'} as ${actedAs}`
+    : actedAs;
   const hasData = entry.before != null || entry.after != null;
 
   return (

@@ -58,6 +58,19 @@ export interface SessionUser {
   status: UserStatus;
   roles: string[];
   permissions: string[];
+  /** QA/demo account (created as a test user). */
+  isTestAccount?: boolean;
+  /** Present while a staff member is viewing as this user ("log in as"). */
+  impersonatedBy?: Impersonator | null;
+}
+
+export interface Impersonator {
+  id: string;
+  displayName: string;
+  email: string;
+  startedAt: IsoDateTime;
+  /** Hard end of the impersonation session. */
+  expiresAt: IsoDateTime;
 }
 
 export interface AuthResponse {

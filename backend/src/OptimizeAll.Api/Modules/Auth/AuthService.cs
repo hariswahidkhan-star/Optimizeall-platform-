@@ -30,6 +30,12 @@ public interface IAuthService
     Task ChangePasswordAsync(Guid userId, ChangePasswordRequest request, CancellationToken ct);
     Task<SessionUserDto> GetSessionUserAsync(Guid userId, CancellationToken ct);
 
+    /// <summary>
+    /// Non-production quick sign-in (DevTools:TestLoginEnabled): a normal session for an active test or demo account,
+    /// without its password. The caller (DevTestLoginController) enforces the environment and account guards.
+    /// </summary>
+    Task<LoginResult> SignInWithoutPasswordAsync(Guid userId, CancellationToken ct);
+
     /// <summary>Revokes every refresh token of a user and invalidates outstanding access tokens.</summary>
     Task RevokeAllSessionsAsync(User user, string reason, CancellationToken ct);
 }
@@ -42,6 +48,7 @@ public sealed class AuthService(
     IEventPublisher events,
     IAuditLogger audit,
     ICurrentUser currentUser,
+    IImpersonationContext impersonation,
     IPrivacyHasher privacyHasher,
     IOptions<JwtOptions> jwtOptions,
     IOptions<EmailOptions> emailOptions,
@@ -354,7 +361,32 @@ public sealed class AuthService(
     {
         var user = await db.Set<User>().AsNoTracking().Include(u => u.Roles).FirstOrDefaultAsync(u => u.Id == userId, ct)
                    ?? throw DomainException.NotFound("User");
-        return ToDto(user);
+        var dto = ToDto(user) with { IsTestAccount = user.IsTestAccount };
+        return impersonation.SessionId is { } sessionId
+            ? dto with { ImpersonatedBy = await ImpersonatorAsync(db, sessionId, ct) }
+            : dto;
+    }
+
+    /// <summary>The impersonator shown on the session of an impersonation token (null when the session is gone).</summary>
+    public static Task<ImpersonatorDto?> ImpersonatorAsync(AppDbContext db, Guid sessionId, CancellationToken ct) =>
+        (from s in db.Set<ImpersonationSession>().AsNoTracking()
+         join u in db.Set<User>().AsNoTracking() on s.ImpersonatorUserId equals u.Id
+         where s.Id == sessionId
+         select new ImpersonatorDto(u.Id, u.DisplayName, u.Email, s.StartedAt, s.ExpiresAt)).FirstOrDefaultAsync(ct);
+
+    public async Task<LoginResult> SignInWithoutPasswordAsync(Guid userId, CancellationToken ct)
+    {
+        var user = await db.Set<User>().Include(u => u.Roles).FirstOrDefaultAsync(u => u.Id == userId, ct)
+                   ?? throw DomainException.NotFound("User");
+        if (user.Status != UserStatus.Active)
+            throw DomainException.Forbidden("account.suspended", "This account is not active.");
+        await db.Set<User>().Where(u => u.Id == user.Id).ExecuteUpdateAsync(s => s
+            .SetProperty(u => u.LastLoginAt, Now)
+            .SetProperty(u => u.LastActiveAt, Now), ct);
+        audit.Record("auth.test_login", nameof(User), user.Id, after: new { user.IsTestAccount });
+        var result = IssueSession(user, familyId: IdGenerator.NewId());
+        await db.SaveChangesAsync(ct);
+        return result;
     }
 
     public async Task RevokeAllSessionsAsync(User user, string reason, CancellationToken ct)
@@ -390,7 +422,8 @@ public sealed class AuthService(
             UserAgent = currentUser.UserAgent is { Length: > 300 } ua ? ua[..300] : currentUser.UserAgent,
         };
         db.Set<RefreshToken>().Add(refreshToken);
-        return new LoginResult(new AuthResponse(access.Token, access.ExpiresAt, ToDto(user)), raw, refreshToken.ExpiresAt);
+        return new LoginResult(new AuthResponse(access.Token, access.ExpiresAt, ToDto(user) with { IsTestAccount = user.IsTestAccount }),
+            raw, refreshToken.ExpiresAt);
     }
 
     private async Task<UserToken?> FindValidTokenAsync(string raw, UserTokenPurpose purpose, CancellationToken ct)

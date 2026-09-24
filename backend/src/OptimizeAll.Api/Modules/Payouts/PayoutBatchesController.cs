@@ -15,6 +15,7 @@ namespace OptimizeAll.Api.Modules.Payouts;
 
 [ApiController]
 [Route("api/v1/finance/payout-batches")]
+[DeniedWhileImpersonating(WritesOnly = true)]
 public sealed class PayoutBatchesController(
     AppDbContext db,
     PayoutBatchService batches,
@@ -171,6 +172,7 @@ public sealed class PayoutBatchesController(
     /// reason ("EXCLUDED — do not pay: …").
     /// </summary>
     [HttpGet("{id:guid}/payment-instructions.csv")]
+    [DeniedWhileImpersonating] // decrypts payout destinations
     [HasPermission(Permissions.PayoutsRecordPayment)]
     public async Task<IActionResult> PaymentInstructions(Guid id, [FromQuery] bool confirm, CancellationToken ct)
     {

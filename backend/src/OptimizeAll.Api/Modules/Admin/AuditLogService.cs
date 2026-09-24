@@ -19,6 +19,7 @@ public sealed class AuditLogService(AppDbContext db)
         public required AuditLog Log { get; init; }
         public string? ActorEmail { get; init; }
         public string? ActorDisplayName { get; init; }
+        public string? ImpersonatorDisplayName { get; init; }
     }
 
     private IQueryable<Row> Query(AuditLogQuery q)
@@ -36,12 +37,24 @@ public sealed class AuditLogService(AppDbContext db)
             logs = logs.Where(l => EF.Functions.Like(l.Action, p, "\\") || EF.Functions.Like(l.EntityId, p, "\\") || (l.Reason != null && EF.Functions.Like(l.Reason, p, "\\")));
         }
 
-        return from l in logs
-               join u in db.Set<User>().AsNoTracking() on l.ActorUserId equals u.Id into actors
-               from u in actors.DefaultIfEmpty()
-               orderby l.Id descending
-               select new Row { Log = l, ActorEmail = u == null ? null : u.Email, ActorDisplayName = u == null ? null : u.DisplayName };
+        return WithActors(logs);
     }
+
+    /// <summary>Joins the actor and, for actions taken while impersonating, the impersonator ("X as Y").</summary>
+    private IQueryable<Row> WithActors(IQueryable<AuditLog> logs) =>
+        from l in logs
+        join u in db.Set<User>().AsNoTracking() on l.ActorUserId equals u.Id into actors
+        from u in actors.DefaultIfEmpty()
+        join i in db.Set<User>().AsNoTracking() on l.ImpersonatorUserId equals i.Id into impersonators
+        from i in impersonators.DefaultIfEmpty()
+        orderby l.Id descending
+        select new Row
+        {
+            Log = l,
+            ActorEmail = u == null ? null : u.Email,
+            ActorDisplayName = u == null ? null : u.DisplayName,
+            ImpersonatorDisplayName = i == null ? null : i.DisplayName,
+        };
 
     public async Task<PagedResult<AuditLogDto>> ListAsync(AuditLogQuery query, CancellationToken ct)
     {
@@ -70,12 +83,7 @@ public sealed class AuditLogService(AppDbContext db)
             (l.EntityType == nameof(SupportTicket) && ticketIds.Contains(l.EntityId)) ||
             (includeActorEntries && l.ActorUserId == userId));
 
-        var rows = await (from l in logs
-                          join u in db.Set<User>().AsNoTracking() on l.ActorUserId equals u.Id into actors
-                          from u in actors.DefaultIfEmpty()
-                          orderby l.Id descending
-                          select new Row { Log = l, ActorEmail = u == null ? null : u.Email, ActorDisplayName = u == null ? null : u.DisplayName })
-            .Take(take).ToListAsync(ct);
+        var rows = await WithActors(logs).Take(take).ToListAsync(ct);
         return rows.Select(r =>
         {
             var dto = ToDto(r);
@@ -87,17 +95,18 @@ public sealed class AuditLogService(AppDbContext db)
     {
         var rows = await Query(query).Take(MaxExportRows).ToListAsync(ct);
         return Csv.File($"audit-log-{DateTime.UtcNow:yyyyMMdd-HHmmss}.csv",
-            new[] { "id", "createdAt", "actorUserId", "actorEmail", "actorType", "action", "entityType", "entityId", "reason", "ipAddress", "correlationId", "before", "after" },
+            new[] { "id", "createdAt", "actorUserId", "actorEmail", "actorType", "impersonatorUserId", "impersonatorName", "action", "entityType", "entityId", "reason", "ipAddress", "correlationId", "before", "after" },
             rows.Select(r => new object?[]
             {
-                r.Log.Id, r.Log.CreatedAt, r.Log.ActorUserId, r.ActorEmail, r.Log.ActorType, r.Log.Action, r.Log.EntityType,
+                r.Log.Id, r.Log.CreatedAt, r.Log.ActorUserId, r.ActorEmail, r.Log.ActorType, r.Log.ImpersonatorUserId,
+                r.ImpersonatorDisplayName, r.Log.Action, r.Log.EntityType,
                 r.Log.EntityId, r.Log.Reason, r.Log.IpAddress, r.Log.CorrelationId, r.Log.BeforeJson, r.Log.AfterJson,
             }));
     }
 
     private static AuditLogDto ToDto(Row r) => new(r.Log.Id, r.Log.CreatedAt, r.Log.ActorUserId, r.ActorEmail, r.ActorDisplayName,
         r.Log.ActorType, r.Log.Action, r.Log.EntityType, r.Log.EntityId, Parse(r.Log.BeforeJson), Parse(r.Log.AfterJson), r.Log.Reason,
-        r.Log.IpAddress, r.Log.CorrelationId);
+        r.Log.IpAddress, r.Log.CorrelationId, r.Log.ImpersonatorUserId, r.ImpersonatorDisplayName);
 
     private static JsonElement? Parse(string? json)
     {

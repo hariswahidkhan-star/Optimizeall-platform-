@@ -75,6 +75,13 @@ public class User : AuditedEntity, IConcurrencyStamped
 
     public Guid ConcurrencyStamp { get; set; } = Guid.NewGuid();
 
+    /// <summary>
+    /// A QA/demo account created as a test user by an administrator. Test accounts are never paid (excluded from payout
+    /// batches) and are left out of analytics and marketing KPIs. Set only when the account is created as a test user;
+    /// no API changes it on an existing account.
+    /// </summary>
+    public bool IsTestAccount { get; set; }
+
     public List<UserRole> Roles { get; set; } = new();
 
     public bool IsEmailVerified => EmailVerifiedAt.HasValue;

@@ -48,6 +48,8 @@ public static class Permissions
     public const string UsersManage = "users.manage";
     public const string UsersSuspend = "users.suspend";
     public const string RolesAssign = "roles.assign";
+    /// <summary>Sensitive: "log in as" another user (time-boxed, audited, high-risk actions blocked). Admin only by default.</summary>
+    public const string UsersImpersonate = "users.impersonate";
     public const string ContentManage = "content.manage";
     public const string SettingsManage = "settings.manage";
     public const string SupportManage = "support.manage";

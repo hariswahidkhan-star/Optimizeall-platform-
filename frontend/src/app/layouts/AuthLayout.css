@@ -248,3 +248,40 @@
   background: var(--danger-bg);
   color: var(--danger-fg);
 }
+
+/* ---------- Non-production "Test accounts" panel on the sign-in page ---------- */
+.auth-test-accounts {
+  margin-top: var(--space-6);
+  padding: var(--space-4);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-md);
+}
+
+.auth-test-accounts__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: 1rem;
+}
+
+.auth-test-accounts__title svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.auth-test-accounts__list {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.auth-test-accounts__list .ui-button {
+  justify-content: space-between;
+}
+
+.auth-test-accounts__name {
+  font-weight: 600;
+}

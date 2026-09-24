@@ -48,7 +48,7 @@ public sealed class ProblemExceptionHandler(ILogger<ProblemExceptionHandler> log
         return await problems.TryWriteAsync(new ProblemDetailsContext { HttpContext = httpContext, ProblemDetails = problem, Exception = exception });
     }
 
-    private static int StatusFor(DomainErrorKind kind) => kind switch
+    internal static int StatusFor(DomainErrorKind kind) => kind switch
     {
         DomainErrorKind.NotFound => StatusCodes.Status404NotFound,
         DomainErrorKind.Conflict => StatusCodes.Status409Conflict,

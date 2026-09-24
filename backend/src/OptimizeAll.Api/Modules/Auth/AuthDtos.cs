@@ -85,7 +85,21 @@ public sealed record SessionUserDto(
     string TimeZone,
     string Status,
     IReadOnlyCollection<string> Roles,
-    IReadOnlyCollection<string> Permissions);
+    IReadOnlyCollection<string> Permissions,
+    bool IsTestAccount = false,
+    ImpersonatorDto? ImpersonatedBy = null);
+
+/// <summary>Present on the session while a staff member is viewing as this user (impersonation).</summary>
+public sealed record ImpersonatorDto(Guid Id, string DisplayName, string Email, DateTime StartedAt, DateTime ExpiresAt);
+
+public sealed class ImpersonateRequest
+{
+    /// <summary>Why you need to see the account (support ticket, bug report...). Audited.</summary>
+    [Required, MinLength(5), MaxLength(500)]
+    public string Reason { get; set; } = string.Empty;
+
+    public bool Confirm { get; set; }
+}
 
 public sealed record AuthResponse(string AccessToken, DateTime ExpiresAt, SessionUserDto User);
 

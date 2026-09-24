@@ -46,6 +46,7 @@ public sealed class AdminUsersService(
         if (q.Status is { } status) users = users.Where(u => u.Status == status);
         if (!string.IsNullOrWhiteSpace(q.Country)) { var c = q.Country.Trim().ToUpperInvariant(); users = users.Where(u => u.CountryCode == c); }
         if (q.Tier is { } tier) users = users.Where(u => u.Tier == tier);
+        if (q.IsTestAccount is { } isTest) users = users.Where(u => u.IsTestAccount == isTest);
         if (!string.IsNullOrWhiteSpace(q.Search))
         {
             var p = PagingExtensions.LikePattern(q.Search);
@@ -73,11 +74,12 @@ public sealed class AdminUsersService(
     {
         var users = await Filter(query).Include(u => u.Roles).OrderBy(u => u.CreatedAt).Take(MaxExportRows).ToListAsync(ct);
         return Csv.File($"users-{Now:yyyyMMdd-HHmmss}.csv",
-            new[] { "id", "email", "displayName", "countryCode", "languageCode", "status", "tier", "roles", "emailVerified", "createdAt", "lastActiveAt" },
+            new[] { "id", "email", "displayName", "countryCode", "languageCode", "status", "tier", "roles", "emailVerified", "createdAt", "lastActiveAt", "isTestAccount" },
             users.Select(u => new object?[]
             {
                 u.Id, u.Email, u.DisplayName, u.CountryCode, u.LanguageCode, u.Status, u.Tier,
                 string.Join(';', u.Roles.Select(r => r.Role).OrderBy(r => r)), u.IsEmailVerified, u.CreatedAt, u.LastActiveAt,
+                u.IsTestAccount,
             }));
     }
 
@@ -344,10 +346,10 @@ public sealed class AdminUsersService(
     }
 
     private static AdminUserListItemDto ToListItem(User u) => new(u.Id, u.Email, u.DisplayName, u.CountryCode, u.Status, u.Tier,
-        u.Roles.Select(r => r.Role).OrderBy(r => r).ToList(), u.IsEmailVerified, u.CreatedAt, u.LastActiveAt);
+        u.Roles.Select(r => r.Role).OrderBy(r => r).ToList(), u.IsEmailVerified, u.CreatedAt, u.LastActiveAt, u.IsTestAccount);
 
     private static AdminUserProfileDto ToProfile(User u) => new(u.Id, u.Email, u.DisplayName, u.CountryCode, u.LanguageCode, u.TimeZone,
         u.Interests, u.Status, u.StatusReason, u.StatusChangedAt, u.Tier, u.ReferralCode, u.IsEmailVerified, u.EmailVerifiedAt,
         u.MarketingEmailOptIn, u.WhatsAppOptIn, u.WhatsAppNumber is null ? null : FieldRules.MaskTail(u.WhatsAppNumber),
-        u.LastLoginAt, u.LastActiveAt, u.CreatedAt);
+        u.LastLoginAt, u.LastActiveAt, u.CreatedAt, u.IsTestAccount);
 }

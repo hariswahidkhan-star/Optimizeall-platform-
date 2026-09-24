@@ -22,6 +22,7 @@ public sealed class ProfileController(IProfileService profiles, ICurrentUser cur
 [ApiController]
 [HasPermission(Permissions.ParticipantPortal)]
 [Route("api/v1/me/payout-profile")]
+[DeniedWhileImpersonating(WritesOnly = true)]
 public sealed class PayoutProfileController(IProfileService profiles, ICurrentUser currentUser) : ControllerBase
 {
     [HttpGet]

@@ -11,9 +11,11 @@ namespace OptimizeAll.Api.Modules.Auth;
 [ApiController]
 [Route("api/v1/auth")]
 [EnableRateLimiting(RateLimitPolicies.Auth)]
-public sealed class AuthController(IAuthService auth, ICurrentUser currentUser, IOptions<SecurityOptions> security) : ControllerBase
+public sealed class AuthController(
+    IAuthService auth, ImpersonationService impersonation, ICurrentUser currentUser, IOptions<SecurityOptions> security) : ControllerBase
 {
-    public const string RefreshCookie = "oa_refresh";
+    public const string RefreshCookie = AuthCookies.Refresh;
+    public const string ImpersonationCookie = AuthCookies.Impersonation;
     private const string CsrfHeader = "X-Requested-With";
 
     /// <summary>Creates a participant account and sends a verification email. Always 202 (no account enumeration).</summary>
@@ -60,6 +62,14 @@ public sealed class AuthController(IAuthService auth, ICurrentUser currentUser, 
     public async Task<ActionResult<AuthResponse>> Refresh(CancellationToken ct)
     {
         RequireCsrfHeader();
+        // A live impersonation session wins (page reloads keep "viewing as"); an ended one is dropped and the staff
+        // member's own session is refreshed instead.
+        if (Request.Cookies[ImpersonationCookie] is { Length: > 0 } impersonationToken)
+        {
+            var resumed = await impersonation.ResumeAsync(impersonationToken, Request.Cookies[RefreshCookie], ct);
+            if (resumed is not null) return resumed;
+            ClearImpersonationCookie();
+        }
         try
         {
             var result = await auth.RefreshAsync(Request.Cookies[RefreshCookie], ct);
@@ -80,9 +90,37 @@ public sealed class AuthController(IAuthService auth, ICurrentUser currentUser, 
     public async Task<IActionResult> Logout(CancellationToken ct)
     {
         RequireCsrfHeader();
+        await impersonation.EndAsync(Request.Cookies[ImpersonationCookie], "logout", ct);
+        ClearImpersonationCookie();
         await auth.LogoutAsync(Request.Cookies[RefreshCookie], ct);
         ClearRefreshCookie();
         return NoContent();
+    }
+
+    /// <summary>
+    /// Ends the impersonation session ("Exit") and returns the staff member's own session, refreshed from their
+    /// untouched refresh cookie. Idempotent: without a live impersonation it just refreshes. 401 when the staff
+    /// member's own session is gone too.
+    /// </summary>
+    [Authorize]
+    [HttpPost("impersonation/exit")]
+    [EnableRateLimiting(RateLimitPolicies.Refresh)]
+    public async Task<ActionResult<AuthResponse>> ExitImpersonation(CancellationToken ct)
+    {
+        RequireCsrfHeader();
+        await impersonation.EndAsync(Request.Cookies[ImpersonationCookie], "exit", ct);
+        ClearImpersonationCookie();
+        try
+        {
+            var result = await auth.RefreshAsync(Request.Cookies[RefreshCookie], ct);
+            SetRefreshCookie(result.RefreshToken, result.RefreshExpiresAt);
+            return result.Response;
+        }
+        catch (DomainException ex) when (ex.Kind == DomainErrorKind.Unauthorized && ex.Code != AuthService.RefreshRaceCode)
+        {
+            ClearRefreshCookie();
+            throw;
+        }
     }
 
     [AllowAnonymous]
@@ -104,6 +142,7 @@ public sealed class AuthController(IAuthService auth, ICurrentUser currentUser, 
     }
 
     [Authorize]
+    [DeniedWhileImpersonating]
     [HttpPost("change-password")]
     public async Task<ActionResult<MessageResponse>> ChangePassword(ChangePasswordRequest request, CancellationToken ct)
     {
@@ -125,19 +164,12 @@ public sealed class AuthController(IAuthService auth, ICurrentUser currentUser, 
     }
 
     private void SetRefreshCookie(string token, DateTime expiresAt) =>
-        Response.Cookies.Append(RefreshCookie, token, new CookieOptions
-        {
-            HttpOnly = true,
-            Secure = security.Value.SecureCookies,
-            SameSite = SameSiteMode.Strict,
-            Path = "/api/v1/auth",
-            Expires = expiresAt,
-            IsEssential = true,
-        });
+        AuthCookies.Set(Response, security.Value, RefreshCookie, token, expiresAt);
 
-    private void ClearRefreshCookie() =>
-        Response.Cookies.Delete(RefreshCookie, new CookieOptions
-        {
-            HttpOnly = true, Secure = security.Value.SecureCookies, SameSite = SameSiteMode.Strict, Path = "/api/v1/auth",
-        });
+    private void ClearRefreshCookie() => AuthCookies.Clear(Response, security.Value, RefreshCookie);
+
+    private void ClearImpersonationCookie()
+    {
+        if (Request.Cookies.ContainsKey(ImpersonationCookie)) AuthCookies.Clear(Response, security.Value, ImpersonationCookie);
+    }
 }

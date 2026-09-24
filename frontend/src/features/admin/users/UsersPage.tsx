@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { UserPlus, Users } from 'lucide-react';
+import { FlaskConical, LogIn, UserPlus, Users } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/Badge';
@@ -15,13 +15,21 @@ import { countryName, countryOptions } from '@/features/auth/localeOptions';
 import { api } from '@/lib/api/client';
 import type { PagedResult } from '@/lib/api/types';
 import { Permissions } from '@/lib/auth/permissions';
+import { useAuth } from '@/lib/auth/useAuth';
 import { ROLES, TIERS, USER_STATUSES, type AdminUserListItem } from '../api/types';
 import { AdminBadge, roleLabel } from '../shared/badges';
 import { enumOptions, ExportCsvButton, QueryError, useCan } from '../shared/common';
 import { useListParams } from '../shared/useListParams';
 import { InviteStaffDialog } from './InviteStaffDialog';
+import {
+  canImpersonateTarget,
+  CreateTestUserDialog,
+  ImpersonateDialog,
+  TestBadge,
+  type ImpersonationTarget,
+} from './TestUserDialogs';
 
-const FILTER_KEYS = ['role', 'status', 'country', 'tier'] as const;
+const FILTER_KEYS = ['role', 'status', 'country', 'tier', 'isTestAccount'] as const;
 
 function flatCountries() {
   const all = countryOptions().find((g) => 'options' in g && g.label === 'All countries');
@@ -31,7 +39,12 @@ function flatCountries() {
 export function UsersPage() {
   const list = useListParams(FILTER_KEYS);
   const canInvite = useCan(Permissions.RolesAssign);
+  const canCreateTest = useCan(Permissions.UsersManage);
+  const canImpersonate = useCan(Permissions.UsersImpersonate);
+  const { user: me, impersonation } = useAuth();
   const [inviteOpen, setInviteOpen] = useState(false);
+  const [testOpen, setTestOpen] = useState(false);
+  const [impersonating, setImpersonating] = useState<ImpersonationTarget | null>(null);
 
   const query = {
     search: list.search,
@@ -55,9 +68,12 @@ export function UsersPage() {
       sortable: true,
       cell: (u) => (
         <div className="admin-cell-stack">
-          <Link className="ui-link" to={u.id}>
-            {u.displayName}
-          </Link>
+          <span className="cluster admin-tight">
+            <Link className="ui-link" to={u.id}>
+              {u.displayName}
+            </Link>
+            {u.isTestAccount && <TestBadge />}
+          </span>
           <span className="text-small text-muted">{u.email}</span>
         </div>
       ),
@@ -91,6 +107,26 @@ export function UsersPage() {
       sortable: true,
       cell: (u) => (u.lastActiveAt ? <DateTime value={u.lastActiveAt} format="relative" /> : 'Never'),
     },
+    ...(canImpersonate && !impersonation
+      ? [
+          {
+            id: 'actions',
+            header: 'Actions',
+            cell: (u: AdminUserListItem) =>
+              canImpersonateTarget(u, me?.id) ? (
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  leadingIcon={<LogIn />}
+                  aria-label={`Log in as ${u.displayName}`}
+                  onClick={() => setImpersonating(u)}
+                >
+                  Log in as
+                </Button>
+              ) : null,
+          } satisfies DataTableColumn<AdminUserListItem>,
+        ]
+      : []),
   ];
 
   return (
@@ -99,11 +135,18 @@ export function UsersPage() {
         title="Users"
         description="Find anyone on the platform, review their account and manage roles, tiers and suspensions."
         actions={
-          canInvite && (
-            <Button leadingIcon={<UserPlus />} onClick={() => setInviteOpen(true)}>
-              Invite staff
-            </Button>
-          )
+          <>
+            {canCreateTest && (
+              <Button variant="secondary" leadingIcon={<FlaskConical />} onClick={() => setTestOpen(true)}>
+                Create test user
+              </Button>
+            )}
+            {canInvite && (
+              <Button leadingIcon={<UserPlus />} onClick={() => setInviteOpen(true)}>
+                Invite staff
+              </Button>
+            )}
+          </>
         }
       />
       <Card>
@@ -118,6 +161,14 @@ export function UsersPage() {
               { id: 'status', label: 'Status', options: enumOptions(USER_STATUSES) },
               { id: 'country', label: 'Country', options: flatCountries() },
               { id: 'tier', label: 'Tier', options: enumOptions(TIERS) },
+              {
+                id: 'isTestAccount',
+                label: 'Account type',
+                options: [
+                  { value: 'false', label: 'Real accounts' },
+                  { value: 'true', label: 'Test accounts' },
+                ],
+              },
             ]}
             values={list.filters}
             onFilterChange={(id, value) => list.update({ [id]: value })}
@@ -166,6 +217,10 @@ export function UsersPage() {
         </CardBody>
       </Card>
       {inviteOpen && <InviteStaffDialog open onClose={() => setInviteOpen(false)} />}
+      {testOpen && <CreateTestUserDialog open onClose={() => setTestOpen(false)} />}
+      {impersonating && (
+        <ImpersonateDialog target={impersonating} open onClose={() => setImpersonating(null)} />
+      )}
     </>
   );
 }

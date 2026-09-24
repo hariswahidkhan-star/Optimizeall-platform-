@@ -2,6 +2,7 @@ import { BadgeCheck, CalendarClock, ShieldCheck } from 'lucide-react';
 import { Link, Outlet } from 'react-router-dom';
 import { BRAND_TAGLINE, Logo } from '@/components/brand/Logo';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { ImpersonationBanner } from './ImpersonationBanner';
 import './AuthLayout.css';
 
 const POINTS = [
@@ -53,6 +54,7 @@ export function AuthLayout() {
         </div>
       </aside>
       <div className="auth-panel">
+        <ImpersonationBanner />
         <header className="auth-panel__header">
           <Link to="/" className="auth-panel__logo" aria-label="Optimize All home">
             <Logo size={28} title="" />

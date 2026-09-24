@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Ban, BadgeCheck, Layers, ShieldCheck, UserCheck } from 'lucide-react';
+import { Ban, BadgeCheck, Layers, LogIn, ShieldCheck, UserCheck } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { useParams } from 'react-router-dom';
 import { Alert } from '@/components/ui/Alert';
@@ -33,6 +33,7 @@ import {
   TierDialog,
   type UserAction,
 } from './UserActionDialogs';
+import { canImpersonateTarget, ImpersonateDialog, TestBadge } from './TestUserDialogs';
 import { SafeExternalLink } from '@/components/SafeExternalLink';
 
 const HISTORY_TONE: Record<string, 'danger' | 'success' | 'info'> = {
@@ -51,7 +52,9 @@ function Section({ title, id, children }: { title: string; id: string; children:
 
 export function UserDetailPage() {
   const { userId = '' } = useParams();
-  const { user: me } = useAuth();
+  const { user: me, impersonation } = useAuth();
+  const canImpersonate = useCan(Permissions.UsersImpersonate);
+  const [impersonateOpen, setImpersonateOpen] = useState(false);
   const canSuspend = useCan(Permissions.UsersSuspend);
   const canAssign = useCan(Permissions.RolesAssign);
   const canTier = useCan(Permissions.UsersManage);
@@ -94,8 +97,18 @@ export function UserDetailPage() {
   const suspended = p.status === 'Suspended';
   const close = () => setAction(null);
 
+  const showImpersonate =
+    canImpersonate &&
+    !impersonation &&
+    canImpersonateTarget({ id: p.id, roles: user.roles, status: p.status }, me?.id);
+
   const actions = (
     <>
+      {showImpersonate && (
+        <Button variant="secondary" leadingIcon={<LogIn />} onClick={() => setImpersonateOpen(true)}>
+          Log in as
+        </Button>
+      )}
       {canSuspend &&
         (suspended ? (
           <Button variant="secondary" leadingIcon={<UserCheck />} onClick={() => setAction('reactivate')}>
@@ -135,6 +148,7 @@ export function UserDetailPage() {
         breadcrumbs={breadcrumbs}
         meta={
           <>
+            {p.isTestAccount && <TestBadge />}
             <AdminBadge kind="user" value={p.status} />
             <Badge tone="neutral">{p.tier}</Badge>
             {user.roles.map((r) => (
@@ -344,6 +358,19 @@ export function UserDetailPage() {
       <ReactivateDialog user={user} open={action === 'reactivate'} onClose={close} />
       <RolesDialog user={user} open={action === 'roles'} onClose={close} />
       <TierDialog user={user} open={action === 'tier'} onClose={close} />
+      {impersonateOpen && (
+        <ImpersonateDialog
+          target={{
+            id: p.id,
+            displayName: p.displayName,
+            email: p.email,
+            roles: user.roles,
+            isTestAccount: p.isTestAccount,
+          }}
+          open
+          onClose={() => setImpersonateOpen(false)}
+        />
+      )}
     </>
   );
 }

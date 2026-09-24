@@ -7,7 +7,7 @@ import type { AuthResponse, MessageResponse, RegisterRequest, SessionUser } from
 import { AuthContext, type AuthContextValue, type AuthStatus } from './authContext';
 import { getDeviceId } from './deviceId';
 import { hasAnyPermission as hasAny, hasPermission as has } from './permissions';
-import { loginPathAfterExpiry } from './sessionPaths';
+import { IMPERSONATION_EXIT_PATH, loginPathAfterExpiry } from './sessionPaths';
 
 /** Refresh this long before the access token expires. */
 const REFRESH_LEAD_MS = 60_000;
@@ -39,6 +39,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   statusRef.current = state.status;
   const locationRef = useRef(location);
   locationRef.current = location;
+  const impersonatingRef = useRef(false);
+  impersonatingRef.current = !!state.user?.impersonatedBy;
 
   const applySession = useCallback((session: AuthResponse) => {
     tokenStore.set(session.accessToken);
@@ -67,7 +69,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     () =>
       onSessionEvent((event) => {
         if (event.type === 'refreshed') {
+          const endedImpersonation = impersonatingRef.current && !event.session.user.impersonatedBy;
           setState({ status: 'authenticated', user: event.session.user, expiresAt: event.session.expiresAt });
+          if (endedImpersonation) {
+            // The impersonation session ended (expired, or exited in another tab): back to the staff member's session.
+            queryClient.clear();
+            navigate(IMPERSONATION_EXIT_PATH, { replace: true });
+          }
           return;
         }
         const wasSignedIn = statusRef.current === 'authenticated';
@@ -100,10 +108,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         });
       }, delay);
     };
-    const delay = new Date(state.expiresAt).getTime() - Date.now() - REFRESH_LEAD_MS;
+    const expires = new Date(state.expiresAt).getTime();
+    const sessionEnd = state.user?.impersonatedBy
+      ? new Date(state.user.impersonatedBy.expiresAt).getTime()
+      : null;
+    // An impersonation token that already runs to the end of its session can't be renewed: refresh just after the
+    // end instead, which hands back the staff member's own session.
+    const delay =
+      sessionEnd !== null && expires >= sessionEnd - 1_000
+        ? sessionEnd - Date.now() + 1_000
+        : expires - Date.now() - REFRESH_LEAD_MS;
     schedule(Math.max(delay, MIN_REFRESH_DELAY_MS));
     return () => clearTimeout(timer);
-  }, [state.status, state.expiresAt]);
+  }, [state.status, state.expiresAt, state.user?.impersonatedBy]);
 
   const login = useCallback(
     async (email: string, password: string) => {
@@ -135,6 +152,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return response.message;
   }, []);
 
+  const adoptSession = useCallback(
+    (next: AuthResponse) => {
+      queryClient.clear();
+      applySession(next);
+      return next.user;
+    },
+    [applySession, queryClient],
+  );
+
+  const startImpersonation = useCallback(
+    async (userId: string, reason: string) => {
+      const next = await api.post<AuthResponse>(`/admin/users/${encodeURIComponent(userId)}/impersonate`, {
+        reason,
+        confirm: true,
+      });
+      return adoptSession(next);
+    },
+    [adoptSession],
+  );
+
+  const exitImpersonation = useCallback(async () => {
+    let next: AuthResponse;
+    try {
+      next = await api.post<AuthResponse>('/auth/impersonation/exit');
+    } catch (error) {
+      if (isApiError(error) && error.status === 401) {
+        expireSession();
+        return;
+      }
+      throw error;
+    }
+    adoptSession(next);
+    navigate(IMPERSONATION_EXIT_PATH, { replace: true });
+  }, [adoptSession, navigate]);
+
   const refreshUser = useCallback(async () => {
     if (!tokenStore.get()) return null;
     const user = await api.get<SessionUser>('/auth/me');
@@ -156,8 +208,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       logout,
       register,
       refreshUser,
+      impersonation: state.user?.impersonatedBy ?? null,
+      startImpersonation,
+      exitImpersonation,
+      adoptSession,
     };
-  }, [state, login, logout, register, refreshUser]);
+  }, [state, login, logout, register, refreshUser, startImpersonation, exitImpersonation, adoptSession]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

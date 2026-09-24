@@ -11,6 +11,7 @@ import { PasswordInput } from '@/components/ui/PasswordInput';
 import { isApiError } from '@/lib/api/errors';
 import { useAuth } from '@/lib/auth/useAuth';
 import { mapServerErrors, type MappedErrors } from './formErrors';
+import { TestAccountsPanel } from './TestAccountsPanel';
 import '@/app/layouts/AuthLayout.css';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -172,6 +173,8 @@ export function LoginPage() {
           Create an account
         </Link>
       </p>
+
+      <TestAccountsPanel />
     </div>
   );
 }

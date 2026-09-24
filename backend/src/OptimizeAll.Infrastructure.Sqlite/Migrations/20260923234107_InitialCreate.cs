@@ -61,6 +61,7 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
                     ActorUserId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    ImpersonatorUserId = table.Column<Guid>(type: "TEXT", nullable: true),
                     ActorType = table.Column<string>(type: "TEXT", maxLength: 40, nullable: false),
                     Action = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     EntityType = table.Column<string>(type: "TEXT", maxLength: 60, nullable: false),
@@ -731,6 +732,7 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     LastActiveAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
                     SecurityVersion = table.Column<int>(type: "INTEGER", nullable: false),
                     ConcurrencyStamp = table.Column<Guid>(type: "TEXT", nullable: false),
+                    IsTestAccount = table.Column<bool>(type: "INTEGER", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false)
                 },
@@ -1108,6 +1110,39 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         principalTable: "users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "impersonation_sessions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ImpersonatorUserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    TargetUserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Reason = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
+                    TokenHash = table.Column<string>(type: "TEXT", fixedLength: true, maxLength: 64, nullable: false),
+                    ImpersonatorSecurityVersion = table.Column<int>(type: "INTEGER", nullable: false),
+                    StartedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
+                    ExpiresAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
+                    EndedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
+                    EndedReason = table.Column<string>(type: "TEXT", maxLength: 40, nullable: true),
+                    IpAddress = table.Column<string>(type: "TEXT", maxLength: 64, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_impersonation_sessions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_impersonation_sessions_users_ImpersonatorUserId",
+                        column: x => x.ImpersonatorUserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_impersonation_sessions_users_TargetUserId",
+                        column: x => x.TargetUserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -6594,6 +6629,11 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 columns: new[] { "EntityType", "EntityId" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_audit_logs_ImpersonatorUserId",
+                table: "audit_logs",
+                column: "ImpersonatorUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_billing_number_sequences_Key",
                 table: "billing_number_sequences",
                 column: "Key",
@@ -7414,6 +7454,22 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 name: "IX_hourly_rates_UserId",
                 table: "hourly_rates",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_impersonation_sessions_ImpersonatorUserId_EndedAt",
+                table: "impersonation_sessions",
+                columns: new[] { "ImpersonatorUserId", "EndedAt" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_impersonation_sessions_TargetUserId",
+                table: "impersonation_sessions",
+                column: "TargetUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_impersonation_sessions_TokenHash",
+                table: "impersonation_sessions",
+                column: "TokenHash",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_integration_connections_ClientAccountId",
@@ -8399,6 +8455,11 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 column: "CreatedAt");
 
             migrationBuilder.CreateIndex(
+                name: "IX_users_IsTestAccount",
+                table: "users",
+                column: "IsTestAccount");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_users_NormalizedEmail",
                 table: "users",
                 column: "NormalizedEmail",
@@ -8849,6 +8910,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
             migrationBuilder.DropTable(
                 name: "hourly_rates");
+
+            migrationBuilder.DropTable(
+                name: "impersonation_sessions");
 
             migrationBuilder.DropTable(
                 name: "integration_connections");

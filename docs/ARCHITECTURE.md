@@ -38,6 +38,7 @@ Modules talk to each other through:
 |---|---|
 | `ICurrentUser` | Caller id, roles, permissions, IP. `Require(permission)` throws 403. |
 | `[HasPermission(Permissions.X)]` | Endpoint authorization. **Authorize by permission, never by role.** Role→permission map: `Common/Security/Permissions.cs`. Default deny: the fallback policy requires a signed-in user, so public endpoints need an explicit `[AllowAnonymous]` (list in SECURITY.md § 2). |
+| `IImpersonationContext` / `[DeniedWhileImpersonating]` | Whether the caller is a staff member "viewing as" this user (impersonation, SECURITY.md § 2.1). Put `[DeniedWhileImpersonating]` on any new high-risk endpoint (credentials, email/2FA, payout destinations, payments, API keys). |
 | `IAuditLogger` | `Record(action, entityType, id, before, after, reason)` stages an append-only audit row saved in the same `SaveChanges` as the change. Required for campaign edits, reviews, reward changes, payout actions, suspensions, settings. |
 | `ILedgerWriter` | The **only** way to create/approve/decline/reverse `EarningEntry` rows. Idempotent by key; converts to settlement currency and stores original amount + rate. |
 | `IPayoutScheduleProvider`, `IExchangeRateProvider` | Active payout schedule (biweekly default) and FX lookup. |

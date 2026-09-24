@@ -89,6 +89,33 @@ invoices, email lists and campaigns, social calendars, ad accounts and SEO sites
 
 The public agency website is at `/` (no sign-in).
 
+### How testers sign in as any user
+
+Three ways, from the quickest to the most production-like:
+
+1. **One-click test login (non-production only).** With `DevTools:TestLoginEnabled=true` (the default in
+   `appsettings.Development.json` and `appsettings.Staging.json`, i.e. `ASPNETCORE_ENVIRONMENT=Development` or
+   `Staging`), the sign-in page shows a **Test accounts** panel listing every active test account and every seeded
+   demo account (`*@demo.optimizeall.app`, `*@<client>.demo.optimizeall.app`). Click one to sign in as it — no
+   password. The API behind it (`GET /api/v1/dev/test-accounts`, `POST /api/v1/dev/test-login`) answers `404` unless
+   the flag is on **and** the environment is not Production, and it refuses any other (real) account. Each use is
+   audited as `auth.test_login`. To turn it off on staging set `DevTools__TestLoginEnabled=false`.
+2. **Test users of any role.** As an admin, open **Users → Create test user**, pick the role(s) (for Client, optionally
+   a client organization and client role) and copy the generated email (`test+<name>-<random>@test.optimizeall.app`,
+   domain from `TestAccounts:EmailDomain`) and password — the password is shown only once. Test users are verified,
+   labelled **TEST** in the admin lists, never paid by payout batches and left out of analytics/marketing KPIs and
+   the tracking leaderboard. Filter the list with **Account type → Test accounts**; delete (deactivate) them with
+   `DELETE /api/v1/admin/test-users/{id}`.
+3. **Log in as (impersonation), any environment.** An admin opens a user (or the row action in **Users**) → **Log in
+   as**, types the user's email and a reason. The app switches to that user's portal for at most 60 minutes, with a
+   high-contrast banner on every page: *"You are viewing as Jane Doe (participant) — Exit"*. **Exit** returns to
+   **Admin → Users** as the admin. Admins, other impersonators, yourself and suspended accounts can't be impersonated,
+   and password/email/payout-detail changes, payment/payout approvals and recording, API keys and impersonating
+   again are refused. Everything done is audited as "admin as user" (see SECURITY.md § 2.1).
+
+Demo script: sign in as `admin@demo.optimizeall.app`, open **Users**, find Sara, **Log in as** → reason "Demo" → Sara's
+home with the banner → **Exit** → back on the users page.
+
 ## What is in the dataset
 
 * **People.** 6 staff and 41 participants in PK, AE, SA, GB, US, IN and EG, with varied languages, time zones, tiers

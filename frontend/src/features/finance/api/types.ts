@@ -239,7 +239,8 @@ export interface CreateHoldResponse {
 export type PayoutBatchStatus = 'Draft' | 'Finalized' | 'Completed' | 'Cancelled';
 export type PayoutItemStatus = 'Pending' | 'Held' | 'AwaitingPayment' | 'Paid' | 'Failed' | 'Cancelled';
 export type PaymentAttemptStatus = 'Created' | 'Submitted' | 'Succeeded' | 'Failed' | 'RequiresManualAction';
-export type PayoutExclusionReason = 'PayoutHold' | 'AccountInactive' | 'NonPositiveBalance' | 'BelowMinimum';
+export type PayoutExclusionReason =
+  'PayoutHold' | 'AccountInactive' | 'NonPositiveBalance' | 'BelowMinimum' | 'TestAccount';
 
 export const BATCH_STATUSES: PayoutBatchStatus[] = ['Draft', 'Finalized', 'Completed', 'Cancelled'];
 export const ITEM_STATUSES: PayoutItemStatus[] = [

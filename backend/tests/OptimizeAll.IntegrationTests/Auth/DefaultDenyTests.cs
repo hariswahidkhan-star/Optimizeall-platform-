@@ -40,6 +40,9 @@ public sealed class DefaultDenyTests(ApiFactory api) : IClassFixture<ApiFactory>
         "GET api/v1/content/faqs",
         "GET api/v1/meta/currencies",
         "GET api/v1/dev/mailbox",
+        // Non-production quick sign-in as a test/demo account (404 unless DevTools:TestLoginEnabled and not Production).
+        "GET api/v1/dev/test-accounts",
+        "POST api/v1/dev/test-login",
         // CRM & billing: tokenized public proposal (/p/{token}) and invoice (/i/{token}) pages.
         "GET api/v1/public/proposals/{token}",
         "POST api/v1/public/proposals/{token}/accept",

@@ -63,6 +63,8 @@ services.Configure<DatabaseOptions>(config.GetSection(DatabaseOptions.Section));
 services.Configure<BootstrapOptions>(config.GetSection(BootstrapOptions.Section));
 services.Configure<JobOptions>(config.GetSection(JobOptions.Section));
 services.Configure<DevToolsOptions>(config.GetSection(DevToolsOptions.Section));
+services.Configure<ImpersonationOptions>(config.GetSection(ImpersonationOptions.Section));
+services.Configure<TestAccountOptions>(config.GetSection(TestAccountOptions.Section));
 
 // ---------- Persistence ----------
 services.AddSingleton(TimeProvider.System);
@@ -119,7 +121,14 @@ services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
                 var state = await db.Set<User>().AsNoTracking().Where(u => u.Id == userId)
                     .Select(u => new { u.Status, u.SecurityVersion }).FirstOrDefaultAsync(context.HttpContext.RequestAborted);
                 if (state is null || state.Status != UserStatus.Active || state.SecurityVersion.ToString() != sv)
+                {
                     context.Fail("session revoked");
+                    return;
+                }
+                // Impersonation tokens die with their session (exit, expiry, impersonator signed out or suspended).
+                var now = context.HttpContext.RequestServices.GetRequiredService<TimeProvider>().GetUtcNow().UtcDateTime;
+                if (!await Impersonation.IsTokenStillValidAsync(context.Principal!, userId, db, now, context.HttpContext.RequestAborted))
+                    context.Fail("impersonation ended");
             },
         };
     });
@@ -144,6 +153,7 @@ services.AddAuthorization(options =>
 
 services.AddHttpContextAccessor();
 services.AddScoped<ICurrentUser, HttpCurrentUser>();
+services.AddScoped<IImpersonationContext, HttpImpersonationContext>();
 services.AddScoped<IClientScope, ClientScope>();
 services.AddScoped<ICredentialVault, CredentialVault>();
 services.AddSingleton<ITokenService, TokenService>();
@@ -171,6 +181,7 @@ services.AddScoped<IExchangeRateProvider, ExchangeRateProvider>();
 services.AddScoped<ILedgerWriter, LedgerWriter>();
 services.AddSingleton<JobRunner>();
 services.AddScoped<IAuthService, AuthService>();
+services.AddScoped<ImpersonationService>();
 
 services.AddSingleton<SmtpEmailSender>();
 services.AddSingleton<FileEmailSender>();
@@ -281,6 +292,7 @@ if (app.Configuration.GetValue("Swagger:Enabled", !app.Environment.IsProduction(
 
 app.UseCors();
 app.UseAuthentication();
+app.UseMiddleware<ImpersonationAuditMiddleware>();
 app.UseRateLimiter();
 app.UseAuthorization();
 
