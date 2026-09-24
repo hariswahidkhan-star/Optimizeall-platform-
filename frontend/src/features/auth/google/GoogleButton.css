@@ -1,0 +1,88 @@
+/*
+ * "Continue with Google" follows Google's sign-in branding guidelines: white (light/neutral) button, 1px #747775
+ * border, #1f1f1f text, the four-colour G logo at 20px with 12px spacing, Roboto Medium 14px where available. The
+ * colours are fixed (not theme tokens) so the button looks the same in light and dark themes, as Google requires.
+ */
+.google-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid #747775;
+  border-radius: var(--radius-md, 8px);
+  background: #ffffff;
+  color: #1f1f1f;
+  font-family: Roboto, var(--font-sans, system-ui), sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.25px;
+  line-height: 20px;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.google-button:hover:not(:disabled) {
+  background: #f8f9fa;
+  box-shadow: 0 1px 2px rgb(60 64 67 / 0.3);
+}
+
+.google-button:active:not(:disabled) {
+  background: #eef0f1;
+}
+
+.google-button:focus-visible {
+  outline: 3px solid var(--color-focus, #1a73e8);
+  outline-offset: 2px;
+}
+
+.google-button:disabled {
+  cursor: progress;
+  opacity: 0.72;
+}
+
+.google-button__logo {
+  flex: none;
+  width: 20px;
+  height: 20px;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3, 12px);
+  margin: 0;
+  color: var(--color-text-muted, #5f6368);
+  font-size: var(--text-sm, 0.875rem);
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  border-top: 1px solid var(--color-border, #dadce0);
+}
+
+.google-connection {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4, 16px);
+}
+
+.google-connection__identity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3, 12px);
+  min-width: 0;
+}
+
+.google-connection__identity p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}

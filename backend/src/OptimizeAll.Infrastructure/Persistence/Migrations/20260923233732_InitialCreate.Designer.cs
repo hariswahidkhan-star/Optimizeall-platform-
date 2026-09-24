@@ -12,7 +12,7 @@ using OptimizeAll.Infrastructure.Persistence;
 namespace OptimizeAll.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260923231459_InitialCreate")]
+    [Migration("20260923233732_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -5482,6 +5482,49 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("stored_files", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Identity.ExternalLogin", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(254)
+                        .HasColumnType("varchar(254)");
+
+                    b.Property<DateTime?>("LastUsedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Provider")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("varchar(32)");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Provider", "Subject")
+                        .IsUnique();
+
+                    b.HasIndex("UserId", "Provider")
+                        .IsUnique();
+
+                    b.ToTable("external_logins", (string)null);
                 });
 
             modelBuilder.Entity("OptimizeAll.Domain.Identity.PayoutProfile", b =>
@@ -14387,6 +14430,15 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("ClientAccountId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Identity.ExternalLogin", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Identity.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("OptimizeAll.Domain.Identity.PayoutProfile", b =>

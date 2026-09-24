@@ -62,6 +62,21 @@ region to use Render's private network; change `region` on all of them together 
 Secrets (`Jwt__SigningKey`, `Security__HashSalt`, and for MySQL `MYSQL_PASSWORD`/`MYSQL_ROOT_PASSWORD`) are generated
 by Render and never stored in the repository.
 
+### Optional: Sign in with Google
+
+Both Blueprints declare `Authentication__Google__ClientId` and `Authentication__Google__ClientSecret` on
+`optimizeall-api` with `sync: false`: Render asks for them when the Blueprint is created, and you can leave them empty
+(Google sign-in then stays off and its button is hidden). To turn it on later:
+
+1. Google Cloud console → **APIs & Services → Credentials → Create credentials → OAuth client ID** (type **Web
+   application**) with the **authorized redirect URI** `https://<web-url>/auth/google/callback`, e.g.
+   `https://optimizeall-web.onrender.com/auth/google/callback` (the same host as `Email__AppBaseUrl`). Configure the
+   OAuth consent screen (scopes `openid`, `email`, `profile`) and publish it. Details: [DEPLOYMENT.md § 5.11](DEPLOYMENT.md#511-sign-in-with-google-optional).
+2. Render dashboard → `optimizeall-api` → **Environment**: set `Authentication__Google__ClientId` and
+   `Authentication__Google__ClientSecret` (the secret stays in Render, never in the repository), then **Save, rebuild
+   and deploy**.
+3. The sign-in and registration pages now show **Continue with Google**.
+
 Switching an existing environment between the two Blueprints does not move data: the demo data is simply seeded
 again into the new database.
 

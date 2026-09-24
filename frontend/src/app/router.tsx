@@ -1,6 +1,7 @@
 import { createBrowserRouter, Outlet, ScrollRestoration, type RouteObject } from 'react-router-dom';
 import { CheckEmailPage } from '@/features/auth/CheckEmailPage';
 import { ForgotPasswordPage } from '@/features/auth/ForgotPasswordPage';
+import { GoogleCallbackPage } from '@/features/auth/google/GoogleCallbackPage';
 import { LoginPage } from '@/features/auth/LoginPage';
 import { RegisterPage } from '@/features/auth/RegisterPage';
 import { ResetPasswordPage } from '@/features/auth/ResetPasswordPage';
@@ -107,6 +108,8 @@ export const routes: RouteObject[] = [
           { path: 'verify-email', element: <VerifyEmailPage /> },
           { path: 'forgot-password', element: <ForgotPasswordPage /> },
           { path: 'reset-password', element: <ResetPasswordPage /> },
+          // Google OAuth redirect URI (AppLinks.GoogleCallback); also finishes linking from the profile.
+          { path: 'auth/google/callback', element: <GoogleCallbackPage /> },
         ],
       },
       ...portals.map<RouteObject>((portal) => ({

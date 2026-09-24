@@ -196,6 +196,7 @@ Required settings (see [`/.env.example`](../.env.example) for all of them):
 | `Database__Seed__0=Baseline` (no `Demo`) | no | never load demo data in production |
 | `Bootstrap__AdminEmail` / `Bootstrap__AdminPassword` | password | first start only; remove afterwards |
 | `WhatsApp__*` | token | only when WhatsApp is enabled |
+| `Authentication__Google__ClientId` / `Authentication__Google__ClientSecret` | secret | optional "Sign in with Google" (§ 5.11) |
 
 * Generate values with `scripts/generate-secrets.sh --aspnet`. Store them in a secret manager (AWS Secrets
   Manager/SSM, GCP Secret Manager, Azure Key Vault, Vault, Kubernetes Secrets with encryption at rest).
@@ -302,6 +303,32 @@ Then, with a dedicated smoke-test participant and staff account:
 | WhatsApp notifications | WhatsApp Business Cloud API: `WhatsApp__PhoneNumberId`, `WhatsApp__AccessToken` (system-user token), approved template `WhatsApp__TemplateName` | `WhatsApp__Enabled=false`: WhatsApp deliveries are skipped; in-app + email still work |
 | Payouts | `Payments__Provider=manual` (default): finance pays outside the platform and records payment references | No automated money movement until a provider integration (e.g. Wise, PayPal Payouts) is added |
 | Advertiser conversion postbacks | `Tracking__PostbackSecret` shared with each advertiser | Postbacks are rejected; clicks are still tracked |
+| Sign in with Google | Google OAuth client: `Authentication__Google__ClientId`, `Authentication__Google__ClientSecret` (§ 5.11) | The "Continue with Google" button is hidden; email + password sign-in only |
+
+### 5.11 Sign in with Google (optional)
+
+1. In the [Google Cloud console](https://console.cloud.google.com/) pick (or create) a project, open **APIs & Services
+   → OAuth consent screen**, choose **External** (or **Internal** for a Workspace-only deployment), fill in the app
+   name, support email, the app domain and privacy/terms URLs, and add the scopes `openid`, `email`, `profile`.
+   Publish the app (a "Testing" app only admits listed test users).
+2. **APIs & Services → Credentials → Create credentials → OAuth client ID**, type **Web application**:
+   * **Authorized JavaScript origins:** not needed (the code exchange happens on the server).
+   * **Authorized redirect URIs:** `https://<host>/auth/google/callback`, where `<host>` is the public web app host
+     (the value of `Email__AppBaseUrl`, e.g. `https://app.optimizeall.app/auth/google/callback`). Add one per
+     environment (staging, production). The API sends exactly `{Email__AppBaseUrl}/auth/google/callback` unless
+     `Authentication__Google__RedirectUri` overrides it; it must match character for character.
+3. Give the API `Authentication__Google__ClientId` and `Authentication__Google__ClientSecret` through the secret
+   manager (never a committed file; locally `dotnet user-secrets set "Authentication:Google:ClientSecret" "…"` in
+   `backend/src/OptimizeAll.Api`). Optionally restrict sign-in to Workspace domains with
+   `Authentication__Google__AllowedHostedDomains__0=example.com`.
+4. Restart the API. `GET /api/v1/auth/providers` now answers `{"google":{"enabled":true}}` and the sign-in and
+   registration pages show **Continue with Google**; signed-in users can connect or disconnect Google under
+   **Profile → Security**.
+5. The API must reach `https://oauth2.googleapis.com` (token endpoint) and `https://www.googleapis.com` (signing keys)
+   outbound. Browsers only navigate to `accounts.google.com`, so the web CSP needs no change.
+
+Account rules and security properties are in [SECURITY.md § 1.1](SECURITY.md#11-sign-in-with-google). Rotating the
+client secret: add a second secret in the console, deploy it, then delete the old one.
 
 ## 6. SQLite (single-instance deployments)
 

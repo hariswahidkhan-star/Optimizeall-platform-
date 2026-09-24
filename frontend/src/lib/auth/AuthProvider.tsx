@@ -115,6 +115,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [applySession, queryClient],
   );
 
+  const startSession = useCallback(
+    (session: AuthResponse) => {
+      queryClient.clear();
+      applySession(session);
+      return session.user;
+    },
+    [applySession, queryClient],
+  );
+
   const logout = useCallback(async () => {
     try {
       await api.post('/auth/logout');
@@ -153,11 +162,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       hasPermission: (permission) => has(permissions, permission),
       hasAnyPermission: (required) => hasAny(permissions, required),
       login,
+      startSession,
       logout,
       register,
       refreshUser,
     };
-  }, [state, login, logout, register, refreshUser]);
+  }, [state, login, startSession, logout, register, refreshUser]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

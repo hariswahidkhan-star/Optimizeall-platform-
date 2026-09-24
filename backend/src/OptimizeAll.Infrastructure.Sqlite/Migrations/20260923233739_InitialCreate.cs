@@ -1111,6 +1111,29 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "external_logins",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Provider = table.Column<string>(type: "TEXT", maxLength: 32, nullable: false),
+                    Subject = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 254, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
+                    LastUsedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_external_logins", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_external_logins_users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "notification_preferences",
                 columns: table => new
                 {
@@ -7354,6 +7377,18 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 columns: new[] { "CampaignId", "Status" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_external_logins_Provider_Subject",
+                table: "external_logins",
+                columns: new[] { "Provider", "Subject" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_external_logins_UserId_Provider",
+                table: "external_logins",
+                columns: new[] { "UserId", "Provider" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_form_consent_versions_FormId_Version",
                 table: "form_consent_versions",
                 columns: new[] { "FormId", "Version" },
@@ -8828,6 +8863,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
             migrationBuilder.DropTable(
                 name: "experiment_assignments");
+
+            migrationBuilder.DropTable(
+                name: "external_logins");
 
             migrationBuilder.DropTable(
                 name: "faq_items");

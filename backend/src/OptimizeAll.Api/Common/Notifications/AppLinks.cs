@@ -22,6 +22,9 @@ public static class AppLinks
     /// <summary>Password reset page; the emailed link adds <c>?token=…</c>.</summary>
     public const string ResetPassword = "/reset-password";
 
+    /// <summary>"Sign in with Google" redirect URI path (registered in Google Cloud as <c>https://&lt;host&gt;/auth/google/callback</c>).</summary>
+    public const string GoogleCallback = "/auth/google/callback";
+
     /// <summary>Invitation landing page (<c>/join/:code</c>).</summary>
     public static string Invitation(string code) => $"/join/{Uri.EscapeDataString(code)}";
 
