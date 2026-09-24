@@ -135,18 +135,21 @@ test('adjustments: credits in USD, PKR and AED convert to the cent, a debit appl
   await expect(dialog.getByText('The amount is converted to USD with the exchange rate in force now')).toBeVisible();
   await dialog.getByRole('button', { name: 'Create adjustment' }).click();
   await expect(toast(finance1, 'Adjustment created')).toBeVisible();
+  await expect(dialog).toBeHidden();
 
   // ---------------------------------------------------------------- 100 AED credit: the newer inverse rate wins
   // 1 / 3.6725 = 0.272294077… → stored rate 0.27229408 (8 dp); 100 × 0.27229408 = 27.229408 → 27.23 USD.
   dialog = await fillAdjustment(finance1, ana.id, '100', 'AED', 'Desert Bloom bonus paid in dirhams');
   await dialog.getByRole('button', { name: 'Create adjustment' }).click();
   await expect(toast(finance1, 'Adjustment created')).toBeVisible();
+  await expect(dialog).toBeHidden();
 
   // ---------------------------------------------------------------- a 5.25 USD debit is approved at once
   dialog = await fillAdjustment(finance1, ana.id, '-5.25', 'USD', 'Duplicate bonus paid last month');
   await expect(dialog.getByText(`Debit of ${money(5.25)}`)).toBeVisible();
   await dialog.getByRole('button', { name: 'Create adjustment' }).click();
   await expect(toast(finance1, 'Adjustment created')).toBeVisible();
+  await expect(dialog).toBeHidden();
 
   const entries = await ledgerOf(api, ana.id);
   const byCurrency = (c: string, sign: 1 | -1 = 1) =>

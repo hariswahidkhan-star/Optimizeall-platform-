@@ -271,7 +271,7 @@ public sealed class PayoutBatchService(
         {
             await notifications.StageAsync(new NotificationRequest(userId, NotificationTypes.BatchPrepared,
                 $"Payout batch {batch.Reference} is ready for review",
-                $"{batch.ItemCount} participant(s), {batch.TotalAmount:0.00} {batch.Currency} for the period ending {batch.PeriodKey}.",
+                $"{batch.ItemCount} participant(s), {Money.Format(batch.TotalAmount, batch.Currency)} for the period ending {batch.PeriodKey}.",
                 AppLinks.FinanceBatch(batch.Id)), ct);
         }
     }
@@ -393,7 +393,7 @@ public sealed class PayoutBatchService(
             {
                 await notifications.StageAsync(new NotificationRequest(userId, NotificationTypes.PayoutScheduled,
                     "Your scheduled payout was rescheduled",
-                    $"Your payout of {amount:0.00} {currency} could not go ahead in this batch. Your earnings are safe and will be included in an upcoming payout.",
+                    $"Your payout of {Money.Format(amount, currency)} could not go ahead in this batch. Your earnings are safe and will be included in an upcoming payout.",
                     AppLinks.Payouts, new[] { NotificationChannel.Email }), ct);
             }
             await db.SaveChangesAsync(ct);
@@ -467,7 +467,7 @@ public sealed class PayoutBatchService(
             {
                 await notifications.StageAsync(new NotificationRequest(item.UserId, NotificationTypes.PayoutScheduled,
                     "Your payout is scheduled",
-                    $"A payout of {item.Amount:0.00} {item.Currency} is scheduled. Expected payment date: {batch.ScheduledPaymentDate:yyyy-MM-dd}.",
+                    $"A payout of {Money.Format(item.Amount, item.Currency)} is scheduled. Expected payment date: {batch.ScheduledPaymentDate:yyyy-MM-dd}.",
                     AppLinks.Payout(item.Id), new[] { NotificationChannel.Email }), ct);
             }
 

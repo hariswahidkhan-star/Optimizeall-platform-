@@ -485,8 +485,10 @@ public sealed class PaymentsHubQueries(
             var failed = await items.CountAsync(i => i.Status == PayoutItemStatus.Failed && i.UpdatedAt >= monthStartUtc, ct);
             var schedule = await schedules.GetActiveAsync(now, ct);
             var next = PayoutPeriodCalculator.PeriodContaining(schedule, now);
+            // Test accounts are never paid (the planner always excludes them), so their earnings are not part of any cycle.
             var available = await db.Set<EarningEntry>().AsNoTracking()
                 .Where(e => e.Status == EarningStatus.Approved && e.PayoutItemId == null && e.AvailableAt <= next.CutoffUtc)
+                .Where(e => !db.Set<User>().Any(u => u.Id == e.UserId && u.IsTestAccount))
                 .GroupBy(e => e.SettlementCurrency).Select(g => new { g.Key, Amount = g.Sum(e => e.SettlementAmount) }).ToListAsync(ct);
             outgoing = new OutgoingSummaryDto(
                 paid.OrderBy(r => r.Key).Select(r => new CurrencyAmount(r.Key, Money.Round(r.Amount, r.Key))).ToList(),
