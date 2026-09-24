@@ -17,6 +17,7 @@ import {
   Skeleton,
   Switch,
   Textarea,
+  useToast,
 } from '@/components/ui';
 import { api } from '@/lib/api/client';
 import { errorMessage } from '@/lib/api/errors';
@@ -35,6 +36,7 @@ import { dk, useStaff } from './api';
 
 function Editor({ detail, projectId }: { detail: TaskDetail; projectId: string }) {
   const qc = useQueryClient();
+  const toast = useToast();
   const staff = useStaff();
   const t = detail.task;
   const [form, setForm] = useState({
@@ -61,6 +63,7 @@ function Editor({ detail, projectId }: { detail: TaskDetail; projectId: string }
     onSuccess: (d) => {
       qc.setQueryData(dk.task(t.id), d);
       void qc.invalidateQueries({ queryKey: dk.tasks(projectId) });
+      toast.success('Task saved');
     },
   });
   const toggleAssignee = (id: string, on: boolean) =>

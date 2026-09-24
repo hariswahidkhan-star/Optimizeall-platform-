@@ -13,6 +13,7 @@ import { ReportView } from '../shared/ReportView';
 import { DashboardPage } from './DashboardPage';
 import { Kanban } from './Kanban';
 import { dashboard, DESIGNER_PERMISSIONS, mockStaffApi, report, task, timeEntry } from './testData';
+import { TaskDrawer } from './TaskDrawer';
 import { TimerWidget } from './TimerWidget';
 
 describe('delivery links (notifications) resolve to real routes', () => {
@@ -172,5 +173,36 @@ describe('dashboard tile registry', () => {
     expect(dashboardTiles().map((t) => t.title)).toEqual(['A tile', 'B tile v2']);
     unregisterDashboardTile('a');
     unregisterDashboardTile('b');
+  });
+});
+
+describe('Task drawer', () => {
+  it('confirms a saved task', async () => {
+    const detail = {
+      task: task(),
+      description: null,
+      checklist: [],
+      comments: [],
+      watchers: [],
+      blockedBy: [],
+      blocking: [],
+      attachments: [],
+      hoursLogged: 0,
+      createdAt: '2026-09-01T00:00:00Z',
+      completedAt: null,
+      iWatch: false,
+    };
+    const { calls } = mockStaffApi({
+      'GET /agency/tasks/t1': () => json(200, detail),
+      'GET /agency/staff': () => json(200, []),
+      'PUT /agency/tasks/t1': () => json(200, { ...detail, task: task({ title: 'Renamed task' }) }),
+    });
+    renderWithApp(<TaskDrawer taskId="t1" projectId="p1" clientId="c1" onClose={() => {}} />);
+    const title = await screen.findByLabelText(/^Title/);
+    await userEvent.clear(title);
+    await userEvent.type(title, 'Renamed task');
+    await userEvent.click(screen.getByRole('button', { name: /^Save/ }));
+    expect(await screen.findByText('Task saved')).toBeInTheDocument();
+    expect(calls.filter((c) => c.method === 'PUT' && c.path === '/agency/tasks/t1')).toHaveLength(1);
   });
 });
