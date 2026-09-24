@@ -140,9 +140,11 @@ test('the recurring invoice job issues the retainer invoice exactly once', async
   const adminErrors = watchErrors(admin);
   for (let i = 0; i < 2; i++) {
     await admin.goto('/admin/jobs');
-    await admin.getByRole('button', { name: 'Run billing.recurring-invoices now' }).click();
-    await modal(admin, 'Run billing.recurring-invoices now?').getByRole('button', { name: 'Run now' }).click();
-    await expect(admin.getByRole('row').filter({ hasText: 'billing.recurring-invoices' })).toContainText(/Created \d+ invoice/);
+    await admin.getByRole('button', { name: 'Run RecurringInvoiceJob now' }).click();
+    const ran = admin.waitForResponse((r) => r.request().method() === 'POST' && /\/admin\/jobs\/.+\/run$/.test(new URL(r.url()).pathname));
+    await modal(admin, 'Run RecurringInvoiceJob now?').getByRole('button', { name: 'Run now' }).click();
+    expect((await ran).ok()).toBe(true);
+    await expect(admin.getByRole('row').filter({ hasText: 'RecurringInvoiceJob' })).toContainText(i === 0 ? /Created [1-9]\d* invoice/ : /Created 0 invoice/); // the rerun creates nothing
   }
 
   const contract = await amApi.get<{ invoices: { id: string; number: string | null; status: string }[] }>(`/agency/contracts/${contractId}`);
@@ -151,14 +153,22 @@ test('the recurring invoice job issues the retainer invoice exactly once', async
   expect(invoice.status).toBe('Issued');
   expect(invoice.number).toMatch(/\S+/);
 
-  // The invoice was emailed to the client's billing contact with a private link.
-  const mail = await latestMail(lead.email, new RegExp(invoice.number!));
-  const invoiceLink = mail.links.find((l) => /\/i\/[\w-]+$/.test(new URL(l).pathname));
-  expect(invoiceLink, 'the invoice email carries the /i/ link').toBeTruthy();
+  // The client's Owner (the signer, also the billing address) is notified in-app and by email; the email goes out
+  // through the notification outbox (NotificationDispatchJob), run here by hand because jobs are off in E2E.
+  const adminApi = await apiAs(accounts.admin);
+  await adminApi.post('/admin/jobs/NotificationDispatchJob/run');
+  const mail = await latestMail(lead.email, new RegExp(`Invoice ${invoice.number}`));
+  expect(mail.links.some((l) => new URL(l).pathname === `/client/billing/invoices/${invoice.id}`), 'the email links the portal invoice').toBe(true);
+
+  // The private /i/ link finance shares ("Client view link").
+  const financeApi = await apiAs(accounts.finance);
+  const issued = await financeApi.get<{ publicUrl: string | null }>(`/agency/billing/invoices/${invoice.id}`);
+  const invoiceLink = issued.publicUrl!;
+  expect(invoiceLink).toMatch(/\/i\/[\w-]+$/);
 
   errors.expectClean('the contract');
   adminErrors.expectClean('the jobs page');
-  remember({ invoiceId: invoice.id, invoiceNumber: invoice.number!, invoiceLink: invoiceLink! });
+  remember({ invoiceId: invoice.id, invoiceNumber: invoice.number!, invoiceLink });
 });
 
 /** The Payments table row containing `text`. */

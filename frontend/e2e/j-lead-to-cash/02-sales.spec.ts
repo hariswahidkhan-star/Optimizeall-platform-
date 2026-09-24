@@ -217,7 +217,7 @@ test('the sales rep builds a proposal from a template, the service catalog and t
   await sales.getByLabel('Valid until').fill(isoDate(-1));
   errors.ignore(/HTTP 400 POST .*\/agency\/proposals$/);
   await sales.getByRole('button', { name: 'Create proposal' }).click();
-  await expect(sales.getByText('Choose today or a later date.')).toBeVisible();
+  await expect(sales.getByRole('alert').filter({ hasText: 'Choose today or a later date.' })).toBeVisible();
   await sales.getByLabel('Valid until').fill(isoDate(21));
 
   // A double click creates one proposal.
