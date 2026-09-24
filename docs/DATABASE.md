@@ -63,6 +63,15 @@ unique `(CampaignId, SubscriberId)`; `email_events (CampaignId, Type)`, `(Subscr
 `earning_entries` unique `IdempotencyKey`, `(UserId, Status)`; `form_submissions (FormId, SubmittedAt)`;
 `tracking_clicks (TrackingLinkId, ClickedAt)`; `time_entries (UserId, Date)`, `(ProjectId, Date)`.
 
+**Person-level rates** (docs/REWARD_ENGINE.md § Person-level rates), each index serving a query:
+`rate_group_members` unique `(GroupId, UserId)` (insert-if-absent for bulk adds) and `(UserId)` (pricing: a person's
+groups); `rate_assignments (UserId, CampaignId)` and `(GroupId, CampaignId)` (pricing and the person/group pages),
+`(CampaignId)` (campaign rates panel), `(RateCardId)` (card detail, archive); `rate_group_member_events (GroupId, At)`
+and `(UserId, At)` (history); `rate_cards (Kind, Status, Name)` (card list), `(OwnerUserId)` (a person's custom rates);
+`rate_groups (MembershipMode, ArchivedAt)` (automatic groups at pricing time); `submission_rates` unique
+`(SubmissionId)`, `(RateCardId)`, `(RateGroupId)`, `(RateAssignmentId)` (usage counts). Pricing a submission loads one
+person's assignments through these indexes, so it does not grow with the number of people in a group.
+
 **Removed:** no index was a duplicate or a redundant prefix of another before the review (the guard test now keeps it
 that way); the four indexes marked ↻ were replaced by their extension instead of adding a second index. Unique
 constraints the code relies on for check-then-insert races were reviewed (post keys, idempotency keys, recipients per
@@ -421,6 +430,13 @@ Growth classes: **high-volume** (append-only or one row per event/recipient/day;
 | `proposal_lines` | per-client / business | |
 | `proposal_versions` | per-client / business | |
 | `proposals` | per-client / business | |
+| `rate_assignments` | per-client / growing | rate card → person or group, global or per campaign; ended rows kept |
+| `rate_card_lines` | static / config | immutable lines of a rate card version |
+| `rate_card_versions` | static / config | immutable, effective-dated versions (unique `(RateCardId, Version)`) |
+| `rate_cards` | static / config | reusable and custom (per-person) rate cards |
+| `rate_group_member_events` | per-client / growing | append-only membership history (one row per person per change) |
+| `rate_group_members` | per-client / growing | current membership, unique `(GroupId, UserId)` |
+| `rate_groups` | static / config | archived, never deleted |
 | `recurring_task_rules` | static / config | |
 | `referrals` | per-client / business | |
 | `refresh_tokens` | high-volume | one per sign-in/refresh rotation; DataRetention |
@@ -470,6 +486,7 @@ Growth classes: **high-volume** (append-only or one row per event/recipient/day;
 | `stored_files` | per-client / growing | uploaded files metadata |
 | `submission_events` | high-volume | status history (3-5 per submission) |
 | `submission_flags` | per-client / growing | risk flags per submission |
+| `submission_rates` | high-volume | person-level rate locked per submission (at most one per submission) |
 | `submissions` | high-volume | participant posts |
 | `support_messages` | per-client / business | |
 | `support_tickets` | per-client / business | |

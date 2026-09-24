@@ -17819,6 +17819,106 @@
         }
       }
     },
+    "/api/v1/admin/campaigns/{campaignId}/rates": {
+      "get": {
+        "tags": [
+          "CampaignRates"
+        ],
+        "parameters": [
+          {
+            "name": "campaignId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.CampaignRatesDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.CampaignRatesDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.CampaignRatesDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/campaigns/{campaignId}/rates/simulate": {
+      "post": {
+        "tags": [
+          "CampaignRates"
+        ],
+        "summary": "\"Price for person X on platform Y\": the explanation plus the full quote with the person's real caps and budget.",
+        "parameters": [
+          {
+            "name": "campaignId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.SimulateRateRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.SimulateRateRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.SimulateRateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateExplanationDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateExplanationDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateExplanationDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/campaign-categories": {
       "get": {
         "tags": [
@@ -33163,6 +33263,9 @@
                     "maxLength": 5000,
                     "type": "string"
                   },
+                  "Format": {
+                    "$ref": "#/components/schemas/OptimizeAll.Domain.Common.ContentFormat"
+                  },
                   "ExperimentVariantId": {
                     "type": "string",
                     "format": "uuid"
@@ -33190,6 +33293,9 @@
                   "style": "form"
                 },
                 "CaptionText": {
+                  "style": "form"
+                },
+                "Format": {
                   "style": "form"
                 },
                 "ExperimentVariantId": {
@@ -37594,6 +37700,186 @@
         }
       }
     },
+    "/api/v1/admin/users/{userId}/rates": {
+      "get": {
+        "tags": [
+          "PersonRates"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "campaignId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.PersonRatesDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.PersonRatesDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.PersonRatesDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/users/{userId}/rates/explain": {
+      "get": {
+        "tags": [
+          "PersonRates"
+        ],
+        "summary": "Every candidate rate for one post (platform/format, optional campaign and time), which one won and why.",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Platform",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Common.SocialPlatform"
+            }
+          },
+          {
+            "name": "Format",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Common.ContentFormat"
+            }
+          },
+          {
+            "name": "CampaignId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "At",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateExplanationDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateExplanationDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateExplanationDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/users/{userId}/custom-rates": {
+      "post": {
+        "tags": [
+          "PersonRates"
+        ],
+        "summary": "Creates a negotiated custom rate (a private card + assignment) for this person, globally or for one campaign.",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.CreateCustomRateRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.CreateCustomRateRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.CreateCustomRateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateAssignmentDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateAssignmentDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateAssignmentDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/admin/content/copy": {
       "get": {
         "tags": [
@@ -40081,6 +40367,1647 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/admin/rate-assignments": {
+      "get": {
+        "tags": [
+          "RateAssignments"
+        ],
+        "parameters": [
+          {
+            "name": "UserId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "GroupId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "CampaignId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "RateCardId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ActiveOnly",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sort",
+            "in": "query",
+            "schema": {
+              "maxLength": 50,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Desc",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Rates.RateAssignmentDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Rates.RateAssignmentDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Rates.RateAssignmentDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "RateAssignments"
+        ],
+        "summary": "409 rates.duplicate_assignment (overlapping window, same target/scope), rates.fx_missing, rate_card.not_active.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.CreateRateAssignmentRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.CreateRateAssignmentRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.CreateRateAssignmentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateAssignmentDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateAssignmentDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateAssignmentDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/rate-assignments/{id}": {
+      "get": {
+        "tags": [
+          "RateAssignments"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateAssignmentDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateAssignmentDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateAssignmentDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "RateAssignments"
+        ],
+        "summary": "Changes the window (extend or shorten a deal). A start that has passed can't move.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.UpdateRateAssignmentRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.UpdateRateAssignmentRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.UpdateRateAssignmentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateAssignmentDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateAssignmentDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateAssignmentDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/rate-assignments/{id}/end": {
+      "post": {
+        "tags": [
+          "RateAssignments"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.EndRateAssignmentRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.EndRateAssignmentRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.EndRateAssignmentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateAssignmentDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateAssignmentDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateAssignmentDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/rate-cards": {
+      "get": {
+        "tags": [
+          "RateCards"
+        ],
+        "parameters": [
+          {
+            "name": "Status",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateCardStatus"
+            }
+          },
+          {
+            "name": "Currency",
+            "in": "query",
+            "schema": {
+              "pattern": "^[A-Za-z]{3}$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sort",
+            "in": "query",
+            "schema": {
+              "maxLength": 50,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Desc",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Rates.RateCardListItemDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Rates.RateCardListItemDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Rates.RateCardListItemDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "RateCards"
+        ],
+        "summary": "Creates a card with version 1 (draft unless \"activate\": true). 409 rate_card.name_taken.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.CreateRateCardRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.CreateRateCardRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.CreateRateCardRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/rate-cards/{id}": {
+      "get": {
+        "tags": [
+          "RateCards"
+        ],
+        "summary": "A card with every version (rates, caps, status), its assignments and how many submissions it priced.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "RateCards"
+        ],
+        "summary": "Renames / re-describes a card (rates change only through new versions). 409 concurrency.conflict.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.UpdateRateCardRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.UpdateRateCardRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.UpdateRateCardRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/rate-cards/{id}/versions": {
+      "post": {
+        "tags": [
+          "RateCards"
+        ],
+        "summary": "Saves a new immutable version (confirm + reason; optional future effectiveFrom). A raise above the four-eyes\r\nthreshold is saved as PendingApproval. 409 rate_card.version_conflict / rate_card.pending_approval / rates.fx_missing.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.CreateRateCardVersionRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.CreateRateCardVersionRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.CreateRateCardVersionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/rate-cards/{id}/versions/{version}/approve": {
+      "post": {
+        "tags": [
+          "RateCards"
+        ],
+        "summary": "Approves a pending rate increase (four-eyes: not its author, not the rate's owner → 403 rates.self_approval).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.ApproveRateCardVersionRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.ApproveRateCardVersionRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.ApproveRateCardVersionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/rate-cards/{id}/versions/{version}/reject": {
+      "post": {
+        "tags": [
+          "RateCards"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.RejectRateCardVersionRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.RejectRateCardVersionRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.RejectRateCardVersionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/rate-cards/{id}/activate": {
+      "post": {
+        "tags": [
+          "RateCards"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.ActivateRateCardRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.ActivateRateCardRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.ActivateRateCardRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/rate-cards/{id}/archive": {
+      "post": {
+        "tags": [
+          "RateCards"
+        ],
+        "summary": "Archives a card. In use → 409 rate_card.in_use unless \"endAssignments\": true. Priced submissions keep their rate.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.ArchiveRateCardRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.ArchiveRateCardRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.ArchiveRateCardRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/rate-cards/{id}/duplicate": {
+      "post": {
+        "tags": [
+          "RateCards"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.DuplicateRateCardRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.DuplicateRateCardRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.DuplicateRateCardRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateCardDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/rate-groups": {
+      "get": {
+        "tags": [
+          "RateGroups"
+        ],
+        "parameters": [
+          {
+            "name": "IncludeArchived",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Mode",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateGroupMembershipMode"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sort",
+            "in": "query",
+            "schema": {
+              "maxLength": 50,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Desc",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Rates.RateGroupListItemDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Rates.RateGroupListItemDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Rates.RateGroupListItemDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "RateGroups"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.CreateRateGroupRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.CreateRateGroupRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.CreateRateGroupRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateGroupDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateGroupDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateGroupDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/rate-groups/{id}": {
+      "get": {
+        "tags": [
+          "RateGroups"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateGroupDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateGroupDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateGroupDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "RateGroups"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.UpdateRateGroupRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.UpdateRateGroupRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.UpdateRateGroupRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateGroupDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateGroupDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateGroupDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/rate-groups/{id}/archive": {
+      "post": {
+        "tags": [
+          "RateGroups"
+        ],
+        "summary": "Archives (\"deletes\") a group. With members/assignments → 409 rate_group.in_use unless \"force\": true.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.ArchiveRateGroupRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.ArchiveRateGroupRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.ArchiveRateGroupRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateGroupDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateGroupDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.RateGroupDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/rate-groups/{id}/members": {
+      "get": {
+        "tags": [
+          "RateGroups"
+        ],
+        "summary": "Members (manual groups) or people matching the rule (automatic groups), with search and paging.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sort",
+            "in": "query",
+            "schema": {
+              "maxLength": 50,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Desc",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Rates.RateGroupMemberDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Rates.RateGroupMemberDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Rates.RateGroupMemberDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "RateGroups"
+        ],
+        "summary": "Adds up to 10,000 people; returns what was added, unchanged, rejected and flagged.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.AddRateGroupMembersRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.AddRateGroupMembersRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.AddRateGroupMembersRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.BulkMembersResultDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.BulkMembersResultDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.BulkMembersResultDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/rate-groups/{id}/members/remove": {
+      "post": {
+        "tags": [
+          "RateGroups"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.RemoveRateGroupMembersRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.RemoveRateGroupMembersRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rates.RemoveRateGroupMembersRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.BulkMembersResultDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.BulkMembersResultDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.BulkMembersResultDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/rate-groups/{id}/members/import": {
+      "post": {
+        "tags": [
+          "RateGroups"
+        ],
+        "summary": "CSV import (multipart field \"file\"; a column of emails or user ids). dryRun=true only validates.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "dryRun",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "note",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.CsvImportResultDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.CsvImportResultDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rates.CsvImportResultDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/rate-groups/{id}/members/export.csv": {
+      "get": {
+        "tags": [
+          "RateGroups"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/admin/rate-groups/{id}/history": {
+      "get": {
+        "tags": [
+          "RateGroups"
+        ],
+        "summary": "Membership history (added/removed, by whom, why), newest first.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sort",
+            "in": "query",
+            "schema": {
+              "maxLength": 50,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Desc",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Rates.RateGroupMemberEventDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Rates.RateGroupMemberEventDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Rates.RateGroupMemberEventDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              }
+            }
           }
         }
       }
@@ -53660,7 +55587,7 @@
         "tags": [
           "WebsiteContent"
         ],
-        "summary": "Denied while impersonating: the settings choose the tag-manager / analytics scripts loaded on every public page and\nthe canonical site URL used by links, the sitemap and robots.txt (platform-wide configuration, like admin settings).",
+        "summary": "Denied while impersonating: the settings choose the tag-manager / analytics scripts loaded on every public page and\r\nthe canonical site URL used by links, the sitemap and robots.txt (platform-wide configuration, like admin settings).",
         "requestBody": {
           "content": {
             "application/json": {
@@ -62812,6 +64739,9 @@
           "remainingSubmissions": {
             "type": "integer",
             "format": "int32"
+          },
+          "yourRate": {
+            "$ref": "#/components/schemas/Rates.YourRateDto"
           }
         },
         "additionalProperties": false
@@ -62948,6 +64878,9 @@
           },
           "trackingEnabled": {
             "type": "boolean"
+          },
+          "yourRate": {
+            "$ref": "#/components/schemas/Rates.YourRateDto"
           }
         },
         "additionalProperties": false
@@ -74234,6 +76167,33 @@
           "concurrencyStamp": {
             "type": "string",
             "format": "uuid"
+          },
+          "rateSource": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateSourceLevel"
+          },
+          "rateSourceLabel": {
+            "type": "string",
+            "nullable": true
+          },
+          "rateCardId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "rateCardVersion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "rateGroupId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "rateAssignmentId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -77767,6 +79727,156 @@
         },
         "additionalProperties": false
       },
+      "OptimizeAll.Api.Common.Http.PagedResult`1[[Rates.RateAssignmentDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.RateAssignmentDto"
+            },
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OptimizeAll.Api.Common.Http.PagedResult`1[[Rates.RateCardListItemDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.RateCardListItemDto"
+            },
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OptimizeAll.Api.Common.Http.PagedResult`1[[Rates.RateGroupListItemDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.RateGroupListItemDto"
+            },
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OptimizeAll.Api.Common.Http.PagedResult`1[[Rates.RateGroupMemberDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.RateGroupMemberDto"
+            },
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OptimizeAll.Api.Common.Http.PagedResult`1[[Rates.RateGroupMemberEventDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.RateGroupMemberEventDto"
+            },
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
       "OptimizeAll.Api.Common.Http.PagedResult`1[[Retention.RetentionLogDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
         "type": "object",
         "properties": {
@@ -79058,6 +81168,16 @@
         ],
         "type": "string"
       },
+      "OptimizeAll.Domain.Common.ContentFormat": {
+        "enum": [
+          "Post",
+          "Story",
+          "ShortVideo",
+          "LongVideo",
+          "Carousel"
+        ],
+        "type": "string"
+      },
       "OptimizeAll.Domain.Common.ParticipantTier": {
         "enum": [
           "Standard",
@@ -80289,6 +82409,79 @@
         "enum": [
           "Automatic",
           "ManualApproval"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Rewards.PersonalRatesMode": {
+        "enum": [
+          "Allowed",
+          "CampaignRatesOnly"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Rewards.RateAssignmentTarget": {
+        "enum": [
+          "Person",
+          "Group"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Rewards.RateCardKind": {
+        "enum": [
+          "Standard",
+          "Custom"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Rewards.RateCardStatus": {
+        "enum": [
+          "Draft",
+          "Active",
+          "Archived"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Rewards.RateCardVersionStatus": {
+        "enum": [
+          "Approved",
+          "PendingApproval",
+          "Rejected"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Rewards.RateGroupMemberAction": {
+        "enum": [
+          "Added",
+          "Removed"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Rewards.RateGroupMembershipMode": {
+        "enum": [
+          "Manual",
+          "Automatic"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Rewards.RateOutcome": {
+        "enum": [
+          "Won",
+          "NotApplicable",
+          "Outranked"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Rewards.RateSourceLevel": {
+        "enum": [
+          "CampaignPersonalCustom",
+          "CampaignPersonalCard",
+          "CampaignGroup",
+          "GlobalPersonalCustom",
+          "GlobalPersonalCard",
+          "GlobalGroup",
+          "CampaignSegment",
+          "GlobalSegment",
+          "CampaignRules"
         ],
         "type": "string"
       },
@@ -86470,6 +88663,1785 @@
         },
         "additionalProperties": false
       },
+      "Rates.ActivateRateCardRequest": {
+        "required": [
+          "concurrencyStamp"
+        ],
+        "type": "object",
+        "properties": {
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.AddRateGroupMembersRequest": {
+        "required": [
+          "userIds"
+        ],
+        "type": "object",
+        "properties": {
+          "userIds": {
+            "maxItems": 10000,
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "note": {
+            "maxLength": 300,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.ApproveRateCardVersionRequest": {
+        "type": "object",
+        "properties": {
+          "note": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.ArchiveRateCardRequest": {
+        "required": [
+          "concurrencyStamp",
+          "reason"
+        ],
+        "type": "object",
+        "properties": {
+          "reason": {
+            "maxLength": 500,
+            "minLength": 5,
+            "type": "string"
+          },
+          "endAssignments": {
+            "type": "boolean",
+            "description": "End the card's active assignments too (otherwise a card in use cannot be archived)."
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.ArchiveRateGroupRequest": {
+        "required": [
+          "concurrencyStamp",
+          "reason"
+        ],
+        "type": "object",
+        "properties": {
+          "reason": {
+            "maxLength": 500,
+            "minLength": 5,
+            "type": "string"
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Remove all members and end the group's assignments (otherwise a group in use cannot be archived)."
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.BulkIssueDto": {
+        "type": "object",
+        "properties": {
+          "row": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.BulkMembersResultDto": {
+        "type": "object",
+        "properties": {
+          "requested": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "added": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unchanged": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "removed": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rejected": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.BulkIssueDto"
+            },
+            "nullable": true
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.BulkIssueDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.CampaignRatesDto": {
+        "type": "object",
+        "properties": {
+          "campaignId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "personalRatesMode": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.PersonalRatesMode"
+          },
+          "personalRateMaxMultiplier": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "campaignAssignments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.RateAssignmentDto"
+            },
+            "nullable": true
+          },
+          "globalAssignments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.RateAssignmentDto"
+            },
+            "nullable": true
+          },
+          "fxProblems": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "peopleWithPersonalRates": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.CreateCustomRateRequest": {
+        "required": [
+          "currency",
+          "lines",
+          "reason"
+        ],
+        "type": "object",
+        "properties": {
+          "currency": {
+            "maxLength": 3,
+            "minLength": 3,
+            "type": "string"
+          },
+          "dailyCapPerParticipant": {
+            "maximum": 100000000,
+            "minimum": 0.0001,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "weeklyCapPerParticipant": {
+            "maximum": 100000000,
+            "minimum": 0.0001,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "campaignCapPerParticipant": {
+            "maximum": 100000000,
+            "minimum": 0.0001,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "stackCampaignBonuses": {
+            "type": "boolean"
+          },
+          "lines": {
+            "maxItems": 100,
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.RateCardLineInput"
+            }
+          },
+          "campaignId": {
+            "type": "string",
+            "description": "Null = the deal applies in every campaign.",
+            "format": "uuid",
+            "nullable": true
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "name": {
+            "maxLength": 120,
+            "type": "string",
+            "nullable": true
+          },
+          "reason": {
+            "maxLength": 500,
+            "minLength": 5,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.CreateRateAssignmentRequest": {
+        "required": [
+          "rateCardId",
+          "reason",
+          "target"
+        ],
+        "type": "object",
+        "properties": {
+          "rateCardId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "target": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateAssignmentTarget"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "groupId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "campaignId": {
+            "type": "string",
+            "description": "Null = every campaign.",
+            "format": "uuid",
+            "nullable": true
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "reason": {
+            "maxLength": 500,
+            "minLength": 5,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.CreateRateCardRequest": {
+        "required": [
+          "currency",
+          "lines",
+          "name",
+          "reason"
+        ],
+        "type": "object",
+        "properties": {
+          "currency": {
+            "maxLength": 3,
+            "minLength": 3,
+            "type": "string"
+          },
+          "dailyCapPerParticipant": {
+            "maximum": 100000000,
+            "minimum": 0.0001,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "weeklyCapPerParticipant": {
+            "maximum": 100000000,
+            "minimum": 0.0001,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "campaignCapPerParticipant": {
+            "maximum": 100000000,
+            "minimum": 0.0001,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "stackCampaignBonuses": {
+            "type": "boolean"
+          },
+          "lines": {
+            "maxItems": 100,
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.RateCardLineInput"
+            }
+          },
+          "name": {
+            "maxLength": 120,
+            "minLength": 2,
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true
+          },
+          "reason": {
+            "maxLength": 500,
+            "minLength": 5,
+            "type": "string"
+          },
+          "activate": {
+            "type": "boolean",
+            "description": "Activate immediately (assignable) instead of leaving the card as a draft."
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.CreateRateCardVersionRequest": {
+        "required": [
+          "currency",
+          "lines",
+          "reason"
+        ],
+        "type": "object",
+        "properties": {
+          "currency": {
+            "maxLength": 3,
+            "minLength": 3,
+            "type": "string"
+          },
+          "dailyCapPerParticipant": {
+            "maximum": 100000000,
+            "minimum": 0.0001,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "weeklyCapPerParticipant": {
+            "maximum": 100000000,
+            "minimum": 0.0001,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "campaignCapPerParticipant": {
+            "maximum": 100000000,
+            "minimum": 0.0001,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "stackCampaignBonuses": {
+            "type": "boolean"
+          },
+          "lines": {
+            "maxItems": 100,
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.RateCardLineInput"
+            }
+          },
+          "reason": {
+            "maxLength": 500,
+            "minLength": 5,
+            "type": "string"
+          },
+          "effectiveFrom": {
+            "type": "string",
+            "description": "When the version takes effect (UTC; default now). Must not be in the past.",
+            "format": "date-time",
+            "nullable": true
+          },
+          "baseVersion": {
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer",
+            "description": "The version the editor started from; a newer saved version answers 409 rate_card.version_conflict.",
+            "format": "int32",
+            "nullable": true
+          },
+          "confirm": {
+            "type": "boolean",
+            "description": "Must be true: changing rates is a sensitive action."
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.CreateRateGroupRequest": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 120,
+            "minLength": 2,
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true
+          },
+          "priority": {
+            "maximum": 1000,
+            "minimum": -1000,
+            "type": "integer",
+            "format": "int32"
+          },
+          "membershipMode": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateGroupMembershipMode"
+          },
+          "autoTiers": {
+            "maxItems": 4,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Common.ParticipantTier"
+            },
+            "nullable": true
+          },
+          "autoMinFollowers": {
+            "maximum": 2000000000,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "autoMaxFollowers": {
+            "maximum": 2000000000,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "autoRequireVerified": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.CsvImportResultDto": {
+        "type": "object",
+        "properties": {
+          "dryRun": {
+            "type": "boolean"
+          },
+          "rows": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "valid": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "added": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "alreadyMembers": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rejected": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.BulkIssueDto"
+            },
+            "nullable": true
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.BulkIssueDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.DuplicateRateCardRequest": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 120,
+            "minLength": 2,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.EffectiveRateDto": {
+        "type": "object",
+        "properties": {
+          "platform": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Common.SocialPlatform"
+          },
+          "format": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Common.ContentFormat"
+          },
+          "level": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateSourceLevel"
+          },
+          "levelLabel": {
+            "type": "string",
+            "nullable": true
+          },
+          "sourceLabel": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "assignmentId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "rateCardId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "rateCardVersion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.EndRateAssignmentRequest": {
+        "required": [
+          "concurrencyStamp",
+          "reason"
+        ],
+        "type": "object",
+        "properties": {
+          "reason": {
+            "maxLength": 500,
+            "minLength": 5,
+            "type": "string"
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.ExplainCandidateDto": {
+        "type": "object",
+        "properties": {
+          "level": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateSourceLevel"
+          },
+          "levelLabel": {
+            "type": "string",
+            "nullable": true
+          },
+          "outcome": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateOutcome"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          },
+          "assignmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "rateCardId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "cardName": {
+            "type": "string",
+            "nullable": true
+          },
+          "version": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "groupId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "groupName": {
+            "type": "string",
+            "nullable": true
+          },
+          "priority": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lineId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "lineConditions": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.PersonGroupDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "membershipMode": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateGroupMembershipMode"
+          },
+          "priority": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "addedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "matchedPlatforms": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Common.SocialPlatform"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.PersonRatesDto": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/Rewards.UserRefDto"
+          },
+          "countryCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "tier": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Common.ParticipantTier"
+          },
+          "status": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Identity.UserStatus"
+          },
+          "isTestAccount": {
+            "type": "boolean"
+          },
+          "campaign": {
+            "$ref": "#/components/schemas/Rates.RateCampaignRefDto"
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.PersonGroupDto"
+            },
+            "nullable": true
+          },
+          "assignments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.RateAssignmentDto"
+            },
+            "nullable": true
+          },
+          "effective": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.EffectiveRateDto"
+            },
+            "nullable": true
+          },
+          "precedence": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.PrecedenceLevelDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.PrecedenceLevelDto": {
+        "type": "object",
+        "properties": {
+          "rank": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "level": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateSourceLevel"
+          },
+          "label": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.RateAssignmentDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "level": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateSourceLevel"
+          },
+          "levelLabel": {
+            "type": "string",
+            "nullable": true
+          },
+          "target": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateAssignmentTarget"
+          },
+          "card": {
+            "$ref": "#/components/schemas/Rates.RateCardRefDto"
+          },
+          "person": {
+            "$ref": "#/components/schemas/Rewards.UserRefDto"
+          },
+          "group": {
+            "$ref": "#/components/schemas/Rates.RateGroupRefDto"
+          },
+          "campaign": {
+            "$ref": "#/components/schemas/Rates.RateCampaignRefDto"
+          },
+          "isCustom": {
+            "type": "boolean"
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "endedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "endReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "$ref": "#/components/schemas/Rewards.UserRefDto"
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.RateCampaignRefDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.RateCardDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "kind": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateCardKind"
+          },
+          "status": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateCardStatus"
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "currentVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "owner": {
+            "$ref": "#/components/schemas/Rewards.UserRefDto"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "archivedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "archiveReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "versions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.RateCardVersionDto"
+            },
+            "nullable": true
+          },
+          "assignments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.RateAssignmentDto"
+            },
+            "nullable": true
+          },
+          "usedBySubmissions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fourEyesRequiredAbovePercent": {
+            "type": "boolean"
+          },
+          "fourEyesThresholdPercent": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.RateCardLineDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "platform": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Common.SocialPlatform"
+          },
+          "format": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Common.ContentFormat"
+          },
+          "countryCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "label": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.RateCardLineInput": {
+        "type": "object",
+        "properties": {
+          "platform": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Common.SocialPlatform"
+          },
+          "format": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Common.ContentFormat"
+          },
+          "countryCode": {
+            "pattern": "^[A-Za-z]{2}$",
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "maximum": 1000000,
+            "minimum": 0,
+            "type": "number",
+            "format": "double"
+          },
+          "label": {
+            "maxLength": 150,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.RateCardListItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "kind": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateCardKind"
+          },
+          "status": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateCardStatus"
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "currentVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lineCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "minAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "maxAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "activeAssignments": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pendingApproval": {
+            "type": "boolean"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.RateCardRefDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "kind": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateCardKind"
+          },
+          "status": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateCardStatus"
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "currentVersion": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.RateCardVersionDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "dailyCapPerParticipant": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "weeklyCapPerParticipant": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "campaignCapPerParticipant": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "stackCampaignBonuses": {
+            "type": "boolean"
+          },
+          "effectiveFrom": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "$ref": "#/components/schemas/Rewards.UserRefDto"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateCardVersionStatus"
+          },
+          "decidedBy": {
+            "$ref": "#/components/schemas/Rewards.UserRefDto"
+          },
+          "decidedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "decisionNote": {
+            "type": "string",
+            "nullable": true
+          },
+          "maxIncreasePercent": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "isCurrent": {
+            "type": "boolean"
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.RateCardLineDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.RateConversionDto": {
+        "type": "object",
+        "properties": {
+          "fromCurrency": {
+            "type": "string",
+            "nullable": true
+          },
+          "toCurrency": {
+            "type": "string",
+            "nullable": true
+          },
+          "rate": {
+            "type": "number",
+            "format": "double"
+          },
+          "exchangeRateId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "cardAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.RateExplanationDto": {
+        "type": "object",
+        "properties": {
+          "platform": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Common.SocialPlatform"
+          },
+          "format": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Common.ContentFormat"
+          },
+          "countryCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "tier": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Common.ParticipantTier"
+          },
+          "followers": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "evaluatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "campaign": {
+            "$ref": "#/components/schemas/Rates.RateCampaignRefDto"
+          },
+          "campaignPolicy": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.PersonalRatesMode"
+          },
+          "maxMultiplier": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "winner": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateSourceLevel"
+          },
+          "summary": {
+            "type": "string",
+            "nullable": true
+          },
+          "candidates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.ExplainCandidateDto"
+            },
+            "nullable": true
+          },
+          "conversion": {
+            "$ref": "#/components/schemas/Rates.RateConversionDto"
+          },
+          "conversionError": {
+            "type": "string",
+            "nullable": true
+          },
+          "quote": {
+            "$ref": "#/components/schemas/Rewards.RewardQuoteDto"
+          },
+          "precedence": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.PrecedenceLevelDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.RateGroupDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "priority": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "membershipMode": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateGroupMembershipMode"
+          },
+          "autoTiers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Common.ParticipantTier"
+            },
+            "nullable": true
+          },
+          "autoMinFollowers": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "autoMaxFollowers": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "autoRequireVerified": {
+            "type": "boolean"
+          },
+          "autoRule": {
+            "type": "string",
+            "nullable": true
+          },
+          "memberCount": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "archivedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "archiveReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "assignments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.RateAssignmentDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.RateGroupListItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "priority": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "membershipMode": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateGroupMembershipMode"
+          },
+          "autoRule": {
+            "type": "string",
+            "nullable": true
+          },
+          "memberCount": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "cards": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.RateCardRefDto"
+            },
+            "nullable": true
+          },
+          "archivedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.RateGroupMemberDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "displayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "countryCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "tier": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Common.ParticipantTier"
+          },
+          "status": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Identity.UserStatus"
+          },
+          "isTestAccount": {
+            "type": "boolean"
+          },
+          "addedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "addedBy": {
+            "$ref": "#/components/schemas/Rewards.UserRefDto"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "followers": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.RateGroupMemberEventDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "displayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "action": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateGroupMemberAction"
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "actor": {
+            "$ref": "#/components/schemas/Rewards.UserRefDto"
+          },
+          "source": {
+            "type": "string",
+            "nullable": true
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.RateGroupRefDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "membershipMode": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateGroupMembershipMode"
+          },
+          "priority": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.RejectRateCardVersionRequest": {
+        "required": [
+          "reason"
+        ],
+        "type": "object",
+        "properties": {
+          "reason": {
+            "maxLength": 500,
+            "minLength": 5,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.RemoveRateGroupMembersRequest": {
+        "required": [
+          "reason",
+          "userIds"
+        ],
+        "type": "object",
+        "properties": {
+          "userIds": {
+            "maxItems": 10000,
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "reason": {
+            "maxLength": 500,
+            "minLength": 5,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.SimulateRateRequest": {
+        "required": [
+          "platform",
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "platform": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Common.SocialPlatform"
+          },
+          "format": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Common.ContentFormat"
+          },
+          "postedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "isFirstApprovedPost": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.UpdateRateAssignmentRequest": {
+        "required": [
+          "concurrencyStamp",
+          "reason"
+        ],
+        "type": "object",
+        "properties": {
+          "validFrom": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "reason": {
+            "maxLength": 500,
+            "minLength": 5,
+            "type": "string"
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.UpdateRateCardRequest": {
+        "required": [
+          "concurrencyStamp",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 120,
+            "minLength": 2,
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.UpdateRateGroupRequest": {
+        "required": [
+          "concurrencyStamp",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 120,
+            "minLength": 2,
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true
+          },
+          "priority": {
+            "maximum": 1000,
+            "minimum": -1000,
+            "type": "integer",
+            "format": "int32"
+          },
+          "membershipMode": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateGroupMembershipMode"
+          },
+          "autoTiers": {
+            "maxItems": 4,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Common.ParticipantTier"
+            },
+            "nullable": true
+          },
+          "autoMinFollowers": {
+            "maximum": 2000000000,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "autoMaxFollowers": {
+            "maximum": 2000000000,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "autoRequireVerified": {
+            "type": "boolean"
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reason": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rates.YourRateDto": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "minAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "maxAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "kind": {
+            "type": "string",
+            "nullable": true
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rates.YourRateEntryDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "The signed-in participant's own person-level rate in a campaign (null when the campaign rates apply). Never names\r\nthe card or group: Kind is \"Personal\" for a personal deal and \"Special\" for a group/segment rate."
+      },
+      "Rates.YourRateEntryDto": {
+        "type": "object",
+        "properties": {
+          "platform": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Common.SocialPlatform"
+          },
+          "format": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Common.ContentFormat"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
       "Retention.RetentionKindCountDto": {
         "type": "object",
         "properties": {
@@ -87632,6 +91604,17 @@
             "format": "double",
             "nullable": true
           },
+          "personalRatesMode": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.PersonalRatesMode"
+          },
+          "personalRateMaxMultiplier": {
+            "maximum": 100,
+            "minimum": 0.01,
+            "type": "number",
+            "description": "Optional ceiling on person-level rates as a multiple of the campaign rate (e.g. 3).",
+            "format": "double",
+            "nullable": true
+          },
           "rules": {
             "maxItems": 50,
             "minItems": 1,
@@ -87660,6 +91643,79 @@
         },
         "additionalProperties": false
       },
+      "Rewards.RateSourceDto": {
+        "type": "object",
+        "properties": {
+          "level": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.RateSourceLevel"
+          },
+          "levelLabel": {
+            "type": "string",
+            "nullable": true
+          },
+          "label": {
+            "type": "string",
+            "nullable": true
+          },
+          "campaignRateAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "personalAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "limited": {
+            "type": "boolean"
+          },
+          "ignoredReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "cardAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "cardCurrency": {
+            "type": "string",
+            "nullable": true
+          },
+          "exchangeRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "rateCardId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "rateCardVersion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "rateGroupId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "rateAssignmentId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Where the post rate came from. OptimizeAll.Api.Modules.Rewards.RateSourceDto.Label names the card/group (staff with rates.view only; otherwise the\r\ngeneric OptimizeAll.Api.Modules.Rewards.RateSourceDto.LevelLabel). Card amount/currency and the exchange rate are those locked on the submission."
+      },
       "Rewards.RewardLineDto": {
         "type": "object",
         "properties": {
@@ -87684,6 +91740,9 @@
           "label": {
             "type": "string",
             "nullable": true
+          },
+          "fromPersonalRate": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -87793,6 +91852,9 @@
           "ruleSetSummary": {
             "type": "string",
             "nullable": true
+          },
+          "rateSource": {
+            "$ref": "#/components/schemas/Rewards.RateSourceDto"
           }
         },
         "additionalProperties": false
@@ -87957,6 +92019,14 @@
               "$ref": "#/components/schemas/Rewards.RewardRuleDto"
             },
             "nullable": true
+          },
+          "personalRatesMode": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.PersonalRatesMode"
+          },
+          "personalRateMaxMultiplier": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -87991,6 +92061,17 @@
             "maximum": 100000000,
             "minimum": 0.0001,
             "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "personalRatesMode": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Rewards.PersonalRatesMode"
+          },
+          "personalRateMaxMultiplier": {
+            "maximum": 100,
+            "minimum": 0.01,
+            "type": "number",
+            "description": "Optional ceiling on person-level rates as a multiple of the campaign rate (e.g. 3).",
             "format": "double",
             "nullable": true
           },
@@ -93926,6 +98007,13 @@
           },
           "canWithdraw": {
             "type": "boolean"
+          },
+          "format": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Common.ContentFormat"
+          },
+          "rateKind": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

@@ -46,7 +46,7 @@ test.describe.serial('submission, approval and ledger', () => {
     await finance.goto('/finance/ledger');
     await finance.getByRole('searchbox', { name: /search/i }).fill(miloSubmission);
     const table = finance.getByRole('table', { name: /ledger/i });
-    await expect(table.getByText(/Rate: Group 'Micro influencers/)).toBeVisible();
+    await expect(table.getByText(/Rate: Group 'Micro influencers/).first()).toBeVisible();
     await table
       .getByRole('row')
       .filter({ hasText: 'Creator fee' })

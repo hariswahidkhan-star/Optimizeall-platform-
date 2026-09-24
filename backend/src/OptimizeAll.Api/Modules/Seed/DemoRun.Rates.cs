@@ -125,7 +125,7 @@ internal sealed partial class DemoRun
         _clock.Now = Day(-35, 11);
         _audit.Record("rate_group.members_added", nameof(RateGroup), macroGroup.Id, after: new { Source = "csv" }, reason: "Initial segmentation by follower count");
 
-        var from = Day(-30, 0);
+        var from = Day(-18, 0); // after Nimbus rules v2 (Day -21): v1-priced posts keep their campaign rate
         void Assign(RateCard card, RateAssignmentTarget target, Guid? user, RateGroup? group, Guid? campaignId, DateTime? validFrom, DateTime? validTo,
             string note, DateTime at, bool custom = false)
         {
@@ -141,11 +141,11 @@ internal sealed partial class DemoRun
             Count("rate assignments");
         }
 
-        Assign(macro, RateAssignmentTarget.Group, null, macroGroup, null, from, null, "2026 macro creator rates", Day(-31, 9));
-        Assign(micro, RateAssignmentTarget.Group, null, microGroup, null, from, null, "2026 micro creator rates", Day(-31, 9));
-        Assign(nano, RateAssignmentTarget.Group, null, nanoGroup, null, from, null, "2026 nano creator rates", Day(-31, 9));
-        Assign(standard, RateAssignmentTarget.Group, null, standardGroup, null, from, null, "Regular per-post fee", Day(-31, 9));
-        Assign(platinum, RateAssignmentTarget.Group, null, platinumGroup, null, from, null, "Platinum tier perk", Day(-31, 9));
+        Assign(macro, RateAssignmentTarget.Group, null, macroGroup, null, from, null, "2026 macro creator rates", Day(-19, 9));
+        Assign(micro, RateAssignmentTarget.Group, null, microGroup, null, from, null, "2026 micro creator rates", Day(-19, 9));
+        Assign(nano, RateAssignmentTarget.Group, null, nanoGroup, null, from, null, "2026 nano creator rates", Day(-19, 9));
+        Assign(standard, RateAssignmentTarget.Group, null, standardGroup, null, from, null, "Regular per-post fee", Day(-19, 9));
+        Assign(platinum, RateAssignmentTarget.Group, null, platinumGroup, null, from, null, "Platinum tier perk", Day(-19, 9));
 
         // Personal deals.
         var sara = Sara;

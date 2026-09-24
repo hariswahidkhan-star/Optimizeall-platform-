@@ -419,6 +419,77 @@ public sealed class DemoSeedTests(DemoSeedFixture fx) : IClassFixture<DemoSeedFi
     }
 
     [Fact]
+    public async Task Person_level_rates_are_seeded_used_by_recent_submissions_and_visible()
+    {
+        await fx.WithDbAsync(async db =>
+        {
+            var groups = await db.Set<RateGroup>().Where(g => g.ArchivedAt == null).ToListAsync();
+            foreach (var name in new[] { "Macro influencers", "Micro influencers", "Nano influencers", "Standard" })
+            {
+                var group = Assert.Single(groups, g => g.Name == name);
+                Assert.True(await db.Set<RateGroupMember>().AnyAsync(m => m.GroupId == group.Id), $"{name} has no members");
+                Assert.True(await db.Set<RateAssignment>().AnyAsync(a => a.GroupId == group.Id && a.EndedAt == null), $"{name} has no card");
+            }
+            Assert.Contains(groups, g => g.MembershipMode == RateGroupMembershipMode.Automatic);
+            // Every member is in exactly one of the four follower bands.
+            var bands = groups.Where(g => g.MembershipMode == RateGroupMembershipMode.Manual).Select(g => g.Id).ToList();
+            var perUser = await db.Set<RateGroupMember>().Where(m => bands.Contains(m.GroupId)).GroupBy(m => m.UserId).Select(g => g.Count()).ToListAsync();
+            Assert.All(perUser, c => Assert.Equal(1, c));
+
+            // Sara's personal deal expires within a week; a card has a raise waiting for a second approval.
+            var saraId = await db.Set<User>().Where(u => u.Email == DemoAccounts.Sara).Select(u => u.Id).FirstAsync();
+            var deal = await db.Set<RateAssignment>().SingleAsync(a => a.UserId == saraId && a.IsCustom);
+            Assert.NotNull(deal.ValidTo);
+            Assert.True(deal.ValidTo > DateTime.UtcNow && deal.ValidTo < DateTime.UtcNow.AddDays(7));
+            Assert.True(await db.Set<RateCardVersion>().AnyAsync(v => v.Status == RateCardVersionStatus.PendingApproval));
+            Assert.True(await db.Set<RateCard>().AnyAsync(c => c.Status == RateCardStatus.Archived));
+
+            // Recent submissions were priced with person-level rates, each snapshot consistent with its card line; the
+            // "campaign rates only" campaign has none.
+            var snapshots = await db.Set<SubmissionRate>().ToListAsync();
+            Assert.NotEmpty(snapshots);
+            foreach (var s in snapshots)
+            {
+                var line = await db.Set<RateCardLine>().SingleAsync(l => l.Id == s.RateCardLineId);
+                Assert.Equal(line.Amount, s.CardAmount);
+                Assert.Equal(Money.Convert(s.CardAmount, s.ExchangeRate, s.Currency), s.Amount);
+                var submission = await db.Set<Submission>().SingleAsync(x => x.Id == s.SubmissionId);
+                Assert.Equal(submission.RewardCurrency, s.Currency);
+                var set = await db.Set<RewardRuleSet>().SingleAsync(r => r.Id == submission.RewardRuleSetId);
+                Assert.Equal(PersonalRatesMode.Allowed, set.PersonalRatesMode);
+            }
+            Assert.Contains(snapshots, s => s.CardCurrency != s.Currency); // USD cards priced in an AED campaign
+
+            // Ledger lines carry the source; person-level lines have no campaign rule id.
+            var personal = await db.Set<EarningEntry>()
+                .Where(e => e.Type == EarningType.PostReward && e.RateSource != null && e.RateSource != RateSourceLevel.CampaignRules).ToListAsync();
+            Assert.NotEmpty(personal);
+            Assert.All(personal, e =>
+            {
+                Assert.Null(e.RewardRuleId);
+                Assert.NotNull(e.RateCardId);
+                Assert.False(string.IsNullOrEmpty(e.RateSourceLabel));
+            });
+            return true;
+        });
+
+        // Sara sees her own deal on a campaign, never group or card names.
+        var sara = await fx.LoginAsync(DemoAccounts.Sara);
+        var text = await (await sara.GetAsync("/api/v1/campaigns/nimbus-fitness-app-launch")).Content.ReadAsStringAsync();
+        var detail = JsonSerializer.Deserialize<JsonElement>(text);
+        Assert.Equal("Personal", detail.GetProperty("yourRate").GetProperty("kind").GetString());
+        Assert.DoesNotContain("Micro creators", text);
+        Assert.DoesNotContain("Micro influencers", text);
+
+        // The manager sees the cards and groups.
+        var manager = await fx.LoginAsync(DemoAccounts.Manager);
+        var cards = await (await manager.GetAsync("/api/v1/admin/rate-cards")).ReadJsonAsync();
+        Assert.True(cards.GetProperty("total").GetInt32() >= 5);
+        var groupsList = await (await manager.GetAsync("/api/v1/admin/rate-groups")).ReadJsonAsync();
+        Assert.True(groupsList.GetProperty("total").GetInt32() >= 5);
+    }
+
+    [Fact]
     public async Task New_participant_is_ineligible_because_the_account_is_too_new()
     {
         var client = await fx.LoginAsync(DemoAccounts.NewParticipant);

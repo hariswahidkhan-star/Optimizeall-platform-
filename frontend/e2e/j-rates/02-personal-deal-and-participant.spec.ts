@@ -13,7 +13,9 @@ test.describe.serial('personal deal, explanation and the participant view', () =
     await page.goto(`/admin/users/${ivy!.id}#rates`);
     const section = page.getByRole('region', { name: 'Rates' });
     await expect(
-      section.getByRole('link', { name: new RegExp(`Micro influencers ${state().runId}`) }),
+      section
+        .getByRole('list', { name: 'Rate groups' })
+        .getByRole('link', { name: new RegExp(`Micro influencers ${state().runId}`) }),
     ).toBeVisible();
     await section.getByRole('button', { name: 'Custom rate' }).click();
 
@@ -41,7 +43,7 @@ test.describe.serial('personal deal, explanation and the participant view', () =
     const candidates = explain.getByRole('table', { name: 'Candidate rates' });
     await expect(candidates.getByRole('row', { name: /Applies.*Custom rate/ })).toBeVisible();
     await expect(candidates.getByRole('row', { name: /Outranked.*Micro creators/ })).toBeVisible();
-    await explain.getByRole('button', { name: 'Close' }).click();
+    await explain.getByRole('button', { name: 'Close', exact: true }).last().click();
   });
 
   test('each participant sees only their own rate on the campaign', async ({ as }) => {
