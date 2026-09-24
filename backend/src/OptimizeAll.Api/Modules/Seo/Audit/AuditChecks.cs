@@ -24,6 +24,7 @@ public static partial class AuditChecks
         SeoAuditRules.RobotsMissing, SeoAuditRules.RobotsInvalid, SeoAuditRules.SitemapMissing, SeoAuditRules.SitemapInvalid,
     };
 
+    /// <param name="crawl">The crawled pages and site-level findings to check.</param>
     /// <param name="rules">
     /// The agency's rule settings (seo_audit_rules). Disabled rules are skipped and their severity overrides the catalog
     /// default; rules missing from the dictionary keep the catalog defaults.
