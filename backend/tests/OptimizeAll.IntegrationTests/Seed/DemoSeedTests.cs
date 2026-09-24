@@ -1,3 +1,4 @@
+using OptimizeAll.Api.Modules.Submissions;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -266,10 +267,12 @@ public sealed class DemoSeedTests(DemoSeedFixture fx) : IClassFixture<DemoSeedFi
             Assert.True(s.PostedAt >= s.SubmittedAt.AddDays(-7), $"{s.Id}: posted {s.PostedAt:u}, submitted {s.SubmittedAt:u}");
             Assert.True(s.PostedAt <= s.SubmittedAt, $"{s.Id}: posted after it was submitted");
 
-            // The stored key is the canonical post key of the URL, exactly as SubmissionService computes it.
+            // The stored key is the canonical post key of the URL, exactly as SubmissionService computes it (a withdrawal
+            // releases it, so the post can be submitted again).
             var parsed = PlatformUrlRules.Parse(s.Platform, s.PostUrl);
             Assert.True(parsed.IsValid, $"{s.Id}: {s.PostUrl} is not a valid {s.Platform} post URL");
-            Assert.Equal(parsed.CanonicalKey, s.NormalizedPostUrl);
+            Assert.Equal(s.Status == SubmissionStatus.Withdrawn ? SubmissionService.WithdrawnKey(s.Id, parsed.CanonicalKey!) : parsed.CanonicalKey,
+                s.NormalizedPostUrl);
 
             // Nobody reviews or live-checks their own post.
             Assert.NotEqual(s.UserId, s.DecidedByUserId);
@@ -278,8 +281,9 @@ public sealed class DemoSeedTests(DemoSeedFixture fx) : IClassFixture<DemoSeedFi
         }
         Assert.Equal(submissions.Count, submissions.Select(s => s.NormalizedPostUrl).Distinct(StringComparer.Ordinal).Count());
 
-        // The participant only ever acts on their own submission as the author (never claims, decides or checks it).
-        var participantActions = new[] { "submitted", "resubmitted", "appealed" };
+        // The participant only ever acts on their own submission as the author: submit, resubmit, appeal or withdraw
+        // (never claims, decides or checks it).
+        var participantActions = new[] { "submitted", "resubmitted", "appealed", "withdrawn" };
         var selfActions = await fx.WithDbAsync(db => (
             from e in db.Set<SubmissionEvent>()
             join s in db.Set<Submission>() on e.SubmissionId equals s.Id
@@ -368,7 +372,8 @@ public sealed class DemoSeedTests(DemoSeedFixture fx) : IClassFixture<DemoSeedFi
                 var history = events.Where(e => e.SubmissionId == s.Id).OrderBy(e => e.CreatedAt).ThenBy(e => e.Id).ToList();
                 Assert.Equal("submitted", history[0].Action);
                 Assert.Equal(s.Status, history[^1].ToStatus);
-                Assert.Equal(PlatformUrlRules.CanonicalKey(s.Platform, s.PostUrl), s.NormalizedPostUrl);
+                var key = PlatformUrlRules.CanonicalKey(s.Platform, s.PostUrl);
+                Assert.Equal(s.Status == SubmissionStatus.Withdrawn ? SubmissionService.WithdrawnKey(s.Id, key!) : key, s.NormalizedPostUrl);
                 Assert.True(s.ScreenshotFileId is not null);
             }
 

@@ -357,6 +357,9 @@ public sealed class SubmissionService(
             var releasedKey = WithdrawnKey(s.Id, key);
 
             await using var tx = await db.Dialect().BeginWriteTransactionAsync(db, ct, IsolationLevel.ReadCommitted);
+            // Same lock order as a reviewer's decision (campaign row first, then the submission), so a withdrawal racing a
+            // decision waits for it instead of deadlocking on MySQL; the loser then gets the 409 below.
+            await CampaignLock.LockAsync(db, s.CampaignId, ct);
             var updated = await db.Set<Submission>()
                 .Where(x => x.Id == id && x.UserId == me && x.Status == from && x.NormalizedPostUrl == key)
                 .ExecuteUpdateAsync(u => u

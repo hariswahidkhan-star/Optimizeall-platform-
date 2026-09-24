@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Ledger;
 using OptimizeAll.Api.Common.Notifications;
 using OptimizeAll.Api.Modules.Rewards;
+using OptimizeAll.Api.Modules.Submissions;
 using OptimizeAll.Domain.Campaigns;
 using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Eligibility;
@@ -31,6 +32,7 @@ internal enum StepKind
     AppealOverturn,
     BonusApprove,
     BonusDecline,
+    Withdraw,
 }
 
 internal sealed record Step(StepKind Kind, DateTime At, DemoPerson Actor, string? Reason = null, decimal? Bonus = null);
@@ -434,6 +436,10 @@ internal sealed partial class DemoRun
                 await ResubmitAsync(plan, s);
                 break;
 
+            case StepKind.Withdraw:
+                Withdraw(s, step.Reason);
+                break;
+
             case StepKind.Reverse:
                 if (s.Status != SubmissionStatus.Approved) return;
                 await ReverseCoreAsync(plan, s, step.Reason!, step.Actor, "reversed");
@@ -613,6 +619,29 @@ internal sealed partial class DemoRun
             flag.ResolvedByUserId = actor;
             flag.ResolutionNote = note;
         }
+    }
+
+    /// <summary>SubmissionService.WithdrawAsync (participant withdraws an undecided submission; the post link is released).</summary>
+    private void Withdraw(Submission s, string? reason)
+    {
+        if (!s.CanWithdraw) return;
+        var from = s.Status;
+        var key = s.NormalizedPostUrl;
+        s.NormalizedPostUrl = SubmissionService.WithdrawnKey(s.Id, key);
+        s.Status = SubmissionStatus.Withdrawn;
+        s.ClaimedByUserId = null;
+        s.ClaimExpiresAt = null;
+        foreach (var flag in s.Flags.Where(f => f.ResolvedAt is null))
+        {
+            flag.ResolvedAt = Now;
+            flag.ResolvedByUserId = s.UserId;
+            flag.ResolutionNote = "withdrawn by participant";
+        }
+        AddEvent(s, from, SubmissionStatus.Withdrawn, "withdrawn", s.UserId, reason);
+        _audit.As(s.UserId, Role.Participant).Record("submission.withdrawn", nameof(Submission), s.Id,
+            before: new { Status = from.ToString(), NormalizedPostUrl = key },
+            after: new { Status = nameof(SubmissionStatus.Withdrawn), s.EstimatedRewardAmount, s.RewardCurrency }, reason: reason);
+        Count("submissions withdrawn");
     }
 
     /// <summary>SubmissionService.ResubmitAsync (participant fixes a NeedsCorrection submission).</summary>

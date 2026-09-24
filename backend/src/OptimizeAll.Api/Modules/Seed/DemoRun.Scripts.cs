@@ -177,12 +177,17 @@ internal sealed partial class DemoRun
           .Then(S.LiveRemove, om.PostedAt.AddHours(77), Reviewer2, "The video now shows 'This post is unavailable' — removed by the author.");
     }
 
-    /// <summary>Two pending submissions get claims: one live (UnderReview now) and one whose claim has expired.</summary>
+    /// <summary>
+    /// Two pending submissions get claims (one live, one whose claim has expired) and a third is withdrawn by its participant.
+    /// </summary>
     private void PlanReviewClaims()
     {
         var waiting = _plans.Where(p => p.Steps.Count == 0 && !p.Who.Scripted && p.SubmittedAt > _now.AddHours(-30))
             .OrderBy(p => p.SubmittedAt).ToList();
         if (waiting.Count > 0) waiting[0].Then(StepKind.Claim, _now.AddMinutes(-4), Reviewer2);
         if (waiting.Count > 1) waiting[1].Then(StepKind.Claim, _now.AddHours(-3), Reviewer1);
+        // One participant withdraws a submission before review (wrong link), so the withdrawn state is in the demo too.
+        if (waiting.Count > 2)
+            waiting[2].Then(StepKind.Withdraw, _now.AddHours(-2), waiting[2].Who, "Posted the wrong link. I'll submit the right post.");
     }
 }
