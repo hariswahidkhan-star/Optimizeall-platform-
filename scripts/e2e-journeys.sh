@@ -3,7 +3,8 @@
 #
 #   1. creates a fresh database oa_e2e_<timestamp> (MySQL), or a fresh SQLite file with E2E_DB_PROVIDER=sqlite
 #   2. builds and starts the API on :$E2E_API_PORT (Development, $E2E_SEED seed profiles, file-mode email + dev mailbox,
-#      background jobs off, relaxed auth rate limit, bootstrap admin)
+#      background jobs off, relaxed auth rate limit, bootstrap admin, non-production test sign-in on, Google sign-in
+#      not configured)
 #   3. builds the frontend and serves it with `vite preview` on :$E2E_WEB_PORT, proxying /api and /t to the API
 #   4. waits for /health/ready and runs `E2E_SUITE=$E2E_SUITE npx playwright test` (desktop + mobile projects)
 #   5. always tears down (kills the servers by PID, drops the database) and exits with Playwright's exit code
@@ -12,9 +13,12 @@
 #   scripts/e2e-journeys.sh [extra playwright args...]      e.g. --project=desktop-chromium, --repeat-each=1
 #
 # Environment:
-#   E2E_SUITE=journeys    Playwright suite (frontend/e2e/<suite>): "journeys" (participant → admin, Baseline seed) or
-#                         "agency" (agency platform journeys against the Demo seed's accounts and clients)
-#   E2E_SEED              comma-separated seed profiles (default: Baseline for journeys, Baseline,Demo for agency)
+#   E2E_SUITE=journeys    Playwright suite (frontend/e2e/<suite>): "journeys" (participant → admin, Baseline seed),
+#                         "agency" (agency platform journeys against the Demo seed's accounts and clients) or
+#                         "platform" (test users, login-as, custom roles, payments hub, editing, Google sign-in off;
+#                         Demo seed)
+#   E2E_SEED              comma-separated seed profiles (default: Baseline for journeys, Baseline,Demo for agency and
+#                         platform)
 #   E2E_DB_PROVIDER=mysql mysql (default) or sqlite (a fresh file in $E2E_WORK_DIR; no MySQL server needed)
 #   DB_HOST/DB_PORT/DB_USER/DB_PASSWORD   MySQL server (defaults: 127.0.0.1:3306 optimizeall/optimizeall_dev);
 #                                         the user must be able to CREATE/DROP databases
@@ -38,7 +42,7 @@ ADMIN_EMAIL="${E2E_ADMIN_EMAIL:-e2e-admin@optimizeall.test}"
 ADMIN_PASSWORD="${E2E_ADMIN_PASSWORD:-E2e-Admin#Journey-2026}"
 E2E_SUITE="${E2E_SUITE:-journeys}"
 case "$E2E_SUITE" in
-  agency) E2E_SEED="${E2E_SEED:-Baseline,Demo}" ;;
+  agency|platform) E2E_SEED="${E2E_SEED:-Baseline,Demo}" ;;
   *) E2E_SEED="${E2E_SEED:-Baseline}" ;;
 esac
 E2E_DB_PROVIDER="$(printf '%s' "${E2E_DB_PROVIDER:-mysql}" | tr '[:upper:]' '[:lower:]')"
@@ -124,7 +128,8 @@ api_pid="$(cd "$ROOT" && start_bg e2e-api "$API_LOG" env \
   Database__InitializationMode=Migrate \
   "${seed_env[@]}" \
   Email__Mode=File Email__PickupDirectory="$MAIL_DIR" Email__AppBaseUrl="http://localhost:$E2E_WEB_PORT" \
-  DevTools__MailboxEnabled=true \
+  DevTools__MailboxEnabled=true DevTools__TestLoginEnabled=true \
+  Authentication__Google__ClientId= Authentication__Google__ClientSecret= \
   RateLimiting__AuthPerMinute=1000 \
   Jobs__Enabled=false \
   Storage__RootPath="$FILES_DIR" \

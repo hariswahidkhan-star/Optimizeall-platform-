@@ -234,6 +234,16 @@ jobs:
           E2E_WORK_DIR: ${{ runner.temp }}/e2e-agency
         run: scripts/e2e-journeys.sh
 
+      # Newest platform features (test users and "log in as" with the non-production test sign-in, custom roles,
+      # payments hub, editing across areas, Google sign-in off, phone layouts) against the Demo seed, on SQLite.
+      - name: Platform journeys (scripts/e2e-journeys.sh, E2E_SUITE=platform, SQLite)
+        env:
+          E2E_SUITE: platform
+          E2E_DB_PROVIDER: sqlite
+          E2E_SKIP_BUILD: "1"
+          E2E_WORK_DIR: ${{ runner.temp }}/e2e-platform
+        run: scripts/e2e-journeys.sh
+
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v4
@@ -255,6 +265,8 @@ jobs:
             ${{ runner.temp }}/e2e/web.log
             ${{ runner.temp }}/e2e-agency/api.log
             ${{ runner.temp }}/e2e-agency/web.log
+            ${{ runner.temp }}/e2e-platform/api.log
+            ${{ runner.temp }}/e2e-platform/web.log
             ${{ runner.temp }}/web-smoke.log
           retention-days: 7
           if-no-files-found: ignore

@@ -12,7 +12,7 @@ export async function signIn(page: Page, user: Credentials, landing: RegExp) {
   await page.goto('/login');
   await page.getByLabel('Email', { exact: true }).fill(user.email);
   await page.getByLabel('Password', { exact: true }).fill(user.password);
-  await page.getByRole('button', { name: 'Sign in' }).click();
+  await page.getByRole('button', { name: 'Sign in', exact: true }).click();
   await expect(page).toHaveURL(landing);
 }
 
