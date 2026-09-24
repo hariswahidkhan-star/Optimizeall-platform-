@@ -1,5 +1,9 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+#
+# Quick .NET build + test of the API on every push/PR to this branch. The solution lives in backend/; integration tests
+# run on SQLite here (no database service needed). The full pipeline — MySQL integration tests, frontend and E2E — is
+# ci.yml.
 
 name: .NET
 
@@ -14,6 +18,10 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: backend
+
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET
@@ -21,8 +29,10 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore OptimizeAll.sln
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build OptimizeAll.sln --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test OptimizeAll.sln --no-build --verbosity normal
+      env:
+        OPTIMIZEALL_TEST_PROVIDER: Sqlite
