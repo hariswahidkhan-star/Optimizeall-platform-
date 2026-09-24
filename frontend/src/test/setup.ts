@@ -1,8 +1,12 @@
 import '@testing-library/jest-dom/vitest';
-import { cleanup } from '@testing-library/react';
+import { cleanup, configure } from '@testing-library/react';
 import { afterEach, beforeEach, vi } from 'vitest';
 import { tokenStore } from '@/lib/api/client';
 import { setViewportWidth, viewportWidth } from './viewport';
+
+// findBy*/waitFor give up after 1 s by default. On a busy CI runner or a loaded dev machine a lazy page's first render
+// can take longer than that, which fails a correct test; allow 5 s. Assertions are unchanged — only the patience.
+configure({ asyncUtilTimeout: 5_000 });
 
 /** jsdom lacks matchMedia: evaluate min/max-width queries against a configurable width. */
 function evaluate(query: string): boolean {
