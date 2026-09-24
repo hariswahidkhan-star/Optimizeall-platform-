@@ -284,7 +284,8 @@ describe('participant pages accessibility', () => {
     const { container } = renderWithApp(element, { route, path });
     expect((await screen.findAllByText(text)).length).toBeGreaterThan(0);
     expect(await axeViolations(container)).toEqual([]);
-  });
+    // axe walks every node: the profile form (country and time-zone lists) takes ~25 s alone on a loaded machine.
+  }, 120_000);
 
   it('renders the submissions list as cards on phones without violations', async () => {
     setViewportWidth(360);

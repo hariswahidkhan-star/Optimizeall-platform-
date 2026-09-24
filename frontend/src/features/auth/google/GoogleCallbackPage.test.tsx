@@ -101,7 +101,8 @@ describe('GoogleCallbackPage', () => {
     });
     expect(complete.countryCode).toMatch(/^[A-Z]{2}$/);
     expect(sessionStorage.getItem('oa.google.signupCodes')).toBeNull();
-  });
+    // Includes an axe scan of the terms form (country list): ~25 s alone on a loaded machine.
+  }, 120_000);
 
   it('explains a refused sign-in', async () => {
     mockFetch({
