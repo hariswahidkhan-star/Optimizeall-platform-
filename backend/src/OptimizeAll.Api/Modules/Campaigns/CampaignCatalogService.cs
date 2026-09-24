@@ -23,7 +23,8 @@ public interface ICampaignCatalogService
 /// unlisted but reachable by slug). Filters that depend on computed values (reward, eligibility, topics) are applied
 /// in memory after a database pre-filter on status, visibility, platform, category, deadline and search.
 /// </summary>
-public sealed class CampaignCatalogService(AppDbContext db, IParticipantEligibility eligibility, TimeProvider clock) : ICampaignCatalogService
+public sealed class CampaignCatalogService(AppDbContext db, IParticipantEligibility eligibility, Rates.IPersonRatesService personRates,
+    TimeProvider clock) : ICampaignCatalogService
 {
     private sealed record Row(Campaign Campaign, RewardRuleSet? RuleSet, EligibilityResult Eligibility, int MyCount, int MyActive);
 
@@ -66,7 +67,9 @@ public sealed class CampaignCatalogService(AppDbContext db, IParticipantEligibil
 
         var list = filtered.ToList();
         var now = clock.GetUtcNow().UtcDateTime;
-        var page = list.Skip(query.Skip).Take(query.PageSize).Select(r => ToCard(r, now)).ToList();
+        var pageRows = list.Skip(query.Skip).Take(query.PageSize).ToList();
+        var yours = await personRates.YourRatesAsync(userId, pageRows.Select(r => (r.Campaign, r.RuleSet)).ToList(), ct);
+        var page = pageRows.Select(r => ToCard(r, now, yours.GetValueOrDefault(r.Campaign.Id))).ToList();
         return new PagedResult<CampaignCardDto>(page, list.Count, query.Page, query.PageSize);
     }
 
@@ -81,6 +84,7 @@ public sealed class CampaignCatalogService(AppDbContext db, IParticipantEligibil
 
         var interests = participant.User.Interests.Select(i => i.ToLowerInvariant()).ToHashSet();
         var maxBase = candidates.Max(r => BaseAmount(r) ?? 0m);
+        var yours = await personRates.YourRatesAsync(userId, candidates.Select(r => (r.Campaign, r.RuleSet)).ToList(), ct);
         var scored = new List<RecommendedCampaignDto>();
         foreach (var r in candidates)
         {
@@ -105,7 +109,7 @@ public sealed class CampaignCatalogService(AppDbContext db, IParticipantEligibil
             else if (eligiblePlatforms.Count > 0) reason = $"Share it from your {eligiblePlatforms[0]} account";
             else reason = "You're eligible for this campaign";
 
-            scored.Add(new RecommendedCampaignDto(ToCard(r, now), Math.Round(score, 3), reason));
+            scored.Add(new RecommendedCampaignDto(ToCard(r, now, yours.GetValueOrDefault(c.Id)), Math.Round(score, 3), reason));
         }
         return scored.OrderByDescending(s => s.Score).ThenBy(s => s.Campaign.SubmissionDeadline).Take(limit).ToList();
     }
@@ -121,7 +125,8 @@ public sealed class CampaignCatalogService(AppDbContext db, IParticipantEligibil
         var participant = await eligibility.LoadAsync(userId, ct);
         var row = (await BuildRowsAsync(new List<Campaign> { campaign }, participant, ct))[0];
         var now = participant.NowUtc;
-        var card = ToCard(row, now);
+        var yourRate = (await personRates.YourRatesAsync(userId, new[] { (campaign, row.RuleSet) }, ct)).GetValueOrDefault(campaign.Id);
+        var card = ToCard(row, now, yourRate);
 
         var mySubmissions = await db.Set<Submission>().AsNoTracking()
             .Where(s => s.UserId == userId && s.CampaignId == campaign.Id).OrderByDescending(s => s.SubmittedAt)
@@ -143,7 +148,7 @@ public sealed class CampaignCatalogService(AppDbContext db, IParticipantEligibil
             campaign.RequiredHashtags, campaign.RequiredMentions,
             campaign.Assets.OrderBy(a => a.SortOrder).ThenBy(a => a.CreatedAt).Select(CampaignAssetDto.From).ToList(),
             disclosures, Terms(campaign, row.RuleSet), eligibilityDto, mySubmissions, row.MyCount, Remaining(row),
-            TrackingUrl.IsValidDestination(campaign.TrackingDestinationUrl));
+            TrackingUrl.IsValidDestination(campaign.TrackingDestinationUrl), yourRate);
     }
 
     private IQueryable<Campaign> ListedCampaigns(bool includeScheduled) =>
@@ -181,7 +186,7 @@ public sealed class CampaignCatalogService(AppDbContext db, IParticipantEligibil
     private static IReadOnlyList<ReasonDto> Reasons(IEnumerable<EligibilityReason> reasons) =>
         reasons.Select(x => new ReasonDto(x.Code, x.Message)).ToList();
 
-    private static CampaignCardDto ToCard(Row r, DateTime now)
+    private static CampaignCardDto ToCard(Row r, DateTime now, Rates.YourRateDto? yourRate)
     {
         var c = r.Campaign;
         return new CampaignCardDto(
@@ -190,7 +195,7 @@ public sealed class CampaignCatalogService(AppDbContext db, IParticipantEligibil
             c.Topics, c.Platforms.Select(p => p.Platform).OrderBy(p => p).ToList(), c.Status, c.Status == CampaignStatus.Scheduled,
             c.StartsAt, c.EndsAt, c.SubmissionDeadline, c.HeroImageUrl, CampaignText.Reward(r.RuleSet, now),
             new CardEligibilityDto(r.Eligibility.IsEligible, Reasons(r.Eligibility.ParticipantReasons)),
-            r.MyCount, Remaining(r));
+            r.MyCount, Remaining(r), yourRate);
     }
 
     private static RewardTermsDto? Terms(Campaign c, RewardRuleSet? set)

@@ -10,6 +10,7 @@ import type {
   RewardRuleSet,
   RewardRuleSetInput,
   RewardRuleType,
+  PersonalRatesMode,
   SocialPlatform,
 } from '../api/types';
 import { isoToZonedInput, zonedInputToIso } from '../shared/zonedTime';
@@ -82,6 +83,10 @@ export interface RulesForm {
   dailyCap: string;
   weeklyCap: string;
   campaignCap: string;
+  /** Whether rate cards / groups / personal deals may replace the campaign rate. */
+  personalRatesMode: PersonalRatesMode;
+  /** Ceiling on personal rates as a multiple of the campaign rate ('' = none). */
+  personalRateMaxMultiplier: string;
   rules: RuleRow[];
 }
 
@@ -277,7 +282,15 @@ export function newRule(type: RewardRuleType): RuleRow {
 }
 
 export function emptyRules(currency = 'USD'): RulesForm {
-  return { currency, dailyCap: '', weeklyCap: '', campaignCap: '', rules: [newRule('BaseRate')] };
+  return {
+    currency,
+    dailyCap: '',
+    weeklyCap: '',
+    campaignCap: '',
+    personalRatesMode: 'Allowed',
+    personalRateMaxMultiplier: '',
+    rules: [newRule('BaseRate')],
+  };
 }
 
 /** Rule windows are UTC; the editor shows them in the campaign's zone. */
@@ -288,6 +301,8 @@ export function rulesFromSet(set: RewardRuleSet | null | undefined, timeZone: st
     dailyCap: numStr(set.dailyCapPerParticipant),
     weeklyCap: numStr(set.weeklyCapPerParticipant),
     campaignCap: numStr(set.campaignCapPerParticipant),
+    personalRatesMode: set.personalRatesMode ?? 'Allowed',
+    personalRateMaxMultiplier: numStr(set.personalRateMaxMultiplier),
     rules: set.rules.map((r) => ({
       key: r.id,
       type: r.type,
@@ -310,6 +325,9 @@ export function rulesToInput(form: RulesForm, timeZone: string): RewardRuleSetIn
     dailyCapPerParticipant: numOrNull(form.dailyCap),
     weeklyCapPerParticipant: numOrNull(form.weeklyCap),
     campaignCapPerParticipant: numOrNull(form.campaignCap),
+    personalRatesMode: form.personalRatesMode,
+    personalRateMaxMultiplier:
+      form.personalRatesMode === 'CampaignRatesOnly' ? null : numOrNull(form.personalRateMaxMultiplier),
     rules: form.rules.map((r): RewardRuleInput => {
       const conditional = r.type === 'RateOverride' || r.type === 'TimeLimitedBonus';
       return {

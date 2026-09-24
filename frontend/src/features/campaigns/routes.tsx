@@ -3,12 +3,14 @@ import {
   Award,
   BarChart3,
   CalendarDays,
+  CreditCard,
   FlaskConical,
   LayoutDashboard,
   LayoutTemplate,
   Link2,
   Megaphone,
   Users,
+  UsersRound,
 } from 'lucide-react';
 import type { RouteObject } from 'react-router-dom';
 import type { PortalNavItem } from '@/app/portalTypes';
@@ -29,6 +31,10 @@ const CampaignsListPage = lazyPage(() => import('./list/CampaignsListPage'), 'Ca
 const OverviewPage = lazyPage(() => import('./overview/OverviewPage'), 'OverviewPage');
 const ReferralsPage = lazyPage(() => import('./referrals/ReferralsPage'), 'ReferralsPage');
 const TemplatesPage = lazyPage(() => import('./templates/TemplatesPage'), 'TemplatesPage');
+const RateCardsPage = lazyPage(() => import('../rates/cards/RateCardsPage'), 'RateCardsPage');
+const RateCardDetailPage = lazyPage(() => import('../rates/cards/RateCardDetailPage'), 'RateCardDetailPage');
+const RateGroupsPage = lazyPage(() => import('../rates/groups/RateGroupsPage'), 'RateGroupsPage');
+const RateGroupDetailPage = lazyPage(() => import('../rates/groups/RateGroupDetailPage'), 'RateGroupDetailPage');
 
 /** Portal entry (the campaign pages call campaigns.manage APIs). */
 export const portalRequires: PermissionRequirement = { anyOf: [Permissions.CampaignsManage] };
@@ -38,6 +44,8 @@ const marketing: PermissionRequirement = {
   allOf: [Permissions.CampaignsManage, Permissions.MarketingManage],
 };
 const analytics: PermissionRequirement = { allOf: [Permissions.CampaignsManage, Permissions.AnalyticsView] };
+/** Person-level pricing (rate cards and groups) calls rates.view APIs. */
+const rates: PermissionRequirement = { allOf: [Permissions.CampaignsManage, Permissions.RatesView] };
 
 /** Campaign manager portal (/manage). Paths are relative to the portal base. */
 export const nav: PortalNavItem[] = [
@@ -47,6 +55,20 @@ export const nav: PortalNavItem[] = [
     label: 'Campaigns',
     icon: Megaphone,
     description: 'Create, schedule and run sharing campaigns.',
+  },
+  {
+    to: 'rate-cards',
+    label: 'Rate cards',
+    icon: CreditCard,
+    description: 'Reusable per-post rates for people and groups.',
+    requires: rates,
+  },
+  {
+    to: 'rate-groups',
+    label: 'Rate groups',
+    icon: UsersRound,
+    description: 'Macro, micro, nano… people who share a rate.',
+    requires: rates,
   },
   {
     to: 'templates',
@@ -107,6 +129,22 @@ export const routes: RouteObject[] = [
       { index: true, element: <CampaignsListPage /> },
       { path: 'new', element: <CampaignEditorPage /> },
       { path: ':campaignId', element: <CampaignEditorPage /> },
+    ],
+  },
+  {
+    path: 'rate-cards',
+    handle: { requires: rates },
+    children: [
+      { index: true, element: <RateCardsPage /> },
+      { path: ':cardId', element: <RateCardDetailPage /> },
+    ],
+  },
+  {
+    path: 'rate-groups',
+    handle: { requires: rates },
+    children: [
+      { index: true, element: <RateGroupsPage /> },
+      { path: ':groupId', element: <RateGroupDetailPage /> },
     ],
   },
   { path: 'templates', handle: { requires: marketing }, element: <TemplatesPage /> },

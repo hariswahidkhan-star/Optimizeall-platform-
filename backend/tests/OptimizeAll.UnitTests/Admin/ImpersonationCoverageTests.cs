@@ -19,6 +19,7 @@ public sealed class ImpersonationCoverageTests
         Permissions.LedgerAdjust, Permissions.PayoutsPrepare, Permissions.PayoutsFinalize, Permissions.PayoutsRecordPayment,
         Permissions.PayoutsHold, Permissions.PayoutSettingsEdit, Permissions.RewardsEdit, Permissions.RewardsApproveBonus,
         Permissions.SubmissionsReverse, Permissions.BillingManage, Permissions.BillingSettings, Permissions.ContractsManage,
+        Permissions.RatesManage, Permissions.RatesAssign,
         // credentials / integrations
         Permissions.IntegrationsManage,
         // identity, accounts and roles

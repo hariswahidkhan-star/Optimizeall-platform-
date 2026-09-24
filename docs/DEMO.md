@@ -138,6 +138,19 @@ home with the banner → **Exit** → back on the users page.
   | CodeSprout Kids coding week | Draft | USD | Incomplete draft |
 
 * **Exchange rates** marked `source = demo`: AED, PKR (updated 30 days ago), SAR and GBP to USD.
+* **Person-level rates** (docs/REWARD_ENGINE.md § Person-level rates), created about 40 days ago by the manager:
+  * rate cards *Macro creators 2026* (v1, v2 raised Instagram 10 days ago, **v3 awaiting a second approval** — the
+    four-eyes threshold `rates.fourEyesIncreasePercent` is 50 %), *Micro creators 2026*, *Nano creators 2026*,
+    *Standard participants*, *Platinum tier bonus rate*, and an archived *Summer 2026 creators (retired)*;
+  * rate groups **Macro influencers** (50k+ followers), **Micro influencers** (10k–50k), **Nano influencers** (2k–10k)
+    and **Standard** (everyone else) — every participant is in exactly one band — plus the automatic
+    **Platinum tier (automatic)** segment; each has its card for every campaign from 18 days ago (after Nimbus
+    rules v2, so v1-priced posts keep their campaign rate);
+  * personal deals: **Sara** has a custom rate for every campaign that **expires in 5 days**; Priyanka has a flagship
+    YouTube deal for Aurora Pro only (capped by Aurora's 3× maximum); Amelia gets the Macro card for the Nimbus launch;
+  * Karachi Eats uses **campaign rates only**; Aurora Pro limits personal rates to 3× the campaign rate;
+  * the submissions of the last 18 days are priced with these rates (USD cards converted into AED for Desert Bloom),
+    so their ledger lines show the rate source.
 * **About 170 submissions** in every status (Pending, UnderReview, Approved, NeedsCorrection, Rejected, Reversed):
   * one live reviewer claim and one expired claim;
   * risk flags: duplicate screenshot, outside the campaign window, high velocity, repeated content, unverified
@@ -246,6 +259,13 @@ API paths are given for reference (`/api/v1/...`); in the web app use the matchi
    * measured sections: tracked clicks with bots excluded, verified conversions;
    * estimated section: reach from declared follower counts.
 7. Try to publish **CodeSprout** (Draft). Publishing explains what is missing.
+8. **Rate cards / Rate groups** (manager portal): open *Macro creators 2026* → the pending v3 raise (approve it as
+   the admin — the manager proposed it and can't approve it himself); open *Micro influencers* → members (select
+   several, remove with a reason), **Import CSV** (check first), **Export**, **History**.
+9. **Admin → Users → Sara → Rates**: her groups, the expiring custom rate, the effective rate per platform and
+   **Explain** (the deal outranks her group's card). In the Nimbus campaign editor → *Rewards* → *Personal & group
+   rates*: the price simulator ("price for Sara on TikTok").
+10. Sign in as Sara → **Campaigns**: "Your personal rate … until …" on the cards and the campaign page.
 
 ### 4. Finance journey (four-eyes payout run)
 
@@ -303,4 +323,7 @@ database. It checks that:
 * the new participant is ineligible;
 * analytics has counted, measured and estimated sections;
 * a reviewer can claim and decide a submission;
-* finance2 can finalize the draft batch that finance1 prepared.
+* finance2 can finalize the draft batch that finance1 prepared;
+* the person-level rates are there (four groups with members and cards, Sara's expiring deal, a pending raise, an
+  archived card), recent submissions were priced with them (snapshots consistent with the card lines and exchange
+  rates, never on the campaign-rates-only campaign), their ledger lines carry the source, Sara sees only her own rate.

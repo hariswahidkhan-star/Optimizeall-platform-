@@ -572,6 +572,7 @@ internal sealed partial class DemoRun
             rule.RuleSetId = set.Id;
             set.Rules.Add(rule);
         }
+        ApplyRatePolicy(demo.Key, set);
         RewardEngine.EnsureValid(set);
         if (demo.Campaign.BudgetAmount.HasValue && demo.Campaign.BudgetCurrency != set.Currency)
             throw new InvalidOperationException($"Demo campaign {demo.Key}: budget and reward currency differ.");

@@ -79,6 +79,13 @@ export interface LedgerRow {
   reversedByEntryId: string | null;
   reason: string | null;
   concurrencyStamp: string;
+  /** Post rewards: where the rate came from (campaign rules or a rate card / group / custom deal). */
+  rateSource?: string | null;
+  rateSourceLabel?: string | null;
+  rateCardId?: string | null;
+  rateCardVersion?: number | null;
+  rateGroupId?: string | null;
+  rateAssignmentId?: string | null;
 }
 
 export interface NextPayout {

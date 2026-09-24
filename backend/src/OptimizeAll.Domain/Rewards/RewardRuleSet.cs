@@ -20,6 +20,15 @@ public class RewardRuleSet : Entity
     public decimal? WeeklyCapPerParticipant { get; set; }
     public decimal? CampaignCapPerParticipant { get; set; }
 
+    /// <summary>Whether person-level rates (rate cards, groups, custom rates) may replace this campaign's post rate.</summary>
+    public PersonalRatesMode PersonalRatesMode { get; set; } = PersonalRatesMode.Allowed;
+
+    /// <summary>
+    /// Optional ceiling on a person-level rate, as a multiple of the campaign rate the post would otherwise get
+    /// (e.g. 3 = at most three times the campaign rate). Null = no ceiling. Caps and the budget always still apply.
+    /// </summary>
+    public decimal? PersonalRateMaxMultiplier { get; set; }
+
     public DateTime EffectiveFrom { get; set; }
     public DateTime CreatedAt { get; set; }
     public Guid CreatedByUserId { get; set; }

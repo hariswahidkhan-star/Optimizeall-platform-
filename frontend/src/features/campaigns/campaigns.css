@@ -566,3 +566,18 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
 }
+
+/* ---------- person-level rate policy (reward rules) ---------- */
+.mg-fieldset {
+  margin: 0;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  min-inline-size: 0;
+}
+
+.mg-legend {
+  padding: 0 var(--space-1);
+  font-weight: 600;
+  color: var(--color-heading);
+}

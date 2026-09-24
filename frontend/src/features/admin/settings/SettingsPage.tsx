@@ -428,7 +428,7 @@ function KeyChange({ from, to }: { from: string; to: string }) {
   );
 }
 
-const GROUP_ORDER: SettingMeta['group'][] = ['Eligibility', 'Fraud & review', 'Retention', 'Growth'];
+const GROUP_ORDER: SettingMeta['group'][] = ['Eligibility', 'Fraud & review', 'Rates', 'Retention', 'Growth'];
 
 export function SettingsPage() {
   const settings = useQuery({

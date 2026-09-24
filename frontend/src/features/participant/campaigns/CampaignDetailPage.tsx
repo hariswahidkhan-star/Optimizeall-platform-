@@ -1,6 +1,7 @@
 import { CircleCheck, CircleSlash, ExternalLink, Link2, Megaphone, ShieldAlert } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { YourRateCard } from '../components/YourRate';
 import { Alert } from '@/components/ui/Alert';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -415,6 +416,7 @@ function CampaignDetailView({ campaign }: { campaign: CampaignDetail }) {
           style={{ gap: 'var(--space-6)' }}
           aria-label="Campaign terms and your status"
         >
+          {campaign.yourRate && <YourRateCard rate={campaign.yourRate} />}
           {campaign.rewardTerms ? (
             <RewardTermsCard terms={campaign.rewardTerms} />
           ) : (

@@ -56,6 +56,7 @@ import { PublishDialog } from './PublishDialog';
 import { RewardPreview } from './rewards/RewardPreview';
 import { RulesBuilder } from './rewards/RulesBuilder';
 import { VersionHistory } from './rewards/VersionHistory';
+import { CampaignRatesPanel } from '../../rates/campaign/CampaignRatesPanel';
 import {
   BasicsSection,
   ContentSection,
@@ -156,6 +157,7 @@ export function CampaignEditor({ campaign, refetch }: EditorProps) {
   const { hasPermission, user } = useAuth();
   const canRewards = hasPermission(Permissions.RewardsEdit);
   const canPublish = hasPermission(Permissions.CampaignsPublish);
+  const canViewRates = hasPermission(Permissions.RatesView);
   const toast = useToast();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -521,6 +523,9 @@ export function CampaignEditor({ campaign, refetch }: EditorProps) {
           timeZone={timeZone}
           defaultPlatform={form.platforms[0]}
         />
+      )}
+      {!isNew && canViewRates && (
+        <CampaignRatesPanel campaignId={campaign.id} campaignTitle={campaign.title} platforms={form.platforms} />
       )}
       {!isNew && <VersionHistory versions={versions} loading={versionsQuery.isLoading} />}
     </div>

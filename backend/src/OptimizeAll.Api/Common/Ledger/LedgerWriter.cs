@@ -22,7 +22,13 @@ public sealed record NewEarning(
     int? RewardRuleSetVersion = null,
     Guid? RewardRuleId = null,
     string? Reason = null,
-    Guid? CreatedByUserId = null);
+    Guid? CreatedByUserId = null,
+    EarningRateSource? RateSource = null);
+
+/// <summary>Where a post reward's rate came from (campaign rules, or a person-level card / group / custom rate).</summary>
+public sealed record EarningRateSource(
+    OptimizeAll.Domain.Rewards.RateSourceLevel Level, string Label, Guid? RateCardId = null, int? RateCardVersion = null,
+    Guid? RateGroupId = null, Guid? RateAssignmentId = null);
 
 public interface IPayoutScheduleProvider
 {
@@ -161,6 +167,12 @@ public sealed class LedgerWriter(
             RewardRuleSetId = earning.RewardRuleSetId,
             RewardRuleSetVersion = earning.RewardRuleSetVersion,
             RewardRuleId = earning.RewardRuleId,
+            RateSource = earning.RateSource?.Level,
+            RateSourceLabel = earning.RateSource?.Label is { } label && label.Length > 200 ? label[..200] : earning.RateSource?.Label,
+            RateCardId = earning.RateSource?.RateCardId,
+            RateCardVersion = earning.RateSource?.RateCardVersion,
+            RateGroupId = earning.RateSource?.RateGroupId,
+            RateAssignmentId = earning.RateSource?.RateAssignmentId,
             IdempotencyKey = earning.IdempotencyKey,
             Description = earning.Description.Length > 300 ? earning.Description[..300] : earning.Description,
             Reason = earning.Reason,
@@ -242,6 +254,12 @@ public sealed class LedgerWriter(
             RewardRuleSetId = entry.RewardRuleSetId,
             RewardRuleSetVersion = entry.RewardRuleSetVersion,
             RewardRuleId = entry.RewardRuleId,
+            RateSource = entry.RateSource,
+            RateSourceLabel = entry.RateSourceLabel,
+            RateCardId = entry.RateCardId,
+            RateCardVersion = entry.RateCardVersion,
+            RateGroupId = entry.RateGroupId,
+            RateAssignmentId = entry.RateAssignmentId,
             IdempotencyKey = $"reversal:{entry.Id}",
             Description = $"Reversal of {entry.Type}",
             Reason = reason,

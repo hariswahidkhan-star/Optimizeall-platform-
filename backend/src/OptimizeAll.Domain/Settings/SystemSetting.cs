@@ -38,6 +38,12 @@ public static class SettingKeys
 
     /// <summary>bool: whether retention automations (reminders, reactivation, alerts) run. Default true.</summary>
     public const string RetentionEnabled = "retention.enabled";
+
+    /// <summary>
+    /// int: a new rate card version that raises any rate by more than this percentage needs a second person's approval
+    /// (four-eyes). 0 = off. Default 0.
+    /// </summary>
+    public const string RatesFourEyesIncreasePercent = "rates.fourEyesIncreasePercent";
 }
 
 /// <summary>Referral program configuration (setting <see cref="SettingKeys.ReferralProgram"/>).</summary>

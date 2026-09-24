@@ -936,3 +936,50 @@
   font-variant-numeric: tabular-nums;
   text-align: right;
 }
+
+/* ---------- your person-level rate ---------- */
+.pp-your-rate-inline {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-1);
+  color: var(--brand-fg);
+}
+
+.pp-your-rate {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border: 1px solid var(--brand-border);
+  border-radius: var(--radius-xl);
+  background: var(--brand-bg);
+  color: var(--brand-fg);
+}
+
+.pp-your-rate__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--text-h3);
+  color: inherit;
+}
+
+.pp-your-rate__lead {
+  margin: 0;
+}
+
+.pp-your-rate__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.pp-your-rate__list li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+}

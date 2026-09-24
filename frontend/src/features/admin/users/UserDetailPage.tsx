@@ -25,6 +25,7 @@ import { humanize } from '@/lib/format/text';
 import type { AdminUserDetail } from '../api/types';
 import { AuditEntry } from '../audit/AuditEntry';
 import { UserCustomRolesSection } from '../roles/UserCustomRolesSection';
+import { PersonRatesSection } from '@/features/rates/person/PersonRatesSection';
 import { AdminBadge, roleLabel } from '../shared/badges';
 import { QueryError, useCan } from '../shared/common';
 import {
@@ -59,6 +60,7 @@ export function UserDetailPage() {
   const canSuspend = useCan(Permissions.UsersSuspend);
   const canAssign = useCan(Permissions.RolesAssign);
   const canTier = useCan(Permissions.UsersManage);
+  const canViewRates = useCan(Permissions.RatesView);
   const [action, setAction] = useState<UserAction | null>(null);
 
   const detail = useQuery({
@@ -220,6 +222,10 @@ export function UserDetailPage() {
         </Section>
 
         <UserCustomRolesSection userId={p.id} displayName={p.displayName} assigned={user.customRoles ?? []} />
+
+        {canViewRates && user.roles.includes('Participant') && (
+          <PersonRatesSection userId={p.id} displayName={p.displayName} />
+        )}
 
         <section aria-labelledby="user-submissions" className="stack">
           <h2 id="user-submissions" className="admin-section-title">

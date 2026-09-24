@@ -10,6 +10,7 @@ import {
   IconButton,
   Input,
   Select,
+  Switch,
 } from '@/components/ui';
 import { useSupportedCurrencies } from '@/lib/api/meta';
 import type { RewardRuleType } from '../../api/types';
@@ -120,6 +121,42 @@ export function RulesBuilder({
           />
         </FormField>
       </div>
+
+      <fieldset className="mg-fieldset stack mg-stack-sm">
+        <legend className="mg-legend">Person-level rates</legend>
+        <p className="text-small text-muted">
+          Rate cards, rate groups and negotiated deals can replace this campaign&apos;s post rate for specific people.
+          Caps and the budget above always apply to everyone.
+        </p>
+        <div className="mg-grid mg-grid--2">
+          <Switch
+            label="Campaign rates only"
+            description="Ignore every personal and group rate: everyone is paid the rules below."
+            checked={value.personalRatesMode === 'CampaignRatesOnly'}
+            disabled={disabled}
+            onCheckedChange={(checked) =>
+              set({ personalRatesMode: checked ? 'CampaignRatesOnly' : 'Allowed' })
+            }
+          />
+          <FormField
+            label="Maximum personal rate"
+            optional
+            hint="Multiple of the campaign rate a post would otherwise get (e.g. 3 = at most 3×). Blank = no limit."
+          >
+            <Input
+              type="number"
+              min={0.01}
+              max={100}
+              step="any"
+              inputMode="decimal"
+              value={value.personalRateMaxMultiplier}
+              disabled={disabled || value.personalRatesMode === 'CampaignRatesOnly'}
+              trailing="×"
+              onChange={(e) => set({ personalRateMaxMultiplier: e.target.value })}
+            />
+          </FormField>
+        </div>
+      </fieldset>
 
       <div role="status" aria-live="polite" className="stack mg-stack-sm">
         {setHints.length > 0 && (

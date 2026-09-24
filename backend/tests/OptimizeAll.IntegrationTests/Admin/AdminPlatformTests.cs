@@ -14,7 +14,9 @@ public sealed class AdminPlatformTests(ApiFactory api) : IClassFixture<ApiFactor
         var (adminUser, admin) = await api.AdminAsync();
         var list = await (await admin.GetAsync("/api/v1/admin/settings")).ReadJsonAsync();
         var keys = list.EnumerateArray().Select(s => s.GetProperty("key").GetString()).ToList();
-        Assert.Equal(9, keys.Count);
+        Assert.Equal(10, keys.Count);
+        var fourEyes = list.EnumerateArray().Single(s => s.GetProperty("key").GetString() == "rates.fourEyesIncreasePercent");
+        Assert.Equal(0, fourEyes.GetProperty("defaultValue").GetInt32());
         var inactivity = list.EnumerateArray().Single(s => s.GetProperty("key").GetString() == "retention.inactivityDays");
         Assert.Equal(30, inactivity.GetProperty("value").GetInt32());
         Assert.Equal(30, inactivity.GetProperty("defaultValue").GetInt32());
@@ -32,6 +34,8 @@ public sealed class AdminPlatformTests(ApiFactory api) : IClassFixture<ApiFactor
         await Bad("review.claimMinutes", 0);
         await Bad("retention.inactivityDays", 6);
         await Bad("retention.enabled", "yes");
+        await Bad("rates.fourEyesIncreasePercent", -1);
+        await Bad("rates.fourEyesIncreasePercent", 1001);
         await Bad("referral.program", new { enabled = true, referrerRewardAmount = -1, currency = "USD", qualifyingAction = "FirstApprovedSubmission", qualifyWithinDays = 30 });
         await Bad("referral.program", new { referrerRewardAmount = 5, currency = "XXX", qualifyingAction = "FirstApprovedSubmission", qualifyWithinDays = 30 });
         await Bad("referral.program", new { referrerRewardAmount = 5, currency = "USD", qualifyingAction = "SignedUp", qualifyWithinDays = 30 });

@@ -43,6 +43,7 @@ public sealed class SubmissionService(
     ICurrentUser currentUser,
     IParticipantEligibility eligibility,
     IRewardQuoteService quotes,
+    Rates.IPersonalRateService personalRates,
     IFileService files,
     ISettingsService settings,
     IAuditLogger audit,
@@ -67,6 +68,7 @@ public sealed class SubmissionService(
         var postedAt = form.PostedAt!.Value.UtcDateTime;
         var account = await ValidateParticipantAsync(campaign, me, form.SocialAccountId!.Value, platform, ct);
         var (normalizedUrl, isShortLink) = ValidateUrl(platform, form.PostUrl);
+        var format = ContentFormats.Resolve(platform, form.PostUrl, form.Format);
         ValidatePostedAt(postedAt, now, submittedAt: now);
         if (await db.Set<Submission>().AnyAsync(s => s.NormalizedPostUrl == normalizedUrl, ct))
             throw DuplicateUrl();
@@ -110,6 +112,7 @@ public sealed class SubmissionService(
                 UserId = me,
                 SocialAccountId = account.Id,
                 Platform = platform,
+                Format = format,
                 PostUrl = form.PostUrl.Trim(),
                 NormalizedPostUrl = normalizedUrl,
                 PostedAt = postedAt,
@@ -127,6 +130,13 @@ public sealed class SubmissionService(
 
             var context = await quotes.BuildContextAsync(campaign, ruleSet.Currency, me, platform, postedAt, submission.SubmittedAt,
                 null, submission.Id, ct);
+            // The person-level rate is resolved once, now, and locked on the submission (like the rule set version).
+            var personalRate = await personalRates.ResolveForSubmissionAsync(submission, ruleSet, ct);
+            if (personalRate is not null)
+            {
+                db.Set<SubmissionRate>().Add(personalRate);
+                context = context with { PersonalRate = Rates.PersonalRateService.ToInput(personalRate) };
+            }
             submission.EstimatedRewardAmount = RewardEngine.Quote(ruleSet, context).Total;
 
             await ApplyRiskFlagsAsync(submission, campaign, account, isShortLink, ct);
@@ -138,8 +148,10 @@ public sealed class SubmissionService(
             db.Set<Submission>().Add(submission);
             audit.Record("submission.created", nameof(Submission), submission.Id, after: new
             {
-                submission.CampaignId, submission.Platform, submission.NormalizedPostUrl, submission.RewardRuleSetVersion,
+                submission.CampaignId, submission.Platform, submission.Format, submission.NormalizedPostUrl, submission.RewardRuleSetVersion,
                 submission.EstimatedRewardAmount, submission.RewardCurrency, submission.RiskScore,
+                RateSource = personalRate?.Level.ToString() ?? nameof(RateSourceLevel.CampaignRules),
+                RateSourceLabel = personalRate?.SourceLabel, PersonalRate = personalRate?.Amount,
             });
             await notifications.StageAsync(new NotificationRequest(me, NotificationTypes.SubmissionReceived,
                 "Submission received", $"We received your post for \"{campaign.Title}\". A reviewer will check it soon.",
@@ -208,6 +220,9 @@ public sealed class SubmissionService(
             var ruleSet = await quotes.LoadRuleSetAsync(submission.RewardRuleSetId, ct);
             var context = await quotes.BuildContextAsync(campaign, ruleSet.Currency, me, submission.Platform, postedAt,
                 submission.SubmittedAt, null, submission.Id, ct);
+            // ... and with the person-level rate locked at creation (never re-resolved on a correction).
+            var lockedRate = await db.Set<SubmissionRate>().AsNoTracking().FirstOrDefaultAsync(r => r.SubmissionId == submission.Id, ct);
+            if (lockedRate is not null) context = context with { PersonalRate = Rates.PersonalRateService.ToInput(lockedRate) };
             submission.EstimatedRewardAmount = RewardEngine.Quote(ruleSet, context).Total;
 
             db.RemoveRange(submission.Flags.Where(f => f.ResolvedAt is null).ToList());
@@ -268,6 +283,8 @@ public sealed class SubmissionService(
             .Select(e => new SubmissionEarningDto(e.Id, e.Type, e.Amount, e.Currency, e.Status, e.CreatedAt)).ToListAsync(ct);
         var appeals = await db.Set<Appeal>().AsNoTracking().Where(a => a.SubmissionId == id).OrderByDescending(a => a.CreatedAt).ToListAsync(ct);
         var latest = appeals.FirstOrDefault();
+        var rateLevel = await db.Set<SubmissionRate>().AsNoTracking().Where(r => r.SubmissionId == id)
+            .Select(r => (RateSourceLevel?)r.Level).FirstOrDefaultAsync(ct);
 
         var (canAppeal, deadline) = await AppealEligibilityAsync(s, appeals, ct);
         var timeline = s.Events.OrderBy(e => e.CreatedAt).ThenBy(e => e.Id)
@@ -281,7 +298,9 @@ public sealed class SubmissionService(
             new LiveCheckDto(s.LiveCheckStatus, s.LiveCheckDueAt, s.LiveCheckedAt), timeline, earnings,
             latest is null ? null : new AppealSummaryDto(latest.Id, latest.Status, latest.DecisionAppealed, latest.Reason,
                 latest.ResolutionNote, latest.CreatedAt, latest.ResolvedAt),
-            s.Status == SubmissionStatus.NeedsCorrection, canAppeal, deadline, s.CanWithdraw);
+            s.Status == SubmissionStatus.NeedsCorrection, canAppeal, deadline, s.CanWithdraw, s.Format,
+            // Participants learn whether their own deal priced the post, never which card or group it was.
+            rateLevel is null ? null : RateSources.IsPersonal(rateLevel.Value) ? "Personal" : "Special");
     }
 
     private async Task<(bool CanAppeal, DateTime? Deadline)> AppealEligibilityAsync(Submission s, IReadOnlyList<Appeal> appeals, CancellationToken ct)

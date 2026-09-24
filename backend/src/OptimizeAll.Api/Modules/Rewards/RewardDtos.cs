@@ -44,6 +44,13 @@ public class RewardRuleSetInput
     [Range(typeof(decimal), "0.0001", "100000000")]
     public decimal? CampaignCapPerParticipant { get; set; }
 
+    /// <summary>Whether person-level rates (rate cards, groups, custom deals) may replace the campaign rate.</summary>
+    public PersonalRatesMode PersonalRatesMode { get; set; } = PersonalRatesMode.Allowed;
+
+    /// <summary>Optional ceiling on person-level rates as a multiple of the campaign rate (e.g. 3).</summary>
+    [Range(typeof(decimal), "0.01", "100")]
+    public decimal? PersonalRateMaxMultiplier { get; set; }
+
     [Required, MinLength(1), MaxLength(50)]
     public List<RewardRuleInput> Rules { get; set; } = new();
 }
@@ -112,16 +119,41 @@ public sealed record RewardRuleSetDto(
     Guid Id, int Version, string Currency,
     decimal? DailyCapPerParticipant, decimal? WeeklyCapPerParticipant, decimal? CampaignCapPerParticipant,
     DateTime EffectiveFrom, DateTime CreatedAt, UserRefDto? CreatedBy, string Reason, string Summary,
-    bool IsCurrent, int InUseBySubmissions, IReadOnlyList<RewardRuleDto> Rules);
+    bool IsCurrent, int InUseBySubmissions, IReadOnlyList<RewardRuleDto> Rules,
+    PersonalRatesMode PersonalRatesMode = PersonalRatesMode.Allowed, decimal? PersonalRateMaxMultiplier = null);
 
-public sealed record RewardLineDto(EarningType Type, Guid RuleId, decimal Amount, decimal UncappedAmount, bool RequiresApproval, string Label);
+public sealed record RewardLineDto(EarningType Type, Guid RuleId, decimal Amount, decimal UncappedAmount, bool RequiresApproval, string Label,
+    bool FromPersonalRate = false);
+
+/// <summary>
+/// Where the post rate came from. <see cref="Label"/> names the card/group (staff with rates.view only; otherwise the
+/// generic <see cref="LevelLabel"/>). Card amount/currency and the exchange rate are those locked on the submission.
+/// </summary>
+public sealed record RateSourceDto(
+    RateSourceLevel Level, string LevelLabel, string Label, decimal CampaignRateAmount, decimal? PersonalAmount, bool Limited,
+    string? IgnoredReason, decimal? CardAmount, string? CardCurrency, decimal? ExchangeRate, DateTime? ValidTo, Guid? RateCardId,
+    int? RateCardVersion, Guid? RateGroupId, Guid? RateAssignmentId);
 
 public sealed record RewardQuoteDto(
     Guid? RuleSetId, int? RuleSetVersion, string Currency, IReadOnlyList<RewardLineDto> Lines, decimal Total,
-    IReadOnlyList<string> AppliedCaps, string RuleSetSummary)
+    IReadOnlyList<string> AppliedCaps, string RuleSetSummary, RateSourceDto? RateSource = null)
 {
-    public static RewardQuoteDto From(RewardQuote q, Guid? ruleSetId, int? ruleSetVersion) => new(
+    public static RewardQuoteDto From(RewardQuote q, Guid? ruleSetId, int? ruleSetVersion, SubmissionRate? rate = null, bool showNames = true) => new(
         ruleSetId, ruleSetVersion, q.Currency,
-        q.Lines.Select(l => new RewardLineDto(l.Type, l.RuleId, l.Amount, l.UncappedAmount, l.RequiresApproval, l.Label)).ToList(),
-        q.Total, q.AppliedCaps, q.RuleSetSummary);
+        q.Lines.Select(l => new RewardLineDto(l.Type, l.RuleId, l.Amount, l.UncappedAmount, l.RequiresApproval, l.Label, l.FromPersonalRate)).ToList(),
+        q.Total, q.AppliedCaps, q.RuleSetSummary, Source(q, ruleSetVersion, rate, showNames));
+
+    private static RateSourceDto? Source(RewardQuote q, int? version, SubmissionRate? rate, bool showNames)
+    {
+        if (q.PostRate is not { } p) return null;
+        if (rate is null || !p.PersonalApplied)
+            return new RateSourceDto(RateSourceLevel.CampaignRules, RateSources.Describe(RateSourceLevel.CampaignRules),
+                version is null ? "Campaign rules" : $"Campaign rules v{version}", p.CampaignAmount, p.PersonalAmount, false,
+                p.PersonalIgnoredReason, null, null, null, null, null, null, null, null);
+        var levelLabel = RateSources.Describe(rate.Level);
+        return new RateSourceDto(rate.Level, levelLabel, showNames ? rate.SourceLabel : levelLabel, p.CampaignAmount, p.PersonalAmount,
+            p.PersonalLimited, null, rate.CardAmount, rate.CardCurrency, rate.ExchangeRate, rate.AssignmentValidTo,
+            showNames ? rate.RateCardId : null, rate.RateCardVersion, showNames ? rate.RateGroupId : null,
+            showNames ? rate.RateAssignmentId : null);
+    }
 }

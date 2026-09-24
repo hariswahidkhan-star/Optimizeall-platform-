@@ -155,7 +155,12 @@ export interface RewardRuleSet {
   isCurrent: boolean;
   inUseBySubmissions: number;
   rules: RewardRule[];
+  personalRatesMode?: PersonalRatesMode;
+  personalRateMaxMultiplier?: number | null;
 }
+
+/** Campaign policy for person-level rates (rate cards, rate groups, negotiated deals). */
+export type PersonalRatesMode = 'Allowed' | 'CampaignRatesOnly';
 
 export interface RewardRuleInput {
   type: RewardRuleType;
@@ -175,6 +180,8 @@ export interface RewardRuleSetInput {
   dailyCapPerParticipant: number | null;
   weeklyCapPerParticipant: number | null;
   campaignCapPerParticipant: number | null;
+  personalRatesMode?: PersonalRatesMode;
+  personalRateMaxMultiplier?: number | null;
   rules: RewardRuleInput[];
 }
 
@@ -200,6 +207,26 @@ export interface RewardLine {
   uncappedAmount: number;
   requiresApproval: boolean;
   label: string;
+  fromPersonalRate?: boolean;
+}
+
+/** Where a post rate came from (campaign rules or a person-level rate), as returned with quotes. */
+export interface RateSource {
+  level: string;
+  levelLabel: string;
+  label: string;
+  campaignRateAmount: number;
+  personalAmount: number | null;
+  limited: boolean;
+  ignoredReason: string | null;
+  cardAmount: number | null;
+  cardCurrency: string | null;
+  exchangeRate: number | null;
+  validTo: IsoDateTime | null;
+  rateCardId: string | null;
+  rateCardVersion: number | null;
+  rateGroupId: string | null;
+  rateAssignmentId: string | null;
 }
 
 export interface RewardQuote {
@@ -210,6 +237,7 @@ export interface RewardQuote {
   total: number;
   appliedCaps: string[];
   ruleSetSummary: string;
+  rateSource?: RateSource | null;
 }
 
 /** Fields shared by create and update. */

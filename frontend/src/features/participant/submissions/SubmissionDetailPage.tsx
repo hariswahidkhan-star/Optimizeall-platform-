@@ -178,6 +178,17 @@ function SubmissionView({ s }: { s: SubmissionDetail }) {
                     value: <Money amount={s.estimatedReward} currency={s.currency} />,
                   },
                   { label: 'Reward rules version', value: `v${s.rewardRuleSetVersion}` },
+                  ...(s.rateKind
+                    ? [
+                        {
+                          label: 'Rate',
+                          value:
+                            s.rateKind === 'Personal'
+                              ? 'Your personal rate (locked when you submitted)'
+                              : 'Your special rate (locked when you submitted)',
+                        },
+                      ]
+                    : []),
                   ...(s.decidedAt ? [{ label: 'Decided', value: <DateTime value={s.decidedAt} /> }] : []),
                 ]}
               />

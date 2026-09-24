@@ -820,6 +820,38 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "rate_groups",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Name = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Description = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    MembershipMode = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AutoTiers = table.Column<string>(type: "json", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AutoMinFollowers = table.Column<int>(type: "int", nullable: true),
+                    AutoMaxFollowers = table.Column<int>(type: "int", nullable: true),
+                    AutoRequireVerified = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CreatedByUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ArchivedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    ArchivedByUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    ArchiveReason = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_rate_groups", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "report_templates",
                 columns: table => new
                 {
@@ -1909,6 +1941,108 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "rate_cards",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Name = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Description = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Kind = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Status = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    OwnerUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    Currency = table.Column<string>(type: "char(3)", fixedLength: true, maxLength: 3, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CurrentVersion = table.Column<int>(type: "int", nullable: false),
+                    CreatedByUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ArchivedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    ArchivedByUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    ArchiveReason = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_rate_cards", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_rate_cards_users_OwnerUserId",
+                        column: x => x.OwnerUserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "rate_group_member_events",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    GroupId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Action = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    At = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    ActorUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    Source = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Reason = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_rate_group_member_events", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_rate_group_member_events_rate_groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "rate_groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_rate_group_member_events_users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "rate_group_members",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    GroupId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    AddedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    AddedByUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    Note = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_rate_group_members", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_rate_group_members_rate_groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "rate_groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_rate_group_members_users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "referrals",
                 columns: table => new
                 {
@@ -2778,6 +2912,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     DailyCapPerParticipant = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: true),
                     WeeklyCapPerParticipant = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: true),
                     CampaignCapPerParticipant = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: true),
+                    PersonalRatesMode = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PersonalRateMaxMultiplier = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: true),
                     EffectiveFrom = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
                     CreatedByUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -4670,6 +4807,14 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     RewardRuleSetId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     RewardRuleSetVersion = table.Column<int>(type: "int", nullable: true),
                     RewardRuleId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    RateSource = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RateSourceLabel = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RateCardId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    RateCardVersion = table.Column<int>(type: "int", nullable: true),
+                    RateGroupId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    RateAssignmentId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     IdempotencyKey = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Description = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false)
@@ -4772,6 +4917,100 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         name: "FK_payout_item_earnings_payout_items_PayoutItemId",
                         column: x => x.PayoutItemId,
                         principalTable: "payout_items",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "rate_assignments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    RateCardId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Target = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    GroupId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    CampaignId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    IsCustom = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    ValidFrom = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    ValidTo = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    Note = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedByUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    EndedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    EndedByUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    EndReason = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_rate_assignments", x => x.Id);
+                    table.CheckConstraint("ck_rate_assignments_target", "(`Target` = 'Person' AND `UserId` IS NOT NULL AND `GroupId` IS NULL) OR (`Target` = 'Group' AND `GroupId` IS NOT NULL AND `UserId` IS NULL)");
+                    table.ForeignKey(
+                        name: "FK_rate_assignments_campaigns_CampaignId",
+                        column: x => x.CampaignId,
+                        principalTable: "campaigns",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_rate_assignments_rate_cards_RateCardId",
+                        column: x => x.RateCardId,
+                        principalTable: "rate_cards",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_rate_assignments_rate_groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "rate_groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_rate_assignments_users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "rate_card_versions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    RateCardId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Version = table.Column<int>(type: "int", nullable: false),
+                    Currency = table.Column<string>(type: "char(3)", fixedLength: true, maxLength: 3, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DailyCapPerParticipant = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: true),
+                    WeeklyCapPerParticipant = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: true),
+                    CampaignCapPerParticipant = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: true),
+                    StackCampaignBonuses = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    EffectiveFrom = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    CreatedByUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ChangeReason = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Status = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DecidedByUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    DecidedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    DecisionNote = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    MaxIncreasePercent = table.Column<decimal>(type: "decimal(19,2)", precision: 19, scale: 2, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_rate_card_versions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_rate_card_versions_rate_cards_RateCardId",
+                        column: x => x.RateCardId,
+                        principalTable: "rate_cards",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 })
@@ -5033,6 +5272,8 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     SocialAccountId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Platform = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Format = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PostUrl = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -6699,6 +6940,35 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "rate_card_lines",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    VersionId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Platform = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Format = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CountryCode = table.Column<string>(type: "char(2)", fixedLength: true, maxLength: 2, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Amount = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: false),
+                    Label = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_rate_card_lines", x => x.Id);
+                    table.CheckConstraint("ck_rate_card_lines_amount_nonnegative", "`Amount` >= 0");
+                    table.ForeignKey(
+                        name: "FK_rate_card_lines_rate_card_versions_VersionId",
+                        column: x => x.VersionId,
+                        principalTable: "rate_card_versions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "experiment_assignments",
                 columns: table => new
                 {
@@ -6821,6 +7091,74 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         principalTable: "submissions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "submission_rates",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    SubmissionId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Level = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RateAssignmentId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    RateCardId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    RateCardVersionId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    RateCardVersion = table.Column<int>(type: "int", nullable: false),
+                    RateCardLineId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    RateGroupId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    CardName = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    GroupName = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CardAmount = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: false),
+                    CardCurrency = table.Column<string>(type: "char(3)", fixedLength: true, maxLength: 3, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ExchangeRate = table.Column<decimal>(type: "decimal(18,8)", precision: 18, scale: 8, nullable: false),
+                    ExchangeRateId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    Amount = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: false),
+                    Currency = table.Column<string>(type: "char(3)", fixedLength: true, maxLength: 3, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DailyCap = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: true),
+                    WeeklyCap = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: true),
+                    CampaignCap = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: true),
+                    StackCampaignBonuses = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    LineLabel = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AssignmentValidTo = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    ResolvedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    Explanation = table.Column<string>(type: "varchar(2000)", maxLength: 2000, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_submission_rates", x => x.Id);
+                    table.CheckConstraint("ck_submission_rates_fx_positive", "`ExchangeRate` > 0");
+                    table.ForeignKey(
+                        name: "FK_submission_rates_rate_assignments_RateAssignmentId",
+                        column: x => x.RateAssignmentId,
+                        principalTable: "rate_assignments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_submission_rates_rate_cards_RateCardId",
+                        column: x => x.RateCardId,
+                        principalTable: "rate_cards",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_submission_rates_rate_groups_RateGroupId",
+                        column: x => x.RateGroupId,
+                        principalTable: "rate_groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_submission_rates_submissions_SubmissionId",
+                        column: x => x.SubmissionId,
+                        principalTable: "submissions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -9946,6 +10284,73 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 columns: new[] { "Status", "CreatedAt" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_rate_assignments_CampaignId",
+                table: "rate_assignments",
+                column: "CampaignId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_rate_assignments_GroupId_CampaignId",
+                table: "rate_assignments",
+                columns: new[] { "GroupId", "CampaignId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_rate_assignments_RateCardId",
+                table: "rate_assignments",
+                column: "RateCardId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_rate_assignments_UserId_CampaignId",
+                table: "rate_assignments",
+                columns: new[] { "UserId", "CampaignId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_rate_card_lines_VersionId",
+                table: "rate_card_lines",
+                column: "VersionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_rate_card_versions_RateCardId_Version",
+                table: "rate_card_versions",
+                columns: new[] { "RateCardId", "Version" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_rate_cards_Kind_Status_Name",
+                table: "rate_cards",
+                columns: new[] { "Kind", "Status", "Name" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_rate_cards_OwnerUserId",
+                table: "rate_cards",
+                column: "OwnerUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_rate_group_member_events_GroupId_At",
+                table: "rate_group_member_events",
+                columns: new[] { "GroupId", "At" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_rate_group_member_events_UserId_At",
+                table: "rate_group_member_events",
+                columns: new[] { "UserId", "At" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_rate_group_members_GroupId_UserId",
+                table: "rate_group_members",
+                columns: new[] { "GroupId", "UserId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_rate_group_members_UserId",
+                table: "rate_group_members",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_rate_groups_MembershipMode_ArchivedAt",
+                table: "rate_groups",
+                columns: new[] { "MembershipMode", "ArchivedAt" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_recurring_task_rules_ProjectId_IsActive",
                 table: "recurring_task_rules",
                 columns: new[] { "ProjectId", "IsActive" });
@@ -10366,6 +10771,27 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "IX_submission_flags_SubmissionId_Type",
                 table: "submission_flags",
                 columns: new[] { "SubmissionId", "Type" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_submission_rates_RateAssignmentId",
+                table: "submission_rates",
+                column: "RateAssignmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_submission_rates_RateCardId",
+                table: "submission_rates",
+                column: "RateCardId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_submission_rates_RateGroupId",
+                table: "submission_rates",
+                column: "RateGroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_submission_rates_SubmissionId",
+                table: "submission_rates",
+                column: "SubmissionId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_submissions_AssignedReviewerId",
@@ -11190,6 +11616,15 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "proposal_lines");
 
             migrationBuilder.DropTable(
+                name: "rate_card_lines");
+
+            migrationBuilder.DropTable(
+                name: "rate_group_member_events");
+
+            migrationBuilder.DropTable(
+                name: "rate_group_members");
+
+            migrationBuilder.DropTable(
                 name: "recurring_task_rules");
 
             migrationBuilder.DropTable(
@@ -11302,6 +11737,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "submission_flags");
+
+            migrationBuilder.DropTable(
+                name: "submission_rates");
 
             migrationBuilder.DropTable(
                 name: "support_messages");
@@ -11454,6 +11892,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "proposal_versions");
 
             migrationBuilder.DropTable(
+                name: "rate_card_versions");
+
+            migrationBuilder.DropTable(
                 name: "seo_audits");
 
             migrationBuilder.DropTable(
@@ -11476,6 +11917,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "sm_brand_profiles");
+
+            migrationBuilder.DropTable(
+                name: "rate_assignments");
 
             migrationBuilder.DropTable(
                 name: "submissions");
@@ -11542,6 +11986,12 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "seo_sites");
+
+            migrationBuilder.DropTable(
+                name: "rate_cards");
+
+            migrationBuilder.DropTable(
+                name: "rate_groups");
 
             migrationBuilder.DropTable(
                 name: "reward_rule_sets");

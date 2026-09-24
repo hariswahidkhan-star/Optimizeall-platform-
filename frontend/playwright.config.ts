@@ -104,6 +104,12 @@ import { defineConfig, devices } from '@playwright/test';
  * the browser at UTC+14, UTC-12 and UTC+05:45, invoices in currencies with 0/2/3 minor units, and a list of identical
  * rows paged through plus wildcard/quote/backslash/emoji search. Serial, one worker, desktop only. Run it with
  * `E2E_SUITE=j-edge E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
+ *
+ * The j-rates suite walks person-level pricing end to end (a rate card and a rate group with bulk-added members, the
+ * card assigned to the group, an expiring personal deal with "explain this rate", participants seeing only their own
+ * rate, submit → approve → ledger rate source, a new card version that leaves approved earnings unchanged, four-eyes on
+ * a large raise and the deal's expiry). Serial, one worker, desktop only, against Baseline + Demo:
+ * `E2E_SUITE=j-rates E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
  */
 const suite = process.env.E2E_SUITE ?? 'smoke';
 /** Suites whose mobile project runs only responsive.spec.ts (and whose desktop project runs everything else). */
@@ -123,6 +129,7 @@ const desktopJourney = [
   'j-edge',
   'j-email',
   'j-auth',
+  'j-rates',
 ].includes(suite);
 /** The finance journey compares datetime-local input (browser time) with UTC periods, so its browser runs in UTC. */
 const finance = suite === 'j-finance';

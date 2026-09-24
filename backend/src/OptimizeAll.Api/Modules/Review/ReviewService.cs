@@ -208,7 +208,8 @@ public sealed class ReviewService(
         if (target == SubmissionStatus.Approved)
         {
             var approved = await RecordApprovalEarningsAsync(before, campaign, request.QualityBonusAmount, keySuffix: string.Empty, me, ct);
-            rewardDto = RewardQuoteDto.From(approved.Quote, approved.RuleSet.Id, approved.RuleSet.Version);
+            rewardDto = RewardQuoteDto.From(approved.Quote, approved.RuleSet.Id, approved.RuleSet.Version, approved.Rate,
+                currentUser.HasPermission(Permissions.RatesView));
             if (approved.Quote.AppliedCaps.Count > 0)
                 eventReason = ReasonText.Fit($"{(reason is null ? "Approved" : reason)} (caps applied: {string.Join(", ", approved.Quote.AppliedCaps)})");
             firstForUser = !await db.Set<Submission>().AnyAsync(s =>
@@ -267,7 +268,8 @@ public sealed class ReviewService(
                 submission.UserId, line.Type, line.Amount, priced.Quote.Currency, key,
                 $"{line.Label} — {campaign.Title}", line.RequiresApproval || requiresLiveCheck,
                 CampaignId: campaign.Id, SubmissionId: submission.Id, RewardRuleSetId: priced.RuleSet.Id,
-                RewardRuleSetVersion: priced.RuleSet.Version, RewardRuleId: line.RuleId, CreatedByUserId: actor), ct);
+                RewardRuleSetVersion: priced.RuleSet.Version, RewardRuleId: line.FromPersonalRate ? null : line.RuleId,
+                CreatedByUserId: actor, RateSource: Rates.RateSourceMapping.ForLine(line, priced)), ct);
         }
         return priced;
     }

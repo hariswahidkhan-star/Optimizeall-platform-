@@ -11,7 +11,7 @@ using OptimizeAll.Infrastructure.Persistence;
 namespace OptimizeAll.Api.Modules.Rewards;
 
 /// <summary>A quote together with the exact rule set version and context it was computed from.</summary>
-public sealed record PricedReward(RewardRuleSet RuleSet, RewardContext Context, RewardQuote Quote);
+public sealed record PricedReward(RewardRuleSet RuleSet, RewardContext Context, RewardQuote Quote, SubmissionRate? Rate = null);
 
 /// <summary>
 /// Builds <see cref="RewardContext"/>s from the database and prices posts with <see cref="RewardEngine"/>.
@@ -153,7 +153,10 @@ public sealed class RewardQuoteService(AppDbContext db) : IRewardQuoteService
         var ruleSet = await LoadRuleSetAsync(submission.RewardRuleSetId, ct);
         var context = await BuildContextAsync(campaign, ruleSet.Currency, submission.UserId, submission.Platform,
             submission.PostedAt, submission.SubmittedAt, qualityBonusRequested, submission.Id, ct);
-        return new PricedReward(ruleSet, context, RewardEngine.Quote(ruleSet, context));
+        // The person-level rate locked when the submission was created (none = campaign rules), never re-resolved.
+        var rate = await db.Set<SubmissionRate>().AsNoTracking().FirstOrDefaultAsync(r => r.SubmissionId == submission.Id, ct);
+        if (rate is not null) context = context with { PersonalRate = Rates.PersonalRateService.ToInput(rate) };
+        return new PricedReward(ruleSet, context, RewardEngine.Quote(ruleSet, context), rate);
     }
 
     public async Task<decimal?> BudgetRemainingAsync(Campaign campaign, CancellationToken ct = default)

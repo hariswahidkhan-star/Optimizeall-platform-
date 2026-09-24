@@ -21,6 +21,9 @@ const RULES: Record<PortalId, [prefix: string, group: string][]> = {
   reviewer: [['', 'Review']],
   manager: [
     ['campaigns', 'Campaigns'],
+    // Person-level pricing sits with the campaigns it prices (rate cards and groups apply per campaign).
+    ['rate-cards', 'Campaigns'],
+    ['rate-groups', 'Campaigns'],
     ['templates', 'Campaigns'],
     ['calendar', 'Campaigns'],
     ['invitations', 'Growth'],

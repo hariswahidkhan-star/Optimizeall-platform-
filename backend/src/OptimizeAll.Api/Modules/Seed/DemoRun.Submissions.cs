@@ -334,6 +334,7 @@ internal sealed partial class DemoRun
             UserId = plan.Who.Id,
             SocialAccountId = plan.Account.Id,
             Platform = plan.Account.Platform,
+            Format = ContentFormats.Infer(plan.Account.Platform, plan.PostUrl),
             PostUrl = plan.PostUrl,
             NormalizedPostUrl = normalizedUrl,
             PostedAt = plan.PostedAt,
@@ -354,6 +355,14 @@ internal sealed partial class DemoRun
 
         var context = await _quotes.BuildContextAsync(campaign, ruleSet.Currency, plan.Who.Id, submission.Platform, submission.PostedAt,
             submission.SubmittedAt, null, submission.Id);
+        // Same as SubmissionService: the person-level rate (if any) is resolved now and locked on the submission.
+        var personalRate = await _personalRates.ResolveForSubmissionAsync(submission, ruleSet);
+        if (personalRate is not null)
+        {
+            _db.Set<SubmissionRate>().Add(personalRate);
+            context = context with { PersonalRate = Rates.PersonalRateService.ToInput(personalRate) };
+            Count("submissions priced with a person-level rate");
+        }
         submission.EstimatedRewardAmount = RewardEngine.Quote(ruleSet, context).Total;
         await ApplyRiskFlagsAsync(submission, campaign, AccountAt(plan.Account, Now), plan.Who);
         submission.Events.Add(new SubmissionEvent
@@ -605,7 +614,8 @@ internal sealed partial class DemoRun
                 s.UserId, line.Type, line.Amount, priced.Quote.Currency, key, $"{line.Label} — {campaign.Title}",
                 line.RequiresApproval || requiresLiveCheck,
                 CampaignId: campaign.Id, SubmissionId: s.Id, RewardRuleSetId: priced.RuleSet.Id,
-                RewardRuleSetVersion: priced.RuleSet.Version, RewardRuleId: line.RuleId, CreatedByUserId: actor.Id));
+                RewardRuleSetVersion: priced.RuleSet.Version, RewardRuleId: line.FromPersonalRate ? null : line.RuleId, CreatedByUserId: actor.Id,
+                RateSource: Rates.RateSourceMapping.ForLine(line, priced)));
             Count("earnings from approvals");
         }
         return priced;
@@ -662,6 +672,8 @@ internal sealed partial class DemoRun
 
         var ruleSet = await _quotes.LoadRuleSetAsync(s.RewardRuleSetId);
         var context = await _quotes.BuildContextAsync(campaign, ruleSet.Currency, s.UserId, s.Platform, s.PostedAt, s.SubmittedAt, null, s.Id);
+        var locked = await _db.Set<SubmissionRate>().AsNoTracking().FirstOrDefaultAsync(r => r.SubmissionId == s.Id);
+        if (locked is not null) context = context with { PersonalRate = Rates.PersonalRateService.ToInput(locked) };
         s.EstimatedRewardAmount = RewardEngine.Quote(ruleSet, context).Total;
 
         _db.RemoveRange(s.Flags.Where(f => f.ResolvedAt is null).ToList());

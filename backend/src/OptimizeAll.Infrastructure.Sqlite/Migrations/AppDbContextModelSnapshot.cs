@@ -7386,6 +7386,26 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.Property<Guid?>("PayoutItemId")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("RateAssignmentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("RateCardId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("RateCardVersion")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("RateGroupId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RateSource")
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RateSourceLabel")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Reason")
                         .HasMaxLength(1000)
                         .HasColumnType("TEXT");
@@ -9979,6 +9999,420 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.ToTable("timesheets", (string)null);
                 });
 
+            modelBuilder.Entity("OptimizeAll.Domain.Rewards.RateAssignment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("CampaignId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EndReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("EndedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("EndedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("GroupId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsCustom")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("RateCardId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Target")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ValidFrom")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ValidTo")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CampaignId");
+
+                    b.HasIndex("RateCardId");
+
+                    b.HasIndex("GroupId", "CampaignId");
+
+                    b.HasIndex("UserId", "CampaignId");
+
+                    b.ToTable("rate_assignments", null, t =>
+                        {
+                            t.HasCheckConstraint("ck_rate_assignments_target", "(\"Target\" = 'Person' AND \"UserId\" IS NOT NULL AND \"GroupId\" IS NULL) OR (\"Target\" = 'Group' AND \"GroupId\" IS NOT NULL AND \"UserId\" IS NULL)");
+                        });
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Rewards.RateCard", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ArchiveReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ArchivedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ArchivedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("TEXT")
+                        .IsFixedLength();
+
+                    b.Property<int>("CurrentVersion")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Kind")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("OwnerUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerUserId");
+
+                    b.HasIndex("Kind", "Status", "Name");
+
+                    b.ToTable("rate_cards", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Rewards.RateCardLine", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CountryCode")
+                        .HasMaxLength(2)
+                        .HasColumnType("TEXT")
+                        .IsFixedLength();
+
+                    b.Property<string>("Format")
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Label")
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Platform")
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("VersionId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VersionId");
+
+                    b.ToTable("rate_card_lines", null, t =>
+                        {
+                            t.HasCheckConstraint("ck_rate_card_lines_amount_nonnegative", "CAST(\"Amount\" AS REAL) >= 0");
+                        });
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Rewards.RateCardVersion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("CampaignCapPerParticipant")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ChangeReason")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("TEXT")
+                        .IsFixedLength();
+
+                    b.Property<decimal?>("DailyCapPerParticipant")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DecidedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("DecidedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DecisionNote")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("EffectiveFrom")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("MaxIncreasePercent")
+                        .HasPrecision(19, 2)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("RateCardId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("StackCampaignBonuses")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal?>("WeeklyCapPerParticipant")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RateCardId", "Version")
+                        .IsUnique();
+
+                    b.ToTable("rate_card_versions", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Rewards.RateGroup", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ArchiveReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ArchivedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ArchivedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("AutoMaxFollowers")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("AutoMinFollowers")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("AutoRequireVerified")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AutoTiers")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MembershipMode")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MembershipMode", "ArchivedAt");
+
+                    b.ToTable("rate_groups", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Rewards.RateGroupMember", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("AddedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("AddedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("GroupId", "UserId")
+                        .IsUnique();
+
+                    b.ToTable("rate_group_members", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Rewards.RateGroupMemberEvent", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ActorUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("At")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Reason")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupId", "At");
+
+                    b.HasIndex("UserId", "At");
+
+                    b.ToTable("rate_group_member_events", (string)null);
+                });
+
             modelBuilder.Entity("OptimizeAll.Domain.Rewards.RewardRule", b =>
                 {
                     b.Property<Guid>("Id")
@@ -10079,6 +10513,15 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasPrecision(6)
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal?>("PersonalRateMaxMultiplier")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PersonalRatesMode")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Version")
                         .HasColumnType("INTEGER");
 
@@ -10092,6 +10535,123 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .IsUnique();
 
                     b.ToTable("reward_rule_sets", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Rewards.SubmissionRate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("AssignmentValidTo")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("CampaignCap")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("CardAmount")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CardCurrency")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("TEXT")
+                        .IsFixedLength();
+
+                    b.Property<string>("CardName")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("TEXT")
+                        .IsFixedLength();
+
+                    b.Property<decimal?>("DailyCap")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("ExchangeRate")
+                        .HasPrecision(18, 8)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ExchangeRateId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Explanation")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("GroupName")
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Level")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LineLabel")
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("RateAssignmentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("RateCardId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("RateCardLineId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("RateCardVersion")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("RateCardVersionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("RateGroupId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ResolvedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("StackCampaignBonuses")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("SubmissionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("WeeklyCap")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RateAssignmentId");
+
+                    b.HasIndex("RateCardId");
+
+                    b.HasIndex("RateGroupId");
+
+                    b.HasIndex("SubmissionId")
+                        .IsUnique();
+
+                    b.ToTable("submission_rates", null, t =>
+                        {
+                            t.HasCheckConstraint("ck_submission_rates_fx_positive", "CAST(\"ExchangeRate\" AS REAL) > 0");
+                        });
                 });
 
             modelBuilder.Entity("OptimizeAll.Domain.Seo.SeoAudit", b =>
@@ -12562,6 +13122,10 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<Guid?>("ExperimentVariantId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Format")
+                        .HasMaxLength(40)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("LiveCheckDueAt")
@@ -16129,6 +16693,86 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("OptimizeAll.Domain.Rewards.RateAssignment", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Campaigns.Campaign", null)
+                        .WithMany()
+                        .HasForeignKey("CampaignId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("OptimizeAll.Domain.Rewards.RateGroup", null)
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("OptimizeAll.Domain.Rewards.RateCard", null)
+                        .WithMany()
+                        .HasForeignKey("RateCardId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OptimizeAll.Domain.Identity.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Rewards.RateCard", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Identity.User", null)
+                        .WithMany()
+                        .HasForeignKey("OwnerUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Rewards.RateCardLine", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Rewards.RateCardVersion", null)
+                        .WithMany("Lines")
+                        .HasForeignKey("VersionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Rewards.RateCardVersion", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Rewards.RateCard", null)
+                        .WithMany("Versions")
+                        .HasForeignKey("RateCardId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Rewards.RateGroupMember", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Rewards.RateGroup", null)
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OptimizeAll.Domain.Identity.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Rewards.RateGroupMemberEvent", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Rewards.RateGroup", null)
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OptimizeAll.Domain.Identity.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("OptimizeAll.Domain.Rewards.RewardRule", b =>
                 {
                     b.HasOne("OptimizeAll.Domain.Rewards.RewardRuleSet", null)
@@ -16143,6 +16787,32 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.HasOne("OptimizeAll.Domain.Campaigns.Campaign", null)
                         .WithMany()
                         .HasForeignKey("CampaignId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Rewards.SubmissionRate", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Rewards.RateAssignment", null)
+                        .WithMany()
+                        .HasForeignKey("RateAssignmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OptimizeAll.Domain.Rewards.RateCard", null)
+                        .WithMany()
+                        .HasForeignKey("RateCardId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OptimizeAll.Domain.Rewards.RateGroup", null)
+                        .WithMany()
+                        .HasForeignKey("RateGroupId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("OptimizeAll.Domain.Submissions.Submission", null)
+                        .WithMany()
+                        .HasForeignKey("SubmissionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
@@ -16907,6 +17577,16 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
             modelBuilder.Entity("OptimizeAll.Domain.Payouts.PayoutBatch", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Rewards.RateCard", b =>
+                {
+                    b.Navigation("Versions");
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Rewards.RateCardVersion", b =>
+                {
+                    b.Navigation("Lines");
                 });
 
             modelBuilder.Entity("OptimizeAll.Domain.Rewards.RewardRuleSet", b =>

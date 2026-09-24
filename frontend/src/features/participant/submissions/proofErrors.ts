@@ -1,7 +1,7 @@
 import { mapFormErrors } from '../lib/formErrors';
 
 /** Form fields of the submit/resubmit forms (names match the multipart fields the API validates). */
-export const PROOF_FIELDS = ['socialAccountId', 'postUrl', 'postedAt', 'captionText', 'screenshot'] as const;
+export const PROOF_FIELDS = ['socialAccountId', 'postUrl', 'format', 'postedAt', 'captionText', 'screenshot'] as const;
 export type ProofField = (typeof PROOF_FIELDS)[number];
 
 /** Domain codes without field details, routed to the field the participant has to change. */
@@ -9,6 +9,7 @@ export const PROOF_CODE_TO_FIELD: Record<string, ProofField> = {
   'submission.duplicate_url': 'postUrl',
   'submission.invalid_url': 'postUrl',
   'submission.url_platform_mismatch': 'postUrl',
+  'submission.format_mismatch': 'format',
   'submission.posted_at_in_future': 'postedAt',
   'submission.posted_at_too_old': 'postedAt',
   'submission.social_account_invalid': 'socialAccountId',

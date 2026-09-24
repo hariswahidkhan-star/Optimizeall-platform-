@@ -10,6 +10,9 @@ export const Permissions = {
   CampaignsPublish: 'campaigns.publish',
   RewardsEdit: 'rewards.edit',
   RewardsApproveBonus: 'rewards.approve_bonus',
+  RatesView: 'rates.view',
+  RatesManage: 'rates.manage',
+  RatesAssign: 'rates.assign',
 
   SubmissionsReview: 'submissions.review',
   SubmissionsReverse: 'submissions.reverse',

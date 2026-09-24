@@ -32,4 +32,12 @@ describe('sidebar nav groups', () => {
       'Workspace',
     ]);
   });
+
+  it("keeps the manager portal's rate cards and groups in the Campaigns section", () => {
+    const sections = groupNav('manager', getPortal('manager').nav);
+    const campaigns = sections.find((s) => s.label === 'Campaigns');
+    expect(campaigns?.items.map((i) => i.to)).toEqual(
+      expect.arrayContaining(['campaigns', 'rate-cards', 'rate-groups']),
+    );
+  });
 });

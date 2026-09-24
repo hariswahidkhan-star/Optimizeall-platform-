@@ -33,6 +33,7 @@
 #                                           through send/pause/cancel, tracking, provider webhooks, public pages (Demo seed)
 #                           j-auth          authentication & security: registration, lockout, reset, sessions and refresh
 #                                           rotation, portal guards, impersonation, headers, rate limits, IDOR/XSS (Demo seed)
+#                           j-rates         person-level rates: rate cards, groups, personal deals, pricing (Demo seed)
 #                           j-edge          cross-cutting edge cases: time zones, currencies, lists at volume (Demo seed)
 #   E2E_SEED              comma-separated seed profiles (default: Baseline for journeys and j-participant,
 #                         Baseline,Demo for everything else)
