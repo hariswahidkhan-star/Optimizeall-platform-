@@ -1,6 +1,6 @@
 import clsx from 'clsx';
-import { Bell, ChevronsUpDown, LogOut, Menu, MoreHorizontal, UserRound } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { Bell, ChevronsUpDown, LogOut, Menu, MoreHorizontal, Search, UserRound } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { Logo } from '@/components/brand/Logo';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -14,9 +14,13 @@ import { PortalContext } from '../portalContext';
 import { accessiblePortals, getPortal } from '../portals';
 import type { PortalDefinition, PortalNavItem } from '../portalTypes';
 import { EmailVerificationBanner } from './EmailVerificationBanner';
+import { CommandPalette, useCommandPaletteShortcut } from './CommandPalette';
 import { ImpersonationBanner } from './ImpersonationBanner';
 import { NotificationSettingsDialog } from './NotificationSettingsDialog';
 import './PortalLayout.css';
+
+/** Portals whose staff get the global search / command palette (Ctrl/Cmd+K). */
+const PALETTE_PORTALS = new Set(['agency', 'admin']);
 
 function itemPath(portal: PortalDefinition, item: PortalNavItem): string {
   return item.to ? `${portal.basePath}/${item.to}` : portal.basePath;
@@ -64,6 +68,10 @@ export function PortalLayout({ portal }: { portal: PortalDefinition }) {
   const location = useLocation();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [notificationSettingsOpen, setNotificationSettingsOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  const hasPalette = PALETTE_PORTALS.has(portal.id);
+  const openPalette = useCallback(() => setPaletteOpen(true), []);
+  useCommandPaletteShortcut(hasPalette, openPalette);
   const mainRef = useRef<HTMLElement>(null);
   const firstRender = useRef(true);
 
@@ -199,6 +207,19 @@ export function PortalLayout({ portal }: { portal: PortalDefinition }) {
                 }
               />
             )}
+            {hasPalette && (
+              <button
+                type="button"
+                className="portal-search"
+                aria-keyshortcuts="Control+K Meta+K"
+                aria-haspopup="dialog"
+                onClick={openPalette}
+              >
+                <Search aria-hidden="true" />
+                <span className="portal-search__label">Search</span>
+                <kbd aria-hidden="true">Ctrl K</kbd>
+              </button>
+            )}
             <ThemeToggle />
             {user && (
               <DropdownMenu
@@ -224,6 +245,8 @@ export function PortalLayout({ portal }: { portal: PortalDefinition }) {
             <Outlet />
           </main>
         </div>
+
+        {hasPalette && <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />}
 
         <NotificationSettingsDialog
           open={notificationSettingsOpen}
