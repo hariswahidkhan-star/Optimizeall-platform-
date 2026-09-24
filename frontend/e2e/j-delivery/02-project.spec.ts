@@ -171,7 +171,8 @@ test('task drawer: fields, assignees, checklist, comments and attachments', asyn
   await drawer.getByLabel('New checklist item').fill('Export Search Console queries');
   await drawer.getByRole('button', { name: 'Add', exact: true }).click();
   const item = drawer.getByRole('checkbox', { name: 'Export Search Console queries' });
-  await item.check();
+  // The box reflects the saved state: it turns checked once the server confirms.
+  await item.click();
   await expect(item).toBeChecked();
 
   // Comment with a mention; edit it; delete a second one.

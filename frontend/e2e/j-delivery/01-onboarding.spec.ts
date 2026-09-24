@@ -316,7 +316,7 @@ test('the Owner sees the account team and manages colleagues; other duties canno
   for (const duty of ['Approver', 'Billing', 'Viewer'] as const) {
     const api = await login(clientUser(duty));
     expect(
-      await statusOf(api.post(`/client/orgs/${clientId}/members`, { email: `x.${duty}.${runId()}@e2e.optimizeall.test`, displayName: 'X', role: 'Viewer' })),
+      await statusOf(api.post(`/client/orgs/${clientId}/members`, { email: `x.${duty}.${runId()}@e2e.optimizeall.test`, displayName: 'Xavier Test', role: 'Viewer' })),
       `${duty} invites a colleague`,
     ).toBe(403);
   }

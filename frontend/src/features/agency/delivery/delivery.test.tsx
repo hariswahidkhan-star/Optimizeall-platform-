@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { matchRoutes } from 'react-router-dom';
 import { afterEach, describe, expect, it } from 'vitest';
 import { routes as appRoutes } from '@/app/router';
@@ -12,6 +12,7 @@ import fixture from '../shared/deliveryLinks.fixture.json';
 import { ReportView } from '../shared/ReportView';
 import { DashboardPage } from './DashboardPage';
 import { Kanban } from './Kanban';
+import type { TaskSummary } from '../shared/deliveryTypes';
 import { dashboard, DESIGNER_PERMISSIONS, mockStaffApi, report, task, timeEntry } from './testData';
 import { TaskDrawer } from './TaskDrawer';
 import { TimerWidget } from './TimerWidget';
@@ -75,6 +76,53 @@ describe('Kanban', () => {
     const move = calls.find((c) => c.path === '/agency/tasks/t1/move')!;
     expect(move.body).toEqual({ status: 'InProgress', afterTaskId: 't3', concurrencyStamp: 'stamp-1' });
     expect(await screen.findByText(/Moved Crawl the site to In progress/)).toBeInTheDocument();
+  });
+
+  /** The board as the project page renders it: tasks come from the query cache, so a move re-renders the card. */
+  function LiveKanban() {
+    const { data = [] } = useQuery<TaskSummary[]>({ queryKey: ['delivery', 'project', 'p1', 'tasks'], queryFn: () => [], staleTime: Infinity, enabled: false });
+    return <Kanban projectId="p1" tasks={data} canEdit onOpen={() => undefined} />;
+  }
+  function renderLiveKanban() {
+    const client = testQueryClient();
+    client.setQueryData(['delivery', 'project', 'p1', 'tasks'], [task({ id: 't1', title: 'Crawl the site' }), task({ id: 't3', title: 'Keyword review', status: 'InProgress' })]);
+    render(
+      <QueryClientProvider client={client}>
+        <LiveKanban />
+      </QueryClientProvider>,
+    );
+  }
+
+  it('keeps keyboard focus on the card after it moved to another column', async () => {
+    mockStaffApi({
+      'POST /agency/tasks/t1/move': (req) => json(200, task({ id: 't1', status: (req.body as { status: 'InProgress' }).status, sortOrder: 5000, concurrencyStamp: 'stamp-2' })),
+      'GET /agency/projects/p1/tasks': () => json(200, []),
+    });
+    renderLiveKanban();
+    const card = screen.getByRole('button', { name: 'Crawl the site' });
+    card.focus();
+    fireEvent.keyDown(card, { key: 'ArrowRight' });
+    const moved = await within(await screen.findByRole('list', { name: 'In progress tasks' })).findByRole('button', { name: 'Crawl the site' });
+    await waitFor(() => expect(moved).toHaveFocus());
+  });
+
+  it('two quick arrow presses move the card two columns, the second with the saved version', async () => {
+    let stamp = 1;
+    const { calls } = mockStaffApi({
+      'POST /agency/tasks/t1/move': (req) =>
+        json(200, task({ id: 't1', status: (req.body as { status: TaskSummary['status'] }).status, sortOrder: 5000 + stamp, concurrencyStamp: `stamp-${++stamp}` })),
+      'GET /agency/projects/p1/tasks': () => json(200, []),
+    });
+    renderLiveKanban();
+    const card = screen.getByRole('button', { name: 'Crawl the site' });
+    card.focus();
+    fireEvent.keyDown(card, { key: 'ArrowRight' });
+    fireEvent.keyDown(card, { key: 'ArrowRight' });
+    await waitFor(() => expect(calls.filter((c) => c.path === '/agency/tasks/t1/move')).toHaveLength(2));
+    const [first, second] = calls.filter((c) => c.path === '/agency/tasks/t1/move');
+    expect(first!.body).toMatchObject({ status: 'InProgress', concurrencyStamp: 'stamp-1' });
+    expect(second!.body).toMatchObject({ status: 'InReview', concurrencyStamp: 'stamp-2' });
+    expect(await screen.findByText(/Moved Crawl the site to In review/)).toBeInTheDocument();
   });
 
   it('reorders within a column with arrow up/down', async () => {
