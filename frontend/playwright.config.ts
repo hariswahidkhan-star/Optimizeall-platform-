@@ -30,6 +30,11 @@ import { defineConfig, devices } from '@playwright/test';
  * responsive.spec.ts, which the mobile project runs alone (390×844). Run it with
  * `E2E_SUITE=platform E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
  *
+ * The j-admin suite walks the platform-administration journey end to end (users, suspensions, built-in and custom
+ * roles with their guardrails, test accounts and "log in as", audit, settings, content, jobs, global search and the
+ * negative paths) against the Demo seed with the non-production test sign-in on. Serial, one worker, desktop project
+ * only. Run it with `E2E_SUITE=j-admin E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
+ *
  * The a11y suite (accessibility & responsive layout: axe WCAG 2.2 A/AA in the light and dark theme, no horizontal
  * scroll at 360/768/1280 px, keyboard and focus behaviour) runs against the Demo seed too. It never changes data, so
  * its tests run in parallel (two workers); each test sets its own viewport, so only the desktop project runs it. Run
@@ -43,8 +48,10 @@ import { defineConfig, devices } from '@playwright/test';
 const suite = process.env.E2E_SUITE ?? 'smoke';
 /** Suites whose mobile project runs only responsive.spec.ts (and whose desktop project runs everything else). */
 const responsiveSplit = suite === 'agency' || suite === 'platform';
+/** Journey suites that run on the desktop project only (admin work is done at a desk; phone layouts are a11y's job). */
+const desktopJourney = suite === 'j-admin';
 /** Full-stack suites share one database and build on earlier steps: serial, one worker, no retries. */
-const journeys = suite === 'journeys' || responsiveSplit;
+const journeys = suite === 'journeys' || responsiveSplit || desktopJourney;
 /** The crawl is read-only: roles run in parallel, desktop only. */
 const crawl = suite === 'crawl';
 const mobileOnly = responsiveSplit ? /responsive\.spec\.ts$/ : /participant\.spec\.ts$/;
@@ -77,7 +84,7 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
       ...(responsiveSplit ? { testIgnore: mobileOnly } : {}),
     },
-    ...(a11y || crawl
+    ...(a11y || crawl || desktopJourney
       ? []
       : [
           {
