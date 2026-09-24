@@ -144,17 +144,16 @@ test('negatives: no roles.manage → 403 in UI and API; stale stamps → 409; do
   const page = await as(agent, landing.participant);
   const errors = watchErrors(page);
   await page.goto('/admin');
-  await expect(
-    page
-      .getByRole('navigation', { name: 'Admin navigation' })
-      .getByRole('link', { name: 'Roles & permissions' }),
-  ).toHaveCount(0);
+  // Wait for the portal (the session is restored from the refresh cookie first), then check its navigation.
+  const adminNav = page.getByRole('navigation', { name: 'Admin navigation' });
+  await expect(adminNav.getByRole('link', { name: 'Support tickets' })).toBeVisible();
+  await expect(adminNav.getByRole('link', { name: 'Roles & permissions' })).toHaveCount(0);
   await page.goto('/admin/roles');
   await expect(page.getByRole('heading', { level: 1, name: FORBIDDEN })).toBeVisible();
   // On a user's page the custom roles are read-only, and no admin actions are offered.
   await page.goto(`/admin/users/${agent.id}`);
-  await expect(page.getByRole('region', { name: 'Custom roles' }).getByRole('checkbox')).toHaveCount(0);
   await expect(page.getByRole('region', { name: 'Custom roles' })).toContainText(`E2E support agents ${id}`);
+  await expect(page.getByRole('region', { name: 'Custom roles' }).getByRole('checkbox')).toHaveCount(0);
   for (const name of ['Suspend', 'Change roles', 'Change tier', 'Log in as'])
     await expect(page.getByRole('button', { name, exact: true })).toHaveCount(0);
   errors.expectClean('the support agent');
