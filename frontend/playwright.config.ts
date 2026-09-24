@@ -64,19 +64,27 @@ import { defineConfig, devices } from '@playwright/test';
  * a payout batch from preparation to reconciliation, the payments hub's incoming flows and the negative paths) against
  * the Demo seed. Its steps build on each other: serial, one worker, no retries, desktop only. Run it with
  * `E2E_SUITE=j-finance E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
+ *
+ * The j-lead-to-cash suite follows one business journey end to end against the Demo seed: an anonymous visitor's
+ * contact/audit/quote forms, consultation booking and newsletter double opt-in → the inquiry for staff → CRM contact,
+ * deal, score and pipeline → a proposal from a template with catalog lines and tax → the client accepts on /p/:token →
+ * client account and owner invitation → retainer contract → the recurring invoice job → /i/:token and the client
+ * portal → "I've paid" → finance confirms → paid; plus spam, replay, permission, tenancy and concurrency negatives. Its
+ * specs build on each other (serial, one worker, desktop only). Run it with
+ * `E2E_SUITE=j-lead-to-cash E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
  */
 const suite = process.env.E2E_SUITE ?? 'smoke';
 /** Suites whose mobile project runs only responsive.spec.ts (and whose desktop project runs everything else). */
 const responsiveSplit =
   suite === 'agency' || suite === 'platform' || suite === 'j-participant' || suite === 'j-delivery';
-/** Full-stack suites share one database and build on earlier steps: serial, one worker, no retries. */
 /**
  * Serial journeys run on desktop only: their screens are staff tools (campaign manager/reviewer, finance, admin…) whose
  * phone layouts are covered by the a11y and responsive specs.
  */
-const desktopJourney = ['j-campaigns', 'j-finance'].includes(suite);
+const desktopJourney = ['j-campaigns', 'j-finance', 'j-lead-to-cash'].includes(suite);
 /** The finance journey compares datetime-local input (browser time) with UTC periods, so its browser runs in UTC. */
 const finance = suite === 'j-finance';
+/** Full-stack suites share one database and build on earlier steps: serial, one worker, no retries. */
 const journeys = suite === 'journeys' || responsiveSplit || desktopJourney;
 /** The crawl is read-only: roles run in parallel, desktop only. */
 const crawl = suite === 'crawl';

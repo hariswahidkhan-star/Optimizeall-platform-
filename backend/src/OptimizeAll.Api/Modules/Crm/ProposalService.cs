@@ -32,6 +32,7 @@ public sealed class ProposalService(
     DocumentNumberService numbers,
     BillingSettingsService billingSettings,
     PublicLinkTokens tokens,
+    LeadScoringService scoring,
     TimeProvider clock,
     ILogger<ProposalService> logger)
 {
@@ -450,6 +451,10 @@ public sealed class ProposalService(
             .ExecuteUpdateAsync(s => s.SetProperty(x => x.Status, ProposalStatus.Viewed), ct);
         if (first == 1)
         {
+            // Lead scoring: the first view of each proposal is a "Proposal viewed" engagement of its contact.
+            if (p.ContactId is { } contactId &&
+                await scoring.RecordEngagementAsync(contactId, "proposal_viewed", $"proposal_viewed:{p.Id}", now, ct))
+                await scoring.RecomputeAsync(contactId, ct);
             var ownerId = p.DealId is { } d ? await db.Set<CrmDeal>().Where(x => x.Id == d).Select(x => x.OwnerUserId).FirstOrDefaultAsync(ct) : null;
             if ((ownerId ?? p.SentByUserId ?? p.CreatedByUserId) is { } notify)
             {

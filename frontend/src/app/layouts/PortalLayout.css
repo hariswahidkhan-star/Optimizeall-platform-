@@ -308,3 +308,68 @@
 .portal-bottom-nav__link:focus-visible {
   outline-offset: -4px;
 }
+
+/* ---------- Notifications (staff and client portals) ---------- */
+
+.portal-bell {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.portal-bell svg {
+  width: 20px;
+  height: 20px;
+}
+
+.portal-bell:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.portal-bell__count {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--danger-solid);
+  color: var(--color-on-danger);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
+
+.portal-inbox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.portal-inbox__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.portal-inbox__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.portal-inbox__item[data-unread='true'] .portal-inbox__title {
+  font-weight: 700;
+}

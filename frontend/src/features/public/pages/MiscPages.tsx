@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { MailCheck, MailX } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Alert, Button, ButtonLink, EmptyState, Input } from '@/components/ui';
 import { api } from '@/lib/api/client';
@@ -17,6 +17,14 @@ function NewsletterTokenPage({ action }: { action: 'confirm' | 'unsubscribe' }) 
   const mutation = useMutation({
     mutationFn: () => api.post<{ status: string; message: string }>(`/public/newsletter/${action}`, { token }),
   });
+  // The confirmation token is single-use: a double click must send it once (the second request would fail and replace
+  // "You're subscribed" with an error). The ref blocks the second click before React re-renders the button as busy.
+  const sent = useRef(false);
+  const send = () => {
+    if (sent.current) return;
+    sent.current = true;
+    mutation.mutate(undefined, { onError: () => (sent.current = false) });
+  };
   useDocumentHead({ title: action === 'confirm' ? 'Confirm your subscription' : 'Unsubscribe', noIndex: true });
 
   const title = action === 'confirm' ? 'Newsletter subscription' : 'Unsubscribe';
@@ -35,7 +43,7 @@ function NewsletterTokenPage({ action }: { action: 'confirm' | 'unsubscribe' }) 
                 ? 'Confirm that you want to receive our newsletter.'
                 : 'Unsubscribe this email address from our newsletter?'}
             </p>
-            <Button onClick={() => mutation.mutate()} loading={mutation.isPending}>
+            <Button onClick={send} loading={mutation.isPending}>
               {action === 'confirm' ? 'Confirm subscription' : 'Unsubscribe'}
             </Button>
           </div>

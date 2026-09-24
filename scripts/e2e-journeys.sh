@@ -24,6 +24,7 @@
 #                           j-delivery      client delivery through the client portal (Demo seed)
 #                           j-campaigns     campaign manager + reviewer (Demo seed)
 #                           j-finance       payouts and the payments hub (Demo seed)
+#                           j-lead-to-cash  website inquiry → CRM → proposal → contract → paid recurring invoice (Demo seed)
 #   E2E_SEED              comma-separated seed profiles (default: Baseline for journeys and j-participant,
 #                         Baseline,Demo for everything else)
 #   E2E_DB_PROVIDER=mysql mysql (default) or sqlite (a fresh file in $E2E_WORK_DIR; no MySQL server needed)

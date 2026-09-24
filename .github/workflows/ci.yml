@@ -262,6 +262,17 @@ jobs:
           E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-delivery
         run: scripts/e2e-journeys.sh
 
+      # Lead to cash, one business journey end to end: public website forms, booking and newsletter → inquiry → CRM →
+      # proposal → acceptance → client account → contract → recurring invoice → client payment report → paid, with its
+      # spam/replay/permission/tenancy/concurrency negatives. Demo seed, SQLite.
+      - name: Lead-to-cash journey (scripts/e2e-journeys.sh, E2E_SUITE=j-lead-to-cash, SQLite)
+        env:
+          E2E_SUITE: j-lead-to-cash
+          E2E_DB_PROVIDER: sqlite
+          E2E_SKIP_BUILD: "1"
+          E2E_WORK_DIR: ${{ runner.temp }}/e2e-lead-to-cash
+        run: scripts/e2e-journeys.sh
+
       # Accessibility & responsive audit (docs/ACCESSIBILITY.md): every portal's representative pages at 360/768/1280 px
       # with axe (WCAG 2.2 A/AA, light and dark contrast) and no horizontal scroll, plus keyboard/focus behaviour.
       - name: Accessibility audit (scripts/e2e-journeys.sh, E2E_SUITE=a11y, SQLite)
@@ -354,6 +365,8 @@ jobs:
             ${{ runner.temp }}/e2e-j-campaigns/web.log
             ${{ runner.temp }}/e2e-j-finance/api.log
             ${{ runner.temp }}/e2e-j-finance/web.log
+            ${{ runner.temp }}/e2e-lead-to-cash/api.log
+            ${{ runner.temp }}/e2e-lead-to-cash/web.log
             ${{ runner.temp }}/web-smoke.log
           retention-days: 7
           if-no-files-found: ignore
