@@ -194,6 +194,21 @@ export interface RewardLine {
   label: string;
 }
 
+/** Where the post rate came from; `label` names the card/group only for staff with rates.view. */
+export interface RateSource {
+  level: string;
+  levelLabel: string;
+  label: string;
+  campaignRateAmount: number;
+  personalAmount: number | null;
+  limited: boolean;
+  ignoredReason: string | null;
+  cardAmount: number | null;
+  cardCurrency: string | null;
+  exchangeRate: number | null;
+  validTo: string | null;
+}
+
 export interface RewardQuote {
   ruleSetId: string | null;
   ruleSetVersion: number | null;
@@ -202,6 +217,7 @@ export interface RewardQuote {
   total: number;
   appliedCaps: string[];
   ruleSetSummary: string;
+  rateSource?: RateSource | null;
 }
 
 export interface ReviewEarning {

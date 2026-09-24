@@ -2,7 +2,7 @@
 
 export interface SettingMeta {
   label: string;
-  group: 'Eligibility' | 'Fraud & review' | 'Retention' | 'Growth';
+  group: 'Eligibility' | 'Fraud & review' | 'Rates' | 'Retention' | 'Growth';
   /** Inclusive range for integer settings (the server enforces the same). */
   range?: [number, number];
   unit?: string;
@@ -56,6 +56,14 @@ export const SETTING_META: Record<string, SettingMeta> = {
     range: [1, 365],
     unit: 'days',
     impact: 'How long after a decision participants can appeal. Applies to decisions made from now on.',
+  },
+  'rates.fourEyesIncreasePercent': {
+    label: 'Four-eyes threshold for rate increases',
+    group: 'Rates',
+    range: [0, 1000],
+    unit: '%',
+    impact:
+      'A new rate card version that raises any rate by more than this percentage waits for approval by a second person before it prices posts. 0 turns the check off.',
   },
   'retention.inactivityDays': {
     label: 'Inactivity threshold',

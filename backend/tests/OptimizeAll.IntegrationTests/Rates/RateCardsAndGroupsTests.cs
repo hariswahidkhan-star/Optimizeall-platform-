@@ -476,15 +476,20 @@ public sealed class RateCardsAndGroupsTests(ApiFactory api) : IClassFixture<ApiF
         await kit.AddExchangeRateAsync("BHD", "USD", 2.65m);
         await AssignAsync(manager, bhd, p.User.Id, campaignId: campaign.Id);
 
-        // Publishing a draft campaign whose applicable rates can't be converted is refused.
-        var omr = Id(await CardAsync(manager, currency: "OMR", lines: new[] { Line(3m) }));
+        // Publishing a draft campaign whose applicable rates can't be converted is refused: here the draft's reward
+        // currency changes to QAR after a USD card was assigned to it.
+        var usd = Id(await CardAsync(manager, lines: new[] { Line(3m) }));
         var draft = await kit.CampaignAsync(manager, currency: "USD", publish: false);
         var q = await kit.Campaigns.ParticipantAsync();
-        await AssignAsync(manager, omr, q.User.Id, campaignId: draft.Id);
+        await AssignAsync(manager, usd, q.User.Id, campaignId: draft.Id);
+        await (await manager.PostAsJsonAsync($"/api/v1/admin/campaigns/{draft.Id}/reward-rules", new
+        {
+            currency = "QAR", rules = new[] { new { type = "BaseRate", amount = 20m } }, reason = "Qatar launch pricing", confirm = true,
+        })).ReadJsonAsync();
         await (await manager.PostAsync($"/api/v1/admin/campaigns/{draft.Id}/publish", null)).ShouldFailAsync(409, "rates.fx_missing");
         var panel = await (await manager.GetAsync($"/api/v1/admin/campaigns/{draft.Id}/rates")).ReadJsonAsync();
-        Assert.Contains("OMR→USD", panel.GetProperty("fxProblems").EnumerateArray().Select(x => x.GetString()));
-        await kit.AddExchangeRateAsync("OMR", "USD", 2.6m);
+        Assert.Contains("USD→QAR", panel.GetProperty("fxProblems").EnumerateArray().Select(x => x.GetString()));
+        await kit.AddExchangeRateAsync("QAR", "USD", 0.2747m);
         await (await manager.PostAsync($"/api/v1/admin/campaigns/{draft.Id}/publish", null)).ReadJsonAsync();
     }
 }

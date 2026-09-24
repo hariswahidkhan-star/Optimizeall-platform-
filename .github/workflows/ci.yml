@@ -364,6 +364,18 @@ jobs:
           E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-social
         run: scripts/e2e-journeys.sh
 
+      # Person-level pricing journey: a rate card and a rate group (bulk add), the card assigned to the group, an
+      # expiring personal deal with "explain this rate", participants seeing only their own rate, submit → approve →
+      # ledger rate source, a new card version (old earnings unchanged), four-eyes on a large raise and the deal's
+      # expiry. Baseline + Demo, SQLite.
+      - name: Person-level rates journey (scripts/e2e-journeys.sh, E2E_SUITE=j-rates, SQLite)
+        env:
+          E2E_SUITE: j-rates
+          E2E_DB_PROVIDER: sqlite
+          E2E_SKIP_BUILD: "1"
+          E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-rates
+        run: scripts/e2e-journeys.sh
+
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v4
@@ -407,6 +419,8 @@ jobs:
             ${{ runner.temp }}/e2e-j-content/web.log
             ${{ runner.temp }}/e2e-j-social/api.log
             ${{ runner.temp }}/e2e-j-social/web.log
+            ${{ runner.temp }}/e2e-j-rates/api.log
+            ${{ runner.temp }}/e2e-j-rates/web.log
             ${{ runner.temp }}/web-smoke.log
           retention-days: 7
           if-no-files-found: ignore

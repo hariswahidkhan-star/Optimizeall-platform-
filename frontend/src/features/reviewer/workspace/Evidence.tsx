@@ -492,7 +492,37 @@ export function RewardQuoteView({ quote, title = 'Reward preview' }: { quote: Re
           </ul>
         </Alert>
       )}
+      {quote.rateSource && <RateSourceNote source={quote.rateSource} currency={quote.currency} />}
       <p className="text-small text-muted">{quote.ruleSetSummary}</p>
+    </div>
+  );
+}
+
+/** Which rate applies: the campaign rules, or the person-level rate locked when the post was submitted. */
+function RateSourceNote({ source, currency }: { source: NonNullable<RewardQuote['rateSource']>; currency: string }) {
+  const personal = source.level !== 'CampaignRules';
+  return (
+    <div className="rv-rate-source" role="group" aria-label="Rate that applies">
+      <span className="cluster rv-cluster-sm">
+        <Badge size="sm" tone={personal ? 'brand' : 'neutral'}>
+          {personal ? 'Person-level rate' : 'Campaign rate'}
+        </Badge>
+        <span className="text-small">{source.label}</span>
+      </span>
+      {personal && (
+        <span className="text-small text-muted">
+          Locked at submission
+          {source.cardAmount !== null && source.cardCurrency && source.cardCurrency !== currency && (
+            <>
+              {' '}
+              · <Money amount={source.cardAmount} currency={source.cardCurrency} /> at {source.exchangeRate}
+            </>
+          )}
+          {' '}· campaign rate would be <Money amount={source.campaignRateAmount} currency={currency} />
+          {source.limited && ' · limited by the campaign’s maximum multiplier'}
+        </span>
+      )}
+      {source.ignoredReason && <span className="text-small text-muted">{source.ignoredReason}</span>}
     </div>
   );
 }

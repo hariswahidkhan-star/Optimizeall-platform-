@@ -8,6 +8,7 @@ import { pluralize } from '@/lib/format/text';
 import type { CampaignCard as CampaignCardData } from '../api/types';
 import { EligibilityBadge } from './Badges';
 import { PlatformList } from './Platform';
+import { YourRateInline } from './YourRate';
 
 export interface CampaignCardProps {
   campaign: CampaignCardData;
@@ -60,6 +61,12 @@ export function CampaignCard({ campaign, reason, headingLevel = 3 }: CampaignCar
                 </>
               ) : (
                 <span className="text-muted">Reward to be announced</span>
+              )}
+              {campaign.yourRate && (
+                <>
+                  <br />
+                  <YourRateInline rate={campaign.yourRate} />
+                </>
               )}
             </dd>
           </div>

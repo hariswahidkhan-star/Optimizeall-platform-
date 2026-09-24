@@ -88,6 +88,12 @@ import { defineConfig, devices } from '@playwright/test';
  * portal → "I've paid" → finance confirms → paid; plus spam, replay, permission, tenancy and concurrency negatives. Its
  * specs build on each other (serial, one worker, desktop only). Run it with
  * `E2E_SUITE=j-lead-to-cash E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
+ *
+ * The j-rates suite walks person-level pricing end to end (a rate card and a rate group with bulk-added members, the
+ * card assigned to the group, an expiring personal deal with "explain this rate", participants seeing only their own
+ * rate, submit → approve → ledger rate source, a new card version that leaves approved earnings unchanged, four-eyes on
+ * a large raise and the deal's expiry). Serial, one worker, desktop only, against Baseline + Demo:
+ * `E2E_SUITE=j-rates E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
  */
 const suite = process.env.E2E_SUITE ?? 'smoke';
 /** Suites whose mobile project runs only responsive.spec.ts (and whose desktop project runs everything else). */
@@ -104,6 +110,7 @@ const desktopJourney = [
   'j-admin',
   'j-content',
   'j-social',
+  'j-rates',
 ].includes(suite);
 /** The finance journey compares datetime-local input (browser time) with UTC periods, so its browser runs in UTC. */
 const finance = suite === 'j-finance';

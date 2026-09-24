@@ -225,6 +225,19 @@ export interface CardReward {
   hasBonuses: boolean;
 }
 
+/**
+ * The signed-in participant's own person-level rate in a campaign (a personal deal or a special group rate).
+ * Never names the card or group. Null when the campaign's own rates apply.
+ */
+export interface YourRate {
+  currency: string;
+  minAmount: number;
+  maxAmount: number;
+  kind: 'Personal' | 'Special';
+  validTo: IsoDateTime | null;
+  entries: { platform: SocialPlatform; format: string | null; amount: number }[];
+}
+
 export interface CampaignCard {
   id: string;
   slug: string;
@@ -243,6 +256,7 @@ export interface CampaignCard {
   eligibility: { isEligible: boolean; reasons: Reason[] };
   mySubmissionCount: number;
   remainingSubmissions: number;
+  yourRate?: YourRate | null;
 }
 
 export interface RecommendedCampaign {
@@ -340,6 +354,7 @@ export interface CampaignDetail {
   remainingSubmissions: number;
   /** The campaign has a tracking destination, so participants can get a personal tracking link. */
   trackingEnabled: boolean;
+  yourRate?: YourRate | null;
 }
 
 export type CampaignSort = 'deadline' | 'reward' | 'newest';
@@ -460,6 +475,10 @@ export interface SubmissionDetail {
   appealDeadline: IsoDateTime | null;
   /** Whether the participant can still withdraw it (not decided yet). */
   canWithdraw: boolean;
+  /** Content format (declared or read from the link); null when unknown. */
+  format?: string | null;
+  /** "Personal" / "Special" when the participant's own rate priced it (locked at submission); null = campaign rate. */
+  rateKind?: 'Personal' | 'Special' | null;
 }
 
 // ---------------------------------------------------------------- Ledger & payouts

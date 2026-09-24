@@ -23,6 +23,13 @@ import { mapProofErrors, PROOF_FIELDS, type ProofField } from '../submissions/pr
 
 export const SCREENSHOT_MAX_BYTES = 10 * 1024 * 1024;
 const URL_RE = /^https?:\/\/\S+\.\S+/i;
+const POST_FORMATS = [
+  { value: 'Post', label: 'Feed post' },
+  { value: 'Carousel', label: 'Carousel' },
+  { value: 'Story', label: 'Story' },
+  { value: 'ShortVideo', label: 'Reel / Short / TikTok video' },
+  { value: 'LongVideo', label: 'Long video' },
+];
 /** The API accepts up to 10 minutes of clock skew. */
 const FUTURE_TOLERANCE_MS = 10 * 60_000;
 
@@ -48,6 +55,7 @@ export function SubmitProofDialog({ open, onClose, campaign, experimentVariantId
 
   const [accountId, setAccountId] = useState(eligible.length === 1 ? eligible[0]!.socialAccountId : '');
   const [postUrl, setPostUrl] = useState('');
+  const [format, setFormat] = useState('');
   const [postedAt, setPostedAt] = useState(() => utcToZonedLocal(new Date(), zone));
   const [caption, setCaption] = useState('');
   const [screenshot, setScreenshot] = useState<File | null>(null);
@@ -107,6 +115,7 @@ export function SubmitProofDialog({ open, onClose, campaign, experimentVariantId
     form.append('socialAccountId', accountId);
     form.append('platform', account!.platform);
     form.append('postUrl', postUrl.trim());
+    if (format) form.append('format', format);
     form.append('postedAt', zonedLocalToUtcIso(postedAt, zone)!);
     if (caption.trim()) form.append('captionText', caption.trim());
     if (experimentVariantId) form.append('experimentVariantId', experimentVariantId);
@@ -200,6 +209,28 @@ export function SubmitProofDialog({ open, onClose, campaign, experimentVariantId
             onChange={(e) => {
               setPostUrl(e.target.value);
               clearFieldError('postUrl');
+            }}
+          />
+        </FormField>
+
+        <FormField
+          id="proof-format"
+          label="Type of post"
+          optional
+          error={errorFor('format')}
+          hint={
+            campaign.yourRate
+              ? 'Your rate can depend on the type of post. Leave blank to detect it from the link.'
+              : 'Leave blank to detect it from the link.'
+          }
+        >
+          <Select
+            value={format}
+            placeholder="Detect from the link"
+            options={POST_FORMATS}
+            onChange={(e) => {
+              setFormat(e.target.value);
+              clearFieldError('format');
             }}
           />
         </FormField>

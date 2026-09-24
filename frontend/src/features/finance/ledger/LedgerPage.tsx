@@ -80,6 +80,12 @@ function LedgerDetail({ row }: { row: LedgerRow }) {
           value: <Money amount={row.settlementAmount} currency={row.settlementCurrency} colored />,
         },
         { label: 'Rule version', value: row.ruleSetVersion ?? '—' },
+        {
+          label: 'Rate source',
+          value: row.rateSource
+            ? `${row.rateSourceLabel ?? humanize(row.rateSource)}${row.rateSource === 'CampaignRules' ? '' : ' — locked at submission'}`
+            : '—',
+        },
         { label: 'Created', value: <DateTime value={row.createdAt} /> },
         { label: 'Approved', value: <DateTime value={row.approvedAt} /> },
         { label: 'Available for payout', value: <DateTime value={row.availableAt} /> },
@@ -184,6 +190,7 @@ export function LedgerPage() {
         <span className="fin-stack">
           <span>{r.description}</span>
           {r.campaign && <Muted>{r.campaign.title}</Muted>}
+          {r.rateSource && r.rateSource !== 'CampaignRules' && <Muted>Rate: {r.rateSourceLabel ?? r.rateSource}</Muted>}
         </span>
       ),
       hideOnMobile: true,

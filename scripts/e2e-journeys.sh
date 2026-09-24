@@ -29,6 +29,7 @@
 #                           j-social        social media + paid ads; publishes through a local Graph/X API stub that
 #                                           the suite's global setup serves on $E2E_STUB_PORT (Demo seed)
 #                           j-lead-to-cash  website inquiry → CRM → proposal → contract → paid recurring invoice (Demo seed)
+#                           j-rates         person-level rates: rate cards, groups, personal deals, pricing (Demo seed)
 #   E2E_SEED              comma-separated seed profiles (default: Baseline for journeys and j-participant,
 #                         Baseline,Demo for everything else)
 #   E2E_DB_PROVIDER=mysql mysql (default) or sqlite (a fresh file in $E2E_WORK_DIR; no MySQL server needed)

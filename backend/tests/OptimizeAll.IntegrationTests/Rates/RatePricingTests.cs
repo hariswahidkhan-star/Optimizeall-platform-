@@ -118,7 +118,9 @@ public sealed class RatePricingTests(ApiFactory api) : IClassFixture<ApiFactory>
 
         var explain = await (await manager.GetAsync($"/api/v1/admin/users/{p.User.Id}/rates/explain?platform=Instagram&campaignId={campaign.Id}")).ReadJsonAsync();
         Assert.Equal("CampaignGroup", explain.GetProperty("winner").GetString());
-        var candidates = explain.GetProperty("candidates").EnumerateArray().ToList();
+        // (Automatic groups of other tests show up as "not applicable" candidates; only the three that apply rank.)
+        var candidates = explain.GetProperty("candidates").EnumerateArray()
+            .Where(c => c.GetProperty("outcome").GetString() != "NotApplicable").ToList();
         Assert.Equal(3, candidates.Count);
         Assert.Equal("Won", candidates[0].GetProperty("outcome").GetString());
         Assert.All(candidates.Skip(1), c => Assert.Equal("Outranked", c.GetProperty("outcome").GetString()));
@@ -154,14 +156,14 @@ public sealed class RatePricingTests(ApiFactory api) : IClassFixture<ApiFactory>
         var group = await GroupAsync(manager);
         await AddMembersAsync(manager, Id(group), p.User.Id);
         await AssignAsync(manager, Id(card), groupId: Id(group));
-        var deal = await CustomRateAsync(manager, p.User.Id, new[] { Line(15m) }, validTo: kit.Now.AddHours(2));
+        var deal = await CustomRateAsync(manager, p.User.Id, new[] { Line(15m) }, validTo: kit.Now.AddMinutes(2));
 
         var locked = await C.SubmitOkAsync(p, campaign.Id); // deal (15) applies
         Assert.Equal(15m, await kit.EstimateAsync(p.Client, locked));
         var viaGroup = await C.SubmitOkAsync(p, campaign.Id, postedAt: kit.Now.AddMinutes(-5));
 
         // Everything changes before approval: the deal expires, a new card version, the person leaves the group.
-        api.Clock.Advance(TimeSpan.FromHours(3));
+        api.Clock.Advance(TimeSpan.FromMinutes(3));
         await PostVersionAsync(manager, Id(card), new[] { Line(11m) });
         await (await manager.PostAsJsonAsync($"/api/v1/admin/rate-groups/{Id(group)}/members/remove",
             new { userIds = new[] { p.User.Id }, reason = "Moved out" })).ReadJsonAsync();
@@ -173,7 +175,8 @@ public sealed class RatePricingTests(ApiFactory api) : IClassFixture<ApiFactory>
         Assert.Equal(15m, (await kit.PostRewardAsync(viaGroup)).Amount);
 
         // A new submission is priced with today's rates: no deal, no group → campaign rate.
-        var fresh = await SubmitAndApproveAsync(p, campaign.Id, reviewer);
+        var fresh = await C.SubmitOkAsync(p, campaign.Id, postedAt: kit.Now);
+        await (await CampaignTestKit.DecideAsync(reviewer, fresh, "Approve")).ReadJsonAsync();
         Assert.Equal(5m, (await kit.PostRewardAsync(fresh)).Amount);
         Assert.Equal(RateSourceLevel.CampaignRules, (await kit.PostRewardAsync(fresh)).RateSource);
 
@@ -208,7 +211,7 @@ public sealed class RatePricingTests(ApiFactory api) : IClassFixture<ApiFactory>
         await kit.AddExchangeRateAsync("KWD", "USD", 3.25m);
         var (manager, campaign, p, reviewer) = await SetupAsync(5m);
         var gbp = await CardAsync(manager, currency: "GBP", lines: new[] { Line(8.99m) });
-        await AssignAsync(manager, Id(gbp), p.User.Id);
+        await AssignAsync(manager, Id(gbp), p.User.Id, campaignId: campaign.Id);
         var id = await SubmitAndApproveAsync(p, campaign.Id, reviewer);
         var snap = (await kit.SnapshotAsync(id))!;
         Assert.Equal("GBP", snap.CardCurrency);
