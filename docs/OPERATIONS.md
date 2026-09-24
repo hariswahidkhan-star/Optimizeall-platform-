@@ -22,6 +22,7 @@ a second run cannot duplicate effects. A failed run is simply retried on the nex
 | `LiveCheckReminderJob` | 1 h | Reminds reviewers/participants about posts that must stay live for the hold period | Missed live-check reminders |
 | `PayoutPreparationJob` | 15 min | Prepares the draft payout batch when a payout period closes (idempotent per period) | No draft batch; finance can prepare manually |
 | `ReferralExpiryJob` | 1 h | Expires referral rewards whose qualification window has passed | Referrals stay pending longer |
+| `DataRetentionJob` | 1 h | Housekeeping: deletes old `job_runs`, read/old `notifications` (+ their deliveries), expired tokens and — only when configured — raw tracking events, in batches (section `DataRetention`, see [DATABASE.md § Retention](DATABASE.md#retention)) | Tables grow until the next run; nothing is lost |
 | `RetentionJob` | 1 h | Engagement automations: onboarding reminders, new-campaign alerts, reactivation (deduplicated per user/kind; setting `retention.enabled`) | Fewer engagement messages; nothing financial |
 
 The run-log name of a job (`job_runs.JobName`) is the job's `Name` and may differ slightly from the class name
@@ -215,9 +216,12 @@ database with keys from a different backup makes encrypted payout destinations u
 | Support tickets | 24 months after closure. |
 | Backups | 14–35 days rolling, plus monthly archives per policy. Deleted data persists in backups until they expire — state this in the privacy policy. |
 
-`RetentionJob` is the **engagement** automation (reminders/alerts), not data deletion. Until automated purge
-jobs exist, run approved clean-up SQL on a schedule for technical tables (`job_runs`, `notification_deliveries`,
-expired tokens) in small batches, e.g.
-`DELETE FROM job_runs WHERE StartedAt < UTC_TIMESTAMP() - INTERVAL 90 DAY AND Status <> 'Running' LIMIT 5000;`.
+`RetentionJob` is the **engagement** automation (reminders/alerts), not data deletion. Technical tables are purged
+automatically by `DataRetentionJob` (hourly, small batches) with the periods in the `DataRetention` configuration
+section: `job_runs` 30 days, read notifications 180 days, all notifications 365 days (never while an e-mail/WhatsApp
+copy is still queued), expired refresh/verification tokens 30 days after expiry; raw `tracking_clicks` and
+`landing_page_views` only when `DataRetention__TrackingEventDays` is set (e.g. `395` for 13 months). Set a value to
+`0` to keep those rows, or `DataRetention__Enabled=false` to switch the job off. Settings and index details:
+[DATABASE.md](DATABASE.md).
 Account deletion requests: suspend/anonymize the user (name, email, phone, social handles, payout details)
 while keeping financial and audit records required by law; document each request.

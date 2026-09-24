@@ -11,7 +11,7 @@ using OptimizeAll.Infrastructure.Persistence;
 namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260924023347_InitialCreate")]
+    [Migration("20260924152635_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -4760,6 +4760,8 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
                     b.HasIndex("ProviderMessageId");
 
+                    b.HasIndex("CampaignId", "SentAt");
+
                     b.HasIndex("CampaignId", "SubscriberId")
                         .IsUnique();
 
@@ -5670,6 +5672,8 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClientAccountId");
+
+                    b.HasIndex("ScopeKey", "CreatedAt");
 
                     b.HasIndex("ScopeKey", "NormalizedEmail")
                         .IsUnique();
@@ -6606,6 +6610,10 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("StartedAt");
+
+                    b.HasIndex("JobName", "StartedAt");
+
                     b.HasIndex("Status", "StartedAt");
 
                     b.HasIndex("JobName", "RunKey", "Attempt")
@@ -6904,13 +6912,15 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientAccountId");
-
                     b.HasIndex("EventPublishedAt");
+
+                    b.HasIndex("ClientAccountId", "SubmittedAt");
 
                     b.HasIndex("FormId", "Status");
 
                     b.HasIndex("FormId", "SubmittedAt");
+
+                    b.HasIndex("IpHash", "SubmittedAt");
 
                     b.HasIndex("LandingPageId", "SubmittedAt");
 
@@ -7302,11 +7312,11 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientAccountId");
+                    b.HasIndex("ClientAccountId", "ViewedAt");
 
                     b.HasIndex("PageId", "ViewedAt");
 
-                    b.HasIndex("PageId", "VisitorHash");
+                    b.HasIndex("PageId", "VisitorHash", "ViewedAt");
 
                     b.ToTable("landing_page_views", (string)null);
                 });
@@ -7916,6 +7926,8 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClickedAt");
+
                     b.HasIndex("TrackingLinkId", "ClickedAt");
 
                     b.HasIndex("TrackingLinkId", "VisitorHash");
@@ -8087,6 +8099,10 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Type", "CreatedAt");
+
+                    b.HasIndex("UserId", "CreatedAt");
 
                     b.HasIndex("UserId", "ReadAt", "CreatedAt");
 
@@ -9807,6 +9823,8 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClientAccountId", "CreatedAt");
+
                     b.HasIndex("ThreadId", "CreatedAt");
 
                     b.ToTable("thread_messages", (string)null);
@@ -9884,6 +9902,8 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Date");
 
                     b.HasIndex("RunningUserId")
                         .IsUnique();
@@ -12635,13 +12655,21 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
                     b.HasIndex("SocialAccountId");
 
+                    b.HasIndex("SubmittedAt");
+
                     b.HasIndex("CampaignId", "Status");
 
-                    b.HasIndex("LiveCheckStatus", "LiveCheckDueAt");
+                    b.HasIndex("ClaimedByUserId", "ClaimExpiresAt");
+
+                    b.HasIndex("Status", "DecidedAt");
 
                     b.HasIndex("Status", "SubmittedAt");
 
                     b.HasIndex("UserId", "CampaignId");
+
+                    b.HasIndex("UserId", "SubmittedAt");
+
+                    b.HasIndex("LiveCheckStatus", "Status", "LiveCheckDueAt");
 
                     b.ToTable("submissions", (string)null);
                 });
@@ -12681,6 +12709,8 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ActorUserId", "CreatedAt");
 
                     b.HasIndex("SubmissionId", "CreatedAt");
 
