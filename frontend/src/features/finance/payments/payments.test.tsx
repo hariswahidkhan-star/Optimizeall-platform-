@@ -209,6 +209,14 @@ describe('Payments hub page', () => {
     expect(hubActions(record({ actions: [] }))).toEqual([]);
     expect(hubActions(payout).find((a) => a.id === 'mark_payout_failed')?.danger).toBe(true);
   });
+
+  it('offers "mark the whole batch paid" on a payout awaiting payment (the bulk-transfer dialog is reachable)', () => {
+    const batch = hubActions(payout).find((a) => a.id === 'mark_batch_paid');
+    expect(batch?.label).toBe('Mark batch PB-2026-09-20 paid');
+    expect(batch?.state).toEqual({ type: 'batchPaid', batchId: 'b1', batchReference: 'PB-2026-09-20' });
+    // Only when the caller may record payouts and the item still awaits payment.
+    expect(hubActions({ ...payout, actions: [] }).find((a) => a.id === 'mark_batch_paid')).toBeUndefined();
+  });
 });
 
 describe('Payment dialogs', () => {

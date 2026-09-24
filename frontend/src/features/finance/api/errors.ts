@@ -11,8 +11,6 @@ export const FINANCE_ERROR_MESSAGES: Record<string, string> = {
   'concurrency.conflict':
     'Someone else changed this while you were looking at it. Refresh to see the latest version, then try again.',
   'request.confirm_required': 'This action needs an explicit confirmation. Please confirm and try again.',
-  'auth.impersonation_forbidden_action':
-    'This can’t be done while you are viewing as another user. Exit “view as” and use your own account.',
   'user.not_found': 'We couldn’t find that user. Check the user id.',
   'submission.not_found': 'We couldn’t find that submission.',
   'supportticket.not_found': 'We couldn’t find that support ticket.',
