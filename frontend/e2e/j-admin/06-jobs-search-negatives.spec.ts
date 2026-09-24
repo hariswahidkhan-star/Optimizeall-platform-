@@ -119,8 +119,10 @@ test('negatives: no roles.manage → 403 in UI and API; stale stamps → 409; do
   // A support agent (users.view + support.manage, no roles.manage).
   const agent = await arrangeTestUser(`E2E support agent ${id}`);
   await arrangeRole(`E2E support ${id}`, ['users.view', 'support.manage'], [agent.id]);
-  const page = await as(agent, landing.admin);
+  // Also a participant: lands in the participant app and opens the admin portal from there.
+  const page = await as(agent, landing.participant);
   const errors = watchErrors(page);
+  await page.goto('/admin');
   await expect(page.getByRole('navigation', { name: 'Admin navigation' }).getByRole('link', { name: 'Roles & permissions' })).toHaveCount(0);
   await page.goto('/admin/roles');
   await expect(page.getByRole('heading', { level: 1, name: FORBIDDEN })).toBeVisible();
@@ -132,10 +134,10 @@ test('negatives: no roles.manage → 403 in UI and API; stale stamps → 409; do
     await expect(page.getByRole('button', { name, exact: true })).toHaveCount(0);
   errors.expectClean('the support agent');
   const agentApi = await ApiSession.login(agent.email, agent.password);
-  expect(await codeOf(agentApi.get('/admin/roles'))).toMatch(/^403 /);
-  expect(await codeOf(agentApi.post('/admin/roles', { name: `x ${id}`, permissions: ['users.view'] }))).toMatch(/^403 /);
-  expect(await codeOf(agentApi.put(`/admin/users/${agent.id}/roles`, { roles: ['Admin'], reason: 'escalate', confirm: true }))).toMatch(/^403 /);
-  expect(await codeOf(agentApi.post('/admin/test-users', { roles: ['Participant'] }))).toMatch(/^403 /);
+  expect(await codeOf(agentApi.get('/admin/roles'))).toMatch(/^403\b/);
+  expect(await codeOf(agentApi.post('/admin/roles', { name: `x ${id}`, permissions: ['users.view'] }))).toMatch(/^403\b/);
+  expect(await codeOf(agentApi.put(`/admin/users/${agent.id}/roles`, { roles: ['Admin'], reason: 'escalate', confirm: true }))).toMatch(/^403\b/);
+  expect(await codeOf(agentApi.post('/admin/test-users', { roles: ['Participant'] }))).toMatch(/^403\b/);
   expect(await statusOf(agentApi.get('/admin/users'))).toBe(200);
 
   // Stale concurrency stamp on a custom role: the second editor is refused with 409 in the dialog.
@@ -161,7 +163,7 @@ test('negatives: no roles.manage → 403 in UI and API; stale stamps → 409; do
     await codeOf(
       api.put(`/admin/roles/${role.id}`, { name: role.name, permissions: ['crm.view'], concurrencyStamp: role.concurrencyStamp }),
     ),
-  ).toMatch(/^409 /);
+  ).toMatch(/^409\b/);
   await editor.getByRole('button', { name: 'Cancel' }).click();
 
   // Double submit: a double-clicked "Create role" makes exactly one role.
@@ -191,12 +193,12 @@ test('negatives: no roles.manage → 403 in UI and API; stale stamps → 409; do
   await bad.getByRole('button', { name: 'Create role' }).click();
   await expect(bad.getByText('This name belongs to a built-in role.')).toBeVisible();
   await bad.getByRole('button', { name: 'Cancel' }).click();
-  expect(await codeOf(api.post('/admin/roles', { name: 'y'.repeat(81), permissions: ['crm.view'] }))).toMatch(/^400 /);
+  expect(await codeOf(api.post('/admin/roles', { name: 'y'.repeat(81), permissions: ['crm.view'] }))).toMatch(/^400\b/);
   expect(await codeOf(api.post('/admin/roles', { name: 'y'.repeat(80), permissions: ['crm.view'] }))).toBeUndefined();
   // Reasons: 2 characters are refused, 500 accepted, 501 refused.
   const target = await arrangeTestUser(`E2E reasons ${id}`);
-  expect(await codeOf(api.put(`/admin/users/${target.id}/tier`, { tier: 'Gold', reason: 'ab' }))).toMatch(/^400 /);
-  expect(await codeOf(api.put(`/admin/users/${target.id}/tier`, { tier: 'Gold', reason: 'r'.repeat(501) }))).toMatch(/^400 /);
+  expect(await codeOf(api.put(`/admin/users/${target.id}/tier`, { tier: 'Gold', reason: 'ab' }))).toMatch(/^400\b/);
+  expect(await codeOf(api.put(`/admin/users/${target.id}/tier`, { tier: 'Gold', reason: 'r'.repeat(501) }))).toMatch(/^400\b/);
   expect(await codeOf(api.put(`/admin/users/${target.id}/tier`, { tier: 'Gold', reason: 'r'.repeat(500) }))).toBeUndefined();
   adminErrors.expectClean('negative paths as the admin');
 });

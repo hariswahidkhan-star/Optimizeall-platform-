@@ -72,7 +72,7 @@ test('settings: edit with a reason, boundary values refused, restore the default
   const api = await adminApi();
   expect(
     await codeOf(api.put('/admin/settings/review.claimMinutes', { value: 241, reason: 'E2E out of range', confirm: true })),
-  ).toMatch(/^400 /);
+  ).toMatch(/^400\b/);
 
   // Restore the default (reason required).
   const resetReason = `E2E ${id}: back to normal`;
@@ -128,7 +128,7 @@ test('portal texts: the help centre headline changes on the public FAQ page, the
         changes: [{ key: 'faq.hero.title', value: 'x'.repeat(301), concurrencyStamp: entry.concurrencyStamp }],
       }),
     ),
-  ).toMatch(/^400 /);
+  ).toMatch(/^400\b/);
   // A stale stamp is refused with 409.
   expect(
     await codeOf(

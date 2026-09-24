@@ -96,7 +96,10 @@ const PORTAL_CASES = [
   {
     key: 'support',
     permissions: ['support.manage', 'users.view'],
-    landing: /\/admin(\/|$)/,
+    // Admin-portal landing is reserved for settings/content managers; this holder is also a participant, so they land in
+    // the participant app and open the admin portal from there.
+    landing: /\/app(\/|$)/,
+    open: '/admin',
     nav: 'Admin navigation',
     links: ['Overview', 'Users', 'Support tickets'],
     forbidden: '/admin/settings',
@@ -153,6 +156,7 @@ for (const c of PORTAL_CASES) {
 
     const user = await as(person, c.landing);
     const userErrors = watchErrors(user);
+    if ('open' in c) await user.goto(c.open);
     const nav = portalNav(user, c.nav);
     await expect(nav.getByRole('link').first()).toBeVisible();
     expect(await linkNames(nav)).toEqual([...c.links]);
@@ -282,17 +286,17 @@ test('a delegated role manager manages what they hold but can’t escalate', asy
       }),
     ),
   ).toMatch(/^403 roles\.(admin_only_permission|cannot_grant_unheld)$/);
-  expect(await codeOf(api.put(`/admin/roles/${mgr.id}/users/${colleague.id}`))).toMatch(/^403 /);
-  expect(await codeOf(api.put(`/admin/roles/${adminOnlyRole.id}/users/${delegate.id}`))).toMatch(/^403 /);
+  expect(await codeOf(api.put(`/admin/roles/${mgr.id}/users/${colleague.id}`))).toMatch(/^403\b/);
+  expect(await codeOf(api.put(`/admin/roles/${adminOnlyRole.id}/users/${delegate.id}`))).toMatch(/^403\b/);
   expect(
     await codeOf(api.put(`/admin/users/${colleague.id}/roles`, { roles: ['Admin'], reason: 'escalate', confirm: true })),
-  ).toMatch(/^403 /);
+  ).toMatch(/^403\b/);
   expect(
     await codeOf(api.put(`/admin/users/${delegate.id}/roles`, { roles: ['Admin'], reason: 'escalate', confirm: true })),
-  ).toMatch(/^403 /);
-  expect(await codeOf(api.put('/admin/settings/eligibility.minFollowers', { value: 1, reason: 'escalate', confirm: true }))).toMatch(/^403 /);
-  expect(await codeOf(api.post(`/admin/users/${colleague.id}/suspend`, { reason: 'escalate', confirm: true }))).toMatch(/^403 /);
-  expect(await codeOf(api.delete(`/admin/roles/${adminOnlyRole.id}`))).toMatch(/^403 /);
+  ).toMatch(/^403\b/);
+  expect(await codeOf(api.put('/admin/settings/eligibility.minFollowers', { value: 1, reason: 'escalate', confirm: true }))).toMatch(/^403\b/);
+  expect(await codeOf(api.post(`/admin/users/${colleague.id}/suspend`, { reason: 'escalate', confirm: true }))).toMatch(/^403\b/);
+  expect(await codeOf(api.delete(`/admin/roles/${adminOnlyRole.id}`))).toMatch(/^403\b/);
   // Nothing changed for them: still exactly the permissions of their roles.
   const me = await api.get<{ permissions: string[] }>('/auth/me');
   expect(me.permissions).not.toContain('settings.manage');
