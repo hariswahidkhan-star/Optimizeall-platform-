@@ -245,14 +245,18 @@ services
     .AddSeedModule(config);
 
 // ---------- HTTP ----------
-services.AddControllers()
+services.AddControllers(o => o.ModelValidatorProviders.Add(new RequestValueValidatorProvider())) // sane dates, no null list items
     .AddJsonOptions(o =>
     {
         // Strings or defined numbers; undefined enum values are a 400 (see DefinedEnumJsonConverterFactory).
-        o.JsonSerializerOptions.Converters.Add(new OptimizeAll.Api.Common.Http.DefinedEnumJsonConverterFactory());
+        o.JsonSerializerOptions.Converters.Add(new DefinedEnumJsonConverterFactory());
         o.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
+        // Malformed JSON is reported per field ("$.amount": "The input was not valid.") without the serializer's message,
+        // which names internal CLR types ("could not be converted to OptimizeAll.Api.Modules.…").
+        o.AllowInputFormatterExceptionMessages = false;
     });
-services.AddProblemDetails();
+// Every problem response (framework ones included: model validation, 404/405/415, authorization) carries `code` and `traceId`.
+services.AddProblemDetails(o => o.CustomizeProblemDetails = ProblemDefaults.Apply);
 services.AddExceptionHandler<ProblemExceptionHandler>();
 services.AddHealthChecks().AddDbContextCheck<AppDbContext>("database", tags: new[] { "ready" });
 // X-Forwarded-* is only honoured from trusted reverse proxies (Hosting:TrustedProxies / Hosting:TrustedNetworks,
@@ -298,6 +302,8 @@ var app = builder.Build();
 
 app.UseForwardedHeaders();
 app.UseExceptionHandler();
+// Bodiless error statuses (unmatched routes, 401/403 from authorization, 405, 413, 415) are written as RFC 7807 problems.
+app.UseStatusCodePages();
 app.UseSecurityHeaders();
 if (!app.Environment.IsDevelopment()) app.UseHsts();
 

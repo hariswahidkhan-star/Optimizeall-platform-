@@ -509,6 +509,7 @@ public sealed class SocialAnalyticsController(
     /// Allowed with reports.manage or social.manage.
     /// </summary>
     [HttpGet("clients/{clientId:guid}/kpis")]
+    [RequireAnyPermission(Permissions.ReportsManage, Permissions.SocialManage)]
     public async Task<SocialKpisDto> Kpis(Guid clientId, [FromQuery] DateOnly? from, [FromQuery] DateOnly? to, CancellationToken ct)
     {
         if (!currentUser.HasPermission(Permissions.ReportsManage) && !currentUser.HasPermission(Permissions.SocialManage))

@@ -20,7 +20,8 @@ public class PageQuery
 
     public bool Desc { get; set; } = true;
 
-    public int Skip => (Page - 1) * PageSize;
+    /// <summary>Rows before the page, computed in 64 bits: page 2147483647 must not wrap to a negative offset (a MySQL syntax error).</summary>
+    public int Skip => (int)Math.Min(int.MaxValue, (Page - 1L) * PageSize);
 }
 
 public sealed record PagedResult<T>(IReadOnlyList<T> Items, int Total, int Page, int PageSize)

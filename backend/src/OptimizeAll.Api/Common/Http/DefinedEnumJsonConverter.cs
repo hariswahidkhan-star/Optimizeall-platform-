@@ -25,6 +25,7 @@ public sealed class DefinedEnumJsonConverterFactory : JsonConverterFactory
     private sealed class DefinedEnumConverter<T>(JsonConverter<T> inner) : JsonConverter<T> where T : struct, Enum
     {
         private static readonly bool IsFlags = typeof(T).IsDefined(typeof(FlagsAttribute), inherit: false);
+        private static readonly ulong AllFlags = Enum.GetValues<T>().Aggregate(0UL, (acc, v) => acc | Convert.ToUInt64(v));
 
         public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
             Check(inner.Read(ref reader, typeToConvert, options));
@@ -37,7 +38,8 @@ public sealed class DefinedEnumJsonConverterFactory : JsonConverterFactory
         public override void WriteAsPropertyName(Utf8JsonWriter writer, T value, JsonSerializerOptions options) =>
             inner.WriteAsPropertyName(writer, value, options);
 
-        private static T Check(T value) => IsFlags || Enum.IsDefined(value)
+        // [Flags] enums accept any combination of defined bits; other enums only defined members.
+        private static T Check(T value) => (IsFlags ? (Convert.ToUInt64(value) & ~AllFlags) == 0 : Enum.IsDefined(value))
             ? value
             : throw new JsonException($"'{value}' is not one of the values of {typeof(T).Name}.");
     }

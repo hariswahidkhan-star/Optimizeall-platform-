@@ -140,7 +140,7 @@ public sealed class CompetitorSnapshotInput
 {
     [Required] public DateOnly? Date { get; set; }
     [Range(0, long.MaxValue)] public long Followers { get; set; }
-    [Range(0, 1)] public decimal? EngagementRate { get; set; }
+    [Range(typeof(decimal), "0", "1")] public decimal? EngagementRate { get; set; }
     [Range(0, 10000)] public int? PostsLast30Days { get; set; }
     public MetricSource Source { get; set; } = MetricSource.Manual;
 }

@@ -95,10 +95,11 @@ public sealed class AgencyProjectsController(ProjectService projects, TaskServic
     /// <summary>Time logged on the project (time.view_all).</summary>
     [HttpGet("{id:guid}/time")]
     [HasPermission(Permissions.TimeViewAll)]
-    public Task<IReadOnlyList<TimeEntryDto>> Time(Guid id, [FromQuery] DateOnly? from, [FromQuery] DateOnly? to, CancellationToken ct)
+    public async Task<IReadOnlyList<TimeEntryDto>> Time(Guid id, [FromQuery] DateOnly? from, [FromQuery] DateOnly? to, CancellationToken ct)
     {
+        await projects.LoadAsync(id, ct); // unknown (or out-of-scope) project: 404, not an empty list
         var end = to ?? DateOnly.FromDateTime(DateTime.UtcNow).AddDays(1);
-        return time.ListAsync(new TimeEntryQuery { ProjectId = id, From = from ?? end.AddDays(-365), To = end }, ct);
+        return await time.ListAsync(new TimeEntryQuery { ProjectId = id, From = from ?? end.AddDays(-365), To = end }, ct);
     }
 }
 
@@ -524,7 +525,8 @@ public sealed class AgencyCommunicationController(CommunicationService communica
 [HasPermission(Permissions.ClientPortal)]
 [Route("api/v1/client/orgs/{clientId:guid}")]
 public sealed class ClientPortalDeliveryController(
-    ClientPortalService portal, DeliverableService deliverables, ReportService reports, CommunicationService communication, ProjectService projects)
+    ClientPortalService portal, DeliverableService deliverables, ReportService reports, CommunicationService communication, ProjectService projects,
+    IClientScope scope)
     : ControllerBase
 {
     [HttpGet("home")]
@@ -564,7 +566,11 @@ public sealed class ClientPortalDeliveryController(
     public Task<ReportDto> Report(Guid clientId, Guid id, CancellationToken ct) => reports.ClientGetAsync(clientId, id, ct);
 
     [HttpGet("brief-templates")]
-    public Task<IReadOnlyList<BriefTemplateDto>> BriefTemplates(Guid clientId, CancellationToken ct) => projects.BriefTemplatesAsync(ct);
+    public async Task<IReadOnlyList<BriefTemplateDto>> BriefTemplates(Guid clientId, CancellationToken ct)
+    {
+        await scope.EnsureAccessAsync(clientId, ct: ct); // another organization's route answers 404 like every sibling endpoint
+        return await projects.BriefTemplatesAsync(ct);
+    }
 
     [HttpGet("briefs")]
     public Task<IReadOnlyList<BriefDto>> Briefs(Guid clientId, CancellationToken ct) => communication.BriefsAsync(clientId, null, ct);

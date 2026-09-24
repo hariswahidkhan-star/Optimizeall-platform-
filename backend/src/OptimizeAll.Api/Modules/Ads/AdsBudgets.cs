@@ -26,8 +26,8 @@ public sealed class BudgetInput
     [Required, StringLength(3, MinimumLength = 3)] public string Currency { get; set; } = "USD";
     [Range(1.0, 5.0)] public decimal OverPacingThreshold { get; set; } = 1.15m;
     [Range(0.0, 1.0)] public decimal UnderPacingThreshold { get; set; } = 0.85m;
-    [Range(0, 1_000_000)] public decimal? TargetCpa { get; set; }
-    [Range(0, 1000)] public decimal? TargetRoas { get; set; }
+    [Range(typeof(decimal), "0", "1000000")] public decimal? TargetCpa { get; set; }
+    [Range(typeof(decimal), "0", "1000")] public decimal? TargetRoas { get; set; }
     [MaxLength(1000)] public string? Notes { get; set; }
     public Guid? ConcurrencyStamp { get; set; }
 }

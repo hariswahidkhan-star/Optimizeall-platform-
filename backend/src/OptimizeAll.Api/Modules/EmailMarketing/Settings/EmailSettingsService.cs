@@ -35,8 +35,8 @@ public sealed class WorkspaceSettingsRequest
     /// <summary>SMS settings (need sms.manage to change).</summary>
     [Range(0, 23)] public int QuietHoursStart { get; set; } = 21;
     [Range(0, 23)] public int QuietHoursEnd { get; set; } = 8;
-    [Range(0, 10)] public decimal SmsCostPerSegment { get; set; }
-    [Range(0, 10)] public decimal WhatsAppCostPerMessage { get; set; }
+    [Range(typeof(decimal), "0", "10")] public decimal SmsCostPerSegment { get; set; }
+    [Range(typeof(decimal), "0", "10")] public decimal WhatsAppCostPerMessage { get; set; }
     [MaxLength(3)] public string? CostCurrency { get; set; }
     public Guid? ConcurrencyStamp { get; set; }
 }

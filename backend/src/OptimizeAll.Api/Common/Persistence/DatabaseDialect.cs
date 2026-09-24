@@ -78,6 +78,25 @@ public static class DatabaseErrors
                                   sqlite.SqliteExtendedErrorCode is SqliteConstraintUnique or SqliteConstraintPrimaryKey,
         _ => false,
     };
+
+    /// <summary>SQLITE_BUSY (5) / SQLITE_LOCKED (6): the write lock was not granted within the busy timeout.</summary>
+    private const int SqliteBusy = 5, SqliteLocked = 6;
+
+    /// <summary>
+    /// True when the exception (or one it wraps, e.g. EF's "transient failure" InvalidOperationException around a
+    /// DbUpdateException) is a lock conflict between concurrent transactions: an InnoDB deadlock (1213) or lock-wait timeout
+    /// (1205) on MySQL, a busy/locked database on SQLite. The transaction was rolled back; the request may be retried.
+    /// </summary>
+    public static bool IsLockConflict(Exception? ex)
+    {
+        for (var e = ex; e is not null; e = e.InnerException)
+        {
+            if (e is MySqlConnector.MySqlException { ErrorCode: MySqlConnector.MySqlErrorCode.LockDeadlock or MySqlConnector.MySqlErrorCode.LockWaitTimeout })
+                return true;
+            if (e is SqliteException { SqliteErrorCode: SqliteBusy or SqliteLocked }) return true;
+        }
+        return false;
+    }
 }
 
 public static class DatabaseDialects

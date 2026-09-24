@@ -57,7 +57,7 @@ public sealed class UpdatePayoutScheduleRequest
     [Range(0, 30)]
     public int PaymentDelayDays { get; set; }
 
-    [Range(0, 100_000)]
+    [Range(typeof(decimal), "0", "100000")]
     public decimal MinimumPayoutAmount { get; set; }
 
     [Required, StringLength(3, MinimumLength = 3)]

@@ -18,7 +18,7 @@ public sealed class ConversionRequest
     [Required, MaxLength(254)] public string Email { get; set; } = string.Empty;
     /// <summary>Order id; conversions are idempotent per workspace + reference.</summary>
     [Required, MaxLength(150)] public string ExternalReference { get; set; } = string.Empty;
-    [Range(0, 1_000_000_000)] public decimal? Value { get; set; }
+    [Range(typeof(decimal), "0", "1000000000")] public decimal? Value { get; set; }
     [MaxLength(3)] public string? Currency { get; set; }
     public DateTime? OccurredAt { get; set; }
 }
