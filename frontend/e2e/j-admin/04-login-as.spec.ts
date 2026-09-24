@@ -109,14 +109,20 @@ test('log in as a user: banner on every page type, blocked actions, exit, audit'
   await expect(admin.getByRole('button', { name: `Account menu for ${DEMO_ADMIN_NAME}` })).toBeVisible();
   expect((await rawApi('GET', '/auth/me', token)).status).toBe(401);
   // Exiting twice is harmless: the second call answers with the admin's own session.
-  const again = await admin.evaluate(async () => {
+  // (Sent from the page with its cookies and the admin's current access token, as the app does.)
+  await admin.getByRole('heading', { level: 1, name: 'Users' }).waitFor();
+  await admin.reload();
+  await expect(admin.getByRole('heading', { level: 1, name: 'Users' })).toBeVisible();
+  const adminToken = bearer.current();
+  expect(adminToken).not.toBe(token);
+  const again = await admin.evaluate(async (bearerToken) => {
     const res = await fetch('/api/v1/auth/impersonation/exit', {
       method: 'POST',
-      headers: { 'X-Requested-With': 'fetch' },
+      headers: { 'X-Requested-With': 'fetch', Authorization: `Bearer ${bearerToken}` },
       credentials: 'include',
     });
     return { status: res.status, email: ((await res.json()) as { user?: { email?: string } }).user?.email };
-  });
+  }, adminToken);
   expect(again).toEqual({ status: 200, email: accounts.admin.email });
   await admin.reload();
   await expect(banner).toHaveCount(0);
@@ -165,6 +171,7 @@ test('who can’t be impersonated, and a suspended impersonator’s session stop
   // A second admin logs in as someone; suspending that admin ends the impersonation on its next request.
   const target = await arrangeTestUser(`E2E viewed by second admin ${id}`);
   const second = await as(otherAdmin, landing.admin);
+  const secondBearer = trackBearer(second);
   await second.goto(`/admin/users/${target.id}`);
   await second.getByRole('button', { name: 'Log in as' }).click();
   const confirm = modal(second, `Log in as ${target.displayName}?`);
@@ -173,9 +180,14 @@ test('who can’t be impersonated, and a suspended impersonator’s session stop
   await confirm.getByRole('button', { name: 'Log in as user' }).click();
   await expect(second).toHaveURL(landing.participant);
   await expect(impersonationBanner(second)).toBeVisible();
+  const impersonationToken = secondBearer.current();
+  expect((await rawApi('GET', '/auth/me', impersonationToken)).status).toBe(200);
 
   await api.post(`/admin/users/${otherAdmin.id}/suspend`, { reason: `E2E ${id}: suspend the impersonator`, confirm: true });
-  await second.getByRole('link', { name: 'Earnings' }).first().click();
+  // The impersonation token is refused on its very next use, and the open page ends up on the sign-in page (its next
+  // request — a background refresh or the navigation below — is refused and cannot be resumed).
+  expect((await rawApi('GET', '/auth/me', impersonationToken)).status).toBe(401);
+  await second.goto('/app/earnings');
   await expect(second).toHaveURL(/\/login/);
   await expect(impersonationBanner(second)).toHaveCount(0);
   // Nothing left to resume: a reload stays signed out.
