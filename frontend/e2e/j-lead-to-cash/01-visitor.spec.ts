@@ -25,7 +25,7 @@ import {
 test.describe.configure({ mode: 'serial' });
 
 /** Waits until the form token the page fetched on mount is old enough, then clicks `submit`. */
-async function submitWhenFilled(page: Page, token: { minFillSeconds: number; issuedAt: number }, submit: () => Promise<void>) {
+async function submitWhenFilled(token: { minFillSeconds: number; issuedAt: number }, submit: () => Promise<void>) {
   await expect
     .poll(() => Date.now() - token.issuedAt, { message: 'form token older than the minimum fill time' })
     .toBeGreaterThanOrEqual(token.minFillSeconds * 1000 + 250);
@@ -87,7 +87,7 @@ test('the visitor browses the site and sends the contact, audit and quote forms'
     await contact.getByRole('button', { name: 'Send message' }).click();
     await expect(contact.getByText('That was quick! Please check your answers and send the form again.')).toBeVisible();
   }
-  await submitWhenFilled(visitor, contactToken, () => contact.getByRole('button', { name: 'Send message' }).click());
+  await submitWhenFilled(contactToken, () => contact.getByRole('button', { name: 'Send message' }).click());
   await expect(visitor.getByRole('heading', { name: 'Thanks — message received' })).toBeVisible();
   const contactRef = (await visitor.getByText(/^Your reference: OA-/).textContent())!.replace('Your reference: ', '').trim();
 
@@ -102,7 +102,7 @@ test('the visitor browses the site and sends the contact, audit and quote forms'
   await audit.getByLabel('What are your goals?').fill('Rank for our top 20 commercial keywords');
   await audit.getByLabel('Monthly marketing budget').selectOption({ label: '$3,000 – $10,000 / month' });
   await audit.getByRole('checkbox', { name: /^I agree that Optimize All may use/ }).check();
-  await submitWhenFilled(visitor, auditToken, () => audit.getByRole('button', { name: 'Request my free audit' }).click());
+  await submitWhenFilled(auditToken, () => audit.getByRole('button', { name: 'Request my free audit' }).click());
   await expect(visitor.getByRole('heading', { name: 'Your audit request is in' })).toBeVisible();
 
   // ---------------------------------------------------------------- quote for a pricing package (3 steps)
@@ -123,7 +123,7 @@ test('the visitor browses the site and sends the contact, audit and quote forms'
   await visitor.getByLabel('Work email').fill(lead.email);
   await visitor.getByLabel('Company').fill(lead.company);
   await visitor.getByRole('checkbox', { name: /^I agree that Optimize All may use/ }).check();
-  await submitWhenFilled(visitor, quoteToken, () => visitor.getByRole('button', { name: 'Request my quote' }).click());
+  await submitWhenFilled(quoteToken, () => visitor.getByRole('button', { name: 'Request my quote' }).click());
   await expect(visitor.getByRole('heading', { name: 'Quote request received' })).toBeVisible();
 
   errors.expectClean('the public website forms');
@@ -175,7 +175,7 @@ test('the visitor books a consultation; a second visitor racing for the same slo
   const secondForm = await fill(second, `Rival ${runId()}`, `rival.${runId()}@othercorp-${runId()}.test`);
 
   // The first visitor books it.
-  await submitWhenFilled(first, firstToken, () => firstForm.getByRole('button', { name: /^Book / }).click());
+  await submitWhenFilled(firstToken, () => firstForm.getByRole('button', { name: /^Book / }).click());
   await expect(first.getByRole('heading', { name: 'See you soon' })).toBeVisible();
   await expect(first.getByText(/^Your call is on /)).toBeVisible();
   const confirmation = await latestMail(lead.email, /consultation/i);
@@ -184,7 +184,7 @@ test('the visitor books a consultation; a second visitor racing for the same slo
   // The second visitor, still looking at the stale slot list, loses the race: 409, the list refreshes, the slot is gone.
   secondErrors.ignore(/HTTP 409 POST .*\/public\/consultations$/);
   const refreshed = second.waitForResponse((r) => r.url().includes('/api/v1/public/consultations/slots') && r.ok());
-  await submitWhenFilled(second, secondToken, () => secondForm.getByRole('button', { name: /^Book / }).click());
+  await submitWhenFilled(secondToken, () => secondForm.getByRole('button', { name: /^Book / }).click());
   await expect(second.getByRole('status', { name: 'That time was just taken' })).toBeVisible();
   await refreshed;
   await expect(secondForm.getByRole('button', { name: 'Book my call' })).toBeVisible(); // the selection was cleared
