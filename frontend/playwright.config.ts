@@ -39,12 +39,22 @@ import { defineConfig, devices } from '@playwright/test';
  * calls, error boundaries and pages without an h1. It never saves anything, so its roles run in parallel
  * (E2E_CRAWL_WORKERS, default 2) on desktop only. Run it with `E2E_SUITE=crawl E2E_DB_PROVIDER=sqlite
  * scripts/e2e-journeys.sh`; each role's visited pages, empty states and findings land in test-results/crawl/.
+ *
+ * The j-lead-to-cash suite follows one business journey end to end against the Demo seed: an anonymous visitor's
+ * contact/audit/quote forms, consultation booking and newsletter double opt-in → the inquiry for staff → CRM contact,
+ * deal, score and pipeline → a proposal from a template with catalog lines and tax → the client accepts on /p/:token →
+ * client account and owner invitation → retainer contract → the recurring invoice job → /i/:token and the client
+ * portal → "I've paid" → finance confirms → paid; plus spam, replay, permission, tenancy and concurrency negatives. Its
+ * specs build on each other (serial, one worker, desktop only). Run it with
+ * `E2E_SUITE=j-lead-to-cash E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
  */
 const suite = process.env.E2E_SUITE ?? 'smoke';
 /** Suites whose mobile project runs only responsive.spec.ts (and whose desktop project runs everything else). */
 const responsiveSplit = suite === 'agency' || suite === 'platform';
+/** Journey suites that run on the desktop project only. */
+const desktopJourney = suite === 'j-lead-to-cash';
 /** Full-stack suites share one database and build on earlier steps: serial, one worker, no retries. */
-const journeys = suite === 'journeys' || responsiveSplit;
+const journeys = suite === 'journeys' || responsiveSplit || desktopJourney;
 /** The crawl is read-only: roles run in parallel, desktop only. */
 const crawl = suite === 'crawl';
 const mobileOnly = responsiveSplit ? /responsive\.spec\.ts$/ : /participant\.spec\.ts$/;
@@ -77,7 +87,7 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
       ...(responsiveSplit ? { testIgnore: mobileOnly } : {}),
     },
-    ...(a11y || crawl
+    ...(a11y || crawl || desktopJourney
       ? []
       : [
           {

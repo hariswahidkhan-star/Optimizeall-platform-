@@ -17,10 +17,11 @@
 #                         "agency" (agency platform journeys against the Demo seed's accounts and clients),
 #                         "platform" (test users, login-as, custom roles, payments hub, editing, Google sign-in off;
 #                         Demo seed), "a11y" (accessibility & responsive audit of every portal; Demo seed,
-#                         read-only) or "crawl" (every role walks every page and the public website; Demo seed,
-#                         read-only)
+#                         read-only), "crawl" (every role walks every page and the public website; Demo seed,
+#                         read-only) or "j-lead-to-cash" (one business journey from an anonymous visitor's inquiry to
+#                         a paid recurring invoice, with its negatives; Demo seed)
 #   E2E_SEED              comma-separated seed profiles (default: Baseline for journeys, Baseline,Demo for agency,
-#                         platform, a11y and crawl)
+#                         platform, a11y, crawl and j-lead-to-cash)
 #   E2E_DB_PROVIDER=mysql mysql (default) or sqlite (a fresh file in $E2E_WORK_DIR; no MySQL server needed)
 #   DB_HOST/DB_PORT/DB_USER/DB_PASSWORD   MySQL server (defaults: 127.0.0.1:3306 optimizeall/optimizeall_dev);
 #                                         the user must be able to CREATE/DROP databases
@@ -44,7 +45,7 @@ ADMIN_EMAIL="${E2E_ADMIN_EMAIL:-e2e-admin@optimizeall.test}"
 ADMIN_PASSWORD="${E2E_ADMIN_PASSWORD:-E2e-Admin#Journey-2026}"
 E2E_SUITE="${E2E_SUITE:-journeys}"
 case "$E2E_SUITE" in
-  agency|platform|a11y|crawl) E2E_SEED="${E2E_SEED:-Baseline,Demo}" ;;
+  agency|platform|a11y|crawl|j-lead-to-cash) E2E_SEED="${E2E_SEED:-Baseline,Demo}" ;;
   *) E2E_SEED="${E2E_SEED:-Baseline}" ;;
 esac
 E2E_DB_PROVIDER="$(printf '%s' "${E2E_DB_PROVIDER:-mysql}" | tr '[:upper:]' '[:lower:]')"
