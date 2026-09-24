@@ -21,6 +21,10 @@ public sealed class ProblemExceptionHandler(ILogger<ProblemExceptionHandler> log
                 "This record was changed by someone else. Reload and try again.", null),
             DbUpdateException due when IsUniqueViolation(due) => (StatusCodes.Status409Conflict, "db.duplicate",
                 "A record with the same unique value already exists.", null),
+            // Two requests writing the same rows at once (InnoDB deadlock / lock-wait timeout, SQLite busy): the
+            // transaction was rolled back, so the caller may simply retry.
+            _ when Persistence.DatabaseErrors.IsLockConflict(exception) => (StatusCodes.Status409Conflict, "concurrency.conflict",
+                "This record was being changed by another request at the same time. Try again.", null),
             OperationCanceledException when httpContext.RequestAborted.IsCancellationRequested =>
                 (499, "request.cancelled", "The request was cancelled.", null),
             BadHttpRequestException bre => (bre.StatusCode, "request.invalid", "The request could not be read.", null),

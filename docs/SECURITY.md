@@ -92,7 +92,10 @@ caller). Built-in role grants are audited and require `roles.assign`; custom rol
 **Default deny.** The authorization `FallbackPolicy` requires an authenticated user, so an endpoint without any
 attribute is never public by accident. Only these endpoints carry an explicit `[AllowAnonymous]` (asserted by
 `IntegrationTests/Auth/DefaultDenyTests`, which also sends an anonymous request to every other endpoint and expects
-`401`):
+`401`; `IntegrationTests/Contract/PermissionContractTests` additionally calls every endpoint as every built-in role and
+client duty and requires exactly the outcome its `[HasPermission]`/`[RequireAnyPermission]` metadata implies, and
+`TenancyContractTests` names each client's records as the other client's users and requires a rejection (404), never
+their data):
 
 * auth: `POST /auth/register|login|refresh|logout|verify-email|resend-verification|forgot-password|reset-password`,
   Google sign-in `GET /auth/providers`, `POST /auth/google/start|callback|complete` (`/auth/me`,

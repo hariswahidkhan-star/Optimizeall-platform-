@@ -62,6 +62,16 @@ Modules talk to each other through:
 * JSON is camelCase; enums serialize as strings; timestamps are UTC ISO-8601 (`...Z`).
 * Validation: DataAnnotations on request DTOs (automatic 400) plus business checks throwing
   `DomainException(code, message, kind)`. The global handler maps it to RFC 7807 with `code` and `traceId`.
+  Every other problem gets them too (`ProblemDefaults`: `validation_failed` for field errors, else `http_<status>`;
+  bodiless 401/403/404/405/415 answers are written as problems by the status-code pages). Rules every request value
+  obeys without per-DTO attributes: undefined enum values (`"platform": 999`) are a 400 (`DefinedEnumJsonConverter`);
+  dates outside 1900–2200, `null` list items (unless the item type is nullable) and a missing `[Required] JsonElement`
+  are 400s (`RequestValueValidatorProvider`); JSON errors never echo serializer messages. On decimal/long properties use
+  `[Range(typeof(decimal), "0", "1000")]`, never the Int32 overload (it throws on large values; guarded by a test).
+  Authorize in metadata, not in the handler: "any of" checks use `[RequireAnyPermission]`.
+* API contract suite (`IntegrationTests/Contract`, run with `--filter FullyQualifiedName~Contract`): enumerates every
+  endpoint and checks each built-in role against its permission metadata, a hostile-input matrix (never a 5xx, 4xx are
+  problems) against unknown and existing records, and cross-tenant access. New endpoints are covered automatically.
 * Optimistic concurrency: entities implementing `IConcurrencyStamped` get a new `ConcurrencyStamp` on each
   update. Mutating staff endpoints accept the stamp the client last saw and reject stale writes with 409.
 * Race-sensitive transitions (claiming a submission, deciding it, recording a payment, including earnings

@@ -147,6 +147,14 @@ public static class HostileCases
             var sample = Samples.Scalar(element ?? qp.Type, qp.Name);
             var dup = Samples.Query(others.Append((qp.Name, sample)).Append((qp.Name, sample)));
             yield return new Case($"query {qp.Name} duplicated", () => DefaultWith(Req(path, dup)));
+            if (qp.Name.Equals("pageSize", StringComparison.OrdinalIgnoreCase) &&
+                e.Query.FirstOrDefault(p => p.Name.Equals("page", StringComparison.OrdinalIgnoreCase)) is { } pageParam)
+            {
+                // (2147483647 - 1) * 20 wraps to -40 in 32-bit arithmetic: a negative OFFSET is a MySQL syntax error.
+                var last = Samples.Query(others.Where(o => !o.Name.Equals(pageParam.Name, StringComparison.OrdinalIgnoreCase))
+                    .Append((pageParam.Name, "2147483647")).Append((qp.Name, "20")));
+                yield return new Case("query page=max&pageSize=20", () => DefaultWith(Req(path, last)));
+            }
             if (qp.Name.Equals("pageSize", StringComparison.OrdinalIgnoreCase))
             {
                 var big = Samples.Query(others.Append((qp.Name, "100000")));

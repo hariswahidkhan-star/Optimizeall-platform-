@@ -28,6 +28,9 @@ public sealed class NotificationListQuery
 
     [Range(1, 100)]
     public int PageSize { get; set; } = 20;
+
+    /// <summary>Rows before the page, computed in 64 bits so a huge page number cannot wrap to a negative offset.</summary>
+    public int Skip => (int)Math.Min(int.MaxValue, (Page - 1L) * PageSize);
 }
 
 public sealed record UnreadCountDto(int Count);
@@ -212,7 +215,7 @@ public sealed class NotificationCenterService(
         if (query.UnreadOnly) q = q.Where(n => n.ReadAt == null);
         var total = await q.CountAsync(ct);
         var items = await q.OrderByDescending(n => n.CreatedAt).ThenByDescending(n => n.Id)
-            .Skip((query.Page - 1) * query.PageSize).Take(query.PageSize)
+            .Skip(query.Skip).Take(query.PageSize)
             .Select(n => new NotificationDto(n.Id, n.Type, n.Title, n.Body, n.LinkUrl, n.CreatedAt, n.ReadAt, n.ReadAt != null))
             .ToListAsync(ct);
         return new PagedResult<NotificationDto>(items, total, query.Page, query.PageSize);
