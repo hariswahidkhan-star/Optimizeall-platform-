@@ -48,6 +48,24 @@ public sealed class PermissionContractTests(ContractFixture fx, ITestOutputHelpe
         findings.AssertEmpty("permission", work.Count);
     }
 
+    /// <summary>
+    /// DefaultDenyTests' anonymous sweep, with route values that match every endpoint (regex-constrained segments included,
+    /// which "sample" does not match: an unmatched anonymous request is a 401 too, so those endpoints were never reached).
+    /// </summary>
+    [Fact]
+    public async Task Every_protected_endpoint_answers_an_anonymous_caller_with_a_401_problem()
+    {
+        var findings = new Findings();
+        var endpoints = fx.Endpoints.Where(e => !e.AllowAnonymous).ToList();
+        await Findings.ForEachAsync(endpoints, ContractFixture.Parallelism, async e =>
+        {
+            var outcome = await Outcome.ReadAsync(await fx.SendAsync(null, () => HostileCases.BaseRequest(e)));
+            if (!outcome.IsChallenge) findings.Add($"{e.Key}: anonymous caller got {outcome.Short}");
+            else if (outcome.ContractViolation() is { } violation) findings.Add($"{e.Key}: {violation}");
+        });
+        findings.AssertEmpty("anonymous", endpoints.Count);
+    }
+
     [Fact]
     public void Every_permission_named_in_endpoint_metadata_exists()
     {

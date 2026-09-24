@@ -250,6 +250,9 @@ services.AddControllers(o => o.ModelValidatorProviders.Add(new RequestValueValid
     {
         o.JsonSerializerOptions.Converters.Add(new DefinedEnumJsonConverter()); // names out; undefined values in are a 400
         o.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
+        // Malformed JSON is reported per field ("$.amount": "The input was not valid.") without the serializer's message,
+        // which names internal CLR types ("could not be converted to OptimizeAll.Api.Modules.…").
+        o.AllowInputFormatterExceptionMessages = false;
     });
 // Every problem response (framework ones included: model validation, 404/405/415, authorization) carries `code` and `traceId`.
 services.AddProblemDetails(o => o.CustomizeProblemDetails = ProblemDefaults.Apply);

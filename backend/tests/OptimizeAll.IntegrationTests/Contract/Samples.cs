@@ -78,7 +78,8 @@ public static class Samples
     public static string SampleString(string name)
     {
         var n = name.ToLowerInvariant();
-        if (n.Contains("email")) return "contract-sample@example.test";
+        // Unique, so an invitation sent by one tenant's caller never makes the same person a member of two tenants.
+        if (n.Contains("email")) return $"contract-{Guid.NewGuid():N}@example.test";
         if (n.Contains("url") || n.Contains("website") || n.Contains("link") || n.Contains("href")) return "https://example.com/contract";
         if (n.Contains("slug")) return "contract-sample";
         if (n.Contains("currency")) return "USD";

@@ -67,11 +67,16 @@ public static class HostileCases
         return request;
     }
 
-    public static IEnumerable<Case> For(ApiEndpoint e)
+    /// <summary>
+    /// The matrix of <paramref name="e"/>. With <paramref name="realRoute"/> (ids of existing records), only the base and body/form
+    /// cases, sent to those records so the handler logic behind the lookup sees the hostile values too.
+    /// </summary>
+    public static IEnumerable<Case> For(ApiEndpoint e, IReadOnlyDictionary<string, string>? realRoute = null)
     {
         var anonymous = e.AllowAnonymous;
+        var real = realRoute is not null;
         var method = MethodOf(e);
-        var path = Samples.Path(e);
+        var path = Samples.Path(e, overrides: realRoute);
         var query = Samples.BaseQuery(e).ToList();
         var qs = Samples.Query(query);
 
@@ -82,10 +87,14 @@ public static class HostileCases
         // ---- Base requests (unknown ids everywhere).
         // Unknown ids are never a success (404, or a 400/409 when the request is rejected before the lookup).
         var guidRoute = e.RouteParameters.Any(p => p.ParameterPolicies.Any(pp => pp.Content == "guid"));
-        yield return new Case("base", () => BaseRequest(e), guidRoute ? ExpectNot2xx : null);
+        yield return real
+            ? new Case("base", () => BaseRequest(e, route: realRoute))
+            : new Case("base", () => BaseRequest(e), guidRoute ? ExpectNot2xx : null);
         if (e.HasBody) yield return new Case("base-minimal", () => WithBody(JsonContent(BaseBody(e, minimal: true)!.ToJsonString())));
 
         // ---- Route values.
+        if (!real)
+        {
         var pathTypes = e.Parameters.Where(p => p.Source == BindingSource.Path).ToDictionary(p => p.Name, p => p.Type, StringComparer.OrdinalIgnoreCase);
         foreach (var rp in e.RouteParameters)
         {
@@ -104,6 +113,7 @@ public static class HostileCases
             if (!constrained && pathTypes.TryGetValue(name, out var t) && Samples.KindOf(t) == ValueKind.Guid)
                 yield return new Case($"route {name}=unknown", () => DefaultWith(Req(Samples.Path(e), qs)), e.HasBody ? ExpectNot2xx : Expect404);
         }
+        }
 
         HttpRequestMessage DefaultWith(HttpRequestMessage r)
         {
@@ -112,7 +122,7 @@ public static class HostileCases
         }
 
         // ---- Query values (one parameter at a time, the others at their defaults).
-        foreach (var qp in e.Query)
+        foreach (var qp in real ? Enumerable.Empty<EndpointParameter>() : e.Query)
         {
             var kind = Samples.KindOf(qp.Type);
             var element = kind == ValueKind.List ? Samples.ElementType(qp.Type) : null;
@@ -282,7 +292,7 @@ public static class HostileCases
                 var badFile = anonymous ? null : (Func<Outcome, string?>)Expect4xx;
                 yield return new Case("form empty file", () => WithBody(BaseForm(e, Array.Empty<byte>())), badFile);
                 yield return new Case("form fake png", () => WithBody(BaseForm(e, Encoding.UTF8.GetBytes("not really a png"), "a.png", "image/png")), badFile);
-                yield return new Case("form weird name", () => WithBody(BaseForm(e, Encoding.UTF8.GetBytes("abc"), "../../" + WeirdInPath + ".exe", "application/x-msdownload")), badFile);
+                yield return new Case("form weird name", () => WithBody(BaseForm(e, Encoding.UTF8.GetBytes("abc"), "../../..%2F<evil>&amp;.exe", "application/x-msdownload")), badFile);
                 yield return new Case("form 13MB", () => WithBody(BaseForm(e, Oversize, "big.png", "image/png")), Expect4xx);
             }
         }
