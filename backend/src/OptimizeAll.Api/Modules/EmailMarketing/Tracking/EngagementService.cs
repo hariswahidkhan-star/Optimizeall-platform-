@@ -179,18 +179,19 @@ public sealed class EngagementService(
 
     public async Task<PreferencesDto?> PreferencesAsync(string token, CancellationToken ct)
     {
-        var s = await SubscriberForAsync(token, ct);
+        var (s, _) = await SubscriberForAsync(token, ct);
         return s is null ? null : await BuildPreferencesAsync(s, ct);
     }
 
     public async Task<PreferencesDto?> UpdatePreferencesAsync(string token, PreferencesUpdate update, string? ip, CancellationToken ct)
     {
-        var s = await SubscriberForAsync(token, ct);
+        var (s, message) = await SubscriberForAsync(token, ct);
         if (s is null) return null;
         var ipHash = hasher.Hash(ip);
         if (update.UnsubscribeAll)
         {
-            await audiences.UnsubscribeAsync(s, null, "preference-center", ipHash, null, ct);
+            // Reached from a campaign email: the unsubscribe is that campaign's (report, activity), like the unsubscribe link.
+            await audiences.UnsubscribeAsync(s, null, "preference-center", ipHash, message?.Recipient, ct);
             return await BuildPreferencesAsync(await db.Set<Subscriber>().AsNoTracking().FirstAsync(x => x.Id == s.Id, ct), ct);
         }
         if (update.Frequency is { } frequency) s.Frequency = frequency;
@@ -218,11 +219,11 @@ public sealed class EngagementService(
         return await BuildPreferencesAsync(await db.Set<Subscriber>().AsNoTracking().FirstAsync(x => x.Id == s.Id, ct), ct);
     }
 
-    private async Task<Subscriber?> SubscriberForAsync(string token, CancellationToken ct)
+    private async Task<(Subscriber? Subscriber, TrackedMessage? Message)> SubscriberForAsync(string token, CancellationToken ct)
     {
         var t = tokens.Read(token, TokenPurpose.Preferences) ?? tokens.Read(token, TokenPurpose.Unsubscribe);
-        if (t is null || await ResolveAsync(t.Value, ct) is not { } m) return null;
-        return await db.Set<Subscriber>().FirstOrDefaultAsync(x => x.Id == m.SubscriberId, ct);
+        if (t is null || await ResolveAsync(t.Value, ct) is not { } m) return (null, null);
+        return (await db.Set<Subscriber>().FirstOrDefaultAsync(x => x.Id == m.SubscriberId, ct), m);
     }
 
     private async Task<PreferencesDto> BuildPreferencesAsync(Subscriber s, CancellationToken ct)

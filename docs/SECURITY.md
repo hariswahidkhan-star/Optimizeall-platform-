@@ -267,7 +267,8 @@ target's email to be typed) starts a time-boxed session:
 
 ## 3. Rate limiting and abuse controls
 
-* Global token bucket: 300 requests/min per client IP.
+* Global token bucket: 300 requests/min per client IP (`RateLimiting__GlobalPerMinute`; the E2E harness raises it,
+  since every browser and API actor of a journey shares 127.0.0.1).
 * `auth` policy: 10 requests/min per IP on credential endpoints (`RateLimiting__AuthPerMinute`).
 * `refresh` policy: 240 session refreshes/min per IP (`RateLimiting__RefreshPerMinute`). Every page load and tab
   refreshes silently and an office behind one NAT address shares the budget, so it is generous; refresh tokens are

@@ -44,6 +44,12 @@ import { defineConfig, devices } from '@playwright/test';
  * (01-onboarding creates the client the others use), so it runs serially like the agency suite; the mobile project runs
  * only responsive.spec.ts. Run it with `E2E_SUITE=j-delivery E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
  *
+ * The j-email suite walks the agency's email-marketing journey in a brand-new client workspace (settings and a
+ * verified sender, lists, manual contacts and CSV imports, suppression, templates and test sends, campaigns from draft
+ * through schedule/send/pause/cancel, open/click tracking, provider webhooks, the public unsubscribe/preferences/confirm
+ * pages, reports and permissions) against the Demo seed. Its specs build on each other, so it runs serially on one
+ * worker without retries, desktop only. Run it with `E2E_SUITE=j-email E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
+ *
  * The a11y suite (accessibility & responsive layout: axe WCAG 2.2 A/AA in the light and dark theme, no horizontal
  * scroll at 360/768/1280 px, keyboard and focus behaviour) runs against the Demo seed too. It never changes data, so
  * its tests run in parallel (two workers); each test sets its own viewport, so only the desktop project runs it. Run
@@ -58,8 +64,10 @@ const suite = process.env.E2E_SUITE ?? 'smoke';
 /** Suites whose mobile project runs only responsive.spec.ts (and whose desktop project runs everything else). */
 const responsiveSplit =
   suite === 'agency' || suite === 'platform' || suite === 'j-participant' || suite === 'j-delivery';
+/** Full-stack suites that run on the desktop project only (no responsive spec). */
+const desktopJourney = suite === 'j-email';
 /** Full-stack suites share one database and build on earlier steps: serial, one worker, no retries. */
-const journeys = suite === 'journeys' || responsiveSplit;
+const journeys = suite === 'journeys' || responsiveSplit || desktopJourney;
 /** The crawl is read-only: roles run in parallel, desktop only. */
 const crawl = suite === 'crawl';
 const mobileOnly = responsiveSplit ? /responsive\.spec\.ts$/ : /participant\.spec\.ts$/;
@@ -92,7 +100,7 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
       ...(responsiveSplit ? { testIgnore: mobileOnly } : {}),
     },
-    ...(a11y || crawl
+    ...(a11y || crawl || desktopJourney
       ? []
       : [
           {

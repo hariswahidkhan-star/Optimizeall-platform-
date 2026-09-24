@@ -15,15 +15,15 @@ client scope. Records of another workspace answer `404`.
 | --- | --- | --- |
 | GET | `/workspaces` | Workspaces the caller can manage (agency + accessible clients). |
 | GET | `/overview?clientId` | Counts, last-30-day KPIs, recent campaigns. |
-| GET | `/kpis?clientId&from&to` | Email/SMS KPIs of a workspace for a period. |
+| GET | `/kpis?clientId&from&to` | Email/SMS KPIs of a workspace for a period. `delivered` is measured (provider webhooks) or estimated (sent − bounces) per campaign, as in the campaign report, then summed. |
 | GET | `/clients/{id}/kpis?from&to` | Same, for client reports (**use this from the reporting module**; there is no `IClientReportSection`). |
 | GET, POST | `/lists` | `?clientId`; create with name, description, `doubleOptIn`, `showInPreferenceCenter`, `consentText`, `consentTextVersion`. |
 | GET, PUT, DELETE | `/lists/{id}` | DELETE archives the list. |
 | GET | `/lists/{id}/health?days=90` | Tiers (active/warm/cold/new), bounced/complained, daily growth. |
 | GET | `/lists/{id}/export.csv` | Contacts with consent evidence (audited). |
 | POST | `/lists/{id}/imports/preview` | `{ csv }` → headers, sample rows, suggested mapping. |
-| POST | `/lists/{id}/imports` | `{ fileName, csv, mapping, tags, confirmConsent: true, consentSource, grantSmsConsent }`. Up to 10 MB; small files finish inline, large ones run in `SubscriberImportJob`. Never re-subscribes unsubscribed/bounced/suppressed addresses. |
-| GET | `/lists/{id}/imports`, `/imports/{id}` | Import status and per-row errors. |
+| POST | `/lists/{id}/imports` | `{ fileName, csv, mapping, tags, confirmConsent: true, consentSource, grantSmsConsent }`. Up to 10 MB; small files finish inline, large ones run in `SubscriberImportJob`. Never re-subscribes unsubscribed/bounced/suppressed addresses, nor a contact who unsubscribed from that list. |
+| GET | `/lists/{id}/imports`, `/imports/{id}` | Import status and per-row errors (`row` is the line of the file, counting the header, blank lines and multi-line values). |
 | GET, POST | `/subscribers` | Paged; filters `clientAccountId, listId, status, tag, search`. POST adds a contact (`attestEmailConsent` + `consentSource`, else a double opt-in email is sent). |
 | GET, PUT, DELETE | `/subscribers/{id}` | Detail with consent history and activity. DELETE = GDPR erasure (audited). |
 | POST | `/subscribers/{id}/tags` | `{ add, remove }`. |
@@ -44,7 +44,7 @@ client scope. Records of another workspace answer `404`.
 | GET, PUT | `/settings` | Workspace: organization name, postal address, client approval, throttle, time zone; SMS quiet hours and costs need `sms.manage`. Returns provider readiness and webhook URLs. |
 | PUT | `/settings/provider` | **`integrations.manage`**; `{ clientAccountId, emailProvider, confirm: true }`. |
 | GET, POST | `/senders` | Sender identities. |
-| PUT, DELETE | `/senders/{id}` | |
+| PUT, DELETE | `/senders/{id}` | A new address must be verified again; while a scheduled, sending or paused campaign or an active journey uses the sender, its address cannot change and it cannot be deleted (`409 email.sender_in_use`). |
 | POST | `/senders/{id}/send-verification` | Emails a 6-digit code (rate limited). |
 | POST | `/senders/{id}/verify` | `{ code }`. Unverified senders cannot send. |
 
@@ -103,13 +103,13 @@ Public pages' API `/api/v1/public/email`:
 | Method | Path | Notes |
 | --- | --- | --- |
 | POST | `/unsubscribe/{token}` | Unsubscribe page button. |
-| GET, PUT | `/preferences/{token}` | Topics, frequency, `unsubscribeAll`. |
+| GET, PUT | `/preferences/{token}` | Topics, frequency, `unsubscribeAll` (reached from a campaign email, it counts as that campaign's unsubscribe). |
 | GET, POST | `/forms/{key}` | Hosted sign-up form (explicit consent box, honeypot `website`); answers `202` whether or not the address was known. |
 | POST | `/confirm/{token}` | Double opt-in confirmation. |
 | POST | `/conversions` | Server-to-server, header `X-OA-Signature: sha256=<hex HMAC-SHA256(Tracking:PostbackSecret, raw body)>`. `{ clientAccountId?, email, externalReference, value, currency, occurredAt? }`; idempotent per reference; last click within 7 days is attributed. |
 | POST | `/events` | Same signature. `{ clientAccountId?, email, name, properties?, eventId?, occurredAt? }`; starts `CustomEvent` journeys; properties available as `{{event.key}}`. |
-| POST | `/webhooks/sendgrid/{workspace}` | Signed Event Webhook (ECDSA public key in the vault settings `webhookPublicKey`). |
-| POST | `/webhooks/mailgun/{workspace}` | HMAC signature (`webhookSigningKey`), 15-minute window. |
+| POST | `/webhooks/sendgrid/{workspace}` | Signed Event Webhook (ECDSA public key: setting `webhookPublicKey` of the workspace's SendGrid connection, entered on the Integrations page). |
+| POST | `/webhooks/mailgun/{workspace}` | HMAC signature (secret `webhookSigningKey` of the workspace's Mailgun connection, entered on the Integrations page), 15-minute window. |
 
 SMS webhooks (`/api/v1/public/sms/webhooks/twilio/{workspace}/inbound` and `/status`) verify `X-Twilio-Signature`.
 `{workspace}` is `agency` or the client id; the URLs are listed on the settings page.

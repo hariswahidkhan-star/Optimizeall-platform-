@@ -184,6 +184,11 @@ public sealed class EmailSettingsService(
         Apply(p, r);
         if (!string.Equals(previousEmail, p.FromEmail, StringComparison.OrdinalIgnoreCase))
         {
+            // A new address is unverified until its code is entered, so every message of a campaign or journey that is
+            // already going out from this sender would fail: the address cannot change while one is.
+            if (await InUseAsync(p.Id, ct))
+                throw DomainException.Conflict("email.sender_in_use",
+                    "A scheduled, sending or paused campaign or an active journey uses this sender, so its address cannot change. Add a new sender instead.");
             // A new address must be verified again.
             p.VerifiedAt = null;
             p.VerifiedByUserId = null;
@@ -198,8 +203,8 @@ public sealed class EmailSettingsService(
     public async Task DeleteSenderAsync(Guid id, CancellationToken ct)
     {
         var p = await LoadSenderAsync(id, ct);
-        if (await db.Set<EmailCampaign>().AnyAsync(c => c.SenderProfileId == id && (c.Status == CampaignStatus.Scheduled || c.Status == CampaignStatus.Sending || c.Status == CampaignStatus.Paused), ct))
-            throw DomainException.Conflict("email.sender_in_use", "A scheduled or sending campaign uses this sender.");
+        if (await InUseAsync(id, ct))
+            throw DomainException.Conflict("email.sender_in_use", "A scheduled or sending campaign or an active journey uses this sender.");
         audit.Record("email.sender.deleted", nameof(SenderProfile), p.Id, before: new { p.FromName, p.FromEmail });
         db.Set<SenderProfile>().Remove(p);
         await db.SaveChangesAsync(ct);
@@ -247,6 +252,15 @@ public sealed class EmailSettingsService(
         audit.Record("email.sender.verified", nameof(SenderProfile), p.Id, after: new { p.FromEmail });
         await db.SaveChangesAsync(ct);
         return ToDto(p);
+    }
+
+    /// <summary>A campaign that is scheduled, sending or paused (its content or an A/B variant) or an active journey sends from the sender.</summary>
+    private async Task<bool> InUseAsync(Guid senderId, CancellationToken ct)
+    {
+        var live = db.Set<EmailCampaign>().Where(c => c.Status == CampaignStatus.Scheduled || c.Status == CampaignStatus.Sending || c.Status == CampaignStatus.Paused);
+        return await live.AnyAsync(c => c.SenderProfileId == senderId ||
+                                        db.Set<CampaignVariant>().Any(v => v.CampaignId == c.Id && v.SenderProfileId == senderId), ct) ||
+               await db.Set<Automation>().AnyAsync(a => a.SenderProfileId == senderId && a.Status == AutomationStatus.Active, ct);
     }
 
     private Task<SenderProfile> LoadSenderAsync(Guid id, CancellationToken ct) =>

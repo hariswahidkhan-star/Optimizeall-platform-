@@ -137,6 +137,56 @@ public sealed class AudienceTests(EmailFixture fx)
     }
 
     [Fact]
+    public async Task Csv_import_never_resubscribes_a_contact_who_unsubscribed_from_that_list()
+    {
+        var staff = await fx.StaffAsync();
+        var ws = await fx.CreateWorkspaceAsync();
+        var ids = await fx.AddSubscribersAsync(ws, 2, (s, i) => s.Email = s.NormalizedEmail = $"member{i}@example.com");
+        // Member 0 leaves this list only (e.g. unticks the topic in the preference center); they stay a subscribed contact.
+        (await staff.PostAsJsonAsync($"/api/v1/agency/email/subscribers/{ids[0]}/lists", new { listId = ws.ListId, action = "unsubscribe" })).EnsureSuccessStatusCode();
+
+        var import = await (await staff.PostAsJsonAsync($"/api/v1/agency/email/lists/{ws.ListId}/imports", new
+        {
+            fileName = "again.csv",
+            csv = "email\nmember0@example.com\nmember1@example.com\n",
+            mapping = new Dictionary<string, string> { ["email"] = "email" },
+            confirmConsent = true,
+            consentSource = "Old CRM export",
+        })).ReadJsonAsync();
+
+        Assert.Equal(1, import.GetProperty("skipped").GetInt32());
+        Assert.Equal(1, import.GetProperty("updated").GetInt32());
+        var error = Assert.Single(import.GetProperty("errors").EnumerateArray());
+        Assert.Equal(2, error.GetProperty("row").GetInt32());
+        Assert.Contains("previously unsubscribed from this list", error.GetProperty("message").GetString());
+        var memberships = await fx.Db(db => db.Set<ListMembership>().AsNoTracking().Where(m => m.ListId == ws.ListId).ToListAsync());
+        Assert.Equal(MembershipStatus.Unsubscribed, memberships.Single(m => m.SubscriberId == ids[0]).Status);
+        Assert.Equal(MembershipStatus.Subscribed, memberships.Single(m => m.SubscriberId == ids[1]).Status);
+    }
+
+    [Fact]
+    public async Task Csv_import_errors_name_the_line_of_the_file_even_after_blank_lines_and_multi_line_values()
+    {
+        var staff = await fx.StaffAsync();
+        var ws = await fx.CreateWorkspaceAsync();
+        const string csv = "email,note\n" +                  // line 1
+                           "fine1@example.com,ok\n" +          // line 2
+                           "\n" +                              // line 3 (blank)
+                           "fine2@example.com,\"two\nlines\"\n" + // lines 4-5
+                           "\n" +                              // line 6 (blank)
+                           "broken-address,oops\n";            // line 7
+        var import = await (await staff.PostAsJsonAsync($"/api/v1/agency/email/lists/{ws.ListId}/imports", new
+        {
+            fileName = "gaps.csv", csv, mapping = new Dictionary<string, string> { ["email"] = "email", ["note"] = "ignore" },
+            confirmConsent = true, consentSource = "Event sign-up sheet",
+        })).ReadJsonAsync();
+        Assert.Equal(2, import.GetProperty("created").GetInt32());
+        var error = Assert.Single(import.GetProperty("errors").EnumerateArray());
+        Assert.Equal(7, error.GetProperty("row").GetInt32());
+        Assert.Contains("broken-address", error.GetProperty("message").GetString());
+    }
+
+    [Fact]
     public async Task Csv_import_never_grants_sms_consent_to_a_number_that_texted_stop()
     {
         var staff = await fx.StaffAsync();

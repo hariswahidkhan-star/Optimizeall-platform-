@@ -373,4 +373,72 @@ public sealed class CampaignSendingTests(EmailFixture fx)
             new { confirm = true, confirmName = "October update", concurrencyStamp = sent.GetProperty("concurrencyStamp").GetString() })).ShouldFailAsync(409);
         Assert.True(await fx.Db(db => db.Set<OptimizeAll.Domain.Audit.AuditLog>().AnyAsync(a => a.Action == "email.campaign.send_confirmed" && a.EntityId == id)));
     }
+
+    [Fact]
+    public async Task A_sender_cannot_change_its_address_while_a_scheduled_campaign_sends_from_it()
+    {
+        var staff = await fx.StaffAsync();
+        var ws = await fx.CreateWorkspaceAsync();
+        await fx.AddSubscribersAsync(ws, 2);
+        var campaign = await fx.CreateCampaignAsync(staff, ws, extra: new { scheduleMode = "FixedTime", scheduledAt = fx.Now.AddHours(2) });
+        await EmailFixture.ConfirmSendAsync(staff, campaign);
+        var sender = await (await staff.GetAsync($"/api/v1/agency/email/senders?clientId={ws.ClientId}")).ReadJsonAsync();
+        var stamp = sender[0].GetProperty("concurrencyStamp").GetString();
+
+        // A new address would be unverified, and every message of the scheduled campaign would fail at send time.
+        await (await staff.PutAsJsonAsync($"/api/v1/agency/email/senders/{ws.SenderId}", new
+        {
+            clientAccountId = ws.ClientId, fromName = "Brand", fromEmail = "someone.else@example.com", isDefault = true, concurrencyStamp = stamp,
+        })).ShouldFailAsync(409, "email.sender_in_use");
+        Assert.NotNull((await fx.Db(db => db.Set<SenderProfile>().AsNoTracking().FirstAsync(s => s.Id == ws.SenderId))).VerifiedAt);
+
+        // Renaming keeps the verified address, so it is allowed.
+        var renamed = await (await staff.PutAsJsonAsync($"/api/v1/agency/email/senders/{ws.SenderId}", new
+        {
+            clientAccountId = ws.ClientId, fromName = "Brand News", fromEmail = sender[0].GetProperty("fromEmail").GetString(), isDefault = true, concurrencyStamp = stamp,
+        })).ReadJsonAsync();
+        Assert.True(renamed.GetProperty("verified").GetBoolean());
+
+        // Once the campaign is cancelled the address can change (and must be verified again).
+        var id = campaign.GetProperty("id").GetString();
+        var current = await (await staff.GetAsync($"/api/v1/agency/email/campaigns/{id}")).ReadJsonAsync();
+        (await staff.PostAsJsonAsync($"/api/v1/agency/email/campaigns/{id}/cancel",
+            new { concurrencyStamp = current.GetProperty("concurrencyStamp").GetString(), reason = "Test" })).EnsureSuccessStatusCode();
+        var moved = await (await staff.PutAsJsonAsync($"/api/v1/agency/email/senders/{ws.SenderId}", new
+        {
+            clientAccountId = ws.ClientId, fromName = "Brand News", fromEmail = "someone.else@example.com", isDefault = true,
+            concurrencyStamp = renamed.GetProperty("concurrencyStamp").GetString(),
+        })).ReadJsonAsync();
+        Assert.False(moved.GetProperty("verified").GetBoolean());
+    }
+
+    [Fact]
+    public async Task Workspace_kpis_measure_or_estimate_deliveries_per_campaign_so_rates_never_exceed_the_audience()
+    {
+        var staff = await fx.StaffAsync();
+        var ws = await fx.CreateWorkspaceAsync();
+        await fx.AddSubscribersAsync(ws, 3);
+        // Campaign A goes through a relay that reports nothing; campaign B's provider reports one delivery (webhook).
+        var a = await fx.CreateCampaignAsync(staff, ws, name: "KPI A");
+        await EmailFixture.ConfirmSendAsync(staff, a);
+        await fx.RunJobAsync<CampaignSendJob>();
+        var b = await fx.CreateCampaignAsync(staff, ws, name: "KPI B");
+        await EmailFixture.ConfirmSendAsync(staff, b);
+        await fx.RunJobAsync<CampaignSendJob>();
+        var aId = Guid.Parse(a.GetProperty("id").GetString()!);
+        var bId = Guid.Parse(b.GetProperty("id").GetString()!);
+        await fx.Db(async db =>
+        {
+            foreach (var r in await db.Set<CampaignRecipient>().Where(r => r.CampaignId == aId).ToListAsync()) r.OpenedAt = fx.Now;
+            (await db.Set<CampaignRecipient>().FirstAsync(r => r.CampaignId == bId)).DeliveredAt = fx.Now;
+            await db.SaveChangesAsync();
+        });
+
+        var kpis = await (await staff.GetAsync($"/api/v1/agency/email/kpis?clientId={ws.ClientId}")).ReadJsonAsync();
+        Assert.Equal(6, kpis.GetProperty("emailsSent").GetInt32());
+        // A: 3 estimated (sent − bounces); B: 1 measured.
+        Assert.Equal(4, kpis.GetProperty("delivered").GetInt32());
+        Assert.Equal(3, kpis.GetProperty("uniqueOpens").GetInt32());
+        Assert.Equal(0.75, kpis.GetProperty("openRate").GetDouble());
+    }
 }

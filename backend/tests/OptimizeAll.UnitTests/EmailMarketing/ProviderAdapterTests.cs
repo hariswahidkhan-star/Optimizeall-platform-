@@ -170,6 +170,17 @@ public sealed class ProviderAdapterTests
         Assert.Equal(ProviderOutcome.NotConfigured, (await new MailgunEmailProvider(new HttpClient(handler), new FakeVault(), NullLogger<MailgunEmailProvider>.Instance).SendAsync(Email(), default)).Outcome);
     }
 
+    [Fact]
+    public async Task Mailgun_eu_region_domains_are_sent_through_the_eu_api()
+    {
+        var handler = Respond(HttpStatusCode.OK, "{\"id\":\"<1@mg.brand.eu>\",\"message\":\"Queued.\"}");
+        var vault = new FakeVault().With("mailgun", new() { ["domain"] = "mg.brand.eu", ["region"] = "eu" }, new() { ["apiKey"] = "key-1" });
+        var result = await new MailgunEmailProvider(new HttpClient(handler), vault, NullLogger<MailgunEmailProvider>.Instance).SendAsync(Email(), default);
+        Assert.Equal(ProviderOutcome.Accepted, result.Outcome);
+        var (request, _) = Assert.Single(handler.Requests);
+        Assert.Equal("https://api.eu.mailgun.net/v3/mg.brand.eu/messages", request.RequestUri!.ToString());
+    }
+
     // ---------- Twilio ----------
 
     [Fact]

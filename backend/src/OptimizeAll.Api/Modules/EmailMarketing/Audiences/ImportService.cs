@@ -142,7 +142,8 @@ public sealed class ImportService(
 
         var import = await db.Set<SubscriberImport>().AsNoTracking().FirstAsync(i => i.Id == importId, ct);
         var list = await db.Set<EmailList>().AsNoTracking().FirstAsync(l => l.Id == import.ListId, ct);
-        var rows = Parse(import.CsvContent ?? string.Empty);
+        var records = ParseRecords(import.CsvContent ?? string.Empty);
+        var rows = records.Select(r => r.Fields).ToList();
         var header = rows.Count > 0 ? rows[0].Select(h => h.Trim()).ToArray() : Array.Empty<string>();
         var mapping = JsonSerializer.Deserialize<Dictionary<string, string>>(import.MappingJson, Json) ?? new();
         var tags = JsonSerializer.Deserialize<List<string>>(import.TagsJson, Json) ?? new();
@@ -168,7 +169,9 @@ public sealed class ImportService(
                 case RowResult.Skipped: skipped++; break;
                 default: failed++; break;
             }
-            if (outcome.Message is not null && errors.Count < MaxErrors) errors.Add(new ImportRowError(index + 1, outcome.Message));
+            // The line of the file (as the person sees it in their editor), not the record index: blank lines are skipped
+            // and quoted values can span lines.
+            if (outcome.Message is not null && errors.Count < MaxErrors) errors.Add(new ImportRowError(records[index].Line, outcome.Message));
             processed = index;
             db.ChangeTracker.Clear();
             if ((index - start + 1) % 100 == 0 || index == end)
@@ -232,6 +235,11 @@ public sealed class ImportService(
             : await db.Set<Subscriber>().AsNoTracking().FirstOrDefaultAsync(s => s.ScopeKey == scope && s.Phone == phone, ct);
         if (existing is not null && (existing.Status is not SubscriberStatus.Subscribed || existing.EmailConsent == ConsentStatus.Withdrawn))
             return new(RowResult.Skipped, $"{dedupKey} previously unsubscribed, bounced or complained; an import cannot re-subscribe them.");
+        // Unsubscribing from this one list (preference center topic, list-level unsubscribe) is an opt-out too: only the
+        // contact can undo it (preference center or a confirmed sign-up), never a file.
+        if (existing is not null && await db.Set<ListMembership>().AsNoTracking()
+                .AnyAsync(m => m.ListId == list.Id && m.SubscriberId == existing.Id && m.Status == MembershipStatus.Unsubscribed, ct))
+            return new(RowResult.Skipped, $"{dedupKey} previously unsubscribed from this list; an import cannot re-subscribe them.");
 
         var errors = new List<string>();
         var country = Cell("country")?.ToUpperInvariant();
@@ -275,9 +283,11 @@ public sealed class ImportService(
         return p >= 0 && p < row.Length ? ContactRules.NormalizePhone(row[p]) : null;
     }
 
-    private static List<string[]> Parse(string csv)
+    private static List<string[]> Parse(string csv) => ParseRecords(csv).Select(r => r.Fields).ToList();
+
+    private static List<CsvRecord> ParseRecords(string csv)
     {
-        try { return CsvParser.Parse(csv); }
+        try { return CsvParser.ParseRecords(csv); }
         catch (FormatException ex) { throw new DomainException("email.import_invalid_csv", ex.Message); }
     }
 

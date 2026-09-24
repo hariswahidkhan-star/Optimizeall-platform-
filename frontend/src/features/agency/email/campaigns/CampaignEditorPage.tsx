@@ -143,6 +143,9 @@ function CampaignForm({ channel, campaign }: { channel: ChannelKind; campaign: C
     mutationFn: () => (campaign ? api.put<Campaign>(`${campaignsPath(channel)}/${campaign.id}`, body()) : api.post<Campaign>(campaignsPath(channel), body())),
     onSuccess: (saved) => {
       toast.success('Campaign saved');
+      // The form is keyed by the concurrency stamp: show the saved version now. Waiting for the refetch would remount the
+      // form later, under the user — closing a send dialog opened meanwhile, whose stale stamp would also fail the send.
+      queryClient.setQueryData(emailKeys.campaign(saved.id), saved);
       void queryClient.invalidateQueries({ queryKey: emailKeys.all });
       if (!campaign) navigate(`${base}/${saved.id}`);
     },
@@ -163,6 +166,7 @@ function CampaignForm({ channel, campaign }: { channel: ChannelKind; campaign: C
       api.post<Campaign>(`${campaignsPath(channel)}/${campaign!.id}/${verb}`, { concurrencyStamp: campaign!.concurrencyStamp, reason }),
     onSuccess: (updated) => {
       toast.success(`Campaign ${updated.status.toLowerCase()}`);
+      queryClient.setQueryData(emailKeys.campaign(updated.id), updated);
       void queryClient.invalidateQueries({ queryKey: emailKeys.all });
     },
     onError: (e) => toast.error('Action failed', errorMessage(e)),

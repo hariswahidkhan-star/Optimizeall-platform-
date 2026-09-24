@@ -44,6 +44,33 @@ public sealed class ProviderRegistryTests
     }
 
     [Fact]
+    public void Email_webhook_verification_keys_the_webhooks_read_can_be_saved()
+    {
+        // WebhookService reads sendgrid settings.webhookPublicKey and mailgun secrets.webhookSigningKey: the registry must
+        // accept them, or bounce/complaint webhooks can never be configured (every event would be refused with 503).
+        var sendgrid = ProviderRegistry.Find("sendgrid")!;
+        var sendgridKey = new Dictionary<string, string> { ["apiKey"] = "SG." + new string('x', 30) };
+        Assert.Empty(ProviderRegistry.Validate(sendgrid,
+            new Dictionary<string, string> { ["fromEmail"] = "news@brand.example", ["webhookPublicKey"] = "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+abc/def==" },
+            sendgridKey, new HashSet<string>()));
+        Assert.Empty(ProviderRegistry.Validate(sendgrid,
+            new Dictionary<string, string> { ["fromEmail"] = "news@brand.example", ["webhookPublicKey"] = "-----BEGIN PUBLIC KEY-----\nMFkwEwYH+/=\n-----END PUBLIC KEY-----" },
+            sendgridKey, new HashSet<string>()));
+        Assert.Contains("settings.webhookPublicKey", ProviderRegistry.Validate(sendgrid,
+            new Dictionary<string, string> { ["fromEmail"] = "news@brand.example", ["webhookPublicKey"] = "not a key!" },
+            sendgridKey, new HashSet<string>()).Keys);
+
+        var mailgun = ProviderRegistry.Find("mailgun")!;
+        Assert.Empty(ProviderRegistry.Validate(mailgun,
+            new Dictionary<string, string> { ["domain"] = "mg.brand.example", ["region"] = "eu", ["fromEmail"] = "news@brand.example" },
+            new Dictionary<string, string> { ["apiKey"] = "key-1", ["webhookSigningKey"] = "whsk-1" }, new HashSet<string>()));
+        // Optional: a connection without webhooks is still valid.
+        Assert.Empty(ProviderRegistry.Validate(mailgun,
+            new Dictionary<string, string> { ["domain"] = "mg.brand.example", ["fromEmail"] = "news@brand.example" },
+            new Dictionary<string, string> { ["apiKey"] = "key-1" }, new HashSet<string>()));
+    }
+
+    [Fact]
     public void Saved_secrets_satisfy_required_fields_on_update()
     {
         var dfs = ProviderRegistry.Find("dataforseo")!;

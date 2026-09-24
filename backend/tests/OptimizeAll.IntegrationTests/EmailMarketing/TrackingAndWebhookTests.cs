@@ -132,6 +132,27 @@ public sealed partial class TrackingAndWebhookTests(EmailFixture fx)
     }
 
     [Fact]
+    public async Task Unsubscribing_from_everything_in_the_preference_center_counts_for_the_campaign_whose_email_linked_to_it()
+    {
+        var (ws, campaignId, message, subscribers) = await SendOneAsync();
+        var preferences = message.Html.Split('"').First(p => p.StartsWith("http://app.test/email/preferences/", StringComparison.Ordinal));
+        var token = preferences.Split('/').Last();
+
+        (await fx.Anonymous().PutAsJsonAsync($"/api/v1/public/email/preferences/{token}", new { unsubscribeAll = true })).EnsureSuccessStatusCode();
+
+        var recipient = Assert.Single(await fx.RecipientsAsync(campaignId));
+        Assert.NotNull(recipient.UnsubscribedAt);
+        var staff = await fx.StaffAsync();
+        var report = await (await staff.GetAsync($"/api/v1/agency/email/campaigns/{campaignId}/report")).ReadJsonAsync();
+        Assert.Equal(1, report.GetProperty("unsubscribes").GetInt32());
+        var unsubscribe = await fx.Db(db => db.Set<EngagementEvent>().AsNoTracking()
+            .SingleAsync(e => e.SubscriberId == subscribers[0] && e.Type == EngagementType.Unsubscribe));
+        Assert.Equal(campaignId, unsubscribe.CampaignId);
+        Assert.Equal("preference-center", unsubscribe.Detail);
+        Assert.NotEqual(Guid.Empty, ws.ClientId);
+    }
+
+    [Fact]
     public async Task SendGrid_webhook_is_signature_checked_and_hard_bounces_reach_the_suppression_list()
     {
         var (ws, campaignId, _, subscribers) = await SendOneAsync();
@@ -197,6 +218,49 @@ public sealed partial class TrackingAndWebhookTests(EmailFixture fx)
         Assert.Equal(HttpStatusCode.OK, (await anonymous.PostAsJsonAsync($"/api/v1/public/email/webhooks/mailgun/{ws.ClientId}", badBody)).StatusCode);
         var suppression = await fx.Db(db => db.Set<Suppression>().AsNoTracking().FirstAsync(x => x.Value == recipient.Address));
         Assert.Equal(SuppressionReason.Complaint, suppression.Reason);
+    }
+
+    [Fact]
+    public async Task Webhook_keys_saved_through_the_integrations_api_verify_mailgun_and_sendgrid_events()
+    {
+        var (ws, campaignId, _, _) = await SendOneAsync();
+        var recipient = Assert.Single(await fx.RecipientsAsync(campaignId));
+        var admin = await fx.StaffAsync();
+        var anonymous = fx.Anonymous();
+
+        // Mailgun: the webhook signing key is a secret of the connection, entered on the Integrations page.
+        (await admin.PostAsJsonAsync("/api/v1/agency/integrations/connections", new
+        {
+            provider = "mailgun", clientAccountId = ws.ClientId, displayName = "Brand Mailgun",
+            settings = new Dictionary<string, string> { ["domain"] = "mg.brand-webhooks.example", ["fromEmail"] = "news@brand-webhooks.example" },
+            secrets = new Dictionary<string, string> { ["apiKey"] = "key-mg", ["webhookSigningKey"] = "mg-signing-via-api" },
+        })).EnsureSuccessStatusCode();
+        var ts = new DateTimeOffset(fx.Now).ToUnixTimeSeconds().ToString();
+        var signature = Convert.ToHexString(HMACSHA256.HashData(Encoding.UTF8.GetBytes("mg-signing-via-api"), Encoding.UTF8.GetBytes(ts + "tok-api"))).ToLowerInvariant();
+        var complaint = await (await anonymous.PostAsJsonAsync($"/api/v1/public/email/webhooks/mailgun/{ws.ClientId}", new Dictionary<string, object>
+        {
+            ["signature"] = new { timestamp = ts, token = "tok-api", signature },
+            ["event-data"] = new Dictionary<string, object> { ["event"] = "complained", ["recipient"] = recipient.Address, ["id"] = "mg-api-1" },
+        })).ReadJsonAsync();
+        Assert.Equal(1, complaint.GetProperty("applied").GetInt32());
+        Assert.Equal(SuppressionReason.Complaint, (await fx.Db(db => db.Set<Suppression>().AsNoTracking().FirstAsync(x => x.Value == recipient.Address))).Reason);
+
+        // SendGrid: the signed event webhook's public key is a setting of the connection.
+        using var key = ECDsa.Create(ECCurve.NamedCurves.nistP256);
+        (await admin.PostAsJsonAsync("/api/v1/agency/integrations/connections", new
+        {
+            provider = "sendgrid", clientAccountId = ws.ClientId, displayName = "Brand SendGrid",
+            settings = new Dictionary<string, string> { ["fromEmail"] = "news@brand-webhooks.example", ["webhookPublicKey"] = Convert.ToBase64String(key.ExportSubjectPublicKeyInfo()) },
+            secrets = new Dictionary<string, string> { ["apiKey"] = "SG." + new string('k', 30) },
+        })).EnsureSuccessStatusCode();
+        var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new[] { new Dictionary<string, object> { ["event"] = "delivered", ["email"] = recipient.Address, ["sg_event_id"] = "sg-api-1", ["oa_ref"] = "c:" + recipient.Id.ToString("N") } }));
+        var sgSignature = Convert.ToBase64String(key.SignData(Encoding.UTF8.GetBytes(ts).Concat(body).ToArray(), HashAlgorithmName.SHA256, DSASignatureFormat.Rfc3279DerSequence));
+        using var request = new HttpRequestMessage(HttpMethod.Post, $"/api/v1/public/email/webhooks/sendgrid/{ws.ClientId}") { Content = new ByteArrayContent(body) };
+        request.Headers.Add("X-Twilio-Email-Event-Webhook-Signature", sgSignature);
+        request.Headers.Add("X-Twilio-Email-Event-Webhook-Timestamp", ts);
+        var delivered = await (await anonymous.SendAsync(request)).ReadJsonAsync();
+        Assert.Equal(1, delivered.GetProperty("applied").GetInt32());
+        Assert.NotNull(Assert.Single(await fx.RecipientsAsync(campaignId)).DeliveredAt);
     }
 
     [Fact]

@@ -195,7 +195,10 @@ public sealed class ReportService(AppDbContext db, EmailAccess access, CampaignS
                          join c in db.Set<EmailCampaign>() on r.CampaignId equals c.Id
                          where c.ScopeKey == key && r.SentAt >= start && r.SentAt <= end
                          select r;
-        var email = await recipients.Where(r => r.Channel == MessageChannel.Email).GroupBy(r => 1).Select(g => new
+        // Per campaign, like the campaign report: delivered is measured where the provider reported deliveries (webhooks)
+        // and estimated as sent minus bounces where it did not. Summing only the measured deliveries of a workspace that
+        // mixes both would divide every open/click of the unmeasured campaigns by a handful of deliveries (rates > 100%).
+        var perCampaign = await recipients.Where(r => r.Channel == MessageChannel.Email).GroupBy(r => r.CampaignId).Select(g => new
         {
             Sent = g.Count(),
             Delivered = g.Count(r => r.DeliveredAt != null),
@@ -205,10 +208,19 @@ public sealed class ReportService(AppDbContext db, EmailAccess access, CampaignS
             Clicks = g.Count(r => r.ClickedAt != null),
             Unsubs = g.Count(r => r.UnsubscribedAt != null),
             Complaints = g.Count(r => r.ComplainedAt != null),
-        }).FirstOrDefaultAsync(ct);
+        }).ToListAsync(ct);
+        var email = perCampaign.Count == 0 ? null : new
+        {
+            Sent = perCampaign.Sum(c => c.Sent),
+            Hard = perCampaign.Sum(c => c.Hard),
+            Opens = perCampaign.Sum(c => c.Opens),
+            Clicks = perCampaign.Sum(c => c.Clicks),
+            Unsubs = perCampaign.Sum(c => c.Unsubs),
+            Complaints = perCampaign.Sum(c => c.Complaints),
+        };
         var smsCosts = await recipients.Where(r => r.Channel != MessageChannel.Email).Select(r => r.Cost).ToListAsync(ct);
         var sent = email?.Sent ?? 0;
-        var delivered = (email?.Delivered ?? 0) == 0 ? Math.Max(0, sent - (email?.Hard ?? 0) - (email?.Soft ?? 0)) : email!.Delivered;
+        var delivered = perCampaign.Sum(c => c.Delivered > 0 ? c.Delivered : Math.Max(0, c.Sent - c.Hard - c.Soft));
         var campaignsSent = await db.Set<EmailCampaign>().AsNoTracking().CountAsync(c => c.ScopeKey == key && c.Status == CampaignStatus.Sent && c.CompletedAt >= start && c.CompletedAt <= end, ct);
         var conversions = db.Set<EngagementEvent>().AsNoTracking().Where(e => e.Type == EngagementType.Conversion && e.OccurredAt >= start && e.OccurredAt <= end &&
                                                                               (e.CampaignId != null || e.AutomationId != null) &&
