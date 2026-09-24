@@ -249,7 +249,7 @@ test.describe.serial('submissions', () => {
   test('C: the appeal needs at least 20 characters; exactly 20 is accepted, and only once', async () => {
     await page.goto(`/app/submissions/${ids.C}`);
     await expect(page.getByText('Rejected', { exact: true }).first()).toBeVisible();
-    await expect(page.getByRole('status', { name: 'Reason for the decision' })).toContainText(
+    await expect(page.getByLabel('Reason for the decision')).toContainText(
       'The campaign hashtag is missing from the caption.',
     );
     const appeal = page.getByRole('region', { name: 'Appeal this decision' });

@@ -104,11 +104,11 @@ test.describe.serial('referral', () => {
   test('finance approves the reward; it joins Pat’s approved earnings', async () => {
     const finance = await as(s().finance1);
     const pending = await finance.get<{
-      items: { id: string; type: string; user: { email: string }; amount: number; concurrencyStamp: string }[];
+      items: { id: string; type: string; user: { email: string }; originalAmount: number; concurrencyStamp: string }[];
     }>('/finance/pending-earnings?type=ReferralReward&pageSize=100');
     const reward = pending.items.find((e) => e.user.email.toLowerCase() === s().pat.email.toLowerCase());
     expect(reward, 'Pat’s referral reward is pending approval').toBeDefined();
-    expect(reward!.amount).toBe(5);
+    expect(reward!.originalAmount).toBe(5);
     await finance.post(`/finance/pending-earnings/${reward!.id}/approve`, { concurrencyStamp: reward!.concurrencyStamp });
     // Approving twice (a retried request) is refused, not applied twice.
     await expect(

@@ -36,10 +36,12 @@ test.describe.serial('notifications and support', () => {
       'Submission not approved',
       'Appeal reviewed',
       'Your referral qualified',
+      'Earning approved',
+      'Your payout is scheduled',
+      'Your payout was sent',
     ]) {
       await expect(list().filter({ hasText: title }).first(), title).toBeVisible();
     }
-    await expect(list().filter({ hasText: /paid/i }).first()).toBeVisible();
   });
 
   test('marks one read and unread, opens one, then marks all read', async () => {
@@ -70,7 +72,7 @@ test.describe.serial('notifications and support', () => {
     expect(subjects.join('\n')).toMatch(/Submission approved/);
     expect(subjects.join('\n')).toMatch(/Correction needed/);
     expect(subjects.join('\n')).toMatch(/Appeal reviewed/);
-    expect(subjects.join('\n')).toMatch(/paid/i);
+    expect(subjects.join('\n')).toMatch(/Your payout was sent/);
     // Running the job again sends nothing twice.
     const count = subjects.length;
     await dispatchNotifications();
