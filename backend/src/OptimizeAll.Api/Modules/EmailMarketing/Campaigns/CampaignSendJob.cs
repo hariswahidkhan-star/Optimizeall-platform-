@@ -112,6 +112,11 @@ public sealed class CampaignSendJob(
     /// <summary>Creates the recipient rows (idempotent; concurrent expansion is resolved by the unique index).</summary>
     public async Task ExpandAsync(EmailCampaign c, CancellationToken ct)
     {
+        // One worker expands a campaign at a time (several API instances run this job): concurrent batch inserts of the
+        // same recipients deadlock on MySQL's unique-index locks. The loser waits, then finds the campaign expanded.
+        await using var expansionLock = await dialect.AcquireNamedLockAsync(db, $"email-expand:{c.Id:N}", TimeSpan.FromMinutes(2), ct);
+        if (await db.Set<EmailCampaign>().AsNoTracking().AnyAsync(x => x.Id == c.Id && x.ExpandedAt != null, ct)) return;
+
         var settings = await settingsStore.GetAsync(c.ClientAccountId, ct);
         var variants = c.Type == CampaignType.AbTest
             ? await db.Set<CampaignVariant>().AsNoTracking().Where(v => v.CampaignId == c.Id).OrderBy(v => v.Key).Select(v => v.Key).ToListAsync(ct)
