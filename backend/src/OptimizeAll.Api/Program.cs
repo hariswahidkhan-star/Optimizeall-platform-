@@ -321,7 +321,10 @@ app.MapHealthChecks("/health/ready", new()
 if (app.Configuration.GetValue("Database:InitializeOnStartup", true))
     await DatabaseInitializer.InitializeAsync(app.Services);
 
-app.Run();
+// RunAsync, never Run(): Main is async, so after the (truly asynchronous, on MySQL) initialization above this code runs
+// on a thread-pool thread, and the blocking Run() would park that pool thread for the whole life of the host. With
+// several hosts in one process (integration tests, WebApplicationFactory) that starved the pool until requests stalled.
+await app.RunAsync();
 
 /// <summary>Entry point marker for WebApplicationFactory in integration tests.</summary>
 public partial class Program;

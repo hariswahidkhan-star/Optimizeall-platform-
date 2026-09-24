@@ -45,7 +45,7 @@ public sealed class IntegrationsFixture : IAsyncLifetime
         await Api.InitializeAsync();
         Host = Api.WithWebHostBuilder(b => b.ConfigureTestServices(services =>
             services.AddHttpClient(IntegrationVerifier.HttpClientName).ConfigurePrimaryHttpMessageHandler(() => new FakeProviderHandler())));
-        _ = Host.Services;
+        await Host.StartAsync();
     }
 
     public async Task DisposeAsync()

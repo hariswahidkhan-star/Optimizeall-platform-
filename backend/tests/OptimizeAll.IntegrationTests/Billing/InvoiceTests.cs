@@ -40,7 +40,7 @@ public sealed class InvoiceTests(ApiFactory api) : IClassFixture<ApiFactory>
     [Fact]
     public async Task Partial_payments_overpayment_double_recording_and_invoice_paid_once()
     {
-        var factory = api.WithInvoicePaidCounter();
+        await using var factory = api.WithInvoicePaidCounter();
         var adminUser1 = await api.CreateUserAsync(new[] { Role.Admin });
         var adminUser2 = await api.CreateUserAsync(new[] { Role.Admin });
         var admin1 = await factory.LoginAsync(adminUser1);

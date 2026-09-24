@@ -105,7 +105,7 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
     {
         if (IsSqlite)
         {
-            _ = Services; // boot the host (creates the file, runs migrations + baseline seed)
+            await this.StartAsync(); // boot the host (creates the file, runs migrations + baseline seed); see HostStartup
             return;
         }
         await using var conn = new MySqlConnection(AdminConnectionString);
@@ -113,7 +113,7 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         await using var cmd = conn.CreateCommand();
         cmd.CommandText = $"CREATE DATABASE `{_databaseName}` CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci";
         await cmd.ExecuteNonQueryAsync();
-        _ = Services; // boot the host (runs migrations + baseline seed)
+        await this.StartAsync(); // boot the host (runs migrations + baseline seed); see HostStartup
     }
 
     public new async Task DisposeAsync()

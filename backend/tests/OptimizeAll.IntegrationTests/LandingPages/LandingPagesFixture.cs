@@ -38,7 +38,7 @@ public sealed class LandingPagesFixture : IAsyncLifetime
             services.AddScoped<IEventHandler<FormSubmitted>, FormSubmittedRecorder>();
             services.AddSingleton<IStartupFilter, TestRemoteIpStartupFilter>();
         }));
-        _ = Host.Services;
+        await Host.StartAsync();
     }
 
     public async Task DisposeAsync()

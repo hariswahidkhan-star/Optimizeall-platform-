@@ -97,6 +97,7 @@ public static class CrmBillingKit
 
     public static async Task<HttpClient> LoginAsync(this WebApplicationFactory<Program> factory, TestUser user)
     {
+        await factory.StartAsync();
         var client = factory.CreateClient(new WebApplicationFactoryClientOptions { HandleCookies = true });
         client.DefaultRequestHeaders.Add("X-Requested-With", "tests");
         var response = await client.PostAsJsonAsync("/api/v1/auth/login", new { email = user.Email, password = user.Password });

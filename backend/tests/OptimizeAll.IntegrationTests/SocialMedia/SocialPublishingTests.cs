@@ -54,6 +54,7 @@ public sealed class SocialPublishingTests(ApiFactory api)
     {
         var client = await SocialAdsKit.CreateClientAsync(api);
         var user = await api.CreateUserAsync(new[] { Role.SocialMediaManager });
+        await host.StartAsync();
         var manager = host.CreateClient();
         var login = await manager.PostAsJsonAsync("/api/v1/auth/login", new { email = user.Email, password = user.Password });
         var token = (await login.ReadJsonAsync()).GetProperty("accessToken").GetString();
@@ -72,7 +73,7 @@ public sealed class SocialPublishingTests(ApiFactory api)
     public async Task Concurrent_runs_and_retries_publish_exactly_once()
     {
         var fake = new CountingXPublisher();
-        using var host = api.WithWebHostBuilder(b => b.ConfigureServices(s => s.AddScoped<ISocialPublisher>(_ => fake)));
+        await using var host = api.WithWebHostBuilder(b => b.ConfigureServices(s => s.AddScoped<ISocialPublisher>(_ => fake)));
         var (clientId, manager, profile) = await SetupAsync(host, SocialNetwork.X);
         var postId = await SocialAdsKit.ScheduledPostAsync(manager, clientId, profile, "Exactly once", api.Clock.GetUtcNow().UtcDateTime.AddMinutes(2));
 
@@ -104,7 +105,7 @@ public sealed class SocialPublishingTests(ApiFactory api)
     public async Task Interrupted_publish_is_never_resent_automatically()
     {
         var fake = new CountingXPublisher();
-        using var host = api.WithWebHostBuilder(b => b.ConfigureServices(s => s.AddScoped<ISocialPublisher>(_ => fake)));
+        await using var host = api.WithWebHostBuilder(b => b.ConfigureServices(s => s.AddScoped<ISocialPublisher>(_ => fake)));
         var (clientId, manager, profile) = await SetupAsync(host, SocialNetwork.X);
         var postId = await SocialAdsKit.ScheduledPostAsync(manager, clientId, profile, "Crash", api.Clock.GetUtcNow().UtcDateTime.AddMinutes(2));
 
@@ -177,7 +178,7 @@ public sealed class SocialPublishingTests(ApiFactory api)
             Content = new StringContent("{\"error\":{\"message\":\"Error validating access token: Session has expired\",\"type\":\"OAuthException\",\"code\":190}}",
                 Encoding.UTF8, "application/json"),
         });
-        using var host = api.WithWebHostBuilder(b => b.ConfigureServices(s =>
+        await using var host = api.WithWebHostBuilder(b => b.ConfigureServices(s =>
             s.AddHttpClient(MetaGraphClient.HttpClientName).ConfigurePrimaryHttpMessageHandler(() => handler)));
         var (clientId, manager, profile) = await SetupAsync(host, SocialNetwork.Facebook, externalId: "1122334455");
 

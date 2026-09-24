@@ -100,6 +100,7 @@ public sealed class NotificationDispatchTests(ApiFactory api) : IClassFixture<Ap
     {
         await using var failing = api.WithWebHostBuilder(b =>
             b.ConfigureServices(s => s.AddScoped<INotificationChannelSender, FailingEmailSender>()));
+        await failing.StartAsync();
         var runner = failing.Services.GetRequiredService<JobRunner>();
 
         var user = await api.CreateUserAsync();
@@ -153,6 +154,7 @@ public sealed class NotificationDispatchTests(ApiFactory api) : IClassFixture<Ap
         var counter = new CountingEmailSender();
         await using var counting = api.WithWebHostBuilder(b =>
             b.ConfigureServices(s => s.AddSingleton<INotificationChannelSender>(counter)));
+        await counting.StartAsync();
 
         var user = await api.CreateUserAsync();
         var ids = new List<Guid>();

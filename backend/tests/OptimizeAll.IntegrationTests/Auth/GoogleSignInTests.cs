@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Time.Testing;
 using OptimizeAll.Domain.Audit;
 using OptimizeAll.Domain.Identity;
 using OptimizeAll.IntegrationTests.Infrastructure;
@@ -226,6 +228,7 @@ public sealed class GoogleSignInTests(GoogleSignInFixture fx) : IClassFixture<Go
         var existing = await Api.CreateUserAsync(email: NewEmail("race-signin"));
         var subject = NewSubject();
         await using var racing = new RacingApp(fx);
+        await racing.StartAsync();
         // Another tab's sign-in links the same Google account to the same user between our check and our insert.
         racing.BeforeLinkSaved = () => Api.WithDbAsync(db => AddLinkAsync(db, existing.Id, subject));
 
@@ -243,6 +246,7 @@ public sealed class GoogleSignInTests(GoogleSignInFixture fx) : IClassFixture<Go
         var loser = await Api.CreateUserAsync(email: NewEmail("race-loser"));
         var subject = NewSubject();
         await using var racing = new RacingApp(fx);
+        await racing.StartAsync();
         racing.BeforeLinkSaved = () => Api.WithDbAsync(db => AddLinkAsync(db, winner.Id, subject));
 
         var client = racing.Client();
@@ -282,6 +286,8 @@ public sealed class GoogleSignInTests(GoogleSignInFixture fx) : IClassFixture<Go
                 services.AddScoped<OptimizeAll.Api.Common.Audit.IAuditLogger>(sp => new Hook(
                     ActivatorUtilities.CreateInstance<OptimizeAll.Api.Common.Audit.AuditLogger>(sp), this))));
         }
+
+        public Task StartAsync() => _app.StartAsync();
 
         public HttpClient Client()
         {
@@ -386,6 +392,30 @@ public sealed class GoogleSignInTests(GoogleSignInFixture fx) : IClassFixture<Go
         var other = await StartAsync();
         await (await CallbackAsync(attempt, NewSubject(), NewEmail("pkce"), challenge: other.Challenge))
             .ShouldFailAsync(400, "auth.google_exchange_failed");
+    }
+
+    [Fact]
+    public async Task Sign_in_works_when_the_browser_clock_runs_ahead_of_the_server()
+    {
+        // The flow cookie lives 10 minutes. Sent as an absolute Expires date by the server's clock, a browser whose
+        // clock is further ahead than that (here: the server clock is an hour behind the client's) would store it
+        // already expired and drop it, so the callback would find no flow and refuse the state. This is also what
+        // broke this whole class on slow full MySQL runs: the fixture's test clock starts when the fixture is built
+        // and lagged the client's real clock by more than 10 minutes once migrations and earlier tests had run.
+        var serverNow = DateTimeOffset.UtcNow.AddHours(-1);
+        await using var lagging = fx.App.WithWebHostBuilder(builder => builder.ConfigureServices(services =>
+        {
+            services.RemoveAll<TimeProvider>();
+            services.AddSingleton<TimeProvider>(new FakeTimeProvider(serverNow));
+        }));
+        await lagging.StartAsync();
+        var attempt = await StartAsync(NewClient(lagging));
+        fx.Google.Now = serverNow.UtcDateTime;
+        var code = fx.Google.IssueCode(attempt.Challenge,
+            fx.Google.IdToken(NewSubject(), NewEmail("skew"), attempt.Nonce, name: "Amina Siddiqui"));
+        var callback = await (await attempt.Client.PostAsJsonAsync("/api/v1/auth/google/callback", new { code, state = attempt.State }))
+            .ReadJsonAsync();
+        Assert.Equal("needsTerms", callback.GetProperty("status").GetString());
     }
 
     // ---------- Profile linking and unlinking ----------
