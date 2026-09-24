@@ -150,7 +150,19 @@
 }
 
 @media (max-width: 639px) {
-  .portal-search__label,
+  /* Icon-only on phones: the label stays in the accessibility tree (visually hidden) so the button keeps its name. */
+  .portal-search__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
   .portal-search kbd {
     display: none;
   }

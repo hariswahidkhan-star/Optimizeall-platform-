@@ -181,6 +181,7 @@ test('finance records, corrects, reverses (four-eyes) and settles client payment
       reason: 'Client asked for the money back',
       reversedOn: new Date().toISOString().slice(0, 10),
       concurrencyStamp: recorded!.concurrencyStamp,
+      confirm: true,
     })
     .then(
       () => null,

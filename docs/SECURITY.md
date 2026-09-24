@@ -269,6 +269,9 @@ target's email to be typed) starts a time-boxed session:
 
 * Global token bucket: 300 requests/min per client IP.
 * `auth` policy: 10 requests/min per IP on credential endpoints (`RateLimiting__AuthPerMinute`).
+* `refresh` policy: 240 session refreshes/min per IP (`RateLimiting__RefreshPerMinute`). Every page load and tab
+  refreshes silently and an office behind one NAT address shares the budget, so it is generous; refresh tokens are
+  random, rotate on use and trigger reuse detection, so nothing can be guessed through this endpoint.
 * `submissions` policy: 30 writes/min per user for actions that create staff work (submissions, tickets, appeals).
 * `public` policy: 120 requests/min per IP for unauthenticated endpoints (landing pages, `/t/{code}`, postbacks).
 * `tracking` policy: 1,200 requests/min per IP for email open pixels, click redirects and one-click unsubscribes
