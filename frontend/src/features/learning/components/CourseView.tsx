@@ -4,7 +4,8 @@ import { useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
 import { Markdown } from '@/features/public/site/Markdown';
-import { formatMinutes, type CourseDetail } from '../api';
+import { courseKeywords, formatMinutes, type CourseDetail } from '../api';
+import { LearnSlot } from './LearnSlot';
 import { BadgeImage, CategoryTag, categoryClass, LevelTag } from './CourseCard';
 
 export interface CourseViewProps {
@@ -112,6 +113,8 @@ export function CourseView({ course, lessonLink, courseLink, actions, progress, 
               </ol>
             </CardBody>
           </Card>
+          {/* Partner slot (course page). */}
+          <LearnSlot slot="learn.course" keywords={courseKeywords(card.skills, card.category)} categories={[card.category]} />
         </div>
 
         <aside className="lx-course__aside" aria-label="Certificate and assessment">

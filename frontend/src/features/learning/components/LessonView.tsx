@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/Button';
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
 import { Markdown } from '@/features/public/site/Markdown';
-import type { KnowledgeCheck as Check, KnowledgeCheckResult, Lesson } from '../api';
+import { CATEGORY_LABELS, type KnowledgeCheck as Check, type KnowledgeCheckResult, type Lesson } from '../api';
+import { LearnSlot } from './LearnSlot';
 import { categoryClass } from './CourseCard';
 
 export interface LessonViewProps {
@@ -95,6 +96,13 @@ export function LessonView({ lesson, lessonLink, courseLink, onAnswer, savedAnsw
           </CardBody>
         </Card>
       )}
+
+      {/* Partner slot (lesson page). */}
+      <LearnSlot
+        slot="learn.lesson"
+        keywords={[lesson.title, lesson.moduleTitle, lesson.courseTitle, CATEGORY_LABELS[lesson.category]]}
+        categories={[lesson.category]}
+      />
 
       {footer}
 

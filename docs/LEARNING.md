@@ -221,6 +221,15 @@ learners, certificates, CSV export), `learning.manage` (author/edit/publish/unpu
 * **Videos** — per video lesson: upload MP4/poster/captions (Files module, `FilePurpose.LearningMedia`, public) or paste
   https URLs; saves a new version.
 
+### Partner slots (integration point)
+
+`frontend/src/features/learning/components/LearnSlot.tsx` is a no-op insertion point placed on the course page, lesson
+page, exam result, certificate page, public verification page and the participant Learning panel, each with its slot
+name (`learn.course` | `learn.lesson` | `learn.exam` | `learn.certificate` | `learn.dashboard`), keywords (course skills +
+category label, `courseKeywords()` in `features/learning/api.ts`) and categories. The partners feature swaps its body for
+`<PartnerSlot … />`. The public `/learn` pages render inside the public site layout, so site-wide providers (e.g.
+sponsored-link handling of Markdown links) apply to lessons.
+
 ## 10. Demo data
 
 The Demo seed (`LearningDemoSeeder`, after the main demo) features the platform course and the first course of other

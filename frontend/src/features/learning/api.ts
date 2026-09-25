@@ -509,6 +509,11 @@ export function useMyCertificate(id: string) {
 
 // ---------------------------------------------------------------- helpers
 
+/** Page keywords for partner slots and topic matching: the course's skills plus its category label. */
+export function courseKeywords(skills: readonly string[], category: CourseCategory): string[] {
+  return [...skills, CATEGORY_LABELS[category]];
+}
+
 export function formatMinutes(minutes: number): string {
   if (minutes < 60) return `${minutes} min`;
   const h = Math.floor(minutes / 60);

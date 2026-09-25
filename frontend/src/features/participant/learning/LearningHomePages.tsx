@@ -21,6 +21,7 @@ import {
 } from '@/features/learning/api';
 import { MyCatalog } from '@/features/learning/components/CatalogBrowser';
 import { BadgeImage, CategoryTag, CourseCard, LinkedInIcon } from '@/features/learning/components/CourseCard';
+import { LearnSlot } from '@/features/learning/components/LearnSlot';
 import '@/features/learning/learning.css';
 
 export const learningPaths = {
@@ -317,6 +318,8 @@ export function LearningCertificatePage() {
                       </a>
                     </li>
                   </ul>
+                  {/* Partner slot (certificate page). */}
+                  <LearnSlot slot="learn.certificate" keywords={[...q.data.skills, q.data.courseTitle]} categories={[]} />
                   {q.data.skills.length > 0 && (
                     <>
                       <h3 className="lx-subhead">Skills</h3>

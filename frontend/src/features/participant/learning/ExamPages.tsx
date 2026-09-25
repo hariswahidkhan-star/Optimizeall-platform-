@@ -25,6 +25,7 @@ import {
   type AttemptQuestion,
   type ExamAttempt,
 } from '@/features/learning/api';
+import { LearnSlot } from '@/features/learning/components/LearnSlot';
 import '@/features/learning/learning.css';
 import { learningPaths } from './LearningHomePages';
 
@@ -408,6 +409,8 @@ function AttemptReview({ attempt }: { attempt: ExamAttempt }) {
           </div>
         </CardBody>
       </Card>
+      {/* Partner slot (exam result). */}
+      <LearnSlot slot="learn.exam" keywords={[attempt.courseTitle]} categories={[]} />
       <section aria-labelledby="review-heading" className="stack">
         <h2 id="review-heading" className="ui-dash-head">
           Review your answers

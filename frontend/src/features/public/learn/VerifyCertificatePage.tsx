@@ -6,6 +6,7 @@ import { ErrorState } from '@/components/ui/ErrorState';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { useCertificateVerification } from '@/features/learning/api';
 import { BadgeImage } from '@/features/learning/components/CourseCard';
+import { LearnSlot } from '@/features/learning/components/LearnSlot';
 import '@/features/learning/learning.css';
 import { useDocumentHead } from '../site/head';
 
@@ -114,6 +115,8 @@ export function VerifyCertificatePage() {
           </CardBody>
         </Card>
       )}
+      {/* Partner slot (public verification page). */}
+      {v && <LearnSlot slot="learn.certificate" keywords={[...v.skills, v.courseTitle]} categories={[]} />}
     </div>
   );
 }

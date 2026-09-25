@@ -5,6 +5,7 @@ import { Card, CardBody, CardHeader } from '@/components/ui/Card';
 import { ProgressRing } from '@/components/ui/Progress';
 import { useLearningDashboard } from '@/features/learning/api';
 import { BadgeImage, CourseCard } from '@/features/learning/components/CourseCard';
+import { LearnSlot } from '@/features/learning/components/LearnSlot';
 import '@/features/learning/learning.css';
 import { ContinueCard, learningPaths } from './LearningHomePages';
 
@@ -65,6 +66,12 @@ export function LearningPanel() {
           </ul>
         </>
       )}
+      {/* Partner slot (participant Learning panel). */}
+      <LearnSlot
+        slot="learn.dashboard"
+        keywords={[...new Set(d.inProgress.concat(d.completed).flatMap((e) => e.course.skills))]}
+        categories={[...new Set(d.inProgress.concat(d.completed).map((e) => e.course.category))]}
+      />
       {d.stats.enrolled === 0 && d.recommended.length === 0 && (
         <Card flat>
           <CardBody>
