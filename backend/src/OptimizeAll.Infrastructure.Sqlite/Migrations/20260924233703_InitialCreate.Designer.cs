@@ -11,7 +11,7 @@ using OptimizeAll.Infrastructure.Persistence;
 namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260924192026_InitialCreate")]
+    [Migration("20260924233703_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -13062,6 +13062,10 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.Property<string>("Excerpt")
                         .IsRequired()
                         .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastLiveSlug")
+                        .HasMaxLength(120)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("PublishAt")

@@ -68,6 +68,7 @@ services.Configure<JobOptions>(config.GetSection(JobOptions.Section));
 services.Configure<DevToolsOptions>(config.GetSection(DevToolsOptions.Section));
 services.Configure<ImpersonationOptions>(config.GetSection(ImpersonationOptions.Section));
 services.Configure<TestAccountOptions>(config.GetSection(TestAccountOptions.Section));
+services.Configure<ExportOptions>(config.GetSection(ExportOptions.Section));
 
 // ---------- Persistence ----------
 services.AddSingleton(TimeProvider.System);

@@ -75,7 +75,7 @@ Line validation (400): `billing.invalid_line` (description, quantity > 0, unit p
 | `POST /agency/crm/companies` | manage | `CompanyRequest` | 201 `CompanyDto` |
 | `PUT /agency/crm/companies/{id}` | manage | `CompanyRequest` + `concurrencyStamp` | `CompanyDto` |
 | `GET /agency/crm/contacts` | view | paging + `lifecycleStage, ownerUserId, companyId, tag, consentStatus, minScore` | paged `ContactSummaryDto` |
-| `GET /agency/crm/contacts/export.csv` | view | same filters | CSV (≤ 50 000 rows) |
+| `GET /agency/crm/contacts/export.csv` | view | same filters | CSV (≤ 50 000 rows; over the cap: 422 `export.too_large`) |
 | `POST /agency/crm/contacts/import` | manage | multipart `file` (CSV ≤ 2 MB), `?dryRun=&updateExisting=` | `ImportResultDto` (per-row status/errors) |
 | `GET /agency/crm/contacts/{id}` | view | – | `ContactDto` (score breakdown, timeline, UTM touches) |
 | `POST /agency/crm/contacts` | manage | `ContactRequest` | 201 `ContactDto` |
@@ -356,7 +356,7 @@ One place for incoming client payments and outgoing participant payouts. Reads n
 
 | Method & path | Permission | What it does |
 |---|---|---|
-| `GET /admin/payments`, `GET …/summary`, `GET …/records/{kind}/{id}`, `GET …/export.csv` | billing.view / payouts.view | unified list, totals, one record, CSV |
+| `GET /admin/payments`, `GET …/summary`, `GET …/records/{kind}/{id}`, `GET …/export.csv` | billing.view / payouts.view | unified list, totals, one record, CSV (≤ 20,000 rows; over the cap: 422 `export.too_large`) |
 | `POST …/invoices/{invoiceId}/payments`, `POST …/invoices/{invoiceId}/mark-paid` | billing.manage | record a payment / settle the balance |
 | `PATCH …/invoice-payments/{paymentId}`, `POST …/invoice-payments/{paymentId}/reverse` | billing.manage | correct or reverse a recorded payment |
 | `POST …/invoice-payments/{paymentId}/proofs`, `GET …/proofs/{proofId}` | billing.manage / billing.view | attach and read payment proofs |

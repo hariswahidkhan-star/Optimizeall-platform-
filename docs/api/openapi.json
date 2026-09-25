@@ -315,6 +315,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -610,6 +611,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -741,6 +743,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -820,6 +823,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -1368,6 +1372,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -2266,6 +2271,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -2673,6 +2679,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -2817,6 +2824,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -2946,6 +2954,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -3804,6 +3813,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -4181,6 +4191,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -4309,6 +4320,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -8311,6 +8323,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -9946,6 +9959,7 @@
         "tags": [
           "AgencyCommunication"
         ],
+        "summary": "The 200 most recent threads (kept for older clients; the full count is in `X-Total-Count`). Use\r\n`threads/paged` to page through all of them.",
         "parameters": [
           {
             "name": "clientId",
@@ -10026,6 +10040,99 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/agency/clients/{clientId}/threads/paged": {
+      "get": {
+        "tags": [
+          "AgencyCommunication"
+        ],
+        "summary": "The client's threads, a page at a time (most recent activity first), with the total.",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sort",
+            "in": "query",
+            "schema": {
+              "maxLength": 50,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Desc",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Projects.ThreadSummaryDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Projects.ThreadSummaryDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Projects.ThreadSummaryDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              }
+            }
           }
         }
       }
@@ -10502,6 +10609,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -11049,6 +11157,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -11337,6 +11446,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -12084,6 +12194,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -12729,6 +12840,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -12835,6 +12947,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -13886,6 +13999,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -14414,6 +14528,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -17960,6 +18075,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -18191,6 +18307,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -18553,6 +18670,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -18718,6 +18836,7 @@
         "tags": [
           "ClientEmail"
         ],
+        "summary": "The client's decision. Refused while impersonating: an approval releases a send to the whole audience, and it is\r\nthe client's consent, which staff cannot give on their behalf.",
         "parameters": [
           {
             "name": "id",
@@ -20491,6 +20610,7 @@
         "tags": [
           "ClientPortalDelivery"
         ],
+        "summary": "The 200 most recent threads (full count in `X-Total-Count`); `threads/paged` pages through all of them.",
         "parameters": [
           {
             "name": "clientId",
@@ -20571,6 +20691,98 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/client/orgs/{clientId}/threads/paged": {
+      "get": {
+        "tags": [
+          "ClientPortalDelivery"
+        ],
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sort",
+            "in": "query",
+            "schema": {
+              "maxLength": 50,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Desc",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Projects.ThreadSummaryDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Projects.ThreadSummaryDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Projects.ThreadSummaryDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              }
+            }
           }
         }
       }
@@ -21647,6 +21859,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -22093,6 +22306,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -22274,6 +22488,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -22816,6 +23031,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -22998,6 +23214,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -23560,6 +23777,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -23689,6 +23907,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -25072,6 +25291,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -25518,6 +25738,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -26984,6 +27205,7 @@
         "tags": [
           "EmailAutomations"
         ],
+        "summary": "Activating starts messaging every contact the trigger matches: refused while impersonating.",
         "parameters": [
           {
             "name": "id",
@@ -27153,6 +27375,7 @@
         "tags": [
           "EmailAutomations"
         ],
+        "summary": "Manual enrolment sends the journey's messages to the chosen contacts: refused while impersonating.",
         "parameters": [
           {
             "name": "id",
@@ -27264,6 +27487,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -27689,7 +27913,7 @@
         "tags": [
           "EmailCampaigns"
         ],
-        "summary": "Sensitive: confirm the send (typed campaign name). The send job does the sending.",
+        "summary": "Sensitive: confirm the send or schedule (typed campaign name). The send job does the sending. Refused while\r\nimpersonating: it reaches the client's whole audience (test sends to staff addresses stay available).",
         "parameters": [
           {
             "name": "id",
@@ -27867,6 +28091,7 @@
         "tags": [
           "EmailCampaigns"
         ],
+        "summary": "Restarts a paused send to the audience: refused while impersonating, like the send itself.",
         "parameters": [
           {
             "name": "id",
@@ -28963,6 +29188,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -29089,6 +29315,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -29734,6 +29961,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -29769,7 +29997,7 @@
         "tags": [
           "FinanceLedger"
         ],
-        "summary": "CSV of the ledger with the same filters (max 100,000 rows, newest first).",
+        "summary": "CSV of the ledger with the same filters (newest first). More matching rows than the cap (Exports:Ledger, default\r\n100,000) is a 422 `export.too_large`, never a cut-short file.",
         "parameters": [
           {
             "name": "UserId",
@@ -29865,6 +30093,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -30152,6 +30381,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -30440,6 +30670,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -30709,6 +30940,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -31595,6 +31827,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -32560,6 +32793,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -33292,6 +33526,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -33754,6 +33989,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -33813,6 +34049,15 @@
             "schema": {
               "maximum": 100,
               "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "description": "Rows before the page, computed in 64 bits so a huge page number cannot wrap to a negative offset.",
+            "schema": {
               "type": "integer",
               "format": "int32"
             }
@@ -34073,6 +34318,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -34456,6 +34702,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -34935,6 +35182,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -35047,7 +35295,7 @@
         "tags": [
           "PaymentsHub"
         ],
-        "summary": "CSV of every record matching the filters (formula-safe; at most 20,000 rows).",
+        "summary": "CSV of every record matching the filters (formula-safe; over 20,000 rows is a 422 `export.too_large`).",
         "parameters": [
           {
             "name": "Direction",
@@ -35190,6 +35438,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -35615,6 +35864,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -36181,6 +36431,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -36279,6 +36530,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -37119,6 +37371,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -37447,6 +37700,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -40246,6 +40500,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -40468,6 +40723,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -40606,6 +40862,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -40859,6 +41116,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -41066,6 +41324,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -41630,6 +41889,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -41899,6 +42159,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -42780,6 +43041,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -44421,6 +44683,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -44959,6 +45222,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -45384,7 +45648,7 @@
         "tags": [
           "SmsCampaigns"
         ],
-        "summary": "Sensitive: confirm the send (typed campaign name). The send job does the sending.",
+        "summary": "Sensitive: confirm the send or schedule (typed campaign name). The send job does the sending. Refused while\r\nimpersonating: it reaches the client's whole audience (test sends to staff addresses stay available).",
         "parameters": [
           {
             "name": "id",
@@ -45562,6 +45826,7 @@
         "tags": [
           "SmsCampaigns"
         ],
+        "summary": "Restarts a paused send to the audience: refused while impersonating, like the send itself.",
         "parameters": [
           {
             "name": "id",
@@ -45741,6 +46006,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -46429,6 +46695,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -46741,6 +47008,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -47307,6 +47575,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -48823,6 +49092,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -49818,6 +50088,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -50613,6 +50884,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -51026,6 +51298,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -51984,6 +52257,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -52324,6 +52598,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -52608,6 +52883,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -52892,6 +53168,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -53724,7 +54001,7 @@
         "tags": [
           "WebsiteContent"
         ],
-        "summary": "Denied while impersonating: the settings choose the tag-manager / analytics scripts loaded on every public page and\nthe canonical site URL used by links, the sitemap and robots.txt (platform-wide configuration, like admin settings).",
+        "summary": "Denied while impersonating: the settings choose the tag-manager / analytics scripts loaded on every public page and\r\nthe canonical site URL used by links, the sitemap and robots.txt (platform-wide configuration, like admin settings).",
         "requestBody": {
           "content": {
             "application/json": {
@@ -54028,6 +54305,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -54165,6 +54443,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -54500,6 +54779,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -54815,6 +55095,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -54915,10 +55196,62 @@
         ],
         "parameters": [
           {
-            "name": "status",
+            "name": "Status",
             "in": "query",
             "schema": {
               "$ref": "#/components/schemas/OptimizeAll.Domain.Website.NewsletterStatus"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sort",
+            "in": "query",
+            "schema": {
+              "maxLength": 50,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Desc",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
@@ -54988,6 +55321,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -55332,6 +55666,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -77949,6 +78284,36 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Projects.ReportSummaryDto"
+            },
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OptimizeAll.Api.Common.Http.PagedResult`1[[Projects.ThreadSummaryDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Projects.ThreadSummaryDto"
             },
             "nullable": true
           },

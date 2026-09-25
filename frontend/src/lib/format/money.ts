@@ -8,8 +8,9 @@ import { browserLocale } from './locale';
  */
 
 /**
- * Currencies whose minor unit is not 2. Mirrors `Money.MinorUnits` in backend/src/OptimizeAll.Domain/Common/Money.cs;
- * keep the two in sync.
+ * Currencies whose minor unit is not 2. Mirrors `Money.MinorUnits` in backend/src/OptimizeAll.Domain/Common/Money.cs:
+ * the backend unit test `MinorUnitsSyncTests` parses this literal and fails when the two differ, so keep it a plain
+ * `CODE: digits` list.
  */
 const MINOR_UNITS: Readonly<Record<string, number>> = {
   BHD: 3, JOD: 3, KWD: 3, OMR: 3, TND: 3, IQD: 3, LYD: 3,

@@ -482,8 +482,26 @@ public sealed class AgencyCommunicationController(CommunicationService communica
     [HasPermission(Permissions.ProjectsManage)]
     public Task<BriefDto> Convert(Guid id, ConvertBriefRequest request, CancellationToken ct) => communication.ConvertBriefAsync(id, request, ct);
 
+    /// <summary>
+    /// The 200 most recent threads (kept for older clients; the full count is in <c>X-Total-Count</c>). Use
+    /// <c>threads/paged</c> to page through all of them.
+    /// </summary>
     [HttpGet("clients/{clientId:guid}/threads")]
-    public Task<IReadOnlyList<ThreadSummaryDto>> Threads(Guid clientId, CancellationToken ct) => communication.ThreadsAsync(clientId, ct);
+    public Task<IReadOnlyList<ThreadSummaryDto>> Threads(Guid clientId, CancellationToken ct) => LegacyThreadsAsync(communication, Response, clientId, ct);
+
+    /// <summary>The client's threads, a page at a time (most recent activity first), with the total.</summary>
+    [HttpGet("clients/{clientId:guid}/threads/paged")]
+    public Task<PagedResult<ThreadSummaryDto>> ThreadPage(Guid clientId, [FromQuery] ThreadQuery query, CancellationToken ct) =>
+        communication.ThreadPageAsync(clientId, query, ct);
+
+    /// <summary>First 200 threads as a bare list plus <c>X-Total-Count</c> (the original contract of <c>GET threads</c>).</summary>
+    internal static async Task<IReadOnlyList<ThreadSummaryDto>> LegacyThreadsAsync(CommunicationService communication, HttpResponse response,
+        Guid clientId, CancellationToken ct)
+    {
+        var page = await communication.ThreadPageAsync(clientId, new ThreadQuery { Page = 1, PageSize = 200 }, ct);
+        response.Headers["X-Total-Count"] = page.Total.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        return page.Items;
+    }
 
     [HttpPost("clients/{clientId:guid}/threads")]
     public async Task<IActionResult> NewThread(Guid clientId, NewThreadRequest request, CancellationToken ct) =>
@@ -583,8 +601,14 @@ public sealed class ClientPortalDeliveryController(
     [HttpGet("briefs/{id:guid}")]
     public Task<BriefDto> Brief(Guid clientId, Guid id, CancellationToken ct) => communication.BriefAsync(id, clientId, ct);
 
+    /// <summary>The 200 most recent threads (full count in <c>X-Total-Count</c>); <c>threads/paged</c> pages through all of them.</summary>
     [HttpGet("threads")]
-    public Task<IReadOnlyList<ThreadSummaryDto>> Threads(Guid clientId, CancellationToken ct) => communication.ThreadsAsync(clientId, ct);
+    public Task<IReadOnlyList<ThreadSummaryDto>> Threads(Guid clientId, CancellationToken ct) =>
+        AgencyCommunicationController.LegacyThreadsAsync(communication, Response, clientId, ct);
+
+    [HttpGet("threads/paged")]
+    public Task<PagedResult<ThreadSummaryDto>> ThreadPage(Guid clientId, [FromQuery] ThreadQuery query, CancellationToken ct) =>
+        communication.ThreadPageAsync(clientId, query, ct);
 
     [HttpPost("threads")]
     public async Task<IActionResult> NewThread(Guid clientId, NewThreadRequest request, CancellationToken ct) =>

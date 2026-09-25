@@ -13072,6 +13072,10 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
 
+                    b.Property<string>("LastLiveSlug")
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)");
+
                     b.Property<DateTime?>("PublishAt")
                         .HasPrecision(6)
                         .HasColumnType("datetime(6)");

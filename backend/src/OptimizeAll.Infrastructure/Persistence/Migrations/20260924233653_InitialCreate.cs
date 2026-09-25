@@ -2516,6 +2516,8 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Slug = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    LastLiveSlug = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Title = table.Column<string>(type: "varchar(180)", maxLength: 180, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Excerpt = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)

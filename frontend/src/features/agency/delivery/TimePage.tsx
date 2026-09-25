@@ -414,6 +414,7 @@ function Reports() {
     queryFn: ({ signal }) => api.get<Utilization>('/agency/time/utilization', { query: { from, to }, signal }),
   });
   const [downloading, setDownloading] = useState(false);
+  const [exportError, setExportError] = useState<unknown>(null);
   return (
     <div className="dl-page">
       <div className="dl-toolbar">
@@ -429,8 +430,11 @@ function Reports() {
           loading={downloading}
           onClick={async () => {
             setDownloading(true);
+            setExportError(null);
             try {
               await api.download(`/agency/time/entries/export.csv?from=${from}&to=${to}`, `time-${from}-${to}.csv`);
+            } catch (error) {
+              setExportError(error);
             } finally {
               setDownloading(false);
             }
@@ -438,6 +442,7 @@ function Reports() {
         >
           Export my entries (CSV)
         </Button>
+        {exportError ? <Alert tone="danger">{errorMessage(exportError)}</Alert> : null}
       </div>
       {util.isPending ? (
         <Skeleton height={160} />

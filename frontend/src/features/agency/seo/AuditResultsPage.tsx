@@ -16,10 +16,12 @@ import {
   FormField,
   Stat,
   Tabs,
+  useToast,
   type DataTableColumn,
 } from '@/components/ui';
 import { SafeExternalLink } from '@/components/SafeExternalLink';
 import { api } from '@/lib/api/client';
+import { errorMessage } from '@/lib/api/errors';
 import type { PagedResult } from '@/lib/api/types';
 import { seoKeys, severityTone, type AuditDetail, type AuditDiff, type AuditIssue, type AuditPage, type DiffIssue } from './api';
 import { AuditIssueGroups } from './AuditIssueGroups';
@@ -29,6 +31,7 @@ import './seo.css';
 export function AuditResultsPage() {
   const { auditId = '' } = useParams();
   const queryClient = useQueryClient();
+  const toast = useToast();
   const detail = useQuery({ queryKey: seoKeys.audit(auditId), queryFn: () => api.get<AuditDetail>(`/agency/seo/audits/${auditId}`) });
   // Replace the triaged issue in the cached audit so the list updates without a refetch.
   const onIssueChanged = (issue: AuditIssue) =>
@@ -46,7 +49,11 @@ export function AuditResultsPage() {
         breadcrumbs={[{ label: 'SEO', to: '/agency/seo' }, ...(a ? [{ label: d!.siteName, to: `/agency/seo/sites/${a.siteId}` }] : []), { label: 'Audit' }]}
         meta={a && <span className="text-small text-muted">Finished <DateTime value={a.finishedAt ?? a.queuedAt} format="datetime" /></span>}
         actions={
-          <Button variant="secondary" leadingIcon={<Download />} onClick={() => void api.download(`/agency/seo/audits/${auditId}/export.csv`, 'seo-audit.csv')}>
+          <Button
+            variant="secondary"
+            leadingIcon={<Download />}
+            onClick={() => api.download(`/agency/seo/audits/${auditId}/export.csv`, 'seo-audit.csv').catch((e) => toast.error('Export failed', errorMessage(e)))}
+          >
             Export CSV
           </Button>
         }

@@ -65,6 +65,9 @@ canonical URL or *noindex*.
 **Leads.** Contact, audit, quote and booking submissions land in **Website inquiries** with their UTM source,
 referrer and landing page, and CRM receives each one as a lead (`WebsiteInquiryReceived`). Set the status and notes,
 assign it to a teammate, filter by assignee, mark it closed, erase it (spam or a data-erasure request) or export CSV.
+The export holds exactly what the list shows: it takes the same filters (search, type, status, assignee, dates, UTM
+source, service), and the newsletter export takes the list's status and search. Over 50,000 matching inquiries (or
+100,000 subscribers) the export is refused with 422 `export.too_large` and a message to narrow the filters.
 **Consultations** holds the weekly availability, slot length, minimum notice, blackout days and the booking list (cancel, reschedule, mark completed or no-show). **Newsletter** lists double opt-in subscribers; only
 confirmed ones are exported for sending, and every email must carry the unsubscribe link. Staff can unsubscribe an
 address on request or erase it entirely. Job applications can be erased with their notes and CV. The wording of the
@@ -96,7 +99,9 @@ impersonating (redirects decide where every visitor of an address lands, like th
   redirect (`website.redirect_removed`), a manual redirect from a live address is refused
   (`website.redirect_source_live`), and lookups check liveness again (scheduled pages that just went live win).
 - Renames of drafts, and renames that unpublish at the same time, record nothing (there is nothing live to send
-  visitors to). Built-in pages (`/`, `/services`, `/blog`, `/pricing`, …) and the portals, API and short links
+  visitors to). A blog post remembers the slug it was last live under (`LastLiveSlug`), so when a post that was
+  unpublished (or returned to draft) and renamed goes live again — published by hand or by the scheduler — its old
+  address redirects to the new one like a rename of the live post, unless another post has taken that slug since. Built-in pages (`/`, `/services`, `/blog`, `/pricing`, …) and the portals, API and short links
   (`/agency`, `/api`, `/t`, …) are never redirect sources.
 - A service line is addressed as `/services?category={slug}`; other query parameters (UTM tags) are carried over to
   the target.

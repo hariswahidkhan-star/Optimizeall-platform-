@@ -133,7 +133,7 @@ uploaded files or pass the image URL allow-list. Videos accept YouTube or Vimeo 
 | `GET /forms?clientId=&status=` · `POST /forms` `{ clientAccountId, name, templateKey? }` | |
 | `GET /forms/{id}` · `PUT /forms/{id}` · `DELETE /forms/{id}` (archive) | `PUT { name, status, schema, submitLabel, successMessage, redirectUrl? (https), notifyUserIds[], autoresponderEnabled, autoresponderSubject?, autoresponderBody?, allowedOrigins[], consentText?, captcha: None\|HCaptcha\|Turnstile, minFillSeconds 0–60, concurrencyStamp }`. Changing `consentText` creates a new consent version; each submission stores the version and text it was given. |
 | `GET /forms/{id}/submissions?from=&to=&landingPageId=` · `GET /forms/{id}/submissions/{sid}` | |
-| `GET /forms/{id}/submissions/export.csv` | one column per field (CSV-injection safe) |
+| `GET /forms/{id}/submissions/export.csv` | one column per field (CSV-injection safe); ≤ 50,000 rows (over the cap: 422 `export.too_large`) |
 | `GET /forms/{id}/submissions/{sid}/files/{fileId}` | attachment download (`Content-Disposition: attachment`, `nosniff`) |
 | `GET /forms/{id}/embed` | `{ formUrl, iframeSnippet, allowedOrigins, frameAncestors, guidance }` |
 

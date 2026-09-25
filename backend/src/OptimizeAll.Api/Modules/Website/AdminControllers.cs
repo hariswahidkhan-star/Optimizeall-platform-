@@ -475,9 +475,9 @@ public sealed class WebsiteLeadsController(
 
     [HttpGet("newsletter/subscribers/export.csv")]
     [HasPermission(Permissions.SiteManage)]
-    public async Task<IActionResult> ExportSubscribers([FromQuery] NewsletterStatus? status, CancellationToken ct)
+    public async Task<IActionResult> ExportSubscribers([FromQuery] SubscriberQuery query, CancellationToken ct)
     {
-        var rows = await newsletter.ExportAsync(status, ct);
+        var rows = await newsletter.ExportAsync(query, ct);
         return Csv.File("newsletter-subscribers.csv",
             new[] { "email", "status", "source", "consent_version", "consent_at", "confirmed_at", "unsubscribed_at", "utm_source", "created_at" },
             rows.Select(s => new object?[] { s.Email, s.Status, s.Source, s.ConsentVersion, s.ConsentAt, s.ConfirmedAt, s.UnsubscribedAt, s.UtmSource, s.CreatedAt }));

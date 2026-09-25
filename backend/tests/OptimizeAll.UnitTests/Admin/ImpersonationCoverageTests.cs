@@ -68,6 +68,15 @@ public sealed class ImpersonationCoverageTests
         "AdminTestUsersController.Create",
         "AdminTestUsersController.Delete",
         "AdminImpersonationController.Start",
+        // Outbound messages to a client's audience (campaigns, journeys) or the client's own consent to one. Test sends
+        // (to staff addresses), pause/unschedule/cancel (they stop sending) and drafting stay available.
+        "EmailCampaignsController.Send",
+        "EmailCampaignsController.Resume",
+        "SmsCampaignsController.Send",
+        "SmsCampaignsController.Resume",
+        "EmailAutomationsController.Activate",
+        "EmailAutomationsController.Enroll",
+        "ClientEmailController.Decide",
     };
 
     /// <summary>Reads that must be denied too (they decrypt data).</summary>
@@ -84,10 +93,15 @@ public sealed class ImpersonationCoverageTests
     {
     };
 
-    /// <summary>The way back must stay reachable while impersonating.</summary>
+    /// <summary>
+    /// The way back must stay reachable while impersonating, and so must the actions that stop outbound messages or
+    /// only reach staff (a campaign test send goes to the addresses typed in, normally the team's own).
+    /// </summary>
     private static readonly string[] MustAllow =
     {
         "AuthController.ExitImpersonation", "AuthController.Logout", "AuthController.Refresh", "AuthController.Me",
+        "EmailCampaignsController.Test", "EmailCampaignsController.Pause", "EmailCampaignsController.Cancel",
+        "EmailCampaignsController.Unschedule", "EmailAutomationsController.Pause",
     };
 
     private sealed record ActionInfo(string Name, bool IsWrite, bool IsRead, IReadOnlySet<string> Permissions,
@@ -101,7 +115,10 @@ public sealed class ImpersonationCoverageTests
         {
             var classDenial = type.GetCustomAttribute<DeniedWhileImpersonatingAttribute>(inherit: true);
             var classPermissions = type.GetCustomAttributes<HasPermissionAttribute>(inherit: true).Select(PermissionOf);
-            foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly))
+            // Actions inherited from an abstract base controller of the app (e.g. CampaignActions) belong to each concrete
+            // controller, so scan the whole hierarchy up to ControllerBase.
+            foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                         .Where(m => m.DeclaringType is { } d && d.Assembly == assembly && typeof(ControllerBase).IsAssignableFrom(d)))
             {
                 var verbs = method.GetCustomAttributes<HttpMethodAttribute>(inherit: true).SelectMany(a => a.HttpMethods).ToList();
                 if (verbs.Count == 0) continue;
@@ -126,6 +143,8 @@ public sealed class ImpersonationCoverageTests
         var actions = Actions();
         Assert.True(actions.Count > 300, $"Only {actions.Count} actions found: the reflection scan is broken.");
         Assert.Contains(actions, a => a.Name == "PayoutBatchesController.Finalize");
+        // Actions declared on an abstract base controller are found on each concrete controller.
+        Assert.Contains(actions, a => a.Name == "SmsCampaignsController.Send");
     }
 
     [Fact]

@@ -102,7 +102,7 @@ Query: `userId`, `search` (email, name, description, or an exact id of earning/u
 `campaignId`, `type`, `status`, `from`, `to`, paging. Returns `Paged<LedgerRow>`, newest first.
 
 ### `GET /finance/ledger/export.csv` — `ledger.view`
-Same filters, max 100,000 rows. Columns: Earning ID, Created at (UTC), User ID, User email, User name, Type, Status,
+Same filters, max 100,000 rows (more matching rows: 422 `export.too_large` with the count, never a cut-short file). Columns: Earning ID, Created at (UTC), User ID, User email, User name, Type, Status,
 Description, Campaign, Submission ID, Original amount, Original currency, Exchange rate, Settlement amount, Settlement
 currency, Rule version, Available at (UTC), Approved at (UTC), Payout item ID, Paid at (UTC), Reverses earning ID,
 Reversed by earning ID, Reason.

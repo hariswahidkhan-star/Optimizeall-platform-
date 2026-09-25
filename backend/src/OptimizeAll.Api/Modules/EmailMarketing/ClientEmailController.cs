@@ -67,7 +67,12 @@ public sealed class ClientEmailController(AppDbContext db, EmailAccess access, I
     [HttpGet("campaigns/{id:guid}/preview")]
     public async Task<RenderResult> Preview(Guid id, CancellationToken ct) => await campaigns.PreviewCampaignAsync(await LoadAsync(id, ct), null, ct);
 
+    /// <summary>
+    /// The client's decision. Refused while impersonating: an approval releases a send to the whole audience, and it is
+    /// the client's consent, which staff cannot give on their behalf.
+    /// </summary>
     [HttpPost("campaigns/{id:guid}/approval")]
+    [DeniedWhileImpersonating]
     public Task<CampaignDto> Decide(Guid id, ApprovalDecisionRequest request, CancellationToken ct) => campaigns.DecideApprovalAsync(id, request, ct);
 
     [HttpGet("kpis")]

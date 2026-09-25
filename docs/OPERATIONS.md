@@ -148,6 +148,12 @@ sends them with retry and backoff. In-app notifications are unaffected by channe
 | Screenshots 404 on some instances | storage not shared between API instances | mount the same shared volume on every instance |
 | Suspected account takeover | audit log (`audit_logs`), refresh-token reuse warnings in logs | suspend the user (revokes sessions), force password reset |
 | Suspicious payout item | fraud flags, submission history | hold the item (reason), escalate; never delete ledger rows |
+| Export refused: 422 `export.too_large` | more rows match than the export's cap (the message gives both numbers) | narrow the filters (shorter date range, one client/user); caps are `Exports__*` (below) — raise one only with memory to spare, the file is built in memory |
+
+**Export caps** (`Exports__<Name>`, rows): `Ledger` 100,000 · `PaymentsHub` 20,000 · `AuditLog` 50,000 · `Users`
+50,000 · `CrmContacts` 50,000 · `FormSubmissions` 50,000 · `EmailList` 200,000 · `NewsletterSubscribers` 100,000 ·
+`Inquiries` 50,000 · `TimeEntries` 50,000. An export over its cap is refused (422, never a silently cut file) and the
+web app shows the message.
 
 ## 5. Backup and restore (MySQL)
 

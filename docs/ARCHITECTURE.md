@@ -53,6 +53,7 @@ Modules talk to each other through:
 | `JobRunner` / `IJob` / `services.AddRecurringJob<TJob>(interval)` | Background jobs with DB lease, run log (`job_runs`) and safe retry. |
 | `PageQuery` / `PagedResult<T>` / `ToPagedAsync` | Standard list endpoints. `PagingExtensions.LikePattern` escapes search. |
 | `Csv.File(...)` | CSV exports with formula-injection protection. |
+| `ExportLimit.EnsureAsync(query, cap)` / `ExportOptions` | Row cap of a CSV export (`Exports:*`). More matching rows than the cap is 422 `export.too_large` ("N rows match … narrow the filters"), never a file cut short; apply it before loading the rows. |
 | `RateLimitPolicies` | `[EnableRateLimiting(RateLimitPolicies.Submissions)]` etc. |
 
 ### API conventions

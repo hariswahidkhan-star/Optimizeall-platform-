@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Domain.Audit;
 using OptimizeAll.Domain.Identity;
@@ -10,10 +11,8 @@ using OptimizeAll.Infrastructure.Persistence;
 
 namespace OptimizeAll.Api.Modules.Admin;
 
-public sealed class AuditLogService(AppDbContext db)
+public sealed class AuditLogService(AppDbContext db, IOptions<ExportOptions> exports)
 {
-    public const int MaxExportRows = 50_000;
-
     private sealed class Row
     {
         public required AuditLog Log { get; init; }
@@ -99,7 +98,8 @@ public sealed class AuditLogService(AppDbContext db)
 
     public async Task<FileContentResult> ExportCsvAsync(AuditLogQuery query, CancellationToken ct)
     {
-        var rows = await Query(query).Take(MaxExportRows).ToListAsync(ct);
+        await ExportLimit.EnsureAsync(Filter(query), exports.Value.AuditLog, ct);
+        var rows = await Query(query).ToListAsync(ct);
         return Csv.File($"audit-log-{DateTime.UtcNow:yyyyMMdd-HHmmss}.csv",
             new[] { "id", "createdAt", "actorUserId", "actorEmail", "actorType", "impersonatorUserId", "impersonatorName", "action", "entityType", "entityId", "reason", "ipAddress", "correlationId", "before", "after" },
             rows.Select(r => new object?[]

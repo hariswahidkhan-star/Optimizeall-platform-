@@ -26,7 +26,7 @@ namespace OptimizeAll.Api.Modules.Website.Leads;
 public sealed class NewsletterService(
     AppDbContext db, IDatabaseDialect dialect, FormGuard guard, IPrivacyHasher hasher, ICurrentUser user, IEmailSender email,
     IOptions<EmailOptions> emailOptions, IOptions<SecurityOptions> security, IEventPublisher events, IAuditLogger audit, TimeProvider clock,
-    ILogger<NewsletterService> logger, EmailTemplateService templates)
+    ILogger<NewsletterService> logger, EmailTemplateService templates, IOptions<ExportOptions> exports)
 {
     public static readonly TimeSpan ConfirmLifetime = TimeSpan.FromHours(48);
 
@@ -136,12 +136,16 @@ public sealed class NewsletterService(
 
     // ---------------------------------------------------------------- Staff (site.manage)
 
-    public async Task<PagedResult<SubscriberDto>> ListAsync(SubscriberQuery query, CancellationToken ct)
+    public async Task<PagedResult<SubscriberDto>> ListAsync(SubscriberQuery query, CancellationToken ct) =>
+        CmsStore.Map(await Filter(query).OrderByDescending(s => s.CreatedAt).ThenByDescending(s => s.Id).ToPagedAsync(query, ct), ToDto);
+
+    /// <summary>The list's filters (status, email search), shared with the CSV export so it holds what the list shows.</summary>
+    private IQueryable<NewsletterSubscriber> Filter(SubscriberQuery query)
     {
         var q = db.Set<NewsletterSubscriber>().AsNoTracking();
         if (query.Status is { } status) q = q.Where(s => s.Status == status);
         if (!string.IsNullOrWhiteSpace(query.Search)) q = q.Where(s => EF.Functions.Like(s.Email, PagingExtensions.LikePattern(query.Search), "\\"));
-        return CmsStore.Map(await q.OrderByDescending(s => s.CreatedAt).ThenByDescending(s => s.Id).ToPagedAsync(query, ct), ToDto);
+        return q;
     }
 
     /// <summary>Unsubscribes an address on the subscriber's behalf (e.g. they asked by reply). Idempotent.</summary>
@@ -172,12 +176,12 @@ public sealed class NewsletterService(
         await db.SaveChangesAsync(ct);
     }
 
-    public async Task<IReadOnlyList<NewsletterSubscriber>> ExportAsync(NewsletterStatus? status, CancellationToken ct)
+    public async Task<IReadOnlyList<NewsletterSubscriber>> ExportAsync(SubscriberQuery query, CancellationToken ct)
     {
-        var q = db.Set<NewsletterSubscriber>().AsNoTracking();
-        if (status is { } s) q = q.Where(x => x.Status == s);
-        var rows = await q.OrderBy(x => x.CreatedAt).Take(100000).ToListAsync(ct);
-        audit.Record("website.subscribers_exported", nameof(NewsletterSubscriber), "bulk", after: new { status, count = rows.Count });
+        var q = Filter(query);
+        await ExportLimit.EnsureAsync(q, exports.Value.NewsletterSubscribers, ct);
+        var rows = await q.OrderBy(x => x.CreatedAt).ThenBy(x => x.Id).ToListAsync(ct);
+        audit.Record("website.subscribers_exported", nameof(NewsletterSubscriber), "bulk", after: new { query.Status, query.Search, count = rows.Count });
         await db.SaveChangesAsync(ct);
         return rows;
     }

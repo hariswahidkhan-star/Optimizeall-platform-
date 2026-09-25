@@ -190,7 +190,7 @@ Under `/api/v1/agency/time` (`time.track`).
 |---|---|---|
 | `GET /timer`, `POST /timer/start`, `POST /timer/stop` | time.track | One running timer per user (unique index); `409 time.timer_running`, `409 time.no_timer`. `204` when none running |
 | `GET /entries`, `POST /entries`, `PUT/DELETE /entries/{id}` | time.track | Manual entries `{ projectId, taskId?, date, minutes, billable, note }`. `?userId=` requires `time.view_all`. Entries in a submitted/approved week are locked (`time.week_locked`) |
-| `GET /entries/export.csv` | time.track | Same filters; CSV with formula-injection-safe cells |
+| `GET /entries/export.csv` | time.track | Same filters; every matching entry (not only the 2,000 the list shows), ≤ 50,000 (over the cap: 422 `export.too_large`); CSV with formula-injection-safe cells |
 | `GET /timesheets/week?weekStart=` | time.track | Week starts Monday |
 | `POST /timesheets/submit` | time.track | `{ weekStart }` (`time.empty_week`, `time.already_submitted`) |
 | `GET /timesheets/pending`, `POST /timesheets/{id}/approve`, `POST /timesheets/{id}/reject` | projects.manage | Cannot decide your own (`time.own_timesheet`); reject needs a comment |
@@ -225,6 +225,7 @@ Under `/api/v1/agency` (`clients.view`).
 | `GET /briefs`, `POST /briefs`, `GET /briefs/{id}` | clients.view / deliverables.submit | Answers validated against the brief template fields |
 | `POST /briefs/{id}/status` | projects.manage | `InReview`, `Accepted`, `Declined` |
 | `POST /briefs/{id}/convert` | projects.manage | Creates a project (from template) or tasks/deliverables in an existing project; once only (`brief.already_converted`) |
+| `GET /clients/{clientId}/threads/paged?page=&pageSize=&search=` | clients.view | The client's threads a page at a time (`PagedResult`, pageSize ≤ 200), most recent activity first with the id as tie-breaker, so pages never repeat or skip a thread; `search` matches the subject or the last message. The web app uses this. `GET .../threads` still returns a bare list of the 200 most recent threads (kept for older clients) and now sends the full count in `X-Total-Count`. |
 | `GET/POST /clients/{clientId}/threads`, `GET .../threads/{threadId}`, `POST .../messages` | clients.view | Per-client threads. `POST` takes `{ subject, body, projectId?, attachmentFileIds, isInternal }`. `isInternal: true` creates a staff-only thread (set once, audited `message.internal_thread_created`). It is never listed or returned to client users (404 by id), its messages notify only the account team, and its attachments stay staff-only. Summaries and threads carry `isInternal`; a thread also carries `canReply`. Opening a thread records a read receipt; `readBy` per message |
 | `GET /meetings`, `POST /meetings`, `PUT /meetings/{id}` | projects.view | Agenda, notes, attendees, `actionItems` |
 | `POST /meetings/{id}/action-items/{itemId}/convert` | deliverables.submit | Turns an action item into a task (once) |
@@ -245,6 +246,7 @@ published reports, non-internal threads/comments.
 | `POST /deliverables/{id}/comments` | Approver/Owner |
 | `GET /reports`, `GET /reports/{id}` | member (published only) |
 | `GET /brief-templates`, `GET/POST /briefs`, `GET /briefs/{id}` | Approver/Owner to submit |
+| `GET /threads/paged?page=&pageSize=&search=` | Paged threads as for staff (non-internal only); `GET /threads` is the first 200 plus `X-Total-Count` |
 | `GET/POST /threads`, `GET /threads/{threadId}`, `POST /threads/{threadId}/messages` | Any member reads; only Approver/Owner write (Viewer and Billing: `403 client.insufficient_role`). Internal threads are never returned (404). `isInternal: true` from a client: `400 message.internal_not_allowed` |
 | `GET /meetings` | member |
 

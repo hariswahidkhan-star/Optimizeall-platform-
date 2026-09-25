@@ -12,7 +12,7 @@ using OptimizeAll.Infrastructure.Persistence;
 namespace OptimizeAll.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260924191934_InitialCreate")]
+    [Migration("20260924233653_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -13074,6 +13074,10 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
+
+                    b.Property<string>("LastLiveSlug")
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)");
 
                     b.Property<DateTime?>("PublishAt")
                         .HasPrecision(6)

@@ -1985,6 +1985,7 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Slug = table.Column<string>(type: "TEXT", maxLength: 120, nullable: false),
+                    LastLiveSlug = table.Column<string>(type: "TEXT", maxLength: 120, nullable: true),
                     Title = table.Column<string>(type: "TEXT", maxLength: 180, nullable: false),
                     Excerpt = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
                     BodyMarkdown = table.Column<string>(type: "TEXT", nullable: false),

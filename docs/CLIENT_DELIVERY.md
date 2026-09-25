@@ -120,6 +120,8 @@ Comments marked *Internal* are never shown to the client.
   page, email campaign, design request, video). The account manager reviews and converts a brief into a new project
   or tasks and deliverables in an existing project.
 - **Messages.** One or more threads per client, optionally about a project. Each message shows who has read it.
+  The list shows the 50 most recent conversations; *Show more conversations* loads the next 50 (with "Showing N of
+  M"), so every conversation stays reachable however many there are.
   **Internal threads**: when starting a conversation, staff can tick *Internal — only the agency team sees this
   conversation*. This is set when the thread is created and can't be changed later. An internal thread is marked
   *Internal* in the list, and client users never get it: it isn't listed, opening or replying to it by id is a 404,

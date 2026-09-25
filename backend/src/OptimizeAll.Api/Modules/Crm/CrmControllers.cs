@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Api.Modules.Billing;
@@ -15,7 +16,8 @@ namespace OptimizeAll.Api.Modules.Crm;
 [ApiController]
 [Route("api/v1/agency/crm")]
 [HasPermission(Permissions.CrmView)]
-public sealed class CrmController(CrmService crm, ContactImportService import, LeadScoringService scoring, CrmOptionsService options) : ControllerBase
+public sealed class CrmController(
+    CrmService crm, ContactImportService import, LeadScoringService scoring, CrmOptionsService options, IOptions<ExportOptions> exports) : ControllerBase
 {
     /// <summary>Agency-editable option lists (lost reasons, budget ranges, industries).</summary>
     [HttpGet("options")]
@@ -72,7 +74,8 @@ public sealed class CrmController(CrmService crm, ContactImportService import, L
     [HttpGet("contacts/export.csv")]
     public async Task<FileContentResult> ExportContacts([FromQuery] ContactQuery q, CancellationToken ct)
     {
-        var rows = await crm.FilterContacts(q).OrderBy(c => c.CreatedAt).Take(50_000).ToListAsync(ct);
+        await ExportLimit.EnsureAsync(crm.FilterContacts(q), exports.Value.CrmContacts, ct);
+        var rows = await crm.FilterContacts(q).OrderBy(c => c.CreatedAt).ThenBy(c => c.Id).ToListAsync(ct);
         var summaries = await crm.ContactSummariesAsync(rows, ct);
         await crm.RecordContactsExportAsync(q, summaries.Count, ct);
         return Csv.File($"contacts-{DateTime.UtcNow:yyyyMMdd}.csv",

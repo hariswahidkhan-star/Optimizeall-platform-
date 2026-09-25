@@ -15,7 +15,8 @@ This guide covers running the email/SMS module (`backend/src/OptimizeAll.Api/Mod
    - a provider that is not ready
    - pending client approval
 2. A user with `email.send` confirms the send by typing the campaign name. This checks the concurrency stamp and
-   records an audit entry. Nothing is sent from the browser.
+   records an audit entry. Nothing is sent from the browser. An admin "viewing as" a user cannot do this (see
+   [Impersonation](#impersonation-viewing-as)).
 3. `CampaignSendJob` runs every 30 seconds and does the following:
    - **Recipients:** creates one recipient row per contact. `(campaign, subscriber)` is unique, so a contact never
      gets two copies.
@@ -32,6 +33,27 @@ This guide covers running the email/SMS module (`backend/src/OptimizeAll.Api/Mod
    the better open or click rate is released to the remaining recipients.
 5. **Journeys:** `AutomationJob` runs every minute and advances enrollments. Each step's side effects run at most
    once, because run rows are unique per (enrollment, step).
+
+## Impersonation ("viewing as")
+
+Messages to a client's audience are refused while an admin is viewing as another user, like payouts: the endpoints
+answer 403 `auth.impersonation_forbidden_action` ("This action is not available while you are viewing as another
+user. Exit the impersonation session first.", shown in the send dialog), nothing changes and the refused request is
+recorded as `impersonation.request` on the impersonated user.
+
+| Refused while impersonating | Why |
+| --- | --- |
+| `POST /agency/email/campaigns/{id}/send` and `/agency/email/sms/campaigns/{id}/send` (send now **and** schedule) | reaches the whole audience |
+| `POST …/campaigns/{id}/resume` (email and SMS) | restarts a paused send to the audience |
+| `POST /agency/email/automations/{id}/activate` | starts messaging every contact the trigger matches |
+| `POST /agency/email/automations/{id}/enroll` | sends the journey's messages to a real contact |
+| `POST /client/email/campaigns/{id}/approval` | releases a send, and is the client's consent, which staff cannot give for them |
+
+Still allowed, by decision: **test sends** (`POST …/campaigns/{id}/test`, `/templates/{id}/test`), because they go only
+to verified staff addresses; **pause, unschedule and cancel** of campaigns and **pause/archive** of journeys, because
+they stop messages; and all reads and drafting (create, edit, duplicate, delete drafts, checklists, previews).
+`UnitTests/Admin/ImpersonationCoverageTests` keeps these on its maintained deny list (and the stopping actions and test
+sends on its must-stay-reachable list), and `IntegrationTests/EmailMarketing/ImpersonatedSendTests` covers each case.
 
 ## Consent and suppression rules
 

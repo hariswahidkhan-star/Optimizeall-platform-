@@ -333,9 +333,13 @@ public abstract class CampaignActions(CampaignService campaigns, ReportService r
     [HttpGet("{id:guid}/report")]
     public Task<CampaignReport> Report(Guid id, CancellationToken ct) => reports.CampaignReportAsync(id, channels, ct);
 
-    /// <summary>Sensitive: confirm the send (typed campaign name). The send job does the sending.</summary>
+    /// <summary>
+    /// Sensitive: confirm the send or schedule (typed campaign name). The send job does the sending. Refused while
+    /// impersonating: it reaches the client's whole audience (test sends to staff addresses stay available).
+    /// </summary>
     [HttpPost("{id:guid}/send")]
     [HasPermission(Permissions.EmailSend)]
+    [DeniedWhileImpersonating]
     public Task<CampaignDto> Send(Guid id, SendCampaignRequest request, CancellationToken ct) => campaigns.SendAsync(id, request, channels, ct);
 
     [HttpPost("{id:guid}/unschedule")]
@@ -346,8 +350,10 @@ public abstract class CampaignActions(CampaignService campaigns, ReportService r
     [HasPermission(Permissions.EmailSend)]
     public Task<CampaignDto> Pause(Guid id, CampaignActionRequest request, CancellationToken ct) => campaigns.PauseAsync(id, request, channels, ct);
 
+    /// <summary>Restarts a paused send to the audience: refused while impersonating, like the send itself.</summary>
     [HttpPost("{id:guid}/resume")]
     [HasPermission(Permissions.EmailSend)]
+    [DeniedWhileImpersonating]
     public Task<CampaignDto> Resume(Guid id, CampaignActionRequest request, CancellationToken ct) => campaigns.ResumeAsync(id, request, channels, ct);
 
     [HttpPost("{id:guid}/cancel")]
@@ -373,7 +379,9 @@ public sealed class EmailAutomationsController(AutomationService automations) : 
     [HttpPut("{id:guid}")]
     public Task<AutomationDto> Update(Guid id, AutomationRequest request, CancellationToken ct) => automations.UpdateAsync(id, request, ct);
 
+    /// <summary>Activating starts messaging every contact the trigger matches: refused while impersonating.</summary>
     [HttpPost("{id:guid}/activate")]
+    [DeniedWhileImpersonating]
     public Task<AutomationDto> Activate(Guid id, CancellationToken ct) => automations.SetStatusAsync(id, AutomationStatus.Active, ct);
 
     [HttpPost("{id:guid}/pause")]
@@ -385,7 +393,9 @@ public sealed class EmailAutomationsController(AutomationService automations) : 
     [HttpGet("{id:guid}/enrollments")]
     public Task<IReadOnlyList<EnrollmentDto>> Enrollments(Guid id, CancellationToken ct) => automations.EnrollmentsAsync(id, ct);
 
+    /// <summary>Manual enrolment sends the journey's messages to the chosen contacts: refused while impersonating.</summary>
     [HttpPost("{id:guid}/enroll")]
+    [DeniedWhileImpersonating]
     public async Task<IActionResult> Enroll(Guid id, ManualEnrollRequest request, CancellationToken ct) =>
         Ok(new { enrolled = await automations.EnrollAsync(id, request, ct) });
 }

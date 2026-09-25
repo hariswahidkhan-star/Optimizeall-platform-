@@ -206,6 +206,7 @@ internal sealed class BlogPostConfiguration : IEntityTypeConfiguration<BlogPost>
         b.ToTable("website_blog_posts");
         b.Property(x => x.Slug).HasMaxLength(120).IsRequired();
         b.HasIndex(x => x.Slug).IsUnique();
+        b.Property(x => x.LastLiveSlug).HasMaxLength(120);
         b.Property(x => x.Title).HasMaxLength(180).IsRequired();
         b.Property(x => x.Excerpt).HasMaxLength(500).IsRequired();
         b.Property(x => x.BodyMarkdown).IsRequired();
