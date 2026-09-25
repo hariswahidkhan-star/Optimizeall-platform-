@@ -2,10 +2,13 @@ import clsx from 'clsx';
 import {
   ArrowLeft,
   ArrowRight,
+  BookOpen,
+  Check as CheckIcon,
   CheckCircle2,
   Clapperboard,
   Lightbulb,
   ListChecks,
+  X,
   XCircle,
 } from 'lucide-react';
 import { useId, useState, type ReactNode } from 'react';
@@ -53,13 +56,20 @@ export function LessonView({
       <article className={clsx('lx-lesson', categoryClass(lesson.category))} aria-labelledby="lesson-title">
         <header className="lx-lesson__header">
           <p className="lx-lesson__crumb">
-            <Link to={courseLink}>{lesson.courseTitle}</Link> · {lesson.moduleTitle} · Lesson{' '}
-            {lesson.position} of {lesson.lessonCount}
+            <Link to={courseLink} className="lx-lesson__course">
+              <ArrowLeft aria-hidden="true" />
+              {lesson.courseTitle}
+            </Link>
+            <span className="lx-lesson__crumb-rest">
+              <span aria-hidden="true"> · </span>
+              {lesson.moduleTitle} · Lesson {lesson.position} of {lesson.lessonCount}
+            </span>
           </p>
           <h1 id="lesson-title" className="lx-lesson__title">
             {lesson.title}
           </h1>
-          <p className="lx-muted">
+          <p className="lx-lesson__meta">
+            {lesson.type === 'Video' ? <Clapperboard aria-hidden="true" /> : <BookOpen aria-hidden="true" />}
             {lesson.type === 'Video' ? 'Video lesson' : 'Article'} · {lesson.durationMinutes} min
           </p>
           {header}
@@ -272,6 +282,9 @@ export function KnowledgeCheckQuestion({
   return (
     <fieldset className="lx-check">
       <legend className="lx-check__question">
+        <span className="lx-check__num" aria-hidden="true">
+          {check.index + 1}
+        </span>
         {check.question}
         {check.multiple && !/all that apply/i.test(check.question) && (
           <span className="lx-check__hint"> Choose all that apply.</span>
@@ -300,8 +313,14 @@ export function KnowledgeCheckQuestion({
                 checked={selected.includes(i)}
                 onChange={() => toggle(i)}
               />
-              <span>{option}</span>
+              <span className="lx-option__text">{option}</span>
               {state === 'correct' && <span className="visually-hidden"> (correct answer)</span>}
+              {/* Visible cue beyond colour; screen readers get the text above and the feedback below. */}
+              {state && (
+                <span className={clsx('lx-option__mark', state === 'wrong' && 'lx-option__mark--bad')} aria-hidden="true">
+                  {state === 'correct' ? <CheckIcon /> : <X />}
+                </span>
+              )}
             </label>
           );
         })}
