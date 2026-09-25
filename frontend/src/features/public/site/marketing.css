@@ -17,23 +17,29 @@
   initial-value: 72;
 }
 
-/* ---------- Reveal on scroll ---------- */
+/* ---------- Reveal on scroll ----------
+ * An animation (not a transition) with fill-mode `backwards`, so once it has played it leaves no trace: hover lifts and
+ * other transitions on the same cards keep their own timing. */
 @media (prefers-reduced-motion: no-preference) {
   .oa-motion :is(.site-section__head, [data-reveal]:not([data-reveal='stagger'])):not(.is-revealed),
   .oa-motion [data-reveal='stagger']:not(.is-revealed) > * {
     opacity: 0;
+  }
+
+  .oa-motion :is(.site-section__head, [data-reveal]:not([data-reveal='stagger'])).is-revealed,
+  .oa-motion [data-reveal='stagger'].is-revealed > * {
+    animation: oa-reveal 600ms var(--ease-standard) backwards;
+  }
+
+  .oa-motion [data-reveal='stagger'].is-revealed > * {
+    animation-delay: calc(min(var(--i, 0), 6) * 60ms);
+  }
+}
+
+@keyframes oa-reveal {
+  from {
+    opacity: 0;
     transform: translateY(18px);
-  }
-
-  .oa-motion :is(.site-section__head, [data-reveal]:not([data-reveal='stagger'])),
-  .oa-motion [data-reveal='stagger'] > * {
-    transition:
-      opacity 700ms var(--ease-standard),
-      transform 700ms var(--ease-standard);
-  }
-
-  .oa-motion [data-reveal='stagger'] > * {
-    transition-delay: calc(var(--i, 0) * 70ms);
   }
 }
 
@@ -1113,6 +1119,7 @@
   }
 }
 
+/* Reduced motion: a still, wrapped selection of skills (no scrolling region, nothing moving). */
 @media (prefers-reduced-motion: reduce) {
   .oa-marquee {
     -webkit-mask-image: none;
@@ -1120,14 +1127,15 @@
   }
 
   .oa-marquee__track {
+    flex: 1 1 auto;
     flex-wrap: wrap;
     justify-content: center;
-    width: 100%;
     max-width: var(--container-max);
     margin-inline: auto;
     padding-inline: var(--gutter);
   }
 
+  .oa-marquee__track > li:nth-child(n + 11),
   .oa-marquee__track--clone {
     display: none;
   }
@@ -1708,6 +1716,16 @@
   .oa-bento > :nth-child(2) {
     grid-column: span 3;
   }
+
+  /* No orphans: after the two wide tiles the rest run in threes; a lone last tile spans the row, a last pair halves it. */
+  .oa-bento > :nth-child(3n):last-child {
+    grid-column: 1 / -1;
+  }
+
+  .oa-bento > :nth-child(3n + 1):last-child:not(:nth-child(1)),
+  .oa-bento > :nth-child(3n):nth-last-child(2) {
+    grid-column: span 3;
+  }
 }
 
 .oa-bento__item {
@@ -2134,4 +2152,60 @@
   .oa-glow-border::before {
     inset: -2px;
   }
+}
+
+/* Phones: feature cards on the pillar pages become compact rows (icon tile left, words right). */
+@media (max-width: 639px) {
+  .oa-page .site-feature {
+    grid-template-columns: 44px minmax(0, 1fr);
+    column-gap: var(--space-4);
+    row-gap: var(--space-1);
+    padding: var(--space-5);
+  }
+
+  .oa-page .site-feature .site-card__icon {
+    grid-row: span 2;
+    margin: 0;
+  }
+}
+
+/* ---------- Agency visual (Services) ---------- */
+.oa-hv__report {
+  --lx-cat: var(--primary-400);
+  bottom: 6%;
+  width: 46%;
+}
+
+.oa-hv__report .oa-hv__player-body {
+  padding: 3.4cqi 3.6cqi;
+}
+
+.oa-hv__report li:last-child .oa-hv__check {
+  background: color-mix(in srgb, var(--color-heading) 14%, transparent);
+  color: transparent;
+}
+
+.oa-hv__report li:nth-last-child(2) .oa-hv__check {
+  background: var(--success-solid);
+  color: #fff;
+}
+
+.oa-hv__approve {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 7.5cqi;
+  height: 7.5cqi;
+  border-radius: clamp(8px, 2cqi, 12px);
+  background: var(--success-bg);
+  color: var(--success-fg);
+}
+
+.oa-hv__approve svg {
+  width: 60%;
+  height: 60%;
+}
+
+.oa-hv--agency .oa-hv__cert small {
+  color: var(--color-text-muted);
 }

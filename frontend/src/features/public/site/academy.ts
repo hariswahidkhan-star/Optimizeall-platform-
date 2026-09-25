@@ -35,7 +35,12 @@ export function useAcademyOverview(): { data: AcademyOverview | null; isLoading:
     const courses = catalog.data.items;
     // Subject courses lead; the platform's own onboarding course goes last.
     const featured = courses.filter((c) => c.isFeatured).sort((a, b) => Number(a.category === 'Platform') - Number(b.category === 'Platform'));
-    const skills = Array.from(new Set(courses.flatMap((c) => c.skills))).slice(0, 36);
+    // Round-robin across subject courses (each course's first skill, then each one's second…) for variety.
+    const subjectCourses = courses.filter((c) => c.category !== 'Platform');
+    const depth = Math.max(0, ...subjectCourses.map((c) => c.skills.length));
+    const skills = Array.from(
+      new Set(Array.from({ length: depth }, (_, i) => subjectCourses.map((c) => c.skills[i]).filter(Boolean)).flat()),
+    ).slice(0, 36);
     return {
       courseCount: catalog.data.total,
       lessonCount: courses.reduce((sum, c) => sum + c.lessonCount, 0),

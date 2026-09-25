@@ -3,6 +3,7 @@ import { BadgeCheck, Check, PlayCircle } from 'lucide-react';
 import { useId, type CSSProperties, type ReactNode } from 'react';
 import type { CourseCategory } from '@/features/learning/api';
 import { useInViewClass } from './motion';
+import './marketing.css';
 
 /**
  * Decorative illustrations for the marketing pages, drawn with HTML, CSS and inline SVG only (no images, CSP-safe).
@@ -34,6 +35,56 @@ function HexBadge({ className }: { className?: string }) {
   );
 }
 
+/** The marketing dashboard window of the hero visuals (chart lines draw in, bars grow). */
+function Dashboard() {
+  return (
+    <div className="oa-hv__dash">
+      <div className="oa-hv__bar">
+        <i />
+        <i />
+        <i />
+        <span>Growth overview</span>
+        <em>Live</em>
+      </div>
+      <div className="oa-hv__kpis">
+        {['Organic traffic', 'Qualified leads', 'Revenue'].map((label, i) => (
+          <div key={label} className="oa-hv__kpi" style={{ '--i': i } as CSSProperties}>
+            <span>{label}</span>
+            <b />
+            <svg viewBox="0 0 60 18" preserveAspectRatio="none">
+              <path d={['M0 15 12 12 24 13 36 7 48 8 60 2', 'M0 14 12 13 24 9 36 10 48 5 60 4', 'M0 16 12 11 24 12 36 8 48 6 60 3'][i]} />
+            </svg>
+          </div>
+        ))}
+      </div>
+      <div className="oa-hv__chart">
+        <svg viewBox="0 0 300 110" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="oa-hv-area" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stopColor="var(--oa-hv-line)" stopOpacity="0.28" />
+              <stop offset="1" stopColor="var(--oa-hv-line)" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          <g className="oa-hv__grid">
+            <line x1="0" y1="27" x2="300" y2="27" />
+            <line x1="0" y1="55" x2="300" y2="55" />
+            <line x1="0" y1="83" x2="300" y2="83" />
+          </g>
+          <path className="oa-hv__area" d="M0 92 C30 88 45 80 70 78 S120 70 140 58 S190 52 210 40 S260 26 300 12 V110 H0Z" fill="url(#oa-hv-area)" />
+          <path className="oa-hv__line" pathLength={1} d="M0 92 C30 88 45 80 70 78 S120 70 140 58 S190 52 210 40 S260 26 300 12" />
+          <path className="oa-hv__line oa-hv__line--2" pathLength={1} d="M0 100 C40 97 60 94 90 90 S150 84 180 76 S240 66 300 52" />
+          <circle className="oa-hv__dot" cx="300" cy="12" r="4" />
+        </svg>
+        <div className="oa-hv__bars">
+          {[38, 52, 46, 64, 58, 76, 70, 88].map((h, i) => (
+            <span key={i} style={{ '--h': `${h}%`, '--i': i } as CSSProperties} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /**
  * Home hero: a layered product visual — a marketing dashboard (chart lines drawing in, bars growing) behind a course
  * player card (progress ring filling, lessons ticking off) and a certificate that shimmers — on a slow orbit and a
@@ -49,50 +100,7 @@ export function HeroVisual({ course }: { course?: { title: string; category: Cou
         <span />
       </div>
 
-      <div className="oa-hv__dash">
-        <div className="oa-hv__bar">
-          <i />
-          <i />
-          <i />
-          <span>Growth overview</span>
-          <em>Live</em>
-        </div>
-        <div className="oa-hv__kpis">
-          {['Organic traffic', 'Qualified leads', 'Revenue'].map((label, i) => (
-            <div key={label} className="oa-hv__kpi" style={{ '--i': i } as CSSProperties}>
-              <span>{label}</span>
-              <b />
-              <svg viewBox="0 0 60 18" preserveAspectRatio="none">
-                <path d={['M0 15 12 12 24 13 36 7 48 8 60 2', 'M0 14 12 13 24 9 36 10 48 5 60 4', 'M0 16 12 11 24 12 36 8 48 6 60 3'][i]} />
-              </svg>
-            </div>
-          ))}
-        </div>
-        <div className="oa-hv__chart">
-          <svg viewBox="0 0 300 110" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="oa-hv-area" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stopColor="var(--oa-hv-line)" stopOpacity="0.28" />
-                <stop offset="1" stopColor="var(--oa-hv-line)" stopOpacity="0" />
-              </linearGradient>
-            </defs>
-            <g className="oa-hv__grid">
-              <line x1="0" y1="27" x2="300" y2="27" />
-              <line x1="0" y1="55" x2="300" y2="55" />
-              <line x1="0" y1="83" x2="300" y2="83" />
-            </g>
-            <path className="oa-hv__area" d="M0 92 C30 88 45 80 70 78 S120 70 140 58 S190 52 210 40 S260 26 300 12 V110 H0Z" fill="url(#oa-hv-area)" />
-            <path className="oa-hv__line" pathLength={1} d="M0 92 C30 88 45 80 70 78 S120 70 140 58 S190 52 210 40 S260 26 300 12" />
-            <path className="oa-hv__line oa-hv__line--2" pathLength={1} d="M0 100 C40 97 60 94 90 90 S150 84 180 76 S240 66 300 52" />
-            <circle className="oa-hv__dot" cx="300" cy="12" r="4" />
-          </svg>
-          <div className="oa-hv__bars">
-            {[38, 52, 46, 64, 58, 76, 70, 88].map((h, i) => (
-              <span key={i} style={{ '--h': `${h}%`, '--i': i } as CSSProperties} />
-            ))}
-          </div>
-        </div>
-      </div>
+      <Dashboard />
 
       <div className={clsx('oa-hv__player', catClass(course?.category))}>
         <div className="oa-hv__player-art">
@@ -126,6 +134,48 @@ export function HeroVisual({ course }: { course?: { title: string; category: Cou
           <small>
             <BadgeCheck /> Verified · Add to LinkedIn
           </small>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Agency pages (Services): the same dashboard with a delivery plan card (audit to reporting, ticking off) and an
+ * "approved in your client portal" chip in place of the course player and certificate.
+ */
+export function AgencyVisual() {
+  const ref = useInViewClass<HTMLDivElement>();
+  return (
+    <div ref={ref} className="oa-hv oa-hv--agency" aria-hidden="true">
+      <div className="oa-hv__mesh" />
+      <div className="oa-hv__orbit">
+        <span />
+        <span />
+      </div>
+      <Dashboard />
+      <div className="oa-hv__player oa-hv__report">
+        <div className="oa-hv__player-body">
+          <p className="oa-hv__course">Your 90-day growth plan</p>
+          <ul>
+            {['Audit', 'Strategy', 'Execution', 'Monthly reporting'].map((t, i) => (
+              <li key={t} style={{ '--i': i } as CSSProperties}>
+                <span className="oa-hv__check">
+                  <Check />
+                </span>
+                {t}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div className="oa-hv__cert">
+        <span className="oa-hv__approve">
+          <BadgeCheck />
+        </span>
+        <div>
+          <span>Creative approved</span>
+          <small>In your client portal</small>
         </div>
       </div>
     </div>
