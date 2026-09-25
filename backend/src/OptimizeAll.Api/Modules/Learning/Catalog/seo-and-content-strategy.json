@@ -1,0 +1,1199 @@
+{
+  "slug": "seo-and-content-strategy",
+  "version": 1,
+  "title": "SEO & Content Strategy",
+  "subtitle": "Win search and AI answers with intent-led content, solid technical foundations and clear measurement",
+  "category": "marketing",
+  "level": "intermediate",
+  "estimatedMinutes": 144,
+  "description": "Search remains one of the most valuable long-term channels for businesses, creators and agencies, and it is changing fast as AI Overviews and answer engines reshape results. This course teaches modern SEO from the ground up: reading search intent, researching keywords customers actually use, and writing pages that satisfy people and search engines.\n\nYou will learn on-page optimisation and **E-E-A-T**, technical basics (crawling, indexing, sitemaps, canonicals, structured data and Core Web Vitals), topic clusters, and local SEO with Google Business Profile. The final module covers **AI search, answer engines and llms.txt** with a realistic view of what matters, and shows you how to measure and report SEO with Google Search Console and analytics. Examples span Pakistan, the UAE, Saudi Arabia, the UK and the US.",
+  "outcomes": [
+    "Classify search intent and choose the right content type for any query",
+    "Build a prioritised keyword map that avoids cannibalisation",
+    "Optimise titles, headings, content, links and images and demonstrate E-E-A-T",
+    "Diagnose crawling, indexing, canonical, structured data and Core Web Vitals issues",
+    "Plan topic clusters and a local SEO programme with Google Business Profile",
+    "Adapt content for AI search and create an llms.txt file with realistic expectations",
+    "Measure and report SEO performance with Search Console and analytics"
+  ],
+  "skills": [
+    "Search engine optimisation",
+    "Keyword research",
+    "Technical SEO",
+    "Content strategy",
+    "Local SEO",
+    "AI search optimisation",
+    "Google Search Console"
+  ],
+  "prerequisites": [
+    "digital-marketing-foundations"
+  ],
+  "badge": {
+    "name": "Certified SEO & Content Strategist",
+    "description": "The holder can research search intent and keywords, optimise pages, demonstrate E-E-A-T, resolve core technical SEO issues and plan topic clusters and local SEO. They understand AI search and llms.txt realistically and measure performance with Search Console and analytics.",
+    "criteria": "Completed all lessons and scored ≥ 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "intent-and-keywords",
+      "title": "Search intent and keyword research",
+      "summary": "Understand what searchers really want and find the keywords and questions worth targeting.",
+      "lessons": [
+        {
+          "slug": "search-intent",
+          "title": "Search intent: the foundation of SEO",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Rankings follow usefulness\n\nSearch engines aim to show the result that best satisfies what the searcher wants. If your page does not match that need, no amount of keyword placement will keep it ranking. **Search intent** is the reason behind a query, and matching it is the first rule of modern SEO.\n\n### The four classic intent types\n\n| Intent | The searcher wants to… | Example queries | Best content type |\n|---|---|---|---|\n| **Informational** | Learn or understand | \"how to start a podcast\", \"what is VAT in UAE\" | Guides, explainers, videos |\n| **Navigational** | Reach a specific site or page | \"Daraz login\", \"HMRC self assessment\" | Home or specific page |\n| **Commercial investigation** | Compare before buying | \"best CRM for small business\", \"Canva vs Adobe Express\" | Comparisons, reviews, \"best of\" lists |\n| **Transactional** | Take action now | \"buy abaya online Dubai\", \"book dentist Lahore\" | Product, category, booking or service pages |\n\nMany queries blend intents. \"Wedding photographer Manchester\" is both commercial and local; searchers want to compare portfolios and prices and then contact someone.\n\n### How to read intent from the results page\n\nThe fastest way to understand intent is to **search the query yourself** (in a private window, set to the right country) and study the page:\n\n1. **Content types ranking:** are they blog posts, product pages, videos, tools, forums?\n2. **Content format:** step-by-step guides, lists, comparisons, calculators?\n3. **Angle:** \"for beginners\", \"2026\", \"cheap\", \"near me\"?\n4. **SERP features:** AI Overviews, featured snippets, \"People also ask\", local map pack, videos, shopping results, forum discussions.\n\nIf the top results are all product category pages, a long blog post will struggle. If they are all guides, a product page will struggle. Match the dominant type and format, then aim to be better.\n\n### Intent and the funnel\n\n- **Informational** queries often sit at the top of the funnel. They build awareness and trust and can capture emails or retargeting audiences.\n- **Commercial investigation** sits in the middle: comparison and proof.\n- **Transactional** queries are at the bottom: the page must make buying or booking easy.\n\nA healthy content strategy covers all three, with clear internal links guiding readers from learning to buying.\n\n### Worked example: a Dubai interior design studio\n\n| Query | Intent | Page to create |\n|---|---|---|\n| \"small apartment design ideas\" | Informational | Illustrated guide with project photos |\n| \"interior designer cost Dubai\" | Commercial | Transparent pricing guide with factors and ranges the studio actually charges |\n| \"interior design company Dubai Marina\" | Transactional + local | Service page with portfolio, reviews, contact and map |\n| \"[studio name] reviews\" | Navigational/commercial | Reviews page and a well-managed Google Business Profile |\n\n### Intent shifts over time\n\nIntent can change. During Ramadan, \"Ramadan recipes\" searches spike and results favour quick recipe pages and videos. After a news event, results may favour fresh articles. Re-check important queries periodically.\n\n### Common mistakes\n\n- Targeting a keyword because of its search volume without checking what ranks.\n- Writing a blog post for a transactional query (or a sales page for an informational one).\n- Ignoring SERP features such as video results or the local pack.\n- Assuming intent is the same in every country.",
+          "video": null,
+          "keyTakeaways": [
+            "Search intent is the reason behind a query; matching it is the first rule of SEO.",
+            "Classify intent as informational, navigational, commercial investigation or transactional, knowing many queries blend.",
+            "Study the live results page for content type, format, angle and SERP features before creating content.",
+            "Map intents to the funnel and re-check important queries because intent shifts."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "The top results for 'best running shoes for flat feet' are comparison articles. What is the dominant intent?",
+              "options": [
+                "Commercial investigation",
+                "Navigational",
+                "Transactional only",
+                "Informational about anatomy"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Searchers want to compare options before buying, so comparison content ranks."
+            },
+            {
+              "question": "What is the fastest way to understand the intent of a keyword?",
+              "options": [
+                "Check its search volume",
+                "Count how many times it appears on competitors' pages",
+                "Search it yourself in the right country and study the ranking pages and SERP features",
+                "Ask the client"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "The live results page shows what search engines believe satisfies the query."
+            },
+            {
+              "question": "Which page best serves 'book dentist Lahore'?",
+              "options": [
+                "A local service page with booking, location, reviews and hours",
+                "A history of dentistry article",
+                "A blog post on brushing tips",
+                "A careers page"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "It is a transactional, local query; the page must make booking easy."
+            }
+          ],
+          "activity": "Pick five keywords for a business you know. Search each one and record the intent, dominant content type, format and SERP features. Decide which page you would create for each."
+        },
+        {
+          "slug": "keyword-research",
+          "title": "Keyword research that finds real opportunities",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### What good keyword research produces\n\nKeyword research is not a list of high-volume words. It is a **prioritised map of topics and queries** your audience uses, matched to pages you can realistically rank and that support business goals.\n\n### Step 1: Start with seeds from real customers\n\nBrainstorm seed topics from:\n\n- Customer questions in emails, WhatsApp chats, DMs and sales calls.\n- Product and service categories.\n- Reviews (yours and competitors').\n- Forums and communities such as Reddit, Quora and niche Facebook groups.\n- Comments on relevant YouTube and TikTok videos.\n\nWrite the words customers use, not your internal jargon. A Pakistani fintech may say \"digital wallet\"; customers may search \"how to send money from JazzCash to bank\".\n\n### Step 2: Expand with tools\n\nUseful sources include:\n\n- **Google Search Console** (for existing sites): queries you already appear for.\n- **Google Keyword Planner** (free with an Ads account): volume ranges and related ideas.\n- **Autocomplete, \"People also ask\" and related searches.**\n- **Third-party SEO tools** (for example Semrush, Ahrefs, Moz, Ubersuggest, SE Ranking): estimated volume, difficulty, competitor keywords and SERP features.\n- **Platform search:** YouTube and TikTok search suggestions for video opportunities.\n\nAll volume numbers are estimates. Use them to compare keywords, not as precise forecasts.\n\n### Step 3: Evaluate each keyword\n\n| Factor | Question |\n|---|---|\n| **Relevance** | Would someone searching this be a potential customer or influence one? |\n| **Intent** | Which content type ranks, and can we produce it? |\n| **Volume** | Is there meaningful demand (relative to our niche)? |\n| **Difficulty** | Who ranks now? Big brands and authoritative sites, or small sites and forums? |\n| **Business value** | How close is it to a sale or lead? |\n\n### Step 4: Favour the long tail\n\n**Long-tail keywords** are longer, more specific queries (\"vegan protein powder without stevia UK\"). Individually they have lower volume, but together they make up a large share of searches, they are often less competitive and they convert well because the intent is precise. New sites should build momentum with long-tail and question-based queries before chasing broad head terms like \"protein powder\".\n\n### Step 5: Group keywords by topic, not one page per keyword\n\nModern search engines understand synonyms and related phrases. \"Best budget laptop for students\", \"cheap laptop for university\" and \"affordable student laptop\" usually belong on **one page**. Group keywords whose results pages largely overlap into a **cluster** and assign one primary keyword plus secondary variants to each page. This prevents **keyword cannibalisation** (several of your own pages competing for the same query).\n\n### Step 6: Prioritise\n\nScore each topic quickly, for example 1–3 on business value, ranking feasibility and effort, and start with high-value, feasible, low-effort topics. A simple spreadsheet works:\n\n| Topic | Primary keyword | Intent | Value | Feasibility | Effort | Priority |\n|---|---|---|---|---|---|---|\n| Student laptops | best budget laptop for students | Commercial | 3 | 2 | 2 | High |\n| Laptop battery care | how to extend laptop battery life | Informational | 1 | 3 | 1 | Medium |\n\n### Multilingual and regional research\n\n- Research each market separately; UK, US, UAE and Pakistani searchers use different terms (\"mobile phone\" vs \"cell phone\", \"pharmacy\" vs \"chemist\").\n- In the Gulf, many people search in both Arabic and English; in Pakistan, English, Urdu and Roman Urdu. Create properly localised pages rather than machine-translating everything.\n\n### Common mistakes\n\n- Targeting only high-volume head terms on a new site.\n- Treating tool estimates as precise.\n- Creating separate pages for near-identical keywords.\n- Ignoring business value in favour of traffic.",
+          "video": null,
+          "keyTakeaways": [
+            "Start with real customer language, then expand with Search Console, Keyword Planner, SERP features and SEO tools.",
+            "Evaluate relevance, intent, volume, difficulty and business value; volumes are estimates.",
+            "Long-tail keywords are often easier to rank for and convert well, especially for new sites.",
+            "Group keywords with overlapping results into one page to avoid cannibalisation, then prioritise by value, feasibility and effort."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A new website wants to start ranking. Which keyword is the most realistic first target?",
+              "options": [
+                "'shoes'",
+                "'women's wide-fit walking shoes for travel'",
+                "'fashion'",
+                "'buy'"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "A specific long-tail query is less competitive and reflects clear intent."
+            },
+            {
+              "question": "What is keyword cannibalisation?",
+              "options": [
+                "Competitors copying your keywords",
+                "Using too many keywords in a meta description",
+                "Several of your own pages competing for the same query",
+                "Buying keywords in ads"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "When multiple pages target the same intent, they split signals and confuse search engines."
+            },
+            {
+              "question": "How should you treat search volume numbers from third-party tools?",
+              "options": [
+                "As exact monthly counts",
+                "As guaranteed traffic",
+                "As irrelevant",
+                "As estimates useful for comparing keywords"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Tools estimate volumes differently; use them for relative comparison."
+            }
+          ],
+          "activity": "Build a 20-row keyword sheet for a business: seeds from customer language, expanded ideas, intent, value, feasibility, effort and a priority rating. Group related keywords into clusters."
+        }
+      ]
+    },
+    {
+      "slug": "on-page-and-eeat",
+      "title": "On-page SEO and E-E-A-T",
+      "summary": "Optimise pages so search engines and people understand them, and demonstrate experience, expertise, authoritativeness and trust.",
+      "lessons": [
+        {
+          "slug": "on-page-seo",
+          "title": "On-page SEO essentials",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### What on-page SEO covers\n\nOn-page SEO is everything on the page itself that helps search engines understand it and helps people choose and enjoy it: titles, headings, content, links, images and structured data.\n\n### Title tags\n\nThe title tag is often shown as the clickable headline in search results.\n\n- Include the primary keyword naturally, ideally near the start.\n- Make it compelling and accurate: it must earn the click.\n- Keep it concise; long titles may be truncated (roughly 50–60 characters is a common guide).\n- Make every title unique across the site.\n- Search engines may rewrite titles they consider unhelpful, which is another reason to write clear, accurate ones.\n\nExample: `Interior Designer Cost in Dubai (2026 Guide) | Studio Noor`\n\n### Meta descriptions\n\nMeta descriptions do not directly affect rankings, but they can appear under the title and influence clicks. Summarise the page's value in one or two sentences with a clear benefit. Search engines often generate their own snippet from page content depending on the query.\n\n### URLs\n\nShort, readable and descriptive: `/interior-design-cost-dubai/` beats `/page?id=4832`. Use hyphens, lowercase and avoid unnecessary dates if the page will be updated over time.\n\n### Headings and structure\n\n- One clear **H1** describing the page's topic.\n- Logical **H2/H3** subheadings that break content into scannable sections and often reflect related questions.\n- Short paragraphs, bullet points, tables and summary boxes help both readers and search engines understand structure.\n\n### Content that satisfies the query\n\n- Answer the main question early, then add depth.\n- Cover subtopics searchers expect (use \"People also ask\" and competitor gaps as prompts).\n- Use original examples, images, data and experience that others do not have.\n- Write naturally; repeating the exact keyword unnaturally (\"keyword stuffing\") is against spam policies and reads badly.\n\n### Internal links\n\nInternal links connect your pages, spread authority and guide readers.\n\n- Link from relevant, related pages using descriptive anchor text (\"see our guide to Dubai interior design costs\" rather than \"click here\").\n- Make sure important pages are no more than a few clicks from the home page.\n- Update older articles to link to new ones.\n\n### Images and media\n\n- Descriptive file names (`dubai-marina-living-room.jpg`).\n- **Alt text** that describes the image for screen-reader users (and helps search engines understand it).\n- Compressed, modern formats (such as WebP or AVIF) and appropriate dimensions for speed.\n- Captions where useful.\n\n### On-page checklist\n\n| Element | Check |\n|---|---|\n| Title | Unique, accurate, keyword near start, compelling |\n| Meta description | Clear benefit, matches content |\n| URL | Short, descriptive, lowercase, hyphens |\n| H1 | One, matches topic |\n| Headings | Logical hierarchy |\n| Intro | Answers the main question quickly |\n| Content | Covers expected subtopics; original value |\n| Internal links | To and from relevant pages, descriptive anchors |\n| Images | Compressed, alt text, descriptive names |\n| Structured data | Relevant schema added (covered in the technical module) |\n\n### Worked example\n\nA UK online plant shop's page \"Snake Plant\" was a thin product page with a manufacturer description. Improvements:\n\n- Title changed to `Snake Plant (Sansevieria) – Easy Care, UK Delivery | Leafy`.\n- Added an original care section with photos taken by staff, light and watering advice for UK homes and a pet-safety note checked against reputable sources.\n- Linked to a \"Low-light houseplants\" guide and back.\n- Compressed images and wrote alt text.\n\nThe page now serves both buyers and researchers and gives search engines more reasons to rank it.\n\n### Common mistakes\n\n- Duplicate titles across many pages.\n- Keyword stuffing.\n- \"Click here\" anchor text.\n- Huge, uncompressed images.",
+          "video": null,
+          "keyTakeaways": [
+            "Titles should be unique, accurate, compelling and include the primary keyword naturally.",
+            "Use one H1, logical subheadings and answer the main question early with original value.",
+            "Internal links with descriptive anchors help both users and search engines.",
+            "Optimise images with compression, descriptive names and meaningful alt text."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which statement about meta descriptions is accurate?",
+              "options": [
+                "They are a major direct ranking factor",
+                "Search engines always display them unchanged",
+                "They must contain the keyword five times",
+                "They can influence clicks but are not a direct ranking factor"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Meta descriptions influence click-through; search engines may also rewrite snippets."
+            },
+            {
+              "question": "Which anchor text is best for an internal link?",
+              "options": [
+                "Click here",
+                "Guide to choosing a wedding photographer",
+                "Read more",
+                "Link"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Descriptive anchors tell users and search engines what the linked page is about."
+            },
+            {
+              "question": "What is the main purpose of image alt text?",
+              "options": [
+                "To describe the image for screen-reader users and help search engines understand it",
+                "To store copyright information",
+                "To make images load faster",
+                "To add hidden keywords"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Alt text is primarily an accessibility feature that also aids understanding."
+            }
+          ],
+          "activity": "Audit one page using the on-page checklist. Rewrite its title, meta description, H1 and two internal links, and write alt text for its images."
+        },
+        {
+          "slug": "eeat-and-helpful-content",
+          "title": "E-E-A-T and people-first content",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### What E-E-A-T is (and is not)\n\n**E-E-A-T** stands for **Experience, Expertise, Authoritativeness and Trustworthiness**. It comes from Google's Search Quality Rater Guidelines, which human raters use to evaluate search quality. It is not a single ranking factor or score, but it describes the qualities Google's systems aim to reward. **Trust** is the most important element; the others support it.\n\n- **Experience:** first-hand experience with the topic – you used the product, visited the place, ran the campaign.\n- **Expertise:** knowledge and skill in the subject – especially important for technical, medical, legal and financial topics.\n- **Authoritativeness:** recognition as a go-to source – mentions, links and references from respected sites and people.\n- **Trustworthiness:** accurate, honest, safe and transparent content and business practices.\n\n### \"Your Money or Your Life\" topics\n\nTopics that can significantly affect health, financial stability, safety or wellbeing (**YMYL**) are held to a higher standard. A blog about investing, visas, medicines or legal rights needs clear expertise, sources and review. A casual hobby blog can rely more on personal experience.\n\n### How to demonstrate E-E-A-T\n\n**Show experience**\n- Original photos, screenshots, videos and data from your own work.\n- Specific details only someone who has done it would know.\n- Case studies with real (permitted) results.\n\n**Show expertise**\n- Author bylines with relevant qualifications and experience.\n- Author bio pages linking to credentials, professional profiles and other work.\n- Expert review for YMYL content (\"Medically reviewed by…\") where genuine.\n\n**Build authority**\n- Earn links and mentions through genuinely useful resources, original research, PR and partnerships.\n- Contribute expert commentary to reputable publications.\n- Be consistent in a topic area rather than writing about everything.\n\n**Strengthen trust**\n- Clear \"About\" and \"Contact\" pages, physical address where relevant, business registration details and policies (privacy, returns, editorial policy).\n- Cite reputable sources and link to them.\n- Update content and show \"last updated\" dates honestly.\n- Disclose affiliate links and sponsored content.\n- Secure site (HTTPS) and no deceptive ads or pop-ups.\n\n### People-first content\n\nGoogle's guidance on helpful content encourages creating content **for people first**, not to manipulate rankings. Useful self-check questions:\n\n- Does the content provide original information, reporting, research or analysis?\n- Would someone leave feeling they learned enough to achieve their goal?\n- Is it written by someone who clearly knows the topic?\n- Would you bookmark or share it?\n- Was it produced mainly to attract search visits (for example, mass-producing pages on trending topics you have no knowledge of)?\n\n### AI-assisted content\n\nUsing AI tools to help research, outline or draft is not against Google's guidelines in itself. What matters is quality and purpose. Google's spam policies target **scaled content abuse**: generating many pages primarily to manipulate rankings without adding value, whether by AI or humans. If you use AI:\n\n- Add genuine experience, expertise and original examples.\n- Fact-check everything, especially numbers, laws and health claims.\n- Edit for accuracy, voice and usefulness.\n- Be transparent where readers would reasonably expect to know how content was made.\n\n### Worked example: a Pakistani immigration consultancy blog\n\nBefore: generic, unsigned articles such as \"Canada visa guide\" copied in style from other sites, no dates or sources.\n\nAfter:\n- Each article has a named author with verified professional credentials and experience.\n- Content cites official government immigration pages and shows a \"last reviewed\" date.\n- Case studies (with client permission and anonymised) show real processes and timelines.\n- A clear disclaimer explains that articles are general information, and the site shows the firm's registration details and office address.\n\n### Common mistakes\n\n- Anonymous content on YMYL topics.\n- Fake reviews, fake author personas or invented credentials (misleading and harmful to trust).\n- Mass-producing unedited AI articles.\n- Outdated information left unchanged.",
+          "video": null,
+          "keyTakeaways": [
+            "E-E-A-T (Experience, Expertise, Authoritativeness, Trust) describes qualities Google aims to reward; trust matters most.",
+            "YMYL topics such as health, finance and legal content need stronger expertise and sourcing.",
+            "Demonstrate E-E-A-T with first-hand evidence, real author credentials, earned mentions and transparent business information.",
+            "AI-assisted content is acceptable when it is people-first, fact-checked and adds value; scaled low-value content is spam."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which element of E-E-A-T does Google describe as the most important?",
+              "options": [
+                "Experience",
+                "Expertise",
+                "Authoritativeness",
+                "Trustworthiness"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Trust is central; experience, expertise and authority contribute to it."
+            },
+            {
+              "question": "Which is the strongest signal of first-hand experience in a product review?",
+              "options": [
+                "Original photos and specific observations from actually using the product",
+                "A stock photo",
+                "Copying the manufacturer's description",
+                "Adding more keywords"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Original evidence and specific details demonstrate genuine experience."
+            },
+            {
+              "question": "What do Google's spam policies say about content created with AI?",
+              "options": [
+                "Scaled content produced mainly to manipulate rankings without adding value is spam, however it is made",
+                "All AI-assisted content is banned",
+                "AI content always ranks higher",
+                "AI content must be hidden"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "The issue is purpose and value, not the tool used."
+            }
+          ],
+          "activity": "Review an article on your site (or a competitor's) and list five concrete changes that would strengthen experience, expertise, authority or trust."
+        }
+      ]
+    },
+    {
+      "slug": "technical-seo",
+      "title": "Technical SEO basics",
+      "summary": "Make sure search engines can crawl, render and index your site, and that it is fast and stable for users.",
+      "lessons": [
+        {
+          "slug": "crawling-indexing-structured-data",
+          "title": "Crawling, indexing, sitemaps and structured data",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### How search engines process your site\n\n1. **Crawling:** bots such as Googlebot and Bingbot discover URLs by following links and reading sitemaps.\n2. **Rendering:** they load the page, including JavaScript, to see the content as a user would.\n3. **Indexing:** they analyse the content and store eligible pages in the index.\n4. **Ranking/serving:** when someone searches, they select and order indexed pages.\n\nA problem at any step stops a page from appearing, no matter how good the content is.\n\n### robots.txt\n\n`robots.txt` sits at the root (`example.com/robots.txt`) and tells crawlers which paths they may crawl. Example:\n\n```\nUser-agent: *\nDisallow: /cart/\nDisallow: /account/\nSitemap: https://example.com/sitemap.xml\n```\n\nKey facts:\n\n- robots.txt controls **crawling**, not indexing. A blocked URL can still appear in results (usually without a description) if other pages link to it.\n- To keep a page out of the index, allow crawling and use a **noindex** meta robots tag or HTTP header instead.\n- Never block CSS or JavaScript files needed to render pages.\n- A single mistake (such as `Disallow: /` left over from a staging site) can block your whole site.\n\n### XML sitemaps\n\nA sitemap lists the canonical URLs you want indexed, optionally with last-modified dates.\n\n- Include only indexable, canonical, 200-status URLs.\n- Keep it updated automatically (most CMSs and e-commerce platforms do this).\n- Submit it in Google Search Console and Bing Webmaster Tools, and reference it in robots.txt.\n- Large sites can use a sitemap index that links to multiple sitemaps.\n\n### Canonical tags and duplicate content\n\nDuplicate or near-duplicate URLs are common: filter parameters (`?colour=red`), tracking parameters, HTTP vs HTTPS, www vs non-www, printer versions. The **canonical tag** (`rel=\"canonical\"`) tells search engines which version is preferred. Combine it with consistent internal linking and redirects (301) from old or alternate URLs to the preferred one.\n\n### Status codes to know\n\n| Code | Meaning | SEO implication |\n|---|---|---|\n| 200 | OK | Page can be indexed |\n| 301 | Permanent redirect | Passes signals to the new URL; use for moved pages |\n| 302 | Temporary redirect | Use only for genuinely temporary moves |\n| 404 | Not found | Fine for truly removed pages; fix internal links pointing to them |\n| 410 | Gone | Signals intentional permanent removal |\n| 5xx | Server error | Frequent errors can reduce crawling and cause pages to drop |\n\n### International sites\n\nFor sites serving multiple languages or countries (for example English and Arabic versions for the UAE, or UK and US versions), **hreflang** annotations help search engines show the right version to each audience. Each version should reference the others and itself.\n\n### Structured data\n\nStructured data (usually **JSON-LD** using the schema.org vocabulary) describes page content in a machine-readable way. It can make pages eligible for **rich results** such as product prices and ratings, breadcrumbs, events, recipes, videos, local business details and organisation information.\n\nExample (simplified) for a local business:\n\n```json\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"LocalBusiness\",\n  \"name\": \"Studio Noor Interiors\",\n  \"address\": {\"@type\": \"PostalAddress\", \"addressLocality\": \"Dubai\", \"addressCountry\": \"AE\"},\n  \"telephone\": \"+971-4-000-0000\",\n  \"url\": \"https://example.com\"\n}\n```\n\nRules:\n\n- Mark up only content visible on the page, and keep it accurate.\n- Use Google's Rich Results Test and the Schema Markup Validator to check.\n- Rich results are never guaranteed, and eligibility changes (Google has reduced or retired some rich result types over time, such as limiting FAQ rich results to certain authoritative sites). Check the current documentation.\n- Misleading markup (for example fake review stars) can lead to manual actions.\n\n### Worked example\n\nA Karachi e-commerce site notices many product pages are \"Discovered – currently not indexed\". Investigation shows thousands of filter URLs being crawled, wasting crawl capacity, and missing canonicals. Fixes: canonical tags on filter pages, blocking crawl of infinite filter combinations in robots.txt where appropriate, cleaner internal links and an accurate sitemap of product URLs. Over the following weeks, more product pages are indexed.\n\n### Common mistakes\n\n- Using robots.txt to try to remove pages from the index.\n- Staging-site `noindex` or `Disallow: /` accidentally shipped to production.\n- Sitemaps full of redirected or noindexed URLs.\n- Structured data that does not match visible content.",
+          "video": null,
+          "keyTakeaways": [
+            "Search engines crawl, render, index and then rank; a failure at any step blocks visibility.",
+            "robots.txt controls crawling, not indexing; use noindex to keep pages out of the index.",
+            "Keep sitemaps clean, use canonicals and 301 redirects for duplicates and hreflang for international versions.",
+            "JSON-LD structured data can enable rich results but must match visible content; eligibility is never guaranteed."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "You want a thank-you page kept out of search results. What should you use?",
+              "options": [
+                "Disallow it in robots.txt",
+                "A noindex meta robots tag while allowing crawling",
+                "Delete the sitemap",
+                "A 302 redirect"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "noindex tells search engines not to index; robots.txt only prevents crawling and can hide the noindex tag."
+            },
+            {
+              "question": "Which URLs belong in an XML sitemap?",
+              "options": [
+                "Indexable, canonical URLs that return 200",
+                "Every URL including redirects and error pages",
+                "Only the home page",
+                "Only noindexed pages"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Sitemaps should list the canonical pages you want indexed."
+            },
+            {
+              "question": "Which structured data practice can lead to a manual action?",
+              "options": [
+                "Marking up a product's visible price",
+                "Adding review stars that do not reflect real, visible reviews",
+                "Using JSON-LD",
+                "Testing with the Rich Results Test"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Misleading markup violates structured data guidelines."
+            }
+          ],
+          "activity": "Check a website's robots.txt and sitemap, inspect three important URLs in Search Console (or a crawler tool) and note any crawling, indexing or canonical issues."
+        },
+        {
+          "slug": "core-web-vitals-and-mobile",
+          "title": "Core Web Vitals, speed and mobile experience",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Why page experience matters\n\nFast, stable, mobile-friendly pages keep visitors engaged and convert better. Google uses page experience signals, including **Core Web Vitals**, as part of its ranking systems, though great content that best matches intent still matters most. Think of speed as a tie-breaker for rankings and a major factor for conversions.\n\n### The three Core Web Vitals\n\n| Metric | Measures | \"Good\" threshold |\n|---|---|---|\n| **LCP** – Largest Contentful Paint | Loading: how quickly the main content (often a hero image or heading) appears | 2.5 seconds or less |\n| **INP** – Interaction to Next Paint | Responsiveness: how quickly the page responds to taps, clicks and key presses | 200 milliseconds or less |\n| **CLS** – Cumulative Layout Shift | Visual stability: how much content unexpectedly moves while loading | 0.1 or less |\n\nINP replaced First Input Delay (FID) as a Core Web Vital in March 2024. Google assesses these at the 75th percentile of real user visits, separately for mobile and desktop.\n\n### Field data vs lab data\n\n- **Field data** comes from real users (for example the Chrome User Experience Report, shown in Search Console's Core Web Vitals report and PageSpeed Insights). This is what counts for assessment.\n- **Lab data** comes from simulated tests (Lighthouse, PageSpeed Insights lab section). Useful for debugging but not identical to real-world experience.\n\nMany visitors in Pakistan, parts of the Gulf and elsewhere browse on mid-range phones and variable mobile networks. Test with throttled mobile settings, not only on a fast office connection.\n\n### Common causes and fixes\n\n**Slow LCP**\n- Large, uncompressed hero images → compress, use WebP/AVIF, correct dimensions, and prioritise the hero image (do not lazy-load it).\n- Slow server response → better hosting, caching, a CDN.\n- Render-blocking CSS and JavaScript → defer non-critical scripts, inline critical CSS.\n\n**Poor INP**\n- Heavy JavaScript and long tasks on the main thread → remove unused scripts, split code, defer third-party tags.\n- Too many third-party widgets (chat, heatmaps, multiple pixels) → audit and remove what you do not use; load others after interaction where possible.\n\n**High CLS**\n- Images and videos without width and height → always set dimensions or aspect-ratio.\n- Ads, banners or cookie notices that push content down → reserve space.\n- Web fonts swapping late → use font-display strategies and preload key fonts.\n\n### Mobile-first indexing\n\nGoogle primarily uses the **mobile version** of a page for indexing and ranking. Ensure:\n\n- The same main content, headings, structured data and internal links exist on mobile as on desktop.\n- Text is readable without zooming and tap targets are not too close together.\n- Pop-ups do not cover the main content on mobile (intrusive interstitials harm experience).\n\n### Other page experience basics\n\n- **HTTPS** across the site.\n- No deceptive or intrusive interstitials.\n- Accessible design: sufficient colour contrast, labelled form fields and logical heading order also help usability.\n\n### A speed improvement process\n\n1. Check Search Console's Core Web Vitals report to find groups of URLs with issues.\n2. Test representative URLs in PageSpeed Insights.\n3. Prioritise fixes by impact (templates used by many pages first).\n4. Implement changes with developers or plugins; test on staging.\n5. Wait for field data to update (it is based on a rolling window of real visits) and re-check.\n\n### Worked example (illustrative)\n\nA UK restaurant site's mobile LCP is poor because a 4 MB hero photo loads first and is lazy-loaded by a plugin. Compressing it to a modern format, sizing it for mobile and marking it as high priority brings LCP into the \"good\" range in lab tests. Removing two unused tracking scripts improves INP. Setting image dimensions fixes a menu that jumped as photos loaded (CLS).\n\n### Common mistakes\n\n- Optimising only for a desktop lab score.\n- Lazy-loading the hero image.\n- Piling on third-party scripts.\n- Hiding content on mobile that exists on desktop.",
+          "video": null,
+          "keyTakeaways": [
+            "Core Web Vitals are LCP (≤ 2.5 s), INP (≤ 200 ms) and CLS (≤ 0.1), measured on real users at the 75th percentile.",
+            "Field data counts for assessment; lab data is for debugging. Test on mid-range phones and slower networks.",
+            "Fix LCP with image and server optimisation, INP by reducing JavaScript and CLS by reserving space for elements.",
+            "Google uses mobile-first indexing, so mobile pages need the same key content and a usable layout."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which Core Web Vital measures responsiveness to user interactions?",
+              "options": [
+                "INP",
+                "LCP",
+                "CLS",
+                "TTFB"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Interaction to Next Paint measures how quickly the page responds to input."
+            },
+            {
+              "question": "A page's content jumps down when a banner loads. Which metric is affected?",
+              "options": [
+                "LCP",
+                "CLS",
+                "INP",
+                "Crawl rate"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Unexpected movement increases Cumulative Layout Shift."
+            },
+            {
+              "question": "Why should you avoid lazy-loading the main hero image?",
+              "options": [
+                "It delays the largest content element and worsens LCP",
+                "It breaks the sitemap",
+                "It blocks crawling",
+                "It increases CLS only on desktop"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "The hero image is often the LCP element and should load as early as possible."
+            }
+          ],
+          "activity": "Run PageSpeed Insights on the mobile version of three important pages. Record LCP, INP and CLS field data (if available) and list the top two fixes for each page."
+        }
+      ]
+    },
+    {
+      "slug": "clusters-and-local",
+      "title": "Content clusters and local SEO",
+      "summary": "Build topical authority with pillar and cluster content, and win local searches with a strong Google Business Profile and local signals.",
+      "lessons": [
+        {
+          "slug": "topic-clusters",
+          "title": "Topic clusters and content planning",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### From random posts to topical authority\n\nPublishing unrelated blog posts rarely builds momentum. Search engines and readers respond better to sites that cover a topic **thoroughly and coherently**. The topic cluster model organises content so each piece supports the others.\n\n### The pillar–cluster model\n\n- **Pillar page:** a comprehensive overview of a broad topic (for example \"Freelancing in the UAE: The Complete Guide\").\n- **Cluster pages:** detailed articles on specific subtopics (freelance permits, pricing, invoicing, VAT registration, finding clients, contracts).\n- **Internal links:** every cluster links to the pillar, the pillar links to every cluster, and related clusters link to each other.\n\nThis structure helps search engines understand your site's depth on a topic, helps users navigate and distributes link authority across the group.\n\n### Building a cluster step by step\n\n1. **Choose a core topic** that matters to your business and audience.\n2. **List subtopics** from keyword research, \"People also ask\", customer questions and competitor gaps.\n3. **Map intent** for each subtopic (informational, commercial, transactional).\n4. **Assign one page per distinct intent** (avoid cannibalisation).\n5. **Plan internal links** before writing.\n6. **Publish in a logical order** – often the pillar plus a few high-priority clusters first.\n7. **Update and expand** based on Search Console data.\n\n### Example cluster for a Pakistani freelancing academy\n\n| Page | Type | Intent |\n|---|---|---|\n| Freelancing in Pakistan: complete guide | Pillar | Informational |\n| How to receive international payments as a freelancer | Cluster | Informational |\n| Best skills to learn for freelancing | Cluster | Commercial/informational |\n| How to write a winning proposal | Cluster | Informational |\n| Freelancer tax basics (general information, with official sources) | Cluster | Informational (YMYL – cite sources) |\n| Freelancing course enrolment | Service page | Transactional |\n\nEach cluster links to the pillar and, where relevant, to the course page with a helpful, non-pushy call to action.\n\n### Content briefs\n\nA **content brief** makes quality repeatable, whether you write yourself or hire writers:\n\n- Primary and secondary keywords\n- Searcher intent and target reader\n- Angle and unique value (experience, data, examples)\n- Outline with H2/H3s\n- Questions to answer\n- Internal links to include\n- Sources to cite\n- Call to action\n- Word range (a guide, not a target – cover the topic fully, no padding)\n\n### Content formats beyond blog posts\n\nClusters can include videos, tools (calculators, templates), glossaries, case studies and comparison pages. Embedding a relevant video or offering a downloadable template can make a page more useful and give you content for other channels too.\n\n### Content maintenance\n\nContent decays: facts change, competitors improve, intent shifts. Schedule regular reviews:\n\n- **Update** pages that are slipping in rankings or contain outdated information.\n- **Consolidate** thin, overlapping posts into one stronger page and 301-redirect the old URLs.\n- **Prune or noindex** pages with no value to users (after checking they have no traffic or links).\n\n### Measuring cluster performance\n\nTrack the cluster as a group: total clicks and impressions for its pages in Search Console, number of keywords ranking, conversions assisted and internal link clicks. A cluster often grows more slowly than a viral post but compounds over time.\n\n### Common mistakes\n\n- Pillar pages that are just long lists of links with no substance.\n- Clusters that repeat the same content with minor variations.\n- Forgetting internal links between clusters.\n- Publishing once and never updating.",
+          "video": null,
+          "keyTakeaways": [
+            "Topic clusters combine a comprehensive pillar page with detailed cluster pages, linked together.",
+            "Map one page per distinct intent to build depth without cannibalisation.",
+            "Use content briefs to make quality consistent across writers.",
+            "Maintain clusters by updating, consolidating and pruning, and measure them as a group."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "In a topic cluster, how should internal links be structured?",
+              "options": [
+                "Only the home page links to the pillar",
+                "No internal links are needed",
+                "Clusters link to the pillar, the pillar links to clusters, and related clusters link to each other",
+                "Only external links matter"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Two-way links between pillar and clusters, plus related cross-links, create a coherent structure."
+            },
+            {
+              "question": "You have five thin posts about the same subtopic. What is usually the best action?",
+              "options": [
+                "Leave them all",
+                "Duplicate them",
+                "Delete all five without redirects",
+                "Consolidate them into one strong page and 301-redirect the old URLs"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Consolidation creates one comprehensive page and preserves any signals via redirects."
+            },
+            {
+              "question": "What is the main purpose of a content brief?",
+              "options": [
+                "To set the page's font",
+                "To make content quality, intent and structure consistent across writers",
+                "To replace keyword research",
+                "To guarantee rankings"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Briefs communicate intent, structure, sources and links so writers produce consistent quality."
+            }
+          ],
+          "activity": "Plan a topic cluster for your niche: one pillar and at least six cluster pages with primary keyword, intent and internal links. Write a content brief for one cluster page."
+        },
+        {
+          "slug": "local-seo",
+          "title": "Local SEO for businesses and service areas",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Why local SEO matters\n\nFor restaurants, salons, clinics, gyms, agencies, tradespeople and shops, many valuable searches are local: \"barber near me\", \"best biryani in Karachi\", \"accountant in Leeds\". Results often include a **local pack** (a map with a few businesses) above standard results, and map apps show the same data. Local SEO is how you appear there.\n\n### How local rankings work\n\nGoogle describes three main factors for local results:\n\n- **Relevance:** how well your business profile matches the search.\n- **Distance:** how far the business is from the searcher or the location in the query.\n- **Prominence:** how well known the business is, based on reviews, links, articles, and other signals.\n\nYou cannot change distance, but you can influence relevance and prominence.\n\n### Google Business Profile (GBP): your most important local asset\n\n1. **Claim and verify** your profile.\n2. **Choose the most accurate primary category** (for example \"Interior designer\" rather than a generic category), plus relevant secondary categories.\n3. **Complete every field:** hours (including holiday and Ramadan hours), phone, website, services, products, attributes, service areas.\n4. **Business name:** use your real business name; adding keywords to the name violates guidelines and risks suspension.\n5. **Photos and videos:** real, recent photos of the premises, team and work.\n6. **Posts and updates:** offers, events and news.\n7. **Q&A and messaging:** answer questions promptly where these features are available.\n\nService-area businesses (such as cleaners or plumbers without a storefront) should hide their address and define their service areas.\n\nAlso claim profiles on **Apple Business Connect** and **Bing Places**, and ensure listings on key regional directories and apps relevant to your market.\n\n### NAP consistency and citations\n\n**NAP** means Name, Address and Phone number. Keep it identical across your website, GBP, social profiles and directories. Inconsistent details (old addresses, different phone numbers) confuse customers and search engines. **Citations** are mentions of your business details on other sites, such as directories, chambers of commerce and local news.\n\n### Reviews\n\nReviews influence both rankings and customer decisions.\n\n- Ask every happy customer, with a direct review link or QR code.\n- Respond to all reviews professionally, including negative ones: thank, acknowledge, offer to resolve offline.\n- **Never** buy fake reviews, review-gate (only asking customers you expect to be positive, where prohibited), or offer incentives for reviews where platform rules or law forbid it. Fake reviews breach platform policies and consumer protection laws in many countries; the UK, for example, explicitly bans fake reviews under the Digital Markets, Competition and Consumers Act 2024, and the US FTC has a rule prohibiting fake reviews.\n\n### Local content on your website\n\n- A clear contact page with address, map embed, hours and phone (clickable on mobile).\n- **LocalBusiness structured data**.\n- **Location pages** for each branch with unique content: local team, directions, parking, photos, local reviews. Avoid near-identical \"doorway\" pages for every nearby town that add no value.\n- Local topics: \"Best wedding venues in Lahore for winter\", written from real experience.\n\n### Worked example: a Jeddah dental clinic\n\n- GBP with primary category \"Dental clinic\", services listed, real photos, Ramadan hours updated each year.\n- Website pages in Arabic and English with hreflang, LocalBusiness/Dentist structured data, doctor bios with qualifications.\n- A post-appointment WhatsApp message with a review link (sent to consenting patients).\n- All reviews answered within 48 hours, without revealing any patient information.\n- Consistent NAP on relevant health directories.\n\n### Measuring local performance\n\n- **GBP performance insights:** searches, views, calls, direction requests, website clicks, messages.\n- **Search Console:** queries containing locations and \"near me\".\n- **UTM tags** on the GBP website link so analytics shows local traffic separately.\n- Calls and bookings attributed to the profile.\n\n### Common mistakes\n\n- Keyword-stuffed business names.\n- Inconsistent NAP across the web.\n- Ignoring or arguing with negative reviews publicly.\n- Buying or faking reviews.",
+          "video": null,
+          "keyTakeaways": [
+            "Local results depend on relevance, distance and prominence; you can improve relevance and prominence.",
+            "A complete, accurate Google Business Profile with the right category, hours and real photos is the core local asset.",
+            "Keep NAP consistent, earn genuine reviews and respond professionally; never fake or buy reviews.",
+            "Support local SEO with location pages, LocalBusiness schema and UTM-tagged profile links."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which change to a Google Business Profile risks suspension?",
+              "options": [
+                "Adding keywords to the business name that are not part of the real name",
+                "Adding holiday hours",
+                "Uploading real photos",
+                "Choosing an accurate category"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Keyword stuffing the business name violates guidelines."
+            },
+            {
+              "question": "What does NAP stand for?",
+              "options": [
+                "Network Access Point",
+                "New Audience Profile",
+                "Native App Page",
+                "Name, Address, Phone number"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Consistent Name, Address and Phone details build trust with users and search engines."
+            },
+            {
+              "question": "A customer leaves an unfair one-star review. What is the best response?",
+              "options": [
+                "Ignore it",
+                "Argue publicly",
+                "Pay for positive reviews to bury it",
+                "Reply politely, acknowledge the concern and offer to resolve it offline"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Professional responses show prospective customers you care and can resolve issues."
+            }
+          ],
+          "activity": "Audit a local business's Google Business Profile: category, hours, photos, reviews, NAP consistency and responses. Write five prioritised improvements."
+        }
+      ]
+    },
+    {
+      "slug": "ai-search-and-measurement",
+      "title": "AI search and measuring SEO",
+      "summary": "Adapt to AI-powered answer engines and measure SEO performance with Google Search Console.",
+      "lessons": [
+        {
+          "slug": "ai-search-and-llms-txt",
+          "title": "AI search, answer engines and llms.txt",
+          "type": "video",
+          "durationMinutes": 12,
+          "body": "### Search is changing, not disappearing\n\nPeople now get answers from **AI-powered features** inside search engines (such as Google's AI Overviews and AI Mode, and Microsoft Copilot in Bing) and from **AI assistants and answer engines** such as ChatGPT search, Perplexity, Gemini and Claude. These systems summarise information from multiple sources and sometimes cite and link to them.\n\nThis affects SEO in several ways:\n\n- Some informational queries are answered directly, which can reduce clicks for simple facts.\n- Being **cited** in AI answers can drive highly qualified visits and brand awareness.\n- Content that is clear, trustworthy, well-structured and genuinely original is more likely to be used as a source.\n\nTerms such as **GEO (generative engine optimisation)** and **AEO (answer engine optimisation)** describe this work. In practice, most of it builds on SEO fundamentals.\n\n### How to be a good source for AI answers\n\n1. **Be crawlable and indexable.** AI features in search engines generally rely on the search index. If search engines cannot crawl and index a page, it is unlikely to be used.\n2. **Answer questions clearly.** Put a concise, direct answer near the top of a section, then expand. Use descriptive headings that mirror real questions.\n3. **Structure content.** Lists, steps, tables, definitions and summaries are easy to extract accurately.\n4. **Offer original value.** First-hand experience, original data, expert opinion and unique examples give AI systems (and people) a reason to cite you rather than a generic page.\n5. **Build entity clarity.** Consistent organisation and author information, About pages, structured data (such as Organization and Person) and consistent profiles across the web help systems understand who you are.\n6. **Earn mentions.** Being referenced by reputable sites, publications and communities increases the chance that AI systems encounter and trust your brand.\n7. **Keep content fresh and accurate.** Outdated prices, laws or product details can be repeated in AI answers and harm trust.\n\n### Controlling AI crawlers\n\nMany AI companies use crawlers with published user-agent names (for example OpenAI's GPTBot and OAI-SearchBot, Anthropic's ClaudeBot, PerplexityBot, and Google-Extended, which is a control token for whether content is used for Google's Gemini models rather than a separate crawler for Search). You can allow or disallow them in robots.txt. Consider the trade-off: blocking may protect content from training use but can reduce visibility in AI answers, depending on the system. Blocking Google-Extended does not remove you from Google Search. Check each provider's current documentation, because names and behaviours change.\n\n### What is llms.txt?\n\n**llms.txt** is a **proposed** convention (introduced in 2024) for a Markdown file at `example.com/llms.txt` that gives language models a concise overview of a site and links to its most useful content, sometimes with a companion `llms-full.txt` containing fuller text. A simple example:\n\n```\n# Studio Noor Interiors\n> Dubai interior design studio specialising in apartments and villas.\n\n## Guides\n- [Interior design cost in Dubai](https://example.com/interior-design-cost-dubai/): pricing factors and ranges\n- [Small apartment ideas](https://example.com/small-apartment-ideas/)\n\n## Company\n- [About and team](https://example.com/about/)\n```\n\nImportant context:\n\n- It is **not an official web standard**, and major search engines have not said they use it for ranking. Google has indicated it is not used for Google Search.\n- Some AI tools and developer platforms do read it, especially for documentation sites.\n- It is low-cost to create and maintain, so many sites add it as an optional extra. It does **not** replace robots.txt, sitemaps, good content or technical SEO.\n\n### Measuring AI visibility\n\nMeasurement is still maturing:\n\n- Search Console includes data from Google's AI features within overall web search performance, without separating it out in the standard reports.\n- Analytics can show referrals from AI assistants (for example, sessions from chatgpt.com or perplexity.ai) – create a channel group or segment for them.\n- Manually (or with emerging tools) test important questions in AI assistants and note whether and how your brand is cited.\n- Track branded search growth and direct traffic as indirect signals.\n\n### Worked example\n\nA UK accountancy firm finds AI assistants often answer \"how to register as self-employed in the UK\" without citing it. It restructures its guide with a direct summary answer, step-by-step list and links to the official GOV.UK pages, adds an author bio for a named chartered accountant, updates dates and figures, adds Organization and Person structured data and publishes an llms.txt listing its key guides. It then tracks AI referrals in analytics and checks answer citations monthly.\n\n### Common mistakes\n\n- Treating llms.txt as a ranking factor or a substitute for SEO.\n- Blocking all crawlers without considering visibility trade-offs.\n- Publishing generic content that offers nothing an AI summary would need to cite.\n- Ignoring accuracy, which AI answers can amplify.",
+          "video": {
+            "script": "Search is changing. More and more people get answers from AI: Google's AI Overviews and AI Mode, ChatGPT, Perplexity, Gemini and Claude. Instead of ten blue links, they see a summary, sometimes with a few sources cited. So how do you become one of those sources? The good news is that it starts with solid SEO. If search engines can't crawl and index your page, AI features that rely on the index are unlikely to use it. Then, make your content easy to use as a source. Put a clear, direct answer near the top of each section. Use headings that match real questions. Add steps, lists and tables. Most importantly, offer something original: first-hand experience, your own data, a named expert. Generic content gives an AI system no reason to cite you. You may have heard of llms dot t x t. It's a proposed file that gives language models a short overview of your site and links to your best pages. It's cheap to create and some tools read it, but it isn't an official standard, and Google has said it isn't used for Google Search. Treat it as a small extra, never a replacement for good content. Finally, measure what you can. Track referrals from AI assistants in your analytics, test key questions regularly and watch your branded searches grow. The fundamentals haven't changed: be useful, be clear and be trustworthy.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "AI Overviews, AI Mode and answer engines summarise sources; being cited requires crawlable, clear, original, trustworthy content.",
+            "Structure answers directly, build entity clarity and earn mentions from reputable sources.",
+            "AI crawlers can be managed in robots.txt; weigh visibility against content-use concerns and check current documentation.",
+            "llms.txt is an optional, proposed convention, not an official standard or ranking factor; it complements rather than replaces SEO."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is llms.txt?",
+              "options": [
+                "An official Google ranking file",
+                "A proposed Markdown file that summarises a site and links key content for language models",
+                "A replacement for robots.txt",
+                "A sitemap format required by Bing"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "llms.txt is a proposed, optional convention; it is not an official standard or ranking factor."
+            },
+            {
+              "question": "Which change most increases the chance of being cited in AI answers?",
+              "options": [
+                "Hiding content behind scripts that crawlers cannot render",
+                "Repeating the keyword many times",
+                "Clear direct answers, structured sections and original, trustworthy information",
+                "Blocking every crawler"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "AI systems draw on accessible, clear and credible sources."
+            },
+            {
+              "question": "Blocking Google-Extended in robots.txt will…",
+              "options": [
+                "Remove your site from Google Search",
+                "Improve rankings",
+                "Control whether content is used for Google's Gemini models, without removing you from Google Search",
+                "Block Bing"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Google-Extended is a control token for AI model use, separate from Search indexing."
+            }
+          ],
+          "activity": "Pick three important questions your audience asks. Test them in two AI assistants and note which sources are cited. Rewrite one of your pages to answer the question more directly and draft an llms.txt for your site."
+        },
+        {
+          "slug": "search-console-measurement",
+          "title": "Measuring SEO with Google Search Console",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Why Search Console is essential\n\nGoogle Search Console (GSC) is a free tool that shows how Google sees your site: which queries you appear for, how often people click, which pages are indexed and what technical problems exist. Bing Webmaster Tools offers similar data for Bing (which also powers some other search experiences). Set both up for every site you manage.\n\n### Setting up\n\n- Add a **Domain property** (verified via DNS) to cover all subdomains and protocols, or a URL-prefix property if you cannot edit DNS.\n- Submit your XML sitemap.\n- Give team members appropriate access (not everyone needs owner permissions).\n- Link GSC with Google Analytics 4 if you want to view some Search Console data alongside analytics.\n\n### The Performance report\n\nFour core metrics:\n\n| Metric | Meaning |\n|---|---|\n| **Clicks** | Times users clicked through to your site from Google Search |\n| **Impressions** | Times a link to your site appeared in results a user saw (definitions vary slightly by feature) |\n| **CTR** | Clicks ÷ Impressions |\n| **Average position** | Average topmost position of your site in results, across impressions |\n\nFilter by query, page, country, device, search appearance and date. Compare date ranges to spot trends (compare like-for-like periods, for example this month versus the same month last year, to account for seasonality).\n\n### Practical analyses\n\n**1. Quick wins: high impressions, low CTR**\nFind queries or pages with many impressions and a lower CTR than similar pages. Improve titles and meta descriptions to better match intent, or improve the content so it earns richer snippets.\n\n**2. Striking distance: positions roughly 8–20**\nPages ranking on the edge of page one can often move up with content improvements, better internal links and fresh updates.\n\n**3. Content decay**\nCompare the last three months with the previous three (or year-on-year). Pages losing clicks may need updating or may face new competition or AI features.\n\n**4. Query-page mismatches**\nIf an informational blog post ranks for a transactional query, consider whether a better-matched page should exist or be linked prominently.\n\n**5. Cannibalisation**\nFilter by a query and check the Pages tab. If several of your pages swap in and out, consider consolidating.\n\n### Indexing and experience reports\n\n- **Page indexing report:** shows indexed and not-indexed pages with reasons (for example \"Crawled – currently not indexed\", \"Duplicate without user-selected canonical\", \"Excluded by noindex tag\"). Not every non-indexed URL is a problem; focus on pages you want indexed.\n- **URL Inspection:** check a specific URL's index status, the canonical Google selected, and test the live URL; request indexing after important updates.\n- **Core Web Vitals report:** groups of URLs with poor, needs-improvement or good performance based on real-user data.\n- **Manual actions and security issues:** check regularly; hopefully always empty.\n- **Links report:** top linking sites and internal link counts.\n\n### Connecting SEO to business results\n\nSearch Console shows visibility and clicks, not revenue. Combine it with analytics and CRM data:\n\n- In GA4, analyse organic search sessions, engagement and conversions by landing page.\n- Tag conversion events (leads, purchases, bookings) and attribute them to organic landing pages.\n- Report SEO as a funnel: impressions → clicks → engaged sessions → conversions → revenue.\n\n### A monthly SEO reporting template\n\n1. **Summary:** clicks, impressions, CTR and conversions vs previous period and last year.\n2. **Top gaining and losing pages and queries** with reasons.\n3. **Technical health:** indexing changes, Core Web Vitals, errors fixed.\n4. **Content shipped** and early performance.\n5. **Next month's priorities** (quick wins, striking-distance updates, new cluster pages).\n\n### Worked example (illustrative)\n\nA Lahore travel agency finds its \"Hunza travel guide\" page has high impressions but a low CTR, sitting around position 6. The title was \"Guide | Travel Co\". The team rewrites it as \"Hunza Travel Guide 2026: Best Time, Routes & Costs\" (reflecting content the page genuinely contains), adds an updated cost table and links from its \"Northern Pakistan tours\" page. Over the following weeks, CTR rises and enquiries from the page increase.\n\n### Common mistakes\n\n- Judging SEO on average position alone.\n- Comparing periods without considering seasonality.\n- Panicking about every non-indexed URL.\n- Reporting clicks without connecting them to conversions.",
+          "video": null,
+          "keyTakeaways": [
+            "Set up Search Console (and Bing Webmaster Tools) with a domain property, sitemaps and appropriate access.",
+            "Use clicks, impressions, CTR and average position with filters and like-for-like date comparisons.",
+            "Find quick wins (high impressions, low CTR), striking-distance pages, decay and cannibalisation.",
+            "Use indexing, URL Inspection and Core Web Vitals reports, and connect SEO data to conversions in analytics."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A page has many impressions but a low CTR at position 4. What is a sensible first action?",
+              "options": [
+                "Delete the page",
+                "Block it in robots.txt",
+                "Improve the title and meta description to better match intent",
+                "Add more ads"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Snippet improvements can increase clicks when visibility is already good."
+            },
+            {
+              "question": "Which report shows why specific URLs are not indexed?",
+              "options": [
+                "Performance report",
+                "Core Web Vitals report",
+                "Links report",
+                "Page indexing report"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "The Page indexing report lists indexed and non-indexed pages with reasons."
+            },
+            {
+              "question": "Why compare this month with the same month last year?",
+              "options": [
+                "It accounts for seasonal changes in search demand",
+                "It is the only option in Search Console",
+                "It doubles the data",
+                "It removes AI Overview impressions"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Seasonality can distort month-to-month comparisons."
+            }
+          ],
+          "activity": "In Search Console, find five queries with high impressions and low CTR and five pages ranking roughly between positions 8 and 20. Write a specific improvement for each."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 20,
+    "timeLimitMinutes": 30,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "seo-001",
+        "module": "intent-and-keywords",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which query has the clearest transactional intent?",
+        "options": [
+          "what is SEO",
+          "history of running",
+          "buy running shoes size 9 online",
+          "running tips for beginners"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "It shows a clear intent to purchase now."
+      },
+      {
+        "id": "seo-002",
+        "module": "intent-and-keywords",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is a long-tail keyword?",
+        "options": [
+          "A keyword with more than 10,000 searches",
+          "A keyword used only in ads",
+          "A longer, more specific query with lower volume and clearer intent",
+          "A misspelled keyword"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Long-tail queries are specific and often easier to rank for."
+      },
+      {
+        "id": "seo-003",
+        "module": "intent-and-keywords",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "The results for 'CRM software' are mostly vendor product pages and comparison lists. You plan a 3,000-word history of CRM. What is the likely outcome?",
+        "options": [
+          "It will rank first because it is long",
+          "It will rank because history pages are popular",
+          "It will struggle because it does not match the dominant intent",
+          "Length guarantees rankings"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Content must match what searchers want; the results show commercial intent."
+      },
+      {
+        "id": "seo-004",
+        "module": "intent-and-keywords",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Select the TWO best sources of real customer language for keyword seeds.",
+        "options": [
+          "Customer questions from WhatsApp and email",
+          "Your internal product jargon",
+          "Reviews and forum discussions",
+          "Randomly generated words"
+        ],
+        "correct": [
+          0,
+          2
+        ],
+        "explanation": "Customer messages and reviews reveal how people actually describe problems."
+      },
+      {
+        "id": "seo-005",
+        "module": "intent-and-keywords",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Three keywords have results pages with almost identical top-ranking URLs. How should you target them?",
+        "options": [
+          "Create three separate pages",
+          "Target all three with one page, using one as primary and the others as secondary",
+          "Ignore two of them",
+          "Put each keyword in a separate domain"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Overlapping SERPs indicate the same intent, so one page should serve them to avoid cannibalisation."
+      },
+      {
+        "id": "seo-006",
+        "module": "intent-and-keywords",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A client in the UAE wants to rank for both Arabic and English searches. What is the best approach?",
+        "options": [
+          "Research each language separately and create properly localised pages with hreflang",
+          "Machine-translate every page and publish without review",
+          "Only target English",
+          "Mix both languages randomly on each page"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Search behaviour differs by language; localised pages with correct hreflang serve each audience."
+      },
+      {
+        "id": "seo-007",
+        "module": "on-page-and-eeat",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "How many H1 headings is it generally best practice for a page to have?",
+        "options": [
+          "None",
+          "One clear H1 describing the topic",
+          "One per paragraph",
+          "At least five"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "A single clear H1 communicates the main topic."
+      },
+      {
+        "id": "seo-008",
+        "module": "on-page-and-eeat",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is an example of keyword stuffing?",
+        "options": [
+          "Repeating 'cheap shoes Dubai' unnaturally in every sentence",
+          "Using the main keyword once in the title",
+          "Using synonyms",
+          "Writing descriptive alt text"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Unnatural repetition violates spam policies and harms readability."
+      },
+      {
+        "id": "seo-009",
+        "module": "on-page-and-eeat",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which improvement best demonstrates first-hand experience in a hotel review?",
+        "options": [
+          "A longer introduction",
+          "More keywords in headings",
+          "Original photos and specific details from staying there",
+          "A stock image of a bed"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Original evidence and specifics show genuine experience."
+      },
+      {
+        "id": "seo-010",
+        "module": "on-page-and-eeat",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Select ALL elements that strengthen trust on a finance advice website.",
+        "options": [
+          "Named authors with relevant credentials",
+          "Citations to official sources",
+          "Clear contact and company registration details",
+          "Anonymous posts with no dates",
+          "Honest 'last reviewed' dates"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          4
+        ],
+        "explanation": "Credentials, citations, transparency and honest dates build trust. Anonymous, undated posts undermine it."
+      },
+      {
+        "id": "seo-011",
+        "module": "on-page-and-eeat",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A site publishes 500 AI-generated city pages ('Best plumber in [town]') with identical text apart from the town name. What is the main risk?",
+        "options": [
+          "It may be treated as scaled content abuse or doorway pages under spam policies",
+          "None; AI content always ranks",
+          "It improves Core Web Vitals",
+          "It only affects Bing"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Mass-produced, low-value pages created to manipulate rankings breach spam policies."
+      },
+      {
+        "id": "seo-012",
+        "module": "on-page-and-eeat",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What does YMYL mean?",
+        "options": [
+          "A type of schema",
+          "Your Marketing, Your Leads",
+          "Yearly Metrics, Yearly Links",
+          "Your Money or Your Life – topics that can significantly affect health, finances, safety or wellbeing"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "YMYL topics face higher quality standards."
+      },
+      {
+        "id": "seo-013",
+        "module": "technical-seo",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does an XML sitemap do?",
+        "options": [
+          "Creates backlinks",
+          "Blocks crawlers",
+          "Speeds up your server",
+          "Lists URLs you want search engines to discover and index"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Sitemaps help discovery of canonical, indexable URLs."
+      },
+      {
+        "id": "seo-014",
+        "module": "technical-seo",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the 'good' threshold for Largest Contentful Paint?",
+        "options": [
+          "2.5 seconds or less",
+          "10 seconds or less",
+          "0.1 or less",
+          "200 milliseconds or less"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "LCP ≤ 2.5 s is good; 200 ms is the INP threshold and 0.1 the CLS threshold."
+      },
+      {
+        "id": "seo-015",
+        "module": "technical-seo",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "After a redesign, organic traffic drops sharply. robots.txt contains 'Disallow: /'. What happened?",
+        "options": [
+          "Google penalised the new design",
+          "Core Web Vitals improved",
+          "The staging robots.txt blocking all crawling was shipped to production",
+          "The sitemap is too large"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "A leftover staging directive blocks crawlers from the entire site."
+      },
+      {
+        "id": "seo-016",
+        "module": "technical-seo",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A product is available at several URLs with different filter parameters. What is the best way to consolidate signals?",
+        "options": [
+          "Submit every variant in the sitemap",
+          "Use noindex on the preferred URL",
+          "Delete the product",
+          "Add canonical tags pointing to the preferred URL and link internally to it"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Canonicals and consistent internal links tell search engines the preferred version."
+      },
+      {
+        "id": "seo-017",
+        "module": "technical-seo",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Select the TWO correct statements about robots.txt.",
+        "options": [
+          "It controls crawling, not indexing",
+          "A disallowed URL can still appear in search results if linked from elsewhere",
+          "It is the best way to remove a page from the index",
+          "It must list every page on the site"
+        ],
+        "correct": [
+          0,
+          1
+        ],
+        "explanation": "robots.txt blocks crawling only; noindex (on a crawlable page) removes pages from the index."
+      },
+      {
+        "id": "seo-018",
+        "module": "technical-seo",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "INP is poor on a site with chat widgets, heatmaps and several ad pixels. What is the most effective first step?",
+        "options": [
+          "Increase image sizes",
+          "Add more widgets",
+          "Audit and remove unused third-party scripts and defer the rest",
+          "Change the domain"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Heavy JavaScript on the main thread delays responses; reducing third-party scripts improves INP."
+      },
+      {
+        "id": "seo-019",
+        "module": "technical-seo",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which structured data format does Google recommend in most cases?",
+        "options": [
+          "Hidden keywords in white text",
+          "JSON-LD",
+          "Meta keywords tag",
+          "Inline CSS"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "JSON-LD is Google's generally recommended format for structured data."
+      },
+      {
+        "id": "seo-020",
+        "module": "clusters-and-local",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is a pillar page?",
+        "options": [
+          "A page that lists all products",
+          "A page with only images",
+          "A comprehensive overview of a broad topic that links to detailed cluster pages",
+          "A 404 page"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Pillars anchor topic clusters."
+      },
+      {
+        "id": "seo-021",
+        "module": "clusters-and-local",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which three factors does Google describe for local rankings?",
+        "options": [
+          "Price, speed and colour",
+          "Relevance, distance and prominence",
+          "Followers, likes and shares",
+          "Age, gender and income"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Local results weigh relevance, distance and prominence."
+      },
+      {
+        "id": "seo-022",
+        "module": "clusters-and-local",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A plumber without a shop serves customers at home. How should the Google Business Profile be set up?",
+        "options": [
+          "Show a home address publicly",
+          "Hide the address and set service areas",
+          "Use a competitor's address",
+          "Create profiles for every nearby town"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Service-area businesses should hide their address and list the areas they serve."
+      },
+      {
+        "id": "seo-023",
+        "module": "clusters-and-local",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Select the TWO practices that break review rules or law in many markets.",
+        "options": [
+          "Buying fake reviews",
+          "Responding politely to negative reviews",
+          "Writing reviews of your own business under fake names",
+          "Sending a review link to customers after a purchase"
+        ],
+        "correct": [
+          0,
+          2
+        ],
+        "explanation": "Fake or self-written reviews breach platform policies and consumer protection laws. Responding and asking genuine customers are good practice."
+      },
+      {
+        "id": "seo-024",
+        "module": "clusters-and-local",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A franchise creates 40 location pages with identical text except the city name. Rankings are poor. What is the best fix?",
+        "options": [
+          "Add more city names to each page",
+          "Give each page unique, useful local content such as team, directions, photos and local reviews",
+          "Delete the Google Business Profiles",
+          "Noindex the home page"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Near-duplicate doorway pages add little value; unique local information helps users and rankings."
+      },
+      {
+        "id": "seo-025",
+        "module": "clusters-and-local",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Your cluster's pages are ranking, but the pillar receives few internal links and little traffic. What should you do?",
+        "options": [
+          "Add contextual links from every cluster page to the pillar and improve the pillar's substance",
+          "Remove the pillar",
+          "Add links only from the footer",
+          "Stop publishing clusters"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Strong two-way internal linking and a genuinely useful pillar are central to the model."
+      },
+      {
+        "id": "seo-026",
+        "module": "ai-search-and-measurement",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "In Search Console, how is CTR calculated?",
+        "options": [
+          "Position ÷ Clicks",
+          "Impressions ÷ Clicks",
+          "Clicks ÷ Sessions",
+          "Clicks ÷ Impressions"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "CTR is clicks divided by impressions."
+      },
+      {
+        "id": "seo-027",
+        "module": "ai-search-and-measurement",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which statement about llms.txt is accurate?",
+        "options": [
+          "It is an official web standard required for ranking",
+          "It blocks AI crawlers",
+          "It replaces the XML sitemap",
+          "It is an optional proposed convention and not a substitute for SEO"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "llms.txt is a proposal some tools read; it is not a ranking factor or replacement for fundamentals."
+      },
+      {
+        "id": "seo-028",
+        "module": "ai-search-and-measurement",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which pages are good 'striking distance' opportunities?",
+        "options": [
+          "Pages with no impressions",
+          "Pages ranking first",
+          "Pages averaging roughly positions 8–20 for valuable queries",
+          "Pages blocked by robots.txt"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Pages near the top of page one or on page two can often move up with targeted improvements."
+      },
+      {
+        "id": "seo-029",
+        "module": "ai-search-and-measurement",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Select ALL tactics that make content more likely to be cited in AI answers.",
+        "options": [
+          "Concise direct answers under question-style headings",
+          "Original data or first-hand experience",
+          "Hiding main content behind scripts crawlers cannot render",
+          "Clear author and organisation information"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Clear answers, originality and entity clarity help. Content crawlers cannot access is unlikely to be used."
+      },
+      {
+        "id": "seo-030",
+        "module": "ai-search-and-measurement",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Clicks fell 30% year-on-year for an informational guide while impressions stayed flat and average position is unchanged. What is a plausible explanation to investigate?",
+        "options": [
+          "More answers are being satisfied on the results page (for example by AI features), reducing CTR",
+          "The site was deindexed",
+          "The sitemap is missing",
+          "robots.txt blocks the page"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Flat impressions and position with fewer clicks point to lower CTR, which AI summaries and SERP features can cause."
+      },
+      {
+        "id": "seo-031",
+        "module": "ai-search-and-measurement",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A manager wants SEO success measured only by average position. What is the best argument for a broader view?",
+        "options": [
+          "Average position hides query mix and does not show clicks, conversions or revenue",
+          "Average position is always accurate",
+          "Search Console does not show position",
+          "Rankings are irrelevant"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "SEO should be reported as a funnel from impressions to revenue; position alone is misleading."
+      },
+      {
+        "id": "seo-032",
+        "module": "ai-search-and-measurement",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which Search Console tool lets you check the canonical Google selected for a specific page?",
+        "options": [
+          "URL Inspection",
+          "Links report",
+          "Performance report",
+          "Removals"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "URL Inspection shows index status and the Google-selected canonical."
+      }
+    ]
+  }
+}
