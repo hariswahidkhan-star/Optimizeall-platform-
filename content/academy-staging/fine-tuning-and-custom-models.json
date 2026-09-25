@@ -6,7 +6,7 @@
   "subtitle": "When not to fine-tune, data curation, SFT, LoRA/QLoRA, DPO, GRPO, distillation, embeddings, evaluation, cost and deployment",
   "category": "ai",
   "level": "advanced",
-  "estimatedMinutes": 401,
+  "estimatedMinutes": 407,
   "description": "Fine-tuning is powerful for the right problems and a costly detour for the wrong ones. This advanced, hands-on course teaches you to decide with evidence and then do it properly. You will climb the customization ladder before touching weights, map methods to gaps (SFT, LoRA and QLoRA, DPO and other preference methods, reinforcement fine-tuning with GRPO, distillation and embedding fine-tuning), and build datasets that teach what you mean: labeling guides, coverage, deduplication, leakage-free splits, synthetic data with strict filtering, PII redaction and license checks. You will train with Hugging Face TRL, PEFT, Unsloth and Axolotl, evaluate against your best non-fine-tuned baseline by slice with confidence intervals, compare hosted platforms including the 2026 changes, and model costs and break-even. Finally you will deploy, monitor drift and retrain, and complete a capstone: a fine-tuned support-intent router with a full evaluation report.",
   "outcomes": [
     "Decide when fine-tuning is justified using the customization ladder",
@@ -185,6 +185,12 @@
                 "seconds": 38
               },
               {
+                "narration": "A question from executives: are we falling behind if we do not fine-tune? No. Many of the strongest AI products in production run on well-designed prompts, retrieval and tools, with careful evaluation, and no fine-tuning at all. Fine-tuning is a tool for specific gaps, not a badge of sophistication. A second question: if we fine-tune, will we have to redo it when the base model changes? Usually yes. Plan for retraining, and keep your data and evaluation ready so it takes days, not months.",
+                "onScreen": "FAQ\n• Behind if we don't fine-tune? No; many top products don't\n• Base model changes → retrain? Usually; keep data + evals ready",
+                "visual": "Two Q&A cards; the first shows a product stack of prompt, retrieval, tools and evals with no fine-tuning layer and a green tick, the second shows a calendar with a retraining marker.",
+                "seconds": 37
+              },
+              {
                 "narration": "Try this now. Pick one AI task your team wants to improve and write down its current score on ten real examples, using your best prompt. Then write one sentence describing the remaining gap and label it: knowledge, behavior, cost or latency. If it says knowledge, stop and plan retrieval instead. If it says behavior, cost or latency, keep it for the worksheet.",
                 "onScreen": "Try this now\n• Score your best prompt on 10 examples\n• Name the gap: knowledge, behavior, cost, latency\n• Knowledge → retrieval",
                 "visual": "A small score card with 10 checkboxes filling in, then a four-option label selector where one option lights up and a routing arrow appears.",
@@ -341,6 +347,12 @@
                 "onScreen": "Sequencing\n• SFT first\n• Then DPO (subjective) or RFT (checkable)\n• Distillation = SFT on teacher outputs\n• Embeddings: separate track",
                 "visual": "Horizontal pipeline: SFT box first, branching to DPO and RFT boxes; a separate lane below labeled embeddings.",
                 "seconds": 36
+              },
+              {
+                "narration": "A common question: can we combine methods in one model? Yes, and it is normal. A typical sequence is SFT to teach the task, then DPO for tone, or GRPO for checkable correctness, all with LoRA adapters on the same base model. Separately, you might fine-tune an embedding model for retrieval. Each step needs its own evaluation, and each should earn its place: if DPO does not improve your blind win rate, drop it. More methods are not automatically better.",
+                "onScreen": "FAQ: combine methods?\n• Yes: SFT → DPO or GRPO, with LoRA\n• Embeddings on a separate track\n• Each step must earn its place in evals",
+                "visual": "A layered pipeline diagram: base model, SFT layer, DPO layer, each with a small eval gate; a separate embedding model sits alongside.",
+                "seconds": 35
               },
               {
                 "narration": "Try this now. For one product you know, write three sentences that each start with the model currently fails when. Then next to each, write which method from the map fits, and what the training data would look like in one line. If you cannot describe the data, that is the real blocker to solve first.",
@@ -536,6 +548,12 @@
                 "seconds": 37
               },
               {
+                "narration": "A question from teams with little data: can we start fine-tuning with only a few hundred examples? For narrow format or style tasks, sometimes yes, especially with LoRA on a capable base model. The key is that those few hundred are clean, consistent and representative. Start there, evaluate honestly, and let the error analysis tell you where more data is needed. Adding targeted examples for the specific failures usually helps more than doubling the dataset at random.",
+                "onScreen": "FAQ: only a few hundred examples?\n• Narrow style/format: often enough to start\n• Must be clean and representative\n• Add targeted examples for failures",
+                "visual": "A small neat stack of example cards, then a targeted handful added exactly where an error-analysis chart shows the biggest bar.",
+                "seconds": 33
+              },
+              {
                 "narration": "Try this now. Export fifty real examples for one task, and read every one of them. Count duplicates, count examples you are unsure how to label, and note which languages and channels appear. Those three numbers will tell you more about your fine-tuning readiness than any model benchmark.",
                 "onScreen": "Try this now\n• Read 50 real examples\n• Count duplicates\n• Count unsure labels\n• Note languages and channels",
                 "visual": "Three counters animate upward as a list of fifty examples scrolls past: duplicates, unsure, and a small pie chart for languages.",
@@ -630,7 +648,7 @@
                 "seconds": 34
               },
               {
-                "narration": "Here is an analogy for distillation. A master chef runs a famous restaurant, but hiring the master for every branch is too expensive. So the master cooks a thousand plates of the signature dish while an apprentice watches, tastes and practises. The apprentice will never be the master, but for that one dish, they can get very close, and they cost a fraction as much. The key word is one dish. Distillation shines on narrow tasks.",
+                "narration": "Here is an analogy for distillation. A master chef runs a famous restaurant, but hiring the master for every branch is too expensive. So the master cooks a thousand plates of the signature dish while an apprentice watches, tastes and practices. The apprentice will never be the master, but for that one dish, they can get very close, and they cost a fraction as much. The key word is one dish. Distillation shines on narrow tasks.",
                 "onScreen": "Analogy: master and apprentice\n• Teacher = master chef\n• Student = apprentice\n• One signature dish = narrow task",
                 "visual": "Kitchen scene: a large chef figure plates identical dishes while a smaller figure copies; a price tag on each shows a big difference, and a label \"one dish\" highlights.",
                 "seconds": 33
@@ -688,6 +706,12 @@
                 "onScreen": "Too much synthetic?\n• Watch synthetic share per class\n• Watch style drift: too clean, too polite\n• Keep real data dominant",
                 "visual": "Stacked bars per class showing real and synthetic proportions; one bar mostly synthetic is flagged; a message card with typos contrasts with a polished synthetic one.",
                 "seconds": 35
+              },
+              {
+                "narration": "A question I hear: if the teacher model makes mistakes, will the student copy them? Yes, faithfully. That is why filtering matters so much, and why the student should be evaluated against real data, not against the teacher. Sometimes a well-filtered student even outperforms its teacher on the narrow task, because the filters removed the teacher's worst outputs. But you only know that from an honest evaluation on real examples.",
+                "onScreen": "FAQ: will the student copy teacher mistakes?\n• Yes, without filtering\n• Evaluate on real data, not vs teacher\n• Filtered students can beat teachers on narrow tasks",
+                "visual": "Teacher outputs pass through a filter that removes red-flagged cards; the student trains on the rest, and its score bar is compared on real data.",
+                "seconds": 30
               },
               {
                 "narration": "Try this now. Find the emptiest cell in your coverage matrix, the class and language combination with the fewest real examples. Write a generation prompt for it that specifies intent, language, channel and difficulty, and includes one anonymized real example. Generate twenty, and read all twenty before you generate any more.",
@@ -846,6 +870,12 @@
                 "onScreen": "Document for trust\n• Lawful basis or permission\n• Redaction method + miss rate\n• Dataset and base-model licenses\n• Approver",
                 "visual": "Data card document with sections highlighted in sequence, then handed across a desk to an auditor icon.",
                 "seconds": 31
+              },
+              {
+                "narration": "A practical question: can we use customer support transcripts to train a model? Possibly, but check three things first. Does your privacy notice, contract or other legal basis cover this use? Can you remove or replace personal data without losing what the model needs to learn? And do any customer contracts restrict how their data may be used? If all three check out, document the decision in the data card, and consider giving enterprise customers a way to opt out.",
+                "onScreen": "FAQ: train on support transcripts?\n• Legal basis/notice/contract covers it?\n• Can PII be removed without losing value?\n• Customer contract restrictions?\n• Document + consider opt-out",
+                "visual": "Three checkpoint gates labeled basis, redaction and contracts; transcript cards pass through each and land in a dataset folder with a data card attached.",
+                "seconds": 35
               },
               {
                 "narration": "Try this now. Take ten real training examples and highlight every piece of personal data by hand. Then run an automatic detector on the same ten and compare. Count what the detector missed. That miss count, even on ten examples, tells you whether your redaction is ready or needs custom patterns first.",
@@ -1021,6 +1051,12 @@
                 "seconds": 30
               },
               {
+                "narration": "A frequent question: how do I know whether to fine-tune a smaller model or just use a bigger one with a good prompt? Run both on your golden set. If the small fine-tuned model matches the big prompted one on your task, you have won on cost and speed. If it falls short, check whether more or better data closes the gap. And remember maintenance: the small model is now yours to retrain and monitor, while the big model's prompt is simpler to update.",
+                "onScreen": "FAQ: small fine-tune vs big prompted model?\n• Run both on the golden set\n• Match → win on cost and speed\n• Short → better data?\n• Factor in maintenance",
+                "visual": "Two model cards compared on a golden-set scoreboard; cost and latency bars favor the small model, and a wrench icon labeled maintenance appears beside it.",
+                "seconds": 37
+              },
+              {
                 "narration": "Try this now. Convert twenty of your labeled examples into the prompt and completion format shown in the lesson, with the exact system prompt you will use in production. Load them with the datasets library and print one example after the tokenizer's chat template is applied. Seeing the special tokens around your text is the moment chat templates stop being abstract.",
                 "onScreen": "Try this now\n• Convert 20 examples to prompt/completion\n• Use the production system prompt\n• Print one after applying the chat template",
                 "visual": "A JSON line transforms into a templated string with special tokens highlighted in a different color, animating token by token.",
@@ -1114,7 +1150,7 @@
           ],
           "activity": "Train a QLoRA adapter for a style task on your GPU (or a rented one), merge it, quantize for serving, and compare scores before and after quantization.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "A few years ago, fine-tuning a seven billion parameter model meant a rack of expensive GPUs and a full copy of the model for every task. Today you can do it overnight on one consumer graphics card and store the result in a file smaller than a movie. That shift is thanks to LoRA and QLoRA. In this lesson you will learn how they work, how to choose settings, and how to take an adapter all the way to a served model.",
@@ -1181,6 +1217,12 @@
                 "onScreen": "Where the memory goes\n• Full FT: weights + gradients + optimizer states\n• LoRA: states only for the adapter\n• QLoRA: plus a 4-bit frozen base",
                 "visual": "Three stacked memory bars: a tall full fine-tuning bar with four segments, a shorter LoRA bar, and a short QLoRA bar fitting under a single-GPU line.",
                 "seconds": 33
+              },
+              {
+                "narration": "A question I get: does LoRA make the model forget what it already knew? Much less than full fine-tuning, because the base weights stay frozen. But the adapter can still shift behavior in ways that hurt other tasks, especially with a high learning rate or many epochs. That is why your regression suite matters: after training, check general instructions, other languages and safety behavior, not only the target task. If you see forgetting, reduce epochs or learning rate, or mix in some general examples.",
+                "onScreen": "FAQ: does LoRA cause forgetting?\n• Less than full fine-tuning (base frozen)\n• Still possible: high LR, many epochs\n• Run regression suite\n• Fix: fewer epochs, lower LR, mix general data",
+                "visual": "A frozen base model block with an adapter attached; a regression dashboard checks general, language and safety tiles, one turning amber then green after a fix.",
+                "seconds": 37
               },
               {
                 "narration": "Try this now. Take a model you might fine-tune and look up two numbers in its config: hidden size and number of layers. Estimate the LoRA parameters for one projection matrix at rank sixteen: sixteen times the two dimensions added together. Then multiply by the number of target matrices per layer and the number of layers. Compare that with the model's total parameters. Seeing the percentage makes LoRA's efficiency real.",
@@ -1284,7 +1326,7 @@
           ],
           "activity": "Convert your SFT script into either an Axolotl YAML or a pinned TRL project in Git, run it twice, and confirm the metrics match within variance.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Your first fine-tune usually lives in a notebook on one person's machine. It works, everyone celebrates, and three weeks later nobody can reproduce it. In this lesson you will map the open-source training stack, see when to use TRL, Unsloth or Axolotl, where to get GPUs, and how to make training reproducible so the second model is easier than the first.",
@@ -1351,6 +1393,12 @@
                 "onScreen": "Track every run\n• Config, versions, data hash\n• Hardware, duration, cost\n• Curves and eval metrics\n• One shared place",
                 "visual": "Run-tracking dashboard with a table of runs, sortable metric columns and one row starred as the chosen model.",
                 "seconds": 34
+              },
+              {
+                "narration": "A common question: should we build our own training pipeline or use a managed service? If you fine-tune rarely and want minimal operations, managed training on a cloud platform or an inference provider that supports adapters can be simpler. If you fine-tune often, need specific methods, or must keep data in particular environments, owning a small reproducible pipeline with open-source tools pays off. Many teams do both: prototype on a managed service, then move steady workloads to their own pipeline.",
+                "onScreen": "FAQ: own pipeline or managed?\n• Rare jobs, minimal ops → managed\n• Frequent jobs, specific methods, data constraints → own pipeline\n• Often both",
+                "visual": "Two paths on a decision map: a managed cloud console and a self-hosted pipeline, joined by an arrow labeled \"prototype, then move\".",
+                "seconds": 35
               },
               {
                 "narration": "Try this now. Create a requirements file that pins exact versions of transformers, TRL, PEFT, datasets and accelerate, and commit it next to your training script. Then write the base model's revision hash into your config. Those two small steps make your next run reproducible.",
@@ -1465,7 +1513,7 @@
           ],
           "activity": "Collect 200 preference pairs from edits or A/B choices in your workflow, filter for length bias, and run a small DPO job; measure blind win rate on 50 held-out prompts.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Try this. Write the perfect reply to an angry customer. Hard, right? Now I show you two replies and ask which is better. Easy. That gap, between writing and choosing, is why preference optimization exists. In this lesson you will understand RLHF at a practitioner level, see why DPO became the default, meet the variants, learn where preference data comes from, and run a DPO job with TRL.",
@@ -1532,6 +1580,12 @@
                 "onScreen": "Continuous preference loop\n• Agents edit drafts\n• Log draft vs edit automatically\n• Periodic DPO update\n• Blind win rate → release",
                 "visual": "Circular loop diagram: draft, agent edit, logged pair, DPO update, evaluation, release, back to draft.",
                 "seconds": 32
+              },
+              {
+                "narration": "A question people ask: how many preference pairs do we need? It depends on how different your target behavior is from the current model. For a focused tone adjustment, a few hundred high-quality pairs can move the needle. For broader changes, thousands. As always, quality beats quantity: pairs where the chosen answer is clearly better on the dimension you care about teach far more than pairs where the difference is subtle or just length. Start small, measure the blind win rate, and scale if it helps.",
+                "onScreen": "FAQ: how many pairs?\n• Focused tone: a few hundred can help\n• Broad changes: thousands\n• Clear, relevant differences beat volume",
+                "visual": "A small stack of clearly contrasting pairs next to a larger stack of subtle pairs; a win-rate meter rises more for the small clear stack.",
+                "seconds": 37
               },
               {
                 "narration": "Try this now. Take ten outputs from your current model and, for each, write a better version yourself or ask a colleague to. You now have ten preference pairs. Look at them together: is the better version longer every time? If so, you have found length bias before it reaches training.",
@@ -1893,6 +1947,12 @@
                 "seconds": 32
               },
               {
+                "narration": "A question from teams under deadline pressure: can we skip the online test if offline results are great? You can shorten it, but do not skip it. Offline tests use the data you collected; live traffic brings new phrasing, new topics and new user behavior. Even a few days in shadow mode often reveals issues, like a new product name, that no offline set contained. A short shadow period is cheap insurance compared with a public failure.",
+                "onScreen": "FAQ: skip online testing?\n• Shorten, don't skip\n• Live traffic brings new phrasing and topics\n• Shadow mode = cheap insurance",
+                "visual": "A calendar showing a short shadow-mode period; live messages flow into a ghosted model and one new product name gets flagged.",
+                "seconds": 33
+              },
+              {
                 "narration": "Try this now. Write your decision rule in three lines before your next training run. Line one: the target metric and minimum improvement. Line two: the maximum regression allowed on any slice or safety test. Line three: the latency or cost limit. Share it with a colleague and ask them to hold you to it.",
                 "onScreen": "Try this now\n• Line 1: target + minimum gain\n• Line 2: max slice/safety regression\n• Line 3: latency or cost limit\n• Share it",
                 "visual": "Three-line rule card types itself, then is sealed in an envelope and passed to a colleague icon.",
@@ -1982,7 +2042,7 @@
           ],
           "activity": "Complete the six-point decision checklist for two hosted options and one self-managed option for your task, and write converters from your canonical JSONL to each format.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "In twenty twenty-six, a lot of teams woke up to an email saying the fine-tuning platform they built on was being wound down. Their fine-tuned models would keep running for a while, but new training would end. The teams that shrugged were the ones who had kept their data and evaluations portable. In this lesson you will map the hosted fine-tuning landscape, the formats and APIs, and the checklist that keeps you able to move.",
@@ -2049,6 +2109,12 @@
                 "onScreen": "Lifecycle planning\n• Base models retire on a schedule\n• Fine-tunes retire with them\n• Calendar reminders + retraining budget\n• Portable data makes it routine",
                 "visual": "Timeline with a base model retirement marker; a fine-tune bar ending at the same point, and a new bar for the successor starting earlier with an overlap period.",
                 "seconds": 33
+              },
+              {
+                "narration": "A question worth asking every time: does a hosted fine-tune cost more to run than the base model? It can. Some platforms price inference on custom models differently, and some require dedicated capacity to serve them. Put those numbers into your cost model before training, not after. A fine-tune that saves prompt tokens but requires expensive dedicated hosting may not save money at your volume.",
+                "onScreen": "FAQ: is custom-model inference pricier?\n• It can be\n• Some require dedicated capacity\n• Model costs before training",
+                "visual": "Two cost bars: base model with long prompts vs custom model with short prompts plus a dedicated-capacity block; a question mark over which is cheaper at your volume.",
+                "seconds": 28
               },
               {
                 "narration": "Try this now. Write a twenty-line converter from your canonical JSON lines to one other provider's format, for example from messages to Gemini's contents and parts. Run it on ten examples and validate them. Once you have one converter working, switching providers stops being scary.",
@@ -2221,6 +2287,12 @@
                 "seconds": 34
               },
               {
+                "narration": "A question from RAG teams: should we fine-tune the embedding model, the generator, or both? Start with whichever step is failing. If the right passages are not being retrieved, the generator cannot fix that, so improve retrieval first. If the right passages are retrieved but answers are still poor, work on the generator's prompt, format or, eventually, fine-tuning. Your evaluation should separately measure retrieval hit rate and answer quality so you know which one to fix.",
+                "onScreen": "FAQ: tune embeddings, generator or both?\n• Fix the failing step first\n• Missing passages → retrieval\n• Good passages, bad answers → generator\n• Measure both separately",
+                "visual": "RAG pipeline with two gauges, retrieval hit rate and answer quality; the lower gauge pulses to show where to focus.",
+                "seconds": 33
+              },
+              {
                 "narration": "Try this now. Export fifty real queries from your search or support logs, and for each, write the document that should have been found. Run them through your current retrieval and count how often the right document is in the top five. That single number is your baseline, and it tells you whether embedding fine-tuning is worth it.",
                 "onScreen": "Try this now\n• 50 real queries + correct documents\n• Run current retrieval\n• Count top-5 hits = baseline",
                 "visual": "A table of 50 queries with a hit/miss column filling in; a percentage appears at the bottom labeled baseline recall@5.",
@@ -2318,7 +2390,7 @@
           ],
           "activity": "Fill in the break-even calculator with your real volumes and current price sheets, then run pessimistic, expected and optimistic scenarios.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Sooner or later, someone from finance asks two questions: what does this cost, and when does it pay back? If your answer is it depends, the project stalls. In this lesson you will build a cost model for custom models that you can defend: one-off and recurring costs, two ways to estimate training, inference economics, break-even, and stress tests. Every number I use is illustrative; you will plug in your own.",
@@ -2385,6 +2457,12 @@
                 "onScreen": "One-page presentation\n• Recommendation + expected break-even\n• Three scenarios table\n• Value beyond cost\n• Price sources + date checked",
                 "visual": "A single slide mock-up with a headline recommendation, a three-row scenario table, a value box and a footnote listing sources with dates.",
                 "seconds": 33
+              },
+              {
+                "narration": "A question finance teams ask: what about the cost of people? Include it. Engineering time to build the pipeline, reviewer time for labeling and evaluation, and ongoing time for monitoring and retraining are often larger than the compute bill, especially in the first year. A model that looks cheap on GPU hours can look very different once people's time is included. Honest models include both, and the recommendation still holds.",
+                "onScreen": "FAQ: what about people costs?\n• Include engineering, labeling, evaluation, monitoring\n• Often bigger than compute in year one",
+                "visual": "Stacked cost bar where a small compute segment is dwarfed by people segments labeled engineering, labeling and monitoring.",
+                "seconds": 30
               },
               {
                 "narration": "Try this now. Open your provider's current price page and your usage dashboard, and calculate your real cost per request for one AI task, including input and output tokens. Write the date and the source next to the number. Every cost model starts with one honest, sourced number.",
@@ -2540,6 +2618,12 @@
                 "seconds": 28
               },
               {
+                "narration": "A question from operations teams: how often should we retrain? There is no fixed answer, which is why triggers matter more than calendars. Some models run well for a year; others need updates every few weeks during seasonal peaks. Start with a quarterly review as a safety net, and let your drift reports and weekly quality samples tell you when to act sooner. Track how often triggers fire, and adjust your data collection so retraining is quick when it is needed.",
+                "onScreen": "FAQ: how often to retrain?\n• Triggers over calendars\n• Quarterly review as a safety net\n• Drift + weekly samples decide sooner",
+                "visual": "Calendar with a quarterly marker and several trigger lightning icons at irregular points; each trigger links to a retrain loop.",
+                "seconds": 35
+              },
+              {
                 "narration": "Try this now. For one model you run or plan, write down the three numbers you would look at every Monday morning, for example the share of the other label, the weekly sample accuracy, and p ninety-five latency. Then write the threshold for each that would make you act. That is your monitoring plan in three lines.",
                 "onScreen": "Try this now\n• 3 Monday-morning numbers\n• A threshold for each\n• = your monitoring plan",
                 "visual": "Three dashboard tiles appear with a number and a dashed threshold line each; one tile crosses its threshold and turns amber.",
@@ -2629,7 +2713,7 @@
           ],
           "activity": "Complete the capstone: a fine-tuned support-intent (or brand-voice) model with all seven deliverables, evaluated on real held-out data against your best baseline.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "This is where everything comes together. You are going to fine-tune a small open-weight model to route customer support messages to the right intent, fast and cheaply enough to run on every message, and prove with evidence that it beats your best non-fine-tuned setup. Uncertain messages will escalate to a stronger model or a human. If brand voice matters more to you, the same steps build a brand-voice classifier instead.",
@@ -2695,6 +2779,12 @@
                 "narration": "A few tips for a smooth capstone. Start with the evaluation, not the training: build the test set and the baseline score in week one. Keep the first model small and the first dataset modest, so you can iterate quickly. Save every run with its config and data hash. And write the report as you go, not at the end. Most strong submissions spend more time on data and evaluation than on training itself.",
                 "onScreen": "Capstone tips\n• Evaluation first, in week one\n• Small model, modest data, fast iterations\n• Save every run\n• Write the report as you go",
                 "visual": "Four-week plan timeline: week one evaluation, week two data, week three training iterations, week four report and deployment plan.",
+                "seconds": 32
+              },
+              {
+                "narration": "A capstone question: what if the fine-tuned model does not beat the baseline? Then your report says so, clearly, and that is a successful capstone. You will have learned where the gap is, maybe data coverage, maybe label quality, maybe the task needs a stronger model. Write down what you would try next and what evidence would change the decision. An honest no-ship decision, backed by evaluation, is exactly the skill this course teaches.",
+                "onScreen": "FAQ: what if we don't beat the baseline?\n• Report it clearly: still a success\n• Diagnose the gap\n• Next steps + what would change the decision",
+                "visual": "An evaluation report with a \"no-ship\" stamp, followed by a short next-steps list and a green tick labeled \"honest decision\".",
                 "seconds": 32
               },
               {

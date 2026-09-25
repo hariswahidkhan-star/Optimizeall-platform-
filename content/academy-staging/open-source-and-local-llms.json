@@ -6,7 +6,7 @@
   "subtitle": "Licenses, model families, quantization, VRAM sizing, Ollama, llama.cpp, vLLM, edge AI, privacy and hybrid routing",
   "category": "ai",
   "level": "advanced",
-  "estimatedMinutes": 396,
+  "estimatedMinutes": 402,
   "description": "Open-weight models now handle a large share of real business work on hardware you control. This advanced, hands-on course teaches you to choose, run and deploy them responsibly. You will read licenses the way legal will (Apache-2.0, MIT, the Llama community license), shortlist current model families on evidence, and understand quantization formats such as GGUF, AWQ, GPTQ, FP8 and MXFP4. You will size memory with a real formula for weights and KV cache, choose hardware on 24-month cost, and run models with Ollama, llama.cpp and LM Studio, including structured output and tool calling. You will serve at scale with vLLM, compare engines like SGLang fairly, put small models on devices, secure the model supply chain, respect data residency, and benchmark honestly. Finally you will build a hybrid router and a private, cited, permission-aware RAG assistant with an evaluation report.",
   "outcomes": [
     "Explain open-weight vs closed models and triage licenses per release",
@@ -918,7 +918,7 @@
           ],
           "activity": "Fill in the 24-month TCO template for two options (on-prem vs cloud) and compare the cost per 1,000 requests with an API model you already use.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Two companies buy the same expensive GPU. One runs it flat out serving hundreds of staff and pays it back in months. The other runs it five percent of the time and quietly burns money for two years. Same chip, opposite outcomes. In this lesson you will learn the five hardware tiers for running models, the trade-offs that actually matter, and a simple total cost sketch so your purchase is defensible.",
@@ -979,6 +979,12 @@
                 "onScreen": "Rent before you buy\n• Rent the target GPU class for a day\n• Real prompts, real concurrency, same engine\n• Measure throughput, latency, memory\n• Synthetic prompts if data cannot leave",
                 "visual": "Calendar showing one highlighted day with a cloud GPU icon, then a results sheet with three measured numbers feeding into a purchase request form.",
                 "seconds": 43
+              },
+              {
+                "narration": "A question I get all the time: should we buy one big GPU or two smaller ones? For most single-team servers, one bigger card is simpler. The whole model fits in one place, you avoid splitting layers across cards, and there is one thing to monitor and cool. Two smaller cards make sense when the model does not fit on any single card you can buy, or when you want two independent replicas for resilience. And a second common question: is a Mac good enough for our team? For a few people using it one at a time, often yes. For twenty people hitting it at once, a dedicated GPU with a batching server will serve them far better.",
+                "onScreen": "FAQ\n• One big GPU or two small? Usually one big, simpler\n• Two cards: model won't fit, or replicas\n• Mac for a team? Few users yes; many users → GPU server",
+                "visual": "Two Q&A cards flip in sequence; the first shows one large GPU vs two small GPUs with a \"simpler\" tick, the second shows a laptop with a few users vs a server with many.",
+                "seconds": 52
               },
               {
                 "narration": "Try this now. Write down your expected number of concurrent users at peak, and the context length they really need. Then place yourself on the five tiers. If you land on tier two or three, you probably do not need a server yet. If you land on tier four or five, your next step is to rent that exact GPU class in the cloud for a day and measure, before you buy anything.",
@@ -1077,7 +1083,7 @@
           ],
           "activity": "Create a Modelfile for an assistant in your domain, set num_ctx deliberately, and call it from Python with both the native and the OpenAI-compatible client.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "In the next ten minutes you will go from an empty laptop to a branded, team-ready AI assistant that never sends a word to the cloud. We will use Ollama, the most popular local model runner. You will learn the five commands that matter, the one setting that silently breaks long documents, how to package your own assistant, how to call it from code, and how to share it without accidentally publishing it to the internet.",
@@ -1138,6 +1144,12 @@
                 "onScreen": "Two habits\n• Modelfiles in version control\n• A one-page runbook: approved tag, update, check, restart, contact",
                 "visual": "Git history view showing a Modelfile diff with a changed num_ctx line, then a one-page runbook document with five headings.",
                 "seconds": 36
+              },
+              {
+                "narration": "Two questions people ask after their first day with Ollama. First: why is the first answer slow and the rest fast? Because the model loads from disk into memory on the first request. Ollama keeps it loaded for a while afterwards, and you can adjust how long with its keep alive setting, so during office hours you can keep it warm. Second: can I use my own fine-tuned model? Yes. If you have a GGUF file, a Modelfile that points FROM that file turns it into a named model, and Ollama can also attach supported adapters. Just record it in your model register like any other model.",
+                "onScreen": "FAQ\n• First answer slow? Model loading; keep it warm with keep_alive\n• Own fine-tuned model? FROM your GGUF, or attach an adapter\n• Register it",
+                "visual": "Two Q&A cards: a loading bar followed by fast responses with a \"keep_alive\" dial; a Modelfile snippet showing FROM ./my-model.gguf.",
+                "seconds": 47
               },
               {
                 "narration": "Try this now. Install Ollama, pull one small model, and run ollama ps while it is answering a question. Look at the processor column. If it says one hundred percent GPU, great. If it shows a CPU share, try a smaller model or a shorter context and watch the change. Then write a Modelfile for a task you do every week, give it a name, and use it for the rest of the week.",
@@ -1300,6 +1312,12 @@
                 "seconds": 35
               },
               {
+                "narration": "A common question: if Ollama and LM Studio both use llama dot cpp underneath, why would I ever use it directly? Three reasons. You get new features and model support first, sometimes weeks earlier. You get precise control over flags like context per slot, cache types and grammars. And you get a tiny, dependency-light server that is easy to put in a container on almost any hardware. Another question: are GGUF files from LM Studio and Ollama interchangeable? The GGUF format is shared, so a GGUF file generally works in any llama dot cpp based runtime, though each app manages its own storage and naming.",
+                "onScreen": "FAQ\n• Why use llama.cpp directly? New features first, precise flags, tiny server\n• GGUF interchangeable? Format is shared across llama.cpp runtimes",
+                "visual": "Q&A cards animate: three small benefit icons for llama.cpp, then a single GGUF file icon connecting to three runtime boxes.",
+                "seconds": 46
+              },
+              {
                 "narration": "Try this now. Start llama server with an API key and a small model, and send it one request with a JSON schema for a task you care about. Then send the same request without the schema, ten times, and count how many answers you could parse. That tiny experiment will convince your team faster than any slide.",
                 "onScreen": "Try this now\n• llama-server + API key\n• Same request ×10 with and without schema\n• Count parseable answers",
                 "visual": "Two tally counters side by side labeled \"with schema\" and \"without schema\", incrementing as ten requests animate through each.",
@@ -1460,6 +1478,12 @@
                 "seconds": 38
               },
               {
+                "narration": "A question worth answering: do small local models handle tool calling reliably? Increasingly yes, but it varies by model and by template. The practical approach is to test tool calling as part of your evaluation, with ten or twenty requests that should call a tool and ten that should not. Measure both: did it call the right tool with valid arguments, and did it avoid calling tools when it should just answer? If a model struggles, give it fewer, clearer tools with good descriptions, or route tool-heavy requests to a stronger model.",
+                "onScreen": "FAQ: are small models good at tools?\n• Varies by model and template\n• Test: should-call and should-not-call cases\n• Fewer, clearer tools · or route to a stronger model",
+                "visual": "Two columns of test requests labeled \"should call\" and \"should not call\"; tick and cross marks fill in as results arrive.",
+                "seconds": 40
+              },
+              {
                 "narration": "Try this now. Take one form you fill in by hand at work, maybe a lead intake or an expense note, and turn its fields into a Pydantic model. Then feed the local model three real examples with the schema and temperature zero. Count how many fields are right. That is your first gold-set measurement, and it takes about twenty minutes.",
                 "onScreen": "Try this now\n• Turn a real form into a Pydantic model\n• 3 real examples, temperature 0\n• Count correct fields",
                 "visual": "A paper form morphs into a Python class on screen, field by field; three example cards pass through and a small per-field accuracy table appears.",
@@ -1556,7 +1580,7 @@
           ],
           "activity": "Serve a model with vLLM, run a benchmark at three request rates using your own prompts, and write a one-page capacity note with p95 TTFT and ITL.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Your pilot was a hit. Twelve people loved the local assistant. Now the whole company wants it, plus an application that fires hundreds of requests at once. The desktop runner that was perfect for one person starts to queue, stall and time out. This lesson is about serving at scale with vLLM: why it is fast, how to launch it properly, which flags to tune, and how to measure performance like an operator.",
@@ -1616,6 +1640,12 @@
                 "narration": "A word on scaling out. When one GPU is not enough, you have two options. Scale up: a bigger card, or tensor parallelism across several cards in one machine, for models that do not fit. Or scale out: several identical replicas behind a load balancer, for more concurrent users. For most business workloads, replicas are simpler, more resilient, and let you do rolling upgrades, one replica at a time, with no downtime. Decide your scale-out trigger in advance, for example, queue length above a threshold for ten minutes.",
                 "onScreen": "Scale up vs scale out\n• Up: bigger card or tensor parallel (model too big)\n• Out: replicas behind a load balancer (more users)\n• Rolling upgrades\n• Pre-agreed scale-out trigger",
                 "visual": "Two diagrams: one large server box split into GPU slices, and three identical smaller boxes behind a load balancer icon; a queue gauge crosses a dashed threshold line.",
+                "seconds": 38
+              },
+              {
+                "narration": "A frequent question: how many users can one GPU serve? It depends on four things: model size and precision, the context length you allow, how long answers are, and how often people actually send requests. Ten people who each send a request every few minutes generate far less load than ten people hammering a chat window. The honest answer is to measure: replay realistic traffic at increasing request rates and find the point where your latency target breaks. That number, not a guess, goes into your capacity plan.",
+                "onScreen": "FAQ: users per GPU?\n• Depends on model, context, answer length, request rate\n• Users ≠ load\n• Replay traffic, find the latency breaking point",
+                "visual": "Line chart of p95 latency against request rate with a horizontal target line; a marker shows the breaking point and a label reads \"capacity\".",
                 "seconds": 38
               },
               {
@@ -1720,7 +1750,7 @@
           ],
           "activity": "Run a bake-off between two engines on your hardware with 100 of your prompts at two concurrency levels; record p50/p95 TTFT, throughput and errors.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Every few months someone posts a chart claiming a new serving engine is three times faster. Sometimes it is, for their traffic, on their hardware. The question is whether it is faster for yours. In this lesson you will get a clear map of the main engines as of September twenty twenty-six, a five-question decision guide, and a small bake-off script to test engines with your own prompts.",
@@ -1781,6 +1811,12 @@
                 "onScreen": "Check the parsers\n• Reasoning sections\n• Family-specific tool-call formats\n• Missing parser → garbled calls or leaked thinking\n• Test tools + reasoning through the API",
                 "visual": "Split view: raw model output with a thinking block and a tool call in a custom format, passing through a parser box into clean JSON fields on the other side.",
                 "seconds": 35
+              },
+              {
+                "narration": "People often ask: will I be locked into one engine? Much less than you might fear. Because vLLM, SGLang, llama dot cpp and most managed endpoints expose OpenAI-compatible APIs, your application code rarely changes. The real switching costs are operational: container images, monitoring dashboards, flags and runbooks. Keep those documented and your engine becomes a replaceable component. Another question: should small teams even run their own engine? If you have steady volume, data residency needs or cost pressure, yes. If not, a managed endpoint may be the better first step.",
+                "onScreen": "FAQ\n• Lock-in? Low for app code (OpenAI-compatible)\n• Real costs: images, dashboards, flags, runbooks\n• Small teams: self-host for volume/residency/cost; else managed",
+                "visual": "An application box connected by a single standard plug to interchangeable engine boxes; a side panel lists operational items as the real switching cost.",
+                "seconds": 39
               },
               {
                 "narration": "Try this now. List the three questions that would decide your engine choice today: your hardware, your exact model and features like tool calling, and whether your traffic shares long prefixes. Write one sentence per question. If any answer is I do not know, that is the first thing to find out before you compare engines.",
@@ -1946,6 +1982,12 @@
                 "seconds": 37
               },
               {
+                "narration": "A question from product teams: how do we update an on-device model safely? Treat it like any app release. Version the model file, ship it to a small percentage of users first, compare accuracy and crash or battery metrics against the previous version, and keep the ability to roll back. Also keep the app working if the new model has not downloaded yet. And a second question: can small models handle Arabic or Urdu? Some do reasonably, many do not. Test your languages early, because language coverage is often the deciding factor for small models.",
+                "onScreen": "FAQ\n• Updating on-device models: version, staged rollout, compare, rollback\n• Keep app working before download\n• Arabic/Urdu? Test early; often the deciding factor",
+                "visual": "Phone icons receiving a new model version in a small group first, with metric cards comparing versions; then a language test card with Arabic and Urdu samples.",
+                "seconds": 41
+              },
+              {
                 "narration": "Try this now. Look at your product or your daily work and list three tasks that are narrow, frequent and low-risk: things like tagging, short rewrites or routing. For each one, write the fixed set of outputs it should produce. If you can write that set in one line, the task is probably a good fit for a small model.",
                 "onScreen": "Try this now\n• List 3 narrow, frequent, low-risk tasks\n• Write each task's fixed output set\n• One line? Good small-model fit",
                 "visual": "Checklist card with three rows; each row gets a short output set typed in, and a small chip icon appears beside rows that fit on one line.",
@@ -2106,6 +2148,12 @@
                 "seconds": 35
               },
               {
+                "narration": "A question I hear from leadership: if we self-host, do we still need a data protection impact assessment? Often yes. Self-hosting changes where data goes, but not what you are doing with it. If the use involves sensitive data, large-scale processing or decisions about people, an assessment is usually expected, and it is also a useful design tool. A second question: is a model file itself personal data? Usually the weights are not treated as a database of personal data, but models can memorize training data, which is why training data choices and memorization tests matter.",
+                "onScreen": "FAQ\n• Self-hosted → still need an impact assessment? Often yes\n• Are weights personal data? Usually not a database, but memorization risk exists",
+                "visual": "Two Q&A cards; the first shows a clipboard labeled impact assessment next to an on-prem server, the second shows a model file with a small magnifier revealing a faint memorized text snippet.",
+                "seconds": 42
+              },
+              {
                 "narration": "Try this now. Take one AI tool your team already uses and ask one question: where do the prompts get logged? Check the tool's settings or documentation, and your own infrastructure. Write the answer down with a retention period. If nobody knows, you have found your first privacy task, and it is probably the most important one.",
                 "onScreen": "Try this now\n• Pick one AI tool\n• Where are prompts logged?\n• How long are they kept?\n• Unknown = first privacy task",
                 "visual": "Magnifying glass sweeps over a simplified settings screen and stops on a \"logging\" section; a sticky note appears with retention period and owner fields.",
@@ -2207,7 +2255,7 @@
           ],
           "activity": "Score two local models on 50 of your tasks, run the paired bootstrap script, and write a one-page evaluation report using the template.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "A new model tops the leaderboard on Monday. By Wednesday your CEO asks why you are not using it. By Friday you have switched, and by the next Monday your Urdu extraction accuracy has quietly dropped. Sound familiar? In this lesson you will learn why public benchmarks mislead, how to build an evaluation you can trust, how to use AI judges without fooling yourself, and how to be statistically honest about small differences.",
@@ -2268,6 +2316,12 @@
                 "onScreen": "When to re-evaluate\n• Any change: model, quant, engine, prompt, template\n• Monthly for drift\n• Automate in the pipeline\n• Block releases on regressions",
                 "visual": "CI pipeline diagram with stages build, evaluate, deploy; the evaluate stage turns red on a metric drop and the deploy stage is greyed out.",
                 "seconds": 35
+              },
+              {
+                "narration": "A question from busy teams: how many evaluation examples do we really need? For a quick screen between very different models, thirty to fifty real examples can reveal large gaps. To detect smaller differences, a few points, you need more, often a few hundred, and a paired comparison. A practical rule: start with fifty, look at the confidence interval, and add examples until the interval is narrow enough for the decision you are making. And always stratify, so small but important groups, like a second language, have enough examples to be judged on their own.",
+                "onScreen": "FAQ: how many examples?\n• 30–50: spot large gaps\n• Few hundred: detect small differences\n• Grow until the interval fits the decision\n• Stratify key groups",
+                "visual": "A confidence interval bar narrowing as the sample-size counter grows from 50 to 300; a stratified bar shows a separate interval for a second language.",
+                "seconds": 41
               },
               {
                 "narration": "Try this now. Take any comparison you have made between two AI tools, even an informal one. Write down how many examples you used and whether both tools saw the same examples with the same settings. If the answer is fewer than thirty, or different settings, treat your conclusion as a hunch, not a result, and plan a fair re-test.",
@@ -2362,7 +2416,7 @@
           ],
           "activity": "Adapt the router to three request types from your organization, seed 20 canary requests with fake IDs, and verify none reach the cloud route.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Here is the question most teams eventually face: local or cloud? And the best answer is usually: both, per request. In this lesson you will build a router, a small piece of software that decides which model handles each request based on data sensitivity, task difficulty, cost, latency and availability. You will learn the four routing strategies, how to detect sensitive data locally, what counts as confidence, and how to prove where your data went.",
@@ -2423,6 +2477,12 @@
                 "onScreen": "Routing UX\n• Show where it was processed\n• Keep-this-private toggle\n• Say when quality is reduced\n• Supports disclosure expectations",
                 "visual": "Chat interface mock-up with a small label under an answer reading \"Processed on our servers\", a privacy toggle in the header, and a subtle banner reading \"Reduced quality mode\".",
                 "seconds": 31
+              },
+              {
+                "narration": "A question that comes up in every routing project: will users notice when they are switched between models? Sometimes, in tone and style. To keep the experience consistent, share one system prompt and output format across routes, test both routes on the same evaluation set, and review a sample of each route's answers side by side. Another question: how often should routing rules change? Review them monthly with the route log in front of you. If a local model has improved, move more traffic to it. If a route's quality drops, tighten the rules.",
+                "onScreen": "FAQ\n• Will users notice switching? Share prompts and formats; test both routes\n• How often to change rules? Monthly, with the route log",
+                "visual": "Two answer cards from different routes shown side by side with matching formatting; a monthly calendar icon next to a route distribution pie chart.",
+                "seconds": 41
               },
               {
                 "narration": "Try this now. Write your first three routing rules in plain English, in priority order. Rule one must be about sensitive data. Then write five fake requests that should trigger rule one, using made-up identifiers, and five that should not. Those ten requests are your first canary test set.",
@@ -2575,6 +2635,12 @@
                 "onScreen": "Tips for strong results\n• Remove duplicates and outdated versions\n• Titles and dates in citations\n• Tune k and threshold on the eval set\n• Read 20 answers yourself",
                 "visual": "Document stack being deduplicated with older versions fading out; then an answer card showing citations with titles and dates, and two tuning sliders labeled k and threshold.",
                 "seconds": 31
+              },
+              {
+                "narration": "A capstone question I get often: how do we keep the index fresh when documents change every week? Build re-indexing into your document workflow. When a policy is updated, the new version replaces the old one in the index, and the old version is removed, not just added alongside. Store the document's date and version in chunk metadata, show it in citations, and run a small nightly job that compares the document folder with the index. Stale or duplicate versions are one of the most common causes of wrong answers in real deployments.",
+                "onScreen": "FAQ: keeping the index fresh\n• Replace, don't just add\n• Date + version in metadata and citations\n• Nightly folder-vs-index check",
+                "visual": "Document folder and index side by side; an updated document replaces its older entry in the index, and a nightly clock icon triggers a comparison scan.",
+                "seconds": 40
               },
               {
                 "narration": "Try this now. Before writing any code, write your first ten evaluation questions: six answerable, two unanswerable, two permission tests. Put the expected source file next to each answerable one. Building the test before the system keeps you honest, and you will reuse these ten questions every time you change the model, the chunking or the embedding.",

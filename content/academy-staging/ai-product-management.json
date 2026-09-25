@@ -6,7 +6,7 @@
   "subtitle": "Strategy, autonomy, AI UX, PRDs with evals, prototyping, unit economics, pricing, launch, impact, regulation and team design",
   "category": "business",
   "level": "intermediate",
-  "estimatedMinutes": 396,
+  "estimatedMinutes": 406,
   "description": "AI features fail for product reasons far more often than model reasons: the wrong problem, the wrong level of autonomy, no definition of good, runaway costs or a launch nobody could measure. This intermediate course teaches product managers, founders and team leads to take AI features from idea to reliable production. You will pick problems where AI creates value, set autonomy levels by error cost and reversibility, and design UX for uncertainty with streaming, citations, undo and human handoff. You will write PRDs with buildable evaluation criteria and golden sets, prototype behavior in two days, and decide between buying, APIs and open weights. You will turn tokens into cost per task, design pricing that protects margin, run evals-driven development, launch in stages with safety reviews, and measure real impact. Finally you will map 2026 regulatory touchpoints, organize your team, and complete a decision-ready capstone.",
   "outcomes": [
     "Prioritize AI opportunities by fit, value net of review and risk",
@@ -107,7 +107,7 @@
           ],
           "activity": "Run a 60-minute scoring workshop with frontline colleagues on 10–20 candidate tasks and produce a prioritized opportunity scorecard.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Here is a pattern I have seen at startups and enterprises alike. A team ships an impressive AI feature. Usage spikes for two weeks, then flatlines. The model was fine. The problem was wrong. In this lesson you will learn where AI actually creates value, a simple fit test for candidate problems, how to size the opportunity, and a scorecard you can run with your team this week.",
@@ -174,6 +174,18 @@
                 "onScreen": "Worked example: Dubai creator agency\n• Top picks: comment triage, weekly reports\n• Contract review re-scoped to \"highlight for lawyer\"",
                 "visual": "Five candidate cards ranked on a board; two move to a \"now\" column, one is rewritten with a new narrower title and moved to \"next\".",
                 "seconds": 28
+              },
+              {
+                "narration": "A question from leadership teams: should we let every department experiment with AI, or pick a few big bets? Usually both, with different rules. Give everyone approved tools and simple guidelines for personal productivity, which surfaces ideas cheaply. Then run the scorecard on the most promising ideas and fund two or three focused bets with proper evaluation and owners. Broad experimentation finds opportunities; focused bets turn them into real products.",
+                "onScreen": "FAQ: experiment everywhere or big bets?\n• Both, different rules\n• Everyone: approved tools + guidelines\n• 2–3 funded bets with evals and owners",
+                "visual": "A wide field of small idea sparks narrowing through a scorecard funnel into three highlighted bets with owner avatars.",
+                "seconds": 30
+              },
+              {
+                "narration": "Another question: how do we measure value if our AI feature improves quality rather than speed? Pick a quality outcome you already track: fewer errors in invoices, fewer customer re-contacts, higher conversion, fewer escalations. Measure it before and after, ideally with a comparison group. Quality improvements are often worth more than time savings, but only if you measure them in terms the business already cares about.",
+                "onScreen": "FAQ: measuring quality value\n• Use an outcome you already track\n• Before/after with a comparison group\n• Speak the business's language",
+                "visual": "Before-and-after bar chart for re-contact rate with a comparison group bar; a label reads \"quality value\".",
+                "seconds": 29
               },
               {
                 "narration": "Try this now. Write down five tasks your team did this week that involved reading or writing. For each, answer two quick questions: if the AI got this wrong, how bad would it be, and how fast could someone check it? Circle the tasks where the answers are not very bad and very fast. Those circled tasks are your shortlist for the scoring workshop.",
@@ -253,7 +265,7 @@
           ],
           "activity": "Write an autonomy spec (YAML template) for one AI feature: classify each action by error cost and reversibility, set its level, accuracy gate and promotion criteria.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Two companies launch the same AI refund feature. One lets the AI issue refunds automatically on day one. After a fraud incident, the feature is switched off for good. The other starts with suggestions agents approve, tracks agreement for a month, then automates small refunds with an undo window. Same model. Different autonomy decision. In this lesson you will learn to choose how much the AI does on its own.",
@@ -322,6 +334,18 @@
                 "seconds": 22
               },
               {
+                "narration": "A question from operations leaders: will augmentation just slow people down with extra checking? Only if the design makes checking hard. Good augmentation makes the easy cases one click, highlights uncertain parts, cites sources, and routes only the tricky cases to careful review. Measure time per task with and without the AI. If checking takes longer than doing the work, fix the design or move the task down the ladder.",
+                "onScreen": "FAQ: does augmentation slow people down?\n• Only with bad design\n• One-click easy cases, highlighted doubts, sources\n• Measure time with and without AI",
+                "visual": "Two stopwatches compared; the augmented flow shows a quick approve button for easy cases and a flagged review lane for tricky ones.",
+                "seconds": 30
+              },
+              {
+                "narration": "Another question: who should decide when to move an action up the ladder? Not the model vendor and not the loudest executive. Put it in your autonomy spec: the metric, the threshold, the observation period and the approver, usually the feature owner plus the business owner of the process, with risk or compliance involved for high-stakes actions. That makes promotion a routine, evidence-based decision rather than a debate.",
+                "onScreen": "FAQ: who approves promotion?\n• Written in the autonomy spec\n• Metric, threshold, period, approver\n• Risk/compliance for high stakes",
+                "visual": "Autonomy spec card with a promotion section highlighted; two approver signatures appear once a threshold chart is met.",
+                "seconds": 30
+              },
+              {
                 "narration": "Try this now. Pick one AI feature and list every action it can take. For each, write two words: the error cost, low, medium or high, and whether it is reversible, yes or no. Then assign a level from the ladder. If any action lands at level four or five, write down the accuracy evidence you would need before allowing it.",
                 "onScreen": "Try this now\n• List every action\n• Error cost + reversible?\n• Assign a level\n• Level 4–5 → required evidence",
                 "visual": "A table with columns action, cost, reversible, level fills row by row; one row at level 4 gets an \"evidence needed\" sticky note.",
@@ -347,12 +371,12 @@
           "title": "AI product strategy: differentiation and defensibility",
           "type": "article",
           "durationMinutes": 14,
-          "body": "### \"Isn't this just a wrapper?\"\n\nEvery AI product team hears it. Foundation models are available to everyone through APIs, and capabilities that were unique last year become commodity features in major platforms this year. So where does lasting advantage come from? Not from access to a model. From what you build **around** it.\n\n### Five sources of defensibility\n\n1. **Workflow depth.** Owning the end-to-end job (inputs, integrations, approvals, outputs, audit) rather than one prompt. The more steps you own, the harder you are to replace with a general assistant.\n2. **Proprietary context and data.** Customer-specific knowledge, historical outcomes, domain datasets and feedback loops that improve quality over time. Note: the data advantage is real only if you can legally use it and it actually improves outcomes.\n3. **Evaluation and quality systems.** Knowing precisely where your AI fails and fixing it faster than competitors is a compounding advantage. Your eval sets are a strategic asset.\n4. **Distribution and trust.** Existing customers, channels, brand and compliance posture (for example in regulated sectors or specific markets like KSA or the UAE) matter more than model choice.\n5. **User experience and integration.** Embedding AI where work already happens (inside the CRM, WhatsApp, the IDE) beats a separate chat window.\n\n### Platform risk: build on shifting ground deliberately\n\n- **Model commoditisation:** assume today's premium capability becomes cheap; plan to pass savings on or reinvest.\n- **Platform encroachment:** major assistants and suites add features that overlap yours. Ask: \"What would we have left if the platform shipped this tomorrow?\"\n- **Vendor change:** models get retired, prices change, and offerings (like hosted fine-tuning) can be wound down. Keep a **model-agnostic architecture**: an abstraction layer, portable prompts and evals, and at least one tested alternative model.\n\n### The AI strategy one-pager\n\n```markdown\n## AI strategy: [product]\n**User problem we own:** [the job-to-be-done in one sentence]\n**Why AI, why now:** [what became possible or cheap]\n**Where we play:** [segments, markets, channels]\n**Our unfair advantages:** [workflow depth, data, evals, distribution, UX]\n**What we will NOT build:** [commodity features we will integrate instead]\n**Platform risk plan:** [what if the platform ships X? model-agnostic plan]\n**Bets for the next 2 quarters:** [2-3 features with success metrics]\n**How we'll know we're winning:** [leading and lagging metrics]\n```\n\n### Build on the roadmap of capability, not just today\n\nModel capabilities improve quickly (longer context, better tool use, multimodality, lower cost). A useful exercise: for each planned feature, ask **\"What if capability doubled and cost halved in 12 months?\"** Features that become better with stronger models are good bets; features whose only value is working around today's model limitations may become obsolete. This is outlook reasoning, not a prediction: plan options, not certainties.\n\n### Worked example: a Lahore HR-tech start-up\n\nThe start-up offered an \"AI CV screener\". A major HR suite added a similar feature. Their response:\n\n- **Workflow depth:** extended to scheduling, structured interviews in Urdu and English, reference checks and offer letters, integrated with local job boards and WhatsApp.\n- **Data and evals:** built evaluation sets from anonymized hiring outcomes (with consent and bias testing) to show better shortlist quality for Pakistani roles.\n- **Trust:** added transparent explanations and human decision points to address fairness concerns.\n- **Won't build:** generic resume writing, which assistants do well.\n\nChurn stabilized, and the product's positioning moved from \"AI screener\" to \"hiring workflow for SMEs in Pakistan\".\n\n### Metrics that show defensibility is working\n\nStrategy needs evidence. Track a few indicators each quarter:\n\n- **Workflow depth:** share of the end-to-end job completed inside your product (for example, from inquiry to signed offer).\n- **Quality lead:** your golden-set score versus the best general-purpose alternative a customer could use instead, re-run whenever major models ship.\n- **Switching cost signals:** integrations connected per customer, saved configurations, team seats using the AI feature.\n- **Data advantage (only if real):** measurable quality gains from customer-specific context or feedback, with rights to use it documented.\n- **Retention of AI-feature users** versus non-users.\n\nIf these do not move, your \"moat\" is a story, not a strategy.\n\n### Pitfalls\n\n- Believing model access is a moat.\n- Claiming a data flywheel without the rights, volume or measurable quality gains.\n- Hard-coding one vendor's model throughout the product.\n- Building features that only exist to patch temporary model weaknesses.\n\n### How to measure success\n\nA one-page AI strategy that names the job you own, your defensibility sources, what you will not build, and a platform-risk plan, reviewed quarterly.",
+          "body": "### \"Isn't this just a wrapper?\"\n\nEvery AI product team hears it. Foundation models are available to everyone through APIs, and capabilities that were unique last year become commodity features in major platforms this year. So where does lasting advantage come from? Not from access to a model. From what you build **around** it.\n\n### Five sources of defensibility\n\n1. **Workflow depth.** Owning the end-to-end job (inputs, integrations, approvals, outputs, audit) rather than one prompt. The more steps you own, the harder you are to replace with a general assistant.\n2. **Proprietary context and data.** Customer-specific knowledge, historical outcomes, domain datasets and feedback loops that improve quality over time. Note: the data advantage is real only if you can legally use it and it actually improves outcomes.\n3. **Evaluation and quality systems.** Knowing precisely where your AI fails and fixing it faster than competitors is a compounding advantage. Your eval sets are a strategic asset.\n4. **Distribution and trust.** Existing customers, channels, brand and compliance posture (for example in regulated sectors or specific markets like KSA or the UAE) matter more than model choice.\n5. **User experience and integration.** Embedding AI where work already happens (inside the CRM, WhatsApp, the IDE) beats a separate chat window.\n\n### Platform risk: build on shifting ground deliberately\n\n- **Model commoditization:** assume today's premium capability becomes cheap; plan to pass savings on or reinvest.\n- **Platform encroachment:** major assistants and suites add features that overlap yours. Ask: \"What would we have left if the platform shipped this tomorrow?\"\n- **Vendor change:** models get retired, prices change, and offerings (like hosted fine-tuning) can be wound down. Keep a **model-agnostic architecture**: an abstraction layer, portable prompts and evals, and at least one tested alternative model.\n\n### The AI strategy one-pager\n\n```markdown\n## AI strategy: [product]\n**User problem we own:** [the job-to-be-done in one sentence]\n**Why AI, why now:** [what became possible or cheap]\n**Where we play:** [segments, markets, channels]\n**Our unfair advantages:** [workflow depth, data, evals, distribution, UX]\n**What we will NOT build:** [commodity features we will integrate instead]\n**Platform risk plan:** [what if the platform ships X? model-agnostic plan]\n**Bets for the next 2 quarters:** [2-3 features with success metrics]\n**How we'll know we're winning:** [leading and lagging metrics]\n```\n\n### Build on the roadmap of capability, not just today\n\nModel capabilities improve quickly (longer context, better tool use, multimodality, lower cost). A useful exercise: for each planned feature, ask **\"What if capability doubled and cost halved in 12 months?\"** Features that become better with stronger models are good bets; features whose only value is working around today's model limitations may become obsolete. This is outlook reasoning, not a prediction: plan options, not certainties.\n\n### Worked example: a Lahore HR-tech start-up\n\nThe start-up offered an \"AI CV screener\". A major HR suite added a similar feature. Their response:\n\n- **Workflow depth:** extended to scheduling, structured interviews in Urdu and English, reference checks and offer letters, integrated with local job boards and WhatsApp.\n- **Data and evals:** built evaluation sets from anonymized hiring outcomes (with consent and bias testing) to show better shortlist quality for Pakistani roles.\n- **Trust:** added transparent explanations and human decision points to address fairness concerns.\n- **Won't build:** generic resume writing, which assistants do well.\n\nChurn stabilized, and the product's positioning moved from \"AI screener\" to \"hiring workflow for SMEs in Pakistan\".\n\n### Metrics that show defensibility is working\n\nStrategy needs evidence. Track a few indicators each quarter:\n\n- **Workflow depth:** share of the end-to-end job completed inside your product (for example, from inquiry to signed offer).\n- **Quality lead:** your golden-set score versus the best general-purpose alternative a customer could use instead, re-run whenever major models ship.\n- **Switching cost signals:** integrations connected per customer, saved configurations, team seats using the AI feature.\n- **Data advantage (only if real):** measurable quality gains from customer-specific context or feedback, with rights to use it documented.\n- **Retention of AI-feature users** versus non-users.\n\nIf these do not move, your \"moat\" is a story, not a strategy.\n\n### Pitfalls\n\n- Believing model access is a moat.\n- Claiming a data flywheel without the rights, volume or measurable quality gains.\n- Hard-coding one vendor's model throughout the product.\n- Building features that only exist to patch temporary model weaknesses.\n\n### How to measure success\n\nA one-page AI strategy that names the job you own, your defensibility sources, what you will not build, and a platform-risk plan, reviewed quarterly.",
           "video": null,
           "keyTakeaways": [
             "Model access is not a moat; defensibility comes from workflow, data, evals, distribution and UX",
             "Treat evaluation sets as strategic assets",
-            "Plan for commoditisation, platform encroachment and vendor change with a model-agnostic architecture",
+            "Plan for commoditization, platform encroachment and vendor change with a model-agnostic architecture",
             "Ask \"what if capability doubled and cost halved?\" to test features",
             "Write and review a one-page AI strategy quarterly"
           ],
@@ -399,7 +423,7 @@
           ],
           "activity": "Write the AI strategy one-pager for your product or a product you know, including a platform-risk plan and a \"won't build\" list.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "If you build AI products, someone will eventually ask: isn't this just a wrapper around a model anyone can use? It is a fair question, and your strategy needs a good answer. In this lesson you will learn where lasting advantage comes from, how to manage platform risk, and how to write a one-page AI strategy that survives the next big model release.",
@@ -427,7 +451,7 @@
               },
               {
                 "narration": "Now platform risk. Expect today's premium capability to become cheap, so plan to pass savings on or reinvest. Expect big platforms to add features overlapping yours, and ask what you would have left if they shipped it tomorrow. And expect vendor change: models retire, prices move, offerings get wound down. Keep a model-agnostic architecture with an abstraction layer, portable prompts and evaluations, and at least one tested alternative model.",
-                "onScreen": "Platform risk\n• Commoditisation\n• Platform encroachment\n• Vendor change\n• Model-agnostic architecture",
+                "onScreen": "Platform risk\n• Commoditization\n• Platform encroachment\n• Vendor change\n• Model-agnostic architecture",
                 "visual": "A product building sitting on shifting tectonic plates labeled models, platforms and vendors; an adapter layer keeps it stable.",
                 "seconds": 30
               },
@@ -466,6 +490,18 @@
                 "onScreen": "Pitfalls\n• Model access as a moat\n• Imaginary data flywheel\n• Single-vendor lock-in\n• Patch-only features",
                 "visual": "Four cracked pillars labeled with each pitfall.",
                 "seconds": 20
+              },
+              {
+                "narration": "A question from founders: should we train our own model to be defensible? For almost every product company, no. Training a foundation model is extremely expensive and the advantage erodes quickly as better models arrive. Your defensibility comes from workflow, data rights, evaluation, distribution and user experience, while you stay free to use the best models available. Some companies fine-tune or distill smaller models for cost or privacy, but that is an efficiency choice, not usually the moat itself.",
+                "onScreen": "FAQ: train our own model to be defensible?\n• Almost always no\n• Moat = workflow, data rights, evals, distribution, UX\n• Fine-tuning: efficiency, not the moat",
+                "visual": "A costly training cluster icon fading out, replaced by five defensibility pillars; a small fine-tune icon labeled \"efficiency\" sits to the side.",
+                "seconds": 34
+              },
+              {
+                "narration": "And a question from boards: how often should we revisit our AI strategy? Quarterly for the one-pager, and immediately after major market events: a big model release, a platform shipping a similar feature, a price change, or a new regulation. Put those triggers in your calendar and your team's habits, the same way you review financials. Strategy in AI is a living document.",
+                "onScreen": "FAQ: how often to revisit?\n• Quarterly one-pager review\n• Plus triggers: model releases, platform moves, prices, regulation",
+                "visual": "A quarterly calendar with the strategy one-pager pinned; four trigger icons appear and each links to an unscheduled review.",
+                "seconds": 27
               },
               {
                 "narration": "Try this now. Write one sentence completing this line: if a major AI platform shipped our core feature tomorrow, customers would still choose us because. If you cannot finish the sentence convincingly, that gap is your strategy work for the next quarter. If you can, write down how you will measure that advantage.",
@@ -1358,7 +1394,7 @@
           ],
           "activity": "Build a cost-per-task model for one AI feature from real token logs and current prices; identify the top three cost drivers and one lever for each.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Here is a story that plays out in many AI startups. A feature launches, users love it, usage triples, and then finance calls a meeting. Every answer costs money, the heaviest users cost more than they pay, and gross margin is sinking. The feature was a hit and a problem at the same time. In this lesson you will learn to turn tokens into cost per task, find the real cost drivers, and pull the levers that cut cost without hurting quality.",
@@ -1431,6 +1467,12 @@
                 "onScreen": "Keep it current\n• Monthly review\n• Re-run on price, model or usage changes\n• Cost next to quality on one dashboard\n• Named owner",
                 "visual": "Dashboard with a quality line and a cost-per-task line side by side over months, with an owner avatar in the corner.",
                 "seconds": 27
+              },
+              {
+                "narration": "A question PMs ask: should we show AI costs to customers? Usually not raw token costs, which mean little to most users. Show usage in units they understand, like documents processed, answers generated or credits remaining. Internally, though, make cost per task visible to the whole product team. When designers and engineers can see what a feature costs per use, they make smarter choices about context, output length and model selection.",
+                "onScreen": "FAQ: show AI costs to customers?\n• Not raw tokens\n• Show understandable units: documents, answers, credits\n• Internally: cost per task visible to the team",
+                "visual": "A customer-facing usage meter showing \"credits\" next to an internal dashboard showing cost per task by feature.",
+                "seconds": 31
               },
               {
                 "narration": "Try this now. Pull a week of token logs for one AI feature. Compute average input tokens, output tokens and calls per task. Multiply by today's prices from your provider's price page, add an estimate for human review, and write the cost per task on a sticky note on your monitor. Then circle the biggest term. That is where your next optimization belongs.",
@@ -1514,7 +1556,7 @@
           ],
           "activity": "Model two pricing options for one AI feature using your cost-per-task data and user distribution; check margins for P50, P90 and P99 users and propose a test.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "A social media platform added AI captions for free to every plan. Customers loved it. Then the finance team noticed that a handful of agency accounts were generating tens of thousands of captions a month, and for those accounts the feature was losing money on every plan. Nobody had done anything wrong. The pricing simply did not fit how AI costs behave. In this lesson you will learn the main pricing models for AI features and how to test them against real usage.",
@@ -1587,6 +1629,12 @@
                 "onScreen": "Price the value, explain the cost\n• Lead with outcomes\n• Make usage predictable and controllable\n• Value → willingness to pay; transparency → retention",
                 "visual": "Pricing page mock-up with an outcome headline at the top and a usage calculator widget beneath it.",
                 "seconds": 29
+              },
+              {
+                "narration": "A question sales teams ask: should AI be a separate add-on or part of the core plan? If AI is central to the value of your product, put it in the core plans with sensible allowances, because customers will expect it. If it serves a specific group, like power users or particular departments, an add-on lets those customers pay for it without raising prices for everyone. Revisit the decision as adoption grows. Many products start with an add-on and fold AI into core plans once it becomes essential.",
+                "onScreen": "FAQ: add-on or core plan?\n• Central to value → core, with allowances\n• Specific group → add-on\n• Often: add-on first, core later",
+                "visual": "Two pricing table layouts; an AI add-on row moves into the core plan columns over a timeline labeled adoption.",
+                "seconds": 38
               },
               {
                 "narration": "Try this now. Take one AI feature and write three numbers: value per task to the customer, your cost per task, and the tasks per month for your median and heaviest users. Put them into the plan-check script for two pricing options. If either option loses money on your heaviest users, sketch the guardrail that would fix it.",
@@ -1693,7 +1741,7 @@
           ],
           "activity": "Categorize 30 failures from an AI feature into an error-analysis table, pick the biggest category, propose a fix and define how the eval will show it worked.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "In most software teams, the question is the feature done has a clear answer: the tests pass. In AI teams, without evaluations, the answer is usually the demo looked good, which is not an answer at all. In this lesson you will learn evals-driven development: the loop that makes AI progress measurable, the error analysis step most teams skip, the types of evals and who owns them, and a shared eval spec for PMs and engineers.",
@@ -1766,6 +1814,12 @@
                 "onScreen": "The weekly eval hour\n• PM + engineer + domain expert\n• Scores by slice\n• Read 10–20 failures\n• One change for the week",
                 "visual": "A recurring calendar block labeled \"eval hour\" with three avatars; a small loop icon shows the weekly cadence.",
                 "seconds": 32
+              },
+              {
+                "narration": "A question from engineers: won't evaluation slow us down? At first, a little. Within weeks, it speeds you up, because you stop debating opinions and stop re-breaking things you already fixed. A fast smoke subset on every change takes minutes. The full suite before release takes an hour or two. Compare that with a week of firefighting after a silent regression reaches customers. Evals are the fastest way to move safely.",
+                "onScreen": "FAQ: do evals slow us down?\n• A little at first\n• Then faster: fewer debates, fewer regressions\n• Smoke subset: minutes · full suite: hours",
+                "visual": "A speed chart where a team with evals starts slightly slower then overtakes a team without evals that hits regression potholes.",
+                "seconds": 31
               },
               {
                 "narration": "Try this now. Take thirty failures from any AI feature you work with, from feedback, logs or your own testing. Tag each one with a category, count them, and put the counts in a table. Then write one sentence: the biggest category, the fix you will try, and the eval result that would prove it worked.",
@@ -1857,7 +1911,7 @@
           ],
           "activity": "Write a staged launch plan with go/no-go metrics and complete the safety review template for one AI feature; schedule a kill-switch test.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Picture two launches of the same AI assistant. One goes live to every customer on a Monday. By Wednesday, screenshots of a wrong answer are circulating on social media. The other starts with the support team, then five friendly customers, then twenty percent of one market. The same wrong answer appears in week one, gets fixed, and never reaches the public. In this lesson you will learn staged rollouts, safety reviews, kill switches and incident readiness.",
@@ -1930,6 +1984,12 @@
                 "onScreen": "Communicate the launch\n• Support first: one-page guide\n• Customers: AI disclosure + human route\n• Leadership: gates, so pauses are expected",
                 "visual": "Three envelopes labeled support, customers and leadership fly out in sequence, each opening to show a short message.",
                 "seconds": 30
+              },
+              {
+                "narration": "A question from executives: doesn't a staged rollout let competitors ship first? Occasionally a few weeks matter, but a public failure costs far more in trust than a short delay. And staging is compatible with speed: dogfood can start in days, and trusted-tester stages can run in parallel with final polish. The fastest teams are the ones with repeatable launch processes, not the ones who skip them.",
+                "onScreen": "FAQ: does staging let competitors win?\n• Public failures cost more than weeks\n• Dogfood in days; stages overlap with polish\n• Repeatable process = speed",
+                "visual": "A race track where one car crashes after skipping a checkpoint while another passes through quick pit stops and finishes steadily.",
+                "seconds": 29
               },
               {
                 "narration": "Try this now. For one AI feature, write the four rollout stages with one go or no-go metric per stage. Then put a thirty-minute kill-switch test in the calendar this week: turn the AI off in a test environment, confirm the manual path works, and time how long it takes. Most teams discover at least one surprise.",
@@ -2017,7 +2077,7 @@
           ],
           "activity": "Build a scorecard for one AI feature with a north star, supporting metrics, quality, economics and guardrails; propose an experiment design that outlasts the novelty effect.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Here is a dashboard that fools a lot of teams. Week one after launch: usage through the roof, the CEO shares a screenshot, everyone celebrates. Week four: usage has quietly fallen by more than half. Did the feature succeed or fail? You cannot tell from usage alone. In this lesson you will learn a measurement framework that connects AI quality to user behavior to business outcomes, the leading indicators to watch, and how to run experiments that tell the truth.",
@@ -2090,6 +2150,18 @@
                 "onScreen": "Pair numbers with stories\n• Read 10 real sessions monthly\n• Where it helped, struggled, gave up\n• Numbers say where; stories say why",
                 "visual": "A dashboard chart on the left and a stack of session transcripts on the right, connected by a line labeled \"why\".",
                 "seconds": 27
+              },
+              {
+                "narration": "A question from analysts: what if we cannot run an A/B test at all, for example with only twenty enterprise customers? Use staggered rollouts, comparing customers who have the feature with similar customers who do not yet, and track the same metrics before and after for both groups. Combine this with interviews and session reviews. The evidence will be less precise than a large experiment, so be clear about uncertainty, but it is far better than a before-and-after chart with no comparison.",
+                "onScreen": "FAQ: no A/B possible?\n• Staggered rollout with comparison customers\n• Same metrics before/after for both\n• Add interviews + session reviews\n• State the uncertainty",
+                "visual": "Two groups of customer icons on a timeline; one group receives the feature earlier, and parallel metric lines are compared with a shaded uncertainty band.",
+                "seconds": 36
+              },
+              {
+                "narration": "Another question: which single metric should we show the board? Show the north-star outcome, with its trend and the comparison group, next to cost per task and one guardrail. One outcome, one cost, one safety signal. Boards need to see that the feature creates value, at a sustainable cost, without hidden harm. Everything else belongs in the team's detailed scorecard.",
+                "onScreen": "FAQ: one board metric?\n• North-star outcome with trend + comparison\n• Plus cost per task + one guardrail",
+                "visual": "A board slide with three tiles: outcome trend, cost per task and a guardrail indicator.",
+                "seconds": 26
               },
               {
                 "narration": "Try this now. For one AI feature, write a one-page scorecard: the north-star outcome with a target, three supporting metrics, quality by slice, cost per task against budget, and three guardrails. Then write two sentences describing an experiment that would still be running after the novelty wears off.",
@@ -2368,7 +2440,7 @@
           ],
           "activity": "Write a one-page AI team charter for your organization or a product area: team model, ownership, rituals, definition of done and escalation.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Here is a pattern I have seen in banks, telecoms and scale-ups alike. A company sets up an AI innovation lab, hires brilliant people, and produces a stream of impressive demos. A year later, almost none of them are in front of customers. The technology was not the problem. The organization was. In this lesson you will learn the roles AI products need, the main team models, the ways of working that change, and how to write a one-page team charter.",
@@ -2441,6 +2513,12 @@
                 "onScreen": "Is the org working?\n• Idea → safe pilot time\n• % features with owner + golden set + scorecard\n• Incidents + time to resolve",
                 "visual": "Three KPI tiles on a management dashboard with trend arrows; one tile shows a shrinking idea-to-pilot time.",
                 "seconds": 29
+              },
+              {
+                "narration": "A question from HR and leadership: do we need a chief AI officer? Some organizations benefit from a senior leader who owns AI strategy, platform investment and governance, especially when many teams are adopting AI at once. Others give those responsibilities to existing product and technology leaders. What matters is not the title but that someone accountable owns the platform, the governance forum and the portfolio of AI bets, with the authority to make trade-offs.",
+                "onScreen": "FAQ: do we need a chief AI officer?\n• Sometimes helpful at scale\n• Or existing leaders take it on\n• What matters: clear accountability + authority",
+                "visual": "An org chart with a highlighted accountability box connecting platform, governance and portfolio; the title on the box changes but the connections stay.",
+                "seconds": 33
               },
               {
                 "narration": "Try this now. Draw your current AI setup on one page. Who owns the golden sets? Who owns cost? Who can approve a high-risk launch? Where is infrastructure duplicated? Then write the one change that would most improve your path from idea to safe pilot, and who needs to agree to it.",
@@ -2528,7 +2606,7 @@
           ],
           "activity": "Complete the capstone package for a real feature or the default scenario, self-score it on the rubric, and get feedback from one engineer and one domain expert.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "This is where everything comes together. Your capstone is the package a leadership team would use to approve, or reject, an AI feature: a PRD with autonomy levels and UX requirements, an evaluation plan with a starter golden set, and a business case with unit economics, a launch plan and regulatory touchpoints. You can use a real feature from your work, or the default scenario: a bilingual WhatsApp and web assistant for a retail group in the UAE and Saudi Arabia.",
@@ -2601,6 +2679,12 @@
                 "onScreen": "Test with a skeptic\n• 15-minute presentation\n• \"Find the weakest assumption\"\n• Strengthen it with evidence or a test",
                 "visual": "A presentation slide with a skeptic avatar pointing at one assumption; the assumption card gets reinforced with an evidence badge.",
                 "seconds": 24
+              },
+              {
+                "narration": "A final question many learners ask: how long should the capstone take? Plan for about two to three weeks of part-time work. Week one: opportunity, autonomy spec and the first twenty golden cases. Week two: the rest of the PRD, the evaluation plan with thresholds, and the cost model from real token counts. Week three: launch plan, scorecard, regulatory checklist, and reviews with an engineer and a domain expert. Keep each section short and evidence-based; length is not quality.",
+                "onScreen": "FAQ: how long?\n• ~2–3 weeks part-time\n• Wk 1: opportunity, autonomy, 20 golden cases\n• Wk 2: PRD, eval plan, cost model\n• Wk 3: launch, scorecard, regulation, reviews",
+                "visual": "A three-week plan graphic with tasks sliding into each week; a small \"short and evidence-based\" badge sits at the end.",
+                "seconds": 34
               },
               {
                 "narration": "Try this now. Before writing any prose, write ten golden-set cases for your feature: four answerable in your main language, two in a second language, two unanswerable, and two red-team cases. Then write three launch thresholds. Everything else in the package gets easier once you know what good looks like.",
