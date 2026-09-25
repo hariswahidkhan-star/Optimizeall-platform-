@@ -1,0 +1,1756 @@
+{
+  "slug": "mastering-claude",
+  "version": 1,
+  "title": "Mastering Claude (Anthropic)",
+  "subtitle": "From first prompt to Projects, Artifacts, research, connectors and team rollout: work with Claude like an expert",
+  "category": "ai",
+  "level": "intermediate",
+  "estimatedMinutes": 260,
+  "description": "Claude is one of the most capable AI assistants available, but most people use a fraction of what it can do. This course takes you from solid chat fundamentals to expert workflows: choosing between a more capable and a faster model tier, analysing long documents, PDFs, images and charts, organising work in **Projects**, building interactive **Artifacts**, personalising Claude with styles and instructions, using research and extended thinking wisely, and running repeatable writing and editing workflows.\n\nYou will also get a clear, non-technical introduction to Claude Code, connectors and the Model Context Protocol (MCP), and the Claude API, with optional *going further* sections for technical readers. The final module covers safety, privacy, data controls and how to roll Claude out responsibly across a team or agency. Every lesson includes copy-paste prompt templates, worked examples and a hands-on activity.",
+  "outcomes": [
+    "Choose an appropriate Claude model tier and feature for a given task, balancing quality, speed and cost",
+    "Write structured prompts that give Claude context, a clear task, constraints and an output format",
+    "Analyse long documents, PDFs, images and charts with Claude and verify the results",
+    "Set up Projects with project knowledge and instructions for repeatable client or team work",
+    "Create, iterate on and share Artifacts such as documents, checklists and simple interactive tools",
+    "Explain Claude Code, connectors/MCP and the Claude API well enough to scope work with technical colleagues",
+    "Apply privacy, data-control and team usage policies when using Claude with business information"
+  ],
+  "skills": [
+    "Claude",
+    "Prompt engineering",
+    "AI-assisted writing",
+    "Document analysis",
+    "AI research",
+    "AI governance"
+  ],
+  "prerequisites": [],
+  "badge": {
+    "name": "Certified Claude Power User",
+    "description": "The holder has demonstrated expert, responsible use of Anthropic's Claude: structured prompting, model selection, long-document and visual analysis, Projects, Artifacts, research with verification, extended thinking, writing workflows, and a working understanding of Claude Code, connectors/MCP and the API, applied within sound privacy and team governance practices.",
+    "criteria": "Completed all lessons and scored at least 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "claude-foundations",
+      "title": "Claude foundations",
+      "summary": "Understand how Claude works, how to choose between capable and fast model tiers, and the prompt structure experts use every day.",
+      "lessons": [
+        {
+          "slug": "how-claude-works-and-model-tiers",
+          "title": "How Claude works and choosing the right model tier",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### What Claude actually is\n\nClaude is a family of large language models built by Anthropic, available through the Claude apps (web, desktop and mobile), through the Claude API for developers, and through several cloud platforms. Under the hood, Claude predicts useful text one piece at a time based on everything in its **context**: your messages, any files you attach, instructions you set, and the conversation so far. It does not \"look things up\" in a hidden database unless a tool such as web search or a connector is switched on, and it does not remember other chats unless a memory or project feature explicitly provides that context.\n\nKeeping this mental model in mind explains most of Claude's behaviour:\n\n- **Better context in, better answer out.** Claude only knows what is in its training and what you put in front of it.\n- **It can be confidently wrong.** Fluent text is not the same as verified fact, especially for recent events, niche figures and exact numbers.\n- **It follows instructions closely.** Precise, explicit requests beat vague ones almost every time.\n\n### The model family: capable vs fast\n\nAnthropic releases Claude as a *family* of models rather than a single one. Names and version numbers change over time, so rather than memorising them, learn the pattern that has stayed stable:\n\n- **The most capable tier** is best for complex reasoning, long multi-step tasks, nuanced writing, strategy, difficult analysis and agentic work (where Claude takes many steps on its own). It is typically slower and costs more per use on the API, and paid app plans may apply tighter usage limits to it.\n- **A balanced tier** gives strong quality at higher speed and lower cost. For many everyday tasks (drafting, summarising, reformatting, brainstorming) it is the sensible default.\n- **A fast, lower-cost tier** is built for speed and volume: classifying hundreds of comments, extracting fields from forms, quick rewrites, or powering high-traffic features in an app.\n\nIn the Claude apps you usually choose a model from a menu near the message box. Which models appear depends on your plan and may change; check Anthropic's official help centre or model overview page for the current line-up rather than relying on a blog post from last year.\n\n### A simple decision rule\n\nAsk two questions before you pick:\n\n1. **How costly is a mediocre answer?** A board presentation, a legal-adjacent summary or a pricing strategy deserves the most capable tier. A first-draft caption does not.\n2. **How many times will this run?** One-off thinking work favours capability; repeated, high-volume work favours speed and cost.\n\n| Task | Sensible starting tier |\n|---|---|\n| Rewrite 200 product titles to a template | Fast tier |\n| Draft a weekly client update from notes | Balanced tier |\n| Analyse a 90-page contract for risks to discuss with a lawyer | Most capable tier |\n| Plan a 6-month content strategy with trade-offs | Most capable tier |\n| Tag 1,000 survey comments by sentiment (via API) | Fast tier, spot-checked |\n\nIf a cheaper tier produces weak results, do not immediately conclude \"AI can't do this\". First improve the prompt; then move up a tier and compare.\n\n### Worked example: same task, two tiers\n\nA creator in Dubai asks for a sponsorship pitch to a regional skincare brand. On a fast tier, the result is a clean but generic email. On the most capable tier, with the same prompt plus the brand's recent campaign notes, Claude connects the creator's audience data to the brand's launch, flags that the sponsored content must be clearly disclosed under local advertising rules, and proposes two package options. The lesson: capability matters most when the task requires *connecting* several pieces of context.\n\n### Tokens and context windows in plain English\n\nClaude reads and writes in **tokens**, which are small chunks of text (roughly parts of words). The **context window** is how much Claude can consider at once: your instructions, files and the conversation. Claude's context windows are large enough for long reports, books and big spreadsheets, but they are still finite. Very long chats can also degrade focus. When a conversation gets long and messy, start a fresh chat with a clean summary.\n\n### Pitfalls\n\n- Using the most capable tier for everything and hitting usage limits by lunchtime.\n- Using the fastest tier for high-stakes analysis and trusting it without review.\n- Assuming Claude knows today's news without web search.\n- Treating model names from old tutorials as current.\n\n### Privacy note\n\nWhatever tier you choose, the same rule applies: do not paste information you are not permitted to share (client secrets, personal data of customers, passwords). Module 6 covers data controls in detail.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Claude only works with what is in its context: training, your messages, files, instructions and enabled tools.",
+            "Pick the most capable tier for complex, high-stakes reasoning; a balanced or fast tier for everyday and high-volume work.",
+            "If results are weak, improve the prompt first, then compare tiers.",
+            "Model names and availability change; check the official model overview and help centre."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "An agency needs to tag 5,000 short social comments by sentiment every week. Which starting choice is most sensible?",
+              "options": [
+                "The most capable tier for every comment",
+                "Whichever tier appears first in the menu",
+                "No AI; tagging cannot be automated",
+                "A fast, lower-cost tier with human spot-checks"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "High-volume, simple classification suits a fast tier; spot-checking catches errors. The most capable tier would be slower and costlier without clear benefit."
+            },
+            {
+              "question": "Why might Claude give an outdated answer about a news event from last week?",
+              "options": [
+                "Recent events are blocked by all AI providers",
+                "Claude deliberately hides recent news",
+                "Claude cannot read dates",
+                "Without web search or supplied sources, Claude relies on training data that has a cut-off"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Models are trained up to a cut-off. Enable search (where available) or paste sources for anything recent."
+            },
+            {
+              "question": "What is the best first step when a cheaper model gives weak results on a task?",
+              "options": [
+                "Switch to a different language",
+                "Give up on AI for that task",
+                "Repeat the same prompt ten times",
+                "Improve the prompt with context, constraints and an example, then compare tiers"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Prompt quality is often the bottleneck. Improve it, then test a more capable tier if needed."
+            }
+          ],
+          "activity": "Pick one real task you do weekly. Run it on two different Claude model tiers with the same prompt and note differences in quality, speed and usefulness in a short table."
+        },
+        {
+          "slug": "chat-fundamentals-and-prompt-structure",
+          "title": "Chat fundamentals: the prompt structure experts use",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Why structure beats cleverness\n\nThere are no magic words. Expert Claude users get better results because they give Claude what a smart new colleague would need: **context, a clear task, constraints and a format**. Claude is particularly responsive to clear, direct instructions and to well-organised input.\n\n### The C-T-C-F framework\n\n1. **Context:** who you are, who the audience is, what is going on, and why it matters.\n2. **Task:** exactly what you want, using a verb (\"draft\", \"compare\", \"critique\", \"extract\").\n3. **Constraints:** length, tone, must-include and must-avoid items, regional rules.\n4. **Format:** bullets, table, email, JSON, headings; plus an example if you have one.\n\n### Copy-paste template\n\n```text\nContext: I am a [role] at [company/type]. My audience is [who]. Background: [2-4 sentences].\nTask: [Verb] a [deliverable] that [goal].\nConstraints:\n- Length: [x words / x bullets]\n- Tone: [e.g. warm, confident, no hype]\n- Must include: [points]\n- Avoid: [jargon, claims we can't prove, emojis]\nFormat: [structure]. Here is an example of the style I like: [paste example]\nBefore you start, ask me up to 3 questions if anything important is missing.\n```\n\nThat last line is powerful: it invites Claude to close gaps instead of guessing.\n\n### Use XML-style tags to separate material\n\nClaude handles clearly labelled sections well. When you paste several things (a brief, a transcript, a style guide), wrap each in simple tags so nothing gets mixed up:\n\n```text\n<brief>\nLaunch email for our Ramadan collection, UK and UAE audiences.\n</brief>\n<brand_voice>\nWarm, respectful, understated. No discount language in the subject line.\n</brand_voice>\n<product_notes>\n[paste notes]\n</product_notes>\nUsing the brief, voice and notes above, write 3 subject lines and one email body under 150 words.\n```\n\nThe tag names are yours to choose; consistency matters more than the exact words.\n\n### Iterate like an editor, not a gambler\n\nYour first response is a draft. Instead of regenerating randomly, give targeted feedback:\n\n- \"Keep the structure, but make paragraph two half as long.\"\n- \"The tone is too salesy for B2B finance buyers. Make it calmer and more specific.\"\n- \"Replace the generic benefits with the three customer quotes in my notes.\"\n\nYou can also **edit your earlier message** and resend it when you realise the original prompt was missing something; that often works better than piling on corrections.\n\n### Worked example\n\nA sales rep in Riyadh writes: \"Write a follow-up email.\" Claude produces something polite but empty. Rewritten with C-T-C-F:\n\n```text\nContext: I sell B2B payroll software. I met Sara, HR Director at a 300-person logistics firm, at a conference on Tuesday. She mentioned manual overtime calculations cause month-end delays.\nTask: Draft a follow-up email that proposes a 20-minute call.\nConstraints: Under 120 words. Professional, not pushy. Mention the overtime pain point. No attachments or pricing.\nFormat: Subject line + email body.\n```\n\nThe result references the specific pain, proposes two time slots and reads like a human wrote it. The difference came entirely from context.\n\n### Ask for reasoning, critique and options\n\n- \"Give me three options with different angles, then recommend one and explain why.\"\n- \"Before answering, list the assumptions you are making.\"\n- \"Critique this draft as a sceptical CFO would. Be specific.\"\n\nThese prompts turn Claude from a text generator into a thinking partner.\n\n### Pitfalls\n\n- **Overlong prompts with no hierarchy.** Put the most important instruction clearly; use headings or tags.\n- **Negative-only instructions.** \"Don't be boring\" helps less than \"use one concrete example per paragraph\".\n- **Contradictions** such as \"be detailed\" and \"keep it to 50 words\".\n- **Not saying who it is for.** Audience changes everything.\n\n### Safety note\n\nStructured prompts often include real details. Use placeholders (e.g. \"[Client A]\") when sharing sensitive names is not necessary for the task, and follow your organisation's AI policy.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Use Context, Task, Constraints and Format (C-T-C-F) for important prompts.",
+            "Wrap pasted materials in labelled tags so Claude can tell them apart.",
+            "Iterate with specific editorial feedback or edit the original prompt instead of regenerating blindly.",
+            "Invite Claude to ask clarifying questions before it starts."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which prompt is most likely to get a strong result?",
+              "options": [
+                "Context: I run a bakery blog for home bakers. Task: Draft a 600-word post on using AI to plan weekly baking. Constraints: friendly tone, no hype. Format: H3 headings plus a checklist.",
+                "Write something good about AI for my blog, make it viral.",
+                "AI blog post. Long. Good.",
+                "Write a blog post about AI."
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Only the bakery prompt gives context, a clear task, constraints and a format."
+            },
+            {
+              "question": "You paste a brief, a transcript and a style guide into one message. What helps Claude keep them separate?",
+              "options": [
+                "Pasting them in random order",
+                "Wrapping each in clearly labelled tags such as <brief> and <transcript>",
+                "Writing everything in capital letters",
+                "Removing all line breaks"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Labelled sections make it clear which material is which and reduce mix-ups."
+            },
+            {
+              "question": "Claude's draft is 80% right but too long. What is the most efficient next step?",
+              "options": [
+                "Start a new chat with no context",
+                "Give targeted feedback: keep the structure, cut to 150 words, remove paragraph 3",
+                "Regenerate until a shorter one appears",
+                "Accept it as is"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Specific editorial feedback keeps what works and fixes what doesn't."
+            }
+          ],
+          "activity": "Take a prompt you used recently and rewrite it using C-T-C-F plus tags. Run both versions and compare the outputs side by side."
+        },
+        {
+          "slug": "your-first-power-session",
+          "title": "Your first power session: a guided tour of the Claude workspace",
+          "type": "video",
+          "durationMinutes": 10,
+          "body": "### The workspace at a glance\n\nWhether you use Claude on the web, the desktop app or mobile, the core workspace is similar. Exact labels and menu positions change as the product evolves, and some features depend on your plan and region, so treat this as a map rather than a pixel-perfect screenshot.\n\n- **The message box:** where you type, attach files and images, and choose options.\n- **Model selector:** lets you switch between available model tiers.\n- **Tools and feature toggles:** depending on your plan, options such as web search, research, extended thinking, and connected apps may appear here.\n- **Chat history (sidebar):** your past conversations, which you can rename, star or delete.\n- **Projects:** workspaces that group chats with shared knowledge and instructions (Module 3).\n- **Settings:** profile, preferences, styles, privacy and data controls, connected tools.\n\n### A 20-minute power session\n\nFollow these steps with a real piece of your own work that contains no confidential data.\n\n**Step 1: Set your profile preferences.** In settings, look for a place to tell Claude about yourself and how you like responses (for example, \"I'm a marketing manager in Lahore; I prefer concise answers with bullet points and British spelling\"). This is applied across chats where supported.\n\n**Step 2: Start a focused chat.** One chat per task keeps context clean. Name it something searchable, like \"Q4 newsletter draft\".\n\n**Step 3: Attach material.** Upload a document or paste text. Ask for a structured summary first:\n\n```text\nSummarise the attached document for a busy manager:\n1. Purpose in one sentence\n2. Five key points\n3. Decisions or actions required\n4. Anything unclear or missing\n```\n\n**Step 4: Turn the summary into a deliverable.** Ask Claude to produce a one-page brief or email based on the summary. If the output is a substantial standalone piece, Claude may place it in an Artifact panel you can edit, copy or download (Module 3).\n\n**Step 5: Critique and improve.** Ask: \"What would a sceptical reader challenge in this draft?\" Then: \"Revise to address the top two issues.\"\n\n**Step 6: Save the pattern.** If this was useful, copy the prompts into a personal prompt library (a simple document works) or turn them into Project instructions.\n\n### What a good first output looks like\n\nWhen you run the summary prompt from Step 3 on, say, a 12-page supplier proposal, a strong response has a one-sentence purpose (\"Proposal to supply packaging for the spring range at a fixed unit price for 12 months\"), five specific key points with numbers where the document has them, a short list of decisions (\"approve pricing tier\", \"confirm delivery schedule\"), and a gaps section that says things like \"No penalty terms for late delivery are stated\". If your output is vaguer than that, add more context about who you are and what decision you face, then rerun.\n\n### Keyboard and workflow habits\n\n- Use **Shift+Enter** for new lines in the desktop and web message box so you can write structured prompts without sending early.\n- **Edit and resend** your earlier message instead of adding \"actually, I meant...\" five times.\n- **Branch deliberately:** if a conversation drifts, start a new chat and paste a short summary of the decisions so far.\n- **Copy responses cleanly** using the copy button to preserve formatting.\n\n### What to expect on different plans\n\nFree access generally lets you try core chat features with usage limits. Paid individual plans typically add higher limits, more models and more features. Team and Enterprise plans add administration, shared projects and stronger data controls. Availability varies by plan and region and changes over time, so check Anthropic's official pricing and help centre pages for specifics rather than relying on this course for plan details.\n\n### Pitfalls\n\n- Mixing five unrelated tasks in one endless chat.\n- Uploading sensitive client files to a personal account.\n- Forgetting that responses can contain errors; always read before you send.\n\n### Going further\n\nIf you work across many chats on the same client, jump ahead to Projects in Module 3. If you are technical, Module 5 explains how the same models are reached through the API and Claude Code.\n",
+          "video": {
+            "script": "Welcome to your first Claude power session. In the next few minutes, we will turn Claude from a chat box into a genuine work tool. Start with your profile preferences. Tell Claude who you are, what you do, and how you like answers: short or detailed, bullets or prose, British or American spelling. You only do this once, and every conversation starts closer to what you need. Next, open a new chat for one task only. Give it a clear name, like 'Q4 newsletter draft'. One task per chat keeps Claude focused. Now attach a document. Do not ask for a vague summary. Ask for structure: the purpose in one sentence, five key points, the decisions required, and anything unclear or missing. That last part is where Claude often catches gaps you missed. Then turn that summary into something useful: a one-page brief, an email to your manager, or a checklist. When the output is substantial, Claude may open it in a separate panel called an Artifact, which you can edit, copy or download. Here is the expert habit most people skip: ask Claude to critique its own work. 'What would a sceptical reader challenge here?' Then ask it to fix the top two issues. Finally, save what worked. Copy your best prompts into a simple prompt library. Next time, you start from a proven template instead of a blank box. Remember: features vary by plan and region, and Claude can make mistakes. You are the editor. Claude is the very fast first draft.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "The workspace combines a message box, model selector, feature toggles, history, Projects and settings.",
+            "One chat per task keeps context clean; start fresh with a summary when a chat drifts.",
+            "Set profile preferences once so every chat starts closer to your style.",
+            "Plan and region determine available features; always check official help pages."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Your chat about a campaign has drifted across three unrelated topics and answers are getting muddled. Best move?",
+              "options": [
+                "Start a new chat and paste a short summary of the key decisions",
+                "Keep going; Claude will sort it out",
+                "Delete your account",
+                "Switch to all caps"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "A fresh chat with a clean summary restores focus and removes irrelevant context."
+            },
+            {
+              "question": "Where should you record how you generally like Claude to respond (for example, British spelling and concise bullets)?",
+              "options": [
+                "In every single message",
+                "Nowhere; Claude guesses",
+                "In the file name of uploads",
+                "In profile or personal preference settings, where supported"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Profile preferences apply across chats, saving repetition."
+            }
+          ],
+          "activity": "Complete the 20-minute power session with a non-confidential document from your work and save the three most useful prompts in a personal prompt library."
+        }
+      ]
+    },
+    {
+      "slug": "documents-vision-and-research",
+      "title": "Documents, vision and research",
+      "summary": "Analyse long files, PDFs, images and charts, and research current topics with citations and a disciplined verification habit.",
+      "lessons": [
+        {
+          "slug": "long-documents-and-file-analysis",
+          "title": "Long documents and file analysis",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Why Claude is strong with long material\n\nClaude supports large context windows, which means it can read long reports, contracts, research papers, transcripts and exported spreadsheets in a single conversation. That makes it excellent for questions like \"What changed between these two policy versions?\" or \"Which clauses in this agreement affect payment timing?\" The skill is not uploading; it is asking the right questions and verifying the answers.\n\n### Supported inputs (conceptually)\n\nIn the Claude apps you can typically upload common document types such as PDFs, Word documents, plain text, CSV files and images, or paste text directly. File size and count limits vary by plan and change over time, so check the official help centre. For PDFs, Claude can generally consider both the text and the visual layout, including charts and tables, though scanned or low-quality pages may be read less reliably.\n\n### The long-document workflow\n\n**1. Orient first.** Before asking detailed questions, get a map:\n\n```text\nI've attached [document type]. Before we go deeper:\n1. Describe its structure (sections and what each covers).\n2. Identify the 5 most important points for a [role, e.g. marketing director].\n3. List any sections that seem incomplete, contradictory or ambiguous.\n```\n\n**2. Ask targeted questions with quotes.** Ask Claude to ground answers in the text:\n\n```text\nUsing only the attached document, answer: [question].\nQuote the exact passages that support your answer and name the section or page.\nIf the document does not answer the question, say \"Not stated in the document\".\n```\n\nRequiring quotes has two benefits: it improves accuracy, and it lets you verify in seconds.\n\n**3. Extract into structure.** Turn prose into tables:\n\n```text\nExtract every deliverable, deadline and responsible party from the attached statement of work.\nReturn a table with columns: Deliverable | Deadline | Owner | Section reference.\nMark anything ambiguous with \"(check)\".\n```\n\n**4. Compare documents.** Upload two versions and ask:\n\n```text\nCompare <v1> and <v2>. List every material change in a table:\nClause | Old wording (short) | New wording (short) | Practical impact for us.\nIgnore formatting-only changes.\n```\n\n**5. Decide and draft.** Only after verification, ask Claude to draft the email, summary or negotiation points.\n\n### Worked example\n\nA small agency in Manchester receives a 40-page influencer-marketing agreement from a brand. They upload it and ask for obligations on the agency, payment terms, content approval rights, usage rights duration and exclusivity. Claude returns a table with section references, and flags that the usage rights clause allows perpetual paid-ads usage of creator content, which conflicts with the creators' standard 12-month licence. The account manager checks the quoted clause, confirms it, and asks Claude to draft a polite redline request. A lawyer still reviews the final contract, but the team walked in prepared rather than surprised.\n\n### Tips for spreadsheets and CSVs\n\n- Tell Claude what each column means if headers are cryptic.\n- Ask for the method before the answer: \"Explain how you will calculate churn, then do it.\"\n- Where available, Claude can run analysis code to compute results; still spot-check a few rows yourself.\n- For large datasets, ask for summary statistics and anomalies first, then drill down.\n\n### Pitfalls\n\n- **Assuming completeness.** Ask \"What might you have missed?\" and check sections that matter most.\n- **Accepting unquoted claims** on contracts, compliance or finances.\n- **Uploading more than needed.** If only chapter 3 matters, share chapter 3.\n- **Scanned documents.** Poor scans can produce misreadings; verify numbers and names.\n- **Legal or financial reliance.** Claude helps you prepare; qualified professionals make the call.\n\n### Privacy note\n\nContracts, HR files and customer lists often contain personal or confidential data. Use an account type your organisation has approved, remove unnecessary personal details, and check data retention settings (Module 6).\n",
+          "video": null,
+          "keyTakeaways": [
+            "Orient first: ask for structure, key points and gaps before detailed questions.",
+            "Require quotes and section references so every answer can be verified quickly.",
+            "Convert prose into tables for deliverables, deadlines, changes and risks.",
+            "Share only what is needed and use approved accounts for confidential files."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the main benefit of asking Claude to quote supporting passages from a document?",
+              "options": [
+                "It makes the answer longer",
+                "It lets you verify claims quickly and reduces unsupported answers",
+                "It is required for the upload to work",
+                "It hides errors"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Quotes ground the answer in the source and make verification fast."
+            },
+            {
+              "question": "You need every deadline from a 30-page statement of work. Which prompt is best?",
+              "options": [
+                "Extract every deliverable, deadline and owner into a table with section references; mark ambiguous items",
+                "Summarise in one line",
+                "What's in this?",
+                "Is this a good contract?"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "A structured extraction with references produces a checkable, usable output."
+            },
+            {
+              "question": "A scanned PDF gives some odd numbers in Claude's summary. What should you do?",
+              "options": [
+                "Ask for a longer summary",
+                "Check the numbers against the original pages, as low-quality scans can be misread",
+                "Trust the numbers; AI can't misread",
+                "Delete the file"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Scan quality affects accuracy; verify key figures against the source."
+            }
+          ],
+          "activity": "Upload a long, non-confidential document (for example, a public annual report). Use the orient, quote, extract workflow and record one thing Claude found that you would have missed."
+        },
+        {
+          "slug": "vision-images-charts-and-pdfs",
+          "title": "Vision: images, screenshots, charts and visual PDFs",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### What Claude's vision can do\n\nAll current Claude models accept images as input. In practice this means you can share a photo, screenshot, chart, slide, whiteboard, receipt, form or design mock-up and ask questions about it. Claude cannot generate images itself in the chat; it analyses them and can produce text, tables, code or diagrams-as-code in response.\n\nHigh-value uses for professionals:\n\n- **Charts and dashboards:** \"What are the three most important trends in this analytics screenshot?\"\n- **Slides and ads:** \"Critique this carousel for clarity, hierarchy and accessibility.\"\n- **Handwritten notes and whiteboards:** \"Transcribe and organise into action items.\"\n- **Forms and receipts:** \"Extract vendor, date, amount and tax into a table.\"\n- **UI screenshots:** \"Write step-by-step instructions for a new user based on this screen.\"\n- **Competitor creative:** \"Describe the visual strategy and messaging of these five ads.\"\n\n### A reliable vision prompt\n\n```text\nI'm sharing [type of image]. Context: [what it is and why it matters].\n1. Describe what you see, including any text, numbers and labels.\n2. Answer: [specific question].\n3. Tell me what you're uncertain about (small text, cropped areas, ambiguous colours).\n```\n\nStep 1 matters: asking Claude to describe first exposes misreadings before they flow into conclusions.\n\n### Worked example: chart critique\n\nA social media manager shares a screenshot of monthly engagement for a Pakistani fashion brand's account. Prompt: \"Describe the chart, then give three insights and two questions I should ask the analytics team.\" Claude reads the axis labels, notes a sharp drop in one month, points out that the axis does not start at zero (which visually exaggerates change), and asks whether a posting-frequency change or a platform algorithm change coincided with the dip. The manager verifies the numbers in the native analytics tool before reporting.\n\n### Tips for better results\n\n- **Crop to what matters.** A focused image beats a full-screen capture with ten panels.\n- **Use sufficient resolution** so small text is legible.\n- **Label multiple images:** \"Image 1 is the old landing page; Image 2 is the new one.\"\n- **Ask for structured outputs:** tables, JSON or checklists make extraction easier to verify.\n- **Combine with text:** paste the underlying numbers when you have them; vision is best for layout, context and quick reads.\n\n### Sample output: receipt extraction\n\nSuppose you upload three restaurant receipts from a client dinner and ask for a table with vendor, date, currency, subtotal, tax and total. A good response returns one row per receipt, notes the currency symbol it saw on each (for example AED or GBP), and adds a line such as \"Receipt 2: the tax amount is partially obscured by a fold; please confirm\". That uncertainty note is exactly what you want: it tells you which single number to check by eye instead of rechecking everything.\n\n### Accessibility and design reviews\n\nClaude can help check visual content for accessibility issues such as low contrast, text too small for mobile, missing alt text or reliance on colour alone. Ask: \"Review this graphic for accessibility and suggest alt text under 125 characters.\" Treat its feedback as a helpful review, not a formal accessibility audit.\n\n### Limits to respect\n\n- Claude may misread tiny, blurred or rotated text, and can miscount many similar objects.\n- Precise spatial measurement (exact pixel positions, exact angles) is not a strength.\n- Do not use Claude to identify real people from their faces; Claude is designed not to do facial identification, and doing so raises serious privacy issues.\n- For PDFs, visual elements are considered, but always verify numbers taken from charts.\n\n### Privacy note\n\nScreenshots often capture more than you intend: open tabs, customer names, email addresses, account numbers. Crop or blur before uploading. This is one of the most common accidental data leaks in AI use.\n\n### Going further\n\nVia the API, images and PDFs can be sent as part of a message, enabling workflows such as automatically extracting fields from invoices. Teams building this should add validation rules (for example, totals must equal line items) and human review for exceptions.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Claude analyses images, screenshots, charts and visual PDFs; it does not generate images in chat.",
+            "Ask Claude to describe what it sees first, then answer, then flag uncertainty.",
+            "Crop, label and use legible resolution; paste raw numbers when you have them.",
+            "Blur or crop personal data before uploading screenshots; do not use Claude to identify people from faces."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why ask Claude to describe an image before answering your question?",
+              "options": [
+                "It makes the reply longer",
+                "It changes the model tier",
+                "Descriptions are required by law",
+                "It surfaces misreadings early so they don't flow into conclusions"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "A description step lets you spot misread labels or numbers before relying on the analysis."
+            },
+            {
+              "question": "Which is an inappropriate use of Claude's vision capability?",
+              "options": [
+                "Critiquing an ad for visual hierarchy",
+                "Identifying an unknown person from a photo of their face",
+                "Extracting totals from a receipt",
+                "Transcribing whiteboard notes"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Facial identification of real people is not supported and raises serious privacy concerns."
+            },
+            {
+              "question": "Before uploading a dashboard screenshot, what should you check?",
+              "options": [
+                "That it is in black and white",
+                "That the screenshot is as large as possible",
+                "That no customer names, emails or other sensitive data are visible",
+                "That it has a watermark"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Screenshots often expose extra data; crop or blur before sharing."
+            }
+          ],
+          "activity": "Take a screenshot of a chart or ad you work with (cropped of sensitive data). Use the three-step vision prompt and write down one insight and one misreading you caught."
+        },
+        {
+          "slug": "research-and-web-search-with-verification",
+          "title": "Research and web search, with verification built in",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Knowledge vs search vs research\n\nClaude has broad knowledge from training, but that knowledge has a cut-off and can contain errors. Depending on your plan and region, Claude can also use **web search** to fetch current information and show sources, and a more thorough **research** mode that runs multiple searches and compiles a longer, cited report. Some plans also let Claude search connected workplace tools. Names and availability of these options change, so check the official help centre for what your plan includes.\n\nUse each mode deliberately:\n\n| Need | Use |\n|---|---|\n| Explain a concept, brainstorm, draft | Claude's own knowledge |\n| Current facts, prices, news, recent regulations | Web search |\n| Multi-angle investigation, market scan, literature review | Research mode, where available |\n| Your company's own documents | Uploads, Projects or connectors |\n\n### A research prompt that produces usable output\n\n```text\nResearch question: [precise question].\nScope: [region, time period, industry]. Audience: [who will read this].\nPlease:\n1. Search for current, authoritative sources (official sites, regulators, reputable publications).\n2. Summarise findings with a citation for every factual claim.\n3. Separate \"well-established\" from \"contested or uncertain\".\n4. List what you could not find or verify.\nOutput: executive summary (5 bullets), then detail by sub-topic, then a source list.\n```\n\n### Worked example: disclosure rules for creators\n\nAn agency serving creators in the UK, UAE and US asks: \"What are the current advertising disclosure requirements for paid influencer posts in the UK, UAE and US?\" With web search on, Claude summarises guidance and cites official or reputable sources such as the UK advertising regulator, the US Federal Trade Commission and UAE media regulation sources, and notes that UAE rules include licensing considerations for influencers. The agency then opens each cited source to confirm the details and date, because regulations change and summaries can compress nuance.\n\n### The verification habit (non-negotiable)\n\nAI search reduces effort; it does not remove responsibility. For anything you will publish, advise on or spend money on:\n\n1. **Open the cited source.** Does it actually say what the summary claims?\n2. **Check the date.** Is it current for your purpose?\n3. **Check authority.** Official regulator or primary source beats a random blog.\n4. **Triangulate important facts** with at least one independent source.\n5. **Watch for missing citations** on specific numbers; ask \"Which source supports this figure?\"\n\nIf Claude cannot cite a specific claim, treat it as unverified.\n\n### Research without web access\n\nIf search is unavailable on your plan, you can still research well: paste or upload the sources yourself and ask Claude to synthesise only from them, citing which document each point comes from. This is often *more* reliable for professional work because you control the source set.\n\n### Prompt-injection awareness\n\nWeb pages can contain hidden or misleading text designed to manipulate AI tools. Claude is trained to resist such instructions, but you should still be cautious when a search result seems to push Claude towards an odd conclusion, a particular product, or an action you did not ask for. Treat web content as data, not as instructions.\n\n### Pitfalls\n\n- Citing an AI summary instead of the underlying source.\n- Asking broad questions (\"Tell me about marketing\") and getting broad answers.\n- Using research mode for simple questions; it takes longer and uses more of your allowance.\n- Forgetting regional differences in rules and prices.\n\n### Going further\n\nThrough the API, developers can enable server-side web search and web fetch tools, and use citations features that point to exact passages in supplied documents. These make it easier to build research assistants with traceable answers.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Use Claude's knowledge for concepts, web search for current facts, research mode for multi-source investigations, where available.",
+            "Ask for citations on every factual claim and a list of what could not be verified.",
+            "Always open, date-check and triangulate important sources before publishing or advising.",
+            "Treat web content as data, not instructions; be alert to manipulation."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "You need this month's regulatory guidance on influencer disclosure. What should you do?",
+              "options": [
+                "Use a fast tier without search",
+                "Ask Claude to guess",
+                "Use web search (if available) or supply official sources, then open and check the cited pages",
+                "Rely on Claude's training knowledge alone"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Current regulatory details require current sources, which you then verify."
+            },
+            {
+              "question": "Claude's research summary includes a specific market-size figure with no citation. Best response?",
+              "options": [
+                "Ask which source supports it and treat it as unverified until confirmed",
+                "Publish it; it sounds right",
+                "Round it up",
+                "Delete the whole report"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Specific numbers without sources should be treated as unverified."
+            },
+            {
+              "question": "Search is not available on your plan. What is a reliable alternative for professional research?",
+              "options": [
+                "Stop using Claude",
+                "Use shorter prompts",
+                "Ask Claude to imagine the latest data",
+                "Upload or paste trusted sources and ask Claude to synthesise only from them, citing each document"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Controlling the source set and requiring document-level citations produces verifiable research."
+            }
+          ],
+          "activity": "Pick a question relevant to your market (for example, a local advertising rule). Run the research prompt, then verify three cited claims by opening the sources. Note any discrepancies."
+        }
+      ]
+    },
+    {
+      "slug": "projects-artifacts-and-personalisation",
+      "title": "Projects, Artifacts and personalisation",
+      "summary": "Organise recurring work in Projects, build reusable Artifacts, and personalise Claude with preferences, styles and memory controls.",
+      "lessons": [
+        {
+          "slug": "projects-and-project-knowledge",
+          "title": "Projects and project knowledge",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### What a Project is\n\nA **Project** in Claude is a workspace that groups related chats and gives them shared context. Typically a Project has:\n\n- **Project knowledge:** documents, notes and reference files that Claude can draw on in every chat inside the Project.\n- **Project instructions:** standing guidance (tone, audience, rules, output formats) applied to every chat in that Project.\n- **Chats:** individual conversations that all start with that shared context.\n\nOn team plans, Projects can usually be shared with colleagues so everyone works from the same knowledge and instructions. Availability, sharing options and knowledge size limits vary by plan; check the official help centre.\n\n### When to create a Project\n\nCreate one when you will return to the same context repeatedly:\n\n- A **client account** (brand guidelines, product sheets, past campaigns, approval rules)\n- A **recurring deliverable** (weekly newsletter, monthly performance report)\n- A **course or research topic** (readings, notes, glossary)\n- A **sales territory** (ideal customer profile, case studies, objection handling)\n\nOne-off questions do not need a Project.\n\n### Designing great project knowledge\n\nQuality beats quantity. Upload material that is current, authoritative and relevant:\n\n1. **Brand voice guide** with do/don't examples.\n2. **Product or service facts:** features, pricing policy statements, FAQs (kept up to date).\n3. **Audience profiles:** who you serve and what they care about.\n4. **Gold-standard examples:** two or three outputs you consider excellent.\n5. **Rules and compliance:** disclosure requirements, claims you must not make, regional notes.\n\nRemove outdated versions. If two documents conflict, Claude may blend them. Name files clearly, like \"BrandVoice_2026.pdf\", not \"final_v3_REAL.pdf\".\n\n### Writing project instructions\n\n```text\nYou are supporting the content team at [Agency] working for [Client], a [industry] brand serving [markets].\nAlways:\n- Follow the brand voice guide in project knowledge.\n- Use British spelling and a warm, confident tone.\n- Include #ad or \"Paid partnership\" wording for any sponsored post.\n- Flag any claim that needs substantiation (health, finance, \"best\", \"No.1\").\nNever:\n- Invent statistics, testimonials or prices.\n- Mention competitors by name.\nDefault output: a draft, then 3 bullet notes on assumptions and risks.\nIf a request conflicts with project knowledge, ask before proceeding.\n```\n\nKeep instructions focused on durable rules. Put task-specific details in the chat itself.\n\n### Worked example: a client Project\n\nA boutique agency in Abu Dhabi creates a Project for a hospitality client. Knowledge: brand book, room and amenity fact sheet, three approved Instagram captions, and a list of phrases the legal team rejected. Instructions: tone, bilingual English/Arabic caption format, and disclosure rules. Now any team member can open a new chat and write \"Draft 5 captions for the new rooftop brunch, family-friendly angle\" and get on-brand drafts in seconds, with the rejected phrases avoided. When the fact sheet changes, one person updates the knowledge file and everyone benefits.\n\n### Sample output: what \"good\" looks like\n\nWith the hospitality Project above, a request for five captions should return drafts that use the approved amenity names exactly as written in the fact sheet, include Arabic versions in the agreed format, avoid every rejected phrase, and end with a short note such as \"Assumption: brunch price not included because it isn't in project knowledge\". If drafts ignore the brand voice, your instructions are probably too long or too vague; shorten them and add one gold-standard example.\n\n### Maintenance routine\n\n- **Monthly:** remove outdated files, update facts, add new gold-standard examples.\n- **After mistakes:** if Claude repeats an error, add a clear rule or example to the instructions.\n- **Access review:** on shared Projects, check who has access, especially after staff or client changes.\n\n### Pitfalls\n\n- Dumping every file you own into knowledge, which dilutes relevance.\n- Contradictory instructions across the Project and your profile preferences.\n- Storing confidential data in a Project shared more widely than intended.\n- Forgetting that knowledge is only as accurate as the files you uploaded.\n\n### Going further\n\nConceptually, Projects give Claude a curated context package. Developers build similar behaviour through the API with system prompts plus retrieved documents; the design principles (curate, label, keep current) are the same.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Projects combine shared knowledge, standing instructions and chats for recurring work.",
+            "Curate knowledge: current, authoritative, relevant, clearly named, no conflicting versions.",
+            "Put durable rules in project instructions and task details in the chat.",
+            "Review shared Projects regularly for accuracy and access."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which situation most justifies creating a Claude Project?",
+              "options": [
+                "Asking once what a word means",
+                "Checking today's weather",
+                "Producing weekly content for the same client with the same brand rules",
+                "Translating a single sentence"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Projects pay off when you reuse the same context repeatedly."
+            },
+            {
+              "question": "Claude keeps mixing an old price with a new one in a client Project. Most likely fix?",
+              "options": [
+                "Switch to a faster model",
+                "Write in capital letters",
+                "Upload more files",
+                "Remove the outdated document so knowledge doesn't conflict"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Conflicting documents lead to blended answers; remove outdated versions."
+            },
+            {
+              "question": "What belongs in project instructions rather than a single chat message?",
+              "options": [
+                "A one-off question",
+                "Durable rules like tone, disclosure requirements and banned claims",
+                "Your lunch order",
+                "Today's specific caption topic"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Instructions hold standing rules; task-specific details go in each chat."
+            }
+          ],
+          "activity": "Create a Project for one client, product or recurring task. Add 3 to 5 curated knowledge files and write project instructions using the template. Test with two real requests."
+        },
+        {
+          "slug": "artifacts-create-iterate-share",
+          "title": "Artifacts: create, iterate and share",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### What Artifacts are\n\n**Artifacts** are standalone pieces of content Claude creates in a dedicated panel beside the chat, rather than inline in the conversation. They are designed for things you will reuse, edit or share, such as:\n\n- Documents (briefs, reports, policies, scripts) in formatted text\n- Checklists, tables and templates\n- Code snippets and simple web pages\n- Diagrams expressed as code (for example, flowcharts)\n- Small interactive tools such as calculators, quizzes or planners\n\nClaude usually decides when to create an Artifact, based on whether the content is substantial and self-contained, but you can ask explicitly: \"Create this as an artifact.\" Sharing and publishing options depend on your plan and settings; on team plans, admins may control whether Artifacts can be shared. Check the help centre for current options.\n\n### Why they matter for non-engineers\n\nArtifacts let you build useful mini-tools without writing code yourself. You describe what you want in plain language; Claude writes the code and shows a working preview. For example:\n\n```text\nCreate an interactive artifact: an influencer campaign budget calculator.\nInputs: number of creators, average fee per creator, content usage fee (%), agency margin (%).\nOutputs: total creator cost, usage cost, agency fee, total client price.\nStyle: clean, mobile-friendly, labels in plain English. Show example numbers pre-filled.\n```\n\nClaude produces a working calculator you can test immediately. Then you iterate:\n\n- \"Add a currency selector for GBP, USD, AED, SAR and PKR (labels only, no conversion).\"\n- \"Add a reset button and make the total bold.\"\n- \"Add a note that figures are estimates and exclude tax.\"\n\n### Iterating well\n\nArtifacts support versioning within the conversation, so you can refer back to earlier versions. Good iteration habits:\n\n1. **Change one thing at a time** for complex artifacts.\n2. **Describe the bug precisely:** \"When I enter 0 creators, the total shows NaN. Show 0 instead.\"\n3. **Ask for a summary of what changed** after each revision.\n4. **Keep a clean copy** of versions you approve.\n\n### Document artifacts for teams\n\nFor written work, ask for artifacts with structure:\n\n```text\nCreate an artifact: a one-page creative brief for [campaign].\nSections: Objective, Audience, Key message, Mandatories (including disclosure), Deliverables, Timeline, Approvals.\nUse short bullets. Leave [TBC] where information is missing rather than inventing it.\n```\n\nThe \"[TBC] instead of inventing\" instruction is a small habit that prevents plausible-sounding fabrication.\n\n### Worked example\n\nA sales team lead in Karachi needs a discovery-call checklist. She asks Claude for an artifact with 12 questions grouped into Situation, Pain, Impact and Next Steps, plus checkboxes and a notes field. Within minutes she has an interactive checklist, tweaks the wording to fit her market, and shares it with her team to use in calls.\n\n### Pitfalls\n\n- **Treating an artifact tool as production software.** A calculator built in minutes is great for internal use; anything handling payments, personal data or client-facing logic needs proper review and testing.\n- **Hidden errors in formulas.** Test with known numbers and edge cases (zeros, very large values).\n- **Sharing publicly by accident.** Check what a share link exposes before sending it.\n- **Embedding real personal data** in an artifact that might be shared.\n\n### Sample prompt: a content calendar artifact\n\n```text\nCreate an artifact: a 4-week content calendar table for a coffee shop's Instagram.\nColumns: Week | Day | Format (Reel/Carousel/Story) | Topic | Caption hook | Call to action | Status.\nThree posts per week. Leave Status as \"Draft\". Don't invent promotions or prices.\n```\n\nGood output is a tidy table you can copy into a spreadsheet, with varied formats, hooks that match the brief, and no made-up offers. You can then ask: \"Add a column for the local holiday or event each week, marking [TBC] where unsure.\"\n\n### Safety note\n\nArtifacts that run code do so in a sandboxed preview. Still, do not paste secrets like API keys or passwords into artifacts, and do not ask them to collect personal information from others without a lawful basis and proper tools.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Artifacts are standalone, editable outputs such as documents, checklists, code and small interactive tools.",
+            "Non-engineers can build internal mini-tools by describing them in plain language and iterating.",
+            "Iterate one change at a time, describe bugs precisely and test with edge cases.",
+            "Check sharing settings and never embed secrets or unnecessary personal data."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which output is most suitable as an Artifact?",
+              "options": [
+                "A reusable one-page campaign brief template",
+                "A quick yes/no confirmation",
+                "A greeting",
+                "A one-word answer"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Artifacts suit substantial, self-contained content you will reuse or share."
+            },
+            {
+              "question": "Your calculator artifact shows an error when an input is zero. Best prompt?",
+              "options": [
+                "When 'creators' is 0 the total shows NaN; show 0 instead and keep everything else unchanged",
+                "Make it prettier",
+                "Start over",
+                "It's broken, fix it"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Precise bug descriptions with expected behaviour lead to targeted fixes."
+            },
+            {
+              "question": "Why add 'leave [TBC] where information is missing' to a brief request?",
+              "options": [
+                "To prevent Claude from inventing plausible but false details",
+                "It is required to create an artifact",
+                "To make the brief longer",
+                "It changes the font"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Explicit placeholders discourage fabrication and highlight gaps."
+            }
+          ],
+          "activity": "Build one interactive artifact that would save you time weekly (a calculator, checklist or planner). Test it with three sets of inputs including an edge case."
+        },
+        {
+          "slug": "styles-instructions-and-memory",
+          "title": "Styles, custom instructions and memory",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Three layers of personalisation\n\nClaude offers several ways to shape responses without repeating yourself. Exact names and availability vary by plan and change over time, but the layers are:\n\n1. **Profile or personal preferences:** account-wide information about you and how you like answers.\n2. **Styles:** reusable writing styles you can select for a response, such as more concise, more explanatory, or a custom style built from samples of your own writing.\n3. **Project instructions:** rules that apply only inside a specific Project (previous lesson).\n\nSome plans also offer **memory** features that let Claude reference past conversations or remember details you've shared, with controls to view, edit or turn memory off. Where memory exists, you should know how to check and manage it.\n\n### Setting preferences well\n\nGood preferences are short, stable and general:\n\n```text\nAbout me: I'm a freelance social media strategist working with beauty and wellness brands in the UK and Gulf region.\nHow I like responses:\n- Lead with the answer, then detail.\n- Use British spelling.\n- Bullets over long paragraphs for plans; prose for client-facing copy.\n- When you're unsure, say so rather than guessing.\n- Don't add emojis unless I ask.\n```\n\nAvoid putting task-specific or confidential information here; it applies everywhere.\n\n### Building a custom style from your writing\n\nStyles are most useful for people who write a lot in a consistent voice (creators, marketers, founders). To create a custom style, you typically provide samples of your writing or describe the style. Tips:\n\n- Use 3 to 5 samples that represent your best, most typical writing.\n- Include variety (a post, an email, a longer article) so the style generalises.\n- Describe what matters: sentence length, humour, formality, words you never use.\n- Test the style on a new topic and refine.\n\nA creator from Lahore who writes witty, bilingual English/Urdu-transliterated captions can build a style from her best posts, then ask for drafts that already sound like her, cutting editing time dramatically.\n\n### Choosing the right layer\n\n| Need | Best layer |\n|---|---|\n| \"I always want British spelling\" | Profile preferences |\n| \"Write this one in my newsletter voice\" | Custom style |\n| \"For Client X, always include disclosure wording\" | Project instructions |\n| \"For this post only, make it playful\" | The chat message |\n\n### Sample test for a new style\n\nAfter creating a style, test it on a topic you have never written about, such as \"a short post announcing our new opening hours\". Compare it with a real post you wrote. Check sentence length, openings, humour and sign-offs. If the draft overuses one quirk (for example, every sentence starts with a question), add a line to the style description such as \"Use rhetorical questions at most once per post\", and test again. Two or three rounds of refinement usually produce a style you can rely on for first drafts.\n\n### Managing memory responsibly\n\nWhere memory is available:\n\n- **Review what is remembered** periodically in settings.\n- **Delete or correct** outdated or sensitive items.\n- **Use incognito or temporary chats** (where offered) for sensitive or one-off topics you do not want remembered.\n- **Separate work and personal use**; do not mix client work into a personal account.\n\n### Pitfalls\n\n- Conflicting instructions between layers (profile says \"be brief\", project says \"be comprehensive\"). Be explicit about which wins for a task.\n- Over-personalising so every output sounds identical; sometimes you need a different voice.\n- Assuming a custom style guarantees accuracy. Style affects voice, not facts.\n\n### Privacy note\n\nAnything you put in preferences, styles or memory may influence many future responses. Keep it free of passwords, financial details, health information or client secrets.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Personalise at the right layer: profile, style, project instructions or the chat itself.",
+            "Keep profile preferences short, stable and non-confidential.",
+            "Build custom styles from 3 to 5 representative writing samples and test them.",
+            "Where memory exists, review, correct and delete it, and use temporary chats for sensitive topics."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "You want every chat to use British spelling. Where should that go?",
+              "options": [
+                "Profile/personal preferences",
+                "Project instructions for every Project",
+                "The file name of each upload",
+                "Nowhere"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Account-wide preferences are the right layer for rules that apply everywhere."
+            },
+            {
+              "question": "A client-specific rule ('always include Paid partnership wording for Client X') belongs in...",
+              "options": [
+                "Your email signature",
+                "A custom style",
+                "The Client X Project instructions",
+                "Profile preferences"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Client-specific rules belong in that client's Project."
+            },
+            {
+              "question": "Which is a good practice for AI memory features where available?",
+              "options": [
+                "Periodically review, correct or delete remembered items and use temporary chats for sensitive topics",
+                "Share your memory with clients",
+                "Store passwords there for convenience",
+                "Never look at what is stored"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Actively managing memory keeps it accurate and protects sensitive information."
+            }
+          ],
+          "activity": "Write your profile preferences using the template and, if available on your plan, create one custom style from 3 to 5 writing samples. Test it on a new topic."
+        }
+      ]
+    },
+    {
+      "slug": "thinking-and-writing-workflows",
+      "title": "Deeper thinking and writing workflows",
+      "summary": "Use extended thinking for hard problems and run professional writing workflows that keep your voice and your facts intact.",
+      "lessons": [
+        {
+          "slug": "extended-thinking-when-and-how",
+          "title": "Extended thinking: when deeper reasoning pays off",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### What extended thinking is\n\nClaude can spend more effort reasoning before it answers. In the apps this is usually presented as an option to turn on extended or deeper thinking for a response; on the API, developers can enable thinking and control how much effort Claude spends. Recent models can also decide adaptively how much to think based on the task. When thinking is on, Claude works through the problem step by step before producing its final answer, and the app may show a summary of that reasoning.\n\nThe trade-off is simple: **more thinking usually means better answers on hard problems, but slower responses and more usage.** For easy tasks it adds delay without adding value.\n\n### When to turn it on\n\nTurn on deeper thinking for tasks with many interacting parts or where mistakes are costly:\n\n- Multi-step maths, pricing models and forecasts\n- Strategy with trade-offs (\"Which of these three markets should we enter first and why?\")\n- Complex analysis across several documents\n- Debugging logic, formulas or code\n- Planning projects with dependencies and constraints\n- Evaluating arguments and finding flaws\n\nLeave it off for:\n\n- Quick rewrites, translations and summaries\n- Brainstorming lists\n- Formatting and extraction with a clear template\n\n### Prompts that make thinking count\n\nThinking works best when the problem is well defined:\n\n```text\nProblem: [describe clearly].\nConstraints: [budget, time, resources, rules].\nOptions to consider: [A, B, C] (add others if they are clearly better).\nEvaluate each option against: [criteria with weights if you have them].\nThen recommend one, state your key assumptions, and say what new information would change your recommendation.\n```\n\nThe last sentence is valuable: it tells you which facts to check before acting.\n\n### Worked example: pricing a retainer\n\nA two-person agency in Jeddah wants to price a social media retainer. They share their hours per deliverable, freelancer costs, target margin and three competitor price ranges they collected themselves. With deeper thinking on, Claude builds the cost per month, tests three pricing tiers, identifies that the lowest tier barely covers costs if revisions exceed two rounds, and recommends capping revisions in the contract. Without thinking, the answer was quicker but missed the revision risk. The agency still checks the arithmetic in a spreadsheet before sending the proposal.\n\n### Sample output shape\n\nWith the template above, a strong thinking-assisted answer usually follows a clear shape: a restatement of the problem and constraints, a short comparison table scoring each option against your criteria, a recommendation in one or two sentences, a list of three to five assumptions, and a closing \"what would change my mind\" section (for example, \"If average revisions per deliverable exceed three, the mid tier becomes unprofitable\"). If you don't get that shape, ask for it explicitly.\n\n### Reading the reasoning\n\nWhen a reasoning summary is shown, skim it for:\n\n- **Wrong assumptions** (\"assuming 20 working days\" when you work 22)\n- **Misread inputs** (a number or constraint taken incorrectly)\n- **Skipped options** you care about\n\nCorrect the assumption and ask Claude to rerun. The reasoning is a helpful window, not a guarantee that the final answer is correct.\n\n### Thinking vs better prompts vs bigger model\n\nThese are three separate levers:\n\n| Lever | Helps when |\n|---|---|\n| Better prompt | The task is unclear or missing context (most common problem) |\n| More capable model tier | The task needs more knowledge, nuance or skill |\n| Deeper thinking | The task needs careful multi-step reasoning |\n\nOften the best results combine all three for hard, high-stakes problems.\n\n### Pitfalls\n\n- Turning thinking on for everything and wondering why you hit usage limits.\n- Believing longer reasoning means certainty; verify numbers independently.\n- Giving an underspecified problem and expecting thinking to fill in the missing facts.\n\n### Going further\n\nOn the API, thinking can be combined with tool use so Claude reasons between steps (for example, searching, then reasoning about results, then searching again). Developers can tune effort to balance quality, latency and cost; check the official documentation for current parameters.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Extended thinking trades speed and usage for better answers on complex, multi-step problems.",
+            "Use it for strategy, maths, multi-document analysis and debugging; skip it for simple rewrites.",
+            "Well-defined problems with constraints and criteria get the most from thinking.",
+            "Check shown reasoning for wrong assumptions and still verify key numbers."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which task most benefits from turning on extended thinking?",
+              "options": [
+                "Listing 10 hashtag ideas",
+                "Translating a tweet",
+                "Comparing three market-entry options against weighted criteria and constraints",
+                "Fixing a typo"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Multi-criteria strategic trade-offs need careful multi-step reasoning."
+            },
+            {
+              "question": "Claude's reasoning summary shows it assumed 20 working days per month, but you work 22. What should you do?",
+              "options": [
+                "Correct the assumption and ask Claude to rerun the analysis",
+                "Switch off your computer",
+                "Ignore it",
+                "Accept the final answer anyway"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Reasoning summaries help you catch and fix wrong assumptions."
+            },
+            {
+              "question": "A prompt is missing key facts and the answer is poor. Which lever should you pull first?",
+              "options": [
+                "Ask the same thing again",
+                "Turn on deeper thinking",
+                "Improve the prompt with the missing context",
+                "Use a different browser"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Thinking cannot supply facts you didn't provide; fix the prompt first."
+            }
+          ],
+          "activity": "Take one decision you face this month. Use the thinking prompt template with deeper thinking on and off, and compare the two recommendations and their assumptions."
+        },
+        {
+          "slug": "writing-and-editing-workflows",
+          "title": "Writing and editing workflows that sound like you",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Claude as writing partner, not ghostwriter\n\nClaude is widely regarded as a strong writer and editor. The most effective professionals do not ask it to \"write something\" and publish the result. They use it at each stage of a writing workflow: planning, drafting, critiquing, editing and adapting.\n\n### The five-stage workflow\n\n**1. Plan.** Clarify the goal before any drafting.\n\n```text\nI need to write [piece] for [audience] to achieve [goal].\nAsk me 5 questions that would most improve this piece. Then propose 2 outline options with different angles.\n```\n\n**2. Draft from your raw material.** Supply notes, voice memos transcribed, bullet points, or examples. Claude writes better when it shapes your ideas than when it invents its own.\n\n```text\nTurn my notes below into a [format] draft. Keep my examples and opinions; don't add new claims.\nVoice: [describe or select a style].\n<notes>\n[paste]\n</notes>\n```\n\n**3. Critique.** Ask Claude to review as a specific reader.\n\n```text\nReview this draft as [a sceptical procurement manager / a busy founder / a first-time customer].\nList the 5 biggest weaknesses in order of impact, with a suggested fix for each. Don't rewrite yet.\n```\n\n**4. Edit precisely.** Use targeted edit requests:\n\n- \"Tighten by 30% without losing the three examples.\"\n- \"Rewrite the opening to lead with the customer problem.\"\n- \"Replace abstract claims with concrete details from my notes.\"\n- \"Check for passive voice and jargon; list them, then fix.\"\n\n**5. Adapt.** Repurpose one piece into many:\n\n```text\nFrom the approved article below, create:\n1. A LinkedIn post (under 200 words, one insight, one question at the end)\n2. Three X/Twitter posts\n3. A newsletter intro (80 words)\n4. A 45-second video script with a hook in the first line\nKeep facts identical. Add #ad disclosure only if I mark the content as sponsored.\n```\n\n### Editing someone else's work\n\nFor managers and editors, Claude can give consistent feedback at scale:\n\n```text\nEdit the draft below for clarity and grammar only. Do not change meaning or voice.\nReturn: (1) the edited version, (2) a list of every change with a short reason.\n```\n\nAsking for a change list keeps you in control and helps writers learn.\n\n### Worked example: founder newsletter\n\nA skincare founder in London records a rambling 10-minute voice note about why she reformulated a product. Claude turns the transcript into a 500-word newsletter using her own phrases, flags two claims (\"clinically proven\", \"best on the market\") as needing substantiation under advertising rules, and suggests softer, accurate alternatives. She edits one paragraph and sends. The piece sounds like her because it is made from her words.\n\n### Sample critique output\n\nWhen you run the critique prompt on a sales one-pager as \"a sceptical procurement manager\", good feedback is specific and ranked: \"1. No price anchor or range, so I can't assess budget fit. Fix: add a starting-from figure or pricing model. 2. The claim 'saves hours every week' has no example. Fix: add one customer scenario with before/after steps. 3. Implementation effort isn't mentioned...\" If the feedback is generic (\"make it more engaging\"), ask Claude to cite the exact sentence each point refers to.\n\n### Avoiding \"AI voice\"\n\nGeneric AI prose tends to overuse certain patterns: grand openings, lists of three adjectives, predictable transitions, and empty conclusions. Counter it by:\n\n- Supplying your own examples, stories and opinions\n- Specifying banned phrases\n- Asking for \"plain, specific language; one idea per paragraph\"\n- Reading the draft aloud before you publish\n\n### Ethics and disclosure\n\nBe honest about AI assistance where your organisation, client, publication or platform requires it. Academic institutions and some publishers have specific policies. Never present AI-generated testimonials, reviews or quotes as real.\n\n### Pitfalls\n\n- Publishing without a human read-through.\n- Letting Claude introduce facts you didn't provide.\n- Losing your voice by accepting every suggestion.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Use Claude across the workflow: plan, draft from your material, critique, edit and adapt.",
+            "Drafts built from your notes and examples sound like you and contain fewer invented claims.",
+            "Ask for critique from a specific reader's perspective before rewriting.",
+            "Request change lists when editing to keep humans in control; never fabricate testimonials."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which approach produces the most authentic founder newsletter?",
+              "options": [
+                "Ask Claude to write about the brand from scratch",
+                "Give Claude the founder's own notes or transcript and ask it to shape them without adding new claims",
+                "Use a random style",
+                "Copy a competitor's newsletter"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Drafting from the founder's own material preserves voice and accuracy."
+            },
+            {
+              "question": "You want feedback before a rewrite. Which prompt fits?",
+              "options": [
+                "Rewrite this",
+                "Review as a sceptical procurement manager; list the five biggest weaknesses with fixes; don't rewrite yet",
+                "Add more adjectives",
+                "Make it better"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "A specific reader lens and a no-rewrite instruction produce actionable critique."
+            },
+            {
+              "question": "Why ask for a list of changes when Claude edits a colleague's draft?",
+              "options": [
+                "To hide changes",
+                "It is needed for spellcheck",
+                "So you can review each change and the writer can learn from it",
+                "To make the output longer"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "A change log keeps edits transparent and reviewable."
+            }
+          ],
+          "activity": "Take one piece you need to write this week and run it through all five stages. Keep the critique list and note which suggestions you rejected and why."
+        }
+      ]
+    },
+    {
+      "slug": "code-connectors-and-api",
+      "title": "Claude Code, connectors and the API",
+      "summary": "Understand coding help and Claude Code, connect Claude to your tools with MCP, and grasp API concepts well enough to lead AI projects.",
+      "lessons": [
+        {
+          "slug": "coding-help-and-claude-code",
+          "title": "Coding help and Claude Code, explained for non-engineers",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### You don't need to be a developer to benefit\n\nClaude is highly capable at writing, explaining and fixing code. For non-engineers, that opens doors: spreadsheet formulas, small automations, website tweaks, data cleanup scripts, and understanding what your developers are talking about. You do not need to become a programmer, but you do need to know what to ask and how to check the result.\n\n### Everyday coding help in chat\n\nUseful non-engineer requests:\n\n- **Spreadsheet formulas:** \"Write a Google Sheets formula that returns the campaign with the highest ROAS from columns A (name) and D (ROAS). Explain how it works.\"\n- **Explaining code:** \"Explain this tracking snippet line by line in plain English. What data does it send, and where?\"\n- **Small scripts:** \"Write a script that renames all images in a folder to lowercase with hyphens. Explain how to run it safely on a copy first.\"\n- **Website edits:** \"Here is my landing page HTML. Add a FAQ section with these five questions, matching the existing style.\"\n\nA safe prompt pattern:\n\n```text\nI'm not a developer. I want to [goal] using [tool: Google Sheets / Excel / WordPress / Python].\nPlease:\n1. Give me the solution.\n2. Explain what each part does in plain English.\n3. Tell me how to test it safely (on a copy or sample).\n4. List what could go wrong and how I'd notice.\n```\n\n### What Claude Code is\n\n**Claude Code** is Anthropic's agentic coding tool. Instead of chatting about code, developers give Claude Code a task and it works directly with a codebase: reading files, making changes across many files, running commands and tests, and iterating until the task is done, with the developer approving actions according to permission settings. It is available in the terminal and through integrations such as IDE extensions, desktop and web experiences; exact surfaces and plan availability change, so check the official documentation.\n\nFor a non-engineer, a useful analogy: chat is like asking an expert for advice over the phone; Claude Code is like giving a skilled contractor supervised access to the workshop to do the job, while you approve the important steps.\n\n### Why it matters to marketers, founders and managers\n\n- **Faster delivery:** developers can move faster on routine changes such as landing pages, integrations, bug fixes and tests.\n- **Better scoping:** you can ask your team whether a task is \"a Claude Code job\" (well-defined, testable) or needs deeper design work.\n- **Prototypes:** founders and product managers increasingly prototype ideas with agentic coding tools, then hand them to engineers for hardening.\n\n### Governance questions to ask your team\n\n1. Which repositories and environments can the tool access?\n2. What actions require human approval (running commands, pushing code, touching production)?\n3. How are secrets such as API keys kept out of prompts and logs?\n4. Is all AI-written code reviewed and tested before release?\n\n### Going further (for technical readers)\n\nClaude Code works best with:\n\n- **A project guidance file** describing conventions, commands and architecture, so Claude follows your team's standards.\n- **Clear, testable tasks:** \"Add input validation to the signup form and write tests\" beats \"improve the signup\".\n- **Plan first:** ask it to propose a plan before editing, review the plan, then let it execute.\n- **Tight feedback loops:** tests, linters and type checks let Claude verify its own work.\n- **Least privilege:** restrict permissions and review diffs before merging.\n\nIt can also connect to external tools through MCP (next lesson), such as issue trackers or documentation sources.\n\n### Pitfalls\n\n- Running a script you don't understand on real data. Always test on a copy.\n- Pasting code that contains passwords or API keys into any AI tool.\n- Assuming working code is secure code; security review still matters.\n- Letting an agent act on production systems without approvals.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Non-engineers can use Claude for formulas, small scripts, explanations and website edits, always testing on copies.",
+            "Claude Code is an agentic coding tool that works directly in a codebase with human-approved actions.",
+            "Ask governance questions about access, approvals, secrets and code review before adopting agentic tools.",
+            "Technical users get best results with guidance files, testable tasks, plan-first and least privilege."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What best describes Claude Code?",
+              "options": [
+                "A browser extension for social media",
+                "A spreadsheet add-on only",
+                "An image generator",
+                "An agentic coding tool that can read, edit and test code in a codebase with human-approved actions"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Claude Code works directly with codebases, running commands and editing files under permission controls."
+            },
+            {
+              "question": "A marketer gets a Claude-written script to rename 3,000 product images. What should they do first?",
+              "options": [
+                "Email it to customers",
+                "Test it on a copy of a small sample folder and check the results",
+                "Run it on the live folder immediately",
+                "Delete the originals"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Testing on a copy protects real data from mistakes."
+            },
+            {
+              "question": "Which is a sound governance practice for agentic coding tools?",
+              "options": [
+                "Skip testing",
+                "Require human approval for sensitive actions and review AI-written code before release",
+                "Paste API keys into prompts",
+                "Give full production access to save time"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Approvals, least privilege and code review keep agentic tools safe."
+            }
+          ],
+          "activity": "Use the non-developer prompt pattern to solve one spreadsheet or small automation problem you have. Test on a copy and write down what you checked."
+        },
+        {
+          "slug": "connectors-and-mcp",
+          "title": "Connectors and the Model Context Protocol (MCP)",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### The problem connectors solve\n\nBy default, Claude only knows what is in its training and what you paste or upload. But your real work lives in other tools: email, calendars, documents, CRMs, project trackers, design tools, analytics. **Connectors** let Claude access information and, in some cases, take actions in those tools, with your permission.\n\n### What MCP is\n\nThe **Model Context Protocol (MCP)** is an open standard introduced by Anthropic for connecting AI applications to external tools and data sources. Think of it like a universal adapter: instead of every AI app building a custom integration for every tool, a tool can offer an MCP server once, and any MCP-compatible AI application can connect to it.\n\nKey concepts in plain English:\n\n- **MCP server:** a connector that exposes a tool's capabilities, for example \"search documents\", \"create a task\" or \"read calendar events\".\n- **MCP client:** the AI application (such as the Claude apps or Claude Code) that connects to servers.\n- **Tools:** actions the AI can call (search, create, update).\n- **Resources:** data the AI can read (files, records).\n\nBecause MCP is an open standard, it is supported across a growing ecosystem, including by other AI vendors and developer tools.\n\n### Connectors in the Claude apps\n\nDepending on your plan, Claude offers a directory of connectors for popular services, and on some plans you can add custom connectors that point to remote MCP servers. Organisation admins on team plans typically control which connectors are allowed. Availability varies by plan and region; check the help centre.\n\n### Practical workflows\n\nWith appropriate connectors enabled, you can ask things like:\n\n```text\nLook through my calendar for next week and my recent emails with [client].\nPrepare a one-page briefing for Tuesday's meeting: open issues, commitments we made, and questions to ask.\nCite which email or event each point comes from.\n```\n\n```text\nSearch our shared drive for the latest brand guidelines and the Q3 campaign report.\nSummarise what worked, what didn't, and three recommendations for Q4.\n```\n\n```text\nFrom this meeting summary, create tasks in our project tracker for each action item, assigned as listed. Show me the list before creating anything.\n```\n\nNotice the last line: **ask to review before actions are taken.** Reading is low-risk; writing, sending or deleting deserves confirmation.\n\n### Security and trust\n\nConnectors are powerful, so treat them with care:\n\n- **Least privilege:** only connect tools you need, with the narrowest permissions.\n- **Trust the source:** use official or vetted connectors; a malicious MCP server could expose data or misbehave.\n- **Prompt injection:** content inside documents, emails or web pages can contain instructions aimed at AI. Claude is trained to resist these, but you should still review actions, especially ones that send data out.\n- **Approve actions:** keep confirmation steps for sending, deleting or sharing.\n- **Audit:** on team plans, admins should review which connectors are enabled and who uses them.\n\n### Worked example\n\nA sales manager connects Claude to her CRM and email (as approved by IT). Before a quarterly review she asks Claude to list deals that have not had contact in 30 days, summarise the last interaction for each, and draft a personalised check-in for review. She edits and sends the drafts herself. The work that took an afternoon now takes 30 minutes, and nothing was sent without her approval.\n\n### Going further (for technical readers)\n\nMCP servers can run locally or remotely. Developers can build servers with official SDKs in several languages, and the Claude API offers an MCP connector feature that lets Messages API requests connect to remote MCP servers. Design good tools with clear names and descriptions, validate inputs, and log actions.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Connectors give Claude permissioned access to your tools; MCP is the open standard behind many of them.",
+            "MCP servers expose tools and resources; AI apps such as Claude act as MCP clients.",
+            "Reading is low-risk; require review before Claude sends, creates or deletes anything.",
+            "Use least privilege, vetted connectors and admin oversight to manage security and prompt-injection risk."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the Model Context Protocol (MCP)?",
+              "options": [
+                "A pricing plan",
+                "A Claude-only file format",
+                "A type of image model",
+                "An open standard for connecting AI applications to external tools and data sources"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "MCP is an open protocol that lets AI apps connect to tools and data through MCP servers."
+            },
+            {
+              "question": "You ask Claude to create project tasks from meeting notes via a connector. What's the safest instruction to add?",
+              "options": [
+                "Show me the list before creating anything",
+                "Delete old tasks too",
+                "Email the client automatically",
+                "Create everything immediately"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Reviewing before write actions prevents mistakes and unintended changes."
+            },
+            {
+              "question": "Which of these is a real risk when connecting AI to email and documents?",
+              "options": [
+                "Documents becoming longer",
+                "The AI refusing to read",
+                "Faster responses",
+                "Prompt injection: hidden instructions in content trying to manipulate the AI"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Content can contain manipulative instructions; review actions and use vetted connectors."
+            }
+          ],
+          "activity": "List three tools where your work lives. For each, write one read-only question you would ask Claude through a connector and one action you would require approval for."
+        },
+        {
+          "slug": "claude-api-for-teams",
+          "title": "The Claude API for teams: core concepts without code",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Why managers and marketers should understand the API\n\nThe Claude apps are for people chatting with Claude. The **Claude API** is for software talking to Claude: your website chatbot, an internal tool that drafts proposals, an automation that classifies support tickets. Even if you never write code, understanding the building blocks lets you scope projects, estimate costs conceptually and ask good questions of developers or vendors.\n\n### The building blocks\n\n**1. Messages.** Every request sends a list of messages: turns from the \"user\" (your application) and, in multi-turn conversations, previous \"assistant\" replies. The API is stateless: the application sends the relevant conversation history each time. Claude replies with a new assistant message.\n\n**2. System prompt.** A special instruction that sets Claude's role, rules and context for the whole interaction, like project instructions for software. For example: \"You are a support assistant for [Brand]. Answer only from the provided help articles. If unsure, offer to connect the customer with a human.\"\n\n**3. Model choice.** The application specifies which model to use. The same tier logic from Module 1 applies: fast tiers for high-volume simple tasks, capable tiers for complex reasoning.\n\n**4. Tokens and cost.** Usage is billed by input and output tokens, with different prices per model. Features such as prompt caching (reusing a long, repeated prefix) and batch processing (asynchronous bulk requests) can reduce cost for suitable workloads. Always check the official pricing page for current figures.\n\n**5. Tool use.** Developers can describe tools, such as \"look up order status\" or \"check stock\", with a name, description and input format. Claude decides when a tool is needed and returns a structured request; the application runs the tool and sends the result back; Claude then continues. Anthropic also offers server-side tools such as web search, and features for structured outputs, citations, file handling and vision.\n\n**6. Stop reasons and limits.** Responses indicate why Claude stopped (finished, hit the length limit, or wants to use a tool). Applications handle each case.\n\n### A concept map of a simple support assistant\n\n```text\nCustomer question\n  -> App sends: system prompt + help-article excerpts + conversation history + question\n  -> Claude replies, or requests tool \"get_order_status(order_id)\"\n  -> App runs tool, returns result to Claude\n  -> Claude writes final answer, cites the help article\n  -> App shows answer; escalates to a human if confidence is low or the topic is sensitive\n```\n\n### Questions to ask before building\n\n1. **What is the job?** One clear task beats a vague \"AI assistant\".\n2. **What data does it need, and are we allowed to send it?**\n3. **Which model tier,** and what are the estimated volume and cost?\n4. **How will we evaluate quality?** Build a test set of real examples with expected answers before launch.\n5. **What are the guardrails?** Topics to refuse, when to hand off to humans, disclosure that users are talking to AI where required.\n6. **How are keys secured?** API keys belong in secure server-side storage, never in browser code, spreadsheets, prompts or chat messages.\n\n### Worked example\n\nAn e-commerce brand in the UK wants to auto-draft replies to common customer emails. The team defines five categories, writes a system prompt with tone rules and refund policy excerpts, uses a fast tier for classification and a more capable tier for drafting complex complaints, and keeps a human approval step. They test on 200 past emails, compare drafts with what agents actually sent, refine, then launch gradually.\n\n### Security note\n\nNever paste an API key into a chat, a shared document or a course exercise. If a key is exposed, revoke it immediately in the console and create a new one. Set spending limits and monitor usage.\n",
+          "video": null,
+          "keyTakeaways": [
+            "The API connects software to Claude using messages, a system prompt and a chosen model.",
+            "Usage is billed by tokens; caching and batch processing can reduce cost for suitable workloads.",
+            "Tool use lets Claude request actions your application performs and returns results for.",
+            "Plan evaluation, guardrails, human hand-off and secure key storage before launch."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "In the Claude API, what does the system prompt do?",
+              "options": [
+                "Uploads images",
+                "Stores the API key",
+                "Chooses the billing currency",
+                "Sets Claude's role, rules and context for the interaction"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "The system prompt provides standing instructions, similar to project instructions."
+            },
+            {
+              "question": "How does tool use work conceptually?",
+              "options": [
+                "Claude returns a structured tool request; your application runs the tool and sends the result back",
+                "Claude runs tools without any application involvement in all cases",
+                "Tools are only for image generation",
+                "Claude directly logs into your database"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "For client-side tools, the application executes the tool and returns results; Claude continues with that information."
+            },
+            {
+              "question": "A colleague pastes an API key into a shared chat. What should happen?",
+              "options": [
+                "Email it to the vendor",
+                "Revoke the key immediately and issue a new one, stored securely server-side",
+                "Nothing; chats are private",
+                "Post it on the wiki"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Exposed keys must be revoked; keys belong in secure server-side storage."
+            }
+          ],
+          "activity": "Sketch (in words, not code) an API use case for your team: the job, data, model tier, guardrails, evaluation set and human hand-off. Share it with a technical colleague for feedback."
+        }
+      ]
+    },
+    {
+      "slug": "safety-privacy-and-teams",
+      "title": "Safety, privacy and team adoption",
+      "summary": "Understand Claude's limits, verify outputs by stakes, manage data controls, and roll Claude out across a team with a clear policy.",
+      "lessons": [
+        {
+          "slug": "safety-limits-and-verification",
+          "title": "Safety, limits and verification",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### How Anthropic approaches safety\n\nAnthropic designs Claude to be helpful, honest and harmless, and publishes its approach to model behaviour and safety. In practice you will notice that Claude tends to acknowledge uncertainty, may decline clearly harmful requests, and will often explain why. Occasionally it may be more cautious than you need; clear context about your legitimate purpose usually resolves that.\n\n### The limits every professional must know\n\n1. **Hallucination.** Claude can produce plausible but false statements: invented citations, wrong dates, misremembered figures, non-existent product features. Risk rises with obscure topics, precise numbers and recent events.\n2. **Knowledge cut-off.** Without search or supplied sources, Claude doesn't know recent developments.\n3. **Arithmetic and counting slips.** Especially in long text. Ask it to compute with code where available, or check in a spreadsheet.\n4. **Over-agreement.** If you push hard, AI systems may accommodate your view. Ask for counter-arguments explicitly.\n5. **Context blind spots.** Claude doesn't know your internal politics, unwritten rules or what a client said on the phone unless you tell it.\n\n### The verification ladder\n\nMatch your checking effort to the stakes:\n\n| Stakes | Example | Verification |\n|---|---|---|\n| Low | Brainstorming post ideas | Quick read |\n| Medium | Client email, blog post | Read carefully; check every fact and name |\n| High | Contract summary, financial figures, health or legal claims | Check against source documents; expert review |\n| Critical | Anything affecting someone's rights, money, health or safety | Qualified human decision; AI only assists |\n\n### Prompts that reduce errors\n\n```text\nAnswer only from the information provided. If it isn't there, say \"I don't know\".\nFor each claim, rate your confidence (high/medium/low) and say why.\nList 3 ways your answer could be wrong.\nGive the strongest counter-argument to your recommendation.\n```\n\n### Worked example\n\nA student in Islamabad asks Claude for five academic sources on influencer marketing and trust. Claude lists plausible-looking papers. Following the verification habit, she searches each title in her university library: two exist as described, one exists with a different year, and two cannot be found. She switches approach: uses research tools with real search, uploads the papers she found, and asks Claude to summarise only those. Lesson: never cite a source you haven't opened.\n\n### Responsible use in marketing and sales\n\n- **No fake social proof.** Do not generate fake reviews, testimonials, follower screenshots or endorsements; this breaches consumer protection and platform rules in many markets.\n- **Substantiate claims.** \"Clinically proven\", \"No.1\" and financial return claims need evidence.\n- **Disclose sponsorship** according to local rules (for example #ad or \"Paid partnership\" labels) and platform policies.\n- **Respect intellectual property.** Don't ask Claude to reproduce copyrighted content wholesale or imitate a living artist's protected work for commercial use.\n- **Disclose AI where required,** for example synthetic media, AI chatbots or policy-specific contexts.\n\n### A 60-second pre-send checklist\n\nBefore you send or publish anything AI-assisted, run through five questions:\n\n1. Are all names, titles and company names spelled correctly and real?\n2. Does every number trace back to a source I can point to?\n3. Are any claims absolute (\"best\", \"guaranteed\", \"proven\") and, if so, substantiated?\n4. Is sponsorship or AI involvement disclosed where required?\n5. Would I be comfortable if the recipient knew exactly how this was produced?\n\n### When Claude declines\n\nIf Claude declines a legitimate request, add context rather than trying to trick it: \"I'm a compliance officer preparing staff training on phishing; I need examples of red flags, not a working phishing email.\" Attempting to bypass safety measures (\"jailbreaking\") typically violates usage policies and can put accounts at risk.\n\n### Pitfalls\n\n- Treating confident tone as evidence.\n- Verifying only the parts that \"feel\" wrong.\n- Using AI outputs for regulated advice without qualified review.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Claude can hallucinate, has a knowledge cut-off, and can slip on arithmetic; plan verification accordingly.",
+            "Scale verification to the stakes, up to expert human decisions for critical matters.",
+            "Never fabricate reviews or testimonials; substantiate claims and disclose sponsorship.",
+            "If Claude declines a legitimate task, give honest context; don't attempt jailbreaks."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Claude provides five academic citations. What should you do before using them?",
+              "options": [
+                "Use them; they look professional",
+                "Use only the first two",
+                "Ask Claude if they're real and accept its answer",
+                "Find and open each source to confirm it exists and says what is claimed"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Citations can be fabricated or wrong; confirm each in a library or the original source."
+            },
+            {
+              "question": "Which request violates responsible marketing practice?",
+              "options": [
+                "Generating 20 fake five-star customer reviews to post",
+                "Writing disclosure wording for a sponsored post",
+                "Summarising genuine customer feedback",
+                "Drafting an honest product description"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Fake reviews breach consumer protection rules and platform policies in many markets."
+            },
+            {
+              "question": "Claude declines to write phishing examples for staff training. Best next step?",
+              "options": [
+                "Give up on training",
+                "Use a different account to try again",
+                "Try tricks to bypass the refusal",
+                "Explain the legitimate training purpose and ask for red-flag examples and awareness content"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Honest context usually resolves over-caution; bypass attempts violate usage policies."
+            }
+          ],
+          "activity": "Take one AI-assisted piece of work from this month and apply the verification ladder. Note its stakes level and what you checked, and record any error you found."
+        },
+        {
+          "slug": "privacy-and-data-controls",
+          "title": "Privacy and data controls",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Know where your data goes\n\nWhen you use Claude, your prompts, files and outputs are processed by Anthropic to provide the service. How that data is retained and whether it may be used to improve models depends on your account type, your settings and the applicable terms. Consumer plans and commercial plans (Team, Enterprise, API) have different default terms, and settings and policies can change. The only reliable source is Anthropic's current privacy policy, terms and help centre, plus your organisation's agreements.\n\n### The controls to look for\n\nIn your settings, look for options such as:\n\n- **Model training preferences:** whether your chats may be used to improve models (on consumer plans, this is a setting you should review).\n- **Chat history:** delete individual chats or all history.\n- **Incognito or temporary chats,** where available, for conversations you do not want saved to history.\n- **Memory controls,** where available: view, edit, pause or delete.\n- **Connected apps:** review and remove connectors you no longer use.\n- **Data export:** download your data.\n\nOn Team and Enterprise plans, admins typically manage retention, access, single sign-on, and other organisation-level controls. Commercial API use is generally governed by separate commercial terms; some organisations arrange stricter retention agreements. Check the specifics rather than assuming.\n\n### A practical data classification\n\nBefore pasting anything, classify it:\n\n| Class | Examples | Rule |\n|---|---|---|\n| Public | Published blog posts, public websites | OK on any approved account |\n| Internal | Draft plans, meeting notes | Approved work account only |\n| Confidential | Client strategy, unreleased products, contracts | Approved commercial account, need-to-know, minimise |\n| Restricted | Passwords, API keys, payment card data, health records, government IDs | Do not paste into AI tools unless an approved, compliant system is specifically designed for it |\n\n### Minimisation techniques\n\n- **Anonymise:** replace names with roles (\"Client A\", \"Customer 1\").\n- **Aggregate:** share totals rather than row-level customer data where possible.\n- **Excerpt:** share only the relevant clause, not the entire contract.\n- **Strip metadata:** screenshots and documents can reveal emails, file paths and tracked changes.\n\n```text\nBefore I paste this, help me anonymise it: replace personal names, emails, phone numbers and company names with consistent placeholders, and give me a key I can keep offline.\n```\n\n(Only use this if the raw text is already permitted in your account; otherwise anonymise locally first.)\n\n### Regulations to be aware of\n\nDepending on where you and your customers are, data protection laws such as the UK GDPR and EU GDPR, Saudi Arabia's Personal Data Protection Law, UAE data protection law, Pakistan's evolving data protection framework, and US state privacy laws may apply. These laws commonly require a lawful basis for processing personal data, transparency, minimisation and appropriate safeguards when using processors. This is not legal advice; involve your data protection lead.\n\n### Worked example\n\nA recruitment consultant wants Claude to summarise 40 candidate CVs. Instead of pasting them into a personal account, she checks her agency's AI policy, uses the approved Team account, removes contact details and dates of birth, and asks Claude to compare candidates only against the job criteria. Final decisions and candidate communications remain human.\n\n### Sample output: an anonymisation key\n\nWhen you anonymise meeting notes before analysis, keep a simple key offline, for example: \"Client A = [real name], Person 1 = [real name], Project Falcon = [real project]\". Claude's output then refers only to placeholders, such as \"Person 1 committed to sending the revised budget by Friday\", and you re-insert real names yourself in the final document. This keeps useful structure while limiting exposure.\n\n### Pitfalls\n\n- Assuming \"private chat\" means \"never stored\".\n- Using personal accounts for client work.\n- Forgetting that shared Projects and Artifacts may expose data to colleagues.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Data handling depends on account type, settings and terms; check Anthropic's current policies and your agreements.",
+            "Review training preferences, history, temporary chats, memory, connectors and export options.",
+            "Classify data before sharing; never paste restricted data such as passwords or payment details.",
+            "Minimise by anonymising, aggregating and excerpting; involve your data protection lead."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which item should never be pasted into a general AI chat?",
+              "options": [
+                "A password or API key",
+                "A public blog post",
+                "A general marketing question",
+                "A published press release"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Credentials are restricted data and should never be shared in chats."
+            },
+            {
+              "question": "A consultant needs AI help with client contracts. What is the best practice?",
+              "options": [
+                "Avoid reading the contracts",
+                "Post the contracts publicly first",
+                "Use her personal free account",
+                "Use the organisation's approved account, share only relevant excerpts and anonymise where possible"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Approved accounts plus minimisation protect client confidentiality."
+            },
+            {
+              "question": "Where can you reliably confirm how your Claude data is retained and used?",
+              "options": [
+                "A social media post",
+                "An old blog article",
+                "Anthropic's current privacy policy, terms, help centre and your organisation's agreement",
+                "Guessing from the interface"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Policies change; official, current sources and contracts are authoritative."
+            }
+          ],
+          "activity": "Open your Claude settings and review each data control listed in this lesson. Write a one-paragraph personal data policy for your own AI use."
+        },
+        {
+          "slug": "team-and-enterprise-rollout",
+          "title": "Team and enterprise usage: policies and rollout",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Why a policy comes before a rollout\n\nIndividuals can experiment freely with public information. Teams handling client work need shared rules, otherwise you end up with confidential data in personal accounts, inconsistent quality and nobody accountable for AI mistakes. A good AI usage policy is short, practical and updated regularly.\n\n### What Team and Enterprise plans typically add\n\nFeatures differ by plan and change over time, but commercial plans generally add:\n\n- **Central administration** and billing, member management\n- **Shared Projects** and collaboration features\n- **Admin controls** over features such as connectors and sharing\n- **Security features** such as single sign-on, and on higher tiers, additional controls like audit logs, role-based permissions and data retention settings\n- **Commercial data terms,** distinct from consumer terms\n\nConfirm current capabilities on Anthropic's official pages or with their sales team before promising anything internally.\n\n### A one-page AI usage policy template\n\n```text\nAI USAGE POLICY - [Organisation], version [x], owner [name], review every [3/6] months\n\n1. Approved tools: [Claude Team/Enterprise account]. Personal accounts not permitted for work data.\n2. Data rules: Public/Internal OK. Confidential only in approved workspace, minimised. Restricted (credentials, payment data, health data, IDs) never.\n3. Human accountability: The person who sends or publishes AI-assisted work is responsible for its accuracy.\n4. Verification: Facts, figures, names, citations and legal/financial claims must be checked against sources.\n5. Disclosure: Follow client contracts, platform rules and advertising disclosure law. Disclose AI use where required.\n6. Prohibited: Fake reviews/testimonials, impersonation, deceptive content, bypassing safety measures, uploading client data to unapproved tools.\n7. Connectors & agents: Only admin-approved connectors. Human approval before any send/create/delete action.\n8. Incidents: Report data leaks or harmful outputs to [contact] within [x hours].\n9. Training: All staff complete [this course] before access.\n```\n\n### Rollout in four phases\n\n**Phase 1: Pilot (2 to 4 weeks).** Pick 5 to 10 enthusiastic users across roles. Define 3 to 5 use cases with measurable outcomes (e.g. time to first draft of a monthly report).\n\n**Phase 2: Playbooks.** Turn winning workflows into shared Projects with instructions, knowledge and prompt templates. Document \"how we use Claude for X\".\n\n**Phase 3: Scale.** Train everyone on the policy and core skills, assign champions per team, and hold short weekly show-and-tell sessions.\n\n**Phase 4: Govern and improve.** Review usage and quality regularly, update knowledge files, retire poor workflows, and revisit the policy as features and laws change.\n\n### Measuring value honestly\n\nTrack a few meaningful metrics, measured before and after: time spent on specific tasks, revision rounds, turnaround time, error rates found in QA, and staff satisfaction. Avoid vanity metrics such as \"number of prompts\". Use illustrative internal baselines rather than borrowed industry claims.\n\n### Worked example\n\nA 25-person agency serving clients in the UK and Gulf pilots Claude with account managers and content writers. They build a shared Project per major client, a reporting Project with a standard monthly report structure, and a policy requiring disclosure checks on all sponsored content. After the pilot they find first drafts of monthly reports are faster, and they add a QA checklist after one report included an unverified figure. The incident is logged, the checklist updated, and the rule \"every number links to a source cell\" added to project instructions.\n\n### Common rollout questions and answers\n\n- **\"Can I use my own account for a quick client task?\"** No; use the approved workspace so data terms and admin controls apply.\n- **\"Do we have to tell clients we use AI?\"** Check contracts and local rules; when in doubt, be transparent about how you use it and how you protect their data.\n- **\"Who fixes a wrong fact in a shared Project?\"** The Project owner named in your playbook, within an agreed timeframe.\n\n### Client considerations\n\nSome client contracts restrict AI use or require notification. Check agreements, and be ready to explain how you protect client data. Transparency builds trust.\n\n### Pitfalls\n\n- Buying licences without training or a policy.\n- A policy so long nobody reads it.\n- No named owner for updates and incidents.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Write a short, practical AI policy before rolling Claude out across a team.",
+            "Commercial plans add administration, shared Projects, security controls and commercial data terms; confirm current details.",
+            "Roll out in phases: pilot, playbooks, scale, govern and improve.",
+            "Measure real outcomes such as time saved and error rates, and review client contracts for AI clauses."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which rule belongs in a team AI policy?",
+              "options": [
+                "The person who publishes AI-assisted work is accountable for its accuracy",
+                "Passwords may be shared if convenient",
+                "Use any tool you like with client data",
+                "AI outputs never need checking"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Human accountability is a core principle of responsible AI use."
+            },
+            {
+              "question": "What is the best first phase of a Claude rollout?",
+              "options": [
+                "Buy licences for everyone and hope",
+                "Let each person pick their own tool",
+                "Ban AI entirely",
+                "A short pilot with a few users and defined, measurable use cases"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Pilots reveal what works before scaling."
+            },
+            {
+              "question": "Which metric best shows real value from AI adoption?",
+              "options": [
+                "Length of AI responses",
+                "Time to first draft of a standard report, before vs after",
+                "Number of prompts sent",
+                "Number of emojis used"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Outcome metrics tied to real tasks show genuine impact."
+            }
+          ],
+          "activity": "Adapt the one-page policy template for your team or business. Identify one pilot use case with a before/after metric."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 25,
+    "timeLimitMinutes": 40,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "claude-001",
+        "module": "claude-foundations",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "A creator wants 30 quick caption variations for a giveaway post. Which Claude model tier is the sensible starting point?",
+        "options": [
+          "The most capable tier with extended thinking",
+          "A balanced or fast tier",
+          "No model; captions can't be AI-assisted",
+          "Whichever is most expensive"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Simple, low-stakes, high-variation writing suits a balanced or fast tier. The most capable tier with deep thinking adds cost and delay without benefit."
+      },
+      {
+        "id": "claude-002",
+        "module": "claude-foundations",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A manager must analyse a complex partnership proposal with financial trade-offs before a board meeting. The fast tier's answer was shallow even after the prompt was improved. What is the best next step?",
+        "options": [
+          "Ask the fast tier the same thing 10 times",
+          "Accept the shallow answer",
+          "Try the most capable tier, possibly with deeper thinking, and compare",
+          "Remove the financial details"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "After improving the prompt, moving up a tier (and adding thinking for multi-step reasoning) is the right lever for high-stakes, complex analysis."
+      },
+      {
+        "id": "claude-003",
+        "module": "claude-foundations",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which prompt element tells Claude who the output is for?",
+        "options": [
+          "Context (including audience)",
+          "Model selector",
+          "File name",
+          "Format"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Context covers who you are, who the audience is and the background; audience strongly shapes tone and content."
+      },
+      {
+        "id": "claude-004",
+        "module": "claude-foundations",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "You paste a brief, brand guidelines and a transcript in one message and Claude confuses details between them. Which change most directly helps?",
+        "options": [
+          "Remove the brief",
+          "Add more exclamation marks",
+          "Wrap each item in clearly labelled tags such as <brief> and <transcript>",
+          "Use a faster model"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Labelled sections help Claude distinguish sources; model speed and removing content don't address the confusion."
+      },
+      {
+        "id": "claude-005",
+        "module": "claude-foundations",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which statements about Claude's context are accurate? (Choose all that apply.)",
+        "options": [
+          "Very long, meandering chats can reduce focus, so a fresh chat with a summary can help",
+          "Claude can access today's news without any search tool or supplied source",
+          "Claude works with what is in its training plus what is in the current context",
+          "Claude automatically knows the content of all your other chats in every case"
+        ],
+        "correct": [
+          0,
+          2
+        ],
+        "explanation": "Claude relies on training plus the current context. It does not automatically see all other chats (unless a memory or project feature supplies context), and it needs search or sources for current news."
+      },
+      {
+        "id": "claude-006",
+        "module": "claude-foundations",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A sales rep's prompt reads: 'Write a detailed, comprehensive follow-up in under 40 words that covers all 8 product features.' The output is poor. What is the core problem?",
+        "options": [
+          "The model is broken",
+          "The prompt lacks emojis",
+          "The constraints contradict each other",
+          "The rep should use a different device"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Detailed coverage of 8 features cannot fit in 40 words; contradictory constraints force poor compromises."
+      },
+      {
+        "id": "claude-007",
+        "module": "claude-foundations",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does adding 'Ask me up to 3 questions if anything important is missing' to a prompt do?",
+        "options": [
+          "Invites Claude to close information gaps instead of guessing",
+          "Changes the model tier",
+          "Turns on web search",
+          "Slows Claude down for no reason"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "It encourages clarifying questions, which reduces assumptions and improves relevance."
+      },
+      {
+        "id": "claude-008",
+        "module": "documents-vision-and-research",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "When analysing a long contract, what should you ask Claude to include so you can verify its answers quickly?",
+        "options": [
+          "A shorter answer only",
+          "Exact quotes and section references",
+          "A poem summary",
+          "More adjectives"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Quotes and references let you check each claim against the source in seconds."
+      },
+      {
+        "id": "claude-009",
+        "module": "documents-vision-and-research",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "An agency wants every deliverable and deadline from a statement of work. Which output format is most useful?",
+        "options": [
+          "A narrative essay",
+          "A single sentence",
+          "A table: Deliverable | Deadline | Owner | Section, with ambiguous items flagged",
+          "A list of emojis"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "A structured table with references and flags is usable and verifiable."
+      },
+      {
+        "id": "claude-010",
+        "module": "documents-vision-and-research",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "You share a screenshot of an analytics dashboard. Which prompt sequence is most reliable?",
+        "options": [
+          "Ask Claude to describe what it sees (including numbers), then answer your question, then flag uncertainties",
+          "Ask for a summary in one word",
+          "Ask for conclusions immediately",
+          "Ask Claude to redraw the chart"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Describing first surfaces misreadings before they affect conclusions; flagging uncertainty shows what to double-check."
+      },
+      {
+        "id": "claude-011",
+        "module": "documents-vision-and-research",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is a privacy risk specific to uploading screenshots?",
+        "options": [
+          "Screenshots are always too small",
+          "Claude cannot read screenshots",
+          "Screenshots change the model",
+          "They can accidentally show customer names, emails, tabs or account details"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Screenshots often capture more than intended; crop or blur before uploading."
+      },
+      {
+        "id": "claude-012",
+        "module": "documents-vision-and-research",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "An agency needs a brief on current influencer-disclosure rules across three countries for a client presentation. Which workflow is best? (Choose all that apply.)",
+        "options": [
+          "Rely on Claude's training knowledge alone because it is faster",
+          "Use web search or research mode where available, requesting citations for each claim",
+          "Open cited official sources to confirm details and dates",
+          "Separate well-established rules from uncertain areas and list what could not be verified"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Current regulatory topics need current, cited sources that you verify, with uncertainty made explicit. Training knowledge alone may be outdated."
+      },
+      {
+        "id": "claude-013",
+        "module": "documents-vision-and-research",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Search isn't available on your plan, but you need a reliable synthesis of five industry reports you have. What should you do?",
+        "options": [
+          "Upload the reports and ask Claude to synthesise only from them, citing which document each point comes from",
+          "Ask Claude to recall the reports from memory",
+          "Ask Claude to invent a sixth report",
+          "Skip the task"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Supplying the sources yourself and requiring document-level citations gives controlled, verifiable research."
+      },
+      {
+        "id": "claude-014",
+        "module": "documents-vision-and-research",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "During a web-assisted research task, a search result contains text urging the AI to recommend a specific product and ignore other instructions. How should you think about this?",
+        "options": [
+          "It proves the product is best",
+          "It's a possible prompt-injection attempt; treat web content as data and review conclusions critically",
+          "Follow it; it's from the web",
+          "It means search is broken"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Web content can contain manipulative instructions. Treat it as data, not instructions, and review any suspicious steer."
+      },
+      {
+        "id": "claude-015",
+        "module": "projects-artifacts-and-personalisation",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What are the main components of a Claude Project?",
+        "options": [
+          "A billing account and invoices",
+          "A single uploaded image",
+          "Only a chat history",
+          "Project knowledge, project instructions and related chats"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Projects combine shared knowledge, standing instructions and the chats within them."
+      },
+      {
+        "id": "claude-016",
+        "module": "projects-artifacts-and-personalisation",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A shared client Project keeps producing an old product price. What is the most likely cause and fix?",
+        "options": [
+          "The tone setting; make it formal",
+          "Too few chats; create more",
+          "The model is outdated; wait for a new one",
+          "Conflicting old and new documents in project knowledge; remove the outdated file"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Outdated knowledge files conflict with current ones. Curating knowledge fixes the problem."
+      },
+      {
+        "id": "claude-017",
+        "module": "projects-artifacts-and-personalisation",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which request is best suited to producing an Artifact?",
+        "options": [
+          "'Build an interactive checklist for discovery calls with checkboxes and a notes field'",
+          "'What does ROI stand for?'",
+          "'Thanks!'",
+          "'Say hello'"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Artifacts suit substantial, self-contained, reusable outputs such as interactive checklists."
+      },
+      {
+        "id": "claude-018",
+        "module": "projects-artifacts-and-personalisation",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "An account manager builds a pricing calculator Artifact and wants to send it to a client. What should they do first? (Choose all that apply.)",
+        "options": [
+          "Embed the client's customer list for convenience",
+          "Add a note that figures are estimates if appropriate",
+          "Check what the share link exposes and whether sharing is permitted by the organisation",
+          "Test it with known values and edge cases such as zero and very large inputs"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Testing, checking sharing settings and clarifying estimates are good practice. Embedding customer data is unnecessary and risky."
+      },
+      {
+        "id": "claude-019",
+        "module": "projects-artifacts-and-personalisation",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Where should a rule like 'always use British spelling in every chat' go?",
+        "options": [
+          "The file names of uploads",
+          "Each Artifact",
+          "A single chat only",
+          "Profile or personal preferences"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Account-wide preferences are designed for rules that apply everywhere."
+      },
+      {
+        "id": "claude-020",
+        "module": "projects-artifacts-and-personalisation",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A creator wants drafts that sound like her own writing. What is the best approach where custom styles are available?",
+        "options": [
+          "Use a competitor's posts as samples",
+          "Create a custom style from 3 to 5 representative samples of her best writing and test it",
+          "Turn on extended thinking",
+          "Describe herself in one word"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Representative samples of her own writing let the style capture her voice; testing refines it."
+      },
+      {
+        "id": "claude-021",
+        "module": "projects-artifacts-and-personalisation",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "You're discussing a sensitive personal matter and don't want it saved to history or memory. What should you use, where available?",
+        "options": [
+          "A public Artifact",
+          "An incognito or temporary chat, and check memory settings",
+          "Your profile preferences",
+          "A shared team Project"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Temporary or incognito chats (where offered) and memory controls are designed for this."
+      },
+      {
+        "id": "claude-022",
+        "module": "thinking-and-writing-workflows",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the main trade-off of turning on extended thinking?",
+        "options": [
+          "It removes all errors",
+          "It disables file uploads",
+          "Faster answers but lower quality",
+          "Better answers on hard problems in exchange for slower responses and more usage"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Thinking improves complex reasoning at the cost of time and usage; it does not guarantee correctness."
+      },
+      {
+        "id": "claude-023",
+        "module": "thinking-and-writing-workflows",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which task gains least from extended thinking?",
+        "options": [
+          "Planning a project with many dependencies",
+          "Evaluating three market-entry options with weighted criteria",
+          "Debugging a complex spreadsheet model",
+          "Converting a list of names to title case"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Simple formatting has no multi-step reasoning to improve; thinking just adds delay."
+      },
+      {
+        "id": "claude-024",
+        "module": "thinking-and-writing-workflows",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Claude recommends a pricing tier after deep thinking. Its reasoning summary assumes two revision rounds per deliverable, but your contracts allow unlimited revisions. What is the best response?",
+        "options": [
+          "Correct the assumption, rerun, and also consider capping revisions in contracts",
+          "Ignore the reasoning summary",
+          "Turn off thinking and ask again",
+          "Accept the recommendation"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Reasoning summaries reveal assumptions. Fixing a wrong assumption can change the recommendation and surface business actions."
+      },
+      {
+        "id": "claude-025",
+        "module": "thinking-and-writing-workflows",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which writing workflow stage asks Claude to review a draft as a specific reader and list weaknesses without rewriting?",
+        "options": [
+          "Adapt",
+          "Plan",
+          "Publish",
+          "Critique"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "The critique stage produces actionable feedback before any rewrite."
+      },
+      {
+        "id": "claude-026",
+        "module": "thinking-and-writing-workflows",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A founder wants a newsletter that sounds authentically like her. Which input produces the best draft?",
+        "options": [
+          "A list of trending hashtags",
+          "A competitor's newsletter",
+          "A one-line topic",
+          "Her voice-note transcript and notes, with instructions to keep her phrases and add no new claims"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Drafting from her own words preserves voice and reduces invented content."
+      },
+      {
+        "id": "claude-027",
+        "module": "thinking-and-writing-workflows",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "When Claude drafts marketing copy, it adds 'clinically proven' to a skincare claim. What should you do? (Choose all that apply.)",
+        "options": [
+          "Add a rule to your project instructions to flag unsubstantiated claims",
+          "Keep it because it improves conversions",
+          "Check whether you have evidence that substantiates the claim",
+          "Remove or soften the claim if it can't be substantiated"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Advertising rules in many markets require substantiation. Remove unsupported claims and prevent recurrence with instructions."
+      },
+      {
+        "id": "claude-028",
+        "module": "thinking-and-writing-workflows",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "You need one approved article repurposed into a LinkedIn post, three short posts and a video script without factual drift. Which instruction matters most?",
+        "options": [
+          "'Make it viral'",
+          "'Use lots of emojis'",
+          "'Keep facts identical to the approved article; don't add new claims'",
+          "'Make each piece contradict the others for variety'"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Repurposing risks drift; an explicit 'facts identical, no new claims' instruction protects accuracy."
+      },
+      {
+        "id": "claude-029",
+        "module": "code-connectors-and-api",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is Claude Code?",
+        "options": [
+          "A billing code",
+          "Anthropic's agentic coding tool that works directly with codebases under permission controls",
+          "A secret prompt",
+          "An image generator"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Claude Code reads, edits and tests code in a codebase, with actions governed by permissions and approvals."
+      },
+      {
+        "id": "claude-030",
+        "module": "code-connectors-and-api",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A non-developer receives a Claude-written script to clean a customer CSV. What is the safest next step?",
+        "options": [
+          "Run it on the live file",
+          "Share it publicly",
+          "Run it on a copy or small sample and check the results before using real data",
+          "Delete the original file first"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Testing on a copy protects real data from mistakes."
+      },
+      {
+        "id": "claude-031",
+        "module": "code-connectors-and-api",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the Model Context Protocol (MCP)?",
+        "options": [
+          "A file compression format",
+          "An open standard for connecting AI applications to external tools and data",
+          "A prompt-writing framework",
+          "A Claude subscription tier"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "MCP is an open protocol; tools expose MCP servers that AI apps (clients) can connect to."
+      },
+      {
+        "id": "claude-032",
+        "module": "code-connectors-and-api",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which connector practices reduce risk? (Choose all that apply.)",
+        "options": [
+          "Connect only the tools you need, with the narrowest permissions",
+          "Enable every available connector just in case",
+          "Require review before Claude sends, creates or deletes anything",
+          "Use official or vetted connectors"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Least privilege, vetted sources and human approval for write actions reduce risk. Enabling everything expands exposure."
+      },
+      {
+        "id": "claude-033",
+        "module": "code-connectors-and-api",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "In the Claude API, what is the role of the system prompt?",
+        "options": [
+          "To store API keys",
+          "To set Claude's role, rules and context for the interaction",
+          "To select payment currency",
+          "To compress files"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "The system prompt provides standing instructions for the application's use of Claude."
+      },
+      {
+        "id": "claude-034",
+        "module": "code-connectors-and-api",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A support app built on the API needs to check live order status. How does tool use work conceptually?",
+        "options": [
+          "The app describes a tool; Claude returns a structured request to use it; the app runs it and returns the result; Claude continues",
+          "Claude logs into the database directly with an admin password",
+          "Claude guesses order status from training data",
+          "Tools only work for images"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "For application-defined tools, Claude requests a tool call and the application executes it and returns the result."
+      },
+      {
+        "id": "claude-035",
+        "module": "code-connectors-and-api",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "A team plans an AI email-drafting system via the API. Which pre-launch steps are most important? (Choose all that apply.)",
+        "options": [
+          "Build a test set of real past emails with expected outcomes",
+          "Choose model tiers per task based on complexity and volume",
+          "Store the API key in the browser code for easy access",
+          "Define guardrails and human hand-off for sensitive cases"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Evaluation sets, guardrails and sensible model choice are essential. API keys must be stored securely server-side, never in browser code."
+      },
+      {
+        "id": "claude-036",
+        "module": "safety-privacy-and-teams",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is a hallucination in AI?",
+        "options": [
+          "A refusal to answer",
+          "A slow response",
+          "A formatting error",
+          "A plausible but false or unsupported statement"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Hallucinations are confident-sounding errors such as invented facts or citations."
+      },
+      {
+        "id": "claude-037",
+        "module": "safety-privacy-and-teams",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which task requires the highest level of verification?",
+        "options": [
+          "Drafting internal meeting agenda topics",
+          "Summarising a contract clause that affects client payments",
+          "Brainstorming post ideas",
+          "Choosing an emoji"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Financial and legal content is high-stakes: check against sources and involve experts as needed."
+      },
+      {
+        "id": "claude-038",
+        "module": "safety-privacy-and-teams",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which of these should never be pasted into a general AI chat?",
+        "options": [
+          "A published blog post",
+          "Passwords, API keys or payment card data",
+          "A public press release",
+          "A generic marketing question"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Credentials and payment data are restricted and must not be shared."
+      },
+      {
+        "id": "claude-039",
+        "module": "safety-privacy-and-teams",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A recruiter wants Claude to compare 40 CVs. Which approach best respects privacy?",
+        "options": [
+          "Use the approved work account, remove unnecessary personal details, compare only against job criteria and keep humans deciding",
+          "Ask Claude to find candidates' social media profiles",
+          "Post CVs publicly for crowd feedback",
+          "Use a personal account and paste everything"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Approved accounts, minimisation and human decision-making respect privacy and fairness."
+      },
+      {
+        "id": "claude-040",
+        "module": "safety-privacy-and-teams",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which elements belong in a practical team AI usage policy? (Choose all that apply.)",
+        "options": [
+          "Human accountability for anything published",
+          "An incident reporting process",
+          "Approved tools and data classification rules",
+          "Permission to generate customer testimonials when real ones are scarce"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Policies should define tools, data rules, accountability and incident handling. Fabricated testimonials are deceptive and prohibited."
+      },
+      {
+        "id": "claude-041",
+        "module": "safety-privacy-and-teams",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Your company is about to roll out Claude to 60 staff. What is the most effective sequence?",
+        "options": [
+          "Pilot with a small group and defined use cases, build playbooks, train and scale, then govern and improve",
+          "Ban AI until regulation is final",
+          "Let each department choose different tools freely",
+          "Buy licences, then write a policy later if problems arise"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "A phased rollout reduces risk and turns early wins into shared playbooks."
+      },
+      {
+        "id": "claude-042",
+        "module": "safety-privacy-and-teams",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Where should a team confirm how Claude handles and retains their data?",
+        "options": [
+          "A competitor's website",
+          "Anthropic's current privacy policy, terms and help centre, plus the organisation's commercial agreement",
+          "A popular video from two years ago",
+          "Guessing from the chat interface"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Data terms differ by plan and change; official, current documents and contracts are authoritative."
+      }
+    ]
+  }
+}

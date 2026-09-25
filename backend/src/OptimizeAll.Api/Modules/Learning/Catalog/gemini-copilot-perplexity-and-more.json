@@ -1,0 +1,1653 @@
+{
+  "slug": "gemini-copilot-perplexity-and-more",
+  "version": 1,
+  "title": "Gemini, Microsoft Copilot, Perplexity & the AI Tool Landscape",
+  "subtitle": "Compare the major AI tools, choose the right one for each task, and build a personal AI stack that is fast, affordable and safe",
+  "category": "ai",
+  "level": "intermediate",
+  "estimatedMinutes": 240,
+  "description": "There is no single \"best\" AI tool. Professionals who get the most from AI know which tool fits which job, and why. This intermediate course maps the landscape beyond a single assistant: **Google Gemini** and its Workspace integration, long context and multimodal skills; **Microsoft Copilot** inside Microsoft 365 and the governance it demands; **Perplexity** as a cited answer engine for research; **open-weight models** and running AI locally; image generators; and voice and video tools such as ElevenLabs and HeyGen.\n\nYou will learn a repeatable method for comparing outputs side by side, weigh cost, privacy and lock-in trade-offs, and finish by designing your own personal AI stack. The course is vendor-neutral and focuses on durable concepts, with clear notes wherever features vary by plan or region.",
+  "outcomes": [
+    "Map AI tools into categories and explain what each category is best at",
+    "Use Gemini with Google Workspace and its long-context, multimodal capabilities for real tasks",
+    "Explain how Microsoft 365 Copilot uses work data and the permissions governance it requires",
+    "Run cited research in Perplexity and verify sources systematically",
+    "Explain open-weight models and the trade-offs of running AI locally",
+    "Choose image, voice and video tools responsibly, with consent and disclosure",
+    "Compare tools with a fair test and design a personal AI stack balancing cost, privacy and quality"
+  ],
+  "skills": [
+    "AI tool selection",
+    "Google Gemini",
+    "Microsoft Copilot",
+    "Perplexity",
+    "Open-weight models",
+    "Generative media",
+    "AI governance"
+  ],
+  "prerequisites": [],
+  "badge": {
+    "name": "Certified Multi-Tool AI Strategist",
+    "description": "The holder can navigate the AI tool landscape with confidence: using Gemini, Microsoft Copilot and Perplexity effectively, understanding open-weight and local models, selecting image, voice and video tools responsibly, running fair side-by-side comparisons, and designing a personal or team AI stack that balances quality, cost, privacy and compliance.",
+    "criteria": "Completed all lessons and scored at least 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "ai-landscape-map",
+      "title": "The AI tool landscape",
+      "summary": "Map AI tools into durable categories and learn a fast, fair way to evaluate any tool on your own tasks.",
+      "lessons": [
+        {
+          "slug": "mapping-the-ai-tool-landscape",
+          "title": "Mapping the AI tool landscape",
+          "type": "video",
+          "durationMinutes": 11,
+          "body": "### Why a map beats a leaderboard\n\nEvery few weeks a new model tops a benchmark or a new app goes viral. Chasing each one wastes time. A better approach is a **map**: categories of tools, what each category is good at, and which tool in each category fits your work. Individual products change quickly; the categories are far more stable.\n\n### The seven categories\n\n**1. General-purpose assistants.** Chat-based assistants such as Claude, ChatGPT, Gemini and Microsoft Copilot. They write, analyse, reason, code, read files and images, and increasingly search the web and take actions. Most professionals need one primary assistant and benefit from access to a second for comparison.\n\n**2. Embedded work copilots.** AI built into the tools you already use: Gemini inside Google Workspace, Microsoft 365 Copilot inside Word, Excel, Outlook and Teams, and AI features inside CRMs, design tools and project managers. Their superpower is **context**: they can work with your emails, files and meetings (within your permissions) without copy-pasting.\n\n**3. Answer and research engines.** Tools such as Perplexity that are designed around search: every answer comes with citations, and follow-up questions refine the research. Many general assistants now include search and deep research modes too, so the line is blurring.\n\n**4. Open-weight and local models.** Model families whose weights are published for download, such as Llama, Mistral, Qwen, DeepSeek and Gemma. They can be run on your own hardware or private cloud, which offers control and privacy, at the cost of setup effort and usually some capability compared with the very best hosted models.\n\n**5. Image generators.** Tools such as Midjourney, Google's Imagen, OpenAI's image generation and Adobe Firefly. They create and edit images from text and reference images.\n\n**6. Voice and video tools.** Text-to-speech, voice cloning, dubbing and avatar video tools such as ElevenLabs and HeyGen, plus video generation models.\n\n**7. Automation and agent platforms.** Tools that connect AI to workflows: automation platforms, agent builders and developer frameworks, often using standards such as the Model Context Protocol (MCP) to connect to other software.\n\n### How the categories overlap\n\nAssistants increasingly bundle search, image generation, voice and agents. That's convenient, but a bundled feature isn't always the strongest option for a specialised need. A creator producing weekly dubbed videos may still prefer a dedicated voice tool; a researcher may still prefer an answer engine's citation-first design. The map helps you notice when a specialist is worth it.\n\n### Worked example: one campaign, many tools\n\nA small agency in Dubai plans a product launch for a skincare client:\n\n- **Research:** an answer engine to gather cited information on the market and advertising rules, verified by a team member.\n- **Strategy and copy:** a general assistant to draft the strategy, captions and scripts from the brief.\n- **Team documents:** the embedded copilot in their office suite to summarise client email threads and meeting notes.\n- **Visuals:** an image tool for concept boards; real product photography for ads.\n- **Voice-over:** a voice tool to produce Arabic and English narration from approved scripts, using a licensed stock voice.\n- **Governance:** everything client-confidential stays inside tools covered by the agency's business agreements.\n\nNobody needed \"the best AI\". They needed the right tool per step.\n\n### Sample output: your first map\n\nA useful personal map is a simple table: Category | Tool I use | What I use it for | Plan/account | Data allowed. For example: \"General assistant | [Tool] | drafting, analysis | Business plan | internal and confidential (minimised)\". If a row is blank, you've found either a gap or a category you don't need.\n\n### Pitfalls\n\n- Switching tools every week and never building skill in any.\n- Paying for five overlapping subscriptions.\n- Using a consumer app for client data because it was the quickest to open.\n- Assuming a tool's bundled feature is best-in-class.\n\n### Availability note\n\nFeatures, model names, prices and regional availability change frequently. This course names products to make examples concrete, but always confirm current capabilities in each vendor's official help centre.\n",
+          "video": {
+            "script": "Every week there's a new AI tool claiming to be the best. Here's the secret professionals use: stop chasing leaderboards and start using a map. Think in seven categories. First, general assistants like Claude, ChatGPT, Gemini and Copilot: your all-rounders for writing, analysis and reasoning. Second, embedded copilots: AI inside the tools you already use, like your email, documents and spreadsheets. Their superpower is context. Third, answer engines like Perplexity, built around search with citations. Fourth, open-weight models like Llama, Mistral and Qwen, which you can run on your own hardware for more control. Fifth, image generators. Sixth, voice and video tools like ElevenLabs and HeyGen. And seventh, automation and agent platforms that connect AI to your workflows. Now, the categories overlap. Many assistants bundle search, images and voice. That's convenient, but for heavy, specialised work, a dedicated tool can still be worth it. Here's your exercise. Draw a simple table: category, the tool you use, what you use it for, which plan you're on, and what data you're allowed to put into it. That last column is the one most people forget, and it's the one that keeps you and your clients safe. Products change fast. Categories don't. Learn the map, and every new tool becomes easy to place.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Think in categories: assistants, embedded copilots, answer engines, open-weight models, image, voice/video, and automation.",
+            "Embedded copilots win on context; answer engines on citations; open-weight models on control.",
+            "Bundled features are convenient, but specialists can be worth it for heavy, specific needs.",
+            "Map your tools by use, plan and allowed data to find gaps and overlaps."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the main advantage of embedded work copilots such as AI inside your office suite?",
+              "options": [
+                "They generate the best images",
+                "They run without internet",
+                "They can use your work context, such as emails and files, within your permissions",
+                "They are always free"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Embedded copilots work with your existing documents and communications without copy-pasting."
+            },
+            {
+              "question": "Which category best describes model families like Llama, Mistral and Qwen?",
+              "options": [
+                "Voice tools",
+                "Embedded copilots",
+                "Open-weight models",
+                "Answer engines"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Their weights are published for download and can be run on your own infrastructure, subject to licence terms."
+            }
+          ],
+          "activity": "Create your personal AI map table with the seven categories. Fill in the tools you use today, what for, the plan, and what data is allowed."
+        },
+        {
+          "slug": "how-to-evaluate-an-ai-tool",
+          "title": "How to evaluate any AI tool in 30 minutes",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### The problem with hype\n\nDemos show a tool at its best, on tasks chosen by the vendor. You need to know how it performs on **your** tasks, with **your** data rules, at **your** budget. A short, structured evaluation beats weeks of casual poking.\n\n### The eight evaluation criteria\n\n1. **Task fit:** does it do the job you need, not just impressive adjacent jobs?\n2. **Output quality:** accuracy, relevance, tone, structure, on your real examples.\n3. **Grounding and citations:** can it show where information comes from?\n4. **Context and integration:** does it connect to where your work lives (documents, email, CRM), and can it handle your file sizes?\n5. **Privacy and data terms:** is your data used for training? What retention and admin controls exist? Is there a business agreement?\n6. **Cost:** subscription or usage price, limits, and cost per useful output.\n7. **Reliability and support:** uptime, usage caps at busy times, help resources.\n8. **Lock-in and portability:** can you export your prompts, files and outputs if you leave?\n\n### The 30-minute evaluation sprint\n\n**Minutes 0 to 5: Define three test tasks** from real work, ideally one easy, one typical and one hard. For a marketer: rewrite a product description; summarise a 20-page report; build a campaign plan with budget constraints.\n\n**Minutes 5 to 20: Run the same prompts** in the tool you're evaluating and in your current tool. Use identical wording and the same attached materials (non-confidential).\n\n```text\n[Paste identical prompt]\nContext: [same]\nMaterials: [same attachments]\nOutput format: [same]\n```\n\n**Minutes 20 to 25: Score blind if possible.** Paste outputs into a document labelled A and B without tool names, and score each 1 to 5 on accuracy, usefulness and effort-to-fix.\n\n**Minutes 25 to 30: Check the non-output criteria.** Read the vendor's privacy page and plan comparison. Note limits and price.\n\n### A simple scorecard\n\n| Criterion | Tool A | Tool B | Notes |\n|---|---|---|---|\n| Task 1 quality (1-5) | | | |\n| Task 2 quality (1-5) | | | |\n| Task 3 quality (1-5) | | | |\n| Citations/grounding | | | |\n| Integration fit | | | |\n| Data terms suitable for our data? | | | |\n| Monthly cost | | | |\n| Export/portability | | | |\n\n### Worked example\n\nA sales team lead in Riyadh evaluates whether to add an answer engine alongside the team's general assistant. Test tasks: research a prospect company's recent news, summarise an industry regulation change, and draft a call plan. Results: the answer engine is faster and better cited on the two research tasks; the assistant is better at the call plan. Decision: keep the assistant as primary, add the answer engine for a two-week trial with three reps, and review.\n\n### Sample judgement notes\n\nUseful notes are specific: \"Tool B's summary missed the exemption in section 4; Tool A caught it and quoted it.\" \"Tool A cited a 2023 article for a current fee; Tool B linked to the regulator's page.\" Specific notes make decisions defensible and help colleagues reproduce your test.\n\n### Fairness rules for comparisons\n\n- Same prompt, same materials, same time.\n- Test more than once for important decisions; outputs vary between runs.\n- Don't reward length; reward usefulness.\n- Include a task where the correct answer is \"I don't know\" to test honesty.\n- Re-evaluate periodically; tools change.\n\n### Pitfalls\n\n- Evaluating with a vendor's demo prompts rather than your tasks.\n- Ignoring data terms until after purchase.\n- Choosing on one lucky output.\n- Forgetting the human time needed to fix outputs, which is the real cost.\n\n### Privacy note\n\nEvaluation often tempts people to paste real client material \"just to test\". Use public or anonymised materials until the tool is approved for your data class.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Evaluate on your own tasks using eight criteria: fit, quality, grounding, integration, privacy, cost, reliability and portability.",
+            "Run identical prompts and materials across tools and score blind where possible.",
+            "Include an 'I don't know' test and repeat important tests; outputs vary.",
+            "Only use public or anonymised material until a tool is approved for your data."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the most important rule for a fair side-by-side comparison?",
+              "options": [
+                "Reward the longest output",
+                "Test only once",
+                "Use identical prompts and materials for each tool",
+                "Use each vendor's favourite demo prompt"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Identical inputs make differences attributable to the tools."
+            },
+            {
+              "question": "Why include a test where the correct answer is 'I don't know'?",
+              "options": [
+                "To confuse the tool",
+                "To see whether the tool admits uncertainty rather than inventing an answer",
+                "It isn't useful",
+                "To make the test shorter"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Honesty about uncertainty is a key quality signal."
+            },
+            {
+              "question": "Which cost is most often overlooked when comparing AI tools?",
+              "options": [
+                "The human time needed to check and fix outputs",
+                "Screen brightness",
+                "Keyboard wear",
+                "Electricity"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Effort-to-fix determines real productivity gains."
+            }
+          ],
+          "activity": "Run the 30-minute evaluation sprint comparing your current primary assistant with one other tool on three real, non-confidential tasks. Complete the scorecard."
+        }
+      ]
+    },
+    {
+      "slug": "google-gemini",
+      "title": "Google Gemini",
+      "summary": "Use Gemini inside Google Workspace and exploit its long-context, multimodal and source-grounded capabilities.",
+      "lessons": [
+        {
+          "slug": "gemini-in-google-workspace",
+          "title": "Gemini in Google Workspace",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Two ways to use Gemini\n\nGoogle's Gemini is available as a standalone assistant (the Gemini app on web and mobile) and as AI built into **Google Workspace** apps such as Gmail, Docs, Sheets, Slides, Drive and Meet. Which features you get depends on whether you use a personal Google account or a Workspace account, your plan, your administrator's settings and your region. Google changes packaging and names regularly, so check the Google Workspace and Gemini help centres for current details.\n\n### What Workspace integration makes possible\n\nThe big advantage is **context without copy-paste**. Depending on your setup, Gemini can:\n\n- **Gmail:** summarise long threads, draft replies in context, and help find information across emails.\n- **Docs:** draft, rewrite and summarise documents; help create outlines and proposals from your notes.\n- **Sheets:** help build formulas, organise data, create tables and explain trends.\n- **Slides:** draft slide content and generate images for presentations.\n- **Drive:** answer questions across files you have access to, and summarise folders or documents.\n- **Meet:** help with note-taking and meeting summaries, where enabled.\n\nGemini works with content you already have access to; it doesn't grant access to files you couldn't otherwise open.\n\n### Workflow 1: Inbox to action\n\n```text\nSummarise this email thread. List:\n1. What the client is asking for\n2. Deadlines mentioned\n3. Open questions we haven't answered\nThen draft a reply that confirms the deadline, answers the open questions with [TBC] where I need to fill in details, and proposes a 15-minute call.\n```\n\nReview the draft, fill the [TBC] items, and send. You remain the sender and the one accountable.\n\n### Workflow 2: Drive-grounded brief\n\n```text\nUsing the files \"Q3 Campaign Report\" and \"Brand Guidelines 2026\" in my Drive, create a one-page brief for the Q4 campaign:\nobjective, audience, key messages, what worked in Q3 (with figures from the report), and mandatory brand rules.\nTell me which file each point comes from.\n```\n\nAsking which file each point comes from turns a black box into something you can check.\n\n### Workflow 3: Sheets analysis\n\n```text\nIn this sheet, column B is campaign name, C is spend, D is conversions.\nAdd a column for cost per conversion, then highlight the three campaigns with the lowest cost per conversion.\nExplain the formula you used.\n```\n\nThen spot-check two rows by hand.\n\n### Gems: reusable assistants\n\nGemini offers **Gems**, customised versions of Gemini with your instructions for a recurring task, similar in spirit to custom assistants in other tools. Example: a \"Client update writer\" Gem with your agency's structure and tone. Availability varies by plan.\n\n### Worked example\n\nAn account manager at a UK agency spends Monday mornings catching up on a weekend of client emails. With Gemini in Gmail, she summarises the five longest threads, drafts replies with [TBC] markers, and asks Gemini in Docs to turn the key points into the weekly status report using last week's report as a template. She checks every figure against the source sheet. Her Monday catch-up shrinks from a morning to under an hour, and the report is more consistent.\n\n### Sample output quality check\n\nA good thread summary names who asked what, lists dates exactly as written in the emails, and separates decisions from open questions. If a summary says \"the client agreed\" without quoting where, ask: \"Quote the sentence where the client agreed.\"\n\n### Admin and privacy considerations\n\nFor Workspace accounts, administrators control which Gemini features are enabled. Google publishes commitments about how Workspace data is handled with Gemini for business customers; read the current terms and your organisation's policy. For personal accounts, check activity and data settings in the Gemini app, including whether conversations are saved and reviewed.\n\n### Pitfalls\n\n- Letting AI send or reply on your behalf without review.\n- Assuming a summary captured every commitment in a long thread.\n- Using a personal Google account for client work.\n- Forgetting that shared Drive files may contain other people's confidential information.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Gemini is available as a standalone app and inside Google Workspace apps; features vary by account, plan, admin settings and region.",
+            "Workspace integration provides context without copy-paste, within your existing permissions.",
+            "Ask Gemini which file or email each point comes from, and use [TBC] markers for missing details.",
+            "Use Gems for recurring tasks and follow admin and data policies for work accounts."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the main advantage of using Gemini inside Google Workspace?",
+              "options": [
+                "It works without internet",
+                "It never makes mistakes",
+                "It can use context from your emails, documents and files that you have access to, without copy-pasting",
+                "It can open any file on the internet"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Workspace integration brings your work context to the AI within your permissions."
+            },
+            {
+              "question": "Why ask Gemini which file each point in a brief comes from?",
+              "options": [
+                "So you can verify each point against its source",
+                "It's required by Google",
+                "To make the brief longer",
+                "To reduce storage"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Source attribution makes checking fast and reliable."
+            },
+            {
+              "question": "Who controls which Gemini features are available in a company Workspace account?",
+              "options": [
+                "Anyone who emails you",
+                "No one",
+                "The organisation's Workspace administrators, within Google's offering",
+                "Each employee alone"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Admins manage feature availability for business accounts."
+            }
+          ],
+          "activity": "Pick one recurring Workspace task (an inbox catch-up, a status report or a sheet analysis). Run it with Gemini using the relevant workflow and note the time saved and what you had to correct."
+        },
+        {
+          "slug": "gemini-long-context-and-multimodal",
+          "title": "Gemini's long context and multimodal skills",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Long context in practice\n\nGemini models are known for very large **context windows**, meaning they can take in a great deal of material in one go: long reports, many documents, large codebases, lengthy transcripts, and in some cases audio and video. Exact limits depend on the model, the product (app vs API) and your plan, and they change over time.\n\nLong context changes what's practical:\n\n- Ask questions across a **whole folder** of reports rather than one at a time.\n- Analyse a **full-length transcript** of a webinar or podcast.\n- Compare **several versions** of a policy or contract.\n- Review a **long video** for key moments (where video input is supported).\n\n### Multimodal inputs\n\nGemini is designed to be **multimodal**: it can understand text, images, audio and video, depending on the product. Practical examples:\n\n- **Video:** \"Watch this product demo recording and list every feature shown, with timestamps.\"\n- **Audio:** \"Summarise this voice note from the client and list the action items.\"\n- **Images:** \"Compare these two packaging designs for shelf visibility and readability.\"\n- **Mixed:** \"Here's our pitch deck PDF and the recording of the client's feedback call. What objections did they raise and which slides address them?\"\n\n### A long-context prompt pattern\n\n```text\nI've provided [list of materials].\nTask: [question that requires looking across all materials].\nRules:\n- Cite the document name and section, or the timestamp for audio/video, for every point.\n- If materials disagree, show both versions.\n- If something isn't in the materials, say \"Not found in materials\".\nOutput: [table / bullet summary / brief].\n```\n\nTimestamps are especially valuable for video and audio: they let you jump to the moment and verify.\n\n### NotebookLM: a source-grounded companion\n\nGoogle also offers **NotebookLM**, a research and note-taking tool built on Gemini that works primarily from the sources you add (documents, websites, videos and more). It is designed to answer with references to your sources, and it can produce study guides and audio overviews. It's a strong choice when you want answers grounded in a defined set of materials, such as a course reading list or a client's document pack. Features vary; check Google's help pages.\n\n### Grounding with search and Deep Research\n\nThe Gemini app can use Google Search to ground answers in current information, and offers a **Deep Research** mode that runs multi-step research and produces a cited report, depending on plan and region. Apply the same verification discipline as with any research tool: open sources, check dates, triangulate.\n\n### Worked example\n\nA creator in Lahore records hour-long livestreams. She uploads a recording (where supported) and asks Gemini to identify the five most engaging segments with timestamps and suggest a title and hook for each as a short-form clip. She reviews the timestamps, cuts the clips in her editor, and uses the suggested hooks as first drafts. What used to take an evening of scrubbing through footage now takes much less time.\n\n### Sample output\n\nFor the livestream task, a good response returns a table: Timestamp range | What happens | Why it's engaging | Suggested hook. If timestamps are missing or vague (\"around the middle\"), ask for exact ranges and spot-check the first two.\n\n### Limits and cautions\n\n- **Long isn't the same as thorough.** Models can miss details in very long inputs. Ask targeted questions and check key facts.\n- **Upload limits vary.** Large videos or many files may hit product limits.\n- **Privacy:** recordings often include other people's voices and faces. Get consent where required and avoid uploading sensitive meetings to non-approved accounts.\n- **Rights:** only analyse content you have the right to use.\n\n### Going further\n\nDevelopers can access Gemini models through Google's AI developer platforms and cloud services, with features for long context, multimodal input and grounding. The same evaluation principles apply: test on your data, measure quality and cost.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Gemini's large context windows make it practical to analyse many documents, long transcripts and media in one go.",
+            "Multimodal input covers text, images, audio and video, depending on product and plan.",
+            "Ask for citations with document names or timestamps, and 'Not found in materials' when absent.",
+            "NotebookLM grounds answers in your chosen sources; verify Deep Research outputs like any research."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why ask for timestamps when analysing a video or audio recording?",
+              "options": [
+                "So you can jump to the moment and verify the claim",
+                "It is required to upload",
+                "To make the answer longer",
+                "Timestamps improve image quality"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Timestamps make verification fast and precise."
+            },
+            {
+              "question": "What is NotebookLM designed for?",
+              "options": [
+                "Research and notes grounded in the sources you add",
+                "Managing email",
+                "Editing spreadsheets only",
+                "Generating music"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "NotebookLM focuses on answering from a defined set of user-provided sources."
+            },
+            {
+              "question": "A long-context model summarises a 300-page report. What caution applies?",
+              "options": [
+                "Models can still miss details, so ask targeted questions and check key facts",
+                "You can't ask follow-ups",
+                "The summary is legally binding",
+                "Long context guarantees nothing is missed"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Large inputs don't guarantee thoroughness; verify what matters."
+            }
+          ],
+          "activity": "Choose a long recording or a set of 3+ documents you're allowed to use. Apply the long-context prompt pattern and verify three cited points using document sections or timestamps."
+        }
+      ]
+    },
+    {
+      "slug": "microsoft-copilot",
+      "title": "Microsoft Copilot",
+      "summary": "Use Microsoft 365 Copilot across Outlook, Teams, Word, Excel and PowerPoint, and govern work copilots through permissions.",
+      "lessons": [
+        {
+          "slug": "copilot-in-microsoft-365",
+          "title": "Microsoft Copilot in Microsoft 365",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### The Copilot family\n\n\"Copilot\" is Microsoft's brand for AI assistance across its products. For professionals, the key distinction is:\n\n- **Microsoft Copilot (consumer):** a general AI assistant for personal use, available in apps and on the web.\n- **Microsoft 365 Copilot (work):** AI built into Word, Excel, PowerPoint, Outlook, Teams and other Microsoft 365 apps for organisations, able to work with your work data such as emails, files, chats and meetings, within your permissions.\n- **Copilot Chat for work** and **agents**, including options to build custom agents with tools such as Copilot Studio.\n\nLicensing, names and included features change and differ between consumer, business and enterprise plans and by region. Check Microsoft's official documentation and your IT team for what you have.\n\n### What Microsoft 365 Copilot can do in each app\n\n- **Outlook:** summarise threads, draft replies, and help prepare for meetings based on related emails.\n- **Teams:** summarise meetings (where recording or transcription is enabled), list action items, and answer \"What did I miss?\" questions.\n- **Word:** draft from prompts and referenced files, rewrite sections, and summarise long documents.\n- **Excel:** help create formulas, analyse data, highlight trends and create charts.\n- **PowerPoint:** create draft presentations from a prompt or a document and summarise decks.\n- **Work chat:** ask questions across your work content, like \"What's the latest on the Al Noor account?\"\n\n### Workflow 1: Meeting to follow-up\n\nAfter a Teams meeting with transcription enabled:\n\n```text\nSummarise this meeting for people who missed it:\n- Decisions made\n- Action items with owners and due dates\n- Open questions\n- Risks raised\nThen draft a follow-up email to attendees with the action items as a table.\n```\n\nCheck owners and dates against your own understanding; transcripts can mishear names and numbers.\n\n### Workflow 2: Document-grounded proposal\n\n```text\nDraft a proposal for [client] using /[Past Proposal file] for structure and /[Case Study file] for proof points.\nKeep pricing as [TBC]. Use our standard terms section unchanged. Highlight anything you inferred rather than took from the files.\n```\n\nIn many Microsoft 365 apps, you can reference specific files in prompts; exact syntax varies by app.\n\n### Workflow 3: Excel analysis\n\n```text\nAnalyse this table of monthly sales by region. Show the top 3 regions by growth rate, create a chart of monthly trends,\nand explain any unusual months. Show the formulas used.\n```\n\n### Worked example\n\nA sales operations manager in Riyadh receives a 60-minute pipeline review recording and a 200-row Excel export. Copilot in Teams produces the summary and action items; Copilot in Excel identifies deals stuck in the same stage for more than 45 days. She drafts the follow-up email with Copilot in Outlook, adds context only she knows (a client's budget freeze), and sends it. The work that took half a day is done before lunch, and every number was checked against the source spreadsheet.\n\n### Sample output check\n\nA strong meeting summary names owners exactly as they appear in the attendee list, gives dates in a consistent format, and separates \"decided\" from \"discussed\". If it says \"the team agreed to increase budget\" but you remember it as a proposal, correct it before sending; summaries can over-state consensus.\n\n### Etiquette and consent\n\nTell participants when meetings are recorded or transcribed, follow your organisation's policy and local law, and be cautious with sensitive meetings (HR, legal, medical) where recording may be inappropriate.\n\n### Pitfalls\n\n- Sending AI-drafted emails without reading them.\n- Treating a meeting summary as the official record without review.\n- Expecting Copilot to know things that aren't in your accessible data.\n- Assuming the consumer Copilot app has the same data protections as your work account.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Distinguish consumer Copilot from Microsoft 365 Copilot, which works with your work data within your permissions.",
+            "Use Copilot across Outlook, Teams, Word, Excel and PowerPoint for summaries, drafts and analysis.",
+            "Check owners, dates and numbers in AI meeting summaries; they can mishear or overstate consensus.",
+            "Inform participants about recording and transcription and follow policy and law."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What most distinguishes Microsoft 365 Copilot from the consumer Copilot app?",
+              "options": [
+                "It only makes images",
+                "It works offline",
+                "It works inside Microsoft 365 apps with your organisation's work data, within your permissions",
+                "It has a different colour"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Microsoft 365 Copilot is grounded in work data and integrated into productivity apps."
+            },
+            {
+              "question": "A Copilot meeting summary lists an action owner you don't recognise. What should you do?",
+              "options": [
+                "Assign it to yourself",
+                "Delete the meeting",
+                "Send it anyway",
+                "Check against the attendee list and your notes; transcription may have misheard a name"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Verify names, owners and dates before distributing summaries."
+            },
+            {
+              "question": "What should happen before a meeting is recorded or transcribed?",
+              "options": [
+                "Participants should be informed, in line with policy and local law",
+                "It should be kept secret",
+                "Nothing",
+                "Only the host needs to know"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Transparency and legal compliance are required for recording."
+            }
+          ],
+          "activity": "Use Copilot (or your organisation's equivalent) on one real meeting or document workflow. Record what it got right, what you corrected, and the time saved."
+        },
+        {
+          "slug": "copilot-grounding-and-governance",
+          "title": "Grounding, permissions and governance for work copilots",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### How work copilots find information\n\nWork copilots such as Microsoft 365 Copilot (and similarly Gemini in Workspace) answer questions by **retrieving** relevant content from your organisation's data (emails, files, chats, calendars) and then generating a response grounded in what they found. In Microsoft's case, this retrieval draws on the organisation's Microsoft 365 data through its underlying services, and it respects existing access permissions: users should only get answers based on content they already have permission to see.\n\nThat design has a crucial implication.\n\n### The oversharing problem\n\nIf permissions in your organisation are too broad, a copilot can surface information people technically have access to but were never meant to see. For example:\n\n- A salary spreadsheet saved in a folder shared with \"Everyone\".\n- An HR investigation document in a team site with inherited permissions.\n- A client's confidential pricing in a widely shared channel.\n\nBefore AI, these files were hard to find. With AI, a simple question like \"What are the salary bands for managers?\" might find them. The AI hasn't broken security; it has exposed weak permissions.\n\n### A readiness checklist for organisations\n\n1. **Audit sharing:** identify sites, folders and files shared with everyone or with large groups, especially those containing sensitive data.\n2. **Apply sensitivity labels and data loss prevention** where available, so sensitive content is classified and protected.\n3. **Fix inherited permissions** on sensitive sites and archive stale content.\n4. **Pilot with a small group** and test prompts designed to find sensitive information (\"show me salary data\", \"contracts with termination clauses\") to see what surfaces.\n5. **Train users** on responsible prompting and what to do if they see something they shouldn't.\n6. **Monitor and review** usage with the admin and compliance tools available on your plan.\n\n### For individual users: responsible habits\n\n- If Copilot shows you something that looks confidential and outside your role, **stop, don't share it, and report it** to IT or your manager.\n- Don't use copilots to search for information about colleagues out of curiosity.\n- Remember that your prompts and results may be logged for compliance purposes in business environments.\n- Verify AI answers against the source documents it references.\n\n### Custom agents and extensions\n\nOrganisations can extend copilots with custom agents and connectors to other systems (for example, CRM or ticketing). Each extension widens what the AI can reach. Apply least privilege, test for data exposure, and require approval before agents take actions such as updating records or sending messages.\n\n### Worked example\n\nA 150-person company pilots Microsoft 365 Copilot. During testing, an IT admin asks \"What are the bonus amounts for this year?\" and Copilot surfaces a spreadsheet from a finance folder that had been shared with a large group years ago. The pilot pauses for two weeks while IT audits sharing on finance and HR sites, applies sensitivity labels, and removes broad access. When the rollout resumes, the same prompt returns nothing sensitive. The AI did the company a favour by revealing a long-standing problem.\n\n### Sample test prompts for a pilot\n\n```text\nShow me any documents about salaries, bonuses or compensation.\nSummarise any HR investigations or disciplinary cases.\nList contracts that mention termination or penalties.\nWhat are our client discount levels?\n```\n\nIf a pilot user without a legitimate need gets meaningful answers to these, permissions need work.\n\n### The same logic applies elsewhere\n\nGemini in Workspace, AI features in CRMs, and third-party tools connected via connectors or MCP all rely on the access you grant. Governance is not Microsoft-specific: it's a principle for every embedded AI.\n\n### Pitfalls\n\n- Rolling out work copilots without a permissions review.\n- Blaming the AI for exposing data that was already overshared.\n- Adding connectors to many systems without assessing what they expose.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Work copilots retrieve content from organisational data and respect existing permissions.",
+            "Overly broad permissions become visible when AI makes content easy to find: the oversharing problem.",
+            "Audit sharing, apply labels and data loss prevention, pilot with sensitive test prompts, and train users.",
+            "Every connector or agent widens reach; apply least privilege and approvals."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A copilot surfaces a salary spreadsheet to a junior employee. What is the most likely root cause?",
+              "options": [
+                "The AI hacked the file",
+                "Salaries are public by law",
+                "The file was shared too broadly, and the AI respected those permissions",
+                "The employee used a special password"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Copilots respect permissions; broad sharing is the underlying issue."
+            },
+            {
+              "question": "Which is a sound step before a company-wide copilot rollout?",
+              "options": [
+                "Give everyone admin rights",
+                "Audit sharing on sensitive sites and test prompts designed to find sensitive data",
+                "Skip testing",
+                "Disable all permissions"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Permission audits and sensitive-data test prompts reveal exposure before rollout."
+            },
+            {
+              "question": "You see confidential HR information in a copilot answer that isn't relevant to your role. What should you do?",
+              "options": [
+                "Ask for more details",
+                "Save it for later",
+                "Share it with colleagues",
+                "Stop, don't share it, and report it to IT or your manager"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Responsible reporting helps fix the permission problem."
+            }
+          ],
+          "activity": "List three types of sensitive information in your organisation. For each, write a test prompt a pilot should try and describe who should and shouldn't be able to see results."
+        }
+      ]
+    },
+    {
+      "slug": "perplexity-and-research",
+      "title": "Perplexity and research engines",
+      "summary": "Use cited answer engines like Perplexity for fast research, and run a repeatable workflow from question to verified brief.",
+      "lessons": [
+        {
+          "slug": "perplexity-cited-answer-engine",
+          "title": "Perplexity: the cited answer engine",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### What makes Perplexity different\n\n**Perplexity** is built around search. Ask a question and it searches the web, reads relevant pages, and writes an answer with **numbered citations** linking to its sources. You can ask follow-up questions that build on the thread. It sits between a traditional search engine (a list of links) and a general assistant (a written answer), with sources front and centre.\n\nPerplexity offers free and paid tiers. Paid tiers typically add more advanced search modes, deeper research features, file uploads, and the option to choose between different underlying AI models. Feature names and inclusions change; check Perplexity's official help centre.\n\n### When an answer engine is the right tool\n\n- **Fact-finding with sources:** \"What are the current requirements for [topic] in [country]?\"\n- **Quick market and competitor scans:** \"What products has [company] launched this year?\"\n- **Explaining news:** \"What happened with [event], and what are the different perspectives?\"\n- **Finding primary sources:** \"Link me to the official guidance on [topic].\"\n- **Pre-meeting research:** \"Summarise public information about [company] relevant to a partnership conversation.\"\n\nFor writing long drafts, complex reasoning over your own files, or building tools, a general assistant is often a better fit.\n\n### Asking better questions\n\nAnswer engines respond to specificity:\n\n| Weak | Strong |\n|---|---|\n| influencer rules | Current UK advertising regulator guidance on labelling paid influencer posts, with links to official pages |\n| best CRM | CRMs suitable for a 10-person agency in the UAE with WhatsApp integration and Arabic support; compare pricing models |\n| AI news | Major announcements about AI regulation in Saudi Arabia in the last 6 months, with official sources |\n\n### Reading citations properly\n\nCitations make verification easier, but they don't make answers automatically correct. Common issues:\n\n- The cited page says something **slightly different** from the summary.\n- The source is **outdated** or secondary.\n- One claim has **no citation** at all.\n- A citation points to a **low-quality** site.\n\nA quick habit: hover over or open the citations for the two or three claims that matter most. If the source doesn't say it, don't use it.\n\n### Workflow: pre-call research in 10 minutes\n\n```text\nI have a partnership call with [company] tomorrow. From public sources:\n1. What does the company do, and who are its main customers?\n2. Recent news (last 12 months): launches, funding, leadership changes, expansions.\n3. Any public statements about marketing or creator partnerships.\n4. Three smart questions I could ask.\nCite every factual claim.\n```\n\nThen open the key sources, note anything surprising, and add your own angle.\n\n### Worked example\n\nA business development manager in Karachi prepares for a call with a regional e-commerce company. Perplexity surfaces a recent expansion announcement and a new leadership hire, with links. She opens the company press release to confirm the expansion and checks the executive's professional profile page. In the call, she references the expansion accurately, which builds credibility. One cited article turned out to be from two years earlier; she ignored it.\n\n### Sample output quality signals\n\nGood: each sentence with a fact has a citation; sources include the company's own site or official registries; dates are given. Weak: vague claims (\"the company is growing rapidly\") with a single blog citation. When you see weak signals, ask a follow-up: \"Find the primary source for the expansion claim.\"\n\n### Privacy and ethics\n\n- Don't enter confidential client information into public search queries.\n- Research companies and public roles, not private individuals' personal lives.\n- Respect paywalls and copyright; answer engines summarise, but use original sources properly when you quote.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Perplexity is a search-first answer engine that writes answers with numbered citations and supports follow-ups.",
+            "Use it for fact-finding, quick scans, news and locating primary sources; use assistants for long drafting and complex reasoning.",
+            "Specific questions with scope and source preferences produce better answers.",
+            "Citations aid verification but don't guarantee accuracy; open the sources that matter."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which task best suits a cited answer engine like Perplexity?",
+              "options": [
+                "Editing a video",
+                "Designing a logo",
+                "Writing a 3,000-word novel chapter",
+                "Finding current official guidance on a regulation, with links"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Search-first, cited answers are ideal for current, sourced information."
+            },
+            {
+              "question": "An answer cites a source, but the page says something slightly different. What should you do?",
+              "options": [
+                "Use the summary anyway",
+                "Rely on what the source actually says, or find a better source",
+                "Delete the browser",
+                "Assume the page is wrong"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "The original source is what counts; summaries can distort."
+            },
+            {
+              "question": "Which question will likely get the best answer-engine result?",
+              "options": [
+                "CRM?",
+                "tell me stuff",
+                "CRMs suitable for a 10-person UAE agency with WhatsApp integration and Arabic support, comparing pricing models",
+                "best CRM"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Specific scope and criteria produce targeted, useful answers."
+            }
+          ],
+          "activity": "Use the pre-call research prompt for a real upcoming meeting. Open the three most important citations and note whether each fully supported the claim."
+        },
+        {
+          "slug": "research-workflows-and-verification",
+          "title": "Research workflows: from question to verified brief",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Research is a process, not a query\n\nWhether you use Perplexity, a general assistant with search, or a deep research mode, good research follows a repeatable process. The tool speeds up each step; it doesn't replace the thinking.\n\n### The five-step research workflow\n\n**1. Frame the question.** Turn a vague topic into answerable questions:\n\n```text\nI'm researching [topic] for [purpose/audience]. Help me turn this into 5 specific research questions,\nand suggest what types of sources would be authoritative for each (regulator, academic, industry body, company, news).\n```\n\n**2. Gather with sources.** Run each question in your answer engine or research mode. For bigger questions, use deeper research modes where available. Save the source links as you go.\n\n**3. Verify.** For each important claim, open the source and classify it:\n\n| Claim | Source | Type (primary/secondary) | Date | Verified? |\n|---|---|---|---|---|\n\nAim for primary sources (regulators, official statistics, company filings, original studies) for anything you'll rely on.\n\n**4. Synthesise.** Paste your verified notes into a general assistant and ask for a structured brief:\n\n```text\nUsing ONLY the verified notes below, write a 1-page research brief for [audience].\nSections: key findings, implications for us, uncertainties, recommended next steps.\nKeep source references in brackets after each point.\n```\n\n**5. Review and store.** Have a colleague sanity-check key claims, then store the brief and sources where others can find them (a shared folder, a Project, or a research space).\n\n### Organising ongoing research\n\nPerplexity offers ways to organise research threads and files into collections (for example, **Spaces**), and other tools offer Projects or notebooks. Use them to keep a topic's questions, sources and instructions together, so you don't restart from zero each time. Features vary by plan.\n\n### Choosing sources and focus\n\nMany answer engines let you steer where they search, for example towards academic papers, discussions, or specific sites, and you can always ask for a type of source in the prompt: \"Prefer government and regulator sources\" or \"Include peer-reviewed studies where available.\" For market data, be wary of numbers from vendors selling into that market; label them.\n\n### Worked example: a student's literature scan\n\nA university student in Manchester needs sources on how AI tools affect small-business marketing. She frames five questions, uses an answer engine with an academic focus to find papers, and opens each in her library portal. Of twelve suggested sources, nine exist and are relevant; three are either tangential or can't be found. She synthesises from the nine verified papers and cites them directly, never citing the AI tool as a source. Her tutor's feedback praises the quality of the references.\n\n### Sample output: a verification log\n\nA short log keeps you honest: \"Claim: the regulator requires clear labelling of paid posts. Source: regulator guidance page. Primary. Checked [date]. Verified.\" \"Claim: market grew strongly last year. Source: vendor blog. Secondary, commercial interest. Not independently verified; excluded.\" Anyone reviewing your brief can see exactly what's solid.\n\n### Red flags that mean \"check this now\"\n\n- A precise statistic with no citation, or a citation to a page that doesn't contain the number\n- A source date more than a year old for fast-moving topics such as regulation, pricing or platform rules\n- Every source coming from the same type of site (for example, only vendor blogs)\n- Language like \"studies show\" or \"experts agree\" with no named study or expert\n- A claim that perfectly supports what you hoped to find; confirmation bias is real for humans too\n\n### Comparing tools on the same research question\n\nFor important research, run the same question in two tools (for example, an answer engine and a general assistant's research mode). Where they agree and cite primary sources, confidence rises. Where they disagree, you've found exactly the points to check manually.\n\n### Pitfalls\n\n- Citing the AI tool instead of the source.\n- Mixing verified and unverified claims in the final brief without labels.\n- Over-relying on a single source type.\n- Forgetting the date: research reflects what was available when you ran it.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Research is a five-step process: frame, gather, verify, synthesise, review and store.",
+            "Aim for primary sources and log each claim's source, type, date and verification status.",
+            "Synthesise only from verified notes, and never cite the AI tool as the source.",
+            "Use research spaces or Projects to keep ongoing topics organised; compare tools on important questions."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "In a research brief, what should you cite?",
+              "options": [
+                "The original sources you verified",
+                "The AI tool's name",
+                "Nothing",
+                "A random website"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Cite the underlying sources, not the tool that found them."
+            },
+            {
+              "question": "Two tools disagree on a key fact. What does that tell you?",
+              "options": [
+                "Pick the longer answer",
+                "You've found a point to verify manually against primary sources",
+                "Average them",
+                "Both are useless"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Disagreement highlights where manual verification is needed."
+            },
+            {
+              "question": "Which source type is generally most reliable for a regulatory requirement?",
+              "options": [
+                "A social media comment",
+                "An anonymous forum post",
+                "The regulator's official guidance",
+                "A vendor's sales page"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Primary, official sources are most authoritative for regulations."
+            }
+          ],
+          "activity": "Run the five-step workflow on a real question. Produce a one-page brief with a verification log of at least five claims."
+        }
+      ]
+    },
+    {
+      "slug": "open-weight-and-local-ai",
+      "title": "Open-weight models and local AI",
+      "summary": "Understand closed vs open-weight models, their licences and trade-offs, and how to run AI privately on your own computer.",
+      "lessons": [
+        {
+          "slug": "open-weight-models-explained",
+          "title": "Open-weight models explained",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Closed, open-weight and open source\n\nAI models differ in how they're released:\n\n- **Closed (proprietary) models** are accessed only through the provider's apps and APIs. You never download the model itself. Many of the most capable frontier models are offered this way.\n- **Open-weight models** publish the trained model weights so anyone can download and run them, subject to a licence. Well-known families include Meta's **Llama**, **Mistral**'s models, Alibaba's **Qwen**, **DeepSeek**'s models and Google's **Gemma**.\n- **Open source** in the strict sense means the weights *and* more of what's needed to understand and reproduce the model (such as code and training details) are released under an open licence. Many \"open\" models are open-weight but not fully open source, and their licences can include restrictions.\n\nThe distinction matters for businesses: **always read the licence**. Some licences permit broad commercial use; others include conditions such as acceptable use policies, attribution, or limits for very large companies.\n\n### Why people use open-weight models\n\n1. **Control:** you choose where the model runs and can customise it.\n2. **Privacy:** running on your own hardware or private cloud means data need not leave your environment.\n3. **Cost at scale:** for high-volume, well-defined tasks, self-hosting smaller models can be economical, though you pay for hardware and engineering.\n4. **Customisation:** fine-tuning on your own data for specialised tasks.\n5. **Resilience:** less dependence on a single vendor's pricing or policy changes.\n\n### The trade-offs\n\n- **Capability:** the best open-weight models are strong and improving fast, but the very top hosted models often lead on the hardest reasoning and agentic tasks. This gap changes over time; test for your use case.\n- **Effort:** you're responsible for setup, updates, security, monitoring and safety filtering.\n- **Hardware:** larger models need powerful GPUs or lots of memory.\n- **Safety:** hosted services include safety systems; self-hosted deployments need you to add appropriate safeguards.\n- **Licensing and compliance:** you must comply with the licence and applicable laws.\n\n### Model sizes in plain English\n\nOpen-weight families usually come in several sizes, described by the number of parameters (for example, \"small\", \"medium\" and \"large\" variants). Rough intuition:\n\n- **Small models** run on laptops and phones; good for simple tasks such as classification, short summaries and drafting.\n- **Medium models** need a strong desktop or a single capable GPU; handle many everyday tasks well.\n- **Large models** need server-grade hardware or cloud GPUs; approach frontier-level quality on many tasks.\n\nTechniques such as **quantisation** compress models so they run on less memory, with some quality trade-off.\n\n### Worked example: an agency's decision\n\nA digital agency in the UAE processes thousands of customer comments monthly for clients, tagging sentiment and topic. Client contracts require that some data not be sent to external AI providers. The agency tests a medium open-weight model hosted in its own cloud account in-region. After tuning prompts and adding a human review sample, accuracy is acceptable for tagging. For strategy decks and creative work, they continue using a hosted frontier assistant under a business agreement. Result: the right model for each job, with data rules respected.\n\n### Sample decision table\n\n| Need | Hosted frontier model | Open-weight, self-hosted |\n|---|---|---|\n| Hardest reasoning, long agentic tasks | Usually stronger | Test carefully |\n| Strict data residency or offline | Depends on vendor options | Strong fit |\n| Low volume, many task types | Simple and cost-effective | Overhead may not pay off |\n| High volume, narrow task | Can be costly | Often economical |\n\n### Going further\n\nOpen-weight models are available from model hubs and can be served with popular open-source inference tools, or accessed via cloud providers that host them. Evaluate with your own test sets, and document the model version, licence and settings you used.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Closed models are accessed via APIs/apps; open-weight models publish weights under a licence; strict open source releases more.",
+            "Open-weight models offer control, privacy and customisation at the cost of setup, hardware and safety responsibilities.",
+            "Always read the licence; commercial terms and restrictions vary.",
+            "Choose per job: hosted frontier models for the hardest tasks, open-weight for control, residency and narrow high-volume work."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What does 'open-weight' mean?",
+              "options": [
+                "The model is free of any licence",
+                "The trained weights are published for download and use under a licence",
+                "The model has no parameters",
+                "It only runs on phones"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Open-weight models publish weights, typically with licence terms that must be followed."
+            },
+            {
+              "question": "An agency's client forbids sending data to external AI providers. Which option fits best?",
+              "options": [
+                "Use any consumer chatbot",
+                "Run an open-weight model in an environment the agency controls, in line with the contract",
+                "Email the data to a friend",
+                "Ignore the contract"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Self-hosted open-weight models can keep data within the agency's environment."
+            },
+            {
+              "question": "What is quantisation?",
+              "options": [
+                "A pricing plan",
+                "A type of image",
+                "A technique that compresses models to use less memory, with some quality trade-off",
+                "A legal licence"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Quantisation reduces model size to run on smaller hardware."
+            }
+          ],
+          "activity": "Pick one open-weight model family. Find its official licence page and summarise in three bullets whether and how it permits commercial use."
+        },
+        {
+          "slug": "running-ai-locally",
+          "title": "Running AI locally: a practical introduction",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Why run AI on your own computer?\n\nRunning a model locally means the model runs on your laptop or desktop rather than a provider's servers. Reasons people do it:\n\n- **Privacy:** prompts and documents stay on your machine.\n- **Offline use:** work without internet, for example while travelling.\n- **No per-use cost** after the hardware you already own.\n- **Learning:** understand how models behave by experimenting.\n\nIt's not for everyone. Local models are usually smaller and less capable than frontier hosted models, and setup takes some effort. But for private notes, simple drafting and experimentation, it can be very useful.\n\n### What you need (conceptually)\n\n- **A reasonably modern computer.** More memory (RAM, or unified memory on some laptops) lets you run larger models. A dedicated GPU helps a lot.\n- **A local AI app or runtime.** Popular options include desktop apps with a chat interface and model catalogue, and command-line tools that download and run models. Well-known examples include LM Studio, Ollama and projects built on llama.cpp. Check each tool's official site for supported systems and current features.\n- **A model file** sized for your hardware, often a quantised version of an open-weight model.\n\n### A non-engineer's first local session\n\n1. **Choose a desktop app** with a friendly interface from its official website.\n2. **Pick a small model** recommended for your hardware (the app often suggests compatible sizes).\n3. **Download it** (models can be several gigabytes).\n4. **Chat** as you would with any assistant. Try a private task, like summarising your own journal notes or drafting a personal email.\n5. **Compare** the result with a hosted assistant on a non-sensitive version of the task to understand the quality gap.\n\n### Good local use cases\n\n- Summarising personal notes and documents you don't want to upload\n- Drafting and rewriting short texts\n- Classifying or tagging items in bulk\n- Offline brainstorming\n- Experimenting and learning prompt techniques\n\nLess suitable: complex reasoning, long agentic tasks, up-to-date research (local models don't browse unless you add tools), and tasks that need the very best quality.\n\n### Worked example\n\nA freelance consultant in London keeps sensitive client interview notes. His client agreement prohibits uploading them to third-party services. He runs a medium-sized open-weight model locally to summarise each interview into themes. The summaries are good enough to speed up his analysis; he writes the final report himself, using a hosted assistant only for non-confidential tasks like structuring the report template.\n\n### Sample output expectations\n\nA small local model asked to \"summarise these notes into five themes with a supporting quote each\" will usually produce a sensible structure but may be less precise: it might merge two themes or pick a weaker quote. Plan a quick human pass. If quality isn't sufficient, try a larger model if your hardware allows, or simplify the task into smaller steps.\n\n### Security and safety notes\n\n- **Download from official sources.** Models and apps from untrusted sites can be malicious.\n- **Local doesn't mean automatically secure.** Your laptop's security (encryption, updates, passwords) now protects the data.\n- **Safety filtering** may be lighter than in hosted services; use responsibly and within the licence's acceptable use policy.\n- **Licences still apply** to local use, particularly for commercial work.\n\n### Going further (technical users)\n\nLocal runtimes often expose a local API compatible with common client libraries, so you can connect a local model to scripts, note-taking tools or automation. You can combine a local model with retrieval over your own documents, and compare models with a small evaluation set. Record model version, quantisation level and settings so results are reproducible.\n\n### Pitfalls\n\n- Choosing a model too large for your hardware and concluding \"local AI is slow\".\n- Expecting frontier-level reasoning from a small local model.\n- Forgetting to keep apps and models updated.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Local AI keeps data on your device and works offline, but models are usually smaller than frontier hosted ones.",
+            "You need adequate memory (and ideally a GPU), a local AI app or runtime, and a model sized for your hardware.",
+            "Great for private notes, drafting, tagging and learning; less suited to complex reasoning and current research.",
+            "Download only from official sources, secure your device, and respect licences."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the main privacy benefit of running a model locally?",
+              "options": [
+                "Prompts and documents can stay on your own device",
+                "It removes licences",
+                "It adds web search",
+                "It makes the model smarter"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Local inference keeps data on your machine."
+            },
+            {
+              "question": "A small local model gives weak answers on a complex analysis. What's the most reasonable response?",
+              "options": [
+                "Conclude AI is useless",
+                "Delete your computer's files",
+                "Try a larger model if hardware allows, simplify the task, or use an approved hosted model for non-sensitive parts",
+                "Share the data publicly"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Match model size and task complexity, and split tasks by sensitivity."
+            },
+            {
+              "question": "Where should you download local AI apps and models from?",
+              "options": [
+                "Any file-sharing site",
+                "Pop-up ads",
+                "Unknown email attachments",
+                "Official sources and reputable model hubs"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Untrusted downloads can contain malware."
+            }
+          ],
+          "activity": "If your computer allows, install a reputable local AI app, run a small model and compare its answer with a hosted assistant on a non-sensitive task. Note differences in quality and speed."
+        }
+      ]
+    },
+    {
+      "slug": "image-voice-and-video-tools",
+      "title": "Image, voice and video tools",
+      "summary": "Choose and use image, voice and video AI tools effectively, with provenance, consent and disclosure built in.",
+      "lessons": [
+        {
+          "slug": "image-generation-tools-compared",
+          "title": "Image generation tools: choosing and using them well",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### The main options\n\nImage generation is now available both in dedicated tools and inside general assistants. Common options include:\n\n- **Midjourney:** known for highly stylised, aesthetic imagery; popular with designers and creators. Accessed via its web app and community platforms, on paid plans.\n- **Google's Imagen models:** available in Gemini and other Google products, and to developers via Google's cloud and AI platforms.\n- **OpenAI image generation (in ChatGPT and via API):** conversational creation and editing inside an assistant; the DALL·E name has been used for earlier OpenAI image models.\n- **Adobe Firefly:** integrated into Adobe's creative apps (for example, generative fill in Photoshop). Adobe positions Firefly as trained on licensed and public-domain content and designed for commercial use; check Adobe's current terms.\n- **Open-weight image models** such as the Stable Diffusion and FLUX families, which can be run locally or through various services, subject to their licences.\n\nCapabilities, pricing and terms change often. Check each vendor's official pages, especially commercial-use terms.\n\n### How to choose\n\n| Need | Consider |\n|---|---|\n| Distinctive artistic style, mood boards | A style-focused dedicated tool |\n| Quick visuals while writing or planning | Image generation inside your assistant |\n| Editing existing photos inside design workflows | Tools integrated into your design software |\n| Enterprise comfort on training data and indemnity | Check vendors' commercial terms and indemnity offers |\n| Full control, local generation | Open-weight models with appropriate licences |\n\n### A universal prompt structure\n\n```text\n[Subject] + [action/pose] + [setting] + [style/medium] + [lighting] + [composition/camera] + [colour palette] + [mood] + [aspect ratio]\n```\n\nExample:\n\n```text\nA handmade ceramic mug with Arabic calligraphy pattern on a wooden table beside a window,\nproduct photography, soft morning light, 45-degree angle, shallow depth of field,\nearthy neutral palette with teal accents, calm and artisanal mood, 4:5 aspect ratio, no text.\n```\n\nDifferent tools interpret prompts differently; some favour short, keyword-style prompts, others natural sentences. Test and keep a prompt log.\n\n### Iteration and editing\n\n- Change **one variable at a time** (lighting, then composition).\n- Use **reference images** where supported to guide style or composition, only with images you have rights to use.\n- Use **inpainting/generative fill** to edit parts of an image rather than regenerating everything.\n- **Upscale** final choices for print or large formats.\n\n### Worked example\n\nA small candle brand in Birmingham needs seasonal social visuals. The owner generates background scenes (autumn tabletop, cosy window) with an image tool, then composites her **real product photos** into them using her design software's generative fill, so the product is shown accurately. She keeps a prompt log, checks each image for artefacts, and follows her platform's AI-content labelling rules where they apply to realistic edits.\n\n### Sample review checklist\n\nBefore using an AI image: Are hands, text, logos and reflections correct? Does the product look like the real product? Are there accidental trademarks or recognisable people? Does the style infringe on a specific living artist's recognisable work? Is labelling or disclosure required on the platform? Would a customer feel misled?\n\n### Provenance and labelling\n\nIndustry initiatives such as **Content Credentials** (based on the C2PA standard) attach provenance information to images, and some providers add invisible watermarks (for example, Google's SynthID) to AI-generated content. Platforms increasingly label AI-generated or altered media, and some require you to disclose realistic synthetic content, particularly in ads and sensitive topics. Keep provenance data intact where possible and follow each platform's rules.\n\n### Legal and ethical cautions\n\n- **Copyright and trademarks:** avoid generating recognisable logos, characters or copying specific artworks. Laws on AI-generated works and training data vary by country and are evolving.\n- **People:** don't create realistic images of real people without consent; never create deceptive, sexualised or defamatory depictions.\n- **Advertising:** images must not mislead consumers about products or results (for example, exaggerated before/after images).\n",
+          "video": null,
+          "keyTakeaways": [
+            "Options include style-focused tools, assistant-integrated generators, design-suite tools and open-weight models; terms vary.",
+            "Choose by need: style, speed, editing workflow, commercial comfort or local control.",
+            "Use a structured prompt, iterate one variable at a time, and composite real products where accuracy matters.",
+            "Respect provenance, platform labelling rules, copyright, consent and advertising law."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A brand needs social visuals that show its real product accurately. What's the best approach?",
+              "options": [
+                "Generate an AI version of the product",
+                "Use a famous artist's painting",
+                "Copy a competitor's image",
+                "Generate backgrounds with AI and composite real product photos into them"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Compositing real product photos keeps representation accurate."
+            },
+            {
+              "question": "What is Content Credentials (C2PA) about?",
+              "options": [
+                "A camera brand",
+                "Faster image generation",
+                "A pricing plan",
+                "Attaching provenance information about how content was created or edited"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Content Credentials provide provenance metadata for digital content."
+            },
+            {
+              "question": "When iterating on an AI image, what's the most efficient method?",
+              "options": [
+                "Change everything each time",
+                "Never change the prompt",
+                "Use random words",
+                "Change one variable at a time and keep a prompt log"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Single-variable changes show what actually improves the image."
+            }
+          ],
+          "activity": "Create three versions of one brand image using the universal prompt structure, changing one variable each time. Run the review checklist on your favourite."
+        },
+        {
+          "slug": "voice-and-video-ai-tools",
+          "title": "Voice and video AI: ElevenLabs, HeyGen and beyond",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### What voice and video AI can do\n\nA new generation of tools can turn text into natural speech, clone or design voices, dub videos into other languages, and create presenter-style videos with AI avatars. Two widely used examples:\n\n- **ElevenLabs:** known for realistic text-to-speech, voice design and cloning, dubbing into other languages, and audio tools such as sound effects. Available via web app and API.\n- **HeyGen:** known for AI avatar videos (a digital presenter speaking your script), creating avatars from your own footage with consent, and video translation with lip-sync.\n\nOther tools offer similar or adjacent capabilities, and general AI platforms increasingly include voice and video generation. Features, languages, pricing and usage rules change; check the official sites.\n\n### High-value use cases\n\n- **Voice-overs** for explainer videos, ads and social content, in several languages.\n- **Localisation:** dubbing a founder's video from English into Arabic or Urdu while preserving tone.\n- **Training and onboarding videos** with an avatar presenter, easy to update when content changes.\n- **Accessibility:** audio versions of articles and course content.\n- **Personalised sales videos** at scale (with care; see ethics below).\n\n### A production workflow\n\n1. **Write and approve the script** first. Keep sentences short and conversational; spell out numbers and acronyms the way they should be spoken.\n2. **Choose a voice or avatar** you have rights to use: a stock voice or avatar licensed by the platform, or your own cloned voice or avatar created with your explicit consent.\n3. **Generate a draft** and listen critically: pronunciation of names, brand terms and local place names; pacing; emphasis.\n4. **Adjust** with the tool's controls (speed, stability, pronunciation hints) or by rewriting phrases.\n5. **Review with a native speaker** for other languages; automated translation can miss cultural nuance.\n6. **Label and disclose** where required by platforms or law.\n7. **Store records** of consent, scripts and outputs.\n\n### Script tips for natural speech\n\n```text\nRewrite this script for voice-over:\n- Short sentences, one idea each\n- Write numbers as spoken (\"twenty-five percent\")\n- Add [pause] where a breath helps\n- Keep brand names exactly: [list]\n- Target length: 60 seconds at a natural pace\n```\n\n### Worked example\n\nAn online academy in Lahore records course introductions in English. Using a voice and video translation tool with the instructor's explicit written consent, they produce Urdu and Arabic versions. A native speaker reviews each: two technical terms are mistranslated and corrected in the script before regenerating. Videos are labelled as AI-translated in the description. Enrolment from Arabic-speaking learners grows, and the instructor retains approval rights over every version.\n\n### Consent, ethics and law\n\nThis is the most important part of the lesson.\n\n- **Never clone a voice or create an avatar of someone without their explicit, informed consent.** Reputable platforms require consent verification for cloning; don't try to circumvent it.\n- **Don't impersonate** real people, public figures or brands. Deepfakes can cause serious harm and may be illegal.\n- **Disclose synthetic media** where platforms require it. For example, major video platforms require creators to disclose realistic altered or synthetic content in certain cases; ad platforms have their own rules.\n- **Advertising law applies:** an AI presenter giving a \"personal testimonial\" for a product they never used is misleading.\n- **Contracts:** for talent and employees, include clear terms on how their voice and likeness may be used, for how long, and how consent can be withdrawn.\n- **Security:** voice cloning is used in scams. Organisations should use call-back verification for payment requests rather than trusting a familiar voice.\n\n### Sample quality checklist\n\nNames pronounced correctly; no robotic emphasis on key words; lip-sync acceptable at normal viewing speed; captions match audio; cultural references appropriate; disclosure present where required; consent documented.\n\n### Pitfalls\n\n- Skipping native-speaker review for translations.\n- Using a stock avatar in a way that implies it's a real customer.\n- Forgetting to update videos when facts change.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Voice and video AI enables voice-overs, dubbing, avatar presenters and accessibility at scale.",
+            "Approve scripts first, use licensed or consented voices/avatars, review with native speakers, and keep records.",
+            "Never clone voices or likenesses without explicit consent; don't impersonate or mislead.",
+            "Follow platform disclosure rules for realistic synthetic media and use verification to defend against voice scams."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A client asks you to clone a celebrity's voice for an ad without permission. What should you do?",
+              "options": [
+                "Label it 'parody' and publish",
+                "Do it quickly before anyone notices",
+                "Use a slightly different pitch",
+                "Decline: cloning a voice without explicit consent is unethical, may be illegal and breaches platform rules"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Consent is essential; impersonation can cause harm and legal liability."
+            },
+            {
+              "question": "What's the most important step when dubbing a video into a language you don't speak?",
+              "options": [
+                "Skip review to save time",
+                "Make the video shorter",
+                "Have a native speaker review the translation and pronunciation",
+                "Use more music"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Native review catches errors and cultural issues."
+            },
+            {
+              "question": "Which practice helps defend a company against voice-cloning scams?",
+              "options": [
+                "Disable phone lines",
+                "Use call-back verification through known channels for payment requests",
+                "Trust familiar voices",
+                "Post executives' voice recordings online"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Independent verification defeats impersonation attempts."
+            }
+          ],
+          "activity": "Write a 60-second script using the voice-over tips and, if you have access to a voice tool, generate it with a licensed stock voice. Run the quality checklist."
+        }
+      ]
+    },
+    {
+      "slug": "choosing-your-ai-stack",
+      "title": "Choosing tools and building your stack",
+      "summary": "Compare outputs fairly, weigh cost, privacy and lock-in, and design a lean personal AI stack with clear data rules.",
+      "lessons": [
+        {
+          "slug": "comparing-outputs-side-by-side",
+          "title": "Comparing outputs side by side",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Why compare?\n\nDifferent AI tools have different strengths, and those strengths shift as models update. Regular side-by-side comparisons on your own tasks are the most reliable way to know which tool to use for what. Module 1 introduced a quick evaluation sprint; this lesson goes deeper into designing fair tests and interpreting results.\n\n### Designing a test set\n\nA good test set is small, representative and reusable:\n\n- **8 to 15 tasks** drawn from real work across your main use cases (writing, analysis, research, planning).\n- **A mix of difficulty:** easy, typical and hard.\n- **Clear success criteria** for each task, written before you run it: \"Must include all 5 deliverables from the brief; under 200 words; no invented figures.\"\n- **At least one honesty test,** where the correct answer is \"not enough information\".\n- **At least one instruction-following test** with several specific constraints.\n- **Only non-confidential or anonymised material.**\n\nSave the test set in a document so you can rerun it every few months.\n\n### Scoring that means something\n\nUse a simple rubric for each output:\n\n| Dimension | 1 | 3 | 5 |\n|---|---|---|---|\n| Accuracy | Errors in key facts | Minor errors | No errors found |\n| Instruction following | Several constraints missed | One missed | All followed |\n| Usefulness | Needs rewrite | Needs edits | Ready with light review |\n| Honesty | Invents to fill gaps | Hedges vaguely | Flags gaps clearly |\n\n**Blind scoring** reduces bias: have a colleague paste outputs labelled A and B so you don't know which tool produced which.\n\n### Using one AI to help evaluate another\n\nYou can ask an assistant to compare outputs against your criteria:\n\n```text\nHere are the task, the success criteria, and two outputs (A and B).\nScore each output 1-5 on accuracy, instruction following, usefulness and honesty, quoting evidence from the output for each score.\nThen list any factual claims in either output that I should verify manually.\n```\n\nThis speeds things up, but AI judges have biases (for example, favouring longer answers or their own style). Use AI scoring as a helper, and make final judgements yourself, especially on accuracy.\n\n### Worked example\n\nA content lead at a UK agency compares two assistants on 10 tasks. Results: Tool A wins on long-form writing and following detailed brand rules; Tool B wins on quick research with citations and spreadsheet formulas. Both tie on summaries. Neither passes the honesty test every time. Decision: Tool A as the team's primary writing assistant, Tool B for research tasks, and a new rule that every research claim must be verified by opening the source.\n\n### Sample results summary\n\nA good summary fits on one page: a table of average scores per tool per use case, three notable examples (one strength, one weakness, one surprise for each tool), and a clear recommendation with a re-test date. Keep the raw outputs in an appendix so others can check your judgement.\n\n### Interpreting results wisely\n\n- **Small differences are noise.** Outputs vary between runs; don't switch tools over a one-point difference on a single task.\n- **Look at failure modes,** not just averages. A tool that's usually great but occasionally invents figures may be riskier for finance than one that's consistently good.\n- **Consider effort-to-fix.** The best output is the one that takes the least human time to make correct and ready.\n- **Re-test after major updates.** Rankings change.\n\n### Pitfalls\n\n- Testing with tasks that favour one tool's showcase features.\n- Changing the prompt between tools.\n- Rewarding confident tone over correctness.\n- Treating public benchmark rankings as a substitute for your own tests.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Build a reusable test set of 8 to 15 real tasks with success criteria, honesty and instruction-following tests.",
+            "Score with a rubric (accuracy, instruction following, usefulness, honesty), blind where possible.",
+            "AI can help evaluate, but has biases; make final accuracy judgements yourself.",
+            "Focus on failure modes and effort-to-fix, ignore small differences, and re-test after updates."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why write success criteria before running comparison tasks?",
+              "options": [
+                "It's required by vendors",
+                "To judge outputs against a fixed standard rather than being swayed by impressive-looking answers",
+                "To make tasks longer",
+                "To slow the process"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Pre-defined criteria reduce bias in evaluation."
+            },
+            {
+              "question": "What is a known bias of using an AI to judge other AI outputs?",
+              "options": [
+                "It may favour longer answers or a style similar to its own",
+                "It only scores in odd numbers",
+                "It can't read text",
+                "It always prefers short answers"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "AI judges can have length and style biases; use them as helpers."
+            },
+            {
+              "question": "Tool X scores slightly higher on average but occasionally invents financial figures. For finance reports, what should you consider?",
+              "options": [
+                "Response length",
+                "The failure mode: occasional invented figures are high-risk for finance work",
+                "Interface colour",
+                "Only the average score"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Failure modes can matter more than averages for high-stakes tasks."
+            }
+          ],
+          "activity": "Build a 10-task test set from your real work with success criteria. Run it on two tools and write a one-page results summary with a recommendation."
+        },
+        {
+          "slug": "cost-privacy-and-lock-in",
+          "title": "Cost, privacy and lock-in trade-offs",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Three questions behind every tool choice\n\nBeyond output quality, three practical questions decide whether a tool belongs in your stack:\n\n1. **What does it really cost?**\n2. **Where does my data go, and on what terms?**\n3. **How hard would it be to leave?**\n\n### Understanding AI costs\n\nAI tools are priced in a few common ways:\n\n- **Seat subscriptions:** a monthly fee per user, often with usage limits (for example, caps on the most capable models or on deep research runs).\n- **Usage-based (API) pricing:** pay per amount of text processed and generated (tokens), with different rates for different models; images, audio and video have their own units.\n- **Credits:** common in image, voice and video tools; each generation consumes credits.\n- **Bundles:** AI included in broader software licences (office suites, CRMs, design tools), sometimes as add-ons.\n\nTo compare fairly, estimate **cost per useful output**, including human time:\n\n```text\nCost per useful output = (tool cost for the period + human time to check and fix x hourly cost) / number of usable outputs\n```\n\nA cheaper tool that needs twice the editing may cost more overall.\n\n### Controlling costs\n\n- Audit overlapping subscriptions quarterly; many people pay for three assistants and use one.\n- Use faster, lower-cost models for simple, high-volume tasks.\n- Set spending limits and alerts on API accounts.\n- Check whether tools you already pay for include AI features.\n- Choose annual plans only after a successful trial period.\n\n### Privacy: the questions to ask every vendor\n\n1. Is my data used to train models by default? Can I opt out? Does a business plan change this?\n2. How long is data retained? Can admins set retention?\n3. Where is data processed and stored (data residency)?\n4. What security certifications and audits does the vendor have?\n5. Is there a data processing agreement for business customers?\n6. What admin controls exist (single sign-on, audit logs, user management)?\n7. How are connectors and third-party integrations governed?\n\nMatch answers against your data classes: public, internal, confidential, restricted. A tool may be fine for public marketing copy but not for client contracts.\n\n### Regional and sector considerations\n\nOrganisations in the UK and EU (GDPR), Saudi Arabia (PDPL), the UAE (federal data protection law, plus free-zone regimes in some cases), Pakistan (evolving framework) and US states (various privacy laws) may have obligations on personal data transfers and processors. Regulated sectors (finance, health, government) often have additional rules. Involve your data protection lead; this lesson isn't legal advice.\n\n### Lock-in and portability\n\nLock-in happens when your workflows, content and knowledge become trapped in one tool. Reduce it by:\n\n- **Keeping prompts, instructions and templates in your own documents,** not only inside a tool.\n- **Storing source files in your own drive,** uploading copies to AI tools.\n- **Exporting outputs regularly** in standard formats.\n- **Preferring open standards** (for example, MCP for connectors) where practical.\n- **Avoiding deep dependence on one vendor's unique features** for critical processes unless the benefit clearly outweighs the risk.\n\n### Worked example\n\nA 12-person agency in Jeddah spends on four AI subscriptions per person. An audit shows most staff use one assistant daily and another occasionally. They consolidate to one business-plan assistant for everyone (for data terms and admin controls), a shared research-tool licence for the three strategists, and credits-based image and voice tools for the creative team. Prompts and client instructions move into a shared drive so they're portable. Costs fall, and the data terms improve.\n\n### Sample cost and privacy table\n\n| Tool | Pricing model | Our monthly cost | Training on our data? | Data classes allowed | Export options |\n|---|---|---|---|---|---|\n\nFill it in for your current tools; blanks are action items.\n\n### Pitfalls\n\n- Comparing sticker prices without human time.\n- Assuming a paid individual plan has business-grade data terms.\n- Building critical workflows inside a tool with no export path.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Compare cost per useful output, including human time to check and fix.",
+            "Control costs by auditing overlaps, matching model tiers to tasks and setting spending limits.",
+            "Ask vendors about training use, retention, residency, security, agreements and admin controls.",
+            "Reduce lock-in by keeping prompts and files in your own storage and favouring open standards."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Tool A costs less per month but outputs need twice the editing of Tool B. What's the right comparison?",
+              "options": [
+                "Choose A because it's cheaper",
+                "Flip a coin",
+                "Choose whichever has more features",
+                "Compare cost per useful output including human editing time"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Human time often dominates true cost."
+            },
+            {
+              "question": "Which practice reduces vendor lock-in?",
+              "options": [
+                "Keeping all prompts only inside one tool",
+                "Avoiding standards",
+                "Deleting local copies",
+                "Storing prompts, instructions and source files in your own documents and exporting outputs"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Portable assets keep switching costs low."
+            },
+            {
+              "question": "Which vendor question is most relevant to data residency?",
+              "options": [
+                "What colour is the logo?",
+                "Where is data processed and stored?",
+                "How many employees does it have?",
+                "Does it have a mobile app?"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Residency concerns the location of processing and storage."
+            }
+          ],
+          "activity": "Complete the cost and privacy table for every AI tool you pay for or use for work. Identify one subscription to cancel or consolidate and one data-terms gap to fix."
+        },
+        {
+          "slug": "building-your-personal-ai-stack",
+          "title": "Building your personal AI stack",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### What a personal AI stack is\n\nYour **AI stack** is the small set of tools you use deliberately, each with a clear job, plus the habits and assets that make them effective. A good stack is **lean** (few tools you know deeply), **fit for purpose** (each tool earns its place), and **safe** (data rules are clear).\n\n### The stack blueprint\n\nMost professionals need something like:\n\n1. **One primary assistant** for writing, analysis and reasoning, on a plan whose data terms match your work.\n2. **One research tool** with strong citations (an answer engine or your assistant's research mode).\n3. **Your embedded copilot** in the office suite you already use (Workspace or Microsoft 365), if your organisation provides it.\n4. **One creative tool** per media type you actually produce (images, voice, video), only if you produce it regularly.\n5. **Optional:** a local model for private notes or offline work, and an automation tool for repetitive workflows.\n\nPlus the **assets** that make any tool better:\n\n- A **prompt library** of tested templates\n- **Instructions and style guides** you can paste into any tool\n- **Reference files** (brand guides, product facts) kept current in your own storage\n- A **verification checklist**\n- A **data rules card**: what goes where\n\n### Designing your stack in five steps\n\n**Step 1: List your top 10 recurring tasks** and estimate weekly time on each.\n\n**Step 2: Map each task to a category** (assistant, research, embedded copilot, creative, automation).\n\n**Step 3: Choose one tool per category** using your evaluation results and data terms.\n\n**Step 4: Build assets** for your top five tasks: a prompt template, a checklist and reference files.\n\n**Step 5: Review quarterly:** re-test key tasks, cancel unused subscriptions, update assets.\n\n### Example stacks\n\n**Content creator (solo):** primary assistant (scripts, captions, repurposing), research tool (trends, facts), image tool (thumbnails, concepts), voice tool (multilingual voice-overs), scheduler with AI features. Data rules: no brand-partner contracts in consumer tools.\n\n**B2B salesperson:** embedded copilot (email, meetings, CRM notes where provided by employer), primary assistant through the company's business plan (proposals, call prep), answer engine (prospect research). Data rules: customer data only in company-approved tools.\n\n**Agency owner:** business-plan assistant with shared projects per client, research tool for strategists, creative tools for designers, embedded copilot for operations, and a policy covering all of it.\n\n**Student:** primary assistant (study support, feedback on drafts within academic rules), source-grounded notebook tool for readings, reference manager for citations. Rules: follow the institution's AI policy; never submit AI work as your own where prohibited.\n\n### Your data rules card\n\n```text\nPUBLIC (published content, general questions): any tool in my stack\nINTERNAL (drafts, plans): [primary assistant business plan], [embedded copilot]\nCONFIDENTIAL (client data, contracts): [approved tool] only, minimised\nRESTRICTED (passwords, payment data, IDs, health data): never in AI tools\n```\n\nPrint it or pin it where you work.\n\n### Worked example\n\nA freelance marketer in Dubai had seven AI subscriptions and no clear rules. After listing her top 10 tasks, she keeps four tools: a primary assistant on a paid plan with training opt-out configured, an answer engine, an image tool, and a voice tool used monthly on credits. She moves all prompts into a single document organised by task, writes her data rules card, and schedules a quarterly review. She spends less and works faster because she knows each tool deeply.\n\n### Sample quarterly review agenda\n\n1. Re-run five key test tasks on current tools. 2. Check any new features in tools you already pay for. 3. Review spending. 4. Update prompts that underperformed. 5. Check data terms for changes. 6. Decide: keep, replace, or cancel for each tool.\n\n### Pitfalls\n\n- Adding tools without removing any.\n- No written data rules.\n- Treating the stack as permanent; the landscape changes.\n",
+          "video": null,
+          "keyTakeaways": [
+            "A personal AI stack is a lean set of tools with clear jobs, plus reusable assets and data rules.",
+            "Typical stack: primary assistant, research tool, embedded copilot, creative tools as needed, optional local/automation.",
+            "Design from your top recurring tasks, build assets for the top five, and review quarterly.",
+            "A written data rules card makes safe choices quick and consistent."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the best starting point for designing your AI stack?",
+              "options": [
+                "A random list of apps",
+                "The most expensive plan",
+                "Your top recurring tasks and the time they take",
+                "The newest tool on social media"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Stacks should be built around real work."
+            },
+            {
+              "question": "Which asset makes any AI tool more effective and portable?",
+              "options": [
+                "A browser bookmark",
+                "A personal prompt library with tested templates",
+                "A screenshot of the pricing page",
+                "More subscriptions"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Tested prompts transfer across tools and save time."
+            },
+            {
+              "question": "Where should restricted data like passwords and payment details go in your data rules card?",
+              "options": [
+                "Never into AI tools",
+                "Only into free tools",
+                "Only into image tools",
+                "Any tool"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Restricted data should never be entered into AI tools."
+            }
+          ],
+          "activity": "Design your personal AI stack using the five steps. Write your data rules card and schedule your first quarterly review."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 25,
+    "timeLimitMinutes": 40,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "land-001",
+        "module": "ai-landscape-map",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which category is Perplexity best described as?",
+        "options": [
+          "Answer and research engine",
+          "Image generator",
+          "Voice tool",
+          "Local model runtime"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Perplexity is a search-first answer engine with citations."
+      },
+      {
+        "id": "land-002",
+        "module": "ai-landscape-map",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why are categories a better guide than model leaderboards when choosing AI tools?",
+        "options": [
+          "Categories are stable and map to jobs, while individual rankings change quickly",
+          "Leaderboards only cover images",
+          "Leaderboards are illegal",
+          "Categories are always cheaper"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Tools and rankings change fast; understanding categories helps you place any new tool."
+      },
+      {
+        "id": "land-003",
+        "module": "ai-landscape-map",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the key advantage of embedded copilots in office suites?",
+        "options": [
+          "They generate video",
+          "They are always free",
+          "They use your work context (emails, files, meetings) within your permissions",
+          "They run offline"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Context without copy-paste is their main strength."
+      },
+      {
+        "id": "land-004",
+        "module": "ai-landscape-map",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "In a 30-minute tool evaluation, which practices produce a fair comparison? (Choose all that apply.)",
+        "options": [
+          "Including an 'I don't know' honesty test",
+          "Identical prompts and materials for each tool",
+          "Using the vendor's demo prompts only",
+          "Blind scoring where possible"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Identical inputs, blind scoring and honesty tests make comparisons fair; vendor demos favour the vendor."
+      },
+      {
+        "id": "land-005",
+        "module": "ai-landscape-map",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An evaluator wants to test tools with real client contracts 'just to see'. What is the correct approach?",
+        "options": [
+          "Use public or anonymised materials until the tool is approved for that data class",
+          "Go ahead; it's only a test",
+          "Ask the client after testing",
+          "Test on a personal account instead"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Testing doesn't exempt you from data rules; use safe materials until approval."
+      },
+      {
+        "id": "land-006",
+        "module": "ai-landscape-map",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which criterion addresses whether you could leave a tool without losing your work?",
+        "options": [
+          "Reliability",
+          "Lock-in and portability",
+          "Task fit",
+          "Output quality"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Portability covers exporting prompts, files and outputs."
+      },
+      {
+        "id": "land-007",
+        "module": "google-gemini",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does Gemini's integration with Google Workspace allow?",
+        "options": [
+          "Offline use without an account",
+          "Bypassing admin settings",
+          "Access to any file on the internet",
+          "Working with your Gmail, Docs, Sheets and Drive content that you already have access to"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Gemini in Workspace uses content within your existing permissions."
+      },
+      {
+        "id": "land-008",
+        "module": "google-gemini",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "You ask Gemini to create a brief from two Drive files. What addition makes the output easiest to verify?",
+        "options": [
+          "Ask for more adjectives",
+          "Ask it to state which file each point came from",
+          "Ask for emojis",
+          "Ask for a longer brief"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Source attribution per point makes verification quick."
+      },
+      {
+        "id": "land-009",
+        "module": "google-gemini",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "When analysing an hour-long recording with a multimodal model, what should you request?",
+        "options": [
+          "A one-word summary",
+          "Findings with timestamps so you can verify each moment",
+          "Only the first minute",
+          "A new recording"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Timestamps let you jump to and check each claim."
+      },
+      {
+        "id": "land-010",
+        "module": "google-gemini",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is NotebookLM primarily designed for?",
+        "options": [
+          "Research and notes grounded in the sources you add",
+          "Email marketing",
+          "Video editing",
+          "Accounting"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "NotebookLM answers primarily from user-provided sources."
+      },
+      {
+        "id": "land-011",
+        "module": "google-gemini",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which statements about long-context models are accurate? (Choose all that apply.)",
+        "options": [
+          "A long context guarantees nothing is missed",
+          "They can analyse many documents or long transcripts at once",
+          "Limits depend on model, product and plan",
+          "Targeted questions and fact checks remain important"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Long context is powerful but doesn't guarantee thoroughness; limits vary."
+      },
+      {
+        "id": "land-012",
+        "module": "google-gemini",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "An account manager wants Gemini to handle Monday inbox catch-up. Which workflow is safest?",
+        "options": [
+          "Let Gemini auto-send replies to all threads",
+          "Forward all emails to a personal account",
+          "Summarise threads, draft replies with [TBC] markers, then review and send personally",
+          "Ignore the inbox"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Drafts with markers plus human review keep accountability with the sender."
+      },
+      {
+        "id": "land-013",
+        "module": "microsoft-copilot",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What distinguishes Microsoft 365 Copilot from the consumer Copilot app?",
+        "options": [
+          "It only generates images",
+          "It has no admin controls",
+          "It works inside Microsoft 365 apps with organisational work data, within permissions",
+          "It works without login"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Microsoft 365 Copilot is grounded in organisational data and integrated into work apps."
+      },
+      {
+        "id": "land-014",
+        "module": "microsoft-copilot",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A Teams meeting summary says 'the team agreed to increase budget', but you recall it was only proposed. What should you do?",
+        "options": [
+          "Increase the budget",
+          "Send it as is",
+          "Correct it before distributing; summaries can overstate consensus",
+          "Delete the meeting"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Review summaries for accuracy, especially decisions."
+      },
+      {
+        "id": "land-015",
+        "module": "microsoft-copilot",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "During a Copilot pilot, a junior employee can retrieve bonus data through a simple prompt. What does this indicate and what should be done?",
+        "options": [
+          "Permissions are too broad; pause, audit sharing on sensitive sites, apply labels and retest",
+          "Give everyone access to bonus data",
+          "It's fine because the AI found it",
+          "Copilot is hacking files; uninstall it"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Copilots respect permissions; the fix is permission governance."
+      },
+      {
+        "id": "land-016",
+        "module": "microsoft-copilot",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which steps belong in a work-copilot readiness checklist? (Choose all that apply.)",
+        "options": [
+          "Apply sensitivity labels and data loss prevention where available",
+          "Test with prompts designed to find sensitive data",
+          "Grant all users admin rights",
+          "Audit broadly shared sensitive content"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Auditing, labelling and testing reduce oversharing; admin rights for all increase risk."
+      },
+      {
+        "id": "land-017",
+        "module": "microsoft-copilot",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What should happen before recording or transcribing a meeting?",
+        "options": [
+          "Inform participants, following policy and local law",
+          "Record secretly for accuracy",
+          "Nothing",
+          "Only tell the manager afterwards"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Transparency and compliance are required."
+      },
+      {
+        "id": "land-018",
+        "module": "microsoft-copilot",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "You see confidential HR details in a copilot answer unrelated to your role. What's the right action?",
+        "options": [
+          "Share them in the team chat",
+          "Stop, don't share, and report to IT or your manager",
+          "Screenshot for later",
+          "Ask the copilot for more"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Reporting helps fix the underlying permission issue."
+      },
+      {
+        "id": "land-019",
+        "module": "perplexity-and-research",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is a defining feature of Perplexity's answers?",
+        "options": [
+          "No sources",
+          "Voice-only responses",
+          "Only image outputs",
+          "Numbered citations linking to sources"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Citations are central to its answer-engine design."
+      },
+      {
+        "id": "land-020",
+        "module": "perplexity-and-research",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A cited answer includes one important claim without a citation. What should you do?",
+        "options": [
+          "Remove all other citations",
+          "Publish immediately",
+          "Treat it as unverified and find a primary source",
+          "Assume it's correct"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Uncited claims need independent verification."
+      },
+      {
+        "id": "land-021",
+        "module": "perplexity-and-research",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "In a research brief, what should you cite?",
+        "options": [
+          "The original sources you verified",
+          "The AI tool",
+          "Nothing",
+          "A search results page"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Always cite the underlying, verified sources."
+      },
+      {
+        "id": "land-022",
+        "module": "perplexity-and-research",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which elements belong in a research verification log? (Choose all that apply.)",
+        "options": [
+          "The date checked and verification status",
+          "The claim",
+          "The tool's subscription price",
+          "The source and whether it's primary or secondary"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Claim, source type, date and status make verification traceable."
+      },
+      {
+        "id": "land-023",
+        "module": "perplexity-and-research",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Two research tools disagree on a key regulatory detail. What's the best next step?",
+        "options": [
+          "Check the regulator's official source directly",
+          "Pick the more confident one",
+          "Average the answers",
+          "Ignore the detail"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Disagreement signals a point to verify against primary sources."
+      },
+      {
+        "id": "land-024",
+        "module": "perplexity-and-research",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A student's answer engine suggests 12 academic sources. Three can't be found in the library. What should she do?",
+        "options": [
+          "Cite the AI tool instead",
+          "Cite only sources she has located and read; exclude those she can't verify",
+          "Invent page numbers",
+          "Cite all 12 anyway"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Only verified, consulted sources should be cited."
+      },
+      {
+        "id": "land-025",
+        "module": "open-weight-and-local-ai",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does 'open-weight' mean?",
+        "options": [
+          "The model's weights are published for download and use under a licence",
+          "The model is always free of restrictions",
+          "The model has no parameters",
+          "The model only works online"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Open-weight models publish weights, usually with licence terms."
+      },
+      {
+        "id": "land-026",
+        "module": "open-weight-and-local-ai",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why must businesses read an open-weight model's licence?",
+        "options": [
+          "Licences may include conditions on commercial use, attribution or acceptable use",
+          "It's only needed for images",
+          "Licences are decorative",
+          "Licences change the model's speed"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Terms vary and must be followed."
+      },
+      {
+        "id": "land-027",
+        "module": "open-weight-and-local-ai",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which are genuine advantages of self-hosting open-weight models? (Choose all that apply.)",
+        "options": [
+          "Automatic frontier-level quality on every task",
+          "Control over where data is processed",
+          "Potential cost savings for high-volume narrow tasks",
+          "Ability to customise or fine-tune"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Control, customisation and scale economics are advantages; frontier quality isn't guaranteed."
+      },
+      {
+        "id": "land-028",
+        "module": "open-weight-and-local-ai",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What's the main privacy benefit of running AI locally?",
+        "options": [
+          "No need for device security",
+          "Prompts and documents can stay on your own device",
+          "Unlimited web search",
+          "Faster internet"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Local inference keeps data on your machine; device security still matters."
+      },
+      {
+        "id": "land-029",
+        "module": "open-weight-and-local-ai",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A consultant's contract bans uploading interview notes to third-party services. Which approach is most appropriate?",
+        "options": [
+          "Email the notes to a colleague to process",
+          "Use a consumer chatbot anyway",
+          "Post the notes publicly",
+          "Use a local open-weight model on a secured device for the notes, and hosted tools only for non-confidential tasks"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Local processing respects the contract; split tasks by sensitivity."
+      },
+      {
+        "id": "land-030",
+        "module": "open-weight-and-local-ai",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Your local model is very slow and weak. What's a likely cause?",
+        "options": [
+          "Local AI never works",
+          "The model is too large or too small for your hardware and task",
+          "Your keyboard is old",
+          "The model needs a new name"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Matching model size to hardware and task is key."
+      },
+      {
+        "id": "land-031",
+        "module": "image-voice-and-video-tools",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "When a brand needs ad images that accurately show its product, what's the best approach?",
+        "options": [
+          "Use a competitor's product image",
+          "Composite real product photos into AI-generated backgrounds",
+          "Generate the product entirely with AI",
+          "Use stock photos of other products"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Real product photos keep representation accurate."
+      },
+      {
+        "id": "land-032",
+        "module": "image-voice-and-video-tools",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What is the purpose of Content Credentials (C2PA)?",
+        "options": [
+          "Speeding up rendering",
+          "Removing watermarks",
+          "Pricing images",
+          "Providing provenance information about how content was created or edited"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Content Credentials attach provenance metadata."
+      },
+      {
+        "id": "land-033",
+        "module": "image-voice-and-video-tools",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "A client wants an AI video of a famous celebrity 'endorsing' their product without permission. Which responses are correct? (Choose all that apply.)",
+        "options": [
+          "Proceed but label it as parody",
+          "Explain that it could mislead consumers and create legal liability",
+          "Decline because it impersonates a real person without consent",
+          "Suggest licensed talent or a clearly fictional presenter instead"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Unauthorised impersonation is harmful and potentially unlawful; offer ethical alternatives."
+      },
+      {
+        "id": "land-034",
+        "module": "image-voice-and-video-tools",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What's the most important quality step when dubbing a video into Arabic with AI?",
+        "options": [
+          "Shorten the video",
+          "Increase volume",
+          "Add music",
+          "Native-speaker review of translation and pronunciation"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Native review catches mistranslations and cultural issues."
+      },
+      {
+        "id": "land-035",
+        "module": "image-voice-and-video-tools",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What's required before cloning someone's voice?",
+        "options": [
+          "A long script",
+          "Their explicit, informed consent",
+          "Nothing",
+          "A paid plan only"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Consent is essential and required by reputable platforms."
+      },
+      {
+        "id": "land-036",
+        "module": "image-voice-and-video-tools",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which practice best protects a company from voice-clone payment scams?",
+        "options": [
+          "Trusting familiar voices",
+          "Sharing executive recordings widely",
+          "Paying quickly to avoid delays",
+          "Call-back verification through known channels before payments"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Independent verification defeats impersonation."
+      },
+      {
+        "id": "land-037",
+        "module": "choosing-your-ai-stack",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What should a reusable AI test set include?",
+        "options": [
+          "8 to 15 real tasks with success criteria, including honesty and instruction-following tests",
+          "Only easy tasks",
+          "The vendor's demo prompts",
+          "One task"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "A representative set with criteria enables fair, repeatable comparisons."
+      },
+      {
+        "id": "land-038",
+        "module": "choosing-your-ai-stack",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "How should you use an AI to help judge other AI outputs?",
+        "options": [
+          "Never",
+          "Only for images",
+          "As a helper with evidence-based scoring, while you make final accuracy judgements",
+          "As the final judge of accuracy"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "AI judges have biases; humans should confirm accuracy."
+      },
+      {
+        "id": "land-039",
+        "module": "choosing-your-ai-stack",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which factors should determine the true cost of an AI tool? (Choose all that apply.)",
+        "options": [
+          "The vendor's logo design",
+          "Subscription or usage fees",
+          "Number of usable outputs produced",
+          "Human time to check and fix outputs"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Cost per useful output includes fees, human time and yield."
+      },
+      {
+        "id": "land-040",
+        "module": "choosing-your-ai-stack",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which practice reduces lock-in?",
+        "options": [
+          "Keeping prompts, instructions and files in your own storage and exporting outputs",
+          "Using only proprietary formats",
+          "Keeping prompts only in one tool",
+          "Never exporting"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Portable assets make switching easier."
+      },
+      {
+        "id": "land-041",
+        "module": "choosing-your-ai-stack",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "In a personal AI stack, what belongs on a data rules card?",
+        "options": [
+          "Tool prices",
+          "Wi-Fi passwords",
+          "Favourite prompts",
+          "Which data classes may go into which tools, with restricted data never entering AI tools"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "The card maps data classes to approved tools."
+      },
+      {
+        "id": "land-042",
+        "module": "choosing-your-ai-stack",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A freelancer has seven overlapping AI subscriptions. What's the best approach?",
+        "options": [
+          "Cancel everything",
+          "Add an eighth",
+          "Pick tools by popularity",
+          "List top recurring tasks, map to categories, keep one tool per category, build assets and review quarterly"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "A lean, task-driven stack with review improves cost and effectiveness."
+      }
+    ]
+  }
+}

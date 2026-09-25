@@ -1,0 +1,1505 @@
+{
+  "slug": "ai-for-everyday-productivity",
+  "version": 1,
+  "title": "AI for Everyday Work: Writing, Research, Meetings & Data",
+  "subtitle": "Save hours every week with practical, safe AI workflows for email, documents, meetings, research, spreadsheets, slides and translation",
+  "category": "ai",
+  "level": "beginner",
+  "estimatedMinutes": 190,
+  "description": "You don't need to be technical to get real value from AI at work. This beginner-friendly course shows you, step by step, how to use any mainstream AI assistant (such as Claude, ChatGPT, Gemini or Microsoft Copilot) for the tasks that fill your week: drafting emails and documents, summarising long material, taking meeting notes and following up, researching with citations, analysing spreadsheets, building presentations, translating and localising content, and organising your knowledge.\n\nEvery lesson includes copy-paste prompt templates, a worked example, common pitfalls and privacy tips. You'll also build simple habits that keep you in control: checking facts, protecting personal and client data, and staying accountable for what you send. By the end you'll have a personal toolkit of workflows you can use from day one.",
+  "outcomes": [
+    "Use a simple prompt formula to get useful first drafts from any AI assistant",
+    "Draft, edit and summarise emails, documents and reports while keeping your own voice",
+    "Turn meetings into clear notes, action items and follow-ups with consent and accuracy",
+    "Research topics with citations and verify claims before sharing them",
+    "Analyse spreadsheet data and build presentation outlines with AI, checking every number",
+    "Translate and localise content responsibly and organise personal knowledge with AI"
+  ],
+  "skills": [
+    "AI productivity",
+    "Prompt writing",
+    "AI-assisted writing",
+    "Meeting notes",
+    "Research verification",
+    "Spreadsheet analysis",
+    "Localisation"
+  ],
+  "prerequisites": [],
+  "badge": {
+    "name": "Certified AI Productivity Practitioner",
+    "description": "The holder can use mainstream AI assistants to work faster and better on everyday tasks: drafting and summarising, meeting notes and follow-ups, research with citations and verification, spreadsheet analysis, presentations, translation and personal knowledge management, while protecting data and remaining accountable for results.",
+    "criteria": "Completed all lessons and scored at least 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "ai-work-basics",
+      "title": "AI work basics",
+      "summary": "Build the Ask, Check, Own habit and learn a simple prompt formula that works in any AI assistant.",
+      "lessons": [
+        {
+          "slug": "ai-work-habits-ask-check-own",
+          "title": "Your AI work habit: Ask, Check, Own",
+          "type": "video",
+          "durationMinutes": 10,
+          "body": "### AI is a fast assistant, not an autopilot\n\nAI assistants such as Claude, ChatGPT, Gemini and Microsoft Copilot can draft an email in seconds, summarise a report in a minute and turn messy notes into a clean plan. They are genuinely useful for everyday work. But they can also be confidently wrong, miss context only you know, and repeat anything you give them. The people who benefit most follow one simple habit: **Ask, Check, Own**.\n\n### Ask: give the AI what a new colleague would need\n\nImagine handing the task to a smart new colleague on their first day. They'd need to know who it's for, what you want, and any rules. AI is the same. A vague request (\"write an email\") gets a vague result. A clear one gets something you can use. You'll learn a simple formula for this in the next lesson.\n\n### Check: review before you rely on it\n\nAlways read the output before you use it. In particular, check:\n\n- **Facts, names and numbers.** AI can invent details that sound right.\n- **Tone.** Is it right for this person and situation?\n- **Completeness.** Did it miss anything important from your notes?\n- **Commitments.** Did it promise something (a deadline, a discount) you didn't agree to?\n\nThe more important the task, the more carefully you check. A brainstorm needs a quick look; a message to a client or a report to your manager needs a careful read; anything legal, financial or medical needs an expert.\n\n### Own: you are responsible for what you send\n\nIf you send it, publish it or submit it, it's yours. \"The AI wrote it\" is not an excuse your manager, client or teacher will accept. Owning the output also means following your organisation's rules on AI use, and being honest about AI help where that's expected (for example, in coursework or when a client contract requires it).\n\n### What to keep out of AI tools\n\nA simple rule for beginners:\n\n- **OK:** public information, general questions, your own non-sensitive drafts.\n- **Only in work-approved tools:** internal documents, client work, colleague information.\n- **Never:** passwords, bank or card details, government ID numbers, medical information about others, or anything you've been told is confidential and not approved for AI.\n\nWhen in doubt, replace names with roles (\"the client\", \"my manager\") or ask your IT team.\n\n### Worked example\n\nAisha, an office manager in Dubai, needs to announce a new visitor-parking process. She asks her work AI assistant for a short, friendly announcement using her bullet notes (**Ask**). The draft is good, but it says visitors \"no longer need to register\", which is wrong: they register at reception instead of online. She fixes it and checks the times (**Check**). She sends it under her name, confident it's accurate (**Own**). Total time: five minutes instead of twenty.\n\n### Sample: what a quick check catches\n\nCommon catches in everyday drafts include a wrong day of the week next to a date, a meeting room name that doesn't exist, a friendly sign-off that's too casual for a senior recipient, or a sentence that promises \"we'll resolve this today\" when you can't. None of these take long to fix, but each could cause real problems if sent.\n\n### Where AI fits in a normal working day\n\nA simple way to start is to look for tasks that are repetitive, text-heavy or slow to begin:\n\n- **Morning:** summarise overnight emails and draft replies to the routine ones.\n- **Before meetings:** create an agenda and a list of questions.\n- **After meetings:** turn notes into action items and a follow-up message.\n- **Afternoon:** draft a report section, clean up a spreadsheet, or translate a customer message.\n- **End of day:** tidy your notes and plan tomorrow's priorities.\n\nStart with one or two of these, build confidence, then add more.\n\n### Pitfalls to avoid\n\n- Copying and pasting without reading.\n- Pasting private information into a personal account.\n- Using AI to write something you don't understand yourself.\n- Assuming AI knows about recent events or your company's internal details.\n",
+          "video": {
+            "script": "Welcome. Today you'll learn the single habit that separates people who get real value from AI from people who get into trouble with it. It's three words: Ask, Check, Own. Ask. Treat the AI like a smart new colleague on their first day. Tell it who the work is for, what you want, and any rules to follow. The clearer your request, the better the first draft. Check. Always read before you rely on it. Look at facts, names and numbers, because AI can invent details that sound perfectly right. Check the tone. Check that nothing important from your notes is missing. And watch for promises you didn't mean to make, like a deadline or a discount. Own. If you send it, it's yours. The AI isn't accountable to your manager, your client or your teacher. You are. That also means following your organisation's AI rules and being honest about AI help where that's expected. One more thing: protect information. Public information and your own non-sensitive drafts are usually fine. Internal and client material belongs only in tools your workplace has approved. And never paste passwords, bank details, ID numbers or other people's private information. Ask, Check, Own. Practise it for one day, and notice how much time you save, and how many small mistakes you catch.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Follow Ask, Check, Own for every AI-assisted task.",
+            "Give the AI the context a new colleague would need.",
+            "Check facts, tone, completeness and commitments; scale checking to the stakes.",
+            "Never paste passwords, financial details, IDs or confidential data into unapproved tools."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "An AI-drafted client email promises a discount you never agreed to. Whose responsibility is it if you send it?",
+              "options": [
+                "Yours, because you sent it",
+                "The AI company's",
+                "Nobody's",
+                "The client's"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "You own what you send; checking commitments is part of the habit."
+            },
+            {
+              "question": "Which of these should you never paste into an AI tool?",
+              "options": [
+                "A public news article",
+                "Your own non-sensitive draft",
+                "Your bank card details",
+                "A general question about grammar"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Financial details are restricted and must stay out of AI tools."
+            }
+          ],
+          "activity": "For one day, apply Ask, Check, Own to every AI-assisted task. Note one thing you caught during the Check step."
+        },
+        {
+          "slug": "the-everyday-prompt-formula",
+          "title": "The everyday prompt formula",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Four ingredients\n\nYou don't need special tricks to write good prompts. Most everyday tasks go well when you include four ingredients. Remember them as **W-A-R-F**: Who, Aim, Rules, Format.\n\n- **Who:** who you are and who the audience is.\n- **Aim:** what you want the AI to produce and why.\n- **Rules:** tone, length, things to include or avoid.\n- **Format:** how the result should look (email, bullets, table, steps).\n\n### The template\n\n```text\nWho: I'm a [your role]. This is for [audience].\nAim: Please [write / summarise / plan / explain] [what] so that [goal].\nRules: [friendly / formal / simple], [length], include [x], avoid [y].\nFormat: [email with subject line / 5 bullets / table with columns ...].\nMy notes: [paste your notes, draft or information]\n```\n\n### Before and after\n\n**Before:** \"Write a message about the office party.\"\n\n**After:**\n\n```text\nWho: I'm the team coordinator. This is for our 25-person team.\nAim: Write a short message inviting everyone to our end-of-year dinner so they reply by Thursday.\nRules: warm and inclusive, under 100 words, mention that vegetarian and halal options are available, avoid alcohol references.\nFormat: a Teams message with a clear call to action.\nMy notes: Dinner on 18 December, 7pm, at the restaurant near the office. Reply in the poll.\n```\n\nThe second prompt produces a message you can send with a quick check. The first produces a generic invitation you'd have to rewrite.\n\n### Three follow-ups that fix most problems\n\nAI rarely gets everything perfect the first time. Instead of starting over, reply with one of these:\n\n1. **\"Shorter and simpler.\"** Great for emails and announcements.\n2. **\"Keep the structure, but change [specific thing].\"** Keeps what works.\n3. **\"Ask me what you need to know to make this better.\"** Lets the AI fill gaps by asking you.\n\n### Give examples when style matters\n\nIf you want a particular style, paste an example: \"Here's a message I wrote last month that my team liked. Match this style.\" Examples are one of the fastest ways to get output that sounds like you.\n\n### Save your best prompts\n\nCreate a simple document called \"My prompts\". Each time a prompt works well, save it with a title like \"Team announcement\" or \"Polite follow-up\". Replace the specific details with [brackets] so you can reuse it. Within a month, you'll have a personal toolkit that saves hours.\n\n### Worked example\n\nBilal, a customer service team lead in Karachi, needs to explain a new refund process to his team. His first attempt (\"explain refund process\") gives a generic explanation of refunds. Using the formula, he adds his role, the audience (new agents), the aim (process refunds correctly in the new system), the rules (simple English, numbered steps, include the approval limit) and pastes the policy text. The result is a clear 8-step guide. He checks it against the policy, fixes one step and shares it.\n\n### Sample output check\n\nA good response to the dinner prompt is under 100 words, includes the date, time, place and reply deadline, mentions both dietary options, and ends with a clear action (\"Please vote in the poll by Thursday\"). If any of these is missing, ask for it specifically rather than regenerating.\n\n### Break big tasks into steps\n\nFor larger tasks, don't ask for everything at once. Ask for a plan first, then work through it one step at a time: \"First, list the sections this guide needs. Wait for my approval before writing.\" Smaller steps give you more control and better results, and they make it easy to spot where something went wrong.\n\n### Works in any assistant\n\nThis formula works in Claude, ChatGPT, Gemini, Copilot and most other assistants. Features differ between tools and plans, but clear communication works everywhere.\n\n### Pitfalls\n\n- Leaving out the audience; tone depends on it.\n- Asking for \"everything\" in one go. Break big tasks into steps.\n- Forgetting to paste the actual information the AI needs.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Use W-A-R-F: Who, Aim, Rules, Format, plus your notes.",
+            "Fix drafts with focused follow-ups instead of starting over.",
+            "Paste an example when style matters.",
+            "Save successful prompts with [brackets] to build a reusable toolkit."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which ingredient tells the AI who will read the output?",
+              "options": [
+                "Format",
+                "Notes",
+                "Rules",
+                "Who"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "The Who ingredient covers you and your audience."
+            },
+            {
+              "question": "Your AI draft is good but too long. What's the best next step?",
+              "options": [
+                "Start a new chat",
+                "Copy it anyway",
+                "Give up",
+                "Reply 'Shorter and simpler'"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "A focused follow-up keeps what works and fixes the issue."
+            },
+            {
+              "question": "Why save prompts with [brackets] instead of the specific details?",
+              "options": [
+                "To hide them",
+                "AI requires brackets",
+                "Brackets look nicer",
+                "So you can reuse them as templates for similar tasks"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Templates make good prompts reusable."
+            }
+          ],
+          "activity": "Rewrite three prompts you use regularly using W-A-R-F and save them in a 'My prompts' document."
+        }
+      ]
+    },
+    {
+      "slug": "writing-with-ai",
+      "title": "Writing and summarising with AI",
+      "summary": "Draft emails and documents that sound like you, and create summaries that help people decide and act.",
+      "lessons": [
+        {
+          "slug": "email-drafting-with-ai",
+          "title": "Email drafting that sounds like you",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Where AI helps most with email\n\nEmail is one of the easiest places to save time with AI. It's especially useful for:\n\n- Replies to long or complicated threads\n- Difficult messages: saying no, chasing late payments, delivering bad news\n- Follow-ups after meetings or calls\n- Messages in a second language\n- Turning rough bullet points into a clear, polite message\n\nIf your organisation provides an AI assistant built into your email (such as Gemini in Gmail or Copilot in Outlook), you can often draft replies inside the thread. Otherwise, copy the relevant parts into your approved assistant, removing anything sensitive that isn't needed.\n\n### The reply template\n\n```text\nHere is an email I received:\n[paste email, removing personal details that aren't needed]\n\nI want to reply to:\n- [point 1: e.g. confirm the meeting on Tuesday]\n- [point 2: e.g. politely decline the extra work this month]\n- [point 3: e.g. suggest we revisit in March]\n\nTone: [friendly and professional]. Length: under [120] words.\nWrite a subject line if needed and the reply.\n```\n\nNotice that **you** decide what the reply says. The AI decides how to say it clearly. This keeps you in control of commitments.\n\n### Difficult emails\n\nAI is excellent at finding calm, respectful wording when you're stressed or annoyed.\n\n```text\nI need to chase an invoice that is 30 days overdue. The client is important and I want to keep a good relationship.\nWrite a firm but friendly reminder. Include the invoice number [#], amount [amount], original due date [date].\nAsk for payment within 7 days or an update on timing. Under 100 words.\n```\n\nFor very sensitive situations (HR issues, complaints, legal disputes), use AI for a first draft only, and get advice from the right person before sending.\n\n### Making it sound like you\n\nAI emails can sound generic or overly formal. Fix this by:\n\n- **Pasting two of your own emails** and saying \"match this style\".\n- **Banning phrases** you'd never use: \"Avoid 'I hope this email finds you well' and 'Please do not hesitate to contact me'.\"\n- **Editing the first and last lines yourself.** Personal openings and closings make the biggest difference.\n\n### Worked example\n\nFatima, a project coordinator in Riyadh, receives a long email from a supplier listing six issues. She pastes it (removing the supplier contact's phone number) and lists her three decisions: accept the revised delivery date, reject the price increase, and request a call about quality issues. The AI drafts a clear, polite reply with a short numbered list. She adds a personal line thanking the supplier for their honesty, checks the dates, and sends it in five minutes instead of twenty-five.\n\n### Sample output check\n\nA good draft answers every point you listed, in the order that makes sense to the reader, keeps your decisions exactly as you stated them, and doesn't add extras like \"we'll also cover shipping costs\". If it adds anything you didn't decide, delete it.\n\n### Quick prompts for common situations\n\n- **Saying no politely:** \"Decline this request kindly, explain we're at capacity this month, and suggest a date in March.\"\n- **Following up without nagging:** \"Write a short, friendly follow-up to my email from last week asking for the signed form.\"\n- **Apologising well:** \"Apologise for the delayed delivery, explain briefly without excuses, and state what we're doing to fix it.\"\n\n### Second-language emails\n\nIf you write in a language that isn't your first, AI can check grammar and tone:\n\n```text\nPlease correct the grammar and make this email sound natural and professional in English. Keep my meaning exactly. Then list the main changes so I can learn.\n```\n\nAsking for a list of changes helps you learn and makes sure the meaning didn't shift.\n\n### Pitfalls\n\n- Letting AI decide what to agree to.\n- Sending without checking names, dates and numbers.\n- Over-polished emails that sound unlike you; colleagues notice.\n- Pasting long threads containing other people's personal information unnecessarily.\n",
+          "video": null,
+          "keyTakeaways": [
+            "You decide what the email says; the AI helps with how to say it.",
+            "Use the reply template with your points, tone and length.",
+            "Match your style with examples, banned phrases and your own opening and closing lines.",
+            "Check commitments, names, dates and numbers, and remove unnecessary personal data."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What should you give the AI when asking for an email reply?",
+              "options": [
+                "Just 'reply to this'",
+                "Your password",
+                "The email plus the specific points you want to make, tone and length",
+                "Nothing"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Your points keep you in control of what the reply commits to."
+            },
+            {
+              "question": "The AI draft adds 'we'll cover the shipping costs', which you didn't decide. What should you do?",
+              "options": [
+                "Forward it to your manager to decide",
+                "Add more promises",
+                "Send it anyway",
+                "Remove it; only commit to what you decided"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Never send commitments you didn't make."
+            },
+            {
+              "question": "Which is the best way to make AI emails sound like you?",
+              "options": [
+                "Add many emojis",
+                "Use a random style",
+                "Paste examples of your own emails and ban phrases you never use",
+                "Use very formal language"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Examples and banned phrases align the style with your voice."
+            }
+          ],
+          "activity": "Use the reply template on three real emails this week (removing unnecessary personal details). Note how long each took compared with usual."
+        },
+        {
+          "slug": "documents-and-reports",
+          "title": "Documents and reports: from blank page to solid draft",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Beat the blank page\n\nStarting a document is often the hardest part. AI can give you a structure, a first draft from your notes, and feedback on what's missing. You still supply the facts and the judgement.\n\n### The four-step document workflow\n\n**Step 1: Outline first.**\n\n```text\nI need to write a [document type, e.g. project update / proposal / policy] for [audience].\nPurpose: [what the reader should know or do after reading].\nSuggest an outline with headings and one line on what goes under each. Keep it to one page.\n```\n\nAdjust the outline yourself. This is where your judgement matters most.\n\n**Step 2: Draft section by section from your notes.**\n\n```text\nUsing the outline below and my notes, draft the \"[section name]\" section in about [150] words.\nUse only information in my notes. Where something is missing, write [TBC].\nOutline: [paste]\nNotes: [paste]\n```\n\nThe **[TBC]** instruction is important: it stops the AI from filling gaps with invented details.\n\n**Step 3: Improve.**\n\n- \"Make this clearer for someone new to the project.\"\n- \"Turn this paragraph into three bullet points.\"\n- \"Add a one-paragraph executive summary at the top.\"\n- \"What questions would my manager ask after reading this?\"\n\n**Step 4: Final check.** Read the whole document. Check facts, figures and names. Fill every [TBC]. Make sure the tone fits your organisation.\n\n### Useful document types and prompts\n\n**Weekly or monthly updates:**\n\n```text\nTurn these notes into a status update with sections: Done this week, Next week, Risks/blockers, Help needed. Keep each bullet to one line.\n```\n\n**Proposals:** outline with problem, proposed solution, benefits, costs [TBC], timeline, next steps.\n\n**Standard operating procedures (SOPs):**\n\n```text\nTurn this description of how we process new orders into numbered steps. Each step should start with a verb. Add a \"common mistakes\" section at the end.\n```\n\n**Policies:** structure and plain-English drafts, always reviewed by the responsible person (and legal or HR where relevant).\n\n### Worked example\n\nTom, an operations assistant at a logistics firm in Birmingham, needs a monthly report for his director. He pastes his bullet notes and last month's report as a structure example. The AI drafts the report with [TBC] for two missing figures. Tom gets the figures from the system, fills them in, and asks: \"What would the director ask after reading this?\" The AI suggests she'll ask why late deliveries rose. Tom adds a short explanation. The director replies: \"Clear and useful, thanks.\"\n\n### Sample output check\n\nA strong draft follows the outline's headings exactly, uses only facts from your notes, and marks gaps clearly. Watch for \"filler\" sentences such as \"This demonstrates our continued commitment to excellence\"; delete them. Readers value specific facts over generic statements.\n\n### Getting feedback before your manager does\n\nBefore you send a document, ask the AI to review it from the reader's point of view:\n\n```text\nRead this report as my director would. What is unclear, what is missing, and what would you question? List the top 5 issues in order of importance. Don't rewrite it.\n```\n\nThis often catches missing context, unexplained jargon or a buried conclusion. Fix the issues yourself, then do your final check.\n\n### Formatting tips\n\n- Ask for **headings and short paragraphs** for readability.\n- Ask for **tables** for comparisons and figures.\n- If your document tool has built-in AI (for example, in Google Docs or Microsoft Word), you can draft directly in the document; features depend on your plan and your organisation's settings.\n\n### Pitfalls\n\n- Asking the AI to write the whole document in one go with no notes; you'll get generic content.\n- Leaving [TBC] markers in the final version.\n- Letting AI invent figures, quotes or references.\n- Using AI for final legal or HR wording without the right review.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Outline first, then draft section by section from your notes, then improve, then check.",
+            "Use [TBC] to stop the AI inventing missing details, and fill every gap before sending.",
+            "Ask 'What would my reader ask?' to strengthen the document.",
+            "Delete generic filler and keep specific facts."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What does asking the AI to write [TBC] for missing information achieve?",
+              "options": [
+                "It formats headings",
+                "It translates the text",
+                "It makes the document look busy",
+                "It prevents invented details and shows you what to fill in"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "[TBC] markers keep gaps visible instead of fabricated."
+            },
+            {
+              "question": "What's the best first step for a new proposal?",
+              "options": [
+                "Ask for an outline based on audience and purpose, then adjust it",
+                "Skip planning",
+                "Ask for the full proposal with no notes",
+                "Copy a competitor's proposal"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Outlining first lets you shape the structure with your judgement."
+            }
+          ],
+          "activity": "Use the four-step workflow for a real document you need this week. Count how many [TBC] items appeared and fill each from a reliable source."
+        },
+        {
+          "slug": "summarising-anything",
+          "title": "Summarising anything: reports, threads, articles and videos",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Summaries that are actually useful\n\n\"Summarise this\" usually produces a bland paragraph. A good summary is shaped by **who needs it** and **what they'll do with it**. The same 30-page report might need a two-line summary for a CEO, a list of actions for a project team, and a risk list for finance.\n\n### The summary template\n\n```text\nSummarise the text below for [audience] who needs to [decide / act / stay informed].\nGive me:\n1. The main point in one sentence\n2. [3-5] key points\n3. Actions or decisions needed (with owners and dates if mentioned)\n4. Anything unclear, missing or worth questioning\nKeep it under [150] words. Use only the text provided.\n[paste text or attach file]\n```\n\nThe fourth item is where AI adds surprising value: it often spots gaps or contradictions you'd miss when skimming.\n\n### Different summary shapes\n\n- **TL;DR:** \"Give me a two-sentence summary.\"\n- **Decision summary:** \"What decision is being asked for, what are the options, and what does the author recommend?\"\n- **Action list:** \"List every action, who owns it and the deadline.\"\n- **Compare:** \"Summarise the differences between version 1 and version 2.\"\n- **Explain simply:** \"Summarise this for someone with no background in finance.\"\n\n### Long documents and multiple files\n\nMany assistants can handle long documents and several files at once; limits vary by tool and plan. For very long material:\n\n1. Ask for the structure first (\"What are the main sections?\").\n2. Summarise the sections that matter to you.\n3. Ask targeted questions: \"What does it say about pricing? Quote the relevant sentences.\"\n\nAsking for **quotes** makes checking easy: you can search the document for the quoted sentence.\n\n### A reading-list shortcut\n\nWhen you have several articles to get through, paste them together (or attach them) and ask: \"For each article, give me the main point in one sentence and one thing I should act on. Then tell me which single article is most worth reading in full.\" You still read the most important one yourself, but you spend your attention where it matters.\n\n### Articles, web pages and videos\n\nSome assistants can read web pages or video transcripts directly, depending on the tool and plan. If yours can't, paste the text or the transcript. Always keep the original link so you can refer back.\n\n### Worked example\n\nSana, a marketing executive in Lahore, receives a 25-page industry report the evening before a strategy meeting. She uploads it to her work assistant and asks for a decision-focused summary for her team: key trends, implications for their brand, and questions to raise. The summary highlights three trends and notes that one chart's data source is unclear. In the meeting, she raises that question, and her manager asks her to follow up with the publisher. She looks prepared and thoughtful, and she read the key sections herself after the summary pointed her to them.\n\n### Sample output check\n\nA strong summary: stays within the word limit, names specific numbers from the text (not rounded or invented), lists actions with owners where the text states them, and flags uncertainty honestly (\"The report doesn't say which markets the survey covered\"). If you spot a figure in the summary, search the document to confirm it before repeating it.\n\n### Summaries for different people from one source\n\nOne document often needs several summaries. After your first summary, try: \"Now give me a version for the finance team focusing on costs and risks\" and \"Now a two-line version for the weekly team update.\" Each version is quick to produce, but check that numbers stay identical across all of them.\n\n### Pitfalls\n\n- Trusting a summary of something important without reading key parts yourself.\n- Summaries that sound confident but include details not in the original. Ask: \"Use only the text provided.\"\n- Uploading confidential documents to unapproved tools.\n- Losing nuance: summaries simplify. For contracts, policies and anything legal, read the original.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Shape summaries by audience and purpose, not just length.",
+            "Ask for main point, key points, actions and gaps, using only the provided text.",
+            "For long documents, get the structure first, then targeted answers with quotes.",
+            "Read the original for anything important, legal or contractual."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which prompt produces the most useful summary for a manager who must decide?",
+              "options": [
+                "Summarise for a manager deciding on budget: main point, options, recommendation, and anything unclear",
+                "Tell me about it",
+                "Summarise this",
+                "Make it short"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Audience and purpose shape a useful summary."
+            },
+            {
+              "question": "Why ask the AI to include quotes when summarising a long document?",
+              "options": [
+                "Quotes are required",
+                "Quotes make it longer",
+                "Quotes let you quickly find and verify the original text",
+                "Quotes change the tone"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Quotes make verification fast."
+            },
+            {
+              "question": "For a contract, what's the right use of an AI summary?",
+              "options": [
+                "Share it as the official version",
+                "Rely on it instead of reading the contract",
+                "Ignore the contract",
+                "Use it to orient yourself, then read the key clauses and get expert review where needed"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Summaries lose nuance; contracts need careful reading and appropriate review."
+            }
+          ],
+          "activity": "Summarise one long document from your work with the template. Verify two points by searching for the quoted text in the original."
+        }
+      ]
+    },
+    {
+      "slug": "meetings-with-ai",
+      "title": "Meetings with AI",
+      "summary": "Prepare focused meetings, capture accurate notes and action items with consent, and follow up fast.",
+      "lessons": [
+        {
+          "slug": "meeting-notes-and-action-items",
+          "title": "Meeting notes and action items",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### From messy meeting to clear next steps\n\nMeetings generate decisions and tasks, but notes are often incomplete, and action items get lost. AI can turn raw notes or transcripts into a clean summary with owners and deadlines in a minute.\n\nThere are two common ways to do this:\n\n1. **Built-in meeting AI:** many video-meeting and office tools (for example, Microsoft Teams with Copilot, Google Meet with Gemini, Zoom's AI features and others) can transcribe and summarise meetings when enabled by your organisation. Availability depends on your plan and admin settings.\n2. **Your own notes plus an assistant:** type rough notes during the meeting, then paste them into your approved AI assistant.\n\n### Consent comes first\n\nBefore recording or transcribing a meeting:\n\n- **Tell participants** and follow your organisation's policy. In many places, recording without consent can break the law.\n- **Avoid recording** sensitive conversations (HR, health, legal) unless there's a clear reason and the right approvals.\n- **Know where the recording and transcript are stored** and who can access them.\n\nIf in doubt, don't record: take your own notes instead.\n\n### The meeting summary template\n\n```text\nHere are my notes (or the transcript) from a meeting about [topic] with [roles/teams].\nCreate:\n1. A 3-sentence summary\n2. Decisions made\n3. Action items as a table: Action | Owner | Due date\n4. Open questions and risks\nIf an owner or date isn't clear, write \"Unassigned\" or \"No date\" instead of guessing.\n[paste notes or transcript]\n```\n\nThe \"don't guess\" instruction is essential. AI will otherwise assign tasks to whoever was mentioned nearby.\n\n### Check before you share\n\nTranscripts mishear names, numbers and technical terms, and summaries can make discussions sound more decided than they were. Before sending:\n\n- Check every **owner** and **due date** against your memory or notes.\n- Change \"agreed\" to \"discussed\" where nothing was actually decided.\n- Remove anything sensitive that shouldn't go to all attendees.\n\n### Worked example\n\nJames, a project manager in London, runs a 45-minute kick-off with a client. With consent, the meeting is transcribed by his company's approved tool. He uses the template on the transcript. The AI lists seven actions; two are marked \"Unassigned\". James fills in owners based on what he remembers, corrects a misheard product name (\"Maven\" should be \"Maveen\"), and changes one \"decision\" back to \"to be confirmed\", because the client said they needed approval. He sends the summary within an hour of the meeting, and the client replies: \"Great notes, very clear.\"\n\n### Sample output\n\nA good summary is short enough to read in a minute. The action table has one action per row, each starting with a verb (\"Send revised timeline\"), a named owner, and a date. Open questions are phrased as questions (\"Who approves the final budget?\"). If the output is long and narrative, ask: \"Cut to decisions, actions and open questions only.\"\n\n### Quick notes if you have no transcript\n\nEven three or four rough bullets typed during a meeting are enough. For example: \"budget ok'd?\", \"Ali to send deck Fri\", \"launch maybe May\". Paste them with the template, and add context: \"This was a 30-minute call with our design agency.\" The AI will tidy them up and flag unclear items, like whether the budget was actually approved.\n\n### Turning action items into tracked tasks\n\nA summary only helps if actions actually happen. Copy the action table into wherever your team tracks work (a task app, a shared spreadsheet, or your project tool), and ask the AI to rewrite vague actions as specific ones: \"Look into pricing\" becomes \"Send three pricing options to Sara by Thursday\". Clear, verb-first actions with an owner and date are far more likely to get done.\n\n### Pitfalls\n\n- Recording without telling people.\n- Sending AI summaries without checking owners and dates.\n- Sharing transcripts widely when they contain off-hand or sensitive comments.\n- Relying on AI summaries as the official record for formal or legal meetings without proper review.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Use built-in meeting AI where approved, or paste your own notes into an approved assistant.",
+            "Get consent and follow policy before recording or transcribing.",
+            "Use a template that asks for decisions, owners, dates and open questions, and says 'don't guess'.",
+            "Check owners, dates, names and 'decisions' before sharing."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What should happen before a meeting is recorded or transcribed?",
+              "options": [
+                "Participants are informed and policy is followed",
+                "Record secretly to be accurate",
+                "Nothing",
+                "Only the organiser knows"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Consent and policy compliance come first."
+            },
+            {
+              "question": "Why tell the AI to write 'Unassigned' when an owner isn't clear?",
+              "options": [
+                "It's required by law",
+                "To make the table longer",
+                "It looks professional",
+                "To stop the AI guessing and wrongly assigning tasks"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Explicit 'don't guess' prevents incorrect assignments."
+            },
+            {
+              "question": "A summary says a budget was 'approved' but the client said they needed sign-off. What should you do?",
+              "options": [
+                "Delete the summary",
+                "Approve it yourself",
+                "Leave it",
+                "Change it to 'to be confirmed' before sharing"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Summaries can overstate decisions; correct them."
+            }
+          ],
+          "activity": "After your next meeting, use the template on your notes or an approved transcript. Correct at least the owners and dates before sharing."
+        },
+        {
+          "slug": "meeting-prep-and-follow-up",
+          "title": "Meeting prep and follow-up",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Better meetings start before they begin\n\nAI can help you prepare in minutes: a clear agenda, background research, likely questions, and a plan for the outcome you need. After the meeting, it helps you follow up quickly while everything is fresh.\n\n### Prep workflow\n\n**1. Agenda:**\n\n```text\nI'm running a [30]-minute meeting with [who] about [topic].\nGoal: by the end we should [decide / agree / plan] [outcome].\nCreate an agenda with time for each item, the question each item should answer, and who should lead it.\n```\n\n**2. Background briefing (for external meetings):** use research tools with citations to learn about the organisation's recent public news. Verify key facts by opening the sources.\n\n```text\nI'm meeting [company] about [topic]. Using public sources, summarise what they do, recent news in the last 12 months, and 3 thoughtful questions I could ask. Cite sources.\n```\n\n**3. Anticipate questions:**\n\n```text\nI'm presenting [proposal] to [audience, e.g. finance director]. What are the 5 toughest questions they might ask, and how could I answer each in 2 sentences?\n```\n\n**4. Practise:** some assistants offer voice mode, which lets you rehearse answers out loud.\n\n### Follow-up workflow\n\nWithin an hour of the meeting:\n\n```text\nUsing the meeting summary below, write a follow-up email to attendees that:\n- Thanks them briefly\n- Confirms decisions\n- Lists action items with owners and dates as a table\n- States the next meeting date if agreed\nKeep it under 150 words and friendly.\n[paste your checked meeting summary]\n```\n\nThen add calendar invites and task assignments in your usual tools. If your AI is connected to your calendar or task tools (where your organisation allows), you can ask it to prepare these, but review before anything is sent or created.\n\n### Worked example\n\nNoor, a sales executive in Abu Dhabi, has a first meeting with a hotel group. The evening before, she uses her assistant to build a 30-minute agenda aimed at agreeing a pilot. She uses a research tool to find the group's recent public announcements, opens two sources to confirm a new property opening, and prepares three questions. The assistant also predicts objections about budget timing. In the meeting, the client raises exactly that objection, and she's ready with a phased pilot option. Her follow-up email goes out the same afternoon with a clear action table.\n\n### Following up on unanswered actions\n\nA week later, reuse the same summary: \"Here are last week's action items. Draft a friendly check-in message asking owners for a quick status update, grouped by person.\" It keeps momentum without awkward chasing, and it's another place where you review before sending.\n\n### Sample agenda output\n\nA useful agenda looks like this: \"1. Introductions and goals (5 min, Noor): What does success look like for you this year? 2. Current guest-communication challenges (10 min, client): Where do you lose time today? 3. Pilot proposal (10 min, Noor): Would a 6-week pilot at one property be useful? 4. Next steps (5 min): Who needs to approve?\" Each item has a question, a time and a lead.\n\n### Preparing others, not just yourself\n\nSend a short pre-read to attendees a day before important meetings. Ask the AI: \"Turn this agenda and background into a 150-word pre-read that tells attendees what we'll decide and what they should think about beforehand.\" People arrive prepared, and meetings finish faster.\n\n### Meeting-free alternatives\n\nSometimes the best meeting is no meeting. Ask the AI: \"Could this be handled by email or a shared document instead? Draft that message.\" Many status updates work better asynchronously.\n\n### Pitfalls\n\n- Using research results about a company without verifying them.\n- Researching individuals' personal lives; keep to professional, public information.\n- Sending follow-ups with unchecked action items.\n- Letting AI create calendar invites or tasks without your review.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Use AI to create agendas with goals, timings and questions for each item.",
+            "Prepare with cited, verified background research and anticipated questions.",
+            "Send follow-ups within an hour using your checked summary.",
+            "Review anything AI prepares for calendars or tasks before it's sent or created."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What makes an AI-generated agenda most useful?",
+              "options": [
+                "Lots of items",
+                "No timings",
+                "A clear goal, timings, and a question each item should answer",
+                "Fancy formatting"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Goals and questions keep meetings focused on outcomes."
+            },
+            {
+              "question": "Before a client meeting, the AI research summary mentions a new property opening. What should you do?",
+              "options": [
+                "Open the cited source to confirm before referring to it",
+                "Ignore all research",
+                "Ask the client if it's true in an email first",
+                "Mention it without checking"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Verify facts before using them in conversation."
+            }
+          ],
+          "activity": "For your next important meeting, prepare an agenda, three anticipated questions with answers, and send a follow-up within an hour using the templates."
+        }
+      ]
+    },
+    {
+      "slug": "research-and-verification",
+      "title": "Research and verification",
+      "summary": "Research with citations using the right tools and questions, and verify facts quickly before you rely on them.",
+      "lessons": [
+        {
+          "slug": "research-with-citations",
+          "title": "Research with citations",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Why citations matter\n\nAI assistants can explain almost anything, but their built-in knowledge has a cut-off date and can contain mistakes. When facts matter, you need **sources**: links or references that show where information comes from. Citations let you check claims and give credit properly.\n\n### Tools that cite sources\n\n- **Assistants with web search** (for example, Claude, ChatGPT, Gemini and Microsoft Copilot, depending on plan and settings) can search the web and show links.\n- **Answer engines** such as Perplexity are designed around cited answers.\n- **Deep research modes** in several assistants run many searches and produce longer reports with citations, taking more time.\n- **Source-grounded tools** such as NotebookLM, or assistant projects with uploaded files, answer from documents you provide.\n\nFeatures and availability vary by plan and region, so check what your tools offer.\n\n### The research prompt\n\n```text\nResearch question: [specific question].\nContext: I need this for [purpose] for [audience]. Region: [country]. Time frame: [e.g. last 12 months].\nPlease:\n- Use reliable sources (official, government, well-known organisations, reputable publications)\n- Put a source link after every fact\n- Say if sources disagree or if information may be out of date\n- Tell me what you couldn't find\nFormat: short summary (5 bullets), then details, then a list of sources.\n```\n\n### Make your question specific\n\n| Vague | Specific |\n|---|---|\n| Remote work rules | What are the current rules for employers offering remote work to staff in the UAE? |\n| Social media trends | Which content formats are brands in Saudi Arabia using most on short-video platforms in the last year, according to reputable sources? |\n| AI in schools | What guidance has the UK government published on using generative AI in schools? |\n\nSpecific questions get specific, checkable answers.\n\n### Choose the right source for the job\n\n- **Laws, rules and official guidance:** government and regulator websites.\n- **Company information:** the company's own website, annual reports and press releases.\n- **Statistics:** official statistics offices and recognised research organisations; be careful with numbers from companies selling something.\n- **Academic topics:** peer-reviewed papers via your library or scholarly search tools.\n\n### Worked example\n\nOmar, a small business owner in Leeds, wants to know whether he needs to register for a particular tax as his online sales grow. He asks an assistant with web search using the research prompt. It summarises the rules and links to the official government pages. He opens the pages, confirms the threshold and date, and notices one detail the summary simplified. He books a call with his accountant, arriving with the right questions. Research that used to take an afternoon of confusing searches took twenty minutes.\n\n### Sample output check\n\nA good research answer has a link after each factual sentence, prefers official sources for rules, gives dates, and ends with \"What I couldn't find\". If you see a specific number with no link, ask: \"Which source says this?\" If the answer is vague, treat the number as unconfirmed.\n\n### When there's no web access\n\nIf your tool can't search, you can still research well: find reliable sources yourself, paste or upload them, and ask the AI to summarise **only** from them and to say which source each point comes from. This is often the most reliable approach for important work.\n\n### Pitfalls\n\n- Asking vague questions.\n- Assuming a link proves the claim; open it (next lesson).\n- Using AI answers about laws, tax, health or finance as final advice. Use them to prepare, then check official sources or ask a professional.\n- Putting private information into search queries.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Use search-enabled assistants, answer engines, deep research or source-grounded tools when facts matter.",
+            "Ask specific questions with context, region and time frame, and request a link after every fact.",
+            "Choose sources by type: official for rules, company for company facts, recognised bodies for statistics.",
+            "Use AI research to prepare, not as final legal, tax, health or financial advice."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which research question will get the most useful answer?",
+              "options": [
+                "Is tax good?",
+                "What are the current official thresholds for [tax] registration for small online sellers in the UK, with links to government pages?",
+                "Tell me about money",
+                "Tax rules"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Specific scope and source requests produce checkable answers."
+            },
+            {
+              "question": "Your AI tool can't search the web. How can you still research reliably?",
+              "options": [
+                "Stop researching",
+                "Provide trusted sources yourself and ask it to summarise only from them, naming the source for each point",
+                "Use shorter questions",
+                "Ask it to guess"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Supplying sources gives you control and traceability."
+            },
+            {
+              "question": "What's the best source for a country's employment rules?",
+              "options": [
+                "An advert",
+                "A social media post",
+                "The government or regulator's official website",
+                "A random forum"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Official sources are most authoritative for rules."
+            }
+          ],
+          "activity": "Pick a real question from your work. Use the research prompt, then list the sources and label each as official, company, research body or other."
+        },
+        {
+          "slug": "verification-and-fact-checking",
+          "title": "Verification and fact-checking in five minutes",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Links aren't proof\n\nA citation shows where the AI *says* information came from. It doesn't guarantee the source says exactly that, that it's current, or that it's trustworthy. AI can also occasionally produce references that don't exist, especially when asked for academic papers without real search. Verification is the step that turns AI research into something you can safely use.\n\n### The 5-minute verification routine\n\nFor the facts that matter most (usually 3 to 5 per piece of work):\n\n1. **Open the source.** Find the sentence or number. Does it really say that? (Use your browser's find function.)\n2. **Check the date.** When was it published or updated? Is it still current?\n3. **Check who's behind it.** Official body, respected publication, or someone selling something?\n4. **Cross-check.** Can you find the same fact in a second, independent reliable source?\n5. **Record it.** Note the source link and date next to the fact in your document.\n\n### Verification prompts\n\nAsk the AI to help you check its own work:\n\n```text\nFor each factual claim in your answer, list: the claim, the source link, and the exact sentence from the source that supports it. Mark any claim you can't directly support.\n```\n\n```text\nWhat in your answer might be out of date or uncertain? What should I double-check?\n```\n\nThese prompts don't replace opening sources, but they point you to the weak spots quickly.\n\n### Spotting common red flags\n\n- **Very precise numbers with no source** (\"73.4% of shoppers...\")\n- **Sources that don't mention the claim** when you open them\n- **Old dates** for fast-changing topics (prices, rules, technology)\n- **Only one type of source**, such as only company blogs\n- **Academic references you can't find** in a library or scholarly search\n- **Quotes attributed to famous people** that you can't find in a reliable source\n\n### Worked example\n\nLeila, a university student in Manchester, asks an AI for five sources about social media and mental health for an essay. Following the routine, she searches each in her library: three exist and are relevant, one exists but was published in a different year, and one can't be found at all. She uses the three verified sources, corrects the year on the fourth after reading it, and drops the fifth. Her tutor's feedback praises her referencing. Her university's AI policy allowed AI for finding sources, but not for writing her essay, so she wrote it herself.\n\n### Sample verification note\n\nKeep notes short and consistent, for example: \"Claim: new rule takes effect in April. Source: official government page, updated [date]. Exact wording found. Verified.\" or \"Claim: 40% of customers prefer X. Source: vendor blog, no methodology. Not verified; removed.\" Notes like these make your work easy to defend if someone asks.\n\n### Checking images and screenshots\n\nVerification isn't only for text. Screenshots, charts and \"quotes\" shared online can be edited or taken out of context, and AI-generated images can look realistic. Before sharing a surprising image or chart, look for the original source, check dates, and be cautious with anything that seems designed to provoke a strong reaction.\n\n### Scale checking to the stakes\n\n- **Low stakes** (internal brainstorm): a quick sense check.\n- **Medium stakes** (client email, blog post): verify key facts and names.\n- **High stakes** (anything legal, financial, medical, published widely, or about real people): verify every fact with primary sources and get expert review where needed.\n\n### Pitfalls\n\n- Verifying only the facts that \"feel\" wrong; confident errors feel right.\n- Citing the AI tool as your source rather than the original.\n- Skipping verification under time pressure; that's when mistakes slip through.\n",
+          "video": null,
+          "keyTakeaways": [
+            "A citation isn't proof; open the source and find the exact sentence.",
+            "Use the 5-minute routine: open, date, who, cross-check, record.",
+            "Watch for red flags such as precise numbers without sources and references you can't find.",
+            "Scale verification to the stakes and cite original sources, not the AI tool."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "An AI answer includes '73.4% of shoppers prefer mobile' with no source. What should you do?",
+              "options": [
+                "Treat it as unverified and look for a reliable source before using it",
+                "Cite the AI tool",
+                "Use it; it's precise",
+                "Round it to 75%"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Precise numbers without sources are a red flag."
+            },
+            {
+              "question": "You open a cited source and it doesn't mention the claim. What does this mean?",
+              "options": [
+                "You should cite it anyway",
+                "The claim isn't supported by that source; find another reliable source or drop it",
+                "The website is broken",
+                "The claim is definitely true"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Only use claims you can actually support."
+            },
+            {
+              "question": "Which should you cite in your work?",
+              "options": [
+                "The original source you verified",
+                "The AI assistant",
+                "Nothing",
+                "A search engine homepage"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Cite the original, verified source."
+            }
+          ],
+          "activity": "Take an AI-assisted piece of work and run the 5-minute routine on its three most important facts. Record the results as verification notes."
+        }
+      ]
+    },
+    {
+      "slug": "data-and-presentations",
+      "title": "Spreadsheets, data and presentations",
+      "summary": "Analyse spreadsheets with AI and check the numbers, then turn insights into clear, story-led presentations.",
+      "lessons": [
+        {
+          "slug": "spreadsheets-and-data-analysis",
+          "title": "Spreadsheets and data analysis with AI",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### You don't need to be a spreadsheet expert\n\nAI can help you write formulas, clean messy data, find patterns and create charts, even if you've never used a pivot table. Depending on your tools, you can:\n\n- **Ask an assistant** to explain or write formulas you then paste into Excel or Google Sheets.\n- **Upload a spreadsheet or CSV** to an assistant that can analyse data (many can run calculations with code behind the scenes; availability varies by plan).\n- **Use AI built into your spreadsheet app** (for example, Copilot in Excel or Gemini in Google Sheets, where your organisation has enabled them).\n\n### Formulas on demand\n\n```text\nI'm using [Excel / Google Sheets]. Column A has dates, column B has product names, column C has sales amounts.\nI want a formula that totals sales for \"Product X\" in March 2026.\nGive me the formula, explain each part in plain English, and tell me where to put it.\n```\n\nTest the formula on a few rows where you know the answer. If it's wrong, paste the error or the unexpected result back and ask for a fix.\n\n### Analysing a dataset: step by step\n\n**1. Describe the data and your goal.**\n\n```text\nI've uploaded our sales for the last 6 months. Columns: date, region, product, units, revenue.\nGoal: find which regions and products are growing or shrinking.\nFirst, check the data for missing values, duplicates or odd entries and tell me what you find. Don't analyse yet.\n```\n\n**2. Decide how to handle problems** (for example, \"remove exact duplicates; flag rows with zero revenue but positive units\").\n\n**3. Ask clear questions.**\n\n```text\nShow monthly revenue by region in a table and a line chart.\nWhich 3 products grew most in revenue from the first 3 months to the last 3 months? Show the numbers.\nExplain the main trends in 5 bullet points a non-expert would understand.\n```\n\n**4. Check the numbers.** Pick two or three results and confirm them yourself with a simple total or filter in your spreadsheet. Ask the AI: \"Show me how you calculated this.\"\n\n### Worked example\n\nHina runs an online clothing shop from Lahore. She exports six months of orders (removing customer names and phone numbers first) and uploads the file to her assistant. It finds duplicate orders from a payment retry issue, removes them after she agrees, and shows that one product category is growing fast while another is declining. It also notices that most returns come from one size range. She checks two totals against her shop dashboard: they match. She adjusts her next stock order and updates the size guide.\n\n### Sample output check\n\nA good analysis answer includes: a note on data quality issues found, a clear table with totals, a chart with labelled axes, and plain-English insights with the actual numbers. It should also mention limits, such as \"only six months of data, so seasonal patterns may not be visible\". If insights don't include numbers, ask for them.\n\n### Remember: correlation isn't causation\n\nAI might notice that sales rise on days you post on social media. That doesn't prove posting caused the rise; a holiday, a promotion or payday might explain both. Treat patterns as ideas to test, not proven facts.\n\n### Protect personal data\n\nCustomer spreadsheets often include names, emails, phone numbers and addresses. Before uploading:\n\n- Delete columns you don't need for the analysis.\n- Replace names with IDs where possible.\n- Use your organisation's approved tool for any customer or employee data.\n\n### Pitfalls\n\n- Trusting results without spot-checking.\n- Not defining terms (\"best-selling\" by units or by revenue?).\n- Drawing conclusions from very small numbers.\n- Uploading full customer lists when only totals are needed.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Use AI for formulas, data cleaning, analysis and charts, in chat or inside your spreadsheet app.",
+            "Describe the data and goal, check data quality first, then ask clear questions.",
+            "Spot-check results yourself and ask how calculations were done.",
+            "Remove personal data you don't need, and treat patterns as ideas, not proof."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What should you ask the AI to do before analysing an uploaded dataset?",
+              "options": [
+                "Check for missing values, duplicates and odd entries",
+                "Make a chart immediately",
+                "Delete the file",
+                "Write a poem"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Checking data quality prevents misleading results."
+            },
+            {
+              "question": "The AI says sales rise on days you post. What's the right interpretation?",
+              "options": [
+                "It's a pattern worth testing; other factors could explain it",
+                "Stop posting",
+                "The data is wrong",
+                "Posting definitely causes sales"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Correlation doesn't prove causation."
+            },
+            {
+              "question": "Before uploading an order export, what should you remove?",
+              "options": [
+                "Customer names, emails and phone numbers you don't need",
+                "Nothing",
+                "The dates",
+                "All the numbers"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Minimise personal data before analysis."
+            }
+          ],
+          "activity": "Ask AI to write one formula you need this week and test it on known rows. Then analyse a small, non-sensitive dataset using the four steps and spot-check two results."
+        },
+        {
+          "slug": "presentations-with-ai",
+          "title": "Presentations with AI: from idea to deck",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Start with the story, not the slides\n\nAI tools can generate slides quickly, but a deck is only as good as its message. The best workflow uses AI to shape your **story** first, then build slides, then polish.\n\n### Step 1: Define the message\n\n```text\nI'm presenting to [audience] for [10] minutes. I want them to [decide / approve / understand] [what].\nHelp me write:\n1. The one-sentence key message\n2. The 3 main points that support it\n3. The evidence I need for each point\n4. The action I'll ask for at the end\n```\n\nIf you can't state the key message in one sentence, the deck isn't ready.\n\n### Step 2: Outline slide by slide\n\n```text\nCreate a [10]-slide outline. For each slide give: a headline that states the point (not just a topic), 3 short bullets or a suggested visual, and speaker notes in 2-3 sentences.\nUse only the facts I provide below; mark missing data as [DATA NEEDED].\n[paste your notes, figures and key messages]\n```\n\n**Headline tip:** \"Q3 revenue grew 12% thanks to repeat customers\" is far stronger than \"Q3 revenue\". Readers should get the point from headlines alone.\n\n### Step 3: Build the slides\n\nOptions depend on your tools:\n\n- **Built-in AI in presentation software** (for example, Copilot in PowerPoint or Gemini in Google Slides, where available) can create draft slides from a prompt or document.\n- **AI presentation tools** can turn outlines into designed decks.\n- **Manual build** using the outline: often fastest if you have a company template.\n\nWhichever you use, apply your organisation's template, fonts and colours.\n\n### Step 4: Visuals and data\n\n- Ask AI for **chart suggestions**: \"What's the best chart type to show monthly sales for 3 regions?\" (Usually a line chart.)\n- Create charts from **your real data** in your spreadsheet tool, not from invented numbers.\n- AI-generated images can work for concept or section slides, but don't use them to represent real products, people or results misleadingly.\n\n### Step 5: Rehearse and anticipate questions\n\n```text\nHere is my deck outline. What are the 5 hardest questions [audience] might ask? Suggest short answers.\n```\n\nSome assistants have voice modes you can use to rehearse aloud.\n\n### Worked example\n\nKhalid, a team leader in Riyadh, must present a proposal for a new customer service tool to senior management in 10 minutes. He uses AI to sharpen his key message (\"A new tool would cut response times and pay for itself within the year, based on our pilot data\"), builds a 7-slide outline with strong headlines and [DATA NEEDED] markers, fills them with real pilot figures, and builds the slides in the company template. AI predicts a question about staff training time; he adds a backup slide. The proposal is approved.\n\n### Sample outline output\n\nA useful slide entry looks like: \"Slide 3 headline: Pilot cut average response time by [DATA NEEDED]. Visual: before/after bar chart. Notes: Explain pilot scope (2 teams, 6 weeks), then the result, then what it means for customers.\" Every slide has a point, a visual idea and notes.\n\n### Accessibility checks\n\nAsk the AI to review your outline for accessibility: \"Check this deck for readability: flag slides with too much text, suggest alt text for each chart, and note where colour alone is used to convey meaning.\" Accessible slides work better for everyone, including people viewing on small screens.\n\n### Pitfalls\n\n- Letting AI create a 30-slide deck when 8 slides would do.\n- Topic headlines instead of message headlines.\n- Unverified or invented numbers on slides.\n- Text-heavy slides; move detail to speaker notes.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Shape the story first: one key message, three supporting points, evidence and an ask.",
+            "Outline with message headlines, visuals and speaker notes; mark missing data as [DATA NEEDED].",
+            "Build in your tool of choice with your organisation's template, using real data for charts.",
+            "Rehearse with AI-predicted tough questions and keep slides lean."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which slide headline is strongest?",
+              "options": [
+                "Q3 revenue",
+                "Q3 revenue grew 12% thanks to repeat customers",
+                "Numbers",
+                "Revenue slide"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Message headlines communicate the point at a glance."
+            },
+            {
+              "question": "Where should chart numbers come from?",
+              "options": [
+                "AI estimates",
+                "Random examples",
+                "Your real, verified data",
+                "A competitor's deck"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Charts must reflect real data."
+            },
+            {
+              "question": "What should you do before building slides?",
+              "options": [
+                "Define the one-sentence key message and supporting points",
+                "Generate 30 slides",
+                "Pick a colour scheme",
+                "Choose fonts"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "The story determines the slides."
+            }
+          ],
+          "activity": "Build a short deck outline for a real upcoming presentation using Steps 1 and 2. Fill every [DATA NEEDED] with verified figures."
+        }
+      ]
+    },
+    {
+      "slug": "languages-and-knowledge",
+      "title": "Translation and personal knowledge",
+      "summary": "Translate and localise content responsibly for different markets, and build a personal knowledge system with AI.",
+      "lessons": [
+        {
+          "slug": "translation-and-localisation",
+          "title": "Translation and localisation",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Translation vs localisation\n\n**Translation** changes words from one language to another. **Localisation** adapts the whole message for a specific audience: tone, examples, idioms, currency, dates, measurements, cultural references and legal requirements. A promotion that works in London might need a very different approach in Riyadh, Karachi or New York, even in English.\n\nModern AI assistants translate between many languages and can help localise, though quality varies by language and topic. Widely used languages usually get stronger results than less-resourced ones.\n\n### The translation prompt\n\n```text\nTranslate the text below from [English] into [Modern Standard Arabic / Urdu / French ...] for [audience, e.g. customers in Saudi Arabia].\nKeep the meaning and tone [friendly and professional].\nKeep these terms unchanged: [brand names, product names].\nFlag any phrase that doesn't translate well and suggest an alternative.\n[paste text]\n```\n\n\"Flag any phrase that doesn't translate well\" often catches idioms and jokes that would confuse or offend.\n\n### The localisation prompt\n\n```text\nAdapt this marketing email for [market]. Consider local holidays and seasons, currency ([SAR/AED/PKR/GBP/USD]), date format, cultural norms and examples that will resonate.\nList every change you made and why.\n[paste text]\n```\n\nAsking for a list of changes teaches you about the market and lets you check each adaptation.\n\n### Always involve a fluent human for important content\n\nAI translation is excellent for understanding, drafting and internal use. For **published, legal, medical, safety or customer-facing content**, have a fluent speaker (ideally a native speaker familiar with the market) review it. They'll catch mistranslated terms, awkward phrasing, and cultural issues AI can miss.\n\n### Useful everyday uses\n\n- **Understanding** emails or documents in languages you don't read.\n- **Replying** to international colleagues and customers, with a quick back-translation check: \"Translate your Arabic reply back into English so I can check the meaning.\"\n- **Multilingual social captions** (with native review for brand accounts).\n- **Subtitles and scripts** for videos (checked by a fluent speaker).\n- **Learning:** \"Explain the difference between these two phrases and when to use each.\"\n\n### Worked example\n\nA UK skincare brand launches in the UAE and Saudi Arabia. The marketing assistant uses AI to translate product descriptions into Arabic and localise the launch email: prices in local currencies, references to local seasons, and a tone suited to the audience. The AI flags a slogan built on an English pun that won't work in Arabic and suggests alternatives. A native Arabic-speaking copywriter reviews everything, adjusts two product terms to match how customers actually search for them, and approves. The launch copy feels local rather than translated.\n\n### Sample output check\n\nFor a translation, a good response keeps brand names unchanged, preserves numbers and dates exactly (or converts formats as you requested), and includes a short list of flagged phrases with alternatives. Back-translation is a quick sanity check: if the English back-translation says something different from your original, investigate before sending.\n\n### Building a glossary\n\nIf you translate regularly, build a simple glossary of approved terms: brand names, product names, job titles and key phrases with their approved translations. Paste it into your translation prompt each time (\"Use this glossary for these terms\") or store it in an assistant project. A glossary keeps translations consistent across people and months.\n\n### Regional and legal notes\n\n- **Advertising rules** apply in every market: claims, disclosures (such as #ad for sponsored content) and required information can differ by country.\n- **Right-to-left languages** (Arabic, Urdu) need proper layout in designs and documents; check how text displays.\n- **Names and honorifics** vary by culture; ask the AI about local conventions, then confirm with a local colleague.\n\n### Pitfalls\n\n- Publishing machine translations without fluent review.\n- Translating puns, idioms or humour literally.\n- Forgetting currencies, dates and units.\n- Pasting confidential documents into unapproved translation tools.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Translation changes language; localisation adapts tone, examples, formats and culture for a market.",
+            "Ask the AI to keep key terms unchanged and flag phrases that don't translate well.",
+            "Use back-translation as a quick check, and fluent human review for important content.",
+            "Remember local advertising rules, right-to-left layout and cultural conventions."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is localisation?",
+              "options": [
+                "Shortening text",
+                "Changing the font",
+                "Adapting a message's language, tone, examples, formats and cultural references for a specific market",
+                "Word-for-word translation"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Localisation goes beyond translation to fit the market."
+            },
+            {
+              "question": "Which content most needs review by a fluent human before use?",
+              "options": [
+                "A quick translation to understand an internal email",
+                "A draft you'll never send",
+                "Customer-facing product descriptions for a new market",
+                "A personal note to yourself"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Published, customer-facing content needs fluent review."
+            },
+            {
+              "question": "What does a back-translation help you check?",
+              "options": [
+                "Spelling in English only",
+                "Font size",
+                "Whether the translated meaning matches your original message",
+                "Delivery speed"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Back-translation reveals meaning shifts."
+            }
+          ],
+          "activity": "Translate and localise one real piece of content for a market you work with. Use back-translation to check it, and if possible ask a fluent speaker to review."
+        },
+        {
+          "slug": "personal-knowledge-management",
+          "title": "Personal knowledge management with AI",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Your second brain, with a helpful assistant\n\nPersonal knowledge management (PKM) means capturing, organising and reusing what you learn: notes from meetings, articles, courses, ideas and templates. AI makes this much easier: it can tidy messy notes, tag and summarise them, and help you find and combine ideas later.\n\n### A simple system: Capture, Organise, Use\n\n**1. Capture quickly.** Use whatever is easiest: a notes app, voice memos, a document. Don't worry about neatness.\n\n**2. Organise with AI.** Once a week, paste or upload your raw notes and ask:\n\n```text\nHere are my raw notes from this week.\n1. Group them by topic.\n2. Summarise each group in 2-3 bullets.\n3. Pull out action items and ideas worth keeping.\n4. Suggest 3-5 tags for each group.\nKeep my wording where it matters; don't add information that isn't in my notes.\n```\n\nSave the result in your notes app or a well-organised folder.\n\n**3. Use it.** When you need to write or decide, ask your assistant to work with your saved notes:\n\n```text\nUsing my notes below on [topic], draft a one-page summary of what I've learned and three ideas I could apply to [project].\nTell me which note each idea comes from.\n```\n\n### Tools that help\n\n- **Assistant Projects or knowledge features** (available in several assistants) let you store reference files and instructions for a topic so each chat starts with that context.\n- **Source-grounded notebook tools** (such as NotebookLM) answer questions from the documents you add, with references.\n- **Notes apps with built-in AI** can summarise and search your notes.\n- **Memory features** in some assistants remember preferences and facts about you; review and manage them regularly.\n\nChoose tools your organisation approves for work notes, and keep personal and work knowledge separate.\n\n### Learning faster with AI\n\n- **Explain it simply:** \"Explain [concept] as if I'm new to it, then give me one real-world example.\"\n- **Quiz yourself:** \"Ask me 5 questions about my notes on [topic], one at a time, and give feedback.\"\n- **Connect ideas:** \"What links my notes on customer service and my notes on product design?\"\n- **Build templates:** turn repeated tasks into checklists you store and reuse.\n\n### Worked example\n\nZara, a new account executive in Dubai, is overwhelmed by information in her first month: client briefs, product details, internal processes. Each Friday she pastes her week's notes into her work assistant's project and asks for the organise prompt. She builds a tidy knowledge base: one page per client, a glossary of internal terms, and a checklist for onboarding new clients. In month three, when a colleague asks how the reporting process works, she shares her checklist, which becomes the team's standard.\n\n### Sample weekly output\n\nA good weekly organisation output looks like: \"Client A (tags: onboarding, reporting): prefers weekly updates on Mondays; approval needed from marketing director for any budget change. Action: send the Q2 plan by the 14th. Idea: create a one-page reporting template.\" Short, tagged and actionable.\n\n### A 15-minute weekly routine\n\n1. Gather the week's notes (5 minutes).\n2. Run the organise prompt and save the output (5 minutes).\n3. Review action items and move them into your task list; delete notes you no longer need (5 minutes).\n\nConsistency beats perfection: a small weekly habit builds a valuable knowledge base over a year.\n\n### Privacy and hygiene\n\n- Don't store passwords, financial details or sensitive personal data in notes you share with AI.\n- Keep client notes in approved work tools only.\n- Review memory and project files periodically; delete what's outdated.\n- Remember that AI summaries of your notes can drop nuance; keep originals for important material.\n\n### Pitfalls\n\n- Capturing everything and never reviewing.\n- Letting AI add \"facts\" to your notes that weren't there.\n- Mixing personal and client knowledge in one place.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Use a simple Capture, Organise, Use system, with AI doing the weekly tidy-up.",
+            "Ask AI to group, summarise, extract actions and tag notes without adding information.",
+            "Projects, notebook tools and notes apps with AI help you reuse knowledge, within approved tools.",
+            "Protect sensitive data, separate personal and work knowledge, and keep originals."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What's the main benefit of a weekly AI 'organise' step?",
+              "options": [
+                "It writes new facts",
+                "It groups, summarises, tags and extracts actions from messy notes so you can reuse them",
+                "It replaces reading",
+                "It deletes old notes"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Regular organisation turns raw notes into usable knowledge."
+            },
+            {
+              "question": "Where should client-related notes be stored for AI use?",
+              "options": [
+                "Any free app",
+                "Tools approved by your organisation for work data",
+                "Social media",
+                "A public document"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Work data belongs in approved tools."
+            },
+            {
+              "question": "Why ask the AI not to add information that isn't in your notes?",
+              "options": [
+                "It's required",
+                "To save storage",
+                "To make it faster",
+                "To keep your knowledge base accurate and free of invented details"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Accuracy of your knowledge base depends on it."
+            }
+          ],
+          "activity": "Collect a week of your notes, run the organise prompt, and save the result in a structured place. Then use it once to draft something useful."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 25,
+    "timeLimitMinutes": 40,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "prod-001",
+        "module": "ai-work-basics",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does the 'Own' in Ask, Check, Own mean?",
+        "options": [
+          "Only managers are responsible",
+          "You must buy the AI tool",
+          "You are responsible for anything you send, publish or submit",
+          "The AI owns its output"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "The person who sends the work owns its accuracy."
+      },
+      {
+        "id": "prod-002",
+        "module": "ai-work-basics",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which should never be pasted into an AI tool?",
+        "options": [
+          "A password or bank card number",
+          "Your own non-sensitive draft",
+          "A public news article",
+          "A general grammar question"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Credentials and financial details are restricted."
+      },
+      {
+        "id": "prod-003",
+        "module": "ai-work-basics",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What does W-A-R-F stand for in the everyday prompt formula?",
+        "options": [
+          "Write, Ask, Read, Finish",
+          "Wait, Assess, Review, Fix",
+          "Who, Aim, Rules, Format",
+          "Words, Actions, Results, Facts"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Who, Aim, Rules (including tone) and Format."
+      },
+      {
+        "id": "prod-004",
+        "module": "ai-work-basics",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "An AI draft is good but too formal for your team. What's the most efficient fix?",
+        "options": [
+          "Switch tools",
+          "Accept it",
+          "Start a new chat from scratch",
+          "Reply with a focused follow-up, such as 'Keep the structure, make it warmer and more casual'"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Targeted follow-ups keep what works and fix the issue."
+      },
+      {
+        "id": "prod-005",
+        "module": "ai-work-basics",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which checks belong in the 'Check' step before sending an AI-drafted client email? (Choose all that apply.)",
+        "options": [
+          "Facts, names and numbers",
+          "The AI tool's logo",
+          "Tone for the recipient",
+          "Any commitments the draft makes"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Facts, tone and commitments are key checks; the tool's branding is irrelevant."
+      },
+      {
+        "id": "prod-006",
+        "module": "ai-work-basics",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why save successful prompts with [brackets] for details?",
+        "options": [
+          "To hide them",
+          "To make them longer",
+          "AI requires brackets",
+          "To reuse them as templates for similar tasks"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Templates make good prompts reusable."
+      },
+      {
+        "id": "prod-007",
+        "module": "ai-work-basics",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A colleague uses AI to write a report on a topic they don't understand and sends it unread. What's the main problem?",
+        "options": [
+          "AI can't write reports",
+          "The report may be too short",
+          "Reports shouldn't have headings",
+          "They can't check accuracy or answer questions about it, yet they are accountable for it"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Using AI for work you can't evaluate breaks the Check and Own steps."
+      },
+      {
+        "id": "prod-008",
+        "module": "writing-with-ai",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "When asking AI to draft an email reply, what should you decide yourself?",
+        "options": [
+          "What the reply says: your decisions and commitments",
+          "The font",
+          "The recipient's response",
+          "Nothing"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "You decide the content; the AI helps phrase it."
+      },
+      {
+        "id": "prod-009",
+        "module": "writing-with-ai",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What does asking the AI to use [TBC] for missing information prevent?",
+        "options": [
+          "Spelling mistakes",
+          "Formatting errors",
+          "Invented details filling the gaps",
+          "Long paragraphs"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "[TBC] keeps gaps visible instead of fabricated."
+      },
+      {
+        "id": "prod-010",
+        "module": "writing-with-ai",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which summary request is most useful for a manager who must make a decision?",
+        "options": [
+          "Summarise for a manager deciding on budget: main point, options, recommendation and anything unclear",
+          "Write a poem about it",
+          "Make it shorter",
+          "Summarise this"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Audience and purpose shape useful summaries."
+      },
+      {
+        "id": "prod-011",
+        "module": "writing-with-ai",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which techniques help AI-drafted emails sound like you? (Choose all that apply.)",
+        "options": [
+          "Ask for maximum formality in every email",
+          "Write the opening and closing lines yourself",
+          "List phrases you never use",
+          "Paste examples of your own emails"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Examples, banned phrases and personal touches align style; blanket formality doesn't."
+      },
+      {
+        "id": "prod-012",
+        "module": "writing-with-ai",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What's a good first step when writing a new report with AI?",
+        "options": [
+          "Ask for an outline, then adjust it",
+          "Ask for the full report with no notes",
+          "Skip planning",
+          "Copy last year's report exactly"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Outline first, then draft from your notes."
+      },
+      {
+        "id": "prod-013",
+        "module": "writing-with-ai",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why ask for quotes when summarising a long document?",
+        "options": [
+          "So you can search the original and verify key points",
+          "Quotes are required",
+          "To make it longer",
+          "To change tone"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Quotes make verification fast."
+      },
+      {
+        "id": "prod-014",
+        "module": "writing-with-ai",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An AI summary of a supplier contract looks clear and confident. What is the right way to use it?",
+        "options": [
+          "Send it to the supplier as the agreed terms",
+          "Sign the contract based on the summary",
+          "Use it to orient yourself, then read the key clauses and get expert review where needed",
+          "Delete the contract"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Summaries lose nuance; contracts require careful reading and appropriate review."
+      },
+      {
+        "id": "prod-015",
+        "module": "meetings-with-ai",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What must happen before a meeting is recorded or transcribed?",
+        "options": [
+          "Only the host knows",
+          "It's recorded secretly",
+          "Nothing",
+          "Participants are informed and policy is followed"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Consent and policy compliance come first."
+      },
+      {
+        "id": "prod-016",
+        "module": "meetings-with-ai",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why include 'If an owner or date isn't clear, write Unassigned' in a meeting-summary prompt?",
+        "options": [
+          "It stops the AI guessing owners and dates",
+          "It looks professional",
+          "It shortens the summary",
+          "It's a legal requirement"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "It prevents incorrect assignments."
+      },
+      {
+        "id": "prod-017",
+        "module": "meetings-with-ai",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A transcript-based summary lists a product as 'Maven' but it's called 'Maveen'. What does this show?",
+        "options": [
+          "Transcripts can mishear names and terms, so check before sharing",
+          "AI can't summarise",
+          "Transcripts are always perfect",
+          "The product should be renamed"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Always check names and terms."
+      },
+      {
+        "id": "prod-018",
+        "module": "meetings-with-ai",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which items should you check before sending an AI meeting summary? (Choose all that apply.)",
+        "options": [
+          "The number of words in the transcript",
+          "Sensitive comments that shouldn't go to everyone",
+          "Owners and due dates",
+          "Whether 'decisions' were actually decided"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Owners, decisions and sensitivity matter; transcript length doesn't."
+      },
+      {
+        "id": "prod-019",
+        "module": "meetings-with-ai",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What makes an AI-generated agenda most effective?",
+        "options": [
+          "Many items",
+          "No time limits",
+          "Decorative formatting",
+          "A clear goal, timings and a question for each item"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Goals and questions drive productive meetings."
+      },
+      {
+        "id": "prod-020",
+        "module": "meetings-with-ai",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Your AI research before a client meeting mentions a recent acquisition. What should you do?",
+        "options": [
+          "Ignore all research",
+          "Ask the client to confirm by email first",
+          "Open the cited source to confirm before raising it",
+          "Mention it without checking"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Verify facts before using them."
+      },
+      {
+        "id": "prod-021",
+        "module": "meetings-with-ai",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "An AI tool connected to your calendar offers to send invites to all attendees. What's the best practice?",
+        "options": [
+          "Send to everyone in the company",
+          "Let it send immediately",
+          "Disable your calendar",
+          "Review the invites and details before anything is sent"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Review AI-prepared actions before they're executed."
+      },
+      {
+        "id": "prod-022",
+        "module": "research-and-verification",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Why do citations matter in AI research?",
+        "options": [
+          "They show where information comes from so you can check it",
+          "They speed up the internet",
+          "They make answers longer",
+          "They're decorative"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Citations enable verification and attribution."
+      },
+      {
+        "id": "prod-023",
+        "module": "research-and-verification",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Your AI tool can't search the web. How can you still research reliably?",
+        "options": [
+          "Stop researching",
+          "Provide trusted sources and ask it to summarise only from them, naming the source for each point",
+          "Ask shorter questions",
+          "Ask it to guess"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Supplying sources gives control and traceability."
+      },
+      {
+        "id": "prod-024",
+        "module": "research-and-verification",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "You open a cited source and it doesn't contain the claim. What should you do?",
+        "options": [
+          "Cite the AI tool",
+          "Find a reliable source that supports it, or drop the claim",
+          "Assume the site changed",
+          "Use the claim anyway"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Only use claims you can support."
+      },
+      {
+        "id": "prod-025",
+        "module": "research-and-verification",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which are red flags in an AI research answer? (Choose all that apply.)",
+        "options": [
+          "A link to the official regulator page that contains the exact claim",
+          "Old dates for fast-changing topics",
+          "Very precise statistics with no source",
+          "Academic references you can't find in a library"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Unsourced precise statistics, untraceable references and outdated sources are warning signs; an official page containing the exact claim is good evidence."
+      },
+      {
+        "id": "prod-026",
+        "module": "research-and-verification",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What should you cite in your work?",
+        "options": [
+          "A search engine homepage",
+          "The AI assistant",
+          "The original source you verified",
+          "Nothing"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Cite original, verified sources."
+      },
+      {
+        "id": "prod-027",
+        "module": "research-and-verification",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which source is most authoritative for a country's tax registration threshold?",
+        "options": [
+          "An influencer's video",
+          "The government's official tax authority website",
+          "A vendor advert",
+          "A forum post"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Official sources are authoritative for rules."
+      },
+      {
+        "id": "prod-028",
+        "module": "research-and-verification",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A student asks AI for five academic sources; two can't be found in the library. What should she do?",
+        "options": [
+          "Invent publication details",
+          "Cite all five",
+          "Cite the AI tool",
+          "Use only sources she has found and read, and drop the ones she can't verify"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Never cite sources you haven't verified and consulted."
+      },
+      {
+        "id": "prod-029",
+        "module": "data-and-presentations",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What should you do after AI writes a spreadsheet formula for you?",
+        "options": [
+          "Delete your data",
+          "Use it everywhere immediately",
+          "Print it",
+          "Test it on rows where you know the answer"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Testing on known data catches errors."
+      },
+      {
+        "id": "prod-030",
+        "module": "data-and-presentations",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "The AI finds sales rise on days you post on social media. What's the right conclusion?",
+        "options": [
+          "Posting causes sales",
+          "Stop posting",
+          "Data is wrong",
+          "It's a pattern to test; other factors may explain it"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Correlation isn't causation."
+      },
+      {
+        "id": "prod-031",
+        "module": "data-and-presentations",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Before uploading a customer order export for analysis, what should you do?",
+        "options": [
+          "Add more columns",
+          "Nothing",
+          "Remove unneeded personal data such as names, emails and phone numbers",
+          "Share it publicly"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Minimise personal data."
+      },
+      {
+        "id": "prod-032",
+        "module": "data-and-presentations",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which steps make an AI data analysis trustworthy? (Choose all that apply.)",
+        "options": [
+          "Accept the first chart without review",
+          "Define terms such as 'best-selling' clearly",
+          "Spot-check results against your own totals",
+          "Check data quality before analysing"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Quality checks, clear definitions and spot-checks build trust."
+      },
+      {
+        "id": "prod-033",
+        "module": "data-and-presentations",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which slide headline is strongest?",
+        "options": [
+          "Customer service",
+          "New tool cut response times in our 6-week pilot",
+          "Data",
+          "Slide 4"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Message headlines state the point."
+      },
+      {
+        "id": "prod-034",
+        "module": "data-and-presentations",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What should you define before building slides with AI?",
+        "options": [
+          "The file name",
+          "The one-sentence key message, supporting points and the ask",
+          "The font",
+          "The number of animations"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Story first, slides second."
+      },
+      {
+        "id": "prod-035",
+        "module": "data-and-presentations",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Where should numbers in your presentation charts come from?",
+        "options": [
+          "AI-invented examples",
+          "Rounded guesses",
+          "A competitor's deck",
+          "Your real, verified data"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Charts must reflect real data."
+      },
+      {
+        "id": "prod-036",
+        "module": "languages-and-knowledge",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the difference between translation and localisation?",
+        "options": [
+          "There is no difference",
+          "Localisation only changes fonts",
+          "Localisation also adapts tone, examples, formats and cultural references for a market",
+          "Translation is only for images"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Localisation goes beyond language."
+      },
+      {
+        "id": "prod-037",
+        "module": "languages-and-knowledge",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which content most needs review by a fluent human?",
+        "options": [
+          "A draft you'll discard",
+          "A private note",
+          "Customer-facing product descriptions for a new market",
+          "A quick translation to understand an internal email"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Published, customer-facing content needs fluent review."
+      },
+      {
+        "id": "prod-038",
+        "module": "languages-and-knowledge",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "When localising a UK marketing email for Saudi Arabia, which should you consider? (Choose all that apply.)",
+        "options": [
+          "Keeping every English pun exactly as written",
+          "Local advertising and disclosure rules",
+          "Cultural norms, holidays and examples",
+          "Currency and date formats"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Localisation covers formats, culture and rules; literal puns rarely work."
+      },
+      {
+        "id": "prod-039",
+        "module": "languages-and-knowledge",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What's a quick way to check an AI translation's meaning?",
+        "options": [
+          "Count the words",
+          "Increase the font size",
+          "Ask for a back-translation into your language",
+          "Translate it twice into the same language"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Back-translation reveals meaning shifts."
+      },
+      {
+        "id": "prod-040",
+        "module": "languages-and-knowledge",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "When organising weekly notes with AI, what instruction keeps your knowledge base accurate?",
+        "options": [
+          "Make it longer",
+          "Use more tags than notes",
+          "Don't add information that isn't in my notes",
+          "Add interesting facts"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Preventing additions keeps notes trustworthy."
+      },
+      {
+        "id": "prod-041",
+        "module": "languages-and-knowledge",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Where should client-related notes be stored when using AI?",
+        "options": [
+          "Tools approved by your organisation for work data",
+          "A social network",
+          "A public document",
+          "Any free app"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Work data belongs in approved tools."
+      },
+      {
+        "id": "prod-042",
+        "module": "languages-and-knowledge",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Zara wants AI to help her find ideas across months of notes for a new project. Which approach is best?",
+        "options": [
+          "Post her notes online and ask for comments",
+          "Use her saved, organised notes in an approved tool and ask for ideas with the note each came from",
+          "Delete old notes first",
+          "Ask the AI to invent ideas without her notes"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Grounding ideas in her notes with references keeps them relevant and checkable."
+      }
+    ]
+  }
+}
