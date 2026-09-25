@@ -98,7 +98,7 @@ export function CampaignsListPage() {
       sortable: true,
       primary: true,
       cell: (row) => (
-        <span className="stack mg-stack-xs">
+        <span className="stack mg-stack-xs mg-campaign-cell">
           <Link className="ui-link mg-strong" to={`/manage/campaigns/${row.id}`}>
             {row.title}
           </Link>
@@ -129,6 +129,7 @@ export function CampaignsListPage() {
       id: 'deadline',
       header: 'Deadline',
       sortable: true,
+      nowrap: true,
       hideOnMobile: true,
       cell: (row) => <DateTime value={row.submissionDeadline} format="date" />,
     },
@@ -155,6 +156,7 @@ export function CampaignsListPage() {
       id: 'created',
       header: 'Created',
       sortable: true,
+      nowrap: true,
       hideOnMobile: true,
       cell: (row) => <DateTime value={row.createdAt} format="relative" />,
     },

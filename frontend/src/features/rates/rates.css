@@ -250,3 +250,16 @@
   font-size: var(--text-h3);
   font-weight: 700;
 }
+
+/* Version terms under the rates table: one quiet surface instead of rows floating on the page. */
+.rt-terms {
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.rt-nowrap {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
