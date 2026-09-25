@@ -155,6 +155,15 @@ export function LearningLessonPage() {
         {completed ? (
           <p className="lx-ok" role="status">
             <CheckCircle2 aria-hidden="true" /> Lesson completed
+            {progress && (
+              <span className="lx-muted">
+                {' '}
+                ·{' '}
+                {progress.examUnlocked && !progress.passed
+                  ? 'Every lesson is done — the final assessment is unlocked.'
+                  : `${progress.progressPercent}% of the course done.`}
+              </span>
+            )}
           </p>
         ) : (
           <Button
@@ -162,13 +171,8 @@ export function LearningLessonPage() {
             loading={complete.isPending}
             onClick={() =>
               complete.mutate(undefined, {
-                onSuccess: (p) => {
-                  void q.refetch();
-                  toast.success(
-                    'Lesson completed',
-                    p.examUnlocked ? 'Every lesson is done — the final assessment is unlocked.' : `${p.progressPercent}% of the course done.`,
-                  );
-                },
+                // Confirmed inline (the status above) rather than with a toast, which would cover the lesson navigation.
+                onSuccess: () => void q.refetch(),
                 onError: (e) => toast.error('Couldn’t save your progress', errorMessage(e)),
               })
             }

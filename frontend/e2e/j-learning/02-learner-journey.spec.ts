@@ -88,7 +88,7 @@ test.describe.serial('learner journey', () => {
     certificatePath = new URL(page.url()).pathname;
   });
 
-  test('download the certificate PDF and check the LinkedIn links and the verification page', async ({ page }) => {
+  test('download the certificate PDF and check the LinkedIn links and the verification page', async ({ page, browser }) => {
     await signIn(page, { email: learner.email, password: learner.password, displayName: learner.displayName }, landing.participant);
     await page.goto(certificatePath);
     await expect(page.getByRole('heading', { level: 1, name: pack.badge.name })).toBeVisible();
@@ -118,14 +118,15 @@ test.describe.serial('learner journey', () => {
     expect(share.searchParams.get('url')).toMatch(new RegExp(`/verify/certificates/${certificateId}$`));
     expect(await axeViolations(page)).toEqual([]);
 
-    // The public verification page (anonymous).
-    const anon = await page.context().browser()!.newPage();
+    // The public verification page (anonymous; a fresh context so axe can run and the project settings apply).
+    const anonContext = await browser.newContext();
+    const anon = await anonContext.newPage();
     await anon.goto(`/verify/certificates/${certificateId}`);
     await expect(anon.getByTestId('verify-status')).toHaveText(/Valid certificate/);
     await expect(anon.getByRole('heading', { level: 1, name: learner.displayName })).toBeVisible();
     await expect(anon.getByText(verificationCode)).toBeVisible();
     expect(await axeViolations(anon)).toEqual([]);
-    await anon.close();
+    await anonContext.close();
   });
 
   test('an admin revokes the certificate and the verification page shows it revoked', async ({ page, browser }) => {
@@ -140,13 +141,14 @@ test.describe.serial('learner journey', () => {
     await dialog.getByRole('button', { name: 'Revoke certificate' }).click();
     await expect(page.getByText('Certificate revoked')).toBeVisible();
 
-    const anon = await browser.newPage();
+    const anonContext = await browser.newContext();
+    const anon = await anonContext.newPage();
     const certificateId = certificatePath.split('/').pop()!;
     await anon.goto(`/verify/certificates/${certificateId}`);
     await expect(anon.getByTestId('verify-status')).toHaveText(/Revoked/);
     await expect(anon.getByRole('link', { name: /Download certificate/ })).toHaveCount(0);
     const assertion = await anon.request.get(`/api/v1/public/learning/openbadges/assertions/${certificateId}`);
     expect(assertion.status()).toBe(410);
-    await anon.close();
+    await anonContext.close();
   });
 });

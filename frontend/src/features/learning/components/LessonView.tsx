@@ -228,7 +228,7 @@ export function KnowledgeCheckQuestion({
     <fieldset className="lx-check">
       <legend className="lx-check__question">
         {check.question}
-        {check.multiple && <span className="lx-check__hint"> Choose all that apply.</span>}
+        {check.multiple && !/all that apply/i.test(check.question) && <span className="lx-check__hint"> Choose all that apply.</span>}
       </legend>
       <div className="lx-check__options">
         {check.options.map((option, i) => {

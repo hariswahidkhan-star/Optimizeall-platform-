@@ -34,7 +34,9 @@ test('anonymous visitors browse the academy, read a lesson and try its knowledge
   await group.getByRole('radio', { name: wrong, exact: true }).check();
   await group.getByRole('button', { name: 'Check answer' }).click();
   await expect(group.getByText('Not quite')).toBeVisible();
-  await group.getByRole('radio', { name: check.options[check.correct[0]!]!, exact: true }).check();
+  // After a wrong answer the correct option is revealed (its accessible name gains "(correct answer)").
+  const right = check.options[check.correct[0]!]!.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  await group.getByRole('radio', { name: new RegExp(`^${right}( \\(correct answer\\))?$`) }).check();
   await group.getByRole('button', { name: 'Check answer' }).click();
   await expect(group.getByText('Correct', { exact: true })).toBeVisible();
 

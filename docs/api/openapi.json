@@ -315,6 +315,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -610,6 +611,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -741,6 +743,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -820,6 +823,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -1368,6 +1372,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -2266,6 +2271,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -2673,6 +2679,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -2817,6 +2824,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -2946,6 +2954,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -3804,6 +3813,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -4181,6 +4191,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -4309,6 +4320,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -8311,6 +8323,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -10502,6 +10515,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -11049,6 +11063,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -11337,6 +11352,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -12084,6 +12100,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -12729,6 +12746,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -12835,6 +12853,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -13886,6 +13905,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -14414,6 +14434,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -17960,6 +17981,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -18191,6 +18213,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -18553,6 +18576,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -21647,6 +21671,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -22093,6 +22118,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -22274,6 +22300,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -22816,6 +22843,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -22998,6 +23026,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -23560,6 +23589,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -23689,6 +23719,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -25072,6 +25103,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -25518,6 +25550,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -27264,6 +27297,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -28963,6 +28997,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -29089,6 +29124,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -29734,6 +29770,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -29865,6 +29902,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -30152,6 +30190,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -30440,6 +30479,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -30709,6 +30749,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -31595,6 +31636,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -32560,6 +32602,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -33121,6 +33164,1061 @@
         }
       }
     },
+    "/api/v1/admin/learning/courses": {
+      "get": {
+        "tags": [
+          "LearningAdmin"
+        ],
+        "parameters": [
+          {
+            "name": "Category",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Learning.CourseCategory"
+            }
+          },
+          {
+            "name": "Status",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Learning.CourseStatus"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sort",
+            "in": "query",
+            "schema": {
+              "maxLength": 50,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Desc",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Learning.AdminCourseRowDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Learning.AdminCourseRowDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Learning.AdminCourseRowDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "LearningAdmin"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.CreateCourseRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.CreateCourseRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.CreateCourseRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCourseDetailDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCourseDetailDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCourseDetailDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/learning/courses/{courseId}": {
+      "get": {
+        "tags": [
+          "LearningAdmin"
+        ],
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCourseDetailDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCourseDetailDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCourseDetailDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/learning/courses/{courseId}/versions/{versionId}": {
+      "get": {
+        "tags": [
+          "LearningAdmin"
+        ],
+        "summary": "A version's full document (final-exam answers included), for the course editor.",
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "versionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.CourseVersionDocumentDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.CourseVersionDocumentDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.CourseVersionDocumentDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/learning/courses/{courseId}/questions": {
+      "get": {
+        "tags": [
+          "LearningAdmin"
+        ],
+        "summary": "Per-question statistics: % correct and discrimination (passers vs. others).",
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Learning.QuestionStatDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Learning.QuestionStatDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Learning.QuestionStatDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/learning/courses/{courseId}/learners": {
+      "get": {
+        "tags": [
+          "LearningAdmin"
+        ],
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Passed",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sort",
+            "in": "query",
+            "schema": {
+              "maxLength": 50,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Desc",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Learning.LearnerRowDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Learning.LearnerRowDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Learning.LearnerRowDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/learning/courses/{courseId}/results.csv": {
+      "get": {
+        "tags": [
+          "LearningAdmin"
+        ],
+        "summary": "CSV of every learner's progress and result in the course (audited).",
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/admin/learning/users/{userId}": {
+      "get": {
+        "tags": [
+          "LearningAdmin"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.UserLearningDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.UserLearningDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.UserLearningDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/learning/courses/validate": {
+      "post": {
+        "tags": [
+          "LearningAdmin"
+        ],
+        "summary": "Checks a course document against the course pack contract without saving it.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.CourseDocumentRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.CourseDocumentRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.CourseDocumentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.ValidationReportDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.ValidationReportDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.ValidationReportDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/learning/courses/{courseId}/versions": {
+      "post": {
+        "tags": [
+          "LearningAdmin"
+        ],
+        "summary": "Saves an edited document as a new version (never overwrites an existing version or the course pack).",
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.SaveCourseVersionRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.SaveCourseVersionRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.SaveCourseVersionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCourseDetailDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCourseDetailDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCourseDetailDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/learning/courses/{courseId}/publish": {
+      "post": {
+        "tags": [
+          "LearningAdmin"
+        ],
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.PublishCourseRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.PublishCourseRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.PublishCourseRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCourseDetailDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCourseDetailDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCourseDetailDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/learning/courses/{courseId}/unpublish": {
+      "post": {
+        "tags": [
+          "LearningAdmin"
+        ],
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.UnpublishCourseRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.UnpublishCourseRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.UnpublishCourseRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCourseDetailDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCourseDetailDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCourseDetailDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/learning/courses/{courseId}/settings": {
+      "put": {
+        "tags": [
+          "LearningAdmin"
+        ],
+        "summary": "Featured flag and catalog order.",
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.CourseSettingsRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.CourseSettingsRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.CourseSettingsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCourseDetailDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCourseDetailDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCourseDetailDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/learning/courses/{courseId}/lessons/{lessonSlug}/video": {
+      "put": {
+        "tags": [
+          "LearningAdmin"
+        ],
+        "summary": "Sets a video lesson's source, poster and captions (a new version of the latest content).",
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "lessonSlug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.LessonVideoRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.LessonVideoRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.LessonVideoRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCourseDetailDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCourseDetailDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCourseDetailDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/learning/media": {
+      "post": {
+        "tags": [
+          "LearningAdmin"
+        ],
+        "summary": "Uploads lesson media (MP4 video, WebVTT captions or a poster image) through the Files module.",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "File": {
+                    "type": "string",
+                    "description": "MP4 video (max 50 MB), WebVTT captions (max 1 MB) or a PNG/JPEG/WebP poster image (max 10 MB).",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "File": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Files.StoredFileDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Files.StoredFileDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Files.StoredFileDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/learning/certificates": {
+      "get": {
+        "tags": [
+          "LearningCertificatesAdmin"
+        ],
+        "parameters": [
+          {
+            "name": "CourseId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Revoked",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sort",
+            "in": "query",
+            "schema": {
+              "maxLength": 50,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Desc",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Learning.AdminCertificateDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Learning.AdminCertificateDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Learning.AdminCertificateDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "LearningCertificatesAdmin"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.IssueCertificateRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.IssueCertificateRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.IssueCertificateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCertificateDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCertificateDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCertificateDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/learning/certificates/{certificateId}/revoke": {
+      "post": {
+        "tags": [
+          "LearningCertificatesAdmin"
+        ],
+        "parameters": [
+          {
+            "name": "certificateId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.RevokeCertificateRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.RevokeCertificateRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.RevokeCertificateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCertificateDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCertificateDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.AdminCertificateDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/me/submissions": {
       "post": {
         "tags": [
@@ -33292,6 +34390,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -33754,6 +34853,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -33777,6 +34877,790 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Ledger.EarningDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/learning/courses/{slug}/exam": {
+      "get": {
+        "tags": [
+          "MyExam"
+        ],
+        "summary": "Exam rules, attempts left in the rolling 24 hours, the attempt in progress and past attempts.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.ExamOverviewDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.ExamOverviewDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.ExamOverviewDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/learning/courses/{slug}/exam/attempts": {
+      "post": {
+        "tags": [
+          "MyExam"
+        ],
+        "summary": "Starts an attempt: questions drawn at random from the pool, options shuffled, deadline set on the server.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.ExamAttemptDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.ExamAttemptDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.ExamAttemptDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/learning/attempts/{attemptId}": {
+      "get": {
+        "tags": [
+          "MyExam"
+        ],
+        "summary": "The attempt: questions (+ saved answers and seconds left) while in progress; score and per-question review once finished.",
+        "parameters": [
+          {
+            "name": "attemptId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.ExamAttemptDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.ExamAttemptDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.ExamAttemptDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/learning/attempts/{attemptId}/answers": {
+      "put": {
+        "tags": [
+          "MyExam"
+        ],
+        "summary": "Saves the answer to one question (autosave) until the deadline.",
+        "parameters": [
+          {
+            "name": "attemptId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.AnswerInput"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.AnswerInput"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.AnswerInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.ExamAttemptDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.ExamAttemptDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.ExamAttemptDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/learning/attempts/{attemptId}/submit": {
+      "post": {
+        "tags": [
+          "MyExam"
+        ],
+        "summary": "Submits and grades the attempt (after the deadline only the saved answers count).",
+        "parameters": [
+          {
+            "name": "attemptId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.SubmitAttemptRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.SubmitAttemptRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.SubmitAttemptRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.ExamAttemptDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.ExamAttemptDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.ExamAttemptDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/learning": {
+      "get": {
+        "tags": [
+          "MyLearning"
+        ],
+        "summary": "\"My learning\": stats, continue where you left off, in-progress and completed courses, recommendations, certificates.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.MyLearningDashboardDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.MyLearningDashboardDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.MyLearningDashboardDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/learning/courses": {
+      "get": {
+        "tags": [
+          "MyLearning"
+        ],
+        "summary": "The catalog with the caller's enrolment and progress on each course.",
+        "parameters": [
+          {
+            "name": "Category",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Learning.CourseCategory"
+            }
+          },
+          {
+            "name": "Level",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Learning.CourseLevel"
+            }
+          },
+          {
+            "name": "MaxMinutes",
+            "in": "query",
+            "description": "Only courses of at most this many minutes.",
+            "schema": {
+              "maximum": 6000,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Featured",
+            "in": "query",
+            "description": "Only featured courses.",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sort",
+            "in": "query",
+            "schema": {
+              "maxLength": 50,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Desc",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Learning.MyCourseCardDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Learning.MyCourseCardDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Learning.MyCourseCardDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/learning/courses/{slug}": {
+      "get": {
+        "tags": [
+          "MyLearning"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.MyCourseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.MyCourseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.MyCourseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/learning/courses/{slug}/enrol": {
+      "post": {
+        "tags": [
+          "MyLearning"
+        ],
+        "summary": "Enrols the caller (free; idempotent: 200 when already enrolled, 201 when created).",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.MyCourseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.MyCourseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.MyCourseDto"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.MyCourseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.MyCourseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.MyCourseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/learning/courses/{slug}/lessons/{lessonSlug}": {
+      "get": {
+        "tags": [
+          "MyLearning"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lessonSlug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.MyLessonDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.MyLessonDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.MyLessonDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/learning/courses/{slug}/lessons/{lessonSlug}/start": {
+      "post": {
+        "tags": [
+          "MyLearning"
+        ],
+        "summary": "Records that the lesson was opened (the \"resume\" point).",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lessonSlug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.MyCourseProgressDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.MyCourseProgressDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.MyCourseProgressDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/learning/courses/{slug}/lessons/{lessonSlug}/complete": {
+      "post": {
+        "tags": [
+          "MyLearning"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lessonSlug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.MyCourseProgressDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.MyCourseProgressDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.MyCourseProgressDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/learning/courses/{slug}/lessons/{lessonSlug}/checks/{index}": {
+      "post": {
+        "tags": [
+          "MyLearning"
+        ],
+        "summary": "Answers a knowledge-check question (not graded for the certificate; the latest answer is kept).",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lessonSlug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "index",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.KnowledgeCheckAnswerRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.KnowledgeCheckAnswerRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Learning.KnowledgeCheckAnswerRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.KnowledgeCheckResultDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.KnowledgeCheckResultDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.KnowledgeCheckResultDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/learning/certificates": {
+      "get": {
+        "tags": [
+          "MyLearning"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Learning.MyCertificateDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Learning.MyCertificateDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Learning.MyCertificateDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/learning/certificates/{certificateId}": {
+      "get": {
+        "tags": [
+          "MyLearning"
+        ],
+        "summary": "One of the caller's certificates with its download, verification, Open Badge and LinkedIn links.",
+        "parameters": [
+          {
+            "name": "certificateId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.MyCertificateDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.MyCertificateDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.MyCertificateDto"
                 }
               }
             }
@@ -33813,6 +35697,15 @@
             "schema": {
               "maximum": 100,
               "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "description": "Rows before the page, computed in 64 bits so a huge page number cannot wrap to a negative offset.",
+            "schema": {
               "type": "integer",
               "format": "int32"
             }
@@ -34073,6 +35966,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -34456,6 +36350,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -34935,6 +36830,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -35190,6 +37086,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -35615,6 +37512,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -36181,6 +38079,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -36279,6 +38178,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -37119,6 +39019,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -37447,6 +39348,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -38050,6 +39952,215 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/v1/public/learning/certificates/{id}": {
+      "get": {
+        "tags": [
+          "PublicCredentials"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.CertificateVerificationDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.CertificateVerificationDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.CertificateVerificationDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/public/learning/certificates/verify": {
+      "get": {
+        "tags": [
+          "PublicCredentials"
+        ],
+        "summary": "Looks a certificate up by its verification code (\"OA-XXXX-XXXX\", as printed and on LinkedIn).",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.CertificateVerificationDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.CertificateVerificationDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.CertificateVerificationDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/public/learning/certificates/{id}/page": {
+      "get": {
+        "tags": [
+          "PublicCredentials"
+        ],
+        "summary": "The verification page as server-rendered HTML with Open Graph/Twitter tags and JSON-LD. The web server serves it at\r\n`/verify/certificates/{id}` (frontend/nginx), so crawlers and LinkedIn previews get real metadata.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/public/learning/certificates/{id}/certificate.pdf": {
+      "get": {
+        "tags": [
+          "PublicCredentials"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/public/learning/certificates/{id}/certificate.svg": {
+      "get": {
+        "tags": [
+          "PublicCredentials"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/public/learning/openbadges/issuer": {
+      "get": {
+        "tags": [
+          "PublicCredentials"
+        ],
+        "summary": "Open Badges 2.0 issuer profile.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/public/learning/openbadges/badges/{slug}": {
+      "get": {
+        "tags": [
+          "PublicCredentials"
+        ],
+        "summary": "Open Badges 2.0 BadgeClass of a course.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/public/learning/openbadges/assertions/{id}": {
+      "get": {
+        "tags": [
+          "PublicCredentials"
+        ],
+        "summary": "Open Badges 2.0 hosted Assertion of a certificate. A revoked certificate answers 410 Gone with the spec's revoked\r\nstub (id, revoked: true) in a problem document (code learning.certificate_revoked).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -39117,6 +41228,273 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/v1/public/learning/courses": {
+      "get": {
+        "tags": [
+          "PublicLearning"
+        ],
+        "summary": "Published courses (featured first by default; sort=title|newest|duration|level).",
+        "parameters": [
+          {
+            "name": "Category",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Learning.CourseCategory"
+            }
+          },
+          {
+            "name": "Level",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Learning.CourseLevel"
+            }
+          },
+          {
+            "name": "MaxMinutes",
+            "in": "query",
+            "description": "Only courses of at most this many minutes.",
+            "schema": {
+              "maximum": 6000,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Featured",
+            "in": "query",
+            "description": "Only featured courses.",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sort",
+            "in": "query",
+            "schema": {
+              "maxLength": 50,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Desc",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Learning.CourseCardDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Learning.CourseCardDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Learning.CourseCardDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/public/learning/categories": {
+      "get": {
+        "tags": [
+          "PublicLearning"
+        ],
+        "summary": "Categories that have published courses, with counts.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Learning.CategorySummaryDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Learning.CategorySummaryDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Learning.CategorySummaryDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/public/learning/courses/{slug}": {
+      "get": {
+        "tags": [
+          "PublicLearning"
+        ],
+        "summary": "A course page: outcomes, skills, syllabus, badge, exam rules, SEO block and schema.org JSON-LD.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.CourseDetailDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.CourseDetailDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.CourseDetailDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/public/learning/courses/{slug}/lessons/{lessonSlug}": {
+      "get": {
+        "tags": [
+          "PublicLearning"
+        ],
+        "summary": "A lesson (Markdown body, takeaways, knowledge check with answers — it is not graded —, activity, video).",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lessonSlug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.LessonDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.LessonDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Learning.LessonDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/public/learning/courses/{slug}/badge.svg": {
+      "get": {
+        "tags": [
+          "PublicLearning"
+        ],
+        "summary": "The course's badge as an SVG image (Open Badges image, cards, certificates).",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -40246,6 +42624,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -40468,6 +42847,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -40606,6 +42986,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -40859,6 +43240,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -41066,6 +43448,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -41630,6 +44013,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -41899,6 +44283,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -42780,6 +45165,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -44421,6 +46807,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -44959,6 +47346,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -45741,6 +48129,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -46429,6 +48818,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -46741,6 +49131,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -47307,6 +49698,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -48823,6 +51215,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -49818,6 +52211,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -50613,6 +53007,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -51026,6 +53421,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -51984,6 +54380,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -52324,6 +54721,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -52608,6 +55006,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -52892,6 +55291,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -53724,7 +56124,7 @@
         "tags": [
           "WebsiteContent"
         ],
-        "summary": "Denied while impersonating: the settings choose the tag-manager / analytics scripts loaded on every public page and\nthe canonical site URL used by links, the sitemap and robots.txt (platform-wide configuration, like admin settings).",
+        "summary": "Denied while impersonating: the settings choose the tag-manager / analytics scripts loaded on every public page and\r\nthe canonical site URL used by links, the sitemap and robots.txt (platform-wide configuration, like admin settings).",
         "requestBody": {
           "content": {
             "application/json": {
@@ -54028,6 +56428,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -54165,6 +56566,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -54500,6 +56902,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -54815,6 +57218,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -54988,6 +57392,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -55332,6 +57737,7 @@
           {
             "name": "Skip",
             "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -73975,6 +76381,1841 @@
         "additionalProperties": false,
         "description": "The immutable content of a published version."
       },
+      "Learning.AdminCertificateDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "verificationCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "holderName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "courseId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "courseTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "score": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "issuedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "manual": {
+            "type": "boolean"
+          },
+          "revokedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "revocationReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.AdminCourseDetailDto": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "$ref": "#/components/schemas/Learning.AdminCourseRowDto"
+          },
+          "versions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Learning.CourseVersionDto"
+            },
+            "nullable": true
+          },
+          "packFile": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.AdminCourseRowDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "category": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Learning.CourseCategory"
+          },
+          "level": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Learning.CourseLevel"
+          },
+          "status": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Learning.CourseStatus"
+          },
+          "origin": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Learning.CourseSource"
+          },
+          "isFeatured": {
+            "type": "boolean"
+          },
+          "sortOrder": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lessonCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "publishedVersionNumber": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "latestVersionNumber": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "packUpdateAvailable": {
+            "type": "boolean"
+          },
+          "enrolments": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "completions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "completionRate": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "attempts": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "passRate": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "averageScore": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "certificates": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.AnswerInput": {
+        "required": [
+          "questionId",
+          "selected"
+        ],
+        "type": "object",
+        "properties": {
+          "questionId": {
+            "maxLength": 64,
+            "minLength": 1,
+            "type": "string"
+          },
+          "selected": {
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "description": "Shown positions (0-based) of the selected options."
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.AttemptQuestionDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Learning.QuestionType"
+          },
+          "question": {
+            "type": "string",
+            "nullable": true
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "selected": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "review": {
+            "$ref": "#/components/schemas/Learning.QuestionReviewDto"
+          }
+        },
+        "additionalProperties": false,
+        "description": "A question of an attempt. OptimizeAll.Api.Modules.Learning.AttemptQuestionDto.Options are in this attempt's shuffled order; indices are positions."
+      },
+      "Learning.AttemptSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Learning.ExamAttemptStatus"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "submittedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "score": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "passed": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "questionCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.BadgeDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "criteria": {
+            "type": "string",
+            "nullable": true
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.CategorySummaryDto": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Learning.CourseCategory"
+          },
+          "label": {
+            "type": "string",
+            "nullable": true
+          },
+          "courseCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.CertificateLinksDto": {
+        "type": "object",
+        "properties": {
+          "verificationUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "pdfUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "badgeImageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "openBadgeAssertionUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "linkedInAddToProfileUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "linkedInShareUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.CertificateVerificationDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "verificationCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "isValid": {
+            "type": "boolean"
+          },
+          "holderName": {
+            "type": "string",
+            "nullable": true
+          },
+          "courseSlug": {
+            "type": "string",
+            "nullable": true
+          },
+          "courseTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "badgeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "badgeDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "criteria": {
+            "type": "string",
+            "nullable": true
+          },
+          "skills": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "issuedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "revokedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "issuerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/Learning.CertificateLinksDto"
+          },
+          "seo": {
+            "$ref": "#/components/schemas/Learning.LearningSeoDto"
+          },
+          "jsonLd": {
+            "type": "array",
+            "items": {},
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.CourseCardDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "subtitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "category": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Learning.CourseCategory"
+          },
+          "level": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Learning.CourseLevel"
+          },
+          "estimatedMinutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "moduleCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lessonCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "badgeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "skills": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "isFeatured": {
+            "type": "boolean"
+          },
+          "isNew": {
+            "type": "boolean"
+          },
+          "badgeImageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "publishedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.CourseDetailDto": {
+        "type": "object",
+        "properties": {
+          "card": {
+            "$ref": "#/components/schemas/Learning.CourseCardDto"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "outcomes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "prerequisites": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Learning.PrerequisiteDto"
+            },
+            "nullable": true
+          },
+          "badge": {
+            "$ref": "#/components/schemas/Learning.BadgeDto"
+          },
+          "exam": {
+            "$ref": "#/components/schemas/Learning.ExamInfoDto"
+          },
+          "modules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Learning.ModuleDto"
+            },
+            "nullable": true
+          },
+          "version": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "seo": {
+            "$ref": "#/components/schemas/Learning.LearningSeoDto"
+          },
+          "jsonLd": {
+            "type": "array",
+            "items": {},
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.CourseDocumentRequest": {
+        "required": [
+          "document"
+        ],
+        "type": "object",
+        "properties": {
+          "document": {
+            "description": "A course document in the course pack format (docs/LEARNING.md)."
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.CourseSettingsRequest": {
+        "required": [
+          "concurrencyStamp"
+        ],
+        "type": "object",
+        "properties": {
+          "isFeatured": {
+            "type": "boolean"
+          },
+          "sortOrder": {
+            "maximum": 10000,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.CourseVersionDocumentDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "courseId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "source": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Learning.CourseSource"
+          },
+          "isPublished": {
+            "type": "boolean"
+          },
+          "document": {}
+        },
+        "additionalProperties": false,
+        "description": "A full course document (answers included): staff with learning.manage only."
+      },
+      "Learning.CourseVersionDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "source": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Learning.CourseSource"
+          },
+          "packVersion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "basedOnVersionId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isPublished": {
+            "type": "boolean"
+          },
+          "isLatest": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.CreateCourseRequest": {
+        "required": [
+          "document"
+        ],
+        "type": "object",
+        "properties": {
+          "document": {},
+          "publish": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.EnrolmentCardDto": {
+        "type": "object",
+        "properties": {
+          "course": {
+            "$ref": "#/components/schemas/Learning.CourseCardDto"
+          },
+          "completedLessons": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lessonCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "progressPercent": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nextLessonSlug": {
+            "type": "string",
+            "nullable": true
+          },
+          "nextLessonTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "examUnlocked": {
+            "type": "boolean"
+          },
+          "passed": {
+            "type": "boolean"
+          },
+          "bestScore": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "certificateId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "enrolledAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastActivityAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.ExamAttemptDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "courseSlug": {
+            "type": "string",
+            "nullable": true
+          },
+          "courseTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Learning.ExamAttemptStatus"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deadlineAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "serverNow": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "secondsRemaining": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "questionCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "passingScore": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Learning.AttemptQuestionDto"
+            },
+            "nullable": true
+          },
+          "result": {
+            "$ref": "#/components/schemas/Learning.ExamResultDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.ExamInfoDto": {
+        "type": "object",
+        "properties": {
+          "questionCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "timeLimitMinutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxAttemptsPerDay": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "passingScore": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.ExamOverviewDto": {
+        "type": "object",
+        "properties": {
+          "courseSlug": {
+            "type": "string",
+            "nullable": true
+          },
+          "courseTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "rules": {
+            "$ref": "#/components/schemas/Learning.ExamInfoDto"
+          },
+          "enrolled": {
+            "type": "boolean"
+          },
+          "lessonsComplete": {
+            "type": "boolean"
+          },
+          "passed": {
+            "type": "boolean"
+          },
+          "certificateId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "attemptsRemaining": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nextAttemptAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "activeAttemptId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "canStart": {
+            "type": "boolean"
+          },
+          "blockedReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "attempts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Learning.AttemptSummaryDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.ExamResultDto": {
+        "type": "object",
+        "properties": {
+          "score": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "correctCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "questionCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "passed": {
+            "type": "boolean"
+          },
+          "passingScore": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "certificateId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "attemptsRemaining": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nextAttemptAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.IssueCertificateRequest": {
+        "required": [
+          "courseId",
+          "reason",
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "courseId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reason": {
+            "maxLength": 500,
+            "minLength": 3,
+            "type": "string"
+          },
+          "confirm": {
+            "type": "boolean",
+            "description": "Must be true: issuing a credential is a deliberate, audited action."
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.KnowledgeCheckAnswerRequest": {
+        "required": [
+          "selected"
+        ],
+        "type": "object",
+        "properties": {
+          "selected": {
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.KnowledgeCheckDto": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "question": {
+            "type": "string",
+            "nullable": true
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "correct": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "explanation": {
+            "type": "string",
+            "nullable": true
+          },
+          "multiple": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "description": "A knowledge-check question. Not graded for the certificate, so the answer and explanation are included."
+      },
+      "Learning.KnowledgeCheckResultDto": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "selected": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "isCorrect": {
+            "type": "boolean"
+          },
+          "correct": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "explanation": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.LearnerRowDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "displayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "enrolledAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedLessons": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lessonCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "progressPercent": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "attempts": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "bestScore": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "passed": {
+            "type": "boolean"
+          },
+          "certificateId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "certificateRevoked": {
+            "type": "boolean"
+          },
+          "lastActivityAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.LearningSeoDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "canonicalPath": {
+            "type": "string",
+            "nullable": true
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "noIndex": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "description": "SEO block for the public course/lesson pages (title, description, canonical path, robots)."
+      },
+      "Learning.LearningStatsDto": {
+        "type": "object",
+        "properties": {
+          "enrolled": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "inProgress": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "completed": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "certificates": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lessonsCompleted": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "minutesLearned": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.LessonDto": {
+        "type": "object",
+        "properties": {
+          "courseSlug": {
+            "type": "string",
+            "nullable": true
+          },
+          "courseTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "category": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Learning.CourseCategory"
+          },
+          "moduleSlug": {
+            "type": "string",
+            "nullable": true
+          },
+          "moduleTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Learning.LessonType"
+          },
+          "durationMinutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "body": {
+            "type": "string",
+            "nullable": true
+          },
+          "video": {
+            "$ref": "#/components/schemas/Learning.LessonVideoDto"
+          },
+          "keyTakeaways": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "knowledgeCheck": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Learning.KnowledgeCheckDto"
+            },
+            "nullable": true
+          },
+          "activity": {
+            "type": "string",
+            "nullable": true
+          },
+          "previous": {
+            "$ref": "#/components/schemas/Learning.LessonNavDto"
+          },
+          "next": {
+            "$ref": "#/components/schemas/Learning.LessonNavDto"
+          },
+          "position": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lessonCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seo": {
+            "$ref": "#/components/schemas/Learning.LearningSeoDto"
+          },
+          "jsonLd": {
+            "type": "array",
+            "items": {},
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.LessonNavDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.LessonSummaryDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Learning.LessonType"
+          },
+          "durationMinutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hasVideo": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.LessonVideoDto": {
+        "type": "object",
+        "properties": {
+          "src": {
+            "type": "string",
+            "nullable": true
+          },
+          "poster": {
+            "type": "string",
+            "nullable": true
+          },
+          "captions": {
+            "type": "string",
+            "nullable": true
+          },
+          "transcript": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.LessonVideoRequest": {
+        "required": [
+          "concurrencyStamp"
+        ],
+        "type": "object",
+        "properties": {
+          "src": {
+            "maxLength": 500,
+            "type": "string",
+            "description": "Uploaded file URL (/api/v1/files/{id}) or https URL; null clears it.",
+            "nullable": true
+          },
+          "poster": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true
+          },
+          "captions": {
+            "maxLength": 500,
+            "type": "string",
+            "description": "WebVTT captions (uploaded file URL or https URL).",
+            "nullable": true
+          },
+          "publish": {
+            "type": "boolean"
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.ModuleDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "summary": {
+            "type": "string",
+            "nullable": true
+          },
+          "lessons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Learning.LessonSummaryDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.MyCertificateDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "verificationCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "courseSlug": {
+            "type": "string",
+            "nullable": true
+          },
+          "courseTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "badgeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "skills": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "score": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "issuedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "revoked": {
+            "type": "boolean"
+          },
+          "revokedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/Learning.CertificateLinksDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.MyCourseCardDto": {
+        "type": "object",
+        "properties": {
+          "course": {
+            "$ref": "#/components/schemas/Learning.CourseCardDto"
+          },
+          "enrolled": {
+            "type": "boolean"
+          },
+          "progressPercent": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "passed": {
+            "type": "boolean"
+          },
+          "certificateId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.MyCourseDto": {
+        "type": "object",
+        "properties": {
+          "course": {
+            "$ref": "#/components/schemas/Learning.CourseDetailDto"
+          },
+          "progress": {
+            "$ref": "#/components/schemas/Learning.MyCourseProgressDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.MyCourseProgressDto": {
+        "type": "object",
+        "properties": {
+          "enrolmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "enrolledAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedLessons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "resumeLessonSlug": {
+            "type": "string",
+            "nullable": true
+          },
+          "completedLessonCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lessonCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "progressPercent": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "examUnlocked": {
+            "type": "boolean"
+          },
+          "passed": {
+            "type": "boolean"
+          },
+          "bestScore": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "certificateId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "lastActivityAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.MyLearningDashboardDto": {
+        "type": "object",
+        "properties": {
+          "stats": {
+            "$ref": "#/components/schemas/Learning.LearningStatsDto"
+          },
+          "continue": {
+            "$ref": "#/components/schemas/Learning.EnrolmentCardDto"
+          },
+          "inProgress": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Learning.EnrolmentCardDto"
+            },
+            "nullable": true
+          },
+          "completed": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Learning.EnrolmentCardDto"
+            },
+            "nullable": true
+          },
+          "recommended": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Learning.CourseCardDto"
+            },
+            "nullable": true
+          },
+          "certificates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Learning.MyCertificateDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.MyLessonDto": {
+        "type": "object",
+        "properties": {
+          "lesson": {
+            "$ref": "#/components/schemas/Learning.LessonDto"
+          },
+          "enrolled": {
+            "type": "boolean"
+          },
+          "completed": {
+            "type": "boolean"
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Learning.KnowledgeCheckResultDto"
+            },
+            "nullable": true
+          },
+          "progress": {
+            "$ref": "#/components/schemas/Learning.MyCourseProgressDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.PrerequisiteDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.PublishCourseRequest": {
+        "required": [
+          "concurrencyStamp",
+          "versionId"
+        ],
+        "type": "object",
+        "properties": {
+          "versionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.QuestionReviewDto": {
+        "type": "object",
+        "properties": {
+          "isCorrect": {
+            "type": "boolean"
+          },
+          "correct": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "explanation": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "After submission only: whether the answer was right, the correct options (shown positions) and why."
+      },
+      "Learning.QuestionStatDto": {
+        "type": "object",
+        "properties": {
+          "questionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "module": {
+            "type": "string",
+            "nullable": true
+          },
+          "difficulty": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Learning.QuestionDifficulty"
+          },
+          "type": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Learning.QuestionType"
+          },
+          "question": {
+            "type": "string",
+            "nullable": true
+          },
+          "answered": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "correct": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "percentCorrect": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "percentCorrectPassers": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "percentCorrectOthers": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "discrimination": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.RevokeCertificateRequest": {
+        "required": [
+          "concurrencyStamp",
+          "reason"
+        ],
+        "type": "object",
+        "properties": {
+          "reason": {
+            "maxLength": 500,
+            "minLength": 3,
+            "type": "string"
+          },
+          "confirm": {
+            "type": "boolean"
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.SaveCourseVersionRequest": {
+        "required": [
+          "concurrencyStamp",
+          "document"
+        ],
+        "type": "object",
+        "properties": {
+          "document": {},
+          "basedOnVersionId": {
+            "type": "string",
+            "description": "The version the edit started from (the editor warns when it is not the latest).",
+            "format": "uuid",
+            "nullable": true
+          },
+          "note": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true
+          },
+          "publish": {
+            "type": "boolean",
+            "description": "Publish the new version right away."
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.SubmitAttemptRequest": {
+        "type": "object",
+        "properties": {
+          "answers": {
+            "maxItems": 100,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Learning.AnswerInput"
+            },
+            "description": "Final answers (optional: answers already saved with PUT …/answers count too).",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.UnpublishCourseRequest": {
+        "required": [
+          "concurrencyStamp"
+        ],
+        "type": "object",
+        "properties": {
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.UserEnrolmentDto": {
+        "type": "object",
+        "properties": {
+          "courseId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "courseSlug": {
+            "type": "string",
+            "nullable": true
+          },
+          "courseTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "enrolledAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedLessons": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lessonCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "progressPercent": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "attempts": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "bestScore": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "passed": {
+            "type": "boolean"
+          },
+          "lastActivityAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.UserLearningDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "displayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "enrolments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Learning.UserEnrolmentDto"
+            },
+            "nullable": true
+          },
+          "certificates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Learning.AdminCertificateDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Learning.ValidationReportDto": {
+        "type": "object",
+        "properties": {
+          "valid": {
+            "type": "boolean"
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Learning.PackIssue"
+            },
+            "nullable": true
+          },
+          "moduleCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lessonCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "poolSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "questionCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "Ledger.ApprovePendingEarningRequest": {
         "required": [
           "concurrencyStamp"
@@ -77402,6 +81643,156 @@
         },
         "additionalProperties": false
       },
+      "OptimizeAll.Api.Common.Http.PagedResult`1[[Learning.AdminCertificateDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Learning.AdminCertificateDto"
+            },
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OptimizeAll.Api.Common.Http.PagedResult`1[[Learning.AdminCourseRowDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Learning.AdminCourseRowDto"
+            },
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OptimizeAll.Api.Common.Http.PagedResult`1[[Learning.CourseCardDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Learning.CourseCardDto"
+            },
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OptimizeAll.Api.Common.Http.PagedResult`1[[Learning.LearnerRowDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Learning.LearnerRowDto"
+            },
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OptimizeAll.Api.Common.Http.PagedResult`1[[Learning.MyCourseCardDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Learning.MyCourseCardDto"
+            },
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
       "OptimizeAll.Api.Common.Http.PagedResult`1[[Ledger.EarningDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
         "type": "object",
         "properties": {
@@ -79820,7 +84211,8 @@
         "enum": [
           "SubmissionScreenshot",
           "CampaignAsset",
-          "ContentImage"
+          "ContentImage",
+          "LearningMedia"
         ],
         "type": "string"
       },
@@ -79907,6 +84299,85 @@
           "Draft",
           "Published",
           "Archived"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Learning.CourseCategory": {
+        "enum": [
+          "Sales",
+          "Marketing",
+          "Seo",
+          "Ai",
+          "Business",
+          "Design",
+          "Data",
+          "Platform"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Learning.CourseLevel": {
+        "enum": [
+          "Beginner",
+          "Intermediate",
+          "Advanced"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Learning.CourseSource": {
+        "enum": [
+          "Pack",
+          "Admin"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Learning.CourseStatus": {
+        "enum": [
+          "Draft",
+          "Published"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Learning.ExamAttemptStatus": {
+        "enum": [
+          "InProgress",
+          "Submitted",
+          "Expired"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Learning.LessonType": {
+        "enum": [
+          "Article",
+          "Video"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Learning.PackIssue": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OptimizeAll.Domain.Learning.QuestionDifficulty": {
+        "enum": [
+          "Easy",
+          "Medium",
+          "Hard"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Learning.QuestionType": {
+        "enum": [
+          "Single",
+          "Multiple"
         ],
         "type": "string"
       },

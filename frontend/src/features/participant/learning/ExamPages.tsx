@@ -285,7 +285,7 @@ function TakeAttempt({ attempt }: { attempt: ExamAttempt }) {
                 </span>
                 {question.question}
               </h1>
-              {question.type === 'Multiple' && <p className="lx-check__hint">Choose all that apply.</p>}
+              {question.type === 'Multiple' && !/all that apply/i.test(question.question) && <p className="lx-check__hint">Choose all that apply.</p>}
             </legend>
             <QuestionOptions question={question} selected={answers[question.id] ?? []} onChoose={(p) => choose(question, p)} />
           </fieldset>
