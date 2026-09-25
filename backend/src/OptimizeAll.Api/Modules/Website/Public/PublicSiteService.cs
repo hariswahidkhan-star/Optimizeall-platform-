@@ -20,7 +20,9 @@ namespace OptimizeAll.Api.Modules.Website.Public;
 /// Anonymous read model of the agency website. Only published content is ever returned: unpublished services (or services
 /// in an unpublished category), industries, case studies, testimonials, team members and pages answer 404 / are left out.
 /// </summary>
-public sealed class PublicSiteService(AppDbContext db, SiteSettingsService settingsService, IOptions<EmailOptions> email, TimeProvider clock)
+public sealed class PublicSiteService(
+    AppDbContext db, SiteSettingsService settingsService, IOptions<EmailOptions> email, TimeProvider clock,
+    IEnumerable<IPublicSitemapContributor> sitemapContributors)
 {
     private SiteSettings? _settings;
     private Catalog? _catalog;
@@ -336,6 +338,9 @@ public sealed class PublicSiteService(AppDbContext db, SiteSettingsService setti
         urls.AddRange((await db.Set<JobOpening>().AsNoTracking()
                 .Where(j => j.Status == JobOpeningStatus.Open && (j.ClosesAt == null || j.ClosesAt > now)).Select(j => new { j.Slug, j.UpdatedAt }).ToListAsync(ct))
             .Select(j => ($"/careers/{j.Slug}", (DateTime?)j.UpdatedAt)));
+        // Other modules' public pages (e.g. the Learning academy: /learn, courses and lessons).
+        foreach (var contributor in sitemapContributors)
+            urls.AddRange((await contributor.SitemapEntriesAsync(ct)).Where(e => urls.All(u => u.Path != e.Path)));
 
         var sb = new StringBuilder();
         using (var writer = XmlWriter.Create(sb, new XmlWriterSettings { Indent = true, OmitXmlDeclaration = false, Encoding = Encoding.UTF8 }))

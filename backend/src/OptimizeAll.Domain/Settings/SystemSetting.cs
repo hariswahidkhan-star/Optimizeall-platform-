@@ -38,6 +38,12 @@ public static class SettingKeys
 
     /// <summary>bool: whether retention automations (reminders, reactivation, alerts) run. Default true.</summary>
     public const string RetentionEnabled = "retention.enabled";
+
+    /// <summary>string: issuing organisation on certificates, Open Badges and LinkedIn. Default "Optimize All Academy".</summary>
+    public const string LearningIssuerName = "learning.issuerName";
+
+    /// <summary>string: LinkedIn company page id for "Add to profile" (empty: the issuer name is sent instead). Default "".</summary>
+    public const string LearningLinkedInOrganizationId = "learning.linkedInOrganizationId";
 }
 
 /// <summary>Referral program configuration (setting <see cref="SettingKeys.ReferralProgram"/>).</summary>

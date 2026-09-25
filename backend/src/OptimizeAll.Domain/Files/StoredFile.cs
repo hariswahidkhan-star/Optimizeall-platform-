@@ -9,6 +9,8 @@ public enum FilePurpose
     /// <summary>Public campaign creative.</summary>
     CampaignAsset,
     ContentImage,
+    /// <summary>Public lesson media of the Learning module: videos (MP4), captions (WebVTT) and poster images.</summary>
+    LearningMedia,
 }
 
 /// <summary>Metadata of an uploaded file. Bytes live in private storage keyed by <see cref="StorageKey"/>, never under the web root.</summary>

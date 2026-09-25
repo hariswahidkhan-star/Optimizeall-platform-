@@ -74,6 +74,10 @@ export const Permissions = {
   FormsManage: 'forms.manage',
   IntegrationsManage: 'integrations.manage',
 
+  LearningView: 'learning.view',
+  LearningManage: 'learning.manage',
+  LearningCertify: 'learning.certify',
+
   ClientPortal: 'client.portal',
 } as const;
 

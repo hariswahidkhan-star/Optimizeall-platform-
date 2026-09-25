@@ -29,7 +29,8 @@ public sealed class FilesController(IFileService files, ICurrentUser currentUser
         headers.CacheControl = content.File.IsPublic ? "public, max-age=86400" : "private, max-age=300";
         headers.ContentDisposition = $"inline; filename=\"{content.File.OriginalFileName.Replace("\"", string.Empty)}\"";
         if (content.File.IsPublic) headers["Cross-Origin-Resource-Policy"] = "cross-origin";
-        return File(content.Content, content.File.ContentType, enableRangeProcessing: false);
+        // Lesson videos need range requests (seeking); everything else is served whole.
+        return File(content.Content, content.File.ContentType, enableRangeProcessing: content.File.ContentType == "video/mp4");
     }
 
     /// <summary>Uploads a public campaign/content image (PNG, JPEG or WebP, max 10 MB, 200–10000 px per side).</summary>

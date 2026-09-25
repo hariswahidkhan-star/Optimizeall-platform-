@@ -39,6 +39,14 @@ public static class SettingDefinitions
             "Whether retention automations (onboarding reminders, reactivation, campaign alerts) run.",
             v => v.ValueKind is JsonValueKind.True or JsonValueKind.False ? (v.GetBoolean(), null) : (null, "Use true or false.")),
         new Definition(SettingKeys.ReferralProgram, "object", "Referral program: reward, currency, qualifying action and limits.", ValidateReferral),
+        new Definition(SettingKeys.LearningIssuerName, "string",
+            "Issuing organisation named on course certificates, Open Badges and LinkedIn \"Add to profile\" (e.g. Optimize All Academy).",
+            v => v.ValueKind == JsonValueKind.String && v.GetString()!.Trim() is { Length: >= 2 and <= 100 } name
+                ? (name, null) : (null, "Use 2 to 100 characters.")),
+        new Definition(SettingKeys.LearningLinkedInOrganizationId, "string",
+            "LinkedIn company page id of the issuer (digits, from the page admin URL). Empty: LinkedIn gets the issuer name instead.",
+            v => v.ValueKind == JsonValueKind.String && v.GetString()!.Trim() is var id && (id.Length == 0 || (id.Length <= 20 && id.All(char.IsAsciiDigit)))
+                ? (id, null) : (null, "Use the numeric LinkedIn organization id (up to 20 digits), or leave it empty.")),
     }.ToDictionary(d => d.Key);
 
     private static Definition Int(string key, int min, int max, string description) => new(key, "integer", description, v =>

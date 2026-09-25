@@ -1570,3 +1570,21 @@ button.site-chip {
   padding: 8px;
   cursor: pointer;
 }
+
+/* GFM task lists (read-only checklists in lessons). */
+.site-prose ul.site-prose__tasks {
+  list-style: none;
+  padding-left: 0;
+}
+.site-prose__task label {
+  display: flex;
+  gap: 0.6em;
+  align-items: flex-start;
+}
+.site-prose__task input[type='checkbox'] {
+  margin-top: 0.35em;
+  inline-size: 1em;
+  block-size: 1em;
+  flex: none;
+  accent-color: var(--color-primary);
+}

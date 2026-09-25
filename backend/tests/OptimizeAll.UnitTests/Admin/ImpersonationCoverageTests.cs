@@ -24,6 +24,8 @@ public sealed class ImpersonationCoverageTests
         // identity, accounts and roles
         Permissions.UsersManage, Permissions.UsersSuspend, Permissions.RolesAssign, Permissions.RolesManage,
         Permissions.UsersImpersonate,
+        // credentials issued in someone's name
+        Permissions.LearningCertify,
     };
 
     /// <summary>
@@ -68,6 +70,14 @@ public sealed class ImpersonationCoverageTests
         "AdminTestUsersController.Create",
         "AdminTestUsersController.Delete",
         "AdminImpersonationController.Start",
+        // Learning: writes that act as the learner (enrolment, exam attempts) and certificate issue/revocation.
+        "MyLearningController.Enrol",
+        "MyLearningController.Complete",
+        "MyExamController.Start",
+        "MyExamController.Answer",
+        "MyExamController.Submit",
+        "LearningCertificatesAdminController.Issue",
+        "LearningCertificatesAdminController.Revoke",
     };
 
     /// <summary>Reads that must be denied too (they decrypt data).</summary>
