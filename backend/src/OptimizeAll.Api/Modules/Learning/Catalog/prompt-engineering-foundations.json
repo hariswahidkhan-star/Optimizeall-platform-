@@ -1,0 +1,1388 @@
+{
+  "slug": "prompt-engineering-foundations",
+  "version": 1,
+  "title": "Prompt Engineering Foundations",
+  "subtitle": "A friendly, practical start: write clear prompts, get useful answers and build your own library of 50+ prompt patterns",
+  "category": "ai",
+  "level": "beginner",
+  "estimatedMinutes": 155,
+  "description": "New to AI assistants, or frustrated by generic answers? This free, beginner-friendly course teaches the skill behind every great AI result: explaining a task clearly. You will learn how AI assistants respond to your words, the five building blocks of a good prompt (Task, Context, Audience, Format, Examples), and how to be specific without writing essays. You will practise giving context and examples, improving answers through follow-up messages, and getting results in the exact format you need. A library of more than fifty ready-to-adapt patterns covers writing, editing, analysis, brainstorming, learning and planning. Finally, you will learn the everyday mistakes that hold people back and a simple routine for checking AI work, protecting private information and building your own prompt toolkit. No technical background needed.",
+  "outcomes": [
+    "Explain in plain words how AI assistants respond to prompts and where they go wrong",
+    "Build prompts using Task, Context, Audience, Format and Examples",
+    "Replace vague requests with specific, goal-focused instructions",
+    "Improve answers through targeted follow-ups and know when to start fresh",
+    "Get outputs in the exact format needed: lists, tables, emails, scripts",
+    "Apply 50+ prompt patterns for writing, analysis, brainstorming, learning and planning",
+    "Check AI work for accuracy, fairness and privacy before using it"
+  ],
+  "skills": [
+    "Prompt writing",
+    "AI assistants",
+    "Clear communication",
+    "Prompt patterns",
+    "AI output checking"
+  ],
+  "prerequisites": [],
+  "badge": {
+    "name": "Certified Prompt Engineering Practitioner",
+    "description": "The holder can write clear, specific prompts using the Task, Context, Audience, Format and Examples structure, improve results through iteration, control output formats, apply a library of prompt patterns across everyday tasks, and check AI outputs for accuracy, fairness and privacy.",
+    "criteria": "Completed all lessons and scored at least 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "getting-started",
+      "title": "Getting started: what a prompt really is",
+      "summary": "Understand, in plain language, how AI chat assistants respond to you and what every good prompt contains.",
+      "lessons": [
+        {
+          "slug": "how-ai-assistants-respond",
+          "title": "How AI assistants respond to your words",
+          "type": "video",
+          "durationMinutes": 10,
+          "body": "### Welcome\n\nIf you have ever typed a question into an AI assistant and received an answer that was vague, generic or slightly off, this course is for you. You do not need any technical background. By the end, you will have a simple method you can use for almost any task, plus a library of more than fifty ready-to-use prompt patterns.\n\nA **prompt** is simply what you give the AI: your question, your instructions, any text you paste in, and any examples. Prompt engineering sounds technical, but at its heart it is the skill of *explaining a task clearly*, the same skill that makes someone a good manager, teacher or client.\n\n### A simple picture of how it works\n\nAI chat assistants are built on large language models. You do not need the maths, but one idea helps a lot:\n\n**The model writes the response that seems most likely to fit what you gave it.**\n\nIt has learned patterns from an enormous amount of text: how emails are written, how recipes are structured, how explanations flow. When you give it a short, vague request, it fills the gaps with the most typical, average answer. When you give it a clear, specific request, it can produce something tailored to you.\n\nThat is why these two prompts give very different results:\n\n```text\nWrite a post about our bakery.\n```\n\n```text\nWrite a friendly Instagram caption (under 60 words) announcing that our\nfamily bakery in Lahore now opens at 7am on weekdays, so office workers\ncan grab fresh parathas and chai before work. Include one emoji and a\ncall to action to visit.\n```\n\nThe first gets a generic bakery post. The second gets something you could actually publish.\n\n### Three things to know from day one\n\n**1. It does not know your situation unless you tell it.** The AI does not know your business, your audience, your deadline or your preferences. Anything important must be in the prompt.\n\n**2. It can be confidently wrong.** AI assistants sometimes state things that sound right but are not, including made-up facts, figures, quotes or sources. This is often called a \"hallucination\". Always check facts that matter, especially numbers, dates, names, legal, medical or financial information.\n\n**3. It is a conversation.** You can reply, correct and refine. Your first prompt is a starting point, not a final exam. Some of the best results come from the second or third message.\n\n### What AI assistants are good at\n\n- Drafting: emails, posts, outlines, summaries, first versions of almost anything.\n- Rewriting: changing tone, length, reading level or language.\n- Explaining: breaking down a topic you do not understand, at your level.\n- Brainstorming: generating many options quickly.\n- Organising: turning messy notes into structured lists, tables or plans.\n\n### Where to be careful\n\n- Up-to-date facts: depending on the tool, it may not know recent events unless it can search the web. Check the tool's settings or ask it whether it is using live search.\n- Precise calculations on large data: helpful, but verify.\n- Personal or confidential information: think before pasting customer data, passwords or private documents. Check your organisation's rules and the tool's privacy settings.\n- Important decisions: use AI to think, draft and compare, but you make the call.\n\n### A tiny experiment to try now\n\nOpen any AI assistant you have access to and try this pair:\n\n```text\nGive me tips for a job interview.\n```\n\nThen:\n\n```text\nI have a video interview on Thursday for a junior marketing role at a\nskincare brand. I'm nervous about the question \"Tell me about yourself\".\nGive me a 60-second answer structure and a sample answer I can adapt,\nbased on this background: 1 year running social media for a family\nrestaurant, grew followers from 800 to 3,000.\n```\n\nNotice how much more useful the second answer is. You did not need special words or tricks. You just gave the AI what a helpful friend would need to know.\n\n### What you will learn in this course\n\n- The anatomy of a good prompt (module 1)\n- How to be clear and specific, and how to give context and examples (module 2)\n- How to iterate and control the format of answers (module 3)\n- A practical library of prompt patterns for writing, analysis, brainstorming, learning and planning (module 4)\n- The everyday mistakes that hold people back, and how to check AI work (module 5)\n\nTake your time, try every example, and keep a note of the prompts that work for you. By the end, you will have your own personal prompt toolkit.",
+          "video": {
+            "script": "Hi, and welcome to Prompt Engineering Foundations. If you've ever asked an AI assistant for help and received something bland, generic or a little bit wrong, you're in exactly the right place.\n\nLet's start with one simple idea that explains most of what you'll see. An AI assistant writes the response that seems most likely to fit what you gave it. That's it. If you give it a short, vague request, it fills the gaps with the most typical, average answer. If you give it clear details, it can tailor the answer to you.\n\nSo \"write a post about our bakery\" gets you a generic bakery post. But \"write a friendly Instagram caption, under sixty words, announcing that our family bakery now opens at seven on weekdays so office workers can grab breakfast before work\" gets you something you could actually publish.\n\nThree things to remember from today. First, the AI doesn't know your situation unless you tell it. Second, it can sound confident and still be wrong, so always check facts, numbers and names that matter. And third, it's a conversation. You can reply, correct and refine, and often your second or third message is where the magic happens.\n\nYou don't need special words or secret tricks. You need to explain your task the way you'd explain it to a smart new colleague. In the next lesson, we'll break a great prompt into its parts, so you can build one every time.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "A prompt is everything you give the AI: question, instructions, pasted text and examples.",
+            "The AI produces the most fitting response to what it sees, so vague prompts get generic answers.",
+            "It only knows your situation if you tell it, and it can be confidently wrong, so check important facts.",
+            "Prompting is a conversation: refine with follow-up messages."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why does 'Write a post about our bakery' usually give a generic result?",
+              "options": [
+                "The prompt is too long",
+                "The AI fills missing details with typical, average content",
+                "AI cannot write social posts",
+                "The AI dislikes bakeries"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "With few details, the model produces the most typical answer. Adding audience, purpose and specifics tailors it."
+            },
+            {
+              "question": "Which statement about AI assistants is true?",
+              "options": [
+                "They never make calculation mistakes",
+                "They always know today's news",
+                "They can state false information confidently",
+                "They remember your business details automatically"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Hallucinations are a known behaviour, so check facts that matter."
+            },
+            {
+              "question": "What is the best way to think about your first prompt?",
+              "options": [
+                "A one-shot test you must get perfect",
+                "Something you should never change",
+                "A starting point you can refine in conversation",
+                "A search engine query"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Iteration is normal and often produces the best results."
+            }
+          ],
+          "activity": "Pick a task you did this week (an email, a post, a plan). Write a one-line prompt for it, then a detailed version with audience, purpose and details. Compare the two answers."
+        },
+        {
+          "slug": "anatomy-of-a-good-prompt",
+          "title": "The anatomy of a good prompt",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Five building blocks\n\nMost great prompts contain some or all of five building blocks. You will not need every block every time, but knowing them means you will never be stuck.\n\n1. **Task:** what you want done. Start with a clear action verb: write, summarise, explain, compare, list, rewrite, plan.\n2. **Context:** the background the AI needs: who you are, the situation, the goal.\n3. **Audience:** who the result is for, and what they already know.\n4. **Format:** what the output should look like: length, structure, tone, language.\n5. **Examples or constraints:** a sample of what good looks like, and any rules (what to include, what to avoid).\n\nA handy memory aid: **Task, Context, Audience, Format, Examples** (T-CAFE).\n\n### Building a prompt, block by block\n\nLet's build a prompt for a common task: asking a landlord to fix a broken heater.\n\n**Task only:**\n\n```text\nWrite an email to my landlord.\n```\n\n**Add context:**\n\n```text\nWrite an email to my landlord asking them to fix the heater in my flat.\nIt stopped working 5 days ago and I reported it by phone on Monday\nbut nobody has come.\n```\n\n**Add audience:**\n\n```text\n... My landlord is polite but slow to respond, and I want to keep a good\nrelationship.\n```\n\n**Add format:**\n\n```text\n... Keep it under 150 words, polite but firm, with a clear request for a\nrepair date by Friday. Include a subject line.\n```\n\n**Add constraints:**\n\n```text\n... Don't threaten legal action. Mention that I have a young child at home.\n```\n\nThe final prompt is five or six sentences long, and the email it produces will need only minor edits. The first version would have needed a full rewrite.\n\n### Why each block matters\n\n- **Without a clear task,** the AI may explain instead of write, or write instead of list.\n- **Without context,** it invents a generic situation.\n- **Without audience,** it guesses the level of detail and tone. An explanation for a ten-year-old and one for a finance director are very different.\n- **Without format,** you get whatever length and structure is typical, often too long.\n- **Without examples or constraints,** it cannot match your style or avoid things you dislike.\n\n### Order and layout\n\nFor short prompts, natural sentences work well. For longer prompts, especially when you paste in text, it helps to separate the parts clearly:\n\n```text\nTASK: Summarise the customer feedback below for my manager.\n\nCONTEXT: We are a small online clothing shop. This is feedback from\nour last 30 orders.\n\nAUDIENCE: My manager, who has 2 minutes to read it.\n\nFORMAT: 3 bullet points of main themes, then 1 suggested action.\n\nFEEDBACK:\n---\n(paste feedback here)\n---\n```\n\nPutting pasted text inside quotation marks or clear markers helps the AI tell your instructions apart from the material you want it to work on.\n\n### Role: an optional sixth block\n\nYou may see advice to start with \"You are a...\" (\"You are an experienced career coach\"). A role can help set the tone and level of expertise, especially in combination with the other blocks. But a role alone is not magic; \"You are a world-class marketer. Write a post.\" still lacks context, audience and format. Think of role as seasoning, not the meal.\n\n### A worked example from start to finish\n\nA shop owner in Dubai wants to reply to a customer review.\n\n```text\nTASK: Write a reply to the Google review below.\nCONTEXT: I own a small phone repair shop in Dubai. The customer waited\n2 hours because a part was delayed. We gave a 10% discount.\nAUDIENCE: The customer, but also future customers reading the reviews.\nFORMAT: Under 80 words, warm and professional, in English.\nCONSTRAINTS: Apologise sincerely, don't make excuses, invite them back.\n\nREVIEW:\n\"Repair was good but I waited 2 hours with no updates. Not happy.\"\n```\n\nThe result will be specific (it mentions the wait and the missing updates), appropriately short and on-tone.\n\n### Quick self-check before you press enter\n\nAsk yourself:\n\n- Would a smart stranger understand what I want?\n- Did I say who it is for?\n- Did I say how long and in what format?\n- Is there anything I would be annoyed to see? If so, say so.\n\nThis takes ten seconds and saves many rounds of back-and-forth.",
+          "video": null,
+          "keyTakeaways": [
+            "Great prompts combine Task, Context, Audience, Format and Examples or constraints (T-CAFE).",
+            "Start with a clear action verb, then add only the blocks the task needs.",
+            "Separate instructions from pasted material with labels or quotation marks.",
+            "A role can help, but it does not replace context, audience and format."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which building block is missing from: 'Summarise this article in 3 bullet points for my team'?",
+              "options": [
+                "None is missing, although context about the team and purpose could still help",
+                "Format",
+                "Audience",
+                "Task"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Task (summarise), format (3 bullets) and audience (my team) are present. More context can still improve it, but no core block is absent."
+            },
+            {
+              "question": "Why put pasted text inside quotation marks or labelled sections?",
+              "options": [
+                "It helps the AI distinguish your instructions from the material to work on",
+                "It hides the text from the AI",
+                "It makes the answer shorter",
+                "It is required by all AI tools"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Clear separation reduces confusion between what to do and what to work on."
+            },
+            {
+              "question": "'You are a world-class chef. Write a recipe.' What is the main weakness?",
+              "options": [
+                "Chefs cannot write recipes",
+                "It lacks context, audience and format, so the role alone cannot tailor the result",
+                "It should not use a role",
+                "The role is too short"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "A role adds flavour, but without details like diet, skill level and servings, results stay generic."
+            }
+          ],
+          "activity": "Write a T-CAFE prompt for a real message you need to send this week. Ask a friend or colleague to read only your prompt: could they do the task without asking questions?"
+        }
+      ]
+    },
+    {
+      "slug": "clarity-context-examples",
+      "title": "Clarity, context and examples",
+      "summary": "Learn to be specific without writing essays, give the background that matters, and use examples to show exactly what you want.",
+      "lessons": [
+        {
+          "slug": "clarity-and-specificity",
+          "title": "Clarity and specificity",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Vague words are the enemy\n\nWords like \"good\", \"short\", \"professional\", \"engaging\" and \"detailed\" mean different things to different people. The AI has to guess what you mean, and it guesses average. Clarity means replacing vague words with concrete ones.\n\n| Vague | Specific |\n|---|---|\n| Make it short | Under 100 words |\n| Make it professional | Formal, no slang, suitable for a bank's client email |\n| Make it engaging | Start with a question; use one short personal example |\n| Explain it simply | Explain for a 12-year-old using an everyday comparison |\n| Give me some ideas | Give me 10 ideas, each in one sentence |\n\n### Say what you want, not only what you don't\n\n\"Don't be boring\" gives the AI nothing to aim at. \"Use a surprising fact in the first sentence and keep sentences under 20 words\" does. It is fine to include things to avoid, but pair each \"don't\" with a \"do\".\n\n### Be specific about the goal\n\nThe same task changes with the goal. Compare:\n\n- \"Write a LinkedIn post about our new product.\"\n- \"Write a LinkedIn post about our new product *to get small-business owners to book a free demo*.\"\n\nThe second tells the AI what the post is *for*, so it can choose a call to action, the right benefits and a suitable tone.\n\n### Quantities and limits\n\nNumbers are one of the easiest ways to be specific:\n\n- How many? (\"5 subject lines\")\n- How long? (\"2 paragraphs\", \"under 50 words\", \"a 3-minute speech\")\n- How detailed? (\"one sentence per point\")\n- By when? (\"a plan for the next 4 weeks\")\n\nWord counts are approximate for AI, so give a range (\"80 to 120 words\") and check.\n\n### One task at a time (or clearly listed)\n\nMixing several requests in one long paragraph invites the AI to do some and skip others. Either ask one thing at a time, or number the requests:\n\n```text\nPlease do three things with the notes below:\n1. Summarise them in 5 bullet points.\n2. List any decisions we made, with the owner's name.\n3. Draft a short follow-up email to the team.\n```\n\n### Worked example: from vague to clear\n\nA teacher in Manchester wants help with a parents' newsletter.\n\nVague:\n\n```text\nHelp me with a newsletter.\n```\n\nClear:\n\n```text\nWrite the opening section (about 120 words) of our Year 4 class\nnewsletter for parents. Topics: the school trip to the science museum\non 14 March (permission slips due 7 March) and our new reading challenge.\nTone: warm and upbeat, easy to read on a phone. End with a reminder to\nreturn slips.\n```\n\nEverything the AI needs is there: section, length, audience, topics, dates, tone and ending.\n\n### Clarity is not length\n\nBeing specific does not mean writing an essay. A clear 40-word prompt beats a rambling 300-word one. Aim for every sentence to add information the AI could not guess. If a sentence does not change the result, cut it.\n\n### A useful trick: let the AI ask you\n\nWhen you are not sure what details matter, ask the AI to interview you first:\n\n```text\nI want to write a speech for my sister's wedding. Before you write\nanything, ask me up to 5 questions about what you need to know.\n```\n\nThis is one of the most powerful beginner techniques. The AI's questions show you which details matter, and the final result will be far more personal.\n\n### Common clarity mistakes\n\n- Using pronouns without context (\"rewrite it\", when \"it\" is not in the chat).\n- Assuming the AI knows internal names (\"update the Q3 deck\" means nothing to it).\n- Leaving out the most important constraint (\"it must fit on one slide\").\n- Changing your mind halfway through a long prompt without editing earlier parts.\n\n### Summary checklist\n\n- Replace vague adjectives with concrete descriptions or numbers.\n- State the goal, not only the task.\n- Number multiple requests.\n- Pair every \"don't\" with a \"do\".\n- When unsure, ask the AI to ask you questions first.",
+          "video": null,
+          "keyTakeaways": [
+            "Replace vague words (short, engaging, professional) with concrete descriptions or numbers.",
+            "State the goal the output serves, not only the task.",
+            "Number multiple requests so none are skipped, and pair every 'don't' with a 'do'.",
+            "Ask the AI to interview you first when you are unsure which details matter."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which instruction is the most specific?",
+              "options": [
+                "Make it better",
+                "Make it engaging",
+                "Open with a question and keep it under 80 words",
+                "Make it pop"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "It gives concrete, checkable instructions instead of subjective adjectives."
+            },
+            {
+              "question": "You are not sure what details the AI needs for a wedding speech. What is a good approach?",
+              "options": [
+                "Paste a random speech from the internet",
+                "Ask the AI to ask you up to 5 questions before writing",
+                "Give up and write it yourself",
+                "Write 'make it good'"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Letting the AI interview you surfaces the details that matter."
+            },
+            {
+              "question": "Why number several requests in one prompt?",
+              "options": [
+                "It reduces the chance that some requests are skipped",
+                "It is required by law",
+                "Numbers make the AI faster",
+                "The AI only reads numbers"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Clear, numbered requests make it easy for the AI (and you) to confirm each was done."
+            }
+          ],
+          "activity": "Find a prompt you used recently that gave a disappointing answer. Rewrite it by replacing every vague word with something concrete, and compare results."
+        },
+        {
+          "slug": "context-and-examples",
+          "title": "Giving context and examples",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Context: what a helpful colleague would need to know\n\nImagine asking a colleague to \"draft a reply to this client\". A good colleague would ask: Who is the client? What happened? What do we want to happen next? Is there anything sensitive? The AI needs the same information, but it cannot ask unless you invite it to. Giving context up front is the single biggest upgrade most people can make.\n\nUseful context usually covers:\n\n- **Who you are:** \"I run a two-person wedding photography business.\"\n- **The situation:** \"A couple is asking for a discount because their budget changed.\"\n- **The goal:** \"I want to keep the booking without cutting my price by more than 10%.\"\n- **Constraints:** \"We have already paid for their venue permit.\"\n- **Relevant material:** the email thread, your price list, your policy.\n\n### How much context is enough?\n\nEnough that the AI does not have to invent anything important. Not so much that the key point is buried. A good rule: include anything that would change the answer. Your company's founding year probably does not; your refund policy probably does.\n\n### Pasting material in\n\nOften the best context is the actual document: the email you are replying to, your notes, a product description. Paste it in and label it clearly:\n\n```text\nHere is the client's email:\n---\n(paste here)\n---\n\nHere is our package price list:\n---\n(paste here)\n---\n\nDraft a reply that offers the smaller package as an alternative.\n```\n\nBefore pasting, remove anything private you would not want to share, such as personal phone numbers, ID numbers, passwords or confidential figures, and follow your workplace rules about AI tools.\n\n### Examples: show, don't just tell\n\nSometimes describing what you want is hard, but showing it is easy. An example of the style, format or tone you like is often worth a paragraph of instructions.\n\n**Example of tone:**\n\n```text\nWrite 3 more product descriptions in the same style as this one:\n\n\"Soft as a Sunday morning. Our cotton hoodie is pre-washed, so it feels\nbroken-in from day one. Oversized fit. Machine-washable. Made to be lived in.\"\n\nProducts: linen shirt, wool beanie, canvas tote bag.\n```\n\nThe AI picks up the short sentences, the sensory opening and the rhythm.\n\n**Example of format:**\n\n```text\nTurn my notes into this format:\nName - Role - One key point they made\n\nExample:\nSara - Designer - Wants fewer colours on the homepage\n```\n\n### Tips for good examples\n\n- **Use one to three examples.** For most everyday tasks, that is plenty.\n- **Vary them** if you want variety in the output. If all your examples are about coffee, the AI may drift toward coffee.\n- **Say what to copy.** \"Copy the tone and length, not the content.\"\n- **Use real examples you like,** such as a past email that worked well or a post that performed well.\n\n### Worked example: a job application\n\nWithout context:\n\n```text\nWrite a cover letter for a data analyst job.\n```\n\nWith context and an example:\n\n```text\nWrite a cover letter for a junior data analyst role at a healthcare\ncharity in Birmingham.\n\nAbout me: recent maths graduate, built an Excel dashboard tracking\nvolunteer hours for my university society, basic SQL.\n\nWhat they want (from the job ad):\n---\n(paste the key requirements)\n---\n\nStyle: confident but humble, short paragraphs, under 300 words.\nHere is an opening line I like the style of:\n\"Numbers only matter when they help people make better decisions.\"\nDon't reuse that line; match its directness.\n```\n\nThis letter will mention the real dashboard, match the job's requirements and sound like a person, not a template.\n\n### When the AI gets something wrong, add context\n\nIf the answer misses the mark, the fix is often more context, not different wording. Ask yourself: what did the AI not know that it needed to? Then add it: \"Note: our customers are mostly retired people, so avoid slang.\"\n\n### Summary\n\n- Context answers who, what, why and what matters.\n- Paste real material, clearly labelled and cleaned of private details.\n- Use one to three examples to show style or format, and say what to copy.\n- When results miss, add the missing context.",
+          "video": null,
+          "keyTakeaways": [
+            "Context (who you are, the situation, the goal, constraints) is the biggest upgrade for most prompts.",
+            "Include anything that would change the answer; leave out what would not.",
+            "Paste real material with clear labels, after removing private details.",
+            "One to three varied examples show style or format better than long descriptions."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which piece of context most likely changes the answer when replying to a refund request?",
+              "options": [
+                "Your favourite colour",
+                "The year your company was founded",
+                "Your refund policy and what happened with the order",
+                "The number of employees"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Include context that would change the answer; the policy and situation do."
+            },
+            {
+              "question": "You show the AI one example product description. What should you add so it doesn't copy the content?",
+              "options": [
+                "'Copy the tone and length, not the content'",
+                "Nothing",
+                "A request to make it longer",
+                "More adjectives"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Telling the AI what to copy from the example prevents it from reusing specific content."
+            },
+            {
+              "question": "What should you do before pasting a customer email into an AI tool?",
+              "options": [
+                "Remove unnecessary personal details and follow your workplace AI rules",
+                "Nothing; all tools are private",
+                "Convert it to capital letters",
+                "Translate it into another language"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Protect personal data and follow your organisation's policy on AI tools."
+            }
+          ],
+          "activity": "Take a reply you need to write. Paste in the original message (with private details removed), add three sentences of context and one example of a past reply you liked."
+        }
+      ]
+    },
+    {
+      "slug": "iterating-and-formatting",
+      "title": "Iterating and formatting outputs",
+      "summary": "Improve answers through conversation and get results in the exact shape you need: lists, tables, emails, slides or plain text.",
+      "lessons": [
+        {
+          "slug": "iterating-in-conversation",
+          "title": "Iterating: the art of the follow-up",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### The first answer is a draft\n\nProfessionals rarely accept the first result. They treat it as a draft and steer. Iterating well is often faster than trying to write a perfect prompt up front.\n\n### Five follow-up moves\n\n**1. Adjust.** Change one thing at a time so you can see the effect.\n\n```text\nGood. Make it 30% shorter and replace the second paragraph with a\ncustomer example.\n```\n\n**2. Point to specifics.** Quote the part you want changed.\n\n```text\nThe line \"we are passionate about quality\" feels generic. Replace it\nwith something specific about our hand-stitched seams.\n```\n\n**3. Ask for options.** Instead of one version, ask for several and pick.\n\n```text\nGive me 3 alternative opening lines: one funny, one emotional, one direct.\n```\n\n**4. Explain what is wrong and why.** The AI learns your taste within the conversation.\n\n```text\nThis sounds too salesy for our audience of nurses, who are sceptical of\nmarketing. Make it more practical and humble.\n```\n\n**5. Combine.** Take the best parts of different versions.\n\n```text\nUse the opening from version 2 and the ending from version 3.\n```\n\n### When to start fresh\n\nLong conversations can drift. The AI may hold on to earlier instructions you have abandoned, or mix details from different drafts. Start a new chat when:\n\n- you have changed direction significantly\n- the answers are getting worse or repetitive\n- the conversation has become very long\n\nWhen you start fresh, write a new, better prompt that includes everything you learned: \"Write X, for Y, in style Z, avoiding A and B.\" That improved prompt is now reusable.\n\n### Ask the AI to critique itself\n\nA simple, effective habit:\n\n```text\nBefore I use this, review your draft against my requirements:\nunder 150 words, mentions the Friday deadline, friendly tone.\nList anything that doesn't meet them, then fix it.\n```\n\nThis catches missed requirements. It is not perfect, especially for facts, so you still need to check anything important yourself.\n\n### Ask the AI to improve your prompt\n\nYou can also ask for help with the prompt itself:\n\n```text\nHere is a prompt I use to write weekly team updates. Suggest how to\nmake it clearer and more specific, then show me the improved version.\n```\n\nThis is a great way to learn, because you see what the AI thinks is missing.\n\n### Worked example: iterating an event invitation\n\nA community organiser in Karachi drafts a volunteer invitation.\n\nRound 1: \"Write an invitation for volunteers for a beach clean-up on Saturday.\" Result: generic and long.\n\nRound 2: \"Make it under 80 words, suitable for WhatsApp, and add the time (7-10am), meeting point (Sea View, near the camel rides) and what to bring (water, hat, gloves provided).\" Result: much better, but a bit formal.\n\nRound 3: \"Make it more energetic and friendly, with one emoji, and add a line asking people to reply 'IN' to confirm.\" Result: ready to send.\n\nRound 4 (saving for later): \"Now write me a reusable prompt I can use for future clean-up invitations, with blanks for date, time and location.\"\n\nIn four short messages, the organiser has a finished message *and* a template for next time.\n\n### Save what works\n\nKeep a simple document of prompts that worked well, with a note of what they are for. Over time you build a personal library, and your first attempts get better and better. Many AI tools also let you save custom instructions or reusable prompts; check your tool's settings.\n\n### Common iteration mistakes\n\n- Changing many things at once, so you cannot tell what helped.\n- Saying \"no, that's wrong\" without saying what is wrong.\n- Continuing a confused conversation instead of starting fresh with a better prompt.\n- Forgetting to check facts after several rewrites, since errors can creep in.",
+          "video": null,
+          "keyTakeaways": [
+            "Treat the first answer as a draft; iterate by adjusting, pointing to specifics, asking for options, explaining why, and combining.",
+            "Start a fresh chat with an improved prompt when a conversation drifts or gets long.",
+            "Ask the AI to check its draft against your requirements, and still verify facts yourself.",
+            "Save prompts that work to build a personal library."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "An answer is 'too salesy'. What is the most effective follow-up?",
+              "options": [
+                "'Make it better.'",
+                "Start a new chat with the same prompt",
+                "'Too salesy. Our readers are sceptical nurses, so make it practical and humble.'",
+                "'No, try again.'"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Saying what is wrong and why helps the AI adjust in the right direction."
+            },
+            {
+              "question": "When is starting a new chat a good idea?",
+              "options": [
+                "When the conversation has drifted or answers are getting worse",
+                "Never",
+                "Only when the AI asks you to",
+                "After every single message"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "A fresh start with a better prompt avoids leftover confusion from a long, drifting conversation."
+            },
+            {
+              "question": "Why change one thing at a time when iterating?",
+              "options": [
+                "It uses less electricity",
+                "The AI can only handle one change",
+                "So you can see which change improved the result",
+                "It is a rule of every AI tool"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Isolating changes shows you what works, which improves your future prompts."
+            }
+          ],
+          "activity": "Take one draft the AI gave you and improve it in exactly three follow-up messages. Then ask the AI to write a reusable template prompt from the final version."
+        },
+        {
+          "slug": "formatting-outputs",
+          "title": "Formatting outputs: getting the shape you need",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Format is part of the request\n\nA great answer in the wrong shape still creates work. If you need a table for a spreadsheet, a bullet list for a slide, or plain text for WhatsApp, say so. AI assistants can produce almost any text format when asked clearly.\n\n### Common formats and how to ask\n\n**Bullet points:** \"Summarise in 5 bullet points, each under 15 words.\"\n\n**Numbered steps:** \"Give me step-by-step instructions, numbered, one action per step.\"\n\n**Tables:** \"Put this in a table with columns: Product, Price, Main benefit, Best for.\"\n\n**Email:** \"Write it as an email with a subject line, greeting, 2 short paragraphs and sign-off.\"\n\n**Headings:** \"Organise the answer under three headings: Problem, Options, Recommendation.\"\n\n**Plain text:** \"Plain text only, no bullet points, bold text or headings; I'm pasting it into a text message.\"\n\n**Spreadsheet-ready:** \"Output as comma-separated values with a header row, so I can paste it into a spreadsheet.\"\n\n**Checklist:** \"Make it a checklist with tick boxes I can print.\"\n\n### Length control\n\nBe explicit and realistic:\n\n- \"One sentence.\"\n- \"Under 50 words.\"\n- \"About one page.\"\n- \"3 short paragraphs.\"\n\nAI is better at counting items (bullets, paragraphs) than counting exact words, so use structure-based limits when precision matters.\n\n### Tone and reading level\n\nTone is also format:\n\n- \"Friendly and casual, like a message to a colleague.\"\n- \"Formal, suitable for a government office.\"\n- \"Plain English; explain any technical term in brackets.\"\n- \"Suitable for a reading age of about 12.\"\n\n### Language\n\nYou can ask for outputs in any major language, or in two at once:\n\n```text\nWrite the announcement in English, then the same message in Urdu,\nkeeping the meaning identical.\n```\n\nFor important translations, such as legal notices, medical instructions or contracts, have a fluent human check. AI translation can be very good but can miss nuance or local terms.\n\n### Show the format with a template\n\nIf you need an exact structure, give a template for the AI to fill:\n\n```text\nFill in this template for each of the 3 suppliers in my notes:\n\nSupplier:\nPrice per unit:\nDelivery time:\nStrengths:\nConcerns:\nRecommendation (Yes/No/Maybe):\n```\n\nThis is extremely reliable because there is little room for interpretation.\n\n### Worked example: meeting notes to action table\n\nA project coordinator pastes messy meeting notes and asks:\n\n```text\nFrom the notes below, create a table with columns:\nAction | Owner | Deadline | Status.\nIf no deadline was mentioned, write \"Not set\".\nThen, below the table, write a 2-sentence summary for people who\nmissed the meeting.\n\nNOTES:\n---\n(paste notes)\n---\n```\n\nNotice the instruction for missing information (\"Not set\"). Without it, the AI may invent a deadline to fill the column. Telling it what to do when information is missing is a simple habit that prevents made-up details.\n\n### Formatting for where it will be used\n\nThink about the destination:\n\n- **Slides:** short bullets, no long sentences, one idea per bullet.\n- **Social media:** platform length norms, line breaks, hashtags if appropriate.\n- **Voice or video scripts:** written for speaking, short sentences, no bullet points or symbols.\n- **Emails:** subject line, short paragraphs, clear request.\n- **Documents:** headings, logical sections.\n\nTell the AI where the text will go: \"This will be read aloud in a 30-second video.\"\n\n### Common formatting mistakes\n\n- Asking for a table but not naming the columns.\n- Not saying what to do with missing information.\n- Forgetting the destination, so text for a chat message arrives full of headings and bold.\n- Expecting exact word counts; check and adjust.\n\n### Quick practice\n\nTry asking for the same information in two shapes, for example \"a 5-bullet summary for my manager\" and \"a 3-sentence WhatsApp update for the team\". Comparing them side by side trains your eye for which format suits which reader, and you will quickly start specifying format in your very first prompt instead of fixing it afterwards.",
+          "video": null,
+          "keyTakeaways": [
+            "State the format you need: bullets, steps, table columns, email parts, plain text or spreadsheet-ready.",
+            "Use structure-based length limits (bullets, paragraphs) when precision matters.",
+            "Give a fill-in template for exact structures, and say what to write when information is missing.",
+            "Tell the AI where the output will be used: slides, social, voice script, email or document."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "You ask for a table of actions with a Deadline column, but many actions had no deadline. What instruction prevents invented dates?",
+              "options": [
+                "'Add more columns'",
+                "'Be accurate'",
+                "'If no deadline was mentioned, write Not set'",
+                "'Use a big table'"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Telling the AI what to do with missing information prevents it from filling gaps with made-up details."
+            },
+            {
+              "question": "Which length instruction is the AI most likely to follow precisely?",
+              "options": [
+                "Medium length",
+                "Exactly 137 words",
+                "3 bullet points",
+                "Not too long"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Counting structural items is more reliable than exact word counts; vague lengths are unclear."
+            },
+            {
+              "question": "Text for a 30-second video voiceover should be formatted how?",
+              "options": [
+                "As short spoken sentences with no symbols or bullet points",
+                "With headings and bullet points",
+                "In capital letters",
+                "As a table"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Scripts are written for speaking; formatting symbols don't read aloud."
+            }
+          ],
+          "activity": "Take one piece of information you use often (a price list, notes, a plan) and ask the AI to produce it in three formats: a table, a WhatsApp message and a 30-second script."
+        }
+      ]
+    },
+    {
+      "slug": "prompt-patterns-library",
+      "title": "Your prompt pattern library",
+      "summary": "More than fifty ready-to-adapt prompt patterns for writing, analysis, brainstorming, learning and planning.",
+      "lessons": [
+        {
+          "slug": "patterns-for-writing",
+          "title": "Patterns for writing and editing (1-18)",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### How to use this library\n\nEach pattern below is a reusable shape. Replace the parts in square brackets with your details. Mix and match: most real prompts combine two or three patterns. Always add the basics from earlier modules (audience, format, length) when they matter.\n\n### Drafting patterns\n\n**1. The briefed draft**\n\n```text\nWrite a [type of text] for [audience] about [topic]. The goal is [goal].\nLength: [length]. Tone: [tone].\n```\n\n**2. The style match**\n\n```text\nHere is something I wrote that I like: \"[sample]\". Write a [new piece]\nabout [topic] in the same style. Copy the style, not the content.\n```\n\n**3. The outline first**\n\n```text\nBefore writing, give me an outline for a [piece] about [topic] with\n3-5 sections. Wait for my approval before writing the full text.\n```\n\n**4. The fill-the-template**\n\n```text\nWrite a [piece] using this structure: [section 1], [section 2], [section 3].\n```\n\n**5. The multi-version**\n\n```text\nWrite 3 versions of [text]: one [style A], one [style B], one [style C].\n```\n\n**6. The interview-me**\n\n```text\nI need to write [piece]. Ask me up to 5 questions first, then write it\nusing my answers.\n```\n\n### Editing patterns\n\n**7. The tone shift**\n\n```text\nRewrite this to sound more [warm / formal / confident / playful],\nkeeping the meaning the same: \"[text]\"\n```\n\n**8. The shorten**\n\n```text\nCut this to under [N] words without losing [the key point / the deadline]: \"[text]\"\n```\n\n**9. The simplify**\n\n```text\nRewrite this so a [12-year-old / non-expert / busy executive] can\nunderstand it: \"[text]\"\n```\n\n**10. The proofread with reasons**\n\n```text\nProofread this. List each change you made and why, then give the\ncorrected version: \"[text]\"\n```\n\n**11. The keep-my-voice edit**\n\n```text\nImprove the clarity and flow of this, but keep my voice and word\nchoices where possible. Only change what's needed: \"[text]\"\n```\n\n**12. The strengthen the opening**\n\n```text\nGive me 5 stronger first sentences for this piece: \"[text]\"\n```\n\n**13. The critic**\n\n```text\nAct as a demanding editor. Give me the 3 biggest weaknesses in this\ndraft and how to fix each. Don't rewrite it yet: \"[text]\"\n```\n\n### Specific-format patterns\n\n**14. The email reply**\n\n```text\nDraft a reply to this email. I want to [accept / decline / ask for X].\nKeep it [length], [tone]. Email: \"[paste]\"\n```\n\n**15. The social caption**\n\n```text\nWrite a [platform] caption for [what the post shows]. Audience:\n[audience]. Include [a call to action / 3 hashtags]. Under [N] words.\n```\n\n**16. The headline set**\n\n```text\nWrite 10 headlines for [article] aimed at [audience]. Mix curiosity,\nbenefit-led and number-led styles.\n```\n\n**17. The translation with nuance**\n\n```text\nTranslate this into [language] for [audience in country]. Keep the tone\n[tone] and adapt any expressions that won't make sense locally: \"[text]\"\n```\n\n**18. The script**\n\n```text\nTurn this into a [30-second / 2-minute] spoken script for [video / voice note].\nShort sentences, no bullet points: \"[text]\"\n```\n\n### Worked example: combining patterns\n\nA freelance designer in Riyadh needs to send a price increase notice to clients. She combines the interview-me (6), briefed draft (1) and critic (13) patterns:\n\n1. \"I need to tell my clients my rates are going up 15% from next quarter. Ask me up to 5 questions first.\"\n2. She answers: loyal clients, rates unchanged for 3 years, new services added, wants to keep relationships warm.\n3. The AI drafts a warm, confident email.\n4. \"Act as a demanding editor. What are the 3 biggest weaknesses?\" The AI notes the email apologises too much and buries the date.\n5. \"Fix those three issues.\"\n\nFive short messages produce a better email than an hour of staring at a blank page.\n\n### Tips for writing patterns\n\n- Always give the AI your real material to work with: a draft, notes, facts. It will invent details otherwise.\n- For anything public, check names, numbers and claims before publishing.\n- When your brand or industry has rules (for example advertising disclosure rules for sponsored posts, or financial promotion rules), say so in the prompt and still check the output yourself.\n- Save your best combinations as personal templates.\n\n### Your turn\n\nChoose three patterns you have never used and try each on a real task this week. Note which ones save you the most time.",
+          "video": null,
+          "keyTakeaways": [
+            "Patterns are reusable shapes: replace the bracketed parts and add audience, format and length.",
+            "Drafting patterns include the briefed draft, style match, outline-first, templates, multi-version and interview-me.",
+            "Editing patterns include tone shift, shorten, simplify, proofread with reasons and critic.",
+            "Combine patterns and always supply your real facts, then check anything public."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "You want the AI's help but don't want it to rewrite your draft yet. Which pattern fits?",
+              "options": [
+                "The social caption",
+                "The critic (list the biggest weaknesses without rewriting)",
+                "The shorten",
+                "The multi-version"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "The critic pattern gives feedback without replacing your draft."
+            },
+            {
+              "question": "Why ask for an outline before the full text?",
+              "options": [
+                "It is cheaper",
+                "AI cannot write full texts",
+                "It makes the text longer",
+                "You can fix the structure early before a full draft is written"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Approving structure first avoids rewriting a whole draft built on the wrong plan."
+            },
+            {
+              "question": "When using the style-match pattern, what extra instruction prevents copying?",
+              "options": [
+                "'Copy the style, not the content'",
+                "'Write in capitals'",
+                "'Make it longer'",
+                "'Use more emojis'"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Explicitly separating style from content stops the AI reusing your sample's specifics."
+            }
+          ],
+          "activity": "Pick three writing patterns you have never tried and use each on a real task this week. Save the one that saved the most time as a template."
+        },
+        {
+          "slug": "patterns-for-analysis-and-brainstorming",
+          "title": "Patterns for analysis and brainstorming (19-37)",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Analysis patterns\n\nAnalysis is where AI can save hours, as long as you give it the material and check its conclusions.\n\n**19. The summary for a reader**\n\n```text\nSummarise this for [reader] who has [2 minutes / no background].\nFocus on [what matters to them]: \"[text]\"\n```\n\n**20. The key points and gaps**\n\n```text\nList the key points in this document, then list any important\nquestions it doesn't answer: \"[text]\"\n```\n\n**21. The compare**\n\n```text\nCompare [option A] and [option B] for [my situation] in a table:\ncost, effort, risks, benefits, best for.\n```\n\n**22. The pros and cons with weight**\n\n```text\nList the pros and cons of [decision] for [who]. Mark each as\nhigh, medium or low importance and explain briefly.\n```\n\n**23. The theme finder**\n\n```text\nHere are [customer comments / survey answers]. Group them into themes,\ncount how many comments fit each theme, and give one example quote each.\n```\n\n**24. The explain the numbers**\n\n```text\nHere is a small table of [data]. Describe the main patterns in plain\nlanguage, and tell me what you can't conclude from this data alone.\n```\n\n**25. The devil's advocate**\n\n```text\nHere is my plan: [plan]. Argue against it as strongly as you can.\nWhat would a sceptic say?\n```\n\n**26. The assumption check**\n\n```text\nWhat assumptions am I making in this plan? Which ones are riskiest\nif they're wrong? [plan]\n```\n\n**27. The extract**\n\n```text\nFrom the text below, extract every [date / name / price / action]\ninto a list. If something is unclear, mark it \"unclear\": \"[text]\"\n```\n\n**28. The decision helper**\n\n```text\nI'm deciding between [options]. My priorities, in order, are [1, 2, 3].\nAsk me any questions you need, then recommend one and explain why.\n```\n\n### Brainstorming patterns\n\nBrainstorming is where AI's speed shines. Quantity first, then filter.\n\n**29. The big list**\n\n```text\nGive me 20 ideas for [goal] for [audience]. One line each. Include\nsome unusual ones.\n```\n\n**30. The constraint twist**\n\n```text\nGive me 10 ideas for [goal] that cost less than [budget] and can be done\nin [time].\n```\n\n**31. The perspective shift**\n\n```text\nHow would [a teenager / a busy parent / a retiree / a competitor] see\n[product or idea]? Give 3 ideas from each perspective.\n```\n\n**32. The combine**\n\n```text\nCombine ideas from [field A] and [field B] to generate 10 new ideas for [goal].\n```\n\n**33. The name generator**\n\n```text\nSuggest 15 names for [product / event / business]. Criteria: [short,\neasy to spell, works in English and Arabic]. Explain the idea behind each.\n```\n\n**34. The build on mine**\n\n```text\nHere are my 3 ideas: [ideas]. Build on each with 3 variations, then\nsuggest 3 new ones in a different direction.\n```\n\n**35. The filter and rank**\n\n```text\nFrom the ideas above, pick the best 5 for [criteria] and rank them,\nwith one sentence each on why.\n```\n\n**36. The what could go wrong**\n\n```text\nFor my idea [idea], list the 5 most likely ways it could fail and how\nto prevent each.\n```\n\n**37. The first step**\n\n```text\nFor the top idea, what is the smallest, cheapest test I could run\nthis week to see if it works?\n```\n\n### Worked example: from comments to action\n\nA café owner in Manchester pastes 40 online reviews and uses patterns 23, 26 and 29:\n\n1. Theme finder: themes include slow weekend service, loved pastries, limited seating, and friendly staff.\n2. She checks the counts against a few reviews herself (the AI's counts can be off, so spot-check).\n3. Assumption check on her plan to extend opening hours: \"You're assuming the complaints about seating are from people who would come at later hours.\"\n4. Big list: 20 ideas to reduce weekend waits; she picks a pre-order option and a second till.\n\n### Important cautions for analysis\n\n- **Give it the data.** Without your real material, the AI will produce generic analysis that sounds specific.\n- **Check counts and numbers.** AI can miscount or miscalculate, especially with long lists. Spot-check, or use a spreadsheet for exact numbers.\n- **Correlation is not cause.** If the AI says \"sales rose because of the campaign\", ask what else could explain it.\n- **You own the decision.** Use AI to widen your thinking, not to replace your judgement.",
+          "video": null,
+          "keyTakeaways": [
+            "Analysis patterns: summary for a reader, key points and gaps, compare, weighted pros and cons, themes, extract, assumption check.",
+            "Brainstorming patterns: big list, constraint twist, perspective shift, combine, build on mine, filter and rank, first step.",
+            "Generate many ideas first, then filter with explicit criteria.",
+            "Give the AI your real data, spot-check counts and numbers, and keep the decision yours."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "The AI groups 40 reviews into themes with counts. What should you do before relying on the counts?",
+              "options": [
+                "Nothing; AI counts are exact",
+                "Spot-check them against the reviews or use a spreadsheet for exact counts",
+                "Ask for more themes",
+                "Delete the counts"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "AI can miscount long lists; verify numbers that matter."
+            },
+            {
+              "question": "Which pattern is best for finding weaknesses in your own plan?",
+              "options": [
+                "The social caption",
+                "The devil's advocate or assumption check",
+                "The translation",
+                "The name generator"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "These patterns deliberately look for flaws and risky assumptions."
+            },
+            {
+              "question": "What is the recommended order for brainstorming with AI?",
+              "options": [
+                "Pick the best idea first, then generate options",
+                "Only ask for one idea",
+                "Ask for ideas without any goal",
+                "Generate many ideas first, then filter and rank against criteria"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Quantity then filtering produces better options than judging too early."
+            }
+          ],
+          "activity": "Paste 20 real comments (reviews, survey answers or feedback, with personal details removed) and use the theme finder. Spot-check three counts, then use 'first step' on the top improvement idea."
+        },
+        {
+          "slug": "patterns-for-learning-and-planning",
+          "title": "Patterns for learning and planning (38-56)",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Learning patterns\n\nAI can be a patient tutor, available any time, at your level. The best learning prompts make the AI *teach* rather than just tell.\n\n**38. The explain like I'm new**\n\n```text\nExplain [topic] to me as a complete beginner. Use an everyday\ncomparison, then give one real example.\n```\n\n**39. The level ladder**\n\n```text\nExplain [topic] in three levels: for a 10-year-old, for a university\nstudent, and for a professional.\n```\n\n**40. The quiz me**\n\n```text\nI'm learning [topic]. Ask me 5 questions one at a time, wait for my\nanswer, then tell me if I'm right and why.\n```\n\n**41. The Socratic tutor**\n\n```text\nHelp me understand [topic] by asking me guiding questions instead of\ngiving answers directly.\n```\n\n**42. The misconception check**\n\n```text\nWhat are the most common misunderstandings about [topic], and what is\nactually true?\n```\n\n**43. The worked example**\n\n```text\nShow me a step-by-step worked example of [skill, e.g. calculating\nprofit margin], then give me a similar problem to try.\n```\n\n**44. The learning plan**\n\n```text\nCreate a 4-week plan to learn the basics of [skill] with 30 minutes a\nday. Include free resources to search for and a small project each week.\n```\n\n**45. The explain my mistake**\n\n```text\nHere is my answer to [problem]: [answer]. Don't give me the solution.\nTell me where my thinking went wrong.\n```\n\n**46. The jargon buster**\n\n```text\nList the 10 most important terms in [field] with a one-sentence plain\nEnglish definition each.\n```\n\n**47. The practice conversation**\n\n```text\nRole-play a [job interview / sales call / conversation in French].\nYou play [role]. Keep your replies short and give me feedback at the end.\n```\n\n### Planning patterns\n\n**48. The goal breakdown**\n\n```text\nMy goal is [goal] by [date]. Break it into milestones, then weekly tasks.\nI have [time available] per week.\n```\n\n**49. The schedule builder**\n\n```text\nHere are my tasks with deadlines and time estimates: [list]. Suggest a\nrealistic schedule for this week, with breaks. Flag anything that won't fit.\n```\n\n**50. The checklist maker**\n\n```text\nCreate a checklist for [event / process, e.g. launching an online shop].\nGroup it by stage and mark the steps that are easy to forget.\n```\n\n**51. The priority sort**\n\n```text\nSort these tasks by urgency and importance into four groups (do now,\nschedule, delegate, drop): [list]\n```\n\n**52. The budget planner**\n\n```text\nHelp me plan a budget of [amount] for [event]. Give categories, suggested\namounts and where I could save. Show your arithmetic.\n```\n\n**53. The risk plan**\n\n```text\nFor [project], list what could go wrong, how likely and how serious each\nis, and one way to reduce each risk.\n```\n\n**54. The meeting prep**\n\n```text\nI have a meeting with [who] about [topic]. My goal is [goal]. Give me an\nagenda, 3 questions to ask and likely objections with responses.\n```\n\n**55. The weekly review**\n\n```text\nHere is what I planned and what I actually did this week: [notes].\nWhat went well, what didn't, and what should I change next week?\n```\n\n**56. The recipe or meal plan**\n\n```text\nPlan 5 dinners for [number] people using [ingredients I have], under\n[time] each, for [dietary needs]. Include a shopping list for anything missing.\n```\n\n### Worked example: a career switcher\n\nAli, an accountant in Lahore, wants to move into data analysis. He uses:\n\n- **Learning plan (44):** a 4-week plan with 30 minutes a day on spreadsheets and basic SQL.\n- **Jargon buster (46):** key terms like \"join\", \"pivot table\" and \"dashboard\".\n- **Worked example (43)** and **quiz me (40):** he practises daily.\n- **Weekly review (55):** each Sunday, he pastes what he did and adjusts the plan.\n\nThe AI does not replace courses or practice, but it turns them into a personal, adaptive routine.\n\n### Cautions\n\n- **Verify facts when learning.** A tutor that is occasionally wrong is still useful, but check key facts in a trusted source, especially in fields like health, law and finance.\n- **Check arithmetic in plans and budgets.** Ask the AI to show its working, and verify totals yourself or in a spreadsheet.\n- **Resources:** AI may suggest books, websites or courses that don't exist or have changed. Search for them yourself before relying on them.\n- **Make it yours.** Plans work when they fit your real life. Tell the AI about your constraints: time, energy, budget and responsibilities.",
+          "video": null,
+          "keyTakeaways": [
+            "Learning patterns make the AI teach: explain simply, level ladder, quiz me, Socratic tutor, worked examples, explain my mistake.",
+            "Planning patterns cover goals, schedules, checklists, priorities, budgets, risks, meetings and weekly reviews.",
+            "Ask the AI to show its arithmetic, and verify totals yourself.",
+            "Search for any suggested resources yourself, as they may not exist or may have changed."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which pattern helps you learn from your own error without being handed the solution?",
+              "options": [
+                "The jargon buster",
+                "The explain my mistake",
+                "The checklist maker",
+                "The budget planner"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "It asks the AI to diagnose your reasoning rather than solve the problem for you."
+            },
+            {
+              "question": "The AI recommends three books for learning SQL. What should you do?",
+              "options": [
+                "Buy them immediately",
+                "Assume they are the best available",
+                "Ignore all AI suggestions forever",
+                "Search for them yourself to confirm they exist and suit you"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "AI can suggest resources that don't exist or are outdated; verify before relying on them."
+            },
+            {
+              "question": "Why add 'show your arithmetic' to a budget prompt?",
+              "options": [
+                "So you can check the calculations, which AI can get wrong",
+                "It makes the answer shorter",
+                "It hides errors",
+                "It is required by banks"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Visible working lets you catch arithmetic mistakes."
+            }
+          ],
+          "activity": "Choose a skill you want to learn. Use the learning plan pattern, then the quiz me pattern for 10 minutes. Note one misconception you corrected."
+        }
+      ]
+    },
+    {
+      "slug": "mistakes-and-good-habits",
+      "title": "Everyday mistakes and good habits",
+      "summary": "Avoid the mistakes that hold most people back, and build simple habits for checking AI work and using it safely.",
+      "lessons": [
+        {
+          "slug": "everyday-mistakes",
+          "title": "Ten everyday prompting mistakes (and fixes)",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Mistake 1: the one-line prompt\n\n**Symptom:** generic, bland results.\n**Fix:** add context, audience and format. Even two extra sentences transform most answers.\n\n### Mistake 2: assuming the AI knows your world\n\n**Symptom:** the AI refers to the wrong product, invents company details or uses the wrong currency.\n**Fix:** state the essentials: who you are, where you are, who the audience is. \"We are a UK-based charity; use British English and pounds.\"\n\n### Mistake 3: trusting facts without checking\n\n**Symptom:** a statistic, quote, legal rule or source turns out to be wrong or invented.\n**Fix:** treat factual claims as leads to verify. Ask \"Which parts of this are you less certain about?\" and check key facts in reliable sources. Be especially careful with health, legal, financial and news topics.\n\n### Mistake 4: asking for everything at once\n\n**Symptom:** half the requests are ignored or done badly.\n**Fix:** one task per message, or clearly numbered requests. Break big jobs into steps: outline, then draft, then edit.\n\n### Mistake 5: vague feedback\n\n**Symptom:** \"Make it better\" produces random changes.\n**Fix:** say what is wrong and why: \"Too formal for Instagram; my followers are students.\"\n\n### Mistake 6: never starting fresh\n\n**Symptom:** a long, confused conversation where the AI mixes old and new instructions.\n**Fix:** start a new chat with a clear, improved prompt that includes what you have learned.\n\n### Mistake 7: not saying what to do when information is missing\n\n**Symptom:** invented deadlines, prices or names that fill gaps.\n**Fix:** \"If you don't know, write 'unknown'\" or \"Ask me instead of guessing.\"\n\n### Mistake 8: pasting private information carelessly\n\n**Symptom:** customer data, passwords, confidential plans or someone else's personal details go into a tool without thought.\n**Fix:** remove or replace personal details (\"Customer A\"), never paste passwords, follow your workplace's AI policy, and check the tool's data settings.\n\n### Mistake 9: copy-paste without reading\n\n**Symptom:** publishing text with errors, odd phrasing, placeholders like \"[Your Name]\" or claims you cannot support.\n**Fix:** read everything before you send or publish. You are the editor and you are responsible for the final result.\n\n### Mistake 10: giving up too early\n\n**Symptom:** \"AI isn't useful for my job\" after one disappointing try.\n**Fix:** try the T-CAFE structure, an example, and two rounds of feedback before judging. Many tasks that fail on the first attempt succeed on the third.\n\n### A before-and-after example\n\n**Before:**\n\n```text\nwrite a product description\n```\n\n**After (fixing mistakes 1, 2, 7 and 9):**\n\n```text\nWrite a 60-word product description for our online shop (we're based in\nDubai; prices in AED). Product: handmade oud-scented soy candle, 200g,\nburn time about 40 hours (from our supplier's spec). Audience: gift\nbuyers aged 25-45. Tone: elegant, not over the top. Don't add any claims\nabout health benefits. If you need details I haven't given, list them\nas questions at the end instead of guessing.\n```\n\nThen the human step: read it, check the burn time matches the label, and remove anything you cannot stand behind.\n\n### Spotting a weak answer\n\nSigns you should push back or verify:\n\n- It is very general and could apply to anyone.\n- It includes specific-looking numbers you did not provide.\n- It cites sources you cannot find.\n- It avoids your actual question.\n- It sounds confident about something that changes often (prices, laws, schedules).\n\n### The habit that fixes most problems\n\nBefore sending any prompt, ask: **\"If I gave this to a smart new colleague, would they have what they need?\"** If not, add what is missing. This single habit fixes the majority of everyday prompting problems.\n\n### Make it stick\n\nPick the two mistakes you recognise most in yourself and write their fixes on a sticky note or at the top of your prompt toolkit. For the next week, check each prompt against those two fixes before sending. Small, repeated habits improve your results far more than reading long lists of tips once.",
+          "video": null,
+          "keyTakeaways": [
+            "Most poor results come from one-line prompts, missing context and vague feedback.",
+            "Treat factual claims as leads to verify, especially numbers, sources, and health, legal or financial topics.",
+            "Tell the AI what to do when information is missing, and never paste private data carelessly.",
+            "Read everything before using it, and don't give up after one attempt."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "An AI-written post includes a statistic you never provided. What should you do?",
+              "options": [
+                "Add more statistics",
+                "Verify it in a reliable source or remove it",
+                "Publish it; it sounds authoritative",
+                "Ask the AI to make it bigger"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Unprovided specific numbers may be invented; verify or remove them."
+            },
+            {
+              "question": "Which instruction prevents the AI from guessing missing details?",
+              "options": [
+                "'If you need details I haven't given, ask me instead of guessing'",
+                "'Write quickly'",
+                "'Be creative'",
+                "'Use more adjectives'"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "An explicit rule for missing information stops the AI inventing details."
+            },
+            {
+              "question": "Which is the safest way to include a customer complaint in a prompt?",
+              "options": [
+                "Screenshot their account page",
+                "Paste their password too",
+                "Replace personal details with placeholders like 'Customer A' and follow your AI policy",
+                "Paste it with their full name, phone and address"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Remove personal details you don't need and follow your organisation's rules."
+            }
+          ],
+          "activity": "Review your last five AI conversations. Which of the ten mistakes did you make most? Rewrite one prompt to fix it."
+        },
+        {
+          "slug": "checking-ai-work",
+          "title": "Checking AI work and building your prompt toolkit",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Why checking matters\n\nAI assistants are powerful drafting partners, but you are responsible for what you send, publish or decide. A quick, consistent checking routine lets you move fast *and* stay trustworthy.\n\n### The 4-point check\n\nBefore using any AI output, run through four questions:\n\n1. **Did it do what I asked?** Right task, audience, length and format?\n2. **Is it true?** Check facts, names, numbers, dates, quotes and sources that matter.\n3. **Is it appropriate?** Tone, sensitivity, fairness, and anything that could embarrass you, offend someone or break a rule.\n4. **Is it mine?** Does it sound like you or your brand? Would you be comfortable putting your name on it?\n\n### How to check facts efficiently\n\n- **Ask the AI to flag uncertainty:** \"Which statements in your answer should I double-check?\" This will not catch everything, but it points you to the riskiest parts.\n- **Ask for sources, then open them:** if your tool can search the web, ask for links. Open them and confirm they say what the AI claims. Sources can be misquoted or even made up.\n- **Cross-check key facts** with an official or reliable source: a government site, the company's own website, a recognised publication.\n- **Use the right tool for numbers:** a calculator or spreadsheet for sums, not your eyes on an AI answer.\n\n### Appropriateness and fairness\n\nAI can reflect stereotypes or assumptions found in the text it learned from. When writing about people, such as job adverts, customer personas or performance feedback, read carefully for unfair assumptions about gender, age, nationality, religion or disability. For advertising, remember that rules about honest claims and disclosure of sponsored content still apply to AI-written text.\n\n### Privacy and confidentiality basics\n\n- Know your tool's settings: some tools let you control whether your conversations are used to improve their models.\n- Follow your workplace policy on which AI tools are approved and what data is allowed.\n- Remove unnecessary personal or confidential information before pasting.\n- Be careful with other people's content: summarising a public article is different from uploading a client's confidential contract.\n\n### Being open about AI use\n\nNorms differ by workplace, school and platform. Some require you to disclose AI assistance; some platforms label AI-generated images or media. When in doubt, check the rules and be honest. It protects your credibility.\n\n### Building your personal prompt toolkit\n\nThe best prompters are not people who memorise tricks; they are people who save what works. Build a simple toolkit document with sections like:\n\n```text\nMY PROMPT TOOLKIT\n\n1. Weekly team update\n   Prompt: \"Turn these notes into a weekly update for my team of 6...\"\n   Notes: works best if I paste notes as bullets.\n\n2. Customer reply (complaint)\n   Prompt: \"Draft a reply to this complaint. Apologise sincerely...\"\n   Notes: always check the refund amount.\n\n3. Learning a new tool\n   Prompt: \"Explain [tool] to me as a beginner, then quiz me...\"\n```\n\nUpdate it whenever a prompt works especially well. Many AI tools also let you save custom instructions (for example your role, location and preferred style) so you don't repeat them every time; check your tool's settings.\n\n### Worked example: a quick checking routine\n\nA marketing assistant in Jeddah uses AI to draft a product launch email.\n\n1. **Did it do what I asked?** Yes, but it is 250 words instead of 150. She asks for a shorter version.\n2. **Is it true?** The draft says \"free delivery across the GCC\". Their offer is only within Saudi Arabia. She corrects it.\n3. **Is it appropriate?** The tone is fine; the discount wording meets the company's promotion rules.\n4. **Is it mine?** She changes two phrases to match the brand's usual voice.\n\nTotal checking time: about five minutes. Without it, a wrong delivery promise would have gone to thousands of customers.\n\n### Where to go next\n\nYou now have the foundations: the T-CAFE structure, clarity, context, examples, iteration, formatting, a library of over fifty patterns, and a checking routine. If you want to go deeper, the Optimize All academy offers more advanced courses on prompt engineering, AI for data analysis and building AI workflows. Keep practising on real tasks; that is where the skill grows.",
+          "video": null,
+          "keyTakeaways": [
+            "Run a 4-point check on every output: did it do the task, is it true, is it appropriate, is it mine?",
+            "Ask the AI to flag uncertain statements, open any sources it gives, and use tools for numbers.",
+            "Watch for stereotypes, follow privacy rules and workplace policies, and be open about AI use where required.",
+            "Build a personal prompt toolkit and keep updating it with prompts that work."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "The AI gives you three links as sources. What should you do?",
+              "options": [
+                "Trust them because links look official",
+                "Open them and confirm they say what the AI claims",
+                "Delete them",
+                "Ask for ten more links"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Sources can be misquoted or invented; opening them is the only way to be sure."
+            },
+            {
+              "question": "Which question belongs in the 4-point check?",
+              "options": [
+                "Did it use many emojis?",
+                "Was it generated quickly?",
+                "Is it the longest possible answer?",
+                "Is it appropriate, fair and within the rules?"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Appropriateness, including fairness and compliance, is one of the four checks."
+            },
+            {
+              "question": "What makes a personal prompt toolkit useful?",
+              "options": [
+                "Saving prompts that worked with notes on how to use them",
+                "Using a different AI every day",
+                "Memorising secret magic words",
+                "Never changing your prompts"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Saving and refining proven prompts is how everyday skill compounds."
+            }
+          ],
+          "activity": "Create your prompt toolkit document with at least five prompts you will reuse, each with a note on when to use it and what to check."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 25,
+    "timeLimitMinutes": 35,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "pef-001",
+        "module": "getting-started",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is a prompt?",
+        "options": [
+          "The AI's answer",
+          "Everything you give the AI: question, instructions, pasted text and examples",
+          "Only the question you type",
+          "A setting in your browser"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "A prompt includes all the input you provide, not just a question."
+      },
+      {
+        "id": "pef-002",
+        "module": "getting-started",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Why does a short, vague prompt usually give a generic answer?",
+        "options": [
+          "The AI only reads the first word",
+          "The AI fills missing details with typical, average content",
+          "Short prompts are blocked",
+          "The AI is lazy"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Without specifics, the model produces the most typical response."
+      },
+      {
+        "id": "pef-003",
+        "module": "getting-started",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does T-CAFE stand for in this course?",
+        "options": [
+          "Tone, Clarity, Action, Facts, Ending",
+          "Task, Context, Audience, Format, Examples",
+          "Text, Content, Answer, Feedback, Edit",
+          "Time, Cost, Accuracy, Focus, Effort"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Task, Context, Audience, Format and Examples or constraints are the building blocks."
+      },
+      {
+        "id": "pef-004",
+        "module": "getting-started",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A shop owner writes 'You are a world-class marketer. Write an ad.' The result is generic. What is the best improvement?",
+        "options": [
+          "Change it to 'You are the best marketer in history'",
+          "Ask the same thing again",
+          "Add the product, audience, goal, platform and length",
+          "Remove the role and add nothing"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "A role cannot replace context, audience and format."
+      },
+      {
+        "id": "pef-005",
+        "module": "getting-started",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which of these should you be careful about with AI assistants? (Choose all that apply.)",
+        "options": [
+          "Recent events if the tool isn't using web search",
+          "Confident but incorrect facts",
+          "Pasting passwords or confidential data",
+          "Asking it to change the tone of your text"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Hallucinations, knowledge limits and privacy all need care; rewriting tone is a standard, low-risk use."
+      },
+      {
+        "id": "pef-006",
+        "module": "getting-started",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A prompt includes an email you want summarised. Why put the email inside quotation marks or a labelled section?",
+        "options": [
+          "So the AI can tell your instructions apart from the material",
+          "To hide it",
+          "To make the AI respond faster",
+          "Because AI can't read unlabelled text"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Clear separation prevents confusion between instructions and content."
+      },
+      {
+        "id": "pef-007",
+        "module": "getting-started",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "You ask an AI for 'the latest opening hours of the city museum' and it answers confidently. What is the best response?",
+        "options": [
+          "Check the museum's official website, since the tool may not have current information",
+          "Trust it; it sounded sure",
+          "Assume museums never change hours",
+          "Ask it to answer more confidently"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Changing facts must be verified with an official source; confidence is not evidence."
+      },
+      {
+        "id": "pef-008",
+        "module": "getting-started",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which task is an AI assistant generally well suited to?",
+        "options": [
+          "Knowing your private plans without being told",
+          "Guaranteeing that facts are true",
+          "Making your final legal decisions for you",
+          "Drafting a first version of an email"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Drafting is a core strength; decisions and facts still need human judgement and checking."
+      },
+      {
+        "id": "pef-009",
+        "module": "clarity-context-examples",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is the most specific instruction?",
+        "options": [
+          "Under 80 words",
+          "Not too long",
+          "Brief-ish",
+          "Make it short"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Numbers remove guesswork."
+      },
+      {
+        "id": "pef-010",
+        "module": "clarity-context-examples",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is a good way to find out which details the AI needs for a personal task?",
+        "options": [
+          "Ask it to ask you up to 5 questions first",
+          "Use capital letters",
+          "Write 'make it perfect'",
+          "Paste a random example"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "The interview-me approach surfaces the details that matter."
+      },
+      {
+        "id": "pef-011",
+        "module": "clarity-context-examples",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which context most improves a reply to a customer asking for a discount? (Choose all that apply.)",
+        "options": [
+          "Your goal for the relationship",
+          "The weather today",
+          "Your pricing and discount policy",
+          "What the customer has bought before"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Include context that would change the answer; the weather does not."
+      },
+      {
+        "id": "pef-012",
+        "module": "clarity-context-examples",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "You give one example of your writing style. The AI copies phrases from it. What should you add?",
+        "options": [
+          "A longer sample",
+          "'Copy the style and length, not the content'",
+          "Nothing; copying is unavoidable",
+          "More examples that are all identical"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Saying what to copy from the example prevents reuse of content."
+      },
+      {
+        "id": "pef-013",
+        "module": "clarity-context-examples",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "'Don't be boring' gives weak results. What is better?",
+        "options": [
+          "'Start with a surprising fact and keep sentences under 20 words'",
+          "Remove all instructions",
+          "'Please, please don't be boring'",
+          "'Be less boring than usual'"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Pair every 'don't' with a concrete 'do'."
+      },
+      {
+        "id": "pef-014",
+        "module": "clarity-context-examples",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Your team asks the AI to 'update the Q3 deck notes' in a new chat, and it produces nonsense. What is the most likely reason?",
+        "options": [
+          "The AI is broken",
+          "It has no idea what 'the Q3 deck' is; internal names need context or the actual material",
+          "Decks cannot be discussed with AI",
+          "The prompt was too long"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "The AI doesn't know internal references; paste or describe the material."
+      },
+      {
+        "id": "pef-015",
+        "module": "clarity-context-examples",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "How many examples are usually enough for an everyday task?",
+        "options": [
+          "Exactly one hundred",
+          "None ever",
+          "One to three",
+          "At least twenty"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "One to three varied examples are usually plenty for everyday tasks."
+      },
+      {
+        "id": "pef-016",
+        "module": "clarity-context-examples",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why state the goal of a LinkedIn post (e.g. 'to get small-business owners to book a demo')?",
+        "options": [
+          "It hides the product name",
+          "LinkedIn requires it",
+          "It makes the post longer",
+          "The AI can choose the right benefits, tone and call to action"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Knowing the purpose lets the AI make better choices."
+      },
+      {
+        "id": "pef-017",
+        "module": "iterating-and-formatting",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "The AI's first draft is decent but too long. What is the best follow-up?",
+        "options": [
+          "Copy it anyway",
+          "'Wrong.'",
+          "'Good. Make it about 30% shorter and keep the deadline.'",
+          "Start a brand new topic"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Specific adjustments get targeted improvements."
+      },
+      {
+        "id": "pef-018",
+        "module": "iterating-and-formatting",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "You need text for a WhatsApp message. What should you ask for?",
+        "options": [
+          "A long report",
+          "A table",
+          "Headings and bold text",
+          "Plain, short text without formatting symbols"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Match the format to the destination."
+      },
+      {
+        "id": "pef-019",
+        "module": "iterating-and-formatting",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A 40-message conversation has become confused, mixing old and new instructions. What should you do?",
+        "options": [
+          "Start a new chat with an improved prompt that includes what you learned",
+          "Type the same instruction ten times",
+          "Stop using AI",
+          "Keep going; it will sort itself out"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "A fresh start with a better prompt clears leftover confusion."
+      },
+      {
+        "id": "pef-020",
+        "module": "iterating-and-formatting",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which follow-up moves are effective when iterating? (Choose all that apply.)",
+        "options": [
+          "Explaining why the draft doesn't suit your audience",
+          "Quoting the exact line you want changed",
+          "Asking for three alternative versions",
+          "Saying only 'no'"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Specific, reasoned feedback and options work; 'no' gives no direction."
+      },
+      {
+        "id": "pef-021",
+        "module": "iterating-and-formatting",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "You ask for a table of supplier details, and some suppliers have no delivery time listed. What prevents invented values?",
+        "options": [
+          "Asking for more columns",
+          "'If a value isn't mentioned, write Not stated'",
+          "Using a bigger font",
+          "Asking for bold text"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Defining what to do with missing information prevents made-up details."
+      },
+      {
+        "id": "pef-022",
+        "module": "iterating-and-formatting",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "You need an exact structure for 12 job candidates' notes (name, strengths, concerns, recommendation). Which approach is most reliable?",
+        "options": [
+          "Ask for a creative essay",
+          "Ask for exactly 1,000 words",
+          "Provide a fill-in template with those fields and ask for one block per candidate",
+          "'Summarise the candidates'"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "A template leaves little room for interpretation and keeps output consistent."
+      },
+      {
+        "id": "pef-023",
+        "module": "iterating-and-formatting",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Why might you ask the AI to review its draft against your requirements?",
+        "options": [
+          "It is required by every tool",
+          "To guarantee all facts are true",
+          "To make it answer slower",
+          "To catch missed requirements before you use it"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Self-review catches missed requirements, though you must still check facts yourself."
+      },
+      {
+        "id": "pef-024",
+        "module": "iterating-and-formatting",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which length instruction is most reliable?",
+        "options": [
+          "Exactly 173 words",
+          "Four bullet points",
+          "Not too short, not too long",
+          "A good length"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "AI counts items more reliably than exact words."
+      },
+      {
+        "id": "pef-025",
+        "module": "prompt-patterns-library",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which pattern asks the AI to argue against your plan?",
+        "options": [
+          "The big list",
+          "The recipe planner",
+          "The devil's advocate",
+          "The social caption"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "The devil's advocate pattern deliberately challenges your plan."
+      },
+      {
+        "id": "pef-026",
+        "module": "prompt-patterns-library",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "You want the AI to help you learn by testing you. Which pattern fits?",
+        "options": [
+          "The shorten",
+          "The quiz me",
+          "The headline set",
+          "The budget planner"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Quiz me asks questions one at a time and gives feedback."
+      },
+      {
+        "id": "pef-027",
+        "module": "prompt-patterns-library",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A charity manager wants a 4-week plan to learn spreadsheets in 30 minutes a day. Which pattern and addition work best?",
+        "options": [
+          "The social caption",
+          "The proofread with reasons",
+          "The learning plan, plus her real time constraints and a small weekly project",
+          "The name generator"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "The learning plan pattern with personal constraints produces a realistic plan."
+      },
+      {
+        "id": "pef-028",
+        "module": "prompt-patterns-library",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "When brainstorming with AI, which steps follow good practice? (Choose all that apply.)",
+        "options": [
+          "Filter and rank using explicit criteria",
+          "Generate many ideas first",
+          "Identify a small, cheap first test for the best idea",
+          "Accept the first idea without comparison"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Quantity, then filtering, then a small test is the productive sequence."
+      },
+      {
+        "id": "pef-029",
+        "module": "prompt-patterns-library",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "The AI groups 60 survey comments into themes with counts. What should you do?",
+        "options": [
+          "Spot-check the counts or use a spreadsheet for exact numbers",
+          "Ask for more themes and ignore counts",
+          "Delete the quotes",
+          "Report the counts as exact"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "AI can miscount; verify numbers before reporting them."
+      },
+      {
+        "id": "pef-030",
+        "module": "prompt-patterns-library",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "The AI says 'sales rose because of your Ramadan campaign'. What is the best follow-up?",
+        "options": [
+          "Ask for a bigger number",
+          "Ask for a new logo",
+          "Accept it and double the budget",
+          "Ask what else could explain the rise and what data would confirm the cause"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Correlation is not causation; ask for alternative explanations and evidence."
+      },
+      {
+        "id": "pef-031",
+        "module": "prompt-patterns-library",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which pattern improves your writing while keeping your voice?",
+        "options": [
+          "The keep-my-voice edit",
+          "The big list",
+          "The perspective shift",
+          "The risk plan"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "It asks for clarity improvements with minimal changes to your word choices."
+      },
+      {
+        "id": "pef-032",
+        "module": "prompt-patterns-library",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which pattern is best for a new product name that must work in English and Arabic?",
+        "options": [
+          "The weekly review",
+          "The quiz me",
+          "The proofread with reasons",
+          "The name generator with explicit criteria"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Stating criteria like language fit makes naming ideas more useful."
+      },
+      {
+        "id": "pef-033",
+        "module": "mistakes-and-good-habits",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is part of the 4-point check?",
+        "options": [
+          "Was it fast?",
+          "Is it long?",
+          "Is it true?",
+          "Did it use emojis?"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Did it do the task, is it true, is it appropriate, is it mine?"
+      },
+      {
+        "id": "pef-034",
+        "module": "mistakes-and-good-habits",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What should you do before publishing AI-written text?",
+        "options": [
+          "Add more text",
+          "Nothing",
+          "Translate it twice",
+          "Read it fully and check facts, placeholders and claims"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "You are responsible for what you publish."
+      },
+      {
+        "id": "pef-035",
+        "module": "mistakes-and-good-habits",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which are signs an AI answer needs checking or pushback? (Choose all that apply.)",
+        "options": [
+          "Sources you cannot find",
+          "It avoids your actual question",
+          "It follows your requested format",
+          "Specific numbers you never provided"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Unprovided numbers, unfindable sources and evasion are warning signs."
+      },
+      {
+        "id": "pef-036",
+        "module": "mistakes-and-good-habits",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A job advert drafted by AI says the ideal candidate is 'a young, energetic guy'. What should you do?",
+        "options": [
+          "Ask the AI to make it funnier",
+          "Add more adjectives",
+          "Publish it",
+          "Rewrite to remove age and gender assumptions and focus on skills"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Check people-related content for unfair assumptions and discriminatory wording."
+      },
+      {
+        "id": "pef-037",
+        "module": "mistakes-and-good-habits",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Your workplace hasn't approved a particular AI tool. What is the right approach for a confidential client contract?",
+        "options": [
+          "Follow the policy: use approved tools only and remove confidential details",
+          "Paste it anyway",
+          "Email it to a friend to paste",
+          "Paste half of it"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Workplace policies and confidentiality come first."
+      },
+      {
+        "id": "pef-038",
+        "module": "mistakes-and-good-habits",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An AI-drafted promo email says 'free delivery across the GCC', but your offer only covers one country. Which check caught this?",
+        "options": [
+          "Did it use a subject line?",
+          "Is it true?",
+          "Is it mine?",
+          "Is it long enough?"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Fact-checking claims against your real offer prevents misleading customers."
+      },
+      {
+        "id": "pef-039",
+        "module": "mistakes-and-good-habits",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the most useful long-term habit for improving your prompting?",
+        "options": [
+          "Memorising magic words",
+          "Never iterating",
+          "Using a new tool every day",
+          "Saving prompts that worked with notes in a personal toolkit"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "A personal toolkit compounds your skill over time."
+      },
+      {
+        "id": "pef-040",
+        "module": "mistakes-and-good-habits",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Which single question fixes most everyday prompting problems before you press enter?",
+        "options": [
+          "Did I use capital letters?",
+          "Would a smart new colleague have what they need from this?",
+          "Does it include the word 'please'?",
+          "Is this the shortest possible prompt?"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "The colleague test catches missing context, audience and format."
+      }
+    ]
+  }
+}
