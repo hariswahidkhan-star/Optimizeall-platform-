@@ -30,6 +30,9 @@ export const publicRoutes: RouteObject[] = [
   { path: 'newsletter/confirm', lazy: async () => ({ Component: (await import('./pages/MiscPages')).NewsletterConfirmPage }) },
   { path: 'newsletter/unsubscribe', lazy: async () => ({ Component: (await import('./pages/MiscPages')).NewsletterUnsubscribePage }) },
   { path: 'search', lazy: async () => ({ Component: (await import('./pages/MiscPages')).SearchPage }) },
+  // The two pillars: the academy's marketing overview (the catalog is /learn) and About, both on CMS pages.
+  { path: 'academy', lazy: async () => ({ Component: (await import('./pages/PillarPages')).AcademyOverviewPage }) },
+  { path: 'about', lazy: async () => ({ Component: (await import('./pages/PillarPages')).AboutPage }) },
   { path: 'partners', lazy: async () => ({ Component: (await import('./partners/PartnerPages')).PartnersPage }) },
   { path: 'partners/:slug', lazy: async () => ({ Component: (await import('./partners/PartnerPages')).PartnerProfilePage }) },
   // Free academy (Learning module) and public certificate verification.

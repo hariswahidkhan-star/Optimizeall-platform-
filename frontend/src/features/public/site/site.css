@@ -84,7 +84,8 @@
   min-width: 260px;
   padding: var(--space-3);
   border-radius: 14px;
-  background: var(--glass-bg);
+  /* Nearly opaque: page text scrolling under an open menu must not show through. */
+  background: color-mix(in srgb, var(--color-surface) 97%, transparent);
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
   box-shadow: var(--shadow-float);
@@ -186,6 +187,111 @@
   .site-header__cta {
     display: inline-flex;
   }
+}
+
+/* Both pillars in the header: the quieter call to action appears once there is room for it. */
+.site-header__cta.site-header__cta--secondary {
+  display: none;
+}
+
+@media (min-width: 1280px) {
+  .site-header__cta.site-header__cta--secondary {
+    display: inline-flex;
+  }
+}
+
+/* Academy dropdown: links, live subjects with course counts, and a "start learning" card. */
+.site-nav__panel--academy {
+  position: fixed;
+  top: calc(var(--topbar-height) + 4px);
+  left: 50%;
+  width: min(900px, calc(100vw - 32px));
+  padding: var(--space-5);
+  transform: translateX(-50%);
+}
+
+.site-academy-mega {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr) minmax(0, 1fr);
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.site-academy-mega__subject {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.site-academy-mega__count {
+  min-width: 26px;
+  padding: 1px 8px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-2);
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.site-academy-mega__cta {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: var(--space-1);
+  min-height: 190px;
+  align-self: stretch;
+  padding: var(--space-5);
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background:
+    radial-gradient(70% 80% at 100% 0%, rgb(252 179 30 / 0.35), transparent 70%),
+    var(--gradient-brand);
+  color: #fff;
+  text-decoration: none;
+  box-shadow: var(--shadow-card);
+}
+
+.site-academy-mega__cta:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.site-academy-mega__kicker {
+  color: var(--accent-300);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.site-academy-mega__title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
+}
+
+.site-academy-mega__text {
+  padding-right: var(--space-8);
+  color: rgb(255 255 255 / 0.82);
+  font-size: var(--text-small);
+  line-height: 1.5;
+}
+
+.site-academy-mega__arrow {
+  position: absolute;
+  right: var(--space-5);
+  bottom: var(--space-5);
+  width: 20px;
+  height: 20px;
+  transition: transform var(--duration-base) var(--ease-standard);
+}
+
+.site-academy-mega__cta:hover .site-academy-mega__arrow {
+  transform: translateX(4px);
 }
 
 .site-drawer__group summary {

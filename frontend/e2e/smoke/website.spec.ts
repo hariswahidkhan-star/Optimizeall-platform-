@@ -131,7 +131,7 @@ test.describe('agency website', () => {
     test.skip(isMobile, 'desktop navigation');
     await mockWebsite(page);
     await page.goto('/');
-    await expect(page.getByRole('heading', { level: 1, name: /Marketing that grows revenue/ })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: /Learn AI, marketing and growth/ })).toBeVisible();
     await expect(page.getByText('Free marketing audits are open for Q4.')).toBeVisible();
     await expect(page.getByText('Tripling organic leads for Northwind')).toBeVisible();
     await expect(page.getByText('$48M')).toBeVisible();

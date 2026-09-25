@@ -30,6 +30,42 @@ function baseRoutes(site: PublicSite = fx.site): Routes {
   };
 }
 
+const course = (over: Record<string, unknown>) => ({
+  id: String(over.slug),
+  subtitle: 'A course subtitle.',
+  level: 'Beginner',
+  estimatedMinutes: 60,
+  moduleCount: 2,
+  lessonCount: 5,
+  badgeName: 'Badge',
+  skills: ['Skill A', 'Skill B'],
+  isFeatured: false,
+  isNew: false,
+  badgeImageUrl: '/badge.svg',
+  publishedAt: '2026-09-01T00:00:00Z',
+  ...over,
+});
+
+/** The public learning API (the academy sections): two published courses in two subjects. */
+const learningRoutes: Routes = {
+  'GET /public/learning/courses': () =>
+    json(200, {
+      items: [
+        course({ slug: 'advanced-prompt-engineering', title: 'Advanced Prompt Engineering', category: 'Ai', level: 'Advanced', lessonCount: 7, isFeatured: true }),
+        course({ slug: 'seo-basics', title: 'SEO Basics', category: 'Seo' }),
+      ],
+      total: 2,
+      page: 1,
+      pageSize: 200,
+      totalPages: 1,
+    }),
+  'GET /public/learning/categories': () =>
+    json(200, [
+      { category: 'Ai', label: 'AI', courseCount: 1 },
+      { category: 'Seo', label: 'SEO', courseCount: 1 },
+    ]),
+};
+
 /** Renders a public page inside the real site chrome (header, footer, consent banner). */
 function renderPublic(page: ReactElement, { route = '/', path = '/', routes = {} as Routes, site = fx.site } = {}) {
   const mock = mockFetch({ ...baseRoutes(site), ...routes });
@@ -74,7 +110,7 @@ afterEach(() => {
 describe('HomePage', () => {
   it('renders services, labelled stats, case studies and pricing from the API', async () => {
     renderPublic(<HomePage />);
-    expect(screen.getByRole('heading', { level: 1, name: /Marketing that grows revenue/ })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: /Learn AI, marketing and growth/ })).toBeInTheDocument();
     const services = (await screen.findByRole('heading', { name: 'Every channel, one accountable team' })).closest('section')!;
     expect(await within(services).findByRole('heading', { name: 'Search' })).toBeInTheDocument();
     expect(within(services).getByRole('link', { name: 'Search engine optimization' })).toHaveAttribute('href', '/services/seo');
@@ -88,9 +124,26 @@ describe('HomePage', () => {
     await waitFor(() => expect(document.head.querySelector('script[type="application/ld+json"]')?.textContent).toContain('"Organization"'));
   });
 
+  it('leads with the academy: live course, lesson and subject counts, subjects and courses from the learning API', async () => {
+    renderPublic(<HomePage />, { routes: learningRoutes });
+    // Learning is the first call to action everywhere: header, hero and closing band all open the catalog.
+    const learn = screen.getAllByRole('link', { name: /Start learning free/ });
+    expect(learn.length).toBeGreaterThanOrEqual(2);
+    for (const link of learn) expect(link).toHaveAttribute('href', '/learn');
+    const academy = (await screen.findByRole('heading', { level: 2, name: 'Practical skills for the AI era, free for everyone' })).closest('section')!;
+    // Figures are the API's, never invented: 2 published courses, 7 + 5 lessons, 2 subjects.
+    const stat = (label: string) => within(academy).getByText(label).closest('div')!;
+    await waitFor(() => expect(within(stat('Free courses')).getByText('2', { selector: '.visually-hidden' })).toBeInTheDocument());
+    expect(within(stat('Lessons')).getByText('12', { selector: '.visually-hidden' })).toBeInTheDocument();
+    expect(within(stat('Subjects')).getByText('2', { selector: '.visually-hidden' })).toBeInTheDocument();
+    expect(within(academy).getByRole('link', { name: 'AI' })).toHaveAttribute('href', '/learn?category=Ai');
+    expect(within(academy).getByRole('link', { name: 'Advanced Prompt Engineering' })).toHaveAttribute('href', '/learn/advanced-prompt-engineering');
+  });
+
   it('has no axe violations', async () => {
-    const { container } = renderPublic(<HomePage />);
+    const { container } = renderPublic(<HomePage />, { routes: learningRoutes });
     await screen.findByText('Tripling organic leads for Northwind');
+    await screen.findByRole('link', { name: 'Advanced Prompt Engineering' });
     expect(await axeViolations(container)).toEqual([]);
   });
 });
