@@ -25,7 +25,7 @@ have "$NGINX_BIN" || die "nginx is required (apt-get install nginx)"
 mkdir -p "$WORK_DIR/snippets" "$WORK_DIR/tmp"
 
 # Same substitution as the nginx image's envsubst step: only these variables, nothing else.
-sed -e "s|\${API_UPSTREAM}|$API_UPSTREAM|g" -e "s|\${IMG_SRC_EXTRA}||g" \
+sed -e "s|\${OA_API_PROXY}|$API_UPSTREAM|g" -e "s|\${IMG_SRC_EXTRA}||g" -e "s|\${MEDIA_SRC_EXTRA}||g" \
     -e "s|listen       8080;|listen       127.0.0.1:$PORT;|" \
     -e "s|root  /usr/share/nginx/html;|root  $DIST;|" \
     -e "s|/etc/nginx/snippets/|$WORK_DIR/snippets/|g" \

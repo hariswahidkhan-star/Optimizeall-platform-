@@ -27,6 +27,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- SQLite files created by earlier releases (BaselineUpgradeTests). -->
+    <None Include="Fixtures\Baselines\*.db.br" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\OptimizeAll.Api\OptimizeAll.Api.csproj" />
   </ItemGroup>
 

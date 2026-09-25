@@ -443,6 +443,9 @@ jobs:
       - name: Install nginx (production web server configuration for j-seo)
         run: sudo apt-get update && sudo apt-get install -y nginx-light || sudo apt-get install -y nginx
 
+      - name: nginx serves pages as HTML whatever the API answers (stub API; scripts/test-web-nginx.sh)
+        run: scripts/test-web-nginx.sh
+
       - name: Technical SEO journey (scripts/e2e-journeys.sh, E2E_SUITE=j-seo, SQLite, vite preview)
         env:
           E2E_SUITE: j-seo

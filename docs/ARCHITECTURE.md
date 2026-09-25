@@ -96,8 +96,9 @@ Modules talk to each other through:
   profiles, earning idempotency keys, one payout item per user per batch, batch idempotency key per period.
 * Indexes follow queries: see [DATABASE.md](DATABASE.md) (index catalogue, guard test `PerformanceIndexTests`,
   retention of high-volume tables by `DataRetentionJob`).
-* Schema changes: edit the entity + its `IEntityTypeConfiguration`, then add the migration for **both** providers
-  with one command: `scripts/regenerate-migrations.sh --add <Name>` (see "Database portability" below).
+* Schema changes: edit the entity + its `IEntityTypeConfiguration`, then add an incremental migration for **both**
+  providers with one command: `scripts/regenerate-migrations.sh --add <Name>` (see "Database portability" below).
+  Never regenerate `InitialCreate` (frozen baseline, [DATABASE.md](DATABASE.md#migrations-and-the-frozen-baseline)).
 
 ## Frontend layout
 
@@ -133,7 +134,10 @@ The API runs on **MySQL 8** or **SQLite** (`Database:Provider` = `MySql` (defaul
 
 Rules for all code (other agents included):
 
-* **No raw SQL in modules.** Use LINQ / `ExecuteUpdateAsync` / `ExecuteDeleteAsync`. For locking use
+* **No raw SQL in modules.** (The one deliberate exception is `SqliteBaselineUpgrader` in
+  `Common/Persistence/BaselineUpgrade.cs`, which copies tables between two schema versions at startup; see
+  [DATABASE.md § Baseline upgrade](DATABASE.md#baseline-upgrade-databases-from-earlier-releases).)
+  Use LINQ / `ExecuteUpdateAsync` / `ExecuteDeleteAsync`. For locking use
   `IDatabaseDialect` (`Common/Persistence/DatabaseDialect.cs`; inject it, or `db.Dialect()` in static helpers):
   * `BeginWriteTransactionAsync(db, ct[, isolationLevel])` for **every transaction that writes** (SQLite:
     `BEGIN IMMEDIATE`, which takes the single database write lock up front and waits up to the busy timeout).
@@ -171,13 +175,18 @@ Rules for all code (other agents included):
 
 **Migrations** exist per provider: MySQL in `OptimizeAll.Infrastructure/Persistence/Migrations`, SQLite in
 `OptimizeAll.Infrastructure.Sqlite/Migrations` (`MigrationsAssembly` is chosen per provider in
-`DatabaseConnection.Configure`). One command regenerates/extends both and verifies them (no database server needed):
+`DatabaseConnection.Configure`). The `InitialCreate` migrations are **frozen baselines**: deployed databases record
+their ids, so they are never regenerated (a new id makes every existing database fail on startup);
+`MigrationBaselineTests` pins them. Every schema change is an incremental migration; one command adds it to both
+providers and verifies them (no database server needed):
 
 ```bash
-scripts/regenerate-migrations.sh              # delete both sets, recreate a single InitialCreate (pre-release)
-scripts/regenerate-migrations.sh --add <Name> # add migration <Name> to both sets
-scripts/regenerate-migrations.sh --check      # has-pending-model-changes for both (CI runs this)
+scripts/regenerate-migrations.sh --add <Name> # add migration <Name> to both sets (the only way to change the schema)
+scripts/regenerate-migrations.sh --check      # has-pending-model-changes for both (CI runs this; also the default)
 ```
+
+Databases created by releases before the freeze (each had its own `InitialCreate` id) are upgraded at startup on
+SQLite and refused with instructions on MySQL: [DATABASE.md § Baseline upgrade](DATABASE.md#baseline-upgrade-databases-from-earlier-releases).
 
 Manually (from `backend/`), the design-time provider is selected through configuration:
 

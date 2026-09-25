@@ -103,9 +103,10 @@ scripts/test-all.sh --sqlite    # integration tests (and --e2e) on SQLite
 * Integration tests read `OPTIMIZEALL_TEST_PROVIDER` (`MySql` default, or `Sqlite`: one temporary database file per
   test class) and `OPTIMIZEALL_TEST_MYSQL` (server-level connection string, default
   `Server=127.0.0.1;Port=3306;User=optimizeall;Password=optimizeall_dev;`).
-* Schema changes: edit the entity + configuration, then add the migration for both providers with
+* Schema changes: edit the entity + configuration, then add an incremental migration for both providers with
   `scripts/regenerate-migrations.sh --add <Name>` (MySQL: `Infrastructure/Persistence/Migrations`, SQLite:
   `Infrastructure.Sqlite/Migrations`; details in [ARCHITECTURE.md](ARCHITECTURE.md#database-portability-mysql-and-sqlite)).
+  The `InitialCreate` baselines are frozen and never regenerated ([DATABASE.md](DATABASE.md#migrations-and-the-frozen-baseline)).
   Export the API contract with `scripts/export-openapi.sh` (writes `docs/api/openapi.json`).
 
 ## 4. Staging / demo with Docker Compose
@@ -246,6 +247,15 @@ Two supported modes:
    waits for. To inspect the SQL instead, generate an idempotent script in CI:
    `dotnet ef migrations script --idempotent -p src/OptimizeAll.Infrastructure -s src/OptimizeAll.Api`.
 
+**Databases from releases before the baseline freeze.** Until 2026-09-25 every schema change regenerated the
+`InitialCreate` migration, so a database created by an earlier release records a different `InitialCreate` id and
+the current migrations cannot be applied to it (they would re-create existing tables). `Database:BaselineUpgrade`
+(`Auto` default | `Refuse`) decides what the API does in `Migrate` mode: on SQLite `Auto` backs up the file to
+`db/backups/` and copies all data into the current schema at startup; MySQL (and `Refuse`) stops startup with a
+`BaselineUpgradeException` that names the fix, `scripts/upgrade-baseline-mysql.sh` (dry run first, then `--apply`).
+The migrator image fails on such a database too: run that script before it. Details:
+[DATABASE.md § Baseline upgrade](DATABASE.md#baseline-upgrade-databases-from-earlier-releases).
+
 ### 5.6 Zero-downtime deploys
 
 * Make schema changes **expand/contract**: a release may only add nullable columns/tables/indexes that the
@@ -379,6 +389,9 @@ Database__InitializationMode=Migrate                  # the API applies the SQLi
 * **Money:** SQLite has no decimal type; amounts are stored as exact decimal text and every sum, average, min/max,
   comparison and ordering is computed in .NET `decimal` (never floating point), so results match MySQL.
 * **Migrations:** the `optimizeall-migrator` image targets MySQL; with SQLite keep
-  `Database__InitializationMode=Migrate`. Take a backup of `db/` before upgrading.
+  `Database__InitializationMode=Migrate`. Take a backup of `db/` before upgrading. A database file created by a
+  release before the baseline freeze is upgraded automatically at startup (`Database__BaselineUpgrade=Auto`, the
+  default; the original is kept in `db/backups/`, so leave room for two copies of the database on the volume); set
+  `Refuse` to stop instead ([DATABASE.md § Baseline upgrade](DATABASE.md#baseline-upgrade-databases-from-earlier-releases)).
 * To move from SQLite to MySQL later, start a MySQL deployment and migrate the data with your preferred tool; the
   schema is the same model on both providers.

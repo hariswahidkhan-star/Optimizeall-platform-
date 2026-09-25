@@ -27,6 +27,15 @@ Both run the same images and code; only the database differs (`Database__Provide
   Always keep `db/optimizeall.db`, `db/optimizeall.db-wal` and `db/optimizeall-keys/` together: the keys decrypt
   stored payout destinations.
 * Resetting the demo: delete the files in `/app/storage/db` (Shell) and restart the service, or delete the disk.
+* **Upgrading a database from an earlier release** happens by itself: releases before 2026-09-25 each had their own
+  `InitialCreate` migration, and a database created by one of them is upgraded on the first start of a newer release
+  (`Database__BaselineUpgrade=Auto`, the default; [DATABASE.md § Baseline upgrade](DATABASE.md#baseline-upgrade-databases-from-earlier-releases)).
+  The API backs the file up to `db/backups/optimizeall-<old baseline>-<utc>.db`, copies every row into the current
+  schema, verifies it and swaps the files; the log line `Baseline upgrade from … finished` lists what was copied. The
+  demo seed then adds any new reference data. Keep room for two copies of the database on the disk (the demo database
+  is ≈ 20 MB), and delete old backups from the Shell once you no longer need them. If the upgrade cannot verify the
+  data it stops the API and leaves the database as it was (see the deploy log). Set `Database__BaselineUpgrade=Refuse`
+  to never do this automatically.
 
 ### MySQL (`deploy/render/render-mysql.yaml`)
 
@@ -39,6 +48,9 @@ Both run the same images and code; only the database differs (`Database__Provide
 * The API can run several instances (named locks use MySQL `GET_LOCK`, row locks use `SELECT … FOR UPDATE`), but
   uploads are on a per-instance disk, so for more than one instance move files to shared storage first.
 * Resetting the demo: delete the `optimizeall-mysql` disk (or the service) and redeploy.
+* A MySQL database created by a release before 2026-09-25 is **not** upgraded automatically: the API stops with a
+  message naming `scripts/upgrade-baseline-mysql.sh` ([DATABASE.md § Baseline upgrade](DATABASE.md#baseline-upgrade-databases-from-earlier-releases)).
+  For a demo, resetting (above) is simplest.
 
 Only the web service is reachable from the internet. All services run in the Singapore region (they must share a
 region to use Render's private network; change `region` on all of them together if you prefer another).
@@ -57,7 +69,7 @@ region to use Render's private network; change `region` on all of them together 
    when the name is taken), update `Email__AppBaseUrl` on `optimizeall-api` afterwards and redeploy the API.
 4. Wait for the services to go live (first build ≈ 10–15 min; the API migrates and seeds, with MySQL after waiting
    for the database). Even after Render shows the API as live, its **first start takes about 60 s** (migrations plus
-   the Baseline and Demo seed) before it answers; until then the web service returns 502 for `/api` requests.
+   the Baseline and Demo seed) before it answers; until then the web service returns 503 for `/api` requests and pages.
 5. Open the web service URL and sign in with a demo account.
 
 Secrets (`Jwt__SigningKey`, `Security__HashSalt`, and for MySQL `MYSQL_PASSWORD`/`MYSQL_ROOT_PASSWORD`) are generated
@@ -111,6 +123,16 @@ The public agency website is the web service's root URL; no sign-in needed.
   services, and private-service support is not established, so the web service's own check is the one Render uses. It
   is nginx's `/healthz` (not `/`): public pages are rendered by the API (docs/SEO_CRO.md § 9), which may still be
   starting, and a starting API must not fail the web service's deploy.
+* **The web service never waits for the API.** nginx starts and `/healthz` answers even when the API's host name does
+  not resolve (API still being created, crash-looping or failed): `frontend/nginx/12-optimizeall-platform.envsh`
+  resolves the host itself and keeps an `upstream` block pointed at its current address (checked every 2 s until it
+  first resolves, then every `API_RESOLVE_INTERVAL`, default 10 s), reloading nginx when it changes. Meanwhile pages
+  answer 503 + `Retry-After` with the app shell and `/api/…` a JSON 503; they recover by themselves when the API is
+  up, without a web redeploy. A failing web deploy therefore points at the web image itself, not at the API.
+* **Pages are always HTML.** nginx's `@document` keeps the API's HTML answers (200/301/404/410) and replaces every
+  other status (400/401/403/405/408/413/429/500–504, often JSON from the API's rate limiter or error handler) with the
+  app shell as `text/html` + 503, so no browser offers a page as a download (iOS Safari did for JSON bodies).
+  `scripts/test-web-nginx.sh` (CI) checks this against a stub API.
 * **API docs** are at `https://<web-url>/api/docs`.
 * **SEO.** Public pages are server-rendered by the API through nginx (complete HTML for crawlers, real 404s),
   `/robots.txt`, `/sitemap.xml` (+ `/sitemaps/*.xml`), `/llms.txt` and `/{page}.md` come from the API too. Canonical URLs
@@ -164,6 +186,18 @@ as root, as Render does). All checks went through the web container only, as the
 * **API redeploys:** when the API came back on a new private IP, nginx (which resolves `proxy_pass` names only at
   start) kept proxying to the old address and answered 502 until restarted. Fixed in
   `frontend/nginx/12-optimizeall-platform.envsh`: the web container re-resolves the API host every
-  `API_RESOLVE_INTERVAL` seconds (default 10) and reloads nginx when the address changes; at startup it waits up to
-  `API_WAIT_SECONDS` (default 300) for the API host to resolve instead of exiting with `host not found in upstream`
-  (e.g. when the web service of a new Blueprint starts before the API exists). Both cases were re-tested.
+  `API_RESOLVE_INTERVAL` seconds (default 10) and reloads nginx when the address changes. Both cases were re-tested.
+* **Web without the API (2026-09-25):** the startup wait for the API host (previously up to 300 s, after which nginx
+  exited with `host not found in upstream` and the web deploy failed together with a crashing API) is now a
+  best-effort `API_WAIT_SECONDS` (default 5) after which nginx starts regardless, proxying through an `upstream` block
+  the envsh maintains. Re-tested with Docker: the web container started with no API container at all answered
+  `/healthz` 200 after 6 s, pages 503 with the app shell, `/api/v1/public/site` a JSON 503; after the API started (on
+  a different IP), the envsh logged `optimizeall-api now resolves to 172.18.0.4 (was unresolved); reloaded nginx` and
+  `/`, `/learn`, `/partners`, `/sitemap.xml`, `/api/v1/public/site` answered 200 within 9 s, with the same nginx
+  process. Against a running API, 18 paths (pages, SEO files, `/index.md`, `/t/…`, `/e/…`, `/health/*`, portals,
+  `/__shell/…`) returned the same status, type and size as the previous nginx configuration.
+* **Old database, new release (2026-09-25):** the API image of a730b95 created and seeded the SQLite database on a
+  volume; the current API image started on the same volume upgraded it in 2.3 s (241 tables, 21 378 rows copied, 18 new
+  tables, backup in `db/backups/`), every common table kept at least its rows (users 59 → 59, submissions 168 → 168,
+  earnings 227 → 227; the rest only grew through the demo seed), `integrity_check` ok, no foreign key violations, and
+  the demo admin signed in through nginx. The next start did nothing.

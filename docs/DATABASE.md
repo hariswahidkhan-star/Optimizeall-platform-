@@ -5,9 +5,83 @@ serves, and the measured effect (MySQL 8 `EXPLAIN ANALYZE` before/after on a Dem
 The portability rules in [ARCHITECTURE.md § Database portability](ARCHITECTURE.md#database-portability-mysql-and-sqlite)
 apply to everything here: every index and query below works on MySQL and SQLite, there is no raw SQL in modules.
 
-Contents: [Conventions](#conventions) · [Index catalogue](#index-catalogue) · [Query fixes](#query-fixes) ·
+Contents: [Migrations and the frozen baseline](#migrations-and-the-frozen-baseline) ·
+[Baseline upgrade](#baseline-upgrade-databases-from-earlier-releases) · [Conventions](#conventions) · [Index catalogue](#index-catalogue) · [Query fixes](#query-fixes) ·
 [Benchmark](#benchmark-before--after) · [Retention](#retention) · [Column hygiene review](#column-hygiene-review) ·
 [Recommendations for larger scale](#recommendations-for-larger-scale) · [Table inventory](#table-inventory)
+
+## Migrations and the frozen baseline
+
+Each provider has its own migrations (MySQL: `OptimizeAll.Infrastructure/Persistence/Migrations`, SQLite:
+`OptimizeAll.Infrastructure.Sqlite/Migrations`). Both start with an `InitialCreate` **baseline** that is frozen:
+
+| Provider | Baseline migration (permanent) |
+|---|---|
+| MySQL | `20260925041843_InitialCreate` |
+| SQLite | `20260925041851_InitialCreate` |
+
+* **Never regenerate or delete a baseline.** Every deployed database records the baseline's id in
+  `__EFMigrationsHistory`. A regenerated `InitialCreate` gets a new id; `Migrate` then sees it as pending on every
+  existing database and fails on its first `CREATE TABLE` (this is what broke the Render deploy of 842e876, see
+  below).
+* **Schema change = incremental migration**, added to both providers with one command:
+  `scripts/regenerate-migrations.sh --add <ChangeName>` (e.g. `--add AddCampaignBudget`). CI runs
+  `scripts/regenerate-migrations.sh --check` (pending model changes fail the build). The script never deletes
+  migrations, and `--add InitialCreate` is refused.
+* **Guarded** by `tests/OptimizeAll.UnitTests/Foundation/MigrationBaselineTests.cs`: it pins both baseline ids, allows
+  exactly one `InitialCreate` per provider and requires the same incremental migrations on both. If it fails after a
+  regeneration, restore the baseline files from version control and add an incremental migration instead.
+
+## Baseline upgrade (databases from earlier releases)
+
+Before the baseline was frozen, every schema change regenerated `InitialCreate` (e.g. SQLite `20260924192026` in
+b70926b, `20260924231550` in a730b95, `20260925041851` in 842e876; MySQL likewise). A database created by such a
+release carries a **foreign baseline**: an applied `…_InitialCreate` id this build does not contain. With
+`Database:InitializationMode=Migrate`, `DatabaseInitializer` checks for one before migrating
+(`Common/Persistence/BaselineUpgrade.cs`) and, depending on `Database:BaselineUpgrade`:
+
+| `Database:BaselineUpgrade` | SQLite | MySQL |
+|---|---|---|
+| `Auto` (default) | upgrades the file at startup, keeping all data (below) | refuses to start, naming the fix (`BaselineUpgradeException`) |
+| `Refuse` | refuses to start, naming the fix | refuses to start, naming the fix |
+
+**SQLite upgrade** (under the `database-baseline-upgrade` named lock, before any request is served):
+
+1. Checkpoint, then SQLite's online backup of the live file to `<db dir>/backups/<name>-<old baseline>-<utc>.db`
+   (e.g. `/app/storage/db/backups/optimizeall-20260924231550_InitialCreate-20260925T061705Z.db`). The backup is kept.
+2. The current schema is created in `<db>.baseline-upgrade.tmp` by the normal migrations.
+3. The backup is attached; foreign keys are switched off; for every table present in both schemas the rows are copied
+   through the **intersection of the columns** (`INSERT INTO t (cols) SELECT cols FROM old.t`). A new `NOT NULL`
+   column without a database default gets the EF model's default (`HasDefaultValue`) or the CLR default rendered by
+   EF's type mapping (`0`, `''`, `[]` for JSON lists, the first enum member's name, `Guid.Empty`…); a column that
+   became `NOT NULL` keeps its values and gets that default only where it was `NULL`. Tables only in the new schema
+   start empty (the seeders fill reference data); tables no longer in the schema are logged and stay in the backup.
+4. Verification: per-table row counts equal, `PRAGMA foreign_key_check` empty, `PRAGMA integrity_check` = `ok`. Any
+   failure deletes the temporary file, **leaves the live database untouched** and stops startup with the cause.
+5. The temporary file is renamed over the live one (atomic on the same file system); the log lists copied tables,
+   row counts, new and dropped tables/columns and the backup path. Seeding then runs as usual (idempotent), so new
+   reference data appears. The next start finds the current baseline and does nothing.
+
+The upgrade needs free disk space for the backup and the new file (about twice the database). The Data Protection key
+ring (`<name>-keys/`) is not touched. It takes seconds (the Demo database: 241 tables, ≈ 21 000 rows, 2.4 s). This is
+the only raw SQL in the backend: a deliberate exception confined to `SqliteBaselineUpgrader`, whose identifiers come
+only from `sqlite_master`/`pragma_table_xinfo` and the EF model (always quoted), never from input. Tested by
+`BaselineUpgradeTests` against SQLite files created by b70926b and a730b95 (Baseline + Demo seed).
+
+**MySQL:** there is no atomic file swap, so the API refuses (in both modes) and names the fix. Stop the API, take a
+`mysqldump`, then run `scripts/upgrade-baseline-mysql.sh` from a checkout of the release being deployed, as a user
+that can create databases (e.g. root):
+
+```bash
+DB_HOST=… DB_NAME=optimizeall DB_USER=root DB_PASSWORD=… scripts/upgrade-baseline-mysql.sh           # dry run
+DB_HOST=… DB_NAME=optimizeall DB_USER=root DB_PASSWORD=… scripts/upgrade-baseline-mysql.sh --apply   # swap
+```
+
+It builds the current schema in `<db>__upgrade` (`dotnet ef migrations script`, or `--schema FILE`), copies the
+intersecting columns table by table with foreign key checks off, verifies row counts and every foreign key, and with
+`--apply` swaps with a single atomic `RENAME TABLE` (old tables → `<db>__bak_<utc>`, new → `<db>`). New `NOT NULL`
+columns without a default get a type default only after you confirm them with `--accept-type-defaults`. Then start
+the API, and drop the `__bak_` database once the release is verified.
 
 ## Conventions
 

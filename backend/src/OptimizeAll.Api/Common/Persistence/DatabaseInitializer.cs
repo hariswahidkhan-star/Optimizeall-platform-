@@ -17,6 +17,13 @@ public sealed class DatabaseOptions
     /// <summary>Seed profiles to apply after initialization, e.g. ["Baseline"] or ["Baseline","Demo"].</summary>
     public string[] Seed { get; set; } = Array.Empty<string>();
 
+    /// <summary>
+    /// What Migrate does with a database created from an earlier, replaced <c>InitialCreate</c> baseline: "Auto" (default;
+    /// SQLite: back up the file and copy its data into the current schema; MySQL: refuse with instructions) or "Refuse".
+    /// See the BaselineUpgrade class and docs/DATABASE.md § Baseline upgrade.
+    /// </summary>
+    public string BaselineUpgrade { get; set; } = "Auto";
+
     /// <summary>How long startup waits for the database server to accept connections before failing.</summary>
     public int StartupWaitSeconds { get; set; } = 120;
 }
@@ -56,6 +63,9 @@ public static class DatabaseInitializer
         switch (options.InitializationMode)
         {
             case "Migrate":
+                // A database from an earlier InitialCreate would otherwise fail on its first CREATE TABLE.
+                if (await BaselineUpgrade.RunIfNeededAsync(sp, db, options, logger, ct) is not null)
+                    db.ChangeTracker.Clear();
                 logger.LogInformation("Applying database migrations ({Provider})", db.Database.ProviderName);
                 await db.Database.MigrateAsync(ct);
                 break;
