@@ -345,7 +345,7 @@
     const times = items.map((_, i) => rt(i, n));
     const tryItem = sc.data && sc.data.tryItem;
     if (layout === "cards" || layout === "grid") {
-      const cols = layout === "cards" ? 3 : 2;
+      const cols = layout === "cards" ? Math.min(3, Math.max(1, n)) : 2;
       const rows = Math.ceil(n / cols);
       const gap = 36;
       const W = 1680, H = 790 - top;
@@ -498,31 +498,31 @@
 
   T.code = (c, sc) => {
     c.classList.add("t-code");
-    const side = put(c, h("div", "side"));
+    const code = sc.data.code;
+    const fam = langFamily(code.lang);
+    const lines = code.code.split("\n");
+    const maxLen = Math.max(...lines.map((l) => l.length));
+    const wrapOk = fam === "text" || fam === "md";
+    // Long code: wider window, narrower side column, readable font and a scrolling viewport.
+    const long = lines.length > 14 || (!wrapOk && maxLen > 64);
+    const sideW = long ? 440 : 560;
+    const side = put(c, h("div", "side"), { width: `${sideW}px` });
     const title = put(side, h("div", "h2", rich(sc.title)));
     enter(title, 0.25, { dur: 0.8, y: 30, ease: "out5" });
     const pts = [];
     let y = title.offsetHeight + 48;
     const bl = sc.bullets.slice(0, 5);
     bl.forEach((b, i) => {
-      const p = put(side, h("div", "pt", `<span class="dot"></span><span>${richc(b)}</span>`), { top: `${y}px` });
+      const p = put(side, h("div", "pt", `<span class="dot"></span><span>${richc(b)}</span>`), { top: `${y}px`, width: `${sideW}px` });
       y += p.offsetHeight + 22;
       pts.push(p);
       enter(p, rt(i, bl.length), { x: -20, y: 0, dur: 0.55 });
     });
-    const code = sc.data.code;
-    const fam = langFamily(code.lang);
     const win = put(c, h("div", "win"));
     const bar = put(win, h("div", "bar", `<i></i><i></i><i></i><span class="fname">${esc(code.filename || FILE_FOR[fam])}</span><span class="tag lang">${esc(code.lang || "text")}</span>`));
     const body = put(win, h("div", "code"));
-    const lines = code.code.split("\n");
-    const maxLen = Math.max(...lines.map((l) => l.length));
-    const wrapOk = fam === "text" || fam === "md";
-    // Long code: wider window, narrower side column, readable font and a scrolling viewport.
-    const long = lines.length > 14 || (!wrapOk && maxLen > 64);
     const winW = long ? 1200 : 1080;
     win.style.width = `${winW}px`;
-    if (long) { side.style.width = "440px"; side.querySelectorAll(".pt").forEach((p) => (p.style.width = "440px")); }
     const usable = winW - 70 - 40;
     let fs = lines.length <= 4 ? 30 : lines.length <= 8 ? 27 : 25;
     while (fs > 19 && !wrapOk && maxLen * fs * 0.6 > usable) fs -= 1;

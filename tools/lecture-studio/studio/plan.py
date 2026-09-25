@@ -181,7 +181,16 @@ def choose_template(scene: dict, parsed: dict, index: int, count: int, blocks: l
             "notes": rest,
         }
 
-    layout = "cards" if len(bullets) == 3 else "grid" if len(bullets) == 4 else "list"
+    # Alternate layouts deterministically so consecutive bullet scenes do not look alike.
+    n = len(bullets)
+    if n == 2:
+        layout = "cards"
+    elif n == 3:
+        layout = ("cards", "list")[index % 2]
+    elif n == 4:
+        layout = ("grid", "list")[index % 2]
+    else:
+        layout = "list"
     return "bullets", {"layout": layout}
 
 

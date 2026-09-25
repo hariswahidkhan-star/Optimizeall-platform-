@@ -106,11 +106,13 @@ are reported as `needs-narration` instead of spending anything.
     lecture): **≈ 3.32 M credits ≈ $600** at the quoted rate; if all 1,060 lessons in 70 packs get lectures of the
     same length, **≈ 7.2 M credits ≈ $1,300**. Re-running is free thanks to the cache; editing one scene costs only
     that scene.
-* **Render** (this 4-vCPU box, 3 render workers): see `report.json` / `run.log.jsonl`; the pilot measured
-  roughly 0.8× real time for rendering plus ≈ 0.5× real time for the final encode, i.e. ≈ 5–6 minutes of wall
-  time for a 4-minute lecture and ≈ 9–10 minutes for a 6.5-minute lecture. The v2 catalogue (≈ 3,600 minutes of
-  narration) is ≈ 75–85 machine-hours on one such box; it parallelises per lecture across machines.
-* **Size**: ≈ 5–6 MB per minute (CRF 19). Keep streaming mode on for batches (disk here is small).
+* **Render + assemble** (this 4-vCPU box, 3 render workers, measured while other agents kept the load average at
+  30+): lecture A (4 min 13 s of video) rendered in 217–252 s and assembled in 162–169 s ≈ **7 min**; lecture B
+  (6 min 47 s) rendered in 374 s and assembled in 307 s ≈ **11.4 min** — i.e. ≈ **1.6× real time** wall clock
+  (only 15–25 % of frames are unique screenshots; the rest reuse the previous frame). The current v2 catalogue
+  (≈ 3,700 minutes of video) is ≈ 100 machine-hours on one such box (≈ 4 days), less on an idle machine; it
+  parallelises per lecture across machines. `--preview` stills take ~10 s per lecture.
+* **Size**: ≈ 5.5 MB per minute (CRF 19): 24 MB and 37 MB for the pilot lectures. Keep streaming mode on for batches (disk here is small).
 
 ## YouTube upload
 
