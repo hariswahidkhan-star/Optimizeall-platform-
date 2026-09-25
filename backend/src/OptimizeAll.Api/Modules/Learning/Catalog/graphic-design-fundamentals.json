@@ -1,0 +1,1884 @@
+{
+  "slug": "graphic-design-fundamentals",
+  "version": 1,
+  "title": "Graphic Design Fundamentals for Creators and Marketers",
+  "subtitle": "Design scroll-stopping posts, ads and thumbnails with hierarchy, layout, type, colour and clean exports",
+  "category": "design",
+  "level": "beginner",
+  "estimatedMinutes": 172,
+  "description": "You do not need a design degree to make work that looks professional — you need a small set of principles applied consistently. This course teaches the fundamentals that working designers use every day: visual hierarchy, alignment and spacing, grids and composition, typography, colour theory and accessible contrast, and choosing and treating imagery.\n\nEverything is applied to the formats creators and small teams actually ship: social posts, carousels, stories, ads and video thumbnails. You will learn how to work with templates without looking templated, how tools such as Canva and Figma organise frames, components and styles, and how to export files that stay sharp after platforms compress them. Each lesson ends with a practical exercise, and the final assessment uses realistic scenarios so your certificate reflects skills you can use on the job.",
+  "outcomes": [
+    "Build a clear visual hierarchy so viewers read a design in the order you intend",
+    "Lay out posts, ads and thumbnails on a grid with consistent margins, alignment and spacing",
+    "Choose, pair and size typefaces for legibility on small mobile screens",
+    "Create colour palettes and check text contrast against WCAG accessibility ratios",
+    "Select, license and treat images so they support the message instead of competing with it",
+    "Use templates, components and styles in design tools without producing generic work",
+    "Export files in the right format, size and colour space for each platform"
+  ],
+  "skills": [
+    "Graphic design",
+    "Visual hierarchy",
+    "Typography",
+    "Colour theory",
+    "Accessible design",
+    "Layout and grids",
+    "Social media design"
+  ],
+  "prerequisites": [],
+  "badge": {
+    "name": "Graphic Design Fundamentals",
+    "description": "The holder can apply visual hierarchy, grids, typography, colour theory and accessible contrast to social posts, ads and thumbnails, choose and license imagery responsibly, work efficiently with templates and design-tool components, and export platform-ready files that remain sharp and legible.",
+    "criteria": "Completed all lessons and scored ≥ 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "seeing-like-a-designer",
+      "title": "Seeing like a designer",
+      "summary": "Learn the core principles that make a design readable at a glance: hierarchy, contrast, alignment, proximity, repetition and whitespace.",
+      "lessons": [
+        {
+          "slug": "visual-hierarchy",
+          "title": "Visual hierarchy: controlling what people see first",
+          "type": "video",
+          "durationMinutes": 8,
+          "body": "### Why hierarchy is the whole game\n\nPeople do not read designs; they scan them. On a social feed a viewer decides in a fraction of a second whether your post is worth a second look. Visual hierarchy is the deliberate ordering of elements so the eye lands on the most important thing first, the second most important thing next, and so on. If everything shouts, nothing is heard.\n\nA useful mental model is the **three-level hierarchy**:\n\n1. **Primary** — the one thing the viewer must get even if they look for one second (a headline, a face, a product, a number).\n2. **Secondary** — the supporting context that makes the primary make sense (a subheading, a short benefit, a date).\n3. **Tertiary** — details for people who are already interested (handle, logo, URL, fine print).\n\nMost weak designs fail because they have two or three competing primaries.\n\n### The levers that create hierarchy\n\nYou control attention with a small set of levers. Each one works by creating *difference*.\n\n| Lever | How it creates emphasis | Typical use |\n|---|---|---|\n| Size | Bigger elements are seen first | Headline, hero product |\n| Weight | Bold text pulls ahead of regular | Key phrase inside a sentence |\n| Colour and value | High contrast or a saturated accent draws the eye | Call to action, price |\n| Position | Top-left (in left-to-right languages) and centre get early attention | Headline placement |\n| Isolation | An element surrounded by space stands out | A single statistic or quote |\n| Faces and eyes | Humans look at faces, then where the eyes point | Thumbnails, ads |\n| Motion | Movement beats stillness | Animated stickers, video |\n\nNote the reading-direction point: for Arabic or Urdu audiences, designs read right-to-left, so the natural entry point and the flow of the layout mirror. If you design bilingual posts for audiences in Pakistan, the UAE or Saudi Arabia, plan the layout for each script instead of flipping a finished design.\n\n### The squint test\n\nThe fastest hierarchy check is to blur your vision. Step back from the screen, squint (or apply a heavy blur to a screenshot) and ask: what is the first blob I see, and what is second? If the answer is not your primary and secondary message, adjust the levers.\n\nA related check is the **one-second test**: show the design to someone for about one second, hide it, and ask what it was about. If they cannot tell you, your primary element is not dominant enough.\n\n### Worked example: a webinar announcement\n\nA creator posts an announcement with this content: \"Free live workshop\", \"Grow on short-form video in 30 days\", date and time, the host's photo, the host's handle and a \"Save your seat\" button.\n\n**First draft problems:** the words \"Free live workshop\" are in the largest type, the benefit is small, the date is the same size as the benefit, and the photo is a tiny circle in the corner. The eye bounces between four things.\n\n**Redesign using the three levels:**\n\n- Primary: the benefit headline, \"Grow on short-form video in 30 days\", set large and bold.\n- Secondary: the host's photo, large enough to read the face, plus \"Free live workshop · Thu 7 pm\" in a medium size.\n- Tertiary: handle and a small \"Save your seat — link in bio\" line.\n\nThe accent colour is used only on the call to action, so it does not compete with the headline. The squint test now shows one dominant block of text and a face — exactly the intended order.\n\n### A hierarchy checklist you can reuse\n\n```\n[ ] I can state the single primary message in one sentence\n[ ] The primary element is clearly the largest or highest-contrast item\n[ ] There are no more than 2–3 distinct text sizes\n[ ] Accent colour is reserved for one or two elements\n[ ] Tertiary details are small, grouped and out of the way\n[ ] The design passes the squint test and the one-second test\n```\n\n### Common mistakes\n\n- **Making everything bold.** Emphasis only works relative to non-emphasised elements.\n- **Too many sizes.** Five slightly different font sizes read as noise; use clear steps.\n- **Logo as primary.** Unless the post is about the brand itself, the logo is usually tertiary.\n- **Decorative elements stealing focus.** Arrows, stickers and shapes should point to the message, not become it.\n- **Ignoring the context.** Your post sits in a feed next to other bright posts; hierarchy must work at thumbnail size, not only full screen.\n\n### Summary\n\nHierarchy is decided before you touch a tool: write down your primary, secondary and tertiary content, then use size, weight, colour, position and space to make that order visible. Test it by squinting and by showing it to someone for a second.",
+          "video": {
+            "script": "Every design you publish is competing for about one second of attention. In that second, the viewer's eye needs somewhere obvious to land. That is what visual hierarchy does: it decides what people see first, second and third. Start before you open any tool. Write down your primary message — the one thing someone must understand even if they barely look. Then your secondary message, the context that makes the first one make sense. Everything else is tertiary: your handle, your logo, the fine print. Now use the levers of attention to make that order visible. Size is the strongest: the biggest element usually wins. Weight and contrast come next — bold, dark or brightly coloured elements pull ahead. Position matters, because readers of left-to-right languages tend to start at the top left, while Arabic and Urdu readers start at the top right. Isolation matters too: one element surrounded by empty space feels important. And never underestimate faces. People look at faces first, then follow where the eyes are pointing. The most common mistake is emphasising everything. If the headline, the price, the logo and the button are all big and bold, nothing stands out and the viewer scrolls on. Here is a quick test. Step back from your screen and squint until the design blurs. What is the first shape you notice? What is second? If that is not your primary and secondary message, adjust size, contrast or spacing until it is. Then try the one-second test: show someone the design briefly, hide it, and ask what it was about. Hierarchy is not decoration. It is the order of your message, made visible.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Hierarchy is the deliberate order in which viewers notice elements — decide it before designing.",
+            "Use a three-level structure: primary, secondary and tertiary content.",
+            "Size, weight, colour, position, isolation and faces are the main levers of attention.",
+            "The squint test and one-second test reveal whether your intended order actually works."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A post has a headline, a price, a logo and a call to action all in the same large bold type. What is the core problem?",
+              "options": [
+                "The logo should be larger than everything else",
+                "There is no clear primary element, so nothing stands out",
+                "The colours are probably wrong",
+                "The design needs more decorative elements"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Emphasis is relative: when four items share the same size and weight, none is dominant and the eye has no entry point. Colour and decoration do not fix a missing hierarchy, and enlarging the logo usually makes it worse."
+            },
+            {
+              "question": "What does the squint test help you check?",
+              "options": [
+                "Whether text is spelled correctly",
+                "Whether the image resolution is high enough",
+                "Whether the colours meet brand guidelines",
+                "Which elements dominate when detail is removed"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Blurring removes detail so only size, contrast and mass remain — which reveals the real visual order. It says nothing about spelling, resolution or brand compliance."
+            },
+            {
+              "question": "You are adapting an English post for an Arabic-speaking audience. What is the best approach to hierarchy?",
+              "options": [
+                "Mirror the finished English layout exactly with a flip tool",
+                "Plan the layout for right-to-left reading so the entry point and flow suit the script",
+                "Remove all text and rely only on images",
+                "Keep the English layout because hierarchy is universal"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Right-to-left reading changes the natural entry point and flow, so the layout should be planned for that script. Blindly flipping can mirror photos, logos and numbers incorrectly, and ignoring direction weakens the hierarchy."
+            }
+          ],
+          "activity": "Take one of your recent posts and write its primary, secondary and tertiary content on paper. Redesign it so the squint test shows that order, then compare before and after side by side."
+        },
+        {
+          "slug": "contrast-repetition-alignment-proximity",
+          "title": "Contrast, repetition, alignment and proximity",
+          "type": "article",
+          "durationMinutes": 8,
+          "body": "### Four principles that fix most layouts\n\nDesigner and educator Robin Williams popularised four principles, often remembered as **C.R.A.P.**: contrast, repetition, alignment and proximity. They are not the only principles in design, but together they explain why most amateur layouts feel messy and how to fix them quickly.\n\n### 1. Contrast — make different things *very* different\n\nContrast is how you signal that two elements have different roles. The key word is *very*. A heading at 22 px next to body text at 18 px looks like a mistake; a heading at 40 px next to 18 px body text looks intentional.\n\nWays to create contrast:\n\n- Size (large versus small)\n- Weight (bold versus light)\n- Colour and value (dark versus light, saturated versus muted)\n- Typeface (a display face for headings, a plain sans-serif for body)\n- Shape and texture (a rounded button against a rectangular layout)\n\n**Rule of thumb:** if two elements are not meant to be the same, do not make them *almost* the same.\n\n### 2. Repetition — make the design feel like one system\n\nRepetition means reusing the same choices consistently: the same heading style, the same accent colour, the same corner radius, the same icon style, the same spacing. Repetition creates unity inside a single post and recognisability across a series. It is why a creator's carousels are recognisable before you read the handle.\n\nPractical repetition choices for a content series:\n\n```\nHeading font + size:     e.g. Bold sans, 64 px\nBody font + size:        e.g. Regular sans, 28 px\nAccent colour:           one colour, used only for highlights\nCorner radius:           same on every card and button\nMargin:                  same on every slide (e.g. 80 px)\nSlide number / progress: same position on every slide\n```\n\n### 3. Alignment — nothing placed arbitrarily\n\nEvery element should be visually connected to something else on the page through a shared edge or centre line. Alignment creates invisible lines that make a layout feel organised.\n\n- **Left alignment** is the most readable for multi-line text in left-to-right languages, because each line starts at the same point. (Right alignment plays that role for Arabic and Urdu.)\n- **Centre alignment** works for short, symmetrical content such as a quote or a single headline, but long centred paragraphs are harder to read because every line starts in a different place.\n- **Mixing alignments** on one design (a centred headline, left-aligned body, right-aligned logo) usually looks accidental unless there is a clear grid.\n\nUse your tool's alignment and distribute functions rather than nudging by eye. Turn on smart guides or snapping.\n\n### 4. Proximity — group related items\n\nItems that belong together should sit close together; unrelated items should be further apart. Proximity lets viewers understand structure without lines or boxes.\n\nA classic error: equal spacing between everything. If the gap between a heading and its paragraph is the same as the gap between that paragraph and the next heading, the viewer cannot tell which heading owns which text. The fix is simple — tighten the space inside a group and increase the space between groups.\n\n### Whitespace: the principle behind the principles\n\nWhitespace (or negative space) is any empty area, whatever its colour. It is not wasted space. It separates groups, frames the primary element and makes a design feel confident and premium. Crowded designs feel cheap and are harder to read on small screens.\n\n### Worked example: fixing a promotional flyer\n\n**Before:** a sale flyer with five fonts, text centred and left-aligned at random, the discount the same size as the terms and conditions, and every item spaced evenly.\n\n**After applying the four principles:**\n\n1. *Contrast:* the discount becomes the dominant element — very large, heavy weight, accent colour. Terms shrink to small, light text.\n2. *Repetition:* two typefaces only; the accent colour reused on the call to action; consistent corner radius on the product cards.\n3. *Alignment:* everything left-aligned to one margin, product cards on a three-column grid.\n4. *Proximity:* each product image sits tight with its name and price; bigger gaps separate the cards and the footer.\n\n### Quick audit table\n\n| Principle | Question to ask | Common fix |\n|---|---|---|\n| Contrast | Are different roles clearly different? | Increase size or weight steps |\n| Repetition | Are styles reused consistently? | Create text and colour styles |\n| Alignment | Does every element share an edge or axis? | Align to one margin or grid |\n| Proximity | Are related items grouped? | Tighten inside groups, widen between |\n\n### Common mistakes\n\n- Using contrast timidly (small size differences).\n- Adding a new style for every element instead of reusing styles.\n- Centring everything by default.\n- Filling every empty area with icons, stickers or patterns.\n\n### Summary\n\nWhen a design feels \"off\" but you cannot say why, run the four-principle audit. It will usually point to weak contrast, inconsistent styles, loose alignment or confusing spacing.",
+          "video": null,
+          "keyTakeaways": [
+            "Make different elements clearly different — timid contrast looks like a mistake.",
+            "Repeat styles, colours and spacing to create unity and a recognisable series.",
+            "Align every element to a shared edge or axis; avoid random centre/left mixes.",
+            "Group related items with proximity and separate groups with more space.",
+            "Whitespace is an active design tool, not wasted space."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A carousel's heading is 24 px and its body text is 22 px. Which principle is being applied too weakly?",
+              "options": [
+                "Proximity",
+                "Alignment",
+                "Repetition",
+                "Contrast"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "The size difference is too small to signal a different role, so it reads as an error. Contrast needs to be decisive; the other principles concern grouping, consistency and shared edges."
+            },
+            {
+              "question": "Viewers cannot tell which subheading belongs to which paragraph because all gaps are equal. What is the best fix?",
+              "options": [
+                "Put every paragraph in a coloured box",
+                "Use a different font for each section",
+                "Tighten the gap between each subheading and its paragraph and increase the gap between groups",
+                "Centre all the text"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Proximity communicates grouping: small gaps inside a group, larger gaps between groups. Boxes can help but add clutter, while centring and extra fonts do not solve the grouping problem."
+            },
+            {
+              "question": "Why is left alignment usually preferred for multi-line body text in English?",
+              "options": [
+                "It uses less space",
+                "It automatically increases contrast",
+                "Each line starts at the same point, which makes reading easier",
+                "Platforms require it"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "A consistent starting edge helps the eye find the next line. It is not a platform rule, does not save space, and has nothing to do with contrast."
+            },
+            {
+              "question": "Which choice best supports repetition across a 10-slide carousel?",
+              "options": [
+                "Using a different photo filter per slide",
+                "Using a new accent colour on every slide for variety",
+                "Changing the layout completely on each slide",
+                "Keeping heading style, margins and slide-number position identical on every slide"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Repetition means consistent styles and positions, which creates unity and recognisability. Constant variation in colour, layout or filters breaks the system."
+            }
+          ],
+          "activity": "Audit one flyer, post or slide you have made using the four-question audit table. Make one fix for each principle and note which change made the biggest difference."
+        },
+        {
+          "slug": "gestalt-and-eye-flow",
+          "title": "Gestalt, eye flow and guiding the viewer",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### How the brain groups what it sees\n\nGestalt psychology describes how people perceive visual elements as organised wholes rather than separate parts. You do not need the theory in depth, but a handful of Gestalt principles explain why some layouts feel instantly clear.\n\n| Principle | What people perceive | Design application |\n|---|---|---|\n| Proximity | Close items belong together | Group image, title and price in a product card |\n| Similarity | Items that look alike are related | Same colour for all clickable elements |\n| Closure | The mind completes incomplete shapes | Logos and icons that use implied lines |\n| Continuity | The eye follows lines and curves | Arrange items along a path toward the call to action |\n| Figure–ground | We separate a subject from its background | Keep subjects distinct from busy backgrounds |\n| Common region | Items inside a boundary are grouped | Cards, panels and background blocks |\n\nThe practical lesson: you can create structure with space, similarity and regions instead of adding lines, borders and labels everywhere.\n\n### Figure–ground in real life\n\nFigure–ground problems are the most common cause of illegible social graphics. White text over a bright sky, a product photographed against a similar-coloured backdrop, or a logo on a busy pattern all make it hard to separate subject from background.\n\nFixes, from least to most intrusive:\n\n1. **Reposition** the text over a calmer area of the image.\n2. **Darken or lighten** the whole image slightly (an overlay at low opacity).\n3. **Add a gradient** from transparent to dark behind the text only.\n4. **Use a solid block** or card behind the text.\n5. **Blur or simplify** the background, or choose a different image.\n\n### Eye-flow patterns\n\nResearch on reading behaviour, including eye-tracking studies by usability researchers, describes common scanning patterns. Treat these as tendencies, not laws:\n\n- **Z-pattern:** on simple, image-led designs with little text, the eye tends to move from top-left across to the top-right, diagonally down, then across the bottom. Useful for ads and single-message posts: headline top, visual in the middle, call to action bottom-right.\n- **F-pattern:** on text-heavy screens, people read the first lines more fully and then scan down the left side. Useful for carousels and infographics: front-load key words at the start of lines and headings.\n- **Focal-point flow:** a strong visual element (a face, a bright object) captures attention first; the viewer then moves to nearby elements. Useful for thumbnails.\n\nFor right-to-left languages these patterns mirror.\n\n### Directional cues\n\nYou can actively steer the eye:\n\n- **Gaze:** if a person in the image looks toward your headline, viewers tend to follow the gaze. If they look out of the frame, attention leaks away.\n- **Lines and shapes:** roads, arms, arrows and leading lines in photos guide the eye along a path.\n- **Pointing and gestures:** a hand pointing at a product works because it is a natural cue.\n- **Sequence numbering:** in carousels and infographics, numbered steps tell people the order explicitly.\n\n### Worked example: a product ad\n\nA skincare brand has a photo of a model holding a bottle, a headline \"Hydration that lasts all day\", and a \"Shop now\" button.\n\n- **Version A:** the model looks straight at the camera; the headline is at the bottom-left; the button is top-right. The eye goes to the face, then wanders.\n- **Version B:** the model looks toward the bottle, which sits near the headline; the headline is top-left; the button sits bottom-right where a Z-pattern ends. The eye goes face → bottle → headline → button.\n\nVersion B is not guaranteed to perform better — only testing can show that — but it is structurally clearer, which gives it a better chance.\n\n### An eye-flow planning template\n\n```\nEntry point (what is seen first):   ______________\nPath (what the eye moves to next):  ______________ → ______________\nExit / action (where it ends):      ______________\nCues used (gaze, lines, numbers):   ______________\nDistractions to remove:             ______________\n```\n\n### Common mistakes\n\n- **Gaze leading out of the frame** toward nothing.\n- **Call to action placed where the eye never goes**, such as a tiny corner above the headline.\n- **Too many focal points**: three faces, two products and a bright sticker all competing.\n- **Assuming a pattern is universal**: always consider reading direction and test with real viewers.\n\n### Summary\n\nUse Gestalt principles to create structure without clutter, fix figure–ground problems before publishing, and plan a deliberate path from entry point to action using gaze, lines and sequence.",
+          "video": null,
+          "keyTakeaways": [
+            "Gestalt principles (proximity, similarity, closure, continuity, figure–ground, common region) create structure without extra decoration.",
+            "Poor figure–ground separation is a leading cause of illegible text on images.",
+            "Z- and F-patterns are useful tendencies, mirrored for right-to-left languages, not fixed laws.",
+            "Gaze, lines, gestures and numbering can deliberately steer the viewer toward your call to action."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "White headline text sits over a bright cloudy sky and is hard to read. What is the least intrusive first fix to try?",
+              "options": [
+                "Make the text smaller",
+                "Add a thick drop shadow and outline to every letter",
+                "Move the text to a calmer, darker area of the image",
+                "Replace the photo with a stock illustration"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Repositioning solves the figure–ground problem without altering the image. Heavy effects look dated, shrinking text makes legibility worse, and replacing the image is a last resort."
+            },
+            {
+              "question": "Making every clickable element the same colour applies which Gestalt principle?",
+              "options": [
+                "Continuity",
+                "Similarity",
+                "Figure–ground",
+                "Closure"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Similarity means elements that look alike are perceived as related — so consistent colour signals 'these are all actions'. Closure, continuity and figure–ground describe other perceptual effects."
+            },
+            {
+              "question": "In a thumbnail, the person pictured is looking out of the right edge of the frame, away from the title. What is the likely effect?",
+              "options": [
+                "Viewers' attention tends to follow the gaze out of the frame, away from the title",
+                "It automatically increases click-through rate",
+                "It improves text contrast",
+                "It has no effect on attention"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "People tend to follow gaze direction, so looking away from the title pulls attention away from it. It has no automatic performance benefit and is unrelated to contrast."
+            }
+          ],
+          "activity": "Pick a design you like from a brand you admire. Sketch its eye path using the planning template, noting entry point, cues and action. Then apply the same path to one of your own designs."
+        }
+      ]
+    },
+    {
+      "slug": "layout-and-composition",
+      "title": "Layout, grids and composition",
+      "summary": "Structure designs with grids, margins and safe zones, compose balanced images, and adapt layouts across aspect ratios.",
+      "lessons": [
+        {
+          "slug": "grids-margins-and-spacing",
+          "title": "Grids, margins and a spacing system",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Why grids make you faster, not more rigid\n\nA grid is a set of invisible guides — columns, rows, margins and gutters — that tells you where things can go. Professionals use grids not because they lack creativity but because a grid removes hundreds of small decisions. Once the structure is fixed, you can focus on content.\n\n### Anatomy of a grid\n\n| Part | What it is | Why it matters |\n|---|---|---|\n| Margins | Space between content and the canvas edge | Keeps content away from edges and platform UI |\n| Columns | Vertical divisions of the live area | Gives consistent widths for text and images |\n| Gutters | Gaps between columns | Prevents content from touching |\n| Rows / baseline | Horizontal divisions or a text rhythm | Aligns elements vertically |\n| Live area | The area inside the margins | Where important content should sit |\n\n### Choosing a grid for social formats\n\nFor most social and ad work, simple is best:\n\n- **Single-column with generous margins** — quotes, announcements, single statistics.\n- **Two-column** — before/after, comparisons, image plus text.\n- **Three- or four-column** — product grids, feature lists, infographics.\n- **Modular grid** (columns plus rows) — dense carousels or information graphics.\n\nA popular approach for a 1080 px wide canvas is a margin in the range of roughly 60–100 px with a 4- or 6-column grid inside it. The exact numbers matter less than using the same ones every time.\n\n### A spacing system\n\nRandom gaps (13 px here, 22 px there) create subtle messiness. A **spacing scale** fixes that by limiting you to a few values. Many digital design teams use multiples of 4 or 8.\n\n```\nSpacing scale (8-point based)\nxs   8\nsm   16\nmd   24\nlg   40\nxl   64\nxxl  96\n\nUse:  inside a group → sm/md\n      between groups → lg/xl\n      canvas margin  → xl/xxl\n```\n\nThis directly supports proximity: small values inside groups, large values between groups.\n\n### Safe zones and platform UI\n\nSocial platforms overlay interface elements on your design: profile names, captions, buttons, progress bars and — for vertical video — like, comment and share icons down one side. Content in those areas can be hidden.\n\nGood practice:\n\n- Keep headlines, faces, logos and calls to action inside a **central safe area**, well away from the top and bottom edges of 9:16 designs and away from the side where action buttons appear.\n- Check the platform's current guidance or preview tool before publishing — overlays change as apps are redesigned.\n- In ads, platforms often provide safe-zone templates; use them.\n\n### Setting up a reusable grid (tool-neutral steps)\n\n1. Create a canvas at the target size (for example 1080 × 1350 px for a 4:5 portrait post).\n2. Add margin guides on all sides.\n3. Add a column grid inside the margins (for example 6 columns with 24 px gutters).\n4. Add horizontal guides for the safe area if designing vertical formats.\n5. Save the file as a template or a frame you duplicate for every new post.\n\nIn Figma this is a layout grid applied to a frame; in Canva you can show rulers and guides and add custom guides. Other tools have equivalents.\n\n### Worked example: a three-tip carousel slide\n\nCanvas 1080 × 1350 px, 80 px margins, 6-column grid, 24 px gutters.\n\n- Slide number in the top-left of the live area.\n- Headline spans all 6 columns, starting at the top margin plus 64 px.\n- Supporting text spans 5 columns, leaving one empty column on the right for breathing room.\n- A small icon sits in column 1 beside each tip; text starts at column 2.\n- Handle sits bottom-left inside the margin on every slide.\n\nThe result looks consistent across slides without extra effort, because every slide shares the same structure.\n\n### Breaking the grid on purpose\n\nOnce the grid is established, you can break it deliberately — a photo that bleeds off the edge, a huge number that overlaps a column. Breaking a grid only reads as intentional when everything else respects it.\n\n### Common mistakes\n\n- **No margins**: text touching the edge looks cramped and may be cropped.\n- **Inconsistent margins between slides**, which makes swiping feel jumpy.\n- **Ignoring platform overlays**, hiding the call to action behind buttons.\n- **Too many columns** for simple content, leading to fussy layouts.\n\n### Summary\n\nSet margins, columns and a spacing scale once, respect safe zones, and save it as a template. Consistency across posts will come almost automatically.",
+          "video": null,
+          "keyTakeaways": [
+            "A grid's margins, columns and gutters remove small decisions and create consistency.",
+            "Use a limited spacing scale (for example multiples of 8) instead of arbitrary gaps.",
+            "Keep critical content inside platform safe zones and verify current overlays before publishing.",
+            "Break the grid only deliberately and only when everything else respects it."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the main purpose of a spacing scale such as 8, 16, 24, 40, 64?",
+              "options": [
+                "To increase file resolution",
+                "To limit spacing to consistent values so layouts feel orderly",
+                "To define brand colours",
+                "To meet platform upload requirements"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "A spacing scale standardises gaps, supporting proximity and consistency. It has nothing to do with resolution, upload rules or colour."
+            },
+            {
+              "question": "A creator's call-to-action text on a 9:16 story keeps getting hidden. What is the most likely cause?",
+              "options": [
+                "The text sits in an area covered by platform interface elements",
+                "The file format is wrong",
+                "The font is a serif",
+                "The colour palette is too small"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Vertical formats have overlays such as reply bars and buttons near the edges; content there can be obscured. Format, font style and palette would not hide the text."
+            },
+            {
+              "question": "Which grid would usually suit a simple quote graphic best?",
+              "options": [
+                "A different grid for each word",
+                "A single column with generous margins",
+                "No margins at all",
+                "A 12-column modular grid"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Simple content needs a simple structure; a single column with generous margins frames the quote. Complex grids add fussiness and no margins look cramped."
+            }
+          ],
+          "activity": "Build a reusable 4:5 template with margins, a column grid and a written spacing scale. Recreate one of your existing posts inside it and compare the consistency."
+        },
+        {
+          "slug": "composition-and-balance",
+          "title": "Composition, balance and focal points",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Composition is arrangement with intent\n\nComposition is how elements are arranged inside the frame to create a focal point, a sense of balance and a path for the eye. It applies equally to photos you shoot, images you crop and layouts you build.\n\n### Balance: symmetrical and asymmetrical\n\n- **Symmetrical balance** mirrors elements around a central axis. It feels stable, formal and calm — useful for announcements, luxury products and quotes.\n- **Asymmetrical balance** distributes different elements so their *visual weight* balances. A large light area can balance a small dark area. It feels dynamic and modern — useful for ads, thumbnails and editorial posts.\n\n**Visual weight** increases with size, darkness, saturation, texture, and faces or text (people are drawn to both). Elements further from the centre also feel heavier, like a lever.\n\n### Classic compositional tools\n\n| Tool | What it is | When to use it |\n|---|---|---|\n| Rule of thirds | Divide the frame into a 3×3 grid; place key subjects on the lines or intersections | Portraits, product shots, thumbnails |\n| Centred composition | Subject in the middle, often symmetrical | Bold single-subject posts, logos, quotes |\n| Leading lines | Lines in the image lead toward the subject | Lifestyle and travel photos |\n| Framing | Surround the subject with a natural frame (doorway, hands) | Adds depth and focus |\n| Negative space | Large empty area around a small subject | Premium, minimal, space for text |\n| Scale contrast | One very large element against small ones | Drama and emphasis |\n\nThe rule of thirds is a helpful starting point, not a law. Centred compositions are very effective on mobile, where the frame is small and bold.\n\n### Cropping as composition\n\nMuch design work involves cropping existing photos. Good cropping:\n\n- Removes distractions at the edges.\n- Gives the subject room to \"look into\" the frame.\n- Avoids cutting people at joints (wrists, knees, ankles) and avoids slicing through the top of the head in an awkward place — cropping into the forehead can be fine for close-ups if intentional.\n- Leaves clean space where text will go.\n\n**Tip:** when choosing photos for a series, pick images that have natural empty space on one side. They give you room for headlines without covering the subject.\n\n### Depth and layering\n\nFlat designs can feel lifeless. You can add depth by:\n\n- Overlapping elements (a product slightly overlapping a text block).\n- Using a cut-out subject in front of text (the \"text behind subject\" effect — use it sparingly and keep the text legible).\n- Scaling elements to imply near and far.\n- Soft shadows that are consistent in direction.\n\n### Worked example: a thumbnail composition\n\nA tutorial video about budgeting apps. Elements: the creator's face showing surprise, a phone showing an app, and the text \"I tried 5 budget apps\".\n\n1. Canvas 16:9. Divide into thirds.\n2. Creator's face on the left-third intersection, large, eyes toward the phone.\n3. Phone on the right third, slightly overlapping the face for depth.\n4. Text in the upper right, short — perhaps \"5 APPS TESTED\" — because long text is unreadable at small sizes.\n5. Background simplified and slightly darkened so the face and phone pop.\n6. Check at small size: reduce the canvas to phone-thumbnail scale and confirm the face, phone and text still read.\n\n### A composition checklist\n\n```\n[ ] One clear focal point\n[ ] Balance is intentional (symmetrical or asymmetrical)\n[ ] Subject has room to look/move into the frame\n[ ] Edges are clean — no distracting fragments\n[ ] Text has a calm area to sit on\n[ ] Works at small (thumbnail) size\n```\n\n### Common mistakes\n\n- **Everything centred and the same size**, making designs static and forgettable.\n- **Subject crammed against an edge** with empty space behind it.\n- **Overused effects** — heavy shadows, glows and outlines layered together.\n- **Composing only at full size** and never checking at thumbnail scale.\n\n### Summary\n\nDecide on your focal point, choose symmetrical or asymmetrical balance deliberately, use cropping and simple tools such as the rule of thirds, and always check the composition at the size people will actually see it.",
+          "video": null,
+          "keyTakeaways": [
+            "Balance can be symmetrical (stable, formal) or asymmetrical (dynamic) — choose deliberately.",
+            "Visual weight grows with size, darkness, saturation, texture, faces and text.",
+            "The rule of thirds is a starting point; centred compositions are strong on mobile.",
+            "Crop to remove distractions, give subjects room and leave space for text.",
+            "Always check composition at the size viewers will actually see."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A small, dark, saturated object on the right is balanced by a large, pale area on the left. What kind of balance is this?",
+              "options": [
+                "No balance",
+                "Radial balance",
+                "Symmetrical balance",
+                "Asymmetrical balance"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Different elements balancing through visual weight is asymmetrical balance. Symmetrical balance mirrors elements; radial balance radiates from a centre."
+            },
+            {
+              "question": "Which crop is usually the weakest choice for a portrait?",
+              "options": [
+                "Cropping exactly at the subject's wrists and knees",
+                "Cropping so the subject looks into the frame",
+                "Cropping to remove a distracting object at the edge",
+                "Cropping to leave calm space for a headline"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Cutting at joints tends to look awkward. The other options are all good cropping practice."
+            },
+            {
+              "question": "Why should you shrink a thumbnail design to a small size before publishing?",
+              "options": [
+                "Because most viewers first see it small, so the focal point and text must still read",
+                "To test colour accuracy",
+                "To reduce file size",
+                "Because platforms reject large files"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Thumbnails are mostly seen at small sizes in feeds and search results; a composition that only works large will fail. The check is about legibility, not file size or colour."
+            }
+          ],
+          "activity": "Take three photos you might use in posts. Crop each twice — once centred and once using the rule of thirds with room for text — and decide which composition supports a headline best."
+        },
+        {
+          "slug": "designing-across-aspect-ratios",
+          "title": "Designing across aspect ratios and formats",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### One idea, many shapes\n\nA single campaign often needs a square post, a portrait feed post, a vertical story or short-video cover, a landscape thumbnail and perhaps a banner. Designing each from scratch wastes time; stretching one design to fit every shape produces distorted or cropped results. The professional approach is to **design a system that adapts**.\n\n### Common aspect ratios\n\n| Ratio | Orientation | Typical use (verify current specs) |\n|---|---|---|\n| 1:1 | Square | Feed posts, profile images, some ads |\n| 4:5 | Portrait | Feed posts and ads that take more screen space |\n| 3:4 | Portrait | Some platforms' feed and grid displays |\n| 9:16 | Vertical full-screen | Stories, Reels, Shorts, TikTok, vertical ads |\n| 16:9 | Landscape | Video thumbnails, YouTube, presentations |\n| 1.91:1 | Wide landscape | Link previews, some banners and ads |\n\nCommon pixel sizes include 1080 × 1080 (1:1), 1080 × 1350 (4:5), 1080 × 1920 (9:16) and 1280 × 720 or larger (16:9). Platforms change recommended sizes, grid crops and overlays regularly, so always check the current help pages or ad specs before a major campaign.\n\n### Aspect ratio versus resolution\n\n- **Aspect ratio** is the shape (width to height).\n- **Resolution** is the number of pixels.\n\n1080 × 1350 and 2160 × 2700 are the same 4:5 shape; the second has four times as many pixels. Designing at a higher resolution can help with sharp text after compression, but upload limits and file sizes still apply.\n\n### The \"core and flex\" method\n\n1. **Define the core** — the elements that must appear in every version: headline, key visual, logo or handle, call to action.\n2. **Define the flex** — elements that can be dropped or moved when space is tight: secondary text, decorative shapes, extra images.\n3. **Design the most demanding format first.** Often that is the 9:16 vertical (tall, with overlays) or a small thumbnail.\n4. **Adapt outward.** Rearrange rather than rescale: a stacked layout in 9:16 may become side-by-side in 16:9.\n5. **Keep type sizes relative to the shorter side** so text stays legible across formats.\n\n### Adapting layouts: patterns\n\n- **Stack ↔ side-by-side:** image above text in vertical formats; image beside text in landscape formats.\n- **Crop the photo, not the subject:** choose images with space around the subject so you can crop to different ratios.\n- **Re-flow text:** break headlines into more lines in narrow formats, fewer in wide formats.\n- **Scale the logo proportionally** and keep it in a consistent corner.\n\nTool support: many design tools offer resize or \"magic resize\" features, and Figma supports auto layout and constraints that make frames adapt. These save time but always need a human check — automated resizing often crops faces or places text under platform overlays.\n\n### Worked example: a product launch\n\nCore: product photo, \"New: Travel Blender\", \"Pre-order now\", logo.\n\n- **9:16 story:** product photo in the upper half, headline in large type below it, call to action above the bottom safe zone, logo top-left inside the safe area.\n- **4:5 feed post:** product photo occupying the right 60%, headline and call to action stacked on the left 40%.\n- **16:9 banner:** product on the right third, headline centred-left, logo top-left, call to action bottom-left.\n- **1:1 ad:** simplified — product and headline only; call to action handled by the platform's button.\n\nAll four share fonts, colours, photo treatment and logo placement, so they look like one campaign.\n\n### Format planning template\n\n```\nCampaign:            __________________\nCore elements:       headline | visual | CTA | logo\nFlex elements:       __________________\nFormats needed:      [ ] 1:1  [ ] 4:5  [ ] 9:16  [ ] 16:9  [ ] other ____\nHardest format:      __________________ (design first)\nSafe-zone check:     [ ] done per format\nFinal small-size check: [ ] done\n```\n\n### Common mistakes\n\n- Stretching or squashing images to fill a new ratio.\n- Letting automated resize tools publish without review.\n- Using the same absolute type size in every format so text becomes tiny in large canvases.\n- Forgetting overlays on vertical formats.\n\n### Summary\n\nSeparate core from flex content, design the hardest format first, rearrange rather than rescale, and verify every version at real size with platform overlays in mind.",
+          "video": null,
+          "keyTakeaways": [
+            "Aspect ratio is shape; resolution is pixel count — they are different decisions.",
+            "Define core elements that appear in every format and flex elements you can drop.",
+            "Design the most constrained format first, then adapt by rearranging, not stretching.",
+            "Automated resize tools save time but always need a human check for crops and overlays."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "1080 × 1350 and 2160 × 2700 images share the same what?",
+              "options": [
+                "Resolution",
+                "Colour profile",
+                "File size",
+                "Aspect ratio"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Both are 4:5 shapes; the second has four times the pixels, so resolution and file size differ. Colour profile is unrelated."
+            },
+            {
+              "question": "In the core-and-flex method, what should you do with 'flex' elements in a small format?",
+              "options": [
+                "Shrink them until they fit, however small",
+                "Enlarge them to fill the space",
+                "Drop or move them when space is tight",
+                "Replace them with the logo"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Flex elements are optional and can be removed or relocated so core elements stay legible. Shrinking everything makes text unreadable."
+            },
+            {
+              "question": "After using an automatic resize feature, what is the most important next step?",
+              "options": [
+                "Convert all files to GIF",
+                "Change the brand colours for each size",
+                "Publish immediately to save time",
+                "Review each version for cropped subjects, legibility and elements under platform overlays"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Automated resizing often crops faces or places text under overlays, so each version needs a human check. File format and colour changes are not the issue."
+            }
+          ],
+          "activity": "Choose one message and produce it in 9:16, 4:5 and 16:9 using the core-and-flex template. Design the 9:16 version first and note what you rearranged for the other two."
+        }
+      ]
+    },
+    {
+      "slug": "typography",
+      "title": "Typography that reads on every screen",
+      "summary": "Understand type anatomy and classification, pair typefaces, build a type scale, and keep text legible on small mobile screens.",
+      "lessons": [
+        {
+          "slug": "type-anatomy-and-choosing-typefaces",
+          "title": "Type anatomy, classification and choosing typefaces",
+          "type": "article",
+          "durationMinutes": 8,
+          "body": "### Why type choices matter so much\n\nMost social graphics, ads and thumbnails are mostly text. The typeface you choose sets the tone before anyone reads a word: a heavy geometric sans feels bold and modern, a high-contrast serif feels editorial or luxurious, a rounded sans feels friendly. Choosing well is less about taste and more about matching purpose, legibility and brand.\n\n### Essential vocabulary\n\n| Term | Meaning | Why it matters |\n|---|---|---|\n| Typeface | The design (e.g. a sans-serif family) | What you choose |\n| Font | A specific style/weight file of that typeface | What you install/use |\n| Family | All weights and styles of a typeface | More weights = more flexibility |\n| Baseline | Line letters sit on | Alignment of mixed sizes |\n| x-height | Height of lowercase letters like \"x\" | Larger x-height = more legible when small |\n| Ascender / descender | Parts above x-height / below baseline | Affect line spacing needs |\n| Serif | Small strokes at the ends of letters | Style and tone |\n| Stroke contrast | Difference between thick and thin strokes | High contrast can break up at small sizes |\n| Counter | Enclosed space inside letters (o, e, a) | Open counters improve legibility |\n\n### Main classifications\n\n- **Serif** (old-style, transitional, modern/didone, slab): tradition, authority, editorial tone. Slab serifs are sturdy and good for bold headlines. High-contrast didone faces look elegant but thin strokes can vanish at small sizes or after compression.\n- **Sans-serif** (grotesque, neo-grotesque, humanist, geometric): clean and versatile; the default for screens and social. Humanist sans faces are often very legible; geometric faces feel modern.\n- **Display**: decorative faces designed for large sizes only — posters, headlines, thumbnails.\n- **Script / handwritten**: personality and warmth, but low legibility in long text or all caps.\n- **Monospace**: every character the same width; signals code or technical content.\n\n### Choosing a typeface: four questions\n\n1. **Purpose:** is this for headlines, body text or both? Display faces are for headlines only.\n2. **Legibility:** at the smallest size it will be seen, are letters distinct? Check pairs like I/l/1 and O/0, and look for a generous x-height and open counters.\n3. **Tone:** does the personality fit the message and brand?\n4. **Coverage and licence:** does it support the languages and characters you need (for example accented Latin, Arabic or Urdu scripts), and does its licence allow your use (social, ads, logo, commercial products)?\n\nOn licensing: many high-quality typefaces are available under open licences (for example the SIL Open Font License used by many families in Google Fonts). Fonts bundled in design tools have their own terms. Commercial fonts require a licence, and licences may differ for desktop, web, app and logo use. Always read the licence before using a font for a client's logo or a product for sale.\n\n### Multi-script projects\n\nIf you design for audiences across Pakistan, the Gulf and English-speaking markets, you may need Latin and Arabic-script typefaces that work together. Look for families designed with multi-script support, or choose pairs whose weight and proportions feel compatible. Urdu is often typeset in the Nastaliq style, which needs more vertical space and specific font support; test with real text, not placeholder text.\n\n### Worked example: choosing type for a fitness coach\n\nBrand personality: energetic, direct, trustworthy. Formats: Reels covers, carousels, story ads.\n\n- Headline: a bold, condensed or geometric sans in heavy weight — punchy and space-efficient for short phrases.\n- Body: a humanist sans in regular and semi-bold — highly legible for tips and captions on slides.\n- Rejected: a thin script (illegible on small screens) and a didone serif (feels like fashion, not fitness, and thin strokes suffer on mobile).\n\n### A typeface selection checklist\n\n```\n[ ] Tested at the smallest real size (on a phone, not only on desktop)\n[ ] Distinct I / l / 1 and O / 0\n[ ] Enough weights (at least regular + bold)\n[ ] Supports all required languages and characters\n[ ] Licence covers intended use (social, ads, logo, merchandise)\n[ ] Tone matches brand personality\n```\n\n### Common mistakes\n\n- Using a display or script face for body text.\n- Choosing fonts on a large desktop monitor and never checking on a phone.\n- Using a font from a free download site without checking the licence.\n- Faking bold or italic with software effects instead of using the real weights.\n\n### Summary\n\nLearn the vocabulary, pick from the right classification for the job, test legibility at real size, and check language coverage and licensing before committing.",
+          "video": null,
+          "keyTakeaways": [
+            "A typeface is the design; a font is a specific weight/style of it.",
+            "Large x-height, open counters and distinct characters improve legibility at small sizes.",
+            "Display and script faces are for headlines and accents, not body text.",
+            "Always check language coverage and the licence for your intended use."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which feature most improves legibility of text at small sizes?",
+              "options": [
+                "Very tight letter spacing",
+                "Very high stroke contrast",
+                "A relatively large x-height and open counters",
+                "Decorative swashes"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "A generous x-height and open counters keep letters distinct when small. High contrast, swashes and tight spacing reduce legibility."
+            },
+            {
+              "question": "A client wants to use a font downloaded from a free font site in their new logo. What should you do first?",
+              "options": [
+                "Rename the font file",
+                "Check the font's licence to confirm logo and commercial use are allowed",
+                "Use it — free fonts can be used anywhere",
+                "Convert it to outlines so the licence no longer applies"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Licences vary and may restrict commercial or logo use. Converting to outlines or renaming does not remove licence obligations."
+            },
+            {
+              "question": "Which is the best use of a display typeface?",
+              "options": [
+                "Long paragraphs of body copy",
+                "Form labels on a website",
+                "Large headlines and short phrases",
+                "Legal terms and fine print"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Display faces are designed for large sizes and short text. Body copy, fine print and labels need highly legible text faces."
+            }
+          ],
+          "activity": "Shortlist three typefaces for your brand or a client. Test each on a phone at the smallest size you would use, check the characters I, l, 1, O and 0, and confirm the licence terms."
+        },
+        {
+          "slug": "type-pairing-and-hierarchy",
+          "title": "Type pairing, scale and spacing",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### How many typefaces do you need?\n\nFor most creators and small brands, **one or two typeface families** are enough. A single versatile family with several weights can carry an entire brand. Two families — one for headlines, one for body — add personality. Three or more usually creates visual noise unless managed by an experienced designer.\n\n### Pairing principles\n\nGood pairs have **contrast with harmony**: different enough to create hierarchy, similar enough to feel related.\n\n| Pairing approach | Example structure | Effect |\n|---|---|---|\n| Superfamily | Sans and serif versions of the same family | Very safe, cohesive |\n| Serif headline + sans body | Editorial serif + neutral sans | Classic, trustworthy |\n| Sans headline + sans body (weights) | Heavy sans + regular sans of the same family | Modern, clean |\n| Display headline + neutral body | Distinctive display + humanist sans | Personality with legibility |\n\nAvoid pairing two faces that are *almost* the same (two similar geometric sans-serifs), which looks like an error, and avoid pairing two faces that both demand attention (two decorative display faces).\n\n### Building a type scale\n\nA type scale is a defined set of sizes you reuse. Designers often use a ratio (for example 1.25 or 1.333) to generate harmonious steps. For social canvases around 1080 px wide, a practical scale might be:\n\n```\nDisplay   96 px   (one big number or word)\nH1        64 px   (headline)\nH2        44 px   (subheading)\nBody      32 px   (main text on slides)\nSmall     24 px   (labels, handle, footnotes)\n```\n\nTreat these as starting points; check them on a phone. Text on social graphics usually needs to be much larger than you would guess from designing on a desktop.\n\n### Spacing: leading, tracking and kerning\n\n- **Leading (line height):** space between lines. Body text often reads well around 1.3–1.5 times the font size. Large headlines usually need tighter leading (around 1.0–1.2) or they look loose.\n- **Tracking (letter spacing):** uniform spacing across a word or line. All-caps text often benefits from slightly increased tracking; large headlines can sometimes take slightly tighter tracking.\n- **Kerning:** adjusting space between specific letter pairs (such as \"AV\" or \"To\"). Most good fonts are well-kerned; manually check large headlines and logos.\n\n### Line length and alignment\n\nVery long lines tire the eye and very short lines break reading rhythm. For body text on websites, a common guideline is roughly 45–75 characters per line. On social slides, lines are much shorter, so keep sentences concise and break lines at natural phrase boundaries rather than mid-phrase.\n\nAvoid **widows and orphans** (a single word left alone on the last line) in headlines — adjust line breaks manually.\n\n### Emphasis without chaos\n\nChoose one method of emphasis per level:\n\n- Bold for key phrases in body text.\n- Colour highlight for one or two words in a headline.\n- Avoid combining underline, italic, bold, colour and all caps on the same phrase.\n\n**All caps:** effective for short labels and punchy headlines, but slower to read in long passages because word shapes become uniform rectangles.\n\n### Worked example: fixing a tips carousel\n\n**Before:** four fonts; headline 40 px, body 36 px (weak contrast); body leading 1.0 (cramped); long centred paragraphs; random bold, italic and underline.\n\n**After:**\n\n1. One family: bold weight for headings, regular for body.\n2. Scale: H1 64 px, body 32 px, small 24 px.\n3. Body leading 1.4, headline leading 1.1.\n4. Left-aligned body text, max about 8–10 words per line.\n5. One emphasis rule: accent colour on one keyword per headline.\n\n### Type style sheet template\n\n```\nHeading font:  ________  weight ___  size ___  leading ___  tracking ___\nSubhead font:  ________  weight ___  size ___  leading ___\nBody font:     ________  weight ___  size ___  leading ___\nSmall text:    ________  weight ___  size ___\nEmphasis rule: ______________________\nAlignment:     ______________________\n```\n\nSave these as text styles in your design tool so every new design uses them automatically.\n\n### Common mistakes\n\n- Too many typefaces or weights.\n- Sizes that are almost the same.\n- Default leading on large headlines, making them look loose.\n- Stacking multiple emphasis styles.\n\n### Summary\n\nUse one or two families, define a type scale with clear steps, set leading and tracking intentionally, and save everything as reusable text styles.",
+          "video": null,
+          "keyTakeaways": [
+            "One or two typeface families are enough for most brands.",
+            "Pair faces with contrast and harmony; avoid near-identical or competing pairs.",
+            "A defined type scale with clear steps creates consistent hierarchy.",
+            "Body text needs looser leading than large headlines; use one emphasis method per level."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Two very similar geometric sans-serif typefaces are paired for headline and body. What is the likely result?",
+              "options": [
+                "Better accessibility",
+                "It looks like an accidental inconsistency",
+                "Automatically better brand recognition",
+                "Strong, clear hierarchy"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Near-identical faces lack contrast, so the difference reads as a mistake. Good pairs are clearly different yet harmonious."
+            },
+            {
+              "question": "Which leading is typically most appropriate for multi-line body text?",
+              "options": [
+                "3 times the font size",
+                "Leading does not matter for body text",
+                "0.8 times the font size",
+                "Around 1.3–1.5 times the font size"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Body text reads comfortably with moderate leading around 1.3–1.5. Very tight leading makes lines collide; very loose leading breaks the text into separate lines."
+            },
+            {
+              "question": "Why is long text in all caps harder to read?",
+              "options": [
+                "All caps cannot be kerned",
+                "Word shapes become uniform, removing cues the eye uses to recognise words",
+                "All-caps fonts are always low resolution",
+                "Platforms penalise all-caps text"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Mixed case creates distinctive word shapes; all caps flattens them into rectangles. Resolution, platform penalties and kerning are not the reason."
+            }
+          ],
+          "activity": "Write a type style sheet for your brand using the template, create matching text styles in your design tool, and apply them to one existing carousel."
+        },
+        {
+          "slug": "legibility-on-mobile",
+          "title": "Legibility on mobile, video and thumbnails",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Designing for the thumb-scroll\n\nMost social content is viewed on a phone, often briefly, sometimes in bright sunlight, and sometimes by people with low vision. Legibility — how easily individual letters and words can be read — is non-negotiable. If people cannot read it at a glance, the rest of your design work is wasted.\n\n### The minimum-size mindset\n\nThere is no single universal minimum size for social graphics, because canvases are scaled down to different screen widths. Instead, use tests:\n\n1. **Phone preview test:** send the design to your phone and view it at the size it appears in the feed, not zoomed in.\n2. **Arm's-length test:** hold the phone at a normal distance. Can you read every piece of text you intend people to read?\n3. **Thumbnail test:** for video thumbnails and carousel covers, view at the small size they appear in search results or grids.\n\nIf a piece of text fails, make it larger, shorten it, or remove it. Fine print that must be present for legal reasons (for example ad disclosures or terms) still needs to be readable.\n\n### Word count discipline\n\n- **Thumbnails:** aim for very few words — often three to five — because they compete with the video title that already appears next to them. The thumbnail text should complement the title, not repeat it.\n- **Story and short-video text:** keep each on-screen phrase short enough to read in the time it is visible.\n- **Carousel slides:** one idea per slide; use more slides rather than cramming.\n- **Ads:** the headline should communicate the offer alone; details can live in the caption or landing page.\n\n### Text on images and video\n\nTechniques to keep text readable over imagery:\n\n| Technique | When to use | Watch out for |\n|---|---|---|\n| Solid text block or card | Busy or colourful backgrounds | Can feel heavy if overused |\n| Gradient scrim | Photos with a darker or calmer area | Keep it subtle |\n| Overall darken/lighten | Evenly busy images | Can dull the photo |\n| Outline or stroke | Bold, playful thumbnail styles | Thin outlines look cheap; keep weight consistent |\n| Subtle shadow | Slight separation | Heavy shadows look dated |\n\nFor video captions and subtitles: use a clean sans-serif, sufficient size, high contrast (for example white text with a dark backing or outline), and position within safe zones so platform UI does not cover them. Burned-in captions help viewers who watch without sound and improve accessibility, but also keep platform-generated or uploaded caption files where available so captions can be read by assistive tech and adjusted by users.\n\n### Accessibility considerations for text\n\n- Maintain strong contrast between text and background (covered in detail in the colour module).\n- Do not rely on very thin weights for important text.\n- Avoid placing text over moving or flashing backgrounds.\n- Include important information in the caption or alt text as well, because screen readers cannot read text baked into an image. Many platforms let you add alt text to images — use it.\n\n### Worked example: a YouTube-style thumbnail\n\nVideo title: \"How I Edit Videos 3× Faster With Keyboard Shortcuts\".\n\n- **Weak thumbnail:** full title repeated in small text across the top, a screenshot of the editing software, tiny keyboard icon.\n- **Strong thumbnail:** large, bold text \"3× FASTER\" (two words), a close-up of hands on a keyboard or the creator's expressive face, a high-contrast background, and the text positioned away from where the platform shows the video duration badge (commonly the bottom-right corner).\n\nThe text adds curiosity and complements the title rather than duplicating it.\n\n### Legibility QA checklist\n\n```\n[ ] Viewed on a phone at real feed/thumbnail size\n[ ] Every intended piece of text readable at arm's length\n[ ] No important text in thin or script weights\n[ ] Text-to-background contrast checked\n[ ] Word count minimal for the format\n[ ] Text clear of platform overlays (duration badge, buttons, captions)\n[ ] Key information also in caption / alt text\n```\n\n### Common mistakes\n\n- Designing on a large monitor and trusting how it looks there.\n- Repeating the video title in the thumbnail.\n- Using thin, elegant fonts for important words on busy photos.\n- Forgetting alt text and captions, excluding screen-reader users and people watching on mute.\n\n### Summary\n\nTest on a real phone at real size, keep word counts ruthless, separate text from imagery with scrims or blocks, and support accessibility with captions and alt text.",
+          "video": null,
+          "keyTakeaways": [
+            "Test legibility on a real phone at feed and thumbnail size, not zoomed in on a monitor.",
+            "Use very few words on thumbnails and complement the title rather than repeating it.",
+            "Separate text from busy imagery with blocks, scrims or careful positioning.",
+            "Burned-in captions and alt text make content accessible and usable on mute."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What should thumbnail text usually do in relation to the video title?",
+              "options": [
+                "Contain the full description",
+                "Repeat the title word for word",
+                "Be omitted entirely in all cases",
+                "Complement it with a few high-impact words"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "The title already appears next to the thumbnail, so thumbnail text works best as a short complementary hook. Repeating the title wastes space; long text is illegible."
+            },
+            {
+              "question": "Why add alt text to an image that already has text baked into it?",
+              "options": [
+                "It is required to upload images",
+                "It changes the thumbnail",
+                "Screen readers cannot read text inside an image, so alt text makes the content accessible",
+                "It improves image resolution"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Text inside a picture is invisible to assistive technology; alt text provides an equivalent. It does not affect resolution or uploads."
+            },
+            {
+              "question": "Which is the most reliable way to check a design's legibility before publishing?",
+              "options": [
+                "Check the file size",
+                "Zoom to 200% on a desktop monitor",
+                "Print it on A4 paper",
+                "View it on a phone at the actual size it appears in the feed"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Real-device, real-size viewing reflects how audiences see it. Zooming in or printing exaggerates legibility; file size is irrelevant."
+            }
+          ],
+          "activity": "Pick your last three thumbnails or covers and run the legibility QA checklist on each. Redesign the weakest one with fewer, larger words and compare them side by side at thumbnail size."
+        }
+      ]
+    },
+    {
+      "slug": "colour-and-accessibility",
+      "title": "Colour theory and accessible contrast",
+      "summary": "Build purposeful palettes, use colour to create hierarchy and mood, and make sure text and graphics meet accessible contrast standards.",
+      "lessons": [
+        {
+          "slug": "colour-theory-essentials",
+          "title": "Colour theory essentials",
+          "type": "article",
+          "durationMinutes": 8,
+          "body": "### The language of colour\n\nColour is one of the fastest ways to create mood, hierarchy and brand recognition — and one of the easiest ways to make a design look amateur. A little theory goes a long way.\n\n**Three properties describe every colour:**\n\n| Property | Meaning | Design use |\n|---|---|---|\n| Hue | The colour family (red, blue, green…) | Identity and mood |\n| Saturation (chroma) | Intensity or purity | Vivid for accents, muted for backgrounds |\n| Value (lightness) | How light or dark | Contrast, hierarchy and legibility |\n\nValue matters most for legibility. Two colours with very different hues can have nearly identical lightness — and text in one on the other will be hard to read. Converting a design to greyscale is a quick way to check value contrast.\n\n### Colour models you will meet\n\n- **RGB** — red, green, blue light; used for screens. Hex codes (for example #1A73E8) are RGB written compactly.\n- **HSL/HSB** — hue, saturation, lightness/brightness; intuitive for adjusting colours.\n- **CMYK** — cyan, magenta, yellow, black inks; used in print. Some vivid screen colours cannot be reproduced in CMYK.\n- **sRGB** — the standard colour space for the web and most social platforms. Export in sRGB unless a platform says otherwise.\n\n### Colour harmonies\n\nColour-wheel relationships give reliable starting points:\n\n- **Monochromatic:** tints and shades of one hue. Calm, elegant, easy.\n- **Analogous:** neighbouring hues (blue, blue-green, green). Harmonious and natural.\n- **Complementary:** opposite hues (blue and orange). High energy; great for making one element pop.\n- **Split-complementary:** one hue plus the two neighbours of its complement. Vibrant but less tense.\n- **Triadic:** three evenly spaced hues. Playful; needs one dominant colour.\n\n### The 60-30-10 guideline\n\nA practical distribution for many layouts:\n\n- **About 60%** dominant colour — usually a neutral or background.\n- **About 30%** secondary colour — panels, imagery, supporting shapes.\n- **About 10%** accent — calls to action, highlights, key numbers.\n\nIt is a guideline, not a formula, but it prevents the most common mistake: using every colour equally.\n\n### Building a small palette\n\nFor a creator or small brand, a practical palette is:\n\n```\nPrimary / brand colour:   1 (recognisable, used often)\nAccent colour:            1 (for actions and highlights)\nNeutrals:                 3–5 (near-black, greys, off-white)\nSupport colours:          0–2 (optional, for charts or categories)\nFunctional colours:       success / warning / error (for UI work)\n```\n\nDefine each colour as a hex code and create **tints and shades** (lighter and darker versions) for backgrounds, borders and hover states. Save them as colour styles in your design tool.\n\n### Colour meaning is contextual\n\nColour associations vary across cultures, industries and personal experience. Green may suggest nature, money or health; white is associated with purity in some contexts and mourning in others; red can mean danger, celebration, love or a sale. Rather than relying on generic \"colour psychology\" lists, consider your audience, your category conventions and your competitors. Sometimes breaking a category's colour convention helps you stand out; sometimes it confuses buyers.\n\n### Worked example: a palette for a halal food blog\n\nAudience: families in the UK and the Gulf; tone: warm, appetising, trustworthy.\n\n- Primary: a warm terracotta (appetising, earthy).\n- Accent: saffron yellow for highlights and \"Get the recipe\" buttons.\n- Neutrals: charcoal for text, warm grey for secondary text, cream for backgrounds.\n- Distribution: cream backgrounds (60%), food photography and terracotta panels (30%), saffron accents (10%).\n- Greyscale check: charcoal on cream passes easily; saffron text on cream fails — so saffron is used for button backgrounds with charcoal text instead.\n\n### Tints, shades and tones in practice\n\nA **tint** adds white to a colour, a **shade** adds black, and a **tone** adds grey. Building a short ramp of each brand colour — for example five steps from very light to very dark — gives you backgrounds, borders, hover states and text colours that all feel related. Name the steps consistently (for example \"coral-100\" to \"coral-900\") so everyone on a team picks the same values. Light tints make calm section backgrounds; dark shades often become your accessible text colours. This one habit removes most of the guesswork when a design needs \"a slightly lighter version\" of a brand colour.\n\n### Common mistakes\n\n- Choosing colours by hue alone and ignoring value contrast.\n- Using saturated colours everywhere, which is tiring to look at.\n- Pure black (#000000) on pure white for large areas can feel harsh; near-black and off-white are often more comfortable while still high contrast.\n- Relying on generic colour-psychology claims instead of audience context.\n\n### Summary\n\nThink in hue, saturation and value; start from a harmony; use a 60-30-10 distribution; build a small palette with tints and shades; and always check value contrast.",
+          "video": null,
+          "keyTakeaways": [
+            "Every colour has hue, saturation and value — value drives legibility.",
+            "Export for screens in sRGB; CMYK is for print.",
+            "Use harmonies (analogous, complementary, etc.) as starting points and 60-30-10 for distribution.",
+            "Colour meaning depends on culture, category and audience — avoid generic psychology claims."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Two colours look very different but text in one on the other is hard to read. What is the most likely reason?",
+              "options": [
+                "They have similar value (lightness)",
+                "They are in the CMYK model",
+                "They are too saturated to display",
+                "They are complementary hues"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Legibility depends mainly on lightness difference. Different hues with similar value produce weak contrast; a greyscale check reveals this."
+            },
+            {
+              "question": "In the 60-30-10 guideline, what is the 10% typically used for?",
+              "options": [
+                "Photography",
+                "Body text",
+                "Background",
+                "Accent elements such as calls to action and highlights"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "The small 10% share is for accents that should stand out. The 60% is usually background/neutral and 30% supporting colour."
+            },
+            {
+              "question": "Which colour space should you usually export social media graphics in?",
+              "options": [
+                "Greyscale",
+                "Pantone",
+                "CMYK",
+                "sRGB"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Screens and most platforms expect sRGB. CMYK is for print; Pantone is a spot-colour system; greyscale removes colour."
+            }
+          ],
+          "activity": "Create a palette for your brand with one primary, one accent and four neutrals. Build a sample post using 60-30-10, then convert it to greyscale to check value contrast."
+        },
+        {
+          "slug": "contrast-and-accessibility",
+          "title": "Accessible contrast and inclusive colour use",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Why accessibility is a design requirement\n\nA significant share of people have some form of visual impairment, colour vision deficiency, or situational limits such as bright sunlight, a cracked screen or a low-brightness setting. Designs with weak contrast exclude these viewers and perform worse for everyone. Accessibility is also increasingly a legal expectation for websites and apps in many jurisdictions, and a reputational one everywhere.\n\n### WCAG contrast ratios\n\nThe Web Content Accessibility Guidelines (WCAG), published by the W3C, are the widely used international standard. WCAG 2.2 is the current recommendation. For contrast, the key success criteria at level AA are:\n\n| Content | Minimum ratio (AA) | Enhanced (AAA) |\n|---|---|---|\n| Normal text | 4.5 : 1 | 7 : 1 |\n| Large text (about 24 px regular, or about 18.66 px bold and above) | 3 : 1 | 4.5 : 1 |\n| User-interface components and meaningful graphics (icons, input borders, chart lines) | 3 : 1 | — |\n\nContrast ratio ranges from 1:1 (no contrast — same colour) to 21:1 (black on white). These criteria were written for web content, but they are an excellent benchmark for social graphics, slides and ads too.\n\nNote that WCAG 3 is in development and explores a different contrast model; until it becomes a recommendation, WCAG 2.x ratios remain the reference.\n\n### How to check contrast\n\n1. Pick the text colour and the background colour (for text on photos, sample the lightest and darkest areas behind the text).\n2. Enter both into a contrast checker — many free web tools, browser developer tools, and design-tool plugins exist.\n3. Compare against the table above.\n4. Adjust **value** (lighter or darker), not just hue, until it passes.\n\n```\nContrast check log\nElement:        ______________\nText colour:    #______   Background: #______\nSize/weight:    ______ (normal or large?)\nRatio:          ____ : 1\nPass AA?        [ ] yes  [ ] no → adjustment: __________\n```\n\n### Colour vision deficiency\n\nColour vision deficiencies (often called colour blindness) affect a meaningful minority of people, more commonly men. Red–green deficiencies are the most common. Design implications:\n\n- **Never use colour as the only way to convey meaning.** A chart where \"profit\" is green and \"loss\" is red needs labels, patterns or icons too. A form error needs text, not just a red border.\n- Test with a colour-blindness simulator (available in many design tools, browser developer tools and plugins).\n- Prefer palettes that differ in lightness as well as hue.\n\n### Common accessible-colour patterns\n\n- Dark text on light backgrounds for body copy.\n- If using white text, place it on sufficiently dark backgrounds — many mid-tone brand colours (bright orange, light green, sky blue) fail with white text at normal sizes.\n- Reserve bright, light accent colours for large shapes or button backgrounds with dark text.\n- Create an accessible variant of your brand colour (slightly darker or lighter) for text use if the main colour fails.\n\n### Worked example: an orange brand button\n\nA brand's orange (a mid-lightness orange) with white \"Book now\" text at 16 px fails 4.5:1.\n\nOptions:\n\n1. Darken the orange for the button until white text passes — keeps white text, slightly changes the brand shade (define it as \"orange-700\" in the palette).\n2. Keep the orange and use near-black text — often passes easily and keeps the brand colour.\n3. Make the text large and bold enough to count as large text and check against 3:1 — acceptable for short labels but not for body copy.\n\nDocument the decision in the brand's colour guidance so everyone uses the accessible pairing.\n\n### Beyond contrast\n\n- Avoid flashing content: WCAG includes limits on flashing (no more than three flashes per second, with thresholds) because it can trigger seizures.\n- Don't put important text over animated backgrounds.\n- Provide captions for video and alt text for images.\n\n### Common mistakes\n\n- Checking contrast against the average colour of a photo instead of its lightest/darkest area behind the text.\n- Assuming a brand colour \"must\" be used for text even when it fails.\n- Using red/green alone for status.\n- Treating accessibility as optional polish at the end of a project.\n\n### Summary\n\nUse WCAG 2.2 AA ratios — 4.5:1 for normal text, 3:1 for large text and meaningful graphics — as your baseline, never rely on colour alone, simulate colour-vision deficiencies, and create accessible variants of brand colours where needed.",
+          "video": null,
+          "keyTakeaways": [
+            "WCAG 2.2 AA: 4.5:1 for normal text, 3:1 for large text and meaningful UI/graphics.",
+            "Fix contrast by adjusting lightness (value), not just hue.",
+            "Never use colour as the only means of conveying meaning.",
+            "Create accessible variants of brand colours and document approved pairings."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the WCAG 2.2 AA minimum contrast ratio for normal-sized body text?",
+              "options": [
+                "7:1",
+                "4.5:1",
+                "3:1",
+                "21:1"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "AA requires 4.5:1 for normal text; 3:1 applies to large text and UI/graphics; 7:1 is AAA for normal text; 21:1 is the maximum possible."
+            },
+            {
+              "question": "A dashboard shows good results in green and bad results in red with no other cue. What is the accessibility problem?",
+              "options": [
+                "Charts cannot use colour",
+                "The colours are not on-brand",
+                "Colour is the only way meaning is conveyed, which excludes people with colour vision deficiency",
+                "The contrast ratio is automatically too high"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Meaning must not rely on colour alone; add labels, icons or patterns. Colour can still be used, and brand fit is a separate question."
+            },
+            {
+              "question": "White text on a brand's light green button fails contrast. Which fix keeps the result accessible and on-brand?",
+              "options": [
+                "Make the text thinner",
+                "Use near-black text on the green, or define a darker green variant for white text",
+                "Reduce the button size",
+                "Add a glow around the text"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Changing lightness — dark text or a darker variant — fixes contrast while retaining the brand hue. Thinner text, glows and smaller buttons make things worse."
+            }
+          ],
+          "activity": "Run your brand colours through a contrast checker in every text/background combination you use. Record results in the contrast log and define an accessible variant for any failing pairing."
+        },
+        {
+          "slug": "colour-in-practice",
+          "title": "Colour in practice: hierarchy, mood and consistency",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### From palette to real designs\n\nKnowing theory is one thing; using colour well across dozens of posts is another. This lesson turns your palette into repeatable decisions.\n\n### Colour creates hierarchy\n\nColour is a hierarchy lever alongside size and weight:\n\n- **Accent = action or key info.** If the accent appears everywhere, it stops meaning anything.\n- **Neutrals carry content.** Most text should be near-black or near-white depending on background.\n- **Muted versus saturated:** saturated colours advance; muted colours recede. Use muted backgrounds so content pops.\n- **Warm versus cool:** warm colours (reds, oranges, yellows) tend to feel closer and more energetic; cool colours (blues, greens) tend to recede and feel calmer.\n\n### Colour and mood — by context\n\nInstead of relying on universal \"meanings\", build mood with combinations:\n\n| Desired mood | Typical approach |\n|---|---|\n| Calm, trustworthy | Cool hues, moderate saturation, plenty of light neutrals |\n| Energetic, urgent | Warm, saturated accents, high value contrast |\n| Premium, minimal | Restrained palette, dark or off-white backgrounds, one refined accent |\n| Playful, youthful | Brighter triadic combinations, rounded shapes |\n| Natural, organic | Earthy analogous hues, muted saturation, textures |\n\nAlways test with your actual audience and category; conventions vary by market.\n\n### Colour in photography and imagery\n\nImagery often contributes the 30% in 60-30-10. Harmonise it with your palette:\n\n- Choose photos whose dominant colours sit comfortably with your brand palette.\n- Apply a consistent **photo treatment** — the same warmth, contrast and saturation adjustments, or a consistent preset — across a series.\n- Use **duotones** or colour overlays for graphic consistency when mixing photos from different sources (keep overlays subtle so faces look natural).\n- Watch skin tones: heavy colour grading can make skin look unnatural; always check people look like themselves.\n\n### Consistency across a series\n\nFor recognisability, lock a small set of rules:\n\n```\nSeries colour rules (example)\nBackgrounds:   off-white or deep navy only\nHeadline:      navy on off-white / off-white on navy\nAccent:        coral — max 1–2 uses per slide (key word, CTA)\nCharts:        navy, coral, grey (with labels)\nPhotos:        warm preset \"A\", saturation −10\nNever:         coral text on off-white (fails contrast)\n```\n\n### Dark mode and platform backgrounds\n\nYour design will be seen on light and dark app themes. Test how your post looks against both: a pure white design can look like a glaring block in dark mode; a design with transparent edges (such as PNG stickers) can change appearance. Designing with your own solid background and some internal margin keeps things predictable.\n\n### Colour for data and charts\n\nWhen you share charts or infographics:\n\n- Use one highlight colour for the data point that matters, with other data in greys.\n- Order colours logically (light to dark for low to high values).\n- Label directly on the chart where possible instead of relying on a legend matched by colour.\n- Check accessibility with a colour-blindness simulator.\n\n### Worked example: making a stat pop\n\nA carousel slide says \"Our clients cut editing time by around half\" with a bar chart of before/after. (Illustrative figures should be labelled as such, and any real claim must be supported by evidence.)\n\n- Background: deep navy (60%).\n- Bars: \"before\" in muted grey, \"after\" in coral (the one thing to notice).\n- Labels: off-white text directly on bars.\n- Headline: off-white, with the key phrase \"around half\" in coral.\n- Everything else neutral, so the eye goes straight to the coral elements.\n\n### A five-minute colour review\n\nBefore publishing any design, run this quick review. First, view it in greyscale to confirm the value structure still shows the hierarchy. Second, count how many times the accent colour appears — if it is more than two or three, remove some. Third, compare the post with the previous three in your feed to check the photo treatment and palette match. Fourth, check any text-on-colour pairing against your approved contrast list. This review takes minutes and catches most colour problems before your audience sees them.\n\n### Common mistakes\n\n- Accent colour used on every element.\n- Inconsistent photo editing within a series.\n- Designs that only work in one app theme.\n- Rainbow charts where every bar is a different colour for no reason.\n- Making numerical claims in graphics without evidence (this is also an advertising-standards issue).\n\n### Summary\n\nUse colour as a hierarchy tool, build mood through combinations rather than single \"meaningful\" colours, harmonise imagery with a consistent treatment, lock series rules, and test in both light and dark contexts.",
+          "video": null,
+          "keyTakeaways": [
+            "Reserve the accent colour for actions and key information so it keeps its power.",
+            "Build mood from combinations of hue, saturation and value, tested with your audience.",
+            "Apply a consistent photo treatment to make mixed imagery feel like one series.",
+            "Test designs in light and dark app themes and label charts directly."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A creator uses their bright accent colour on every heading, icon and border. What happens?",
+              "options": [
+                "The design becomes more accessible",
+                "Photos look more consistent",
+                "The accent loses its ability to draw attention to what matters",
+                "The palette automatically follows 60-30-10"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "An accent works through scarcity. Overuse flattens hierarchy; it does not improve accessibility or consistency."
+            },
+            {
+              "question": "Which approach best highlights one key data point in a chart?",
+              "options": [
+                "A different bright colour for every bar",
+                "Greys for most data and one highlight colour for the key point, with direct labels",
+                "Red and green bars only",
+                "Only a legend with colour swatches"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Muted context plus one highlight directs attention; direct labels help everyone including colour-blind viewers. Rainbow bars and colour-only legends dilute or exclude."
+            },
+            {
+              "question": "Why should you preview a post in both light and dark app themes?",
+              "options": [
+                "Platforms reject designs that fail in dark mode",
+                "Surrounding interface colours change how the design and its edges appear",
+                "It changes the file format",
+                "It improves compression"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "App theme alters the surrounding context, so white designs can glare and transparent edges can change. It is not a platform rule and does not affect format or compression."
+            }
+          ],
+          "activity": "Write a 'series colour rules' block for your content like the example, including at least one 'never' rule based on a contrast check, and apply it to your next three posts."
+        }
+      ]
+    },
+    {
+      "slug": "imagery-and-social-formats",
+      "title": "Imagery and designing for social, ads and thumbnails",
+      "summary": "Choose and license images responsibly, treat them consistently, and apply everything to posts, carousels, ads and thumbnails.",
+      "lessons": [
+        {
+          "slug": "choosing-and-licensing-images",
+          "title": "Choosing, licensing and treating images",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Images do the heavy lifting\n\nIn most social and ad creative the image is the first thing noticed. A strong image carries the message; a weak one — generic, low quality or unrelated — undermines even perfect typography. Choosing images is a design skill, and using them legally is a professional responsibility.\n\n### What makes an image work\n\nUse this five-point filter:\n\n1. **Relevance:** does it show the actual product, person, place or outcome — or a vague metaphor?\n2. **Clarity:** is there one clear subject that reads at small size?\n3. **Emotion:** does it create curiosity, desire, empathy or trust?\n4. **Authenticity:** does it look real and specific rather than generic stock (the over-lit handshake, the perfect team laughing at a laptop)?\n5. **Space:** is there room for text without covering the subject?\n\nOriginal photos — your product, your workspace, your face, real customers (with permission) — usually beat stock because they are specific and credible.\n\n### Sources and licences\n\n| Source | Typical terms | Watch out for |\n|---|---|---|\n| Your own photos | You generally own the copyright | Permission from identifiable people; property/location rules |\n| Free stock libraries | Often a permissive custom licence | Restrictions on selling unaltered copies, implying endorsement, trademarks in images |\n| Paid stock | Standard or extended licences | Limits on print runs, merchandise, templates for resale |\n| Creative Commons | Various (CC0, CC BY, CC BY-SA, NC, ND) | Attribution requirements, non-commercial or no-derivatives clauses |\n| AI-generated images | Governed by the tool's terms and local law | Copyright status and likeness issues (see the dedicated AI image course) |\n| Images found online | Usually copyrighted by default | \"Found on Google\" is not a licence |\n\nKey principles (not legal advice — laws differ between countries):\n\n- Copyright usually belongs to the creator from the moment the image is made; absence of a copyright notice does not mean it is free to use.\n- **Model releases** are generally needed when identifiable people appear in commercial or advertising use.\n- **Property releases** may be needed for private property, artworks or certain buildings.\n- **Trademarks and logos** in images can create problems, especially in ads implying endorsement.\n- Keep a record of where each image came from and its licence.\n\n```\nImage licence log\nFile name:     ____________\nSource/URL:    ____________\nLicence type:  ____________   Date downloaded: ________\nAttribution required? [ ] yes → text: __________  [ ] no\nCommercial use OK?    [ ] yes  [ ] no\nPeople/property releases: [ ] n/a  [ ] on file\n```\n\n### Image quality basics\n\n- **Resolution:** use images at least as large as the output size; enlarging small images causes blur.\n- **Sharpness and focus:** the subject should be crisp.\n- **Lighting:** even, natural light is flattering; avoid harsh mixed colour temperatures.\n- **Noise and compression artefacts:** re-saving JPEGs repeatedly degrades quality — keep originals.\n\n### Treating images consistently\n\nA consistent treatment ties a series together:\n\n- **Crop and framing rules** (for example: always close-up, subject on the left third).\n- **Colour adjustments**: the same warmth, contrast and saturation settings or preset.\n- **Background removal** for product cut-outs placed on brand colours.\n- **Shapes and masks**: consistent rounded corners or a signature shape.\n- **Overlays**: subtle brand-colour gradients behind text.\n\nBe honest in editing. Retouching blemishes or cleaning a background is normal; misrepresenting a product's results (for example editing a before/after or exaggerating a skincare effect) can mislead consumers and breach advertising standards in many markets. Several regulators and platforms have rules on filters and retouching in beauty ads.\n\n### Icons and illustrations\n\n- Use one icon style (outline or filled, same stroke width, same corner style).\n- Do not mix illustration styles from different artists in one design.\n- Icons should clarify, not decorate.\n\n### Common mistakes\n\n- Using images found online without a licence.\n- Enlarging a small image until it pixelates.\n- Mixing inconsistent photo edits in one carousel.\n- Over-editing products or people in ways that mislead.\n\n### Summary\n\nChoose relevant, clear, authentic images with space for text, confirm the licence and releases, keep a licence log, and apply one honest, consistent treatment across your content.",
+          "video": null,
+          "keyTakeaways": [
+            "Pick images for relevance, clarity, emotion, authenticity and space for text.",
+            "Images online are usually copyrighted — confirm the licence and keep a record.",
+            "Identifiable people and some property may need releases for commercial use.",
+            "Apply a consistent, honest treatment; misleading retouching can breach advertising rules."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A designer finds a perfect photo through an image search with no copyright notice. What is the correct assumption?",
+              "options": [
+                "It is likely copyrighted, so a licence or permission is needed",
+                "It can be used if you crop it",
+                "It is public domain because there is no notice",
+                "It can be used if you credit the website"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Copyright usually applies automatically; missing notices do not grant rights. Credit or cropping does not replace a licence."
+            },
+            {
+              "question": "Which image edit is most likely to raise advertising-standards concerns?",
+              "options": [
+                "Digitally exaggerating the results of a skincare product in a before/after ad",
+                "Removing dust from a product background",
+                "Brightening a photo slightly",
+                "Cropping to improve composition"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Altering the claimed effect of a product can mislead consumers. Cleaning backgrounds, slight brightening and cropping do not change product claims."
+            },
+            {
+              "question": "What is a model release generally used for?",
+              "options": [
+                "Permission to use a font",
+                "Permission to use an identifiable person's likeness in commercial use",
+                "A licence to edit stock photos",
+                "A platform upload requirement"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Model releases document a person's consent to use their likeness, especially commercially. Fonts and stock edits are covered by other licences."
+            }
+          ],
+          "activity": "Create an image licence log for the images in your last five posts. Replace any image you cannot document, and write one consistent treatment rule for your next series."
+        },
+        {
+          "slug": "posts-and-carousels",
+          "title": "Designing social posts and carousels",
+          "type": "article",
+          "durationMinutes": 8,
+          "body": "### The job of a social post\n\nA feed post must do three things in order: **stop** the scroll, **deliver** the message, and **prompt** a next step (save, share, comment, tap, visit). Your design choices should serve those jobs in that order.\n\n### Single-image posts\n\nStructure most single posts around one idea:\n\n```\nHook (primary):     big statement, question, number or striking image\nSupport (secondary): one line of context or proof\nSignature (tertiary): handle/logo, consistent position\nAction (optional):  \"Save this\", \"Comment 'guide'\", etc. — often better in the caption\n```\n\nPatterns that work well for creators and small brands:\n\n- **Big statement:** one bold sentence on a clean background.\n- **Quote card:** a quote with attribution and optional headshot.\n- **Before/after or comparison:** two-column layout with clear labels.\n- **Single statistic:** one large number with a source (never invent statistics — cite real sources or mark numbers as illustrative).\n- **Product hero:** product photo, benefit headline, price or offer.\n\n### Carousels: the mini-presentation\n\nCarousels reward saves and deep engagement when they teach or tell a story. Plan them like a short deck.\n\n| Slide | Purpose | Design notes |\n|---|---|---|\n| 1 — Cover | Hook: promise a clear benefit or curiosity | Largest type, strongest contrast, a visual cue to swipe |\n| 2 | Context or problem | Keep it short; build tension |\n| 3–8 | One point per slide | Consistent layout, numbered steps |\n| Second-to-last | Summary or recap | Useful for saves |\n| Last | Call to action | Follow, save, share, comment keyword, visit link |\n\nDesign system for a carousel:\n\n- Same grid, margins and type styles on every slide.\n- A progress cue (slide numbers such as \"3/8\", or a subtle progress bar).\n- A visual element that continues across slides can encourage swiping — for example a line or shape that crosses the edge.\n- One idea per slide; if the text needs to shrink to fit, split the slide.\n\n### Stories and vertical posts\n\n- Design in 9:16 with generous safe areas at top and bottom.\n- Use interactive features (polls, questions, links) as part of the design, leaving space for them.\n- Keep text short; people tap through quickly.\n\n### Captions complement design\n\nThe caption can carry details, context, hashtags and disclosures, while the image carries the hook. However:\n\n- **Advertising disclosures** (for example \"#ad\", \"Paid partnership\" labels, or the platform's branded-content tool) must be clear and prominent. Many regulators — including the FTC in the US, the ASA/CAP in the UK, and authorities in the UAE and Saudi Arabia that regulate influencer advertising — expect disclosure to be obvious before people engage, not hidden in a hashtag pile or \"see more\". Consider putting disclosure on the image itself for paid content.\n- Anything essential for understanding the offer (price conditions, key limitations) should not be buried.\n\n### Worked example: a \"5 mistakes\" carousel for a freelance designer\n\n- **Cover:** \"5 portfolio mistakes that cost you clients\" in huge type; a small red \"✕\" motif; \"Swipe →\".\n- **Slide 2:** \"Clients decide in seconds. Here's what makes them leave.\"\n- **Slides 3–7:** each mistake numbered, headline plus one sentence of fix; the red ✕ motif in the same corner; slide number bottom-right.\n- **Slide 8:** recap list of all five.\n- **Slide 9:** \"Want a portfolio review? Comment 'REVIEW'.\" with the designer's photo and handle.\n\n### Writing on-image copy\n\nDesign and copywriting work together. Keep on-image text short and concrete: use numbers, specific outcomes and plain words rather than jargon. Front-load the key words so the phrase still works if someone only reads the first three words. Read every slide aloud; if it sounds like a paragraph, it is too long for a graphic. Finally, match the tone of the copy to the visual style — a playful illustration with formal corporate text feels disjointed.\n\n### Post and carousel QA checklist\n\n```\n[ ] Cover passes the one-second test at feed size\n[ ] One idea per slide/post\n[ ] Consistent grid, type and colours across slides\n[ ] Progress cue and swipe cue present (carousels)\n[ ] Numbers and claims are real and sourced, or labelled illustrative\n[ ] Paid/affiliate content disclosed clearly and early\n[ ] Alt text written\n```\n\n### Common mistakes\n\n- A weak cover that does not promise anything.\n- Walls of text on slides.\n- Inconsistent layouts between slides.\n- Hiding sponsorship disclosure.\n\n### Summary\n\nDesign posts to stop, deliver and prompt; plan carousels like short decks with a strong cover and one idea per slide; and keep disclosures and claims honest and visible.",
+          "video": null,
+          "keyTakeaways": [
+            "A post must stop the scroll, deliver the message and prompt a next step — in that order.",
+            "Plan carousels like short decks: hook cover, one idea per slide, recap and CTA.",
+            "Keep grid, type and progress cues consistent across slides.",
+            "Advertising disclosures must be clear and prominent, not buried in captions."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the most important job of a carousel's first slide?",
+              "options": [
+                "Hooking viewers with a clear benefit or curiosity so they swipe",
+                "Showing the creator's full contact details",
+                "Listing every point in detail",
+                "Displaying the logo as large as possible"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "If the cover does not earn the swipe, the rest is unseen. Detailed lists and large logos weaken the hook."
+            },
+            {
+              "question": "A creator is paid to promote a product and puts #ad at the end of 25 hashtags after 'see more'. What is the problem?",
+              "options": [
+                "#ad is banned on all platforms",
+                "Paid posts cannot have hashtags",
+                "There is no problem if #ad is present anywhere",
+                "Disclosure should be clear and prominent before people engage, so burying it is likely inadequate"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Regulators such as the FTC and ASA expect obvious, upfront disclosure. Presence alone is not enough when it is hidden."
+            },
+            {
+              "question": "A slide's text must be shrunk to fit. What is the better fix?",
+              "options": [
+                "Reduce contrast to make it look lighter",
+                "Shrink it anyway",
+                "Remove the margins",
+                "Split the content across two slides"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "One idea per slide keeps text legible. Shrinking text, reducing contrast or removing margins harms readability."
+            }
+          ],
+          "activity": "Plan a 7–9 slide carousel using the slide table, sketch each slide on the same grid, and run the QA checklist before designing it fully."
+        },
+        {
+          "slug": "ads-and-thumbnails",
+          "title": "Designing ads and video thumbnails",
+          "type": "video",
+          "durationMinutes": 8,
+          "body": "### Ads and thumbnails share one challenge\n\nBoth must win attention in a crowded, fast environment and communicate instantly at small sizes. Ads must also comply with advertising rules and platform policies. Thumbnails must earn a click without misleading the viewer.\n\n### Anatomy of an effective static ad\n\n| Element | Role | Tips |\n|---|---|---|\n| Visual | Stops the scroll | Product in use, a face, or a clear before/after (honest) |\n| Headline | States the benefit or offer | Short, specific, readable without the caption |\n| Proof | Builds trust | Real review excerpt, rating, recognisable client (with permission) |\n| Brand cue | Recognition | Logo, colours, distinctive style |\n| Call to action | Tells people what to do | Often provided by the platform's button — avoid duplicating clutter |\n\nDesign principles for ads:\n\n- **Design for sound-off, fast viewing** — the image must make sense alone.\n- **Make the brand recognisable early** so impressions build memory even without a click.\n- **Keep text concise.** Older platform rules limiting text on ad images have been relaxed on major platforms, but ads with less text are often clearer. Check current ad policies.\n- **Create variations** to test: different visuals, headlines or offers, changing one main variable at a time.\n- **Respect safe zones** for each placement.\n\n### Compliance essentials for ad creative\n\nRules vary by country and platform, so always check local requirements. Common principles:\n\n- Claims must be truthful and supportable; \"best\", \"No. 1\", health or financial promises need evidence and may be restricted.\n- Prices, discounts and \"free\" offers must be accurate, with key conditions clear.\n- Before/after images must not exaggerate results.\n- Testimonials must be genuine and representative.\n- Restricted categories (health, finance, alcohol, gambling, political and more) have extra rules, and some are prohibited in certain markets.\n- Using someone's likeness, trademarks or copyrighted material requires permission.\n\n### Thumbnails: the click decision\n\nA thumbnail and title work as a pair to promise what the video delivers. Effective thumbnails typically use:\n\n1. **A single focal point** — an expressive face, a key object or a dramatic result.\n2. **High contrast** — subject clearly separated from the background.\n3. **Very few words** — complementing the title.\n4. **Curiosity or clarity** — either intrigue (\"Is this worth it?\") or a clear outcome (\"Before / After\").\n5. **Consistency** — a recognisable style across the channel.\n\nAvoid **clickbait that misleads**: if the thumbnail promises something the video does not deliver, viewers leave quickly, which can hurt performance and trust, and platforms may treat misleading thumbnails as a policy issue.\n\n### A thumbnail design process\n\n```\n1. Write the video's one-sentence promise.\n2. Sketch 3 different concepts (face + object, result, contrast).\n3. Build each at 16:9 (e.g. 1280 × 720 or larger) — check current specs.\n4. Simplify: remove anything not needed at small size.\n5. Test at thumbnail size next to competitors' thumbnails.\n6. Check text clears the duration badge area.\n7. If the platform offers thumbnail A/B testing, test concepts.\n```\n\n### Worked example: an ad for an online course\n\nAudience: small business owners in the UK and UAE who want better Instagram content.\n\n- **Visual:** the instructor at a desk with a phone showing a clean content calendar.\n- **Headline:** \"Plan a month of posts in one afternoon.\"\n- **Proof:** a short, real student quote with first name and city (with permission).\n- **Brand cue:** consistent colour block and logo in the top-left safe area.\n- **CTA:** platform's \"Learn more\" button; no duplicate button in the image.\n- **Variations:** (A) instructor visual; (B) calendar close-up; same headline, to learn which visual performs better.\n\n### Measuring what works\n\nJudge creative by the metric that matches its job. For thumbnails, watch click-through rate together with average view duration — a high click rate with viewers leaving quickly suggests the promise is not being kept. For ads, look beyond clicks to conversions and cost per result, and give each variation enough impressions before drawing conclusions. Keep a simple log of each test: what changed, the result, and what you will try next.\n\n### Common mistakes\n\n- Designing ads like posters, with too much text and no focal point.\n- Claims without evidence, or fake urgency (\"only 2 left\" when untrue).\n- Misleading thumbnails that promise things the content does not deliver.\n- Testing many changes at once, so results cannot be interpreted.\n\n### Summary\n\nBuild ads around one visual, one benefit headline, proof and a clear brand cue, stay within advertising rules, and design thumbnails with a single focal point, high contrast and honest promises.",
+          "video": {
+            "script": "Ads and thumbnails live in the same brutal environment: small, fast and crowded. Let's look at how to design both so they win attention honestly. Start with an ad. Assume the viewer's sound is off and they will give you about a second. The image must make sense on its own. Pick one strong visual: the product in use, a real person, or a clear result. Add one short headline that states a specific benefit, like \"Plan a month of posts in one afternoon\". Then add a trust signal — a genuine review or a recognisable client, used with permission — and make sure your brand is recognisable early, through colour, logo or style. Let the platform's button handle the call to action, so you're not cluttering the image with a second one. Now, compliance. Claims must be true and supportable. Prices and discounts must be accurate. Before-and-after images must not exaggerate. And if you're a creator being paid to promote something, disclose it clearly and early. Rules differ by country and platform, so check the local requirements before you launch. Thumbnails work as a pair with the title. The title explains; the thumbnail creates the emotional pull. Use one focal point — often an expressive face or a striking object — high contrast, and just a few big words that add to the title rather than repeat it. Keep text away from the corner where the video length is displayed. Finally, make a promise the video actually keeps. Misleading thumbnails might win a click, but viewers leave, and trust drains away. Design three concepts, test them at real thumbnail size next to your competitors, and when you test variations, change one thing at a time so you know what worked.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Ads must work sound-off at a glance with a clear visual, benefit headline, proof and brand cue.",
+            "Ad claims, prices, testimonials and before/after images must be truthful and supportable.",
+            "Thumbnails need one focal point, high contrast, few words and an honest promise.",
+            "Test creative variations by changing one main variable at a time."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which ad headline is strongest for a static image ad?",
+              "options": [
+                "'Welcome to our brand page'",
+                "'Click here'",
+                "'Plan a month of posts in one afternoon'",
+                "'We are passionate about quality'"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "It states a specific, concrete benefit. The others are generic or instruction-only."
+            },
+            {
+              "question": "A thumbnail promises a result that the video does not show. What is the most likely consequence?",
+              "options": [
+                "Better accessibility",
+                "No consequence because only clicks matter",
+                "Viewers leave quickly and trust falls, and it may breach platform policies on misleading content",
+                "Higher long-term trust"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Misleading thumbnails disappoint viewers, can hurt performance signals and trust, and may breach policies. Clicks alone are not the goal."
+            },
+            {
+              "question": "When testing ad variations, what is the best practice?",
+              "options": [
+                "Change the image, headline, offer and colours at once",
+                "Never test — trust your instinct",
+                "Change one main variable at a time so you can learn what made the difference",
+                "Only test on the last day of the campaign"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Isolating variables makes results interpretable. Changing everything hides what caused any difference."
+            }
+          ],
+          "activity": "Design one static ad and three thumbnail concepts for a real or planned piece of content. Check each at real size, confirm every claim is supportable, and note which single variable you would test first."
+        }
+      ]
+    },
+    {
+      "slug": "tools-templates-and-export",
+      "title": "Tools, templates and exporting",
+      "summary": "Work efficiently in tools like Canva and Figma using templates, components and styles, then export files that stay sharp on every platform.",
+      "lessons": [
+        {
+          "slug": "working-with-templates",
+          "title": "Working with templates without looking templated",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Templates are a starting point, not a finish line\n\nDesign tools offer thousands of ready-made templates. They are brilliant for speed — but thousands of other people use the same ones. A template used as-is makes a brand look generic. The skill is to use templates for **structure** and replace their **style** with your own.\n\n### What to keep and what to change\n\n| Keep (structure) | Change (style and content) |\n|---|---|\n| Grid and layout proportions | Typefaces → your brand fonts |\n| Hierarchy pattern | Colours → your palette |\n| Spacing rhythm | Imagery → your own photos or a consistent style |\n| Useful content order (e.g. hook → points → CTA) | Icons and graphic motifs |\n| Safe-zone-aware placement | Copy — written for your audience |\n\n### A five-step template customisation method\n\n1. **Choose by structure.** Pick a template whose layout suits your content, ignoring its colours and fonts for now.\n2. **Apply your brand kit.** Swap fonts and colours globally (many tools let you apply a brand kit or replace colours across a design).\n3. **Replace imagery.** Use your photos or a consistent illustration style; remove generic stock.\n4. **Add a signature element.** A consistent motif — a shape, a frame, a colour block, a handwritten underline — that repeats across your content.\n5. **Save as your own template.** Store the customised version so future posts start from your system, not the public template.\n\n### Building your own template library\n\nOnce you have customised a few, formalise them:\n\n```\nMy template library\n- Cover / hook post (4:5)\n- Quote card (4:5)\n- Tip carousel: cover, content slide, recap, CTA (4:5)\n- Story announcement (9:16)\n- Thumbnail layouts: face-left, object-centre (16:9)\n- Ad set: 1:1, 4:5, 9:16 master layouts\nEach uses: brand fonts, palette, grid, signature element, logo position\n```\n\nA good library makes you faster *and* more consistent. It also makes it easier to brief assistants, freelancers or clients.\n\n### Brand kits and shared assets\n\nMost modern tools support shared brand assets:\n\n- **Colour palettes** saved as named styles.\n- **Text styles** for headings and body.\n- **Logos** in different versions (full colour, one colour, reversed).\n- **Approved photos and graphics** in shared folders.\n\nFor teams, lock or restrict key elements (logo, fonts) so contributors can edit content without breaking the brand.\n\n### Templates for clients and teams\n\nIf you design templates for others to use:\n\n- Name layers clearly (\"Headline\", \"Photo\", \"CTA\").\n- Lock background and brand elements.\n- Build in character limits — if the headline area fits roughly six words, note that in the template or a short guide.\n- Provide examples of correct and incorrect use.\n- Test with real, messy content (long names, long product titles, different photo shapes).\n\n### Licensing reminder\n\nTemplate marketplaces and design tools have their own licence terms. Some templates and elements are licensed for use in your own designs but not for resale as templates, or have restrictions on merchandise, logos or trademarks. Check the terms before selling templates or using elements in a client's logo.\n\n### Worked example: a coach using a public template\n\nA career coach finds a stylish quote-card template with pastel colours and a script font.\n\n- **Kept:** the centred layout, the generous margins and the attribution line position.\n- **Changed:** pastel palette → the coach's navy and gold; script font → the brand's serif headline font; decorative leaves → a thin gold rule (the signature element).\n- **Saved** as \"Quote card — brand\" in the team's folder, with the headline limited to about 20 words.\n\nThe result feels like the coach's brand, not a template.\n\n### Keeping a template library healthy\n\nReview your library every few months. Remove layouts you no longer use, update any that have drifted from current brand rules, and add new layouts only when a real content need appears. Keep one \"master\" copy of each template that nobody edits directly; people duplicate it for each new post. This prevents the slow decay where a template is edited so many times that its spacing, fonts and colours no longer match the system.\n\n### Common mistakes\n\n- Using templates unchanged, making the brand look like everyone else.\n- Mixing templates from different design styles in one feed.\n- Leaving placeholder text or elements in a published design.\n- Not checking template and element licences before commercial reuse.\n\n### Summary\n\nUse templates for structure, apply your brand for style, add a signature element, and build your own locked, well-named library.",
+          "video": null,
+          "keyTakeaways": [
+            "Keep a template's structure; replace its fonts, colours, imagery and motifs.",
+            "A consistent signature element makes customised templates feel ownable.",
+            "Build and name your own template library to gain speed and consistency.",
+            "Check template and element licences before resale or logo use."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the main risk of publishing templates unchanged?",
+              "options": [
+                "They cannot be exported",
+                "They are illegal to use",
+                "The brand looks generic because many others use the same designs",
+                "They always have low resolution"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Popular templates are widely used, so unmodified designs lack distinctiveness. They are usually legal within their licence, and exportable."
+            },
+            {
+              "question": "When customising a template, what should you usually keep?",
+              "options": [
+                "Its layout structure and hierarchy pattern",
+                "Its placeholder images",
+                "Its colours and fonts",
+                "Its sample text"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Structure is the valuable part; style and content should become yours."
+            },
+            {
+              "question": "You are building templates for a client's team. Which practice prevents brand drift?",
+              "options": [
+                "Using a different font on each template",
+                "Locking brand elements, naming layers clearly and noting text limits",
+                "Leaving every element editable",
+                "Providing no examples"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Locked brand elements, clear naming and guidance keep outputs consistent. The other options increase inconsistency."
+            }
+          ],
+          "activity": "Pick one public template in your design tool, customise it with the five-step method including a signature element, and save it as the first item in your template library."
+        },
+        {
+          "slug": "design-tools-concepts",
+          "title": "Design tool concepts: frames, components, styles and collaboration",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Tools change; concepts last\n\nCanva, Figma, Adobe Express, Affinity, Photoshop, Illustrator and others each have their own interface, and features change frequently. The underlying concepts, however, transfer between tools. Learn the concepts and you can pick up any tool quickly.\n\n### Core concepts\n\n| Concept | What it is | Why it matters |\n|---|---|---|\n| Canvas / frame / artboard | A container with a defined size | Each format (4:5, 9:16…) gets its own frame |\n| Layers | Stacked elements | Order controls what sits on top |\n| Groups | Elements combined to move together | Keeps related items organised |\n| Styles | Saved colours, text and effects | Change once, update everywhere |\n| Components / symbols | Reusable master elements with instances | Consistency across many designs |\n| Auto layout / smart resizing | Containers that adapt to content | Buttons and cards that grow with text |\n| Constraints | Rules for how elements behave when a frame resizes | Helps adapt across formats |\n| Vector vs raster | Paths vs pixels | Vectors scale without blur; photos are raster |\n| Masks | Shapes that crop other elements | Image shapes, reveals |\n| Version history | Saved past states | Undo mistakes, compare versions |\n\n### Vector versus raster\n\n- **Vector** graphics (logos, icons, shapes, text) are made of mathematical paths and scale to any size without losing quality. Formats include SVG, PDF and AI/EPS.\n- **Raster** images (photos, screenshots, painted textures) are grids of pixels; enlarging beyond their native size causes blur or pixelation. Formats include JPG, PNG, WebP and HEIC.\n\nKeep logos in vector format and export raster versions only when a platform requires them.\n\n### Canva-style and Figma-style workflows (conceptually)\n\n- **Template-first, browser-based editors (Canva-style):** fast, approachable, large libraries of templates, stock elements and brand kits; strong for social content, presentations and quick marketing assets; collaborative with comments and sharing.\n- **Interface and system design tools (Figma-style):** precise frames, auto layout, components with variants, design tokens/variables, prototyping and developer handoff; strong for UI, design systems and complex multi-format campaigns.\n\nMany teams use both: system design and master layouts in one tool, high-volume content production in another. Choose based on the work, team skills and collaboration needs, not hype.\n\n### AI features in design tools\n\nMost tools now include AI features: background removal, generative fill or expand, text-to-image, automatic resizing, copy suggestions and more. Treat them as assistants:\n\n- Review every output for errors — anatomy, text, logos, brand colours.\n- Check the tool's terms about ownership and permitted commercial use of generated content.\n- Follow platform and legal rules on labelling AI-generated or materially altered content where required.\n\nThe dedicated AI image course covers this in depth.\n\n### File organisation and naming\n\n```\nProject/\n  01_brief/\n  02_assets/ (logos, fonts info, photos + licence log)\n  03_working/\n  04_exports/\n     2026-03_launch_story_9x16_v2.png\n     2026-03_launch_feed_4x5_v2.png\n```\n\nName files with date, campaign, placement, ratio and version. Future you — and your clients — will thank you.\n\n### Collaboration and feedback\n\n- Share view or comment links rather than exporting screenshots for every review round.\n- Ask reviewers for feedback against the brief (\"Does the headline communicate the offer?\") rather than personal taste.\n- Consolidate feedback into one list before revising.\n- Use version history or duplicate frames (\"v1\", \"v2\") so you can revert.\n\n### A design-critique checklist\n\n```\nBrief:        Does it meet the objective and audience?\nHierarchy:    Is the primary message obvious in one second?\nLayout:       Grid, alignment, spacing consistent?\nType:         Legible at real size? Max 2 families?\nColour:       Palette respected? Contrast passes?\nImagery:      Relevant, licensed, consistent treatment?\nFormat:       Correct size/ratio, safe zones respected?\nCompliance:   Claims supportable? Disclosures present?\n```\n\n### Accessibility features in tools\n\nMost design tools now help with accessibility. Look for built-in contrast checkers or plugins, colour-blindness simulation, alt text fields when publishing, and reading-order settings for exported PDFs. Use them as part of your normal workflow rather than as a final extra step. When a tool lacks a feature, a free web-based contrast checker and a phone preview cover most social media needs.\n\n### Common mistakes\n\n- Using raster logos that blur when enlarged.\n- Detaching components or ignoring styles, so updates must be done manually everywhere.\n- Unnamed layers (\"Rectangle 238\") in shared files.\n- Accepting AI outputs without review.\n\n### Summary\n\nMaster transferable concepts — frames, layers, styles, components, vector versus raster — organise files well, review AI outputs carefully, and run structured critiques against the brief.",
+          "video": null,
+          "keyTakeaways": [
+            "Concepts like frames, layers, styles and components transfer between tools.",
+            "Vectors scale without blur; raster images do not — keep logos as vectors.",
+            "Choose tools by the work and team needs; many teams combine a template-first editor with a system design tool.",
+            "Review AI features' outputs and check their terms and labelling requirements."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A logo becomes blurry when enlarged for a banner. What is the most likely cause?",
+              "options": [
+                "The logo has too many colours",
+                "It was saved as a raster image at a small size instead of a vector",
+                "The banner uses sRGB",
+                "The banner is in 16:9"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Raster images lose quality when enlarged; vectors scale cleanly. Colour space, colour count and ratio do not cause blur."
+            },
+            {
+              "question": "What is the main benefit of components (symbols) in design tools?",
+              "options": [
+                "They compress files",
+                "They add animation",
+                "Updating the master updates every instance, keeping designs consistent",
+                "They convert text to outlines"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Components provide reusable masters so changes propagate. They are not compression, animation or outlining features."
+            },
+            {
+              "question": "Which feedback question is most useful during a design review?",
+              "options": [
+                "'Do you like purple?'",
+                "'What's your favourite font?'",
+                "'Can you make it pop?'",
+                "'Does the headline communicate the offer to the target audience in one second?'"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Feedback tied to the brief and objective is actionable. Taste-based or vague questions lead to endless revisions."
+            }
+          ],
+          "activity": "Organise your current design project using the folder and naming structure shown, convert any repeated elements into components or saved styles, and run the critique checklist on one design."
+        },
+        {
+          "slug": "exporting-for-platforms",
+          "title": "Exporting for platforms: formats, sizes and quality",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### The last step that ruins good designs\n\nYou can do everything right and still publish a blurry, colour-shifted or cropped image because of a poor export. Platforms compress uploads, and each format behaves differently. A few rules prevent most problems.\n\n### Choosing a file format\n\n| Format | Best for | Notes |\n|---|---|---|\n| PNG | Graphics with text, flat colour, logos, transparency | Lossless; larger files; keeps text crisp |\n| JPG / JPEG | Photographs | Lossy; small files; artefacts around sharp text at low quality |\n| WebP / AVIF | Web images | Modern, efficient; check platform support |\n| SVG | Logos and icons on websites | Vector; not accepted by most social uploads |\n| PDF | Print, documents, some carousel uploads (e.g. document posts) | Can hold vectors and multiple pages |\n| MP4 (H.264/H.265) | Video, animated posts | Standard for social video |\n| GIF | Short simple animations | Limited colours, large files; MP4 often better |\n\n**Rule of thumb:** text-heavy graphics → PNG (or high-quality JPG if file size limits apply); photos → high-quality JPG; logos for web → SVG; print → PDF.\n\n### Size and resolution\n\n- Export at the platform's recommended pixel dimensions or an exact multiple (for example 1080 × 1350 or 2160 × 2700 for 4:5), keeping the correct aspect ratio.\n- Many design tools offer 1×, 2× or custom scale exports. Exporting at 2× can keep text sharper after platform compression, as long as the file stays within upload limits.\n- **DPI/PPI is irrelevant for screens** — a 1080 × 1350 image displays the same whether its metadata says 72 or 300 DPI. Pixel dimensions are what count. DPI matters for print, where 300 PPI at final print size is a common guideline.\n\n### Colour space\n\nExport in **sRGB** for social media and the web. Images in other colour spaces (for example wide-gamut profiles or CMYK) can appear dull or shifted after upload. Print work uses CMYK or the printer's specified profile — ask your printer.\n\n### Compression and quality\n\n- Use high JPG quality (often around 80–90% in most tools' scales) for photos; very low quality creates blocky artefacts.\n- Avoid repeatedly re-saving JPGs — each save loses more quality. Export fresh from the design file.\n- Large, flat areas of gradient can band after compression; subtle noise/grain can reduce banding.\n- Fine text on photo backgrounds suffers most from compression — keep text size generous.\n\n### Platform checks\n\nBefore publishing:\n\n1. **Verify current specs.** Platforms update recommended sizes, grid crops and limits regularly — check official help pages or ad specs.\n2. **Preview the crop.** Profile grids may crop feed posts differently from the post itself (for example to a squarer or taller shape); keep key content central.\n3. **Upload settings.** Some apps have settings for uploading at the highest quality; enable them.\n4. **Test upload.** For important campaigns, upload privately or to a test account and view on a phone.\n\n### Export presets\n\nSave export presets for your common outputs:\n\n```\nPreset: Feed 4:5      1080×1350 @2x  PNG   sRGB\nPreset: Story 9:16    1080×1920 @1x  PNG   sRGB\nPreset: Thumb 16:9    1280×720+ @1x  JPG 90% sRGB (check current limit)\nPreset: Carousel PDF  1080×1350 pages  PDF  (for document-style posts)\nPreset: Print A5      148×210 mm + 3 mm bleed  PDF  CMYK per printer spec\n```\n\n### Print basics (when you need them)\n\n- **Bleed:** extend backgrounds beyond the trim edge (often around 3 mm, check with your printer) so there are no white edges after cutting.\n- **Safe margin:** keep text a few millimetres inside the trim.\n- Convert or proof colours for print; bright screen colours may look duller in CMYK.\n\n### Worked example: a blurry carousel\n\nA creator complains their text looks fuzzy after posting. Diagnosis:\n\n- Exported as a JPG at low quality → switched to PNG.\n- Exported at 540 px wide (0.5×) → exported at 1080 px (or 2×).\n- Small 18 px body text on a photo → increased to 32 px and added a scrim.\n- Uploaded with data-saver settings on → enabled high-quality uploads.\n\nResult: crisp text and faithful colour.\n\n### Common mistakes\n\n- Exporting text-heavy graphics as low-quality JPG.\n- Changing DPI and expecting sharper screen images.\n- Exporting in CMYK for Instagram.\n- Relying on outdated size lists from old blog posts.\n\n### Summary\n\nChoose format by content, export at correct pixel dimensions (often 2× for text), use sRGB for screens, avoid repeated compression, save presets, and verify current platform specs before important launches.",
+          "video": null,
+          "keyTakeaways": [
+            "Text-heavy graphics → PNG; photos → high-quality JPG; web logos → SVG; print → PDF.",
+            "Pixel dimensions matter on screens — DPI metadata does not.",
+            "Export in sRGB for social and web; use CMYK/profile specs only for print.",
+            "Save export presets and verify current platform specs before important launches."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which format is usually best for a text-heavy social graphic with flat colours?",
+              "options": [
+                "GIF",
+                "CMYK TIFF",
+                "PNG",
+                "Low-quality JPG"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "PNG is lossless and keeps text edges crisp. Low-quality JPG creates artefacts, GIF has colour limits and CMYK TIFF is for print."
+            },
+            {
+              "question": "A designer changes an image's DPI from 72 to 300 without changing pixel dimensions. How will it look on Instagram?",
+              "options": [
+                "The same — screen display depends on pixel dimensions, not DPI metadata",
+                "Blurrier",
+                "Four times sharper",
+                "Colour-corrected"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "DPI is print metadata; screens show pixels. Only changing pixel dimensions affects on-screen detail."
+            },
+            {
+              "question": "Colours in an uploaded post look dull compared with the design file. What is a likely cause?",
+              "options": [
+                "The file was exported in a non-sRGB colour space such as CMYK",
+                "The aspect ratio was 4:5",
+                "The layers were named",
+                "The file was exported as PNG"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Non-sRGB colour spaces can shift or dull on upload. PNG, ratio and layer names do not affect colour."
+            }
+          ],
+          "activity": "Create export presets for the three formats you publish most. Re-export one recent post using the right format, size and sRGB, and compare it with the original after uploading to a private test account."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 25,
+    "timeLimitMinutes": 40,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "gdf-001",
+        "module": "seeing-like-a-designer",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "You are designing a post announcing a giveaway. Which should normally be the primary element?",
+        "options": [
+          "The terms and conditions",
+          "The prize or the core benefit for the viewer",
+          "The date the post was designed",
+          "The creator's handle"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "The primary element is the one thing viewers must grasp instantly — usually the prize or benefit. Handles and terms are tertiary details."
+      },
+      {
+        "id": "gdf-002",
+        "module": "seeing-like-a-designer",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A colleague says their design 'feels busy' but everything is aligned. Using the squint test, you see five blobs of equal weight. What is the best next step?",
+        "options": [
+          "Add a border around the whole design",
+          "Add more colours to separate elements",
+          "Change every font to bold",
+          "Choose one primary element and increase its size or contrast while reducing the others"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Equal-weight blobs mean no hierarchy. Promote one element and demote the rest. Borders, more colours or more bold add noise."
+      },
+      {
+        "id": "gdf-003",
+        "module": "seeing-like-a-designer",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which statement about whitespace is correct?",
+        "options": [
+          "Whitespace is wasted space that should be filled",
+          "Whitespace separates groups and frames important elements",
+          "Whitespace must always be white",
+          "Whitespace only matters in print"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Whitespace (negative space) can be any colour; it structures and frames content on every medium."
+      },
+      {
+        "id": "gdf-004",
+        "module": "seeing-like-a-designer",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which changes apply the principle of proximity? (Choose all that apply.)",
+        "options": [
+          "Using the same accent colour on all buttons",
+          "Placing each product's price directly under its image",
+          "Increasing the space between separate sections",
+          "Grouping the date and time together"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Proximity is about grouping related items close together and separating unrelated ones. Consistent button colour is repetition/similarity, not proximity."
+      },
+      {
+        "id": "gdf-005",
+        "module": "seeing-like-a-designer",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An ad shows a model looking directly at the camera, a headline at the bottom-left and a button at the top-right. Testing shows few people notice the button. Which redesign best uses eye-flow principles?",
+        "options": [
+          "Have the model's gaze lead toward the product and headline, and place the button where the scanning path ends",
+          "Add three more buttons around the frame",
+          "Make the button flash continuously",
+          "Remove the model from the image"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Gaze cues and a deliberate path (entry → message → action) guide viewers to the button. Flashing and extra buttons add noise; removing the face loses a strong entry point."
+      },
+      {
+        "id": "gdf-006",
+        "module": "seeing-like-a-designer",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which fix addresses a figure–ground problem where text disappears into a busy photo?",
+        "options": [
+          "Adding more text",
+          "Adding a subtle dark gradient behind the text area",
+          "Reducing the text size",
+          "Switching to a thinner font"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "A gradient or overlay separates the text (figure) from the background (ground). Smaller or thinner text worsens legibility."
+      },
+      {
+        "id": "gdf-007",
+        "module": "seeing-like-a-designer",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does 'repetition' achieve across a series of carousel posts?",
+        "options": [
+          "It makes each post look completely different",
+          "It creates unity and makes the series recognisable",
+          "It increases file resolution",
+          "It removes the need for a grid"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Repeating styles, colours and positions builds a recognisable system. It does not affect resolution or replace structure."
+      },
+      {
+        "id": "gdf-008",
+        "module": "layout-and-composition",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What are gutters in a layout grid?",
+        "options": [
+          "The gaps between columns",
+          "The largest text size",
+          "The area covered by platform buttons",
+          "The outer edges of the canvas"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Gutters are the spaces between columns; margins are the outer spaces."
+      },
+      {
+        "id": "gdf-009",
+        "module": "layout-and-composition",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Your 10-slide carousel feels 'jumpy' when swiping even though the content is good. What is the most likely cause?",
+        "options": [
+          "The text is left-aligned",
+          "The margins and element positions change from slide to slide",
+          "The slides are in 4:5 format",
+          "The photos are high resolution"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Inconsistent margins and positions make elements jump as viewers swipe. Format, left alignment and high resolution do not cause this."
+      },
+      {
+        "id": "gdf-010",
+        "module": "layout-and-composition",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which statements about the rule of thirds are accurate? (Choose all that apply.)",
+        "options": [
+          "It must be used in every design",
+          "Centred compositions can be equally effective, especially on mobile",
+          "It is only relevant to photography, never to layouts",
+          "It places key subjects on or near the lines or intersections of a 3×3 grid"
+        ],
+        "correct": [
+          1,
+          3
+        ],
+        "explanation": "The rule of thirds is a helpful guide, not a law, and centred compositions are often strong on small screens. It applies to layouts and crops too."
+      },
+      {
+        "id": "gdf-011",
+        "module": "layout-and-composition",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A campaign needs 9:16, 4:5 and 16:9 versions. The team designs the 16:9 banner first and resizes it. The 9:16 version ends up with tiny text and a CTA under the reply bar. What process change would prevent this?",
+        "options": [
+          "Always design at the largest pixel size",
+          "Increase the brightness of the vertical version",
+          "Design the most constrained format first, define core vs flex elements, and rearrange rather than rescale",
+          "Use only square formats"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Starting with the hardest format and rearranging core elements keeps text legible and inside safe zones. Pixel size, forcing square or brightness changes do not address layout."
+      },
+      {
+        "id": "gdf-012",
+        "module": "layout-and-composition",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which aspect ratio is standard for full-screen vertical stories and short-form video?",
+        "options": [
+          "1.91:1",
+          "9:16",
+          "16:9",
+          "1:1"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "9:16 is the full-screen vertical ratio; 16:9 is landscape, 1:1 square, 1.91:1 wide link previews."
+      },
+      {
+        "id": "gdf-013",
+        "module": "layout-and-composition",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "What increases an element's visual weight? (Choose all that apply.)",
+        "options": [
+          "Larger size",
+          "Lower opacity",
+          "Higher saturation or darker value",
+          "Being a human face"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Size, darker or more saturated colour, and faces attract attention and add weight. Lowering opacity reduces weight."
+      },
+      {
+        "id": "gdf-014",
+        "module": "layout-and-composition",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "You must place a headline on a lifestyle photo for a 4:5 post, but the subject fills the frame edge to edge. What is the best-practice solution?",
+        "options": [
+          "Shrink the headline to fit between objects",
+          "Stretch the photo horizontally to create space",
+          "Choose or crop a photo with natural negative space, or use a layout that separates image and text",
+          "Place the headline over the subject's face"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Plan images with space for text, or split the layout. Covering faces, tiny text and distortion all reduce quality."
+      },
+      {
+        "id": "gdf-015",
+        "module": "layout-and-composition",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Why should critical elements stay inside safe zones on vertical formats?",
+        "options": [
+          "Because colours shift at the edges",
+          "Because file compression is stronger at the edges",
+          "Because platform interface elements can cover content near the edges",
+          "Because grids require it"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Overlays such as captions, buttons and reply bars can hide content near edges. Compression and colour do not vary this way."
+      },
+      {
+        "id": "gdf-016",
+        "module": "typography",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the difference between a typeface and a font?",
+        "options": [
+          "A font is always a serif; a typeface is always sans-serif",
+          "A typeface is only for print",
+          "They are unrelated terms",
+          "A typeface is the design; a font is a specific weight or style of it"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "The typeface is the overall design; each weight/style file is a font. Classification and medium are unrelated."
+      },
+      {
+        "id": "gdf-017",
+        "module": "typography",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A luxury skincare brand wants an elegant high-contrast serif for all text, including small captions on mobile stories. What is your best recommendation?",
+        "options": [
+          "Set everything in all caps to improve legibility",
+          "Use the serif for large headlines and pair it with a highly legible sans-serif for small text",
+          "Use a script font for body text instead",
+          "Use it everywhere — elegance matters most"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Thin strokes of high-contrast serifs break down at small sizes; pairing preserves elegance and legibility. Scripts and long all-caps text reduce legibility."
+      },
+      {
+        "id": "gdf-018",
+        "module": "typography",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which are good typographic practices for social graphics? (Choose all that apply.)",
+        "options": [
+          "Using a defined type scale with clearly different sizes",
+          "Saving text styles in the design tool",
+          "Tighter leading for large headlines than for body text",
+          "Combining bold, italic, underline and colour on the same phrase for emphasis"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Clear scales, appropriate leading and saved styles support consistency. Stacking emphasis styles creates chaos."
+      },
+      {
+        "id": "gdf-019",
+        "module": "typography",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "You are designing bilingual English–Urdu posts for a Pakistani audience. Which approach is most professional?",
+        "options": [
+          "Type the Urdu in any font installed by default and copy the English layout",
+          "Choose fonts with proper Urdu (e.g. Nastaliq) support, allow extra vertical space, and plan layouts for right-to-left reading with real text",
+          "Use images of handwritten Urdu instead of text",
+          "Transliterate Urdu into Latin letters to avoid font issues"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Proper script support, vertical space for Nastaliq and RTL layout planning respect the language. Default fonts may render poorly; transliteration and handwritten images reduce accessibility and reach."
+      },
+      {
+        "id": "gdf-020",
+        "module": "typography",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Roughly how many words should most video thumbnails use?",
+        "options": [
+          "The full video title",
+          "At least 20 to improve SEO",
+          "As many as needed to explain the video",
+          "Very few, often three to five high-impact words"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Thumbnails are seen small next to the title, so a few large words work best. Repeating the title or long text is illegible."
+      },
+      {
+        "id": "gdf-021",
+        "module": "typography",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A client asks you to make a heading 'bold' by applying a stroke effect to the regular weight because the font has no bold. What is the better approach?",
+        "options": [
+          "Apply the stroke — it is identical to bold",
+          "Increase letter spacing",
+          "Choose a typeface family that includes a true bold weight",
+          "Use italic instead"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Faux bold distorts letterforms; real weights are drawn for balance. Italic and spacing do not create weight."
+      },
+      {
+        "id": "gdf-022",
+        "module": "typography",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which checks belong in a legibility QA for a Reels cover? (Choose all that apply.)",
+        "options": [
+          "Checking the contrast of text against its background",
+          "Increasing the file's DPI setting to 300",
+          "Confirming key text is clear of areas the grid crop or platform UI may hide",
+          "Viewing it on a phone at the size it appears in the profile grid"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Real-size viewing, crop/overlay checks and contrast checks all affect legibility. DPI metadata does not change how pixels display on screen."
+      },
+      {
+        "id": "gdf-023",
+        "module": "colour-and-accessibility",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which colour property has the biggest impact on text legibility?",
+        "options": [
+          "The colour's name in the brand guide",
+          "Value (lightness)",
+          "Hue",
+          "Colour temperature naming"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Lightness difference drives contrast. Hue alone can mislead."
+      },
+      {
+        "id": "gdf-024",
+        "module": "colour-and-accessibility",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A large 32 px bold headline is white on a mid-blue with a 3.4:1 ratio. Body text in the same colours is 16 px regular. Which statement is correct under WCAG 2.2 AA?",
+        "options": [
+          "Both pass",
+          "Both fail",
+          "Only the body text passes",
+          "The headline passes as large text (3:1) but the body text fails (needs 4.5:1)"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Large text needs 3:1, which 3.4:1 meets; normal text needs 4.5:1, which it does not."
+      },
+      {
+        "id": "gdf-025",
+        "module": "colour-and-accessibility",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which practices support people with colour vision deficiency? (Choose all that apply.)",
+        "options": [
+          "Relying on red and green alone to show good/bad",
+          "Using palettes that also differ in lightness",
+          "Testing with a colour-blindness simulator",
+          "Adding labels or icons alongside status colours"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Redundant cues, lightness differences and simulation all help. Red/green alone excludes the most common deficiency."
+      },
+      {
+        "id": "gdf-026",
+        "module": "colour-and-accessibility",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does a complementary colour scheme use?",
+        "options": [
+          "Hues opposite each other on the colour wheel",
+          "Tints and shades of one hue",
+          "Three hues next to each other",
+          "Only neutral colours"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Complementary colours sit opposite on the wheel. Monochromatic uses one hue; analogous uses neighbours."
+      },
+      {
+        "id": "gdf-027",
+        "module": "colour-and-accessibility",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Your brand orange with white text fails AA for 16 px button labels. Brand leadership insists on keeping the exact orange. Which solution is accessible and respects the constraint?",
+        "options": [
+          "Add a white drop shadow",
+          "Keep white text and ignore the ratio because buttons are short",
+          "Keep the exact orange as the button background and use near-black text that passes 4.5:1",
+          "Make the white text thinner to look lighter"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Dark text on the orange can pass while keeping the brand hue. Ignoring the criterion, thinner text or shadows do not produce compliant contrast."
+      },
+      {
+        "id": "gdf-028",
+        "module": "colour-and-accessibility",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "You check contrast of white text on a photo by sampling the photo's average colour and get 5:1. Parts of the background behind the text are much lighter. What should you do?",
+        "options": [
+          "Increase the image saturation",
+          "Check against the lightest area behind the text and add a scrim or reposition if it fails",
+          "Change the text to italic",
+          "Accept 5:1 as the result"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Contrast must hold where text actually sits, so test the worst case. Saturation or italics do not fix low lightness contrast."
+      },
+      {
+        "id": "gdf-029",
+        "module": "colour-and-accessibility",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "In 60-30-10, which share usually goes to the dominant background or neutral colour?",
+        "options": [
+          "30%",
+          "10%",
+          "60%",
+          "100%"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "About 60% is the dominant colour, 30% secondary and 10% accent."
+      },
+      {
+        "id": "gdf-030",
+        "module": "imagery-and-social-formats",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which image choice usually works best for a small business's social post?",
+        "options": [
+          "An authentic photo of the actual product or team, with space for text",
+          "A low-resolution image found online",
+          "Generic stock photo of people shaking hands",
+          "A busy collage of ten photos"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Authentic, relevant images with space for text are clear and credible. Generic stock, unlicensed low-res images and busy collages weaken the message."
+      },
+      {
+        "id": "gdf-031",
+        "module": "imagery-and-social-formats",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "You want to use a Creative Commons 'CC BY-NC' image in a paid ad. What is the issue?",
+        "options": [
+          "CC images can never be edited",
+          "BY means you cannot credit the creator",
+          "There is no issue with attribution",
+          "NC means non-commercial, so use in a paid ad is likely not permitted"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "NC restricts commercial use; BY requires attribution. Some CC licences allow edits (ND is the one that forbids derivatives)."
+      },
+      {
+        "id": "gdf-032",
+        "module": "imagery-and-social-formats",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "A client supplies a photo of a customer for a testimonial ad. Which steps should you take before using it? (Choose all that apply.)",
+        "options": [
+          "Edit the quote to sound more impressive",
+          "Confirm the testimonial is genuine and representative",
+          "Confirm the customer consented to their image and words being used in advertising",
+          "Keep a record of permissions"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Consent, genuine testimonials and records are essential. Altering the customer's words to exaggerate would mislead."
+      },
+      {
+        "id": "gdf-033",
+        "module": "imagery-and-social-formats",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What is usually the best structure for an educational carousel?",
+        "options": [
+          "Random order to create surprise",
+          "Ten slides of dense text with no cover",
+          "Only a cover slide and a CTA",
+          "Hook cover, context, one point per slide, recap, clear call to action"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "The deck-like structure earns swipes and saves. Dense text, missing content or random order confuse viewers."
+      },
+      {
+        "id": "gdf-034",
+        "module": "imagery-and-social-formats",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Where should a paid-partnership disclosure appear?",
+        "options": [
+          "Only in comments",
+          "Clearly and prominently, visible before people engage",
+          "Hidden among many hashtags after 'see more'",
+          "Only in the creator's bio"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Regulators expect clear, upfront disclosure. Hiding it in hashtags, bios or comments is generally inadequate."
+      },
+      {
+        "id": "gdf-035",
+        "module": "imagery-and-social-formats",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "An ad reads 'Guaranteed to double your followers in 7 days — only 2 spots left!' The spots claim is untrue and there is no evidence for the guarantee. Which problems apply? (Choose all that apply.)",
+        "options": [
+          "Too few colours",
+          "Unsupported performance claim",
+          "False urgency",
+          "Potential breach of advertising and consumer-protection rules"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Unsubstantiated guarantees and fake scarcity are misleading practices regulated in many markets. Colour count is irrelevant."
+      },
+      {
+        "id": "gdf-036",
+        "module": "imagery-and-social-formats",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which thumbnail concept is strongest for a video titled 'I Tested 5 Budget Phones for a Month'?",
+        "options": [
+          "A screenshot of the video's end screen",
+          "The full title in small text across the image",
+          "A plain logo on a white background",
+          "The creator's expressive face with the five phones and 'WORTH IT?' in large type"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "A focal face, the subject and a short complementary hook work at small size. Repeating the title, plain logos or end screens do not."
+      },
+      {
+        "id": "gdf-037",
+        "module": "tools-templates-and-export",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which graphics should be kept in vector format?",
+        "options": [
+          "Screenshots",
+          "Scanned textures",
+          "Logos and icons",
+          "Smartphone photos"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Logos and icons are path-based and should scale cleanly. Photos, screenshots and scans are raster."
+      },
+      {
+        "id": "gdf-038",
+        "module": "tools-templates-and-export",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "A team keeps producing off-brand posts from shared templates. Which changes help most? (Choose all that apply.)",
+        "options": [
+          "Provide examples of correct and incorrect use",
+          "Lock logos, backgrounds and brand fonts in templates",
+          "Name layers clearly and note text limits",
+          "Give every team member a different template style"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Locking, clear naming and examples reduce drift. Different styles for each person increase inconsistency."
+      },
+      {
+        "id": "gdf-039",
+        "module": "tools-templates-and-export",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Text in your uploaded carousel looks fuzzy. Which fix is most likely to help?",
+        "options": [
+          "Reduce the canvas to 540 px wide",
+          "Export in CMYK",
+          "Change DPI metadata to 300",
+          "Export as PNG at full or 2× pixel dimensions and enlarge small text"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Lossless format, adequate pixels and larger text survive compression. DPI metadata and CMYK do not help; shrinking reduces detail."
+      },
+      {
+        "id": "gdf-040",
+        "module": "tools-templates-and-export",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A client needs the same flyer for Instagram and for professional printing. Which export plan is correct?",
+        "options": [
+          "CMYK PNG for Instagram and sRGB JPG for print",
+          "SVG for both",
+          "sRGB PNG/JPG at platform pixel dimensions for Instagram; print PDF with bleed and the printer's colour specification",
+          "One JPG at 72 DPI used for both"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Screens need sRGB at correct pixel sizes; print needs PDF, bleed and printer-specified colour. Mixing up colour spaces or using a single low-res file fails one of the outputs."
+      },
+      {
+        "id": "gdf-041",
+        "module": "tools-templates-and-export",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the best use of a public template?",
+        "options": [
+          "Use its structure and apply your own fonts, colours, imagery and signature element",
+          "Copy it to sell as your own template",
+          "Publish it unchanged",
+          "Use it only for its stock photos"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Structure is reusable; style should be yours. Reselling templates can breach licences."
+      },
+      {
+        "id": "gdf-042",
+        "module": "tools-templates-and-export",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which statement about using AI features inside design tools is most accurate?",
+        "options": [
+          "Review outputs for errors and check the tool's terms and any labelling rules before commercial use",
+          "AI features cannot be used for social media",
+          "AI outputs never need review",
+          "AI-generated content is always owned by the tool"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Outputs can contain errors, and terms and disclosure rules vary. Ownership depends on the tool's terms and local law, not a universal rule."
+      },
+      {
+        "id": "gdf-043",
+        "module": "tools-templates-and-export",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "You must deliver a campaign in 4 formats every week. Which workflow best balances speed and quality?",
+        "options": [
+          "Build master layouts with components and styles, save export presets, and review each output at real size",
+          "Design each format from scratch every week",
+          "Use automatic resize and publish without checking",
+          "Export one square image for every placement"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Reusable systems plus a quick human QA is fast and reliable. Starting from scratch is slow; unchecked automation and one-size-fits-all exports cause errors."
+      },
+      {
+        "id": "gdf-044",
+        "module": "seeing-like-a-designer",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A designer uses a bold accent colour for the headline, the logo, all icons and the button. The call-to-action gets little attention. Which principle explains the problem and fix?",
+        "options": [
+          "Proximity — move the button closer to the logo",
+          "Repetition — add more accent colour",
+          "Closure — remove the button's border",
+          "Contrast/hierarchy — reserve the accent for the call to action so it stands out"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Emphasis works through difference; when the accent is everywhere, it no longer signals importance. Reserving it restores hierarchy."
+      }
+    ]
+  }
+}
