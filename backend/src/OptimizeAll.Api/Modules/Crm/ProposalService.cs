@@ -108,6 +108,7 @@ public sealed class ProposalService(
             p.CreatedAt, p.ConcurrencyStamp);
     }
 
+    /// <summary>The client link: absolute when the public origin is known, else root-relative (the web app shows it on its own origin).</summary>
     public string ShareUrl(string raw) => publicOrigin.Current + BillingLinks.PublicProposal(raw);
 
     public async Task<ProposalVersionDto> VersionDtoAsync(ProposalVersion v, CancellationToken ct)
@@ -289,6 +290,8 @@ public sealed class ProposalService(
             throw DomainException.Conflict("proposal.expired", "This proposal's validity date has passed. Edit it to set a new date, then send it.");
         if (r.Email && string.IsNullOrWhiteSpace(proposal.RecipientEmail))
             throw new DomainException("proposal.recipient_required", "Add the recipient's email before sending, or publish the link without emailing.");
+        // An emailed link must be absolute; checked before anything changes (422 hosting.public_origin_unknown).
+        var emailOrigin = r.Email ? await publicOrigin.RequireAbsoluteAsync(ct) : null;
 
         string raw;
         if (tokens.Reveal(proposal.ShareTokenProtected) is { } existing) raw = existing;
@@ -305,7 +308,7 @@ public sealed class ProposalService(
         if (proposal.Status == ProposalStatus.Draft) proposal.Status = ProposalStatus.Sent;
         proposal.SentAt = Now;
         proposal.SentByUserId = currentUser.IdOrNull;
-        var url = ShareUrl(raw);
+        var url = emailOrigin is null ? ShareUrl(raw) : emailOrigin + BillingLinks.PublicProposal(raw);
         var agency = (await billingSettings.GetAsync(ct)).CompanyName;
 
         // Client members (Billing/Owner) of an existing client also get it in their portal.

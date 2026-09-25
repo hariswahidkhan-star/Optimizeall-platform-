@@ -168,7 +168,10 @@ public origin, chosen in this order (`IPublicOrigin`, `backend/src/OptimizeAll.A
    host that ends up in links. Optional `Hosting__PublicHosts__0=…` (`*.example.com` allowed) restricts it further.
 4. For emails and links built by background jobs (no request): the last origin seen under 3, remembered in the
    database (system setting `hosting.publicOrigin`, written at most once a day).
-5. Otherwise links are root-relative (`/verify/certificates/…`) and the API logs a warning.
+5. Otherwise links on the site are root-relative (`/verify/certificates/…`) and the API logs a warning. Links that
+   leave the site are never sent relative: account emails (verification, password reset) and the invoice email to a
+   client's billing address are not sent (logged as errors), emailing a proposal and starting Google or social sign-in
+   answer 422 `hosting.public_origin_unknown`, email campaigns pause and journey emails wait, until 1–4 gives an origin.
 
 Images and files the web app itself shows (course badges, certificate images and PDFs, partner logos) are always
 root-relative (`/api/v1/public/learning/courses/{slug}/badge.svg`), so they load under the web app's CSP

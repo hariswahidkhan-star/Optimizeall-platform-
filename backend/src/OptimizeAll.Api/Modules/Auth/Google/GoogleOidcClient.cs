@@ -16,11 +16,15 @@ public sealed class GoogleOidcClient(
     IPublicOrigin publicOrigin,
     ILogger<GoogleOidcClient> logger)
 {
-    /// <summary>The redirect URI registered with Google (configuration, never the request).</summary>
+    /// <summary>
+    /// The redirect URI registered with Google: <c>GoogleAuth:RedirectUri</c>, else the web app's callback on the public
+    /// origin (<see cref="IPublicOrigin"/>: Site URL, Email:AppBaseUrl, or the host a trusted proxy forwarded; never a host
+    /// the client chose). Google needs it absolute, so an unknown origin is a 422 rather than a relative redirect_uri.
+    /// </summary>
     public string RedirectUri =>
         options.Value.RedirectUri is { Length: > 0 } configured
             ? configured
-            : publicOrigin.Current + AppLinks.GoogleCallback;
+            : publicOrigin.RequireAbsolute() + AppLinks.GoogleCallback;
 
     public string BuildAuthorizationUrl(string state, string nonce, string codeVerifier)
     {

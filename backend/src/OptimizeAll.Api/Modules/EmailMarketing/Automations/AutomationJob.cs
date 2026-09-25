@@ -2,6 +2,7 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Api.Common.Events;
+using OptimizeAll.Api.Common.Hosting;
 using OptimizeAll.Api.Common.Jobs;
 using OptimizeAll.Api.Common.Notifications;
 using OptimizeAll.Api.Common.Persistence;
@@ -36,6 +37,7 @@ public sealed class AutomationJob(
     INotificationService notifications,
     IDatabaseDialect dialect,
     TimeProvider clock,
+    IPublicOrigin publicOrigin,
     ILogger<AutomationJob> logger) : IJob
 {
     public const int BatchSize = 200;
@@ -211,6 +213,13 @@ public sealed class AutomationJob(
                 }
                 if (step.Type == AutomationStepType.SendSms && SendTiming.IsQuietHours(now, zone, s.Settings.QuietHoursStart, s.Settings.QuietHoursEnd))
                     return new StepResult(null, WaitUntil: SendTiming.AfterQuietHours(now, zone, s.Settings.QuietHoursStart, s.Settings.QuietHoursEnd));
+                if (await publicOrigin.GetAsync(ct) is not { Length: > 0 })
+                {
+                    // Unsubscribe, preferences and tracking links would be relative: nothing sent; retry once a Site URL is set.
+                    logger.LogError("Journey {Automation} step {Step} deferred: the website's public address isn't known (set the Site URL)",
+                        s.Automation.Id, step.Key);
+                    return new StepResult(null, WaitUntil: now.AddHours(1));
+                }
                 if (await TryStartRunAsync(s, step, ct) is not { } runId) return new StepResult(step.Next);
                 var (status, detail) = await SendAsync(s, step, runId, ct);
                 await CompleteRunAsync(runId, status, detail, ct);

@@ -344,7 +344,14 @@ public sealed class InvoiceService(
         var billingEmail = client.BillingEmail?.Trim();
         if (string.IsNullOrWhiteSpace(billingEmail) || recipients.Any(r => r.NormalizedEmail == Normalization.Email(billingEmail)))
             return _ => Task.CompletedTask;
-        var absolute = publicOrigin.Current + BillingLinks.PublicInvoice(raw);
+        if (await publicOrigin.GetAsync(ct) is not { Length: > 0 } origin)
+        {
+            // A root-relative link is useless in an email; the client's portal members were still notified above.
+            logger.LogError("Invoice email for {InvoiceId} to the client billing address not sent: {Reason}", invoice.Id,
+                new PublicOriginUnknownException().Message);
+            return _ => Task.CompletedTask;
+        }
+        var absolute = origin + BillingLinks.PublicInvoice(raw);
         var message = new EmailMessage(billingEmail, client.Name, title,
             $"Hello {client.Name},\n\n{body}\n\nView and download the invoice: {absolute}\n\n— {settings.CompanyName}");
         return async token =>

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Audit;
+using OptimizeAll.Api.Common.Hosting;
 using OptimizeAll.Api.Common.Jobs;
 using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Api.Modules.EmailMarketing.Delivery;
@@ -341,8 +342,9 @@ public sealed class CampaignSendJob(
                     var text = MessageComposer.ComposeText(c.SmsBody ?? string.Empty, values);
                     segments = SmsSegments.Calculate(text).Segments;
                     cost = segments * ctx.Settings.SmsCostPerSegment;
+                    var statusCallback = $"{urls.AbsolutePublicBaseUrl}/api/v1/public/sms/webhooks/twilio/{c.ScopeKey}/status";
                     attempted = true;
-                    result = await sms.SendAsync(c.ClientAccountId, r.Address, text, $"{urls.PublicBaseUrl}/api/v1/public/sms/webhooks/twilio/{c.ScopeKey}/status", ct);
+                    result = await sms.SendAsync(c.ClientAccountId, r.Address, text, statusCallback, ct);
                     break;
                 }
                 default:
@@ -355,6 +357,12 @@ public sealed class CampaignSendJob(
                     break;
                 }
             }
+        }
+        catch (PublicOriginUnknownException ex)
+        {
+            // Unsubscribe, tracking and callback links would be relative: nothing was sent; pause until a Site URL is set.
+            logger.LogError("Campaign {Campaign} paused: {Reason}", c.Id, ex.Message);
+            result = ProviderResult.NotConfigured(ex.Message);
         }
         catch (Exception ex) when (!ct.IsCancellationRequested)
         {

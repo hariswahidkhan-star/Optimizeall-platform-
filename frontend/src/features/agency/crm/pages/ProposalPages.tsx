@@ -51,6 +51,7 @@ import { ProposalDocumentView } from '../components/ProposalDocumentView';
 import { ProposalStatusBadge } from '../lib';
 import '@/features/agency/billing/billing.css';
 import '../crm.css';
+import { absoluteUrl } from '@/features/public/site/head';
 
 const STATUS_OPTIONS = ['Draft', 'Sent', 'Viewed', 'Accepted', 'Declined', 'Expired', 'Withdrawn'].map((s) => ({ value: s, label: s }));
 
@@ -376,7 +377,7 @@ function SendDialog({ proposal, open, onClose }: { proposal: Proposal; open: boo
       submitLabel={link ? 'Send again' : 'Send proposal'}
       onSubmit={async () => {
         const result = await send.mutateAsync({ concurrencyStamp: proposal.concurrencyStamp, email, message: message.trim() || undefined });
-        setLink(result.shareUrl);
+        setLink(absoluteUrl(result.shareUrl));
         toast.success(result.emailed ? `Emailed to ${proposal.recipientEmail}` : 'Proposal published');
         return false;
       }}
@@ -511,7 +512,7 @@ export function ProposalDetailPage() {
                     : []),
                 ]}
               />
-              {p.shareUrl && <CopyField label="Client link" value={p.shareUrl} />}
+              {p.shareUrl && <CopyField label="Client link" value={absoluteUrl(p.shareUrl)!} />}
             </CardBody>
           </Card>
           <Card>

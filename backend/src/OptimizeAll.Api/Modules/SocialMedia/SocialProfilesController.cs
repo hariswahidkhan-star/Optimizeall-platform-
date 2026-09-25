@@ -411,7 +411,7 @@ public sealed class SocialProfilesController(
     private string RedirectUri() =>
         options.Value.OAuthRedirectUri is { Length: > 0 } configured
             ? configured
-            : publicOrigin.Current + "/agency/social/connect/callback";
+            : publicOrigin.RequireAbsolute() + "/agency/social/connect/callback";
 
     private static DomainException AppCredentialsRequired(SocialNetwork network) => DomainException.Conflict("social.app_credentials_required",
         $"App credentials required: add the {PostValidator.Label(network)} developer app id and secret under Integrations " +

@@ -21,20 +21,30 @@ namespace OptimizeAll.Api.Modules.EmailMarketing.Shared;
 /// </summary>
 public sealed class EmailMarketingUrls(IConfiguration configuration, IPublicOrigin publicOrigin)
 {
+    /// <summary>The web app origin, or "" when unknown (root-relative links): previews, the UI and redirects only.</summary>
     public string AppBaseUrl => publicOrigin.Current;
 
     public string PublicBaseUrl =>
         (configuration["EmailMarketing:PublicBaseUrl"] is { Length: > 0 } url ? url : AppBaseUrl).TrimEnd('/');
 
+    /// <summary>
+    /// <see cref="PublicBaseUrl"/> for links that leave the site (emails, List-Unsubscribe, provider callbacks), which must be
+    /// absolute: throws <see cref="PublicOriginUnknownException"/> when no origin is known.
+    /// </summary>
+    public string AbsolutePublicBaseUrl =>
+        (configuration["EmailMarketing:PublicBaseUrl"] is { Length: > 0 } url ? url : publicOrigin.RequireAbsolute()).TrimEnd('/');
+
+    private string AbsoluteAppBaseUrl => publicOrigin.RequireAbsolute();
+
     public string? SigningSecret => configuration["Tracking:PostbackSecret"] is { Length: > 0 } s ? s : null;
 
-    public string OpenPixel(string token) => $"{PublicBaseUrl}/e/o/{token}.gif";
-    public string Click(string token) => $"{PublicBaseUrl}/e/c/{token}";
+    public string OpenPixel(string token) => $"{AbsolutePublicBaseUrl}/e/o/{token}.gif";
+    public string Click(string token) => $"{AbsolutePublicBaseUrl}/e/c/{token}";
     /// <summary>RFC 8058 one-click endpoint (List-Unsubscribe); a GET shows the confirmation page.</summary>
-    public string Unsubscribe(string token) => $"{PublicBaseUrl}/e/u/{token}";
+    public string Unsubscribe(string token) => $"{AbsolutePublicBaseUrl}/e/u/{token}";
     public string UnsubscribePage(string token) => $"{AppBaseUrl}/email/unsubscribe/{token}";
-    public string Preferences(string token) => $"{AppBaseUrl}/email/preferences/{token}";
-    public string ConfirmSubscription(string token) => $"{AppBaseUrl}/email/confirm/{token}";
+    public string Preferences(string token) => $"{AbsoluteAppBaseUrl}/email/preferences/{token}";
+    public string ConfirmSubscription(string token) => $"{AbsoluteAppBaseUrl}/email/confirm/{token}";
     public string SignupForm(string key) => $"{AppBaseUrl}/email/subscribe/{key}";
 }
 

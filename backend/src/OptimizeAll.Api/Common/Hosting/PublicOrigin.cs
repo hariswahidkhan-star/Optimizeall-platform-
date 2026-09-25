@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using OptimizeAll.Api.Modules.Website.Settings;
 using OptimizeAll.Domain.Settings;
 using OptimizeAll.Domain.Website;
+using OptimizeAll.Domain.Common;
 using OptimizeAll.Infrastructure.Persistence;
 
 namespace OptimizeAll.Api.Common.Hosting;
@@ -39,9 +40,26 @@ public interface IPublicOrigin
     /// <summary>The public origin for a caller that already loaded the site settings (their <c>Seo.SiteUrl</c>).</summary>
     string Resolve(string? siteUrl);
 
+    /// <summary>
+    /// The public origin for a link that must be absolute (emails, List-Unsubscribe, OAuth redirect URIs): a root-relative
+    /// link there is broken, so an unknown origin throws <see cref="PublicOriginUnknownException"/> instead.
+    /// </summary>
+    string RequireAbsolute();
+
+    /// <inheritdoc cref="RequireAbsolute"/>
+    Task<string> RequireAbsoluteAsync(CancellationToken ct = default);
+
     /// <summary>Called when the site settings are saved, so this instance uses the new site URL at once.</summary>
     void SiteUrlChanged(string? siteUrl);
 }
+
+/// <summary>
+/// No public origin is known (no Site URL, no <c>Email:AppBaseUrl</c>, no request through a trusted proxy yet) where a link
+/// must be absolute. 422 <c>hosting.public_origin_unknown</c>; the email-marketing senders pause instead of sending.
+/// </summary>
+public sealed class PublicOriginUnknownException() : DomainException("hosting.public_origin_unknown",
+    "The website's public address isn't known yet, so this link can't be built. Set Website → Settings → SEO → Site URL " +
+    "(or Email__AppBaseUrl) and try again.", DomainErrorKind.Unprocessable);
 
 public sealed partial class PublicOrigin(
     IConfiguration configuration, IHttpContextAccessor http, IServiceScopeFactory scopes, TimeProvider clock, ILogger<PublicOrigin> logger)
@@ -95,6 +113,11 @@ public sealed partial class PublicOrigin(
         if (state is null || IsStale(state)) state = await LoadAsync(ct);
         return Resolve(state.SiteUrl);
     }
+
+    public string RequireAbsolute() => Current is { Length: > 0 } origin ? origin : throw new PublicOriginUnknownException();
+
+    public async Task<string> RequireAbsoluteAsync(CancellationToken ct = default) =>
+        await GetAsync(ct) is { Length: > 0 } origin ? origin : throw new PublicOriginUnknownException();
 
     public string Resolve(string? siteUrl)
     {

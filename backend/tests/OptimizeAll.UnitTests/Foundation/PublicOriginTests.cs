@@ -50,6 +50,20 @@ public sealed class PublicOriginTests
         Assert.Equal(string.Empty, Create(null).Resolve(null));
     }
 
+    [Fact]
+    public async Task Links_that_must_be_absolute_throw_when_no_origin_is_known()
+    {
+        var unknown = Create(Request("https", "evil.example", trusted: false));
+        var error = Assert.Throws<PublicOriginUnknownException>(() => unknown.RequireAbsolute());
+        Assert.Equal("hosting.public_origin_unknown", error.Code);
+        await Assert.ThrowsAsync<PublicOriginUnknownException>(() => unknown.RequireAbsoluteAsync());
+        Assert.Equal(string.Empty, unknown.Current);
+
+        Assert.Equal("https://optimizeall-web.onrender.com",
+            Create(Request("https", "optimizeall-web.onrender.com", trusted: true)).RequireAbsolute());
+        Assert.Equal("https://app.example.com", await Create(null, "https://app.example.com/").RequireAbsoluteAsync());
+    }
+
     [Theory]
     [InlineData("evil.example/path")]
     [InlineData("user@evil.example")]

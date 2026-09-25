@@ -30,6 +30,7 @@ import { CreditNoteDialog, RecordPaymentDialog } from '../components/InvoiceDial
 import { TotalsList } from '../components/LineItemsEditor';
 import { InvoiceStatusBadge, billingErrorMessage, formatDateOnly } from '../lib';
 import '../billing.css';
+import { absoluteUrl } from '@/features/public/site/head';
 
 export function LinesTable({ lines, currency, caption }: { lines: PriceLine[]; currency: string; caption: string }) {
   const columns: DataTableColumn<PriceLine>[] = [
@@ -251,7 +252,7 @@ export function InvoiceDetailPage() {
                 ]}
               />
               {invoice.notes && <p className="bill-pre">{invoice.notes}</p>}
-              {invoice.publicUrl && <CopyField label="Client view link" value={invoice.publicUrl} />}
+              {invoice.publicUrl && <CopyField label="Client view link" value={absoluteUrl(invoice.publicUrl)!} />}
             </CardBody>
           </Card>
           {canManage && open && (
