@@ -393,7 +393,7 @@ export function AcademyPage() {
                 </h2>
               </div>
             </div>
-            <ul className="lx-grid lx-reveal" ref={freshRef} aria-label="New courses">
+            <ul className="lx-grid lx-grid--rail lx-reveal" ref={freshRef} aria-label="New courses">
               {fresh.data.items.map((course, i) => (
                 <li key={course.id} style={stagger(i)}>
                   <CourseCard course={course} to={academyPaths.course(course.slug)} headingLevel={3} />

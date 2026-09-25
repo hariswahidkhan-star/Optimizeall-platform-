@@ -347,15 +347,27 @@
   flex-direction: column;
   justify-content: center;
   gap: var(--space-2);
-  min-block-size: 200px;
-  aspect-ratio: 16 / 9;
-  padding: clamp(var(--space-4), 4vw, var(--space-8));
+  min-inline-size: 0;
+  /* Phones: natural height (a 16:9 box with long bullets would overflow); a 16:9 slide from 640px. */
+  padding: var(--space-5) var(--space-4) calc(var(--space-4) + 18px);
   border-radius: var(--radius-lg);
   color: #f5f7ff;
   background:
     radial-gradient(90% 120% at 0% 100%, color-mix(in srgb, var(--lx-lecture-ink) 55%, transparent), transparent 60%),
     linear-gradient(135deg, #0b1030 0%, #161b4a 55%, #231a52 100%);
   box-shadow: var(--shadow-md);
+}
+
+@media (min-width: 640px) {
+  .lx-lecture__slide {
+    aspect-ratio: 16 / 9;
+    min-block-size: 220px;
+    padding: clamp(var(--space-4), 4vw, var(--space-8));
+  }
+}
+
+.lx-lecture__soon > * {
+  min-inline-size: 0;
 }
 
 .lx-lecture__slide-glow {
@@ -413,8 +425,8 @@
 
 .lx-lecture__slide-dots {
   position: absolute;
-  inset-inline: clamp(var(--space-4), 4vw, var(--space-8));
-  inset-block-end: var(--space-4);
+  inset-inline: var(--space-4);
+  inset-block-end: var(--space-3);
   display: flex;
   gap: 5px;
 }
@@ -477,6 +489,16 @@
   font-weight: var(--weight-semibold);
   cursor: pointer;
   transition: background var(--duration-fast) var(--ease-standard), transform var(--duration-fast) var(--ease-standard);
+}
+
+.lx-lecture__toggle {
+  white-space: nowrap;
+}
+
+@media (max-width: 420px) {
+  .lx-lecture__toggle .lx-muted {
+    display: none;
+  }
 }
 
 .lx-lecture__toggle:hover {
@@ -724,7 +746,12 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+}
+
+/* The hub's rails: four across on desktop (no orphan card). */
+.lx-grid.lx-grid--rail {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
 }
 
 .lx-path-grid > li {
@@ -1031,6 +1058,11 @@
 .lx-path__note {
   margin: 0;
   font-size: var(--text-small);
+}
+
+/* Outcomes inside a narrow side panel: one column. */
+.lx-panel .lx-outcomes {
+  grid-template-columns: 1fr;
 }
 
 .lx-audience {
@@ -1380,7 +1412,13 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 124px), 1fr));
+}
+
+@media (max-width: 520px) {
+  .lx-cat-tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .lx-cat-tile {
@@ -1411,6 +1449,7 @@
 
 .lx-cat-tile .lx-art {
   inline-size: 100%;
+  max-inline-size: 120px;
   block-size: auto;
   color: var(--lx-cat, var(--color-primary));
 }

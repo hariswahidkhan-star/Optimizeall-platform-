@@ -1,6 +1,16 @@
 import '../academy.css';
 import clsx from 'clsx';
-import { Captions, ChevronDown, Clapperboard, FileText, Headphones, ListVideo, Play, PlayCircle, Sparkles } from 'lucide-react';
+import {
+  Captions,
+  ChevronDown,
+  Clapperboard,
+  FileText,
+  Headphones,
+  ListVideo,
+  Play,
+  PlayCircle,
+  Sparkles,
+} from 'lucide-react';
 import { useCallback, useEffect, useId, useRef, useState, type CSSProperties } from 'react';
 import { formatClock, type LectureChapter, type LessonLecture } from '../api';
 
@@ -57,7 +67,7 @@ export function LectureSection({ lecture, headingLevel = 2 }: LectureSectionProp
   const [speed, setSpeed] = useState<Speed>(1);
   const [transcriptOpen, setTranscriptOpen] = useState(false);
   const [ytStart, setYtStart] = useState<number | null>(null); // null = facade (the embed is not loaded)
-  const [thumb, setThumb] = useState<'maxresdefault' | 'hqdefault'>('maxresdefault');
+  const [thumb, setThumb] = useState<'maxresdefault' | 'hqdefault' | 'none'>('maxresdefault');
   const youTubeId = lecture.produced ? lecture.youTubeId : null;
   const embedUrl = youTubeId ? (lecture.embedUrl ?? `${YOUTUBE_EMBED_ORIGIN}/embed/${youTubeId}`) : null;
   const fileSrc = lecture.produced && !youTubeId ? lecture.src : null;
@@ -82,13 +92,21 @@ export function LectureSection({ lecture, headingLevel = 2 }: LectureSectionProp
 
   // ---- YouTube: postMessage commands and time updates (the embed is loaded with enablejsapi=1).
   const ytCommand = useCallback((func: string, args: unknown[] = []) => {
-    frameRef.current?.contentWindow?.postMessage(JSON.stringify({ event: 'command', func, args }), YOUTUBE_EMBED_ORIGIN);
+    frameRef.current?.contentWindow?.postMessage(
+      JSON.stringify({ event: 'command', func, args }),
+      YOUTUBE_EMBED_ORIGIN,
+    );
   }, []);
 
   useEffect(() => {
     if (!embedUrl || ytStart === null) return;
     const onMessage = (e: MessageEvent) => {
-      if (e.origin !== YOUTUBE_EMBED_ORIGIN || e.source !== frameRef.current?.contentWindow || typeof e.data !== 'string') return;
+      if (
+        e.origin !== YOUTUBE_EMBED_ORIGIN ||
+        e.source !== frameRef.current?.contentWindow ||
+        typeof e.data !== 'string'
+      )
+        return;
       let data: { event?: string; info?: { currentTime?: number; duration?: number } | null };
       try {
         data = JSON.parse(e.data) as typeof data;
@@ -105,7 +123,10 @@ export function LectureSection({ lecture, headingLevel = 2 }: LectureSectionProp
 
   const onFrameLoad = () => {
     // Ask the player to stream its state (infoDelivery) to this window; then apply the chosen speed.
-    frameRef.current?.contentWindow?.postMessage(JSON.stringify({ event: 'listening', id: titleId, channel: 'widget' }), YOUTUBE_EMBED_ORIGIN);
+    frameRef.current?.contentWindow?.postMessage(
+      JSON.stringify({ event: 'listening', id: titleId, channel: 'widget' }),
+      YOUTUBE_EMBED_ORIGIN,
+    );
     if (speed !== 1) ytCommand('setPlaybackRate', [speed]);
   };
 
@@ -119,7 +140,9 @@ export function LectureSection({ lecture, headingLevel = 2 }: LectureSectionProp
     setTranscriptOpen(true);
     // After the panel opens: bring the chapter's transcript into view (no smooth scroll with reduced motion: base.css).
     window.setTimeout(() => {
-      transcriptRef.current?.querySelector<HTMLElement>(`[data-chapter="${index}"]`)?.scrollIntoView?.({ block: 'nearest' });
+      transcriptRef.current
+        ?.querySelector<HTMLElement>(`[data-chapter="${index}"]`)
+        ?.scrollIntoView?.({ block: 'nearest' });
     }, 50);
   };
 
@@ -128,7 +151,8 @@ export function LectureSection({ lecture, headingLevel = 2 }: LectureSectionProp
     setChapterProgress(0);
     const at = startOf(chapters[index]!);
     if (embedUrl) {
-      if (ytStart === null) setYtStart(at); // loads the player at the chapter
+      if (ytStart === null)
+        setYtStart(at); // loads the player at the chapter
       else {
         ytCommand('seekTo', [at, true]);
         ytCommand('playVideo');
@@ -177,21 +201,36 @@ export function LectureSection({ lecture, headingLevel = 2 }: LectureSectionProp
       {embedUrl && youTubeId ? (
         <div className="lx-lecture__stage lx-yt">
           {ytStart === null ? (
-            <button type="button" className="lx-yt__facade" onClick={() => setYtStart(0)} aria-label={`Play the video lecture: ${lecture.title}`}>
-              <img
-                src={lecture.poster ?? youTubeThumbnail(youTubeId, thumb)}
-                alt=""
-                width={1280}
-                height={720}
-                loading="lazy"
-                decoding="async"
-                // maxresdefault is missing for non-HD uploads (404, or a small grey placeholder).
-                onError={() => setThumb('hqdefault')}
-                onLoad={(e) => {
-                  if (!lecture.poster && thumb === 'maxresdefault' && e.currentTarget.naturalWidth > 0 && e.currentTarget.naturalWidth < 200)
-                    setThumb('hqdefault');
-                }}
-              />
+            <button
+              type="button"
+              className="lx-yt__facade"
+              onClick={() => setYtStart(0)}
+              aria-label={`Play the video lecture: ${lecture.title}`}
+            >
+              {thumb !== 'none' && (
+                <img
+                  src={lecture.poster ?? youTubeThumbnail(youTubeId, thumb)}
+                  alt=""
+                  width={1280}
+                  height={720}
+                  loading="lazy"
+                  decoding="async"
+                  // maxresdefault is missing for non-HD uploads (404, or a small grey placeholder).
+                  // hqdefault failing too (offline, blocked): show the branded stage instead of a broken image.
+                  onError={() =>
+                    setThumb((t) => (t === 'maxresdefault' && !lecture.poster ? 'hqdefault' : 'none'))
+                  }
+                  onLoad={(e) => {
+                    if (
+                      !lecture.poster &&
+                      thumb === 'maxresdefault' &&
+                      e.currentTarget.naturalWidth > 0 &&
+                      e.currentTarget.naturalWidth < 200
+                    )
+                      setThumb('hqdefault');
+                  }}
+                />
+              )}
               <span className="lx-yt__play" aria-hidden="true">
                 <Play />
               </span>
@@ -228,7 +267,9 @@ export function LectureSection({ lecture, headingLevel = 2 }: LectureSectionProp
             aria-describedby={transcriptId}
           >
             <source src={fileSrc} type="video/mp4" />
-            {lecture.captions && <track kind="captions" src={lecture.captions} srcLang="en" label="English" default />}
+            {lecture.captions && (
+              <track kind="captions" src={lecture.captions} srcLang="en" label="English" default />
+            )}
             Your browser can’t play this video. Read the transcript below instead.
           </video>
         </div>
@@ -251,7 +292,10 @@ export function LectureSection({ lecture, headingLevel = 2 }: LectureSectionProp
             )}
             <div className="lx-lecture__slide-dots" aria-hidden="true">
               {chapters.map((c) => (
-                <span key={c.index} className={clsx(c.index === active && 'is-on', c.index < active && 'is-past')} />
+                <span
+                  key={c.index}
+                  className={clsx(c.index === active && 'is-on', c.index < active && 'is-past')}
+                />
               ))}
             </div>
           </div>
@@ -260,8 +304,8 @@ export function LectureSection({ lecture, headingLevel = 2 }: LectureSectionProp
               <Headphones aria-hidden="true" /> The narrated lecture is in production
             </p>
             <p className="lx-muted">
-              Every chapter is scripted and ready. Browse the chapters and read the full transcript now — the video will
-              appear here when it’s published.
+              Every chapter is scripted and ready. Browse the chapters and read the full transcript now — the
+              video will appear here when it’s published.
             </p>
           </div>
         </div>
@@ -273,7 +317,12 @@ export function LectureSection({ lecture, headingLevel = 2 }: LectureSectionProp
             <span
               className="lx-seg__thumb"
               aria-hidden="true"
-              style={{ ['--seg-i' as string]: SPEEDS.indexOf(speed), ['--seg-n' as string]: SPEEDS.length } as CSSProperties}
+              style={
+                {
+                  ['--seg-i' as string]: SPEEDS.indexOf(speed),
+                  ['--seg-n' as string]: SPEEDS.length,
+                } as CSSProperties
+              }
             />
             {SPEEDS.map((s) => (
               <button
@@ -311,7 +360,10 @@ export function LectureSection({ lecture, headingLevel = 2 }: LectureSectionProp
           {chapters.map((c) => {
             const isActive = c.index === active;
             return (
-              <li key={c.index} className={clsx('lx-chapter', isActive && 'is-active', c.index < active && 'is-past')}>
+              <li
+                key={c.index}
+                className={clsx('lx-chapter', isActive && 'is-active', c.index < active && 'is-past')}
+              >
                 <button
                   type="button"
                   className="lx-chapter__btn"
@@ -321,11 +373,19 @@ export function LectureSection({ lecture, headingLevel = 2 }: LectureSectionProp
                   <span className="lx-chapter__time">{formatClock(startOf(c))}</span>
                   <span className="lx-chapter__title">{c.title}</span>
                   <span className="lx-chapter__bar" aria-hidden="true">
-                    <span style={{ transform: `scaleX(${isActive ? (produced ? chapterProgress : 1) : c.index < active ? 1 : 0})` }} />
+                    <span
+                      style={{
+                        transform: `scaleX(${isActive ? (produced ? chapterProgress : 1) : c.index < active ? 1 : 0})`,
+                      }}
+                    />
                   </span>
                 </button>
                 {!produced && (
-                  <button type="button" className="lx-chapter__read" onClick={() => openTranscriptAt(c.index)}>
+                  <button
+                    type="button"
+                    className="lx-chapter__read"
+                    onClick={() => openTranscriptAt(c.index)}
+                  >
                     Read<span className="visually-hidden"> the transcript of “{c.title}”</span>
                   </button>
                 )}
