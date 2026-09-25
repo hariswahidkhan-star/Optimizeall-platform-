@@ -1,0 +1,1832 @@
+{
+  "slug": "ecommerce-marketing-and-growth",
+  "version": 1,
+  "title": "E-commerce Marketing and Growth",
+  "subtitle": "Grow an online store profitably — product pages, merchandising, retention, marketplaces, partners and unit economics",
+  "category": "marketing",
+  "level": "intermediate",
+  "estimatedMinutes": 235,
+  "description": "Many online stores grow revenue and still lose money. This course teaches **profitable** e-commerce growth: the store foundations and **product pages** that convert, **merchandising and promotions** that lift order value without destroying margin, and **retention** through email, SMS, messaging, loyalty and great customer experience.\n\nYou will weigh **marketplaces and social commerce** against your own store, build **affiliate and creator programmes** that are measurable and compliant, and master **unit economics** — AOV, CAC, LTV, contribution margin and payback — with the analytics to track them.\n\nFor store owners, e-commerce managers, D2C founders and agency teams selling online in markets from the UK and US to the Gulf and South Asia.",
+  "outcomes": [
+    "Explain the e-commerce growth equation and diagnose which lever limits a store",
+    "Build store foundations and product pages that earn trust and convert",
+    "Plan merchandising, promotions and discount codes that protect margin",
+    "Design retention programmes across email, SMS, messaging and loyalty",
+    "Evaluate marketplaces, social commerce and paid acquisition for a brand",
+    "Run affiliate and creator programmes with clear terms, disclosure and measurement",
+    "Calculate AOV, CAC, LTV, contribution margin and payback to guide growth decisions"
+  ],
+  "skills": [
+    "E-commerce marketing",
+    "Product page optimization",
+    "Merchandising",
+    "Retention marketing",
+    "Marketplace strategy",
+    "Affiliate marketing",
+    "Unit economics",
+    "E-commerce analytics"
+  ],
+  "prerequisites": [],
+  "badge": {
+    "name": "Certified E-commerce Growth Marketer",
+    "description": "The holder can grow an online store profitably: building trustworthy store foundations and product pages, planning merchandising and margin-safe promotions, running retention and loyalty programmes, evaluating marketplaces and social commerce, managing compliant affiliate and creator programmes, and making decisions with unit economics and analytics.",
+    "criteria": "Completed all lessons and scored at least 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "store-fundamentals",
+      "title": "Store fundamentals and product pages",
+      "summary": "Understand the growth equation, build trustworthy store foundations and create product pages that convert.",
+      "lessons": [
+        {
+          "slug": "ecommerce-growth-model",
+          "title": "The e-commerce growth model",
+          "type": "video",
+          "durationMinutes": 10,
+          "body": "### Revenue is a product of levers\n\nE-commerce revenue can be broken into a small number of multiplying levers:\n\n```\nRevenue = Visitors x Conversion rate x Average order value (AOV)\n\nOver a customer's lifetime:\nCustomer value = AOV x Purchase frequency x Customer lifespan\n```\n\nAnd profit depends on what it costs to acquire and serve those customers:\n\n```\nProfit = Revenue - Cost of goods - Fulfilment & shipping - Payment fees\n         - Returns - Marketing - Operating costs\n```\n\nGrowth comes from improving one or more levers **without damaging the others**. A discount can raise conversion rate but lower AOV and margin. Cheap traffic can raise visitors but lower conversion. Understanding the levers helps you choose the right move.\n\n### The five growth levers\n\n| Lever | Questions | Typical tactics |\n|---|---|---|\n| Traffic | Are enough of the right people visiting? | SEO, paid ads, social, creators, marketplaces, email |\n| Conversion rate | Do visitors buy? | Product pages, trust, checkout, payment options, speed |\n| AOV | How much do they spend per order? | Bundles, cross-sells, free-shipping thresholds, premium ranges |\n| Purchase frequency | Do customers come back? | Email/SMS flows, loyalty, subscriptions, new launches |\n| Margin | Is each order profitable? | Pricing, sourcing, shipping costs, returns, discount discipline |\n\n### Diagnosing the limiting lever\n\nLook at your numbers against your own history and the reality of your category:\n\n```\nSymptom                                          Likely limiting lever\nLots of traffic, few orders                      Conversion (product pages, trust, checkout)\nGood conversion, low revenue                     Traffic or AOV\nStrong first orders, few repeat orders           Retention / frequency\nGrowing revenue, shrinking bank balance          Margin / CAC / unit economics\nGrowing CAC every month                          Traffic quality, creative fatigue, over-reliance on one channel\n```\n\n### Channels in the modern e-commerce mix\n\n- **Owned**: your store, email list, SMS list, messaging channels (such as WhatsApp Business), app, community.\n- **Earned**: SEO, reviews, press, word of mouth, organic social, creator content you did not pay for.\n- **Paid**: search and shopping ads, social ads, creator partnerships, affiliates, marketplace ads.\n- **Marketplaces**: third-party platforms where you sell alongside others.\n\nHealthy stores build **owned** channels over time so that growth does not depend entirely on rising ad costs.\n\n### Regional realities\n\nE-commerce looks different across markets. Cash on delivery remains important in parts of South Asia and the Middle East, while cards and digital wallets dominate in the UK and US. Buy-now-pay-later services are popular in several markets. Delivery expectations, returns culture, peak seasons (Ramadan and Eid, White Friday or Black Friday, 11.11, Diwali, Boxing Day) and preferred marketplaces vary. Always build your model on your market's reality.\n\n### Worked example: finding the lever\n\nAn online modest-fashion store in Karachi has illustrative monthly numbers:\n\n```\nVisitors: 60,000   Conversion: 0.8%   Orders: 480   AOV: PKR 6,500   Revenue: PKR 3.12m\nRepeat customer share of orders: 12%\nCOD refusal rate: significant\n```\n\nComparing with its own past and similar stores, conversion and retention look weak, and cash-on-delivery refusals erode realised revenue. Priorities: improve product pages and trust (size guides, real photos, reviews), add order confirmation messages to reduce refusals, and build post-purchase flows to increase repeat orders — before spending more on traffic.\n\n### Common mistakes\n\n- Scaling ad spend before fixing conversion and margin.\n- Measuring revenue growth without profit.\n- Treating all traffic as equal.\n- Ignoring repeat purchase behaviour.\n- Copying tactics from a different market without adapting them.\n\n### A monthly growth review\n\nHold a short monthly review built around the levers. For each one, note last month's figure, the change versus the previous month and the same month last year, and the single biggest driver of the change. Then choose one lever to focus on next month and one experiment to run. This keeps the team from chasing every idea at once and makes progress visible. Over a year, twelve focused improvements compound into a very different business.\n\n### Questions to ask before spending more on ads\n\n1. Is our conversion rate stable or improving for each main traffic source?\n2. Do we know our contribution margin per order after all variable costs?\n3. Are first-time buyers coming back at a healthy rate?\n4. Can operations (stock, delivery, customer service) handle more orders?\n\nIf any answer is no, fix that first.\n\n### Growth model checklist\n\n- [ ] Monthly numbers for each lever recorded\n- [ ] Limiting lever identified with evidence\n- [ ] Contribution margin per order known\n- [ ] Owned channels growing month on month\n- [ ] Market-specific factors (payments, delivery, seasons) reflected in plans\n",
+          "video": {
+            "script": "Let's look at how an online store really grows. Revenue comes from three things multiplied together: visitors, times conversion rate, times average order value. Over a customer's lifetime you add two more: how often they buy, and how long they stay. Then there's profit. Take revenue, subtract product costs, shipping, payment fees, returns and marketing, and see what's left. Here's the key idea. Growth comes from improving one lever without damaging the others. A big discount might lift conversion, but it lowers order value and margin. Cheap traffic might boost visitor numbers but bring people who never buy. So before you spend more on ads, work out which lever is actually holding you back. Lots of traffic and few orders? That's usually conversion: product pages, trust, checkout, payment options. Strong first orders but hardly anyone coming back? That's retention. Revenue growing while the bank balance shrinks? That's margin and acquisition cost. Also think about which channels you own. Your store, your email and SMS lists, your messaging channels and your community belong to you. Ads and marketplaces are rented. Healthy stores grow their owned channels, so growth doesn't depend on ad prices that keep going up. And always build around your market. Cash on delivery, digital wallets, delivery expectations and peak seasons like Ramadan, White Friday or Black Friday vary a lot from country to country. In this course, you'll learn to pull each lever, and to do it profitably.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Revenue = visitors × conversion rate × AOV; lifetime value adds frequency and lifespan.",
+            "Improve one lever without damaging others — discounts and cheap traffic often do.",
+            "Diagnose the limiting lever before spending more on traffic.",
+            "Build owned channels and adapt to your market's payments, delivery and seasons."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A store has high traffic but very few orders. Which lever is most likely limiting?",
+              "options": [
+                "Traffic",
+                "Purchase frequency",
+                "Conversion rate",
+                "AOV"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Plenty of visitors but few orders points to conversion problems."
+            },
+            {
+              "question": "Revenue grows every month but the bank balance shrinks. What should be investigated first?",
+              "options": [
+                "Margin, CAC and unit economics",
+                "Social media followers",
+                "Logo design",
+                "Website fonts"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Unprofitable growth usually stems from margin or acquisition cost issues."
+            },
+            {
+              "question": "Which is an owned channel?",
+              "options": [
+                "A creator's audience",
+                "Search engine results",
+                "Marketplace ads",
+                "Your email list"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Owned channels are those you control directly, such as email lists."
+            }
+          ],
+          "activity": "Record your store's (or a sample store's) monthly visitors, conversion rate, AOV, repeat rate and contribution margin, and identify the limiting lever with evidence."
+        },
+        {
+          "slug": "store-foundations",
+          "title": "Store foundations: trust, payments, delivery and speed",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### The foundations shoppers notice\n\nBefore persuasive copy or clever campaigns, shoppers decide whether a store is **trustworthy, easy and fast**. Weak foundations leak sales no matter how good your marketing is.\n\n### Platform choice\n\nHosted platforms (such as Shopify, WooCommerce on managed hosting, BigCommerce, Wix, Salla or Zid in the Gulf, and many others) handle much of the technical work. Choose based on:\n\n| Factor | Questions |\n|---|---|\n| Market fit | Local payment gateways, currencies, languages (including right-to-left), tax and invoicing requirements |\n| Integrations | Couriers, marketplaces, email/SMS tools, accounting, ERP |\n| Cost | Subscription, transaction fees, app costs, developer costs |\n| Flexibility | Custom checkout, B2B features, subscriptions, multi-store |\n| Scalability | Performance at peak traffic, support quality |\n\nSwitching platforms later is painful; choose for where the business will be in two to three years.\n\n### Trust signals\n\nShoppers look for evidence that the store is real and safe:\n\n- Clear business identity: company name, address, contact details (and registration details where required).\n- Recognisable payment methods and secure checkout.\n- Clear delivery, returns and refund policies — written in plain language, easy to find.\n- Genuine reviews and ratings.\n- Professional product photography and consistent branding.\n- Responsive customer service channels (chat, WhatsApp, email, phone) with stated hours.\n- Social proof: press mentions, creator content, community.\n\n### Payments\n\nOffer the payment methods your customers actually use:\n\n```\nUK / US / EU:   Cards, digital wallets, PayPal, buy-now-pay-later (BNPL) options\nGulf:           Cards, digital wallets, local BNPL providers, cash on delivery (declining but still used)\nPakistan:       Cash on delivery, cards, bank transfer, mobile wallets\nEverywhere:     Show accepted methods early (product page and cart), not just at payment\n```\n\nFor **cash on delivery (COD)**, reduce refusals with order confirmation messages (SMS or WhatsApp), clear delivery estimates, and in some cases a small deposit or incentives for prepaid orders. BNPL requires clear, fair presentation of terms and may be subject to consumer credit rules in some markets.\n\n### Delivery and returns\n\nDelivery is part of the product experience:\n\n- Show delivery costs and estimated dates **before checkout**, ideally on product pages.\n- Offer options (standard, express, click-and-collect) where viable.\n- Provide tracking and proactive updates.\n- Make returns clear; many jurisdictions give consumers statutory rights (for example, cancellation periods for online purchases in the UK and EU) that your policy must respect.\n- Consider a free-shipping threshold to raise AOV (see Module 2).\n\n### Speed and mobile experience\n\nMost e-commerce traffic in many markets is mobile. Priorities:\n\n- Fast-loading pages on mid-range phones and mobile networks (compress images, limit apps and scripts).\n- Thumb-friendly navigation and buttons.\n- Sticky add-to-cart on product pages.\n- Simple, guest-friendly checkout with autofill and wallet support.\n\n### Legal and compliance essentials\n\n- Accurate product information and prices (including taxes where required).\n- Terms and conditions, privacy notice and cookie consent where required.\n- Consumer rights information (cancellations, returns, warranties).\n- Accessibility considerations.\n- Restricted products checked against local law and platform or payment-provider rules.\n\nThis is a general overview, not legal advice — check the rules in each market you sell to.\n\n### Worked example: a Saudi skincare store's foundation fixes\n\nA new skincare brand in Jeddah launches with a beautiful site but low conversion. An audit finds: no Arabic version, delivery fees revealed only at checkout, card-only payments, no returns policy link, and slow mobile pages due to large images. Fixes: an Arabic storefront with proper right-to-left layout, delivery estimates by city on product pages, digital wallet and BNPL options, a clear returns page, and image compression. Conversion improves before any extra marketing spend (outcome illustrative).\n\n### Common mistakes\n\n- Hiding contact details.\n- Offering payment methods your customers do not use while missing ones they do.\n- Surprise costs at checkout.\n- Slow mobile pages.\n- Policies copied from another country that conflict with local law.\n\n### Foundations checklist\n\n- [ ] Business identity and contact details visible\n- [ ] Local payment methods shown early\n- [ ] Delivery costs and dates visible before checkout\n- [ ] Clear, lawful returns policy\n- [ ] Mobile speed tested on mid-range devices\n- [ ] Legal pages and consent in place\n",
+          "video": null,
+          "keyTakeaways": [
+            "Trust, ease and speed are foundations; marketing cannot fix weak ones.",
+            "Choose a platform for market fit, integrations, cost and future scale.",
+            "Offer and display the payment methods your customers actually use, early.",
+            "Show delivery costs and dates before checkout and respect statutory consumer rights."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A store reveals delivery fees only at the final checkout step. What is the likely effect?",
+              "options": [
+                "Better SEO",
+                "More checkout abandonment due to surprise costs",
+                "Higher AOV",
+                "Higher conversion"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Unexpected costs late in the flow are a common reason for abandonment."
+            },
+            {
+              "question": "Which tactic helps reduce cash-on-delivery refusals?",
+              "options": [
+                "Removing COD entirely without notice",
+                "Sending order confirmation messages and clear delivery estimates",
+                "Hiding the delivery date",
+                "Longer delivery times"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Confirmation and clear expectations reduce refusals."
+            },
+            {
+              "question": "What should guide platform choice?",
+              "options": [
+                "Market fit, integrations, cost, flexibility and scalability",
+                "The designer's preference only",
+                "The most popular platform in another country",
+                "The cheapest theme"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Platform fit with market and business needs matters most."
+            }
+          ],
+          "activity": "Audit a store against the foundations checklist and list the top three fixes by expected impact."
+        },
+        {
+          "slug": "product-pages-that-convert",
+          "title": "Product pages that convert",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### The product page is your salesperson\n\nOn most stores, the product page (PDP) is where the buying decision is made. It must answer every question a shopper would ask a knowledgeable salesperson — quickly and honestly.\n\n### Anatomy of a high-converting product page\n\n```\nABOVE THE FOLD (mobile first screen)\n- Product title (clear, descriptive)\n- Price (with any discount shown honestly) and payment options (e.g. BNPL, COD)\n- Star rating and review count (linked to reviews)\n- Primary images (swipeable)\n- Key variant selectors (size, colour)\n- Add to cart (sticky on mobile)\n- Delivery estimate and returns summary\n\nBELOW\n- Benefit-led description\n- Specifications / materials / ingredients\n- Size guide or fit information\n- How to use / care instructions\n- Reviews with photos\n- FAQs\n- Cross-sells (\"Complete the look\", \"Frequently bought together\")\n```\n\n### Images and video\n\nVisuals do most of the selling online:\n\n- Multiple angles, close-ups of texture and details, scale references (the product in hand or on a person).\n- Lifestyle images showing the product in context.\n- Short videos: product in use, fit on different body types, unboxing.\n- Consistent lighting and backgrounds.\n- Alternative text for accessibility.\n- Accurate colours — colour mismatch is a common cause of returns.\n\n### Descriptions that sell\n\nStructure descriptions for scanners:\n\n```\nOpening line: the main benefit for the target customer\nBullets (3-6): benefits, each backed by a feature\nDetails: materials, dimensions, compatibility, origin\nUse/care: how to get the best from it\n```\n\nExample for a linen abaya:\n\n```\n\"Stay cool through long summer days in breathable, lightweight linen.\n- Breathable linen blend keeps you comfortable in heat and humidity\n- Relaxed fit with room to layer, sized for your usual size\n- Hidden side pockets for your phone and keys\n- Machine washable at 30 degrees - no dry cleaning needed\nModel is 165 cm and wears size S (length 54).\"\n```\n\n### Reviews and user-generated content\n\nReviews reduce uncertainty. Best practices:\n\n- Display ratings near the title and full reviews lower down, with filters (size, rating).\n- Encourage photo and video reviews.\n- Show negative reviews too — a mix of ratings tends to be seen as more credible than a perfect score.\n- Respond to reviews professionally.\n- **Never** fake, buy or selectively suppress reviews; this is illegal in many jurisdictions (for example, under UK consumer law as updated by the DMCC Act 2024, the US FTC's rule on fake reviews, and EU consumer rules) and violates platform policies.\n\n### Size, fit and compatibility\n\nFor fashion, furniture and electronics, uncertainty drives returns. Provide size charts with measurements, fit notes from reviews (\"runs small\"), model measurements, compatibility checkers for electronics, and dimension diagrams for furniture.\n\n### Price presentation\n\n- Show the price clearly with currency.\n- If discounted, show the genuine previous price; misleading reference prices can breach consumer protection rules.\n- Show instalment options clearly and fairly if you offer BNPL.\n- Mention inclusive taxes where required.\n\n### Worked example: rebuilding a PDP for a UK homeware brand\n\nOriginal: one studio photo, a two-line description, no dimensions, reviews hidden at the bottom, delivery information on a separate page.\n\nRebuilt: six images including scale shots and a short video; benefit-led bullets; dimensions diagram; star rating near the title; delivery date estimate by postcode; \"30-day returns\" note by the add-to-cart button; FAQ answering the three most common customer service questions. The team monitors add-to-cart rate, conversion and returns reasons after launch.\n\n### Testing and iteration\n\nUse analytics and customer feedback to prioritise PDP improvements: what do customer service agents hear most often? What do return reasons say? Where do heatmaps show confusion? Test significant changes (for example, image order or information placement) where traffic allows.\n\n### Common mistakes\n\n- Supplier-provided descriptions copied word for word (also creates duplicate content across the web).\n- Missing dimensions or size guidance.\n- Too few images or inaccurate colours.\n- Reviews hidden or absent.\n- Delivery and returns information missing from the page.\n\n### PDP checklist\n\n- [ ] Clear title, price, rating and add-to-cart in the first mobile screen\n- [ ] At least five images plus video where possible\n- [ ] Benefit-led description with specs and care\n- [ ] Size/fit/compatibility information\n- [ ] Reviews with photos, including critical ones\n- [ ] Delivery estimate and returns summary near the button\n",
+          "video": null,
+          "keyTakeaways": [
+            "The product page must answer every question a knowledgeable salesperson would.",
+            "Visuals, benefit-led descriptions, size and fit information and reviews reduce uncertainty.",
+            "Show price, discounts and payment options honestly and clearly.",
+            "Never fake, buy or suppress reviews — it is illegal in many markets."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which element most directly reduces fit-related returns for clothing?",
+              "options": [
+                "A longer brand story",
+                "More discount codes",
+                "Size charts, model measurements and fit notes",
+                "A bigger logo"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Fit information helps customers choose correctly."
+            },
+            {
+              "question": "Why show negative reviews alongside positive ones?",
+              "options": [
+                "Negative reviews improve SEO only",
+                "It is required to get more discounts",
+                "It reduces returns to zero",
+                "A mix of ratings tends to be more credible, and suppressing reviews can be unlawful"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Authentic, unfiltered reviews build trust and comply with consumer rules."
+            },
+            {
+              "question": "What should appear near the add-to-cart button?",
+              "options": [
+                "Social media follower counts",
+                "The company history",
+                "Delivery estimate and returns summary",
+                "Job vacancies"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Answering delivery and returns questions at the decision point reduces hesitation."
+            }
+          ],
+          "activity": "Audit one product page against the PDP checklist and rewrite its description using the benefit-led structure."
+        }
+      ]
+    },
+    {
+      "slug": "merchandising-and-promotions",
+      "title": "Merchandising, pricing and promotions",
+      "summary": "Organise products so shoppers find and buy more, and run promotions and discount codes that grow profit, not just revenue.",
+      "lessons": [
+        {
+          "slug": "merchandising-and-aov",
+          "title": "Merchandising and raising order value",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### What merchandising means online\n\n**Merchandising** is how you present and arrange products so shoppers find what they want and discover more. In a physical shop, it covers windows, shelves and displays. Online, it includes navigation, collections, search, product sorting, recommendations and bundles.\n\n### Navigation and collections\n\n- Organise categories the way **customers** think, not how your warehouse is organised (for example, \"Gifts for her\" and \"Under AED 100\" alongside product types).\n- Keep top navigation simple; use mega-menus sparingly on desktop and clear, tappable menus on mobile.\n- Create **curated collections** for occasions and needs: \"Eid outfits\", \"Back to school\", \"Home office essentials\", \"New arrivals\", \"Bestsellers\".\n- Use collection pages with helpful introductions and filters (size, colour, price, availability).\n\n### Sorting and ranking\n\nThe default order of products in a collection matters. Options include bestsellers, new arrivals, highest margin, or manual curation. A common approach is to feature **bestsellers and hero products first** (social proof and conversion) while mixing in new or high-margin items. Always hide or push down out-of-stock items.\n\n### On-site search\n\nShoppers who search often convert at higher rates because they have clear intent. Improve search by:\n\n- Supporting synonyms and common misspellings (including transliterations, for example Roman Urdu or Arabic spellings).\n- Showing product suggestions as users type.\n- Reviewing **zero-result searches** weekly and fixing them (add synonyms, products or redirects).\n- Using search data to inform buying and content decisions.\n\n### Raising AOV\n\n| Tactic | How it works | Watch out for |\n|---|---|---|\n| Bundles | Sell related items together, often at a small saving | Margin; bundle relevance |\n| Cross-sells | \"Frequently bought together\", \"Complete the look\" | Relevance over randomness |\n| Upsells | Premium version or larger size | Don't hide the cheaper option |\n| Free-shipping threshold | Free delivery above a set order value | Set threshold using AOV data and shipping costs |\n| Tiered offers | \"Spend 300, save 30\" | Margin at each tier |\n| Gift with purchase | Free item above a threshold | Cost of the gift |\n| Post-purchase offers | One-click add-on after checkout | Keep it relevant and optional |\n\n### Setting a free-shipping threshold\n\nA common approach is to set the threshold somewhat above your current AOV so that many customers add an item to qualify. Example with illustrative numbers:\n\n```\nCurrent AOV: 180\nAverage shipping cost to you: 20\nOption: free shipping above 220\n\nIf a meaningful share of orders between 180 and 220 grows to 220+, AOV rises.\nCheck: does the extra gross margin from added items exceed the shipping cost you absorb?\n```\n\nTest and monitor: conversion rate, AOV and contribution margin per order.\n\n### Merchandising calendar\n\nPlan homepage and collection changes around the retail calendar: new season launches, gifting occasions, local holidays and sales events. Keep the homepage fresh and relevant to what customers are shopping for this week.\n\n### Worked example: a Dubai electronics accessories store\n\nAOV is low because most orders are single phone cases. Changes:\n\n- \"Complete your setup\" cross-sells on phone case pages (screen protector, charger).\n- Bundles: case + screen protector at a small saving.\n- Free shipping threshold set just above the price of a case plus protector.\n- Search synonyms added for model names customers type differently.\n\nThe team monitors AOV, attach rate (share of orders with cross-sold items) and margin per order.\n\n### Common mistakes\n\n- Navigation mirroring internal categories customers don't understand.\n- Random or irrelevant recommendations.\n- Out-of-stock products at the top of collections.\n- Free-shipping thresholds set without margin analysis.\n- Ignoring zero-result searches.\n\n### Personalised recommendations\n\nMany platforms and apps offer automated recommendations (\"customers also bought\", \"recently viewed\", \"you may also like\"). They can raise AOV and discovery, but check that suggestions are relevant, in stock and appropriate for the customer's market and language. Review recommendation performance monthly: click-through, add-to-cart rate from recommendations and the margin of recommended products. Where automated suggestions are weak, curate manual rules for your top products.\n\n### Merchandising checklist\n\n- [ ] Navigation and collections based on customer language and needs\n- [ ] Bestsellers and heroes prioritised; out-of-stock items demoted\n- [ ] Search synonyms and zero-result review in place\n- [ ] At least two AOV tactics running and measured\n- [ ] Merchandising calendar aligned with the retail calendar\n",
+          "video": null,
+          "keyTakeaways": [
+            "Merchandising is how products are arranged and presented so shoppers find and discover more.",
+            "Organise navigation and collections around customer needs and language.",
+            "Improve on-site search by fixing zero-result queries and adding synonyms.",
+            "Raise AOV with relevant bundles, cross-sells and margin-checked thresholds."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Where should a free-shipping threshold typically be set?",
+              "options": [
+                "Somewhat above current AOV, checked against margin and shipping costs",
+                "At ten times AOV",
+                "Far below current AOV",
+                "At exactly zero"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "A threshold slightly above AOV encourages additions while preserving margin."
+            },
+            {
+              "question": "What should you do about zero-result searches?",
+              "options": [
+                "Ignore them",
+                "Remove search",
+                "Show a 404 page",
+                "Review them regularly and fix with synonyms, products or redirects"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Zero-result searches reveal unmet demand and fixable friction."
+            },
+            {
+              "question": "Which is an example of a relevant cross-sell?",
+              "options": [
+                "A discount on unrelated furniture",
+                "A screen protector offered with a phone case",
+                "A random T-shirt on a laptop page",
+                "Nothing"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Cross-sells should complement the primary product."
+            }
+          ],
+          "activity": "Review a store's navigation, search and AOV tactics, and propose one bundle, one cross-sell and a free-shipping threshold with the margin maths."
+        },
+        {
+          "slug": "pricing-promotions-and-discount-codes",
+          "title": "Pricing, promotions and discount codes",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Promotions are tools, not habits\n\nPromotions can attract new customers, clear stock, and create urgency around events. But frequent discounting trains customers to wait for sales, erodes margin and can damage brand perception. The goal is **profitable promotion**.\n\n### The margin maths of discounts\n\nAlways calculate the sales increase required to maintain gross profit:\n\n```\nPrice: 100   Cost of goods: 50   Gross profit per unit: 50\n\n20% discount -> price 80 -> gross profit per unit 30\nUnits needed to keep the same gross profit: 50 / 30 = 1.67x  (+67% more units)\n\nWith a 40% gross margin (cost 60):\n20% discount -> profit 20 (was 40) -> need 2x units (+100%)\n```\n\nThe lower your margin, the more a discount hurts. Include shipping, payment fees and returns in the full contribution calculation.\n\n### Types of promotions\n\n| Promotion | Best for | Risk |\n|---|---|---|\n| Percentage off sitewide | Big events (Black Friday, White Friday, 11.11) | Margin erosion; trains waiting |\n| Percentage off selected items | Clearing stock, category pushes | Cannibalising full-price sales |\n| Spend-and-save tiers | Raising AOV | Complexity |\n| Gift with purchase | Protecting perceived price | Cost of gift |\n| Free shipping | Reducing checkout friction | Absorbed shipping cost |\n| Bundle pricing | AOV and product discovery | Bundle margin |\n| First-order offer | New customer acquisition | Attracting discount-only shoppers |\n| Loyalty rewards | Retention | Liability of unused points |\n| Early access for subscribers | List growth and loyalty | None significant if managed |\n\n### Discount codes: benefits and leakage\n\nDiscount codes allow targeting (specific customers, creators, channels) and tracking. But codes **leak**: they end up on coupon websites and browser extensions, where shoppers who would have paid full price find them. Controls:\n\n- **Unique, single-use codes** for email and SMS campaigns.\n- **Creator-specific codes** with expiry dates and usage limits.\n- **Automatic discounts** applied via links rather than public codes.\n- **Minimum order values** and product exclusions.\n- **Monitoring** code usage by source; deactivate leaked codes.\n- Consider collapsing the promo code field at checkout so full-price shoppers are not prompted to search for one (test the effect).\n\n### Pricing strategy basics\n\n- **Cost-plus**: cost + target margin. Simple, but ignores customer value and competition.\n- **Competitive**: aligned with competitors. Useful for commodity items; risky race to the bottom.\n- **Value-based**: based on perceived value to the customer. Best for differentiated products.\n- **Psychological pricing**: price endings and anchoring (show a premium option to make the mid-tier look reasonable). Use honestly.\n\n### Legal rules on pricing and promotions\n\nConsumer protection laws in most markets regulate how prices and promotions are presented. Common principles:\n\n- Reference prices (\"was\") must be genuine — the product must have been sold at that price for a meaningful period.\n- Sale end dates must be real; extending a \"final day\" repeatedly can mislead.\n- Mandatory fees must be included or shown clearly upfront (drip pricing is targeted by regulators).\n- Promotion terms (exclusions, limits) must be clear.\n- Prize draws and competitions have specific legal requirements in many countries.\n\nCheck local rules — for example, in the UK the CMA and ASA guidance, EU price indication rules, and consumer protection authorities in the UAE, Saudi Arabia and Pakistan.\n\n### Worked example: planning a White Friday promotion\n\nA Gulf beauty retailer with a 55% gross margin plans a sale:\n\n```\nOption A: 30% off sitewide\n  -> Profit per unit falls from 55 to 25 (on a price of 100): needs 2.2x units.\nOption B: 20% off selected best-sellers + gift with purchase over AED 250\n  -> Protects margin on most items; raises AOV; gift cost AED 15.\nOption C: Early access for email subscribers + tiered \"spend more, save more\"\n  -> Grows the list and AOV.\n```\n\nThe team chooses a combination of B and C, uses unique codes for email subscribers, and tracks contribution margin — not just revenue — during the event.\n\n### Common mistakes\n\n- Running discounts without margin calculations.\n- Public codes that leak to coupon sites.\n- Constant sales that make full price meaningless.\n- Fake reference prices or countdowns.\n- Measuring promotions by revenue alone.\n\n### Promotion planning checklist\n\n- [ ] Objective defined (acquisition, clearance, AOV, loyalty)\n- [ ] Margin maths completed including shipping and fees\n- [ ] Code controls (unique, limited, expiring) in place\n- [ ] Legal presentation checked (reference prices, dates, terms)\n- [ ] Success measured by contribution margin and new customers, not only revenue\n",
+          "video": null,
+          "keyTakeaways": [
+            "Always calculate the extra volume needed to recover margin lost to a discount.",
+            "Choose promotion types by objective: acquisition, clearance, AOV or loyalty.",
+            "Control code leakage with unique, limited and expiring codes and monitoring.",
+            "Reference prices, deadlines and fees must be genuine and clearly presented."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A product sells for 100 with a cost of 50. How many more units are needed after a 20% discount to keep the same gross profit?",
+              "options": [
+                "About 5% more",
+                "About 20% more",
+                "About 67% more",
+                "No change"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Profit per unit falls from 50 to 30, so 50/30 ≈ 1.67 times the units are needed."
+            },
+            {
+              "question": "A creator's discount code appears on coupon websites. What is the best control?",
+              "options": [
+                "Ignore it",
+                "Use unique, limited, expiring codes and deactivate leaked ones",
+                "Remove all creator partnerships",
+                "Double the discount"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Controls and monitoring limit leakage."
+            },
+            {
+              "question": "Which pricing practice is likely to breach consumer protection rules?",
+              "options": [
+                "Showing prices with currency",
+                "Offering bundles",
+                "Listing delivery fees upfront",
+                "Showing a 'was' price the product was never genuinely sold at"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Fake reference prices mislead consumers."
+            }
+          ],
+          "activity": "Plan a promotion for a real or sample store: set the objective, run the margin maths for two options, and define code controls and success metrics."
+        },
+        {
+          "slug": "seasonal-campaign-calendar",
+          "title": "Seasonal campaigns and the retail calendar",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Seasons drive e-commerce\n\nDemand in e-commerce rises and falls with seasons, holidays and cultural events. Planning ahead lets you secure stock, prepare creative, book creators and ads, and avoid last-minute discounting.\n\n### A global and regional retail calendar (examples)\n\n| Period | Events | Notes |\n|---|---|---|\n| January | New Year sales, \"new year, new me\" | Fitness, organisation, self-improvement |\n| Varies (lunar calendar) | Ramadan and Eid al-Fitr | Major season in the Gulf, Pakistan and Muslim communities worldwide; shopping patterns shift (late-night browsing), gifting and clothing peaks before Eid |\n| Varies (lunar calendar) | Eid al-Adha | Travel, clothing, food and gifting |\n| February | Valentine's Day (in markets where it is marketed) | Gifting |\n| March–May | Mother's Day (dates vary by country), spring launches | Check dates per market |\n| Summer | Summer sales, travel, back to school (timing varies) | School calendars differ by country |\n| Varies | Diwali | Major gifting season in South Asian markets and diaspora |\n| 11 November | Singles' Day / 11.11 | Big in parts of Asia and adopted by some marketplaces elsewhere |\n| Late November | Black Friday / White Friday, Cyber Monday | White Friday is the name used by some Gulf retailers and marketplaces |\n| December | Christmas, Boxing Day, year-end | Gifting and clearance in many markets |\n| Local | National days, regional festivals, pay days | E.g. UAE National Day, Saudi National Day, Pakistan's Independence Day |\n\nBecause Islamic calendar dates move roughly 10–11 days earlier each Gregorian year, Ramadan and Eid planning must be updated annually.\n\n### The campaign planning timeline\n\n```\nT-12 to T-8 weeks: Decide objectives, products, offers; check stock and supplier lead times\nT-8 to T-6 weeks:  Brief creative; book creators; plan email/SMS calendar; landing pages\nT-6 to T-4 weeks:  Build audiences; warm-up content; grow email/SMS list (early access)\nT-4 to T-1 weeks:  Teasers; QA site speed, checkout, codes, tracking; customer service prep\nCampaign period:   Launch; monitor daily (stock, conversion, ad performance, site health)\nT+1 to T+2 weeks:  Post-campaign flows (thank you, cross-sell, reviews); analysis and learnings\n```\n\n### Operations are marketing\n\nPeak seasons stress operations. Coordinate with logistics and customer service:\n\n- Stock levels for hero products.\n- Courier capacity and cut-off dates (especially before Eid or Christmas).\n- Clear \"order by\" dates on the site.\n- Extra customer service coverage, including messaging channels.\n- Returns policy communication for gifts.\n\n### Campaign messaging\n\n- Lead with the customer's occasion (\"Eid outfits for the whole family\"), not just discounts.\n- Use genuine urgency (delivery cut-offs, limited stock) — clearly and truthfully.\n- Create gift guides by recipient and budget.\n- Respect cultural sensitivities: for Ramadan, tone and timing matter (for example, content suited to evening browsing hours and reflective themes rather than purely transactional messaging).\n\n### Worked example: a Pakistani fashion brand's Eid plan\n\n```\n10 weeks before: Finalise Eid collection; order fabric; plan hero products\n8 weeks:         Photoshoot; brief creators (with disclosure requirements); build landing page\n6 weeks:         Launch waitlist and early-access sign-ups via Instagram and WhatsApp\n3 weeks:         Collection reveal; email/SMS/WhatsApp campaigns to consented subscribers\n2 weeks:         Paid social scaling; \"order by\" dates for delivery before Eid by city\nFinal week:      Delivery cut-off reminders; switch to \"gift cards\" and \"Eid day 2\" messaging\nAfter Eid:       Thank-you flow; review requests; clearance of remaining stock\n```\n\n### Common mistakes\n\n- Starting creative and stock planning too late.\n- Discount-only messaging that ignores the occasion.\n- Missing courier cut-off communication.\n- Not testing the site under peak load.\n- Forgetting post-campaign flows, when newly acquired customers are most receptive.\n\n### Learning from each season\n\nAfter every major event, hold a short retrospective with marketing, operations and customer service. Record what sold out, what was overstocked, which messages and creatives performed, where the site or checkout struggled, how many customer service contacts arrived and why, and how the new customers behaved in the weeks that followed. Store these notes with next year's calendar so the next campaign starts from evidence, not memory.\n\n### Seasonal planning checklist\n\n- [ ] Annual calendar with market-specific dates (update lunar dates yearly)\n- [ ] Timeline working back from each key event\n- [ ] Stock, courier and customer service plans aligned\n- [ ] Creative and creators booked early\n- [ ] Post-campaign retention flows ready\n",
+          "video": null,
+          "keyTakeaways": [
+            "Seasonal peaks require planning 8–12 weeks ahead.",
+            "Retail calendars differ by market; lunar-calendar events shift each year.",
+            "Operations — stock, couriers, service — are part of campaign success.",
+            "Lead with the customer's occasion and use only genuine urgency."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why must Ramadan and Eid campaign dates be updated every year?",
+              "options": [
+                "The Islamic calendar is lunar, so dates move about 10–11 days earlier each Gregorian year",
+                "They are chosen by retailers",
+                "They never change",
+                "They are always on 1 January"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Lunar dates shift relative to the Gregorian calendar."
+            },
+            {
+              "question": "Which is an example of genuine urgency for a seasonal campaign?",
+              "options": [
+                "Clear courier cut-off dates for delivery before Eid",
+                "'Last chance' every day for a month",
+                "A fake countdown that resets",
+                "Hidden stock levels"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Real delivery deadlines are truthful and useful."
+            },
+            {
+              "question": "What should happen immediately after a seasonal campaign?",
+              "options": [
+                "Nothing",
+                "Raise all prices",
+                "Delete customer data",
+                "Post-campaign flows such as thank-yous, review requests and cross-sells, plus analysis"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "New customers are receptive after purchase, and learnings improve the next campaign."
+            }
+          ],
+          "activity": "Build a 12-month retail calendar for your market(s) and a backward timeline for your next major seasonal campaign."
+        }
+      ]
+    },
+    {
+      "slug": "retention-and-loyalty",
+      "title": "Retention, lifecycle marketing and loyalty",
+      "summary": "Turn first-time buyers into repeat customers with lifecycle flows, loyalty programmes and excellent customer experience.",
+      "lessons": [
+        {
+          "slug": "lifecycle-email-sms-messaging",
+          "title": "Lifecycle email, SMS and messaging flows",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Why retention matters so much\n\nAcquiring a new customer usually costs more than keeping an existing one, and repeat customers often spend more over time. Retention marketing turns one-off buyers into repeat customers through timely, relevant communication.\n\n### Owned channels\n\n| Channel | Strengths | Considerations |\n|---|---|---|\n| Email | Rich content, low cost per message, automation | Deliverability, consent, inbox competition |\n| SMS | High visibility, short and urgent messages | Cost per message, stricter consent rules in many countries, frequency sensitivity |\n| Messaging apps (e.g. WhatsApp Business) | Conversational, popular in many markets including the Gulf and South Asia | Platform rules, opt-in requirements, template approval for business-initiated messages |\n| Push notifications (app) | Instant for app users | Requires an app and permission |\n\n### Core automated flows\n\n```\n1. WELCOME SERIES (new subscribers)\n   - Deliver sign-up incentive (if any); brand story; bestsellers; social proof\n2. BROWSE ABANDONMENT (viewed products, no cart)\n   - Gentle reminder of viewed items; helpful content\n3. CART ABANDONMENT\n   - Reminder within hours; answer objections (delivery, returns); optional incentive later\n4. CHECKOUT ABANDONMENT\n   - Similar, focused on completing payment; alternative payment options\n5. POST-PURCHASE\n   - Order confirmation; shipping updates; how to use; review request; cross-sell\n6. REPLENISHMENT\n   - For consumables: reminder when the product is likely running out\n7. WIN-BACK\n   - For lapsed customers: what's new, incentive, feedback request\n8. VIP / LOYALTY\n   - Early access, exclusive offers, thank-you notes for top customers\n```\n\nStart with welcome, cart abandonment and post-purchase flows — they typically deliver the most value for the effort.\n\n### Timing and content principles\n\n- **Relevance beats frequency**: segment by behaviour (browsed categories, purchase history).\n- **Lead with value**: helpful content, not just discounts. Reserve incentives for where they are needed.\n- **Mobile-first design**: short copy, clear buttons.\n- **One goal per message**.\n- **Respect quiet hours** and cultural timing (for example, evening engagement during Ramadan).\n\n### Consent and compliance\n\nRules vary by country and channel, but common principles apply:\n\n- Get clear, informed consent for marketing messages where required (for example, under GDPR and PECR in the UK and EU; SMS rules such as the TCPA in the US are strict about consent).\n- Keep proof of consent.\n- Include an easy opt-out in every marketing message and honour it promptly.\n- Separate **transactional** messages (order confirmations, shipping updates) from **marketing** messages.\n- Messaging platforms have their own policies on business messaging and opt-in; follow them to avoid restrictions.\n\n### Worked example: a UK coffee subscription brand\n\n```\nWelcome (3 emails):   Brewing guide; roaster story; bestseller trio\nPost-purchase:        Brew tips for the beans purchased; review request after 10 days\nReplenishment:        Reminder around the typical time a bag runs out (based on bag size)\nWin-back:             After 60 days of no purchase - \"new seasonal roast\" + feedback survey\nVIP:                  Early access to limited roasts for top customers\n```\n\nThe brand monitors revenue per recipient, unsubscribe rate and repeat purchase rate.\n\n### Collecting subscribers\n\n- Pop-ups and embedded forms with a clear value (early access, guides, first-order offer).\n- Checkout opt-in (unticked where required).\n- Messaging opt-ins via click-to-chat buttons.\n- Quizzes and product finders.\n- Offline events and packaging inserts (with QR codes).\n\n### Measuring lifecycle marketing\n\n- Revenue per recipient and per flow.\n- Conversion rate by flow.\n- Repeat purchase rate and time between orders.\n- List growth rate and unsubscribe/complaint rates.\n- Deliverability (inbox placement, bounce rates).\n\nBe cautious about attribution: some revenue attributed to emails would have happened anyway. Holdout tests (suppressing a flow for a small group) can estimate true incremental impact.\n\n### Common mistakes\n\n- Only sending promotional blasts.\n- Discount in every message, training customers to wait.\n- Sending marketing without consent.\n- Ignoring post-purchase experience.\n- Measuring email by opens alone (privacy features make open tracking unreliable).\n- Sending the same message to every subscriber regardless of what they bought or browsed.\n- Forgetting to suppress recent purchasers from promotions for the product they just bought.\n\n### Lifecycle checklist\n\n- [ ] Welcome, cart abandonment and post-purchase flows live\n- [ ] Consent captured and recorded per channel\n- [ ] Segmentation by behaviour\n- [ ] Incremental impact estimated with holdouts where possible\n- [ ] Monthly review of flow performance\n",
+          "video": null,
+          "keyTakeaways": [
+            "Retention turns one-off buyers into repeat customers through timely, relevant messages.",
+            "Start with welcome, cart abandonment and post-purchase flows.",
+            "Consent, opt-outs and the separation of transactional and marketing messages are essential.",
+            "Measure revenue per recipient and repeat rate; use holdouts for incrementality."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which three flows typically deliver the most value to start with?",
+              "options": [
+                "Win-back, survey and newsletter",
+                "Only promotional blasts",
+                "Welcome, cart abandonment and post-purchase",
+                "Birthday, anniversary and holiday"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "These flows capture high-intent moments."
+            },
+            {
+              "question": "Why are email open rates an unreliable primary metric?",
+              "options": [
+                "Opens are illegal to measure",
+                "Privacy features in email clients can inflate or obscure opens",
+                "Opens equal revenue",
+                "Opens are always 100%"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Privacy protections distort open tracking; focus on clicks, conversions and revenue."
+            },
+            {
+              "question": "How can you estimate the true incremental impact of a flow?",
+              "options": [
+                "Use a holdout group that does not receive the flow",
+                "Send more messages",
+                "Ask customers",
+                "Count all attributed revenue"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Holdouts show what would have happened without the flow."
+            }
+          ],
+          "activity": "Map the lifecycle flows for a store, identify which are missing, and draft the first message of a post-purchase flow including consent and opt-out handling."
+        },
+        {
+          "slug": "loyalty-and-referrals",
+          "title": "Loyalty programmes, subscriptions and referrals",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Building reasons to return\n\nBeyond messages, you can build structural reasons for customers to come back: loyalty programmes, subscriptions, memberships and referral schemes.\n\n### Types of loyalty programmes\n\n| Type | How it works | Best for |\n|---|---|---|\n| Points | Earn points per purchase; redeem for rewards | Frequent, moderate-value purchases |\n| Tiered / VIP | Higher tiers unlock better benefits | Brands with a wide spread of customer value |\n| Paid membership | Customers pay for benefits (e.g. free shipping, discounts) | High-frequency categories |\n| Value-based / community | Access, content, events, causes | Lifestyle brands with strong identity |\n| Cashback / wallet | Store credit on purchases | Price-sensitive markets |\n\n### Designing a sustainable programme\n\n1. **Define the goal**: more frequent purchases? Higher AOV? Better retention of top customers?\n2. **Understand your economics**: what is the cost of rewards as a percentage of revenue? What behaviour change must happen to make it profitable?\n3. **Make it simple**: customers should understand how to earn and redeem in one sentence.\n4. **Offer meaningful rewards**: a mix of financial (discounts, credit) and experiential (early access, exclusive products, events).\n5. **Communicate**: show point balances in emails, account pages and checkout.\n6. **Manage liability**: unredeemed points can represent a financial liability; set clear terms and expiry in line with local law.\n\n### Subscriptions\n\nSubscriptions (replenishment of consumables like coffee, pet food, skincare) can create predictable revenue. Best practices:\n\n- Flexible frequency, easy skip and pause options.\n- Clear pricing and renewal terms before sign-up.\n- **Easy cancellation** — regulators in many markets (for example, under UK consumer law reforms and US state automatic-renewal laws) scrutinise subscriptions that are hard to cancel or have unclear renewal terms.\n- Reminders before renewal where required.\n\n### Referral programmes\n\nSatisfied customers can bring new ones. A typical structure: \"Give 10%, get 10%\" — the new customer gets a discount, the referrer gets credit after the friend's first order. Tips:\n\n- Ask at moments of delight (after delivery, after a positive review).\n- Make sharing easy (links for messaging apps and social).\n- Prevent abuse (self-referrals, fake accounts) with rules and checks.\n- Disclose incentives where referrers post publicly, as advertising rules may treat incentivised recommendations as endorsements.\n\n### Measuring loyalty impact\n\nCompare members and non-members carefully: members are often already your best customers (selection bias). Better methods:\n\n- Compare behaviour before and after joining for similar customers.\n- Use holdout groups when launching new benefits.\n- Track repeat purchase rate, purchase frequency, AOV and retention by cohort.\n- Track programme cost (rewards redeemed, admin, technology) against incremental margin.\n\n### Worked example: a Saudi pet supplies store\n\nThe store sells pet food (frequent, predictable purchases) and accessories. It launches:\n\n- **Subscription** for pet food with flexible delivery every 2, 4 or 6 weeks, easy skip, and a small saving versus one-off orders.\n- **Points programme**: points on all purchases, bonus points on accessories (higher margin).\n- **Referral**: \"Give SAR 30, get SAR 30\" after the friend's first order.\n\nAfter six months, the team compares cohorts and finds subscribers order more often and churn less — while monitoring whether the subscription discount is paid back by the extra orders (outcome illustrative).\n\n### Common mistakes\n\n- Programmes too complex to understand.\n- Rewards that cost more than the behaviour change is worth.\n- Hard-to-cancel subscriptions.\n- Measuring loyalty impact without accounting for selection bias.\n- Launching and never promoting the programme.\n\n### Launching and promoting the programme\n\nA programme nobody knows about changes nothing. Promote it on product pages, in the cart, at checkout, in post-purchase emails and on packaging inserts. Show customers what they would earn on the current order (\"You'll earn 120 points with this purchase\"). Remind members of their balance and upcoming expiry in lifecycle messages. Review membership sign-up rate, redemption rate and the behaviour of members against a fair comparison group each quarter, and simplify rules that customers find confusing.\n\n### When not to launch a loyalty programme\n\nIf products are bought rarely (for example, furniture or mattresses), a points scheme may add cost without changing behaviour. In those categories, referral programmes, excellent service and post-purchase content often work better.\n\n### Loyalty checklist\n\n- [ ] Clear goal and economic model\n- [ ] Simple earn and redeem rules\n- [ ] Transparent terms, expiry and cancellation\n- [ ] Referral abuse prevention\n- [ ] Impact measured against a fair comparison\n",
+          "video": null,
+          "keyTakeaways": [
+            "Loyalty programmes, subscriptions and referrals create structural reasons to return.",
+            "Design programmes around a clear goal and sustainable economics.",
+            "Subscriptions must have transparent terms and easy cancellation.",
+            "Measure loyalty impact while accounting for selection bias."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why can comparing loyalty members with non-members overstate the programme's impact?",
+              "options": [
+                "Members never buy",
+                "Points are free",
+                "Members are often already the best customers, so differences may not be caused by the programme",
+                "Non-members don't exist"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Selection bias means members may have been loyal anyway."
+            },
+            {
+              "question": "What is a key compliance consideration for subscription products?",
+              "options": [
+                "Blocking cancellations online",
+                "Hiding renewal terms",
+                "Charging without notice",
+                "Clear renewal terms and easy cancellation"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Regulators scrutinise subscriptions that are hard to cancel or unclear."
+            },
+            {
+              "question": "When is the best moment to ask for a referral?",
+              "options": [
+                "Before the first purchase",
+                "At moments of delight, such as after a successful delivery or positive review",
+                "Never",
+                "During a complaint"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Satisfied customers are most likely to refer."
+            }
+          ],
+          "activity": "Design a simple loyalty or referral programme for a store, including the goal, rules, costs and how you would measure incremental impact."
+        },
+        {
+          "slug": "customer-experience-and-reviews",
+          "title": "Customer experience, reviews and returns",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Experience is the most powerful retention tool\n\nCustomers come back when the experience is good: accurate products, fast and reliable delivery, helpful support and easy resolution when things go wrong. Marketing can amplify a great experience but cannot compensate for a poor one.\n\n### The post-purchase journey\n\n```\nOrder confirmation   -> Clear, reassuring, with order details and support contact\nShipping updates     -> Proactive tracking; delay notifications before customers ask\nDelivery             -> Packaging that protects and delights; inserts with care tips or QR codes\nFirst use            -> How-to content; quick-start guides\nSupport              -> Easy channels; fast responses; empowered agents\nReview request       -> Timed after the customer has used the product\nReturns / exchanges  -> Simple process; clear refunds timeline\nNext purchase        -> Relevant recommendations; loyalty benefits\n```\n\n### Customer service as a growth channel\n\n- Offer channels customers use — live chat, email, phone, and messaging apps popular in your market.\n- Publish response time expectations and meet them.\n- Use templates for common questions, but personalise.\n- Empower agents to resolve issues (refunds, replacements) within guidelines.\n- Tag and analyse contact reasons monthly; fix root causes (unclear sizing, delivery delays, product defects).\n- Share insights with marketing and product teams — customer questions are also content and PDP improvement ideas.\n\n### Collecting reviews ethically\n\n- Ask all customers (not just happy ones) after they have had time to use the product.\n- Make it easy: a short form, star rating, optional photo.\n- Incentives: if you offer incentives for reviews, they must not depend on the review being positive, and incentivised reviews may need to be disclosed — check local rules and platform policies.\n- Never write fake reviews, pay for positive reviews, or suppress negative ones. These practices are illegal in many jurisdictions and breach marketplace and review platform policies.\n- Respond to negative reviews constructively: acknowledge, explain, offer a resolution.\n\n### Returns: reduce, then simplify\n\nReturns are costly (shipping, handling, unsellable stock) but a fair returns policy builds trust and can increase conversion. Two-part strategy:\n\n1. **Reduce avoidable returns**: better size guides, accurate photos and colours, detailed descriptions, fit reviews, quality control.\n2. **Simplify necessary returns**: clear policy, easy process, fast refunds or exchanges, and options such as store credit.\n\nAnalyse return reasons by product. A product with a high \"too small\" rate may need a sizing note; one with \"not as pictured\" needs better photos.\n\nRespect statutory rights: many jurisdictions give consumers cancellation rights for online purchases and rights for faulty goods, which your policy cannot remove.\n\n### Measuring customer experience\n\n- Customer satisfaction (CSAT) after support interactions.\n- Net Promoter Score (NPS) or similar loyalty measures.\n- Review ratings over time.\n- Return rate by product and reason.\n- First-response time and resolution time.\n- Repeat purchase rate.\n\n### Worked example: a Pakistani footwear brand\n\nReturn rate is high, mostly \"wrong size\". The brand adds a foot-measurement guide with a printable ruler, fit notes from reviews (\"runs half a size small\"), and a WhatsApp sizing assistant. It offers free exchanges for size (not refunds), and packages include a card explaining the exchange process. Returns for size fall, and customers who exchange often become repeat buyers (illustrative).\n\n### Common mistakes\n\n- Treating customer service as a cost centre only.\n- Asking for reviews before delivery.\n- Suppressing negative reviews.\n- Complicated, hidden returns processes.\n- Not analysing return reasons.\n- Slow refunds, which generate repeat contacts, chargebacks and negative reviews.\n- Treating every complaint as an isolated case instead of looking for patterns across products, couriers or regions.\n\n### Turning feedback into improvements\n\nCreate a simple monthly loop: collect contact reasons, return reasons and review themes; rank them by frequency and cost; assign each top issue to an owner (product, marketing, operations); and track whether the issue declines after the fix. Share wins with the team — customer service staff are more engaged when they see their insights lead to change.\n\n### Customer experience checklist\n\n- [ ] Proactive shipping updates and delay notices\n- [ ] Support channels and response times published\n- [ ] Contact reasons tagged and reviewed monthly\n- [ ] Ethical, timed review requests to all customers\n- [ ] Return reasons analysed by product with fixes\n",
+          "video": null,
+          "keyTakeaways": [
+            "A great experience is the strongest driver of repeat purchases.",
+            "Treat customer service insights as input for marketing and product pages.",
+            "Collect reviews from all customers ethically; never fake or suppress them.",
+            "Reduce avoidable returns first, then make necessary returns simple and fair."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "When should a review request be sent?",
+              "options": [
+                "After the customer has had time to use the product",
+                "Only to customers who complained",
+                "Before the order ships",
+                "Never"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Timing after use produces informed reviews."
+            },
+            {
+              "question": "A product has many returns for 'too small'. What is the best first fix?",
+              "options": [
+                "Hide the returns policy",
+                "Improve sizing guidance and add fit notes",
+                "Stop selling online",
+                "Increase the price"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Better sizing information addresses the root cause."
+            },
+            {
+              "question": "Which review incentive practice is acceptable in principle?",
+              "options": [
+                "Deleting negative reviews",
+                "Writing reviews on customers' behalf",
+                "Offering a small incentive for any honest review, disclosed where required",
+                "Rewarding only five-star reviews"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Incentives must not depend on positive sentiment and may need disclosure."
+            }
+          ],
+          "activity": "Analyse return reasons or support contact reasons for one product category and propose three fixes across product pages, packaging and post-purchase communication."
+        }
+      ]
+    },
+    {
+      "slug": "marketplaces-and-acquisition",
+      "title": "Marketplaces, social commerce and paid acquisition",
+      "summary": "Decide where to sell beyond your own store and how to acquire customers profitably with paid channels.",
+      "lessons": [
+        {
+          "slug": "marketplaces",
+          "title": "Selling on marketplaces",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Why marketplaces matter\n\nMarketplaces — for example Amazon, noon, Daraz, eBay, Etsy and many regional platforms — bring large audiences with high purchase intent. Many shoppers start product searches on marketplaces rather than search engines. For many brands, marketplaces are a major revenue channel alongside their own store.\n\n### Benefits and trade-offs\n\n| Benefits | Trade-offs |\n|---|---|\n| Access to large, high-intent audiences | Fees (commissions, fulfilment, advertising) reduce margin |\n| Trust and familiar checkout | Limited customer data and relationship ownership |\n| Fulfilment services in some markets | Price competition and comparison |\n| Faster market entry, including cross-border | Platform rules can change; account health risks |\n| Marketplace advertising for visibility | Counterfeit and unauthorised sellers |\n\n### Choosing marketplaces\n\nConsider:\n\n- Where your target customers shop (by country and category).\n- Fee structures and fulfilment options.\n- Category restrictions and approval requirements.\n- Brand protection tools (brand registries, IP reporting).\n- Operational requirements (stock, delivery times, return handling).\n\n### Marketplace listing optimisation\n\nMarketplaces have their own search engines. Listings should include:\n\n- **Titles** following the marketplace's style guide, with key attributes (brand, product type, key feature, size or quantity).\n- **Images** meeting requirements (for example, white-background main image where required) plus lifestyle and infographic images.\n- **Bullet points** covering benefits and specifications.\n- **Backend search terms** where available.\n- **Enhanced brand content** (rich descriptions, comparison charts) where available.\n- **Competitive pricing** and availability — both influence visibility.\n- **Reviews and ratings** — collected through the marketplace's permitted methods only.\n\n### Marketplace advertising\n\nMost marketplaces offer sponsored product and brand ads. Principles:\n\n- Start with your best-selling, well-reviewed products.\n- Use automatic campaigns to discover search terms, then build manual campaigns around profitable terms.\n- Monitor advertising cost of sales (ACoS) or return on ad spend against your margin.\n- Protect branded search terms if competitors bid on them.\n\n### Channel conflict and pricing\n\nSelling on marketplaces and your own store can create conflict:\n\n- Price parity: marketplaces may penalise or suppress listings priced higher than elsewhere, depending on their policies.\n- Promotions: coordinate so one channel doesn't undercut another unintentionally.\n- Retailer relationships: if you also sell wholesale, marketplace pricing can affect partners.\n\nMany brands use marketplaces for acquisition and discovery while encouraging repeat purchases on their own store through packaging inserts (where marketplace rules permit), exclusive products, loyalty programmes and better service. Check each marketplace's rules on directing customers off-platform — some prohibit it.\n\n### Worked example: a Pakistani handicrafts brand\n\nA brand selling handmade home décor from Multan sells domestically on Daraz and internationally on Etsy, plus its own store:\n\n- **Daraz**: price-competitive bestsellers, local delivery and cash on delivery.\n- **Etsy**: unique handmade pieces, storytelling about artisans, international shipping.\n- **Own store**: full collection, custom orders, and a loyalty programme; email list built from own-store customers.\n\nEach channel's contribution margin is tracked separately after fees and shipping.\n\n### Common mistakes\n\n- Treating marketplace revenue as profit without subtracting fees and advertising.\n- Poor listings (few images, weak titles).\n- Ignoring account health metrics (late shipments, cancellations, policy violations).\n- Breaking marketplace rules on reviews or off-platform contact.\n- No brand protection against counterfeits.\n- Letting stock run out on marketplace bestsellers, which can hurt ranking long after stock returns.\n\n### Starting small\n\nIf you are new to marketplaces, start with a limited range of your best-selling, well-reviewed products that have healthy margins after fees. Learn the platform's fulfilment, advertising and account health requirements before expanding. Track each product's contribution margin after commission, fulfilment, advertising and returns; some products that are profitable on your own store will not be profitable on a marketplace, and that is fine — sell them where they work.\n\n### Cross-border marketplace selling\n\nMarketplaces can help you reach other countries, but consider duties and taxes, product regulations and labelling, delivery times and costs, returns handling across borders, and local language listings. Pilot in one new market before expanding further.\n\n### Marketplace checklist\n\n- [ ] Marketplace selection based on customers and economics\n- [ ] Listings optimised to each marketplace's guidelines\n- [ ] Contribution margin tracked per channel after all fees\n- [ ] Advertising measured against margin\n- [ ] Brand protection and account health monitored\n",
+          "video": null,
+          "keyTakeaways": [
+            "Marketplaces offer high-intent audiences but reduce margin and customer ownership.",
+            "Optimise listings for each marketplace's search and style rules.",
+            "Track contribution margin per channel after fees and advertising.",
+            "Follow marketplace rules on reviews, pricing and off-platform contact."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is a major trade-off of selling on marketplaces?",
+              "options": [
+                "They forbid advertising",
+                "No search function",
+                "No shoppers",
+                "Fees and limited ownership of customer data and relationships"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Marketplaces provide reach at the cost of fees and data ownership."
+            },
+            {
+              "question": "Which listing element is typically most important for marketplace search visibility?",
+              "options": [
+                "A descriptive title with key attributes following marketplace guidelines",
+                "A long legal disclaimer",
+                "A hidden price",
+                "Brand story video only"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Titles strongly influence marketplace search relevance."
+            },
+            {
+              "question": "Why should you check a marketplace's rules before adding packaging inserts that promote your own store?",
+              "options": [
+                "Inserts are always illegal",
+                "Inserts reduce reviews",
+                "Marketplaces require inserts",
+                "Some marketplaces restrict directing customers off-platform"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Off-platform promotion rules vary and can affect account health."
+            }
+          ],
+          "activity": "Evaluate one marketplace for your product: fees, category requirements, competition and brand protection, and estimate contribution margin per order."
+        },
+        {
+          "slug": "social-commerce",
+          "title": "Social commerce and creator-led selling",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Shopping where attention lives\n\n**Social commerce** means selling directly within or via social platforms — shoppable posts, in-app shops, live shopping, and creator-led sales. It shortens the path from inspiration to purchase.\n\n### Social commerce options (availability varies by country)\n\n| Option | Description |\n|---|---|\n| Shoppable posts and product tags | Tag products in posts and videos, linking to product details |\n| In-app shops | Storefronts inside social apps; checkout may happen in-app or on your site |\n| Social marketplaces | Platform shops with integrated fulfilment in some markets |\n| Live shopping | Real-time selling with demonstrations and Q&A |\n| Messaging commerce | Catalogues and ordering via messaging apps (common in the Gulf and South Asia) |\n| Creator affiliate programmes | Creators earn commission on sales through their content |\n\nFeatures and availability change often and differ by country — check each platform's current commerce offering in your markets.\n\n### What sells on social\n\n- Products with **visual appeal** or demonstrable results (beauty, fashion, gadgets, home).\n- **Impulse-friendly price points**.\n- Products that benefit from **explanation or demonstration**.\n- **Trending** or novel items.\n- Brands with **community and personality**.\n\n### Content that converts on social\n\n- **Demonstrations**: show the product solving a problem.\n- **Before and after** (only if genuine and compliant with platform rules and advertising codes — restricted in some categories).\n- **Creator reviews and tutorials** (disclosed).\n- **Unboxing and first impressions**.\n- **Behind the scenes**: how products are made.\n- **Live Q&A** answering objections in real time.\n\n### Messaging commerce\n\nIn markets where messaging apps dominate, many stores sell through conversations: customers ask questions, receive catalogue links, and confirm orders in chat. To scale this responsibly:\n\n- Use business accounts with catalogues and quick replies.\n- Respond quickly with clear information (price, delivery, payment options).\n- Confirm orders in writing, including delivery date and total cost.\n- Collect marketing opt-in explicitly before sending promotional messages.\n- Keep customer data secure.\n\n### Live shopping\n\nLive shopping combines entertainment and selling. Tips:\n\n- Plan a run-sheet: products, demos, offers, questions to address.\n- Have a host who knows the products and a moderator for comments.\n- Offer genuine live-only incentives if appropriate (with clear terms).\n- Repurpose the recording into short clips.\n\n### Measuring social commerce\n\nTrack: sales attributed to social shops and links, conversion rate, AOV, return rate (social impulse purchases can have higher returns), customer acquisition cost, and repeat purchase rate of social-acquired customers. Compare with other channels on contribution margin.\n\n### Worked example: a Dubai beauty brand\n\nThe brand runs weekly live sessions demonstrating products for different skin types, with a creator co-host (paid partnership, disclosed). Shoppable clips from each live are posted during the week. Customers can also order via a messaging app catalogue. The team discovers that live-session buyers have higher AOV but also higher return rates for shade-matching issues, so it adds a shade-finder quiz and offers shade samples.\n\n### Common mistakes\n\n- Assuming social commerce features are available in every market.\n- Ignoring returns and margin in social-driven sales.\n- Undisclosed creator partnerships.\n- Slow responses in messaging commerce.\n- Sending promotional messages without opt-in.\n- Measuring only views and likes rather than orders, margin and repeat purchases.\n\n### Operations behind social selling\n\nSocial selling can create sudden demand spikes when content performs well. Prepare by keeping stock buffers for featured products, having customer service ready for message volumes, and making sure delivery promises in content are realistic. Record which pieces of content drove sales so you can brief creators and plan future lives with evidence.\n\n### Building community around social commerce\n\nThe strongest social commerce brands treat followers as a community, not just an audience: they reply to comments, feature customers (with permission), ask for product ideas, and reward loyal followers with early access. Community turns one-off impulse buyers into repeat customers and advocates.\n\n### Social commerce checklist\n\n- [ ] Platform features confirmed for your markets\n- [ ] Content plan built around demonstrations and creators\n- [ ] Messaging commerce with fast responses and written confirmations\n- [ ] Disclosures for all paid partnerships\n- [ ] Contribution margin and returns tracked for social sales\n",
+          "video": null,
+          "keyTakeaways": [
+            "Social commerce shortens the path from inspiration to purchase.",
+            "Features differ by country and change often — confirm availability in your markets.",
+            "Demonstrations, creator content and live Q&A drive social sales.",
+            "Track returns and contribution margin for social-acquired customers."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which products tend to suit social commerce best?",
+              "options": [
+                "Products with no visual appeal and complex contracts",
+                "Products that cannot be shown",
+                "Visually appealing or demonstrable products at impulse-friendly prices",
+                "Only industrial machinery"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Visual, demonstrable products perform well in social feeds."
+            },
+            {
+              "question": "What must a store do before sending promotional messages via a messaging app?",
+              "options": [
+                "Nothing",
+                "Obtain explicit marketing opt-in and follow platform rules",
+                "Send from a personal number",
+                "Buy a contact list"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Consent and platform policies govern business messaging."
+            },
+            {
+              "question": "Live shopping buyers show higher return rates for shade mismatches. What is a sensible response?",
+              "options": [
+                "Stop live shopping",
+                "Increase prices",
+                "Hide the returns policy",
+                "Add shade-matching tools or samples and review demonstration content"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Addressing the root cause reduces returns while keeping the channel."
+            }
+          ],
+          "activity": "Choose one social commerce option available in your market, plan a four-week content calendar for it, and define how you will measure contribution margin."
+        },
+        {
+          "slug": "paid-acquisition-for-ecommerce",
+          "title": "Paid acquisition for e-commerce",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Paid media: fuel, not foundation\n\nPaid advertising can scale e-commerce quickly — but only when the foundations (product, pages, margins, retention) are sound. Otherwise, ads amplify losses.\n\n### Core paid channels\n\n| Channel | Role | Notes |\n|---|---|---|\n| Search and shopping ads | Capture existing demand | Product feeds, shopping campaigns, brand and generic search |\n| Social ads | Create demand and retarget | Creative-driven; broad targeting with strong creative is common |\n| Marketplace ads | Visibility within marketplaces | Measure against marketplace margin |\n| Video and connected TV | Awareness at scale | Harder to attribute; consider incrementality tests |\n| Affiliates and creators | Partner-driven sales | Covered in Module 5 |\n\n### Product feeds\n\nShopping and catalogue ads rely on a **product feed**: a structured file of your products (title, description, price, availability, images, identifiers such as GTIN, categories). Feed quality strongly affects performance:\n\n- Descriptive titles with key attributes.\n- Accurate prices and availability (mismatches can cause disapprovals).\n- High-quality images.\n- Correct identifiers and categories.\n- Custom labels (for example, margin tier, bestseller, seasonal) to structure campaigns.\n\n### Creative is the new targeting\n\nOn social platforms, automated delivery systems increasingly find audiences based on signals from creative and conversions. As a result, **creative quality and variety** are major levers:\n\n- Test multiple concepts (problem-solution, demonstration, testimonial, unboxing, comparison), not just colour variations.\n- Use native formats (vertical video, captions, creator-style content).\n- Refresh creative regularly to combat fatigue.\n- Keep a creative log: concept, hook, format, results.\n\n### Measurement: ROAS versus MER\n\n```\nROAS (return on ad spend) = Revenue attributed by the platform / Ad spend (per channel/campaign)\nMER (marketing efficiency ratio) = Total revenue / Total marketing spend (whole business)\n```\n\nPlatforms attribute sales using their own rules and often overlap (the same sale claimed by several platforms). MER gives a blended view that cannot double count. Use **platform ROAS for in-platform optimisation** and **MER and contribution margin for business decisions**. For bigger budgets, incrementality tests (geo holdouts, conversion lift studies) show what ads truly add.\n\n### Break-even ROAS\n\nKnow the minimum ROAS at which ads are profitable on the first order:\n\n```\nBreak-even ROAS = 1 / Contribution margin % (before marketing)\n\nExample: contribution margin before marketing = 40%\nBreak-even ROAS = 1 / 0.40 = 2.5\n```\n\nBelow 2.5, the first order loses money (though repeat purchases may make it worthwhile — see Module 6). Set target ROAS based on your margin and customer lifetime value, not on generic benchmarks.\n\n### Tracking foundations\n\n- Implement conversion tracking properly (pixels/tags and server-side conversion APIs where appropriate), respecting consent requirements.\n- Use UTMs consistently for non-auto-tagged channels.\n- Reconcile platform-reported conversions with your store's orders.\n- Track new versus returning customer revenue — acquisition campaigns should acquire new customers.\n\n### Worked example: scaling a UK candle brand\n\nIllustrative numbers: contribution margin before marketing is 45%, so break-even first-order ROAS is about 2.2. Social ads report a ROAS of 3.0, but MER across all spend is 2.4 and new-customer share is falling. The team:\n\n1. Excludes existing customers from prospecting campaigns.\n2. Tests new creative concepts (candle-making process, scent descriptions by creators).\n3. Runs a geo holdout in two regions to measure incrementality.\n4. Scales only campaigns that maintain MER and new-customer acquisition.\n\n### Common mistakes\n\n- Scaling spend on platform ROAS alone.\n- Poor product feeds causing disapprovals and weak relevance.\n- Retargeting-heavy budgets that claim credit for purchases that would happen anyway.\n- Ignoring creative fatigue.\n- No break-even calculation.\n\n### Budget pacing and learning phases\n\nAutomated campaigns typically need enough conversions to learn. Frequent large budget changes or constant edits can reset learning and make performance unstable. Change budgets in measured steps, give campaigns time to stabilise, and group products or audiences so each campaign has enough data. During peak seasons, plan budget increases in advance rather than reacting hour by hour.\n\n### Paid acquisition checklist\n\n- [ ] Break-even ROAS calculated from contribution margin\n- [ ] Product feed optimised with custom labels\n- [ ] Creative testing programme with concept variety\n- [ ] MER and new-customer revenue tracked weekly\n- [ ] Incrementality tested before major budget increases\n",
+          "video": null,
+          "keyTakeaways": [
+            "Paid media amplifies whatever foundations you have — good or bad.",
+            "Product feed quality and creative variety are major performance levers.",
+            "Use platform ROAS for optimisation and MER plus contribution margin for business decisions.",
+            "Calculate break-even ROAS as 1 ÷ contribution margin percentage."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Contribution margin before marketing is 40%. What is the break-even first-order ROAS?",
+              "options": [
+                "0.4",
+                "4.0",
+                "2.5",
+                "1.4"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Break-even ROAS = 1 / 0.40 = 2.5."
+            },
+            {
+              "question": "Why can the sum of platform-reported ROAS figures overstate performance?",
+              "options": [
+                "Platforms never report sales",
+                "Platforms attribute the same sales with their own rules, often overlapping",
+                "ROAS is always negative",
+                "Stores underreport orders"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Overlapping attribution can double count sales."
+            },
+            {
+              "question": "What does MER measure?",
+              "options": [
+                "Total revenue divided by total marketing spend",
+                "Marketplace fees",
+                "Email open rate",
+                "Revenue from one ad"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "MER is a blended efficiency metric across all marketing."
+            }
+          ],
+          "activity": "Calculate your store's break-even ROAS, compare it with current platform ROAS and MER, and list two creative concepts to test next month."
+        }
+      ]
+    },
+    {
+      "slug": "affiliate-and-creator-programmes",
+      "title": "Affiliate and creator programmes",
+      "summary": "Build partner programmes that drive incremental sales, with clear terms, compliant disclosure and honest measurement.",
+      "lessons": [
+        {
+          "slug": "affiliate-programmes",
+          "title": "Designing an affiliate programme",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### What affiliate marketing is\n\nIn an **affiliate programme**, partners (publishers, bloggers, review sites, creators, cashback and coupon sites, comparison sites) promote your products and earn a commission on sales they refer, tracked through links or codes. You pay mainly for results.\n\n### Types of affiliates\n\n| Type | Value | Watch out for |\n|---|---|---|\n| Content and review sites | Reach shoppers researching purchases | Quality and accuracy of content |\n| Creators and influencers | Trust and demonstration | Disclosure; audience fit |\n| Comparison sites | High-intent shoppers | Price competition |\n| Cashback and loyalty sites | Conversion and repeat purchase | May reward customers who would buy anyway |\n| Coupon / voucher sites | Conversion at checkout | Often intercept existing customers; low incrementality |\n| Sub-networks | Scale | Less control over where you appear |\n\n### Setting up a programme\n\n1. **Platform**: join an affiliate network (which provides tracking, payments and a publisher marketplace) or use in-house affiliate software integrated with your store.\n2. **Commission structure**: percentage of sale or fixed amount; consider different rates by product margin or affiliate type; bonuses for new customers.\n3. **Cookie / attribution window**: the period after a click during which a sale is credited (for example, 7 to 30 days). Longer windows attract partners but increase cost.\n4. **Terms**: allowed promotion methods, brand bidding rules (can affiliates bid on your brand name in search ads?), use of trademarks, coupon use, disclosure requirements, prohibited practices.\n5. **Creative assets**: product images, banners, brand guidelines, product feeds.\n6. **Payment terms**: validation period (to account for returns and cancellations) before paying commission.\n\n### Commission maths\n\n```\nAverage order value: 120\nContribution margin before marketing: 45% -> 54 per order\nAffiliate commission: 10% -> 12 per order\nNetwork fee (if any): e.g. a percentage of commission\n\nContribution after affiliate cost: 54 - 12 - fees\n```\n\nSet commission levels so the programme remains profitable, and consider higher commissions for **new customers** (who are more valuable than existing customers who would buy anyway).\n\n### Fraud and low-quality traffic\n\nWatch for:\n\n- **Cookie stuffing**: dropping affiliate cookies without genuine clicks.\n- **Brand bidding** against your terms.\n- **Fake orders** or self-referrals to earn commission.\n- **Coupon code hijacking**: codes intended for one partner appearing on coupon sites.\n- **Toolbar or extension interception** at checkout.\n\nControls: clear terms, monitoring conversion paths, validation periods, reversing commissions for returns and fraud, and removing violating affiliates.\n\n### Compliance\n\nAffiliates must disclose their commercial relationship clearly (for example, \"I earn a commission if you buy through this link\"), in line with advertising rules such as the FTC's guidance in the US and ASA/CAP rules in the UK, and local requirements elsewhere. Your terms should require it, and you should monitor compliance — brands can be held responsible for misleading promotion by partners.\n\n### Worked example: a Gulf electronics retailer\n\nThe retailer launches an affiliate programme:\n\n- Content partners (tech review sites and YouTube creators): 6% commission, 30-day window, higher rate for new customers.\n- Cashback sites: 3% commission, only for new customers.\n- Coupon sites: limited to exclusive codes with lower commission; brand bidding prohibited.\n- Commission validated after the return window.\n\nAfter three months, analysis shows content partners drive the highest share of new customers, while coupon sites mostly convert existing customers already in checkout. The retailer shifts budget toward content partners.\n\n### Common mistakes\n\n- Paying the same commission to all affiliate types regardless of incrementality.\n- No validation period for returns.\n- Allowing unrestricted brand bidding.\n- No monitoring of disclosure.\n- Recruiting affiliates without audience fit.\n\n### Recruiting good affiliates\n\nStart with partners who already reach your customers: bloggers and reviewers in your category, creators who have mentioned your products organically, loyal customers with audiences, and complementary brands. Approach them with a clear value proposition — commission, exclusive products or early access, assets, and responsive support — and start with a small group you can manage well before opening the programme widely.\n\n### Affiliate programme checklist\n\n- [ ] Commission structure profitable at contribution level\n- [ ] Attribution window and validation period defined\n- [ ] Terms cover brand bidding, coupons, trademarks and disclosure\n- [ ] Fraud monitoring in place\n- [ ] Performance analysed by affiliate type and new-customer share\n",
+          "video": null,
+          "keyTakeaways": [
+            "Affiliate programmes pay partners commission on referred sales.",
+            "Design commission, attribution windows, validation periods and terms deliberately.",
+            "Coupon and cashback affiliates may reward sales that would happen anyway.",
+            "Require and monitor disclosure; watch for fraud such as cookie stuffing and brand bidding."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is a validation period in an affiliate programme?",
+              "options": [
+                "A period before paying commission to account for returns and cancellations",
+                "The length of a cookie",
+                "A discount window",
+                "Time for affiliates to create content"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Validation ensures commissions are paid only on genuine, completed sales."
+            },
+            {
+              "question": "Which affiliate type often has the lowest incrementality?",
+              "options": [
+                "Creators with engaged audiences",
+                "Coupon sites intercepting shoppers already at checkout",
+                "Comparison sites",
+                "Independent review sites"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Coupon sites frequently capture existing purchase intent."
+            },
+            {
+              "question": "What must affiliates do when promoting your products?",
+              "options": [
+                "Use your logo without permission",
+                "Hide the relationship",
+                "Clearly disclose their commercial relationship",
+                "Only post on weekends"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Advertising rules require clear disclosure of affiliate relationships."
+            }
+          ],
+          "activity": "Draft an affiliate programme outline: commission structure with margin maths, attribution window, validation period and five key terms."
+        },
+        {
+          "slug": "creator-partnerships",
+          "title": "Creator partnerships for e-commerce",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Why creators matter for e-commerce\n\nCreators (influencers, content creators, experts) can introduce products to engaged audiences with authentic demonstrations and recommendations. For e-commerce, creators provide **reach**, **trust** and **content** that can also be used in ads and on product pages (with the right permissions).\n\n### Partnership models\n\n| Model | Description | Best for |\n|---|---|---|\n| Product seeding / gifting | Send products with no obligation to post | Building relationships; discovering fits |\n| Paid posts | Fixed fee for agreed content | Launches and campaigns |\n| Affiliate / commission | Commission on sales via links or codes | Performance-focused partnerships |\n| Hybrid | Lower fee plus commission | Balancing risk |\n| Ambassador programmes | Long-term relationships with regular content | Brand building and loyalty |\n| Content licensing / usage rights | Brand uses creator content in ads (e.g. partnership or whitelisted ads) | Scaling proven creative |\n| Co-created products | Creator collaborates on a product line | Strong creator-brand fit |\n\n### Finding the right creators\n\n- **Audience fit** matters more than follower count: location, age, interests and purchasing power.\n- **Engagement quality**: genuine comments and conversations, not just high numbers.\n- **Content quality and style**: would their content fit your brand?\n- **Values and safety**: review past content for brand safety.\n- **Authenticity**: check for signs of fake followers or engagement.\n\nMicro and mid-tier creators often deliver strong engagement and credibility within niche communities; larger creators offer reach. Many brands use a portfolio of sizes.\n\n### Briefs and contracts\n\nA good brief includes:\n\n```\n- Campaign goal and key message (one or two points)\n- Product information and what makes it special\n- Mandatory elements: disclosure, product claims that are approved, link/code\n- Do's and don'ts (claims to avoid, competitor mentions, sensitive topics)\n- Creative freedom: let creators speak in their own voice\n- Deliverables, timelines, approval process\n```\n\nContracts should cover: deliverables, payment and timing, usage rights (where, how long, which formats), exclusivity, disclosure obligations, claims and approvals, cancellation, and what happens if content breaches rules.\n\n### Disclosure and claims\n\n- Paid partnerships, gifted products with expectations, and affiliate links must be disclosed clearly — using platform tools (such as paid-partnership labels) and clear language like \"Ad\".\n- The UK ASA/CAP guidance, US FTC Endorsement Guides and regulators in other markets (for example, the UAE, which requires licensing for certain paid influencer advertising) set rules; check the markets where content is published and consumed.\n- Creators must not make claims the brand could not substantiate (health, results, comparisons). Brands can be held responsible for partners' misleading claims.\n\n### Measuring creator impact\n\n- **Direct**: link clicks, code redemptions, affiliate sales, conversion rates.\n- **Indirect**: branded search lifts, direct traffic, social followers, content reused in ads.\n- **Content value**: performance of licensed creator content in paid ads.\n- **Incrementality**: regional or timing-based tests for larger campaigns.\n\nRemember that codes leak and links do not capture every influenced sale; use multiple signals.\n\n### Worked example: a Saudi modest fashion brand's creator strategy\n\n- Seeds new collections to 30 micro-creators whose audiences match (Saudi women 20–35 interested in modest fashion); no obligation to post.\n- Offers paid partnerships to the 8 creators who posted most authentically and drove engagement.\n- Licenses the best-performing creator videos for partnership ads (with usage rights agreed).\n- Each creator has a unique code and link; performance tracked by new customers and contribution margin.\n- All content uses the platform's paid-partnership label and clear disclosure; claims about fabric and fit are pre-approved.\n\n### Common mistakes\n\n- Choosing creators by follower count alone.\n- Scripts that erase the creator's voice.\n- Missing usage rights for reusing content in ads.\n- Undisclosed partnerships.\n- Measuring only code redemptions.\n\n### Managing creators at scale\n\nAs programmes grow, use a simple tracker: creator, audience details, agreed deliverables, posting dates, links and codes, disclosure checked, content performance, usage rights expiry, and payment status. Review it weekly during campaigns. Consistent processes protect the brand and make creators want to work with you again.\n\n### Creator partnership checklist\n\n- [ ] Creators vetted for audience fit, engagement and brand safety\n- [ ] Brief with key message, mandatory disclosures and approved claims\n- [ ] Contract with deliverables, rights, exclusivity and payment terms\n- [ ] Unique links and codes per creator\n- [ ] Measurement across direct, indirect and content value\n",
+          "video": null,
+          "keyTakeaways": [
+            "Creators provide reach, trust and reusable content for e-commerce brands.",
+            "Choose creators for audience fit, engagement quality and brand safety.",
+            "Briefs and contracts must cover disclosure, approved claims and usage rights.",
+            "Measure beyond codes: branded search, content value in ads and incrementality."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the most important factor when choosing creators?",
+              "options": [
+                "Number of posts per day",
+                "Their camera equipment",
+                "Follower count alone",
+                "Audience fit with your target customers"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Relevant audiences drive meaningful results."
+            },
+            {
+              "question": "A brand wants to reuse a creator's video in paid ads. What is required?",
+              "options": [
+                "Agreed usage rights in the contract",
+                "Deleting the original post",
+                "Nothing; posted content is free to use",
+                "Only a thank-you message"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Usage rights must be agreed for paid reuse."
+            },
+            {
+              "question": "Why shouldn't creator impact be measured only by discount code redemptions?",
+              "options": [
+                "Creators dislike codes",
+                "Codes always overstate impact",
+                "Codes are illegal",
+                "Codes leak and many influenced sales happen without codes"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Multiple signals capture creator influence more accurately."
+            }
+          ],
+          "activity": "Write a creator brief for a product launch including key message, mandatory disclosures, approved claims and deliverables, plus a list of contract terms."
+        },
+        {
+          "slug": "measuring-partner-programmes",
+          "title": "Measuring and managing partner programmes",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Beyond last-click commissions\n\nAffiliate and creator programmes are often measured by last-click attribution: whoever's link or code was used last gets credit. This is simple for paying commissions, but it can reward partners who intercept sales rather than create them. Good programme management looks at **incrementality** and **quality**.\n\n### Key metrics\n\n| Metric | Why it matters |\n|---|---|\n| Revenue and orders by partner | Basic performance |\n| New-customer share | New customers are usually more valuable than existing ones |\n| AOV and return rate by partner | Quality of customers referred |\n| Contribution margin after commission | Profitability |\n| Conversion path position | Did the partner introduce the customer or only close the sale? |\n| Customer lifetime value by partner | Long-term value of referred customers |\n| Content performance | For creators: engagement and ad performance of licensed content |\n\n### Assessing incrementality\n\nMethods, from simple to rigorous:\n\n1. **Path analysis**: how often is the partner the first touchpoint versus the last? Partners that appear mostly at the final step (for example, coupon sites) may be less incremental.\n2. **New-customer analysis**: share of referred customers who had never purchased before.\n3. **Pause tests**: temporarily pause a partner type (for example, coupon sites) and observe total sales and conversion.\n4. **Geo or time-based holdouts** for large creator campaigns.\n5. **Post-purchase surveys**: \"Where did you first hear about us?\"\n\n### Commission optimisation\n\nUse insights to reward value:\n\n- Higher commission for new customers.\n- Lower commission (or none) for existing customers or for coupon-driven sales.\n- Tiered commissions for top-performing partners.\n- Bonuses for launching new products or content creation.\n- Adjust commission by product margin.\n\n### Partner relationship management\n\nPartners are people and businesses. Strong programmes:\n\n- Communicate regularly (newsletters, product updates, upcoming campaigns).\n- Provide assets early before seasonal peaks.\n- Pay on time and transparently.\n- Share performance data so partners can optimise.\n- Enforce terms consistently (disclosure, brand bidding, claims).\n\n### Programme governance\n\n```\nMonthly:    Review partner performance, new-customer share, fraud signals, disclosure compliance\nQuarterly:  Re-evaluate commission structure; recruit new partners; remove poor fits\nAnnually:   Review programme strategy against overall marketing mix and MER\n```\n\n### Worked example: restructuring an affiliate programme\n\nA UK fashion retailer finds that coupon sites generate a large share of affiliate revenue but mostly from returning customers already in checkout, while content partners bring most new customers. It:\n\n1. Reduces coupon-site commission and restricts codes to exclusive offers.\n2. Raises commission on new-customer sales for content partners and creators.\n3. Runs a pause test on one cashback partner for four weeks; total sales barely change, confirming low incrementality.\n4. Reinvests savings into creator partnerships with content licensing.\n\nTotal affiliate cost falls while new-customer acquisition from partners rises (illustrative).\n\n### Common mistakes\n\n- Judging partners only by last-click revenue.\n- Paying full commission on returned orders.\n- Neglecting partner communication.\n- Inconsistent enforcement of terms.\n- Treating the partner channel in isolation from overall marketing.\n- Changing commission terms suddenly without notice, which damages trust with good partners.\n- Relying on a single large partner for most partner revenue, creating concentration risk.\n- Ignoring partner feedback about assets, landing pages or tracking problems that reduce their conversion rates.\n\n### A partner performance report template\n\n```\n| Partner | Type | Orders | Revenue | New-customer share | AOV | Return rate | Commission | Contribution after commission | First-touch share | Notes |\n|---------|------|--------|---------|--------------------|-----|-------------|------------|-------------------------------|-------------------|-------|\n```\n\nReview the report monthly. Sort by contribution after commission and new-customer share, not revenue alone. Flag partners whose return rates or disclosure compliance cause concern, and agree actions with them.\n\n### When to end a partnership\n\nPartnerships should end when a partner repeatedly breaches terms (undisclosed promotion, brand bidding, misleading claims), when incrementality tests show little added value, or when their audience no longer fits your customers. End them professionally, pay commissions owed under the agreement, and document the reasons.\n\n### Partner programme checklist\n\n- [ ] New-customer share and margin tracked by partner\n- [ ] Incrementality assessed (paths, pauses, holdouts, surveys)\n- [ ] Commission structure rewards incremental value\n- [ ] Regular partner communication and assets\n- [ ] Terms and disclosure enforced consistently\n",
+          "video": null,
+          "keyTakeaways": [
+            "Last-click commissions can reward partners who intercept rather than create sales.",
+            "Track new-customer share, margin, returns and lifetime value by partner.",
+            "Assess incrementality with path analysis, pause tests, holdouts and surveys.",
+            "Adjust commissions to reward incremental value and enforce terms consistently."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What does a pause test on a cashback partner help reveal?",
+              "options": [
+                "The partner's follower count",
+                "Shipping costs",
+                "Whether sales drop when the partner is paused, indicating incrementality",
+                "Commission rate"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "If sales barely change, the partner may be capturing sales that would happen anyway."
+            },
+            {
+              "question": "Which commission structure best rewards incremental value?",
+              "options": [
+                "Same rate for every sale",
+                "Higher commission for new customers and lower for existing customers or coupon-driven sales",
+                "Paying on returned orders",
+                "No commission at all"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Differentiated commissions align cost with value."
+            },
+            {
+              "question": "Which metric best indicates whether partners bring genuinely new customers?",
+              "options": [
+                "Total clicks",
+                "Number of banners used",
+                "New-customer share of referred orders",
+                "Email open rate"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "New-customer share shows acquisition value."
+            }
+          ],
+          "activity": "Analyse (or design) a partner performance report with new-customer share, margin after commission and incrementality indicators, and propose one commission change."
+        }
+      ]
+    },
+    {
+      "slug": "unit-economics-and-analytics",
+      "title": "Unit economics and e-commerce analytics",
+      "summary": "Calculate AOV, CAC, LTV, contribution margin and payback, analyse cohorts and customers, and plan profitable growth.",
+      "lessons": [
+        {
+          "slug": "unit-economics",
+          "title": "Unit economics: AOV, CAC, LTV and contribution margin",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Why unit economics decide survival\n\n**Unit economics** describe the profit or loss on each order and each customer. A store can grow revenue rapidly and still run out of cash if each new customer costs more to acquire than they ever generate. Understanding unit economics lets you decide how much you can afford to spend on growth.\n\n### Key definitions\n\n| Metric | Formula | Notes |\n|---|---|---|\n| AOV (average order value) | Revenue / Number of orders | Use net revenue after discounts |\n| Gross margin | (Revenue - Cost of goods) / Revenue | Product-level profitability |\n| Contribution margin (per order) | Revenue - COGS - Shipping & fulfilment - Payment fees - Returns allowance - (variable marketing, if included) | The profit each order contributes to fixed costs |\n| CAC (customer acquisition cost) | Acquisition marketing spend / New customers acquired | Use new customers, not all orders |\n| LTV (customer lifetime value) | Contribution per order x Orders per customer over a period | Use contribution, not revenue |\n| LTV:CAC ratio | LTV / CAC | Commonly discussed guide: comfortably above 1; many aim for around 3 over a sensible time frame |\n| Payback period | Time for cumulative contribution from a customer to exceed CAC | Shorter payback reduces cash strain |\n\n### Worked contribution margin example\n\nIllustrative numbers for one order:\n\n```\nSelling price (net of discount):        100\nCost of goods:                          -40\nShipping & fulfilment:                  -12\nPayment processing fees:                 -3\nReturns allowance (avg cost of returns): -5\nContribution margin before marketing:     40  (40%)\n```\n\nIf the average CAC is 30, the **first order** contributes 40 - 30 = 10 after acquisition cost. The customer pays back on the first order.\n\n### LTV example\n\n```\nContribution per order: 40\nAverage orders per customer over 24 months: 2.5\nLTV (24 months, contribution basis): 40 x 2.5 = 100\nCAC: 30\nLTV:CAC = 100 / 30 = about 3.3\n```\n\nChoose a realistic time frame for LTV (for example 12 or 24 months) and base it on **observed cohort data** rather than hopeful assumptions. Early-stage stores should be conservative.\n\n### Why revenue-based LTV misleads\n\nCalculating LTV from revenue (for example, 250 in revenue per customer) and comparing it to CAC (30) makes the business look far healthier than it is. Always use **contribution** — the money actually left after variable costs.\n\n### Levers to improve unit economics\n\n```\nRaise contribution per order:  price, AOV, sourcing, shipping costs, payment mix, fewer returns\nLower CAC:                     creative, conversion rate, channel mix, organic and referral growth\nRaise orders per customer:     retention flows, loyalty, subscriptions, product range\nShorten payback:               higher first-order margin, faster second purchase\n```\n\n### Cash flow and payback\n\nEven with a healthy LTV:CAC ratio, a long payback period can create cash problems — you spend on acquisition today and recover over many months. Inventory purchases add further strain. Plan growth spend with cash flow in mind.\n\n### Market considerations\n\n- Cash on delivery refusals and returns can significantly change contribution — include them.\n- Currency fluctuations affect cost of goods for importers.\n- Marketplace fees reduce contribution for marketplace orders; calculate per channel.\n- VAT or sales tax treatment varies — use net revenue.\n\n### Common mistakes\n\n- Using revenue instead of contribution for LTV.\n- Ignoring returns, fees and shipping.\n- Calculating CAC with all orders instead of new customers.\n- Assuming lifetime values from optimistic projections.\n- Ignoring payback and cash flow.\n\n### Using unit economics in decisions\n\nUnit economics should shape everyday choices: whether to accept a marketplace's fees, how much commission to offer affiliates, what CAC target to set for each channel, whether a discount is worth running, and which products to promote. A simple rule many teams use is to set a maximum CAC per channel based on contribution-based LTV and an acceptable payback period, then review it monthly as data improves.\n\n### Unit economics checklist\n\n- [ ] Contribution margin per order calculated with all variable costs\n- [ ] CAC calculated on new customers by channel\n- [ ] LTV based on observed cohorts over a defined period\n- [ ] LTV:CAC and payback reviewed monthly\n- [ ] Channel-level unit economics (own store vs marketplaces)\n",
+          "video": null,
+          "keyTakeaways": [
+            "Unit economics show profit or loss per order and per customer.",
+            "Contribution margin subtracts all variable costs, including shipping, fees and returns.",
+            "Calculate LTV on contribution over a defined period using observed cohorts.",
+            "Watch LTV:CAC and payback period together to manage growth and cash."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A product sells for 100 with COGS 40, shipping 12, fees 3 and a returns allowance of 5. What is the contribution margin before marketing?",
+              "options": [
+                "60",
+                "45",
+                "100",
+                "40"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "100 − 40 − 12 − 3 − 5 = 40."
+            },
+            {
+              "question": "Why should LTV be calculated using contribution rather than revenue?",
+              "options": [
+                "It is required by law",
+                "Revenue ignores variable costs and overstates the value available to cover acquisition",
+                "Contribution is easier to inflate",
+                "Revenue is always lower"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Only contribution reflects the money available after variable costs."
+            },
+            {
+              "question": "How should CAC be calculated?",
+              "options": [
+                "Acquisition marketing spend / new customers acquired",
+                "Total spend / all orders",
+                "Ad clicks / orders",
+                "Revenue / customers"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "CAC is the cost of acquiring each new customer."
+            }
+          ],
+          "activity": "Build a unit economics sheet for a store with contribution per order, CAC by channel, 12-month LTV from cohort data (or assumptions labelled as such) and payback period."
+        },
+        {
+          "slug": "ecommerce-analytics",
+          "title": "E-commerce analytics: cohorts, customers and dashboards",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### From reports to decisions\n\nE-commerce generates rich data: sessions, product views, carts, orders, customers, returns and marketing costs. The goal is to turn it into decisions about products, marketing and retention.\n\n### Core analytics sources\n\n- **Web analytics** (such as GA4) for traffic, behaviour and funnel analysis.\n- **Store platform reports** for orders, products, customers and discounts.\n- **Marketing platforms** for spend and platform-attributed results.\n- **Email/SMS tools** for lifecycle performance.\n- **Finance and operations** for cost of goods, shipping, returns and cash.\n\nReconcile them: GA4 purchases, store orders and platform-reported conversions will differ. Decide which source is the \"source of truth\" for each metric (usually the store platform for orders and revenue).\n\n### Funnel analysis\n\n```\nSessions -> Product views -> Add to cart -> Checkout started -> Purchase\n```\n\nSegment by device, traffic source, new vs returning and country to find leaks. Compare against your own history rather than generic benchmarks.\n\n### Product analytics\n\n- Product views, add-to-cart rate and conversion rate per product.\n- Revenue, margin and return rate per product.\n- Products frequently bought together (bundle and cross-sell ideas).\n- Out-of-stock impact.\n- \"Hero\" products that bring new customers versus products bought by repeat customers.\n\n### Cohort analysis\n\nA **cohort** is a group of customers who made their first purchase in the same period (for example, January 2026). Cohort tables show how each group behaves over time:\n\n```\nFirst-purchase month | Customers | % ordering again by Month 1 | Month 3 | Month 6 | Month 12\nJan                  | 1,000     | 8%                          | 15%     | 21%     | 28%\nFeb                  | 1,200     | 9%                          | 17%     | 24%     | —\nMar (big promo)      | 2,500     | 5%                          | 9%      | —       | —\n```\n\n(Illustrative.) In this example, the March cohort — acquired with a big promotion — repeats less, suggesting discount-driven customers are less loyal. Cohorts reveal patterns that averages hide.\n\n### RFM segmentation\n\n**RFM** scores customers by:\n\n- **Recency**: how recently they purchased.\n- **Frequency**: how often they purchase.\n- **Monetary value**: how much they spend.\n\nSegments such as \"champions\" (recent, frequent, high value), \"at risk\" (previously frequent, not recent), and \"new\" guide lifecycle marketing: VIP perks for champions, win-back campaigns for at-risk customers, onboarding for new ones.\n\n### Building an e-commerce dashboard\n\n```\nEXECUTIVE (weekly)\n- Net revenue, orders, AOV, conversion rate\n- Contribution margin (after marketing)\n- MER and blended CAC; new vs returning customer revenue\n- Repeat purchase rate; return rate\n\nMARKETING (daily/weekly)\n- Spend, platform ROAS, new customers by channel\n- Creative performance; email/SMS revenue per recipient\n\nMERCHANDISING (weekly)\n- Top and bottom products by revenue, margin, conversion and returns\n- Stock levels for top sellers; zero-result searches\n```\n\nEach metric should have a comparison (previous period, same period last year, target) and an owner.\n\n### Privacy and data quality\n\n- Respect consent for analytics and marketing tags.\n- Avoid storing unnecessary personal data in spreadsheets.\n- Document metric definitions (for example, whether revenue includes tax or shipping).\n- Monitor tracking health after site changes.\n\n### Worked example: a Gulf home-fragrance brand\n\nCohort analysis shows customers acquired via a creator partnership reorder at twice the rate of those from a discount-heavy campaign (illustrative). RFM shows a growing \"at risk\" segment of past frequent buyers. Actions: scale creator partnerships, reduce deep discount acquisition, launch a win-back flow for at-risk customers with new scents rather than discounts.\n\n### Common mistakes\n\n- Relying on averages that hide cohort differences.\n- Mixing data sources without reconciliation.\n- Dashboards without targets or owners.\n- Tracking revenue but not contribution.\n- Ignoring returns in product performance.\n\n### Common analysis questions to answer monthly\n\n1. Which channels brought the most new customers, and at what CAC?\n2. How are recent cohorts repeating compared with earlier ones?\n3. Which products drive first purchases, and which drive repeat purchases?\n4. Where in the funnel did conversion change most, and for which segment?\n5. Which products have rising return rates, and why?\n\n### Analytics checklist\n\n- [ ] Source of truth defined for each key metric\n- [ ] Funnel segmented by device, source and customer type\n- [ ] Monthly cohort table maintained\n- [ ] RFM segments feeding lifecycle marketing\n- [ ] Dashboards with comparisons, targets and owners\n",
+          "video": null,
+          "keyTakeaways": [
+            "Reconcile data sources and define a source of truth for each metric.",
+            "Cohort analysis reveals how customer groups behave over time.",
+            "RFM segmentation guides VIP, win-back and onboarding marketing.",
+            "Dashboards need comparisons, targets, owners and contribution metrics."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What does a cohort table show?",
+              "options": [
+                "Warehouse stock",
+                "How groups of customers who first purchased in the same period behave over time",
+                "Ad creative performance",
+                "Today's traffic only"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Cohorts track repeat behaviour by acquisition period."
+            },
+            {
+              "question": "In RFM analysis, what does 'R' stand for?",
+              "options": [
+                "Revenue",
+                "Reach",
+                "Returns",
+                "Recency"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "RFM is Recency, Frequency and Monetary value."
+            },
+            {
+              "question": "A cohort acquired during a heavy discount campaign repeats less than others. What might this suggest?",
+              "options": [
+                "Discounts always build loyalty",
+                "The data is wrong",
+                "Discount-driven customers may be less loyal, so acquisition tactics affect long-term value",
+                "Cohorts are irrelevant"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Acquisition method can influence customer quality."
+            }
+          ],
+          "activity": "Build a cohort table from your store data (or a sample dataset) and define three RFM segments with a marketing action for each."
+        },
+        {
+          "slug": "profitable-growth-planning",
+          "title": "Planning profitable growth",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Growth planning brings it all together\n\nA growth plan connects your targets to the levers, channels, budgets and experiments needed to reach them — while protecting profit and cash.\n\n### Start from a target and work backwards\n\n```\nTarget: net revenue of 1.2m next year (illustrative)\n\nCurrent: 800k revenue, AOV 80, 10,000 orders\nPlan:\n- AOV +10% via bundles and threshold      -> AOV 88\n- Repeat orders +20% via lifecycle/loyalty -> more orders from existing customers\n- New customers +25% via creators, search, marketplace expansion\nCheck: Do these combined assumptions reach 1.2m?\nCheck: At expected CAC and contribution margin, is the plan profitable and fundable?\n```\n\nBuild a simple model in a spreadsheet: new customers × first-order AOV + returning customers × orders × AOV, minus variable costs and marketing, month by month.\n\n### Budget allocation principles\n\n- **Fund the foundations first**: conversion, product pages, retention flows — often high return, lower cost.\n- **Allocate acquisition spend by marginal return**: the next unit of spend in each channel, not the average.\n- **Protect owned channel growth**: email/SMS list growth targets.\n- **Keep a test budget** (for example, a small percentage of spend) for new channels and creative.\n- **Plan for seasonality**: more spend in peak periods when conversion is higher, with inventory aligned.\n\n### Forecasting and scenarios\n\nCreate three scenarios:\n\n| Scenario | Assumptions |\n|---|---|\n| Conservative | CAC rises, conversion flat, repeat rate unchanged |\n| Base | Planned improvements achieved partially |\n| Optimistic | Improvements fully achieved, CAC stable |\n\nCheck cash needs in each (inventory, marketing, payback). Decide in advance what you will do if results track to the conservative case.\n\n### An experimentation roadmap\n\nGrowth plans should include experiments, not just budgets:\n\n```\nQ1: PDP improvements (size guide, delivery estimates); welcome flow rebuild\nQ2: Bundle and free-shipping threshold tests; creator seeding programme\nQ3: Marketplace expansion pilot; loyalty programme launch\nQ4: Peak season plan; win-back flow; incrementality test on retargeting\n```\n\nEach experiment has a hypothesis, success metric and decision date.\n\n### Governance: the weekly and monthly rhythm\n\n```\nWEEKLY:  Dashboard review - revenue, contribution, MER, new customers, stock;\n         actions on anomalies\nMONTHLY: Unit economics and cohort review; channel budget reallocation;\n         experiment results and next tests\nQUARTERLY: Plan vs actual; scenario update; strategic bets\n```\n\n### Sustainability and ethics in growth\n\nSustainable growth avoids tactics that damage trust: fake urgency, fake reviews, misleading pricing, spammy messages or hard-to-cancel subscriptions. These can bring short-term gains but lead to regulatory action, platform penalties, chargebacks and lost customers. Customer trust is a long-term asset.\n\n### Worked example: a Pakistani skincare D2C brand\n\nThe brand's plan for next year:\n\n- Foundations: Urdu and English PDPs with ingredient explanations; COD confirmation via WhatsApp to reduce refusals.\n- Retention: post-purchase routine guides; replenishment reminders; loyalty points.\n- Acquisition: micro-creator programme with codes and licensing; search ads for high-intent terms; marketplace presence for discovery.\n- Economics: target contribution margin after marketing of a set percentage; CAC capped by channel based on 12-month LTV.\n- Scenarios: conservative plan funded by existing cash; optimistic plan requires inventory financing agreed in advance.\n\n### Common mistakes\n\n- Revenue targets with no link to levers or unit economics.\n- Spending on average ROAS rather than marginal returns.\n- No test budget.\n- Ignoring cash flow and inventory.\n- Growth tactics that erode trust.\n- Plans that are never revisited: compare plan versus actual monthly and update assumptions as evidence arrives.\n\n### Communicating the plan\n\nShare a one-page version of the plan with the whole team: the target, the three or four levers you will pull, the key experiments, and the metrics everyone should watch. When people understand how their work connects to growth — a customer service agent reducing COD refusals, a designer improving product images — execution improves. Update the page each quarter with progress and learnings.\n\n### Growth plan checklist\n\n- [ ] Target broken down into lever assumptions\n- [ ] Monthly model including contribution and cash\n- [ ] Budget allocated by marginal return with a test budget\n- [ ] Three scenarios with trigger points\n- [ ] Experiment roadmap with hypotheses and decision dates\n- [ ] Weekly and monthly governance rhythm\n",
+          "video": null,
+          "keyTakeaways": [
+            "Work backwards from targets to lever assumptions, budgets and experiments.",
+            "Allocate spend by marginal return and keep a test budget.",
+            "Model scenarios for revenue, contribution and cash, with decision triggers.",
+            "Sustainable growth avoids tactics that erode customer trust."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why allocate budget by marginal return rather than average return?",
+              "options": [
+                "The next unit of spend may earn much less than the average, especially as channels saturate",
+                "Marginal return is always higher",
+                "It avoids tracking",
+                "Average return is illegal"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Diminishing returns mean the average can hide poor performance of additional spend."
+            },
+            {
+              "question": "What is the purpose of scenario planning?",
+              "options": [
+                "To avoid targets",
+                "To predict the exact future",
+                "To replace budgets",
+                "To understand revenue, profit and cash needs under different assumptions and decide responses in advance"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Scenarios prepare decisions for different outcomes."
+            },
+            {
+              "question": "Which growth tactic is likely to damage long-term trust?",
+              "options": [
+                "Loyalty programmes with clear terms",
+                "Improving product pages",
+                "Fake countdown timers and misleading reference prices",
+                "Faster delivery"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Deceptive tactics risk penalties and lost customers."
+            }
+          ],
+          "activity": "Build a one-year growth plan outline for a store: target, lever assumptions, budget allocation, three scenarios and a quarterly experiment roadmap."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 25,
+    "timeLimitMinutes": 40,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "ecom-001",
+        "module": "store-fundamentals",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which formula describes e-commerce revenue?",
+        "options": [
+          "Orders - returns",
+          "Visitors x conversion rate x AOV",
+          "AOV / visitors",
+          "Visitors + orders + AOV"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Revenue is the product of visitors, conversion rate and average order value."
+      },
+      {
+        "id": "ecom-002",
+        "module": "store-fundamentals",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A store has strong first orders but very few repeat purchases. Which lever is limiting?",
+        "options": [
+          "Retention / purchase frequency",
+          "Traffic",
+          "Conversion rate",
+          "Product photography"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Few repeat orders point to retention."
+      },
+      {
+        "id": "ecom-003",
+        "module": "store-fundamentals",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which improve store trust? (Choose all that apply)",
+        "options": [
+          "Hiding fees until checkout",
+          "Clear delivery and returns policies",
+          "Visible business identity and contact details",
+          "Genuine reviews and ratings"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Transparency and genuine proof build trust; hidden fees damage it."
+      },
+      {
+        "id": "ecom-004",
+        "module": "store-fundamentals",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A store in Pakistan sees high COD refusal rates. Which combination is most likely to help?",
+        "options": [
+          "Hiding the order total",
+          "Order confirmation messages, clear delivery estimates and incentives for prepayment",
+          "Longer delivery times",
+          "Removing all payment options"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Confirmation and clear expectations reduce refusals; prepayment incentives shift the mix."
+      },
+      {
+        "id": "ecom-005",
+        "module": "store-fundamentals",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which element should be visible near the add-to-cart button?",
+        "options": [
+          "Delivery estimate and returns summary",
+          "Company history",
+          "Job openings",
+          "Investor information"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Answering delivery and returns questions at decision time reduces hesitation."
+      },
+      {
+        "id": "ecom-006",
+        "module": "store-fundamentals",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why is copying supplier descriptions word for word a weak practice?",
+        "options": [
+          "It is too persuasive",
+          "It is required by marketplaces",
+          "It creates generic, duplicate content that does not address your customers' questions",
+          "It improves SEO"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Original, customer-focused descriptions perform better and avoid duplication."
+      },
+      {
+        "id": "ecom-007",
+        "module": "store-fundamentals",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "A fashion store's returns are driven by 'colour not as expected'. Which fixes address the root cause? (Choose all that apply)",
+        "options": [
+          "Colour descriptions with context (e.g. 'deep olive, closer to khaki in daylight')",
+          "Customer photo reviews",
+          "More accurate, consistently lit product photos",
+          "Hiding the returns policy"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Accurate visuals and descriptions reduce mismatched expectations."
+      },
+      {
+        "id": "ecom-008",
+        "module": "merchandising-and-promotions",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is merchandising in e-commerce?",
+        "options": [
+          "Only warehouse management",
+          "Accounting",
+          "Customer service",
+          "How products are arranged and presented so shoppers find and discover more"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Online merchandising covers navigation, collections, search, sorting and recommendations."
+      },
+      {
+        "id": "ecom-009",
+        "module": "merchandising-and-promotions",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A product sells at 100 with a cost of 60. After a 20% discount, how many more units are needed to keep the same gross profit?",
+        "options": [
+          "20% more",
+          "No change",
+          "50% more",
+          "100% more (double)"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Profit per unit falls from 40 to 20, so twice the units are needed."
+      },
+      {
+        "id": "ecom-010",
+        "module": "merchandising-and-promotions",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which controls reduce discount code leakage? (Choose all that apply)",
+        "options": [
+          "Expiry dates and usage limits for creator codes",
+          "Monitoring code usage by source",
+          "One permanent public code for everyone",
+          "Unique single-use codes for email and SMS"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Unique, limited and monitored codes reduce leakage."
+      },
+      {
+        "id": "ecom-011",
+        "module": "merchandising-and-promotions",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A store runs a 'final day' sale that is extended every day for two weeks. What is the main issue?",
+        "options": [
+          "It is required for Black Friday",
+          "It increases AOV",
+          "It creates misleading urgency that can breach consumer protection rules",
+          "It improves trust"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Sale deadlines must be genuine."
+      },
+      {
+        "id": "ecom-012",
+        "module": "merchandising-and-promotions",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Where should a free-shipping threshold usually be set?",
+        "options": [
+          "Somewhat above current AOV, checked against margin",
+          "Below current AOV",
+          "At zero",
+          "At ten times AOV"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Slightly above AOV encourages add-ons while protecting margin."
+      },
+      {
+        "id": "ecom-013",
+        "module": "merchandising-and-promotions",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why must Ramadan and Eid campaigns be re-dated each year?",
+        "options": [
+          "Governments change them randomly",
+          "The Islamic calendar is lunar and shifts about 10–11 days earlier each Gregorian year",
+          "They are fixed on 1 March",
+          "Retailers choose new dates"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Lunar calendar events move relative to the Gregorian calendar."
+      },
+      {
+        "id": "ecom-014",
+        "module": "merchandising-and-promotions",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Which approach is most likely to protect margin during a major sales event?",
+        "options": [
+          "No planning",
+          "Targeted discounts on selected items plus gifts with purchase and tiered spend offers, measured on contribution margin",
+          "Doubling prices first and then discounting",
+          "30% off everything with public codes"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Targeted, margin-aware offers measured on contribution protect profit."
+      },
+      {
+        "id": "ecom-015",
+        "module": "retention-and-loyalty",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which flows are usually the highest priority to set up first?",
+        "options": [
+          "Birthday and anniversary",
+          "Surveys",
+          "Welcome, cart abandonment and post-purchase",
+          "Only weekly newsletters"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "These flows capture key moments of intent."
+      },
+      {
+        "id": "ecom-016",
+        "module": "retention-and-loyalty",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which statements about SMS and messaging marketing are correct? (Choose all that apply)",
+        "options": [
+          "Consent rules are often strict and must be followed",
+          "Platform business-messaging policies apply",
+          "Transactional and marketing messages should be separated",
+          "Opt-out links are optional"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Consent, separation and platform rules are essential; opt-outs are required."
+      },
+      {
+        "id": "ecom-017",
+        "module": "retention-and-loyalty",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why can comparing loyalty members with non-members overstate impact?",
+        "options": [
+          "Members spend less",
+          "Non-members cannot buy",
+          "Loyalty points are free",
+          "Members are often already the best customers (selection bias)"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Selection bias inflates apparent programme impact."
+      },
+      {
+        "id": "ecom-018",
+        "module": "retention-and-loyalty",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A subscription business makes cancellation possible only by phone during office hours. What is the main risk?",
+        "options": [
+          "Regulatory scrutiny and customer backlash over hard-to-cancel subscriptions",
+          "Higher retention with no downside",
+          "Lower costs",
+          "Better reviews"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Many regulators target subscriptions that are hard to cancel."
+      },
+      {
+        "id": "ecom-019",
+        "module": "retention-and-loyalty",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "When should review requests be sent?",
+        "options": [
+          "Never",
+          "After the customer has had time to use the product",
+          "Before shipping",
+          "Only to happy customers"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Informed reviews come after use; asking everyone avoids bias."
+      },
+      {
+        "id": "ecom-020",
+        "module": "retention-and-loyalty",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "How can you estimate the true incremental revenue of an email flow?",
+        "options": [
+          "Double the send frequency",
+          "Look at open rates",
+          "Count attributed revenue",
+          "Use a holdout group that doesn't receive the flow"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Holdouts measure what happens without the flow."
+      },
+      {
+        "id": "ecom-021",
+        "module": "retention-and-loyalty",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which review practices are unlawful or against platform policies in many markets? (Choose all that apply)",
+        "options": [
+          "Asking all customers for honest reviews",
+          "Suppressing negative reviews",
+          "Rewarding only five-star reviews",
+          "Writing reviews on behalf of customers"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Fake, suppressed or sentiment-conditional reviews mislead consumers."
+      },
+      {
+        "id": "ecom-022",
+        "module": "marketplaces-and-acquisition",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is a key trade-off of selling on marketplaces?",
+        "options": [
+          "No reviews",
+          "No search",
+          "Fees and limited customer data ownership",
+          "No customers"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Marketplaces trade reach for fees and less relationship ownership."
+      },
+      {
+        "id": "ecom-023",
+        "module": "marketplaces-and-acquisition",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What is break-even first-order ROAS when contribution margin before marketing is 50%?",
+        "options": [
+          "2.0",
+          "1.5",
+          "5.0",
+          "0.5"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "1 / 0.50 = 2.0."
+      },
+      {
+        "id": "ecom-024",
+        "module": "marketplaces-and-acquisition",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What is MER?",
+        "options": [
+          "Margin per order",
+          "Total revenue divided by total marketing spend",
+          "Marketplace error rate",
+          "Email revenue per recipient"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "MER is a blended efficiency metric."
+      },
+      {
+        "id": "ecom-025",
+        "module": "marketplaces-and-acquisition",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Social platforms report a combined ROAS well above break-even, but blended MER is below break-even and new-customer share is falling. What should the team do? (Choose all that apply)",
+        "options": [
+          "Exclude existing customers from prospecting campaigns",
+          "Test new creative concepts and run an incrementality test",
+          "Make decisions using MER and contribution margin",
+          "Scale spend immediately based on platform ROAS"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Platform overlap inflates ROAS; blended and incremental measures should guide scaling."
+      },
+      {
+        "id": "ecom-026",
+        "module": "marketplaces-and-acquisition",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which product feed improvements help shopping ads?",
+        "options": [
+          "Removing images",
+          "Duplicate products",
+          "Hiding prices",
+          "Descriptive titles, accurate prices and availability, correct identifiers"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Feed quality drives relevance and approvals."
+      },
+      {
+        "id": "ecom-027",
+        "module": "marketplaces-and-acquisition",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Before sending promotional messages via a messaging app catalogue, what must a store have?",
+        "options": [
+          "A marketplace account",
+          "Nothing",
+          "Explicit marketing opt-in and compliance with platform policies",
+          "A large following"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Consent and platform policies govern promotional messaging."
+      },
+      {
+        "id": "ecom-028",
+        "module": "marketplaces-and-acquisition",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A marketplace penalises listings priced higher than on the brand's own site. What does this illustrate?",
+        "options": [
+          "Channel pricing conflicts must be managed deliberately across store and marketplaces",
+          "Own stores are always cheaper",
+          "Marketplaces have no rules",
+          "Marketplaces set your costs"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Price parity policies and channel conflict require coordinated pricing."
+      },
+      {
+        "id": "ecom-029",
+        "module": "affiliate-and-creator-programmes",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "How are affiliates typically paid?",
+        "options": [
+          "Salary",
+          "Commission on referred sales",
+          "Free products only",
+          "Equity"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Affiliate programmes are performance-based."
+      },
+      {
+        "id": "ecom-030",
+        "module": "affiliate-and-creator-programmes",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which terms belong in an affiliate programme agreement? (Choose all that apply)",
+        "options": [
+          "Disclosure requirements",
+          "The affiliate's personal passwords",
+          "Validation period for returns",
+          "Brand bidding rules"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Clear terms protect brand, compliance and costs."
+      },
+      {
+        "id": "ecom-031",
+        "module": "affiliate-and-creator-programmes",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What is the most important factor when selecting creators?",
+        "options": [
+          "Same city as the brand",
+          "Largest follower count",
+          "Audience fit and engagement quality",
+          "Posting frequency only"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Relevant, engaged audiences drive results."
+      },
+      {
+        "id": "ecom-032",
+        "module": "affiliate-and-creator-programmes",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A cashback partner generates a large share of affiliate revenue. A four-week pause barely changes total sales. What does this suggest?",
+        "options": [
+          "The pause test failed",
+          "The partner is highly incremental",
+          "Commissions should double",
+          "The partner mostly captured sales that would have happened anyway"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Little change during a pause indicates low incrementality."
+      },
+      {
+        "id": "ecom-033",
+        "module": "affiliate-and-creator-programmes",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What must creators include when posting paid content?",
+        "options": [
+          "Clear disclosure such as 'Ad' or a paid-partnership label",
+          "Nothing",
+          "Their home address",
+          "A competitor mention"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Advertising rules require clear disclosure."
+      },
+      {
+        "id": "ecom-034",
+        "module": "affiliate-and-creator-programmes",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A brand wants to run a creator's video as a paid ad. What must be agreed?",
+        "options": [
+          "Usage rights covering paid use, duration and formats",
+          "The creator's follower growth",
+          "Nothing",
+          "Only a verbal thank-you"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Contracts must grant usage rights for paid reuse."
+      },
+      {
+        "id": "ecom-035",
+        "module": "affiliate-and-creator-programmes",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which commission design best aligns affiliate cost with value? (Choose all that apply)",
+        "options": [
+          "Reduced commission for coupon-driven sales to existing customers",
+          "Same rate for every order regardless of source",
+          "Commission reversed on returned orders",
+          "Higher commission for new customers"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Differentiated, validated commissions reward incremental value."
+      },
+      {
+        "id": "ecom-036",
+        "module": "unit-economics-and-analytics",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is AOV?",
+        "options": [
+          "Orders divided by visitors",
+          "Average order velocity",
+          "Revenue divided by number of orders",
+          "Average of all prices"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "AOV is average revenue per order."
+      },
+      {
+        "id": "ecom-037",
+        "module": "unit-economics-and-analytics",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Contribution per order is 40, customers place 2.5 orders over 24 months, and CAC is 25. What is the 24-month LTV:CAC ratio?",
+        "options": [
+          "1.6",
+          "4.0",
+          "10",
+          "2.5"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "LTV = 40 x 2.5 = 100; 100 / 25 = 4.0."
+      },
+      {
+        "id": "ecom-038",
+        "module": "unit-economics-and-analytics",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which costs belong in contribution margin per order? (Choose all that apply)",
+        "options": [
+          "Cost of goods",
+          "Office rent",
+          "Shipping and fulfilment",
+          "Payment processing fees"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Contribution subtracts variable costs; fixed costs like rent are excluded."
+      },
+      {
+        "id": "ecom-039",
+        "module": "unit-economics-and-analytics",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A founder calculates LTV as 300 using revenue and CAC as 60, concluding LTV:CAC is 5. Contribution margin is 30%. What is the more accurate view?",
+        "options": [
+          "LTV:CAC is 5; scale aggressively",
+          "CAC should be ignored",
+          "LTV:CAC is 10",
+          "Contribution-based LTV is about 90, so LTV:CAC is about 1.5 — much tighter than it appears"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "300 x 30% = 90 contribution; 90 / 60 = 1.5."
+      },
+      {
+        "id": "ecom-040",
+        "module": "unit-economics-and-analytics",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does RFM stand for?",
+        "options": [
+          "Reach, Follow, Message",
+          "Returns, Fulfilment, Marketing",
+          "Recency, Frequency, Monetary value",
+          "Revenue, Fees, Margin"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "RFM segments customers by purchase behaviour."
+      },
+      {
+        "id": "ecom-041",
+        "module": "unit-economics-and-analytics",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why use cohort analysis rather than overall averages?",
+        "options": [
+          "Cohorts replace revenue reporting",
+          "Averages are illegal",
+          "Cohorts are easier to fake",
+          "Cohorts reveal how customer groups acquired at different times behave, which averages hide"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Cohorts expose differences by acquisition period and tactic."
+      },
+      {
+        "id": "ecom-042",
+        "module": "unit-economics-and-analytics",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A store has a healthy LTV:CAC ratio but frequently runs short of cash. What is the likely explanation?",
+        "options": [
+          "A long payback period plus inventory purchases means cash is spent long before it is recovered",
+          "Revenue is too stable",
+          "LTV is too high",
+          "CAC is zero"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Payback and inventory timing affect cash even when lifetime economics are sound."
+      }
+    ]
+  }
+}
