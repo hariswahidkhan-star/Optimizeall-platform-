@@ -272,15 +272,17 @@ public sealed class SeoCrawlabilityTests(ApiFactory api) : IClassFixture<ApiFact
 
         public Task<IReadOnlyList<SitemapContribution>> UrlsAsync(CancellationToken ct) => Task.FromResult<IReadOnlyList<SitemapContribution>>(new[]
         {
-            new SitemapContribution("/learn/test-video-course/lecture", new DateTime(2026, 9, 1, 0, 0, 0, DateTimeKind.Utc), "Lecture")
+            new SitemapContribution("/learn/test-video-course/lecture", new DateTime(2026, 9, 1, 0, 0, 0, DateTimeKind.Utc), "Lecture", null, new[]
+            {
+                new SeoVideo("Lecture video", "What the lecture covers.", "/api/v1/files/lecture", null, "/api/v1/files/poster", null, "en", null,
+                    new DateTime(2026, 9, 1, 0, 0, 0, DateTimeKind.Utc), 420),
+                new SeoVideo("YouTube lecture", "Embedded.", null, null, "https://i.ytimg.com/vi/abcdefghijk/hqdefault.jpg", null, "en",
+                    "https://www.youtube-nocookie.com/embed/abcdefghijk", new DateTime(2026, 9, 2, 0, 0, 0, DateTimeKind.Utc), 300),
+                new SeoVideo("No poster", "Left out of the video sitemap.", "/api/v1/files/other", null, null, null, "en", null,
+                    new DateTime(2026, 9, 1, 0, 0, 0, DateTimeKind.Utc), null),
+            })
             {
                 Images = new[] { "/api/v1/files/poster" },
-                Videos = new[]
-                {
-                    new SitemapVideoContribution("Lecture video", "What the lecture covers.", "/api/v1/files/poster", ContentUrl: "/api/v1/files/lecture",
-                        DurationSeconds: 420),
-                    new SitemapVideoContribution("No poster", "Left out of the video sitemap.", null, ContentUrl: "/api/v1/files/other"),
-                },
             },
         });
     }
@@ -299,6 +301,8 @@ public sealed class SeoCrawlabilityTests(ApiFactory api) : IClassFixture<ApiFact
         Assert.Equal("420", entry.Element(v + "duration")!.Value);
         Assert.StartsWith("2026-09-01", entry.Element(v + "publication_date")!.Value);
         Assert.DoesNotContain(videos.Descendants(v + "title"), t => t.Value == "No poster");
+        var embedded = videos.Descendants(v + "video").Single(e => e.Element(v + "title")!.Value == "YouTube lecture");
+        Assert.Equal("https://www.youtube-nocookie.com/embed/abcdefghijk", embedded.Element(v + "player_loc")!.Value);
         var images = XDocument.Parse(await client.GetStringAsync("/sitemaps/images.xml"));
         Assert.Contains(images.Descendants(img + "loc"), l => l.Value == Base + "/api/v1/files/poster");
     }

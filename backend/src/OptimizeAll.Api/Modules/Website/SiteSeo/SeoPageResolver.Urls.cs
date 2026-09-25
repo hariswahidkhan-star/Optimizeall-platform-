@@ -139,9 +139,8 @@ public sealed partial class SeoPageResolver
             {
                 if (!known.Add(u.Path)) continue;
                 var images = new[] { (u.ImageUrl, (string?)u.Title) }.Concat((u.Images ?? Array.Empty<string>()).Select(i => ((string?)i, (string?)u.Title))).ToArray();
-                var videos = (u.Videos ?? Array.Empty<SitemapVideoContribution>())
-                    .Select(v => new SeoVideo(v.Title, v.Description, Abs(v.ContentUrl), null, Abs(v.PosterUrl), Abs(v.CaptionsUrl), v.CaptionsLanguage,
-                        Abs(v.PlayerUrl), v.UploadDate ?? u.Modified ?? now, v.DurationSeconds, v.TranscriptMarkdown))
+                var videos = (u.Videos ?? Array.Empty<SeoVideo>())
+                    .Select(v => v with { Mp4Url = Abs(v.Mp4Url), WebmUrl = Abs(v.WebmUrl), PosterUrl = Abs(v.PosterUrl), CaptionsUrl = Abs(v.CaptionsUrl), EmbedUrl = Abs(v.EmbedUrl) })
                     .ToList();
                 Add(u.Path, u.Modified, contributor.Group, u.Title, Img(images), videos);
             }

@@ -1,25 +1,16 @@
 namespace OptimizeAll.Api.Modules.Website.Public;
 
 /// <summary>
-/// A public page a feature contributes to the sitemaps: path, last modification (UTC) and title (for the SEO overview),
-/// plus its media for the image and video sitemaps: <see cref="ImageUrl"/> / <see cref="Images"/> (content images, app
-/// paths or absolute URLs) and <see cref="Videos"/> (for example a lesson's lecture video: needs a poster image and a
-/// content or player URL, as Google's video sitemap requires). Videos without a poster are left out of the video sitemap.
+/// A public page a feature contributes to the sitemaps: path, last modification (UTC), title (for the SEO overview),
+/// an optional image and optional videos (video sitemap: e.g. academy lectures embedded from YouTube). A video is listed
+/// when it has a thumbnail (<see cref="SiteSeo.SeoVideo.PosterUrl"/>) and a file or player URL (Google's requirements);
+/// app paths such as <c>/api/v1/files/{id}</c> are made absolute. <see cref="Images"/> adds more content images.
 /// </summary>
-public sealed record SitemapContribution(string Path, DateTime? Modified, string Title, string? ImageUrl = null)
+public sealed record SitemapContribution(string Path, DateTime? Modified, string Title, string? ImageUrl = null,
+    IReadOnlyList<SiteSeo.SeoVideo>? Videos = null)
 {
     public IReadOnlyList<string>? Images { get; init; }
-
-    public IReadOnlyList<SitemapVideoContribution>? Videos { get; init; }
 }
-
-/// <summary>
-/// A video on a contributed page (URLs are app paths such as <c>/api/v1/files/{id}</c> or absolute https URLs).
-/// <see cref="UploadDate"/> defaults to the page's last modification.
-/// </summary>
-public sealed record SitemapVideoContribution(
-    string Title, string Description, string? PosterUrl, string? ContentUrl = null, string? PlayerUrl = null, int? DurationSeconds = null,
-    DateTime? UploadDate = null, string? CaptionsUrl = null, string CaptionsLanguage = "en", string? TranscriptMarkdown = null);
 
 /// <summary>
 /// Extension point of the sitemap index (<c>SiteSeo/SeoPageResolver.SitemapUrlsAsync</c>): a feature that owns public

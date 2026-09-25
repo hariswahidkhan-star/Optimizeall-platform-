@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using OptimizeAll.Api.Modules.Content.Copy;
 using OptimizeAll.Api.Modules.LandingPages;
 using OptimizeAll.Api.Modules.Learning;
@@ -46,7 +47,8 @@ public sealed class NoSeoRedirects : ISeoRedirectLookup
 public sealed partial class SeoPageResolver(
     PublicSiteService site, AppDbContext db, SiteCopyService copyService, CareersService careers, LandingPageService landing,
     ISeoRedirectLookup redirects, PartnerPublicService partners, IEnumerable<ISitemapContributor> sitemapContributors,
-    PublicLearningService learning, CertificateService certificates, TimeProvider clock)
+    PublicLearningService learning, CertificateService certificates, TimeProvider clock,
+    IMemoryCache memoryCache)
 {
     /// <summary>Signed-in areas (portals). Never indexed; disallowed in robots.txt.</summary>
     public static readonly string[] PortalPrefixes = { "/app", "/admin", "/agency", "/client", "/review", "/finance", "/manage" };
@@ -154,7 +156,26 @@ public sealed partial class SeoPageResolver(
             page = NotFound(path);
         }
         Finish(page, qs);
+        if (page.IsIndexable && page.ModifiedAt is null) page.ModifiedAt = await SitemapLastModifiedAsync(path + qs, ct);
         return page;
+    }
+
+    /// <summary>
+    /// The sitemap's lastmod of a URL, for pages whose builder sets no modification time (Last-Modified then matches the
+    /// sitemap). The lookup is built from <see cref="SitemapUrlsAsync"/> and kept for two minutes.
+    /// </summary>
+    private async Task<DateTime?> SitemapLastModifiedAsync(string pathAndQuery, CancellationToken ct)
+    {
+        var key = "seo:lastmod:" + _baseUrl;
+        if (!memoryCache.TryGetValue(key, out IReadOnlyDictionary<string, DateTime?>? map) || map is null)
+        {
+            map = (await SitemapUrlsAsync(ct)).GroupBy(u => u.Path, StringComparer.Ordinal).ToDictionary(g => g.Key, g => g.First().LastModified, StringComparer.Ordinal);
+            memoryCache.Set(key, map, new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(2), Size = 1,
+            });
+        }
+        return map.TryGetValue(pathAndQuery, out var modified) ? modified : null;
     }
 
     /// <summary>The images the site falls back to (a page showing one of these gets a generated social card instead).</summary>
