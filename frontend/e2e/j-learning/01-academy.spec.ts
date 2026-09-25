@@ -9,9 +9,10 @@ test('anonymous visitors browse the academy, read a lesson and try its knowledge
   const errors = watchErrors(page);
   await page.goto('/learn');
   await expect(page.getByRole('heading', { level: 1, name: /Free courses/ })).toBeVisible();
-  await page.getByRole('button', { name: /Optimize All platform/ }).click();
+  await page.getByRole('group', { name: 'Filter by category' }).getByRole('button', { name: /Optimize All platform/ }).click();
   await expect(page).toHaveURL(/category=Platform/);
-  await page.getByRole('link', { name: COURSE_TITLE }).click();
+  // The course may also appear in the hub's "Just published" rail: follow the catalog's card.
+  await page.getByRole('list', { name: 'Courses' }).getByRole('link', { name: COURSE_TITLE }).click();
 
   await expect(page).toHaveURL(new RegExp(`/learn/${COURSE}$`));
   await expect(page.getByRole('heading', { level: 1, name: COURSE_TITLE })).toBeVisible();
@@ -25,7 +26,7 @@ test('anonymous visitors browse the academy, read a lesson and try its knowledge
   // The syllabus lists every lesson; open the first one.
   await page.getByRole('link', { name: lessons[0]!.title }).click();
   await expect(page.getByRole('heading', { level: 1, name: lessons[0]!.title })).toBeVisible();
-  await expect(page.getByText('Create a free account to track progress, take the exam and earn your certificate')).toBeVisible();
+  await expect(page.getByText('Enrol for free to track progress, take the exam and earn your certificate')).toBeVisible();
 
   // Knowledge check: feedback in the browser, no account needed.
   const check = lessons[0]!.knowledgeCheck[0]!;
@@ -46,8 +47,8 @@ test('anonymous visitors browse the academy, read a lesson and try its knowledge
   expect(await axeViolations(page)).toEqual([]);
 
   // Exams need an account.
-  await page.getByRole('link', { name: 'Create a free account' }).first().click();
-  await expect(page).toHaveURL(/\/register/);
+  await page.getByRole('button', { name: 'Create a free account' }).first().click();
+  await expect(page).toHaveURL(/\/register\?next=/);
   expect(pack.badge.name).toBeTruthy();
   errors.expectClean('academy');
 });
