@@ -49,6 +49,9 @@ http {
     location = /llms.txt { default_type text/plain; return 200 'llms'; }
     location = /_markdown/index { default_type text/markdown; return 200 '# home'; }
     location = /api/v1/public/site { default_type application/json; return 200 '{"ok":true}'; }
+    # Echoes the forwarded scheme and host: the API builds links on them when no public URL is configured.
+    location = /_document/origin { return 200 '<!doctype html>origin=\$http_x_forwarded_proto://\$http_x_forwarded_host'; }
+    location = /api/v1/origin { default_type text/plain; return 200 'origin=\$http_x_forwarded_proto://\$http_x_forwarded_host'; }
 EOF
   for code in 400 401 403 405 429 500 503; do
     echo "    location = /_document/e$code { default_type application/problem+json; return $code '{\"status\":$code}'; }"
@@ -90,6 +93,9 @@ expect /llms.txt 200 text/plain
 expect /index.md 200 text/markdown
 expect /api/v1/public/site 200 application/json
 expect /app 200 text/html SHELL
+# X-Forwarded-Proto/Host carry the visitor's scheme and host (with its port) to the API (docs/RENDER.md#public-url).
+expect /origin 200 text/html "origin=http://127.0.0.1:$web_port"
+expect /api/v1/origin 200 text/plain "origin=http://127.0.0.1:$web_port"
 
 log "API down"
 kill "$stub_pid"; wait "$stub_pid" 2>/dev/null || true; stub_pid=""

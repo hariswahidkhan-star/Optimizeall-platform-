@@ -184,6 +184,17 @@ publish job with registry credentials when a registry is chosen.
   **Site settings → SEO → Site URL** to the canonical https origin: canonical links, Open Graph URLs, the sitemaps,
   robots.txt and llms.txt all use it. The web server already redirects trailing slashes, duplicate slashes and
   upper-case paths to the one lower-case form (301).
+* **Public URL.** Every absolute link (canonical, sitemaps, llms.txt, JSON-LD, Open Graph, certificates, Open Badges,
+  LinkedIn, invoices/proposals, emails) uses one origin: **Site settings → SEO → Site URL** → `Email__AppBaseUrl` (when
+  set and not empty) → the request's own scheme and host as forwarded by the proxy (`X-Forwarded-Proto`,
+  `X-Forwarded-Host`, only honoured from `Hosting__TrustedNetworks`/`Hosting__TrustedProxies` and only for a valid
+  plain host name) → for jobs and emails outside a request, the last such origin (remembered in the database, written
+  at most once a day) → otherwise root-relative links and a warning in the log. There is no `localhost` default any
+  more (only `appsettings.Development.json` sets `http://localhost:5173`). In production set the Site URL or
+  `Email__AppBaseUrl`. If your proxy passes on any `Host` a client sends (nginx reachable directly, not behind a load
+  balancer that routes by host name), also set `Hosting__PublicHosts__0` so a forged Host never reaches links. Images
+  the web app shows itself (course badges, certificate images, partner logos) are root-relative and so always
+  same-origin for the CSP.
 
 ### 5.3 Database: managed MySQL 8
 
@@ -209,8 +220,10 @@ Required settings (see [`/.env.example`](../.env.example) for all of them):
 | `Security__HashSalt` | yes | HMAC key for IP/device hashes; keep stable |
 | `Tracking__PostbackSecret` | yes | shared with advertisers for signed conversion postbacks |
 | `Email__SmtpHost/Port/Username/Password`, `Email__FromAddress` | password | Production refuses to start email without `Email__Mode=Smtp` |
-| `Email__AppBaseUrl` | no | public HTTPS URL of the web app (links in emails) |
-| `Tracking__PublicBaseUrl` | no | base of `/t/{code}` links (defaults to `Email__AppBaseUrl`) |
+| `Email__AppBaseUrl` | no | public HTTPS URL of the web app (links in emails, canonical URLs, sitemaps, certificates). Optional but recommended; see "Public URL" below |
+| `Hosting__TrustedNetworks__0` / `Hosting__TrustedProxies__0` | no | the reverse proxy's network/address: only it may set `X-Forwarded-For/Proto/Host` |
+| `Hosting__PublicHosts__0` | no | optional allow-list of host names (`*.example.com` allowed) the request origin may use |
+| `Tracking__PublicBaseUrl` | no | base of `/t/{code}` links (defaults to the public URL) |
 | `Security__SecureCookies=true`, `Swagger__Enabled=false`, `DevTools__MailboxEnabled=false` | no | production values (the defaults in `appsettings.json`) |
 | `Database__Seed__0=Baseline` (no `Demo`) | no | never load demo data in production |
 | `Bootstrap__AdminEmail` / `Bootstrap__AdminPassword` | password | first start only; remove afterwards |
@@ -347,8 +360,8 @@ Then, with a dedicated smoke-test participant and staff account:
 2. **APIs & Services → Credentials → Create credentials → OAuth client ID**, type **Web application**:
    * **Authorized JavaScript origins:** not needed (the code exchange happens on the server).
    * **Authorized redirect URIs:** `https://<host>/auth/google/callback`, where `<host>` is the public web app host
-     (the value of `Email__AppBaseUrl`, e.g. `https://app.optimizeall.app/auth/google/callback`). Add one per
-     environment (staging, production). The API sends exactly `{Email__AppBaseUrl}/auth/google/callback` unless
+     (the public URL: Site URL or `Email__AppBaseUrl`, e.g. `https://app.optimizeall.app/auth/google/callback`). Add one per
+     environment (staging, production). The API sends exactly `{public URL}/auth/google/callback` unless
      `Authentication__Google__RedirectUri` overrides it; it must match character for character.
 3. Give the API `Authentication__Google__ClientId` and `Authentication__Google__ClientSecret` through the secret
    manager (never a committed file; locally `dotnet user-secrets set "Authentication:Google:ClientSecret" "…"` in

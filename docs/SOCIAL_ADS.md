@@ -60,7 +60,7 @@ Configuration (`appsettings` / environment):
 ```jsonc
 "SocialMedia": {
   "PublicApiBaseUrl": "https://api.example.com",      // Meta fetches media from here: must be public https
-  "OAuthRedirectUri": null,                            // default {Email:AppBaseUrl}/agency/social/connect/callback
+  "OAuthRedirectUri": null,                            // default {public URL}/agency/social/connect/callback
   "OAuthStateSecret": null,                            // default: derived from Jwt:SigningKey (HKDF)
   "GraphApiBaseUrl": "https://graph.facebook.com/v20.0",
   "XApiBaseUrl": "https://api.x.com",

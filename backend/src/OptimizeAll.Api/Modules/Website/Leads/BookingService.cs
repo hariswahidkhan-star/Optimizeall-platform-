@@ -1,6 +1,7 @@
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using OptimizeAll.Api.Common.Hosting;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Api.Common.Notifications;
@@ -20,7 +21,7 @@ namespace OptimizeAll.Api.Modules.Website.Leads;
 /// slot exactly one commits and the other gets 409 <c>website.slot_taken</c>. Confirmations go out by email.
 /// </summary>
 public sealed class BookingService(
-    AppDbContext db, IDatabaseDialect dialect, FormGuard guard, FormTokenLedger tokens, InquiryService inquiries, IEmailSender email, IOptions<EmailOptions> emailOptions,
+    AppDbContext db, IDatabaseDialect dialect, FormGuard guard, FormTokenLedger tokens, InquiryService inquiries, IEmailSender email, IPublicOrigin publicOrigin,
     IAuditLogger audit, TimeProvider clock, ILogger<BookingService> logger, EmailTemplateService templates)
 {
     public async Task<ConsultationSettings> SettingsAsync(CancellationToken ct)
@@ -308,7 +309,7 @@ public sealed class BookingService(
             await SendTemplateAsync(b, EmailTemplateCatalog.BookingCancelled, new()
             {
                 ["reason"] = b.CancellationReason ?? string.Empty,
-                ["bookUrl"] = $"{emailOptions.Value.AppBaseUrl.TrimEnd('/')}/book-a-consultation",
+                ["bookUrl"] = $"{publicOrigin.Current}/book-a-consultation",
             }, ct);
         return ToDto(b);
     }

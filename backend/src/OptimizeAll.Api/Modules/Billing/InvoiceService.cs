@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using OptimizeAll.Api.Common.Hosting;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Api.Common.Notifications;
@@ -26,7 +27,7 @@ public sealed class InvoiceService(
     IAuditLogger audit,
     INotificationService notifications,
     IEmailSender email,
-    IOptions<EmailOptions> emailOptions,
+    IPublicOrigin publicOrigin,
     LineBuilder lineBuilder,
     DocumentNumberService numbers,
     BillingSettingsService settingsService,
@@ -112,7 +113,7 @@ public sealed class InvoiceService(
         var lines = invoice.Lines.OrderBy(l => l.Position).ToList();
         var totals = LineBuilder.TotalsOf(lines, invoice.Currency);
         var publicUrl = includeStaffDetails && tokens.Reveal(invoice.PublicTokenProtected) is { } raw
-            ? emailOptions.Value.AppBaseUrl.TrimEnd('/') + BillingLinks.PublicInvoice(raw)
+            ? publicOrigin.Current + BillingLinks.PublicInvoice(raw)
             : null;
         return new InvoiceDto(invoice.Id, invoice.Number, invoice.ClientAccountId, client.Name, client.BillingEmail, invoice.Status,
             invoice.Currency, invoice.IssueDate, invoice.DueDate, invoice.PaymentTermsDays,
@@ -343,7 +344,7 @@ public sealed class InvoiceService(
         var billingEmail = client.BillingEmail?.Trim();
         if (string.IsNullOrWhiteSpace(billingEmail) || recipients.Any(r => r.NormalizedEmail == Normalization.Email(billingEmail)))
             return _ => Task.CompletedTask;
-        var absolute = emailOptions.Value.AppBaseUrl.TrimEnd('/') + BillingLinks.PublicInvoice(raw);
+        var absolute = publicOrigin.Current + BillingLinks.PublicInvoice(raw);
         var message = new EmailMessage(billingEmail, client.Name, title,
             $"Hello {client.Name},\n\n{body}\n\nView and download the invoice: {absolute}\n\n— {settings.CompanyName}");
         return async token =>

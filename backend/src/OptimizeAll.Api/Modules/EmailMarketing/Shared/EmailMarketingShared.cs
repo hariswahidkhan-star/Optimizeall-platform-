@@ -2,6 +2,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OptimizeAll.Api.Common.Hosting;
 using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Domain.Agency;
 using OptimizeAll.Domain.Common;
@@ -12,14 +13,15 @@ namespace OptimizeAll.Api.Modules.EmailMarketing.Shared;
 
 /// <summary>
 /// Configuration (section "EmailMarketing"). Read on every use so hosts and tests can change it at runtime.
-///   EmailMarketing:PublicBaseUrl  origin that serves the tracking routes /e/... (default: Email:AppBaseUrl, since nginx
+///   EmailMarketing:PublicBaseUrl  origin that serves the tracking routes /e/... (default: the web app origin, see
+///                                 IPublicOrigin: site URL → Email:AppBaseUrl → request → remembered; since nginx
 ///                                 proxies /e/ to the API on the web origin)
 ///   EmailMarketing:TokenSecret    HMAC key for open/click/unsubscribe tokens (default: derived from Security:HashSalt)
 ///   Tracking:PostbackSecret       HMAC secret for the signed conversion/event APIs (shared with the tracking postback)
 /// </summary>
-public sealed class EmailMarketingUrls(IConfiguration configuration)
+public sealed class EmailMarketingUrls(IConfiguration configuration, IPublicOrigin publicOrigin)
 {
-    public string AppBaseUrl => (configuration["Email:AppBaseUrl"] is { Length: > 0 } url ? url : "http://localhost:5173").TrimEnd('/');
+    public string AppBaseUrl => publicOrigin.Current;
 
     public string PublicBaseUrl =>
         (configuration["EmailMarketing:PublicBaseUrl"] is { Length: > 0 } url ? url : AppBaseUrl).TrimEnd('/');

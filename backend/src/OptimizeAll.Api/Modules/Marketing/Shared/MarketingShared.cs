@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
+using OptimizeAll.Api.Common.Hosting;
 using OptimizeAll.Api.Common.Errors;
 using OptimizeAll.Api.Common.Notifications;
 using OptimizeAll.Domain.Common;
@@ -9,13 +10,13 @@ namespace OptimizeAll.Api.Modules.Marketing.Shared;
 /// <summary>
 /// Public URLs and secrets used by the growth features. Read from configuration on every use (not cached) so
 /// hosts and tests can change them at runtime:
-///   Email:AppBaseUrl          web app base URL (referral/invitation links)
-///   Tracking:PublicBaseUrl    base URL of the short tracking links (default: Email:AppBaseUrl)
+///   (web app origin)          referral/invitation links: <see cref="IPublicOrigin"/> (site URL → Email:AppBaseUrl → request)
+///   Tracking:PublicBaseUrl    base URL of the short tracking links (default: the web app origin)
 ///   Tracking:PostbackSecret   HMAC-SHA256 secret advertisers use to sign conversion postbacks
 /// </summary>
-public sealed class MarketingUrls(IConfiguration configuration)
+public sealed class MarketingUrls(IConfiguration configuration, IPublicOrigin publicOrigin)
 {
-    public string AppBaseUrl => (configuration["Email:AppBaseUrl"] is { Length: > 0 } url ? url : "http://localhost:5173").TrimEnd('/');
+    public string AppBaseUrl => publicOrigin.Current;
 
     public string TrackingBaseUrl =>
         (configuration["Tracking:PublicBaseUrl"] is { Length: > 0 } url ? url : AppBaseUrl).TrimEnd('/');

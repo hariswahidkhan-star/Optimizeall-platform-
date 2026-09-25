@@ -3,6 +3,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using OptimizeAll.Api.Common.Hosting;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Api.Common.Security;
@@ -114,7 +115,7 @@ public sealed class SubmissionQuery : PageQuery
 [Route("api/v1/agency/pages")]
 public sealed class FormsController(
     AppDbContext db, SeoAccess access, IClientScope scope, FormService forms, FormFileStore fileStore, IAuditLogger audit,
-    IConfiguration configuration, IOptions<ExportOptions> exports) : ControllerBase
+    IPublicOrigin publicOrigin, IOptions<ExportOptions> exports) : ControllerBase
 {
     [HttpGet("form-templates")]
     public async Task<List<FormTemplateDto>> Templates(CancellationToken ct)
@@ -260,7 +261,7 @@ public sealed class FormsController(
     public async Task<EmbedDto> Embed(Guid id, CancellationToken ct)
     {
         var form = await LoadAsync(id, ct, tracked: false);
-        var app = FormService.CanonicalOrigin(configuration["Email:AppBaseUrl"]) ?? "http://localhost:5173";
+        var app = FormService.CanonicalOrigin(await publicOrigin.GetAsync(ct)) ?? string.Empty;
         var url = $"{app}/f/{form.Id}";
         var elementId = $"oa-form-{form.Id:N}";
         var title = System.Net.WebUtility.HtmlEncode(form.Name);

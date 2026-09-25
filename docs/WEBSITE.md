@@ -263,7 +263,8 @@ Full reference: [SEO_CRO.md § 9](SEO_CRO.md#9-technical-seo-of-the-public-websi
   API, personal links and search results are closed to all; it points to `/sitemap.xml`.
 - `GET /sitemap.xml` is a sitemap index (pages, services, case studies, blog, careers, landing pages, images, videos)
   of published, indexable, self-canonical URLs with real `lastmod`. `/api/v1/public/sitemap.xml` still answers with the
-  flat list. Absolute URLs use **Site settings → SEO → Site URL** (fallback `Email:AppBaseUrl`), so set it to the
+  flat list. Absolute URLs use **Site settings → SEO → Site URL** (fallback `Email:AppBaseUrl`, then the request's origin through
+  a trusted proxy, then the last one seen — DEPLOYMENT.md "Public URL"), so set it to the
   public origin before launch, and submit `https://<site>/sitemap.xml` in Google Search Console and Bing Webmaster Tools.
 - `GET /llms.txt`, `/llms-full.txt` and `/{path}.md` describe the site for AI assistants; `/.well-known/security.txt`,
   `/humans.txt`, `/site.webmanifest` and the favicons are served too. IndexNow is available (off by default).

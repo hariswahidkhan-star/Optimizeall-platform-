@@ -311,7 +311,8 @@ browser: loads the app bundle; React renders into #root (createRoot replaces the
   pointing elsewhere also removes it from the sitemaps.
 * Every page has: `<title>`, description, `robots` (`index, follow, max-image-preview:large, max-snippet:-1,
   max-video-preview:-1` or the noindex form), self-referencing absolute **canonical** (from Site settings → SEO → Site
-  URL, falling back to `Email:AppBaseUrl`), `og:type/site_name/locale/title/description/url/image(+width/height/alt)`,
+  URL, falling back to `Email:AppBaseUrl`, then the request's origin through a trusted proxy — see DEPLOYMENT.md
+  "Public URL"), `og:type/site_name/locale/title/description/url/image(+width/height/alt)`,
   `twitter:card` (`summary_large_image`), `twitter:title/description/image/image:alt`, `twitter:site` (Site settings →
   Twitter handle), `article:published_time/modified_time/section` on articles, `rel=prev/next` on the paginated blog,
   `rel=alternate` RSS and Markdown links. Social image: the page's image → the settings' default → the built-in
@@ -456,7 +457,7 @@ without JavaScript the whole page is in the first response.
 
 | Setting | Default | Purpose |
 |---|---|---|
-| Site settings → SEO → Site URL | `Email:AppBaseUrl` | Origin of canonical URLs, sitemaps, robots, llms.txt |
+| Site settings → SEO → Site URL | `Email:AppBaseUrl`, else the request's origin via a trusted proxy (`X-Forwarded-Proto/Host`), else the last one seen | Origin of canonical URLs, sitemaps, robots, llms.txt, JSON-LD |
 | `Website:Seo:SitemapMaxUrls` | 45000 | URLs per sitemap file before splitting |
 | `Website:Seo:CanonicalHostRedirect` | false | 301 page requests on other host names to the Site URL's host |
 | `Website:Seo:IndexNowEndpoint` | `https://api.indexnow.org/indexnow` | IndexNow submission URL |

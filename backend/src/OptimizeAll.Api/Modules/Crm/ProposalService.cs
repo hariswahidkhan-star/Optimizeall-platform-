@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using OptimizeAll.Api.Common.Hosting;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Api.Common.Notifications;
@@ -27,7 +28,7 @@ public sealed class ProposalService(
     IAuditLogger audit,
     INotificationService notifications,
     IEmailSender email,
-    IOptions<EmailOptions> emailOptions,
+    IPublicOrigin publicOrigin,
     LineBuilder lineBuilder,
     DocumentNumberService numbers,
     BillingSettingsService billingSettings,
@@ -107,7 +108,7 @@ public sealed class ProposalService(
             p.CreatedAt, p.ConcurrencyStamp);
     }
 
-    public string ShareUrl(string raw) => emailOptions.Value.AppBaseUrl.TrimEnd('/') + BillingLinks.PublicProposal(raw);
+    public string ShareUrl(string raw) => publicOrigin.Current + BillingLinks.PublicProposal(raw);
 
     public async Task<ProposalVersionDto> VersionDtoAsync(ProposalVersion v, CancellationToken ct)
     {

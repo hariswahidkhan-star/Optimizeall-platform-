@@ -21,7 +21,7 @@ public sealed class GoogleAuthOptions
     public string[] AllowedHostedDomains { get; set; } = Array.Empty<string>();
 
     /// <summary>
-    /// The redirect URI registered in Google Cloud. Default: <c>{Email:AppBaseUrl}/auth/google/callback</c>. It is never
+    /// The redirect URI registered in Google Cloud. Default: <c>{public origin}/auth/google/callback</c> (IPublicOrigin: site URL → Email:AppBaseUrl → request). It is never
     /// taken from the request.
     /// </summary>
     public string? RedirectUri { get; set; }

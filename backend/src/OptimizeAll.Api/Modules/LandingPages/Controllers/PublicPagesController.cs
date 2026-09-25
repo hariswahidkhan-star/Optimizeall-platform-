@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using OptimizeAll.Api.Common.Hosting;
 using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Api.Common.Persistence;
 using OptimizeAll.Api.Common.Security;
@@ -36,7 +37,7 @@ public sealed record SubmissionResultDto(bool Ok, string Message, string? Redire
 [Route("api/v1/public")]
 public sealed class PublicPagesController(
     AppDbContext db, IDatabaseDialect dialect, IPrivacyHasher hasher, FormRenderTokens tokens, CaptchaVerifier captcha,
-    FormSubmissionService submissions, LandingPageService pages, IConfiguration configuration, TimeProvider clock) : ControllerBase
+    FormSubmissionService submissions, LandingPageService pages, IPublicOrigin publicOrigin, TimeProvider clock) : ControllerBase
 {
     public const string VisitorHeader = "X-Visitor-Id";
     public const string EmbedOriginHeader = "X-Embed-Origin";
@@ -44,8 +45,7 @@ public sealed class PublicPagesController(
 
     private DateTime Now => clock.GetUtcNow().UtcDateTime;
 
-    private string AppOrigin =>
-        FormService.CanonicalOrigin(configuration["Email:AppBaseUrl"]) ?? "http://localhost:5173";
+    private string AppOrigin => FormService.CanonicalOrigin(publicOrigin.Current) ?? string.Empty;
 
     /// <summary>The published version of a landing page, with the visitor's (sticky) A/B variant and its forms. Counts a view.</summary>
     [HttpGet("lp/{clientSlug}/{pageSlug}")]

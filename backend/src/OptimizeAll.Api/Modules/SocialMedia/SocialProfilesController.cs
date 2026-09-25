@@ -3,6 +3,7 @@ using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using OptimizeAll.Api.Common.Hosting;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Notifications;
 using OptimizeAll.Api.Common.Persistence;
@@ -102,7 +103,7 @@ public sealed class SocialProfilesController(
     ICurrentUser currentUser,
     IAuditLogger audit,
     IOptions<SocialMediaOptions> options,
-    IOptions<EmailOptions> email,
+    IPublicOrigin publicOrigin,
     TimeProvider clock) : ControllerBase
 {
     public const string OAuthPurpose = "social-profile";
@@ -410,7 +411,7 @@ public sealed class SocialProfilesController(
     private string RedirectUri() =>
         options.Value.OAuthRedirectUri is { Length: > 0 } configured
             ? configured
-            : email.Value.AppBaseUrl.TrimEnd('/') + "/agency/social/connect/callback";
+            : publicOrigin.Current + "/agency/social/connect/callback";
 
     private static DomainException AppCredentialsRequired(SocialNetwork network) => DomainException.Conflict("social.app_credentials_required",
         $"App credentials required: add the {PostValidator.Label(network)} developer app id and secret under Integrations " +

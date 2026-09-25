@@ -20,8 +20,8 @@ public sealed class EmailOptions
     public bool SmtpUseStartTls { get; set; } = true;
     public string PickupDirectory { get; set; } = "storage/mail";
 
-    /// <summary>Public base URL of the web app, used to build links in emails.</summary>
-    public string AppBaseUrl { get; set; } = "http://localhost:5173";
+    // Email:AppBaseUrl (the web app's public URL) is optional and read only through IPublicOrigin
+    // (Common/Hosting/PublicOrigin.cs), which falls back to the site URL setting and the request's origin.
 }
 
 public sealed record EmailMessage(string ToAddress, string ToName, string Subject, string TextBody, string? HtmlBody = null);

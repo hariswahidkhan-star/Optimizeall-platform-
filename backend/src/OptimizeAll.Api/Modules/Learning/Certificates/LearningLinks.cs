@@ -9,7 +9,12 @@ namespace OptimizeAll.Api.Modules.Learning.Certificates;
 /// <summary>The issuing organisation (admin settings <c>learning.issuerName</c>, <c>learning.linkedInOrganizationId</c>).</summary>
 public sealed record LearningIssuer(string Name, string? LinkedInOrganizationId, string BaseUrl);
 
-/// <summary>Absolute public URLs of the academy, certificates, badges and Open Badges documents.</summary>
+/// <summary>
+/// Public URLs of the academy, certificates, badges and Open Badges documents. Links that leave the site (LinkedIn, Open
+/// Badges documents, JSON-LD, Open Graph, sitemaps, emails, canonical URLs) are absolute on <see cref="BaseUrl"/>; images
+/// and files our own web app shows or downloads are root-relative (<c>/api/v1/public/learning/…</c>) so they are always
+/// same-origin for the web app's CSP (<c>img-src 'self'</c>), whatever the configured public URL.
+/// </summary>
 public sealed class LearningLinks(string baseUrl)
 {
     public string BaseUrl { get; } = baseUrl.TrimEnd('/');
@@ -33,8 +38,9 @@ public sealed class LearningLinks(string baseUrl)
     public string OpenBadgeClass(string slug) => Absolute($"/api/v1/public/learning/openbadges/badges/{Uri.EscapeDataString(slug)}");
     public string OpenBadgeAssertion(Guid id) => Absolute($"/api/v1/public/learning/openbadges/assertions/{id}");
 
+    /// <summary>Links for the web app: verification, Open Badges and LinkedIn absolute; PDF, certificate and badge images root-relative.</summary>
     public CertificateLinksDto For(Certificate c, LearningIssuer issuer) => new(
-        Verify(c.Id), Pdf(c.Id), Image(c.Id), BadgeImage(c.CourseSlug), OpenBadgeAssertion(c.Id),
+        Verify(c.Id), PdfPath(c.Id), ImagePath(c.Id), BadgeImagePath(c.CourseSlug), OpenBadgeAssertion(c.Id),
         LinkedIn.AddToProfile(c.BadgeName, issuer, c.IssuedAt, Verify(c.Id), c.VerificationCode),
         LinkedIn.Share(Verify(c.Id)));
 }
@@ -75,7 +81,7 @@ public static class LinkedIn
     public static string Share(string url) => ShareBase + "?url=" + Uri.EscapeDataString(url);
 }
 
-/// <summary>Loads the issuer settings and the public base URL (site settings SEO URL → Email:AppBaseUrl).</summary>
+/// <summary>Loads the issuer settings and the public base URL (<see cref="PublicSiteService.BaseUrlAsync"/>: IPublicOrigin).</summary>
 public sealed class LearningIssuerProvider(ISettingsService settings, PublicSiteService site)
 {
     private LearningIssuer? _issuer;

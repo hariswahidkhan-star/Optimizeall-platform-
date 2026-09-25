@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
+using OptimizeAll.Api.Common.Hosting;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Modules.Accounts;
 using OptimizeAll.Api.Modules.Website.Shared;
@@ -65,7 +66,7 @@ public sealed class UpdateSiteSettingsRequest
 }
 
 /// <summary>Loads, validates and saves the site settings document.</summary>
-public sealed partial class SiteSettingsService(AppDbContext db, IAuditLogger audit, WebsiteRules rules)
+public sealed partial class SiteSettingsService(AppDbContext db, IAuditLogger audit, WebsiteRules rules, IPublicOrigin publicOrigin)
 {
     public static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web)
     {
@@ -97,6 +98,7 @@ public sealed partial class SiteSettingsService(AppDbContext db, IAuditLogger au
         doc.Json = JsonSerializer.Serialize(normalized, Json);
         audit.Record("website.settings_updated", nameof(SiteSettingsDocument), doc.Id, before, normalized);
         await db.SaveChangesAsync(ct);
+        publicOrigin.SiteUrlChanged(normalized.Seo.SiteUrl);
         return new SiteSettingsDto(normalized, doc.UpdatedAt, doc.ConcurrencyStamp);
     }
 

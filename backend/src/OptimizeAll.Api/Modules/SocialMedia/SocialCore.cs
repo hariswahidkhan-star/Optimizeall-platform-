@@ -21,7 +21,7 @@ public sealed class SocialMediaOptions
     /// <summary>Public base URL of this API (e.g. https://api.example.com), used to give Meta absolute media URLs.</summary>
     public string? PublicApiBaseUrl { get; set; }
 
-    /// <summary>Web-app URL of the OAuth callback page (default {Email:AppBaseUrl}/agency/social/connect/callback).</summary>
+    /// <summary>Web-app URL of the OAuth callback page (default {public origin}/agency/social/connect/callback, see IPublicOrigin).</summary>
     public string? OAuthRedirectUri { get; set; }
 
     /// <summary>HMAC key for OAuth state. When empty a key is derived from Jwt:SigningKey.</summary>

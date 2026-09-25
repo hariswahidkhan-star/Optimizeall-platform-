@@ -4,6 +4,7 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Options;
+using OptimizeAll.Api.Common.Hosting;
 using OptimizeAll.Api.Common.Notifications;
 using OptimizeAll.Api.Modules.Notifications.Templates;
 using OptimizeAll.Domain.Identity;
@@ -49,7 +50,7 @@ internal static class RecipientRules
 /// Sends notifications as plain-text + simple HTML email through <see cref="IEmailSender"/>, worded by the editable
 /// email templates (the layout plus the notification type's own template).
 /// </summary>
-public sealed class EmailChannelSender(IEmailSender email, IOptions<EmailOptions> options, EmailTemplateService templates) : INotificationChannelSender
+public sealed class EmailChannelSender(IEmailSender email, IPublicOrigin publicOrigin, EmailTemplateService templates) : INotificationChannelSender
 {
     public NotificationChannel Channel => NotificationChannel.Email;
 
@@ -58,7 +59,7 @@ public sealed class EmailChannelSender(IEmailSender email, IOptions<EmailOptions
         if (RecipientRules.SkipReason(notification, user) is { } reason) return ChannelSendResult.Skipped(reason);
         if (string.IsNullOrWhiteSpace(user.Email)) return ChannelSendResult.Skipped("Recipient has no email address.");
 
-        var message = await templates.ComposeNotificationAsync(notification, user, options.Value.AppBaseUrl, ct);
+        var message = await templates.ComposeNotificationAsync(notification, user, await publicOrigin.GetAsync(ct), ct);
         var result = await email.SendAsync(message, ct);
         return result.Success
             ? ChannelSendResult.Sent(result.ProviderMessageId)

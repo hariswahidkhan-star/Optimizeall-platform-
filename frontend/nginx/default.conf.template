@@ -23,6 +23,13 @@ map $http_x_forwarded_proto $oa_forwarded_proto {
     ""      $scheme;
 }
 
+# The host (and port) the visitor used, for X-Forwarded-Host: the Host header as received (with a non-default port, e.g.
+# localhost:4173), or the server's own name for requests without one. The API validates it (Common/Hosting/PublicOrigin.cs).
+map $http_host $oa_forwarded_host {
+    default $http_host;
+    ""      $host;
+}
+
 # Extra image hosts for the CSP img-src (used in snippets/security-headers.conf, which is not templated).
 map "" $oa_img_src_extra {
     default "${IMG_SRC_EXTRA}";

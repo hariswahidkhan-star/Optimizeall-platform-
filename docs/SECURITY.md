@@ -57,8 +57,10 @@ Setup: [DEPLOYMENT.md § 5.11](DEPLOYMENT.md#511-sign-in-with-google-optional).
   cookie (sent as `Max-Age`, so a browser clock running ahead of the server's does not drop it; the session cookies
   use `Max-Age` too) (path `/api/v1/auth/google`) holding the encrypted nonce and PKCE verifier. `POST /auth/google/callback`
   requires the state to verify **and** to match that cookie (so a state from another browser — login CSRF — is
-  useless), deletes the cookie (single use) and exchanges the code. The redirect URI comes from configuration
-  (`{Email:AppBaseUrl}/auth/google/callback`), never from the request; the post-login `returnTo` is kept only if it is
+  useless), deletes the cookie (single use) and exchanges the code. The redirect URI is
+  `Authentication:Google:RedirectUri` or `{public URL}/auth/google/callback` (the Site URL / `Email:AppBaseUrl`; only
+  when neither is set, the request's host as forwarded by a trusted proxy and validated, see DEPLOYMENT.md "Public
+  URL"), never a client-chosen host; Google also refuses any URI not registered; the post-login `returnTo` is kept only if it is
   a same-origin path (and checked again by the SPA).
 * **ID token validation**: RS256 signature against Google's JWKS (cached per `Cache-Control`, 5 min – 24 h; an
   unknown key id forces at most one refresh per minute; during a JWKS outage the last good keys are kept and the

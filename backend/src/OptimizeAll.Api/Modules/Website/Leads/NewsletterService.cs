@@ -2,6 +2,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using OptimizeAll.Api.Common.Hosting;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Events;
 using OptimizeAll.Api.Common.Http;
@@ -25,7 +26,7 @@ namespace OptimizeAll.Api.Modules.Website.Leads;
 /// </summary>
 public sealed class NewsletterService(
     AppDbContext db, IDatabaseDialect dialect, FormGuard guard, IPrivacyHasher hasher, ICurrentUser user, IEmailSender email,
-    IOptions<EmailOptions> emailOptions, IOptions<SecurityOptions> security, IEventPublisher events, IAuditLogger audit, TimeProvider clock,
+    IPublicOrigin publicOrigin, IOptions<SecurityOptions> security, IEventPublisher events, IAuditLogger audit, TimeProvider clock,
     ILogger<NewsletterService> logger, EmailTemplateService templates, IOptions<ExportOptions> exports)
 {
     public static readonly TimeSpan ConfirmLifetime = TimeSpan.FromHours(48);
@@ -72,7 +73,7 @@ public sealed class NewsletterService(
             return new NewsletterResultDto("pending", SubscribeMessage);
         }
 
-        var baseUrl = emailOptions.Value.AppBaseUrl.TrimEnd('/');
+        var baseUrl = publicOrigin.Current;
         var mail = await templates.RenderAsync(EmailTemplateCatalog.NewsletterConfirm, new Dictionary<string, string>
         {
             ["confirmUrl"] = $"{baseUrl}/newsletter/confirm?token={Uri.EscapeDataString(token)}",
@@ -132,7 +133,7 @@ public sealed class NewsletterService(
     }
 
     public string UnsubscribeUrl(Guid subscriberId) =>
-        $"{emailOptions.Value.AppBaseUrl.TrimEnd('/')}/newsletter/unsubscribe?token={UnsubscribeToken(subscriberId)}";
+        $"{publicOrigin.Current}/newsletter/unsubscribe?token={UnsubscribeToken(subscriberId)}";
 
     // ---------------------------------------------------------------- Staff (site.manage)
 

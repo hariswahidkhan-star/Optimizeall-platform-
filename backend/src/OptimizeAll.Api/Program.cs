@@ -186,6 +186,7 @@ services.AddAuthorization(options =>
 });
 
 services.AddHttpContextAccessor();
+services.AddSingleton<IPublicOrigin, PublicOrigin>();
 services.AddScoped<ICurrentUser, HttpCurrentUser>();
 services.AddScoped<IImpersonationContext, HttpImpersonationContext>();
 services.AddScoped<IClientScope, ClientScope>();
@@ -281,9 +282,11 @@ services.AddExceptionHandler<ProblemExceptionHandler>();
 services.AddHealthChecks().AddDbContextCheck<AppDbContext>("database", tags: new[] { "ready" });
 // X-Forwarded-* is only honoured from trusted reverse proxies (Hosting:TrustedProxies / Hosting:TrustedNetworks,
 // e.g. the nginx container's network); otherwise clients could spoof their IP to evade rate limits and audit.
+// X-Forwarded-Host gives the host the visitor used; IPublicOrigin only builds links from it for requests that came
+// through a trusted proxy, and only after validating it (Common/Hosting/PublicOrigin.cs).
 services.AddOptions<ForwardedHeadersOptions>().Configure<IConfiguration>((o, cfg) =>
 {
-    o.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    o.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
     o.ForwardLimit = 1;
     foreach (var proxy in cfg.GetSection("Hosting:TrustedProxies").Get<string[]>() ?? Array.Empty<string>())
         o.KnownProxies.Add(System.Net.IPAddress.Parse(proxy));
@@ -320,6 +323,7 @@ services.AddSwaggerGen(o =>
 
 var app = builder.Build();
 
+app.UsePublicOriginTrust(); // before UseForwardedHeaders: it needs the proxy's address, not the client's
 app.UseForwardedHeaders();
 app.UseExceptionHandler();
 // Bodiless error statuses (unmatched routes, 401/403 from authorization, 405, 413, 415) are written as RFC 7807 problems.

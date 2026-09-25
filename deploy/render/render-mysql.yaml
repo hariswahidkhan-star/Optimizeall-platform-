@@ -82,10 +82,12 @@ services:
         generateValue: true
       - key: Security__SecureCookies
         value: "true"
-      # Only nginx on Render's private network may set X-Forwarded-For/Proto.
+      # Only nginx on Render's private network may set X-Forwarded-For/Proto/Host.
       - key: Hosting__TrustedNetworks__0
         value: 10.0.0.0/8
-      # Public URL of optimizeall-web (used in email links), e.g. https://optimizeall-web.onrender.com
+      # Optional, recommended: public URL of optimizeall-web, e.g. https://optimizeall-web.onrender.com. Left empty, links
+      # use the address visitors reach optimizeall-web on (forwarded by nginx) and jobs/emails the last one seen
+      # (docs/RENDER.md#public-url). Site settings -> SEO -> Site URL takes precedence over it.
       - key: Email__AppBaseUrl
         sync: false
       # Optional "Sign in with Google" (docs/RENDER.md): OAuth client from Google Cloud with the authorized redirect URI

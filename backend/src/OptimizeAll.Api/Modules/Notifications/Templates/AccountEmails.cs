@@ -1,5 +1,6 @@
 using System.Net;
 using Microsoft.Extensions.Options;
+using OptimizeAll.Api.Common.Hosting;
 using OptimizeAll.Api.Common.Notifications;
 using OptimizeAll.Domain.Identity;
 
@@ -10,9 +11,9 @@ namespace OptimizeAll.Api.Modules.Notifications.Templates;
 /// through the editable templates of the <see cref="EmailTemplateCatalog.GroupAccount"/> group. Links are built here, so
 /// the Auth module only says which email to send to whom.
 /// </summary>
-public sealed class AccountEmails(IEmailSender email, EmailTemplateService templates, IOptions<EmailOptions> options)
+public sealed class AccountEmails(IEmailSender email, EmailTemplateService templates, IPublicOrigin publicOrigin)
 {
-    private string AppBaseUrl => options.Value.AppBaseUrl;
+    private string AppBaseUrl => publicOrigin.Current;
 
     public static readonly int VerificationHours = 48;
 

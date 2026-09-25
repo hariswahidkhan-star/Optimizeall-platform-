@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using OptimizeAll.Api.Common.Hosting;
 using OptimizeAll.Api.Common.Notifications;
 using OptimizeAll.Domain.Common;
 
@@ -12,14 +13,14 @@ namespace OptimizeAll.Api.Modules.Auth.Google;
 public sealed class GoogleOidcClient(
     IHttpClientFactory httpClients,
     IOptions<GoogleAuthOptions> options,
-    IOptions<EmailOptions> emailOptions,
+    IPublicOrigin publicOrigin,
     ILogger<GoogleOidcClient> logger)
 {
     /// <summary>The redirect URI registered with Google (configuration, never the request).</summary>
     public string RedirectUri =>
         options.Value.RedirectUri is { Length: > 0 } configured
             ? configured
-            : emailOptions.Value.AppBaseUrl.TrimEnd('/') + AppLinks.GoogleCallback;
+            : publicOrigin.Current + AppLinks.GoogleCallback;
 
     public string BuildAuthorizationUrl(string state, string nonce, string codeVerifier)
     {

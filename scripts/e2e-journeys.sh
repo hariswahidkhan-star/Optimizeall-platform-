@@ -57,6 +57,8 @@
 #   E2E_WEB_SERVER     vite (default: `vite preview`) or nginx (the production nginx config with a local nginx binary)
 #   E2E_KEEP_DB=1      keep the database after the run (for debugging)
 #   E2E_WORK_DIR       where mail, uploaded files and server logs go (default: a new mktemp directory)
+#   E2E_APP_BASE_URL   the API's Email__AppBaseUrl (default http://localhost:$E2E_WEB_PORT); set it empty to check that links
+#                      follow the address the web server forwards (docs/RENDER.md#public-url)
 set -uo pipefail
 # shellcheck source-path=SCRIPTDIR source=lib/common.sh
 . "$(dirname "${BASH_SOURCE[0]}")/lib/common.sh"
@@ -163,7 +165,7 @@ api_pid="$(cd "$ROOT" && start_bg e2e-api "$API_LOG" env \
   "${db_env[@]}" \
   Database__InitializationMode=Migrate \
   "${seed_env[@]}" \
-  Email__Mode=File Email__PickupDirectory="$MAIL_DIR" Email__AppBaseUrl="http://localhost:$E2E_WEB_PORT" \
+  Email__Mode=File Email__PickupDirectory="$MAIL_DIR" Email__AppBaseUrl="${E2E_APP_BASE_URL-http://localhost:$E2E_WEB_PORT}" \
   DevTools__MailboxEnabled=true DevTools__TestLoginEnabled=true \
   Authentication__Google__ClientId= Authentication__Google__ClientSecret= \
   RateLimiting__AuthPerMinute=1000 RateLimiting__GlobalPerMinute=6000 RateLimiting__DocumentsPerMinute=6000 RateLimiting__PublicPerMinute=6000 \

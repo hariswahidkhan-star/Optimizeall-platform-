@@ -324,6 +324,10 @@ describe('participant learning', () => {
     expect(url.searchParams.get('startTask')).toBe('CERTIFICATION_NAME');
     expect(url.searchParams.get('certId')).toBe('OA-ABCD-2345');
     expect(screen.getByRole('link', { name: /Download PDF/ })).toHaveAttribute('href', certificate.links.pdfUrl);
+    // Images come straight from the API's root-relative fields: always same-origin for the CSP (img-src 'self').
+    const images = [...container.querySelectorAll('img')];
+    expect(images.length).toBeGreaterThan(0);
+    images.forEach((img) => expect(img.getAttribute('src')).toMatch(/^\/api\/v1\/public\/learning\//));
     expect(screen.getByRole('link', { name: 'Open the public verification page' })).toHaveAttribute('href', '/verify/certificates/cert-1');
     expect(await axeViolations(container)).toEqual([]);
   });

@@ -64,9 +64,16 @@ region to use Render's private network; change `region` on all of them together 
    * MySQL: set **Blueprint Path** to `deploy/render/render-mysql.yaml`.
 
    Then **Apply**. (An existing Blueprint's file path can be changed later under the Blueprint's **Settings**.)
-3. Render asks for the one value it can't generate: **`Email__AppBaseUrl`**. Enter the web service's public URL,
-   normally `https://optimizeall-web.onrender.com`. If Render gives the service a different URL (it adds a suffix
-   when the name is taken), update `Email__AppBaseUrl` on `optimizeall-api` afterwards and redeploy the API.
+3. Render asks for **`Email__AppBaseUrl`** (optional, recommended). Enter the web service's public URL, normally
+   `https://optimizeall-web.onrender.com`. If Render gives the service a different URL (it adds a suffix when the name
+   is taken), update `Email__AppBaseUrl` on `optimizeall-api` afterwards and redeploy the API.
+
+   **If you leave it empty** the API still builds correct links (see [Public URL](#public-url) below): it uses the
+   address visitors reach the web service on, as nginx forwards it over the private network, so canonical URLs, the
+   sitemaps, llms.txt, JSON-LD, certificate and LinkedIn links are on `https://optimizeall-web.onrender.com`. Emails and
+   other links built by background jobs use the last such address the API saw (remembered once a day); before the
+   first visit after a fresh install they are root-relative and the API logs a warning. Setting the value (or
+   **Site settings → SEO → Site URL**) makes links independent of traffic and is what you want for a custom domain.
 4. Wait for the services to go live (first build ≈ 10–15 min; the API migrates and seeds, with MySQL after waiting
    for the database). Even after Render shows the API as live, its **first start takes about 60 s** (migrations plus
    the Baseline and Demo seed) before it answers; until then the web service returns 503 for `/api` requests and pages.
@@ -136,7 +143,8 @@ The public agency website is the web service's root URL; no sign-in needed.
 * **API docs** are at `https://<web-url>/api/docs`.
 * **SEO.** Public pages are server-rendered by the API through nginx (complete HTML for crawlers, real 404s),
   `/robots.txt`, `/sitemap.xml` (+ `/sitemaps/*.xml`), `/llms.txt` and `/{page}.md` come from the API too. Canonical URLs
-  use `Email__AppBaseUrl` until **Site settings → SEO → Site URL** is set; with a custom domain set it there, point the
+  use the [public URL](#public-url) (**Site settings → SEO → Site URL**, else `Email__AppBaseUrl`, else the address the
+  page was requested on); with a custom domain set the Site URL, point the
   domain at the web service, optionally turn on `Website__Seo__CanonicalHostRedirect=true` on `optimizeall-api` (301
   from `*.onrender.com` to the domain) and submit `https://<domain>/sitemap.xml` in Search Console. The demo
   Blueprints are staging: consider blocking the crawler groups under Website → SEO → Crawlers & AI unless the demo
@@ -144,6 +152,27 @@ The public agency website is the web service's root URL; no sign-in needed.
 * **Payments** are recorded manually; no money moves. WhatsApp shows as not configured.
 * These Blueprints are for staging/demos (demo accounts, dev mailbox, Swagger on). For production follow
   [DEPLOYMENT.md](DEPLOYMENT.md): real SMTP, no demo seed, Swagger off, backups.
+
+## Public URL
+
+Every absolute link the API builds (canonical URLs, sitemaps, robots.txt, llms.txt, JSON-LD, Open Graph, certificate
+verification links, Open Badges, LinkedIn "Add to profile"/"Share", invoice/proposal/referral links and emails) uses one
+public origin, chosen in this order (`IPublicOrigin`, `backend/src/OptimizeAll.Api/Common/Hosting/PublicOrigin.cs`):
+
+1. **Site settings → SEO → Site URL** (an admin setting; takes effect at once).
+2. **`Email__AppBaseUrl`** on `optimizeall-api`, when set and not empty.
+3. The address of the current request as the visitor used it: nginx forwards `Host`, `X-Forwarded-Host` and
+   `X-Forwarded-Proto` (`frontend/nginx/snippets/proxy-api.conf`), and the API accepts them **only** from
+   `Hosting__TrustedNetworks` (`10.0.0.0/8`, Render's private network) and only for a plain host name (no user info,
+   path or odd characters, at most 253 characters). A client talking to the API from anywhere else cannot choose the
+   host that ends up in links. Optional `Hosting__PublicHosts__0=…` (`*.example.com` allowed) restricts it further.
+4. For emails and links built by background jobs (no request): the last origin seen under 3, remembered in the
+   database (system setting `hosting.publicOrigin`, written at most once a day).
+5. Otherwise links are root-relative (`/verify/certificates/…`) and the API logs a warning.
+
+Images and files the web app itself shows (course badges, certificate images and PDFs, partner logos) are always
+root-relative (`/api/v1/public/learning/courses/{slug}/badge.svg`), so they load under the web app's CSP
+(`img-src 'self'`) whatever the public URL is.
 
 ## Verified locally
 

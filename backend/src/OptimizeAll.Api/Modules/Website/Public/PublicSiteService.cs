@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Xml;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using OptimizeAll.Api.Common.Hosting;
 using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Api.Common.Notifications;
 using OptimizeAll.Api.Modules.Website.Blog;
@@ -21,16 +22,18 @@ namespace OptimizeAll.Api.Modules.Website.Public;
 /// in an unpublished category), industries, case studies, testimonials, team members and pages answer 404 / are left out.
 /// </summary>
 public sealed class PublicSiteService(
-    AppDbContext db, SiteSettingsService settingsService, IOptions<EmailOptions> email, TimeProvider clock)
+    AppDbContext db, SiteSettingsService settingsService, IPublicOrigin publicOrigin, TimeProvider clock)
 {
     private SiteSettings? _settings;
     private Catalog? _catalog;
 
     public async Task<SiteSettings> SettingsAsync(CancellationToken ct) => _settings ??= await settingsService.GetAsync(ct);
 
-    /// <summary>Public origin used for absolute URLs (sitemap, canonical, JSON-LD): settings → Email:AppBaseUrl.</summary>
-    public async Task<string> BaseUrlAsync(CancellationToken ct) =>
-        ((await SettingsAsync(ct)).Seo.SiteUrl ?? email.Value.AppBaseUrl).TrimEnd('/');
+    /// <summary>
+    /// Public origin used for absolute URLs (sitemap, canonical, JSON-LD): site URL setting → Email:AppBaseUrl → the
+    /// request's origin through a trusted proxy → the remembered origin (see <see cref="IPublicOrigin"/>); "" when unknown.
+    /// </summary>
+    public async Task<string> BaseUrlAsync(CancellationToken ct) => publicOrigin.Resolve((await SettingsAsync(ct)).Seo.SiteUrl);
 
     private async Task<JsonLd> LdAsync(CancellationToken ct) => new(await BaseUrlAsync(ct), await SettingsAsync(ct));
 

@@ -131,7 +131,7 @@ sends on its must-stay-reachable list), and `IntegrationTests/EmailMarketing/Imp
 | Key | Purpose |
 | --- | --- |
 | `EmailMarketing:PublicBaseUrl` | Public origin used in tracking links (`/e/...`) and webhook URLs. Defaults to the app base URL. |
-| `Email:AppBaseUrl` | Frontend origin for the unsubscribe/preferences/confirm/sign-up pages. |
+| `Email:AppBaseUrl` | Frontend origin for the unsubscribe/preferences/confirm/sign-up pages (optional: Site URL → this → the last origin seen on a request; see DEPLOYMENT.md "Public URL"). |
 | `EmailMarketing:TokenSecret` | HMAC key for tracking/unsubscribe tokens (≥ 32 random bytes). If unset it is derived from `Security:HashSalt`. **Rotating it invalidates links in emails already sent.** |
 | `Tracking:PostbackSecret` | HMAC key for the signed conversions/events APIs (`X-OA-Signature: sha256=<hex>`). Without it those endpoints answer 503. |
 | `Email:Mode`, `Email:Smtp:*` | Platform SMTP relay used by the default `smtp` provider (`File` mode writes `.eml` files for development). |
