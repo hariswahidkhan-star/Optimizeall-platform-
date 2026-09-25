@@ -30,5 +30,10 @@ export const publicRoutes: RouteObject[] = [
   { path: 'newsletter/confirm', lazy: async () => ({ Component: (await import('./pages/MiscPages')).NewsletterConfirmPage }) },
   { path: 'newsletter/unsubscribe', lazy: async () => ({ Component: (await import('./pages/MiscPages')).NewsletterUnsubscribePage }) },
   { path: 'search', lazy: async () => ({ Component: (await import('./pages/MiscPages')).SearchPage }) },
+  // Free academy (Learning module) and public certificate verification.
+  { path: 'learn', lazy: async () => ({ Component: (await import('./learn/AcademyPages')).AcademyPage }) },
+  { path: 'learn/:slug', lazy: async () => ({ Component: (await import('./learn/AcademyPages')).AcademyCoursePage }) },
+  { path: 'learn/:slug/:lessonSlug', lazy: async () => ({ Component: (await import('./learn/AcademyPages')).AcademyLessonPage }) },
+  { path: 'verify/certificates/:id', lazy: async () => ({ Component: (await import('./learn/VerifyCertificatePage')).VerifyCertificatePage }) },
   { path: ':slug', lazy: async () => ({ Component: (await import('./pages/CmsPage')).CmsPage }) },
 ];

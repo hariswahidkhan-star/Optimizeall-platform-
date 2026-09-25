@@ -21,6 +21,7 @@ const FALLBACK_COLUMNS: { title: string; links: SiteLink[] }[] = [
       { label: 'About', url: '/about' },
       { label: 'Careers', url: '/careers' },
       { label: 'Blog', url: '/blog' },
+      { label: 'Free courses', url: '/learn' },
     ],
   },
   {

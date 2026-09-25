@@ -72,6 +72,11 @@ function parseDraft(
   draft: string | boolean | ReferralDraft,
 ): { value?: SettingValue; errors: Record<string, string> } {
   if (setting.valueType === 'boolean') return { value: Boolean(draft), errors: {} };
+  if (setting.valueType === 'string') {
+    const text = String(draft).trim();
+    if (meta?.maxLength && text.length > meta.maxLength) return { errors: { value: `Use at most ${meta.maxLength} characters.` } };
+    return { value: text, errors: {} };
+  }
   if (setting.valueType === 'integer') {
     const text = String(draft).trim();
     const n = Number(text);
@@ -195,6 +200,12 @@ function SettingCard({ setting }: { setting: Setting }) {
         label={meta?.label ?? setting.key}
         description={draft ? 'On' : 'Off'}
       />
+    );
+  } else if (setting.valueType === 'string') {
+    control = (
+      <FormField label="New value" error={errors.value}>
+        <Input value={String(draft)} maxLength={meta?.maxLength} onChange={(e) => setDraft(e.target.value)} />
+      </FormField>
     );
   } else if (setting.valueType === 'integer') {
     control = (
@@ -428,7 +439,7 @@ function KeyChange({ from, to }: { from: string; to: string }) {
   );
 }
 
-const GROUP_ORDER: SettingMeta['group'][] = ['Eligibility', 'Fraud & review', 'Retention', 'Growth'];
+const GROUP_ORDER: SettingMeta['group'][] = ['Eligibility', 'Fraud & review', 'Retention', 'Growth', 'Learning'];
 
 export function SettingsPage() {
   const settings = useQuery({

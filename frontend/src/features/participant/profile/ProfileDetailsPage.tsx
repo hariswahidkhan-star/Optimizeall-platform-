@@ -20,6 +20,7 @@ import type { Profile, UpdateProfileRequest } from '../api/types';
 import { QueryState } from '../components/QueryState';
 import { firstMessage, focusFirstError, mapFormErrors } from '../lib/formErrors';
 import '../participant.css';
+import { EarnedBadges } from '../learning/EarnedBadges';
 
 const FIELDS = [
   'displayName',
@@ -255,7 +256,12 @@ export function ProfileDetailsPage() {
   const query = useProfile();
   return (
     <QueryState query={query} errorTitle="Your profile couldn’t be loaded">
-      {(profile) => <ProfileForm profile={profile} />}
+      {(profile) => (
+        <div className="stack">
+          <ProfileForm profile={profile} />
+          <EarnedBadges />
+        </div>
+      )}
     </QueryState>
   );
 }

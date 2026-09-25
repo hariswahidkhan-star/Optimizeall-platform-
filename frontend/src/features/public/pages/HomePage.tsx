@@ -8,6 +8,7 @@ import { CaseStudyCard, CtaBand, PackageCard, PostCard, Section, TestimonialCaro
 import { headFromSeo, useDocumentHead } from '../site/head';
 import { SiteIcon } from '../site/icons';
 import { NewsletterSignup } from '../site/NewsletterSignup';
+import { FeaturedCourses } from '../learn/FeaturedCourses';
 
 /** Agency homepage: value proposition, proof, services, results, process, industries, pricing, blog and creators. */
 export function HomePage() {
@@ -245,6 +246,8 @@ export function HomePage() {
           </ButtonLink>
         </div>
       </Section>
+
+      <FeaturedCourses />
 
       <CtaBand />
 

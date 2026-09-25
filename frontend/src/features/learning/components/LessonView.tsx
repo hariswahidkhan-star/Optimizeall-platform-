@@ -139,6 +139,8 @@ function LessonVideo({ lesson }: { lesson: Lesson }) {
   return (
     <section className="lx-video" aria-label="Lesson video">
       {video.src ? (
+        // The captions track is rendered whenever captions exist; every lesson video also has the full transcript below.
+        // eslint-disable-next-line jsx-a11y/media-has-caption
         <video className="lx-video__player" controls preload="metadata" poster={video.poster ?? undefined} playsInline>
           <source src={video.src} type="video/mp4" />
           {video.captions && <track kind="captions" src={video.captions} srcLang="en" label="English" default />}

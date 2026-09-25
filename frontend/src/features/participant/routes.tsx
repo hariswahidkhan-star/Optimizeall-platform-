@@ -4,6 +4,7 @@ import {
   Banknote,
   Bell,
   FileCheck2,
+  GraduationCap,
   Home,
   LifeBuoy,
   Megaphone,
@@ -38,6 +39,13 @@ const SubmissionDetailPage = lazyPage(
   () => import('./submissions/SubmissionDetailPage'),
   'SubmissionDetailPage',
 );
+const LearningHomePage = lazyPage(() => import('./learning/LearningHomePages'), 'LearningHomePage');
+const LearningCatalogPage = lazyPage(() => import('./learning/LearningHomePages'), 'LearningCatalogPage');
+const LearningCertificatePage = lazyPage(() => import('./learning/LearningHomePages'), 'LearningCertificatePage');
+const LearningCoursePage = lazyPage(() => import('./learning/CoursePages'), 'LearningCoursePage');
+const LearningLessonPage = lazyPage(() => import('./learning/CoursePages'), 'LearningLessonPage');
+const ExamOverviewPage = lazyPage(() => import('./learning/ExamPages'), 'ExamOverviewPage');
+const ExamAttemptPage = lazyPage(() => import('./learning/ExamPages'), 'ExamAttemptPage');
 const SubmissionsPage = lazyPage(() => import('./submissions/SubmissionsPage'), 'SubmissionsPage');
 const NewTicketPage = lazyPage(() => import('./support/SupportPages'), 'NewTicketPage');
 const SupportPage = lazyPage(() => import('./support/SupportPages'), 'SupportPage');
@@ -96,6 +104,12 @@ export const nav: PortalNavItem[] = [
     description: 'Milestones and badges you have earned.',
   },
   {
+    to: 'learning',
+    label: 'Learning',
+    icon: GraduationCap,
+    description: 'Free courses, your progress, exams and certificates.',
+  },
+  {
     to: 'notifications',
     label: 'Notifications',
     icon: Bell,
@@ -122,6 +136,13 @@ export const routes: RouteObject[] = [
   { path: 'social-accounts', element: <SocialAccountsPage /> },
   { path: 'referrals', element: <ReferralsPage /> },
   { path: 'achievements', element: <AchievementsPage /> },
+  { path: 'learning', element: <LearningHomePage /> },
+  { path: 'learning/catalog', element: <LearningCatalogPage /> },
+  { path: 'learning/courses/:slug', element: <LearningCoursePage /> },
+  { path: 'learning/courses/:slug/lessons/:lessonSlug', element: <LearningLessonPage /> },
+  { path: 'learning/courses/:slug/exam', element: <ExamOverviewPage /> },
+  { path: 'learning/attempts/:attemptId', element: <ExamAttemptPage /> },
+  { path: 'learning/certificates/:id', element: <LearningCertificatePage /> },
   { path: 'notifications', element: <NotificationsPage /> },
   { path: 'support', element: <SupportPage /> },
   { path: 'support/new', element: <NewTicketPage /> },

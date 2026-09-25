@@ -1,4 +1,4 @@
-import { Award, BookOpenCheck, Clock, Download, ExternalLink, GraduationCap, Library, Linkedin, PlayCircle, Share2 } from 'lucide-react';
+import { Award, BookOpenCheck, Clock, Download, ExternalLink, GraduationCap, Library, PlayCircle, Share2 } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { ButtonLink } from '@/components/ui/ButtonLink';
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
@@ -20,7 +20,7 @@ import {
   type MyCertificate,
 } from '@/features/learning/api';
 import { MyCatalog } from '@/features/learning/components/CatalogBrowser';
-import { BadgeImage, CategoryTag, CourseCard } from '@/features/learning/components/CourseCard';
+import { BadgeImage, CategoryTag, CourseCard, LinkedInIcon } from '@/features/learning/components/CourseCard';
 import '@/features/learning/learning.css';
 
 export const learningPaths = {
@@ -284,7 +284,7 @@ export function LearningCertificatePage() {
                         rel="noopener noreferrer"
                         data-testid="linkedin-add"
                       >
-                        <Linkedin aria-hidden="true" /> Add to LinkedIn profile
+                        <LinkedInIcon /> Add to LinkedIn profile
                         <span className="visually-hidden"> (opens in a new tab)</span>
                       </a>
                       <a

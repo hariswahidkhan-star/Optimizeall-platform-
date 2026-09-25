@@ -17,6 +17,7 @@ export const FALLBACK_MENU: MenuItem[] = [
   { label: 'Industries', url: '/industries', description: null, children: null },
   { label: 'Case studies', url: '/case-studies', description: null, children: null },
   { label: 'Pricing', url: '/pricing', description: null, children: null },
+  { label: 'Academy', url: '/learn', description: null, children: null },
   { label: 'About', url: '/about', description: null, children: null },
   { label: 'Creators', url: '/creators', description: null, children: null },
 ];
