@@ -19,7 +19,7 @@
 }
 
 .dl-dash .ui-card__body--flush > .dl-list > .dl-list__item:last-child {
-  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  border-radius: 0 0 var(--radius-card) var(--radius-card);
 }
 
 .dl-dash .ui-card__body--flush > .dl-list > .dl-list__item:hover {
@@ -164,6 +164,7 @@
   border: 0;
   border-radius: 0;
   background: transparent;
+  box-shadow: none;
 }
 
 .dl-dash .cc-person + .cc-person {
@@ -192,7 +193,16 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
+  color: var(--color-text-muted);
   font-size: var(--text-xs);
+  text-decoration: none;
+}
+
+.dl-dash .cc-person__text a:hover {
+  color: var(--color-link-hover);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
 }
 
 .dl-dash .cc-person__text a svg {

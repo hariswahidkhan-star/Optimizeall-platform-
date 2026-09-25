@@ -6,6 +6,7 @@ import { Alert } from '@/components/ui/Alert';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
+import { StatGrid } from '@/components/ui/Dashboard';
 import { DataTable } from '@/components/ui/DataTable';
 import { DateTime } from '@/components/ui/DateTime';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -231,7 +232,7 @@ export function UserDetailPage() {
           <h2 id="user-submissions" className="admin-section-title">
             Submissions
           </h2>
-          <div className="grid-auto admin-stat-grid">
+          <StatGrid strip min="150px">
             <Stat label="Total" value={formatNumber(counts.total)} measurement="Count" />
             <Stat
               label="Pending"
@@ -242,7 +243,7 @@ export function UserDetailPage() {
             <Stat label="Needs correction" value={formatNumber(counts.needsCorrection)} measurement="Count" />
             <Stat label="Rejected" value={formatNumber(counts.rejected)} measurement="Count" />
             <Stat label="Reversed" value={formatNumber(counts.reversed)} measurement="Count" />
-          </div>
+          </StatGrid>
         </section>
 
         <div className="admin-two-col">

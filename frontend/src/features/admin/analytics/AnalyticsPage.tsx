@@ -5,6 +5,7 @@ import { useSearchParams } from 'react-router-dom';
 import { Alert } from '@/components/ui/Alert';
 import { Button } from '@/components/ui/Button';
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
+import { StatGrid } from '@/components/ui/Dashboard';
 import { LineChart } from '@/components/ui/Charts';
 import { DataTable } from '@/components/ui/DataTable';
 import { FormField } from '@/components/ui/FormField';
@@ -63,11 +64,11 @@ function SectionCard({ section }: { section: MetricSection | undefined }) {
         actions={<MeasurementTag measurement={measurementTag(section.measurement)} />}
       />
       <CardBody>
-        <div className="grid-auto admin-stat-grid">
+        <StatGrid strip min="10.5rem">
           {section.metrics.map((m, i) => (
             <MetricStat key={`${m.key}-${m.currency ?? i}`} metric={m} />
           ))}
-        </div>
+        </StatGrid>
       </CardBody>
     </Card>
   );

@@ -439,6 +439,9 @@ function KeyChange({ from, to }: { from: string; to: string }) {
   );
 }
 
+/** A fragment-safe id for a group heading (the section nav links to it). */
+const groupId = (group: string) => `group-${group.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+
 const GROUP_ORDER: SettingMeta['group'][] = ['Eligibility', 'Fraud & review', 'Rates', 'Retention', 'Growth', 'Learning'];
 
 export function SettingsPage() {
@@ -471,18 +474,36 @@ export function SettingsPage() {
       ) : settings.isError ? (
         <QueryError error={settings.error} onRetry={() => void settings.refetch()} />
       ) : (
-        groups.map(({ group, items }) => (
-          <section key={group} className="stack admin-settings-group" aria-labelledby={`group-${group}`}>
-            <h2 id={`group-${group}`} className="admin-section-title">
-              {group}
-            </h2>
-            <div className="admin-settings-grid">
-              {items.map((s) => (
-                <SettingCard key={s.key} setting={s} />
+        <div className="admin-settings-layout">
+          <nav className="admin-settings-nav" aria-label="Setting groups">
+            <ul>
+              {groups.map(({ group, items }) => (
+                <li key={group}>
+                  <a href={`#${groupId(group)}`}>
+                    <span>{group}</span>
+                    <span className="admin-settings-nav__count" aria-hidden="true">
+                      {items.length}
+                    </span>
+                  </a>
+                </li>
               ))}
-            </div>
-          </section>
-        ))
+            </ul>
+          </nav>
+          <div className="admin-settings-sections">
+            {groups.map(({ group, items }) => (
+              <section key={group} className="stack admin-settings-group" aria-labelledby={groupId(group)}>
+                <h2 id={groupId(group)} className="admin-section-title">
+                  {group}
+                </h2>
+                <div className="admin-settings-grid">
+                  {items.map((s) => (
+                    <SettingCard key={s.key} setting={s} />
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
+        </div>
       )}
     </>
   );

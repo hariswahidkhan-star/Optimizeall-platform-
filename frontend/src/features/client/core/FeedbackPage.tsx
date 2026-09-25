@@ -19,7 +19,7 @@ export function ScorePicker({ legend, min, max, value, onChange, lowLabel, highL
 }) {
   const name = useId();
   return (
-    <fieldset className="dl-form">
+    <fieldset className="dl-form cc-scale-group">
       <legend>{legend}</legend>
       <div className="cc-scale">
         {Array.from({ length: max - min + 1 }, (_, i) => min + i).map((n) => (
