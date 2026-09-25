@@ -266,3 +266,20 @@
   font-size: var(--text-small);
   font-weight: var(--weight-medium);
 }
+
+/* Mobile cards: a column with nothing to show for this row (e.g. no actions) leaves no orphan label. */
+.ui-table-card__field:has(> dd:empty) {
+  display: none;
+}
+
+/* Values in mobile cards are record links, not prose: same quiet link style as table cells. */
+.ui-table-card__fields dd a:not(.ui-button) {
+  color: var(--color-heading);
+  font-weight: var(--weight-semibold);
+  text-decoration-line: none;
+}
+
+.ui-table-card__fields dd a:not(.ui-button):hover {
+  color: var(--color-link-hover);
+  text-decoration-line: underline;
+}
