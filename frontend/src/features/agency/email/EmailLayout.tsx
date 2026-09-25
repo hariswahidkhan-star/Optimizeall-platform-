@@ -1,6 +1,7 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { FormField } from '@/components/ui/FormField';
 import { Select } from '@/components/ui/Select';
+import { useScrollEdges } from '@/components/ui/useScrollEdges';
 import { Permissions } from '@/lib/auth/permissions';
 import { useAuth } from '@/lib/auth/useAuth';
 import { useWorkspaces } from './api/queries';
@@ -47,9 +48,11 @@ export function WorkspacePicker() {
 
 function SectionNav() {
   const { hasPermission } = useAuth();
+  const { pathname } = useLocation();
+  const listRef = useScrollEdges<HTMLUListElement>('.is-active', pathname);
   return (
     <nav className="email-subnav" aria-label="Email marketing sections">
-      <ul>
+      <ul ref={listRef} className="ui-scroll-fade">
         {EMAIL_SECTIONS.filter((s) => !s.requires || hasPermission(s.requires)).map((s) => (
           <li key={s.to}>
             <NavLink to={s.to} end={s.end} className={({ isActive }) => (isActive ? 'email-subnav__link is-active' : 'email-subnav__link')}>

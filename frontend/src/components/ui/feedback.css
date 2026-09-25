@@ -101,6 +101,7 @@
 }
 
 .ui-alert__title {
+  font-family: var(--font-sans);
   color: var(--tone-fg);
   font-weight: var(--weight-semibold);
   font-size: var(--text-small);
@@ -237,10 +238,10 @@
 }
 
 .ui-state__title {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1rem;
   font-weight: var(--weight-semibold);
-  letter-spacing: -0.014em;
+  letter-spacing: -0.011em;
 }
 
 .ui-state__description {

@@ -26,6 +26,7 @@
 }
 
 .roles-area__title {
+  font-family: var(--font-sans);
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
@@ -34,6 +35,7 @@
   font-size: var(--text-body);
   font-weight: var(--weight-semibold);
   color: var(--color-heading);
+  letter-spacing: -0.011em;
 }
 
 .roles-area__grid {

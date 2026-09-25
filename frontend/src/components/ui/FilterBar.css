@@ -21,9 +21,16 @@
   min-width: 150px;
 }
 
+/* Phones: filters pair up two per row (an odd last one takes the full row) instead of a tall stack of full-width
+   selects; the search field keeps its own row. */
 @media (max-width: 639px) {
+  .ui-filterbar__search {
+    flex-basis: 100%;
+  }
+
   .ui-filterbar__filter {
-    flex: 1 1 100%;
+    flex: 1 1 calc(50% - var(--space-1));
+    min-width: 0;
   }
 }
 

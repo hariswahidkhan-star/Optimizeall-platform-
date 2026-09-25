@@ -60,10 +60,12 @@
 }
 
 .crm-column__title {
+  font-family: var(--font-sans);
   margin: 0;
   color: var(--color-heading);
   font-size: var(--text-body);
   font-weight: var(--weight-semibold);
+  letter-spacing: -0.011em;
 }
 
 .crm-column__head .crm-muted {
@@ -118,11 +120,13 @@
 }
 
 .crm-card__title.ui-link {
+  font-family: var(--font-sans);
   padding-top: 2px;
   color: var(--color-heading);
   font-size: var(--text-small);
   line-height: 1.4;
   text-decoration: none;
+  letter-spacing: -0.011em;
 }
 
 .crm-card__title.ui-link:hover {

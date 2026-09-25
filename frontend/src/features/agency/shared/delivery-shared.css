@@ -74,6 +74,22 @@
   flex: 1 1 12rem;
 }
 
+/* A row that ends in a single status pill keeps the pill on the title line at every width (instead of dropping it
+   under short titles and floating it beside long ones). */
+.dl-list__item:has(> .dl-list__main + .ui-badge:last-child) {
+  flex-wrap: nowrap;
+  align-items: flex-start;
+}
+
+.dl-list__item:has(> .dl-list__main + .ui-badge:last-child) > .dl-list__main {
+  flex: 1 1 0;
+}
+
+.dl-list__item > .dl-list__main + .ui-badge:last-child {
+  flex: none;
+  margin-top: 1px;
+}
+
 .dl-list__title {
   color: var(--color-heading);
   font-weight: var(--weight-semibold);
@@ -406,6 +422,7 @@
 }
 
 .dl-card__title {
+  font-family: var(--font-sans);
   font: inherit;
   font-size: var(--text-small);
   font-weight: var(--weight-semibold);
@@ -417,6 +434,7 @@
   padding: 0;
   color: var(--color-heading);
   cursor: pointer;
+  letter-spacing: -0.011em;
 }
 
 .dl-card__title:hover {

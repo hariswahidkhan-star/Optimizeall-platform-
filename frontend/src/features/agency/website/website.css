@@ -171,6 +171,7 @@
 }
 
 .cms-board__title {
+  font-family: var(--font-sans);
   display: flex;
   justify-content: space-between;
   margin: 0;
@@ -178,6 +179,7 @@
   color: var(--color-heading);
   font-size: var(--text-small);
   font-weight: var(--weight-semibold);
+  letter-spacing: -0.011em;
 }
 
 .cms-board__card {

@@ -25,6 +25,14 @@ export interface DataTableColumn<T> {
   primary?: boolean;
   /** Leave this column out of mobile cards. */
   hideOnMobile?: boolean;
+  /**
+   * Where the column sits in a mobile card. `badge`: beside the title (a status pill). `value`: the emphasised figure
+   * at the end of the meta line (`compact` layout only). In `compact` rows a column with id `status` is the badge
+   * unless another column claims the slot.
+   */
+  mobileSlot?: 'badge' | 'value';
+  /** `compact` layout: show the header before the value in the meta line ("Submitted Sep 25"). */
+  mobileLabel?: boolean;
 }
 
 export interface SortState {
@@ -58,8 +66,11 @@ export interface DataTableProps<T> {
   bulkActions?: (selectedIds: string[]) => ReactNode;
   /** Max height before the body scrolls with a sticky header. */
   maxHeight?: string;
-  /** Below the md breakpoint: stacked cards (default) or horizontal scrolling. */
-  mobileLayout?: 'cards' | 'scroll';
+  /**
+   * Below the md breakpoint: stacked cards with a labelled row per field (default); `compact` rows (title + status on
+   * top, one meta line below — for long lists); or horizontal scrolling with a sticky first column.
+   */
+  mobileLayout?: 'cards' | 'compact' | 'scroll';
   className?: string;
 }
 
@@ -156,22 +167,42 @@ export function DataTable<T>({
     );
   }
 
-  if (isMobile && mobileLayout === 'cards') {
+  if (isMobile && mobileLayout !== 'scroll') {
+    const compact = mobileLayout === 'compact';
     const primary = columns.find((c) => c.primary) ?? columns[0];
-    const rest = columns.filter((c) => c !== primary && !c.hideOnMobile);
+    const visible = columns.filter((c) => c !== primary && !c.hideOnMobile);
+    const badges = visible.some((c) => c.mobileSlot === 'badge')
+      ? visible.filter((c) => c.mobileSlot === 'badge')
+      : compact
+        ? visible.filter((c) => c.id === 'status').slice(0, 1)
+        : [];
+    const values = compact ? visible.filter((c) => c.mobileSlot === 'value') : [];
+    const rest = visible.filter((c) => !badges.includes(c) && !values.includes(c));
+    // Every field keeps its term: visible in the labelled rows, visually hidden next to a badge or in the meta line.
+    const fieldList = (cols: DataTableColumn<T>[], row: T, listClass: string, showLabel: (c: DataTableColumn<T>) => boolean) =>
+      cols.length > 0 && (
+        <dl className={listClass}>
+          {cols.map((column) => (
+            <div key={column.id} className="ui-table-card__field">
+              <dt className={showLabel(column) ? undefined : 'visually-hidden'}>{column.header}</dt>
+              <dd>{column.cell(row)}</dd>
+            </div>
+          ))}
+        </dl>
+      );
     return (
       <div className={className} aria-busy={loading || undefined}>
         {toolbar}
         <p id={captionId} className={showCaption ? 'ui-card__title' : 'visually-hidden'}>
           {caption}
         </p>
-        <ul className="ui-table-cards" aria-labelledby={captionId}>
+        <ul className={compact ? 'ui-table-cards ui-table-cards--compact' : 'ui-table-cards'} aria-labelledby={captionId}>
           {loading
             ? Array.from({ length: Math.min(loadingRows, 4) }, (_, i) => (
                 <li key={i} className="ui-table-card" aria-hidden="true">
                   <Skeleton width="55%" height={18} />
                   <Skeleton width="100%" height={14} />
-                  <Skeleton width="80%" height={14} />
+                  {!compact && <Skeleton width="80%" height={14} />}
                 </li>
               ))
             : sortedRows.map((row) => {
@@ -191,18 +222,17 @@ export function DataTable<T>({
                         />
                       )}
                       <div className="ui-table-card__primary">{primary?.cell(row)}</div>
+                      {fieldList(badges, row, 'ui-table-card__badge', () => false)}
                       {actionsMenu(row)}
                     </div>
-                    {rest.length > 0 && (
-                      <dl className="ui-table-card__fields">
-                        {rest.map((column) => (
-                          <div key={column.id} className="ui-table-card__field">
-                            <dt>{column.header}</dt>
-                            <dd>{column.cell(row)}</dd>
+                    {compact
+                      ? (rest.length > 0 || values.length > 0) && (
+                          <div className="ui-table-card__foot">
+                            {fieldList(rest, row, 'ui-table-card__meta', (c) => !!c.mobileLabel)}
+                            {fieldList(values, row, 'ui-table-card__value', () => false)}
                           </div>
-                        ))}
-                      </dl>
-                    )}
+                        )
+                      : fieldList(rest, row, 'ui-table-card__fields', () => true)}
                   </li>
                 );
               })}

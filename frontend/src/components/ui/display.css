@@ -276,7 +276,30 @@
   letter-spacing: var(--tracking-tighter);
   line-height: 1.15;
   font-variant-numeric: tabular-nums;
-  overflow-wrap: anywhere;
+  /* Break only where a word cannot fit at all ("PKR / 3,000.00" at the space, never "3,0 / 00.00"). */
+  overflow-wrap: break-word;
+}
+
+/* In KPI grids each tile is a size container, so the figure scales with the tile: "PKR 3,000.00" fits a 2-up phone
+   tile on one line instead of breaking mid-number. Short figures keep the full KPI size on wider tiles. */
+.ui-stat-grid .ui-stat {
+  container-type: inline-size;
+}
+
+.ui-stat-grid .ui-stat__value {
+  font-size: clamp(1.125rem, 16cqi, var(--text-kpi));
+}
+
+/* Tiles in one row share their label / figure / footer tracks, so a label that wraps ("Batches awaiting payment")
+   does not push its figure below its neighbours'. */
+@supports (grid-template-rows: subgrid) {
+  .ui-stat-grid > .ui-stat {
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    align-content: start;
+    row-gap: var(--space-2);
+  }
 }
 
 .ui-stat__value a {
@@ -357,8 +380,9 @@
   }
 }
 
-/* Hairlines are drawn by each tile (right + bottom) and clipped at the strip's edge, so a short last row leaves
-   plain surface rather than a grey block. */
+/* Hairlines are drawn by each tile on its left and top edges (outside the tile, over its neighbour) and clipped at
+   the strip's edge, so the first row and column carry no stray line and the empty cells of a short last row stay
+   plain surface: no orphan divider hangs beside or above them. */
 .ui-stat-grid--strip {
   gap: 0;
   overflow: hidden;
@@ -370,8 +394,8 @@
 
 .ui-stat-grid--strip > * {
   box-shadow:
-    1px 0 0 var(--color-border),
-    0 1px 0 var(--color-border);
+    -1px 0 0 var(--color-border),
+    0 -1px 0 var(--color-border);
 }
 
 .ui-stat-grid--strip > .ui-stat,
@@ -387,11 +411,13 @@
 
 .ui-stat-grid--strip > .ui-stat {
   box-shadow:
-    1px 0 0 var(--color-border),
-    0 1px 0 var(--color-border);
+    -1px 0 0 var(--color-border),
+    0 -1px 0 var(--color-border);
 }
 
 .ui-stat-grid--strip > * {
+  /* Positioned like the tiles, so each item (and its hairlines) paints after the previous one. */
+  position: relative;
   min-width: 0;
   background: var(--color-surface);
 }
@@ -492,10 +518,10 @@
 .ui-ring__label {
   position: absolute;
   color: var(--color-heading);
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: var(--text-small);
   font-weight: var(--weight-semibold);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.011em;
   font-variant-numeric: tabular-nums;
 }
 
@@ -574,9 +600,11 @@
 }
 
 .ui-stepper__title {
+  font-family: var(--font-sans);
   color: var(--color-heading);
   font-size: var(--text-small);
   font-weight: var(--weight-semibold);
+  letter-spacing: -0.011em;
 }
 
 .ui-stepper__step[data-status='complete'] .ui-stepper__title {
@@ -764,9 +792,11 @@
 }
 
 .ui-timeline__title {
+  font-family: var(--font-sans);
   color: var(--color-heading);
   font-size: var(--text-small);
   font-weight: var(--weight-semibold);
+  letter-spacing: -0.011em;
 }
 
 .ui-timeline__time {

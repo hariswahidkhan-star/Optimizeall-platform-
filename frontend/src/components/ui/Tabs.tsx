@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { useId, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
+import { useScrollEdges } from './useScrollEdges';
 import './display.css';
 
 export interface TabItem {
@@ -30,6 +31,7 @@ export function Tabs({ tabs, value, defaultValue, onValueChange, label, classNam
   const [internal, setInternal] = useState(defaultValue ?? tabs.find((t) => !t.disabled)?.id ?? '');
   const selected = value ?? internal;
   const tabRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
+  const listRef = useScrollEdges<HTMLDivElement>('[aria-selected="true"]', selected);
 
   const select = (id: string) => {
     if (value === undefined) setInternal(id);
@@ -52,7 +54,7 @@ export function Tabs({ tabs, value, defaultValue, onValueChange, label, classNam
 
   return (
     <div className={clsx('ui-tabs', className)}>
-      <div role="tablist" aria-label={label} className="ui-tabs__list">
+      <div ref={listRef} role="tablist" aria-label={label} className="ui-tabs__list ui-scroll-fade">
         {tabs.map((tab) => {
           const isSelected = tab.id === selected;
           return (

@@ -27,8 +27,10 @@
 }
 
 .dl-dash .dl-list__title {
+  font-family: var(--font-sans);
   font-size: var(--text-small);
   font-weight: var(--weight-semibold);
+  letter-spacing: -0.011em;
 }
 
 .dl-dash .dl-list__title.ui-link {

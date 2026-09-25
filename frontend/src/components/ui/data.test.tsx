@@ -136,6 +136,22 @@ describe('DataTable', () => {
     expect(within(cards[0]!).getByRole('button', { name: 'Actions for Charlie' })).toBeInTheDocument();
   });
 
+  it('renders compact rows on phones: status beside the title, one meta line, every field keeps its term', async () => {
+    setViewportWidth(360);
+    const { container } = renderTable({ mobileLayout: 'compact' });
+    const list = screen.getByRole('list', { name: 'Submissions' });
+    const cards = within(list).getAllByRole('listitem');
+    expect(cards).toHaveLength(3);
+    const first = cards[0]!;
+    expect(within(first).getByText('Charlie')).toBeInTheDocument();
+    // Terms stay in the accessibility tree (visually hidden) next to their values.
+    expect(within(first).getByText('Status')).toHaveClass('visually-hidden');
+    expect(within(first).getByText('Reward')).toHaveClass('visually-hidden');
+    expect(within(first).getByText('Approved')).toBeInTheDocument();
+    expect(first.querySelector('.ui-table-card__head .ui-table-card__badge')).not.toBeNull();
+    expect(await axeViolations(container)).toEqual([]);
+  });
+
   it('has no axe violations', async () => {
     const { container } = renderTable({
       selectable: true,

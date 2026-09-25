@@ -25,9 +25,11 @@
 }
 
 .sm-h3 {
+  font-family: var(--font-sans);
   margin: 0;
   font-size: var(--text-h4);
   color: var(--color-heading);
+  letter-spacing: -0.011em;
 }
 
 .sm-grid-2 {

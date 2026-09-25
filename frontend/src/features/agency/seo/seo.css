@@ -97,11 +97,13 @@
 
 /* Issues grouped by severity */
 .seo-issue-group__title {
+  font-family: var(--font-sans);
   display: flex;
   align-items: center;
   gap: var(--space-2);
   font-size: var(--text-h4);
   margin: 0 0 var(--space-2);
+  letter-spacing: -0.011em;
 }
 
 .seo-sev-icon {
@@ -196,8 +198,10 @@
 }
 
 .seo-h3 {
+  font-family: var(--font-sans);
   font-size: var(--text-h4);
   margin: 0 0 var(--space-2);
+  letter-spacing: -0.011em;
 }
 
 .seo-diff__list > li {

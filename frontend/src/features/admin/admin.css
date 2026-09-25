@@ -278,8 +278,10 @@
 }
 
 .admin-audit__heading {
+  font-family: var(--font-sans);
   margin: 0;
   font-size: var(--text-body);
+  letter-spacing: -0.011em;
 }
 
 .admin-audit__toggle,

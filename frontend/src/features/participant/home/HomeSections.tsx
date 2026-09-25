@@ -637,7 +637,7 @@ export function UnreadNotice({ count, openTickets }: { count: number; openTicket
         </ButtonLink>
       )}
       {openTickets > 0 && (
-        <ButtonLink to="/app/support" variant="ghost" size="sm" leadingIcon={<LifeBuoy />}>
+        <ButtonLink to="/app/support" variant="secondary" size="sm" leadingIcon={<LifeBuoy />}>
           {pluralize(openTickets, 'open support ticket')}
         </ButtonLink>
       )}

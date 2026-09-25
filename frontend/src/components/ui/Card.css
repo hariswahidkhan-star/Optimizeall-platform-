@@ -45,10 +45,10 @@
 }
 
 .ui-card__title {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1rem;
   font-weight: var(--weight-semibold);
-  letter-spacing: -0.014em;
+  letter-spacing: -0.011em;
   line-height: 1.4;
 }
 

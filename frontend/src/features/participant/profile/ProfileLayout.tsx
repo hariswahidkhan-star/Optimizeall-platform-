@@ -1,6 +1,7 @@
 import clsx from 'clsx';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { useScrollEdges } from '@/components/ui/useScrollEdges';
 import './ProfileLayout.css';
 
 const SECTIONS = [
@@ -12,13 +13,15 @@ const SECTIONS = [
 
 /** Profile area with section navigation (links, so each section has its own URL). */
 export function ProfileLayout() {
+  const { pathname } = useLocation();
+  const navRef = useScrollEdges<HTMLElement>('.is-active', pathname);
   return (
     <>
       <PageHeader
         title="Profile"
         description="Your details, how you get paid, what we notify you about and your sign-in security."
       />
-      <nav aria-label="Profile sections" className="profile-nav">
+      <nav ref={navRef} aria-label="Profile sections" className="profile-nav ui-scroll-fade">
         <ul>
           {SECTIONS.map((section) => (
             <li key={section.to}>

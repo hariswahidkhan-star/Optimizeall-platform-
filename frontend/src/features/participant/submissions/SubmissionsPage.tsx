@@ -42,6 +42,7 @@ const columns: DataTableColumn<SubmissionListItem>[] = [
     id: 'reward',
     header: 'Estimated reward',
     align: 'right',
+    mobileSlot: 'value',
     cell: (s) => <Money amount={s.estimatedReward} currency={s.currency} />,
   },
 ];
@@ -95,6 +96,7 @@ export function SubmissionsPage() {
           <DataTable
             caption="Your submissions"
             columns={columns}
+            mobileLayout="compact"
             rows={list.data?.items ?? []}
             getRowId={(s) => s.id}
             loading={list.isPending}

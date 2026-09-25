@@ -167,6 +167,29 @@
   white-space: nowrap;
 }
 
+/* Wide tables that scroll sideways (tablets, `mobileLayout="scroll"`): the first column (the record's name) stays put
+   so every figure keeps its row label. Not with selection, where the first column is the checkbox. */
+.ui-table-wrap[data-scrollable] .ui-table:not(:has(.ui-table__select)) :is(th, td):first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--color-surface);
+  box-shadow: inset -1px 0 0 var(--color-border);
+}
+
+.ui-table-wrap[data-scrollable] .ui-table:not(:has(.ui-table__select)) thead th:first-child {
+  z-index: 2;
+  background: color-mix(in srgb, var(--color-surface-2) 65%, var(--color-surface));
+}
+
+.ui-table-wrap[data-scrollable] .ui-table:not(:has(.ui-table__select)) tbody tr:hover > td:first-child {
+  background: color-mix(in srgb, var(--color-surface-2) 70%, var(--color-surface));
+}
+
+.ui-table-wrap[data-scrollable] .ui-table:not(:has(.ui-table__select)) :is(th, td):first-child {
+  max-width: 44vw;
+}
+
 /* Mobile stacked cards */
 .ui-table-cards {
   display: flex;
@@ -205,35 +228,75 @@
   flex: 1;
   min-width: 0;
   color: var(--color-heading);
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-weight: var(--weight-semibold);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.011em;
+  line-height: 1.4;
   /* Long unbroken values (URLs, ids, e-mail addresses) wrap instead of widening the page on phones. */
   overflow-wrap: anywhere;
-}
-
-.ui-table-card__fields {
-  display: grid;
-  gap: var(--space-2);
-  margin: 0;
-  padding-top: var(--space-3);
-  border-top: 1px solid var(--color-border);
 }
 
 .ui-table-card__primary :where(a),
 .ui-table-card__primary .ui-link {
   color: var(--color-heading);
+  font-weight: inherit;
   text-decoration: none;
+}
+
+/* Secondary lines inside the title cell (category, platforms, a payout summary) stay quiet: only the record name
+   carries the weight. */
+.ui-table-card__primary :is(.text-muted, .text-small, .ui-badge) {
+  font-weight: var(--weight-regular);
+  letter-spacing: normal;
+}
+
+.ui-table-card__primary .ui-badge {
+  font-weight: var(--weight-medium);
+}
+
+/* Status pill beside the title: its term stays for assistive tech only. */
+.ui-table-card__badge {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-1);
+  max-width: 50%;
+  margin: 0;
+  padding-top: 1px;
+}
+
+.ui-table-card__badge .ui-table-card__field {
+  display: block;
+}
+
+.ui-table-card__badge dd {
+  margin: 0;
+  color: var(--color-text);
+  font-size: var(--text-small);
+  text-align: right;
+}
+
+.ui-table-card__fields {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
 }
 
 .ui-table-card__field {
   display: flex;
+  align-items: baseline;
   justify-content: space-between;
   gap: var(--space-3);
   font-size: var(--text-small);
+  line-height: 1.5;
 }
 
 .ui-table-card__field dt {
+  flex: none;
+  max-width: 50%;
   color: var(--color-text-muted);
 }
 
@@ -244,6 +307,93 @@
   color: var(--color-heading);
   font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
+}
+
+/* Compact rows (long lists on phones): one surface split by hairlines; title + status, then a single meta line
+   ("Instagram · Sep 25, 2026") with the headline figure at its end. */
+.ui-table-cards--compact {
+  gap: 0;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card), var(--shadow-highlight);
+}
+
+.ui-table-cards--compact > .ui-table-card {
+  gap: 6px;
+  padding: 14px var(--space-4);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.ui-table-cards--compact > .ui-table-card + .ui-table-card {
+  border-top: 1px solid var(--color-border);
+}
+
+.ui-table-cards--compact > .ui-table-card[data-selected='true'] {
+  background: var(--color-primary-soft);
+  box-shadow: none;
+}
+
+.ui-table-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-3);
+  min-width: 0;
+}
+
+.ui-table-card__meta {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 0;
+  min-width: 0;
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+}
+
+.ui-table-card__meta > .ui-table-card__field {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: inherit;
+}
+
+/* A small dot between facts (drawn, not typed, so screen readers don't read "middle dot"). */
+.ui-table-card__meta > .ui-table-card__field + .ui-table-card__field::before {
+  content: '';
+  width: 3px;
+  height: 3px;
+  margin: 0 var(--space-2);
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.55;
+}
+
+.ui-table-card__meta dt,
+.ui-table-card__meta dd {
+  max-width: none;
+  color: inherit;
+  text-align: left;
+}
+
+.ui-table-card__value {
+  flex: none;
+  margin: 0;
+}
+
+.ui-table-card__value dd {
+  margin: 0;
+  color: var(--color-heading);
+  font-size: var(--text-small);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
 }
 
 .ui-table-empty {
@@ -268,7 +418,8 @@
 }
 
 /* Mobile cards: a column with nothing to show for this row (e.g. no actions) leaves no orphan label. */
-.ui-table-card__field:has(> dd:empty) {
+.ui-table-card__field:has(> dd:empty),
+.ui-table-card :is(.ui-table-card__badge, .ui-table-card__value):not(:has(dd:not(:empty))) {
   display: none;
 }
 

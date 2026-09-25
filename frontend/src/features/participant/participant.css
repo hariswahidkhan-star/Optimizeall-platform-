@@ -24,7 +24,7 @@
 
 .pp-section__title {
   font-family: var(--font-display);
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   font-weight: var(--weight-semibold);
   letter-spacing: var(--tracking-tight);
 }
@@ -205,10 +205,10 @@
 }
 
 .pp-campaign-card__title {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1.125rem;
   font-weight: var(--weight-semibold);
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: -0.011em;
   line-height: var(--leading-snug);
 }
 
@@ -533,7 +533,9 @@
 }
 
 .pp-banner__title {
+  font-family: var(--font-sans);
   font-size: var(--text-h4);
+  letter-spacing: -0.011em;
 }
 
 .pp-strip-scroll {
@@ -571,9 +573,11 @@
 }
 
 .pp-achievement-mini__name {
+  font-family: var(--font-sans);
   color: var(--color-heading);
   font-size: var(--text-small);
   font-weight: var(--weight-semibold);
+  letter-spacing: -0.011em;
 }
 
 /* ---------- Achievements ---------- */
@@ -608,7 +612,9 @@
 }
 
 .pp-achievement__name {
+  font-family: var(--font-sans);
   font-size: var(--text-h4);
+  letter-spacing: -0.011em;
 }
 
 /* ---------- Detail pages ---------- */
@@ -640,7 +646,9 @@
 }
 
 .pp-asset__title {
+  font-family: var(--font-sans);
   font-size: var(--text-body);
+  letter-spacing: -0.011em;
 }
 
 .pp-asset__image {
@@ -914,7 +922,8 @@
   .pp-help {
     width: 44px;
     height: 44px;
-    margin: -8px;
+    /* Full 44px target, but it only claims 20px of line height, so a wrapped label keeps its normal leading. */
+    margin: -12px -8px;
   }
 }
 
@@ -922,6 +931,8 @@
 .pp-list__item--row {
   flex-wrap: nowrap;
   padding: var(--space-3) 0;
+  /* Same size as the key/value rows these lists sit next to. */
+  font-size: var(--text-small);
 }
 
 .pp-list__item--row > .pp-list__main {
@@ -932,8 +943,23 @@
   flex-shrink: 0;
 }
 
+.pp-link-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: var(--weight-semibold);
+  text-decoration-line: none;
+}
+
+.pp-link-icon:hover {
+  text-decoration-line: underline;
+}
+
 .pp-link-icon svg {
   display: inline-block;
+  width: 14px;
+  height: 14px;
+  flex: none;
 }
 
 .pp-filters__more {
@@ -971,11 +997,18 @@
   margin-bottom: 0;
 }
 
+/* A filter bar belongs to the list below it: sit close to it rather than a full section gap away. */
+.pp-page > .ui-filterbar {
+  margin-bottom: calc(var(--space-4) - var(--space-8));
+}
+
 /* ---------- Home dashboard ---------- */
 .pp-home .pp-list__title.ui-link {
+  font-family: var(--font-sans);
   color: var(--color-heading);
   font-size: var(--text-small);
   text-decoration: none;
+  letter-spacing: -0.011em;
 }
 
 .pp-home .pp-list__title.ui-link:hover {
@@ -993,6 +1026,56 @@
 
 .pp-home .ui-card__body--flush > .pp-list {
   border-top: 1px solid var(--color-border);
+}
+
+/* Attention rows: title and status pill share the top line on every width (the pill no longer drops below short
+   titles and floats beside long ones); platform and date form one quiet meta line. */
+.pp-home .pp-list__item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: var(--space-1) var(--space-3);
+}
+
+/* The main column is a plain wrapper: its lines join the row's grid, so the meta line and a correction note use
+   the full width below the title/pill line. */
+.pp-home .pp-list__item > .pp-list__main {
+  display: contents;
+}
+
+.pp-home .pp-list__item > .pp-list__main > * {
+  grid-column: 1 / -1;
+}
+
+.pp-home .pp-list__item > .pp-list__main > .pp-list__title {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.pp-home .pp-list__item > .ui-badge {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  margin-top: 1px;
+}
+
+.pp-home .pp-list__meta {
+  align-items: center;
+}
+
+/* Platform names inside meta lines read as text, not as a second row of pills. */
+:is(.pp-home .pp-list__meta, .ui-table-card__meta) .pp-platform {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+:is(.pp-home .pp-list__meta, .ui-table-card__meta) .pp-platform svg {
+  width: 13px;
+  height: 13px;
 }
 
 /* Next payout: three facts as one quiet table-like block instead of three tinted boxes. */
@@ -1273,6 +1356,21 @@
   padding: 0 var(--space-3);
 }
 
+/* Label, figure and footer rows line up across the tiles even when one label wraps ("Scheduled for payment"). */
+@supports (grid-template-rows: subgrid) {
+  .pp-balance__grid > .ui-stat {
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    align-content: start;
+    row-gap: var(--space-1);
+  }
+
+  .pp-balance__grid > .ui-stat > .ui-stat__top {
+    align-items: flex-start;
+  }
+}
+
 .pp-balance__grid > .ui-stat:first-child {
   padding-left: 0;
 }
@@ -1523,8 +1621,8 @@
 
 .pp-social-card .pp-list__title .ui-link {
   color: var(--color-heading);
-  font-family: var(--font-display);
-  letter-spacing: var(--tracking-tight);
+  font-family: var(--font-sans);
+  letter-spacing: -0.011em;
 }
 
 .pp-social-card .ui-kv {

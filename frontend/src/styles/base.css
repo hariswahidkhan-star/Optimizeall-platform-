@@ -119,6 +119,15 @@ h4 {
   font-size: var(--text-h4);
 }
 
+/* Inter Tight is a display face: below ~20px its tight fit reads as squeezed. Small headings use Inter with only a
+   whisper of negative tracking (components set the same on their small card/section titles). */
+h4,
+h5,
+h6 {
+  font-family: var(--font-sans);
+  letter-spacing: -0.011em;
+}
+
 /* Headings and in-page anchors land below the sticky header (public 64px, portal 56px) instead of under it. */
 :where(h1, h2, h3, h4, h5, h6, [id]) {
   scroll-margin-top: calc(var(--impersonation-banner-height, 0px) + var(--topbar-height) + var(--space-4));
@@ -368,4 +377,33 @@ hr {
   display: flex;
   justify-content: center;
   padding: var(--space-8);
+}
+
+/* Horizontal strips that scroll (tab lists, section navs): the edge with hidden content fades out, so a clipped
+   "Secu…" reads as "there is more" rather than as a bug. `useScrollEdges` sets the data attributes. */
+.ui-scroll-fade {
+  --fade-start: 0px;
+  --fade-end: 0px;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 var(--fade-start),
+    #000 calc(100% - var(--fade-end)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 var(--fade-start),
+    #000 calc(100% - var(--fade-end)),
+    transparent 100%
+  );
+}
+
+.ui-scroll-fade[data-more-start] {
+  --fade-start: 32px;
+}
+
+.ui-scroll-fade[data-more-end] {
+  --fade-end: 48px;
 }
