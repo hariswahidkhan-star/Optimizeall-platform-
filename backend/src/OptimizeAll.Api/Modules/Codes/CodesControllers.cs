@@ -148,11 +148,11 @@ public sealed class DiscountCodesController(IDiscountCodesService codes) : Contr
 public sealed class CodeSalesController(ICodeSalesService sales) : ControllerBase
 {
     [HttpGet]
-    [RequireAnyPermission(Permissions.CodesView, Permissions.SalesReview)]
+    [RequireAnyPermission(Permissions.CodesView, Permissions.SalesReview, Permissions.SalesReverse)]
     public Task<PagedResult<CodeSaleListItemDto>> List([FromQuery] CodeSaleQuery query, CancellationToken ct) => sales.ListAsync(query, ct);
 
     [HttpGet("{id:guid}")]
-    [RequireAnyPermission(Permissions.CodesView, Permissions.SalesReview)]
+    [RequireAnyPermission(Permissions.CodesView, Permissions.SalesReview, Permissions.SalesReverse)]
     public Task<CodeSaleDto> Get(Guid id, CancellationToken ct) => sales.GetAsync(id, ct);
 
     /// <summary>

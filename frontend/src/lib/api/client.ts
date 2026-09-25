@@ -232,6 +232,10 @@ export const api = {
   upload: <T>(path: string, form: FormData, options?: RequestOptions) =>
     send<T>('POST', path, { ...options, body: form }),
 
+  /** Multipart replace (PUT), e.g. editing a record that carries a file. */
+  uploadPut: <T>(path: string, form: FormData, options?: RequestOptions) =>
+    send<T>('PUT', path, { ...options, body: form }),
+
   /** Fetches a binary resource with the current session (e.g. a private screenshot) as a Blob. */
   blob: async (path: string, options?: RequestOptions): Promise<Blob> => {
     const response = await send<Response>('GET', path, {

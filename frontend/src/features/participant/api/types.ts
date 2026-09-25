@@ -491,6 +491,8 @@ export const EARNING_TYPES = [
   'TimeLimitedBonus',
   'QualityBonus',
   'ReferralReward',
+  'SaleCommission',
+  'SaleTierBonus',
   'Adjustment',
   'Reversal',
 ] as const;

@@ -7,6 +7,7 @@ import {
   Layers,
   LayoutDashboard,
   PauseCircle,
+  TicketPercent,
   Wallet,
 } from 'lucide-react';
 import type { RouteObject } from 'react-router-dom';
@@ -24,6 +25,11 @@ const HoldsPage = lazyPage(() => import('./pages/HoldsPage'), 'HoldsPage');
 const OverviewPage = lazyPage(() => import('./pages/OverviewPage'), 'OverviewPage');
 const PaymentsPage = lazyPage(() => import('./payments/PaymentsPage'), 'PaymentsPage');
 const SchedulePage = lazyPage(() => import('./pages/SchedulePage'), 'SchedulePage');
+const FinanceCodeSalesPage = lazyPage(() => import('../codes/staff/CodeSalesQueuePage'), 'FinanceCodeSalesPage');
+const FinanceCodeSaleDetailPage = lazyPage(
+  () => import('../codes/staff/CodeSalesQueuePage'),
+  'FinanceCodeSaleDetailPage',
+);
 
 /**
  * Finance portal (/finance). Paths are relative to the portal base. Every section declares the permission of the API
@@ -40,6 +46,8 @@ const requires = {
   holds: { anyOf: [Permissions.PayoutsHold] },
   exchangeRates: { anyOf: [Permissions.PayoutsView] },
   schedule: { anyOf: [Permissions.PayoutsView] },
+  // Discount-code sales: refunds reverse commissions (sales.reverse).
+  codeSales: { anyOf: [Permissions.SalesReverse] },
 } satisfies Record<string, PermissionRequirement>;
 
 /** Portal entry: any permission that opens one of its sections. */
@@ -76,6 +84,13 @@ export const nav: PortalNavItem[] = [
     icon: ClipboardCheck,
     description: 'Bonuses and adjustments waiting for approval.',
     requires: requires.approvals,
+  },
+  {
+    to: 'code-sales',
+    label: 'Code sales',
+    icon: TicketPercent,
+    description: 'Discount-code commissions; mark refunded orders to reverse them.',
+    requires: requires.codeSales,
   },
   {
     to: 'holds',
@@ -122,6 +137,14 @@ export const routes: RouteObject[] = [
   },
   { path: 'approvals', handle: { requires: requires.approvals }, element: <ApprovalsPage /> },
   { path: 'holds', handle: { requires: requires.holds }, element: <HoldsPage /> },
+  {
+    path: 'code-sales',
+    handle: { requires: requires.codeSales },
+    children: [
+      { index: true, element: <FinanceCodeSalesPage /> },
+      { path: ':saleId', element: <FinanceCodeSaleDetailPage /> },
+    ],
+  },
   { path: 'exchange-rates', handle: { requires: requires.exchangeRates }, element: <ExchangeRatesPage /> },
   { path: 'schedule', handle: { requires: requires.schedule }, element: <SchedulePage /> },
 ];

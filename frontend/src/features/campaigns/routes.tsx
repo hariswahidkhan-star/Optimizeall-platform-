@@ -9,6 +9,7 @@ import {
   LayoutTemplate,
   Link2,
   Megaphone,
+  TicketPercent,
   Users,
   UsersRound,
 } from 'lucide-react';
@@ -35,6 +36,10 @@ const RateCardsPage = lazyPage(() => import('../rates/cards/RateCardsPage'), 'Ra
 const RateCardDetailPage = lazyPage(() => import('../rates/cards/RateCardDetailPage'), 'RateCardDetailPage');
 const RateGroupsPage = lazyPage(() => import('../rates/groups/RateGroupsPage'), 'RateGroupsPage');
 const RateGroupDetailPage = lazyPage(() => import('../rates/groups/RateGroupDetailPage'), 'RateGroupDetailPage');
+const CodeProgramsPage = lazyPage(() => import('../codes/manage/CodeProgramsPage'), 'CodeProgramsPage');
+const CodeProgramDetailPage = lazyPage(() => import('../codes/manage/CodeProgramDetailPage'), 'CodeProgramDetailPage');
+const ManageCodeSalesPage = lazyPage(() => import('../codes/staff/CodeSalesQueuePage'), 'ManageCodeSalesPage');
+const ManageCodeSaleDetailPage = lazyPage(() => import('../codes/staff/CodeSalesQueuePage'), 'ManageCodeSaleDetailPage');
 
 /** Portal entry (the campaign pages call campaigns.manage APIs). */
 export const portalRequires: PermissionRequirement = { anyOf: [Permissions.CampaignsManage] };
@@ -46,6 +51,8 @@ const marketing: PermissionRequirement = {
 const analytics: PermissionRequirement = { allOf: [Permissions.CampaignsManage, Permissions.AnalyticsView] };
 /** Person-level pricing (rate cards and groups) calls rates.view APIs. */
 const rates: PermissionRequirement = { allOf: [Permissions.CampaignsManage, Permissions.RatesView] };
+/** Discount-code programs, codes and sales call codes.view APIs. */
+const codes: PermissionRequirement = { allOf: [Permissions.CampaignsManage, Permissions.CodesView] };
 
 /** Campaign manager portal (/manage). Paths are relative to the portal base. */
 export const nav: PortalNavItem[] = [
@@ -69,6 +76,13 @@ export const nav: PortalNavItem[] = [
     icon: UsersRound,
     description: 'Macro, micro, nano… people who share a rate.',
     requires: rates,
+  },
+  {
+    to: 'codes',
+    label: 'Discount codes',
+    icon: TicketPercent,
+    description: 'Brand codes for people and groups, reported sales and commissions.',
+    requires: codes,
   },
   {
     to: 'templates',
@@ -145,6 +159,16 @@ export const routes: RouteObject[] = [
     children: [
       { index: true, element: <RateGroupsPage /> },
       { path: ':groupId', element: <RateGroupDetailPage /> },
+    ],
+  },
+  {
+    path: 'codes',
+    handle: { requires: codes },
+    children: [
+      { index: true, element: <CodeProgramsPage /> },
+      { path: 'sales', element: <ManageCodeSalesPage /> },
+      { path: 'sales/:saleId', element: <ManageCodeSaleDetailPage /> },
+      { path: ':programId', element: <CodeProgramDetailPage /> },
     ],
   },
   { path: 'templates', handle: { requires: marketing }, element: <TemplatesPage /> },

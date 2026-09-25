@@ -162,6 +162,7 @@ per-participant submission limit, the "first approved post" check or any cap.
 | Multi-currency | Each campaign's rules use one original currency; `ILedgerWriter` converts every earning to the payout schedule's settlement currency at the rate in force and stores both amounts plus the rate (`ExchangeRate`, `SettlementAmount`). Adding a currency = add it to `Money.SupportedCurrencies` and configure exchange rates. |
 | Engagement-based rewards (views/likes) | Would add context fields (e.g. verified view count) and a new rule type; the versioning and ledger model stay unchanged. |
 | Per-person / per-group rates | Rate cards assigned to people, rate groups or segments (next section). |
+| Affiliate / discount-code sales | Not posts: a separate code-program workflow ([DISCOUNT_CODES.md](DISCOUNT_CODES.md)) prices approved sales with its own calculator and records `SaleCommission` / `SaleTierBonus` earnings through `ILedgerWriter`. It reuses rate groups (shared codes, group payout overrides) and the rate-source ledger fields with the levels `CodePersonOverride`, `CodeGroupOverride`, `CodeProgramTier` and `CodeProgramRules` (outside the post precedence below). |
 
 ## Person-level rates (rate cards, rate groups, personal deals)
 

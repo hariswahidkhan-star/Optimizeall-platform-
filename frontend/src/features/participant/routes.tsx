@@ -8,6 +8,7 @@ import {
   LifeBuoy,
   Megaphone,
   Share2,
+  TicketPercent,
   UserRound,
   Users,
   Wallet,
@@ -42,6 +43,8 @@ const SubmissionsPage = lazyPage(() => import('./submissions/SubmissionsPage'), 
 const NewTicketPage = lazyPage(() => import('./support/SupportPages'), 'NewTicketPage');
 const SupportPage = lazyPage(() => import('./support/SupportPages'), 'SupportPage');
 const TicketDetailPage = lazyPage(() => import('./support/SupportPages'), 'TicketDetailPage');
+const MyCodesPage = lazyPage(() => import('../codes/participant/MyCodesPage'), 'MyCodesPage');
+const MyCodeSalePage = lazyPage(() => import('../codes/participant/MyCodeSalePage'), 'MyCodeSalePage');
 
 /** Portal entry. No section needs more than the participant portal permission. */
 export const portalRequires: PermissionRequirement = { anyOf: [Permissions.ParticipantPortal] };
@@ -70,6 +73,12 @@ export const nav: PortalNavItem[] = [
     icon: Wallet,
     description: 'Pending, approved and paid earnings.',
     mobilePrimary: true,
+  },
+  {
+    to: 'codes',
+    label: 'My codes',
+    icon: TicketPercent,
+    description: 'Brand discount codes: share them, report sales and earn a commission.',
   },
   {
     to: 'payouts',
@@ -117,6 +126,8 @@ export const routes: RouteObject[] = [
   { path: 'submissions', element: <SubmissionsPage /> },
   { path: 'submissions/:id', element: <SubmissionDetailPage /> },
   { path: 'earnings', element: <EarningsPage /> },
+  { path: 'codes', element: <MyCodesPage /> },
+  { path: 'codes/sales/:saleId', element: <MyCodeSalePage /> },
   { path: 'payouts', element: <PayoutsPage /> },
   { path: 'payouts/:itemId', element: <PayoutDetailPage /> },
   { path: 'social-accounts', element: <SocialAccountsPage /> },

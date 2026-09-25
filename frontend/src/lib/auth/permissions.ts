@@ -13,6 +13,11 @@ export const Permissions = {
   RatesView: 'rates.view',
   RatesManage: 'rates.manage',
   RatesAssign: 'rates.assign',
+  CodesView: 'codes.view',
+  CodesManage: 'codes.manage',
+  CodesAssign: 'codes.assign',
+  SalesReview: 'sales.review',
+  SalesReverse: 'sales.reverse',
 
   SubmissionsReview: 'submissions.review',
   SubmissionsReverse: 'submissions.reverse',
