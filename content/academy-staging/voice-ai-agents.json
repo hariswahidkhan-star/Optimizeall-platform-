@@ -6,7 +6,7 @@
   "subtitle": "Design, build, test and launch voice agents with ElevenLabs, OpenAI Realtime and telephony, in English, Arabic and Urdu",
   "category": "ai",
   "level": "intermediate",
-  "estimatedMinutes": 422,
+  "estimatedMinutes": 434,
   "description": "Voice agents now answer phones, book appointments, qualify leads and narrate content. This intermediate, hands-on course shows you how to build them properly. You will learn cascaded (ASR to LLM to TTS) and speech-to-speech architectures, latency budgets, turn-taking and barge-in; choose and design voices with ElevenLabs; build agents on ElevenAgents with tools, knowledge and tests; and use code-first options such as the OpenAI Realtime API, Gemini Live, LiveKit Agents and Pipecat. You will connect telephony with Twilio and SIP, design conversations and prompts for the ear, handle Urdu, Arabic and English code-switching, and apply consent, disclosure, recording and calling rules. Finally you will evaluate, monitor and cost voice agents, produce narration and course lectures, and build an appointment-booking agent as your capstone.",
   "outcomes": [
     "Choose between cascaded and speech-to-speech voice architectures for a given use case",
@@ -116,6 +116,12 @@
                 "onScreen": "Voice AI & Conversational Agents\n• From IVR menus to real conversations\n• Design, build, test, launch\n• Architecture shapes everything",
                 "visual": "Animated transition from an old phone keypad menu graphic to a smooth waveform conversation between a caller icon and an agent icon.",
                 "seconds": 33
+              },
+              {
+                "narration": "Why start with architecture? Because it decides almost everything that follows: how fast the agent can respond, which voices you can use, how many languages you can support well, how easily you can add guardrails, what it costs per minute, and how locked in you are to one vendor. Teams that pick an architecture by accident often rebuild six months later. A few minutes of deliberate choice now saves that rebuild.",
+                "onScreen": "Why architecture first\n• Latency, voice, languages\n• Guardrails, cost, lock-in\n• Avoid a rebuild later",
+                "visual": "Key-idea card layout: headline on the left, three icon bullets animating in one by one on the right, thin progress bar along the bottom. Six small icons (stopwatch, microphone, globe, shield, coin, padlock) orbit a central 'Architecture' node.",
+                "seconds": 31
               },
               {
                 "narration": "What changed? Three things, roughly between twenty twenty-three and twenty twenty-six. Speech recognition got accurate across accents and noisy phone lines. Large language models got good at open conversation and at calling tools. And speech synthesis got natural enough that many callers can't immediately tell. Add streaming at every step, and you get voice agents: software that holds a spoken conversation, understands intent, looks things up, takes actions, and hands off to a human when needed.",
@@ -265,6 +271,12 @@
                 "onScreen": "Latency and turn-taking\n• Human turn gaps: about a fifth of a second\n• Long silences lose callers\n• Budget, cut, detect, handle interruptions",
                 "visual": "Two waveform lanes (caller and agent) with a tiny gap between turns, then the gap stretches and a caller icon shows a frustrated expression symbol (no faces).",
                 "seconds": 37
+              },
+              {
+                "narration": "Why does latency deserve a whole lesson? Because on the phone, timing is the experience. Callers forgive a slightly imperfect answer delivered naturally, but they abandon a perfect answer delivered after an awkward silence. Slow agents also cause more interruptions, which confuse turn detection and create a spiral of talking over each other. Fixing latency and turn-taking often improves satisfaction more than any prompt change.",
+                "onScreen": "Why timing matters\n• Timing is the experience\n• Silence -> abandonment\n• Slow -> interruptions spiral",
+                "visual": "Key-idea card layout: headline on the left, three icon bullets animating in one by one on the right, thin progress bar along the bottom. A satisfaction meter that rises as a silence bar shrinks; a spiral icon of overlapping speech bubbles untangles.",
+                "seconds": 28
               },
               {
                 "narration": "Voice to voice latency is the time from the caller finishing to hearing the first sound of the reply. In a cascade, it's the sum of end of turn detection, final speech recognition, the language model's time to first token, plus any tool call, synthesis time to first audio, and network and telephony transport. An illustrative budget for a phone agent lands somewhere between about point seven and two seconds. Your numbers will differ, so measure them. And tool calls add their own time. A slow CRM lookup can add whole seconds.",
@@ -423,6 +435,12 @@
                 "seconds": 37
               },
               {
+                "narration": "Why spend time on the voice? Because callers form an impression in the first two seconds, before the agent has said anything useful. A voice that sounds rushed, robotic or mismatched to your brand lowers trust, and a trusted voice makes people more patient with small mistakes. The voice also affects comprehension on phone lines and for non-native listeners. It's one of the cheapest, highest-impact decisions you'll make.",
+                "onScreen": "Why the voice matters\n• First impression in 2 seconds\n• Trust buys patience\n• Comprehension on phone lines",
+                "visual": "Key-idea card layout: headline on the left, three icon bullets animating in one by one on the right, thin progress bar along the bottom. A two-second timer beside a waveform; a trust meter climbs as the waveform smooths out.",
+                "seconds": 30
+              },
+              {
                 "narration": "As of September twenty twenty-six, ElevenLabs offers four main text to speech families. Eleven v3 is the expressive one, for narration, dialogue and ads, with more than seventy languages and audio tags, little stage directions in square brackets, like whispers or laughs. Multilingual v2 is stable and reliable for long-form content in twenty-nine languages. Flash v2.5 is built for real-time agents, with ultra-low latency. And Turbo v2.5 balances quality and speed. The rule of thumb: Flash for live conversation, v3 or Multilingual v2 for produced content. Always check the current models page, because lineups change.",
                 "onScreen": "ElevenLabs TTS families\n• Eleven v3: expressive, audio tags, 70+ languages\n• Multilingual v2: stable long-form\n• Flash v2.5: real-time agents\n• Turbo v2.5: balance",
                 "visual": "Four model cards arranged on a two-axis chart: expressiveness vs latency. Flash sits at low latency; v3 at high expressiveness.",
@@ -563,13 +581,19 @@
           ],
           "activity": "Create one webhook tool and one agent (via API or dashboard) for a booking use case. Before any test call, write three simulation tests with clear success conditions.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "In this lesson, you'll go from blank page to a working voice agent on ElevenAgents, the ElevenLabs platform for voice and chat agents that used to be called Conversational AI. By the end, you'll know every major configuration area: the agent's prompt and language model, the voice, turn-taking, tools, knowledge base, workflows, testing and analysis. And you'll see how to create a tool and an agent through the API, so your setup can be versioned like code.",
                 "onScreen": "Building with ElevenAgents\n• Formerly 'Conversational AI'\n• Agent, voice, turn-taking, tools, knowledge\n• Workflows, tests, analysis\n• Create via API",
                 "visual": "Screen-recording style walkthrough of a generic agent dashboard with tabs Agent, Voice, Tools, Knowledge, Analysis, Tests (product UI allowed as the product being taught).",
                 "seconds": 33
+              },
+              {
+                "narration": "Why use an integrated platform at all, instead of wiring components yourself? Speed and completeness. The hard parts of voice, like turn-taking, interruptions, telephony, testing and analytics, are already solved and maintained. You focus on the conversation design, the tools and the business rules. For most businesses, that's the right trade-off until they have unusual needs or large engineering teams.",
+                "onScreen": "Why a platform\n• Hard parts already solved\n• Focus on design, tools, rules\n• Right trade-off for most teams",
+                "visual": "Key-idea card layout: headline on the left, three icon bullets animating in one by one on the right, thin progress bar along the bottom. A puzzle with most pieces already placed labelled 'turn-taking', 'telephony', 'testing'; three remaining pieces labelled 'design', 'tools', 'rules' slide in.",
+                "seconds": 26
               },
               {
                 "narration": "ElevenAgents bundles the whole cascade: speech recognition, a choice of language models from several providers or your own custom model endpoint, ElevenLabs voices, turn-taking, tools, retrieval over a knowledge base, workflows, testing and analytics. It deploys to a web widget, mobile apps, phone lines through Twilio or SIP trunking, WhatsApp and other channels. The core settings: the agent's system prompt, first message, language and model; the voice and its model; turn-taking behavior; tools; the knowledge base; analysis; and security and privacy controls.",
@@ -712,13 +736,19 @@
           ],
           "activity": "Run the Agents SDK example locally with an ephemeral token endpoint. Ask the agent to book a slot in three different phrasings and check whether it calls the tool with correct parameters each time.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Integrated platforms get you live fast. But sometimes you need code-level control: your own interface, your own orchestration, speech to speech models, special hosting for compliance, or voice as one feature in a bigger app. In this lesson, you'll learn the OpenAI Realtime API and Agents SDK, Google's Gemini Live API, the open-source frameworks LiveKit Agents and Pipecat, and orchestration platforms, and you'll finish with a decision matrix for choosing between them.",
                 "onScreen": "Code-first voice stacks\n• OpenAI Realtime + Agents SDK\n• Gemini Live API\n• LiveKit Agents, Pipecat\n• Orchestration platforms",
                 "visual": "Four stacked layers labelled Platform, Orchestration, Realtime APIs, Open-source frameworks, with a 'more control' arrow pointing downward.",
                 "seconds": 31
+              },
+              {
+                "narration": "Why learn code-first options if platforms exist? Because some products need them: voice inside your own app, special hosting for compliance, speech to speech natural flow, or unusual integrations. And even if you use a platform today, knowing the alternatives helps you negotiate, plan for growth, and avoid being locked into a single vendor's roadmap.",
+                "onScreen": "Why code-first options\n• Voice inside your own app\n• Compliance hosting, natural flow\n• Negotiate + avoid lock-in",
+                "visual": "Key-idea card layout: headline on the left, three icon bullets animating in one by one on the right, thin progress bar along the bottom. A fork in a road: one path to a 'Platform' building, another to a 'Custom build' workshop; a compass icon labelled 'know your options'.",
+                "seconds": 24
               },
               {
                 "narration": "OpenAI's Realtime API gives low-latency speech to speech with the G P T realtime model family, which OpenAI has updated through twenty twenty-five and twenty twenty-six, so check which version is current. You can connect three ways. WebRTC for browsers and mobile, where microphone, echo cancellation and jitter are handled for you. WebSocket for servers that own the audio stream, for example when bridging phone audio. And SIP, to connect phone calls straight to the API.",
@@ -779,6 +809,12 @@
                 "onScreen": "Recap and next step\n• Pick by team, control and voice needs\n• Protect keys; test tools in audio\n• Watch audio costs\n• Run the Agents SDK example",
                 "visual": "Decision matrix table animating row by row, ending on a terminal running 'npm run dev'.",
                 "seconds": 40
+              },
+              {
+                "narration": "Try this now, step by step. First, install the Agents SDK in a small web project. Second, add a server route that mints an ephemeral client secret, keeping your real key in an environment variable. Third, create a realtime agent with short instructions that start with an AI disclosure. Fourth, add one tool with a Zod schema that calls a mock availability endpoint. Fifth, connect in the browser, then ask for a booking three different ways and note whether the tool is called with the right date each time.",
+                "onScreen": "Try this now\n1. Install the SDK\n2. Ephemeral token route\n3. Agent with disclosure\n4. One Zod tool\n5. Test three phrasings",
+                "visual": "Numbered step cards animate down the screen one at a time, each with a small icon; the current step is highlighted while earlier steps dim. Icons: package box, key with timer, agent card, tool with schema, three speech bubbles with check marks.",
+                "seconds": 39
               }
             ],
             "pronunciations": [
@@ -875,6 +911,12 @@
                 "onScreen": "Telephony for voice agents\n• Phone calls ≠ browser audio\n• Numbers, SIP, Twilio\n• Inbound, outbound, transfers\n• Voicemail and keypad tones",
                 "visual": "Split scene: clean browser waveform vs a phone-line waveform with a narrower band; a 'PSTN' cloud between caller and agent.",
                 "seconds": 31
+              },
+              {
+                "narration": "Why does telephony matter if the agent works in the browser? Because most business callers still pick up a phone. And the phone network changes things: narrower audio, carrier routing, caller ID, regulations about automated calls, and the need to transfer to humans reliably. Understanding the plumbing is what turns a demo into a phone line your customers can actually rely on.",
+                "onScreen": "Why telephony\n• Most callers use phones\n• Narrow audio, routing, regulation\n• Demo -> reliable phone line",
+                "visual": "Key-idea card layout: headline on the left, three icon bullets animating in one by one on the right, thin progress bar along the bottom. A browser demo tile transforms into a phone handset tile with carrier, caller-ID and regulation badges attaching around it.",
+                "seconds": 27
               },
               {
                 "narration": "A few terms first. A D I D is simply a phone number people dial, bought from a carrier or a communications platform like Twilio, Vonage, Telnyx or Plivo. SIP, the Session Initiation Protocol, is the signaling standard that sets up, transfers and ends internet calls, while the audio itself travels separately as media. A SIP trunk connects your phone system or carrier to another SIP endpoint, like your agent platform. Phone networks often use narrowband codecs. D T M F means keypad tones. And a SIP REFER is one way to transfer a call.",
@@ -1024,13 +1066,19 @@
           ],
           "activity": "Fill in the conversation design spec for your use case and write three sample dialogues: happy path, correction, and failure leading to a human.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Here's the fundamental truth of voice design: voice is linear and invisible. On a screen, people scan, skip ahead and go back. On a call, they hear one thing at a time, in order, and they can't see any options. Their short-term memory does all the work. If you design a voice agent like a web form, callers get lost. In this lesson, you'll learn the anatomy of a good voice conversation, how to confirm things without being tedious, how to repair misunderstandings, and how to make agents accessible and inclusive.",
                 "onScreen": "Voice UX\n• Linear and invisible\n• Short-term memory does the work\n• Anatomy, confirmation, repair, inclusion",
                 "visual": "A web form with many fields collapses into a single sound wave moving left to right; one word at a time appears above it.",
                 "seconds": 40
+              },
+              {
+                "narration": "Why does voice UX matter so much? Because in voice, the design is invisible, so every flaw lands directly on the caller's memory and patience. A confusing menu on a website is annoying. A confusing sequence on a phone call feels endless. Good voice design shortens calls, reduces transfers and repeat calls, and makes the agent feel competent, which is exactly what customers judge you on.",
+                "onScreen": "Why voice UX\n• Design is invisible\n• Flaws hit memory and patience\n• Shorter calls, fewer transfers",
+                "visual": "Key-idea card layout: headline on the left, three icon bullets animating in one by one on the right, thin progress bar along the bottom. A long tangled call path shortens into a clean path; counters for 'call length' and 'transfers' tick down.",
+                "seconds": 29
               },
               {
                 "narration": "Four design rules follow. Keep turns short: one or two sentences, then give the turn back. Offer few options per turn, three at most, or better, ask an open question and let the agent interpret the answer. Confirm critical data explicitly: dates, times, amounts, names and numbers. And signpost: two quick questions, then I'll book it. People relax when they know how long something will take.",
@@ -1091,6 +1139,12 @@
                 "onScreen": "Recap and next step\n• Design for the ear\n• Spec + three sample dialogues\n• Happy path, correction, failure\n• They become test cases",
                 "visual": "Markdown spec template on screen, then three dialogue cards labelled Happy, Correction, Failure.",
                 "seconds": 31
+              },
+              {
+                "narration": "Try this now. Take your use case and write the opening line with identity, AI disclosure, purpose and an invitation. Then list the required details and order them the way a caller would naturally give them. Decide which ones need explicit confirmation and which can be implicit. Write the repair path for two failures. Finally, read your three sample dialogues out loud with a colleague playing the caller, and time them. Anything that feels long out loud is too long.",
+                "onScreen": "Try this now\n1. Opening line\n2. Order the details\n3. Pick confirmation styles\n4. Repair path\n5. Read aloud + time it",
+                "visual": "Numbered step cards animate down the screen one at a time, each with a small icon; the current step is highlighted while earlier steps dim. Icons: speech bubble, ordered list, check marks, loop arrow, stopwatch.",
+                "seconds": 35
               }
             ],
             "pronunciations": [
@@ -1173,13 +1227,19 @@
           ],
           "activity": "Rewrite your agent's system prompt with the voice template, then run the ten-utterance test script and fix every failure before your next test call.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Take a great chatbot prompt, paste it into a voice agent, and listen. You'll hear bullet points read aloud, a web address spelled out character by character, and answers that go on for a minute. Voice prompts are different. They must produce speakable text, manage turn-taking and tools under time pressure, and enforce guardrails, because a spoken mistake can't be scrolled back. In this lesson, you'll learn a proven structure for voice system prompts, the techniques that matter, layered guardrails, and a ten-line test script.",
                 "onScreen": "Prompting for voice\n• Speakable output\n• Turns, tools, timing\n• Guardrails in layers\n• A 10-line test script",
                 "visual": "A chat response with bullets and a link gets fed into a speaker icon; the audio waveform comes out jumbled with a red warning.",
                 "seconds": 37
+              },
+              {
+                "narration": "Why a whole lesson on prompts for voice? Because the prompt controls what the agent says and how, and voice is unforgiving. A long answer can't be skimmed. A read-out URL can't be clicked. A mistake can't be scrolled back. A few specific rules, about length, formatting, disclosure and when to use tools, make a bigger difference in voice than in any chat product.",
+                "onScreen": "Why voice prompts matter\n• No skimming, clicking or scrolling back\n• Small rules, big impact",
+                "visual": "Key-idea card layout: headline on the left, three icon bullets animating in one by one on the right, thin progress bar along the bottom. Three crossed-out icons (skim, click, scroll) beside a speaker; a short rules card slides in and the waveform tidies up.",
+                "seconds": 28
               },
               {
                 "narration": "Here's a structure that works. Identity: who the agent is and for which business. Goal: what it helps with. Spoken style: short sentences, one or two per turn, no lists, markdown, emojis or links, spoken forms for times and dates, numbers in groups, and match the caller's language. Disclosure: say it's an AI in the first turn and confirm it whenever asked. Process: the steps, in order. Tools: when to call each one. Guardrails: what it must never do. And context: dynamic variables like today's date and the caller's name.",
@@ -1240,6 +1300,12 @@
                 "onScreen": "Recap and next step\n• Speakable, structured prompts\n• Hard caps + examples\n• Layered guardrails\n• Run the 10-line script",
                 "visual": "Prompt template on screen with sections filled for the learner's own business, followed by a test run summary.",
                 "seconds": 30
+              },
+              {
+                "narration": "Try this now. Copy the voice prompt template from the lesson text. Fill in identity, goal and your spoken style rules. Add the disclosure line exactly as you want it said. Write your process steps and tool rules. Add guardrails for your industry. Then run the ten-utterance test script, record which ones fail, fix the prompt or the tools, and run the script again. Keep the script and results with the prompt version so you can compare future changes.",
+                "onScreen": "Try this now\n1. Fill the template\n2. Fixed disclosure line\n3. Process + tool rules\n4. Guardrails\n5. Run, fix, re-run the script",
+                "visual": "Numbered step cards animate down the screen one at a time, each with a small icon; the current step is highlighted while earlier steps dim. Icons: template, speech bubble with lock, list, shield, test list turning green.",
+                "seconds": 34
               }
             ],
             "pronunciations": [
@@ -1322,13 +1388,19 @@
           ],
           "activity": "Time every tool your agent uses on ten realistic requests. Add caching, pre-fetching or pre-tool speech to anything slower than a second, and trim results to at most three options.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "In a chat app, a four-second tool call is just a spinner. In a voice call, it's four seconds of dead air, and callers start saying hello, are you there? Tools and knowledge in voice agents have to be fast, forgiving and safe, and the agent has to talk naturally around them. In this lesson, you'll learn to design voice-friendly tools, talk through waits, build a knowledge base that retrieves well for speech, use MCP safely, and write a fast webhook.",
                 "onScreen": "Tools and knowledge for voice\n• Dead air kills calls\n• Fast, forgiving, safe tools\n• Speech-friendly knowledge\n• MCP with care",
                 "visual": "Timeline with a long silent gap during a tool call; question marks accumulate above the caller lane.",
                 "seconds": 35
+              },
+              {
+                "narration": "Why focus on tools and knowledge? Because that's where voice agents create real value, by checking availability, booking, looking up orders and answering policy questions correctly. It's also where most production problems come from: slow APIs, confusing tool descriptions, stale knowledge and unsafe write actions. Getting this layer right is the difference between a pleasant talker and a useful assistant.",
+                "onScreen": "Why tools + knowledge\n• Where the value is\n• Where most failures are\n• Talker vs useful assistant",
+                "visual": "Key-idea card layout: headline on the left, three icon bullets animating in one by one on the right, thin progress bar along the bottom. A balance: one side 'pleasant talker' (speech bubble), the other 'useful assistant' (speech bubble plus calendar, order and policy icons) which tips the scale.",
+                "seconds": 26
               },
               {
                 "narration": "Six principles for tools. One: keep them narrow and well described. Check availability with a date, service and branch beats a generic call A P I tool. Two: accept forgiving inputs. Callers say next Thursday, so give the model today's date or resolve dates on your server, and validate everything. Three: respond fast, ideally well under a second, with caching and pre-fetching at call start. Four: return speakable results, the best two or three options, not two hundred. Five: fail honestly with a message that helps the agent recover. Six: keep write actions safe with confirmation, identity checks and logs.",
@@ -1471,13 +1543,19 @@
           ],
           "activity": "Adapt the multilingual evaluation set to your callers. Record at least five utterances per language or dialect, run them through your agent, and report success per language. Fix the weakest language first.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Listen to how people actually talk in Karachi: mera order abhi tak nahi aaya, can you check the status? Or in Dubai, where a caller slides between Gulf Arabic and English in one sentence. In Pakistan, the UAE and Saudi Arabia, multilingual and code-switched speech is the default, not the exception. An agent designed for one language at a time will fail a lot of your callers. In this lesson, you'll learn where multilingual voice breaks, how to handle scripts, numbers and dates, how to pick register and politeness, and how to evaluate per language.",
                 "onScreen": "Multilingual voice\n• Code-switching is normal\n• Urdu, Arabic, English\n• Scripts, numbers, dates, register\n• Evaluate per language",
                 "visual": "Speech bubbles mixing Urdu (Roman), Arabic script and English words flow into an agent icon; a map shows Pakistan, UAE and KSA.",
                 "seconds": 41
+              },
+              {
+                "narration": "Why is multilingual design a must in these markets? Because your callers don't speak one language at a time. An agent that only works well in English quietly fails a large share of real conversations in Pakistan and the Gulf, and those failures often go unnoticed in overall averages. Designing for code-switching, dialects and scripts from day one is far cheaper than retrofitting it after complaints.",
+                "onScreen": "Why multilingual by design\n• Callers mix languages\n• English-only fails silently\n• Cheaper than retrofitting",
+                "visual": "Key-idea card layout: headline on the left, three icon bullets animating in one by one on the right, thin progress bar along the bottom. A caller population graphic split into colored segments by language; an English-only agent lights up only one segment; a multilingual agent lights them all.",
+                "seconds": 29
               },
               {
                 "narration": "Problems appear at every layer. Speech recognition struggles with dialects, like Gulf, Najdi, Egyptian or Levantine Arabic, regional Urdu accents, code-switching, names and numbers. The fix: test on real recordings from your callers, pick models strong in your dialects, and allow keypad input for numbers. Language detection gets confused by short words like okay or haan, so detect on longer turns and avoid flip-flopping. The language model needs clear instructions on which language and register to reply in. And text to speech needs voices tested in each language, with pronunciation help for names and brands.",
@@ -1627,13 +1705,19 @@
           ],
           "activity": "Adapt the voice consent template with your counsel and create a voice model register (model, owner, consent date, expiry, deletion plan). Add call-back verification to your payment approval process.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "With a minute of audio, today's tools can create a convincing copy of someone's voice and make it say anything. That's genuinely useful: a founder narrating fifty product videos without fifty recording sessions, or someone who's losing their voice to illness preserving it. It's also dangerous: fraud, harassment, false endorsements and political deception. Voice-clone scams impersonating executives and relatives are a documented fraud pattern. In this lesson, you'll learn the principles of ethical voice cloning, what a good consent covers, platform safeguards, the legal landscape in brief, and how to protect your own organization.",
                 "onScreen": "Voice cloning\n• Powerful and risky\n• Ethical principles\n• Consent that works\n• Safeguards and anti-fraud",
                 "visual": "A waveform being duplicated; one copy flows to a 'product video' icon with a green check, the other toward a 'fraud call' icon blocked by a shield.",
                 "seconds": 41
+              },
+              {
+                "narration": "Why does consent matter so much for voices in particular? Because a voice is uniquely personal and uniquely persuasive. People trust familiar voices instinctively, which is exactly what makes clones useful for brands and dangerous in fraud. Clear consent protects the person, protects your organization from legal and reputational harm, and protects your audience from being misled.",
+                "onScreen": "Why consent for voices\n• Personal + persuasive\n• Useful for brands, dangerous in fraud\n• Protects person, company, audience",
+                "visual": "Key-idea card layout: headline on the left, three icon bullets animating in one by one on the right, thin progress bar along the bottom. Three shields labelled 'Person', 'Company', 'Audience' form around a waveform.",
+                "seconds": 25
               },
               {
                 "narration": "Six principles guide ethical cloning. Informed consent from the voice owner, specific to purpose. Control, so the owner can review uses and revoke consent for the future. Fair compensation for professional voices, and for employees when use goes beyond their ordinary job. Transparency to listeners where the law or context requires it. Security, treating voice models and samples like passwords. And no impersonation of anyone who hasn't consented: not public figures, not colleagues, not family members.",
@@ -1694,6 +1778,12 @@
                 "onScreen": "Recap and next step\n• Consent, control, pay, security\n• Disclose where required\n• Anti-fraud controls\n• Consent template + voice model register",
                 "visual": "Register table: Voice model, Owner, Consent date, Expiry, Deletion plan, filling in.",
                 "seconds": 32
+              },
+              {
+                "narration": "Try this now. Pick one real or planned voice clone. Adapt the consent template from the lesson text with its purpose, exclusions, territories, duration and revocation terms, and have it reviewed by your counsel. Create a voice model register entry with the owner, consent date, expiry and deletion plan. Then add a call-back verification rule to your payment approval process, so no transfer happens on the strength of a voice alone.",
+                "onScreen": "Try this now\n1. Adapt the consent template\n2. Counsel review\n3. Register entry\n4. Call-back rule for payments",
+                "visual": "Numbered step cards animate down the screen one at a time, each with a small icon; the current step is highlighted while earlier steps dim. Icons: consent form, legal scales, register table, phone with a return arrow.",
+                "seconds": 31
               }
             ],
             "pronunciations": [
@@ -1783,6 +1873,12 @@
                 "onScreen": "The legal checklist\n• Disclosure\n• Recording and transcription\n• Outbound calling rights\n• Data protection\n• Content and sector rules",
                 "visual": "Five checkboxes next to a phone icon; a small 'not legal advice' tag in the corner.",
                 "seconds": 32
+              },
+              {
+                "narration": "Why take calling rules so seriously? Because they're some of the most actively enforced consumer protection rules in many markets, with per-call penalties, carrier blocking and regulator attention. A single outbound campaign without proper consent can create liability far larger than the value of the leads. Inbound agents carry lighter duties, but disclosure and recording notices still matter everywhere.",
+                "onScreen": "Why calling rules matter\n• Actively enforced\n• Per-call penalties, carrier blocking\n• One bad campaign = big liability",
+                "visual": "Key-idea card layout: headline on the left, three icon bullets animating in one by one on the right, thin progress bar along the bottom. A campaign dial pad with a counter; each unconsented call adds a penalty token to a growing stack; a carrier block icon appears.",
+                "seconds": 26
               },
               {
                 "narration": "First, disclosure. Under the EU AI Act, from August twenty twenty-six, AI systems that interact directly with people must be designed so people know they're talking to AI, unless it's obvious. For a voice agent, say it in the first turn. In the US, several states have bot disclosure rules, and the FCC treats AI-generated voices in calls as artificial voices under the Telephone Consumer Protection Act. In the Gulf and Pakistan, guidelines emphasize transparency. So make disclosure your baseline everywhere. And if a caller asks, am I talking to a real person, always tell the truth.",
@@ -1932,13 +2028,19 @@
           ],
           "activity": "Convert your three sample dialogues into simulation tests, add five safety tests and five audio clips, and write down launch gate thresholds.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Here's an uncomfortable truth about voice agents: a small prompt tweak that fixes one scenario can quietly break three others. They're non-deterministic, multi-part systems talking to unpredictable people. Without a test discipline, every change is a gamble with your real callers. In this lesson you'll learn what to measure, the six test types, how to use a language model as a judge without fooling yourself, and how to set a launch gate.",
                 "onScreen": "Evaluating voice agents\n• Every change is a gamble without tests\n• What to measure\n• Six test types\n• LLM judges + launch gates",
                 "visual": "A domino line: one prompt tweak knocks over three scenario tiles; then a 'test suite' shield stops the dominoes.",
                 "seconds": 31
+              },
+              {
+                "narration": "Why invest in evaluation before you have many calls? Because the cheapest time to find a failure is before a customer hears it. Voice agents change constantly, through prompt edits, model upgrades, new voices and new tools, and each change can break something that used to work. A small, well-chosen test suite makes every change safer and lets you improve quickly with confidence.",
+                "onScreen": "Why evaluate early\n• Cheapest time to find failures\n• Constant change breaks things\n• Confidence to improve fast",
+                "visual": "Key-idea card layout: headline on the left, three icon bullets animating in one by one on the right, thin progress bar along the bottom. A cost curve rising over time labelled 'cost of finding a bug', with a green marker at 'before launch'.",
+                "seconds": 27
               },
               {
                 "narration": "Measure four layers. Task outcome: did the call achieve its goal, was it resolved without a human, and were transfers correct? Conversation quality: turns to completion, no-match and repetition rates, interruptions, politeness and disclosure compliance. The speech layer: recognition errors on key entities like names, numbers and dates, pronunciation mistakes, and language accuracy. And the system: latency, tool success and speed, errors and cost per call. On top of that, safety and compliance: no forbidden advice, no invented prices, emergencies handled, and resistance to injection.",
@@ -1999,6 +2101,12 @@
                 "onScreen": "Recap and next step\n• Four layers + safety\n• Six test types\n• Calibrated judges\n• Launch gate on every change",
                 "visual": "Checklist: 3 simulations from dialogues, 5 safety tests, 5 audio clips, launch gate thresholds.",
                 "seconds": 30
+              },
+              {
+                "narration": "Try this now. Turn your three sample dialogues into simulation tests with clear success conditions. Add five safety tests for your industry, like refusing forbidden advice and confirming AI status. Add three tool-call tests that check parameters. Record five audio clips with noise and different accents. Write down your launch gate numbers. Then run everything, fix the failures, and save the results with the agent version number.",
+                "onScreen": "Try this now\n1. 3 simulations\n2. 5 safety tests\n3. 3 tool-call tests\n4. 5 audio clips\n5. Launch gate + run",
+                "visual": "Numbered step cards animate down the screen one at a time, each with a small icon; the current step is highlighted while earlier steps dim. Icons: persona cards, shield, wrench, microphone with noise lines, gate with five lights.",
+                "seconds": 29
               }
             ],
             "pronunciations": [
@@ -2081,13 +2189,19 @@
           ],
           "activity": "Fill in the unit economics sheet with your data and current vendor pricing, and configure three alerts: any disclosure failure, p90 latency over budget, and a week-on-week success drop.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Launch day isn't the finish line. Real callers are far more varied than your tests, models get updated, APIs slow down, and costs creep up quietly. In this lesson, you'll learn what to monitor, how to build feedback loops that make the agent better every week, how to roll out changes safely, how voice agent costs really work, and how to scale for peaks like Ramadan evenings or big sale days.",
                 "onScreen": "After launch\n• Monitor\n• Feedback loops\n• Safe changes\n• Cost and scaling",
                 "visual": "A rocket 'Launch' icon transitions into a control room dashboard with several live charts.",
                 "seconds": 31
+              },
+              {
+                "narration": "Why does operations deserve its own lesson? Because the day you launch is the day your agent meets reality: new accents, unexpected questions, slow APIs, peak seasons and model updates. Without monitoring and a weekly improvement rhythm, quality quietly decays and costs quietly climb. With them, the agent gets better every week.",
+                "onScreen": "Why operations\n• Launch = meeting reality\n• Quality decays without monitoring\n• Weekly rhythm = steady improvement",
+                "visual": "Key-idea card layout: headline on the left, three icon bullets animating in one by one on the right, thin progress bar along the bottom. Two quality lines over time: one without monitoring drifting down, one with a weekly loop stepping upward.",
+                "seconds": 23
               },
               {
                 "narration": "Monitor seven signals. Call volume and outcomes, for business health. Transfer and abandonment rates, for friction. Voice to voice latency, median and p90. Tool errors and timeouts. Evaluation criteria failures, including any disclosure or safety failure, which should alert immediately. Language mix and success per language, to catch hidden gaps. And cost per call and per successful outcome. Set alerts on changes, like success dropping compared with last week, not just on absolute numbers.",
@@ -2148,6 +2262,12 @@
                 "onScreen": "Recap and next step\n• Monitor what matters\n• Weekly loop + staged releases\n• Cost per outcome\n• Unit economics sheet + three alerts",
                 "visual": "Spreadsheet with unit economics rows; three alert rule cards beside it.",
                 "seconds": 35
+              },
+              {
+                "narration": "Try this now. Open your platform's analytics and list the seven signals from this lesson. Set three alerts: any disclosure failure, ninetieth-percentile latency above budget, and a week-on-week drop in success rate. Fill in the unit economics sheet with your volumes and current vendor prices. Schedule a thirty-minute weekly review with a named owner, and create a place where every production failure becomes a new test case.",
+                "onScreen": "Try this now\n1. List the 7 signals\n2. Set 3 alerts\n3. Unit economics sheet\n4. Weekly 30-min review\n5. Failures -> tests",
+                "visual": "Numbered step cards animate down the screen one at a time, each with a small icon; the current step is highlighted while earlier steps dim. Icons: dashboard, bell, spreadsheet, calendar, test tube.",
+                "seconds": 29
               }
             ],
             "pronunciations": [
@@ -2237,13 +2357,19 @@
           ],
           "activity": "Score three candidate use cases with the scorecard, choose one, and write its success metrics and current baseline before building.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Not every phone conversation should go to an AI agent. The best early use cases have high volume, predictable structure, clear success criteria, recoverable failures and an easy route to a human. The worst are rare, emotional, high-stakes conversations handled with no human in the loop. In this lesson you'll learn to score use cases, five proven patterns, a real estate qualification agent design, and how to measure return on investment honestly.",
                 "onScreen": "Where voice agents earn their keep\n• High volume, predictable structure\n• Clear success, recoverable failures\n• Easy human fallback",
                 "visual": "Two-column graphic: 'Good fit' with icons for bookings, order status, reminders; 'Poor fit' with icons for grief support, legal disputes, high-stakes negotiation.",
                 "seconds": 31
+              },
+              {
+                "narration": "Why does use-case choice matter so much? Because the first project sets expectations for everything that follows. A well-chosen first use case delivers visible results quickly, builds trust with staff and customers, and teaches your team the operational habits you'll need later. A badly chosen one, like complaints handling on day one, can set voice AI back in your organization by a year.",
+                "onScreen": "Why choose carefully\n• First project sets expectations\n• Quick wins build trust\n• Bad picks set you back",
+                "visual": "Key-idea card layout: headline on the left, three icon bullets animating in one by one on the right, thin progress bar along the bottom. A path with a first step labelled 'good first use case' leading upward, versus a first step labelled 'complaints on day one' leading to a 'setback' sign.",
+                "seconds": 27
               },
               {
                 "narration": "Score each candidate from one to five on seven questions. Volume: are there enough calls? Structure: do most follow a few paths? Data access: can tools reach the calendar, CRM or orders? Success definition: can you tell automatically if a call worked? Risk: what's the worst plausible failure, and can you recover? Fallback: can humans take over smoothly? And caller acceptance: will your audience accept an AI for this? Start with the highest-scoring, lowest-risk option.",
@@ -2304,6 +2430,12 @@
                 "onScreen": "Recap and next step\n• Score, then choose\n• Patterns as templates\n• Outcomes over activity\n• Baseline before building",
                 "visual": "Scorecard filled for three candidates with one circled; a 'baseline metrics' note pinned beside it.",
                 "seconds": 29
+              },
+              {
+                "narration": "Try this now. Write down three candidate use cases for your business or a client. Score each from one to five on volume, structure, data access, success definition, risk, fallback and caller acceptance. Pick the highest-scoring, lowest-risk option. Then, before building anything, record today's baseline: response time, completion rate and cost per outcome, so you can prove the agent's impact later.",
+                "onScreen": "Try this now\n1. Three candidates\n2. Score on 7 criteria\n3. Pick the best low-risk one\n4. Record the baseline",
+                "visual": "Numbered step cards animate down the screen one at a time, each with a small icon; the current step is highlighted while earlier steps dim. Icons: three cards, scorecard, trophy, baseline chart.",
+                "seconds": 27
               }
             ],
             "pronunciations": [
@@ -2386,13 +2518,19 @@
           ],
           "activity": "Split one lesson into scenes, create voice_config.json and lecture_scenes.json, and narrate it with the batch script. Edit one scene and confirm only that scene regenerates.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Not all voice AI is a live conversation. Course lectures, explainer videos, audiobooks, podcast segments, ads and phone menu prompts are produced audio: generated offline, reviewed and published. Latency doesn't matter here. Quality, consistency, pronunciation and rights do. In fact, the lecture you're listening to right now was produced this way, with an AI voice over generated visuals. In this lesson you'll learn the production pipeline, script writing for narration, model choices, consistency, quality control and disclosure.",
                 "onScreen": "Produced audio\n• Lectures, explainers, podcasts, ads\n• Quality, consistency, rights\n• This lecture is an example",
                 "visual": "Production timeline strip showing script, voice, audio waveform, visuals and a 'Publish' button; a small 'AI-narrated' tag.",
                 "seconds": 33
+              },
+              {
+                "narration": "Why treat produced audio as its own discipline? Because the audience listens longer and more carefully than a caller does. A lecture or podcast exposes every mispronunciation, every awkward pause and every change in tone across episodes. The good news is that the tools make studio-quality narration possible for small teams, if you follow a production process instead of generating everything in one go.",
+                "onScreen": "Why produced audio differs\n• Longer, closer listening\n• Every flaw is noticed\n• Process makes studio quality possible",
+                "visual": "Key-idea card layout: headline on the left, three icon bullets animating in one by one on the right, thin progress bar along the bottom. Headphones icon with a magnifying glass over a waveform; small flaw markers appear and are fixed one by one.",
+                "seconds": 28
               },
               {
                 "narration": "The pipeline runs like this. Write the script for the ear. Do a pronunciation pass. Choose the voice and model. Generate in segments. Listen and fix. Assemble with music and visuals. Normalize loudness. Create captions and a transcript. Add disclosure and metadata. Publish. Generating in segments, like one scene or paragraph at a time, is the key to cheap fixes: you only regenerate the bit that went wrong.",
@@ -2453,6 +2591,12 @@
                 "onScreen": "Recap and next step\n• Quality, consistency, rights\n• Segments + manifest\n• Listen, caption, disclose\n• Narrate one lesson with the script",
                 "visual": "Terminal showing the batch script skipping unchanged scenes and regenerating one edited scene.",
                 "seconds": 30
+              },
+              {
+                "narration": "Try this now. Pick one lesson or episode and split the script into scenes of forty to two hundred and sixty words. Create a voice config file with your voice, model and settings. Create a scenes file. Run the batch script from the lesson text. Listen to every scene, flag problems, fix the text or pronunciation rules, and rerun. Only the changed scenes should regenerate. Then assemble, normalize loudness, add captions, and add an AI narration note.",
+                "onScreen": "Try this now\n1. Split into scenes\n2. Voice config\n3. Batch generate\n4. Listen + fix + rerun\n5. Assemble, caption, disclose",
+                "visual": "Numbered step cards animate down the screen one at a time, each with a small icon; the current step is highlighted while earlier steps dim. Icons: scissors on a script, settings file, batch play, headphones, captioned video frame.",
+                "seconds": 33
               }
             ],
             "pronunciations": [
@@ -2535,13 +2679,19 @@
           ],
           "activity": "Build the Nova Dental (or your own) booking agent: backend, agent config, tests with a launch gate, deployment, monitoring and a launch memo. Record a 3-minute demo call covering a booking, a correction, a transfer and a refusal of clinical advice.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "It's time to put everything together. In this capstone, you'll build an appointment-booking voice agent that answers the phone, books, reschedules and cancels appointments in a real or mock calendar, hands off to humans, and meets the disclosure, privacy and quality standards from this course. Use your own business or a client, or our default case, Nova Dental, with branches in Dubai Marina, Downtown Dubai and London Soho, and callers in English and Arabic.",
                 "onScreen": "Capstone: booking voice agent\n• Book, reschedule, cancel\n• Human handoff\n• Compliant and tested\n• Default case: Nova Dental",
                 "visual": "Project board with ten deliverable cards; a phone icon connected to a calendar and a reception desk icon.",
                 "seconds": 32
+              },
+              {
+                "narration": "Why a booking agent as the capstone? Because it exercises every skill from the course in one realistic project: conversation design, prompts, tools with business rules, telephony, multilingual callers, disclosure and consent, testing and operations. And it's directly useful: clinics, salons, service centers and agencies everywhere need exactly this, so your capstone can become a real product or client project.",
+                "onScreen": "Why this capstone\n• Uses every course skill\n• Realistic end to end\n• Directly sellable",
+                "visual": "Key-idea card layout: headline on the left, three icon bullets animating in one by one on the right, thin progress bar along the bottom. A skill wheel with eight segments (design, prompts, tools, telephony, languages, consent, testing, ops) lighting up around a calendar icon.",
+                "seconds": 26
               },
               {
                 "narration": "You'll produce ten deliverables, most of which you've practised already. A conversation design spec with three sample dialogues. A voice-style system prompt and your ten-utterance test results. Tools for availability, booking, rescheduling and cancelling, plus transfer and end call. A bilingual FAQ-style knowledge base. Your voice choice and pronunciation dictionary. Telephony or widget deployment. A compliance pack with disclosure lines in English and Arabic, privacy text and retention settings. A test suite with a launch gate. A monitoring plan and unit economics. And a three-minute demo with a one-page launch memo.",
@@ -2596,6 +2746,12 @@
                 "onScreen": "Course recap\n• Architecture, latency, platforms\n• Telephony, design, prompts, tools\n• Multilingual, consent, law\n• Testing, operations, capstone",
                 "visual": "Montage of icons from each module assembling into a finished agent badge.",
                 "seconds": 31
+              },
+              {
+                "narration": "Try this now. Start with the backend, not the agent. Build the four booking endpoints with rules enforced on the server and an idempotency key on booking. Then write your launch gate and at least five simulation tests before you configure the agent. Only then set up the agent, connect a test number or widget, and run the tests. Record your demo only after the launch gate passes.",
+                "onScreen": "Try this now\n1. Backend + rules first\n2. Idempotent booking\n3. Launch gate + tests\n4. Configure agent\n5. Run tests, then demo",
+                "visual": "Numbered step cards animate down the screen one at a time, each with a small icon; the current step is highlighted while earlier steps dim. Icons: server, key, gate, agent card, video camera.",
+                "seconds": 30
               }
             ],
             "pronunciations": [
