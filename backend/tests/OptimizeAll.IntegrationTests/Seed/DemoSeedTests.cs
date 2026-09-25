@@ -11,6 +11,7 @@ using OptimizeAll.Api.Modules.Accounts;
 using OptimizeAll.Api.Modules.Seed;
 using OptimizeAll.Domain.Audit;
 using OptimizeAll.Domain.Campaigns;
+using OptimizeAll.Domain.Codes;
 using OptimizeAll.Domain.Common;
 using OptimizeAll.Domain.Files;
 using OptimizeAll.Domain.Identity;
@@ -199,6 +200,8 @@ public sealed class DemoSeedTests(DemoSeedFixture fx) : IClassFixture<DemoSeedFi
                 EarningType.Adjustment => "adjustment:",
                 EarningType.ReferralReward => $"referral:{e.ReferralId}",
                 EarningType.FirstPostBonus => $"firstpost:{e.CampaignId}:{e.UserId}",
+                EarningType.SaleCommission => $"codesale:{e.CodeSaleId:N}:commission",
+                EarningType.SaleTierBonus => $"codetier:{e.CodeProgramId:N}:{e.UserId:N}:",
                 _ => $"submission:{e.SubmissionId}:{e.Type}",
             };
             Assert.StartsWith(expectedPrefix, e.IdempotencyKey);
@@ -431,8 +434,9 @@ public sealed class DemoSeedTests(DemoSeedFixture fx) : IClassFixture<DemoSeedFi
                 Assert.True(await db.Set<RateAssignment>().AnyAsync(a => a.GroupId == group.Id && a.EndedAt == null), $"{name} has no card");
             }
             Assert.Contains(groups, g => g.MembershipMode == RateGroupMembershipMode.Automatic);
-            // Every member is in exactly one of the four follower bands.
-            var bands = groups.Where(g => g.MembershipMode == RateGroupMembershipMode.Manual).Select(g => g.Id).ToList();
+            // Every member is in exactly one of the four follower bands (other manual groups, e.g. the discount-code squad, are extra).
+            var bandNames = new[] { "Macro influencers", "Micro influencers", "Nano influencers", "Standard" };
+            var bands = groups.Where(g => g.MembershipMode == RateGroupMembershipMode.Manual && bandNames.Contains(g.Name)).Select(g => g.Id).ToList();
             var perUser = await db.Set<RateGroupMember>().Where(m => bands.Contains(m.GroupId)).GroupBy(m => m.UserId).Select(g => g.Count()).ToListAsync();
             Assert.All(perUser, c => Assert.Equal(1, c));
 
@@ -487,6 +491,61 @@ public sealed class DemoSeedTests(DemoSeedFixture fx) : IClassFixture<DemoSeedFi
         Assert.True(cards.GetProperty("total").GetInt32() >= 5);
         var groupsList = await (await manager.GetAsync("/api/v1/admin/rate-groups")).ReadJsonAsync();
         Assert.True(groupsList.GetProperty("total").GetInt32() >= 5);
+    }
+
+    [Fact]
+    public async Task Discount_codes_are_seeded_in_every_state_and_visible_to_each_role()
+    {
+        await fx.WithDbAsync(async db =>
+        {
+            var program = await db.Set<CodeProgram>().Include(p => p.Tiers).SingleAsync(p => p.Name == DemoRun.DemoCodeProgramName);
+            Assert.Equal(CodeProgramStatus.Active, program.Status);
+            Assert.Equal(2, program.Tiers.Count);
+            Assert.True(await db.Set<CodeProgram>().AnyAsync(p => p.Status == CodeProgramStatus.Draft));
+            var statuses = await db.Set<CodeSale>().Where(s => s.ProgramId == program.Id).Select(s => s.Status).Distinct().ToListAsync();
+            foreach (var status in new[] { CodeSaleStatus.Pending, CodeSaleStatus.NeedsInfo, CodeSaleStatus.Approved, CodeSaleStatus.Rejected, CodeSaleStatus.Refunded })
+                Assert.Contains(status, statuses);
+            Assert.True(await db.Set<CodeSale>().AnyAsync(s => s.Verification == CodeSaleVerification.Matched && s.Status == CodeSaleStatus.Pending));
+            Assert.True(await db.Set<CodeSale>().AnyAsync(s => s.Source == CodeSaleSource.Import));
+            var group = await db.Set<RateGroup>().SingleAsync(g => g.Name == DemoRun.DemoCodeGroupName);
+            Assert.True(await db.Set<DiscountCodeAssignment>().AnyAsync(a => a.GroupId == group.Id && a.EndedAt == null));
+            var codeStatuses = await db.Set<DiscountCode>().Where(c => c.ProgramId == program.Id).Select(c => c.Status).Distinct().ToListAsync();
+            foreach (var status in new[] { DiscountCodeStatus.Available, DiscountCodeStatus.Assigned, DiscountCodeStatus.Paused, DiscountCodeStatus.Retired })
+                Assert.Contains(status, codeStatuses);
+
+            // Every approved sale has its commission in the ledger with the payout source; the refunded one was reversed.
+            var approved = await db.Set<CodeSale>().Where(s => s.ProgramId == program.Id && s.Status == CodeSaleStatus.Approved).ToListAsync();
+            Assert.True(approved.Count >= 7);
+            foreach (var sale in approved)
+            {
+                var commission = await db.Set<EarningEntry>().SingleAsync(e => e.CodeSaleId == sale.Id && e.Type == EarningType.SaleCommission);
+                var credited = await db.Set<EarningEntry>().Where(e => e.CodeSaleId == sale.Id && e.Type != EarningType.Reversal).Select(e => e.Amount).ToListAsync();
+                Assert.Equal(sale.CommissionAmount, credited.Sum()); // commission plus any tier bonus it triggered
+                Assert.NotNull(commission.RateSource);
+                Assert.True(commission.RateSource >= RateSourceLevel.CodePersonOverride);
+                Assert.False(string.IsNullOrEmpty(commission.RateSourceLabel));
+            }
+            Assert.Contains(await db.Set<EarningEntry>().Where(e => e.CodeProgramId == program.Id).Select(e => e.RateSource).ToListAsync(),
+                r => r == RateSourceLevel.CodeProgramTier);
+            Assert.True(await db.Set<EarningEntry>().AnyAsync(e => e.CodeProgramId == program.Id && e.RateSource == RateSourceLevel.CodePersonOverride));
+            Assert.True(await db.Set<EarningEntry>().AnyAsync(e => e.CodeProgramId == program.Id && e.RateSource == RateSourceLevel.CodeGroupOverride));
+            var refunded = await db.Set<CodeSale>().SingleAsync(s => s.ProgramId == program.Id && s.Status == CodeSaleStatus.Refunded);
+            Assert.True(await db.Set<EarningEntry>().AnyAsync(e => e.CodeSaleId == refunded.Id && e.Type == EarningType.Reversal));
+            return true;
+        });
+
+        // Sara sees her code, its stats and her sales; the manager sees the program; reviewers see the queue.
+        var sara = await fx.LoginAsync(DemoAccounts.Sara);
+        var codes = (await (await sara.GetAsync("/api/v1/me/codes")).ReadJsonAsync()).EnumerateArray().ToList();
+        var mine = Assert.Single(codes, c => c.GetProperty("code").GetString() == DemoRun.DemoSaraCode);
+        Assert.True(mine.GetProperty("stats").GetProperty("commissionApproved").GetDecimal() > 0);
+        Assert.True((await (await sara.GetAsync("/api/v1/me/code-sales")).ReadJsonAsync()).GetProperty("total").GetInt32() >= 8);
+        var manager = await fx.LoginAsync(DemoAccounts.Manager);
+        var programs = await (await manager.GetAsync("/api/v1/admin/code-programs")).ReadJsonAsync();
+        Assert.Contains(programs.GetProperty("items").EnumerateArray(), p => p.GetProperty("name").GetString() == DemoRun.DemoCodeProgramName);
+        var reviewer = await fx.LoginAsync(DemoAccounts.Reviewer1);
+        var queue = await (await reviewer.GetAsync("/api/v1/admin/code-sales?status=Pending")).ReadJsonAsync();
+        Assert.True(queue.GetProperty("total").GetInt32() >= 4);
     }
 
     [Fact]
