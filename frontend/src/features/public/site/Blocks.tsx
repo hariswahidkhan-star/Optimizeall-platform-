@@ -152,14 +152,16 @@ export function Blocks({ blocks, context = {} }: { blocks: PageBlock[]; context?
           case 'cta':
             return (
               <section key={block.id} className="site-cta" aria-label={str(d.title) ?? 'Call to action'}>
-                <div className="container site-cta__inner">
-                  <div>
-                    <h2>{str(d.title)}</h2>
-                    {str(d.text) && <p>{str(d.text)}</p>}
-                  </div>
-                  <div className="site-cta__actions">
-                    <CtaButton value={link(d.primary)} variant="highlight" />
-                    <CtaButton value={link(d.secondary)} variant="secondary" />
+                <div className="container">
+                  <div className="site-cta__inner">
+                    <div>
+                      <h2>{str(d.title)}</h2>
+                      {str(d.text) && <p>{str(d.text)}</p>}
+                    </div>
+                    <div className="site-cta__actions">
+                      <CtaButton value={link(d.primary)} variant="highlight" />
+                      <CtaButton value={link(d.secondary)} variant="secondary" />
+                    </div>
                   </div>
                 </div>
               </section>

@@ -130,7 +130,8 @@ export function PartnerStrip({ partners, slot = 'home.partners' }: { partners: P
   if (partners.length === 0) return null;
   return (
     <section className="partner-strip" aria-labelledby="partner-strip-title" data-partner-slot={slot}>
-      <div className="container partner-strip__inner">
+      <div className="container">
+        <div className="partner-strip__inner">
         <div className="partner-strip__intro">
           <p className="eyebrow">Partners</p>
           <h2 id="partner-strip-title" className="partner-strip__title">
@@ -144,10 +145,11 @@ export function PartnerStrip({ partners, slot = 'home.partners' }: { partners: P
         </ul>
         <p className="partner-strip__statement">
           Optimize All is the official marketing partner of {names(partners)}.{' '}
-          <Link to="/partners" className="partner-strip__more">
-            About our partners
-          </Link>
-        </p>
+            <Link to="/partners" className="partner-strip__more">
+              About our partners
+            </Link>
+          </p>
+        </div>
       </div>
     </section>
   );

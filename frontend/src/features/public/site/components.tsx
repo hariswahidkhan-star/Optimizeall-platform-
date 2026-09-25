@@ -338,18 +338,20 @@ export function CtaBand({ title, text }: { title?: string; text?: string }) {
   const copy = useSiteCopy();
   return (
     <section className="site-cta" aria-labelledby={id}>
-      <div className="container site-cta__inner">
-        <div>
-          <h2 id={id}>{title ?? copy.text('shared.cta.title')}</h2>
-          <p>{text ?? copy.text('shared.cta.text')}</p>
-        </div>
-        <div className="site-cta__actions">
-          <ButtonLink to="/free-audit" variant="highlight" size="lg" trailingIcon={<ArrowRight />}>
-            {copy.text('shared.cta.primary')}
-          </ButtonLink>
-          <ButtonLink to="/book-a-consultation" variant="secondary" size="lg">
-            {copy.text('shared.cta.secondary')}
-          </ButtonLink>
+      <div className="container">
+        <div className="site-cta__inner">
+          <div>
+            <h2 id={id}>{title ?? copy.text('shared.cta.title')}</h2>
+            <p>{text ?? copy.text('shared.cta.text')}</p>
+          </div>
+          <div className="site-cta__actions">
+            <ButtonLink to="/free-audit" variant="highlight" size="lg" trailingIcon={<ArrowRight />}>
+              {copy.text('shared.cta.primary')}
+            </ButtonLink>
+            <ButtonLink to="/book-a-consultation" variant="secondary" size="lg">
+              {copy.text('shared.cta.secondary')}
+            </ButtonLink>
+          </div>
         </div>
       </div>
     </section>
