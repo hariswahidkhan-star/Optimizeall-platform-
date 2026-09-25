@@ -39,15 +39,20 @@ public static class PermissionCatalog
     private const string Delivery = "Client delivery";
     private const string Execution = "Marketing execution";
     private const string Client = "Client portal";
+    private const string Learning = "Learning";
 
     /// <summary>Display order of the areas.</summary>
     public static readonly IReadOnlyList<string> AreaOrder = new[]
     {
-        Admin, Sales, Delivery, Execution, Website, Billing, Campaigns, Review, Finance, Growth, Participants, Client,
+        Admin, Sales, Delivery, Execution, Website, Billing, Campaigns, Review, Finance, Growth, Learning, Participants, Client,
     };
 
     private static readonly PermissionInfo[] Entries =
     {
+        new(Permissions.LearningView, Learning, "View learning", "See courses, enrolment and pass-rate statistics, question analytics, learner progress and certificates; export results."),
+        new(Permissions.LearningManage, Learning, "Manage courses", "Author and edit courses (new versions), publish and unpublish, set lesson videos and upload lesson media."),
+        new(Permissions.LearningCertify, Learning, "Issue and revoke certificates", "Issue course certificates manually and revoke certificates (audited).", Sensitive: true),
+
         new(Permissions.ParticipantPortal, Participants, "Participant portal", "Use the participant app: join campaigns, submit posts and receive payouts."),
 
         new(Permissions.CampaignsView, Campaigns, "View campaigns", "Read campaigns, their content and reward rules."),

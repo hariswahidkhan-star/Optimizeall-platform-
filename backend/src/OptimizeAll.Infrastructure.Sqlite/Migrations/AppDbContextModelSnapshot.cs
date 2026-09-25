@@ -7972,6 +7972,498 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.ToTable("landing_page_views", (string)null);
                 });
 
+            modelBuilder.Entity("OptimizeAll.Domain.Learning.Certificate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ActiveKey")
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("AttemptId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("BadgeName")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CourseSlug")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CourseTitle")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CourseVersionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("HolderName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("IssuedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("IssuedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RecipientSalt")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RevocationReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("RevokedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("RevokedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("Score")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Skills")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("VerificationCode")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActiveKey")
+                        .IsUnique();
+
+                    b.HasIndex("VerificationCode")
+                        .IsUnique();
+
+                    b.HasIndex("CourseId", "IssuedAt");
+
+                    b.HasIndex("UserId", "IssuedAt");
+
+                    b.ToTable("learning_certificates", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Learning.Course", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("BadgeName")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("EstimatedMinutes")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsFeatured")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("LatestVersionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("LessonCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Level")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ModuleCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("PublishedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("PublishedVersionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Skills")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Subtitle")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.HasIndex("Status", "Category", "SortOrder");
+
+                    b.ToTable("learning_courses", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Learning.CourseVersion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("BasedOnVersionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ContentJson")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ContentSha256")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("CreatedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("PackVersion")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId", "Number")
+                        .IsUnique();
+
+                    b.HasIndex("CourseId", "PackVersion");
+
+                    b.ToTable("learning_course_versions", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Learning.Enrolment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("BestScore")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("EnrolledAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastActivityAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastLessonSlug")
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LessonsCompletedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("PassedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId", "EnrolledAt");
+
+                    b.HasIndex("UserId", "CourseId")
+                        .IsUnique();
+
+                    b.ToTable("learning_enrolments", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Learning.ExamAnswer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("AnsweredAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AttemptId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("AttemptPassed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("QuestionId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Selected")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AttemptId", "QuestionId")
+                        .IsUnique();
+
+                    b.HasIndex("CourseId", "QuestionId");
+
+                    b.ToTable("learning_exam_answers", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Learning.ExamAttempt", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ActiveKey")
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AnswersJson")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("CorrectCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CourseVersionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DeadlineAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DrawJson")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("EnrolmentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool?>("Passed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PassingScore")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("QuestionCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("Score")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("StartedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("SubmittedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActiveKey")
+                        .IsUnique();
+
+                    b.HasIndex("CourseVersionId");
+
+                    b.HasIndex("EnrolmentId");
+
+                    b.HasIndex("CourseId", "Status", "SubmittedAt");
+
+                    b.HasIndex("UserId", "CourseId", "StartedAt");
+
+                    b.ToTable("learning_exam_attempts", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Learning.KnowledgeCheckAnswer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("AnsweredAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("EnrolmentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("LessonSlug")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("QuestionIndex")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Selected")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnrolmentId", "LessonSlug", "QuestionIndex")
+                        .IsUnique();
+
+                    b.ToTable("learning_knowledge_check_answers", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Learning.LessonProgress", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("EnrolmentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LessonSlug")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("StartedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnrolmentId", "LessonSlug")
+                        .IsUnique();
+
+                    b.ToTable("learning_lesson_progress", (string)null);
+                });
+
             modelBuilder.Entity("OptimizeAll.Domain.Ledger.EarningEntry", b =>
                 {
                     b.Property<Guid>("Id")
@@ -17190,6 +17682,87 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.HasOne("OptimizeAll.Domain.LandingPages.LandingPage", null)
                         .WithMany()
                         .HasForeignKey("PageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Learning.Certificate", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Learning.Course", null)
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OptimizeAll.Domain.Identity.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Learning.CourseVersion", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Learning.Course", null)
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Learning.Enrolment", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Learning.Course", null)
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OptimizeAll.Domain.Identity.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Learning.ExamAnswer", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Learning.ExamAttempt", null)
+                        .WithMany()
+                        .HasForeignKey("AttemptId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Learning.ExamAttempt", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Learning.CourseVersion", null)
+                        .WithMany()
+                        .HasForeignKey("CourseVersionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OptimizeAll.Domain.Learning.Enrolment", null)
+                        .WithMany()
+                        .HasForeignKey("EnrolmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Learning.KnowledgeCheckAnswer", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Learning.Enrolment", null)
+                        .WithMany()
+                        .HasForeignKey("EnrolmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Learning.LessonProgress", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Learning.Enrolment", null)
+                        .WithMany()
+                        .HasForeignKey("EnrolmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

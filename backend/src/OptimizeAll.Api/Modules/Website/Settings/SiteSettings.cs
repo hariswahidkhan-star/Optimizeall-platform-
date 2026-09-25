@@ -289,6 +289,7 @@ public sealed partial class SiteSettingsService(AppDbContext db, IAuditLogger au
                 new("Industries", "/industries", null, null),
                 new("Case studies", "/case-studies", null, null),
                 new("Pricing", "/pricing", null, null),
+                new("Academy", "/learn", "Free courses with certificates.", null),
                 new("About", "/about", null, new MenuItem[]
                 {
                     new("About us", "/about", "Who we are and how we work.", null),
@@ -313,7 +314,7 @@ public sealed partial class SiteSettingsService(AppDbContext db, IAuditLogger au
                 new("Company", new SiteLink[]
                 {
                     new("About", "/about"), new("How we work", "/how-we-work"), new("Team", "/team"), new("Careers", "/careers"),
-                    new("Case studies", "/case-studies"), new("Blog", "/blog"),
+                    new("Case studies", "/case-studies"), new("Blog", "/blog"), new("Free courses", "/learn"),
                 }),
                 new("Get started", new SiteLink[]
                 {

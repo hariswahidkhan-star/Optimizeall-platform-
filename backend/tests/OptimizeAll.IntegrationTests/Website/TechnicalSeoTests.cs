@@ -61,7 +61,8 @@ public sealed class TechnicalSeoTests(ApiFactory api) : IClassFixture<ApiFactory
         public List<JsonElement> JsonLd => Html.QuerySelectorAll("script[type='application/ld+json']")
             .Select(s => JsonDocument.Parse(s.TextContent).RootElement.Clone()).ToList();
 
-        public IEnumerable<string> Types => JsonLd.Select(j => j.GetProperty("@type").GetString()!);
+        /// <summary>Every node's types ("@type" is one type or a list, e.g. ["LearningResource", "Article"]).</summary>
+        public IEnumerable<string> Types => JsonLd.SelectMany(TypesOf);
     }
 
     private async Task<Doc> GetDocAsync(string path)
@@ -73,10 +74,23 @@ public sealed class TechnicalSeoTests(ApiFactory api) : IClassFixture<ApiFactory
     }
 
     /// <summary>schema.org shape rules for the node types the site emits (what Google's rich results need).</summary>
+    internal static IEnumerable<string> TypesOf(JsonElement node)
+    {
+        var t = node.GetProperty("@type");
+        return t.ValueKind == JsonValueKind.Array ? t.EnumerateArray().Select(x => x.GetString()!).ToList() : new[] { t.GetString()! };
+    }
+
+    /// <summary>schema.org shape rules; a node with several types must satisfy the rules of each.</summary>
     internal static void AssertValidJsonLd(JsonElement node)
     {
         Assert.Equal("https://schema.org", node.GetProperty("@context").GetString());
-        var type = node.GetProperty("@type").GetString();
+        var types = TypesOf(node).ToList();
+        Assert.NotEmpty(types);
+        foreach (var type in types) AssertValidJsonLdType(node, type);
+    }
+
+    private static void AssertValidJsonLdType(JsonElement node, string type)
+    {
         bool Has(string p) => node.TryGetProperty(p, out var v) && v.ValueKind != JsonValueKind.Null &&
                               !(v.ValueKind == JsonValueKind.String && string.IsNullOrWhiteSpace(v.GetString()));
         void Abs(string url) => Assert.StartsWith("http", url);
@@ -138,6 +152,17 @@ public sealed class TechnicalSeoTests(ApiFactory api) : IClassFixture<ApiFactory
                 break;
             case "ProfessionalService":
                 Assert.True(Has("name") && Has("address"));
+                break;
+            // Academy (Learning): Google's course rich results need name, description and provider; free courses say so.
+            case "Course":
+                Assert.True(Has("name") && Has("description") && Has("provider"), "Course needs name, description and provider");
+                Abs(node.GetProperty("url").GetString()!);
+                break;
+            case "LearningResource":
+                Assert.True(Has("name") && Has("url") && Has("isPartOf"), "LearningResource needs name, url and the course it belongs to");
+                break;
+            case "EducationalOccupationalCredential":
+                Assert.True(Has("name") && Has("url"), "EducationalOccupationalCredential needs name and url");
                 break;
             default:
                 Assert.Fail($"Unexpected JSON-LD type {type}");

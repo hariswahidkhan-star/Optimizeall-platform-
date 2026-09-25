@@ -106,7 +106,7 @@ public sealed class FileService(AppDbContext db, IFileStorage storage, ICurrentU
 
     private async Task<bool> CanReadAsync(StoredFile file, CancellationToken ct)
     {
-        if (file.IsPublic && file.Purpose is FilePurpose.CampaignAsset or FilePurpose.ContentImage) return true;
+        if (file.IsPublic && file.Purpose is FilePurpose.CampaignAsset or FilePurpose.ContentImage or FilePurpose.LearningMedia) return true;
         if (!currentUser.IsAuthenticated) return false;
         if (currentUser.Id == file.OwnerUserId) return true;
         if (file.Purpose == FilePurpose.SaleProof)

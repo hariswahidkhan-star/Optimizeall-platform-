@@ -39,6 +39,7 @@ using OptimizeAll.Api.Modules.Auth.Google;
 using OptimizeAll.Api.Modules.Campaigns;
 using OptimizeAll.Api.Modules.Content;
 using OptimizeAll.Api.Modules.Files;
+using OptimizeAll.Api.Modules.Learning;
 using OptimizeAll.Api.Modules.Ledger;
 using OptimizeAll.Api.Modules.Marketing;
 using OptimizeAll.Api.Modules.Notifications;
@@ -260,6 +261,7 @@ services
     .AddSeoModule(config)
     .AddLandingPagesModule(config)
     .AddIntegrationsModule(config)
+    .AddLearningModule(config)
     .AddSeedModule(config);
 
 // ---------- HTTP ----------

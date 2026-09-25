@@ -1,0 +1,523 @@
+{
+  "slug": "platform-getting-started",
+  "version": 1,
+  "title": "Getting started on Optimize All",
+  "subtitle": "How campaigns, submissions, reviews, earnings and payouts work, and how to disclose paid posts properly",
+  "category": "platform",
+  "level": "beginner",
+  "estimatedMinutes": 45,
+  "description": "New to Optimize All? This short, free course walks you through everything you need to earn with confidence. You will learn how campaigns are structured, why eligibility sometimes says *not yet* and how to pick campaigns you can finish. You will see how to submit proof that passes review the first time, how reviewers decide, what live checks and appeals are, and how approved posts become earnings that are paid out every two weeks. The final module covers advertising disclosure rules in the markets our creators work in, including FTC and ASA expectations, and the responsible-posting rules that keep your account in good standing. Finish the lessons, pass the short assessment and add the certificate to your LinkedIn profile.",
+  "outcomes": [
+    "Explain what a campaign page contains and check your eligibility before posting",
+    "Submit proof that passes review, including a public link and a visible disclosure",
+    "Describe how reviews, corrections, live checks and appeals work",
+    "Trace an earning from approval through the holding period to a biweekly payout",
+    "Apply FTC, ASA and platform disclosure rules to your own campaign posts",
+    "Avoid the violations that lead to reversed earnings or suspension"
+  ],
+  "skills": [
+    "Creator campaigns",
+    "Advertising disclosure",
+    "Influencer compliance",
+    "Content submission",
+    "Creator payouts"
+  ],
+  "prerequisites": [],
+  "badge": {
+    "name": "Optimize All Certified Creator",
+    "description": "The holder understands how Optimize All campaigns, eligibility, submissions, reviews, live checks, earnings and payouts work, and can publish paid posts with clear, compliant advertising disclosure that follows platform rules and FTC and ASA expectations.",
+    "criteria": "Completed all lessons of Getting started on Optimize All and scored at least 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "how-the-platform-works",
+      "title": "How Optimize All works",
+      "summary": "Campaigns, eligibility and submitting posts that pass review.",
+      "lessons": [
+        {
+          "slug": "campaigns-and-eligibility",
+          "title": "Campaigns and eligibility",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### What Optimize All is\n\nOptimize All connects brands with creators, influencers and everyday social media users who genuinely like a product and are happy to talk about it. A brand publishes a **campaign** with approved content and clear rules. You share that content from your own established social profile, submit the public link to your post, and earn a fixed reward for every post a reviewer approves. There is no bidding, no follower auction and no guesswork: the reward, the rules and the deadline are on the campaign page before you start.\n\nThis lesson explains what a campaign contains, how eligibility works and how to choose campaigns you can actually complete.\n\n### Anatomy of a campaign\n\nEvery campaign page answers the same questions, in the same order:\n\n- **What to share.** Approved captions, images or videos, sometimes in several languages. You can personalise the wording where the campaign allows it, but you must not change claims, prices or offers.\n- **Where to share it.** The platforms the brand accepts (for example Instagram, TikTok, LinkedIn or X). A post on any other platform will not be accepted.\n- **Who can take part.** Target countries, languages, participant tiers and sometimes interests.\n- **The posting window.** The start date, the end date and the submission deadline, shown in your local time zone.\n- **The reward.** A fixed amount per approved post, in the campaign's currency, plus any bonuses (for example a launch-week bonus) and any caps (per day, per week or per campaign).\n- **Proof rules.** What you submit (the public link, sometimes a screenshot as supporting evidence) and whether the post must stay live for a minimum time, which is checked later.\n\nRead the whole page before you post. Most rejected submissions come from a rule that was clearly stated but skipped.\n\n### Eligibility: why some campaigns say \"not yet\"\n\nBrands pay for real reach from real people, so the platform protects them from throwaway accounts. Your eligibility is checked in two layers.\n\n**Your account.** Your email must be verified, your account must be active, and your country, language and tier must match what the campaign targets.\n\n**Your social profiles.** Each profile you add is checked on its own. A profile must be old enough (the platform minimum is shown on your Social profiles page, and some campaigns require more), must meet any follower minimum, and must be verified when the campaign asks for it. A brand-new profile is shown as *not yet eligible* with the exact date it will qualify, so you are never left guessing.\n\nOne social profile can belong to only one Optimize All account. If someone else registered a profile you own, contact support instead of creating a second account; duplicate or shared accounts are treated as fraud.\n\n### A worked example\n\nAmina lives in Lahore and has an Instagram account she has used for four years and a TikTok account she opened last month. She opens the *Karachi Eats food festival* campaign, which targets Pakistan, accepts Instagram and TikTok, and pays a fixed amount in PKR per approved post.\n\n- Her account is verified and her country matches, so the participant checks pass.\n- Her Instagram profile is old enough and meets the follower minimum, so it is **eligible**.\n- Her TikTok profile is too new. The campaign page shows it as *not yet eligible* and gives the date it will qualify.\n\nAmina shares the approved reel on Instagram now and puts a reminder in her calendar for the TikTok date, if the campaign is still running by then. She does not try to post from her sister's older account, because submitting from a profile that is not registered to her would be rejected and could suspend her account.\n\n### Choosing campaigns you can finish\n\nA simple habit saves most of the frustration new participants run into:\n\n1. Filter campaigns by the platforms you actually use.\n2. Open the campaign and check the eligibility panel first. Green means every rule passes for at least one of your profiles.\n3. Check the posting window and the submission deadline in your time zone.\n4. Read the caps. If a campaign caps approved posts per day, posting ten times on day one only earns the capped amount.\n5. Save the approved content, then post it within the window.\n\n### Do and don't\n\n- **Do** keep your profile details (country, language, interests) accurate: they decide which campaigns you see.\n- **Do** add every social profile you post from, so the platform can match you to more campaigns.\n- **Don't** buy followers or engagement to reach a minimum. Inflated profiles are removed and their earnings reversed.\n- **Don't** join campaigns you cannot finish before the deadline; late proof is not accepted.\n\nUnderstanding campaigns and eligibility first means that everything you post has a real chance of being approved, which is exactly what the next lesson is about.",
+          "video": null,
+          "keyTakeaways": [
+            "A campaign page states the content, platforms, audience, posting window, reward and proof rules before you start.",
+            "Eligibility is checked for your account and for each social profile separately.",
+            "New profiles show the exact date they become eligible; never post from a profile that is not yours.",
+            "Check caps and deadlines before posting so every post can actually be rewarded."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Your TikTok profile is shown as \"not yet eligible\" with a future date. What does that usually mean?",
+              "options": [
+                "The profile is below the minimum account age and will qualify on that date",
+                "Your email address is not verified",
+                "The campaign has ended",
+                "The profile has been permanently rejected"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "A profile that is too new is shown as not yet eligible together with the date it reaches the minimum age. The other situations show different messages."
+            },
+            {
+              "question": "Which of these can stop you from joining a campaign? (Choose all that apply.)",
+              "options": [
+                "Your country is not targeted by the campaign",
+                "None of your profiles is on an accepted platform",
+                "You joined another campaign yesterday",
+                "Your email address is not verified"
+              ],
+              "correct": [
+                0,
+                1,
+                3
+              ],
+              "explanation": "Country targeting, accepted platforms and a verified email are all eligibility rules. Taking part in other campaigns does not affect eligibility."
+            },
+            {
+              "question": "A friend offers to let you post from their older account to meet the age requirement. What should you do?",
+              "options": [
+                "Decline: only profiles registered to your own account can be used",
+                "Accept, but only for one campaign",
+                "Accept if you split the reward with them",
+                "Register the profile to both accounts"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Each social profile belongs to exactly one account and must be yours. Posting from someone else's profile is rejected and can lead to suspension."
+            }
+          ],
+          "activity": "Open your Social profiles page, check the eligibility status and qualifying date of each profile, and add any profile you post from that is missing."
+        },
+        {
+          "slug": "submitting-posts-that-pass-review",
+          "title": "Submitting posts that pass review",
+          "type": "video",
+          "durationMinutes": 12,
+          "body": "### What happens after you post\n\nPosting the content is only half of the job. You get paid for **approved submissions**, and a reviewer approves a submission only when it proves that the post exists, is public, matches the campaign and follows the rules. This lesson shows how to submit proof that passes review the first time, and what to do when it does not.\n\n### Submitting proof\n\nOpen the campaign and choose *Submit proof*. You will be asked for:\n\n- **The public link to your post.** This is the proof. The link must open the exact post, be publicly visible without logging in, and belong to one of your registered profiles.\n- **The profile you posted from.** Only your eligible profiles for this campaign are listed.\n- **The time you posted.** It must fall inside the campaign's posting window.\n- **A screenshot (optional or required, depending on the campaign).** It supports the link, it never replaces it. A screenshot of a post that has been deleted or made private is not proof.\n\nThe platform normalises links, so the same post submitted twice (even with different tracking parameters) is detected. Each post can be claimed once, by one participant, for one campaign.\n\n### How a reviewer decides\n\nReviewers work from a queue. For each submission they open the link, compare the post with the approved content and check the rules. They can:\n\n- **Approve** it. The reward is calculated from the campaign's reward rules at the moment you submitted, so a later rule change never lowers what you earn for that post.\n- **Request a correction.** Something small is wrong, for example the disclosure is missing. You fix the post and resubmit.\n- **Reject** it, with a reason, when the post cannot be accepted (wrong content, private post, outside the window, not your profile).\n\nSome submissions are flagged for a closer look: a duplicate screenshot, a post outside the window, unusually many submissions in a short time, or a profile that is not verified. A flag is not an accusation; it simply means a reviewer checks more carefully.\n\n### Live checks\n\nMany campaigns require the post to stay live for a minimum period, for example 48 or 72 hours. After approval, a live check confirms the post is still public. If the post has been removed early, the approval is reversed and the reward is deducted. Keep campaign posts up for at least the stated period, and ideally leave them up.\n\n### Appeals\n\nIf you believe a decision is wrong, you can appeal within the appeal window shown on the submission (14 days by default). Explain what the reviewer missed and add evidence. A different reviewer decides the appeal. Appeals are for genuine mistakes; appealing every rejection without new information only slows the queue for everyone.\n\n### A worked example\n\nBilal shares a fitness-app launch video on TikTok and submits the link twenty minutes later. The reviewer finds that the post is public and matches the approved video, but the caption has no paid-partnership disclosure. They request a correction and explain what is missing. Bilal edits the caption, turns on TikTok's branded-content toggle, and resubmits. The submission is approved, and three days later the live check confirms the post is still up.\n\n### Checklist before you press submit\n\n- [ ] The link opens my post while I am logged out.\n- [ ] The post is on a platform the campaign accepts, from a profile registered to me.\n- [ ] I posted inside the campaign window.\n- [ ] The content matches the approved content, and any personal wording keeps every claim accurate.\n- [ ] The paid-partnership disclosure is visible without clicking \"more\".\n- [ ] I will keep the post live for at least the required period.\n\n### Common reasons for rejection\n\n| Reason | How to avoid it |\n|---|---|\n| Missing or hidden disclosure | Use the platform's paid-partnership label and the disclosure text from the campaign, at the start of the caption |\n| Private, deleted or age-restricted post | Check the link in a private browser window before submitting |\n| Outside the posting window | Post after the start date and submit before the deadline |\n| Edited claims | Keep prices, offers and product claims exactly as approved |\n| Same post submitted twice | Submit each post once; duplicates are detected automatically |\n\nGetting these basics right is what separates participants whose submissions are approved within a day from those who spend their time on corrections and appeals.",
+          "video": {
+            "script": "Hi, and welcome back. In this lesson we follow a post from the moment you publish it to the moment it is approved.\n\nFirst, submitting proof. Open the campaign and choose Submit proof. Paste the public link to your post, pick the profile you posted from, and confirm the time you posted. The link is the proof, so check it in a private browser window: if you can see the post without logging in, so can the reviewer. A screenshot can support your submission, but it never replaces a working link.\n\nNext, the review. A reviewer opens your link and compares the post with the approved content. If everything matches and your paid-partnership disclosure is clear, the submission is approved and your reward is recorded using the rules that applied when you submitted. If something small is wrong, like a missing disclosure, you will be asked for a correction. Fix the post and resubmit.\n\nMany campaigns also run a live check. That means your post must stay public for a minimum time, often forty-eight or seventy-two hours. Removing it early reverses the approval.\n\nFinally, if you think a decision was a mistake, you can appeal within the appeal window. Explain what was missed and add evidence, and a different reviewer will take a fresh look.\n\nUse the checklist below this video before every submission, and you will spend your time earning, not correcting.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "The public link to your post is the proof; a screenshot only supports it.",
+            "Reviewers approve, request a correction or reject, and rewards use the rules in force when you submitted.",
+            "Live checks confirm posts stay public for the required period; early removal reverses the approval.",
+            "Appeal within the appeal window with new information when you believe a decision is wrong."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the actual proof of a campaign post?",
+              "options": [
+                "The public link to the post",
+                "A screenshot of the post",
+                "A message from the brand",
+                "The number of likes"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "The public link lets the reviewer see the live post. A screenshot can support it but is never accepted on its own."
+            },
+            {
+              "question": "Your submission was sent back with \"correction requested: disclosure missing\". What is the best next step?",
+              "options": [
+                "Add the disclosure to the post and resubmit",
+                "Delete the post and appeal",
+                "Submit the same link again unchanged",
+                "Open a second account and submit there"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "A correction request means the post can be accepted once the issue is fixed. Resubmitting unchanged or appealing does not fix the missing disclosure."
+            }
+          ],
+          "activity": "Pick one of your recent posts and run through the pre-submission checklist from this lesson, including opening the link in a private browser window."
+        }
+      ]
+    },
+    {
+      "slug": "getting-paid-and-staying-compliant",
+      "title": "Getting paid and staying compliant",
+      "summary": "Earnings, holds and payouts, and the disclosure rules that protect you and the brands.",
+      "lessons": [
+        {
+          "slug": "earnings-and-payouts",
+          "title": "Earnings, holds and payouts",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### From approved post to money in your account\n\nWhen a reviewer approves your submission, an **earning** is recorded in your ledger. Understanding how that earning moves from *approved* to *paid* helps you plan and avoids surprises.\n\n### Your earnings, step by step\n\n1. **Pending approval.** Some earnings need a second decision, for example a quality bonus or an earning waiting for a live check. They are visible but not yet payable.\n2. **Approved.** The earning is confirmed. It first passes a short **holding period** (three days by default). The hold exists because posts can still be removed or found to break the rules shortly after approval.\n3. **Scheduled.** When a payout batch is prepared, approved earnings that have passed their hold before the cutoff date are included in it.\n4. **Paid.** Finance records the payment with a reference, and you receive a notification.\n\nEarnings can also be **reversed** (for example after a failed live check) or **declined** (a bonus that was not approved). If an earning that was already paid is reversed, the amount is deducted from a future payout instead of being taken back from your bank account.\n\n### Payout schedule and minimum\n\nPayouts run on a schedule, **every two weeks by default**. Your Earnings page shows the next payout date and the cutoff. Two rules decide whether you are paid in a given run:\n\n- Only **approved** earnings that have **passed their hold** before the cutoff are included.\n- Your payable balance must reach the **minimum payout threshold**. Smaller balances simply carry over to the next run; nothing is lost.\n\nAmounts are recorded in the campaign's currency together with the exchange rate used for your settlement currency. A later change in exchange rates never changes an earning that has already been recorded.\n\n### Payout details and security\n\nAdd your payout details (bank transfer, PayPal or mobile wallet) on your profile before your first payout. Your details are encrypted when stored and only a masked hint, such as the last four digits, is ever shown. Only authorised finance staff can use the full details to pay you. Changing payout details is a sensitive action: you may be asked to confirm it, and a support agent can never change them for you while viewing your account.\n\n### A worked example\n\nSara has three approved posts from two campaigns: two in USD and one in AED. On Monday the payout batch is prepared with a Friday cutoff.\n\n- One USD earning was approved on Thursday. Its three-day hold ends on Sunday, after the cutoff, so it waits for the next run.\n- The other USD earning and the AED earning passed their holds before Friday, so both are scheduled. The AED amount is converted to Sara's settlement currency at the rate recorded when the earning was created.\n- Her scheduled total is above the minimum threshold, so she is included in the batch and receives a notification when finance records the payment.\n\n### Reading your Earnings page\n\n- **Pending**: waiting for a review decision, a bonus approval or a live check.\n- **Available soon**: approved but still inside the holding period.\n- **Scheduled**: in the next payout.\n- **Paid**: with the payment date and reference.\n\nIf something looks wrong, open a support ticket from the payout or the submission itself, so the team sees exactly what you are asking about.\n\n### Do and don't\n\n- **Do** add payout details early; a missing profile is the most common reason a first payout is delayed.\n- **Do** keep posts live for at least the required period, because reversals reduce future payouts.\n- **Don't** share your login with anyone who offers to \"manage\" your earnings. Staff never ask for your password.\n- **Don't** open multiple accounts to get around caps or minimums; linked accounts are detected and suspended.\n\nWith the earnings lifecycle clear, the last lesson covers the rules that protect both you and the brands: disclosure and responsible posting.",
+          "video": null,
+          "keyTakeaways": [
+            "Earnings move from pending or approved, through a short holding period, to scheduled and paid.",
+            "Payouts run every two weeks by default and include approved earnings that passed their hold before the cutoff.",
+            "Balances below the minimum threshold carry over; reversed paid earnings are deducted from future payouts.",
+            "Payout details are encrypted and only shown as a masked hint."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "An earning was approved one day before the payout cutoff. Why might it not be in this payout?",
+              "options": [
+                "It is still inside its holding period",
+                "Approved earnings are never paid",
+                "The brand must approve it again",
+                "Earnings are paid only once a year"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Approved earnings first pass a short holding period (three days by default). Only earnings whose hold ended before the cutoff are scheduled."
+            },
+            {
+              "question": "Your payable balance is below the minimum payout threshold. What happens?",
+              "options": [
+                "It carries over to the next payout run",
+                "It is forfeited",
+                "It is converted into a bonus",
+                "It is paid in cash"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Nothing is lost: balances below the threshold carry over until they reach the minimum."
+            }
+          ],
+          "activity": "Open your Earnings page and identify which of your earnings are pending, in their hold, scheduled or paid, and note the next payout date."
+        },
+        {
+          "slug": "disclosure-and-platform-rules",
+          "title": "Disclosure and responsible posting",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Why disclosure is not optional\n\nWhen you are paid to share content, your audience has a right to know. Advertising regulators in most markets require it, social platforms require it, and every Optimize All campaign requires it. A post without a clear disclosure is rejected, and repeated violations can lead to suspension. This is not a formality: undisclosed advertising misleads the people who trust you, and it exposes you and the brand to complaints and penalties.\n\n### What the main rules say\n\nThe principles are very similar across markets, even though the wording differs:\n\n- **United States (FTC).** Material connections with a brand, including payment, must be disclosed clearly and conspicuously. Simple words such as *ad*, *advertisement* or *sponsored* work; vague tags such as *#sp*, *#collab* or a thank-you to the brand do not. The disclosure should be seen without clicking \"more\".\n- **United Kingdom (ASA and CAP Code).** Paid posts must be obviously identifiable as advertising, typically with *Ad* or *#ad* placed upfront. Platform labels help but may not be enough on their own if they are not prominent.\n- **UAE.** Advertising content on social media is regulated, and creators who promote products commercially are expected to hold the appropriate advertiser permit and to mark paid content clearly.\n- **Saudi Arabia and Pakistan.** Consumer-protection rules prohibit misleading advertising, and platform policies require paid partnerships to be labelled; campaign disclosure text reflects local expectations.\n\nRules change, and some campaigns add stricter requirements. The campaign's own disclosure instructions always win; if they are stricter than the general rule, follow the campaign.\n\n### How to disclose correctly\n\n1. **Turn on the platform's paid-partnership or branded-content label** where it exists (Instagram, Facebook, TikTok and YouTube all have one).\n2. **Add the campaign's disclosure text at the start of the caption**, for example *#ad* or *Paid partnership with Nimbus*. In videos, say it or show it on screen near the beginning as well.\n3. **Keep it visible.** Not buried among twenty hashtags, not after the \"more\" cut-off, and not only in a comment.\n4. **Use the audience's language.** If the campaign provides Arabic or Urdu disclosure text, use it for posts in that language.\n\n### A worked example\n\nOmar shares the *Desert Bloom Skincare* campaign on Instagram in Arabic. He enables the *Paid partnership* label, starts his caption with the Arabic disclosure provided by the campaign, and keeps the approved product claims unchanged. He does not add \"dermatologist approved\", because that claim is not in the approved content. The post is approved on the first review.\n\n### Responsible posting beyond disclosure\n\n- **Keep claims accurate.** Never add health, earnings or performance claims the brand did not approve.\n- **Be honest about your experience.** Do not pretend you have used a product for months if you have not.\n- **Respect age and category rules.** Some products may not be advertised to minors or in certain countries.\n- **Protect privacy.** Do not include other people's personal data or images without their consent.\n- **Play fair.** No bought followers or engagement, no fake or shared accounts, no submitting someone else's post, no duplicate submissions.\n\n### What happens when rules are broken\n\n| Situation | Typical outcome |\n|---|---|\n| Disclosure missing on a new submission | Correction requested or rejected |\n| Post removed before the live check | Approval reversed; amount deducted from a future payout |\n| Misleading edits to approved content | Rejected; repeated cases reviewed for suspension |\n| Fake engagement or duplicate accounts | Earnings reversed and account suspended |\n\n### Your disclosure checklist\n\n- [ ] Paid-partnership label turned on where the platform offers it.\n- [ ] Campaign disclosure text at the start of the caption, in the post's language.\n- [ ] Disclosure visible without expanding the caption.\n- [ ] Only approved claims, nothing added.\n\nFollowing these rules keeps your audience's trust, keeps your submissions flowing through review, and keeps brands coming back with more campaigns. You are now ready for the final assessment.",
+          "video": null,
+          "keyTakeaways": [
+            "Every paid post must be clearly disclosed with the platform's label and the campaign's disclosure text, visible upfront.",
+            "Regulators such as the FTC and ASA require clear, conspicuous disclosure; vague tags are not enough.",
+            "Never add claims the brand did not approve, and follow the campaign when its rules are stricter.",
+            "Fake engagement, shared accounts and early post removal lead to reversals and suspension."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which disclosure is clearest for a paid Instagram post?",
+              "options": [
+                "The Paid partnership label plus \"#ad\" at the start of the caption",
+                "\"#sp\" at the end of thirty hashtags",
+                "A thank-you to the brand in the first comment",
+                "No disclosure, because the brand is tagged"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "A platform label combined with a clear word such as ad at the start is conspicuous. Vague tags, comments or brand tags alone do not tell the audience the post is paid."
+            },
+            {
+              "question": "The campaign's disclosure instructions are stricter than the general rule in your country. What should you do?",
+              "options": [
+                "Follow the campaign's instructions",
+                "Follow only the local rule",
+                "Choose whichever is shorter",
+                "Ask followers which they prefer"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Campaign rules can be stricter than the law and are part of what the reviewer checks, so the stricter campaign instructions apply."
+            },
+            {
+              "question": "Which of these are responsible-posting violations? (Choose all that apply.)",
+              "options": [
+                "Adding a health claim the brand did not approve",
+                "Buying followers to reach a minimum",
+                "Posting the approved content in the campaign's language",
+                "Deleting the post before the live check"
+              ],
+              "correct": [
+                0,
+                1,
+                3
+              ],
+              "explanation": "Unapproved claims, bought followers and early removal all break the rules. Posting the approved content in the right language is exactly what the campaign asks for."
+            }
+          ],
+          "activity": "Draft the caption for your next campaign post with the disclosure in the right place, then check it against the disclosure checklist."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 10,
+    "timeLimitMinutes": 15,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "gs-001",
+        "module": "how-the-platform-works",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What do you submit as proof that you shared a campaign post?",
+        "options": [
+          "The public link to the post",
+          "Only a screenshot",
+          "Your follower count",
+          "A message to the brand"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "The public link is the proof the reviewer checks. A screenshot can support it but is not accepted alone; follower counts and messages prove nothing about the post."
+      },
+      {
+        "id": "gs-002",
+        "module": "how-the-platform-works",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "A new social profile is listed as \"not yet eligible\" with a date. What does the date mean?",
+        "options": [
+          "When the profile reaches the minimum account age",
+          "When the campaign ends",
+          "When your next payout is",
+          "When the profile will be deleted"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Profiles that are too new become eligible on the date they reach the minimum age; the other dates are unrelated to profile eligibility."
+      },
+      {
+        "id": "gs-003",
+        "module": "how-the-platform-works",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which of these are part of eligibility checks? (Choose all that apply.)",
+        "options": [
+          "Your email address is verified",
+          "Your country is targeted by the campaign",
+          "Your profile is on an accepted platform",
+          "You own a smartphone of a particular brand"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Email verification, country targeting and accepted platforms are all checked. The device you use has nothing to do with eligibility."
+      },
+      {
+        "id": "gs-004",
+        "module": "how-the-platform-works",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Two participants submit the same post link with different tracking parameters. What happens?",
+        "options": [
+          "The platform detects it as the same post; it can be claimed only once",
+          "Both are approved because the links differ",
+          "Both are paid half the reward",
+          "The brand chooses one at random"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Links are normalised, so tracking parameters do not make a post new. Each post can be claimed once, by one participant, for one campaign."
+      },
+      {
+        "id": "gs-005",
+        "module": "how-the-platform-works",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Your submission comes back with \"correction requested\". What does it mean?",
+        "options": [
+          "Something fixable is wrong; fix the post and resubmit",
+          "The submission is permanently rejected",
+          "Your account is suspended",
+          "The reward was paid"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "A correction request signals a small, fixable issue such as a missing disclosure. It is not a rejection, a suspension or a payment."
+      },
+      {
+        "id": "gs-006",
+        "module": "how-the-platform-works",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A campaign requires posts to stay live for 72 hours. You delete your post after 24 hours. What is the likely outcome?",
+        "options": [
+          "The live check fails and the approval is reversed",
+          "Nothing, because it was already approved",
+          "You receive a bonus for a short campaign",
+          "The reward is doubled"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Live checks confirm posts stay public for the required time. Removing the post early reverses the approval and the reward is deducted."
+      },
+      {
+        "id": "gs-007",
+        "module": "how-the-platform-works",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A campaign changes its reward rules after you submitted a post. Which rules apply to your approved submission?",
+        "options": [
+          "The rules in force when you submitted",
+          "The new rules",
+          "Whichever is lower",
+          "The reviewer decides freely"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Each submission captures the reward rule version at submission time, so later changes never lower what you earn for that post."
+      },
+      {
+        "id": "gs-008",
+        "module": "how-the-platform-works",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which situations can cause a submission to be flagged for closer review? (Choose all that apply.)",
+        "options": [
+          "A screenshot identical to another participant's",
+          "A post time outside the campaign window",
+          "Unusually many submissions in a short period",
+          "Using the approved caption exactly"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Duplicate screenshots, posts outside the window and high submission velocity are risk flags. Using the approved caption exactly is what campaigns ask for."
+      },
+      {
+        "id": "gs-009",
+        "module": "getting-paid-and-staying-compliant",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "How often do payouts run by default?",
+        "options": [
+          "Every two weeks",
+          "Every day",
+          "Once a year",
+          "Only when you ask"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "The default payout schedule is biweekly; the Earnings page shows the next payout date and cutoff."
+      },
+      {
+        "id": "gs-010",
+        "module": "getting-paid-and-staying-compliant",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why does an approved earning wait before it can be scheduled for payout?",
+        "options": [
+          "It passes a short holding period in case the post is removed or found to break the rules",
+          "Finance must convert every earning to gold",
+          "The brand must approve it twice",
+          "Holds only apply to new participants"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "The holding period (three days by default) protects against early removal or later-discovered violations before money is paid."
+      },
+      {
+        "id": "gs-011",
+        "module": "getting-paid-and-staying-compliant",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Your payable balance is below the minimum payout threshold on cutoff day. What happens to it?",
+        "options": [
+          "It carries over to a later payout",
+          "It is forfeited",
+          "It is paid automatically in cash",
+          "It is donated to the brand"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Balances below the threshold are not lost; they carry over until they reach the minimum."
+      },
+      {
+        "id": "gs-012",
+        "module": "getting-paid-and-staying-compliant",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which disclosure best meets advertising rules for a paid post?",
+        "options": [
+          "\"#ad\" at the start of the caption plus the platform's paid-partnership label",
+          "\"#sp\" hidden at the end of many hashtags",
+          "A thank-you to the brand in a comment",
+          "Tagging the brand without any disclosure"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Regulators such as the FTC and ASA expect clear, upfront disclosure. Vague tags, comments or brand tags alone do not make the commercial relationship obvious."
+      },
+      {
+        "id": "gs-013",
+        "module": "getting-paid-and-staying-compliant",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which of these break Optimize All's posting rules? (Choose all that apply.)",
+        "options": [
+          "Adding a performance claim the brand did not approve",
+          "Buying followers to meet a minimum",
+          "Using the campaign's Arabic disclosure text for an Arabic post",
+          "Submitting the same post twice"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Unapproved claims, bought followers and duplicate submissions break the rules. Using the provided disclosure in the post's language is correct."
+      },
+      {
+        "id": "gs-014",
+        "module": "getting-paid-and-staying-compliant",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An earning that was already paid is later reversed after a failed live check. How is it recovered?",
+        "options": [
+          "It is deducted from a future payout",
+          "Your bank account is debited immediately",
+          "It is ignored because it was paid",
+          "Your account is closed"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Reversals of paid earnings become a negative entry that is netted against your next payout; no money is pulled back from your bank."
+      },
+      {
+        "id": "gs-015",
+        "module": "getting-paid-and-staying-compliant",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "The campaign's disclosure instructions are stricter than the general rule in your country. Which do you follow?",
+        "options": [
+          "The campaign's instructions",
+          "Only the general rule",
+          "Whichever is shorter",
+          "Neither, if the brand is tagged"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Campaign rules may be stricter than the law and are checked in review, so the stricter campaign instructions apply."
+      }
+    ]
+  }
+}

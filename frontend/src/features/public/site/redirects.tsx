@@ -18,6 +18,7 @@ export interface RedirectLookup {
 const APP_SEGMENTS = new Set([
   'app', 'agency', 'client', 'admin', 'finance', 'review', 'manage', 'api', 'auth', 'login', 'register', 'check-email',
   'verify-email', 'forgot-password', 'reset-password', 'join', 'c', 't', 'e', 'p', 'i', 'email', 'f', 'assets', 'design-system',
+  'verify',
 ]);
 
 /** Whether a not-found public address may have moved (anything outside the app's own areas). */

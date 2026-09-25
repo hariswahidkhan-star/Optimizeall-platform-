@@ -31,6 +31,7 @@ import {
   VerifyEmailHero,
 } from './HomeSections';
 import '../participant.css';
+import { LearningPanel } from '../learning/LearningPanel';
 import { useSiteCopy } from '@/features/public/site/copy';
 
 /** Submissions that need the participant: corrections first, then the most recent decisions. */
@@ -172,6 +173,7 @@ export function HomePage() {
           <Banners banners={home.data.banners} />
           <StateSection home={home.data} email={user?.email ?? ''} />
           <OnboardingCard onboarding={home.data.onboarding} />
+          <LearningPanel />
           {achievements.isSuccess && <AchievementStrip achievements={achievements.data} />}
           <Announcements
             announcements={announcements.isSuccess ? announcements.data : home.data.announcements}

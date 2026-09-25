@@ -194,6 +194,12 @@ home with the banner → **Exit** → back on the users page.
     announcements.
   * Support tickets that are open, awaiting the participant, awaiting staff and resolved, with internal notes.
   * Notifications with a mix of read and unread. Achievements are awarded from the real metrics.
+* **Learning** (Optimize All Academy, [LEARNING.md](LEARNING.md)): every course pack in the catalog is published by the
+  Baseline seed; the Demo seed features "Getting started on Optimize All" and the first course of other categories.
+  Sara completed "Getting started" (a failed first attempt, then a pass) and holds its **certificate**, and is part-way
+  through up to two more courses; the new participant has started "Getting started"; eight more demo participants have
+  enrolments, lesson progress and attempts (two hold certificates), so the Learning admin shows enrolments, pass rates,
+  average scores and question analytics.
 * **Audit log** entries for staff actions, for example `campaign.reward_rules_changed`, `campaign.published`,
   `submission.approved`, `ledger.adjustment_created`, `payout.batch_prepared`, `payout.batch_finalized`,
   `payout.payment_recorded`, `payout.hold_created` and `admin.user_suspended`.
@@ -234,6 +240,14 @@ API paths are given for reference (`/api/v1/...`); in the web app use the matchi
    * Every campaign card shows the same reason.
 8. Contrast with `unverified@…` (onboarding banner, email not verified).
 9. Contrast with `hold.participant@…`: the earnings page shows the neutral payout-hold message.
+10. **Learning** (`/app/learning`, also the Learning panel on the home page and "Earned badges" on the profile):
+    * "Continue where you left off" for her in-progress courses and recommended courses;
+    * her **Optimize All Certified Creator** certificate: open it to download the PDF, see the "Add to LinkedIn profile"
+      and "Share on LinkedIn" links, the Open Badge and the public verification page (`/verify/certificates/{id}`);
+    * the course's final assessment page lists her failed and passed attempts; open one to see the per-question review.
+    * Anonymous visitors see the same catalog on the website at `/learn` (header "Academy", home page "Free courses").
+    * Admin: **Admin → Learning** shows the statistics, question analytics and learners; **Certificates** lets you
+      revoke Sara's certificate (reason required; the verification page then shows "Revoked").
 
 ### 2. Reviewer journey
 
@@ -356,3 +370,5 @@ database. It checks that:
 * the person-level rates are there (four groups with members and cards, Sara's expiring deal, a pending raise, an
   archived card), recent submissions were priced with them (snapshots consistent with the card lines and exchange
   rates, never on the campaign-rates-only campaign), their ledger lines carry the source, Sara sees only her own rate.
+* Sara holds a valid learning certificate (with a failed and a passed attempt), the new participant has a course in
+  progress and the Learning admin shows real statistics.

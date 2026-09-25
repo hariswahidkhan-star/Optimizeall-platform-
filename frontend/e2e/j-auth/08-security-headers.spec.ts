@@ -17,6 +17,7 @@ const header = (name: string) => {
   if (!m) throw new Error(`${name} missing from security-headers.conf`);
   return m[1]!
     .replace('$oa_img_src_extra', '')
+    .replace('$oa_media_src_extra', '')
     .replace(/\s+;/g, ';')
     .replace(/\s{2,}/g, ' ');
 };

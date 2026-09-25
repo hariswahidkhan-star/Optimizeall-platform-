@@ -44,6 +44,12 @@ public static class SettingKeys
     /// (four-eyes). 0 = off. Default 0.
     /// </summary>
     public const string RatesFourEyesIncreasePercent = "rates.fourEyesIncreasePercent";
+
+    /// <summary>string: issuing organisation on certificates, Open Badges and LinkedIn. Default "Optimize All Academy".</summary>
+    public const string LearningIssuerName = "learning.issuerName";
+
+    /// <summary>string: LinkedIn company page id for "Add to profile" (empty: the issuer name is sent instead). Default "".</summary>
+    public const string LearningLinkedInOrganizationId = "learning.linkedInOrganizationId";
 }
 
 /// <summary>Referral program configuration (setting <see cref="SettingKeys.ReferralProgram"/>).</summary>

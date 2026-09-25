@@ -24,12 +24,14 @@ public sealed partial class SeoPageResolver
     public const string GroupLanding = "landing-pages";
     /// <summary>Partner pages (/partners and profiles), contributed by <see cref="PartnerSitemapContributor"/>.</summary>
     public const string GroupPartners = PartnerSitemapContributor.GroupName;
+    /// <summary>The academy (/learn, courses, lessons), contributed by <see cref="Learning.LearningSitemapContributor"/>.</summary>
+    public const string GroupLearn = Learning.LearningSitemapContributor.GroupName;
 
     /// <summary>
     /// The content sitemaps, in index order (images and videos are derived from these URLs' media). Groups of
     /// <see cref="ISitemapContributor"/>s must be listed here.
     /// </summary>
-    public static readonly string[] UrlGroups = { GroupPages, GroupServices, GroupCaseStudies, GroupBlog, GroupCareers, GroupLanding, GroupPartners };
+    public static readonly string[] UrlGroups = { GroupPages, GroupServices, GroupCaseStudies, GroupBlog, GroupCareers, GroupLanding, GroupPartners, GroupLearn };
 
     private static readonly IReadOnlyList<SeoImage> NoImages = Array.Empty<SeoImage>();
     private static readonly IReadOnlyList<SeoVideo> NoVideos = Array.Empty<SeoVideo>();

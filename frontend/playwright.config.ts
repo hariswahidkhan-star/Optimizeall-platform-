@@ -131,6 +131,12 @@ import { defineConfig, devices } from '@playwright/test';
  * reports a sale; a reviewer approves it and finance sees the commission with its payout source on the ledger; the
  * brand's sales-report CSV matches, flags and reports a refund that reverses the commission. Serial, one worker,
  * desktop only, against Baseline + Demo: `E2E_SUITE=j-codes E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
+ *
+ * The j-learning suite walks the academy and learning journey: anonymous visitors browse /learn, read a lesson and try a
+ * knowledge check; a new participant enrols, completes every lesson, fails the final exam, retakes and passes, downloads
+ * the certificate PDF, checks the LinkedIn "Add to profile"/"Share" links and the verification page; an admin revokes the
+ * certificate and the verification page shows it revoked. Serial, one worker, desktop only, Demo seed:
+ * `E2E_SUITE=j-learning E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
  */
 const suite = process.env.E2E_SUITE ?? 'smoke';
 /** Suites whose mobile project runs only responsive.spec.ts (and whose desktop project runs everything else). */
@@ -154,6 +160,7 @@ const desktopJourney = [
   'j-seo',
   'j-partners',
   'j-codes',
+  'j-learning',
 ].includes(suite);
 /** The finance journey compares datetime-local input (browser time) with UTC periods, so its browser runs in UTC. */
 const finance = suite === 'j-finance';

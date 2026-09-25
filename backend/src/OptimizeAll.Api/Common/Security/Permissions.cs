@@ -119,6 +119,14 @@ public static class Permissions
     /// <summary>Sensitive: third-party integration credentials (social, ads, SMS, SEO data providers).</summary>
     public const string IntegrationsManage = "integrations.manage";
 
+    // Learning (academy, courses, certificates)
+    /// <summary>Learning admin: courses, statistics, question analytics, learner progress, certificates list, exports.</summary>
+    public const string LearningView = "learning.view";
+    /// <summary>Author, edit, publish and unpublish courses; set lesson videos; upload lesson media.</summary>
+    public const string LearningManage = "learning.manage";
+    /// <summary>Sensitive: issue certificates manually and revoke certificates (audited).</summary>
+    public const string LearningCertify = "learning.certify";
+
     // Client portal
     public const string ClientPortal = "client.portal";
 
@@ -148,6 +156,7 @@ public static class RolePermissions
             Permissions.RewardsApproveBonus, Permissions.MarketingManage, Permissions.AnalyticsView, Permissions.ReviewAssign,
             Permissions.UsersView, Permissions.RatesView, Permissions.RatesManage, Permissions.RatesAssign,
             Permissions.CodesView, Permissions.CodesManage, Permissions.CodesAssign,
+            Permissions.LearningView, Permissions.LearningManage,
         },
         [Role.Finance] = new[]
         {

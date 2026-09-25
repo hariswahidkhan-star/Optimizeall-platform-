@@ -3,6 +3,8 @@
 #   ${API_UPSTREAM}   API base URL, e.g. http://api:8080  (only defined env vars are substituted)
 #   ${IMG_SRC_EXTRA}  extra CSP img-src sources, space separated, e.g. "https://images.example.com"; must list the
 #                     same hosts as the API's Content:AllowedImageHosts (default empty: uploaded images only)
+#   ${MEDIA_SRC_EXTRA} extra CSP media-src sources for lesson videos hosted elsewhere (e.g. a HeyGen or CDN host),
+#                     space separated (default empty: uploaded videos and captions only)
 #
 # Serves the Vite SPA and reverse-proxies the API on the same origin:
 #   /api/     REST API (+ Swagger UI at /api/docs when enabled on the API)
@@ -21,6 +23,11 @@ map $http_x_forwarded_proto $oa_forwarded_proto {
 # Extra image hosts for the CSP img-src (used in snippets/security-headers.conf, which is not templated).
 map "" $oa_img_src_extra {
     default "${IMG_SRC_EXTRA}";
+}
+
+# Extra media hosts for the CSP media-src (lesson videos, docs/LEARNING.md).
+map "" $oa_media_src_extra {
+    default "${MEDIA_SRC_EXTRA}";
 }
 
 server {

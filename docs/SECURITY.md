@@ -118,6 +118,12 @@ their data):
   (HMAC-signed), the tracking redirect `GET /t/{code}`;
 * `GET /files/{id}` (the handler checks access per file, see § 5), `GET /campaign-categories`, `GET /content/faqs`,
   `GET /meta/currencies`;
+* the free public academy (Learning, rate-limited by the `public` policy, published content only, no exam questions):
+  `GET /public/learning/courses`, `/categories`, `/courses/{slug}`, `/courses/{slug}/lessons/{lessonSlug}`,
+  `/courses/{slug}/badge.svg`; certificate verification `GET /public/learning/certificates/{id}` and `/verify?code=`,
+  the certificate `/certificate.pdf` and
+  `/certificate.svg`, and the Open Badges 2.0 hosted documents `/openbadges/issuer`, `/openbadges/badges/{slug}`,
+  `/openbadges/assertions/{id}` (§ 14);
 * the dev mailbox `GET /dev/mailbox` (404 unless enabled outside Production), the non-production test sign-in
   `GET /dev/test-accounts` / `POST /dev/test-login` (§ 2.2) and the health checks `/health/live`, `/health/ready`.
 
@@ -168,6 +174,9 @@ any permission that opens one of its sections, but post-login landing there is r
 | `support.manage` | | ✓ | | | ✓ |
 | `audit.view` | | | | ✓ | ✓ |
 | `jobs.view` | | | | | ✓ |
+| `learning.view` | | | ✓ | | ✓ |
+| `learning.manage` | | | ✓ | | ✓ |
+| `learning.certify` *(sensitive)* | | | | | ✓ |
 
 Keep this table in sync with `Permissions.cs` when permissions change. Sensitive actions (reward-rate changes,
 batch finalization, payout settings, suspensions) additionally require an explicit `"confirm": true` and a
@@ -302,7 +311,10 @@ target's email to be typed) starts a time-boxed session:
   refreshes silently and an office behind one NAT address shares the budget, so it is generous; refresh tokens are
   random, rotate on use and trigger reuse detection, so nothing can be guessed through this endpoint.
 * `submissions` policy: 30 writes/min per user for actions that create staff work (submissions, tickets, appeals).
-* `public` policy: 120 requests/min per IP for unauthenticated endpoints (landing pages, `/t/{code}`, postbacks).
+* `public` policy: 120 requests/min per IP for unauthenticated endpoints (landing pages, `/t/{code}`, postbacks, the
+  public academy and certificate verification).
+* `learning` policy: 120 writes/min per user for learner progress (enrol, lesson start/complete, knowledge checks, exam
+  answer autosave), `RateLimiting__LearningPerMinute`; exam starts and submissions use the `submissions` policy.
 * `tracking` policy: 1,200 requests/min per IP for email open pixels, click redirects and one-click unsubscribes
   (`/e/*`; mailbox providers fetch these for many recipients from a few proxy IPs), `RateLimiting__TrackingPerMinute`.
 * `webhooks` policy: 6,000 requests/min per endpoint path, i.e. per provider and workspace, for signature-verified
@@ -478,3 +490,33 @@ Please report suspected vulnerabilities privately to **security@optimizeall.app*
 reproduction steps and impact. Do not access other users' data, run denial-of-service tests or use social
 engineering. We acknowledge reports within 3 business days, keep you informed, and credit reporters who wish
 to be named once a fix is released.
+
+## 14. Learning: exam integrity and credentials
+
+* **No answer leakage.** Final-exam pools never leave the server: the public course and lesson endpoints carry no exam
+  questions, an attempt in progress returns only the drawn questions with their options **in a per-attempt shuffled
+  order** (positions, not original indices), and correct answers and explanations are returned only after the attempt
+  is submitted or expired. Knowledge checks (not graded for certificates) include their answers by design.
+* **Server-side grading and timing.** Questions are drawn and shuffled on the server when the attempt starts; the
+  deadline is stored with the attempt and every answer/submission is checked against it (+30 s grace for latency);
+  after the deadline only the answers saved before it are graded (status `Expired`). The browser timer is display only.
+  Grading requires the exact set of correct options (no partial credit) against the attempt's own course version.
+* **One attempt at a time, limited attempts.** A unique `ActiveKey` allows one attempt in progress per learner and
+  course (plus a named lock around start); the course's `maxAttemptsPerDay` is enforced over a rolling 24 hours; exam
+  writes are rate-limited. Lessons must all be complete before an attempt can start.
+* **Tenancy / IDOR.** Everything under `/me/learning` is scoped to the caller: another learner's attempt or
+  certificate answers 404. Staff analytics need `learning.view`; course authoring `learning.manage`; issuing and
+  revoking certificates `learning.certify` (sensitive, admin-only by default, `"confirm": true` + reason, audited,
+  concurrency-stamped).
+* **Impersonation.** Staff viewing as a learner can read but not act: enrol, lesson progress, knowledge checks and every
+  exam write are `[DeniedWhileImpersonating(WritesOnly = true)]`; certificate issue/revoke are denied too (listed in
+  `ImpersonationCoverageTests`).
+* **Public credentials.** Certificates are verifiable by unguessable id (UUIDv7) or by verification code
+  (`OA-XXXX-XXXX`, 32⁸ space); verification shows the holder's display name, course, badge, skills and dates — never
+  the email. The Open Badges assertion identifies the recipient by a salted SHA-256 hash of the email. A revoked
+  certificate stays verifiable as "revoked" and its assertion answers `410 Gone`. The server-rendered verification page
+  HTML-encodes every value, serializes JSON-LD with the HTML-safe encoder and sends its own CSP (inline styles only, no
+  scripts). Certificate PDFs/SVGs contain only the snapshot taken at issue time.
+* **Content.** Course documents (packs and staff edits) are validated against the pack contract (no raw HTML outside
+  code, no external images, media only from uploads or https); lesson Markdown is rendered by the SPA's safe Markdown
+  component (no HTML injection). Lesson media uploads are identified by magic bytes (MP4, WebVTT, PNG/JPEG/WebP).

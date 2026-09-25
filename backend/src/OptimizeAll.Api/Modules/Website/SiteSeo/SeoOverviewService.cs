@@ -77,7 +77,10 @@ public sealed class SeoOverviewService(SeoPageResolver resolver, AppDbContext db
         if (page.Kind == SeoPageKind.Content && page.NoIndex) Add("noindex", "notice", "The page is set to noindex.");
         if (page.Content.OfType<ImageNode>().Any(i => string.IsNullOrWhiteSpace(i.Alt) && !i.Priority))
             Add("image.alt", "notice", "An image has no alternative text.");
-        var types = page.JsonLd.Select(j => j.TryGetProperty("@type", out var t) ? t.GetString() ?? "?" : "?").ToList();
+        // "@type" may be one type or several (["LearningResource", "Article"]); each counts.
+        var types = page.JsonLd.SelectMany(j => !j.TryGetProperty("@type", out var t) ? new[] { "?" }
+            : t.ValueKind == System.Text.Json.JsonValueKind.Array ? t.EnumerateArray().Select(x => x.GetString() ?? "?").ToArray()
+            : new[] { t.GetString() ?? "?" }).ToList();
         SeoCopyKeysDto? copyKeys = SeoPageResolver.CopyPages.TryGetValue(page.Path, out var prefix)
             ? new SeoCopyKeysDto($"{prefix}.seo.title", $"{prefix}.seo.description")
             : page.Path switch

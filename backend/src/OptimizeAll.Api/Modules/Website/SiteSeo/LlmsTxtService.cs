@@ -76,6 +76,8 @@ public sealed class LlmsTxtService(SeoPageResolver resolver)
         Section("Careers", entries.Where(e => e.Url.Path == "/careers" || e.Url.Group == SeoPageResolver.GroupCareers));
         Section("Creator program", entries.Where(e => e.Url.Path is "/creators" or "/faq"));
         Section("Partners", entries.Where(e => e.Url.Group == SeoPageResolver.GroupPartners));
+        // The academy home and its courses (each course page links its lessons).
+        Section("Academy (free courses)", entries.Where(e => e.Url.Group == SeoPageResolver.GroupLearn && e.Url.Path.Count(ch => ch == '/') <= 2));
         var listed = new HashSet<string>(keyPaths.Concat(new[] { "/careers", "/creators", "/faq", "/blog" }));
         Section("Optional", entries.Where(e => e.Url.Group == SeoPageResolver.GroupPages && !listed.Contains(e.Url.Path) &&
                                                !e.Url.Path.StartsWith("/industries/", StringComparison.Ordinal))

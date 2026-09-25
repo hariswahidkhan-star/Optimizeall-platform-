@@ -174,6 +174,10 @@ publish job with registry credentials when a registry is chosen.
   `IMG_SRC_EXTRA="https://images.example.com"` (rendered into the CSP `img-src` by
   `frontend/nginx/default.conf.template` → `$oa_img_src_extra` in `snippets/security-headers.conf`). Several hosts are
   space-separated in `IMG_SRC_EXTRA` and indexed (`__0`, `__1`, …) in the API setting.
+* Lesson videos (Learning): uploads (`/api/v1/files/…`) play under the default CSP. Videos linked by https URL (e.g.
+  a HeyGen or CDN host) need that origin in the web container's `MEDIA_SRC_EXTRA` (CSP `media-src`, space-separated).
+  The web server also proxies `/verify/certificates/{id}` to the API's server-rendered verification page (LinkedIn
+  previews); see [LEARNING.md](LEARNING.md).
 * Redirect HTTP to HTTPS at the proxy. Allow request bodies of at least 12 MB (screenshot uploads).
 * Canonical host: redirect the other host form (`example.com` ↔ `www.example.com`) with a 301 at the proxy, and set
   **Site settings → SEO → Site URL** to the canonical https origin: canonical links, Open Graph URLs, the sitemaps,

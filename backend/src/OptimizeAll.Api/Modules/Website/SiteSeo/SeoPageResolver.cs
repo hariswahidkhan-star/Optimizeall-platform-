@@ -3,6 +3,8 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Modules.Content.Copy;
 using OptimizeAll.Api.Modules.LandingPages;
+using OptimizeAll.Api.Modules.Learning;
+using OptimizeAll.Api.Modules.Learning.Certificates;
 using OptimizeAll.Api.Modules.Website.Careers;
 using OptimizeAll.Api.Modules.Website.Partners;
 using OptimizeAll.Api.Modules.Website.Public;
@@ -43,7 +45,8 @@ public sealed class NoSeoRedirects : ISeoRedirectLookup
 /// </summary>
 public sealed partial class SeoPageResolver(
     PublicSiteService site, AppDbContext db, SiteCopyService copyService, CareersService careers, LandingPageService landing,
-    ISeoRedirectLookup redirects, PartnerPublicService partners, IEnumerable<ISitemapContributor> sitemapContributors, TimeProvider clock)
+    ISeoRedirectLookup redirects, PartnerPublicService partners, IEnumerable<ISitemapContributor> sitemapContributors,
+    PublicLearningService learning, CertificateService certificates, TimeProvider clock)
 {
     /// <summary>Signed-in areas (portals). Never indexed; disallowed in robots.txt.</summary>
     public static readonly string[] PortalPrefixes = { "/app", "/admin", "/agency", "/client", "/review", "/finance", "/manage" };
@@ -176,6 +179,7 @@ public sealed partial class SeoPageResolver(
                     "creators" => CreatorsPage(),
                     "faq" => await FaqAsync(ct),
                     "partners" => await PartnersAsync(ct),
+                    "learn" => await AcademyAsync(ct),
                     _ => await CmsPageAsync(segments[0], ct),
                 };
             case 2:
@@ -188,10 +192,15 @@ public sealed partial class SeoPageResolver(
                     "careers" => await JobAsync(segments[1], ct),
                     "c" => await CampaignAsync(segments[1], ct),
                     "partners" => await PartnerAsync(segments[1], ct),
+                    "learn" => await CourseAsync(segments[1], ct),
                     _ => null,
                 };
             case 3 when segments[0] == "lp":
                 return await LandingAsync(segments[1], segments[2], ct);
+            case 3 when segments[0] == "learn":
+                return await LessonAsync(segments[1], segments[2], ct);
+            case 3 when segments[0] == "verify" && segments[1] == "certificates":
+                return await CertificateAsync(segments[2], ct);
             default:
                 return null;
         }

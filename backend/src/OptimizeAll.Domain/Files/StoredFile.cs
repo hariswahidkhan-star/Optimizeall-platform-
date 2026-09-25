@@ -11,6 +11,8 @@ public enum FilePurpose
     ContentImage,
     /// <summary>Private proof of a discount-code sale (receipt/screenshot): the owner and staff with sales.review or codes.view.</summary>
     SaleProof,
+    /// <summary>Public lesson media of the Learning module: videos (MP4), captions (WebVTT) and poster images.</summary>
+    LearningMedia,
 }
 
 /// <summary>Metadata of an uploaded file. Bytes live in private storage keyed by <see cref="StorageKey"/>, never under the web root.</summary>

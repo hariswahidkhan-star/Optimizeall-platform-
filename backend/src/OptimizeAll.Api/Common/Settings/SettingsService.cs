@@ -34,6 +34,8 @@ public sealed class SettingsService(AppDbContext db, TimeProvider clock) : ISett
         [SettingKeys.RetentionEnabled] = true,
         [SettingKeys.RatesFourEyesIncreasePercent] = 0,
         [SettingKeys.ReferralProgram] = new ReferralProgramSettings(),
+        [SettingKeys.LearningIssuerName] = "Optimize All Academy",
+        [SettingKeys.LearningLinkedInOrganizationId] = "",
     };
 
     public async Task<T> GetAsync<T>(string key, T defaultValue, CancellationToken ct = default)

@@ -155,8 +155,22 @@ export async function sitemapUrls(request: APIRequestContext): Promise<string[]>
 /** Validates the schema.org shape of a JSON-LD node (the rules Google's rich results rely on). */
 export function expectValidJsonLd(node: Record<string, unknown>, where: string) {
   expect(node['@context'], `${where}: @context`).toBe('https://schema.org');
-  const type = node['@type'] as string;
-  expect(typeof type, `${where}: @type`).toBe('string');
+  // "@type" is one type or a list (e.g. ["LearningResource", "Article"]); a node must satisfy the rules of each type.
+  const types = jsonLdTypes(node);
+  expect(types.length, `${where}: @type`).toBeGreaterThan(0);
+  for (const type of types) {
+    expect(typeof type, `${where}: @type`).toBe('string');
+    expectValidJsonLdType(node, type, where);
+  }
+}
+
+/** The types of a JSON-LD node ("@type" as a string or a list of strings). */
+export function jsonLdTypes(node: Record<string, unknown>): string[] {
+  const t = node['@type'];
+  return Array.isArray(t) ? (t as string[]) : t === undefined ? [] : [t as string];
+}
+
+function expectValidJsonLdType(node: Record<string, unknown>, type: string, where: string) {
   const has = (key: string) => node[key] !== undefined && node[key] !== null && node[key] !== '';
   const need = (...keys: string[]) => {
     for (const key of keys) expect(has(key), `${where}: ${type} needs ${key}`).toBe(true);

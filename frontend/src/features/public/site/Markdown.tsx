@@ -219,6 +219,8 @@ export function renderInline(text: string, keyPrefix = 'i', partnerLinks: readon
   return out;
 }
 
+const TASK = /^\[([ xX])\]\s+(.*)$/s;
+
 export interface MarkdownProps {
   source: string | null | undefined;
   className?: string;
@@ -265,11 +267,22 @@ export function Markdown({ source, className, minLevel = 2, interlude }: Markdow
         return <p key={key}>{renderInline(block.text, key, partnerLinks)}</p>;
       case 'list': {
         const Tag = block.ordered ? 'ol' : 'ul';
+        // GFM task lists ("- [ ] item", "- [x] item") render read-only checkboxes inside a label.
+        const isTaskList = block.items.length > 0 && block.items.every((item) => TASK.test(item));
         return (
-          <Tag key={key}>
-            {block.items.map((item, j) => (
-              <li key={j}>{renderInline(item, `${key}-${j}`, partnerLinks)}</li>
-            ))}
+          <Tag key={key} className={isTaskList ? 'site-prose__tasks' : undefined}>
+            {block.items.map((item, j) => {
+              const task = isTaskList ? TASK.exec(item) : null;
+              if (!task) return <li key={j}>{renderInline(item, `${key}-${j}`, partnerLinks)}</li>;
+              return (
+                <li key={j} className="site-prose__task">
+                  <label>
+                    <input type="checkbox" disabled checked={task[1] !== ' '} />
+                    <span>{renderInline(task[2], `${key}-${j}`, partnerLinks)}</span>
+                  </label>
+                </li>
+              );
+            })}
           </Tag>
         );
       }

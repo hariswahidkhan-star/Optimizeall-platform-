@@ -14,7 +14,7 @@ public sealed class AdminPlatformTests(ApiFactory api) : IClassFixture<ApiFactor
         var (adminUser, admin) = await api.AdminAsync();
         var list = await (await admin.GetAsync("/api/v1/admin/settings")).ReadJsonAsync();
         var keys = list.EnumerateArray().Select(s => s.GetProperty("key").GetString()).ToList();
-        Assert.Equal(10, keys.Count);
+        Assert.Equal(12, keys.Count); // 9 platform settings + rates.fourEyesIncreasePercent + the 2 Learning issuer settings
         var fourEyes = list.EnumerateArray().Single(s => s.GetProperty("key").GetString() == "rates.fourEyesIncreasePercent");
         Assert.Equal(0, fourEyes.GetProperty("defaultValue").GetInt32());
         var inactivity = list.EnumerateArray().Single(s => s.GetProperty("key").GetString() == "retention.inactivityDays");
@@ -41,6 +41,9 @@ public sealed class AdminPlatformTests(ApiFactory api) : IClassFixture<ApiFactor
         await Bad("referral.program", new { referrerRewardAmount = 5, currency = "USD", qualifyingAction = "SignedUp", qualifyWithinDays = 30 });
         await Bad("referral.program", new { referrerRewardAmount = 5, currency = "USD", qualifyingAction = "EmailVerified", qualifyWithinDays = 366 });
         await Bad("referral.program", new { referrerRewardAmount = 5, currency = "USD", qualifyingAction = "EmailVerified", qualifyWithinDays = 30, typo = 1 });
+        await Bad("learning.issuerName", "x");
+        await Bad("learning.issuerName", 5);
+        await Bad("learning.linkedInOrganizationId", "acme-company");
         await Bad("no.such.key", 1, 404, "setting.not_found");
         await (await admin.PutAsJsonAsync("/api/v1/admin/settings/review.claimMinutes", new { value = 20, reason = "test" }))
             .ShouldFailAsync(400, "admin.confirmation_required");

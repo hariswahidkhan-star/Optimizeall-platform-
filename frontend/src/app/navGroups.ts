@@ -16,6 +16,9 @@ const RULES: Record<PortalId, [prefix: string, group: string][]> = {
     ['social-accounts', 'Grow'],
     ['referrals', 'Grow'],
     ['achievements', 'Grow'],
+    // The academy (courses, certificates): part of growing as a creator.
+    ['learning', 'Grow'],
+    ['learning', 'Learn'],
     ['notifications', 'Account'],
     ['support', 'Account'],
     ['profile', 'Account'],
@@ -52,7 +55,10 @@ const RULES: Record<PortalId, [prefix: string, group: string][]> = {
     ['settings', 'Platform'],
     ['content', 'Platform'],
     ['categories', 'Platform'],
+    // Academy courses are platform content (next to the site content and campaign categories).
+    ['learning', 'Platform'],
     ['support', 'Operations'],
+    ['learning', 'Operations'],
     ['audit', 'Operations'],
     ['jobs', 'Operations'],
     ['analytics', 'Operations'],

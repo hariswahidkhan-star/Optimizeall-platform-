@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Open Badges 2.0 Profile (Issuer)",
+  "description": "Open Badges 2.0 (IMS Global Final, https://www.imsglobal.org/sites/default/files/Badges/OBv2p0Final/index.html): required properties and value types of the hosted-verification documents, transcribed from the specification's data model tables.",
+  "type": "object",
+  "required": [
+    "@context",
+    "type",
+    "id",
+    "name",
+    "url"
+  ],
+  "properties": {
+    "@context": {
+      "const": "https://w3id.org/openbadges/v2"
+    },
+    "type": {
+      "enum": [
+        "Issuer",
+        "Profile"
+      ]
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^https?://"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "url": {
+      "type": "string",
+      "pattern": "^https?://"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "description": {
+      "type": "string"
+    },
+    "image": {
+      "type": "string",
+      "pattern": "^https?://"
+    }
+  }
+}

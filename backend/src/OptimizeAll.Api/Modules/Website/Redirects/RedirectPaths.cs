@@ -34,7 +34,7 @@ public static class RedirectPaths
     {
         "app", "agency", "client", "admin", "finance", "review", "manage", "api", "auth", "login", "register", "check-email",
         "verify-email", "forgot-password", "reset-password", "join", "c", "t", "e", "p", "i", "email", "f", "assets", "health",
-        "healthz", "design-system",
+        "healthz", "design-system", "verify",
     };
 
     /// <summary>Built-in public pages (frontend features/public/routes.tsx): they always render, so they are never a redirect source.</summary>
@@ -42,7 +42,7 @@ public static class RedirectPaths
     {
         "/", "/services", "/industries", "/case-studies", "/pricing", "/team", "/careers", "/blog", "/contact", "/free-audit",
         "/get-a-quote", "/book-a-consultation", "/newsletter", "/newsletter/confirm", "/newsletter/unsubscribe", "/search", "/faq",
-        "/creators", "/lp", "/robots.txt", "/sitemap.xml", "/favicon.ico", "/partners",
+        "/creators", "/lp", "/robots.txt", "/sitemap.xml", "/favicon.ico", "/partners", "/learn",
     };
 
     /// <summary>Parses a raw request target ("/path?query#fragment"); null when it is not a safe same-site address.</summary>

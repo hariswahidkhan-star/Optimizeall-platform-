@@ -70,9 +70,9 @@ public sealed partial class LocalFileStorage : IFileStorage
         return full;
     }
 
-    [GeneratedRegex(@"^\d{4}/\d{2}/[0-9a-f]{32}\.(png|jpg|webp|pdf|mp4)$")]
+    [GeneratedRegex(@"^\d{4}/\d{2}/[0-9a-f]{32}\.(png|jpg|webp|pdf|mp4|vtt)$")]
     private static partial Regex KeyRegex();
 
-    [GeneratedRegex(@"^\.(png|jpg|webp|pdf|mp4)$")]
+    [GeneratedRegex(@"^\.(png|jpg|webp|pdf|mp4|vtt)$")]
     private static partial Regex ExtensionRegex();
 }

@@ -18,6 +18,8 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.10" />
     <PackageReference Include="MimeKit" Version="4.18.1" />
+    <!-- Certificate PDFs (Learning). MIT licence, pure managed (no native/system packages); fonts are embedded below. -->
+    <PackageReference Include="PDFsharp" Version="6.2.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
@@ -36,6 +38,10 @@
     <None Remove="Modules\Website\Content\partner-posts\**" />
     <EmbeddedResource Include="Modules\Website\Content\partner-posts\*.md" LogicalName="OptimizeAll.PartnerPosts.%(Filename)%(Extension)" />
     <EmbeddedResource Include="Modules\Website\Content\partner-posts\covers\*.png" LogicalName="OptimizeAll.PartnerPosts.covers.%(Filename)%(Extension)" />
+    <!-- Learning course packs (every *.json in the catalog folder) and the OFL fonts of the certificate PDF. -->
+    <Content Remove="Modules\Learning\Catalog\*.json" />
+    <EmbeddedResource Include="Modules\Learning\Catalog\*.json" LogicalName="OptimizeAll.Learning.Catalog.%(Filename)%(Extension)" />
+    <EmbeddedResource Include="Modules\Learning\Fonts\*.ttf" LogicalName="OptimizeAll.Learning.Fonts.%(Filename)%(Extension)" />
   </ItemGroup>
 
   <ItemGroup>

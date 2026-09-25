@@ -2,7 +2,9 @@
 
 export interface SettingMeta {
   label: string;
-  group: 'Eligibility' | 'Fraud & review' | 'Rates' | 'Retention' | 'Growth';
+  group: 'Eligibility' | 'Fraud & review' | 'Rates' | 'Retention' | 'Growth' | 'Learning';
+  /** Max length for string settings. */
+  maxLength?: number;
   /** Inclusive range for integer settings (the server enforces the same). */
   range?: [number, number];
   unit?: string;
@@ -84,6 +86,20 @@ export const SETTING_META: Record<string, SettingMeta> = {
     group: 'Growth',
     impact:
       'Controls referral rewards. Changes apply to referrals that qualify from now on; rewards already granted are not changed.',
+  },
+  'learning.issuerName': {
+    label: 'Certificate issuer name',
+    group: 'Learning',
+    maxLength: 100,
+    impact:
+      'The organisation named on course certificates, Open Badges and LinkedIn “Add to profile” links. Certificates show the current name.',
+  },
+  'learning.linkedInOrganizationId': {
+    label: 'LinkedIn organization id',
+    group: 'Learning',
+    maxLength: 20,
+    impact:
+      'Numeric id of your LinkedIn company page. When set, “Add to LinkedIn profile” links the certification to the page (with its logo); when empty, the issuer name is sent instead.',
   },
 };
 

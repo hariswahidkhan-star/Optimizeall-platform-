@@ -31,6 +31,12 @@ public static class AppLinks
     /// <summary>Public campaign landing page (<c>/c/:slug</c>).</summary>
     public static string PublicCampaign(string slug) => $"/c/{Uri.EscapeDataString(slug)}";
 
+    /// <summary>Public certificate verification page (<c>/verify/certificates/:id</c>).</summary>
+    public static string VerifyCertificate(Guid certificateId) => $"/verify/certificates/{certificateId}";
+
+    /// <summary>Public course page of the free academy (<c>/learn/:slug</c>).</summary>
+    public static string AcademyCourse(string slug) => $"/learn/{Uri.EscapeDataString(slug)}";
+
     // ---------- Participant portal (/app) ----------
     public const string ParticipantHome = "/app";
     public const string Campaigns = "/app/campaigns";
@@ -50,6 +56,10 @@ public static class AppLinks
     /// <summary>The participant's discount codes and the sales they reported (docs/DISCOUNT_CODES.md).</summary>
     public const string MyCodes = "/app/codes";
     public static string MyCodeSale(Guid saleId) => $"/app/codes/sales/{saleId}";
+    /// <summary>My learning (dashboard of enrolled courses and certificates).</summary>
+    public const string LearningHome = "/app/learning";
+    public static string LearningCourse(string slug) => $"/app/learning/courses/{Uri.EscapeDataString(slug)}";
+    public static string LearningCertificate(Guid certificateId) => $"/app/learning/certificates/{certificateId}";
 
     // ---------- Reviewer portal (/review) ----------
     public static string ReviewSubmission(Guid submissionId) => $"/review/queue/{submissionId}";

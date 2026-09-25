@@ -51,4 +51,12 @@ describe('sidebar nav groups', () => {
     const section = sections.find((s) => s.items.some((i) => i.to === to));
     expect(section?.label).toBe(label);
   });
+
+  it.each([
+    ['participant', 'learning', 'Grow'],
+    ['admin', 'learning', 'Platform'],
+  ] as const)('puts %s → %s (academy) in the %s section', (portal, to, label) => {
+    const sections = groupNav(portal, getPortal(portal).nav);
+    expect(sections.find((s) => s.items.some((i) => i.to === to))?.label).toBe(label);
+  });
 });

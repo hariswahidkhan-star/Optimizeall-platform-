@@ -4,6 +4,7 @@ import {
   Cog,
   FileText,
   FolderTree,
+  GraduationCap,
   KeyRound,
   LayoutDashboard,
   LifeBuoy,
@@ -21,6 +22,17 @@ const AnalyticsPage = lazyPage(() => import('./analytics/AnalyticsPage'), 'Analy
 const AuditLogPage = lazyPage(() => import('./audit/AuditLogPage'), 'AuditLogPage');
 const CategoriesPage = lazyPage(() => import('./categories/CategoriesPage'), 'CategoriesPage');
 const ContentPage = lazyPage(() => import('./content/ContentPage'), 'ContentPage');
+const LearningCoursesPage = lazyPage(() => import('./learning/LearningCoursesPage'), 'LearningCoursesPage');
+const LearningCertificatesPage = lazyPage(
+  () => import('./learning/LearningCoursesPage'),
+  'LearningCertificatesPage',
+);
+const LearningCourseDetailPage = lazyPage(
+  () => import('./learning/LearningCourseDetailPage'),
+  'LearningCourseDetailPage',
+);
+const NewCoursePage = lazyPage(() => import('./learning/CourseEditorPage'), 'NewCoursePage');
+const EditCoursePage = lazyPage(() => import('./learning/CourseEditorPage'), 'EditCoursePage');
 const JobsPage = lazyPage(() => import('./jobs/JobsPage'), 'JobsPage');
 const RolesPage = lazyPage(() => import('./roles/RolesPage'), 'RolesPage');
 const OverviewPage = lazyPage(() => import('./OverviewPage'), 'OverviewPage');
@@ -44,6 +56,8 @@ const requires = {
   // The API (/admin/campaign-categories) authorizes with campaigns.manage.
   categories: { anyOf: [Permissions.CampaignsManage] },
   support: { anyOf: [Permissions.SupportManage] },
+  learning: { anyOf: [Permissions.LearningView] },
+  learningManage: { anyOf: [Permissions.LearningView], allOf: [Permissions.LearningManage] },
   audit: { anyOf: [Permissions.AuditView] },
   jobs: { anyOf: [Permissions.JobsView] },
   analytics: { anyOf: [Permissions.AnalyticsView] },
@@ -90,6 +104,13 @@ export const nav: PortalNavItem[] = [
     icon: FolderTree,
     description: 'Categories used to organise campaigns.',
     requires: requires.categories,
+  },
+  {
+    to: 'learning',
+    label: 'Learning',
+    icon: GraduationCap,
+    description: 'Courses, pass rates, question analytics, learners and certificates.',
+    requires: requires.learning,
   },
   {
     to: 'support',
@@ -146,6 +167,21 @@ export const routes: RouteObject[] = [
     children: [
       { index: true, element: page(<TicketsPage />) },
       { path: ':ticketId', element: page(<TicketDetailPage />) },
+    ],
+  },
+  {
+    path: 'learning',
+    handle: { requires: requires.learning },
+    children: [
+      { index: true, element: page(<LearningCoursesPage />) },
+      { path: 'certificates', element: page(<LearningCertificatesPage />) },
+      { path: 'new', handle: { requires: requires.learningManage }, element: page(<NewCoursePage />) },
+      { path: 'courses/:courseId', element: page(<LearningCourseDetailPage />) },
+      {
+        path: 'courses/:courseId/edit',
+        handle: { requires: requires.learningManage },
+        element: page(<EditCoursePage />),
+      },
     ],
   },
   { path: 'audit', handle: { requires: requires.audit }, element: page(<AuditLogPage />) },

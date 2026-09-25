@@ -11,6 +11,7 @@
 #   API_UPSTREAM    base URL of the API (scheme://host:port, no path). Default http://api:8080.
 #   IMG_SRC_EXTRA   extra CSP img-src sources, space separated (e.g. "https://images.example.com"). Default empty.
 #                   Must match the API's Content:AllowedImageHosts.
+#   MEDIA_SRC_EXTRA extra CSP media-src sources for lesson videos hosted elsewhere (e.g. "https://cdn.example.com"). Default empty.
 #   API_HOSTPORT, REAL_IP_FROM, API_WAIT_SECONDS, API_RESOLVE_INTERVAL: see nginx/12-optimizeall-platform.envsh (Render: docs/RENDER.md).
 
 ARG NODE_VERSION=22
@@ -37,6 +38,7 @@ FROM nginxinc/nginx-unprivileged:${NGINX_VERSION}-alpine AS runtime
 ENV API_UPSTREAM=http://api:8080
 # Defined (empty) so envsubst always renders it; see nginx/snippets/security-headers.conf.
 ENV IMG_SRC_EXTRA=""
+ENV MEDIA_SRC_EXTRA=""
 
 COPY nginx/default.conf.template /etc/nginx/templates/default.conf.template
 COPY nginx/snippets/ /etc/nginx/snippets/
