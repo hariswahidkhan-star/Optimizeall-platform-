@@ -209,6 +209,39 @@ public sealed class SeoFilesController(SeoPageResolver resolver, SeoSettingsServ
     }
 }
 
+/// <summary>
+/// Generated social cards (Open Graph / Twitter images, 1200×630 PNG): <c>/og{path}.png?v={version}</c>, one per
+/// indexable page without an image of its own (SocialCards/). The version in the URL changes with the card's words, so
+/// a request carrying the current version is cached for a year (immutable); any other gets the current card with a
+/// short cache. Unknown, noindex-only or image-bearing pages answer 404.
+/// </summary>
+[ApiController]
+[AllowAnonymous]
+[EnableRateLimiting(RateLimitPolicies.Documents)]
+[ApiExplorerSettings(IgnoreApi = true)]
+public sealed class SocialCardController(SeoPageResolver resolver, SocialCards.SocialCardRenderer renderer) : ControllerBase
+{
+    [HttpGet("/og/{**path}")]
+    [HttpHead("/og/{**path}")]
+    public async Task<IActionResult> Card(CancellationToken ct)
+    {
+        var pagePath = SocialCards.SocialCardFactory.PagePath(Request.Path.Value ?? string.Empty);
+        if (pagePath is null || SeoPageResolver.NormalizePath(pagePath) is not null) return NotFound();
+        var query = Request.Query.Where(kv => kv.Key != "v")
+            .SelectMany(kv => kv.Value.Select(v => Uri.EscapeDataString(kv.Key) + "=" + Uri.EscapeDataString(v ?? string.Empty)));
+        var page = await resolver.ResolveAsync(pagePath, "?" + string.Join("&", query), ct);
+        if (page.Status != 200 || page.Card is null) return NotFound();
+        var siteName = resolver.Settings.SiteName;
+        var version = page.Card.Version(siteName, resolver.CardHost);
+        var etag = "\"" + version + "\"";
+        Response.Headers.ETag = etag;
+        Response.Headers.CacheControl = Request.Query["v"] == version ? "public, max-age=31536000, immutable" : "public, max-age=3600";
+        Response.Headers["X-Content-Type-Options"] = "nosniff";
+        if (Request.Headers.IfNoneMatch.ToString().Split(',').Select(t => t.Trim()).Contains(etag)) return StatusCode(StatusCodes.Status304NotModified);
+        return File(renderer.Render(page.Card, siteName, resolver.CardHost), "image/png");
+    }
+}
+
 /// <summary>SEO overview of every public URL and the SEO settings (crawler policy, IndexNow, llms.txt).</summary>
 [ApiController]
 [HasPermission(Permissions.SiteManage)]

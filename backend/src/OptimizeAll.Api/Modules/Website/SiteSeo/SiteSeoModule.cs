@@ -9,6 +9,7 @@ public static class SiteSeoModule
     public static IServiceCollection AddSiteSeo(this IServiceCollection services)
     {
         services.AddScoped<SeoSettingsService>();
+        services.AddSingleton<SocialCards.SocialCardRenderer>();
         services.AddScoped<SeoPageResolver>();
         services.AddScoped<LlmsTxtService>();
         services.AddScoped<SeoOverviewService>();
