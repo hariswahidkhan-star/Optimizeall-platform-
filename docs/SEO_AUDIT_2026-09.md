@@ -71,7 +71,7 @@ at the end).
 | 15 | Medium | `/learn` (hydrated) | The academy page shows fewer courses than the server HTML (28 course links exist only in the server HTML). Google indexes the rendered page; courses stay discoverable through the sitemap and SSR links, but the rendered hub should link them all (or paginate with crawlable links). | See A3. | Owner: engine |
 | 16 | Medium | 710 lessons | Lesson meta descriptions (and llms summaries) run the first heading into the first paragraph ("What Optimize All is Optimize All connects…"). | See A1. | Owner: engine |
 | 17 | Low | 18 pages (industries, some services) | Meta descriptions of 50–65 characters (target 70–155). | See B3. | Owner: brand/content |
-| 18 | Low | `/`, `/pricing`, `/careers`, `/about` | The server HTML has some text the rendered page does not show (home service taglines and 3 industries, pricing's "what's included" links, the careers call to action). Not deceptive, but server HTML should be a subset of the rendered page. | See B2. | Owner: brand |
+| 18 | Low | `/`, `/academy`, `/pricing`, `/careers` | The server HTML had text the rendered page does not show. After the two-pillar redesign the home page and `/academy` are rendered in the web app's order and words (academy first: live counts, subjects, featured courses, paths, steps, certificates; then the agency, audit, services limited as shown, trust, dual call to action); Playwright now finds every server link on the rendered page. Remaining: pricing's "what's included" links and the careers call to action. | Home and /academy fixed; rest see B2. | Fixed / Owner: brand |
 | 19 | Low | 25 blog posts | `og:image` is the uploaded cover, whose size is unknown, so no `og:image:width/height`. Networks fetch the image to size it; harmless. | — | Accepted |
 | 20 | Low | `/lp/*` (4), `/c/*` (2) | Not linked from the site (orphans; they are in the landing-pages sitemap). Client landing pages are reached from ads and carry the client's brand, so no breadcrumb or agency card. Public creator campaigns could be linked from `/creators`. | See B4 for campaigns. | Accepted / Owner: brand |
 | 21 | Low | JobPosting | No `validThrough` when a role has no closing date — Google only needs it when the posting expires. | — | Accepted |
@@ -123,9 +123,8 @@ from nginx (CSP, nosniff, X-Frame-Options, Referrer-Policy, Permissions-Policy, 
    it); after client navigation, use the page's own image or the card URL pattern `/og{path}.png` (the API serves the
    current card for any `v`). Also stop removing `og:image:*` only on client navigations while replacing the image,
    so width/height never describe a different image.
-2. **Server/rendered parity:** anything the server HTML shows should also be on the rendered page: home — service
-   taglines under each service and all industries returned by the home payload (or ask the SEO owner to trim the server
-   HTML to what the page shows); pricing — a "What's included" link per service to `/services/{slug}#pricing`;
+2. **Server/rendered parity:** anything the server HTML shows should also be on the rendered page (home and /academy
+   now match); pricing — a "What's included" link per service to `/services/{slug}#pricing`;
    careers — the `careers.cta.*` block.
 3. **Meta descriptions under 70 characters:** extend the SEO descriptions of the industries (healthcare, finance,
    real-estate, SaaS, education, hospitality, …) and the other short ones to 70–155 characters.
