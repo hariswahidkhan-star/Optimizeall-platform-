@@ -129,6 +129,10 @@ export interface LessonLecture {
   captions: string | null;
   chapters: LectureChapter[];
   transcriptWords: number;
+  /** YouTube-hosted lecture: its video id and the privacy-enhanced embed URL (youtube-nocookie.com). */
+  youTubeId: string | null;
+  embedUrl: string | null;
+  publishedAt: string | null;
 }
 
 export interface KnowledgeCheck {

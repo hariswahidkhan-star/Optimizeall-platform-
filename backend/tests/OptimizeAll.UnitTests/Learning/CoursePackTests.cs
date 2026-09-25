@@ -319,6 +319,37 @@ public sealed class CoursePackTests
         p = V2Sample(); p.Modules![0].Lessons![0].Lecture!.Captions = "https://cdn.example.com/c.vtt"; AssertIssue(p, $"{lp}.captions");
     }
 
+    [Theory]
+    [InlineData("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "dQw4w9WgXcQ")]
+    [InlineData("https://youtube.com/watch?v=dQw4w9WgXcQ&t=30s", "dQw4w9WgXcQ")]
+    [InlineData("https://youtu.be/dQw4w9WgXcQ", "dQw4w9WgXcQ")]
+    [InlineData("https://youtu.be/dQw4w9WgXcQ?si=abc", "dQw4w9WgXcQ")]
+    [InlineData("https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ", "dQw4w9WgXcQ")]
+    [InlineData("https://www.youtube.com/watch?v=short", null)]
+    [InlineData("https://www.youtube.com/watch?v=dQw4w9WgXcQx", null)]
+    [InlineData("http://youtu.be/dQw4w9WgXcQ", null)]
+    [InlineData("https://www.youtube.com/embed/dQw4w9WgXcQ", null)]
+    [InlineData("https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ/extra", null)]
+    [InlineData("https://cdn.example.com/lecture.mp4", null)]
+    public void YouTube_ids_are_read_from_the_accepted_url_forms(string url, string? id) => Assert.Equal(id, YouTube.IdFrom(url));
+
+    [Fact]
+    public void A_lecture_src_on_youtube_must_be_an_accepted_form_and_publishedAt_a_date()
+    {
+        const string lp = "modules[0].lessons[0].lecture";
+        var p = V2Sample(); var l = p.Modules![0].Lessons![0].Lecture!;
+        l.Src = "https://youtu.be/dQw4w9WgXcQ"; l.Captions = "/api/v1/files/0f8fad5b-d9cb-469f-a165-70867728950e"; l.PublishedAt = "2026-09-20";
+        Assert.Empty(CoursePackValidator.Validate(p));
+        Assert.Equal("dQw4w9WgXcQ", l.YouTubeId);
+        p = V2Sample(); p.Modules![0].Lessons![0].Lecture!.Src = "https://www.youtube.com/watch?v=tooShort"; AssertIssue(p, $"{lp}.src");
+        p = V2Sample(); p.Modules![0].Lessons![0].Lecture!.Src = "https://www.youtube.com/embed/dQw4w9WgXcQ"; AssertIssue(p, $"{lp}.src", PackValidationMode.Authoring);
+        p = V2Sample(); p.Modules![0].Lessons![0].Lecture!.PublishedAt = "2026-02-30"; AssertIssue(p, $"{lp}.publishedAt");
+        p = V2Sample(); p.Modules![0].Lessons![0].Lecture!.PublishedAt = "20-09-2026"; AssertIssue(p, $"{lp}.publishedAt");
+        // Round trip keeps publishedAt.
+        p = V2Sample(); p.Modules![0].Lessons![0].Lecture!.PublishedAt = "2026-09-20";
+        Assert.Equal("2026-09-20", CoursePack.Parse(p.ToJson()).Pack!.Modules![0].Lessons![0].Lecture!.PublishedAt);
+    }
+
     [Fact]
     public void Chapter_title_is_the_first_on_screen_line()
     {

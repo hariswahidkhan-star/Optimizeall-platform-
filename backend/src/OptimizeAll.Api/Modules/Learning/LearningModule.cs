@@ -39,7 +39,7 @@ public static class LearningModule
 /// The <c>learn</c> child sitemap of the sitemap index (SiteSeo, <c>/sitemaps/learn.xml</c>): /learn, every published
 /// course and each of its lessons, all server-rendered by <c>SeoPageResolver</c>.
 /// </summary>
-public sealed class LearningSitemapContributor(AppDbContext db, CourseContentCache cache) : ISitemapContributor
+public sealed class LearningSitemapContributor(AppDbContext db, CourseContentCache cache, LearningIssuerProvider issuers) : ISitemapContributor
 {
     public const string GroupName = "learn";
 
@@ -50,6 +50,7 @@ public sealed class LearningSitemapContributor(AppDbContext db, CourseContentCac
         var courses = await db.Set<Course>().AsNoTracking()
             .Where(c => c.Status == CourseStatus.Published && c.PublishedVersionId != null)
             .OrderBy(c => c.SortOrder).ThenBy(c => c.Slug).ToListAsync(ct);
+        var links = new LearningLinks((await issuers.GetAsync(ct)).BaseUrl);
         var lastUpdate = courses.Count == 0 ? (DateTime?)null : courses.Max(c => c.UpdatedAt);
         var result = new List<SitemapContribution> { new("/learn", lastUpdate, "Academy") };
         // Learning paths with at least one published course (/learn/paths and each path).
@@ -64,7 +65,14 @@ public sealed class LearningSitemapContributor(AppDbContext db, CourseContentCac
         {
             result.Add(new SitemapContribution(LearningLinks.CoursePath(course.Slug), course.UpdatedAt, course.Title));
             var doc = await cache.GetAsync(db, course.PublishedVersionId!.Value, ct);
-            result.AddRange(doc.Lessons.Select(l => new SitemapContribution(LearningLinks.LessonPath(course.Slug, l.Lesson.Slug), course.UpdatedAt, l.Lesson.Title)));
+            foreach (var l in doc.Lessons)
+            {
+                // Produced lectures go into the video sitemap (player_loc = the privacy-enhanced YouTube embed).
+                var video = l.Lesson.Lecture?.Src is null ? null
+                    : LearningJsonLd.SeoVideo(doc.Pack, l.Lesson, PublicLearningService.Truncate(PublicLearningService.PlainText(l.Lesson.Body), 300), links, course);
+                result.Add(new SitemapContribution(LearningLinks.LessonPath(course.Slug, l.Lesson.Slug), course.UpdatedAt, l.Lesson.Title,
+                    Videos: video is null ? null : new[] { video }));
+            }
         }
         return result;
     }

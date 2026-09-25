@@ -278,6 +278,11 @@ public static partial class CoursePackValidator
             v.Text($"{pp}.say", pronunciations[i].Say, 120);
         }
         v.Media($"{lp}.src", lecture.Src);
+        if (lecture.Src is not null && YouTube.IsYouTubeHost(lecture.Src) && YouTube.IdFrom(lecture.Src) is null)
+            v.Add($"{lp}.src", "Use https://www.youtube.com/watch?v=ID, https://youtu.be/ID or https://www.youtube-nocookie.com/embed/ID (an 11-character video id).");
+        if (lecture.PublishedAt is not null &&
+            !DateOnly.TryParseExact(lecture.PublishedAt, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out _))
+            v.Add($"{lp}.publishedAt", "Use the publication date as YYYY-MM-DD.");
         v.Media($"{lp}.poster", lecture.Poster);
         v.Media($"{lp}.captions", lecture.Captions);
         if (lecture.Captions is not null && lecture.Src is null) v.Add($"{lp}.captions", "Captions need a lecture video source.");

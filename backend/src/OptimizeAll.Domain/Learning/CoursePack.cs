@@ -163,6 +163,13 @@ public sealed class PackLecture
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Captions { get; set; }
 
+    /// <summary>When the produced lecture was published ("YYYY-MM-DD"): the VideoObject's uploadDate.</summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? PublishedAt { get; set; }
+
+    /// <summary>The YouTube video id when <see cref="Src"/> is a YouTube URL (lectures are hosted on YouTube), else null.</summary>
+    [JsonIgnore] public string? YouTubeId => YouTube.IdFrom(Src);
+
     /// <summary>Total narration words.</summary>
     [JsonIgnore] public int NarrationWords => (Scenes ?? new()).Sum(s => CoursePackValidator.WordCount(s?.Narration));
 

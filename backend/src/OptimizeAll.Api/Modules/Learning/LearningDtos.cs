@@ -57,11 +57,12 @@ public sealed record LessonVideoDto(string? Src, string? Poster, string? Caption
 public sealed record LectureChapterDto(int Index, string Title, IReadOnlyList<string> Points, string Narration, int StartSeconds, int Seconds);
 
 /// <summary>
-/// A lesson's video lecture (pack v2). <see cref="Produced"/> is false until the ElevenLabs-produced video is attached
-/// (<see cref="Src"/>): the page then shows "coming soon" with the chapters and the full transcript.
+/// A lesson's video lecture (pack v2). <see cref="Produced"/> is false until the produced video is attached
+/// (<see cref="Src"/>): the page then shows "coming soon" with the chapters and the full transcript. Lectures are hosted on
+/// YouTube (<see cref="YouTubeId"/>, embedded privacy-enhanced via <see cref="EmbedUrl"/>) or self-hosted (MP4 src).
 /// </summary>
 public sealed record LessonLectureDto(string Title, int TargetMinutes, int TotalSeconds, bool Produced, string? Src, string? Poster,
-    string? Captions, IReadOnlyList<LectureChapterDto> Chapters, int TranscriptWords);
+    string? Captions, IReadOnlyList<LectureChapterDto> Chapters, int TranscriptWords, string? YouTubeId, string? EmbedUrl, string? PublishedAt);
 
 /// <summary>A knowledge-check question. Not graded for the certificate, so the answer and explanation are included.</summary>
 public sealed record KnowledgeCheckDto(int Index, string Question, IReadOnlyList<string> Options, IReadOnlyList<int> Correct, string Explanation, bool Multiple);
@@ -255,6 +256,10 @@ public sealed class LessonVideoRequest
     /// <summary>WebVTT captions (uploaded file URL or https URL).</summary>
     [MaxLength(500)]
     public string? Captions { get; set; }
+
+    /// <summary>Lectures only: when the video was published ("YYYY-MM-DD", the VideoObject uploadDate).</summary>
+    [MaxLength(10)]
+    public string? PublishedAt { get; set; }
 
     public bool Publish { get; set; }
 

@@ -168,6 +168,37 @@ public sealed class LearningPathTests
     }
 
     [Fact]
+    public void Video_object_for_a_youtube_lecture_uses_the_nocookie_embed()
+    {
+        var pack = CoursePackTests.V2Sample();
+        var lesson = pack.AllLessons.First(x => x.Lesson.Type == "article").Lesson;
+        lesson.Lecture!.Src = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+        lesson.Lecture.PublishedAt = "2026-09-20";
+        var course = new Course { Slug = pack.Slug, UpdatedAt = DateTime.UtcNow, PublishedAt = DateTime.UtcNow };
+        var video = LearningJsonLd.Video(pack, lesson, "excerpt", Links, course)!.Value;
+        Assert.Equal("https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ", video.GetProperty("embedUrl").GetString());
+        Assert.Equal("https://www.youtube.com/watch?v=dQw4w9WgXcQ", video.GetProperty("contentUrl").GetString());
+        Assert.Equal("https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg", video.GetProperty("thumbnailUrl")[0].GetString());
+        Assert.Equal("2026-09-20", video.GetProperty("uploadDate").GetString());
+        Assert.Equal("PT6M30S", video.GetProperty("duration").GetString());
+        var clip = video.GetProperty("hasPart")[1];
+        Assert.Equal(65, clip.GetProperty("startOffset").GetInt32());
+        Assert.Equal(130, clip.GetProperty("endOffset").GetInt32());
+        Assert.Equal("https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=65s", clip.GetProperty("url").GetString());
+
+        var seo = LearningJsonLd.SeoVideo(pack, lesson, "excerpt", Links, course)!;
+        Assert.Equal("https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ", seo.EmbedUrl);
+        Assert.Null(seo.ContentUrl);
+        Assert.Equal(390, seo.DurationSeconds);
+        Assert.Equal(new DateTime(2026, 9, 20, 0, 0, 0, DateTimeKind.Utc), seo.UploadDate);
+
+        var dto = PublicLearningService.Lecture(lesson)!;
+        Assert.True(dto.Produced);
+        Assert.Equal("dQw4w9WgXcQ", dto.YouTubeId);
+        Assert.Equal("https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ", dto.EmbedUrl);
+    }
+
+    [Fact]
     public void Lesson_lecture_dto_has_chapters_and_times()
     {
         var pack = CoursePackTests.V2Sample();

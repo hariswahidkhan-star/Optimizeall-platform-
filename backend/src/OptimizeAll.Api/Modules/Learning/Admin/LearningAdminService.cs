@@ -259,6 +259,7 @@ public sealed class LearningAdminService(
             lecture.Src = Blank(request.Src);
             lecture.Poster = Blank(request.Poster);
             lecture.Captions = Blank(request.Captions);
+            lecture.PublishedAt = Blank(request.PublishedAt);
         }
         else
         {

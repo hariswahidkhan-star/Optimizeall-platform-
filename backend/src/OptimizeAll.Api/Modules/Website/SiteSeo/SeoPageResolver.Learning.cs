@@ -200,6 +200,12 @@ public sealed partial class SeoPageResolver
         {
             // The lecture transcript is crawlable text on the page, produced or not (the web app shows it in a panel).
             c.Add(new HeadingNode(2, $"Video lecture: {lecture.Title}"));
+            if (lecture.Produced && await learning.LectureVideoAsync(l.CourseSlug, l.Slug, ct) is { } lectureVideo)
+            {
+                // The player itself (YouTube embed or self-hosted file); its VideoObject JSON-LD is already in l.JsonLd.
+                c.Add(new VideoNode(lectureVideo));
+                page.Videos.Add(lectureVideo);
+            }
             c.Add(new ParagraphNode(lecture.Produced
                 ? $"{lecture.Chapters.Count} chapters · about {lecture.TargetMinutes} minutes · captions and full transcript below."
                 : $"Lecture coming soon · {lecture.Chapters.Count} chapters · about {lecture.TargetMinutes} minutes. Read the full transcript below."));

@@ -173,6 +173,8 @@ public static class LearningJsonLd
         var uploaded = (course.PublishedAt ?? course.UpdatedAt).ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
         if (lesson.Lecture is { Src: { } src } lecture)
         {
+            var youTube = lecture.YouTubeId;
+            if (lecture.PublishedAt is { } published) uploaded = published;
             var chapters = new List<Dictionary<string, object?>>();
             var start = 0;
             foreach (var (scene, i) in (lecture.Scenes ?? new()).Where(s => s is not null).Select((s, i) => (s, i)))
@@ -183,18 +185,27 @@ public static class LearningJsonLd
                     ["name"] = scene.ChapterTitle.Length > 0 ? scene.ChapterTitle : $"Part {i + 1}",
                     ["startOffset"] = start,
                     ["endOffset"] = start + scene.Seconds,
-                    ["url"] = links.Absolute(LearningLinks.LessonPath(pack.Slug, lesson.Slug)) + $"#t={start}",
+                    // Deep link to the moment: YouTube's watch page (&t=) or the lesson page's media fragment.
+                    ["url"] = youTube is not null
+                        ? $"{YouTube.WatchUrl(youTube)}&t={start}s"
+                        : links.Absolute(LearningLinks.LessonPath(pack.Slug, lesson.Slug)) + $"#t={start}",
                 });
                 start += scene.Seconds;
             }
+            object thumbnails = lecture.Poster is { } poster
+                ? links.Absolute(poster)
+                : youTube is not null
+                    ? new[] { YouTube.Thumbnail(youTube, "maxresdefault"), YouTube.Thumbnail(youTube, "hqdefault") }
+                    : links.BadgeImage(pack.Slug);
             return Element(new()
             {
                 ["@context"] = "https://schema.org",
                 ["@type"] = "VideoObject",
                 ["name"] = lecture.Title ?? lesson.Title,
                 ["description"] = excerpt,
-                ["thumbnailUrl"] = lecture.Poster is { } poster ? links.Absolute(poster) : links.BadgeImage(pack.Slug),
-                ["contentUrl"] = links.Absolute(src),
+                ["thumbnailUrl"] = thumbnails,
+                ["embedUrl"] = youTube is null ? null : YouTube.EmbedUrl(youTube),
+                ["contentUrl"] = youTube is null ? links.Absolute(src) : YouTube.WatchUrl(youTube),
                 ["uploadDate"] = uploaded,
                 ["duration"] = DurationSeconds(lecture.TotalSeconds),
                 ["transcript"] = lecture.Transcript,
@@ -218,6 +229,25 @@ public static class LearningJsonLd
             ["transcript"] = lesson.Video.Script,
             ["isAccessibleForFree"] = true,
         });
+    }
+
+    /// <summary>
+    /// A produced lecture as the site's video model (server-rendered player/embed and the video sitemap: player_loc = the
+    /// privacy-enhanced YouTube embed, or content_loc = the self-hosted file). Null until the lecture is produced.
+    /// </summary>
+    public static Website.SiteSeo.SeoVideo? SeoVideo(CoursePack pack, PackLesson lesson, string description, LearningLinks links, Course course)
+    {
+        if (lesson.Lecture is not { Src: { } src } lecture) return null;
+        var youTube = lecture.YouTubeId;
+        var uploaded = lecture.PublishedAt is { } p && DateTime.TryParseExact(p, "yyyy-MM-dd", CultureInfo.InvariantCulture,
+            DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out var d)
+            ? d
+            : course.PublishedAt ?? course.UpdatedAt;
+        var poster = lecture.Poster is { } pp ? links.Absolute(pp) : youTube is not null ? YouTube.Thumbnail(youTube) : links.BadgeImage(pack.Slug);
+        return new Website.SiteSeo.SeoVideo(lecture.Title ?? lesson.Title, description,
+            youTube is null ? links.Absolute(src) : null, null, poster,
+            lecture.Captions is { } c ? links.Absolute(c) : null, "en",
+            youTube is null ? null : YouTube.EmbedUrl(youTube), uploaded, Math.Max(1, lecture.TotalSeconds));
     }
 
     /// <summary>A learning path as a schema.org ItemList of its courses (in order), with the path's credentials.</summary>

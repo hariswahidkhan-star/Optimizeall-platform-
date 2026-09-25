@@ -47,9 +47,10 @@ public sealed class LearningV2Tests(ApiFactory api) : IClassFixture<ApiFactory>
             };
             if (first)
             {
-                lesson.Lecture.Src = "https://cdn.example.com/lecture.mp4";
-                lesson.Lecture.Poster = "https://cdn.example.com/lecture.jpg";
+                // Lectures are hosted on YouTube (captions: an optional VTT we host).
+                lesson.Lecture.Src = "https://youtu.be/dQw4w9WgXcQ";
                 lesson.Lecture.Captions = "https://cdn.example.com/lecture.vtt";
+                lesson.Lecture.PublishedAt = "2026-09-20";
                 first = false;
             }
         }
@@ -89,7 +90,11 @@ public sealed class LearningV2Tests(ApiFactory api) : IClassFixture<ApiFactory>
         var produced = await (await anon.GetAsync($"/api/v1/public/learning/courses/v2-lecture-course/lessons/{lessons[0]}")).ReadJsonAsync();
         var lecture = produced.GetProperty("lecture");
         Assert.True(lecture.GetProperty("produced").GetBoolean());
-        Assert.Equal("https://cdn.example.com/lecture.mp4", lecture.GetProperty("src").GetString());
+        Assert.Equal("dQw4w9WgXcQ", lecture.GetProperty("youTubeId").GetString());
+        Assert.Equal("https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ", lecture.GetProperty("embedUrl").GetString());
+        Assert.Equal("2026-09-20", lecture.GetProperty("publishedAt").GetString());
+        var videoLd = produced.GetProperty("jsonLd").EnumerateArray().Single(x => x.GetProperty("@type").ValueKind == JsonValueKind.String && x.GetProperty("@type").GetString() == "VideoObject");
+        Assert.Equal("https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ", videoLd.GetProperty("embedUrl").GetString());
         Assert.Equal(6, lecture.GetProperty("chapters").GetArrayLength());
         Assert.Equal("Chapter 2 heading", lecture.GetProperty("chapters")[1].GetProperty("title").GetString());
         Assert.Equal(60, lecture.GetProperty("chapters")[1].GetProperty("startSeconds").GetInt32());
@@ -113,6 +118,18 @@ public sealed class LearningV2Tests(ApiFactory api) : IClassFixture<ApiFactory>
             Assert.Equal(expectVideo, html.Contains("\"VideoObject\"", StringComparison.Ordinal));
             Assert.Contains("\"BreadcrumbList\"", html);
         }
+        // The produced lecture's page embeds the privacy-enhanced player; the video sitemap lists it (player_loc).
+        var producedHtml = await anon.GetStringAsync($"/_document/learn/v2-lecture-course/{lessons[0]}");
+        Assert.Contains("<iframe src=\"https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ\"", producedHtml);
+        var index = await anon.GetStringAsync("/sitemap.xml");
+        var videoMaps = Regex.Matches(index, "<loc>http://app.test(/sitemaps/videos[^<]*)</loc>").Select(m => m.Groups[1].Value).ToList();
+        Assert.NotEmpty(videoMaps);
+        var videoXml = string.Concat(await Task.WhenAll(videoMaps.Select(m => anon.GetStringAsync(m))));
+        Assert.Contains($"/learn/v2-lecture-course/{lessons[0]}</loc>", videoXml);
+        Assert.Contains("<video:player_loc>https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ</video:player_loc>", videoXml);
+        Assert.Contains("<video:thumbnail_loc>https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg</video:thumbnail_loc>", videoXml);
+        Assert.DoesNotContain($"/learn/v2-lecture-course/{lessons[1]}</loc>", videoXml);
+
         var coursePage = await anon.GetStringAsync("/_document/learn/v2-lecture-course");
         Assert.Contains("Updated", coursePage);
         Assert.Contains("Sep 2026", coursePage);

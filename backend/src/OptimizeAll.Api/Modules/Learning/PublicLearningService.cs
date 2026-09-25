@@ -173,8 +173,18 @@ public sealed partial class PublicLearningService(AppDbContext db, CourseContent
             next is null ? null : new LessonNavDto(next.Slug, next.Title),
             r.Index + 1, doc.Lessons.Count,
             new LearningSeoDto(SeoTitle($"{lesson.Title} — {doc.Pack.Title}", lesson.Title), excerpt, path,
-                lesson.Lecture?.Poster is { } poster ? links.Absolute(poster) : links.BadgeImage(doc.Pack.Slug), false),
+                lesson.Lecture?.Poster is { } poster ? links.Absolute(poster)
+                : lesson.Lecture?.YouTubeId is { } yt ? YouTube.Thumbnail(yt) : links.BadgeImage(doc.Pack.Slug), false),
             jsonLd, Lecture(lesson), doc.Pack.LastReviewed);
+    }
+
+    /// <summary>A published lesson's produced lecture as a site video (server-rendered embed/player), or null.</summary>
+    public async Task<Website.SiteSeo.SeoVideo?> LectureVideoAsync(string slug, string lessonSlug, CancellationToken ct)
+    {
+        var (course, doc) = await LoadPublishedAsync(slug, ct);
+        if (!doc.LessonsBySlug.TryGetValue(lessonSlug, out var r)) return null;
+        var links = new LearningLinks((await issuers.GetAsync(ct)).BaseUrl);
+        return LearningJsonLd.SeoVideo(doc.Pack, r.Lesson, Truncate(PlainText(r.Lesson.Body), SeoDescriptionMax), links, course);
     }
 
     /// <summary>The lesson's lecture for the player: chapters from scenes (title = first on-screen line), planned times.</summary>
@@ -194,8 +204,10 @@ public sealed partial class PublicLearningService(AppDbContext db, CourseContent
             chapters.Add(new LectureChapterDto(i, title, points, (scene.Narration ?? string.Empty).Trim(), start, scene.Seconds));
             start += scene.Seconds;
         }
+        var youTube = lecture.YouTubeId;
         return new LessonLectureDto(lecture.Title ?? lesson.Title, lecture.TargetMinutes, start, lecture.Src is not null, lecture.Src,
-            lecture.Poster, lecture.Captions, chapters, lecture.NarrationWords);
+            lecture.Poster, lecture.Captions, chapters, lecture.NarrationWords, youTube, youTube is null ? null : YouTube.EmbedUrl(youTube),
+            lecture.PublishedAt);
     }
 
     // ---------------------------------------------------------------- text helpers

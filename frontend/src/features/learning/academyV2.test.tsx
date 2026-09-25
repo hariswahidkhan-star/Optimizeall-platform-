@@ -1,6 +1,7 @@
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, describe, expect, it } from 'vitest';
+import { act, fireEvent } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { json, mockFetch, problem, session, makeUser } from '@/test/fetchMock';
 import { axeViolations, renderWithApp } from '@/test/render';
 import {
@@ -87,6 +88,9 @@ const soonLecture: LessonLecture = {
   captions: null,
   chapters,
   transcriptWords: 1040,
+  youTubeId: null,
+  embedUrl: null,
+  publishedAt: null,
 };
 
 const lesson: Lesson = {
@@ -305,6 +309,56 @@ describe('video lecture', () => {
     await userEvent.click(within(section).getByRole('button', { name: /Chapter 2 title/ }));
     expect(video.currentTime).toBe(60);
     expect(within(section).getByRole('button', { name: /Chapter 2 title/ })).toHaveAttribute('aria-current', 'step');
+  });
+});
+
+describe('YouTube lecture', () => {
+  it('shows a click-to-play facade, then the privacy-enhanced embed; chapters seek and time updates follow the player', async () => {
+    const yt: Lesson = {
+      ...lesson,
+      lecture: {
+        ...soonLecture,
+        produced: true,
+        src: 'https://youtu.be/dQw4w9WgXcQ',
+        youTubeId: 'dQw4w9WgXcQ',
+        embedUrl: 'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ',
+        publishedAt: '2026-09-20',
+      },
+    };
+    mockFetch({ ...anonymous, ...publicRoutes, 'GET /public/learning/courses/ai-agents-engineering/lessons/l1': () => json(200, yt) });
+    const { container } = renderWithApp(<AcademyLessonPage />, { route: '/learn/ai-agents-engineering/l1', path: '/learn/:slug/:lessonSlug' });
+    const section = await screen.findByRole('region', { name: 'What an agent is' });
+    // Facade: a thumbnail from i.ytimg.com, no iframe (no YouTube code) until play.
+    expect(container.querySelector('iframe')).toBeNull();
+    const img = section.querySelector('.lx-yt__facade img')!;
+    expect(img.getAttribute('src')).toBe('https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg');
+    fireEvent.error(img);
+    expect(section.querySelector('.lx-yt__facade img')!.getAttribute('src')).toBe('https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg');
+    expect(await axeViolations(container)).toEqual([]);
+    // A chapter before playing starts the player there (?start=).
+    await userEvent.click(within(section).getByRole('button', { name: /^\d+:\d\d\s*Chapter 2 title$/ }));
+    const frame = container.querySelector('iframe')!;
+    const src = new URL(frame.getAttribute('src')!);
+    expect(src.origin).toBe('https://www.youtube-nocookie.com');
+    expect(src.pathname).toBe('/embed/dQw4w9WgXcQ');
+    expect(src.searchParams.get('start')).toBe('60');
+    expect(src.searchParams.get('enablejsapi')).toBe('1');
+    expect(frame).toHaveAttribute('title', 'Video lecture: What an agent is');
+    // Once loaded: commands go by postMessage to the embed origin only.
+    const post = vi.spyOn(frame.contentWindow!, 'postMessage');
+    await userEvent.click(within(section).getByRole('radio', { name: '1.25×' }));
+    expect(post).toHaveBeenCalledWith(JSON.stringify({ event: 'command', func: 'setPlaybackRate', args: [1.25] }), 'https://www.youtube-nocookie.com');
+    await userEvent.click(within(section).getByRole('button', { name: /^\d+:\d\d\s*Chapter 4 title$/ }));
+    expect(post).toHaveBeenCalledWith(JSON.stringify({ event: 'command', func: 'seekTo', args: [180, true] }), 'https://www.youtube-nocookie.com');
+    // The player's time updates move the current chapter (messages from other origins are ignored).
+    act(() => {
+      window.dispatchEvent(new MessageEvent('message', { origin: 'https://evil.example', source: frame.contentWindow, data: JSON.stringify({ event: 'infoDelivery', info: { currentTime: 250 } }) }));
+    });
+    expect(within(section).getByRole('button', { name: /^\d+:\d\d\s*Chapter 4 title$/ })).toHaveAttribute('aria-current', 'step');
+    act(() => {
+      window.dispatchEvent(new MessageEvent('message', { origin: 'https://www.youtube-nocookie.com', source: frame.contentWindow, data: JSON.stringify({ event: 'infoDelivery', info: { currentTime: 130 } }) }));
+    });
+    expect(within(section).getByRole('button', { name: /^\d+:\d\d\s*Chapter 3 title$/ })).toHaveAttribute('aria-current', 'step');
   });
 });
 
