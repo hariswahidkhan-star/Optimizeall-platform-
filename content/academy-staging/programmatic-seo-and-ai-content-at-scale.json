@@ -6,7 +6,7 @@
   "subtitle": "Build data-backed page systems and AI-assisted content that meet Google's spam policies, earn indexing and stay visible in AI search",
   "category": "seo",
   "level": "advanced",
-  "estimatedMinutes": 257,
+  "estimatedMinutes": 271,
   "description": "Programmatic SEO can power a category-leading directory, marketplace or integration hub — or trigger a site-wide quality problem. The difference is data, design and discipline. This advanced course starts with what Google's spam policies actually say about scaled content abuse, site reputation abuse and AI-generated content, and when page systems deserve to exist. You will research query patterns (including Arabic, Urdu and Roman Urdu), source licensed and proprietary data, measure page uniqueness, and design answer-first templates with quality gates. You will build internal linking and structured data at scale, manage crawling and indexing with sitemaps, directives and staged rollouts, and use AI through grounded, validated workflows with editorial QA and E-E-A-T. Finally, you will track visibility in AI Overviews, AI Mode and answer engines, measure and prune by cohort, study case walkthroughs, and produce a launch-ready page system plan with a calibrated quality rubric.",
   "outcomes": [
     "Apply Google's spam policies and people-first guidance to decide which page systems deserve to exist",
@@ -113,12 +113,12 @@
           ],
           "activity": "Take one page type you plan to scale. Write its unique-value statement, the data fields that make each page distinct, and the minimum data threshold for publishing.",
           "lecture": {
-            "targetMinutes": 8,
+            "targetMinutes": 9,
             "scenes": [
               {
                 "narration": "Programmatic SEO has a reputation problem. Say it in some rooms and people picture thousands of junk pages that got a site wiped out by a Google update. Say it in others and they picture the directory or comparison site that dominates a whole category. Both pictures are real. In this lecture you'll learn exactly where Google draws the line, what its spam policies actually say, what it says about AI, and how to self-assess risk before you publish a single page.",
                 "onScreen": "Google's rules for scaled content\n• Scaled content abuse\n• Related spam policies\n• Google on AI content\n• A risk self-assessment",
-                "visual": "A split screen: one side a grid of thousands of identical gray pages crumbling; the other a structured directory with rich, distinct cards rising.",
+                "visual": "Layout: A split screen: one side a grid of thousands of identical gray pages crumbling; the other a structured directory with rich, distinct cards rising. Timing (36s): title card 0–3s; then the 4 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 36
               },
               {
@@ -130,19 +130,19 @@
               {
                 "narration": "The key policy is called scaled content abuse. Google defines it as generating many pages primarily to manipulate search rankings rather than to help users, and here's the crucial phrase, no matter how the content is created. Automation, AI, humans, or a mix. Google's examples include using generative AI to produce many pages without adding value, scraping feeds or search results, and stitching content together from other pages without adding anything. So the question is never did AI write it. The question is does it help.",
                 "onScreen": "Scaled content abuse\n• Many pages to manipulate rankings\n• Regardless of how it's made\n• Examples: AI filler, scraping, stitching\n• Question: does it help?",
-                "visual": "A factory conveyor producing identical pages; a quality inspector stamps 'no added value' on them.",
+                "visual": "Layout: A factory conveyor producing identical pages; a quality inspector stamps 'no added value' on them. Timing (37s): title card 0–3s; then the 4 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 37
               },
               {
                 "narration": "Two related policies arrived at the same time, in March twenty twenty-four. Site reputation abuse is when a site hosts third-party pages to exploit the host's ranking strength, like a respected news domain suddenly hosting coupon pages it doesn't really control. Google later clarified that first-party involvement doesn't make that acceptable. And expired domain abuse is buying an old domain for its reputation and filling it with low-value content. Both are shortcuts that scaled publishing projects are sometimes tempted by.",
                 "onScreen": "Related policies\n• Site reputation abuse\n• Expired domain abuse\n• Both introduced March 2024",
-                "visual": "A trusted building facade with a pop-up stall of unrelated signs attached; then an old abandoned shopfront being repainted with spammy signs.",
+                "visual": "Layout: A trusted building facade with a pop-up stall of unrelated signs attached; then an old abandoned shopfront being repainted with spammy signs. Timing (35s): title card 0–3s; then the 3 on-screen points build in narration order about every 9s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 35
               },
               {
                 "narration": "Also in twenty twenty-four, Google folded its helpful content system into core ranking. That means there's no separate helpful content penalty to recover from. Site-wide quality signals are simply part of how Google ranks. The practical risk for programmatic SEO is that a large volume of unhelpful pages can weigh on your whole site, including your good pages. Enforcement comes from algorithms or from manual actions, which you'll see in Search Console.",
                 "onScreen": "Helpful content in core ranking\n• No separate penalty\n• Site-wide quality signals\n• Bad pages can drag good ones\n• Manual actions in Search Console",
-                "visual": "A website represented as a set of boats in a harbour; a few leaking boats lower the water level for all.",
+                "visual": "Layout: A website represented as a set of boats in a harbour; a few leaking boats lower the water level for all. Timing (31s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               },
               {
@@ -154,31 +154,31 @@
               {
                 "narration": "What does Google say about AI content? Consistently this: using AI isn't against the guidelines. Using it to produce unhelpful content at scale is. Meet Search Essentials and the spam policies, focus on accuracy and quality, and consider telling readers how content was made where they'd expect it. For online shops, Merchant Center goes further: AI-generated images need standard metadata marking them as AI-made, and AI-generated product titles and descriptions must be labeled.",
                 "onScreen": "Google on AI\n• AI use is allowed\n• Unhelpful AI at scale is not\n• Consider disclosure\n• Merchant Center: label AI images and text",
-                "visual": "A pen and a robot arm both writing; both outputs pass through the same 'helpful?' gate.",
+                "visual": "Layout: A pen and a robot arm both writing; both outputs pass through the same 'helpful?' gate. Timing (32s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 32
               },
               {
                 "narration": "Google's people-first guidance gives you the test questions. Does the page offer original information or analysis? A substantial, complete answer? Insight beyond the obvious? Would someone bookmark or share it? Is it written or reviewed by someone who knows the topic? And does the reader leave able to do what they came to do? The warning signs are content made mainly for search visits, lots of topics without expertise, heavy automation, summarizing others without adding value, and writing to a word count.",
                 "onScreen": "People-first test\n• Original information?\n• Complete answer?\n• Insight beyond obvious?\n• Expert involvement?\n• Reader achieves goal?",
-                "visual": "A checklist on a clipboard, each question appearing and ticking; warning signs appear as red flags beside it.",
+                "visual": "Layout: A checklist on a clipboard, each question appearing and ticking; warning signs appear as red flags beside it. Timing (36s): title card 0–3s; then the 5 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 36
               },
               {
                 "narration": "So programmatic SEO isn't the problem. Emptiness is. It works when each page answers a distinct need with distinct data: currency pages with live rates, integration pages between two real products, local pages with real local information, comparisons with actual specifications. It fails when only the keyword changes, when unique content means AI filler, when pages target queries nobody asks, or when data is scraped without adding value.",
                 "onScreen": "Emptiness is the problem\n• Works: distinct need + distinct data\n• Fails: keyword swaps, AI filler\n• Fails: queries nobody asks\n• Fails: scraped, unimproved data",
-                "visual": "Two page templates side by side: one filled with rich data widgets, the other with the same paragraph and a swapped city name highlighted.",
+                "visual": "Layout: Two page templates side by side: one filled with rich data widgets, the other with the same paragraph and a swapped city name highlighted. Timing (30s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
                 "narration": "Here's a worked contrast. Approach A: two thousand city pages for best dentist in a city, each with an AI paragraph about why choosing a dentist matters, and no listings. Approach B: pages only for cities with at least ten verified clinics, listing real services, languages spoken, hours and verified reviews, a map, appointment availability from booking data, and an editor-written guide to dental costs. Cities without enough data aren't published until they qualify. Approach B is a product. Approach A is a liability.",
                 "onScreen": "Worked contrast\n• A: 2,000 AI paragraphs, no data\n• B: threshold of 10 verified clinics\n• B: real attributes, map, availability\n• B unpublished until qualified",
-                "visual": "Two stacks of city pages: stack A thin and identical; stack B fewer but each page different, with data icons.",
+                "visual": "Layout: Two stacks of city pages: stack A thin and identical; stack B fewer but each page different, with data icons. Timing (37s): title card 0–3s; then the 4 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 37
               },
               {
                 "narration": "Before launch, run the checklist in the lesson. Every page type passes a unique value test with named data fields. A minimum data threshold per page. No scraped content without transformation and licensing. AI text reviewed by a human against a rubric. No third-party content hosted to exploit your domain. Real publisher, author and methodology pages. A staged launch, pilot first. And Search Console monitored for manual actions.",
                 "onScreen": "Pre-launch checklist\n• Unique value per page type\n• Data thresholds\n• Licensed, transformed data\n• Human editorial review\n• Accountability pages\n• Staged launch",
-                "visual": "A launch checklist with eight boxes ticking, then a small 'pilot' rocket launching before a larger one.",
+                "visual": "Layout: A launch checklist with eight boxes ticking, then a small 'pilot' rocket launching before a larger one. Timing (30s): title card 0–3s; then the 6 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
@@ -188,9 +188,15 @@
                 "seconds": 43
               },
               {
+                "narration": "Watch me do it. Let's run the pre-launch policy checklist on an illustrative plan from a Karachi agency: pages for home tutors in every neighborhood of Pakistan's ten largest cities, about four thousand pages. Item one, unique value: the plan says each page has a paragraph about education in that neighborhood. I stop here. That's not data; it's filler. What data do they have? They have three hundred verified tutors, concentrated in fifteen neighborhoods. Item two, thresholds: none defined. I propose eight verified tutors per page, which means about thirty pages qualify, not four thousand. Item three, AI: the plan was to generate neighborhood paragraphs with AI. I replace that with tutor profile summaries grounded in verified data, reviewed by an editor. Item four, accountability: there's no methodology page explaining how tutors are verified; that's added. Item five, staged launch: thirty pages first, then new neighborhoods unlock automatically as tutor supply grows. The client worried that thirty pages is too few. My answer: thirty pages that genuinely help will outperform four thousand that don't, and they won't put the domain at risk.",
+                "onScreen": "Watch me do it: policy check (illustrative)\n• Plan: 4,000 neighborhood pages\n• Real data: 300 tutors, 15 areas\n• Gate: 8 tutors → ~30 pages\n• Grounded AI, methodology page\n• Unlock pages as supply grows",
+                "visual": "Layout: plan document on the left, checklist on the right. Timing: a '4,000 pages' counter at ~10s; filler paragraph struck through ~30s; threshold slider drops the counter to ~30 at ~60s; AI and methodology items tick ~90–110s; final 15s show pages unlocking one by one on a map.",
+                "seconds": 79
+              },
+              {
                 "narration": "Recap. Scaled content abuse is about purpose and value, not production method. Watch site reputation and expired domain abuse too. Helpful content is part of core ranking, so bad pages can hurt good ones. AI is allowed, emptiness isn't. Your next step: take one page type you want to scale, and write its unique value statement, the data fields that make each page different, and the minimum data threshold for publishing.",
                 "onScreen": "Recap and next step\n• Value, not method\n• Related policies\n• AI allowed, emptiness not\n• Write your unique value statement",
-                "visual": "A template card with three fields: unique value, data fields, threshold.",
+                "visual": "Layout: A template card with three fields: unique value, data fields, threshold. Timing (31s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               }
             ],
@@ -267,12 +273,12 @@
           ],
           "activity": "List three query patterns for your business. For each, name the dataset, the quality gate and how the page serves users beyond search.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Some of the biggest organic traffic engines on the web are programmatic. Currency converters, integration directories, property and job listings. And some of the biggest SEO disasters were programmatic too. What separates them? In this lecture you'll learn the four-part equation behind every working page system, which patterns tend to work and which tend to fail, how to decide one page per intent, and a simple way to score opportunities before you build anything.",
                 "onScreen": "When pSEO works\n• The four-part equation\n• Patterns that work and fail\n• One page per intent\n• Scoring opportunities",
-                "visual": "A formula builds on screen: pattern × dataset × template × quality gate = page system.",
+                "visual": "Layout: A formula builds on screen: pattern × dataset × template × quality gate = page system. Timing (32s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 32
               },
               {
@@ -284,19 +290,19 @@
               {
                 "narration": "Here's the equation. A query pattern: a repeatable search structure with real demand, like tool A plus tool B integration, or service in area. A dataset: structured information that makes each page genuinely different. A template: the design that turns data into an answer. And a quality gate: rules that decide which pages are good enough to publish. If any of the four is weak, the system fails. Most failed projects had a pattern and a template, but no real data and no gate.",
                 "onScreen": "Four parts\n• Query pattern\n• Dataset\n• Template\n• Quality gate",
-                "visual": "Four puzzle pieces fit together; when the dataset and gate pieces are removed, the structure collapses.",
+                "visual": "Layout: Four puzzle pieces fit together; when the dataset and gate pieces are removed, the structure collapses. Timing (37s): title card 0–3s; then the 4 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 37
               },
               {
                 "narration": "Patterns that tend to work share one thing: a specific need with a clear, data-driven answer. Integrations and compatibility. Conversions and calculators, where people want a number right now. Local pages backed by verified listings, prices and availability. Comparisons with real specs and testing. Directories with many verified entities. Data pages built on proprietary or well-sourced data. And templates or examples, where each variant is genuinely distinct.",
                 "onScreen": "Patterns that work\n• Integrations\n• Conversions, calculators\n• Local with real data\n• Comparisons\n• Directories\n• Data pages\n• Real examples",
-                "visual": "Seven small page thumbnails, each showing a distinct data widget: a connector, a calculator, a map, a comparison table, a list, a chart, a document.",
+                "visual": "Layout: Seven small page thumbnails, each showing a distinct data widget: a connector, a calculator, a map, a comparison table, a list, a chart, a document. Timing (29s): title card 0–3s; then the 7 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 29
               },
               {
                 "narration": "And patterns that tend to fail. Keyword in every city with no local data. Glossaries of thousands of terms, each with one AI sentence. Best product for every persona without any testing. And the most common one: separate pages for phrasings that share one intent, like cheap flights to Dubai, cheap flight Dubai, and Dubai cheap flights. Those belong on one page.",
                 "onScreen": "Patterns that fail\n• City swaps without data\n• One-sentence glossaries\n• Untested 'best for' pages\n• One page per phrasing",
-                "visual": "Thin page thumbnails fading out; three phrasings merge into a single page icon.",
+                "visual": "Layout: Thin page thumbnails fading out; three phrasings merge into a single page icon. Timing (27s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 27
               },
               {
@@ -308,25 +314,25 @@
               {
                 "narration": "How do you know if two phrasings are one intent? Look at the search results. If the results for two variants are largely the same pages, search engines treat them as the same need, and one page should serve both. If the results differ substantially, you're probably looking at different intents. It's a simple check, and it saves you from building thousands of competing near-duplicates.",
                 "onScreen": "One page per intent\n• Compare search results\n• Same results = same intent\n• Different results = different intents",
-                "visual": "Two search result lists side by side with overlapping entries highlighted; a Venn diagram shows high overlap.",
+                "visual": "Layout: Two search result lists side by side with overlapping entries highlighted; a Venn diagram shows high overlap. Timing (28s): title card 0–3s; then the 3 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 28
               },
               {
                 "narration": "The best programmatic pages are also useful product surfaces. A marketplace's category and location pages. A software company's integration directory. A fintech's exchange rate pages that lead into its transfer product. Pages that exist only to catch traffic tend to get poor engagement and weak conversion, and they're harder to defend under Google's policies. So ask: would users navigate to this page even without search?",
                 "onScreen": "Pages as product\n• Marketplace categories\n• Integration directories\n• Rate pages → product\n• Would users navigate here anyway?",
-                "visual": "A website navigation menu with pSEO pages embedded as natural product sections, not hidden in a footer.",
+                "visual": "Layout: A website navigation menu with pSEO pages embedded as natural product sections, not hidden in a footer. Timing (28s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 28
               },
               {
                 "narration": "Some illustrative examples by market. A UAE property portal with property type for rent in community pages powered by live listings, community facts and price trends, published only above a minimum number of listings. A Pakistani tutoring marketplace with subject tutors in city pages, verified profiles, rates, and Urdu or English options. A UK software company with integration pages maintained by the product team. And a US fintech with currency pages showing live rates, fee comparisons and transfer limits.",
                 "onScreen": "Examples (illustrative)\n• UAE property: live listings\n• Pakistan tutoring: verified tutors\n• UK SaaS: maintained integrations\n• US fintech: live rates",
-                "visual": "Four regional cards with a map pin and a simple page mock for each.",
+                "visual": "Layout: Four regional cards with a map pin and a simple page mock for each. Timing (34s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 34
               },
               {
                 "narration": "Before building, score your opportunities. The lesson has a small Python scorer that combines estimated demand across the pattern, how unique your data is, business fit, competition and maintenance cost. The weights are illustrative. But one rule isn't: if you have no unique data, the score is zero. No data, no project. You'll often find the highest-volume idea scores lowest once you're honest about data and maintenance.",
                 "onScreen": "Score before you build\n• Demand, data, fit\n• Competition, maintenance\n• No unique data = zero",
-                "visual": "Code editor with the scoring function; output ranks opportunities, with a high-volume glossary idea landing at the bottom.",
+                "visual": "Layout: Code editor with the scoring function; output ranks opportunities, with a high-volume glossary idea landing at the bottom. Timing (29s): title card 0–3s; then the 3 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 29
               },
               {
@@ -342,9 +348,15 @@
                 "seconds": 40
               },
               {
+                "narration": "Watch me do it. Let's score three illustrative opportunities for a Dubai used-car marketplace with the scorer from the lesson. Opportunity one, make and model for sale in Dubai: demand is strong across hundreds of models, unique data is excellent because we have live listings, price ranges and mileage distributions, business fit is perfect, competition is high, maintenance moderate. Opportunity two, car loan calculator for each model: demand is decent, but the data is thin, the calculation is the same for every model except the price, so unique data scores one. Opportunity three, best family cars in the UAE for every nationality: search demand is patchy, and we have no data connecting nationality to car preference, so unique data is zero, and the score is zero by rule. I run the script. Opportunity one wins clearly, opportunity two lands low, three is zero. Then I sanity-check the result against intuition and search results: make-and-model pages rank as listing pages, which matches our template. Decision: pilot opportunity one with the fifty most searched models, and fold the calculator into those pages as a module rather than separate pages.",
+                "onScreen": "Watch me do it: scoring opportunities (illustrative)\n• Make/model listings: strong data\n• Loan calculator per model: thin\n• 'Best cars per nationality': no data → 0\n• Pilot top 50 models\n• Calculator becomes a module",
+                "visual": "Layout: three opportunity cards in a row with score gauges beneath. Timing: each card's inputs fill in ~25s apart; gauges animate at ~80s with the third locking at zero; final 25s show the calculator card shrinking into a module inside the first card.",
+                "seconds": 81
+              },
+              {
                 "narration": "Recap. A page system needs a pattern, a dataset, a template and a quality gate. Choose patterns with specific needs and data-driven answers. Build one page per intent. Make pages useful product surfaces. And score opportunities honestly. Your next step: list three query patterns for your business, and for each, name the dataset, the quality gate, and how the page helps users beyond search.",
                 "onScreen": "Recap and next step\n• Four-part equation\n• Right patterns\n• One page per intent\n• Score three patterns",
-                "visual": "A three-row worksheet filling in with pattern, dataset, gate, and user value.",
+                "visual": "Layout: A three-row worksheet filling in with pattern, dataset, gate, and user value. Timing (28s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 28
               }
             ],
@@ -428,12 +440,12 @@
           ],
           "activity": "Use Search Console regex filters to find one pattern in your data. Build a head × modifier grid of impressions and check search results for ten modifier values.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Traditional keyword research hunts for individual keywords. Programmatic research hunts for patterns, a structure that repeats hundreds or thousands of times with different values plugged in. Find the right pattern, and you've found a whole content system. In this lecture you'll learn how to discover patterns, mine your own Search Console data with regular expressions, cluster modifiers with Python, validate intent, and handle languages like Arabic and Urdu properly.",
                 "onScreen": "Keyword pattern research\n• Patterns, not keywords\n• Where to find them\n• Regex and Python mining\n• Intent validation\n• Localization",
-                "visual": "A single keyword card multiplies into a grid of cards sharing one structure with different values highlighted.",
+                "visual": "Layout: A single keyword card multiplies into a grid of cards sharing one structure with different values highlighted. Timing (30s): title card 0–3s; then the 5 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
@@ -445,19 +457,19 @@
               {
                 "narration": "A pattern is a head term plus modifiers in a consistent structure. Service in area. Tool A plus tool B integration. Job title salary in city. Product versus product. You're looking for patterns where many modifier values have real demand, the intent stays consistent across values, and you've got data to answer each one. Miss any of those three, and the pattern isn't worth building.",
                 "onScreen": "What a pattern is\n• Head term + modifiers\n• Demand across values\n• Consistent intent\n• Answerable with your data",
-                "visual": "The pattern '[service] in [area]' with slots; service and area chips drop into the slots, generating example queries.",
+                "visual": "Layout: The pattern '[service] in [area]' with slots; service and area chips drop into the slots, generating example queries. Timing (28s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 28
               },
               {
                 "narration": "Where do patterns come from? Your own Search Console, where queries already reaching you reveal structures. Keyword tools, including Google's Keyword Planner, to expand head terms. Autocomplete and people also ask, which reveal modifier types like cost, near me, versus and for beginners. Your own product data: every location, product, integration or category is a potential modifier. Competitor URL folders and sitemaps. And your internal site search logs.",
                 "onScreen": "Pattern sources\n• Search Console\n• Keyword tools\n• Autocomplete, People also ask\n• Your product database\n• Competitor URL structures\n• Site search logs",
-                "visual": "Six source icons feeding into a funnel labeled 'patterns'.",
+                "visual": "Layout: Six source icons feeding into a funnel labeled 'patterns'. Timing (30s): title card 0–3s; then the 6 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
                 "narration": "Search Console supports regular expressions in its query filter. The lesson includes examples: one catches comparison queries with words like versus or compare, one catches city names across the Gulf, Pakistan and the UK, and one catches integration language. It's case-insensitive and quick. For larger datasets, pull the data through the Search Console API instead of the interface.",
                 "onScreen": "Regex in Search Console\n• Comparison terms\n• City names\n• Integration language\n• API for scale",
-                "visual": "Search Console-style filter box with a regex being typed; a filtered query table updates.",
+                "visual": "Layout: Search Console-style filter box with a regex being typed; a filtered query table updates. Timing (25s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 25
               },
               {
@@ -469,25 +481,25 @@
               {
                 "narration": "Then cluster with Python. Load your exported queries, define lists of services and areas, tag each query with the service and area it mentions, and pivot into a grid: services down the side, areas across the top, impressions in the cells. That grid instantly shows where demand exists. Blank cells might mean no demand, or might mean you're simply not visible yet, so check a keyword tool before deciding.",
                 "onScreen": "Cluster with Python\n• Tag service and area\n• Pivot into a grid\n• Demand heatmap\n• Blank ≠ no demand",
-                "visual": "A pandas pivot table morphing into a color heatmap with services as rows and areas as columns.",
+                "visual": "Layout: A pandas pivot table morphing into a color heatmap with services as rows and areas as columns. Timing (30s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
                 "narration": "Now validate intent. For ten to twenty modifier values per pattern, look at the actual search results. What type of result ranks: listings, a map pack, guides, tools, products? Your page type must match. Are the results consistent across values, or do some values show a different need? Which features appear, like map packs or AI Overviews, that affect clicks? And how good are the incumbents? Thin pages ranking at the top are an opportunity.",
                 "onScreen": "Validate intent\n• Result type\n• Consistency across values\n• SERP features\n• Incumbent quality",
-                "visual": "A grid of mini search result screenshots (generic) for different modifier values, with a few highlighted as 'different intent'.",
+                "visual": "Layout: A grid of mini search result screenshots (generic) for different modifier values, with a few highlighted as 'different intent'. Timing (33s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 33
               },
               {
                 "narration": "A word on demand estimates. Keyword tools are rough, especially for long-tail and non-English queries. Arabic and Urdu queries are often under-reported, and many people in Pakistan and the Gulf search in Roman Urdu or mix Arabic and English. So add up demand across the whole pattern rather than trusting any single keyword's number, and treat long-tail volume as upside.",
                 "onScreen": "Estimating demand\n• Tools are rough\n• Non-English under-reported\n• Roman Urdu and mixed queries\n• Aggregate across the pattern",
-                "visual": "Error bars on a bar chart widening for long-tail and Arabic/Urdu queries; a summed total bar stands more stable.",
+                "visual": "Layout: Error bars on a bar chart widening for long-tail and Arabic/Urdu queries; a summed total bar stands more stable. Timing (26s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 26
               },
               {
                 "narration": "Localization matters. Gulf market pages should be written natively in Arabic with a right-to-left layout and Arabic modifiers, not just translated. For Pakistan, check which query forms the search results favor: English, Urdu, or Roman Urdu. And use hreflang correctly when you have language or region variants. Here's an illustrative example: a Riyadh home services platform found Arabic and English district patterns, built a twelve-by-forty grid, and focused pages on what the map pack lacks: verified providers, price ranges from real jobs, and response times.",
                 "onScreen": "Localize natively\n• Arabic RTL, native writing\n• Urdu / Roman Urdu checks\n• Correct hreflang\n• Riyadh example (illustrative)",
-                "visual": "A page mock flipping from English LTR to Arabic RTL layout; a district grid of Riyadh appears beside it.",
+                "visual": "Layout: A page mock flipping from English LTR to Arabic RTL layout; a district grid of Riyadh appears beside it. Timing (37s): title card 0–3s; then the 4 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 37
               },
               {
@@ -503,9 +515,15 @@
                 "seconds": 37
               },
               {
+                "narration": "Watch me do it. Let's research an illustrative pattern for a Riyadh cleaning company in Search Console. Step one, regex filter on queries: cleaning, تنظيف, or maid, case-insensitive. I export three months. Step two, I scan and see three structures: cleaning company in district, deep cleaning villa, and Arabic queries for home cleaning company in a district name. Step three, in Python I tag each query with service and district, including Arabic district names mapped to the same IDs as English ones, so Al Malqa and الملقا count together. Step four, the grid: eight services by thirty districts. Two hundred and ten cells have impressions, heavily concentrated in north Riyadh. Step five, intent checks: for ten cells I search both languages. English results show directories and company pages; Arabic results show more company pages and a map pack. Both match a listing-style page. Step six, one surprise: queries with the word monthly show a different intent, recurring maid services, which needs its own pattern. The output is a validated grid and two patterns, ready for data sourcing.",
+                "onScreen": "Watch me do it: Riyadh cleaning research (illustrative)\n• Regex incl. Arabic terms\n• Map Arabic + English districts to one ID\n• Grid: 8 services × 30 districts\n• Intent checks in both languages\n• 'Monthly' = separate pattern",
+                "visual": "Layout: Search Console filter bar on top, heatmap grid below, a bilingual label panel on the right. Timing: regex types ~10s; query list scrolls ~25s; Arabic and English district labels merge into one ID ~50s; heatmap fills ~75s; 'monthly' queries split into a new pattern card in the final 25s.",
+                "seconds": 77
+              },
+              {
                 "narration": "Recap. Find patterns, not keywords. Mine Search Console with regex and your own data, cluster modifiers into a demand grid, validate intent against real results, aggregate demand across the pattern, and localize natively. Your next step: find one pattern in your own Search Console with a regex filter, build a head by modifier grid of impressions, and check the results for ten modifier values.",
                 "onScreen": "Recap and next step\n• Patterns\n• Regex + grid\n• Validate intent\n• Localize\n• Build your first grid",
-                "visual": "A heatmap grid with a checklist of ten modifier checks beside it.",
+                "visual": "Layout: A heatmap grid with a checklist of ten modifier checks beside it. Timing (28s): title card 0–3s; then the 5 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 28
               }
             ],
@@ -586,12 +604,12 @@
           ],
           "activity": "Create a data inventory for one page type: sources, licenses, fields, update frequency, owner, and the value-add layer each page provides.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "In programmatic SEO, the data is the product. It's the only thing that makes page one thousand two hundred and thirty-seven genuinely different from page one thousand two hundred and thirty-eight. In this lecture you'll learn the types of data sources and their risks, how to build a value-add layer on top of raw data, how to measure whether your pages are near-duplicates, how to keep data fresh and accurate, and the legal checks you can't skip.",
                 "onScreen": "Data sourcing and uniqueness\n• Source types\n• The value-add layer\n• Measuring similarity\n• Freshness\n• Legal checks",
-                "visual": "Two page thumbnails that look identical until data widgets fill each with different numbers and charts.",
+                "visual": "Layout: Two page thumbnails that look identical until data widgets fill each with different numbers and charts. Timing (33s): title card 0–3s; then the 5 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 33
               },
               {
@@ -603,19 +621,19 @@
               {
                 "narration": "There are six broad source types. Proprietary data, like your own listings, bookings, prices and reviews, which is unique and defensible. Partner and licensed feeds, which are rich but come with license terms. Open public data, like national statistics offices in the UK, Saudi Arabia, Pakistan and the US, which is credible but available to everyone. User-generated content, which is fresh but needs moderation. Derived data you compute. And scraped data, which is high risk and adds nothing unless genuinely transformed.",
                 "onScreen": "Six source types\n• Proprietary\n• Partner / licensed\n• Open / public\n• User-generated\n• Derived / computed\n• Scraped (high risk)",
-                "visual": "Six labeled data containers; the scraped one has a warning triangle.",
+                "visual": "Layout: Six labeled data containers; the scraped one has a warning triangle. Timing (35s): title card 0–3s; then the 6 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 35
               },
               {
                 "narration": "Here's the rule of thumb. Open data alone rarely makes a competitive page, because everyone can publish it. The winning combination is open data, plus proprietary data, plus computed insight. So for each page, write down what it gives that a user couldn't get from the raw source. Combinations, like rent plus commute plus schools. Computations, like medians, trends and calculators. Curation. Freshness. Expert context. And moderated reviews.",
                 "onScreen": "The value-add layer\n• Combine datasets\n• Compute insight\n• Curate and verify\n• Keep fresh\n• Add context and UGC",
-                "visual": "Three layers stacking: open data base, proprietary middle, computed insight on top, forming a page.",
+                "visual": "Layout: Three layers stacking: open data base, proprietary middle, computed insight on top, forming a page. Timing (30s): title card 0–3s; then the 5 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
                 "narration": "Near-duplicate pages are the classic programmatic failure, so measure them. The lesson includes a Python snippet that takes the main content text of each generated page, builds a TF-IDF representation, computes cosine similarity between pages, and prints each page's closest neighbor with a score. Calibrate your threshold on pages you already consider good. Pages above it need more distinct data, or should be merged, kept out of the index, or not published.",
                 "onScreen": "Measure similarity\n• TF-IDF + cosine similarity\n• Closest neighbor per page\n• Calibrate on good pages\n• Improve, merge or hold back",
-                "visual": "Heatmap matrix of page similarities with a few bright off-diagonal cells highlighted as near-duplicates.",
+                "visual": "Layout: Heatmap matrix of page similarities with a few bright off-diagonal cells highlighted as near-duplicates. Timing (31s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               },
               {
@@ -627,25 +645,25 @@
               {
                 "narration": "Freshness and accuracy need design, not hope. Define update frequencies per field: exchange rates hourly, listings daily, statistics yearly. Show last updated dates truthfully, and only change them when content materially changes, because fake freshness is exactly what Google's guidance warns about. Add validation: ranges, missing values, outliers, and reconciliation against sources. And give users and businesses a way to report errors.",
                 "onScreen": "Freshness and accuracy\n• Update frequency per field\n• Honest dates\n• Validation rules\n• Correction path",
-                "visual": "A field-by-field schedule table with clock icons, and a 'report an error' button on a page mock.",
+                "visual": "Layout: A field-by-field schedule table with clock icons, and a 'report an error' button on a page mock. Timing (27s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 27
               },
               {
                 "narration": "Now the legal checks. Read data licenses for commercial and SEO use, attribution and redistribution. Respect terms of service and robots rules; scraping sites that prohibit it is a legal and reputational risk. Never publish personal data without a lawful basis; publish aggregates like median tutor rates, not individual earnings. And follow fake review rules, like the FTC's rule in the US and the UK's consumer protection law on fake reviews.",
                 "onScreen": "Legal checks\n• Licenses: commercial, SEO, attribution\n• Terms of service, robots\n• Privacy: aggregate\n• Fake review rules",
-                "visual": "A checklist with four legal icons: a license document, a robot sign, a padlock, a star rating with a shield.",
+                "visual": "Layout: A checklist with four legal icons: a license document, a robot sign, a padlock, a star rating with a shield. Timing (31s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               },
               {
                 "narration": "Here's an illustrative example. A UK used-car marketplace builds make, model and city pages. The data combines its own live listings, licensed open vehicle data in aggregate, computed price ranges and depreciation by year, and in-house mechanics' notes on what to check for each model. Pages need at least five live listings. The similarity check flagged small-city pages that looked identical, so those were merged into regional pages. Fewer pages, each much stronger.",
                 "onScreen": "Example: UK used-car marketplace (illustrative)\n• Listings + licensed open data\n• Computed prices, depreciation\n• Mechanic notes\n• Threshold 5 listings\n• Merge near-duplicates",
-                "visual": "A UK map where small city pins merge into a regional pin; a car page mock with price chart and checklist.",
+                "visual": "Layout: A UK map where small city pins merge into a regional pin; a car page mock with price chart and checklist. Timing (32s): title card 0–3s; then the 5 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 32
               },
               {
                 "narration": "Common pitfalls. Relying on a single public dataset everyone uses. Displaying partner data in ways the license forbids. Changing dates without changing content. And publishing pages whose only difference is a city name in one sentence. Measure success with a documented data inventory, similarity scores within threshold, error reports fixed quickly, and pages that others cite or link to as references.",
                 "onScreen": "Pitfalls and success\n• Single common dataset\n• License breaches\n• Fake freshness\n• City-name swaps\n• Success: inventory, similarity, citations",
-                "visual": "Four pitfall cards flipping to four success badges.",
+                "visual": "Layout: Four pitfall cards flipping to four success badges. Timing (27s): title card 0–3s; then the 5 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 27
               },
               {
@@ -661,9 +679,15 @@
                 "seconds": 31
               },
               {
+                "narration": "Watch me do it. Let's run the similarity check on an illustrative pilot of sixty pages for a UK wedding photographer directory. Step one, I render every page and extract the main content text, excluding the header, footer and navigation. Step two, I run the TF-IDF script. Step three, results: most pages' nearest neighbor scores sit between point four and point six, which matches pages we already consider good. But twelve pages score above point nine. Step four, I open a pair: wedding photographers in Hexham and wedding photographers in Corbridge. They list the same four photographers, because both small towns are served by the same people, and the guidance text is identical. Step five, the decision: these are one need, not two. We create a regional page for Northumberland with all photographers covering the area, travel fees and venue lists, and 301 the small-town pages to it. Step six, I rerun the check: no pairs above threshold, and the new regional page is richer than either original. Similarity scores didn't just flag a risk; they pointed to a better page design.",
+                "onScreen": "Watch me do it: similarity check (illustrative)\n• Render + extract main content\n• TF-IDF nearest neighbors\n• 12 pages > 0.9\n• Merge towns into a regional page\n• Rerun: clean",
+                "visual": "Layout: similarity heatmap matrix on the left, page comparison on the right. Timing: matrix fills ~20s; twelve bright cells pulse ~45s; side-by-side town pages with identical lists highlight ~70s; merge animation into a regional page ~95s; final 20s show a rerun matrix with no bright cells.",
+                "seconds": 79
+              },
+              {
                 "narration": "Recap. Data is the product. Combine open, proprietary and computed data. Measure similarity before you publish. Design freshness and accuracy honestly. And do the legal checks. Your next step: create a data inventory for one page type, listing sources, licenses, fields, update frequency, owner, and the value-add layer every page will carry.",
                 "onScreen": "Recap and next step\n• Data is the product\n• Value-add layer\n• Similarity checks\n• Build your data inventory",
-                "visual": "A data inventory spreadsheet template with columns filling in.",
+                "visual": "Layout: A data inventory spreadsheet template with columns filling in. Timing (23s): title card 0–3s; then the 4 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 23
               }
             ],
@@ -751,12 +775,12 @@
           ],
           "activity": "Sketch the template for one page type with blocks in order, the data field behind each, conditional rules, and the noindex threshold.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "A programmatic page template isn't an SEO container. It's a product decision that gets multiplied by a thousand. Get it right and every page helps someone. Get it wrong and you've published a thousand problems at once. In this lecture you'll learn the anatomy of a strong programmatic page, how conditional logic and quality gates make pages adapt to their data, how to write the text parts responsibly, and the rendering and performance rules that matter.",
                 "onScreen": "Template design\n• Anatomy of a strong page\n• Conditional logic\n• Writing the text parts\n• Rendering and performance",
-                "visual": "A single template blueprint stamps out many pages, each subtly different as data flows in.",
+                "visual": "Layout: A single template blueprint stamps out many pages, each subtly different as data flows in. Timing (33s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 33
               },
               {
@@ -768,19 +792,19 @@
               {
                 "narration": "Start with the user's question for the pattern, then design blocks in order. Answer first: satisfy the query immediately, like how many verified tutors, the typical rate range, and the next available slot. Then the primary data module: the listing, table or calculator. Then computed insight, what the data means. Then guidance to help the decision. Then trust and methodology: how data is verified and when it was updated. Then related navigation, the conversion action, and an FAQ built from real questions.",
                 "onScreen": "Page anatomy\n• Answer first\n• Primary data module\n• Computed insight\n• Guidance\n• Trust + methodology\n• Navigation, conversion, FAQ",
-                "visual": "A wireframe builds top to bottom with each block labeled as it's named.",
+                "visual": "Layout: A wireframe builds top to bottom with each block labeled as it's named. Timing (36s): title card 0–3s; then the 6 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 36
               },
               {
                 "narration": "Now the secret to avoiding near-duplicates: conditional logic. Show a price trend chart only when there are enough data points. When inventory is below your threshold, show a helpful notify-me module and set the page to noindex. Vary insight sentences based on real comparisons, above or below average, rising or falling. And include local notes only where they actually exist. Pages should differ because their data differs.",
                 "onScreen": "Conditional logic\n• Charts only with enough data\n• Below threshold: notify-me + noindex\n• Insight varies with data\n• Local notes where they exist",
-                "visual": "Two page renders from the same template: one rich with a chart and insights, one showing a notify-me box with a small 'noindex' tag.",
+                "visual": "Layout: Two page renders from the same template: one rich with a chart and insights, one showing a notify-me box with a small 'noindex' tag. Timing (29s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 29
               },
               {
                 "narration": "The lesson includes a Jinja template that does exactly this. It checks whether there are at least eight tutors and sets the robots tag accordingly. It writes an answer-first sentence from counts, rate percentiles and next availability. It adds a comparison sentence only when the national comparison exists, citing the number of bookings behind it. And it includes local notes only for cities that have them. Keep thresholds and statistics in the data layer, and presentation in the template.",
                 "onScreen": "The Jinja example\n• Threshold → robots tag\n• Answer from computed stats\n• Comparison only when valid\n• Local notes conditional",
-                "visual": "Code editor showing the Jinja template with conditionals highlighted in sequence.",
+                "visual": "Layout: Code editor showing the Jinja template with conditionals highlighted in sequence. Timing (34s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 34
               },
               {
@@ -792,25 +816,25 @@
               {
                 "narration": "How should the text be written? Three kinds. Data-driven sentences generated from computed fields, which are accurate by construction. Evergreen guidance written once by an expert per page type or meaningful segment, like per subject, kept short and supportive of the data rather than duplicated filler. And AI-assisted text only where it adds meaning, like summarizing reviews for this specific entity, always with human quality checks.",
                 "onScreen": "Writing the text\n• Data-driven sentences\n• Expert guidance per type/segment\n• AI only where it adds meaning\n• Human QA",
-                "visual": "Three text blocks with different icons: a database, an expert badge, and a small AI chip with a human checkmark.",
+                "visual": "Layout: Three text blocks with different icons: a database, an expert badge, and a small AI chip with a human checkmark. Timing (29s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 29
               },
               {
                 "narration": "Rendering matters. Server-side render or statically generate pages, so the main content is in the HTML, not loaded later by JavaScript. Meet Core Web Vitals: loading, interactivity and layout stability. Long lists need pagination or load more with crawlable links. And build accessibility in: headings in order, proper table markup, text alternatives for charts, and right-to-left support for Arabic pages.",
                 "onScreen": "Rendering and performance\n• SSR / static generation\n• Core Web Vitals\n• Crawlable pagination\n• Accessibility + RTL",
-                "visual": "A page loading progressively with performance gauges for LCP, INP and CLS turning green.",
+                "visual": "Layout: A page loading progressively with performance gauges for LCP, INP and CLS turning green. Timing (26s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 26
               },
               {
                 "narration": "Here's an illustrative example. A Jeddah restaurant directory with cuisine in district pages. Answer first: how many restaurants, price bands, and which are open now. Then a map and list with halal certification status, family sections and delivery options. Computed insight like most popular for late-night dining, based on reservations. Methodology and last updated. Related districts and cuisines. And districts with fewer than six listings show a notify-me module and stay out of the index.",
                 "onScreen": "Example: Jeddah restaurants (illustrative)\n• Answer-first summary\n• Map + list with key attributes\n• Computed insight\n• Methodology\n• Threshold: 6 listings",
-                "visual": "A restaurant directory page mock with map, list cards and an insight badge; a small district without enough listings shows a notify box.",
+                "visual": "Layout: A restaurant directory page mock with map, list cards and an insight badge; a small district without enough listings shows a notify box. Timing (33s): title card 0–3s; then the 5 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 33
               },
               {
                 "narration": "Three pitfalls. Templates where ninety percent of the text is identical across pages. Main content loaded only by client-side JavaScript. And inconsistent behavior, like hiding thin pages from users but not from crawlers. Measure template versions on engagement, scroll depth, interactions and conversions, keep similarity scores within threshold, pass Core Web Vitals, and watch user error reports decline.",
                 "onScreen": "Pitfalls and metrics\n• 90% identical text\n• Client-only content\n• Inconsistent behavior\n• Measure engagement, similarity, vitals",
-                "visual": "Three pitfall icons, then a metrics dashboard for two template versions compared side by side.",
+                "visual": "Layout: Three pitfall icons, then a metrics dashboard for two template versions compared side by side. Timing (25s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 25
               },
               {
@@ -826,9 +850,15 @@
                 "seconds": 37
               },
               {
+                "narration": "Watch me do it. Let's redesign one illustrative template for a Karachi wedding venue directory, block by block. The current page opens with a hero image and three paragraphs about weddings in Karachi. Step one, answer first: I replace that with a summary generated from data, twenty-three venues in Clifton, capacity from one hundred and fifty to one thousand guests, per-head price range, and how many have dates free next month. Step two, the primary module: a filterable list with capacity, separate family and ladies' sections, catering in-house or outside, parking, and verified photos. Step three, computed insight: most bookings in this area are for events over five hundred guests, calculated from our enquiries. It only appears when there are enough enquiries. Step four, guidance: a checklist written by our events team, what to confirm about generator backup, parking and catering permits. Step five, trust: last verified dates per venue and a methodology link. Step six, conversion: check availability for your date. Step seven, the empty state: areas under five venues show notify me and carry noindex. Same keyword, but now every block earns its place.",
+                "onScreen": "Watch me do it: venue template redesign (illustrative)\n• Answer-first summary from data\n• Filterable list with key attributes\n• Conditional insight\n• Events-team checklist\n• Trust, CTA, empty state",
+                "visual": "Layout: before/after wireframes side by side. Timing: 'before' page fades to 50% at ~10s; 'after' blocks build top to bottom roughly every 18s with the data field label beside each; final 15s show the empty-state variant with a noindex tag.",
+                "seconds": 81
+              },
+              {
                 "narration": "Recap. Design the template from the user's question, answer first. Use conditional logic and quality gates so pages adapt to their data. Generate accurate sentences from data, write expert guidance once, and use AI only where it adds meaning. Render in HTML, fast and accessible. Your next step: sketch the template for one page type, with blocks in order, the data field behind each, the conditional rules, and your noindex threshold.",
                 "onScreen": "Recap and next step\n• Answer first\n• Conditional + gated\n• Honest text\n• Sketch your template",
-                "visual": "A blank wireframe with labeled block placeholders and a threshold note.",
+                "visual": "Layout: A blank wireframe with labeled block placeholders and a threshold note. Timing (31s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               }
             ],
@@ -917,12 +947,12 @@
           ],
           "activity": "Draw the hub-and-spoke structure for your page system and define the related-link rules (signals, number of links, eligibility).",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "You can publish ten thousand excellent pages and still get almost none of them indexed, if nothing links to them. Internal links are how search engines discover pages, decide which matter, and understand how they relate. And they're how users move around. In this lecture you'll learn hub and spoke architecture, how to handle faceted navigation without creating crawl traps, how to build related links that are actually relevant, and how to find orphan pages.",
                 "onScreen": "Internal linking at scale\n• Hubs and spokes\n• Faceted navigation\n• Related-link algorithms\n• Finding orphans",
-                "visual": "A constellation of page dots; lines connect some, leaving isolated dots dim and labeled 'orphan'.",
+                "visual": "Layout: A constellation of page dots; lines connect some, leaving isolated dots dim and labeled 'orphan'. Timing (33s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 33
               },
               {
@@ -934,19 +964,19 @@
               {
                 "narration": "Start with the architecture. A top hub lists everything in the system. Subject hubs list cities for a subject. City hubs list subjects in a city. Each spoke page, like physics tutors in Lahore, links up to its hubs through breadcrumbs, across to siblings like nearby cities and related subjects, and down to individual entities like tutor profiles. Hubs shouldn't be bare link lists; give them their own data, like counts and price ranges. And keep important pages within a few clicks of the home page.",
                 "onScreen": "Hubs and spokes\n• Top hub → subject and city hubs\n• Spokes link up, across, down\n• Hubs carry useful data\n• Keep key pages shallow",
-                "visual": "Tree diagram from the lesson animating: home, hubs, spokes, with arrows up, across and down.",
+                "visual": "Layout: Tree diagram from the lesson animating: home, hubs, spokes, with arrows up, across and down. Timing (37s): title card 0–3s; then the 4 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 37
               },
               {
                 "narration": "Filters are where page systems quietly explode. Price, rating, language, online or in-person, sort order: combine them and you get millions of URLs. So decide which combinations deserve indexable landing pages, the ones matching real query patterns with demand. Prevent crawling of the rest, point canonicals to the base page, keep parameter order consistent, and avoid infinite spaces like calendars, sort orders and session IDs in URLs. Google's own faceted navigation guidance says much the same.",
                 "onScreen": "Faceted navigation\n• Index only demanded combinations\n• Block crawling of the rest\n• Canonical to base\n• Avoid infinite spaces",
-                "visual": "A filter panel generating a branching explosion of URLs; most branches fade behind a 'no crawl' barrier while a few glow as landing pages.",
+                "visual": "Layout: A filter panel generating a branching explosion of URLs; most branches fade behind a 'no crawl' barrier while a few glow as landing pages. Timing (33s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 33
               },
               {
                 "narration": "Related link modules should be relevant, not random. Use geography, like the nearest areas by distance. Taxonomy, like parent and sibling categories. Behavior, like pages that are often viewed or booked together, in aggregate. And similarity of content or attributes. The lesson includes a small Python function that finds the nearest published areas using the haversine distance formula. Note the word published. Only link to indexable pages with real content.",
                 "onScreen": "Related links\n• Geography\n• Taxonomy\n• Aggregated behavior\n• Similarity\n• Only published pages",
-                "visual": "Map of Dubai areas with distance rings from Dubai Marina; three nearest published areas light up, an unpublished one stays gray.",
+                "visual": "Layout: Map of Dubai areas with distance rings from Dubai Marina; three nearest published areas light up, an unpublished one stays gray. Timing (30s): title card 0–3s; then the 5 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
@@ -958,31 +988,31 @@
               {
                 "narration": "A few details on anchors and placement. Use descriptive anchor text, like physics tutors in Karachi, varied naturally rather than stuffed. Links inside the content, in context, carry more meaning than a dump of links in the footer. And avoid enormous link blocks; paginate hubs instead.",
                 "onScreen": "Anchors and placement\n• Descriptive anchors\n• Contextual > footer dumps\n• Paginate large hubs",
-                "visual": "A paragraph with a highlighted contextual link, contrasted with a cluttered footer of hundreds of tiny links.",
+                "visual": "Layout: A paragraph with a highlighted contextual link, contrasted with a cluttered footer of hundreds of tiny links. Timing (20s): title card 0–3s; then the 3 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 20
               },
               {
                 "narration": "How do you find problems? Crawl your own site with a crawler, and compare what it finds with your sitemap and your database. URLs in the sitemap that the crawl never reached are orphans. Check the crawl depth distribution by page type. And look at internal links per page, because pages with very few are at risk of being ignored.",
                 "onScreen": "Finding problems\n• Crawl vs sitemap vs database\n• Orphans\n• Depth by page type\n• Low inlink pages",
-                "visual": "Venn diagram of 'crawled', 'in sitemap' and 'in database'; the 'sitemap only' slice highlighted as orphans.",
+                "visual": "Layout: Venn diagram of 'crawled', 'in sitemap' and 'in database'; the 'sitemap only' slice highlighted as orphans. Timing (26s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 26
               },
               {
                 "narration": "Big hubs need pagination, so handle it cleanly. Use plain, crawlable links to the next pages, give each paginated page its own self-referencing canonical, and don't point every page's canonical back to page one, because that hides everything listed on later pages. And make page one of every hub genuinely useful on its own, with a data summary like counts, price ranges and top areas, the most relevant items first, and links into sub-hubs. A hub that's only a list of links is itself a thin page.",
                 "onScreen": "Pagination and hub quality\n• Crawlable next-page links\n• Self-referencing canonicals\n• Don't canonicalize all to page 1\n• Useful page one with data summary",
-                "visual": "A hub page with a data summary header and a numbered pagination bar; canonical arrows on each page point to themselves.",
+                "visual": "Layout: A hub page with a data summary header and a numbered pagination bar; canonical arrows on each page point to themselves. Timing (38s): title card 0–3s; then the 4 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 38
               },
               {
                 "narration": "Here's an illustrative example. A Karachi-based software directory had three thousand alternatives and versus pages. A crawl showed about forty percent of the versus pages were orphans, linked only from sitemaps. The fix: every product page links to its top five comparisons by demand and co-views, category hubs list top comparisons, and breadcrumbs were added. After the change, indexing coverage of those pages rose, tracked in Search Console's page indexing report.",
                 "onScreen": "Example: Karachi software directory (illustrative)\n• 40% of vs-pages orphaned\n• Product → top 5 comparisons\n• Hubs + breadcrumbs\n• Indexing coverage rose",
-                "visual": "Before and after link graphs: many disconnected nodes, then a connected network.",
+                "visual": "Layout: Before and after link graphs: many disconnected nodes, then a connected network. Timing (31s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               },
               {
                 "narration": "Pitfalls to avoid. Relying on XML sitemaps instead of links. Random related links. Letting facets create millions of crawlable URLs. And linking to pages that are noindexed or below threshold. Success looks like zero orphans among indexable pages, click depth within target, efficient crawling of important page types in Search Console's crawl stats, and better indexing after linking changes.",
                 "onScreen": "Pitfalls and success\n• Sitemaps ≠ links\n• Random related links\n• Facet explosions\n• Links to thin pages\n• Success: no orphans, shallow depth",
-                "visual": "Four pitfall cards, then a success dashboard with orphan count at zero.",
+                "visual": "Layout: Four pitfall cards, then a success dashboard with orphan count at zero. Timing (26s): title card 0–3s; then the 5 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 26
               },
               {
@@ -992,9 +1022,15 @@
                 "seconds": 34
               },
               {
+                "narration": "Watch me do it. Let's fix orphans on an illustrative Lahore restaurant directory. Step one, I crawl the site with a crawler starting from the home page and export all found URLs. Step two, I export the sitemap URLs and the database's list of published pages. Step three, a quick comparison in Python: two thousand four hundred pages in the database, two thousand three hundred in the sitemap, but only one thousand five hundred found by the crawl. So about eight hundred pages are orphans. Step four, I look at which kind: almost all are cuisine in area pages for smaller areas, which are only reachable through the site search. Step five, the fix: every area hub lists its cuisines with counts; every cuisine page links to the three nearest areas that have that cuisine; breadcrumbs link cuisine in area pages up to both the area hub and the cuisine hub. Step six, recrawl after deployment: two thousand three hundred and eighty pages found; the remaining twenty are below threshold and correctly noindexed and unlinked. Step seven, Search Console's crawl stats over the next month confirm more frequent crawling of those pages.",
+                "onScreen": "Watch me do it: fixing orphans (illustrative)\n• Crawl vs sitemap vs database\n• ~800 orphans: small-area cuisine pages\n• Hubs, nearest-area links, breadcrumbs\n• Recrawl: 2,380 found\n• Crawl stats confirm",
+                "visual": "Layout: three overlapping circles (crawl, sitemap, database) on the left; site structure graph on the right. Timing: circles size to counts ~20s; orphan segment highlights ~40s; new link edges draw into the graph ~60–100s; recrawl counter rises in the final 20s.",
+                "seconds": 83
+              },
+              {
                 "narration": "Recap. Internal links drive discovery, priority and navigation. Build hubs and spokes with breadcrumbs and sibling links. Control facets. Make related links relevant and point only at published pages. Crawl regularly. Your next step: draw the hub and spoke structure for your page system, and write the rules for your related-link module: which signals, how many links, and which pages are eligible.",
                 "onScreen": "Recap and next step\n• Hubs + spokes\n• Facet control\n• Relevant related links\n• Draw your structure",
-                "visual": "A blank hub-and-spoke canvas with rule cards beside it.",
+                "visual": "Layout: A blank hub-and-spoke canvas with rule cards beside it. Timing (27s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 27
               }
             ],
@@ -1067,12 +1103,12 @@
           ],
           "activity": "Choose the schema types for your page system, write a generator function for one type, and list the consistency checks you'll run in CI.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Structured data is one of the few SEO tasks that genuinely scales with code. Generate it right once and thousands of pages describe themselves clearly to search engines and AI systems. Generate it wrong once and you've published thousands of errors. In this lecture you'll learn what structured data does and doesn't do, which types fit programmatic pages, how to generate it from your data, and how to validate it at scale.",
                 "onScreen": "Structured data at scale\n• What it does and doesn't do\n• Relevant types\n• Generating JSON-LD\n• Validation at scale",
-                "visual": "A page with an invisible layer peeling back to reveal labeled data fields in a JSON structure.",
+                "visual": "Layout: A page with an invisible layer peeling back to reveal labeled data fields in a JSON structure. Timing (31s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               },
               {
@@ -1084,19 +1120,19 @@
               {
                 "narration": "Structured data uses the Schema dot org vocabulary, usually written as JSON-LD, to describe what's on the page in a machine-readable way. Google uses it to understand pages and to make them eligible for rich results, like product prices and availability, breadcrumbs, local business details, events and job postings. Eligible, not guaranteed. It's not a direct ranking boost. And it must describe content that's visible on the page.",
                 "onScreen": "What it does\n• Machine-readable description\n• Eligibility for rich results\n• Not guaranteed, not a ranking boost\n• Must match visible content",
-                "visual": "A search result mock gaining a price and availability line; a small 'eligible, not guaranteed' tag appears.",
+                "visual": "Layout: A search result mock gaining a price and availability line; a small 'eligible, not guaranteed' tag appears. Timing (30s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
                 "narration": "Google retires rich result types from time to time. How-to rich results were removed and FAQ rich results were limited to certain authoritative sites back in twenty twenty-three, and several more types were phased out in twenty twenty-five. So always check Google's current Search Gallery before investing in a type. Structured data can still help other search engines, AI assistants and product feeds understand your pages, but set expectations correctly.",
                 "onScreen": "Types change\n• HowTo removed, FAQ limited (2023)\n• More retired in 2025\n• Check the Search Gallery\n• Still useful beyond Google",
-                "visual": "A gallery wall of rich result type cards; a few get removed and replaced with 'retired' labels.",
+                "visual": "Layout: A gallery wall of rich result type cards; a few get removed and replaced with 'retired' labels. Timing (30s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
                 "narration": "Which types fit page systems? Listing and category pages: BreadcrumbList, ItemList and CollectionPage. Products and comparisons: Product, Offer, AggregateRating and Review, but only real, visible offers and reviews. Local entities: LocalBusiness subtypes with address, hours and coordinates. Jobs: JobPosting, which has strict requirements. Events. Articles with named authors and the organization. And Dataset for data pages.",
                 "onScreen": "Types for page systems\n• Breadcrumbs, ItemList\n• Product, Offer, Review\n• LocalBusiness\n• JobPosting, Event\n• Article, Dataset",
-                "visual": "Six page thumbnails, each tagged with its schema types.",
+                "visual": "Layout: Six page thumbnails, each tagged with its schema types. Timing (24s): title card 0–3s; then the 5 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 24
               },
               {
@@ -1108,31 +1144,31 @@
               {
                 "narration": "The golden rule: generate structured data from the same data source that renders the page, so they can never disagree. The lesson's Python functions build a breadcrumb list and a local business, here a dentist, with address, coordinates and opening hours. Notice the aggregate rating is only added when there are at least five real, visible reviews. And one more rule: Google doesn't show review rich results for reviews a business publishes about itself.",
                 "onScreen": "Generate from data\n• Same source as the page\n• Breadcrumb + LocalBusiness functions\n• Ratings only when real and visible\n• No self-serving review markup",
-                "visual": "Code editor showing the Python generator; the output JSON-LD appears next to the rendered page with matching values highlighted.",
+                "visual": "Layout: Code editor showing the Python generator; the output JSON-LD appears next to the rendered page with matching values highlighted. Timing (32s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 32
               },
               {
                 "narration": "Validation at scale has four layers. Unit tests in your pipeline that check required fields and types. Google's Rich Results Test and the Schema Markup Validator on samples of each template. Search Console enhancement reports for errors across all pages. And consistency checks: prices, availability and ratings in the markup must match what's visible, and for products, your Merchant Center feed.",
                 "onScreen": "Validation layers\n• Unit tests in CI\n• Rich Results Test + validator\n• Search Console reports\n• Consistency checks",
-                "visual": "Four stacked shields labeled with each validation layer, a markup payload passing through them.",
+                "visual": "Layout: Four stacked shields labeled with each validation layer, a markup payload passing through them. Timing (27s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 27
               },
               {
                 "narration": "Here's an illustrative example. A Pakistani job board has job title in city hubs with breadcrumbs and item lists, and individual job pages with JobPosting markup, including salary ranges where provided, a valid-through date, employment type, and location or remote eligibility. Expired jobs are updated promptly and removed from the index, because stale postings are a known quality problem. And they use Google's Indexing API, which Google permits for job posting pages.",
                 "onScreen": "Example: Pakistani job board (illustrative)\n• Hubs: Breadcrumb + ItemList\n• Jobs: JobPosting with validThrough\n• Expired jobs removed fast\n• Indexing API for jobs",
-                "visual": "A job page mock with a JSON-LD panel; an expired job card fades and is removed from an index list.",
+                "visual": "Layout: A job page mock with a JSON-LD panel; an expired job card fades and is removed from an index list. Timing (31s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               },
               {
                 "narration": "There's a newer reason to care about clean structured data: AI search experiences and assistants increasingly read pages directly. Markup doesn't guarantee a mention or a citation. But it helps any system parse entities, prices, locations, dates and authorship accurately. For data pages, consider a Dataset description with your methodology and license, and put key numbers in real HTML tables rather than only in images or charts. Consistency across your page, your markup, your feeds and your business profiles reduces the chance of AI systems repeating outdated facts about you.",
                 "onScreen": "Structured data and AI search\n• Helps parsing, not a guarantee\n• Dataset + methodology\n• Key numbers in HTML tables\n• Consistent facts everywhere",
-                "visual": "An AI assistant icon reading a page's structured data panel and an HTML table, then quoting a correct number.",
+                "visual": "Layout: An AI assistant icon reading a page's structured data panel and an HTML table, then quoting a correct number. Timing (39s): title card 0–3s; then the 4 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 39
               },
               {
                 "narration": "Avoid four pitfalls. Markup that doesn't match visible content, which risks a manual action. Fake or self-serving review markup. Investing in retired rich result types. And hand-written markup that drifts away from the data. Success means no critical errors in Search Console enhancement reports, rich result impressions where you're eligible, and consistency tests passing in your pipeline.",
                 "onScreen": "Pitfalls and success\n• Mismatched markup\n• Self-serving reviews\n• Retired types\n• Hand-written drift\n• Success: clean reports, tests passing",
-                "visual": "Four warning cards; then a green Search Console-style enhancement report.",
+                "visual": "Layout: Four warning cards; then a green Search Console-style enhancement report. Timing (25s): title card 0–3s; then the 5 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 25
               },
               {
@@ -1142,9 +1178,15 @@
                 "seconds": 37
               },
               {
+                "narration": "Watch me do it. Let's add structured data tests to the build pipeline for an illustrative Dubai clinic directory. Step one, I pick three sample pages per template: a rich clinic, an average one, and one with no reviews. Step two, I run the generator and print the JSON-LD for each. The clinic with no reviews correctly has no aggregate rating. Good. Step three, I paste one into the Rich Results Test: valid, with a warning about a missing optional price range, which we note. Step four, the consistency test in code: for every page, the telephone number, address and opening hours in the markup must equal the values rendered in the HTML. I run it across the whole site locally. It fails on forty pages. Step five, the cause: opening hours in the markup use the database's old field, while the page shows the new Ramadan hours field. Two sources of truth. Step six, the fix: both the page and the generator read from one hours function that knows about Ramadan schedules. Test passes. Step seven, the test now runs on every deployment, so markup and page can never quietly disagree again.",
+                "onScreen": "Watch me do it: JSON-LD tests (illustrative)\n• 3 samples per template\n• Rich Results Test on one\n• Consistency test: 40 failures\n• Cause: two sources for Ramadan hours\n• One function, test in CI",
+                "visual": "Layout: code panel on the left, test runner output on the right. Timing: JSON-LD outputs print ~20s; Rich Results card with a warning ~40s; consistency test runs showing '40 failed' in red ~65s; diff of hours fields ~85s; single function refactor and green test in the final 25s.",
+                "seconds": 84
+              },
+              {
                 "narration": "Recap. Structured data aids understanding and eligibility, not guaranteed boosts. Mark up only visible, truthful content. Check the Search Gallery for current types. Generate from the same data as the page and validate in layers. Your next step: choose the schema types for your page system, write a generator function for one type, and list the consistency checks you'll run in your pipeline.",
                 "onScreen": "Recap and next step\n• Eligibility, not guarantees\n• Truthful markup\n• Generate + validate\n• Write one generator",
-                "visual": "A to-do card with three items: choose types, write generator, list checks.",
+                "visual": "Layout: A to-do card with three items: choose types, write generator, list checks. Timing (27s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 27
               }
             ],
@@ -1228,12 +1270,12 @@
           ],
           "activity": "Design the sitemap structure and rollout plan for your page system: sitemap files per type, pilot size, observation window, thresholds and the metrics that trigger expansion.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Here's the moment of truth for every programmatic project. You publish ten thousand pages, open Search Console a month later, and see most of them sitting in discovered, currently not indexed. Publishing isn't indexing. In this lecture you'll learn why indexing is your first real quality signal, when crawl budget actually matters, how to structure sitemaps, which tool to use among noindex, robots, canonical and redirects, and how to roll out in stages.",
                 "onScreen": "Indexing management\n• Indexing as a quality signal\n• Crawl budget\n• Sitemaps\n• The right tool for each goal\n• Staged rollout",
-                "visual": "A large stack of published pages; only a small portion passes through a gate labeled 'indexed'.",
+                "visual": "Layout: A large stack of published pages; only a small portion passes through a gate labeled 'indexed'. Timing (32s): title card 0–3s; then the 5 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 32
               },
               {
@@ -1245,19 +1287,19 @@
               {
                 "narration": "Search engines don't index everything they find. They decide based on value, duplication, site quality and resources. So when Google declines to index a big share of a page type, showing crawled, currently not indexed, or discovered, currently not indexed, it's telling you something about value or discovery. Treat the indexed share per page type as your first quality metric.",
                 "onScreen": "Indexing = quality signal\n• Not everything gets indexed\n• 'Crawled/Discovered – not indexed'\n• Track indexed share per type",
-                "visual": "Search Console-style indexing bar split into indexed and not-indexed segments by page type.",
+                "visual": "Layout: Search Console-style indexing bar split into indexed and not-indexed segments by page type. Timing (26s): title card 0–3s; then the 3 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 26
               },
               {
                 "narration": "When does crawl budget matter? Google says mainly for very large sites, on the order of a million or more pages, for medium-large sites whose content changes very often, and when lots of pages are stuck as discovered but not indexed. Crawl capacity depends on your server's health and speed. Crawl demand depends on popularity and freshness. You help by removing low-value URLs from crawl paths, keeping servers fast and error-free, linking clearly to important pages, and keeping sitemaps accurate.",
                 "onScreen": "Crawl budget\n• Matters for very large / fast-changing sites\n• Capacity: server health\n• Demand: popularity, freshness\n• Remove waste, speed up, link well",
-                "visual": "A crawler robot with a limited fuel gauge; fuel is wasted on facet URLs until they're blocked, then spent on important pages.",
+                "visual": "Layout: A crawler robot with a limited fuel gauge; fuel is wasted on facet URLs until they're blocked, then spent on important pages. Timing (35s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 35
               },
               {
                 "narration": "Sitemaps for page systems. Split them by page type, and by segment for large types, so you can see indexing per type in Search Console. Respect the limits: fifty thousand URLs or fifty megabytes uncompressed per file, with a sitemap index for more. Include only canonical, indexable URLs that return a normal success status. Use last modified accurately, because Google uses it when it's consistently reliable, and ignores change frequency and priority.",
                 "onScreen": "Sitemaps\n• Split by page type\n• 50,000 URLs / 50 MB limit\n• Only canonical, indexable, 200\n• Honest lastmod",
-                "visual": "A sitemap index file branching into per-type sitemap files, each with a small indexing gauge.",
+                "visual": "Layout: A sitemap index file branching into per-type sitemap files, each with a small indexing gauge. Timing (31s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               },
               {
@@ -1269,25 +1311,25 @@
               {
                 "narration": "Now the right tool for each goal. To keep a page out of the index but crawlable, use a noindex meta tag or header. To stop crawling of URL spaces like facets, use robots dot t x t disallow, knowing that blocked URLs can still appear in the index without content if linked. To consolidate duplicates, use canonical, which is a hint. To remove permanently, return four oh four or four ten. To move or merge, use a three oh one redirect.",
                 "onScreen": "Right tool, right goal\n• noindex: crawl yes, index no\n• robots.txt: stop crawling\n• canonical: consolidate (hint)\n• 404/410: remove\n• 301: move/merge",
-                "visual": "A toolbox with five labeled tools, each paired with its goal card.",
+                "visual": "Layout: A toolbox with five labeled tools, each paired with its goal card. Timing (36s): title card 0–3s; then the 5 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 36
               },
               {
                 "narration": "One combination to never use: disallowing a URL in robots dot t x t and also putting noindex on it. If Google can't crawl the page, it can't see the noindex. So the page may stay in the index. Pick one approach per URL, based on the goal.",
                 "onScreen": "Never combine\n• Disallow + noindex = noindex unseen\n• One approach per URL",
-                "visual": "A locked door with a 'noindex' sign behind it that the crawler can't read.",
+                "visual": "Layout: A locked door with a 'noindex' sign behind it that the crawler can't read. Timing (21s): title card 0–3s; then the 2 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 21
               },
               {
                 "narration": "Roll out in stages. Pilot fifty to two hundred pages of one type in their own sitemap. Observe for four to eight weeks: indexing rate, impressions, clicks, engagement. Improve the template and thresholds based on what was and wasn't indexed. Expand in waves, keeping per-type sitemaps. And hold back or noindex segments that underperform. Monitor with Search Console's page indexing and crawl stats reports, URL inspection samples, and your server logs.",
                 "onScreen": "Staged rollout\n• Pilot 50–200\n• Observe 4–8 weeks\n• Improve\n• Expand in waves\n• Hold back weak segments",
-                "visual": "A staircase of rollout waves with a monitoring dashboard at each step.",
+                "visual": "Layout: A staircase of rollout waves with a monitoring dashboard at each step. Timing (31s): title card 0–3s; then the 5 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               },
               {
                 "narration": "A few related tools. IndexNow lets you notify Bing, Yandex and other participating engines of changes instantly, though Google doesn't use it. And Google's Indexing API is only for pages with job posting or livestream broadcast event markup, not general pages. Here's an illustrative example: a UK property data site launched a hundred and twenty thousand street pages, most stuck as discovered but not indexed. They set a threshold of five sales in five years, merged thinner streets into district pages, sped up rendering, added hub links and per-type sitemaps. The indexed share climbed over the following months.",
                 "onScreen": "Related tools and example\n• IndexNow: Bing and others, not Google\n• Indexing API: jobs + livestreams only\n• UK property site (illustrative)",
-                "visual": "A UK map with street-level dots merging into district pages; an indexing chart rising after the change.",
+                "visual": "Layout: A UK map with street-level dots merging into district pages; an indexing chart rising after the change. Timing (43s): title card 0–3s; then the 3 on-screen points build in narration order about every 11s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 43
               },
               {
@@ -1303,9 +1345,15 @@
                 "seconds": 32
               },
               {
+                "narration": "Watch me do it. Let's plan the rollout for an illustrative UK tradesperson marketplace launching plumber, electrician and roofer in town pages. Step one, sitemaps: one sitemap per trade, each generated from the same rules that set indexability, so only pages meeting the threshold appear. Step two, pilot: plumbers only, in the one hundred towns with the most verified tradespeople, about one hundred pages. Step three, observation: six weeks. I set targets before launch: at least seventy percent indexed, and impressions for at least half of the indexed pages. Step four, week three check: the plumbers sitemap shows sixty-two percent indexed; the rest are mostly crawled, currently not indexed. I compare them with indexed ones: the unindexed pages have fewer reviews and shorter lists. Step five, I raise the threshold slightly and add a computed insight module, average response time. Step six, week six: seventy-eight percent indexed. Step seven, expansion: electricians in the same hundred towns, then more towns in waves. Each wave has its own sitemap segment, so if something goes wrong, we can see exactly where.",
+                "onScreen": "Watch me do it: staged rollout (illustrative)\n• Sitemap per trade from same rules\n• Pilot: 100 plumber pages\n• Targets: ≥70% indexed\n• Week 3: 62% → raise threshold + insight\n• Week 6: 78% → expand in waves",
+                "visual": "Layout: rollout timeline across the bottom, indexing gauge top-right, sitemap file stack top-left. Timing: sitemaps generate ~10s; pilot wave flag ~30s; gauge reads 62% at ~60s and 78% at ~100s after an improvement icon; final 20s show new wave flags appearing.",
+                "seconds": 77
+              },
+              {
                 "narration": "Recap. Publishing isn't indexing, and indexing is your first quality signal. Crawl budget matters for very large or fast-changing sites. Split sitemaps by type with honest dates. Use each directive for its purpose, and never combine robots blocking with noindex. Roll out in stages. Your next step: design your sitemap structure and rollout plan, including pilot size, observation window, thresholds and the metrics that trigger expansion.",
                 "onScreen": "Recap and next step\n• Indexing = signal\n• Sitemaps by type\n• Right directive\n• Plan your rollout",
-                "visual": "A rollout plan template with fields filling in.",
+                "visual": "Layout: A rollout plan template with fields filling in. Timing (29s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 29
               }
             ],
@@ -1393,12 +1441,12 @@
           ],
           "activity": "Write a grounded prompt for one section of your page type, with input fields, output format, refusal rule and three automatic validation checks.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Let's get one thing straight. AI in programmatic SEO is not a write ten thousand pages button. Used that way, it's the fastest route to a scaled content abuse problem. Used well, it adds meaning that templates and data alone can't. In this lecture you'll learn where AI belongs in a page system, the grounded generation pattern, prompt design for scale, and how to validate, review and log everything.",
                 "onScreen": "AI content workflows\n• Where AI belongs\n• Grounded generation\n• Prompt design for scale\n• Validate, review, log",
-                "visual": "A big red button labeled 'generate 10,000 pages' gets crossed out; a careful pipeline with checkpoints appears instead.",
+                "visual": "Layout: A big red button labeled 'generate 10,000 pages' gets crossed out; a careful pipeline with checkpoints appears instead. Timing (30s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
@@ -1410,19 +1458,19 @@
               {
                 "narration": "Good uses of AI in page systems: summarizing entity-specific data, like forty verified reviews of one clinic into pros and cons. Explaining computed insights, like turning a price trend into a readable sentence. Drafting segment-level guidance that an expert then edits. Translating expert content into Arabic or Urdu with a native reviewer. Classifying and tagging data. And helping QA. Bad uses: generic paragraphs to make pages unique, invented facts, fake reviews or personas, and publishing without review.",
                 "onScreen": "Good vs bad AI uses\n• Good: summarize, explain, draft, localize, tag, QA\n• Bad: filler, invented facts, fake reviews, no review",
-                "visual": "Two columns of task cards: green 'good use' and red 'avoid'.",
+                "visual": "Layout: Two columns of task cards: green 'good use' and red 'avoid'. Timing (33s): title card 0–3s; then the 2 on-screen points build in narration order about every 12s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 33
               },
               {
                 "narration": "Here's the grounded generation pattern. One, retrieve only this page's structured data. Two, compute every number in code. Three, prompt the model to write a specific section using only the provided data, and to return a fixed refusal, like insufficient data, if it can't. Four, validate automatically: numbers must match inputs, banned phrases blocked, length and language checked. Five, human review on a sample, or everything for sensitive topics. Six, log the prompt, model, version and reviewer.",
                 "onScreen": "Grounded pattern\n1 Retrieve page data\n2 Compute numbers in code\n3 Constrained prompt + refusal\n4 Automatic validation\n5 Human review\n6 Log everything",
-                "visual": "Six-step pipeline with icons; a data packet travels through each step, getting a check stamp.",
+                "visual": "Layout: Six-step pipeline with icons; a data packet travels through each step, getting a check stamp. Timing (33s): title card 0–3s; then the 6 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 33
               },
               {
                 "narration": "The lesson includes a Python example for review summaries. The system prompt says use only the JSON provided, don't add facts or numbers, and reply insufficient data if there are fewer than five reviews. The user prompt passes trimmed review text and asks for short bullet lists without reviewer names. The validation function rejects any number that isn't in the input and any banned phrases like guaranteed. The call to the model is left for you to wire up with your provider's official SDK, with the key from an environment variable.",
                 "onScreen": "The review summary example\n• Strict system prompt\n• Trimmed, anonymised input\n• Structured output\n• Number + phrase validation\n• Provider SDK, env var key",
-                "visual": "Code editor showing the Python functions; a validation panel flags 'unexpected number: 97%'.",
+                "visual": "Layout: Code editor showing the Python functions; a validation panel flags 'unexpected number: 97%'. Timing (40s): title card 0–3s; then the 5 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 40
               },
               {
@@ -1434,25 +1482,25 @@
               {
                 "narration": "Prompt design for scale has five principles. Constrain inputs: only this page's data. Constrain outputs: structure, length, tone and language. Give an explicit refusal path, because insufficient data beats confident filler. Put your style guide in the system prompt: brand voice, banned claims, regional spelling. And evaluate before scaling: run the prompt on fifty diverse pages, score them with a rubric, and iterate.",
                 "onScreen": "Prompt principles\n• Constrain inputs\n• Constrain outputs\n• Explicit refusal\n• Style guide in system prompt\n• Evaluate on 50 pages first",
-                "visual": "A prompt card with five highlighted sections; a sample grid of fifty page thumbnails being scored.",
+                "visual": "Layout: A prompt card with five highlighted sections; a sample grid of fifty page thumbnails being scored. Timing (27s): title card 0–3s; then the 5 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 27
               },
               {
                 "narration": "Now operations. Batch your generation jobs and cache results keyed by a hash of the input data, so you only regenerate when the data changes, like when new reviews arrive. Watch for model updates, because a provider change can shift output style; pin versions where you can and re-evaluate on upgrade. And privacy: don't send personal data to AI providers without a lawful basis and a data processing agreement. Strip names and contact details from reviews before summarizing.",
                 "onScreen": "Operations\n• Batch + cache by input hash\n• Regenerate on data change\n• Pin and re-evaluate models\n• Strip personal data",
-                "visual": "A cache table keyed by hashes; a model version badge with a 'pinned' pin; a review text with names being redacted.",
+                "visual": "Layout: A cache table keyed by hashes; a model version badge with a 'pinned' pin; a review text with names being redacted. Timing (34s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 34
               },
               {
                 "narration": "Here's an illustrative example. A UAE clinic directory summarizes verified patient reviews per clinic, with consent to publish reviews, in Arabic and English, and adds a computed most-mentioned services list from tagged data. Because it's health-related, a medical content editor reviews every summary. Clinics with fewer than five reviews show no summary at all. And every summary is logged with the model version and the reviewer's name.",
                 "onScreen": "Example: UAE clinic directory (illustrative)\n• Consented reviews summarized\n• Arabic + English\n• 100% medical editor review\n• < 5 reviews → no summary\n• Full logging",
-                "visual": "Clinic page mock in Arabic and English side by side; a reviewer badge stamp on the summary block.",
+                "visual": "Layout: Clinic page mock in Arabic and English side by side; a reviewer badge stamp on the summary block. Timing (29s): title card 0–3s; then the 5 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 29
               },
               {
                 "narration": "Pitfalls. Letting the model compute or estimate numbers. One-shot prompts that were never tested on diverse pages. Publishing AI text on your-money-or-your-life topics, like health and finance, without expert review. And sending personal data to AI tools without agreements. Measure success with validation pass rates, a falling human edit rate as prompts improve, zero factual errors in audits, and engagement on AI-assisted sections compared with control pages.",
                 "onScreen": "Pitfalls and success\n• Model-made numbers\n• Untested prompts\n• Unreviewed YMYL\n• Personal data leaks\n• Success: pass rate, edit rate, zero errors",
-                "visual": "Pitfall icons turning into a metrics panel with four KPIs.",
+                "visual": "Layout: Pitfall icons turning into a metrics panel with four KPIs. Timing (29s): title card 0–3s; then the 5 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 29
               },
               {
@@ -1462,9 +1510,15 @@
                 "seconds": 40
               },
               {
+                "narration": "Watch me do it. Let's evaluate a prompt on fifty pages before scaling, for an illustrative Islamabad tutoring marketplace that wants AI summaries of tutor reviews. Step one, sample: fifty tutors across subjects, cities and review counts, including five with fewer than five reviews. Step two, run the pipeline. Step three, automatic validation: forty-four pass, five correctly return insufficient data, one fails because it contains the number ninety-five percent, which isn't in the input. The model invented a satisfaction rate. Step four, human review with the rubric on the forty-four: thirty-eight are good; four are too generic, like great teacher, very helpful; two mention a student's name that slipped through our anonymizer. Step five, fixes: I add to the prompt, each bullet must reference a specific aspect, such as explanations, punctuality, exam preparation. I fix the anonymizer to catch names in Urdu script. I add percent signs to the banned patterns. Step six, rerun on the same fifty: all pass validation, forty-seven rated good. Step seven, only now do we run the remaining three thousand, with a weekly sample review. Evaluation took one afternoon and prevented three thousand pages of problems.",
+                "onScreen": "Watch me do it: prompt evaluation (illustrative)\n• 50 diverse samples\n• Validation catches invented '95%'\n• Review finds generic bullets + leaked names\n• Fix prompt, anonymizer, banned patterns\n• Rerun, then scale",
+                "visual": "Layout: fifty small tiles in a grid, a results legend on the right. Timing: tiles turn green, gray or red after validation ~25s; the red tile opens showing '95%' ~40s; review tags appear on tiles ~65s; fix cards ~90s; rerun turns the grid mostly green in the final 20s.",
+                "seconds": 83
+              },
+              {
                 "narration": "Recap. Use AI where it adds meaning, not to pad pages. Follow the grounded pattern: retrieve, compute, constrain, validate, review, log. Give the model a way to say no. Evaluate before scaling, pin model versions, and protect personal data. Your next step: write a grounded prompt for one section of your page type, with the input fields, output format, refusal rule and three automatic validation checks.",
                 "onScreen": "Recap and next step\n• Meaningful AI only\n• Grounded pattern\n• Refusal path\n• Write your grounded prompt",
-                "visual": "A prompt template card with four fields ready to fill.",
+                "visual": "Layout: A prompt template card with four fields ready to fill. Timing (29s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 29
               }
             ],
@@ -1541,12 +1595,12 @@
           ],
           "activity": "Adapt the QA rubric to your page type, set a calibrated publishing bar, and write your editorial policy paragraph on AI use.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Nobody can read twenty thousand pages. So how do you keep quality high at scale? Not with hope, and not with an author box pasted on every page. In this lecture you'll learn how to make E-E-A-T concrete for page systems, the accountability pages every system needs, a scoring rubric, a smart sampling approach, the automated checks that run on every page, and how to disclose AI use honestly.",
                 "onScreen": "Editorial QA and E-E-A-T\n• E-E-A-T made concrete\n• Accountability pages\n• QA rubric\n• Sampling\n• Automated checks\n• AI disclosure",
-                "visual": "A giant wall of pages with a few highlighted by a spotlight labeled 'sample', while an automated scanner sweeps across all of them.",
+                "visual": "Layout: A giant wall of pages with a few highlighted by a spotlight labeled 'sample', while an automated scanner sweeps across all of them. Timing (30s): title card 0–3s; then the 6 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
@@ -1558,19 +1612,19 @@
               {
                 "narration": "Google's quality rater guidelines describe experience, expertise, authoritativeness and trustworthiness, with trust the most important. Raters don't change rankings directly, but the guidelines describe what Google's systems aim to reward. For page systems, experience means first-hand data: your bookings, testing, inspections, photos and real reviews. Expertise means named experts who write or review guidance. Authority means recognition: citations, links and partnerships. And trust means accurate data, clear methodology, transparent ownership, corrections and honest disclosures.",
                 "onScreen": "E-E-A-T, concretely\n• Experience: first-hand data\n• Expertise: named reviewers\n• Authority: recognition\n• Trust: accuracy, methodology, ownership",
-                "visual": "Four pillars labeled E, E, A, T, with trust drawn as the foundation beneath them.",
+                "visual": "Layout: Four pillars labeled E, E, A, T, with trust drawn as the foundation beneath them. Timing (32s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 32
               },
               {
                 "narration": "Every page system needs accountability pages. About us, with ownership and contact. Methodology: how data is collected, verified, computed and updated. An editorial policy: who writes and reviews, how AI is used, and how errors get corrected. Author and reviewer profiles. A review policy that follows fake review rules. And advertising or affiliate disclosures if the pages make money. Link them from every template, including a contextual how we compiled this link near the data.",
                 "onScreen": "Accountability pages\n• About / ownership\n• Methodology\n• Editorial policy\n• Author profiles\n• Review policy\n• Disclosures",
-                "visual": "Six small page icons arranged around a central programmatic page, each linked by a line.",
+                "visual": "Layout: Six small page icons arranged around a central programmatic page, each linked by a line. Timing (33s): title card 0–3s; then the 6 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 33
               },
               {
                 "narration": "Next, a rubric. Score sampled pages zero to two on eight criteria. Does it answer the query, answer first? Does it have substantial unique data? Is it accurate? Fresh, with honest dates? Readable and natively localized? Are trust signals visible? If there's AI text, is it specific, grounded and reviewed? And is there a clear, useful next step? Set a publishing bar, calibrated on your own best pages, for example no zeros on accuracy.",
                 "onScreen": "The rubric (0–2 each)\n• Answers query\n• Unique data\n• Accuracy\n• Freshness\n• Localization\n• Trust signals\n• AI text quality\n• Next step",
-                "visual": "A scorecard with eight rows and three columns; a sample page gets scored with animated ticks.",
+                "visual": "Layout: A scorecard with eight rows and three columns; a sample page gets scored with animated ticks. Timing (32s): title card 0–3s; then the 8 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 32
               },
               {
@@ -1582,25 +1636,25 @@
               {
                 "narration": "Who reviews what? For your-money-or-your-life content like health, finance and legal, review every page before it's indexed. For everything else, use a stratified sample: a few pages from each segment, like city tier, category and data richness, plus every page flagged by automated checks. And increase sampling after any template, data or model change. The lesson has a short Python script that builds this review queue.",
                 "onScreen": "Sampling strategy\n• YMYL: 100% before indexing\n• Others: stratified by segment\n• Plus all auto-flagged pages\n• More after changes",
-                "visual": "Pages sorted into segment buckets; a few drawn from each bucket plus all red-flagged pages into a review queue.",
+                "visual": "Layout: Pages sorted into segment buckets; a few drawn from each bucket plus all red-flagged pages into a review queue. Timing (29s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 29
               },
               {
                 "narration": "Automated checks run on every page. Data completeness and thresholds. Similarity to the nearest sibling page. Number consistency between the text, tables and structured data. A banned claims list, broken links, missing images or alt text. Language detection, so your Arabic pages really are in Arabic. And readability metrics, but only as a weak signal.",
                 "onScreen": "Automated checks\n• Completeness + thresholds\n• Similarity\n• Number consistency\n• Banned claims, links, alt text\n• Language detection",
-                "visual": "A scanner beam passing over a page; small check or cross icons appear next to each check type.",
+                "visual": "Layout: A scanner beam passing over a page; small check or cross icons appear next to each check type. Timing (24s): title card 0–3s; then the 5 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 24
               },
               {
                 "narration": "What about disclosing AI use? Google suggests considering it where readers would reasonably expect it. A short, honest editorial policy works well, like: review summaries are generated with AI from verified reviews and checked by our editors. It builds trust and fits emerging transparency norms. In the EU, the AI Act has transparency rules for AI-generated text published to inform the public on matters of public interest, unless it's had human review and editorial responsibility. Check how that applies to you.",
                 "onScreen": "AI disclosure\n• Where readers expect it\n• Short, honest policy\n• EU AI Act transparency context\n• Check applicability",
-                "visual": "An editorial policy snippet appearing under a review summary block with a small 'AI-assisted, editor-reviewed' label.",
+                "visual": "Layout: An editorial policy snippet appearing under a review summary block with a small 'AI-assisted, editor-reviewed' label. Timing (35s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 35
               },
               {
                 "narration": "Here's an illustrative example. A London legal services directory builds legal service in borough pages. Every guidance section is written by a qualified solicitor, named, with their regulator registration referenced. Directory data is verified against the regulator's register. There's a methodology page, full review before indexing because it's YMYL, and quarterly re-verification. AI is only used to tag practice areas from firm descriptions, with sampling.",
                 "onScreen": "Example: London legal directory (illustrative)\n• Solicitor-written guidance\n• Verified against regulator register\n• 100% review (YMYL)\n• AI only for tagging",
-                "visual": "A borough map of London with a legal page mock; a verified badge next to the author name.",
+                "visual": "Layout: A borough map of London with a legal page mock; a verified badge next to the author name. Timing (28s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 28
               },
               {
@@ -1616,9 +1670,15 @@
                 "seconds": 35
               },
               {
+                "narration": "Watch me do it. Let's run a first editorial QA cycle on an illustrative UAE home-maintenance directory. Step one, the queue: the sampling script picks five pages from each of six segments, plus eleven pages flagged by automated checks, forty-one in total. Step two, two editors score them with the rubric independently, then compare. They disagree on seven pages, mostly on freshness. We clarify the rubric: fresh means verified within ninety days for provider details. Step three, patterns: pages in Sharjah score low on accuracy, because provider phone numbers were imported from an old partner file. Pages in Abu Dhabi score low on localization; the Arabic guidance was machine translated without review. Step four, fixes at the source: a re-verification job for the Sharjah providers, and a native Arabic editor for the Abu Dhabi guidance template. Step five, trust signals: we add a visible last-verified date and a report-an-error link to the template. Step six, follow-up: two weeks later, the same segments are re-sampled. Scores improve, and the error reports from users become a new input to the QA queue. Quality at scale is this loop, repeated.",
+                "onScreen": "Watch me do it: first QA cycle (illustrative)\n• 41-page stratified queue\n• Two editors, calibrate rubric\n• Sharjah: stale phones; Abu Dhabi: MT Arabic\n• Fix at source + trust signals\n• Re-sample in 2 weeks",
+                "visual": "Layout: queue list on the left, rubric scorecards on the right, UAE map inset. Timing: queue builds ~15s; paired scores with disagreements highlighted ~40s; map inset marks Sharjah and Abu Dhabi issues ~65s; fix cards ~90s; re-sample score bars rise in the final 20s.",
+                "seconds": 81
+              },
+              {
                 "narration": "Recap. Quality at scale combines automated checks, stratified human sampling, expert ownership and visible accountability. Make E-E-A-T concrete with first-hand data and named experts. Score with a rubric, review YMYL fully, and disclose AI honestly. Your next step: adapt the rubric to your page type, set a calibrated publishing bar, and write your editorial policy paragraph on AI use.",
                 "onScreen": "Recap and next step\n• Checks + sampling + experts\n• Concrete E-E-A-T\n• Rubric + bar\n• Write your AI policy",
-                "visual": "Rubric card and policy card side by side, both with 'draft' stamps.",
+                "visual": "Layout: Rubric card and policy card side by side, both with 'draft' stamps. Timing (26s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 26
               }
             ],
@@ -1702,12 +1762,12 @@
           ],
           "activity": "List 20 target queries for your page system, record current AI answers and whether you're cited, and set up a GA4 channel group for answer-engine referrals.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Search has changed shape. For many queries, an AI-generated answer now sits above the classic results, in Google's AI Overviews and AI Mode, and people also ask assistants like ChatGPT, Perplexity, Copilot and Gemini. For page systems this cuts both ways. Simple facts may never earn a click again. Rich, data-backed answers can earn citations and better visitors. In this lecture you'll learn what Google says, how to measure AI visibility, what makes page-system content citable, and how to control AI crawlers.",
                 "onScreen": "AI search visibility\n• The new surfaces\n• What Google says\n• Measuring AI visibility\n• Citable content\n• Controlling crawlers",
-                "visual": "A search results page morphing: an AI answer panel appears above the links, with small citation chips linking to sources.",
+                "visual": "Layout: A search results page morphing: an AI answer panel appears above the links, with small citation chips linking to sources. Timing (36s): title card 0–3s; then the 5 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 36
               },
               {
@@ -1719,19 +1779,19 @@
               {
                 "narration": "First, what Google says. The same fundamentals apply. Pages must be indexable and eligible to show a snippet, and helpful, people-first content with a good page experience is what its systems aim to surface. There's no special markup needed for AI Overviews or AI Mode. Google's newer guidance on generative AI features repeats the message: unique, useful content matters most over time. This course's companion, AI Search Optimization, goes much deeper.",
                 "onScreen": "What Google says\n• Same fundamentals\n• Indexable + snippet-eligible\n• No special markup\n• Unique, useful content wins",
-                "visual": "A simple checklist: indexable, snippet-eligible, helpful; a crossed-out card reads 'secret AI markup'.",
+                "visual": "Layout: A simple checklist: indexable, snippet-eligible, helpful; a crossed-out card reads 'secret AI markup'. Timing (31s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               },
               {
                 "narration": "How do you measure it? In June twenty twenty-six, Google launched generative AI performance reports in Search Console, rolling them out to all sites by the end of August. They show impressions in AI Overviews, AI Mode and AI features in Discover, by page, country, device and date, with data starting in mid-May. At launch they didn't include clicks or queries, so check what the current report shows. Add answer-engine referrals in GA4 with a custom channel group, and sample your target queries in assistants to track citations directionally.",
                 "onScreen": "Measuring AI visibility\n• Search Console generative AI reports\n• Impressions by page, country, device, date\n• Answer-engine referrals in GA4\n• Citation sampling (directional)",
-                "visual": "A Search Console-style report with an 'AI features' tab showing an impressions chart; a GA4 channel group labeled 'answer engines'.",
+                "visual": "Layout: A Search Console-style report with an 'AI features' tab showing an impressions chart; a GA4 channel group labeled 'answer engines'. Timing (39s): title card 0–3s; then the 4 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 39
               },
               {
                 "narration": "What makes programmatic content citable? Specific, verifiable facts in HTML text and tables, not hidden in images or charts rendered by scripts. Clear entity names and consistent facts across your site, structured data and profiles. Original data others don't have, like computed medians, trends and availability, with methodology. A concise answer near the top, then depth. Freshness with honest dates. And crawlability by the right bots.",
                 "onScreen": "Citable content\n• Facts in HTML text/tables\n• Consistent entities\n• Original data + methodology\n• Answer first, depth next\n• Fresh + crawlable",
-                "visual": "A page section with a highlighted HTML table; an AI answer panel quotes a number from it with a citation chip.",
+                "visual": "Layout: A page section with a highlighted HTML table; an AI answer panel quotes a number from it with a citation chip. Timing (29s): title card 0–3s; then the 5 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 29
               },
               {
@@ -1743,25 +1803,25 @@
               {
                 "narration": "Now crawler control. Each AI company documents its user agents. Google Search, including AI Overviews and AI Mode, uses Googlebot, controlled by normal robots rules and snippet controls. Google-Extended is a separate token for certain Gemini uses outside Search. OpenAI separates OAI-SearchBot for search, GPTBot for training, and ChatGPT-User for user-initiated fetches. Perplexity, Anthropic and others document their own. Bing's crawler also feeds Copilot answers.",
                 "onScreen": "AI crawlers\n• Googlebot: Search incl. AI features\n• Google-Extended: some Gemini uses\n• OpenAI: OAI-SearchBot, GPTBot, ChatGPT-User\n• Others document their own",
-                "visual": "A robots.txt file on screen with lines for each user agent, color-coded allow and disallow.",
+                "visual": "Layout: A robots.txt file on screen with lines for each user agent, color-coded allow and disallow. Timing (28s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 28
               },
               {
                 "narration": "The lesson includes an example robots file that allows search and answer engines while opting out of some training uses. That's a business decision with trade-offs between visibility and content reuse, and blocking only affects crawlers that respect the rules. User agents change, so check vendor documentation. And llms dot t x t? It's an informal proposal, and major search engines haven't committed to using it, so treat it as optional.",
                 "onScreen": "Decisions and caveats\n• Visibility vs reuse trade-off\n• Only compliant bots obey\n• Check current user agents\n• llms.txt: optional proposal",
-                "visual": "A balance scale with 'visibility' and 'content reuse' on each side; a small 'check docs' calendar icon.",
+                "visual": "Layout: A balance scale with 'visibility' and 'content reuse' on each side; a small 'check docs' calendar icon. Timing (31s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               },
               {
                 "narration": "For queries AI answers directly, shift the value of the click. Offer depth and action: tools, filters, comparisons, booking, alerts and downloadable data. See all thirty-four verified tutors with availability this week beats restating a rate range the AI already showed. Here's an illustrative example. A Dubai currency comparison site lost clicks on simple rate queries, then leaned into live exchange-house comparisons with fees, rate alerts, charts with methodology, and Arabic and Urdu versions. AI impressions grew for richer queries, and answer-engine referrals grew for comparison pages.",
                 "onScreen": "Zero-click adaptation\n• Depth and action beat restated facts\n• Tools, comparisons, alerts\n• Dubai FX site example (illustrative)",
-                "visual": "A simple rate answer in an AI panel, then a click-through to a rich comparison page with an alert button.",
+                "visual": "Layout: A simple rate answer in an AI panel, then a click-through to a rich comparison page with an alert button. Timing (38s): title card 0–3s; then the 3 on-screen points build in narration order about every 10s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 38
               },
               {
                 "narration": "Pitfalls. Chasing AI SEO hacks instead of unique data and clear answers. Hiding key facts in images or scripts. And blocking bots without understanding the trade-offs. Measure AI feature impressions by page type, answer-engine referrals, citation share on your tracked queries as a directional signal, and above all, the conversions these visits bring.",
                 "onScreen": "Pitfalls and metrics\n• Hacks over substance\n• Hidden facts\n• Blind bot blocking\n• Metrics: impressions, referrals, citations, conversions",
-                "visual": "Three pitfall icons and a four-tile metrics panel.",
+                "visual": "Layout: Three pitfall icons and a four-tile metrics panel. Timing (23s): title card 0–3s; then the 4 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 23
               },
               {
@@ -1777,9 +1837,15 @@
                 "seconds": 36
               },
               {
+                "narration": "Watch me do it. Let's run the monthly AI visibility routine for an illustrative money-transfer comparison site serving the UK to Pakistan corridor. Step one, Search Console's generative AI report by page type: comparison pages show rising AI impressions; single rate pages show AI impressions rising while classic clicks fall, the zero-click pattern. Step two, answer-engine referrals in GA4 via our custom channel group: small but growing, highest to provider-versus-provider pages. Step three, tracked queries: twenty questions in two assistants. We're cited for cheapest way to send two hundred pounds to Lahore, but not for how long does a bank transfer to Pakistan take. Step four, I open the page that gets cited instead: it has a simple table of delivery times by method, updated weekly. Ours has delivery times buried in provider cards. Step five, template change: add a delivery-time table in HTML, with methodology and the update date. Step six, for the zero-click rate pages, add a rate alert and a fee calculator above the fold. Step seven, log both changes with dates so next month's routine can check the effect.",
+                "onScreen": "Watch me do it: monthly AI visibility (illustrative)\n• GA report: comparisons up, rate pages zero-click\n• Answer-engine referrals\n• 20 queries × 2 assistants\n• Competitor cited for a delivery-time table\n• Add table; add alerts to rate pages",
+                "visual": "Layout: dashboard with three panels: AI impressions by page type, referrals, citation tracker. Timing: panels populate ~15s each; an uncited query row highlights ~55s; competitor page with a table zooms in ~75s; our template gains a table ~95s; change log entries appear in the final 20s.",
+                "seconds": 80
+              },
+              {
                 "narration": "Recap. AI search rewards the fundamentals. Measure with Search Console's generative AI reports, referrals and citation sampling. Make your facts citable, control crawlers deliberately, and give clicks extra value. Your next step: list twenty target queries, record the current AI answers and whether you're cited, and set up a GA4 channel group for answer-engine referrals.",
                 "onScreen": "Recap and next step\n• Fundamentals\n• Measure\n• Citable facts\n• Track 20 queries",
-                "visual": "A tracking sheet with twenty query rows and 'cited?' checkboxes.",
+                "visual": "Layout: A tracking sheet with twenty query rows and 'cited?' checkboxes. Timing (24s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 24
               }
             ],
@@ -1860,12 +1926,12 @@
           ],
           "activity": "Build a scorecard for one page type (at least five metrics), segment it, and apply the decision framework to produce a keep/improve/hold/merge/remove list.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Publishing a page system is the start, not the finish. Data changes, demand shifts, and some segments simply don't work. If you don't garden, weak pages pile up and can drag on how search engines see your whole site. In this lecture you'll learn how to measure page systems properly, build a page scorecard, pull Search Console data by page type, apply a clear decision framework, and prune safely.",
                 "onScreen": "Measuring and pruning\n• Why gardening matters\n• Cohort measurement\n• The page scorecard\n• Decision framework\n• Safe pruning",
-                "visual": "A garden of page icons; some flourish, some wilt; a gardener's shears icon trims the wilted ones.",
+                "visual": "Layout: A garden of page icons; some flourish, some wilt; a gardener's shears icon trims the wilted ones. Timing (30s): title card 0–3s; then the 5 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
@@ -1877,19 +1943,19 @@
               {
                 "narration": "First, measure at the right level. A single long-tail page might get three visits a month, which is pure noise. So measure cohorts: by page type, like integrations or city pages; by segment, like city tier or data richness; by launch wave; and by template version. Patterns across hundreds of pages are reliable. Individual pages rarely are.",
                 "onScreen": "Measure cohorts\n• Page type\n• Segment\n• Launch wave\n• Template version",
-                "visual": "Scattered noisy dots cluster into four cohort groups with clear average lines.",
+                "visual": "Layout: Scattered noisy dots cluster into four cohort groups with clear average lines. Timing (25s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 25
               },
               {
                 "narration": "Build a scorecard per page. Indexed or not, from Search Console or the URL Inspection API. Impressions, clicks, click-through rate and position. AI feature impressions from the new generative AI report. Engaged sessions and conversions from GA4. Data richness and freshness from your own database. Internal links from a crawl. And backlinks from a link tool. Join them into one table per page type.",
                 "onScreen": "The scorecard\n• Indexed?\n• Search performance\n• AI feature impressions\n• Engagement + conversions\n• Data richness + freshness\n• Inlinks + backlinks",
-                "visual": "A wide table assembling from four data sources: Search Console, GA4, database and crawler.",
+                "visual": "Layout: A wide table assembling from four data sources: Search Console, GA4, database and crawler. Timing (28s): title card 0–3s; then the 6 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 28
               },
               {
                 "narration": "The lesson shows how to pull page-level data from the Search Console API in Python, filtered to a page type by URL path, using a service account whose key path comes from an environment variable. The service account must be added as a user on the property. Then join that with your GA4 BigQuery export, your data richness scores, and your crawl data.",
                 "onScreen": "Pull the data\n• Search Console API in Python\n• Filter by URL path\n• Service account (env var)\n• Join with GA4, DB, crawl",
-                "visual": "Code editor showing the Search Console query; output rows stream into a joined table.",
+                "visual": "Layout: Code editor showing the Search Console query; output rows stream into a joined table. Timing (27s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 27
               },
               {
@@ -1901,25 +1967,25 @@
               {
                 "narration": "Now the decision framework, for pages that have had three to six months. Indexed with good impressions and engagement: keep, and refresh the data. Indexed with impressions but poor engagement: improve the template or check for an intent mismatch. Not indexed with thin data: hold back with noindex, or merge into a parent. Not indexed but rich: fix discovery with links and sitemaps, and check for duplication. No demand and little value: remove, or noindex if it helps navigation. Duplicates: merge with a redirect to the strongest page.",
                 "onScreen": "Decision framework\n• Keep\n• Improve\n• Hold back / merge\n• Fix discovery\n• Remove\n• Merge duplicates",
-                "visual": "A decision tree with six colored leaf outcomes.",
+                "visual": "Layout: A decision tree with six colored leaf outcomes. Timing (38s): title card 0–3s; then the 6 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 38
               },
               {
                 "narration": "Two nuances. Some pages matter to users even without search traffic, like navigation inside a marketplace. Keep those, but consider noindex. And outdated entities, like a closed business or an expired job, need a status update and then removal or a redirect as appropriate. Also, revisit held-back pages regularly. When their data improves, they may qualify for the index.",
                 "onScreen": "Nuances\n• Navigation value without search\n• Update outdated entities\n• Revisit held-back pages",
-                "visual": "A marketplace menu with some noindexed but useful pages; a closed-shop icon getting an updated status label.",
+                "visual": "Layout: A marketplace menu with some noindexed but useful pages; a closed-shop icon getting an updated status label. Timing (26s): title card 0–3s; then the 3 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 26
               },
               {
                 "narration": "Prune safely. Make changes in batches, log them, and annotate the dates. Redirect only to genuinely equivalent or parent pages, never everything to the home page. Remove pruned URLs from internal links and sitemaps. And monitor after every batch, looking at the whole page type's indexing, impressions and conversions, not just the pages you touched.",
                 "onScreen": "Prune safely\n• Logged batches\n• Sensible redirects only\n• Clean links + sitemaps\n• Monitor the whole type",
-                "visual": "Batch cards moving through a pipeline with a log book and a monitoring chart after each batch.",
+                "visual": "Layout: Batch cards moving through a pipeline with a log book and a monitoring chart after each batch. Timing (24s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 24
               },
               {
                 "narration": "Here's an illustrative example. A Pakistani real-estate portal reviewed property type for sale in society pages after a year. About thirty percent had no listings for six months or more, and many small societies duplicated larger ones nearby. Pages with no listings for ninety days switched to noindex with a notify-me module. Small societies merged into area pages with redirects. And the template gained a computed price-per-marla trend for societies with enough sales. Impressions concentrated on fewer, stronger pages, and leads per page rose.",
                 "onScreen": "Example: Pakistani property portal (illustrative)\n• 30% empty for 6+ months\n• Noindex + notify-me after 90 days\n• Merge small societies\n• Price-per-marla trend added",
-                "visual": "A map of a Pakistani city with society markers; small ones merge into area markers; a price trend chart appears on a page mock.",
+                "visual": "Layout: A map of a Pakistani city with society markers; small ones merge into area markers; a price trend chart appears on a page mock. Timing (37s): title card 0–3s; then the 4 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 37
               },
               {
@@ -1935,9 +2001,15 @@
                 "seconds": 33
               },
               {
+                "narration": "Watch me do it. Let's build the scorecard for an illustrative Pakistani job board's job title in city pages. Step one, Search Console API: clicks and impressions per page for three months, filtered to the jobs path. Step two, URL Inspection API on a daily sample to track indexed status. Step three, GA4 export: sessions and applications per page. Step four, database: live job count per page and average posting age. Step five, crawl: internal links per page. I join everything on URL and segment by city tier and job category. Step six, the patterns: tier-one cities with healthcare and IT roles do well. Tier-three cities for niche titles, like marine engineer in small towns, average zero live jobs for months. Step seven, decisions: niche titles in small cities switch to noindex after sixty days with no jobs and redirect users to a province-level page for that title; job pages with expired postings are removed quickly. Step eight, we log the batch with the date and check the whole jobs section in six weeks. The scorecard turned three thousand pages into a handful of clear segment decisions.",
+                "onScreen": "Watch me do it: jobs scorecard (illustrative)\n• GSC + URL Inspection + GA4\n• Live jobs + posting age + inlinks\n• Segment: city tier × category\n• Niche small-city pages → noindex/province page\n• Log batch, review in 6 weeks",
+                "visual": "Layout: five data source icons feeding a joined table, then a segment heatmap. Timing: sources connect one per ~12s; joined table appears ~65s; heatmap with a cold corner ~85s; decision tags stamp onto the cold segment ~100s; batch log entry in the final 15s.",
+                "seconds": 81
+              },
+              {
                 "narration": "Recap. Page systems need gardening. Measure cohorts, build a scorecard, and use a clear framework to keep, improve, hold back, merge or remove. Prune in logged batches with sensible redirects and cleanup, and monitor afterwards. Your next step: build a scorecard with at least five metrics for one page type, segment it, and produce your first keep, improve, hold, merge or remove list.",
                 "onScreen": "Recap and next step\n• Cohorts + scorecard\n• Decision framework\n• Safe pruning\n• Build your first list",
-                "visual": "A five-column action list with page counts in each column.",
+                "visual": "Layout: A five-column action list with page counts in each column. Timing (27s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 27
               }
             ],
@@ -2014,12 +2086,12 @@
           ],
           "activity": "Fill in the YAML walkthrough skeleton for your own page system and have a colleague predict what three sample pages will contain.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Theory is useful, but seeing a whole page system from idea to iteration is where it clicks. In this lecture we'll walk through four illustrative composite cases, a UK software integrations directory, a UAE rental property system, a Pakistani tutor marketplace, and a money transfer comparison site for the UK and UAE to Pakistan corridor. Then we'll pull out the lessons they share, so you can apply them in your capstone.",
                 "onScreen": "Case walkthroughs\n• UK integrations directory\n• UAE rentals\n• Pakistan tutors\n• Money transfer comparison\n• Shared lessons",
-                "visual": "Four case cards laid out on a table, each with a flag-free regional map outline and a simple page icon.",
+                "visual": "Layout: Four case cards laid out on a table, each with a flag-free regional map outline and a simple page icon. Timing (31s): title card 0–3s; then the 5 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               },
               {
@@ -2031,19 +2103,19 @@
               {
                 "narration": "Case one, a UK software integrations directory. The pattern: our product plus a tool integration. The data: the real integration catalog, supported triggers and fields, plan availability, setup steps, and aggregated usage. The template answers first, yes, it syncs contacts and deals both ways on the pro plan, then gives setup steps, a fields table, limits and a short video. The gate: only integrations that actually exist. Requests get a vote page that stays out of the index. AI drafts setup steps from internal docs, and product specialists verify them.",
                 "onScreen": "Case 1: UK integrations\n• Real catalog data\n• Answer-first template\n• Gate: integration must exist\n• AI drafts, specialists verify",
-                "visual": "An integration page mock with a yes/no answer badge, setup steps and a fields table.",
+                "visual": "Layout: An integration page mock with a yes/no answer badge, setup steps and a fields table. Timing (39s): title card 0–3s; then the 4 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 39
               },
               {
                 "narration": "Case two, UAE rentals. Property type for rent in community pages, in English and Arabic. The data: live listings, community facts like service charges, nearby schools and metro distance, computed rent trends, and verified agents. The template leads with count, rent range and trend, then filters, a map, and a local editor's community guide. Communities need ten active listings, otherwise the page is noindexed with an alert sign-up. They rolled out emirate by emirate, with per-community sitemaps, and later merged micro-communities.",
                 "onScreen": "Case 2: UAE rentals\n• Listings + community facts\n• English + Arabic\n• Gate: 10 listings\n• Emirate-by-emirate rollout",
-                "visual": "A map of the UAE with emirates lighting up in sequence; a rental page mock in Arabic RTL layout.",
+                "visual": "Layout: A map of the UAE with emirates lighting up in sequence; a rental page mock in Arabic RTL layout. Timing (35s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 35
               },
               {
                 "narration": "Case three, a Pakistani tutor marketplace. Subject tutor in city, and exam board subject tutor, like O-Level physics, with Roman Urdu variants validated in Search Console. Data: verified tutors, aggregated rates from bookings, languages, online or in-person, and availability. Senior teachers wrote how-to-choose guides per subject. The gate is eight verified tutors. Tiny areas merged into city pages, and the team created online tutor pages for cities with little local supply.",
                 "onScreen": "Case 3: Pakistan tutors\n• Exam-board patterns\n• Roman Urdu validated\n• Gate: 8 tutors\n• Online pages for low-supply cities",
-                "visual": "A Pakistan map with city dots; small area dots merge into their city; an 'online tutors' badge appears on low-supply cities.",
+                "visual": "Layout: A Pakistan map with city dots; small area dots merge into their city; an 'online tutors' badge appears on low-supply cities. Timing (31s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               },
               {
@@ -2055,25 +2127,25 @@
               {
                 "narration": "Case four, money transfer comparison, UK and UAE to Pakistan. Patterns like send money from a country to Pakistan, currency to rupee, and provider versus provider. Data: live mid-market rates, provider fees and rates captured under agreements or public APIs, delivery times and limits. The template has a live comparison table, a total cost calculator, methodology and update time, regulatory notes, and rate alerts. Compliance is built in: financial promotion rules, clear affiliate disclosure, no misleading best claims.",
                 "onScreen": "Case 4: Transfer comparison\n• Live rates + fees\n• Calculator + alerts\n• Methodology + update time\n• Financial promotion rules, disclosure",
-                "visual": "A comparison table with provider rows (generic names), a calculator widget and an alert bell.",
+                "visual": "Layout: A comparison table with provider rows (generic names), a calculator widget and an alert bell. Timing (34s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 34
               },
               {
                 "narration": "Case four also shows the AI search shift. Simple rate queries were increasingly answered directly by AI, so the team leaned into what AI can't easily replace: comparison tables, calculators and alerts. Those pages earned citations and clicks, and adding Urdu and Arabic versions, plus the alert feature, drove repeat visits.",
                 "onScreen": "AI search shift\n• Simple rates answered by AI\n• Comparisons + tools earn clicks\n• Urdu/Arabic + alerts → repeat visits",
-                "visual": "An AI answer panel with a rate, followed by a click into a richer comparison tool.",
+                "visual": "Layout: An AI answer panel with a rate, followed by a click into a richer comparison tool. Timing (22s): title card 0–3s; then the 3 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 22
               },
               {
                 "narration": "Now the shared lessons. Data thresholds prevented most problems in every case. Pages that double as product surfaces performed best: integrations, listings, tutor booking, comparison tools. Merging beat keeping thin pages. Localization into Arabic, Urdu and Roman Urdu was a real moat. AI worked best on grounded, reviewed tasks. And compliance was part of the template, not an afterthought.",
                 "onScreen": "Shared lessons\n• Thresholds prevent problems\n• Product surfaces win\n• Merge thin pages\n• Localization is a moat\n• Grounded AI\n• Compliance in the template",
-                "visual": "Six lesson cards stacking into a single 'playbook' deck.",
+                "visual": "Layout: Six lesson cards stacking into a single 'playbook' deck. Timing (26s): title card 0–3s; then the 6 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 26
               },
               {
                 "narration": "The lesson gives you a YAML skeleton to write your own walkthrough: the pattern, how you checked intent, your proprietary, licensed and computed data, template blocks, the gate, linking, indexing and rollout, AI tasks with grounding and review level, measurement, compliance, and the triggers for iteration. Watch for four red flags: a pattern with no proprietary data, no gate or a gate that's too low, AI tasks without grounding, and no plan for stale data.",
                 "onScreen": "Your walkthrough skeleton\n• Pattern → data → template → gate\n• Linking, indexing, AI, measurement\n• Red flags to catch",
-                "visual": "A YAML file on screen with each key highlighting in order; four red flag icons beside it.",
+                "visual": "Layout: A YAML file on screen with each key highlighting in order; four red flag icons beside it. Timing (33s): title card 0–3s; then the 3 on-screen points build in narration order about every 8s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 33
               },
               {
@@ -2089,9 +2161,15 @@
                 "seconds": 36
               },
               {
+                "narration": "Watch me do it. Let's fill in the YAML skeleton live for an illustrative Manchester gym-comparison site. Page system: gyms in area. Pattern: gyms in area, twenty-four hour gyms in area, women-only gyms in area, the last validated as a separate intent because its results differ. Intent check: done in both desktop and mobile results. Data: proprietary, class timetables from partner gyms and member reviews; licensed, gym locations and facilities from a data provider; computed, monthly price ranges and peak-time busyness from check-in data shared by partners, aggregated. Template blocks: answer first with count and price range, list with filters, peak times chart, a guide on contract traps written by a personal trainer, methodology, related areas, and a free pass call to action. Gate: at least six gyms with verified pricing. Linking: city hub, area hubs, nearest areas. Indexing: per-pattern sitemaps, pilot twenty areas. AI: summarize reviews by theme, grounded, sample review. Measurement: free-pass claims per indexed page. Compliance: pricing must include joining fees to avoid misleading comparisons. Iteration trigger: any area below fifty percent indexed after eight weeks gets reviewed.",
+                "onScreen": "Watch me do it: YAML skeleton live (illustrative)\n• 3 patterns, one separate intent\n• Proprietary + licensed + computed data\n• Gate: 6 gyms with pricing\n• Grounded review summaries\n• Joining fees in price comparisons",
+                "visual": "Layout: YAML editor full width with a side preview of a gym page. Timing: each YAML key types in roughly every 12s while the matching block highlights in the preview; compliance line flashes amber ~110s; final 10s show the complete file.",
+                "seconds": 79
+              },
+              {
                 "narration": "Recap. Four very different page systems followed the same sequence and learned the same lessons: gate on data, build product surfaces, merge thin pages, localize, ground your AI, and design for compliance. Your next step: fill in the walkthrough skeleton for your own page system, then ask a colleague to predict what three sample pages will contain. If they can, your plan is clear enough to build.",
                 "onScreen": "Recap and next step\n• Same sequence, same lessons\n• Fill your skeleton\n• Colleague prediction test",
-                "visual": "Two people-shaped silhouettes (non-realistic) looking at a plan; three sample page cards match their predictions.",
+                "visual": "Layout: Two people-shaped silhouettes (non-realistic) looking at a plan; three sample page cards match their predictions. Timing (29s): title card 0–3s; then the 3 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 29
               }
             ],
@@ -2179,12 +2257,12 @@
           ],
           "activity": "Complete the Page System Plan for one scenario, including three page mock-ups scored with your calibrated rubric; run the AI review prompt and address its findings.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "This is your capstone, and it's where everything in the course becomes one plan. You'll design a programmatic page system that could survive Google's spam policies and a skeptical editor. The deliverable is a page system plan, a calibrated quality rubric, and three page mock-ups. In this lecture I'll walk through the scenarios, the eleven-section template, an abbreviated example, an AI review prompt, and how you'll be assessed.",
                 "onScreen": "Capstone\n• Page System Plan\n• Quality rubric\n• Three mock-ups\n• Template, example, review",
-                "visual": "A plan document, a rubric card and three wireframe pages arranged on a desk.",
+                "visual": "Layout: A plan document, a rubric card and three wireframe pages arranged on a desk. Timing (30s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
@@ -2196,19 +2274,19 @@
               {
                 "narration": "Pick a scenario or use your own business. Option A, a home services marketplace in the UAE and Saudi Arabia, with service in district pages in Arabic and English. Option B, a UK software company with integration and use case template pages. Option C, a Pakistani edtech with exam, subject, past papers and tutors in city pages. Each one tests different skills: localization, product data, or licensing and expert content.",
                 "onScreen": "Scenarios\n• A: UAE/KSA home services\n• B: UK SaaS integrations/templates\n• C: Pakistan edtech past papers + tutors",
-                "visual": "Three scenario cards with icons: a toolbox, a plug connector, an exam paper.",
+                "visual": "Layout: Three scenario cards with icons: a toolbox, a plug connector, an exam paper. Timing (30s): title card 0–3s; then the 3 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
                 "narration": "Sections one to three are the foundation. Opportunity and intent: patterns, aggregated demand, intent checks and search features including AI Overviews. Policy fit: your unique value statement per page type, exactly what won't be published, and no shortcuts like site reputation or expired domain tricks. And data: sources, licenses, fields, freshness, owner, validation, the value-add layer and privacy handling.",
                 "onScreen": "Sections 1–3\n• Opportunity + intent\n• Policy fit\n• Data inventory",
-                "visual": "Foundation blocks labeled 'intent', 'policy fit' and 'data' laid under a building frame.",
+                "visual": "Layout: Foundation blocks labeled 'intent', 'policy fit' and 'data' laid under a building frame. Timing (26s): title card 0–3s; then the 3 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 26
               },
               {
                 "narration": "Sections four to seven are the build. Template: block by block, the data behind each, conditional logic, noindex rules, performance and accessibility, including right-to-left where needed. Internal linking: hubs, spokes, related link rules, facets and pagination. Structured data: types, the generator, and validation tests. Indexing and rollout: sitemaps per type, pilot size, observation window, expansion criteria and monitoring.",
                 "onScreen": "Sections 4–7\n• Template\n• Internal linking\n• Structured data\n• Indexing + rollout",
-                "visual": "Wireframe, link graph, JSON-LD panel and rollout staircase appearing in sequence.",
+                "visual": "Layout: Wireframe, link graph, JSON-LD panel and rollout staircase appearing in sequence. Timing (25s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 25
               },
               {
@@ -2220,25 +2298,25 @@
               {
                 "narration": "Sections eight to eleven make it trustworthy. The AI workflow: tasks, grounding, prompts, validation, review levels, logging, model versions and privacy. The quality system: rubric, publishing bar, sampling, automated checks, accountability pages and AI disclosure. Measurement and pruning: scorecard, cohorts, decision framework, cadence and AI visibility tracking. And risks: your top five across policy, data, legal, technical and market, each with a mitigation.",
                 "onScreen": "Sections 8–11\n• AI workflow\n• Quality system\n• Measurement + pruning\n• Risks + mitigations",
-                "visual": "Four shields labeled with each section surrounding the plan document.",
+                "visual": "Layout: Four shields labeled with each section surrounding the plan document. Timing (27s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 27
               },
               {
                 "narration": "Here's the abbreviated example for scenario C. Patterns: exam, subject, past papers, and subject tutor in city, with past-paper pages linking to tutor pages. Policy fit: host papers only where the exam board permits it, otherwise link to official sources, and add original teacher-written worked solutions as the unique value. The gate: worked solutions for most questions, illustratively seventy percent, and eight verified tutors for tutor pages. AI tags questions to syllabus topics and drafts hints that teachers edit, but no AI solution is published without teacher verification.",
                 "onScreen": "Example: Scenario C (abbreviated)\n• Papers + tutors patterns\n• License-checked papers\n• Teacher-written solutions\n• Gates on solutions + tutors\n• AI tags + drafts, teachers verify",
-                "visual": "An exam paper page mock with a 'worked solution' panel and a 'find a tutor' link box.",
+                "visual": "Layout: An exam paper page mock with a 'worked solution' panel and a 'find a tutor' link box. Timing (38s): title card 0–3s; then the 5 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 38
               },
               {
                 "narration": "The rollout for that example: pilot a hundred past-paper pages for two subjects, and expand after eight weeks if indexed share and engagement hit targets. Measure clicks per indexed page, engagement with solutions, tutor enquiries from past-paper pages, and AI feature impressions. Then use the lesson's AI review prompt. It asks a model to act as a senior SEO lead and a quality reviewer, find scaled content abuse risks, check data and gates for loopholes, test the AI workflow, and list legal questions, in a table. Tell it to be skeptical and not to praise.",
                 "onScreen": "Rollout + AI review\n• Pilot 100, expand after 8 weeks\n• Cohort metrics\n• Skeptical AI reviewer\n• Issue table with fixes",
-                "visual": "A rollout timeline, then an AI reviewer panel producing a severity-coded issue table.",
+                "visual": "Layout: A rollout timeline, then an AI reviewer panel producing a severity-coded issue table. Timing (41s): title card 0–3s; then the 4 on-screen points build in narration order about every 8s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 41
               },
               {
                 "narration": "Your rubric is a deliverable too. Adapt it from the editorial QA lesson, with criteria, scoring guidance and examples, a publishing bar, and who scores. Then test it on your three mock-ups and include the scores. You'll be assessed on seven things: policy fit, data, template, architecture, rollout, AI and quality, and measurement. Excellent means clear unique value, proprietary and computed data, answer-first templates, controlled architecture, a staged rollout, grounded AI with a calibrated rubric, and cohort measurement with pruning.",
                 "onScreen": "Assessment\n• Policy fit\n• Data\n• Template\n• Architecture\n• Rollout\n• AI + quality\n• Measurement",
-                "visual": "The seven-row assessment table with check marks animating into 'excellent'.",
+                "visual": "Layout: The seven-row assessment table with check marks animating into 'excellent'. Timing (35s): title card 0–3s; then the 7 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 35
               },
               {
@@ -2248,9 +2326,15 @@
                 "seconds": 40
               },
               {
+                "narration": "Watch me do it. Let's write the risks and mitigations section for scenario B, the UK software company building integrations and use-case template pages. Risk one, policy: template pages drift into generic AI text. Mitigation: every template page must include a real, downloadable workflow tested by our team, or it isn't published. Risk two, data: integration details go stale when partner APIs change. Mitigation: nightly checks against our integration catalog; pages auto-flag when a connector is deprecated, and support tickets link to the page owner. Risk three, legal: partner logos and trademarks. Mitigation: use them only under partner program terms; otherwise text names only. Risk four, technical: the documentation site and marketing site both publish similar setup instructions. Mitigation: one canonical location, with the other linking to it. Risk five, market: AI assistants answer does X integrate with Y directly. Mitigation: make pages worth the click with the downloadable workflow, setup video and limits table, and track AI impressions and citations monthly. Each risk has an owner and a review date. That table is often the first thing a senior stakeholder reads, so it earns trust for the rest of the plan.",
+                "onScreen": "Watch me do it: risks + mitigations (illustrative)\n• Policy: real workflows or no page\n• Data: nightly catalog checks\n• Legal: partner terms for logos\n• Technical: one canonical location\n• Market: worth the click, track AI",
+                "visual": "Layout: five-row risk table with columns risk, mitigation, owner, review date. Timing: rows fill one by one roughly every 22s, with a small icon per risk type; final 10s zoom out to show the table inside the full plan document.",
+                "seconds": 83
+              },
+              {
                 "narration": "That's the course. You've learned where Google draws the line, how to find patterns and build unique data, how to design templates, links and structured data, how to manage indexing, how to use AI responsibly with editorial QA, how to stay visible in AI search, and how to measure and prune. Your next step: build your page system plan, score three mock-ups with your rubric, run the skeptical AI review, and fix what it finds.",
                 "onScreen": "Your next step\n• Build the plan\n• Score three mock-ups\n• Run the AI review\n• Fix and submit",
-                "visual": "The plan document closes and a subtle badge outline appears.",
+                "visual": "Layout: The plan document closes and a subtle badge outline appears. Timing (33s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 33
               }
             ],

@@ -6,7 +6,7 @@
   "subtitle": "Classify AI uses, meet EU AI Act duties, apply NIST and ISO/IEC 42001, and build a practical governance pack for your business",
   "category": "business",
   "level": "intermediate",
-  "estimatedMinutes": 394,
+  "estimatedMinutes": 423,
   "description": "AI is now regulated, audited and asked about in every serious procurement. This intermediate course turns the EU AI Act, the NIST AI Risk Management Framework and ISO/IEC 42001 into practical controls for businesses, agencies and marketing teams. You will classify AI uses by risk, spot prohibited practices, understand high-risk and general-purpose AI obligations, and apply transparency duties for chatbots, synthetic media and deepfakes, using the application dates as amended by the 2026 Digital Omnibus. You will compare the UK, US, UAE, Saudi and Pakistani approaches, write an AI policy people follow, build an AI inventory and impact assessments, run vendor due diligence, and handle marketing-specific rules on advertising disclosure and data protection. The capstone produces a complete AI governance pack for an SME. Educational content, not legal advice.",
   "outcomes": [
     "Classify AI use cases under the EU AI Act by role and risk tier, with documented reasoning",
@@ -107,7 +107,7 @@
           ],
           "activity": "List every AI tool used in your organization (including AI features inside existing software). For each, record who uses it, for what, and what data goes in. Keep this as the seed of your AI inventory.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Here is a question that catches a lot of business owners off guard. If a regulator, a big client, or a journalist asked you tomorrow which AI systems your company uses, who owns them, and what data they touch, could you answer in a day? For most teams the honest answer is no. AI arrived quietly, one helpful tool at a time. In this course you will change that. By the end, you will be able to read the EU AI Act with confidence, map it to practical controls, use NIST and ISO frameworks, and assemble a complete AI governance pack for a small business.",
@@ -120,6 +120,12 @@
                 "onScreen": "What AI governance is\n• Policies, roles, processes, controls\n• Deliberate, not accidental use\n• Not legal advice: confirm with counsel",
                 "visual": "Simple diagram: left box 'Idea: use an AI tool', right box 'Running safely, with evidence', a middle layer labelled 'Governance OS' with four stacked blocks: Policies, Roles, Processes, Controls.",
                 "seconds": 47
+              },
+              {
+                "narration": "Here's an analogy that makes governance click. Think about how a restaurant handles food safety. Nobody bans cooking. Instead, there's a list of approved suppliers, rules about temperatures and allergens, a named person responsible for each shift, and a logbook an inspector can check. Cooks move faster because they know the rules. AI governance works the same way: approved tools instead of approved suppliers, rules about data and disclosure instead of temperatures, named owners for each AI system, and records you can show a client or regulator.",
+                "onScreen": "Analogy: a restaurant kitchen\n• Approved suppliers = approved tools\n• Safety rules = data + disclosure rules\n• Shift lead = system owner\n• Logbook = evidence",
+                "visual": "Split-screen motion graphic. Left: a kitchen with four labelled icons appearing in sequence (supplier crate, thermometer, chef hat with name tag, logbook). Right: matching AI icons slide in beside each one (tool list, lock and label, owner badge, audit file). Connecting lines draw between each pair.",
+                "seconds": 38
               },
               {
                 "narration": "Three forces make this urgent in 2026. The first is binding regulation. The EU AI Act entered into force in August 2024 and applies in stages. Bans on certain practices and a duty to support AI literacy started in February 2025. Rules for general-purpose models followed in August 2025. Most of the rest, including transparency for chatbots and synthetic content, applies from August 2026. The second force is buyer pressure. Enterprise clients now send AI questionnaires next to their security questionnaires, and agencies that cannot answer lose deals. The third is real incidents: invented legal citations, leaked prompts, biased screening tools, and deepfake voice scams against finance teams.",
@@ -150,6 +156,12 @@
                 "onScreen": "Three myths\n• Not a ban: it speeds adoption\n• Not only legal: quality matters\n• Not one-and-done: review rhythm",
                 "visual": "Three myth cards stamped 'MYTH' that flip to 'REALITY' with short phrases: faster adoption, quality failures, continuous review cycle icon.",
                 "seconds": 30
+              },
+              {
+                "narration": "Let's add a second, simpler example. A freelance copywriter in London uses a chat assistant to draft blog posts for three clients, one of them a German software company. Does she need a governance program? Not a big one. But three habits protect her: she only uses a business plan that doesn't train on her inputs, she never pastes client confidential material without permission, and she tells clients in her contract that AI assists her drafting and that she edits and fact-checks everything. That's governance at freelancer scale: a tool choice, a data rule and a transparency statement.",
+                "onScreen": "Example 2: a London freelancer\n• Business plan, no training on inputs\n• No confidential material without permission\n• AI use stated in contracts\n• Governance at freelancer scale",
+                "visual": "Single laptop icon centered. Three cards animate out from it one at a time: 'Tool: business plan', 'Data: no confidential pastes', 'Contract: AI-assisted, human-edited'. Each card gets a green check as it lands.",
+                "seconds": 43
               },
               {
                 "narration": "Here's your recap and next step. AI governance is the operating system that turns scattered AI use into deliberate, accountable use. Regulation, buyer pressure and real incidents make it urgent. Learn the roles, because being a provider or a deployer changes everything. Your practical next step: open a blank spreadsheet and list every AI tool anyone in your organization uses, including browser extensions and features inside tools you already pay for. Add who uses it and what data goes in. Keep it. That list becomes your AI inventory later in the course.",
@@ -216,7 +228,7 @@
           ],
           "activity": "Run each tool in your inventory through the seven-step decision tree. Record role, tier and a one-sentence rationale for each.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Imagine two companies using exactly the same AI model. One uses it to write product descriptions. The other uses it to rank job applicants. Under the EU AI Act, the first has almost no specific obligations. The second is running a high-risk AI system. Same model, completely different rules. By the end of this lesson, you will be able to work out whether the Act applies to you, which role you play, and which risk tier each of your AI uses falls into.",
@@ -229,6 +241,12 @@
                 "onScreen": "The AI Act in one breath\n• Product-safety style regulation\n• Bans, high-risk duties, transparency\n• Separate track for general-purpose models\n• Amended in 2026 by the Digital Omnibus",
                 "visual": "Layered pyramid builds up from the bottom: Minimal, Transparency, High-risk, Prohibited. A separate side column labelled 'General-purpose AI models' appears next to it.",
                 "seconds": 42
+              },
+              {
+                "narration": "Here's an analogy for the whole structure. Think of the AI Act like road rules for vehicles. Some vehicles are banned outright from public roads. Heavy trucks, the high-risk category, need inspections, logbooks and licensed drivers. Ordinary cars need lights and number plates so others can see and identify them, that's the transparency layer. And bicycles in your own garden face almost no rules at all. Crucially, the rules depend on how and where you drive, not just what you bought. A van used for deliveries and the same van used as a school bus are treated differently.",
+                "onScreen": "Analogy: road rules\n• Banned vehicles = prohibited AI\n• Trucks = high-risk (inspections, logs)\n• Lights + plates = transparency\n• Garden bike = minimal risk\n• Use decides the rules",
+                "visual": "Motion graphic of a four-lane road. Lane icons animate in: a crossed-out vehicle, a truck with a logbook, a car with glowing headlights, a bicycle. Then a single van icon moves between two lanes as its label flips from 'Deliveries' to 'School bus'.",
+                "seconds": 43
               },
               {
                 "narration": "Now, scope. The Act reaches well beyond Europe. It applies to providers placing AI on the EU market wherever they are based, to deployers in the EU, and even to providers and deployers outside the EU when the output of the AI system is used in the EU. So a software house in Lahore selling an AI recruitment tool to a company in Ireland is in scope as a provider. A brand in Riyadh running a chatbot for customers in France should assume the chatbot rules apply. There are exclusions: military and national security uses, scientific research as such, and purely personal use.",
@@ -259,6 +277,18 @@
                 "onScreen": "Worked example: UK retailer\n• Descriptions: minimal\n• Chatbot: transparency\n• CV screening: high risk\n• Emotion webcam: prohibited",
                 "visual": "Table animation with five rows appearing one by one, each receiving a colored tag: green, blue, amber, green, red. Then a flowchart of the seven-step decision tree slides in.",
                 "seconds": 46
+              },
+              {
+                "narration": "Now a simpler example. A freelance designer in Karachi uses an image generator to create illustrations for a French client's brochure. Is she in scope? Her output is used in the EU, so the Act can reach her work. But what applies? She's a deployer of a general-purpose image tool. The illustrations are stylized, not realistic depictions of real people or events, so they aren't deepfakes. Her main practical duties come from the client contract, copyright and the tool's terms. The lesson: scope doesn't automatically mean heavy obligations. Classification tells you how much actually applies.",
+                "onScreen": "Example 2: Karachi designer, French client\n• Output used in EU: in scope\n• Role: deployer\n• Stylized art: not a deepfake\n• Scope ≠ heavy duties",
+                "visual": "Map animation: a line draws from Karachi to France. A brochure icon appears with stylized illustrations. A classification card flips through: 'In scope? Yes' then 'Role: Deployer' then 'Deepfake? No' then 'Tier: minimal'.",
+                "seconds": 41
+              },
+              {
+                "narration": "Three mistakes come up again and again. First, assuming we're not in the EU, so it doesn't apply, while serving EU customers or sending outputs into the EU. Second, classifying the vendor's product instead of your use of it. The vendor's marketing page might say low risk, but if you use the tool to rank job applicants, you're in high-risk territory. Third, forgetting that everything else still applies. Even minimal-risk AI must respect GDPR, consumer protection and advertising law. Classification under the AI Act is one question, not the only question.",
+                "onScreen": "Common mistakes\n• 'Not in the EU' while serving EU users\n• Classifying the product, not the use\n• Forgetting GDPR, consumer, ad law",
+                "visual": "Three mistake cards slide in stacked. Each flips over to show the correction in green text. A final banner reads 'AI Act tier is one question, not the only one'.",
+                "seconds": 40
               },
               {
                 "narration": "Recap. The AI Act regulates uses, not models, so classify what you do with a tool, not the tool itself. It reaches outside the EU whenever your AI or its output touches the EU. Know your role, and watch for Article twenty-five, which can turn a deployer into a provider. Your next step: take the AI tool list you started last lesson and run each entry through the decision tree in the lesson text. Mark each one prohibited, high-risk candidate, transparency, or minimal, and note why.",
@@ -332,7 +362,7 @@
           ],
           "activity": "Scan your AI inventory for any feature involving emotion detection, biometric inference or targeting of vulnerable groups. Then adapt the YAML literacy plan to your team and set a review date.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Some AI uses are not just risky under the EU AI Act. They are banned outright, and the fines are the highest in the regulation: up to thirty-five million euros or seven percent of worldwide annual turnover. The surprising part is how ordinary some of the banned uses can look inside a normal business, especially in HR, call centers and marketing. In this lesson you'll learn the prohibited practices in plain language, how businesses accidentally drift toward them, and how to run a proportionate AI literacy program, which has been required since February twenty twenty-five.",
@@ -345,6 +375,12 @@
                 "onScreen": "Prohibited practices, part 1\n• Harmful manipulation\n• Exploiting vulnerabilities\n• Social scoring\n• Crime prediction from profiling alone",
                 "visual": "Four icon cards slide in one after another: puppet strings, child and wallet, scoreboard over people silhouettes, crystal ball with a warning sign.",
                 "seconds": 33
+              },
+              {
+                "narration": "Think of Article five as a short list of things no amount of paperwork can make acceptable, a bit like the list of substances banned in food. You can't get a special licence to add them, and it doesn't matter how good your quality system is. That's different from high-risk AI, which is allowed if you meet strict conditions. So the first question for any AI idea isn't how do we comply. It's is this on the banned list at all? If the answer is yes, or maybe, stop and redesign before you spend a single hour on anything else.",
+                "onScreen": "Analogy: banned ingredients\n• No licence can make them OK\n• Different from high-risk (allowed with conditions)\n• First question: is it banned?",
+                "visual": "Food-label motion graphic: an ingredient list scrolls; two ingredients flash red with 'BANNED' tags. The scene cross-fades to an AI idea checklist where the first checkbox reads 'On the Article 5 list?'.",
+                "seconds": 43
               },
               {
                 "narration": "Next: untargeted scraping of face images from the internet or CCTV to build facial recognition databases. Then emotion recognition in workplaces and schools, with exceptions for medical or safety reasons. Then biometric categorization that infers sensitive traits like race, religion, political opinions, or sexual orientation. And real-time remote biometric identification in public spaces for law enforcement, with narrow exceptions. Finally, the twenty twenty-six Digital Omnibus added a new ban from the second of December twenty twenty-six, targeting AI systems used to create non-consensual intimate images and child sexual abuse material, the so-called nudification tools.",
@@ -375,6 +411,18 @@
                 "onScreen": "A proportionate literacy plan\n• All staff: basics and safe use\n• Marketing: disclosure, copyright, consent\n• HR: high-risk and oversight\n• System owners: inventory, vendors, monitoring",
                 "visual": "Layered audience diagram, concentric rings: All staff, Marketing, HR and managers, System owners. Then a YAML file scrolls on screen showing the plan.",
                 "seconds": 39
+              },
+              {
+                "narration": "A second example, from marketing. A Dubai agency pitches a lending app on a campaign that uses AI to find people showing signs of money stress in their app behavior, then pushes urgent loan offers at the moments they seem most desperate. The agency's AI lead stops the pitch. Targeting people because of a financial vulnerability, in a way likely to cause significant harm, sits right next to the Article five line for EU audiences, and it's a reputational disaster everywhere. The redesign: target by stated intent, like people researching loan comparisons, with clear total cost information and no false urgency.",
+                "onScreen": "Example 2: Dubai lending campaign\n• Pitch: target money stress with urgent offers\n• Risk: exploiting vulnerability\n• Redesign: stated intent + clear costs + no false urgency",
+                "visual": "Campaign board animation: a targeting card labelled 'signs of money stress' turns red and slides off; a new card 'researching loan comparisons' slides in with a 'total cost shown' badge.",
+                "seconds": 44
+              },
+              {
+                "narration": "Common mistakes with this lesson's topics. Treating the ban list as irrelevant because we're a marketing company, when marketing tools are exactly where emotion inference and vulnerability targeting show up. Trusting a vendor's claim that its emotion AI is compliant without asking how you'll actually use it. And running one generic AI training session, then never updating it as tools and laws change. A literacy program is a living thing, reviewed every six months or whenever a major tool or rule changes.",
+                "onScreen": "Common mistakes\n• 'Not relevant to marketing'\n• Trusting vendor compliance claims\n• One-off, never-updated training",
+                "visual": "Three warning icons appear in a row; each expands into a short fix label: 'screen your tools', 'ask about your use', 'review every 6 months'.",
+                "seconds": 36
               },
               {
                 "narration": "Recap. Eight practices have been banned since February twenty twenty-five, with a ninth, nudification tools, joining in December twenty twenty-six. The ones businesses most often drift toward are workplace emotion recognition, exploiting vulnerable people, and inferring sensitive traits. When you hit a ban, redesign around the signal you actually need. And run a proportionate, documented AI literacy program. Your next step: check your inventory for any emotion, biometric or vulnerability-targeting features, then adapt the literacy plan template to your team.",
@@ -441,7 +489,7 @@
           ],
           "activity": "Pick one HR, credit, insurance or education AI tool you use or are evaluating. Send the provider the nine vendor questions and map their answers to the deployer duties table.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "If your company uses AI to screen CVs, score credit, price insurance, or grade students, you are probably using a high-risk AI system under the EU AI Act. And even if the vendor built it, some of the obligations are yours. In this lesson you'll learn the two routes into high risk, the escape hatch in Article six paragraph three, what providers must do, what deployers must do, and how the twenty twenty-six Omnibus changed the dates.",
@@ -453,6 +501,12 @@
                 "narration": "There are two routes in. The product route, under Annex one, covers AI that is a product or a safety component of a product already regulated by EU safety law, like machinery, toys or medical devices, where third-party conformity assessment is required. The use-case route, under Annex three, covers sensitive areas: biometrics, critical infrastructure, education, employment and worker management, access to essential services like credit and insurance, law enforcement, migration, and justice and democratic processes. For most businesses, the Annex three areas that matter are employment, credit, insurance and education.",
                 "onScreen": "Two routes into high risk\n• Annex I: regulated products\n• Annex III: sensitive use cases\n• SME hotspots: jobs, credit, insurance, education",
                 "visual": "Two-lane road diagram. Lane one labelled 'Annex I products' with machinery and medical device icons; lane two labelled 'Annex III uses' with eight small icons. Both lead to a 'High-risk' gate.",
+                "seconds": 39
+              },
+              {
+                "narration": "An analogy helps separate provider and deployer duties. Think of a commercial boiler in a building. The manufacturer must design it safely, test it, document it, certify it and attach a label. That's the provider. But the building owner must install it as instructed, have a qualified person oversee it, keep service records, report dangerous faults and tell residents what they need to know. That's the deployer. A certified boiler operated badly is still dangerous, and a well-run building can't fix a badly designed boiler. Both sets of duties matter.",
+                "onScreen": "Analogy: a certified boiler\n• Manufacturer = provider (design, test, certify)\n• Building owner = deployer (install, oversee, log, report)\n• Both needed for safety",
+                "visual": "Two-panel motion graphic. Left: a factory stamping a certification label onto a boiler. Right: a building with a technician icon, a logbook and an alert bell. A bridge line labelled 'instructions for use' connects the panels.",
                 "seconds": 39
               },
               {
@@ -484,6 +538,18 @@
                 "onScreen": "New high-risk dates\n• Annex III: 2 Dec 2027\n• Annex I: 2 Aug 2028\n• Reason: standards not ready\n• Contracts signed now will still be running",
                 "visual": "Timeline with original date 2 Aug 2026 crossed out and new markers at 2 Dec 2027 (Annex III) and 2 Aug 2028 (Annex I). A contract icon stretches across the timeline.",
                 "seconds": 35
+              },
+              {
+                "narration": "A simpler example from education. A private school in Riyadh with branches serving EU families online wants AI to proctor online exams and flag suspected cheating. Proctoring to detect prohibited behavior during tests is listed in Annex three under education. So the school, as a deployer, needs trained staff who review every flag before any consequence, clear notices to students and parents, logs retained, and a route to challenge a decision. The AI flags. A human decides. That one principle covers most of what deployers need to get right.",
+                "onScreen": "Example 2: online exam proctoring\n• Annex III education use\n• Trained humans review every flag\n• Notices, logs, challenge route\n• AI flags; humans decide",
+                "visual": "Exam screen mock-up with an AI flag icon appearing; the flag travels to a reviewer icon who clicks 'Review'; a notice card and a logbook appear beside the screen.",
+                "seconds": 39
+              },
+              {
+                "narration": "The mistakes to avoid. Treating the vendor is compliant as the end of your obligations, when deployer duties are yours alone. Assigning human oversight to someone who can't actually override the system, like a junior employee with no authority, which makes oversight a fiction. And letting a tool drift beyond its documented purpose, for example, using a shift-scheduling tool to evaluate staff performance. That drift can change your classification overnight, without anyone noticing.",
+                "onScreen": "Common mistakes\n• 'Vendor is compliant' = done\n• Oversight without authority\n• Purpose drift",
+                "visual": "Three mistake tiles; the third animates a tool icon sliding from a 'Scheduling' box into a 'Performance evaluation' box, triggering an amber 'reclassify' warning.",
+                "seconds": 32
               },
               {
                 "narration": "Recap. Two routes lead into high risk: regulated products and Annex three uses. The Article six three filter can take narrow tasks out, but profiling is always high-risk. Providers carry most of the burden, but deployers must provide real human oversight, keep logs, inform people and sometimes carry out a fundamental rights impact assessment. Your next step: take the nine vendor questions in the lesson text and send them to the provider of any HR, credit, insurance or education AI tool you use or plan to buy.",
@@ -550,7 +616,7 @@
           ],
           "activity": "Send the seven-point documentation request to your primary model or AI platform vendor. File the response against the specific model version and set a review reminder for the next model upgrade.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "You probably don't train foundation models. So why should you care about the EU's rules for general-purpose AI? Because those rules decide what documentation you can demand from the models under every AI tool you use. And in some cases, building on or fine-tuning a model can create obligations for you. In this lesson, you'll learn what a general-purpose AI model is, what its providers must do, what changes at the systemic-risk level, how the Code of Practice works, and how to use all of it in vendor due diligence.",
@@ -563,6 +629,12 @@
                 "onScreen": "Definitions\n• GPAI model: broad, many tasks\n• GPAI system: an app built on it\n• Systemic risk: presumed above 10^25 FLOPs",
                 "visual": "Scale graphic: a horizontal bar of training compute with a marker at 10^25 FLOPs labelled 'presumption of systemic risk'. Model icons sit on either side.",
                 "seconds": 37
+              },
+              {
+                "narration": "Here's an analogy. A general-purpose model is like a powerful engine sold to many car makers. The engine maker must document how the engine performs, what fuel it needs, and its limits, so car makers can build safe cars. If the engine is exceptionally powerful, the maker must also stress-test it and report serious failures. But the car maker is still responsible for the brakes, the seatbelts and the dashboard warnings on their own car. In AI terms, the model provider documents the model; you, building the app, are responsible for how your app behaves with users.",
+                "onScreen": "Analogy: engine and car\n• Engine maker = GPAI provider (docs, limits)\n• Very powerful engine = systemic risk (stress tests)\n• Car maker = your app (brakes, warnings)",
+                "visual": "Motion graphic: an engine block with a spec sheet unfolding beside it; the engine drops into three different car outlines; each car gets its own dashboard warning light labelled 'your system duties'.",
+                "seconds": 42
               },
               {
                 "narration": "Every general-purpose model provider has four core duties. Keep technical documentation for the AI Office and authorities. Give downstream providers the information they need to understand capabilities and limits. Have a policy to comply with EU copyright law, including respecting text and data mining opt-outs. And publish a public summary of the content used for training, using the AI Office template. Open-source models with public weights are exempt from the first two, unless they carry systemic risk. The copyright policy and training summary still apply.",
@@ -593,6 +665,18 @@
                 "onScreen": "Worked example: Riyadh fintech\n• Code of Practice status\n• Training summary\n• Downstream documentation\n• Data training defaults and residency",
                 "visual": "Comparison table animating row by row for Vendor A, B, C with green, amber and red cells. Vendor C column fades with the note 'rejected: reasons recorded'.",
                 "seconds": 40
+              },
+              {
+                "narration": "A simple example. An agency in Lahore trains a small adapter on top of an open-weight model to write in a client's brand voice, and uses it only internally to draft social posts. Are they now a general-purpose model provider? Very likely not: it's a modest modification used internally, not placed on the market as a model. They document that reasoning in their inventory, keep the model version on record, and apply their normal content review and disclosure rules to the posts. Clear, proportionate, and done in an afternoon.",
+                "onScreen": "Example 2: internal brand-voice adapter\n• Small fine-tune, internal use\n• Likely not a GPAI provider\n• Document reasoning + version\n• Normal content controls apply",
+                "visual": "Inventory entry card fills in: 'Model: open-weight base + adapter', 'Use: internal drafts', 'GPAI provider? Unlikely: reasoning attached'. A version tag stamps onto the card.",
+                "seconds": 39
+              },
+              {
+                "narration": "Three mistakes are common here. Assuming open-weight models come with no documentation duties at all, when the copyright policy and training summary still apply to their providers. Treating a model's compliance as covering your whole system, when your chatbot's disclosure and your data handling are your duties. And forgetting that model versions change. Tie your due diligence to specific versions, and review it whenever a vendor upgrades or swaps the model under your tool.",
+                "onScreen": "Common mistakes\n• 'Open weights = no duties'\n• Model compliance ≠ system compliance\n• Ignoring version changes",
+                "visual": "Three cards flip; the last one animates a model version number ticking from 'v1' to 'v2' with a 'review due' alarm icon.",
+                "seconds": 32
               },
               {
                 "narration": "Recap. General-purpose model rules bind the model developers, but they give you leverage: documentation, copyright policies, training summaries and incident processes you can request. Systemic-risk models carry extra duties. The Code of Practice is a useful signal, not a guarantee. And building your own app on a model makes the system duties yours. Next step: send the seven-point request in the lesson text to your main model or platform vendor, and file the answers with the model version they apply to.",
@@ -659,7 +743,7 @@
           ],
           "activity": "Create a synthetic asset register for your last campaign. Classify each asset (deepfake or not), record the label applied, and add consent evidence for any real person's likeness or voice.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "If you run a chatbot, publish AI-generated images or video, or use a cloned voice, this lesson is about you. Article fifty of the EU AI Act sets transparency duties that apply from the second of August twenty twenty-six, and they reach deep into everyday marketing. By the end, you'll know the four duties, who carries each one, what counts as a deepfake, and exactly how to label content without ruining your creative.",
@@ -672,6 +756,12 @@
                 "onScreen": "Four duties\n• 50(1) Providers: chatbot disclosure\n• 50(2) Providers: machine-readable marking\n• 50(3) Deployers: emotion/biometric notice\n• 50(4) Deployers: deepfakes and public-interest text",
                 "visual": "Four-quadrant grid; each quadrant has an icon and a 'Provider' or 'Deployer' tag in different colors.",
                 "seconds": 39
+              },
+              {
+                "narration": "An analogy: think of Article fifty like labels on food packaging. The manufacturer prints a barcode and batch number that machines can read. That's machine-readable marking by the provider. The shop puts clear signs on anything that might confuse customers, like 'contains nuts'. That's your visible disclosure as a deployer. And the purpose isn't to stop anyone selling food. It's to make sure people aren't misled about what they're consuming. Labels only work if they're visible at the point of decision, not hidden in the small print.",
+                "onScreen": "Analogy: food labels\n• Barcode = machine-readable marking\n• 'Contains nuts' sign = visible disclosure\n• Purpose: not misleading\n• Visible at the point of decision",
+                "visual": "Product packaging graphic: a barcode animates with a scanner beam (machine-readable), then a bold front label pops on. Side panel repeats with an AI image: invisible watermark wave, then a visible 'AI-generated' tag.",
+                "seconds": 38
               },
               {
                 "narration": "What counts as a deepfake? AI-generated or manipulated image, audio or video that resembles existing persons, objects, places, entities or events, and would falsely appear authentic. So a stylized AI background isn't a deepfake. A realistic video of a real CEO endorsing a product is. So is a realistic image of a named city after a flood that never happened. And a cloned voice of a real person saying new words resembles an existing person, so treat it as a deepfake. For clearly artistic, satirical or fictional works, the disclosure can be lighter, done in a way that doesn't spoil the work.",
@@ -702,6 +792,18 @@
                 "onScreen": "Disclosure that works\n• Chatbot: say it in the first message\n• Video: on-screen line\n• Audio: spoken disclaimer\n• Keep provenance metadata",
                 "visual": "On-screen examples: chat bubble with disclosure, video end card with the line, audio waveform with a speech bubble 'This ad uses an AI-generated voice'.",
                 "seconds": 41
+              },
+              {
+                "narration": "A simple example. A bakery in Manchester sells online across the EU and adds an AI chat assistant to its website. What does it need? A first message that says it's an AI assistant, an easy way to reach a human, and nothing more exotic. The product photos are real, so there's nothing to label there. And when the bakery later uses an AI tool to create a playful cartoon of its founder as a baker superhero, that's evidently creative and not a realistic deepfake. A light touch mention that it's AI-generated is still good practice.",
+                "onScreen": "Example 2: online bakery\n• Chatbot: AI disclosure first\n• Real photos: nothing to label\n• Cartoon founder: evidently creative\n• Light mention = good practice",
+                "visual": "Website mock-up: chat bubble 'Hi, I'm the Bakery's AI assistant' animates in; product photo carousel shows 'real photo' ticks; a cartoon superhero baker appears with a small 'Made with AI' tag.",
+                "seconds": 42
+              },
+              {
+                "narration": "Common mistakes. Believing that because you're only the deployer, you have no duties, when deepfake and public-interest text disclosures are deployer duties. Hiding disclosures in terms and conditions, when they must be clear and given at first exposure. And relying only on platform labels. A social network's AI label may not satisfy your own obligations, and it won't appear on your website, emails or radio ads.",
+                "onScreen": "Common mistakes\n• 'Deployer = no duties'\n• Disclosures hidden in T&Cs\n• Relying only on platform labels",
+                "visual": "Three mistake tiles; the second shows a tiny disclosure buried in a long terms page, then zooms out and repositions to the top of the chat window.",
+                "seconds": 29
               },
               {
                 "narration": "Recap. Four duties: chatbot disclosure and machine-readable marking for providers, emotion and biometric notices and deepfake and public-interest text disclosure for deployers. Deepfakes are realistic content resembling real people, places or events, and voice clones count. Disclose clearly, at first exposure, not in small print. Your next step: build an asset register for synthetic content. For each asset, record the tool, whether it's a deepfake, the label you applied, and any consent record. Then test that every chatbot you run discloses itself in its first message.",
@@ -768,7 +870,7 @@
           ],
           "activity": "Copy the CSV compliance calendar, adapt the rows to your inventory, assign owners and evidence links, and add the next three dates to your team calendar.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Dates in the EU AI Act have moved, and quoting the wrong one in a client proposal is an easy way to lose credibility. In this lesson you'll get the full timeline as of September twenty twenty-six, understand what the twenty twenty-six Digital Omnibus changed, see the penalty structure, and build a dated compliance calendar for your own organization. One reminder: always confirm dates against the consolidated legal text, because this area keeps moving.",
@@ -781,6 +883,12 @@
                 "onScreen": "Timeline, part 1\n• 1 Aug 2024: entry into force\n• 2 Feb 2025: bans + AI literacy\n• 2 Aug 2025: GPAI + governance\n• 2 Aug 2026: general application, Art. 50",
                 "visual": "Horizontal timeline animating left to right with four markers and short labels, and a toggle graphic showing 'in force' vs 'applies'.",
                 "seconds": 38
+              },
+              {
+                "narration": "An analogy for staged application: think of a new building code that phases in. On day one, the most dangerous practices are banned immediately. A year later, rules for the biggest suppliers of materials apply. Later still, general rules for every building kick in. And for complex structures like hospitals, the deadline is pushed back because the official testing standards aren't finished yet. That's the AI Act: bans first, model providers next, general rules after, and high-risk systems last, once the standards exist.",
+                "onScreen": "Analogy: a phased building code\n• Dangerous practices banned first\n• Big suppliers next\n• General rules after\n• Complex structures when standards exist",
+                "visual": "Construction timeline graphic with four blocks stacking over time: 'Bans', 'Suppliers', 'General rules', 'Complex structures (awaiting standards)'. The last block has a clock icon and slides further right.",
+                "seconds": 36
               },
               {
                 "narration": "Then came the Digital Omnibus on AI, Regulation twenty twenty-six slash seventeen forty-four. It was proposed in November twenty twenty-five, politically agreed on the seventh of May twenty twenty-six, adopted by the Council at the end of June, and entered into force on the twenty-seventh of July twenty twenty-six. It moved the high-risk dates: Annex three systems to the second of December twenty twenty-seven, and Annex one product systems to the second of August twenty twenty-eight. It also set the second of December twenty twenty-six as the end of the marking grace period for existing generative systems and the start of the ban on nudification tools. And legacy general-purpose models must comply by August twenty twenty-seven.",
@@ -811,6 +919,18 @@
                 "onScreen": "SME roadmap\n• Now: inventory, bans, literacy, disclosures, vendors\n• 2027: management system, incident drills\n• By 2 Dec 2027: Annex III deployer readiness",
                 "visual": "Three-column roadmap board labelled 'Now', '2027', 'By Dec 2027' with task cards moving into place.",
                 "seconds": 39
+              },
+              {
+                "narration": "A simple example of getting dates right. An agency in Dubai wrote in a September proposal that its client's AI recruitment screening would need to comply from August twenty twenty-six. After the Omnibus, that's wrong: Annex three high-risk duties now apply from the second of December twenty twenty-seven. The corrected proposal says so, adds that the client should still plan now because contracts and processes signed today will be running then, and notes that transparency duties for any candidate-facing chatbot already apply. Precise dates build credibility with clients.",
+                "onScreen": "Example 2: fixing a proposal\n• Old: 'comply from Aug 2026'\n• New: Annex III from 2 Dec 2027\n• Plan now; chatbot disclosure already live",
+                "visual": "Document mock-up: a sentence with 'August 2026' gets a red strikethrough; '2 December 2027' types in; a margin note appears: 'Chatbot disclosure: already applies'.",
+                "seconds": 38
+              },
+              {
+                "narration": "Three mistakes to avoid. Quoting the original high-risk date after the Omnibus changed it. Assuming postponed means cancelled, when the obligations are exactly the same, just later. And confusing entry into force with application. The Act entered into force in twenty twenty-four, but most duties applied later. When a client asks is the AI Act in force, the precise answer is yes, and here's which parts apply to you, and from when.",
+                "onScreen": "Common mistakes\n• Old high-risk date\n• 'Postponed = cancelled'\n• In force vs applies",
+                "visual": "Three cards; the third shows a toggle switching between 'In force: 2024' and 'Applies: staged dates' with a mini timeline.",
+                "seconds": 31
               },
               {
                 "narration": "Recap. Know the difference between entry into force and application. The key dates are February twenty twenty-five for bans and literacy, August twenty twenty-five for model rules, August twenty twenty-six for general application and transparency, December twenty twenty-six for marking and the new ban, and December twenty twenty-seven and August twenty twenty-eight for high-risk systems. Penalties scale with severity, and SMEs get the lower cap. Your next step: copy the calendar template, fill in owners and evidence links, and put the next three dates in your team calendar.",
@@ -884,7 +1004,7 @@
           ],
           "activity": "Write a one-page RMF profile (YAML template) for your highest-impact AI use case, including owner, GenAI risks, tests, metrics, controls and a review date.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "If the EU AI Act tells you what you must do, the NIST AI Risk Management Framework tells you how to think about doing it well. It's free, voluntary, recognized by enterprise buyers worldwide, and it has a companion profile just for generative AI. In this lesson, you'll learn the seven characteristics of trustworthy AI, the four functions, Govern, Map, Measure and Manage, the twelve generative AI risks, and how to write a one-page risk profile for any AI use case.",
@@ -897,6 +1017,12 @@
                 "onScreen": "What it is\n• AI RMF 1.0 (Jan 2023)\n• Playbook of suggested actions\n• GenAI Profile, NIST AI 600-1 (Jul 2024)\n• Guidance, not certification",
                 "visual": "Stack of three documents labelled 'AI RMF 1.0', 'Playbook', 'AI 600-1 GenAI Profile', with a small 'voluntary' tag.",
                 "seconds": 41
+              },
+              {
+                "narration": "An analogy: the NIST framework is like a pilot's pre-flight checklist. It doesn't fly the plane and it isn't a law. But it makes sure experienced people don't skip steps under pressure. Govern is the airline's rules and crew roles. Map is checking the route, weather and passengers. Measure is reading the instruments. Manage is deciding what to do when something looks wrong, including whether to turn back. Pilots with checklists aren't slower. They're more reliable.",
+                "onScreen": "Analogy: a pre-flight checklist\n• Govern = airline rules + crew roles\n• Map = route, weather, passengers\n• Measure = instruments\n• Manage = act, even turn back",
+                "visual": "Cockpit-style dashboard motion graphic: four checklist sections labelled Govern, Map, Measure, Manage tick one by one; a small plane icon taxis forward as the last box ticks.",
+                "seconds": 33
               },
               {
                 "narration": "NIST describes seven characteristics of trustworthy AI. Valid and reliable, which is the foundation. Safe. Secure and resilient. Accountable and transparent, which runs across everything. Explainable and interpretable. Privacy-enhanced. And fair, with harmful bias managed. Here's the important nuance: these trade off against each other. Making a model more interpretable can cost accuracy. Stronger privacy can make fairness testing harder. Governance is about making those trade-offs consciously and writing down why.",
@@ -927,6 +1053,18 @@
                 "onScreen": "NIST meets the AI Act\n• Govern: literacy, policy\n• Map: classification, FRIA\n• Measure: accuracy, bias\n• Manage: oversight, incidents\n• Select actions; don't copy all 200+",
                 "visual": "Two-column mapping diagram with connector lines from AI Act concepts on the left to NIST functions on the right.",
                 "seconds": 40
+              },
+              {
+                "narration": "A simpler example. A freelance writer in Karachi offers an AI-assisted blog writing service. Her one-page NIST-style profile: Govern, her own policy says AI drafts, she edits, and she never invents statistics. Map: clients in fintech and health, so confabulation and intellectual property are her key risks. Measure: she fact-checks every claim and runs a plagiarism check on each article. Manage: any error found after publishing gets corrected within a day and logged. It takes twenty minutes to write, and she can show it to clients who ask how she uses AI.",
+                "onScreen": "Example 2: freelance writer profile\n• Govern: AI drafts, human edits, no invented stats\n• Map: confabulation + IP risks\n• Measure: fact-check + plagiarism check\n• Manage: fix within a day, log it",
+                "visual": "One-page profile card fills in section by section, with small icons: a pen, a magnifying glass, a checklist, a clock.",
+                "seconds": 40
+              },
+              {
+                "narration": "Common mistakes. Treating NIST as a certificate you can hang on the wall. It's voluntary guidance, and saying you're NIST certified will raise eyebrows with informed buyers. Copying all two hundred plus Generative AI Profile actions into a spreadsheet nobody reads, instead of selecting the ones that fit. And skipping Measure: without tests and metrics, Manage is just guesswork, and you can't show that your controls work.",
+                "onScreen": "Common mistakes\n• 'NIST certified'\n• Copying all 200+ actions\n• Skipping Measure",
+                "visual": "A fake 'NIST certified' badge cracks and falls; a long spreadsheet shrinks to a short curated list; an empty metrics gauge fills when a 'tests' icon plugs in.",
+                "seconds": 29
               },
               {
                 "narration": "Recap. The NIST AI RMF is voluntary guidance with a powerful structure: seven trustworthy characteristics, four functions, and a generative AI profile with twelve risks. Use it to organize your thinking and your evidence, including for the EU AI Act. Your next step: pick your highest-impact AI use case and write a one-page profile using the YAML template in the lesson text, with an owner, risks, tests, metrics, controls and a review date.",
@@ -993,7 +1131,7 @@
           ],
           "activity": "Write a one-paragraph AIMS scope statement for your organization, then complete the Statement of Applicability starter with owners and evidence links.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "NIST gives you a way of thinking about AI risk. ISO slash IEC forty-two thousand and one gives you a way of running it, week after week, in a form an auditor can certify. For enterprise and public-sector buyers, a certificate or at least clear alignment is becoming a real differentiator. In this lesson, you'll learn what an AI management system is, the clause structure, how Annex A controls and the Statement of Applicability work, and whether a small business should certify.",
@@ -1006,6 +1144,12 @@
                 "onScreen": "What it is\n• Published Dec 2023\n• Management system standard (like 27001)\n• For providers, developers and users\n• Certifiable",
                 "visual": "Two side-by-side shields labelled '27001 Information security' and '42001 AI management', connected by a 'same structure' bracket.",
                 "seconds": 40
+              },
+              {
+                "narration": "An analogy: if the NIST framework is a checklist, ISO forty-two thousand and one is the operating rhythm of a well-run kitchen with regular inspections. There's a written policy, named roles, a routine for assessing risks, training records, procedures people follow, regular internal checks, a management meeting that reviews how things are going, and a habit of fixing problems at the root. An auditor doesn't just read the manual. They watch the kitchen work and check the records match reality.",
+                "onScreen": "Analogy: a kitchen with inspections\n• Policy + roles\n• Risk routine + training\n• Procedures + internal checks\n• Management review + root-cause fixes",
+                "visual": "Kitchen timeline animation: a weekly cycle wheel rotates through 'Plan', 'Do', 'Check', 'Act' with small kitchen icons; an inspector icon compares a manual with live activity and ticks both.",
+                "seconds": 35
               },
               {
                 "narration": "It sits in a family. Twenty-two nine eight nine defines AI concepts and terms. Twenty-three eight nine four gives guidance on AI risk management. Forty-two thousand and five, published in twenty twenty-five, guides AI system impact assessments. And forty-two thousand and six, also twenty twenty-five, sets requirements for the bodies that audit and certify AI management systems. Separately, European standards bodies are writing harmonized standards for the EU AI Act. Forty-two thousand and one isn't one of those, but it builds much of the organizational muscle you'll need.",
@@ -1036,6 +1180,18 @@
                 "onScreen": "Certify or align?\n• Certify: tenders, AI products, existing 27001\n• Align: internal discipline, tight budget\n• Reuse your ISMS machinery",
                 "visual": "Decision fork graphic: left path 'Certify' with a certificate icon; right path 'Align' with a compass icon; both lead to 'Better AI governance'.",
                 "seconds": 37
+              },
+              {
+                "narration": "A simple example. A twelve-person consultancy in Abu Dhabi uses AI lightly: a chat assistant, transcription and an image tool. No client has asked for certification. So they align rather than certify: a one-page scope, a signed AI policy, a short risk register, a Statement of Applicability with most Annex A controls marked applicable at a light level, a yearly internal review and a management meeting twice a year. Total effort: a few days. If a government client later asks for certification, they're already most of the way there.",
+                "onScreen": "Example 2: Abu Dhabi consultancy\n• Light AI use, no client demand\n• Align, don't certify (yet)\n• Scope, policy, register, SoA, reviews\n• Ready if clients ask later",
+                "visual": "Progress bar labelled 'Certification readiness' fills to about three quarters as five document icons drop into a folder labelled 'AIMS (aligned)'.",
+                "seconds": 39
+              },
+              {
+                "narration": "Three mistakes. Writing policies that describe an ideal organization rather than the real one. Auditors test what you actually do, and gaps become nonconformities. Ignoring the impact assessment requirement, when ISO forty-two thousand and one expects AI system impact assessments, and forty-two thousand and five shows how to do them. And treating certification as the finish line. Surveillance audits check continual improvement, so the system has to keep running.",
+                "onScreen": "Common mistakes\n• Policies for an imaginary company\n• Skipping impact assessments\n• Certificate = finish line",
+                "visual": "A glossy policy document labelled 'ideal' is compared side by side with a live process; mismatched lines flash amber; a certificate icon is followed by a looping arrow labelled 'surveillance audits'.",
+                "seconds": 30
               },
               {
                 "narration": "Recap. ISO slash IEC forty-two thousand and one is a certifiable management system for AI, built on clauses four to ten, with Annex A controls selected through a Statement of Applicability. It fits alongside NIST and the EU AI Act. Watch for two traps: policies describing an imaginary company, and treating certification as the finish line. Your next step: write a one-paragraph scope statement for your organization, then fill in the Statement of Applicability starter from the lesson text.",
@@ -1109,7 +1265,7 @@
           ],
           "activity": "Run the jurisdiction research prompt for your top AI use case, then verify each item on the official regulator or legislature website and add verified items to your inventory.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "The EU chose one big AI law. The UK and the United States went a different way, and that catches people out in two directions. Some assume there are no rules. Others assume an EU-style regime exists everywhere. Both are wrong. In this lesson, you'll learn how the UK's principles-based approach works, which existing laws already bite, the federal levers in the US, and the fast-moving map of US state laws, as of September twenty twenty-six.",
@@ -1122,6 +1278,12 @@
                 "onScreen": "UK: five principles\n• Safety, security, robustness\n• Transparency, explainability\n• Fairness\n• Accountability, governance\n• Contestability, redress",
                 "visual": "Five principle cards arranged around a UK outline, with regulator badges (ICO, CMA, FCA, Ofcom, EHRC) as text labels connecting to them.",
                 "seconds": 35
+              },
+              {
+                "narration": "An analogy for the UK and US approach: instead of one new rulebook for a new kind of vehicle, the existing traffic police, parking wardens and insurance regulators all issue guidance on how their existing rules apply to it. In the UK, the ICO, CMA, FCA and others each apply five principles in their own areas. In the US, the FTC, FCC and other agencies use their existing powers, while individual states add their own local rules. Same vehicle, many rulebooks, which is why a jurisdiction map matters.",
+                "onScreen": "Analogy: many existing referees\n• No single AI rulebook\n• Each regulator applies its own rules\n• US states add local rules\n• You need a jurisdiction map",
+                "visual": "Sports-field motion graphic: a single ball labelled 'AI' with several referees in different colored jerseys labelled ICO, CMA, FCA, FTC, FCC; state flags pop up along the sideline.",
+                "seconds": 38
               },
               {
                 "narration": "What already bites in the UK? Data protection, now amended by the Data Use and Access Act twenty twenty-five, which reshaped automated decision-making rules: more solely automated decisions are allowed, but with safeguards like information, the chance to make representations, and human review. Consumer law, with stronger CMA powers against fake reviews and misleading practices. The advertising code enforced by the ASA, which applies no matter how an ad was made. Online safety law and criminal offences for intimate image abuse, including sexually explicit deepfakes. And equality law for AI in hiring.",
@@ -1152,6 +1314,18 @@
                 "onScreen": "Use AI to draft, verify yourself\n• Ask for official sources\n• Ask for confidence levels\n• Verify every item",
                 "visual": "Screen recording style: chat window with the research prompt, output table with a 'verify' column; a cursor ticks items after checking a source.",
                 "seconds": 32
+              },
+              {
+                "narration": "A simpler example. A UK e-commerce brand uses AI to generate product images that make a vacuum cleaner look more powerful than it is, and AI-written reviews to fill a new product page. No AI law is needed to see the problem. The ASA would likely treat the images as misleading advertising, and the reviews would be fake reviews under UK consumer law, which the CMA can now enforce directly. In the US, the same reviews would fall under the FTC's rule on fake reviews. Existing law already covers the most common AI marketing mistakes.",
+                "onScreen": "Example 2: UK e-commerce brand\n• Exaggerated AI product images: misleading ads\n• AI-written reviews: fake reviews\n• UK: ASA + CMA; US: FTC rule\n• Existing law already applies",
+                "visual": "Product page mock-up with an exaggerated image and five-star AI reviews; red flags pop up labelled 'ASA', 'CMA', 'FTC'; then the page resets with real photos and verified reviews.",
+                "seconds": 41
+              },
+              {
+                "narration": "Common mistakes. Believing there's no AI law, so there are no rules, when consumer, privacy, equality and advertising law apply today. Treating the US as one market, when state laws differ and change quickly, so check where your users actually are. And relying on a language model's legal summary without verifying it at the source. Use AI to draft your jurisdiction map, but check every entry against the regulator's or legislature's own website before you rely on it.",
+                "onScreen": "Common mistakes\n• 'No AI law = no rules'\n• 'The US is one market'\n• Unverified AI legal summaries",
+                "visual": "Three mistake cards; the third shows an AI-generated table with a 'verify' column where each row gets a check mark only after a source link icon is clicked.",
+                "seconds": 34
               },
               {
                 "narration": "Recap. The UK is principles-based and regulator-led, with existing laws on data, consumers, advertising, online safety and equality already applying to AI. The US has federal agencies enforcing existing laws, an unresolved preemption push, and a changing patchwork of state laws. No AI law never means no rules. Your next step: for your top AI use case, list the UK or US laws that apply using the research prompt, then verify each one and add it to your inventory.",
@@ -1218,7 +1392,7 @@
           ],
           "activity": "Create a jurisdiction register for one AI use case covering every country where your users are. Record instrument, binding or guidance, duty summary, official source and verification date.",
           "lecture": {
-            "targetMinutes": 4,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "If you work across the Gulf and South Asia, AI governance looks different from Europe. Instead of one big AI law, you'll find ambitious national strategies, ethics charters and guidelines that are mostly voluntary, and binding data protection, cybercrime and media laws that already apply to AI. In this lesson you'll learn the landscape in the UAE, Saudi Arabia and Pakistan as of September twenty twenty-six, and how to run one governance program across all of them.",
@@ -1231,6 +1405,12 @@
                 "onScreen": "UAE\n• AI Strategy 2031; AI minister since 2017\n• AI Charter (2024): 12 principles\n• Binding: federal PDPL, cyber and media law\n• Free zones: DIFC Regulation 10, ADGM",
                 "visual": "UAE outline with a charter scroll showing 12 small principle icons; separate badges for 'Federal PDPL', 'DIFC', 'ADGM'.",
                 "seconds": 43
+              },
+              {
+                "narration": "An analogy for this region: think of a national sports strategy. The government sets ambitious goals, publishes a code of conduct for fair play, and funds academies. The code of conduct isn't a criminal law, but clubs that ignore it won't get government contracts or sponsorship. Meanwhile, the actual laws, like fraud, safety and privacy, apply to everyone. In the UAE, Saudi Arabia and Pakistan, AI strategies and ethics charters set the direction and expectations, while data protection, cybercrime and media laws are the binding rules.",
+                "onScreen": "Analogy: a national sports strategy\n• Goals + funding = AI strategy\n• Code of conduct = ethics charter\n• Contracts depend on following it\n• Laws still bind everyone",
+                "visual": "Stadium motion graphic: a scoreboard labelled 'National AI Strategy', a rulebook labelled 'Ethics charter (expected)', and a referee whistle labelled 'Binding law'. Three country flags rotate beneath.",
+                "seconds": 37
               },
               {
                 "narration": "Now Saudi Arabia. SDAIA, the Saudi Data and AI Authority, leads policy under Vision twenty thirty. It published AI Ethics Principles in twenty twenty-three: fairness, privacy and security, humanity, social and environmental benefit, reliability and safety, transparency and explainability, and accountability. It followed with Generative AI Guidelines in twenty twenty-four, and guidance on deepfakes emphasizing consent, data protection and safeguards like watermarking. The binding piece is the Personal Data Protection Law, in force since twenty twenty-three with enforcement from September twenty twenty-four, including rules on transferring data outside the Kingdom.",
@@ -1255,6 +1435,24 @@
                 "onScreen": "Worked example: Dubai e-commerce\n• Bilingual AI disclosure + human handoff\n• UAE and KSA data laws, vendor DPA\n• Fictional, labelled synthetic presenters\n• Same baseline for Pakistan",
                 "visual": "Mobile chat mock-up showing an Arabic and English greeting with an AI badge; product video thumbnail with a 'AI-generated presenter' tag.",
                 "seconds": 39
+              },
+              {
+                "narration": "A simpler example. A Lahore agency builds a chatbot for a Saudi client's website. Pakistan has no comprehensive data protection law in force yet, but that doesn't matter much here. The chatbot processes Saudi residents' personal data, so the Saudi law applies, including its rules on transferring data outside the Kingdom. The client's contract will require a data processing agreement and security measures. And SDAIA's guidelines set expectations on transparency. So the agency discloses the AI in Arabic and English, minimizes data, and confirms where the chatbot vendor processes conversations.",
+                "onScreen": "Example 2: Lahore agency, Saudi client\n• Saudi PDPL applies to residents' data\n• Transfer rules + DPA in contract\n• SDAIA transparency expectations\n• Bilingual disclosure, minimize, check vendor location",
+                "visual": "Map line from Lahore to Riyadh; a chatbot icon sits between them; a 'PDPL' shield locks onto the Saudi side; a contract icon with 'DPA' stamps onto the line.",
+                "seconds": 39
+              },
+              {
+                "narration": "Three mistakes to watch for. Treating non-binding charters and guidelines as irrelevant, when government clients and regulators use them as the yardstick. Forgetting that free zones like the DIFC and ADGM have their own data regimes that differ from onshore law. And assuming that because Pakistan has no data protection law in force, there are no obligations, when foreign laws and client contracts still apply to the data you handle.",
+                "onScreen": "Common mistakes\n• Ignoring charters and guidelines\n• Forgetting free-zone regimes\n• 'No PK data law = no duties'",
+                "visual": "Three cards flip to fixes; the second shows the UAE map with DIFC and ADGM highlighted as separate zones with their own shield icons.",
+                "seconds": 30
+              },
+              {
+                "narration": "One more practical tip for this region: language. Disclosures, privacy notices and consent requests should be available in the languages your users actually read, often Arabic and English in the Gulf, and Urdu and English in Pakistan. Machine translation is a starting point, but have legal wording reviewed by a fluent speaker. A disclosure nobody understands doesn't really disclose anything, and regulators and government clients notice when Arabic versions are clearly an afterthought.",
+                "onScreen": "Language matters\n• Arabic + English in the Gulf\n• Urdu + English in Pakistan\n• Review legal wording with fluent speakers",
+                "visual": "A disclosure card appears in English, then flips to Arabic and Urdu versions with a 'reviewed by native speaker' badge stamping onto each.",
+                "seconds": 32
               },
               {
                 "narration": "Recap. In the UAE, Saudi Arabia and Pakistan, strategies and ethics guidelines set expectations, while data protection, cybercrime and media laws create binding duties. Free zones can have their own rules. Pakistan has an AI policy but no data protection law yet, and client contracts still demand good practice. Your next step: add a jurisdiction register to your governance pack, using the CSV row format in the lesson text, and record the official source and the date you verified each item.",
@@ -1328,7 +1526,7 @@
           ],
           "activity": "Fill in the approved-tools table for every tool in your inventory, then draft a one-page AI policy and traffic-light page using the prompt. Book a leadership sign-off.",
           "lecture": {
-            "targetMinutes": 4,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "Here's a pattern I see constantly. A company writes an AI policy that either bans generative AI, which pushes staff into personal accounts where nobody can see what's happening, or runs to forty pages that nobody reads. Neither protects anyone. In this lesson, you'll build a policy stack that people actually follow: a short policy, a traffic-light acceptable-use page, an approved tools list, and clear decision rights.",
@@ -1340,6 +1538,12 @@
                 "narration": "Think of it as a stack. At the top, a one to two page AI policy, signed by leadership, reviewed yearly. Under it, one page of acceptable-use rules, reviewed quarterly. Then a living approved tools list, updated monthly. And standard operating procedures for specific workflows, like content production or chatbot launches. Each layer changes at a different speed, which is why you separate them. You don't want to re-sign your policy every time a tool changes its pricing plan.",
                 "onScreen": "The policy stack\n• Policy: 1 to 2 pages, yearly\n• Acceptable use: 1 page, quarterly\n• Approved tools: monthly\n• SOPs: per workflow",
                 "visual": "Four stacked layers with clock icons showing update frequency: yearly, quarterly, monthly, as needed.",
+                "seconds": 34
+              },
+              {
+                "narration": "Here's an analogy: an AI policy should work like a company's travel policy. Nobody reads a forty-page travel manual. What people actually use is a one-page summary, a list of approved booking tools, clear limits like economy for flights under six hours, and a named person to ask when something unusual comes up. The full rules exist, but day-to-day behavior is driven by the short version and the approved tools. Your AI policy stack works the same way.",
+                "onScreen": "Analogy: a travel policy\n• One-page summary\n• Approved booking tools\n• Clear limits\n• A named person to ask",
+                "visual": "Motion graphic of a travel policy: a thick manual shrinks into a one-page card, an 'approved tools' list slides in, a limit badge appears, and a contact card with a question mark pops up.",
                 "seconds": 34
               },
               {
@@ -1371,6 +1575,18 @@
                 "onScreen": "Draft with AI, edit hard, measure\n• Use the drafting prompt\n• Make it specific to you\n• Track training, shadow tools, approval time, reports",
                 "visual": "Screen recording style: prompt entered into a chat assistant, draft appears, then human edits highlighted in a different color replacing generic lines.",
                 "seconds": 33
+              },
+              {
+                "narration": "A second, bigger example. A two-hundred-person bank-adjacent fintech in Karachi can't use the same lightweight approach as a small agency. Their stack adds an AI committee with risk, legal, security and business members; a formal approval workflow with a two-week service level; mandatory impact assessments for customer-facing AI; and quarterly reporting to the board's risk committee. But the principle is the same: a short policy people actually read, a traffic-light page, a living tools list and clear decision rights. The size of the controls grows with the risk, not the thickness of the document.",
+                "onScreen": "Example 2: Karachi fintech (200 staff)\n• AI committee (risk, legal, security, business)\n• Approval SLA: two weeks\n• Mandatory impact assessments for customer AI\n• Quarterly board reporting",
+                "visual": "Org chart animation: a committee box forms from four role icons; an approval pipeline with a two-week clock; a board icon receives a quarterly report card.",
+                "seconds": 41
+              },
+              {
+                "narration": "Common mistakes. Blanket bans that push people into personal accounts. No approved tools list, so staff can't follow the policy even if they want to. A policy with no owner and no review date, so it quietly goes stale. And rules that don't match reality, like banning a tool the whole sales team depends on. When you find a mismatch, fix the policy or fix the practice, but don't leave the gap open.",
+                "onScreen": "Common mistakes\n• Blanket bans\n• No approved tools list\n• No owner or review date\n• Rules that don't match reality",
+                "visual": "Four tiles in a grid; each shows a small broken icon that repairs itself as the fix label appears.",
+                "seconds": 32
               },
               {
                 "narration": "Recap. Skip bans and encyclopedias. Build a stack: a short signed policy, a traffic-light acceptable-use page, a living approved tools list, and workflow procedures. Assign decision rights with a RACI, and measure whether it's working. Your next step: fill in the approved tools table from the lesson text for the tools on your inventory, and draft your one-page policy using the prompt. Then book a thirty-minute review with leadership to sign it.",
@@ -1437,7 +1653,7 @@
           ],
           "activity": "Convert your tool list into YAML inventory entries, one per use case. Rate impact and likelihood, and mark any entry that crosses your assessment threshold.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "You can't govern what you can't see. Every framework in this course, the EU AI Act, NIST and ISO forty-two thousand and one, starts from the same place: knowing which AI systems you have, what they do, and who they affect. In this lesson you'll build a proper AI inventory, find the shadow AI you didn't know about, rate risk quickly and consistently, and choose the right impact assessment for each use case.",
@@ -1450,6 +1666,12 @@
                 "onScreen": "What to record\n• Owners, vendor, model, version\n• Purpose and forbidden uses\n• Data in, outputs, autonomy\n• Jurisdictions, AI Act tier, risk, controls, review date",
                 "visual": "Inventory form fields appearing one by one on a clean card layout.",
                 "seconds": 40
+              },
+              {
+                "narration": "An analogy: an AI inventory is like a hospital's register of medical equipment. Every device has an ID, a location, a responsible department, a service date and a risk class. Before a new device is used on patients, someone checks it's safe for that purpose. If a device is recalled, the hospital knows exactly where every unit is. Your AI inventory gives you the same power: when a vendor has an incident, or a law changes, you can find every affected use within minutes.",
+                "onScreen": "Analogy: a hospital equipment register\n• ID, location, owner, service date, risk class\n• Checked before use\n• Instant recall response",
+                "visual": "Equipment register table animates rows with device icons; a 'recall' alert flashes and three rows highlight instantly, then the scene swaps device icons for AI tool icons.",
+                "seconds": 37
               },
               {
                 "narration": "Now the hard part: finding shadow AI. Run a short, non-punitive survey asking which AI tools and features people use for work. Check expense reports and card statements for AI subscriptions. Review single sign-on and app grants, browser extensions and network logs if you have them. And ask the vendors of software you already use which AI features are switched on by default. The goal is visibility, not punishment. If people fear blame, they'll hide tools.",
@@ -1480,6 +1702,18 @@
                 "onScreen": "Three traps\n• Tools instead of use cases\n• One-and-done assessments\n• Assessments written after launch",
                 "visual": "Three warning signs on a road leading to 'Launch', each with a short caption.",
                 "seconds": 29
+              },
+              {
+                "narration": "A simpler example. A six-person travel agency in Dubai runs its first inventory. They find four uses: a chat assistant for itinerary drafts, an AI feature in their email tool that writes subject lines, a WhatsApp chatbot answering visa questions, and a transcription tool for client calls. Scores: the drafts and subject lines are ones and twos. The visa chatbot scores higher, because wrong answers could cost clients a trip, so it gets a light assessment, a rule to link to official sources, and a human check on unusual cases.",
+                "onScreen": "Example 2: six-person Dubai travel agency\n• 4 uses found\n• Drafts + subject lines: low\n• Visa chatbot: higher (wrong answers hurt)\n• Light assessment + official links + human check",
+                "visual": "Four inventory cards animate in; three show green scores; the visa chatbot card pulses amber and expands to show three controls.",
+                "seconds": 39
+              },
+              {
+                "narration": "A final practical tip: keep the inventory where people already work, in a shared spreadsheet or your project tool, with fixed columns and a named owner, and make adding an entry part of every new tool request. An inventory that lives in a forgotten document decays within months. One that's part of the approval workflow stays current automatically, because nobody gets a new AI tool approved without creating its entry.",
+                "onScreen": "Keep it alive\n• Where people already work\n• Fixed columns + owner\n• Entry required for every approval",
+                "visual": "Workflow diagram: 'New tool request' flows into 'Create inventory entry' then 'Approval'; a spreadsheet icon updates with a new row each time.",
+                "seconds": 30
               },
               {
                 "narration": "Recap. Your inventory is the foundation of everything else. Record owners, purpose, data, outputs, autonomy, jurisdictions, tier, risk and controls. Hunt for shadow AI without blame. Rate risk simply and set a threshold for deeper assessment. Use one combined template for AI, data protection and fundamental rights assessments. Your next step: convert your tool list into the YAML inventory format in the lesson text, one entry per use case, and rate each one.",
@@ -1546,7 +1780,7 @@
           ],
           "activity": "Send the standard vendor AI questionnaire to the vendor of your highest-risk AI tool. Record answers against its inventory entry and note any contract changes to request.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "Most small businesses never build an AI model. They buy AI inside software, call model APIs, and connect agents to their data. That means most of your AI risk is really vendor risk, hidden in terms of service, default settings and contracts. In this lesson, you'll learn a tiered approach to due diligence, the eight domains to check, extra care for agents and connectors, the contract clauses that matter, and a ready-made questionnaire.",
@@ -1558,6 +1792,12 @@
                 "narration": "Don't give every tool the same sixty-question review. Tier it. Light tier, for something like a grammar assistant with no client data: check whether inputs are used for training, retention and security basics. Standard tier, for a chat assistant used with client data or a transcription tool: a security and privacy questionnaire, a data processing agreement, sub-processors, data location and model documentation. Enhanced tier, for customer-facing chatbots, HR or credit tools, and agents with write access: all of that plus testing, AI Act classification evidence, incident terms, audit rights and an exit plan.",
                 "onScreen": "Tier your reviews\n• Light: terms check\n• Standard: questionnaire, DPA, data location\n• Enhanced: testing, AI Act evidence, audit, exit",
                 "visual": "Three stacked trays labelled Light, Standard, Enhanced with example tool icons sliding into each.",
+                "seconds": 40
+              },
+              {
+                "narration": "An analogy: vendor due diligence is like hiring a contractor to work inside your office after hours. You'd check references, see their insurance, agree which rooms they can enter, know who else they'll bring, and make sure you get the keys back when the job ends. AI vendors often get access to your most sensitive data, your clients' conversations, documents and customer lists. The questions are the same: who are you, what can you touch, who else is involved, what happens if something goes wrong, and how do I get my data back?",
+                "onScreen": "Analogy: an after-hours contractor\n• References + insurance = attestations\n• Which rooms = data access and scopes\n• Who they bring = sub-processors\n• Keys back = exit and deletion",
+                "visual": "Office floor-plan motion graphic: a contractor icon enters with a badge; certain rooms light up as 'allowed'; a sub-contractor icon follows; at the end, keys return to a key box labelled 'exit'.",
                 "seconds": 40
               },
               {
@@ -1589,6 +1829,18 @@
                 "onScreen": "Keep it current\n• Questionnaire, DPA, owner, review date\n• Re-review on renewal, model change, incident\n• Avoid free tiers for client work",
                 "visual": "Circular review cycle with three triggers: renewal calendar, model-swap icon, incident alarm.",
                 "seconds": 34
+              },
+              {
+                "narration": "A second, enhanced-tier example. A Riyadh property developer wants an AI agent that answers buyers on WhatsApp and can book viewings directly into the sales calendar. Enhanced review: the vendor provides a security report, a processing agreement, the list of sub-processors and where conversations are stored, which matters under Saudi transfer rules. The team tests prompt injection by sending messages like cancel all viewings. They limit the agent to creating tentative bookings only, which a salesperson confirms. And the contract includes incident notice and data export on exit.",
+                "onScreen": "Example 2: Riyadh WhatsApp booking agent\n• Security report, DPA, sub-processors, storage location\n• Injection testing\n• Tentative bookings only, human confirms\n• Incident notice + export on exit",
+                "visual": "WhatsApp-style chat on the left with an injection attempt message; a shield blocks it; on the right, a calendar shows a 'tentative' booking waiting for a salesperson's confirm click.",
+                "seconds": 38
+              },
+              {
+                "narration": "A final practical tip: review vendors on triggers, not just on a calendar. The obvious triggers are contract renewal, a change of underlying model, a new data category, like starting to process health information, a new market with different data rules, and any security incident at the vendor. Put those triggers in the tool's inventory entry, so whoever owns the tool knows when a fresh review is due.",
+                "onScreen": "Review on triggers\n• Renewal\n• Model change\n• New data category\n• New market\n• Vendor incident",
+                "visual": "Inventory card with five trigger icons along its edge; when one lights up, a 'review due' banner slides across the card.",
+                "seconds": 30
               },
               {
                 "narration": "Recap. Tier your reviews by risk. Cover the eight domains. Give agents and connectors least privilege, human approval, injection defenses and logs. Negotiate the clauses that protect your data and your exit. Your next step: send the standard questionnaire from the lesson text to the vendor behind your highest-risk AI tool, and record the answers alongside the tool's inventory entry.",
@@ -1662,7 +1914,7 @@
           ],
           "activity": "Add the synthetic media pre-flight checklist to your campaign launch template and run it on one live or recent campaign. Log findings in your synthetic asset register.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "AI didn't change what counts as a misleading ad. It changed how easy it is to make one. With a few prompts you can create a flawless before and after photo, a glowing customer testimonial, or a celebrity-sounding voice-over. In this lesson you'll learn the four rulebooks that apply when you use AI in marketing, how disclosure layers work, what major platforms require, and a pre-flight checklist for every synthetic asset.",
@@ -1675,6 +1927,12 @@
                 "onScreen": "Four rulebooks\n• AI law\n• Advertising and consumer law\n• Platform policies\n• Rights of real people",
                 "visual": "Four overlapping transparent sheets stacking over an ad; each sheet has a label and a small icon.",
                 "seconds": 31
+              },
+              {
+                "narration": "An analogy: using AI in ads is like using professional food styling in a burger commercial. Some styling is fine, everyone expects a nicely lit photo. But if the burger in the ad is twice the size of the one you get, that's misleading, whether it was done with glue, lighting tricks or an AI tool. Regulators don't care about the technique. They care about whether the average customer is misled about something that matters to their decision.",
+                "onScreen": "Analogy: burger food styling\n• Nice lighting = fine\n• Twice the real size = misleading\n• Technique doesn't matter\n• Would the customer be misled?",
+                "visual": "Side-by-side motion graphic: an ad burger and a real burger; a measuring tape animates across both; a 'misleading?' meter swings to red when the ad version is inflated.",
+                "seconds": 34
               },
               {
                 "narration": "The timeless test is simple: is the ad likely to deceive the average consumer about something that matters to their decision? AI makes three failures easy. Exaggerated product imagery, like AI-enhanced skincare results. The UK's ASA has ruled against filters that exaggerate results, and AI edits follow the same logic. Synthetic testimonials, AI-generated customers praising a product. In the US, the FTC's fake reviews rule covers these explicitly. And virtual influencers, who must still disclose sponsorship and shouldn't pass off an invented experience as real.",
@@ -1705,6 +1963,18 @@
                 "onScreen": "Worked example: skincare launch\n• AI results imagery: replaced with real photos\n• AI presenter: labelled\n• Cloned founder voice: consent + tag\n• Virtual influencer: #ad + 'virtual creator'",
                 "visual": "Campaign board with four assets, each transitioning from a red flag to a green check with a short fix caption.",
                 "seconds": 34
+              },
+              {
+                "narration": "A simpler example. A Karachi clothing brand uses AI to generate lifestyle backgrounds, like a beach at sunset, behind real product photos of its kurtas. The garments themselves are photographed as they are, colors unaltered. Is this misleading? Not about anything material: customers see the real product accurately. The brand keeps a note in its asset register, preserves the provenance metadata, and uses the platform's AI disclosure setting where the background looks realistic. Proportionate, honest and quick.",
+                "onScreen": "Example 2: Karachi clothing brand\n• Real garment photos, true colors\n• AI backgrounds only\n• Not misleading about the product\n• Register + metadata + platform setting",
+                "visual": "Product photo of a garment on a plain backdrop; the background swaps to an AI sunset while the garment stays unchanged; a 'colors unaltered' badge and a small 'AI background' tag appear.",
+                "seconds": 33
+              },
+              {
+                "narration": "Three mistakes to avoid. Thinking a platform's AI label covers your legal duties, when it may not appear everywhere your ad runs and won't cure a misleading claim. Using AI-generated customer faces in testimonials, which is deception even with a label. And cloning a staff member's voice on a casual verbal OK, without a written, specific, revocable consent they genuinely felt free to refuse.",
+                "onScreen": "Common mistakes\n• Platform label = compliance\n• AI faces in testimonials\n• Casual consent for staff voices",
+                "visual": "Three mistake cards; the third shows a speech bubble 'Sure, go ahead' crossed out, replaced by a signed consent form with 'revocable' highlighted.",
+                "seconds": 28
               },
               {
                 "narration": "Recap. AI doesn't change the misleading test. It makes failing it easier. Four rulebooks apply: AI law, advertising law, platform policies and people's rights. Disclosure layers work together but don't substitute for each other. And real people's likeness and voice need written consent. Your next step: copy the synthetic media pre-flight checklist from the lesson text into your campaign launch template, and run it on your next campaign.",
@@ -1771,7 +2041,7 @@
           ],
           "activity": "Map one AI marketing workflow end to end. Mark each personal data field, its lawful basis and retention, and remove any field the model does not need.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "If you use AI in marketing, the law most likely to catch you isn't an AI law at all. It's data protection. Personalization, segmentation, chatbot transcripts, call recordings and AI-generated insights about people all involve personal data. In this lesson, you'll apply the GDPR principles to AI, choose lawful bases, understand automated decisions and profiling, handle international transfers, and learn to minimize data before it ever reaches a model.",
@@ -1784,6 +2054,12 @@
                 "onScreen": "Principles applied to AI\n• Transparency about unexpected AI use\n• Purpose limitation\n• Minimization\n• Accuracy of inferences\n• Retention for prompts and logs",
                 "visual": "Principle cards flipping to show AI-specific examples on the back.",
                 "seconds": 45
+              },
+              {
+                "narration": "An analogy: think of personal data like cash handled by a shop. You only take what the sale needs. You know which till it's in and who can open it. You don't hand it to third parties without a receipt and a reason. You keep it no longer than necessary. And if a customer asks what you hold, you can show them. Sending data to an AI tool is handing cash to a third party. Do it with a contract, a reason, the smallest amount needed, and a record.",
+                "onScreen": "Analogy: handling cash\n• Take only what's needed\n• Know where it is + who has access\n• Third parties need a contract + reason\n• Keep only as long as needed",
+                "visual": "Shop till motion graphic: coins labelled with data types (name, email, order) move into a till; only a few coins pass through a slot to an 'AI vendor' box with a contract stamp; a timer counts down on stored coins.",
+                "seconds": 39
               },
               {
                 "narration": "Which lawful basis? Consent is needed under ePrivacy rules for most tracking cookies and much electronic marketing, and it's the safest basis for sensitive uses like voice cloning. Legitimate interests often covers analytics and segmentation, but you need a written balancing test, and it gets weaker when processing is intrusive or unexpected. Contract covers processing needed to deliver what the person asked for, like an AI assistant answering their order question. And special category data, like health or religion, needs an extra condition. If your AI infers those traits, you're processing special category data. In marketing, simply don't.",
@@ -1814,6 +2090,18 @@
                 "onScreen": "Minimize before you prompt\n• Select fields explicitly\n• Redact free text\n• Secrets in environment variables\n• Don't log prompt contents",
                 "visual": "Code editor showing the Python function; highlighted lines for field selection, redaction regex, environment variable, and error logging.",
                 "seconds": 40
+              },
+              {
+                "narration": "A simpler example. A Lahore online store wants AI to write personalized thank-you emails after purchase. The minimal design: send the model only the product category and the customer's first name, never the address, phone or payment details. Use an API plan with a processing agreement and no training on inputs. Mention AI-assisted personalization in the privacy notice. And because Pakistan has no data protection law in force yet, they still follow this approach, because it's good practice, and because their EU customers are covered by GDPR anyway.",
+                "onScreen": "Example 2: Lahore online store\n• Send only first name + product category\n• API plan with DPA, no training\n• Privacy notice mention\n• Good practice everywhere",
+                "visual": "Customer record card with many fields; all but two fade out; the two remaining fields flow into an AI icon that outputs a short thank-you email.",
+                "seconds": 38
+              },
+              {
+                "narration": "Three mistakes are common. Pasting CRM exports into consumer chat tools, where the terms may allow training and there's no processing agreement. Letting AI infer sensitive traits, like health or religion, for targeting, which creates special category data and serious risk. And forgetting that chatbot transcripts and call recordings are personal data too, with retention limits and rights like access and deletion.",
+                "onScreen": "Common mistakes\n• CRM exports in consumer chat tools\n• Inferring sensitive traits\n• Forgetting transcripts are personal data",
+                "visual": "Three warning tiles; the first shows a spreadsheet being dragged into a generic chat window and bouncing off a 'no DPA' barrier.",
+                "seconds": 27
               },
               {
                 "narration": "Recap. Data protection is the AI compliance area that's already fully live. Apply the principles to prompts, outputs and logs. Pick lawful bases deliberately, and never infer sensitive traits for marketing. Watch automated decisions with significant effects. Handle transfers and rights requests across your AI workflows. Your next step: map one AI marketing workflow from data source to model to output, and mark where personal data can be removed before it reaches the model.",
@@ -1887,7 +2175,7 @@
           ],
           "activity": "Assemble the 13-artifact governance pack for your organization or the Crescent Digital case, run the quality checklist, and deliver a 10-minute leadership briefing with decisions needed.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "This is where everything comes together. You're going to build a complete AI governance pack for a small business: the kind of pack that answers a demanding enterprise client's AI questionnaire, meets the EU AI Act duties that apply, and still gets read by the people who have to follow it. Use your own organization, a client, or our case company, Crescent Digital, a thirty-person agency in Lahore and Dubai with clients across the Gulf, the UK and Germany.",
@@ -1899,6 +2187,12 @@
                 "narration": "Crescent Digital uses AI in six ways: generative text and images for content; a client-branded chatbot for a dental clinic group with patients in the UAE and UK; AI voice-overs, including a cloned voice of one client's founder; meeting transcription; lead scoring in its own CRM; and a pilot tool that pre-screens job applicants for its own hiring. Pause for a second and guess which of these carries the heaviest obligations. If you said the hiring pilot, you're right. It's an Annex three high-risk use.",
                 "onScreen": "Crescent Digital's six AI uses\n• Content generation\n• Dental clinic chatbot\n• Founder voice clone\n• Meeting transcription\n• Lead scoring\n• Hiring pre-screen pilot",
                 "visual": "Six use-case tiles appear; the hiring pilot tile glows amber with a 'high-risk' tag.",
+                "seconds": 37
+              },
+              {
+                "narration": "An analogy for the capstone: think of this pack like a building's fire safety file. There's a floor plan showing where everything is, which is your inventory. There are rules for occupants, your policy and acceptable use. There are inspection records, your assessments and vendor checks. There are signs on the walls, your disclosures. There's an evacuation plan, your incident runbook. And there's a calendar of drills and inspections. An inspector expects all of it, but the real goal is that people know what to do.",
+                "onScreen": "Analogy: a fire safety file\n• Floor plan = inventory\n• Occupant rules = policy\n• Inspections = assessments + vendor checks\n• Signs = disclosures\n• Evacuation plan = incident runbook",
+                "visual": "Building cross-section motion graphic: floor plan lines draw, signs appear on walls, an inspection clipboard ticks, an exit-route arrow animates; each element gets a governance label.",
                 "seconds": 37
               },
               {
@@ -1930,6 +2224,18 @@
                 "onScreen": "Quality checklist\n• Owners, reasons, review dates\n• Annex III plan or stop decision\n• Tested disclosures; consent records\n• Vendor records; not-legal-advice note\n• Under ~30 pages + registers",
                 "visual": "Checklist with seven items ticking one by one next to the pack folder.",
                 "seconds": 41
+              },
+              {
+                "narration": "Common mistakes in capstone packs. Writing for an imaginary company instead of documenting what actually happens. Producing sixty pages that leadership will never read, when twenty focused pages plus registers is better. Skipping the decisions: a pack that lists risks but asks leadership for nothing hasn't done its job. And forgetting the maintenance plan: without owners, review dates and a calendar, the pack is out of date within a quarter.",
+                "onScreen": "Common mistakes\n• Imaginary company\n• Too long to read\n• No decisions requested\n• No maintenance plan",
+                "visual": "A thick binder shrinks to a slim folder; a 'Decisions needed' card pops out; a calendar with review dates attaches to the folder.",
+                "seconds": 30
+              },
+              {
+                "narration": "A final tip for presenting: lead with the heat map and one sentence per risk, not with the law. Leaders respond to: here's what we use, here's where the real risk is, here's what we're doing, and here's what we need from you. Keep the legal detail in the appendix for anyone who wants it. Then ask for one or two clear decisions, and schedule the next review before you leave the room.",
+                "onScreen": "Presenting to leadership\n• Heat map first\n• One sentence per risk\n• Clear decisions requested\n• Next review booked",
+                "visual": "Presentation slide sequence: heat map, three risk sentences, 'Decisions needed' box, and a calendar invite for the next review sliding in.",
+                "seconds": 32
               },
               {
                 "narration": "Finally, present it. Prepare a ten-minute leadership briefing: the inventory heat map, the three biggest risks and what you're doing about them, the decisions you need from leadership, like whether to continue the hiring pilot, and the calendar. Governance succeeds when leaders make informed decisions, not when documents exist. That's the course. You can now read the EU AI Act with confidence, use NIST and ISO frameworks, navigate the UK, US, Gulf and Pakistan, and build a practical governance pack. Go build yours.",

@@ -6,7 +6,7 @@
   "subtitle": "Measure accurately and lawfully in 2026 with consent management, server-side tagging, conversion APIs and modeled measurement",
   "category": "data",
   "level": "advanced",
-  "estimatedMinutes": 257,
+  "estimatedMinutes": 275,
   "description": "Marketing measurement is shrinking and skewing: consent refusals, Safari and Firefox protections, Apple's tracking prompt, ad blockers and cross-device journeys all hide conversions — even though Chrome kept third-party cookies. This advanced course shows you how to measure accurately and lawfully. You will map the privacy laws that matter (GDPR and ePrivacy, the UK's Data (Use and Access) Act, US state laws and GPC, Saudi PDPL, UAE PDPL), configure a CMP with IAB TCF 2.3 and GPP where needed, and implement Google Consent Mode v2 correctly. You will set up GA4 for consent and the Measurement Protocol, build a server-side tagging layer with server-side GTM or Google tag gateway, and implement Meta Conversions API, Google enhanced conversions and offline imports, TikTok Events API and LinkedIn Conversions API with deduplication. You finish with data quality, automated QA, first-party data strategy, modeled measurement and clean rooms, and a capstone design document.",
   "outcomes": [
     "Explain how consent, browsers, ATT and blockers affect measurement in 2026, and the laws that govern it by region",
@@ -116,12 +116,12 @@
           ],
           "activity": "Run the 15-minute tracking reality check on your site and write a one-paragraph gap analysis comparing backend orders, analytics and each ad platform.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 9,
             "scenes": [
               {
                 "narration": "For five years, marketers were told that third-party cookies were about to die in Chrome. Then, in twenty twenty-five, Google changed course and kept them, with user choice. So can we all relax? Not at all. In this lecture you'll learn what actually changed, the seven forces still eroding your measurement, the three layers of a privacy-first measurement stack, and a fifteen-minute check that shows you how much your own tracking is missing.",
                 "onScreen": "The state of tracking in 2026\n• What changed with Chrome\n• Seven forces eroding measurement\n• Three measurement layers\n• A 15-minute reality check",
-                "visual": "A cookie icon shown with a countdown timer that stops and resets; then seven small arrows chip away at a pie chart labeled 'observed conversions'.",
+                "visual": "Layout: A cookie icon shown with a countdown timer that stops and resets; then seven small arrows chip away at a pie chart labeled 'observed conversions'. Timing (32s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 32
               },
               {
@@ -133,19 +133,19 @@
               {
                 "narration": "First, the facts. In twenty twenty-five Google announced it would keep its current approach to third-party cookies in Chrome. Users can block them in settings, and they're blocked in Incognito, but there's no forced deprecation. Then in October twenty twenty-five, Google retired most Privacy Sandbox technologies, including the Attribution Reporting API, Topics and Protected Audience, while continuing a few with broad adoption, like CHIPS and FedCM. Always check Google's Privacy Sandbox site for the current list.",
                 "onScreen": "Chrome and Privacy Sandbox\n• Third-party cookies kept, with user choice\n• Oct 2025: most Sandbox APIs retired\n• CHIPS and FedCM continue\n• Check current status",
-                "visual": "Timeline graphic from 2020 to 2026 with milestones: 'deprecation planned', 'plan changed 2025', 'Sandbox APIs retired Oct 2025'.",
+                "visual": "Layout: Timeline graphic from 2020 to 2026 with milestones: 'deprecation planned', 'plan changed 2025', 'Sandbox APIs retired Oct 2025'. Timing (33s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 33
               },
               {
                 "narration": "So why does this course exist? Because cookies were only one piece. Consent laws in Europe, the UK, Saudi Arabia and elsewhere mean many tags can't fire before a user agrees. Safari's Intelligent Tracking Prevention blocks third-party cookies and limits some first-party cookies set by JavaScript. Firefox partitions cookies by site. Apple's App Tracking Transparency means many app users decline tracking. Ad blockers stop common tag scripts. People switch devices. And regulators fine companies whose pixels leak sensitive data.",
                 "onScreen": "Seven forces\n• Consent laws\n• Safari ITP\n• Firefox cookie partitioning\n• Apple ATT\n• Ad blockers\n• Cross-device journeys\n• Enforcement",
-                "visual": "Seven icons orbit a website icon: a gavel, a compass, a fox-like browser silhouette (generic), a phone with a permission dialog, a shield, two devices, and a fine notice.",
+                "visual": "Layout: Seven icons orbit a website icon: a gavel, a compass, a fox-like browser silhouette (generic), a phone with a permission dialog, a shield, two devices, and a fine notice. Timing (34s): title card 0–3s; then the 7 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 34
               },
               {
                 "narration": "The result is that browser-only tags see a shrinking and biased slice of reality. Biased is the important word. The people you can't observe aren't random. They're more likely to use Safari, to decline consent, or to buy on a different device. So a platform optimizing only on observed conversions is learning from a skewed sample. That's why accuracy is a performance issue, not just a reporting issue.",
                 "onScreen": "Shrinking and biased\n• Missing users aren't random\n• Safari, refusals, cross-device\n• Skewed learning for ad AI",
-                "visual": "A population of dots where one color group fades out disproportionately; a model icon learns only from the remaining dots.",
+                "visual": "Layout: A population of dots where one color group fades out disproportionately; a model icon learns only from the remaining dots. Timing (30s): title card 0–3s; then the 3 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
@@ -157,31 +157,31 @@
               {
                 "narration": "Think of a privacy-first stack as three layers. Layer one, observed client-side: browser tags like the Google tag and the Meta Pixel. Easy and rich in context, but the most vulnerable. Layer two, observed server-side: your server sends events to platforms, through the Meta Conversions API, Google enhanced conversions, the TikTok Events API and the LinkedIn Conversions API. More durable, more control. Layer three, modeled and aggregated: consent mode modeling, conversion modeling, mix models and lift tests.",
                 "onScreen": "Three layers\n• Client-side observed\n• Server-side observed\n• Modeled and aggregated",
-                "visual": "Three horizontal layers stacking up: browser icon, server rack icon, and a statistical chart icon.",
+                "visual": "Layout: Three horizontal layers stacking up: browser icon, server rack icon, and a statistical chart icon. Timing (33s): title card 0–3s; then the 3 on-screen points build in narration order about every 8s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 33
               },
               {
                 "narration": "Let me be very clear on one point. Server-side tracking is not a way around consent. If a user says no to advertising cookies, sending their data server-side for advertising purposes is still a problem, and regulators have said so. Server-side is about accuracy, efficiency and control over what data leaves your systems. The legal basis follows the purpose and the data, not the technical route.",
                 "onScreen": "Not a consent workaround\n• Consent follows purpose and data\n• Not the technical route\n• Server-side = accuracy and control",
-                "visual": "A server icon with a red 'no entry' sign on a data path when the consent toggle is off, and a green path when it's on.",
+                "visual": "Layout: A server icon with a red 'no entry' sign on a data path when the consent toggle is off, and a green path when it's on. Timing (29s): title card 0–3s; then the 3 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 29
               },
               {
                 "narration": "The foundation of the new stack is first-party context. Cookies set by your own server in HTTP responses are more durable than cookies written by JavaScript in Safari. Logged-in users and CRM identifiers let you match with hashed email or phone, with consent where required. And click identifiers in your landing URLs, like gclid, fbclid and ttclid, should be captured and stored with the lead or order, so you can attribute and upload conversions later.",
                 "onScreen": "First-party foundation\n• Server-set first-party cookies\n• Login and CRM identifiers (hashed)\n• Stored click IDs",
-                "visual": "A browser address bar showing a URL with a click ID parameter highlighted, flowing into a database record next to an order ID.",
+                "visual": "Layout: A browser address bar showing a URL with a click ID parameter highlighted, flowing into a database record next to an order ID. Timing (33s): title card 0–3s; then the 3 on-screen points build in narration order about every 8s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 33
               },
               {
                 "narration": "Here's an illustrative audit. A Dubai fashion site fired Meta and TikTok pixels before the cookie banner was answered. Safari visitors appeared as new users every few days. And the ad platforms reported far fewer purchases than Shopify. The plan: fix consent gating, implement Consent Mode version two with a proper consent platform, add a server-side container on a first-party subdomain, capture click IDs and hashed email at checkout with notice, and use modeling and lift tests for the rest.",
                 "onScreen": "Example: Dubai fashion site (illustrative)\n• Pixels fired before consent\n• Safari users looked new\n• Platforms under-reported\n• Five-step fix plan",
-                "visual": "Audit report card with three red findings flipping to a five-step plan list with icons.",
+                "visual": "Layout: Audit report card with three red findings flipping to a five-step plan list with icons. Timing (35s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 35
               },
               {
                 "narration": "Now your fifteen-minute reality check. Open your site in a fresh browser profile and look at cookies before touching the banner. Watch the network panel for tag requests firing before consent. Accept all, then reject all in another profile, and compare. Repeat in Safari and note cookie expiry dates. Then compare last month's backend orders with GA4 and each ad platform. Write down the gaps. That gap is your roadmap.",
                 "onScreen": "Your 15-minute check\n• Cookies before consent\n• Requests before consent\n• Accept vs reject comparison\n• Safari expiry dates\n• Backend vs GA4 vs platforms",
-                "visual": "Screen-recording style mock of browser developer tools with the Application and Network tabs highlighted; generic site, no real brand.",
+                "visual": "Layout: Screen-recording style mock of browser developer tools with the Application and Network tabs highlighted; generic site, no real brand. Timing (30s): title card 0–3s; then the 5 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
@@ -191,9 +191,15 @@
                 "seconds": 43
               },
               {
+                "narration": "Watch me do it. I'll run the fifteen-minute reality check on an illustrative Abu Dhabi furniture site, narrating what I see. I open a fresh browser profile and load the home page without touching the banner. In the application tab, I see an underscore g a cookie and an underscore f b p cookie already set. That's a problem: analytics and the Meta pixel fired before consent. In the network tab, filtered for collect and tr, I see requests to Google Analytics and to Meta, both before any choice. I click reject all, visit a product page, and the Meta requests continue. Now I know the banner is decorative. Next I open Safari, accept all, and inspect cookies: underscore g a is set by JavaScript with a long expiry, but I know Safari may cap script-set cookies, so returning visitors will look new sooner. Finally, the numbers: last month the store recorded eight hundred orders, GA4 six hundred and ten, Meta four hundred and ninety. I write my gap analysis in three sentences: pre-consent firing to fix immediately, no server-side events, and Safari durability. That's a roadmap, built in fifteen minutes.",
+                "onScreen": "Watch me do it: reality check (illustrative)\n• Cookies set before consent\n• Requests before and after reject\n• Safari: script-set cookies\n• Orders 800 | GA4 610 | Meta 490\n• 3-sentence gap analysis",
+                "visual": "Layout: mock browser with developer tools docked right. Timing: application tab highlights offending cookies at ~15s; network rows stream at ~40s with pre-consent rows flashing red; Safari panel at ~80s; comparison bars at ~110s; gap-analysis card types in over the final 20s.",
+                "seconds": 83
+              },
+              {
                 "narration": "Recap. Chrome kept third-party cookies, but consent, browsers, Apple, blockers and cross-device journeys still erode measurement, and the missing data is biased. Build three layers: client-side, server-side and modeled, all lawful. Anchor on first-party context. Your next step: run the fifteen-minute check on your own site and write a one-paragraph gap analysis. The rest of this course shows you how to close it.",
                 "onScreen": "Recap and next step\n• Measurement still eroding\n• Three lawful layers\n• First-party foundation\n• Write your gap analysis",
-                "visual": "The three-layer stack reappears with a gap marker between 'reality' and 'observed', and a pen writing 'gap analysis'.",
+                "visual": "Layout: The three-layer stack reappears with a gap marker between 'reality' and 'observed', and a pen writing 'gap analysis'. Timing (27s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 27
               }
             ],
@@ -278,12 +284,12 @@
           ],
           "activity": "Create a tag-to-law register for your site: every tag, vendor, purpose, data sent, cookies, lawful basis per region and transfer mechanism.",
           "lecture": {
-            "targetMinutes": 8,
+            "targetMinutes": 9,
             "scenes": [
               {
                 "narration": "Every tag you add to a website is a legal decision, whether you realize it or not. Which data goes to which company, where, for how long, and whether the user agreed. In this lecture you'll get a practical map of the privacy laws that shape marketing measurement across Europe, the UK, the United States, Saudi Arabia and the UAE. It's not legal advice, and laws change, so always confirm current guidance, but it will help you ask the right questions and build the right setup.",
                 "onScreen": "Privacy laws for marketers\n• EU and UK\n• United States\n• Saudi Arabia\n• UAE and free zones\n• Your tag-to-law register",
-                "visual": "A website with tags shown as small plugs; each plug gets a legal label tag attached as the regions are named on a world map.",
+                "visual": "Layout: A website with tags shown as small plugs; each plug gets a legal label tag attached as the regions are named on a world map. Timing (37s): title card 0–3s; then the 5 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 37
               },
               {
@@ -295,19 +301,19 @@
               {
                 "narration": "Start with Europe and the UK, where there are two layers. Layer one is about the device. The EU's ePrivacy rules and the UK's PECR say you need consent to store or access information on someone's device, unless it's strictly necessary for a service they asked for. That covers cookies, local storage, pixels and fingerprinting. Layer two is data protection, the GDPR and UK GDPR: lawful basis, transparency, minimization, retention, security, transfers and rights.",
                 "onScreen": "EU and UK: two layers\n• Device access: ePrivacy / PECR\n• Data protection: GDPR / UK GDPR\n• Consent for non-essential device access",
-                "visual": "Two stacked translucent layers over a browser: the top labeled 'device access', the bottom 'data protection'.",
+                "visual": "Layout: Two stacked translucent layers over a browser: the top labeled 'device access', the bottom 'data protection'. Timing (32s): title card 0–3s; then the 3 on-screen points build in narration order about every 8s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 32
               },
               {
                 "narration": "There's an important UK update. The Data Use and Access Act twenty twenty-five added exemptions from cookie consent for some low-risk purposes, including analytics used only to produce statistics that improve your service, provided people get clear information and an easy way to object. Its provisions have been coming into force in stages through twenty twenty-six. Advertising and cross-site tracking still need consent. Check the ICO's current guidance before you rely on the exemption.",
                 "onScreen": "UK: Data (Use and Access) Act 2025\n• Some analytics may be exempt\n• Clear info + easy objection\n• Advertising still needs consent\n• Check current ICO guidance",
-                "visual": "A UK map with a small analytics chart icon passing through a gate marked 'exemption', while an advertising icon is stopped at a gate marked 'consent required'.",
+                "visual": "Layout: A UK map with a small analytics chart icon passing through a gate marked 'exemption', while an advertising icon is stopped at a gate marked 'consent required'. Timing (32s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 32
               },
               {
                 "narration": "Now the United States. There's no single federal privacy law. Instead, around twenty states have comprehensive laws, including California, Virginia, Colorado, Connecticut, Texas and Oregon, with Indiana, Kentucky and Rhode Island taking effect in January twenty twenty-six. Most use an opt-out model for selling data and targeted advertising. Several require you to honor Global Privacy Control, a browser signal that says don't sell or share my data. Sensitive data often needs opt-in consent.",
                 "onScreen": "United States\n• ~20 state laws\n• Opt-out for sale / targeted ads\n• Honor Global Privacy Control\n• Opt-in for sensitive data",
-                "visual": "A US map where states light up in a patchwork; a browser icon emits a small 'GPC' signal wave.",
+                "visual": "Layout: A US map where states light up in a patchwork; a browser icon emits a small 'GPC' signal wave. Timing (32s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 32
               },
               {
@@ -319,31 +325,31 @@
               {
                 "narration": "US enforcement has also focused on pixels leaking sensitive data. The FTC and state attorneys general have acted against companies whose tracking sent health or financial information to ad platforms, sometimes simply through page URLs like a condition name in the path. So if you're in health, finance or anything involving children, audit exactly what each tag sends. A URL can be personal data.",
                 "onScreen": "Sensitive data leaks\n• Health, finance, children\n• URLs can leak conditions\n• Audit exactly what tags send",
-                "visual": "A URL bar showing a path like /conditions/diabetes/book highlighted in red, with an arrow flowing toward a generic ad platform icon and a stop sign.",
+                "visual": "Layout: A URL bar showing a path like /conditions/diabetes/book highlighted in red, with an arrow flowing toward a generic ad platform icon and a stop sign. Timing (28s): title card 0–3s; then the 3 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 28
               },
               {
                 "narration": "Saudi Arabia's Personal Data Protection Law, overseen by SDAIA, has been enforceable since September twenty twenty-four. For marketers, the key points are a clear legal basis, with consent central for marketing, proper privacy notices, individuals' rights, and restrictions on transferring data outside the Kingdom. The updated Transfer Regulation allows transfers based on adequacy or appropriate safeguards like standard contractual clauses. SDAIA's committees have already issued violation decisions.",
                 "onScreen": "Saudi Arabia: PDPL\n• Regulator: SDAIA\n• Enforceable since Sep 2024\n• Legal basis, notices, rights\n• Transfer Regulation: safeguards",
-                "visual": "A map of Saudi Arabia with a data file icon at a border gate labeled 'transfer safeguards' and a checklist beside it.",
+                "visual": "Layout: A map of Saudi Arabia with a data file icon at a border gate labeled 'transfer safeguards' and a checklist beside it. Timing (29s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 29
               },
               {
                 "narration": "In the UAE, Federal Decree-Law number forty-five of twenty twenty-one, the PDPL, sets out consent and other lawful bases, rights, and transfer rules, overseen by the UAE Data Office. Check the current status of its executive regulations before relying on specific details. The financial free zones have their own laws: the DIFC Data Protection Law and ADGM's Data Protection Regulations, both closely modeled on GDPR. And in Pakistan, a data protection bill has been under discussion for years, so check its status. Remember: if you target Europeans or Saudis from Pakistan, their laws apply to you.",
                 "onScreen": "UAE and Pakistan\n• UAE PDPL (Decree-Law 45/2021)\n• DIFC and ADGM regimes\n• Pakistan: check bill status\n• Target a region → its law applies",
-                "visual": "A UAE map with two small zones highlighted for DIFC and ADGM; an arrow from Pakistan to Europe and the Gulf labeled 'their rules apply'.",
+                "visual": "Layout: A UAE map with two small zones highlighted for DIFC and ADGM; an arrow from Pakistan to Europe and the Gulf labeled 'their rules apply'. Timing (42s): title card 0–3s; then the 4 on-screen points build in narration order about every 8s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 42
               },
               {
                 "narration": "Here's an illustrative example. A Riyadh marketplace advertises in Saudi Arabia, the UAE and the UK. They mapped every tag to a purpose, a lawful basis and a vendor location. Their consent platform behaves differently by region: opt-in for UK and EU visitors, clear consent collection in Saudi Arabia and the UAE, and Global Privacy Control honored for US visitors. Their server-side events forward only the fields each purpose needs, and transfers outside the Kingdom rely on documented safeguards.",
                 "onScreen": "Example: Riyadh marketplace (illustrative)\n• Tag → purpose → basis → location\n• Region-specific consent behavior\n• Minimal fields per purpose\n• Documented transfer safeguards",
-                "visual": "A routing diagram: visitors from four regions pass through a consent platform that branches into different rule paths.",
+                "visual": "Layout: A routing diagram: visitors from four regions pass through a consent platform that branches into different rule paths. Timing (34s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 34
               },
               {
                 "narration": "The practical tool that ties this together is a tag-to-law register. It's a simple spreadsheet. For every tag: the vendor, the purpose, the data sent, the cookies or device access, the lawful basis per region, whether US opt-outs apply, the vendor's location, the transfer mechanism, and retention. The lesson has a CSV template. Get it signed off by legal, and then verify in testing that what actually fires matches the register.",
                 "onScreen": "Tag-to-law register\n• Vendor, purpose, data\n• Cookies / device access\n• Basis per region, opt-outs\n• Location, transfers, retention",
-                "visual": "Spreadsheet columns scroll horizontally with the headings from the lesson; a 'legal sign-off' stamp lands on it.",
+                "visual": "Layout: Spreadsheet columns scroll horizontally with the headings from the lesson; a 'legal sign-off' stamp lands on it. Timing (31s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               },
               {
@@ -353,9 +359,15 @@
                 "seconds": 42
               },
               {
+                "narration": "Watch me do it. Let's fill in the tag-to-law register for an illustrative Jeddah online florist selling in Saudi Arabia, the UAE and the UK. Row one, GA4: vendor Google, purpose analytics, data sent includes page URL, events and a client ID, cookie underscore g a. Lawful basis: consent for UK visitors unless legal confirms the new statistical exemption applies; consent-based for Saudi and UAE visitors under our policy. Vendor location includes the United States, so for Saudi personal data I note that the transfer relies on appropriate safeguards and must be documented. Retention fourteen months. Row two, Meta Pixel plus Conversions API: advertising purpose, hashed email and phone on purchase, consent required in all three markets under our policy, same transfer note. Row three, WhatsApp order updates via a messaging provider: purpose service messages, lawful basis contract performance, not advertising, so it must never feed ad audiences without separate consent. Row four, a heatmap tool: we discover nobody uses it anymore, so we remove it. That last row is common. Registers aren't only about compliance; they often delete tools that add risk without value.",
+                "onScreen": "Watch me do it: tag-to-law register (illustrative)\n• GA4: consent / UK exemption check\n• Meta: consent + transfer safeguards\n• WhatsApp: contract, never ads\n• Heatmap tool: unused → removed",
+                "visual": "Layout: register spreadsheet centered with frozen headers. Timing: four rows fill in over ~25s each; transfer notes flash amber on rows one and two; row four gets a strikethrough and 'removed' tag in the final 10s.",
+                "seconds": 80
+              },
+              {
                 "narration": "Recap. In Europe and the UK, device access needs consent and data protection applies on top, with a new UK analytics exemption to check. The US is an opt-out patchwork where Global Privacy Control matters. Saudi Arabia and the UAE have real laws with transfer rules, and the free zones have their own. Your next step: build your tag-to-law register, and then test that reality matches it.",
                 "onScreen": "Recap and next step\n• EU/UK: two layers\n• US: opt-out + GPC\n• KSA/UAE: consent + transfers\n• Build your register",
-                "visual": "The world map returns with each region summarized by a single icon; a register document slides in.",
+                "visual": "Layout: The world map returns with each region summarized by a single icon; a register document slides in. Timing (29s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 29
               }
             ],
@@ -455,12 +467,12 @@
           ],
           "activity": "Audit your consent banner: record the first-layer choices, whether Reject is as easy as Accept, which tags fire before and after each choice, and whether GPC is honored.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 9,
             "scenes": [
               {
                 "narration": "Your consent banner is the most viewed piece of content on your website, and probably the least designed. It decides what you can measure, what you can show in ads, and whether a regulator ever knocks on your door. In this lecture you'll learn what a consent management platform must do, where IAB's TCF and GPP standards fit, how to design a banner that's lawful and still effective, and how to check consent state in the browser yourself.",
                 "onScreen": "Consent management\n• What a CMP must do\n• IAB TCF 2.3 and GPP\n• Lawful, effective design\n• Checking consent state",
-                "visual": "A website loads with a consent banner sliding up; a spotlight focuses on it as the most important element on the page.",
+                "visual": "Layout: A website loads with a consent banner sliding up; a spotlight focuses on it as the most important element on the page. Timing (34s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 34
               },
               {
@@ -472,19 +484,19 @@
               {
                 "narration": "A consent management platform, or CMP, does six jobs. It presents clear choices. It blocks non-essential tags until consent, or passes consent state to tags that can adapt, like Google's consent mode. It stores proof of consent: what the user saw, when, and what they chose. It exposes that state through APIs. It applies different rules by region. And it lets people change their mind easily, with a persistent link or icon.",
                 "onScreen": "Six jobs of a CMP\n• Present choices\n• Block or adapt tags\n• Store proof\n• Expose APIs\n• Regional rules\n• Easy to change mind",
-                "visual": "Six icons arranged in a hexagon around a CMP shield icon: a dialog, a padlock, a receipt, a plug, a globe, and a circular arrow.",
+                "visual": "Layout: Six icons arranged in a hexagon around a CMP shield icon: a dialog, a padlock, a receipt, a plug, a globe, and a circular arrow. Timing (31s): title card 0–3s; then the 6 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               },
               {
                 "narration": "Now the standards. The IAB Transparency and Consent Framework, TCF, is how consent travels across the advertising supply chain in Europe, packed into something called a TC string. The current version is two point three. IAB Europe set a transition deadline of the end of February twenty twenty-six, and the key change is proving which vendors were actually disclosed to the user. If your CMP supports TCF, make sure it's on version two point three.",
                 "onScreen": "IAB TCF\n• Consent across the ad supply chain\n• TC string\n• Current: v2.3\n• Transition deadline 28 Feb 2026",
-                "visual": "A consent string token travels along a chain of generic vendor boxes, each checking it; a version badge reads '2.3'.",
+                "visual": "Layout: A consent string token travels along a chain of generic vendor boxes, each checking it; a version badge reads '2.3'. Timing (33s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 33
               },
               {
                 "narration": "Do you need TCF? If you're a publisher earning from programmatic ads, usually yes. If you're an advertiser measuring your own site with Google, Meta and TikTok, it's optional. Many advertisers use a non-TCF CMP together with Google consent mode and tag-level blocking. For the United States, IAB Tech Lab's Global Privacy Platform, GPP, carries state-by-state signals in one string, and ad tech vendors increasingly expect it.",
                 "onScreen": "Do you need it?\n• Publishers: usually TCF\n• Advertisers: optional\n• US: GPP for state signals",
-                "visual": "Decision tree: 'Do you sell ad inventory?' yes leads to TCF; no leads to 'CMP + consent mode'; a US branch leads to GPP.",
+                "visual": "Layout: Decision tree: 'Do you sell ad inventory?' yes leads to TCF; no leads to 'CMP + consent mode'; a US branch leads to GPP. Timing (29s): title card 0–3s; then the 3 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 29
               },
               {
@@ -496,31 +508,31 @@
               {
                 "narration": "Let's talk design, because regulators across Europe and the UK have repeatedly acted against dark patterns. Where consent is required, make rejecting as easy as accepting on the first layer. No pre-ticked boxes. No hiding advertising cookies behind legitimate interest. Explain purposes in plain language and name key vendors. Don't block the whole site unless you offer a fair alternative the regulator accepts. And localize: Arabic and English for Gulf sites, Urdu where it helps Pakistani audiences.",
                 "onScreen": "Lawful design\n• Reject as easy as Accept\n• No pre-ticked boxes\n• Plain-language purposes\n• No unfair cookie walls\n• Localize",
-                "visual": "Two banner mockups side by side: one with a big Accept and a tiny gray link, crossed out; one with equal buttons, ticked.",
+                "visual": "Layout: Two banner mockups side by side: one with a big Accept and a tiny gray link, crossed out; one with equal buttons, ticked. Timing (33s): title card 0–3s; then the 5 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 33
               },
               {
                 "narration": "Can you improve consent rates without tricks? Yes. Be honest about the value exchange, for example, we use this to show you relevant offers and keep the site free of irrelevant ads. Keep the banner short and readable on mobile. Load the CMP early and fast, because a slow banner delays everything else. And don't nag people who said no. Test wording, not deception.",
                 "onScreen": "Better consent rates, honestly\n• Explain the value exchange\n• Short and mobile-friendly\n• Fast loading\n• No nagging",
-                "visual": "A mobile phone showing a concise banner; a stopwatch shows fast load; a simple A/B label compares two honest wordings.",
+                "visual": "Layout: A mobile phone showing a concise banner; a stopwatch shows fast load; a simple A/B label compares two honest wordings. Timing (28s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 28
               },
               {
                 "narration": "Here's an illustrative setup for a UK retailer with EU and Gulf visitors. UK and EU visitors get an opt-in banner with Accept, Reject and Manage on the first layer. Advertising tags wait for consent. For UK analytics, they only use the new statistical exemption after legal review, with an easy objection link. Gulf visitors get an Arabic and English banner. US visitors get a privacy choices link, Global Privacy Control honored, and a GPP string generated.",
                 "onScreen": "Example: UK retailer (illustrative)\n• UK/EU: opt-in, equal choices\n• UK analytics: exemption after review\n• Gulf: Arabic/English banner\n• US: choices link, GPC, GPP",
-                "visual": "World map with three differently designed banner mockups pinned to the UK/EU, the Gulf and the US.",
+                "visual": "Layout: World map with three differently designed banner mockups pinned to the UK/EU, the Gulf and the US. Timing (33s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 33
               },
               {
                 "narration": "You can check consent state yourself in the browser console, and the lesson has the code. If your CMP supports TCF, call the TCF API and read the TC string, whether purpose one, storing and accessing information on the device, was consented, and whether a specific vendor has consent. Check the navigator's global privacy control flag. And look for consent commands in the data layer to see what Google's tags received.",
                 "onScreen": "Check it yourself\n• __tcfapi: TC string, purposes, vendors\n• navigator.globalPrivacyControl\n• dataLayer consent commands",
-                "visual": "Browser console mock with the JavaScript snippet running and outputs printed: a TC string, true/false flags.",
+                "visual": "Layout: Browser console mock with the JavaScript snippet running and outputs printed: a TC string, true/false flags. Timing (31s): title card 0–3s; then the 3 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               },
               {
                 "narration": "Common failures. A beautiful banner that doesn't actually block anything. Consent that's stored but never passed to server-side events. One global banner for every region. And forgetting to ask again when you add new vendors or purposes. Measure success with consent rates by region and device, zero pre-consent firing where consent is required, and proof-of-consent records you can retrieve on request.",
                 "onScreen": "Common failures\n• Banner doesn't block\n• Consent not passed server-side\n• One banner for all regions\n• No re-prompt after changes",
-                "visual": "Four broken-link icons that repair themselves one by one.",
+                "visual": "Layout: Four broken-link icons that repair themselves one by one. Timing (27s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 27
               },
               {
@@ -530,9 +542,15 @@
                 "seconds": 40
               },
               {
+                "narration": "Watch me do it. Let's configure an illustrative CMP for a Karachi fashion brand that ships to the UK, the UAE and the US. Step one, geolocation rules: UK and EU visitors get opt-in with accept all, reject all and manage choices on the first layer. Gulf visitors get an Arabic and English banner with marketing consent. US visitors get a your privacy choices link, and Global Privacy Control is honored automatically. Step two, purposes: necessary, analytics, advertising and personalization, each described in one plain sentence. Step three, vendors: Google, Meta, TikTok and the email platform, each mapped to a purpose. Step four, Google Consent Mode integration: the CMP's template sets defaults and updates. Step five, tag blocking: in Tag Manager, Meta and TikTok tags require advertising consent. Step six, proof: consent records exported monthly. Step seven, testing: I open the site through a UK VPN location, reject all, and confirm no advertising cookies; then a Dubai location, check the Arabic layout reads right to left properly; then a US browser with GPC enabled. Only after all three pass do we publish. TCF isn't needed here because the brand doesn't sell ad inventory.",
+                "onScreen": "Watch me do it: CMP setup (illustrative)\n• Region rules: UK/EU, Gulf, US\n• Purposes + vendors mapped\n• Consent Mode template\n• GTM consent checks\n• Test 3 regions before publishing",
+                "visual": "Layout: CMP admin mock on the left, live site preview on the right. Timing: each of seven steps highlights its admin panel ~15s; from ~95s the preview switches between UK, Arabic RTL and US versions with green checks; final 5s show 'published'.",
+                "seconds": 84
+              },
+              {
                 "narration": "Recap. A CMP presents choices, controls tags, stores proof and exposes consent to everything downstream. TCF version two point three is the current European standard, mostly for publishers, and GPP covers US states. Design without dark patterns. Your next step: audit your banner. Record the first-layer choices, whether reject is as easy as accept, which tags fire before and after each choice, and whether Global Privacy Control is honored.",
                 "onScreen": "Recap and next step\n• CMP: choices, control, proof, APIs\n• TCF 2.3, GPP\n• No dark patterns\n• Audit your banner",
-                "visual": "Audit checklist with four items appears beside a banner mockup.",
+                "visual": "Layout: Audit checklist with four items appears beside a banner mockup. Timing (30s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               }
             ],
@@ -617,12 +635,12 @@
           ],
           "activity": "Implement or audit Consent Mode on a test page: record defaults per region, the update on accept and reject, gcs values in network requests, and GA4's consent settings status.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "If you advertise to Europe or the UK with Google and your audiences have quietly stopped growing, or your conversion modeling looks thin, the cause is often one missing detail in Consent Mode. In this lecture you'll learn what Consent Mode version two actually does, the difference between basic and advanced implementations, how to set it up with code or Tag Manager, and three ways to verify it's working.",
                 "onScreen": "Google Consent Mode v2\n• What it does\n• Basic vs advanced\n• Implementation\n• Verification",
-                "visual": "A Google-style tag icon (generic) with a dial that switches between 'granted' and 'denied', causing different data flows.",
+                "visual": "Layout: A Google-style tag icon (generic) with a dial that switches between 'granted' and 'denied', causing different data flows. Timing (30s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
@@ -634,19 +652,19 @@
               {
                 "narration": "First, what it isn't. Consent Mode is not a consent banner. Your consent platform collects choices. Consent Mode passes those choices to Google's tags, like Analytics, Google Ads and Floodlight, so they change their behavior. Version two added two parameters to the original storage settings: ad user data, which covers sending user data to Google for advertising, and ad personalization, which covers things like remarketing.",
                 "onScreen": "What it is\n• CMP collects consent\n• Consent Mode passes it to Google tags\n• v2 adds ad_user_data, ad_personalization",
-                "visual": "Diagram: banner icon hands a consent card to a messenger labeled 'Consent Mode', who delivers it to three tag icons.",
+                "visual": "Layout: Diagram: banner icon hands a consent card to a messenger labeled 'Consent Mode', who delivers it to three tag icons. Timing (28s): title card 0–3s; then the 3 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 28
               },
               {
                 "narration": "Why does v2 matter? For traffic from the European Economic Area and the UK, Google requires these consent signals before it uses data for certain ads features, including building audiences and some measurement. Without them, remarketing lists stop growing and some features degrade. So if you only implemented the original two parameters years ago, you're probably missing out, even if users are consenting.",
                 "onScreen": "Why v2 matters\n• Required for EEA/UK ads features\n• Audiences stop growing without it\n• Old setups miss v2 signals",
-                "visual": "A remarketing audience bar chart flattening over time, then growing again after a 'v2 signals' switch.",
+                "visual": "Layout: A remarketing audience bar chart flattening over time, then growing again after a 'v2 signals' switch. Timing (27s): title card 0–3s; then the 3 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 27
               },
               {
                 "narration": "Now the big choice: basic or advanced. In basic mode, Google tags don't load at all until the user chooses. If they say no, nothing goes to Google. In advanced mode, tags load immediately with a default of denied. If the user says no, the tags send cookieless pings, which don't read or write cookies, and Google uses them for more precise, advertiser-specific modeling. Advanced gives better data. Basic is more conservative. It's a legal and business decision, so document it.",
                 "onScreen": "Basic vs advanced\n• Basic: tags wait, nothing sent if denied\n• Advanced: cookieless pings if denied\n• Advanced = better modeling\n• Document the decision",
-                "visual": "Two lanes: in the basic lane, a tag sits behind a closed gate; in the advanced lane, a tag sends small gray 'no cookie' pings through a filter.",
+                "visual": "Layout: Two lanes: in the basic lane, a tag sits behind a closed gate; in the advanced lane, a tag sends small gray 'no cookie' pings through a filter. Timing (35s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 35
               },
               {
@@ -658,31 +676,31 @@
               {
                 "narration": "Implementation has one golden rule: set the default before any Google tag loads. With gtag, you push a consent default command with all four key parameters, typically denied for EEA and UK regions, with a short wait for update so the banner can respond. You can set different defaults for other regions based on your legal assessment. Then, when the user chooses, you send a consent update with their choices. The lesson has copy-ready code.",
                 "onScreen": "gtag implementation\n• Default before tags load\n• Region-specific defaults\n• wait_for_update\n• Update on user choice",
-                "visual": "Code editor showing the consent default snippet with the region array, then the update function; an arrow marks 'runs first'.",
+                "visual": "Layout: Code editor showing the consent default snippet with the region array, then the update function; an arrow marks 'runs first'. Timing (33s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 33
               },
               {
                 "narration": "Two optional settings are worth knowing. Ads data redaction removes ad click identifiers from requests when ad storage is denied. URL passthrough carries click information through your URLs between pages, so conversions can still be connected without cookies. Consider both with your legal team.",
                 "onScreen": "Optional settings\n• ads_data_redaction\n• url_passthrough\n• Review with legal",
-                "visual": "A URL with a click parameter highlighted being passed from a landing page to a checkout page; a redaction bar covers an identifier in another request.",
+                "visual": "Layout: A URL with a click parameter highlighted being passed from a landing page to a checkout page; a redaction bar covers an identifier in another request. Timing (19s): title card 0–3s; then the 3 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 19
               },
               {
                 "narration": "If you use Google Tag Manager, enable Consent Overview, use your CMP's template from the Community Template Gallery, and fire the default on the Consent Initialization trigger, which runs before everything else. Then the crucial bit: Consent Mode only controls Google tags. Meta, TikTok and LinkedIn tags don't understand it. Add additional consent checks in Tag Manager, for example requiring ad storage, or fire them only after a consent event.",
                 "onScreen": "With Tag Manager\n• Consent Overview\n• CMP template\n• Consent Initialization trigger\n• Extra checks for non-Google tags",
-                "visual": "Tag Manager style interface mock showing a tag list with consent check columns; Meta and TikTok rows get an extra 'requires ad_storage' badge.",
+                "visual": "Layout: Tag Manager style interface mock showing a tag list with consent check columns; Meta and TikTok rows get an extra 'requires ad_storage' badge. Timing (30s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
                 "narration": "Here's an illustrative example. An electronics retailer in Kuwait and Saudi Arabia uses advanced mode for Gulf traffic after legal review, and basic mode for EU visitors as a conservative choice. They add consent checks to their Meta and TikTok tags in Tag Manager. After rollout, GA4's consent settings confirm signals are arriving, and Google Ads diagnostics show Consent Mode as active.",
                 "onScreen": "Example: Gulf electronics retailer (illustrative)\n• Advanced for Gulf (after review)\n• Basic for EU\n• Consent checks on Meta/TikTok\n• Verified in GA4 and Ads",
-                "visual": "Map with Kuwait and Saudi Arabia marked 'advanced', Europe marked 'basic'; a green 'active' status badge appears.",
+                "visual": "Layout: Map with Kuwait and Saudi Arabia marked 'advanced', Europe marked 'basic'; a green 'active' status badge appears. Timing (27s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 27
               },
               {
                 "narration": "Verify three ways. In Tag Assistant, the consent tab should show the default and then the update, in that order. In the network panel, Google requests carry g c s and g c d parameters describing consent state, and with storage denied, no Google Analytics or Ads cookies should appear. And in GA4 admin, under data collection, the consent settings page shows whether ad user data and ad personalization signals are being received.",
                 "onScreen": "Verify three ways\n• Tag Assistant consent tab\n• gcs / gcd in requests, no cookies when denied\n• GA4 consent settings",
-                "visual": "Three verification panels: a Tag Assistant timeline, a network request with gcs highlighted, and a GA4 settings card with green checks.",
+                "visual": "Layout: Three verification panels: a Tag Assistant timeline, a network request with gcs highlighted, and a GA4 settings card with green checks. Timing (32s): title card 0–3s; then the 3 on-screen points build in narration order about every 8s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 32
               },
               {
@@ -692,9 +710,15 @@
                 "seconds": 43
               },
               {
+                "narration": "Watch me do it. Let's verify Consent Mode on an illustrative London shoe retailer after deployment. First, I open Tag Assistant and connect to the site. On the first page view, the consent tab shows a default command: ad storage denied, analytics storage denied, ad user data denied, ad personalization denied, with region set for the UK. Good, and it appears before the Google tag, which is the order we need. Second, I open the network tab and find a request to Google Analytics. The g c s parameter shows everything denied, and no underscore g a cookie exists. That confirms advanced mode's cookieless ping. Third, I click accept all. Tag Assistant now shows an update with all four granted, and the next request's g c s shows granted, with cookies now set. Fourth, I test the partial path: manage choices, analytics on, ads off. The update shows analytics granted, ad storage denied, and the Meta tag doesn't fire because of its additional consent check. Fifth, in GA4 admin, consent settings shows ad user data and ad personalization signals being received. Five checks, fifteen minutes, and I can sign off with evidence.",
+                "onScreen": "Watch me do it: verifying Consent Mode (illustrative)\n• Default before tag, all denied\n• gcs denied, no cookies\n• Accept → update granted\n• Partial: analytics only, Meta silent\n• GA4 signals received",
+                "visual": "Layout: Tag Assistant timeline on the left, network request detail on the right. Timing: default row appears ~10s; gcs parameter highlights ~40s; update row after a click animation ~70s; partial path at ~100s with Meta tag grayed; GA4 settings card with green checks in the final 20s.",
+                "seconds": 83
+              },
+              {
                 "narration": "Recap. Consent Mode passes choices to Google tags, and version two adds ad user data and ad personalization. Choose basic or advanced deliberately. Set defaults before tags load, per region, and update on choice. Add separate checks for non-Google tags. Your next step: implement or audit Consent Mode on a test page, recording defaults, updates, the g c s values and GA4's consent status.",
                 "onScreen": "Recap and next step\n• v2 parameters\n• Basic vs advanced\n• Defaults first\n• Audit your implementation",
-                "visual": "Checklist of four audit items with a test page mock beside it.",
+                "visual": "Layout: Checklist of four audit items with a test page mock beside it. Timing (28s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 28
               }
             ],
@@ -786,12 +810,12 @@
           ],
           "activity": "In a GA4 test property, send a purchase via the Measurement Protocol validation server with consent parameters, then document how you'll store client_id and consent state with each order.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Here's a question worth asking about your GA4 data: when someone says no to analytics, what does GA4 actually see? The answer depends on choices you may not know you made. In this lecture you'll learn how GA4 behaves under consent, how behavioral modeling fills gaps, which privacy settings to review, and how to send server-confirmed events with the Measurement Protocol while respecting consent.",
                 "onScreen": "GA4 with consent\n• What GA4 sees when denied\n• Behavioral modeling\n• Privacy settings\n• The Measurement Protocol",
-                "visual": "A GA4-style dashboard (generic) with some users shown as solid dots and others as faint outlines representing unconsented visitors.",
+                "visual": "Layout: A GA4-style dashboard (generic) with some users shown as solid dots and others as faint outlines representing unconsented visitors. Timing (28s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 28
               },
               {
@@ -803,19 +827,19 @@
               {
                 "narration": "With advanced Consent Mode, when analytics storage is denied, GA4 still receives pings, but they're cookieless. No analytics cookie is read or written, so each ping can't be linked to a returning user. With basic mode, GA4 receives nothing at all from people who decline. That difference matters because GA4's behavioral modeling learns from those cookieless pings. No pings, no advertiser-specific modeling.",
                 "onScreen": "Denied consent in GA4\n• Advanced: cookieless pings\n• Basic: nothing sent\n• Modeling needs the pings",
-                "visual": "Two pipes: one carrying faint gray pings into GA4 (advanced), one closed off with a valve (basic).",
+                "visual": "Layout: Two pipes: one carrying faint gray pings into GA4 (advanced), one closed off with a valve (basic). Timing (27s): title card 0–3s; then the 3 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 27
               },
               {
                 "narration": "Behavioral modeling uses machine learning to estimate what unconsented users did, based on similar consented users. You'll see modeled data when your reporting identity is set to Blended and your property meets Google's eligibility thresholds, which require minimum daily volumes of both denied and consented traffic over a period. Check the current numbers in the help center. And remember, modeled numbers are estimates, not observations.",
                 "onScreen": "Behavioral modeling\n• Estimates unconsented behavior\n• Requires Blended identity\n• Eligibility thresholds apply\n• Estimates, not observations",
-                "visual": "A chart with solid observed bars and lighter modeled bar segments stacked on top, labeled 'modeled'.",
+                "visual": "Layout: A chart with solid observed bars and lighter modeled bar segments stacked on top, labeled 'modeled'. Timing (28s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 28
               },
               {
                 "narration": "Reporting identity has three options. Blended uses User-ID, device ID and modeling. Observed uses only User-ID and device ID. Device-based uses only the device. Switching doesn't change the data you collected, only how reports are computed, so you can flip between them to see how much of a number is modeled. That's a great way to explain gaps to stakeholders.",
                 "onScreen": "Reporting identity\n• Blended: IDs + modeling\n• Observed: IDs only\n• Device-based: device only\n• Switch to compare",
-                "visual": "Three toggle buttons; as each is selected, the same chart redraws with slightly different totals.",
+                "visual": "Layout: Three toggle buttons; as each is selected, the same chart redraws with slightly different totals. Timing (26s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 26
               },
               {
@@ -827,25 +851,25 @@
               {
                 "narration": "Next, check the consent settings in GA4's admin, under data collection. It shows whether ad user data and ad personalization signals are arriving for European traffic. If they're missing, audiences for ads and some features linked to Google Ads will be limited. While you're there, review data retention, granular location and device collection, Google signals, and data redaction, which can strip email addresses and chosen query parameters from page URLs.",
                 "onScreen": "GA4 admin checks\n• Consent signals received?\n• Data retention\n• Granular location/device\n• Google signals\n• PII redaction",
-                "visual": "Settings panel mock with five rows being ticked; one row 'consent signals' shows a green status.",
+                "visual": "Layout: Settings panel mock with five rows being ticked; one row 'consent signals' shows a green status. Timing (30s): title card 0–3s; then the 5 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
                 "narration": "Now the Measurement Protocol. It lets your server send events to GA4, like a purchase confirmed by the payment provider, a subscription renewal or an offline sale. It complements the tag. Each request needs your measurement ID and an API secret, which must stay on the server. Include the client ID captured from the user's analytics cookie at checkout, so the event joins the right session. And pass consent, ad user data and ad personalization, reflecting what the user chose.",
                 "onScreen": "Measurement Protocol\n• Server → GA4 events\n• measurement_id + secret (server only)\n• client_id to join the session\n• Consent object",
-                "visual": "Diagram: a payment server sends a 'purchase' event to GA4 carrying badges labeled client_id and consent.",
+                "visual": "Layout: Diagram: a payment server sends a 'purchase' event to GA4 carrying badges labeled client_id and consent. Timing (35s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 35
               },
               {
                 "narration": "The lesson includes a Python function that sends a purchase, with a debug switch that uses the validation server during development. Use it before going live, because the validation server tells you if your payload is malformed, whereas the live endpoint silently accepts almost anything. Store the client ID and consent state with every order in your database, so server events always carry the right context.",
                 "onScreen": "Build and validate\n• Python send_purchase function\n• /debug/mp/collect for validation\n• Store client_id + consent per order",
-                "visual": "Code editor showing the Python function; a terminal prints a validation response with no errors.",
+                "visual": "Layout: Code editor showing the Python function; a terminal prints a validation response with no errors. Timing (29s): title card 0–3s; then the 3 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 29
               },
               {
                 "narration": "A word on duplicates. GA4 often deduplicates purchases with the same transaction ID, but don't rely on it blindly. Decide which source is the truth for each event, the browser or the server, and avoid sending the same purchase from both unless you've tested the result. Here's an illustrative example: a Lahore meal-kit subscription never saw renewals in GA4, because they happened when cards were charged. Sending renewal events server-side, with stored client IDs and consent, finally let them analyze first order to renewal paths.",
                 "onScreen": "Duplicates and an example\n• One source of truth per event\n• Test before double-sending\n• Lahore meal-kit: renewals via MP (illustrative)",
-                "visual": "A single purchase icon arriving from two directions with a warning sign; then a subscription timeline with renewal markers flowing into GA4.",
+                "visual": "Layout: A single purchase icon arriving from two directions with a warning sign; then a subscription timeline with renewal markers flowing into GA4. Timing (37s): title card 0–3s; then the 3 on-screen points build in narration order about every 9s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 37
               },
               {
@@ -861,9 +885,15 @@
                 "seconds": 35
               },
               {
+                "narration": "Watch me do it. Let's send a server-confirmed renewal event for an illustrative Dubai gym subscription using the Measurement Protocol. First, at signup, our site stores the GA4 client ID from the underscore g a cookie on the customer record, along with the consent choices from the CMP. Second, a month later the payment provider's webhook tells our server that the renewal succeeded for customer one two three. Third, the server looks up the stored client ID and consent. Analytics consent was granted; advertising consent was not. Fourth, I build the payload: client ID, the event name subscription renewal, value and currency in dirhams, and the consent object with ad user data and ad personalization both denied. Fifth, I send it to the debug endpoint first. The validation response lists no messages, so the format is right. Sixth, I switch to the live endpoint, then check GA4's real-time report, where the renewal appears. Finally, I build an exploration: first purchase to renewal, by acquisition channel. For the first time, the gym can see which channels bring members who stay, not just members who join.",
+                "onScreen": "Watch me do it: server renewal event (illustrative)\n• Store client_id + consent at signup\n• Webhook: renewal succeeded\n• Payload with consent denied for ads\n• Validate on debug endpoint\n• Live, then retention by channel",
+                "visual": "Layout: sequence diagram with lanes for browser, server, payment provider and GA4. Timing: arrows animate in order roughly every 20s; payload JSON card expands at ~70s; validation response shows 'no messages' at ~95s; final 20s show an exploration chart by channel.",
+                "seconds": 80
+              },
+              {
                 "narration": "Recap. With advanced Consent Mode, GA4 gets cookieless pings and can model under Blended identity if you're eligible. Check consent signals and privacy settings in admin. Use the Measurement Protocol for server-confirmed events, keep the secret on the server, and send client ID and consent. Your next step: in a test property, send a purchase through the validation server with consent parameters, and document how you'll store client ID and consent with each order.",
                 "onScreen": "Recap and next step\n• Pings + modeling\n• Admin checks\n• MP with client_id + consent\n• Validate a test purchase",
-                "visual": "A checklist with three items and a test-property badge.",
+                "visual": "Layout: A checklist with three items and a test-property badge. Timing (32s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 32
               }
             ],
@@ -940,12 +970,12 @@
           ],
           "activity": "Draw your server-side architecture: what the browser sends, which server tags forward to which vendors, which fields each vendor gets, and where consent is checked.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 9,
             "scenes": [
               {
                 "narration": "Imagine your website sending one clean stream of events to a server you control, and that server deciding exactly what each advertising and analytics vendor gets. Fewer scripts slowing your pages, less data leaking, and one place to plug in every conversion API. That's server-side tagging. In this lecture you'll learn the architecture, the building blocks of server-side Google Tag Manager, hosting choices, how Google tag gateway fits in, and how consent works server-side.",
                 "onScreen": "Server-side tagging\n• Architecture\n• Server GTM building blocks\n• Hosting\n• Google tag gateway\n• Consent server-side",
-                "visual": "Animated architecture: browser sends a single stream to a server labeled with the site's subdomain, which branches to several vendor icons.",
+                "visual": "Layout: Animated architecture: browser sends a single stream to a server labeled with the site's subdomain, which branches to several vendor icons. Timing (32s): title card 0–3s; then the 5 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 32
               },
               {
@@ -957,19 +987,19 @@
               {
                 "narration": "In a traditional setup, every vendor's JavaScript runs in the visitor's browser and sends data straight to that vendor. You've got little control over what leaves. In a server-side setup, the browser sends events to your tagging server on your own subdomain, like s g t m dot your domain. The server then forwards what's needed to Google Analytics, Google Ads, Meta's Conversions API, TikTok's Events API, or your own data warehouse.",
                 "onScreen": "Traditional vs server-side\n• Traditional: many scripts, direct to vendors\n• Server-side: one stream to your server\n• Server forwards what's needed",
-                "visual": "Split screen: left, a browser with many arrows shooting out to vendors; right, one arrow to a server which then fans out carefully.",
+                "visual": "Layout: Split screen: left, a browser with many arrows shooting out to vendors; right, one arrow to a server which then fans out carefully. Timing (31s): title card 0–3s; then the 3 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               },
               {
                 "narration": "The benefits are real. Fewer third-party scripts, so pages get faster. Data minimization, because you can strip IP addresses, redact personal data and drop fields before any vendor sees them. First-party cookies set by your server, which tend to last longer in some browsers. Central consent enforcement. And one place to add conversion APIs. The costs are real too: hosting bills, uptime, security, monitoring and harder debugging. You become responsible for everything the server forwards.",
                 "onScreen": "Benefits and costs\n• Faster pages\n• Minimize before sharing\n• Durable first-party cookies\n• Central consent\n• Costs: hosting, uptime, responsibility",
-                "visual": "Balance scale with benefits on one side and responsibilities on the other, roughly balanced.",
+                "visual": "Layout: Balance scale with benefits on one side and responsibilities on the other, roughly balanced. Timing (33s): title card 0–3s; then the 5 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 33
               },
               {
                 "narration": "Server-side Tag Manager has four building blocks. Clients receive incoming requests and turn them into event data; the GA4 client handles GA4-format requests. Tags send data to vendors when triggers match. Transformations allow, exclude or add parameters before tags see them, which is perfect for enforcing minimization. Variables read event data, headers or cookies. And preview mode shows you every incoming request, the event data, and every outgoing request.",
                 "onScreen": "Server GTM building blocks\n• Clients\n• Tags\n• Transformations\n• Variables\n• Preview mode",
-                "visual": "Exploded diagram of a server container with four labeled compartments; an event travels through them in order.",
+                "visual": "Layout: Exploded diagram of a server container with four labeled compartments; an event travels through them in order. Timing (30s): title card 0–3s; then the 5 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
@@ -981,31 +1011,31 @@
               {
                 "narration": "Where do you host it? Google documents Cloud Run as the path for server-side Tag Manager, and you should follow its current guidance on production sizing. Managed hosting providers offer simpler setup and extra features; check their data location, security and support. Either way, map a subdomain of your own site, or serve the container on the same origin through your CDN, so it's truly first-party. For Gulf data, think about hosting region and transfer rules like those under Saudi Arabia's PDPL.",
                 "onScreen": "Hosting\n• Google Cloud Run\n• Managed hosts\n• First-party subdomain or same origin\n• Consider data location rules",
-                "visual": "Map with server icons in different cloud regions; a DNS record card showing a subdomain pointing to the server.",
+                "visual": "Layout: Map with server icons in different cloud regions; a DNS record card showing a subdomain pointing to the server. Timing (36s): title card 0–3s; then the 4 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 36
               },
               {
                 "narration": "Now Google tag gateway for advertisers, previously called first-party mode. It serves the Google tag and routes its measurement requests through your own domain, via your CDN or load balancer. Integrations exist for Cloudflare, Akamai and Google Cloud, with others in beta. It's a quick win for Google measurement durability. But it's not a full server container. You can't transform data or add other vendors. Many teams start with tag gateway and add server-side Tag Manager when they need multi-vendor control.",
                 "onScreen": "Google tag gateway\n• Google tag via your domain\n• CDN / load balancer integrations\n• Quick durability win\n• Not a full server container",
-                "visual": "A CDN edge node icon sitting between the browser and Google; a comparison table shows tag gateway vs server GTM features.",
+                "visual": "Layout: A CDN edge node icon sitting between the browser and Google; a comparison table shows tag gateway vs server GTM features. Timing (35s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 35
               },
               {
                 "narration": "Consent must travel with every event. Google's consent state arrives in the g c s and g c d parameters, and your server container can read them and block vendor tags accordingly. For Meta, TikTok and others, add consent conditions to their server triggers, so the Meta Conversions API tag only fires when advertising consent is granted. And never use the server to restore data a user refused. That's both a legal risk and a breach of trust.",
                 "onScreen": "Consent server-side\n• Read gcs / gcd\n• Consent conditions on vendor triggers\n• Never restore refused data",
-                "visual": "An event entering the server with a consent badge; vendor tags light up green or stay gray depending on the badge.",
+                "visual": "Layout: An event entering the server with a consent badge; vendor tags light up green or stay gray depending on the badge. Timing (34s): title card 0–3s; then the 3 on-screen points build in narration order about every 8s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 34
               },
               {
                 "narration": "Here's an illustrative example. A Karachi electronics marketplace had eight vendor scripts slowing the site, weak Safari data, and no conversion APIs. They moved to one GA4 stream to their own subdomain, removed other pixels from the page, and added server tags for GA4, Google Ads, Meta and TikTok, with a transformation stripping IP overrides and redacting emails in URLs. Consent checks on every non-Google tag. Hosted nearby with uptime alerts. The site got lighter and their event match quality improved.",
                 "onScreen": "Example: Karachi marketplace (illustrative)\n• 8 scripts → 1 stream\n• Server tags for 4 vendors\n• Transformations for minimization\n• Consent checks + monitoring",
-                "visual": "Before and after page-weight bars; a server container diagram with four vendor outputs and a transformation filter.",
+                "visual": "Layout: Before and after page-weight bars; a server container diagram with four vendor outputs and a transformation filter. Timing (35s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 35
               },
               {
                 "narration": "The lesson has an eight-step setup outline, from creating the server container and mapping your subdomain, to adding vendor templates, transformations, preview, publishing and monitoring. Don't skip monitoring. If your server goes down silently, all your measurement stops at once. Alert on request volume drops, error rates and latency.",
                 "onScreen": "Set up in 8 steps\n• Container → domain → web config\n• Clients, tags, templates\n• Transformations, preview\n• Publish and monitor",
-                "visual": "Numbered step list animating down the screen, ending with a monitoring dashboard showing request volume.",
+                "visual": "Layout: Numbered step list animating down the screen, ending with a monitoring dashboard showing request volume. Timing (21s): title card 0–3s; then the 4 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 21
               },
               {
@@ -1015,9 +1045,15 @@
                 "seconds": 39
               },
               {
+                "narration": "Watch me do it. Let's trace one event through an illustrative server container for a Lahore electronics store. I open server preview mode and place a test order. First, the incoming request: a GA4-format request arrives at our subdomain, and the GA4 client claims it. Event data shows event name purchase, transaction ID, value in rupees, items, and consent state from the g c s parameter: analytics granted, advertising granted. Second, the transformation: our rule removes the page location's query string and drops the IP override for GA4. I can see the before and after in preview. Third, tags: the GA4 tag fires and I inspect its outgoing request, no email anywhere, good. The Google Ads conversion tag fires with the transaction ID. The Meta Conversions API tag fires with event ID order underscore the order number and hashed email looked up from our order system. The TikTok tag fires similarly. Fourth, I repeat with a test order where advertising consent was refused: only GA4 fires, and the three ad tags show not fired, with the consent condition as the reason. That screenshot goes into our evidence folder.",
+                "onScreen": "Watch me do it: tracing one event (illustrative)\n• GA4 client claims request\n• Transformation strips query string, IP\n• Outgoing: GA4, Ads, Meta, TikTok\n• Refused ads → only GA4 fires\n• Screenshot to evidence folder",
+                "visual": "Layout: server preview mock with three panes: incoming request, event data, outgoing requests. Timing: incoming pane fills ~10s; transformation before/after diff ~40s; four outgoing requests list ~70s; replay with refused consent from ~110s showing three grayed tags.",
+                "seconds": 82
+              },
+              {
                 "narration": "Recap. Server-side tagging gives you one first-party stream and full control over what each vendor receives. Learn the clients, tags, transformations and variables. Host first-party and mind data location. Use tag gateway for a quick Google win. Enforce consent server-side and monitor uptime. Your next step: draw your architecture, showing what the browser sends, which tags forward to which vendors, which fields each gets, and where consent is checked.",
                 "onScreen": "Recap and next step\n• One stream, your control\n• Building blocks\n• Consent + monitoring\n• Draw your architecture",
-                "visual": "A blank architecture canvas with boxes being sketched in.",
+                "visual": "Layout: A blank architecture canvas with boxes being sketched in. Timing (30s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               }
             ],
@@ -1101,12 +1137,12 @@
           ],
           "activity": "Map your purchase flow: where the order ID is created, how it reaches the Pixel eventID and the CAPI event_id, which identifiers you can lawfully send, and how consent is checked.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 9,
             "scenes": [
               {
                 "narration": "If your Meta ads report far fewer purchases than your store actually made, you're not just losing reporting. You're starving the algorithm. In this lecture you'll learn how the Meta Conversions API fills that gap: the implementation routes, the anatomy of an event, how deduplication really works, and how to use Event Match Quality and diagnostics to prove it's working.",
                 "onScreen": "Meta Conversions API\n• Why CAPI\n• Implementation routes\n• Event anatomy\n• Deduplication\n• Match quality",
-                "visual": "A store backend showing a stack of orders beside a Meta-style (generic) dashboard showing a smaller stack; a pipe labeled 'server' connects them.",
+                "visual": "Layout: A store backend showing a stack of orders beside a Meta-style (generic) dashboard showing a smaller stack; a pipe labeled 'server' connects them. Timing (26s): title card 0–3s; then the 5 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 26
               },
               {
@@ -1118,19 +1154,19 @@
               {
                 "narration": "The Conversions API sends events from your server straight to Meta. Meta recommends running it alongside the Pixel, not instead of it, with deduplication. The browser Pixel captures rich context. The server fills gaps when browsers block the Pixel, and it can carry stronger matching data from your order system. Together, more of your real conversions reach Meta, and they're easier to match to the people who saw your ads.",
                 "onScreen": "Pixel + CAPI\n• Server → Meta directly\n• Run alongside the Pixel\n• Server fills browser gaps\n• Better matching",
-                "visual": "Two arrows, one from a browser and one from a server, converging on a Meta icon with a merge symbol.",
+                "visual": "Layout: Two arrows, one from a browser and one from a server, converging on a Meta icon with a merge symbol. Timing (30s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
                 "narration": "There are four ways to implement it. Partner integrations, like Shopify's, are the fastest, but check which events and parameters they actually send. The Conversions API Gateway is a Meta-provided, self-hosted option. Server-side Tag Manager can run Meta's Conversions API tag template. Or you integrate directly from your backend through the Graph API. The lesson shows the direct route in Python, because understanding it makes every other route easier to debug.",
                 "onScreen": "Four routes\n• Partner integrations\n• CAPI Gateway\n• Server-side GTM template\n• Direct Graph API",
-                "visual": "Four road signs pointing to the same destination labeled 'Meta'.",
+                "visual": "Layout: Four road signs pointing to the same destination labeled 'Meta'. Timing (31s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               },
               {
                 "narration": "Let's look at an event. Event name, like purchase. Event time, a Unix timestamp in seconds. An event ID, ideally your order ID. The action source, for example website or physical store. The page URL. Then user data: email, phone and your customer ID, all normalized and hashed with SHA two fifty-six, plus IP address, user agent and Meta's own browser identifiers, f b p and f b c, which are sent unhashed. Finally custom data: currency, value and order ID.",
                 "onScreen": "Event anatomy\n• event_name, event_time, event_id\n• action_source, event_source_url\n• user_data: hashed IDs + IP, UA, fbp, fbc\n• custom_data: currency, value, order_id",
-                "visual": "The JSON payload from the lesson appears on screen; each field highlights as it is named, hashed fields shown in one color, unhashed in another.",
+                "visual": "Layout: The JSON payload from the lesson appears on screen; each field highlights as it is named, hashed fields shown in one color, unhashed in another. Timing (35s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 35
               },
               {
@@ -1142,31 +1178,31 @@
               {
                 "narration": "Deduplication is where most setups go wrong. When the Pixel and the server both send the same purchase, Meta removes the duplicate only if the event name matches and the server's event ID equals the browser's event ID. So generate one ID per real conversion, the order ID is perfect, and pass it to both. If the IDs differ, Meta counts two purchases, your cost per purchase looks half what it really is, and the algorithm scales the wrong things.",
                 "onScreen": "Deduplication\n• Same event_name\n• Server event_id = browser eventID\n• Use the order ID\n• Mismatch = double counting",
-                "visual": "Two identical purchase tokens with ID tags; when tags match they merge into one, when they differ both are counted with a warning.",
+                "visual": "Layout: Two identical purchase tokens with ID tags; when tags match they merge into one, when they differ both are counted with a warning. Timing (35s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 35
               },
               {
                 "narration": "Now the code. Read the pixel ID, access token and Graph API version from environment variables, never hard-coded. Check advertising consent first, and if the user refused, don't send. Build the event, hash the email, phone and customer ID, forward IP, user agent, f b p and f b c, and remove any empty fields. While testing, include a test event code. Post to the events endpoint, and raise an error with the response body if it fails, so problems are visible.",
                 "onScreen": "Direct integration in Python\n• Secrets in environment variables\n• Consent check first\n• Hash, forward, clean\n• Test event code\n• Fail loudly",
-                "visual": "Code editor scrolling through the Python function, with the consent check line and error handling line highlighted.",
+                "visual": "Layout: Code editor scrolling through the Python function, with the consent check line and error handling line highlighted. Timing (36s): title card 0–3s; then the 5 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 36
               },
               {
                 "narration": "How do you know it's working? Events Manager gives you three tools. The Test Events tab shows events arriving in real time when you use the test code. Diagnostics flags problems like missing deduplication keys or invalid parameters. And Event Match Quality scores how well your customer information can be matched. Improve it by adding hashed email and phone, your customer ID, and the browser identifiers, wherever that's lawful.",
                 "onScreen": "Verify and improve\n• Test Events (real time)\n• Diagnostics\n• Event Match Quality\n• Add lawful identifiers",
-                "visual": "Events Manager style mock with three tabs; an EMQ gauge moves from 'poor' to 'good'.",
+                "visual": "Layout: Events Manager style mock with three tabs; an EMQ gauge moves from 'poor' to 'good'. Timing (30s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
                 "narration": "Here's an illustrative example. A Jeddah abaya brand ran the Pixel alone, which was blocked for a meaningful share of Safari and in-app browser traffic, and their match quality was poor. They added the Conversions API from their order system, using order IDs for deduplication, hashed email and phone captured at checkout, and the browser identifiers forwarded. Match quality improved, reported purchases moved closer to real orders, and they verified deduplication by comparing Events Manager counts with their backend.",
                 "onScreen": "Example: Jeddah abaya brand (illustrative)\n• Pixel-only, poor EMQ\n• CAPI from order system\n• Order IDs for dedup\n• Reported ≈ backend",
-                "visual": "Two bar charts converging: platform-reported purchases rising toward backend orders over weeks.",
+                "visual": "Layout: Two bar charts converging: platform-reported purchases rising toward backend orders over weeks. Timing (34s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 34
               },
               {
                 "narration": "Four pitfalls to avoid. Different IDs in browser and server events. Hashing the IP address or user agent, which must be sent as they are. Sending events for users who refused advertising consent. And sending sensitive data, like health conditions or financial details, in custom data or URLs, which Meta's terms prohibit and regulators punish.",
                 "onScreen": "Pitfalls\n• Mismatched IDs\n• Hashing IP/UA\n• Ignoring consent\n• Sensitive data",
-                "visual": "Four warning cards, each flipping to reveal the fix.",
+                "visual": "Layout: Four warning cards, each flipping to reveal the fix. Timing (24s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 24
               },
               {
@@ -1176,9 +1212,15 @@
                 "seconds": 38
               },
               {
+                "narration": "Watch me do it. Let's test a Conversions API integration for an illustrative Riyadh bookstore before going live. Step one, in Events Manager I copy the test event code and set it as an environment variable in staging. Step two, I place a test order. In Test Events, two purchase events appear within seconds: one from the browser and one from the server, both with event ID order underscore five five one two. The server one shows as deduplicated, so the IDs match. Step three, I open the server event's details and check parameters: hashed email present, hashed phone present, external ID present, client IP looks like a real user address, not our server's, and f b p is present, but f b c is missing. Why? This order didn't come from an ad click, so there was no f b c l i d. That's expected. Step four, I place an order through a URL with a test f b c l i d, and now f b c appears. Step five, I remove the test code, deploy to production, and after a few days check Event Match Quality and the dedup indicator. Only then do I compare Meta's purchases with backend orders.",
+                "onScreen": "Watch me do it: testing CAPI (illustrative)\n• Test code in staging env\n• Browser + server events, same ID, deduplicated\n• Check hashed IDs, real client IP\n• fbc only with an ad click\n• Remove test code, monitor EMQ",
+                "visual": "Layout: Test Events mock showing an event list with a detail drawer. Timing: two events appear ~20s; 'deduplicated' badge ~35s; parameter checklist ticks one by one ~50–90s, fbc row amber then green after the second test ~110s; final 15s show an EMQ gauge.",
+                "seconds": 89
+              },
+              {
                 "narration": "Recap. Run the Conversions API alongside the Pixel. Deduplicate with a shared event ID. Hash personal identifiers, send the technical ones unhashed. Verify with Test Events, Diagnostics and match quality. And always respect consent. Your next step: map your purchase flow, from where the order ID is created, to how it reaches both the Pixel and the server event, which identifiers you can lawfully send, and where consent is checked.",
                 "onScreen": "Recap and next step\n• Pixel + CAPI, deduplicated\n• Hash correctly\n• Verify\n• Map your purchase flow",
-                "visual": "A flowchart from checkout to order ID to two outputs, Pixel and server, labeled with the same ID.",
+                "visual": "Layout: A flowchart from checkout to order ID to two outputs, Pixel and server, labeled with the same ID. Timing (30s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               }
             ],
@@ -1263,12 +1305,12 @@
           ],
           "activity": "Design your Google offline loop: which stages you'll upload, their values, where gclid and hashed email are stored, upload method and schedule, and how consent is recorded.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Google Ads can only optimize toward what it can see. If your real wins happen in a CRM weeks after the click, or your conversion tag misses a chunk of buyers, the bidding is flying half blind. In this lecture you'll learn Google's conversion toolkit: enhanced conversions for web and for leads, offline imports with click IDs, and where Data Manager fits, with code for each and the consent rules that apply.",
                 "onScreen": "Google's conversion toolkit\n• Enhanced conversions (web, leads)\n• Offline imports\n• Data Manager\n• Consent in uploads",
-                "visual": "A Google Ads-style bidding engine (generic) with a blindfold that gets removed as data pipes connect.",
+                "visual": "Layout: A Google Ads-style bidding engine (generic) with a blindfold that gets removed as data pipes connect. Timing (31s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               },
               {
@@ -1280,19 +1322,19 @@
               {
                 "narration": "Here's the toolkit. Enhanced conversions for web sends hashed first-party data, like email or phone, with your conversion tag. Enhanced conversions for leads captures hashed data when a form is submitted, so you can later upload that lead's outcome. Offline conversion import uploads conversions with a click ID. Store sales imports cover retail transactions. Tag gateway and server-side Tag Manager improve delivery. And Data Manager in Google Ads helps connect CRM and warehouse sources and manage uploads.",
                 "onScreen": "The toolkit\n• Enhanced conversions for web\n• Enhanced conversions for leads\n• Click-ID offline import\n• Store sales\n• Tag gateway / server GTM\n• Data Manager",
-                "visual": "Toolbox opening with six labeled tools sliding out.",
+                "visual": "Layout: Toolbox opening with six labeled tools sliding out. Timing (33s): title card 0–3s; then the 6 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 33
               },
               {
                 "narration": "Enhanced conversions for web is straightforward with gtag. On the confirmation page, after the user has granted consent for ads measurement, you set user data, email, phone in international format, and name and address fields if you have them. Google's tag normalizes and hashes the values, or you can send them pre-hashed. Then the conversion event fires with value, currency and transaction ID. In Tag Manager, use a data layer variable for user-provided data rather than automatic detection.",
                 "onScreen": "Enhanced conversions for web\n• Set user_data before conversion\n• Email, phone (E.164), name, address\n• Tag hashes (or pre-hash)\n• Prefer data layer in GTM",
-                "visual": "Code editor showing the gtag set user_data and conversion event snippet, with the order of lines highlighted.",
+                "visual": "Layout: Code editor showing the gtag set user_data and conversion event snippet, with the order of lines highlighted. Timing (34s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 34
               },
               {
                 "narration": "Now offline imports. Step one, capture the click ID from the landing URL: g c l i d, or g braid and w braid in some iOS contexts. Store it with the lead in your CRM. Step two, when that lead reaches a meaningful stage, like qualified or closed-won, upload a conversion with the click ID, the conversion action, the time with its time zone, the value and the currency. Step three, choose your upload method: scheduled files, a CRM integration, Data Manager, or the Google Ads API.",
                 "onScreen": "Offline import\n• Capture and store click ID\n• Upload stage + time zone + value\n• Methods: files, CRM, Data Manager, API",
-                "visual": "Flow diagram: landing URL with a highlighted gclid, CRM record storing it, later an upload arrow back to Google Ads.",
+                "visual": "Layout: Flow diagram: landing URL with a highlighted gclid, CRM record storing it, later an upload arrow back to Google Ads. Timing (38s): title card 0–3s; then the 3 on-screen points build in narration order about every 10s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 38
               },
               {
@@ -1304,25 +1346,25 @@
               {
                 "narration": "The lesson shows an upload with the official Google Ads Python client. Credentials come from environment variables. You build a click conversion with the stored g c l i d, the conversion action path, a date time with offset, the value and currency, and the consent status for ad user data. Turn on partial failure, so one bad row doesn't block the rest, and always print partial failure messages. Google has been consolidating first-party data ingestion under Data Manager, so check the current docs.",
                 "onScreen": "Upload with the API\n• Credentials from env vars\n• ClickConversion with gclid\n• Time with offset, value, currency\n• consent.ad_user_data\n• partial_failure on",
-                "visual": "Code editor with the Python upload script; a response panel shows a partial failure message for one row.",
+                "visual": "Layout: Code editor with the Python upload script; a response panel shows a partial failure message for one row. Timing (37s): title card 0–3s; then the 5 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 37
               },
               {
                 "narration": "What if click IDs get lost, say your form is on a different domain, or a browser strips parameters? That's where enhanced conversions for leads shines. When the form is submitted, the tag captures hashed email or phone, with consent. When the lead is qualified in your CRM, you upload the conversion matched on that same hashed data, no click ID required. Google matches it back to the original ad interaction.",
                 "onScreen": "Enhanced conversions for leads\n• Hash email/phone at form submit\n• Upload qualified outcome on same hash\n• No click ID required",
-                "visual": "Two-step animation: form submit captures a hashed token; weeks later a CRM event with the same token links back to an ad click.",
+                "visual": "Layout: Two-step animation: form submit captures a hashed token; weeks later a CRM event with the same token links back to an ad click. Timing (31s): title card 0–3s; then the 3 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               },
               {
                 "narration": "Here's an illustrative example. A Dubai real-estate brokerage gets leads from Search and Performance Max, but deals close offline weeks later. They added enhanced conversions for leads to the enquiry form, stored the click ID and hashed email in the CRM, and uploaded two stages daily: viewing booked, valued at expected commission times the viewing-to-deal rate, and deal closed, with the actual commission. Once volume built up, they moved to value-based bidding, and campaigns stopped chasing low-intent enquiries.",
                 "onScreen": "Example: Dubai brokerage (illustrative)\n• Enhanced conversions for leads\n• Upload: viewing booked, deal closed\n• Stage values from commission\n• Then value-based bidding",
-                "visual": "A property listing card, a calendar with a viewing booked, and a handshake icon; each sends a valued conversion arrow back to Google Ads.",
+                "visual": "Layout: A property listing card, a calendar with a viewing booked, and a handshake icon; each sends a valued conversion arrow back to Google Ads. Timing (34s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 34
               },
               {
                 "narration": "Four common failures. Uploading conversions older than the conversion action's click-through window, which get rejected. Time zone formats that don't match, causing errors. Primary and secondary conversion actions set up wrongly, so bidding optimizes for the wrong goal. And uploading data for users who didn't consent, where consent is required. Check the Diagnostics tab weekly for enhanced conversion coverage and upload success.",
                 "onScreen": "Common failures\n• Too-old conversions\n• Time zone format errors\n• Wrong primary actions\n• Missing consent\n• Check Diagnostics weekly",
-                "visual": "A diagnostics panel with four red rows turning green one by one.",
+                "visual": "Layout: A diagnostics panel with four red rows turning green one by one. Timing (27s): title card 0–3s; then the 5 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 27
               },
               {
@@ -1332,9 +1374,15 @@
                 "seconds": 41
               },
               {
+                "narration": "Watch me do it. Let's check that an illustrative Lahore property developer's lead loop actually works. Step one, I click our own ad in a test, or add a test g c l i d to the landing URL, and submit the enquiry form with a test email. Step two, in the CRM, I open the new lead: the g c l i d field is filled, and the source shows paid search. Step three, in Google Ads, the enhanced conversions diagnostics for the lead form show user-provided data detected. Step four, I move the lead to site visit booked in the CRM. At the nightly upload, a conversion is sent with the g c l i d, the conversion action site visit, the time with the plus five hours Pakistan offset, a value of our expected revenue for that stage, and consent status. Step five, next morning, the uploads page shows the file processed with one success and zero errors. Step six, I check the conversion action's settings: site visit is primary, form submit is now secondary. Within weeks, bidding learns which searches lead to site visits, not just form fills.",
+                "onScreen": "Watch me do it: lead loop check (illustrative)\n• Test click → form → CRM gclid stored\n• Enhanced conversions detected\n• Stage upload with +05:00 offset\n• Upload report: 1 success\n• Site visit primary, form secondary",
+                "visual": "Layout: four-stage horizontal flow: ad click, form, CRM record, Google Ads upload report. Timing: each stage opens ~25s apart with the relevant field highlighted; the time offset '+05:00' pulses at ~85s; final 20s show primary/secondary toggles switching.",
+                "seconds": 83
+              },
+              {
                 "narration": "Recap. Enhanced conversions add hashed first-party data to Google conversions. Enhanced conversions for leads and click-ID imports close the loop with your CRM. Store click IDs, upload stages with values and proper time zones, include consent, and monitor diagnostics. Your next step: design your offline loop, the stages, values, storage, upload method, schedule, and how consent is recorded.",
                 "onScreen": "Recap and next step\n• Enhanced conversions\n• Offline loop\n• Consent in uploads\n• Design your loop",
-                "visual": "A circular loop diagram from ad click to CRM to upload and back to bidding.",
+                "visual": "Layout: A circular loop diagram from ad click to CRM to upload and back to bidding. Timing (25s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 25
               }
             ],
@@ -1419,12 +1467,12 @@
           ],
           "activity": "Pick TikTok or LinkedIn. Write the event mapping for your top two conversions: event name, event ID source, identifiers, value, and where click IDs are captured and stored.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Once you've built one conversions API, the next two are mostly a matter of field names. In this lecture you'll learn how TikTok's Events API and LinkedIn's Conversions API follow the same pattern as Meta, the specific fields and gotchas each one has, and how a B2B company can use them to optimize for qualified pipeline instead of raw form fills.",
                 "onScreen": "TikTok Events API and LinkedIn CAPI\n• Same pattern\n• TikTok specifics\n• LinkedIn specifics\n• B2B example",
-                "visual": "Three server output pipes labeled with generic platform shapes, sharing the same connector design.",
+                "visual": "Layout: Three server output pipes labeled with generic platform shapes, sharing the same connector design. Timing (27s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 27
               },
               {
@@ -1436,19 +1484,19 @@
               {
                 "narration": "The pattern is the same everywhere. Send events from your server. Hash personal identifiers like email and phone. Include the platform's click ID and browser identifiers. And deduplicate with the browser tag by sharing an event ID. For TikTok, the browser tag is the TikTok Pixel, the click ID is t t c l i d, and the browser cookie is underscore t t p. For LinkedIn, it's the Insight Tag, and the click identifier is l i fat id.",
                 "onScreen": "The shared pattern\n• Server events\n• Hashed identifiers\n• Click IDs + browser IDs\n• Shared event ID for dedup",
-                "visual": "A four-part template card; TikTok and LinkedIn tags slot their specific field names into each part.",
+                "visual": "Layout: A four-part template card; TikTok and LinkedIn tags slot their specific field names into each part. Timing (35s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 35
               },
               {
                 "narration": "Let's do TikTok first. The Events API endpoint, version one point three at the time of writing, takes an event source of web, your Pixel code as the event source ID, and a list of events. Each event has a name, like complete payment, a timestamp in seconds, an event ID, a user object with hashed email, phone and external ID plus t t c l i d, t t p, IP and user agent, the page URL, and properties like currency, value and contents. The access token goes in a header.",
                 "onScreen": "TikTok Events API\n• event_source: web, event_source_id: Pixel code\n• event, event_time (s), event_id\n• user: hashed IDs, ttclid, ttp, IP, UA\n• properties: currency, value, contents",
-                "visual": "The TikTok payload structure appears as a tree diagram with each node lighting up.",
+                "visual": "Layout: The TikTok payload structure appears as a tree diagram with each node lighting up. Timing (40s): title card 0–3s; then the 4 on-screen points build in narration order about every 8s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 40
               },
               {
                 "narration": "Two TikTok gotchas. The API can return an HTTP success while the body contains an error code, so check that the response code field equals zero, not just the HTTP status. And capture t t c l i d from the landing URL and store it first-party, because by the time the purchase happens, the parameter is long gone from the address bar. The lesson's Python function handles both.",
                 "onScreen": "TikTok gotchas\n• Check body code == 0\n• Capture ttclid at landing\n• Store first-party",
-                "visual": "An HTTP 200 badge next to a JSON body showing a non-zero code in red; then a landing URL with ttclid highlighted being saved to a cookie.",
+                "visual": "Layout: An HTTP 200 badge next to a JSON body showing a non-zero code in red; then a landing URL with ttclid highlighted being saved to a cookie. Timing (30s): title card 0–3s; then the 3 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
@@ -1460,25 +1508,25 @@
               {
                 "narration": "Now LinkedIn. You create a conversion rule in Campaign Manager, then stream events to the conversion events REST endpoint with an OAuth token. Every request needs a LinkedIn version header, year and month, plus the Rest.li protocol header. Each event references the conversion rule by its URN, has a timestamp in milliseconds, a value with currency, user IDs like the SHA two fifty-six email and the first-party tracking ID, user info like name, company and country, and an event ID for dedup.",
                 "onScreen": "LinkedIn Conversions API\n• Conversion rule URN\n• Headers: LinkedIn-Version, Rest.li 2.0.0\n• Timestamp in milliseconds\n• SHA256_EMAIL + li_fat_id\n• eventId",
-                "visual": "Request anatomy diagram with headers on top and body fields below, the millisecond timestamp highlighted.",
+                "visual": "Layout: Request anatomy diagram with headers on top and body fields below, the millisecond timestamp highlighted. Timing (36s): title card 0–3s; then the 5 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 36
               },
               {
                 "narration": "LinkedIn's classic mistake is the timestamp. Send seconds instead of milliseconds and your conversion lands in nineteen seventy. The other classic is an unversioned or deprecated API version, which starts failing when LinkedIn retires it. Keep the version in configuration, not code, and check the Microsoft Learn documentation for LinkedIn's current versions and rate limits.",
                 "onScreen": "LinkedIn gotchas\n• Milliseconds, not seconds\n• Keep version in config\n• Check current versions and limits",
-                "visual": "A calendar flipping back to 1970 with a red X; then a config file with a version value being updated.",
+                "visual": "Layout: A calendar flipping back to 1970 with a red X; then a config file with a version value being updated. Timing (24s): title card 0–3s; then the 3 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 24
               },
               {
                 "narration": "Here's an illustrative B2B example. A UK cybersecurity software company runs LinkedIn for pipeline and TikTok for small-business awareness. On LinkedIn, the Insight Tag tracks demo requests with an event ID, and their CRM sends sales-qualified-lead and opportunity stages through the Conversions API, valued by historical close rates. On TikTok, free trial sign-ups go through the Events API, deduplicated with the Pixel. Both respect advertising consent from the consent platform. Within a quarter, LinkedIn campaigns were optimizing for qualified leads, not raw form fills.",
                 "onScreen": "Example: UK cybersecurity SaaS (illustrative)\n• LinkedIn: SQL + opportunity via CAPI\n• TikTok: trials via Events API\n• Both consent-aware\n• Optimizing for qualified pipeline",
-                "visual": "CRM funnel with stages; arrows labeled SQL and Opportunity go to a LinkedIn-style box, and 'Trial' goes to a TikTok-style box.",
+                "visual": "Layout: CRM funnel with stages; arrows labeled SQL and Opportunity go to a LinkedIn-style box, and 'Trial' goes to a TikTok-style box. Timing (37s): title card 0–3s; then the 4 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 37
               },
               {
                 "narration": "How do you know it's working? Each platform has an events or conversion diagnostics page. Check events are arriving, deduplication is working, match rates are improving, and your qualified-stage conversions are the ones steering bidding. And as always, keep tokens in environment variables, rotate them, and log errors so failures are visible.",
                 "onScreen": "Verify\n• Events arriving\n• Dedup working\n• Match rates improving\n• Qualified stages steer bidding\n• Secure tokens",
-                "visual": "Dashboard mock with four green check tiles and a small key icon labeled 'env var'.",
+                "visual": "Layout: Dashboard mock with four green check tiles and a small key icon labeled 'env var'. Timing (23s): title card 0–3s; then the 5 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 23
               },
               {
@@ -1488,9 +1536,15 @@
                 "seconds": 40
               },
               {
+                "narration": "Watch me do it. Let's run a first TikTok Events API test for an illustrative Dubai sneaker store. Step one, in TikTok Events Manager I generate an access token for the pixel and copy the test event code. Step two, I store both as environment variables, never in code. Step three, I place a test order with a test t t c l i d in the landing URL. Our landing handler saved it in a first-party cookie, and at checkout the server reads it. Step four, the script sends a complete payment event with event ID order underscore seven seven eight, hashed email and phone, the t t c l i d, IP and user agent, and the value in dirhams. The HTTP status is two hundred, but I print the body: code zero, message OK. Step five, in Test Events, the server event appears alongside the pixel event with the same ID, and TikTok marks the duplicate. Step six, I deliberately send a malformed phone number to see what happens. The body returns a non-zero code with a clear message, and our logger records it. Now I know failures won't be silent.",
+                "onScreen": "Watch me do it: TikTok Events API test (illustrative)\n• Token + test code in env vars\n• ttclid captured, stored, read\n• Event with shared ID order_778\n• Check body code 0\n• Deliberate failure logged",
+                "visual": "Layout: terminal on the left, Test Events mock on the right. Timing: env var lines type ~10s; request payload prints ~40s; response body with code 0 highlights ~70s; Test Events shows matched pair ~95s; final 25s show an error response and a log entry.",
+                "seconds": 84
+              },
+              {
                 "narration": "Recap. TikTok and LinkedIn use the same server-side pattern as Meta. For TikTok: Pixel code as source ID, access token header, and check the body code. For LinkedIn: versioned headers, the conversion rule URN, and milliseconds. Capture click IDs at landing. Your next step: pick one of the two, and write the event mapping for your top two conversions, including the event ID source, identifiers, value, and where click IDs are stored.",
                 "onScreen": "Recap and next step\n• Same pattern\n• TikTok + LinkedIn specifics\n• Write your event mapping",
-                "visual": "An event mapping table template with columns filling in.",
+                "visual": "Layout: An event mapping table template with columns filling in. Timing (31s): title card 0–3s; then the 3 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               }
             ],
@@ -1582,12 +1636,12 @@
           ],
           "activity": "Write a tracking plan row for your three most important events, including event ID rule, source of truth, platform mappings and consent purposes.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Here's something most marketers don't realize. The single biggest cause of bad automated bidding isn't the algorithm. It's messy events. Duplicates that make performance look twice as good, missing values, the same purchase named four different ways. In this lecture you'll learn to build a tracking plan, design event IDs that deduplicate correctly everywhere, validate events in code, and monitor data quality so problems are caught in hours, not months.",
                 "onScreen": "Data quality\n• Why it drives performance\n• The tracking plan\n• Event ID design\n• Validation and monitoring",
-                "visual": "A bidding engine being fed a stream of events, some duplicated and some broken; a filter labeled 'data quality' cleans the stream.",
+                "visual": "Layout: A bidding engine being fed a stream of events, some duplicated and some broken; a filter labeled 'data quality' cleans the stream. Timing (30s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
@@ -1599,19 +1653,19 @@
               {
                 "narration": "Think about what duplicates do. If every purchase is counted twice, your cost per purchase looks half what it is. The system thinks it's winning, scales spend, and you lose money. Missing values make it undervalue good traffic. Inconsistent names split learning across events. Wrong currencies make a hundred rupees look like a hundred dollars. And a hybrid browser-plus-server setup increases these risks, unless you design for it.",
                 "onScreen": "What bad data does\n• Duplicates inflate results\n• Missing values undervalue\n• Inconsistent names split learning\n• Wrong currency distorts value",
-                "visual": "Four small scenes: a doubled purchase counter, an empty value field, three differently named events, and currency symbols swapping.",
+                "visual": "Layout: Four small scenes: a doubled purchase counter, an empty value field, three differently named events, and currency symbols swapping. Timing (30s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
                 "narration": "The fix starts with a tracking plan, one source of truth for every event. For each event: the canonical name, what triggers it, which system is the source of truth, whether a browser duplicate exists, the event ID rule, required parameters, how value is defined, how it maps to each platform, which consent purposes apply, and who owns it. It can be a spreadsheet or a schema file in your code repository. What matters is that everyone uses it.",
                 "onScreen": "The tracking plan\n• Name, trigger, source of truth\n• Event ID rule\n• Parameters and value definition\n• Platform mappings\n• Consent and owner",
-                "visual": "Spreadsheet with columns from the lesson; one row for 'purchase' fills in fully.",
+                "visual": "Layout: Spreadsheet with columns from the lesson; one row for 'purchase' fills in fully. Timing (34s): title card 0–3s; then the 5 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 34
               },
               {
                 "narration": "Now event IDs, the key to deduplication. Make them deterministic: derive them from a business key like the order ID, so the browser and server produce the same ID independently, or generate once and pass it along. Make them unique per conversion and per stage, so a lead reaching the qualified stage has a different ID from the same lead becoming an opportunity. Keep them stable across retries. And never use personal data like an email address as an ID.",
                 "onScreen": "Event ID design\n• Deterministic\n• Unique per conversion and stage\n• Stable across retries\n• Never personal",
-                "visual": "An order ID 10042 turning into event IDs 'order_10042' used by both browser and server; a lead ID generating 'lead_8812_sql' and 'lead_8812_opportunity'.",
+                "visual": "Layout: An order ID 10042 turning into event IDs 'order_10042' used by both browser and server; a lead ID generating 'lead_8812_sql' and 'lead_8812_opportunity'. Timing (35s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 35
               },
               {
@@ -1623,25 +1677,25 @@
               {
                 "narration": "Each platform deduplicates slightly differently. Meta and TikTok match on the event name plus the event ID. Google Ads uses the transaction ID for web conversions, and you must avoid uploading the same offline conversion twice. GA4 uses the transaction ID for purchases. LinkedIn uses the event ID shared between the Insight Tag and the Conversions API. Put these rules in your tracking plan so every developer knows them.",
                 "onScreen": "Dedup keys\n• Meta, TikTok: event + event_id\n• Google Ads: transaction_id\n• GA4: transaction_id\n• LinkedIn: eventId",
-                "visual": "A table with five platform rows and their dedup key highlighted.",
+                "visual": "Layout: A table with five platform rows and their dedup key highlighted. Timing (30s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
                 "narration": "Validate events before they leave your server. The lesson shows JSON Schema in Python: required fields, types, a pattern for the event ID, a list of allowed currencies, and one setting that's a quiet privacy hero, additional properties set to false. That stops anyone accidentally adding an email or a free-text field to an event. If validation fails, log it, alert, and don't send.",
                 "onScreen": "Validate in code\n• Required fields and types\n• ID pattern, currency list\n• additionalProperties: false\n• Fail closed",
-                "visual": "Code editor with the JSON schema; an event with an extra 'email' field is rejected with a red message.",
+                "visual": "Layout: Code editor with the JSON schema; an event with an extra 'email' field is rejected with a red message. Timing (28s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 28
               },
               {
                 "narration": "Then monitor. Run a daily reconciliation comparing backend, GA4 and each platform for key events, with expected ranges. Track the duplicate rate, the share of purchases missing currency or value, match-quality indicators like Meta's Event Match Quality and Google's enhanced conversion coverage, and latency from conversion to send. Alert when anything leaves its range. Most incidents come from website releases, consent platform changes or vendor API updates, so link alerts to your release calendar.",
                 "onScreen": "Monitor daily\n• Backend vs GA4 vs platforms\n• Duplicate rate\n• Missing parameters\n• Match quality\n• Latency\n• Alerts tied to releases",
-                "visual": "Reconciliation dashboard with five metric tiles and a release calendar strip underneath showing a spike aligned with a deployment.",
+                "visual": "Layout: Reconciliation dashboard with five metric tiles and a release calendar strip underneath showing a spike aligned with a deployment. Timing (32s): title card 0–3s; then the 6 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 32
               },
               {
                 "narration": "Here's an illustrative example. A Karachi agency standardized onboarding for every client: a tracking plan template, event ID conventions, a JSON schema for each key event, a reconciliation dashboard and alerts. Onboarding took a little longer, but tickets asking why the numbers don't match fell sharply, and clients started trusting the reports. That trust is worth more than any single campaign optimization.",
                 "onScreen": "Example: Karachi agency (illustrative)\n• Tracking plan template\n• ID conventions + schemas\n• Reconciliation + alerts\n• Fewer mismatch tickets, more trust",
-                "visual": "An onboarding checklist for a new client with five items ticked, and a support ticket counter decreasing.",
+                "visual": "Layout: An onboarding checklist for a new client with five items ticked, and a support ticket counter decreasing. Timing (27s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 27
               },
               {
@@ -1657,9 +1711,15 @@
                 "seconds": 39
               },
               {
+                "narration": "Watch me do it. Let's set up the daily reconciliation for an illustrative Karachi online grocer. Step one, the query: yesterday's backend paid orders, GA4 purchases from the BigQuery export, and each platform's reported purchases from their APIs, all in one table. Step two, expected ranges from the last eight weeks: GA4 typically sees seventy-five to eighty-five percent of backend orders, Meta sixty to seventy-five, Google Ads sixty-five to eighty. Step three, the duplicate check: count purchase event IDs sent more than once per platform from our outbox table; expected zero. Step four, missing parameters: purchases without currency or value; expected zero. Step five, today's run: GA4 at eighty percent, fine. Meta at one hundred and thirty percent of backend orders. That's outside the range and above one hundred, which almost always means duplicates. Step six, the duplicate check confirms it: after yesterday's release, the thank-you page tag fires twice. The alert posts in the team channel with the numbers and the likely cause. The fix goes out the same day, and we annotate the data so nobody misreads yesterday's ROAS.",
+                "onScreen": "Watch me do it: daily reconciliation (illustrative)\n• Backend vs GA4 vs platforms\n• Expected ranges from 8 weeks\n• Duplicate + missing-parameter checks\n• Meta at 130% → duplicates\n• Alert, fix, annotate",
+                "visual": "Layout: reconciliation dashboard with range bands per source. Timing: bands draw in ~20s; today's dots appear ~50s with Meta's dot outside the band flashing red; duplicate-check panel counts rising IDs at ~80s; final 25s show an alert message and an annotation marker.",
+                "seconds": 79
+              },
+              {
                 "narration": "Recap. Data quality is a performance lever. Write a tracking plan with a source of truth for every event. Design deterministic, stage-specific, retry-stable, non-personal event IDs. Know each platform's dedup key. Validate with strict schemas and reconcile daily. Your next step: write tracking plan rows for your three most important events, including the ID rule, source of truth, platform mappings and consent purposes.",
                 "onScreen": "Recap and next step\n• Tracking plan\n• Good event IDs\n• Validate + reconcile\n• Write three rows today",
-                "visual": "Three tracking plan rows appear filled in.",
+                "visual": "Layout: Three tracking plan rows appear filled in. Timing (27s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 27
               }
             ],
@@ -1736,12 +1796,12 @@
           ],
           "activity": "Write your consent QA matrix for at least three region profiles and three choices, and automate one scenario with Playwright on a staging site.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Tracking has a nasty habit. It breaks silently. A new checkout design, a consent platform update or a vendor API change, and suddenly conversions stop, or worse, tags start firing without consent. Nobody notices for weeks. In this lecture you'll learn a QA mindset for tracking, the tools that matter, a consent QA matrix, how to automate consent tests, and quick debugging recipes for the most common failures.",
                 "onScreen": "Debugging and QA\n• A QA mindset\n• The toolset\n• Consent QA matrix\n• Automation\n• Debugging recipes",
-                "visual": "A calm dashboard hides a small crack spreading underneath; a magnifying glass reveals it.",
+                "visual": "Layout: A calm dashboard hides a small crack spreading underneath; a magnifying glass reveals it. Timing (30s): title card 0–3s; then the 5 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
@@ -1753,19 +1813,19 @@
               {
                 "narration": "The mindset is simple: treat tracking like product code. Test before every release. Monitor after release. Keep evidence. That last one matters because regulators, auditors and clients may ask you to prove what your site did on a given day, and screenshots or network recordings are your proof.",
                 "onScreen": "The mindset\n• Test before release\n• Monitor after release\n• Keep evidence",
-                "visual": "Three pillars labeled test, monitor, evidence holding up a roof labeled 'trustworthy data'.",
+                "visual": "Layout: Three pillars labeled test, monitor, evidence holding up a roof labeled 'trustworthy data'. Timing (21s): title card 0–3s; then the 3 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 21
               },
               {
                 "narration": "Your toolset. Google Tag Assistant shows Google tags, consent defaults and updates, and events. Tag Manager preview, both web and server, steps through triggers and shows the server's incoming and outgoing requests. GA4 DebugView shows events in real time. Meta and TikTok Events Managers have Test Events tabs. LinkedIn shows conversion status in Campaign Manager. Browser developer tools reveal cookies and network requests. And Playwright or Puppeteer automate all of it.",
                 "onScreen": "The toolset\n• Tag Assistant\n• GTM preview (web + server)\n• GA4 DebugView\n• Meta/TikTok Test Events\n• DevTools\n• Playwright",
-                "visual": "A tool belt with seven labeled tools, each glowing briefly as named.",
+                "visual": "Layout: A tool belt with seven labeled tools, each glowing briefly as named. Timing (31s): title card 0–3s; then the 6 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               },
               {
                 "narration": "Now the consent QA matrix. For each region profile and each choice, write down what should happen before and after the choice, and verify it. European or UK visitor accepting all: cookies and tags active, server forwarding to all vendors. Rejecting all: no advertising cookies, no Meta, TikTok or LinkedIn events, client-side or server-side. Analytics only: GA4 active, ads blocked. A US visitor with Global Privacy Control on. A Gulf visitor rejecting marketing.",
                 "onScreen": "Consent QA matrix\n• Regions × choices\n• Accept, reject, partial\n• GPC scenarios\n• Client and server side",
-                "visual": "Grid with rows for regions and columns for choices; cells turn green as each scenario is verified.",
+                "visual": "Layout: Grid with rows for regions and columns for choices; cells turn green as each scenario is verified. Timing (32s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 32
               },
               {
@@ -1777,31 +1837,31 @@
               {
                 "narration": "Manual testing doesn't scale, so automate. The lesson has a Playwright test that loads your staging site, records every request to known advertising hosts, asserts none fire before consent, clicks reject all, visits another page, and asserts there are still no ad requests and no advertising cookies. Adapt the host patterns and button names to your setup. If you use server-side tagging, also check your server logs for any vendor forwards from a session that rejected consent.",
                 "onScreen": "Automate with Playwright\n• Record ad-host requests\n• None before consent\n• Reject → still none\n• No ad cookies\n• Check server logs too",
-                "visual": "Terminal running the Playwright test, with green check marks for each assertion.",
+                "visual": "Layout: Terminal running the Playwright test, with green check marks for each assertion. Timing (33s): title card 0–3s; then the 5 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 33
               },
               {
                 "narration": "Put that test in your deployment pipeline, so a failing consent test blocks the release. After release, run a synthetic purchase on production every hour, using a test product and test event codes, and alert if GA4, Meta, TikTok or Google Ads don't receive it within a set time. That's how a Manchester retailer, illustratively, catches problems within an hour rather than at month-end reporting.",
                 "onScreen": "In the pipeline\n• Consent tests block bad releases\n• Hourly synthetic purchase\n• Alerts if a platform misses it",
-                "visual": "CI pipeline diagram with a red stop at 'consent tests failed'; then a clock icon triggering a test purchase and four platform checkmarks.",
+                "visual": "Layout: CI pipeline diagram with a red stop at 'consent tests failed'; then a clock icon triggering a test purchase and four platform checkmarks. Timing (28s): title card 0–3s; then the 3 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 28
               },
               {
                 "narration": "Here are quick debugging recipes. Conversions dropped to zero? Check recent releases, the thank-you page data layer, triggers, consent defaults, and server health. Double counting? Compare event IDs in Test Events and look for duplicate tags. Low match quality? Check that hashed email and phone are present and normalized, click IDs are captured, and that server events forward the user's original IP and user agent, not your server's.",
                 "onScreen": "Recipes, part one\n• Zero conversions\n• Double counting\n• Low match quality",
-                "visual": "Three recipe cards with a symptom on the front and a checklist on the back.",
+                "visual": "Layout: Three recipe cards with a symptom on the front and a checklist on the back. Timing (30s): title card 0–3s; then the 3 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
                 "narration": "One more area teams forget: in-app browsers. A big share of social ad clicks open inside Instagram, Facebook, TikTok or Snapchat's own browser. Cookies there may not carry over to the phone's main browser, consent banners sometimes render badly, and payment redirects can drop parameters. So add real-device checks. Tap a test link inside the app, complete a test purchase, and confirm that the click ID, the consent state and the purchase event reach every platform. If you serve Gulf audiences, include Arabic right-to-left layouts in those checks too.",
                 "onScreen": "In-app browsers\n• Cookies may not carry over\n• Banners may render badly\n• Redirects drop parameters\n• Test on real devices\n• Include Arabic RTL layouts",
-                "visual": "A phone showing a social app's in-app browser with a checkout page; a checklist overlay ticks click ID, consent and purchase event.",
+                "visual": "Layout: A phone showing a social app's in-app browser with a checkout page; a checklist overlay ticks click ID, consent and purchase event. Timing (39s): title card 0–3s; then the 5 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 39
               },
               {
                 "narration": "More recipes. Values wrong? Look for missing currency, numbers formatted with commas, or tax included inconsistently. Server events missing? Check for expired tokens, retired API versions, or rate limiting, which shows up as HTTP four twenty-nine. And avoid four QA pitfalls: testing only accept all, testing only desktop Chrome while in-app browsers and Safari behave differently, leaving test codes in production, and keeping no evidence.",
                 "onScreen": "Recipes, part two\n• Wrong values\n• Missing server events\n• Pitfalls: accept-only, Chrome-only, test codes, no evidence",
-                "visual": "Two more recipe cards, then four pitfall icons including a phone showing an in-app browser.",
+                "visual": "Layout: Two more recipe cards, then four pitfall icons including a phone showing an in-app browser. Timing (28s): title card 0–3s; then the 3 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 28
               },
               {
@@ -1811,9 +1871,15 @@
                 "seconds": 38
               },
               {
+                "narration": "Watch me do it. Let's debug an illustrative problem: a Doha electronics store says Google Ads conversions dropped by half this week, while orders didn't. Step one, timeline: the drop started Tuesday. The release log shows a checkout update deployed Tuesday afternoon. Step two, Tag Assistant on a test purchase: the Google Ads conversion tag fires, but the transaction ID and value are empty. Step three, the data layer on the thank-you page: the new checkout pushes the order under a different key, order data instead of ecommerce, so our variables read nothing. Step four, why did only half the conversions drop? Because the new checkout was rolled out to half of visitors as an experiment. Step five, the fix: update the variables to read the new structure for both versions, then retest in preview with both checkouts. Step six, prevention: we add an assertion to the Playwright suite that the thank-you page data layer contains transaction ID, value and currency, so a structure change fails the pipeline next time. Debugging is detective work: timeline, evidence, cause, fix, and a test so it never happens again.",
+                "onScreen": "Watch me do it: debugging a drop (illustrative)\n• Timeline: drop matches Tuesday release\n• Tag fires, values empty\n• Data layer key changed\n• Half traffic in experiment\n• Fix + new pipeline assertion",
+                "visual": "Layout: detective-board style canvas with a timeline strip across the top. Timing: release marker pins to Tuesday ~15s; Tag Assistant card with empty fields ~40s; data layer diff ~65s; experiment split pie ~90s; code fix and a green test badge in the final 25s.",
+                "seconds": 81
+              },
+              {
                 "narration": "Recap. Tracking breaks silently, so test, monitor and keep evidence. Use the right tools, run a full consent matrix across regions and choices, automate consent tests in your pipeline, run synthetic purchases, and keep recipes handy. Your next step: write your consent QA matrix for at least three region profiles and three choices, and automate one scenario with Playwright on a staging site.",
                 "onScreen": "Recap and next step\n• Test, monitor, evidence\n• Consent matrix\n• Automate in CI\n• Build your matrix",
-                "visual": "The consent matrix grid reappears with one scenario highlighted and a code icon beside it.",
+                "visual": "Layout: The consent matrix grid reappears with one scenario highlighted and a code icon beside it. Timing (27s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 27
               }
             ],
@@ -1901,12 +1967,12 @@
           ],
           "activity": "List three value exchanges your business could offer, the data each collects, the consent needed, and one ad activation each enables.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Fixing tags recovers some lost signal. But the companies that win the next decade of marketing measurement won't just track better. They'll know their customers better, because customers chose to tell them. In this lecture you'll learn how to build a first-party data strategy: designing value exchanges, stitching identity responsibly, choosing an architecture, and activating data in ad platforms, with consent traveling alongside every record.",
                 "onScreen": "First-party data strategy\n• Value exchanges\n• Identity\n• Architecture\n• Activation with consent",
-                "visual": "A customer icon handing a card labeled 'preferences' to a brand icon, receiving a gift icon in return.",
+                "visual": "Layout: A customer icon handing a card labeled 'preferences' to a brand icon, receiving a gift icon in return. Timing (28s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 28
               },
               {
@@ -1918,19 +1984,19 @@
               {
                 "narration": "Let's define terms. First-party data is what you collect directly from customers and prospects, with their knowledge: accounts, purchases, preferences, survey answers, support interactions. Zero-party data is what people deliberately share, like their size, their skin type, or when they plan to buy. Both are more durable and more valuable than anything a pixel captures, as long as you collect them lawfully and use them in ways people expect.",
                 "onScreen": "Definitions\n• First-party: collected directly, with knowledge\n• Zero-party: intentionally shared\n• Durable and valuable\n• Lawful, expected use",
-                "visual": "Two labeled data folders side by side with example contents appearing inside each.",
+                "visual": "Layout: Two labeled data folders side by side with example contents appearing inside each. Timing (30s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
                 "narration": "People share data when they get something worth it. Design value exchanges. An account with order tracking and faster checkout. A loyalty program, very popular in Gulf retail. A quiz or configurator. Gated content, used sparingly, in B2B. WhatsApp order updates, which work brilliantly in Pakistan, the UAE and Saudi Arabia. And a post-purchase survey asking how people heard about you. Be explicit, collect the minimum, and keep order updates and marketing consent separate.",
                 "onScreen": "Value exchanges\n• Accounts\n• Loyalty\n• Quizzes\n• Gated content (sparingly)\n• WhatsApp updates\n• Post-purchase survey",
-                "visual": "A carousel of value exchange cards with simple icons: a user profile, a loyalty card, a quiz, a document, a chat bubble, a survey.",
+                "visual": "Layout: A carousel of value exchange cards with simple icons: a user profile, a loyalty card, a quiz, a document, a chat bubble, a survey. Timing (32s): title card 0–3s; then the 6 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 32
               },
               {
                 "narration": "Now identity. Deterministic identity, meaning logins, emails, phone numbers and customer IDs, is accurate and requires the customer to identify themselves. Probabilistic techniques that resemble fingerprinting are a bad idea. European regulators treat device fingerprinting as needing consent, and platforms restrict it. Instead, resolve identity in your warehouse or customer data platform by joining events on customer ID, hashed email and consented device IDs.",
                 "onScreen": "Identity\n• Deterministic: login, email, phone, ID\n• Avoid fingerprinting\n• Resolve in warehouse or CDP",
-                "visual": "Several event dots joining into one customer profile via solid lines labeled 'login' and 'email'; a dotted line labeled 'fingerprint' is crossed out.",
+                "visual": "Layout: Several event dots joining into one customer profile via solid lines labeled 'login' and 'email'; a dotted line labeled 'fingerprint' is crossed out. Timing (28s): title card 0–3s; then the 3 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 28
               },
               {
@@ -1942,25 +2008,25 @@
               {
                 "narration": "Three architecture options. Warehouse-native: events and CRM data land in BigQuery, Snowflake or Databricks, transformations build customer tables, and connectors send audiences and conversions to ad platforms. A packaged customer data platform that handles collection, identity, consent and activation. Or lightweight: your e-commerce platform, a CRM and native integrations, which is fine for many small businesses. Whichever you choose, consent and purpose must travel with the data.",
                 "onScreen": "Architectures\n• Warehouse-native\n• Packaged CDP\n• Lightweight (SMB)\n• Consent travels with data",
-                "visual": "Three architecture thumbnails; a small consent badge follows the data through each one.",
+                "visual": "Layout: Three architecture thumbnails; a small consent badge follows the data through each one. Timing (29s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 29
               },
               {
                 "narration": "How do you activate it? Upload hashed customer lists as Customer Match on Google, custom audiences on Meta, matched audiences on LinkedIn, and customer file audiences on TikTok. Use them to exclude current customers from acquisition campaigns, re-engage lapsed buyers, seed similar audiences, and act as signals for automated campaigns. Feed offline conversions and CRM stages. And use lifetime value tiers to inform value rules. Google also offers confidential matching for Customer Match, using secure hardware; check if it fits your commitments.",
                 "onScreen": "Activation\n• Hashed audience uploads\n• Exclude, re-engage, seed, signal\n• Conversion feeds\n• LTV tiers",
-                "visual": "A warehouse icon sending hashed lists to four generic platform icons, each labeled with a purpose.",
+                "visual": "Layout: A warehouse icon sending hashed lists to four generic platform icons, each labeled with a purpose. Timing (36s): title card 0–3s; then the 4 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 36
               },
               {
                 "narration": "Here's an illustrative example. An Abu Dhabi supermarket chain launched a loyalty app with digital receipts, personalized offers and WhatsApp order updates, with marketing consent asked separately. Loyalty IDs join online and in-store purchases in their warehouse. Consented, hashed segments like lapsed for sixty days, or high-value families, go to Meta and Google for re-engagement and exclusion, and in-store sales are uploaded as offline conversions. Every quarter they check each use against the privacy notice.",
                 "onScreen": "Example: Abu Dhabi supermarket (illustrative)\n• Loyalty app + WhatsApp updates\n• Online + in-store joined\n• Consented segments to ads\n• Quarterly privacy review",
-                "visual": "A loyalty card and a receipt merging into one profile; segments flow out to ad platforms with a consent check gate.",
+                "visual": "Layout: A loyalty card and a receipt merging into one profile; segments flow out to ad platforms with a consent check gate. Timing (33s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 33
               },
               {
                 "narration": "The lesson includes a SQL query that builds a consented exclusion list of active customers. It hashes normalized emails and phone numbers, joins a consent table, keeps only people with ads personalization consent, and filters by recent orders. Avoid the classic mistakes: collecting data just in case, bundling marketing consent into terms of service, uploading lists without opt-out suppression, and forgetting that a deletion in your CRM must also remove someone from ad audiences.",
                 "onScreen": "Build it safely\n• Consent-joined SQL export\n• No 'just in case' data\n• No bundled consent\n• Suppress opt-outs\n• Propagate deletions",
-                "visual": "SQL editor with the export query; a delete request arrow flows from CRM to every downstream audience.",
+                "visual": "Layout: SQL editor with the export query; a delete request arrow flows from CRM to every downstream audience. Timing (32s): title card 0–3s; then the 5 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 32
               },
               {
@@ -1976,9 +2042,15 @@
                 "seconds": 41
               },
               {
+                "narration": "Watch me do it. Let's design one value exchange for an illustrative Riyadh coffee chain, from idea to activation. Step one, the value: a loyalty app offering a free drink after every eight, order-ahead pickup, and birthday rewards. Step two, data collected: name, mobile number, favorite branch, orders, and optional date of birth, nothing more. Step three, consent: service terms cover the loyalty program itself; a separate, unticked checkbox asks for marketing offers by message and for using data to show relevant ads, written in Arabic and English. Step four, storage: orders and consent flags land in the warehouse, joined by loyalty ID. Step five, activation: a nightly job builds three audiences only from people who gave marketing consent: lapsed thirty days, new-branch neighbors based on favorite branch, and high-frequency customers to exclude from acquisition ads. Hashed phone numbers upload to Meta and Google. Step six, rights: when a member deletes their account, a deletion event removes them from the next nightly upload, and we request removal from existing lists. Step seven, measurement: we track opt-in rate for marketing consent at signup, a direct measure of whether the value exchange feels fair.",
+                "onScreen": "Watch me do it: loyalty value exchange (illustrative)\n• Value: free drink, order-ahead, birthday\n• Minimal data\n• Separate marketing consent (AR/EN)\n• 3 consented audiences nightly\n• Deletion flows downstream",
+                "visual": "Layout: vertical journey from app screen to warehouse to ad platforms. Timing: app mock with two checkboxes ~20s; warehouse table with consent flags ~50s; three audience chips generate ~80s; deletion event arrow removing a contact ~105s; opt-in rate KPI tile in the final 15s.",
+                "seconds": 83
+              },
+              {
                 "narration": "Recap. First-party and zero-party data are your most durable signals when earned through real value exchanges. Use deterministic identity, pick an architecture that fits, carry consent everywhere, and activate through audiences, conversion feeds and value tiers. Your next step: list three value exchanges your business could offer, the data each collects, the consent needed, and one ad activation each would enable.",
                 "onScreen": "Recap and next step\n• Earn the data\n• Deterministic identity\n• Consent everywhere\n• Plan three value exchanges",
-                "visual": "A three-row planning table filling in.",
+                "visual": "Layout: A three-row planning table filling in. Timing (27s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 27
               }
             ],
@@ -2059,12 +2131,12 @@
           ],
           "activity": "Mark which numbers in your current reports include modeled data, write the reconciliation band you expect versus backend orders, and identify one clean-room or lift test that would validate them.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Even the best, fully compliant tracking setup won't see every conversion. Some people decline consent, some switch devices, some use apps that don't share data. So platforms fill the gaps with models, and you need to know how to read those numbers honestly. In this lecture you'll learn the types of modeled measurement, how to judge them, and how data clean rooms let companies analyze combined data without sharing raw personal data.",
                 "onScreen": "Modeled measurement and clean rooms\n• Types of modeling\n• Judging modeled numbers\n• Data clean rooms\n• Privacy-enhancing technologies",
-                "visual": "A chart with solid observed bars and translucent modeled extensions; a locked room icon with two data streams entering.",
+                "visual": "Layout: A chart with solid observed bars and translucent modeled extensions; a locked room icon with two data streams entering. Timing (31s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               },
               {
@@ -2076,19 +2148,19 @@
               {
                 "narration": "You'll meet six kinds of estimate. Google Ads conversion modeling under Consent Mode estimates conversions from people who declined. GA4 behavioral modeling estimates unconsented users' activity. Platforms model conversions lost to browsers, Apple's tracking prompt and cross-device journeys. App measurement uses privacy frameworks like Apple's SKAdNetwork and AdAttributionKit. Marketing mix models estimate channel contributions from aggregated data. And lift studies estimate causal effects with randomized holdouts.",
                 "onScreen": "Six kinds\n• Consent Mode modeling\n• GA4 behavioral modeling\n• Platform conversion modeling\n• App privacy frameworks\n• MMM\n• Lift studies",
-                "visual": "Six tiles in a grid, each with a simple icon, lighting up one by one.",
+                "visual": "Layout: Six tiles in a grid, each with a simple icon, lighting up one by one. Timing (29s): title card 0–3s; then the 6 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 29
               },
               {
                 "narration": "How do you judge modeled numbers? Three checks. Direction and scale: do they move sensibly when consent rates or traffic change? Reconciliation: do platform totals, including modeled conversions, stay within a known band of your backend orders? And experiments: lift tests are the referee. If modeled attribution and a well-designed lift test disagree, trust the lift test. And always label modeled numbers in reports, so nobody mistakes an estimate for an observation.",
                 "onScreen": "Judging modeled numbers\n• Direction and scale\n• Backend reconciliation band\n• Lift tests referee\n• Label clearly",
-                "visual": "A band chart showing platform totals staying within a shaded tolerance zone around backend orders; a referee whistle icon labeled 'lift test'.",
+                "visual": "Layout: A band chart showing platform totals staying within a shaded tolerance zone around backend orders; a referee whistle icon labeled 'lift test'. Timing (31s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               },
               {
                 "narration": "Now data clean rooms. A clean room lets two or more parties analyze combined data, say your purchases and a platform's or retailer's ad exposure data, without either side seeing the other's raw, individual-level records. Queries return only aggregated results, above minimum thresholds, and often with extra protections. It's a way to answer questions like did people who saw these ads buy more, without handing over customer lists.",
                 "onScreen": "Data clean rooms\n• Combine data from two parties\n• No raw data sharing\n• Aggregated, thresholded outputs",
-                "visual": "Two parties each put a locked box into a central room; only a summary chart comes out the door.",
+                "visual": "Layout: Two parties each put a locked box into a central room; only a summary chart comes out the door. Timing (30s): title card 0–3s; then the 3 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 30
               },
               {
@@ -2100,25 +2172,25 @@
               {
                 "narration": "Examples, and check current names because this market moves fast. Google's Ads Data Hub lets you analyze Google and YouTube campaign data with your own data in BigQuery. Amazon Marketing Cloud does the same for Amazon Ads. Cloud and independent clean rooms, from providers like Snowflake, AWS, LiveRamp and InfoSum, power publisher and retailer collaborations. And many retailers, including large grocery and marketplace groups in the Gulf and the UK, offer clean room access to brands buying their retail media.",
                 "onScreen": "Examples (check current)\n• Google Ads Data Hub\n• Amazon Marketing Cloud\n• Snowflake, AWS, LiveRamp, InfoSum\n• Retail media clean rooms",
-                "visual": "A row of generic clean-room icons, each labeled by type rather than logo: platform, marketplace, cloud, retailer.",
+                "visual": "Layout: A row of generic clean-room icons, each labeled by type rather than logo: platform, marketplace, cloud, retailer. Timing (35s): title card 0–3s; then the 4 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 35
               },
               {
                 "narration": "What are they good for? Reach and frequency across channels, overlap between your customers and a platform's audience, incremental sales from retail media, and audience planning without swapping lists. The limits: thresholds hide small segments, setup needs data engineering, each clean room usually covers one partner, and contracts must define purposes, retention and allowed outputs.",
                 "onScreen": "Uses and limits\n• Reach, overlap, retail media impact\n• Small segments hidden\n• Engineering effort\n• One partner each\n• Contracts matter",
-                "visual": "Two columns: green uses with checkmarks, amber limits with caution signs.",
+                "visual": "Layout: Two columns: green uses with checkmarks, amber limits with caution signs. Timing (24s): title card 0–3s; then the 5 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 24
               },
               {
                 "narration": "Clean rooms use privacy-enhancing technologies. Aggregation thresholds. Differential privacy, which adds calibrated noise so no individual can be singled out. Secure multi-party computation. And trusted execution environments, hardware that processes data in isolation, which Google uses for confidential matching. These reduce risk. But they don't replace a lawful basis, transparency, and using data only for the purposes people were told about.",
                 "onScreen": "Privacy-enhancing technologies\n• Aggregation thresholds\n• Differential privacy\n• Secure multi-party computation\n• Trusted execution environments\n• Still need lawful basis",
-                "visual": "Four shields around a data core, each labeled with a PET; a legal document sits beneath labeled 'still required'.",
+                "visual": "Layout: Four shields around a data core, each labeled with a PET; a legal document sits beneath labeled 'still required'. Timing (27s): title card 0–3s; then the 5 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 27
               },
               {
                 "narration": "Here's an illustrative example. A UK snack brand buys retail media from a grocer. Through the grocer's clean room, it measures in aggregate whether exposed shoppers bought more than matched unexposed shoppers, and how many were new to the brand. The results feed the brand's mix model as priors. No raw loyalty data ever leaves the grocer. The lesson includes a clean-room style SQL pattern for this kind of aggregated overlap, with one warning: exposed versus unexposed isn't causal unless groups are randomized or carefully matched.",
                 "onScreen": "Example: UK snack brand (illustrative)\n• Grocer clean room\n• Exposed vs matched unexposed\n• New-to-brand share\n• Feeds MMM priors\n• Not causal unless matched well",
-                "visual": "Shopping basket icon inside a secure room; an aggregated chart exits and flows into an MMM model icon.",
+                "visual": "Layout: Shopping basket icon inside a secure room; an aggregated chart exits and flows into an MMM model icon. Timing (37s): title card 0–3s; then the 5 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 37
               },
               {
@@ -2134,9 +2206,15 @@
                 "seconds": 39
               },
               {
+                "narration": "Watch me do it. Let's walk through a first clean room analysis for an illustrative UAE snack brand buying retail media from a grocery chain. Step one, the question: did shoppers exposed to our on-site ads buy the brand more in the following two weeks than similar unexposed shoppers? Step two, the contract: the retailer's clean room lets us upload our own campaign list, and outputs only aggregates above a minimum count. Step three, the design: instead of comparing all exposed with all unexposed, we ask the retailer to match unexposed shoppers on past category purchases and store region, which reduces selection bias. Step four, the query: exposed purchasers, matched-control purchasers, and new-to-brand counts, grouped by campaign. Step five, the result: exposed shoppers bought at a higher rate than matched controls, and a meaningful share were new to the brand. Step six, the caveat, written right on the slide: matched comparison, not randomized; for a causal estimate, next quarter we'll request a holdout. Step seven, we feed the result into our marketing mix model as a prior for retail media. Every number is labeled for what it is.",
+                "onScreen": "Watch me do it: first clean-room analysis (illustrative)\n• Question + contract limits\n• Matched controls reduce bias\n• Aggregated query by campaign\n• Result + 'not randomized' caveat\n• Feed MMM prior; plan holdout",
+                "visual": "Layout: secure room graphic centered with two locked data boxes entering. Timing: question card ~10s; contract terms ~30s; matching diagram pairing shopper icons ~55s; aggregated result bars ~85s; caveat banner ~105s; MMM prior curve in the final 15s.",
+                "seconds": 82
+              },
+              {
                 "narration": "Recap. Modeled measurement fills real gaps. Label it, sanity-check it, reconcile it with the backend, and let lift tests referee. Clean rooms enable aggregated collaboration without raw data sharing, backed by privacy-enhancing technologies, but they don't make any use lawful by themselves. Your next step: mark which numbers in your reports include modeled data, set your expected reconciliation band, and pick one clean room or lift test that would validate them.",
                 "onScreen": "Recap and next step\n• Label and check modeled data\n• Lift referees\n• Clean rooms + PETs\n• Mark your modeled numbers",
-                "visual": "A report with small 'modeled' tags appearing next to certain figures.",
+                "visual": "Layout: A report with small 'modeled' tags appearing next to certain figures. Timing (31s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 31
               }
             ],
@@ -2224,12 +2302,12 @@
           ],
           "activity": "Produce the Measurement Design Document for one scenario using the template, including an architecture diagram, tracking plan, consent QA matrix and validation plan; run the AI review prompt and address the findings.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "This is your capstone. You're going to design and document a complete measurement setup that's accurate, consent-compliant and ready to build. The output is a measurement design document that a developer can implement, a privacy lead can approve, and a marketer can trust. In this lecture I'll walk you through the scenarios, the nine-section template, an abbreviated example, an AI review prompt and the rubric.",
                 "onScreen": "Capstone\n• A Measurement Design Document\n• Scenarios\n• Nine-section template\n• Example, AI review, rubric",
-                "visual": "A blueprint-style document unrolls with nine section headers.",
+                "visual": "Layout: A blueprint-style document unrolls with nine section headers. Timing (28s): title card 0–3s; then the 4 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 28
               },
               {
@@ -2241,19 +2319,19 @@
               {
                 "narration": "Pick a scenario, or use your own business. Option A, a Shopify fashion brand in the UAE selling across the Gulf and the UK, advertising on Meta, TikTok, Google and Snapchat. Option B, a Pakistani software company selling to the UK and Saudi Arabia via LinkedIn and Google, with a CRM and a forty-five-day sales cycle. Option C, a private clinic group in the UK and Saudi Arabia with online booking, where health-related data needs extra care.",
                 "onScreen": "Scenarios\n• A: UAE fashion, GCC + UK\n• B: Pakistan B2B SaaS → UK, KSA\n• C: UK/KSA clinic group (sensitive data)",
-                "visual": "Three scenario cards with icons: a clothes hanger, a laptop, a medical cross.",
+                "visual": "Layout: Three scenario cards with icons: a clothes hanger, a laptop, a medical cross. Timing (33s): title card 0–3s; then the 3 on-screen points build in narration order about every 8s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 33
               },
               {
                 "narration": "Sections one and two. Scope and objectives: the goals, KPIs, platforms, regions and decisions the data must support. Then legal and consent design, the heart of a compliant setup: your tag-to-law register, the consent platform configuration by region and language, whether you need TCF or GPP, how you honor Global Privacy Control, basic or advanced Consent Mode per region with the reasoning, and a sensitive data policy listing what must never be sent.",
                 "onScreen": "Sections 1–2\n• Scope and objectives\n• Tag-to-law register\n• CMP config by region\n• Consent Mode choices\n• Sensitive data policy",
-                "visual": "Document sections expanding with checklist items appearing.",
+                "visual": "Layout: Document sections expanding with checklist items appearing. Timing (32s): title card 0–3s; then the 5 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 32
               },
               {
                 "narration": "Sections three and four. The architecture: a diagram showing the browser, your first-party server container or tag gateway, each vendor, your CRM and backend feeding server APIs, and your warehouse, plus hosting, domain, region and monitoring. Then the tracking plan: canonical events, triggers, the source of truth, parameters, values, event ID rules, platform mappings, consent purposes and owners.",
                 "onScreen": "Sections 3–4\n• Architecture diagram\n• Hosting, domain, region, monitoring\n• Tracking plan",
-                "visual": "An architecture diagram assembling on screen, followed by a tracking plan table.",
+                "visual": "Layout: An architecture diagram assembling on screen, followed by a tracking plan table. Timing (25s): title card 0–3s; then the 3 on-screen points build in narration order about every 5s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 25
               },
               {
@@ -2265,31 +2343,31 @@
               {
                 "narration": "Sections five and six. Server-side feeds: for each platform, the events, identifiers and whether they're hashed, how click IDs are captured and stored, dedup keys, batching and retries, and how secrets are managed. Then data minimization and security: exactly which fields each vendor receives, transformations, retention, access control, key rotation, and logging that avoids personal data.",
                 "onScreen": "Sections 5–6\n• Per-platform feed specs\n• Dedup, retries, secrets\n• Fields per vendor\n• Retention, access, logging",
-                "visual": "Four platform feed cards with fields listed; a filter icon shows fields removed per vendor.",
+                "visual": "Layout: Four platform feed cards with fields listed; a filter icon shows fields removed per vendor. Timing (24s): title card 0–3s; then the 4 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 24
               },
               {
                 "narration": "Sections seven to nine. QA and monitoring: your consent matrix, automated tests in the deployment pipeline, synthetic transactions, reconciliation bands and alerts, and where evidence is stored. Modeled measurement: which reports include modeled data and how you'll validate with a lift or geo test. And the rollout plan, with phases and a RACI, who's responsible, accountable, consulted and informed, plus sign-offs.",
                 "onScreen": "Sections 7–9\n• QA + monitoring\n• Modeled data + validation\n• Rollout + RACI",
-                "visual": "A timeline with rollout phases and a small RACI grid beside it.",
+                "visual": "Layout: A timeline with rollout phases and a small RACI grid beside it. Timing (27s): title card 0–3s; then the 3 on-screen points build in narration order about every 6s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 27
               },
               {
                 "narration": "Here's an abbreviated example for scenario A. Opt-in for EU and UK visitors, an Arabic and English banner in the Gulf with marketing consent, and Global Privacy Control honored for US visitors. Advanced Consent Mode for the Gulf after legal review, basic for Europe. A server container on a first-party subdomain in a Middle East cloud region. Shopify webhooks feed the order service. Server feeds to GA4, Google Ads with enhanced conversions, Meta, TikTok and Snapchat. Hashed identifiers only go to ad platforms when ad consent is granted. And validation through a Meta lift study and a TikTok geo test.",
                 "onScreen": "Example: Scenario A (abbreviated)\n• Region-specific consent\n• First-party server container\n• Five server feeds\n• Consent-gated identifiers\n• Lift + geo validation",
-                "visual": "Map of the Gulf and UK with a server icon on a subdomain; five vendor arrows each with a consent gate.",
+                "visual": "Layout: Map of the Gulf and UK with a server icon on a subdomain; five vendor arrows each with a consent gate. Timing (43s): title card 0–3s; then the 5 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 43
               },
               {
                 "narration": "Use AI as a reviewer. The lesson's prompt asks a model, acting as a privacy engineer and measurement lead, to find any place data could reach a vendor without valid consent, check each feed's dedup, hashing, click IDs and retries, spot sensitive data leaks in URLs or parameters, identify missing QA scenarios, and list assumptions your legal counsel must confirm, in a table with severity and fixes. Never paste real personal data. Review the design, not the customers.",
                 "onScreen": "AI as reviewer\n• Consent gaps\n• Feed checks\n• Leakage risks\n• Missing QA\n• Assumptions for counsel\n• No real personal data",
-                "visual": "A document with AI margin comments tagged by severity; a padlock over a 'customer data' folder kept outside the frame.",
+                "visual": "Layout: A document with AI margin comments tagged by severity; a padlock over a 'customer data' folder kept outside the frame. Timing (34s): title card 0–3s; then the 6 on-screen points build in narration order about every 4s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 34
               },
               {
                 "narration": "Score yourself on six criteria. Lawfulness: every purpose mapped to a basis per region, with consent enforced client-side and server-side. Architecture: first-party, minimal, monitored, secure. Accuracy: dedup, IDs, values, currencies and click IDs designed end to end. Coverage: server feeds for each platform and offline loops. QA: automated tests, synthetic transactions, reconciliation and evidence. And honesty: modeled data labeled, with a validation plan.",
                 "onScreen": "Rubric\n• Lawfulness\n• Architecture\n• Accuracy\n• Coverage\n• QA\n• Honesty",
-                "visual": "Six-row rubric with check marks sliding into 'excellent'.",
+                "visual": "Layout: Six-row rubric with check marks sliding into 'excellent'. Timing (27s): title card 0–3s; then the 6 on-screen points build in narration order about every 3s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 27
               },
               {
@@ -2299,9 +2377,15 @@
                 "seconds": 40
               },
               {
+                "narration": "Watch me do it. Let's draft the QA section of an illustrative measurement design document for scenario B, the Pakistani software company selling to the UK and Saudi Arabia. First, the consent matrix: two region profiles, UK and Saudi Arabia, three choices each, accept all, reject all, analytics only, and for each cell, which tags fire client-side and which forwards happen server-side. Six rows, written in a table. Second, automation: a Playwright test for the UK reject-all row runs on every deployment and fails the release if any request to LinkedIn, Google Ads or Meta appears. Third, the synthetic conversion: every six hours a test lead is submitted with a test flag; the CRM routes it to a test pipeline stage, and the server sends a test LinkedIn and Google conversion that we verify arrived, without polluting real data. Fourth, reconciliation: weekly, CRM SQLs versus LinkedIn and Google reported conversions, with bands. Fifth, evidence: every release stores the test report and a HAR file in a dated folder. Sixth, ownership: the growth engineer owns the suite, the privacy lead reviews quarterly. That's a QA section a regulator or client would respect.",
+                "onScreen": "Watch me do it: MDD QA section (illustrative)\n• 2 regions × 3 choices matrix\n• Playwright gate on releases\n• 6-hourly synthetic lead\n• Weekly CRM vs platform bands\n• Evidence + owners",
+                "visual": "Layout: document page with the QA section expanding. Timing: consent matrix table fills row by row ~0–45s; pipeline gate icon ~60s; clock with synthetic lead ~80s; reconciliation band chart ~100s; evidence folder and owner badges in the final 20s.",
+                "seconds": 83
+              },
+              {
                 "narration": "That's the course. You now understand the real state of tracking, the laws that govern it, consent management and Consent Mode, GA4 and server-side tagging, every major conversion API, data quality and QA, first-party data strategy, and modeled measurement. Your next step: write your measurement design document, run the AI review, fix what it finds, and you'll have a blueprint any team would be glad to build.",
                 "onScreen": "Your next step\n• Write your MDD\n• Run the AI review\n• Fix and submit",
-                "visual": "The blueprint document closes and a subtle badge outline appears.",
+                "visual": "Layout: The blueprint document closes and a subtle badge outline appears. Timing (29s): title card 0–3s; then the 3 on-screen points build in narration order about every 7s, each animating its element; hold and highlight the key idea in the final 5s.",
                 "seconds": 29
               }
             ],
