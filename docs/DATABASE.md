@@ -44,6 +44,12 @@ release carries a **foreign baseline**: an applied `…_InitialCreate` id this b
 |---|---|---|
 | `Auto` (default) | upgrades the file at startup, keeping all data (below) | refuses to start, naming the fix (`BaselineUpgradeException`) |
 | `Refuse` | refuses to start, naming the fix | refuses to start, naming the fix |
+| `AutoOrFresh` (**demo/staging only**, `render.yaml`) | as `Auto`; if the upgrade fails verification, or the file is unreadable, sets the file aside unchanged and starts on a fresh database (below) | as `Auto` |
+
+Before migrating, the SQLite file is inspected with its own connection (`SqliteDatabaseProbe`): a file with tables but
+**no `__EFMigrationsHistory`** (or an empty one) is treated as a foreign baseline named `no-migrations-history` and
+upgraded like any other; a file SQLite **cannot read** (not a database, corrupt; with `AutoOrFresh` also a failed
+`PRAGMA quick_check`) stops startup with a clear message in `Auto`/`Refuse`.
 
 **SQLite upgrade** (under the `database-baseline-upgrade` named lock, before any request is served):
 
@@ -62,11 +68,37 @@ release carries a **foreign baseline**: an applied `…_InitialCreate` id this b
    row counts, new and dropped tables/columns and the backup path. Seeding then runs as usual (idempotent), so new
    reference data appears. The next start finds the current baseline and does nothing.
 
+**`AutoOrFresh` fallback (demo/staging only).** When step 4 fails, when any other step of the upgrade throws, or when
+the file cannot be read, the API does not stop: the live file is **moved unchanged** (with its `-wal`/`-shm`, so the
+copy stays consistent) to `<db dir>/backups/<name>-<old baseline>-<utc>-unmigrated.db` (e.g.
+`/app/storage/db/backups/optimizeall-20260924231550_InitialCreate-20260925T180102Z-unmigrated.db`;
+`…-unreadable-…-unmigrated.db` for an unreadable file), the redundant step-1 copy is deleted, a `crit` log line
+`DATABASE RESET (Database:BaselineUpgrade=AutoOrFresh)` names the file and the reason, and startup continues with a
+**fresh database** (migrations + the configured seed profiles). The next start finds the current baseline and keeps it.
+To recover the old data, stop the API, repair the file (or upgrade it with `Auto` on a copy) and move it back to
+`db/optimizeall.db`. Never use `AutoOrFresh` where data matters: production keeps `Auto`, which stops instead.
+
+**Seeders** run after the schema is ready. A seeder that throws is logged (`Startup: seeder X … failed … and was
+skipped`) and the API starts without its data (`Database:SeedFailure=Continue`, the default; `Fail` stops startup,
+which the integration tests use); the learning catalog applies each course pack under its own savepoint, so one bad
+pack is skipped and the others are applied. Migrations and the baseline upgrade are always fatal (except the
+`AutoOrFresh` fallback). Each phase and seeder is logged with its duration and memory (`Startup: …`).
+
 The upgrade needs free disk space for the backup and the new file (about twice the database). The Data Protection key
 ring (`<name>-keys/`) is not touched. It takes seconds (the Demo database: 241 tables, ≈ 21 000 rows, 2.4 s). This is
-the only raw SQL in the backend: a deliberate exception confined to `SqliteBaselineUpgrader`, whose identifiers come
-only from `sqlite_master`/`pragma_table_xinfo` and the EF model (always quoted), never from input. Tested by
-`BaselineUpgradeTests` against SQLite files created by b70926b and a730b95 (Baseline + Demo seed).
+the only raw SQL in the backend: a deliberate exception confined to `SqliteBaselineUpgrader` and
+`SqliteDatabaseProbe`, whose identifiers come only from `sqlite_master`/`pragma_table_xinfo` and the EF model (always
+quoted), never from input. Tested by `BaselineUpgradeTests` against SQLite files created by 5ca8a65 (the first SQLite
+release, whose first start migrated and then crashed in its seed), f781343, b70926b and a730b95 (Baseline + Demo
+seed), plus `AutoOrFresh`, unreadable-file and missing-history cases.
+
+**Every historical baseline verified (2026-09-25).** Each of the 20 `InitialCreate` ids of the main line (5ca8a65 …
+2d2b326) was recreated by building that commit and starting it once like `render.yaml` (Staging, `Migrate`,
+Baseline + Demo seed); the current API image then started on each file in a container limited like Render starter
+(`--memory=512m --cpus=0.5`) with the Blueprint's environment: all 20 upgraded (3–8 s), seeded and answered
+`/health/ready` and the demo sign-in, in 22–77 s (the 5ca8a65 file, which has to be seeded almost from scratch, is the
+slowest), peak resident (anonymous) memory 134–262 MiB of the 512 MiB. The same image on a file with a foreign-key
+violation and on a file of random bytes (`AutoOrFresh`) set each aside as `…-unmigrated.db` and started fresh in ≈ 73 s.
 
 **MySQL:** there is no atomic file swap, so the API refuses (in both modes) and names the fix. Stop the API, take a
 `mysqldump`, then run `scripts/upgrade-baseline-mysql.sh` from a checkout of the release being deployed, as a user

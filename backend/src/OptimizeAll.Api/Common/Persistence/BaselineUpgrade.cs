@@ -70,7 +70,7 @@ public static class BaselineUpgrade
             if (mode != BaselineUpgradeMode.AutoOrFresh)
                 throw new BaselineUpgradeException(
                     $"The SQLite database {probe.Path} cannot be read ({unreadable}), so the API will not start. Restore it from " +
-                    "a backup (docs/RENDER.md § Backups), or on a demo/staging environment set " +
+                    "a backup (docs/RENDER.md, \"Back up the database\"), or on a demo/staging environment set " +
                     "Database:BaselineUpgrade=AutoOrFresh to set the file aside and start with a fresh database " +
                     "(docs/DATABASE.md § Baseline upgrade).");
             return await SqliteFreshStart.SetAsideAsync(db, probe.Path, "unreadable", unreadable, logger, ct);

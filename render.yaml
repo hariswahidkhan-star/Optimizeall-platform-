@@ -27,7 +27,8 @@ services:
     # No healthCheckPath here: Render documents HTTP health checks (healthCheckPath) for web services, and it is not
     # established that private services (pserv) support them, so none is configured rather than guessed. The API serves
     # /health/live and /health/ready; optimizeall-web proxies /health/ and has its own health check. The first start takes
-    # about 60 s (migrations + Baseline/Demo seed) before the API accepts requests (docs/RENDER.md).
+    # about 75 s on starter (migrations + Baseline/Demo seed); meanwhile the port is open, /health/live answers 200 and
+    # everything else 503 "starting" (docs/RENDER.md).
     # One disk for all state: db/optimizeall.db (+ -wal/-shm) and files/ (uploaded screenshots, campaign images).
     # Render keeps daily snapshots of disks; a disk also means zero-downtime deploys are not possible (the old
     # instance stops before the new one starts), which SQLite requires anyway.
@@ -50,6 +51,19 @@ services:
         value: Baseline
       - key: Database__Seed__1
         value: Demo
+      # Demo/staging only: a database from an earlier release is upgraded keeping its data (as with Auto); if that
+      # upgrade fails verification, or the file is unreadable, the old file is set aside unchanged in
+      # db/backups/optimizeall-<old baseline>-<utc>-unmigrated.db and the API starts on a fresh demo database instead
+      # of not starting at all (docs/DATABASE.md § Baseline upgrade). Production keeps the default, Auto.
+      - key: Database__BaselineUpgrade
+        value: AutoOrFresh
+      # Memory (starter: 512 MB): workstation GC and a 300 MiB managed-heap cap, so the GC collects well before the
+      # instance limit even if the runtime cannot see it. A full demo seed peaks at ~155 MiB of managed heap and
+      # ~260 MiB resident (docs/RENDER.md, "Things to know").
+      - key: DOTNET_gcServer
+        value: "0"
+      - key: DOTNET_GCHeapHardLimit
+        value: "0x12C00000"
       - key: Jwt__SigningKey
         generateValue: true
       - key: Security__HashSalt

@@ -263,9 +263,11 @@ Two supported modes:
 **Databases from releases before the baseline freeze.** Until 2026-09-25 every schema change regenerated the
 `InitialCreate` migration, so a database created by an earlier release records a different `InitialCreate` id and
 the current migrations cannot be applied to it (they would re-create existing tables). `Database:BaselineUpgrade`
-(`Auto` default | `Refuse`) decides what the API does in `Migrate` mode: on SQLite `Auto` backs up the file to
-`db/backups/` and copies all data into the current schema at startup; MySQL (and `Refuse`) stops startup with a
-`BaselineUpgradeException` that names the fix, `scripts/upgrade-baseline-mysql.sh` (dry run first, then `--apply`).
+(`Auto` default | `Refuse` | `AutoOrFresh`) decides what the API does in `Migrate` mode: on SQLite `Auto` backs up the
+file to `db/backups/` and copies all data into the current schema at startup; MySQL (and `Refuse`) stops startup with
+a `BaselineUpgradeException` that names the fix, `scripts/upgrade-baseline-mysql.sh` (dry run first, then `--apply`).
+`AutoOrFresh` is for demo/staging only (the SQLite Render Blueprint): when the upgrade fails or the file is unreadable,
+it sets the file aside unchanged as `db/backups/…-unmigrated.db` and starts on a fresh database; never in production.
 The migrator image fails on such a database too: run that script before it. Details:
 [DATABASE.md § Baseline upgrade](DATABASE.md#baseline-upgrade-databases-from-earlier-releases).
 
@@ -405,6 +407,7 @@ Database__InitializationMode=Migrate                  # the API applies the SQLi
   `Database__InitializationMode=Migrate`. Take a backup of `db/` before upgrading. A database file created by a
   release before the baseline freeze is upgraded automatically at startup (`Database__BaselineUpgrade=Auto`, the
   default; the original is kept in `db/backups/`, so leave room for two copies of the database on the volume); set
-  `Refuse` to stop instead ([DATABASE.md § Baseline upgrade](DATABASE.md#baseline-upgrade-databases-from-earlier-releases)).
+  `Refuse` to stop instead, or, for a demo only, `AutoOrFresh` to start on a fresh database when the upgrade fails
+  ([DATABASE.md § Baseline upgrade](DATABASE.md#baseline-upgrade-databases-from-earlier-releases)).
 * To move from SQLite to MySQL later, start a MySQL deployment and migrate the data with your preferred tool; the
   schema is the same model on both providers.

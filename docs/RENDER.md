@@ -33,9 +33,14 @@ Both run the same images and code; only the database differs (`Database__Provide
   The API backs the file up to `db/backups/optimizeall-<old baseline>-<utc>.db`, copies every row into the current
   schema, verifies it and swaps the files; the log line `Baseline upgrade from … finished` lists what was copied. The
   demo seed then adds any new reference data. Keep room for two copies of the database on the disk (the demo database
-  is ≈ 20 MB), and delete old backups from the Shell once you no longer need them. If the upgrade cannot verify the
-  data it stops the API and leaves the database as it was (see the deploy log). Set `Database__BaselineUpgrade=Refuse`
-  to never do this automatically.
+  is ≈ 20 MB), and delete old backups from the Shell once you no longer need them.
+* **The demo always starts (`Database__BaselineUpgrade=AutoOrFresh`).** This Blueprint is a demo/staging environment,
+  so if the upgrade cannot verify the data, or the database file is unreadable, the API does not stay down: it moves
+  the old file **unchanged** to `db/backups/optimizeall-<old baseline>-<utc>-unmigrated.db` and starts on a fresh demo
+  database. The deploy log then shows a `crit` line starting `DATABASE RESET` with the path and the reason; the old
+  data is still in that file (stop the API, fix it, move it back to `db/optimizeall.db` to recover it). For data that
+  matters use `Auto` (the default: the API stops and leaves the database as it was) or `Refuse` (never upgrade
+  automatically); see [DATABASE.md § Baseline upgrade](DATABASE.md#baseline-upgrade-databases-from-earlier-releases).
 
 ### MySQL (`deploy/render/render-mysql.yaml`)
 
@@ -75,8 +80,9 @@ region to use Render's private network; change `region` on all of them together 
    first visit after a fresh install they are root-relative and the API logs a warning. Setting the value (or
    **Site settings → SEO → Site URL**) makes links independent of traffic and is what you want for a custom domain.
 4. Wait for the services to go live (first build ≈ 10–15 min; the API migrates and seeds, with MySQL after waiting
-   for the database). Even after Render shows the API as live, its **first start takes about 60 s** (migrations plus
-   the Baseline and Demo seed) before it answers; until then the web service returns 503 for `/api` requests and pages.
+   for the database). Even after Render shows the API as live, its **first start takes about 75 s** on starter
+   (migrations plus the Baseline and Demo seed) before it serves requests; meanwhile `/health/live` already answers 200
+   and every other API path 503 "starting", and the web service returns 503 for `/api` requests and pages.
 5. Open the web service URL and sign in with a demo account.
 
 Secrets (`Jwt__SigningKey`, `Security__HashSalt`, and for MySQL `MYSQL_PASSWORD`/`MYSQL_ROOT_PASSWORD`) are generated
@@ -124,8 +130,17 @@ The public agency website is the web service's root URL; no sign-in needed.
 * **Email is not sent.** The demo writes email to files. To follow a verification or reset link for a newly
   registered account, open `https://<web-url>/api/v1/dev/mailbox?to=<email>`. For real email set `Email__Mode=Smtp`,
   the `Email__Smtp*` settings and `DevTools__MailboxEnabled=false`.
-* **First start ≈ 60 s.** On a fresh disk/database the API applies migrations and seeds the demo data before it listens,
-  which takes about a minute (later restarts are quick). `https://<web-url>/health/ready` answers 200 once it is up.
+* **First start ≈ 75 s.** On a fresh disk/database the API applies migrations and seeds the demo data before it serves
+  requests, which takes about 75 s on starter's 0.5 CPU (later restarts: ≈ 20 s). A small startup responder holds the
+  port meanwhile: `/health/live` answers 200, everything else 503 with `Retry-After`; `https://<web-url>/health/ready`
+  answers 200 once the API is up. The log shows each phase (`Startup: schema ready …`, `Startup: seeder … done in … ms`
+  with memory, `Startup: database initialization finished …`); a seeder that fails is logged and skipped instead of
+  stopping the API.
+* **Memory (starter = 512 MB).** The Blueprint sets `DOTNET_gcServer=0` and `DOTNET_GCHeapHardLimit=0x12C00000`
+  (300 MiB managed heap), so the GC collects well before the instance limit even if the runtime cannot see it.
+  Measured under `--memory=512m --cpus=0.5`: a fresh Baseline + Demo seed peaks at ≈ 155 MiB managed heap and
+  225–260 MiB resident (anonymous) memory; upgrading and seeding the oldest release's database about the same, and an
+  upgrade of a complete demo database ≈ 150 MiB. The log's `Startup:` lines show the memory after each phase.
   `render.yaml` configures no health check on the private API service: Render documents `healthCheckPath` for web
   services, and private-service support is not established, so the web service's own check is the one Render uses. It
   is nginx's `/healthz` (not `/`): public pages are rendered by the API (docs/SEO_CRO.md § 9), which may still be
@@ -178,6 +193,13 @@ root-relative (`/api/v1/public/learning/courses/{slug}/badge.svg`), so they load
 (`img-src 'self'`) whatever the public URL is.
 
 ## Verified locally
+
+**2026-09-25, API image under Render starter limits.** `backend/Dockerfile` built from scratch (`--no-cache`, the
+NuGet packages in the restore layer), the image started with `render.yaml`'s API environment under
+`docker run --memory=512m --cpus=0.5`: on an empty disk, and on the database of each of the 20 earlier releases of the
+main line (5ca8a65 … 2d2b326, each created by building that commit and starting it once with Baseline + Demo). Every
+start upgraded (where needed), seeded all 52 course packs and the demo data, answered `/health/live` within ≈ 3–5 s
+and `/health/ready` plus the demo sign-in afterwards; no OOM (numbers in [DATABASE.md § Baseline upgrade](DATABASE.md#baseline-upgrade-databases-from-earlier-releases)).
 
 Both Blueprints were reproduced end to end with Docker, most recently on **2026-09-24** (images built from
 `backend/Dockerfile` and `frontend/Dockerfile`; every `envVars` entry translated to container environment, random

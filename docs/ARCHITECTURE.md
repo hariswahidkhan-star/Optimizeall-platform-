@@ -135,7 +135,8 @@ The API runs on **MySQL 8** or **SQLite** (`Database:Provider` = `MySql` (defaul
 Rules for all code (other agents included):
 
 * **No raw SQL in modules.** (The one deliberate exception is `SqliteBaselineUpgrader` in
-  `Common/Persistence/BaselineUpgrade.cs`, which copies tables between two schema versions at startup; see
+  `Common/Persistence/BaselineUpgrade.cs`, which copies tables between two schema versions at startup, with its catalog
+  probe `SqliteDatabaseProbe` in `Common/Persistence/SqliteStartupRecovery.cs`; see
   [DATABASE.md § Baseline upgrade](DATABASE.md#baseline-upgrade-databases-from-earlier-releases).)
   Use LINQ / `ExecuteUpdateAsync` / `ExecuteDeleteAsync`. For locking use
   `IDatabaseDialect` (`Common/Persistence/DatabaseDialect.cs`; inject it, or `db.Dialect()` in static helpers):
