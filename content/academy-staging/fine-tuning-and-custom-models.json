@@ -860,7 +860,7 @@
                 "seconds": 29
               },
               {
-                "narration": "A simple example. An estate agency wants a model that classifies enquiry emails. The emails contain names, phone numbers and addresses. For classification, none of that is needed. So they replace names with Customer, phone numbers with a fixed fake number, and addresses with City, before training. They check fifty redacted emails by hand, find three missed phone numbers in an unusual format, add a pattern for it, and re-run. The model learns the intent, not the people.",
+                "narration": "A simple example. An estate agency wants a model that classifies inquiry emails. The emails contain names, phone numbers and addresses. For classification, none of that is needed. So they replace names with Customer, phone numbers with a fixed fake number, and addresses with City, before training. They check fifty redacted emails by hand, find three missed phone numbers in an unusual format, add a pattern for it, and re-run. The model learns the intent, not the people.",
                 "onScreen": "Simple example: estate agency\n• Replace names, phones, addresses\n• Hand-check 50 → 3 misses\n• Add a pattern, re-run\n• Model learns intent, not people",
                 "visual": "An email with highlighted entities being replaced by placeholders; a checklist shows 47 clean and 3 flagged, then a new pattern card is added and all 50 turn clean.",
                 "seconds": 34
