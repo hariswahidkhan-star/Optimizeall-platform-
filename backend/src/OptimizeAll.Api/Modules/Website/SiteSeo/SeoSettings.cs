@@ -35,14 +35,16 @@ public static class CrawlerCatalog
             "Google, Bing, Apple, DuckDuckGo, Yandex and Baidu: how people find the site in search results.",
             true, new[] { "Googlebot", "Bingbot", "Applebot", "DuckDuckBot", "YandexBot", "Baiduspider" }),
         new(AiSearch, "AI search and assistants",
-            "Crawlers that fetch pages to answer a user's question with a link back (ChatGPT search, Claude, Perplexity).",
-            true, new[] { "OAI-SearchBot", "ChatGPT-User", "Claude-SearchBot", "Claude-User", "PerplexityBot", "Perplexity-User" }),
+            "Crawlers that fetch pages to answer a user's question with a link back (ChatGPT search, Claude, Perplexity, " +
+            "DuckDuckGo's DuckAssist, Mistral Le Chat, Meta AI, Amazon Alexa and Rufus, You.com).",
+            true, new[] { "OAI-SearchBot", "ChatGPT-User", "Claude-SearchBot", "Claude-User", "PerplexityBot", "Perplexity-User",
+                "DuckAssistBot", "MistralAI-User", "Meta-ExternalFetcher", "Amazonbot", "YouBot" }),
         new(AiTraining, "AI model training",
             "Reputable AI companies that use public pages to train models (OpenAI, Anthropic, Google, Apple, Meta, Common Crawl).",
             true, new[] { "GPTBot", "ClaudeBot", "anthropic-ai", "Google-Extended", "Applebot-Extended", "Meta-ExternalAgent", "CCBot" }),
         new(Scrapers, "Aggressive scrapers",
             "Crawlers known for heavy, low-value scraping. Blocked by default.",
-            false, new[] { "Bytespider", "PetalBot", "Amazonbot", "cohere-ai", "Diffbot", "ImagesiftBot", "omgili" }),
+            false, new[] { "Bytespider", "PetalBot", "cohere-ai", "Diffbot", "ImagesiftBot", "omgili" }),
     };
 
     public static CrawlerGroup? Find(string key) => Groups.FirstOrDefault(g => g.Key == key);

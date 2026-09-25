@@ -51,6 +51,20 @@ public sealed class JsonLd(string baseUrl, SiteSettings site)
         org["telephone"] = site.Contact.Phone;
         org["foundingDate"] = o.FoundingYear?.ToString(CultureInfo.InvariantCulture);
         org["sameAs"] = site.Social.Count > 0 ? site.Social.Select(s => s.Url).ToArray() : null;
+        // How to reach the organization (Google knowledge panel / assistants): from the contact settings.
+        if (site.Contact.Email is not null || site.Contact.Phone is not null)
+            org["contactPoint"] = new[]
+            {
+                new Dictionary<string, object?>
+                {
+                    ["@type"] = "ContactPoint",
+                    ["contactType"] = "customer service",
+                    ["email"] = site.Contact.Email,
+                    ["telephone"] = site.Contact.Phone,
+                    ["url"] = Url("/contact"),
+                    ["availableLanguage"] = "English",
+                }.Where(kv => kv.Value is not null).ToDictionary(kv => kv.Key, kv => kv.Value),
+            };
         org["areaServed"] = o.AreaServed.Count > 0 ? o.AreaServed.ToArray() : null;
         if (o.StreetAddress is not null || o.Locality is not null || o.CountryCode is not null) org["address"] = Address();
         return Element(org);

@@ -10,8 +10,9 @@ namespace OptimizeAll.Api.Modules.Website.SiteSeo;
 
 /// <summary>
 /// IndexNow (Bing, Yandex, Seznam, Naver…): when enabled in Website → SEO (off by default), every 10 minutes submits the
-/// sitemap URLs whose content changed since the last successful submission, so new and updated pages are crawled
-/// quickly. The key file is served at <c>/{key}.txt</c>. Skipped unless the site URL is a public https origin.
+/// sitemap URLs whose content changed since the last successful submission, plus the URLs that left the sitemaps since
+/// then (unpublished, deleted or moved content, which now answers 404/410/301), so new, updated and removed pages are
+/// recrawled quickly. The key file is served at <c>/{key}.txt</c>. Skipped unless the site URL is a public https origin.
 /// Idempotent and safe on several instances (named lock; the watermark only advances after a successful submission).
 /// </summary>
 public sealed class IndexNowJob(
@@ -24,7 +25,10 @@ public sealed class IndexNowJob(
 
     public string Name => nameof(IndexNowJob);
 
-    private sealed record State(DateTime? LastSubmittedAt);
+    /// <summary>At most this many known paths are remembered for removal detection (larger sites only get changes).</summary>
+    public const int MaxRememberedPaths = 50_000;
+
+    private sealed record State(DateTime? LastSubmittedAt, IReadOnlyList<string>? Paths = null);
 
     public async Task<string> ExecuteAsync(CancellationToken ct)
     {
@@ -38,9 +42,13 @@ public sealed class IndexNowJob(
         var doc = await db.Set<SiteSettingsDocument>().FirstOrDefaultAsync(d => d.Key == StateKey, ct);
         var state = doc is null ? new State(null) : JsonSerializer.Deserialize<State>(doc.Json) ?? new State(null);
         var started = clock.GetUtcNow().UtcDateTime;
-        var urls = (await resolver.SitemapUrlsAsync(ct))
+        var sitemap = await resolver.SitemapUrlsAsync(ct);
+        var current = sitemap.Select(u => u.Path).ToHashSet(StringComparer.Ordinal);
+        var removed = state.LastSubmittedAt is null ? new List<string>() : (state.Paths ?? Array.Empty<string>()).Where(p => !current.Contains(p)).ToList();
+        var urls = sitemap
             .Where(u => state.LastSubmittedAt is null || (u.LastModified ?? DateTime.MinValue) > state.LastSubmittedAt)
-            .Select(u => resolver.Absolute(u.Path)).Take(MaxUrlsPerRequest).ToList();
+            .Select(u => u.Path).Concat(removed)
+            .Select(resolver.Absolute).Take(MaxUrlsPerRequest).ToList();
         if (urls.Count > 0)
         {
             var endpoint = configuration["Website:Seo:IndexNowEndpoint"] ?? "https://api.indexnow.org/indexnow";
@@ -59,7 +67,7 @@ public sealed class IndexNowJob(
             doc = new SiteSettingsDocument { Key = StateKey };
             db.Add(doc);
         }
-        doc.Json = JsonSerializer.Serialize(new State(started));
+        doc.Json = JsonSerializer.Serialize(new State(started, current.Count <= MaxRememberedPaths ? current.Order(StringComparer.Ordinal).ToList() : null));
         await db.SaveChangesAsync(ct);
         await tx.CommitAsync(ct);
         return $"IndexNow: submitted {urls.Count} URLs.";

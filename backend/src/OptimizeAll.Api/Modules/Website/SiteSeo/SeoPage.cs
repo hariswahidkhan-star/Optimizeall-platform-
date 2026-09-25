@@ -38,6 +38,11 @@ public sealed class SeoPage
     public int? OgImageWidth { get; set; }
     public int? OgImageHeight { get; set; }
     public string? OgImageAlt { get; set; }
+    /// <summary>
+    /// The words of the page's generated social card (SocialCards/SocialCardRenderer.cs). Null: derived from the page
+    /// (<see cref="SocialCards.SocialCardFactory"/>). Only used when the page has no image of its own.
+    /// </summary>
+    public SocialCards.SocialCard? Card { get; set; }
     public DateTime? PublishedAt { get; set; }
     public DateTime? ModifiedAt { get; set; }
     public string? Author { get; set; }

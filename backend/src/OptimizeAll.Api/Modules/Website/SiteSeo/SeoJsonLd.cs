@@ -18,6 +18,35 @@ public sealed class SeoJsonLd(JsonLd ld, string siteName)
 
     public JsonLd Base => ld;
 
+    private static readonly HashSet<string> ArticleTypes = new(StringComparer.Ordinal) { "Article", "BlogPosting", "NewsArticle", "TechArticle" };
+
+    /// <summary>
+    /// Adds <paramref name="imageUrl"/> as <c>image</c> to an Article-type node (top level or in <c>@graph</c>) that has
+    /// none: Google's article rich results require an image. Other nodes are returned unchanged.
+    /// </summary>
+    public static JsonElement WithArticleImage(JsonElement node, string imageUrl)
+    {
+        static bool IsArticle(System.Text.Json.Nodes.JsonObject o) => o["@type"] switch
+        {
+            System.Text.Json.Nodes.JsonValue v when v.TryGetValue<string>(out var t) => ArticleTypes.Contains(t),
+            System.Text.Json.Nodes.JsonArray a => a.Any(x => x is System.Text.Json.Nodes.JsonValue v && v.TryGetValue<string>(out var t) && ArticleTypes.Contains(t)),
+            _ => false,
+        };
+        static bool Missing(System.Text.Json.Nodes.JsonObject o) =>
+            !o.TryGetPropertyValue("image", out var img) || img is null || (img is System.Text.Json.Nodes.JsonArray arr && arr.Count == 0);
+        if (node.ValueKind != JsonValueKind.Object) return node;
+        var root = System.Text.Json.Nodes.JsonNode.Parse(node.GetRawText())!.AsObject();
+        var targets = new List<System.Text.Json.Nodes.JsonObject> { root };
+        if (root["@graph"] is System.Text.Json.Nodes.JsonArray graph) targets.AddRange(graph.OfType<System.Text.Json.Nodes.JsonObject>());
+        var changed = false;
+        foreach (var o in targets.Where(o => IsArticle(o) && Missing(o)))
+        {
+            o["image"] = new System.Text.Json.Nodes.JsonArray(imageUrl);
+            changed = true;
+        }
+        return changed ? JsonSerializer.SerializeToElement(root) : node;
+    }
+
     public static JsonElement Element(Dictionary<string, object?> value) =>
         JsonSerializer.SerializeToElement(value.Where(kv => kv.Value is not null).ToDictionary(kv => kv.Key, kv => kv.Value), Options);
 

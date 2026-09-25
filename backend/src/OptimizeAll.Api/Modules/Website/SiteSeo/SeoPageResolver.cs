@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using OptimizeAll.Api.Modules.Content.Copy;
 using OptimizeAll.Api.Modules.LandingPages;
 using OptimizeAll.Api.Modules.Learning;
@@ -46,7 +47,8 @@ public sealed class NoSeoRedirects : ISeoRedirectLookup
 public sealed partial class SeoPageResolver(
     PublicSiteService site, AppDbContext db, SiteCopyService copyService, CareersService careers, LandingPageService landing,
     ISeoRedirectLookup redirects, PartnerPublicService partners, IEnumerable<ISitemapContributor> sitemapContributors,
-    PublicLearningService learning, CertificateService certificates, TimeProvider clock)
+    PublicLearningService learning, CertificateService certificates, TimeProvider clock,
+    IMemoryCache memoryCache)
 {
     /// <summary>Signed-in areas (portals). Never indexed; disallowed in robots.txt.</summary>
     public static readonly string[] PortalPrefixes = { "/app", "/admin", "/agency", "/client", "/review", "/finance", "/manage" };
@@ -144,14 +146,70 @@ public sealed partial class SeoPageResolver(
         if (NormalizePath(path) is { } normalized)
             return Redirect(path, normalized + qs, 301);
 
+        SeoPage page;
         try
         {
-            return await DispatchAsync(path, query, ct) ?? NotFound(path);
+            page = await DispatchAsync(path, query, ct) ?? NotFound(path);
         }
         catch (DomainException ex) when (ex.Kind == DomainErrorKind.NotFound)
         {
-            return NotFound(path);
+            page = NotFound(path);
         }
+        Finish(page, qs);
+        if (page.IsIndexable && page.ModifiedAt is null) page.ModifiedAt = await SitemapLastModifiedAsync(path + qs, ct);
+        return page;
+    }
+
+    /// <summary>
+    /// The sitemap's lastmod of a URL, for pages whose builder sets no modification time (Last-Modified then matches the
+    /// sitemap). The lookup is built from <see cref="SitemapUrlsAsync"/> and kept for two minutes.
+    /// </summary>
+    private async Task<DateTime?> SitemapLastModifiedAsync(string pathAndQuery, CancellationToken ct)
+    {
+        var key = "seo:lastmod:" + _baseUrl;
+        if (!memoryCache.TryGetValue(key, out IReadOnlyDictionary<string, DateTime?>? map) || map is null)
+        {
+            map = (await SitemapUrlsAsync(ct)).GroupBy(u => u.Path, StringComparer.Ordinal).ToDictionary(g => g.Key, g => g.First().LastModified, StringComparer.Ordinal);
+            memoryCache.Set(key, map, new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(2), Size = 1,
+            });
+        }
+        return map.TryGetValue(pathAndQuery, out var modified) ? modified : null;
+    }
+
+    /// <summary>The images the site falls back to (a page showing one of these gets a generated social card instead).</summary>
+    private IEnumerable<string> DefaultImages()
+    {
+        yield return _ld.Url(DefaultOgImagePath);
+        if (_settings.Seo.DefaultOgImageUrl is { } configured) yield return _ld.Url(configured);
+    }
+
+    /// <summary>The host name shown on social cards (without "www.").</summary>
+    public string CardHost => Uri.TryCreate(_baseUrl, UriKind.Absolute, out var u) ? u.Host.StartsWith("www.", StringComparison.OrdinalIgnoreCase) ? u.Host[4..] : u.Host : _settings.SiteName;
+
+    /// <summary>
+    /// Sitewide finishing touches after a page is built: a generated 1200×630 social card (SocialCards/) when the page
+    /// has no raster image of its own, and that image on Article/BlogPosting JSON-LD that lacks one (required by Google).
+    /// Client landing pages keep their own branding and are left alone.
+    /// </summary>
+    private void Finish(SeoPage page, string queryString)
+    {
+        if (page.Status != 200 || page.Kind != SeoPageKind.Content || page.Path.StartsWith("/lp/", StringComparison.Ordinal)) return;
+        if (page.Card is not null || SocialCards.SocialCardFactory.NeedsCard(page, DefaultImages()))
+        {
+            var card = page.Card ?? SocialCards.SocialCardFactory.From(page, _settings.SiteName);
+            page.Card = card;
+            var extra = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(queryString)
+                .Where(kv => kv.Key != "v" && page.Canonical is not null && page.Canonical.Contains(kv.Key + "=", StringComparison.Ordinal))
+                .SelectMany(kv => kv.Value.Select(v => Uri.EscapeDataString(kv.Key) + "=" + Uri.EscapeDataString(v ?? string.Empty)));
+            var query = string.Join("&", extra.Append("v=" + card.Version(_settings.SiteName, CardHost)));
+            page.OgImage = _ld.Url(SocialCards.SocialCardFactory.CardPath(page.Path) + "?" + query);
+            (page.OgImageWidth, page.OgImageHeight) = (SocialCards.SocialCardRenderer.Width, SocialCards.SocialCardRenderer.Height);
+            page.OgImageAlt = $"{card.Title} — {_settings.SiteName}";
+        }
+        for (var i = 0; i < page.JsonLd.Count; i++)
+            page.JsonLd[i] = SeoJsonLd.WithArticleImage(page.JsonLd[i], page.OgImage!);
     }
 
     private async Task<SeoPage?> DispatchAsync(string path, IReadOnlyDictionary<string, string> query, CancellationToken ct)
@@ -230,7 +288,7 @@ public sealed partial class SeoPageResolver(
     {
         var chosen = image ?? _settings.Seo.DefaultOgImageUrl;
         page.OgImage = chosen is null ? _ld.Url(DefaultOgImagePath) : _ld.Url(chosen);
-        page.OgImageAlt = chosen is null ? $"{_settings.SiteName}: full-service digital marketing agency" : alt ?? page.Title;
+        page.OgImageAlt = chosen is null ? $"{_settings.SiteName}: free AI, marketing and growth courses with certificates, and a full-service marketing agency" : alt ?? page.Title;
         (page.OgImageWidth, page.OgImageHeight) = chosen is null ? (1200, 630) : ((int?)null, (int?)null);
         if (image is not null) page.Images.Add(new SeoImage(_ld.Url(image), alt ?? page.Title));
     }
@@ -355,7 +413,8 @@ public sealed partial class SeoPageResolver(
         page.Content.Add(new HeadingNode(2, "Helpful links"));
         page.Content.Add(new LinkListNode(new[]
         {
-            new LinkItem("Home", "/"), new LinkItem("Services", "/services"), new LinkItem("Case studies", "/case-studies"),
+            new LinkItem("Home", "/"), new LinkItem("Academy", "/academy"), new LinkItem("Free courses", "/learn"),
+            new LinkItem("Services", "/services"), new LinkItem("Case studies", "/case-studies"),
             new LinkItem("Pricing", "/pricing"), new LinkItem("Blog", "/blog"), new LinkItem("Contact us", "/contact"),
             new LinkItem("Search the site", "/search"),
         }));

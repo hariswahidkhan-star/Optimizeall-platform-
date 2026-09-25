@@ -12,6 +12,7 @@ describe('dev/preview proxy (vite.config.ts)', () => {
     '/services',
     '/blog/ga4-consent-mode-guide',
     '/events',
+    '/ogilvy-case-study',
     '/',
   ])('serves the SPA for the public page %s (never the API)', (path) => {
     expect(proxiedBy(rules, path)).toBeUndefined();
@@ -27,6 +28,9 @@ describe('dev/preview proxy (vite.config.ts)', () => {
     ['/sitemaps/blog.xml', '^/sitemaps/'],
     ['/llms.txt', '^/llms(-full)?\\.txt$'],
     ['/llms-full.txt', '^/llms(-full)?\\.txt$'],
+    ['/llms/academy.txt', '^/llms/[a-z0-9-]+\\.txt$'],
+    ['/og/index.png', '^/og/'],
+    ['/og/learn/seo-basics.png', '^/og/'],
     ['/humans.txt', '^/humans\\.txt$'],
     ['/.well-known/security.txt', '^/\\.well-known/security\\.txt$'],
     ['/0123456789abcdef.txt', '^/[A-Za-z0-9-]{8,128}\\.txt$'],
@@ -71,6 +75,8 @@ describe('page documents vs the proxy (vite.config.ts, mirrors nginx `location /
     '/sitemap.xml',
     '/sitemaps/blog.xml',
     '/llms.txt',
+    '/llms/academy.txt',
+    '/og/services/seo.png',
     '/humans.txt',
     '/.well-known/security.txt',
     '/0123456789abcdef.txt',

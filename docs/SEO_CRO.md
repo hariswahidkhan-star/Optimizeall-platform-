@@ -332,12 +332,12 @@ browser: loads the app bundle; React renders into #root (createRoot replaces the
 
 | Page | JSON-LD |
 |---|---|
-| Home | Organization (`@id #organization`, logo as ImageObject, sameAs from social profiles, address), WebSite (`#website`, SearchAction → `/search?q=`), WebPage, ProfessionalService (LocalBusiness) when an address is set in Site settings → Organization |
+| Home | Organization (`@id #organization`, logo as ImageObject, sameAs from social profiles, contactPoint from the contact email/phone, address), WebSite (`#website`, SearchAction → `/search?q=`), WebPage, ProfessionalService (LocalBusiness) when an address is set in Site settings → Organization |
 | Services list / industries / case studies / careers | BreadcrumbList, CollectionPage, ItemList |
 | Service | Service (+ Offer per priced package, provider → Organization), BreadcrumbList, FAQPage |
 | Pricing | BreadcrumbList, WebPage, OfferCatalog (services → Offers with UnitPriceSpecification for recurring prices) |
-| Blog | BreadcrumbList, Blog, ItemList · post: BlogPosting (author Person, dates, image, publisher), BreadcrumbList |
-| Case study | Article (headline, dates, image, publisher), BreadcrumbList |
+| Blog / blog topic | BreadcrumbList, Blog, ItemList · post: BlogPosting (author Person, dates, image — the cover or the generated social card, publisher), BreadcrumbList |
+| Case study | Article (headline, dates, image — the cover or the generated social card, publisher), BreadcrumbList |
 | Job opening | JobPosting (employmentType, datePosted, validThrough, location or TELECOMMUTE, baseSalary), BreadcrumbList |
 | Team / about / how we work | AboutPage, ItemList of Person (team) |
 | Contact | ContactPage, ProfessionalService (when an address is set) |
@@ -370,12 +370,17 @@ nginx): an MP4 (H.264/AAC) and ideally a WebM, a 16:9 poster image (JPEG/WebP, �
 `/sitemap.xml` is a **sitemap index** of `/sitemaps/{pages,services,case-studies,blog,careers,landing-pages,images,
 videos}.xml` (only non-empty files). Only published, indexable, self-canonical, `200` URLs are listed, on the Site URL:
 
-* `pages`: home, the built-in pages, CMS pages, industries · `services` · `case-studies` · `blog` (posts) · `careers`
+* `pages`: home, the built-in pages, CMS pages, industries · `services` · `case-studies` · `blog` (posts and topic
+  archives `/blog?category=…`) · `careers`
   (open jobs) · `landing-pages` (live client landing pages without noindex and public campaigns) · `images` (Google
   image extension: hero, cover, gallery, team photos) · `videos` (Google video extension: thumbnail, title,
   description, content/player URL, duration, publication date).
 * `<lastmod>` is the real last change (content `UpdatedAt`; built-in pages: page texts or site settings, plus the newest
   content they list), in W3C datetime format.
+* Features that own pages outside the CMS contribute URLs through `ISitemapContributor` (`partners`, `learn`):
+  `SitemapContribution(Path, Modified, Title, ImageUrl?, Videos?)` plus `Images`; a video (`SeoVideo`) is listed in
+  `videos.xml` when it has a thumbnail and a file (`content_loc`) or player (`player_loc`, e.g. the YouTube nocookie
+  embed of an academy lecture) URL. App paths are made absolute.
 * Files above `Website:Seo:SitemapMaxUrls` (default 45 000, protocol limit 50 000) are split into `{group}-2.xml`…
   Responses carry a strong ETag and Last-Modified (304 on If-None-Match).
 * `/api/v1/public/sitemap.xml` still answers with one flat urlset of the same URLs (older Search Console submissions).
@@ -390,9 +395,9 @@ group naming it, so every group repeats the private-area rules):
 | Group | User agents | Default |
 |---|---|---|
 | Search engines | Googlebot, Bingbot, Applebot, DuckDuckBot, YandexBot, Baiduspider | allowed |
-| AI search and assistants | OAI-SearchBot, ChatGPT-User, Claude-SearchBot, Claude-User, PerplexityBot, Perplexity-User | allowed |
+| AI search and assistants | OAI-SearchBot, ChatGPT-User, Claude-SearchBot, Claude-User, PerplexityBot, Perplexity-User, DuckAssistBot, MistralAI-User, Meta-ExternalFetcher, Amazonbot, YouBot | allowed |
 | AI model training | GPTBot, ClaudeBot, anthropic-ai, Google-Extended, Applebot-Extended, Meta-ExternalAgent, CCBot | allowed |
-| Aggressive scrapers | Bytespider, PetalBot, Amazonbot, cohere-ai, Diffbot, ImagesiftBot, omgili | **blocked** (`Disallow: /`) |
+| Aggressive scrapers | Bytespider, PetalBot, cohere-ai, Diffbot, ImagesiftBot, omgili | **blocked** (`Disallow: /`) |
 | Everyone else (`*`) | — | allowed |
 
 Allowed groups get: `Allow: /api/v1/public/blog/rss.xml`, `/api/v1/public/sitemap.xml`, `/api/v1/files/` (public
@@ -404,11 +409,21 @@ areas are protected by sign-in, and noindex is also sent as `X-Robots-Tag` on po
 
 ### 9.8 llms.txt, Markdown pages and well-known files
 
-* **`/llms.txt`** (llmstxt.org): `# Optimize All`, a `>` summary (default description), what the agency and the
-  creator program are, contact email, then `## Key pages`, `## Services`, `## Industries`, `## Case studies`, `## Blog`
-  (50 newest), `## Careers`, `## Creator program`, `## Optional` and `## Machine-readable` (sitemap, RSS, llms-full).
-  Every entry is `- [Title](https://<site>/path.md): description`, generated from published, indexable content.
-* **`/llms-full.txt`**: the Markdown of every indexable page (up to 150), each with its URL and update date.
+* **`/llms.txt`** (llmstxt.org): `# Optimize All`, a `>` summary (default description), what the agency, the
+  creator program and the academy are, contact email, then `## Key pages`, `## Services`, `## Industries`,
+  `## Case studies`, `## Blog` (50 newest), `## Blog topics`, `## Careers`, `## Creator program`, `## Partners`,
+  `## Academy (free courses)` (every course, and learning paths when published), `## Optional` and
+  `## Machine-readable` (sitemap, RSS, llms-full, the academy guide). Every entry is
+  `- [Title](https://<site>/path.md): description`, generated from published, indexable content. Lessons are not
+  listed here (hundreds of lines): they are in the academy guide.
+* **`/llms-full.txt`**: the Markdown of every indexable agency page plus the academy home and every course page (up to
+  300 pages), each with its URL and update date. Lessons are left out (see the guide and each lesson's `.md`).
+* **`/llms/academy.txt`** (section file, `LlmsTxtService.Sections`): every course with its facts, description, modules
+  and each lesson as `- [Lesson](https://<site>/learn/course/lesson.md) (N min, video lecture with transcript): summary`.
+  Lesson `.md` versions carry the lesson text, key takeaways and the lecture transcript.
+* The three files are built from the resolver (every public page) and cached in memory per content state (the key
+  includes the number of sitemap URLs and their latest lastmod, so a publish shows at once; entries expire after
+  10 minutes). The SSR footer links `/sitemap.xml`, `/llms.txt` (while enabled) and the blog RSS feed.
 * **Markdown page versions:** `/{path}.md` (`/index.md` for the home page) — YAML front matter (title, description,
   canonical URL, updated) plus the same content as the HTML, `noindex` with a `Link: rel=canonical` header to the HTML.
   Linked from each page with `<link rel="alternate" type="text/markdown">`.
@@ -419,14 +434,55 @@ areas are protected by sign-in, and noindex is also sent as `X-Robots-Tag` on po
 ### 9.9 IndexNow
 
 Off by default. When enabled in SEO settings, a key is generated and served at `/{key}.txt`, and `IndexNowJob`
-(every 10 minutes, named lock, idempotent) submits the sitemap URLs changed since the last successful submission to
+(every 10 minutes, named lock, idempotent) submits the sitemap URLs changed since the last successful submission, plus
+the URLs that left the sitemaps since then (unpublished, deleted or moved: they now answer 404/410/301), to
 `Website:Seo:IndexNowEndpoint` (default `https://api.indexnow.org/indexnow`, shared by Bing, Yandex, Seznam, Naver).
-It only runs when the Site URL is a public https origin.
+The job remembers the submitted URL set (up to 50,000 paths) in its state document. It only runs when the Site URL is a
+public https origin.
+
+### 9.9a Social cards (Open Graph / Twitter images)
+
+Every indexable page without a raster image of its own (none, the built-in `/og-default.png` or the site's default
+image, or an SVG such as a course badge, which Facebook, LinkedIn and X cannot show) gets a generated **1200×630 PNG
+card** at `/og{path}.png?v={version}` (`/og/index.png` for the home page; topic archives keep their `category`/`page`
+query). The card shows the logo mark and site name, an amber eyebrow (content type and category: "Academy · SEO",
+"Lesson · Course title", "Blog · Paid media", "Service · Search"), the h1 as the title (72→42 px, balanced lines,
+ellipsis at 4 lines), the description, facts along the bottom ("Free course · 12 lessons · Beginner · Certificate",
+"Lesson 3 of 8 · 9 min · Free", "Author · date · 6 min read") and the site's host, on the navy gradient with the amber
+rule. `SocialCardFactory` derives the words from what the server renders; a page builder can set `SeoPage.Card`.
+
+* Rendering is fully managed (`SiteSeo/SocialCards/`: a TrueType reader with GPOS pair kerning, an exact-area
+  anti-aliased polygon rasterizer and a PNG encoder), using the OFL Work Sans fonts already embedded for certificates:
+  no native library or system font, identical output in the Alpine image. About 60 ms per card (Release); cards are
+  kept in a 48 MB in-memory cache keyed by version.
+* `v` is a hash of the card's words, the site name/host and the design version (`SocialCardRenderer.DesignVersion`).
+  A request with the current `v` is `Cache-Control: public, max-age=31536000, immutable`; any other `v` gets the
+  current card with a one-hour cache. `ETag` = the version (304 on `If-None-Match`). Unknown and non-content pages → 404.
+* The head then carries `og:image`, `og:image:type` (`image/png`), `og:image:width`/`height` (1200×630),
+  `og:image:alt` ("{title} — Optimize All"), `twitter:card=summary_large_image` and `twitter:image`. Article and
+  BlogPosting JSON-LD without an image get the same URL (Google requires an article image).
+* Client landing pages (`/lp/…`) keep their own branding and are left alone.
+* nginx proxies `/og/` to the API (`seo-file-errors.conf`: errors are short text/plain); `vite`/`vite preview` proxy
+  it too (`src/app/devProxy.ts`).
+
+### 9.9b Head completeness
+
+Every indexable page also declares `<link rel="alternate" hreflang="en">` and `hreflang="x-default"` pointing at its
+canonical URL (one language), `<meta name="author">` on articles, and the robots directive
+`index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1`. The document's `Last-Modified` equals
+the page's sitemap `lastmod` (listing pages use the same rule as the sitemap; pages without their own date fall back to
+the sitemap's value, cached for two minutes). Blog topic archives (`/blog?category=…`) are indexable, self-canonical,
+in the blog sitemap, with `Blog › Topic` breadcrumbs; every archive page after the first has its own "— page N" title
+and a "Page N of M." description.
 
 ### 9.10 Performance (Core Web Vitals)
 
 * Route-level code splitting (`lazyPage()` / lazy public routes); vendor chunks `react` and `query`; hashed assets
-  `immutable` for a year; HTML `no-cache`; gzip for HTML, CSS, JS, JSON, XML, SVG; `/media/` cached 7 days.
+  `immutable` for a year; HTML `no-cache`; gzip for HTML, CSS, JS, JSON, XML, RSS/Atom, Markdown, JSON-LD, SVG and
+  icons (Brotli needs an nginx module the stock image lacks); `/media/` cached 7 days; social cards immutable.
+* Server rendering costs 5–30 ms per page (p50 7 ms, p95 28 ms across all 911 public URLs in the 2026-09 audit), so
+  rendered HTML is not cached server-side: every response is current. Sitemaps are cached 5 minutes, robots.txt and
+  llms files an hour (ETag + 304).
 * Fonts are self-hosted (`@fontsource-variable/inter`, `font-display: swap`) — no third-party preconnect is needed.
 * The server-rendered head preloads the page's LCP image (`<link rel="preload" as="image" fetchpriority="high">`),
   server images carry `width`/`height`, the first is `fetchpriority="high"`, the rest `loading="lazy"`; videos are

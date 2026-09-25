@@ -60,7 +60,11 @@ public sealed record Crumb(string Name, string Path);
 
 /// <summary>Header/footer links written around every server-rendered page so crawlers can follow the site's structure.</summary>
 public sealed record SiteChromeLinks(string SiteName, IReadOnlyList<LinkItem> Header, IReadOnlyList<(string Title, IReadOnlyList<LinkItem> Links)> Footer,
-    IReadOnlyList<LinkItem> Legal);
+    IReadOnlyList<LinkItem> Legal)
+{
+    /// <summary>Whether /llms.txt is published (Website → SEO), so the footer links it.</summary>
+    public bool LlmsTxt { get; init; } = true;
+}
 
 /// <summary>Writes the content tree and site chrome as HTML (every text encoded; links limited to safe schemes).</summary>
 public static class SeoHtml
@@ -115,6 +119,10 @@ public static class SeoHtml
             foreach (var l in chrome.Legal) sb.Append("<li>").Append(Link(l.Href, l.Text)).Append("</li>");
             sb.Append("</ul></nav>");
         }
+        // Machine-readable versions of the site, for crawlers and AI assistants (docs/SEO_CRO.md § llms.txt).
+        sb.Append("<p>Machine-readable: <a href=\"/sitemap.xml\">Sitemap</a> · ")
+            .Append(chrome.LlmsTxt ? "<a href=\"/llms.txt\">llms.txt</a> · " : string.Empty)
+            .Append("<a href=\"/api/v1/public/blog/rss.xml\">Blog RSS feed</a></p>");
         sb.Append("<p>&copy; ").Append(DateTime.UtcNow.Year.ToString(CultureInfo.InvariantCulture)).Append(' ').Append(E(chrome.SiteName)).Append("</p>");
         sb.Append("</footer>\n</div>");
     }

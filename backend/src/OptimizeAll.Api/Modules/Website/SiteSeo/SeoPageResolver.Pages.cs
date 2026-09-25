@@ -16,6 +16,10 @@ public sealed partial class SeoPageResolver
 {
     // ---------------------------------------------------------------- Home
 
+    /// <summary>
+    /// The home page: Academy first, Agency second, in the order and words of the web app's home page
+    /// (frontend/src/features/public/pages/HomePage.tsx), with the same live academy figures.
+    /// </summary>
     private async Task<SeoPage> HomeAsync(CancellationToken ct)
     {
         var home = await site.HomeAsync(ct);
@@ -32,17 +36,33 @@ public sealed partial class SeoPageResolver
         c.Add(new ListNode(_copy.List("home.hero.proof")));
         c.Add(new LinkListNode(new[]
         {
+            new LinkItem(_copy.Text("home.hero.learnCta"), "/learn"), new LinkItem(_copy.Text("home.hero.primaryCta"), "/free-audit"),
+        }));
+
+        // Pillar 1: the academy.
+        c.AddRange(await HomeAcademyNodesAsync(ct));
+
+        // Pillar 2: the agency, with the free-audit panel.
+        c.Add(new ParagraphNode(_copy.Text("home.agency.eyebrow")));
+        c.Add(new HeadingNode(2, _copy.Text("home.agency.title")));
+        c.Add(new ParagraphNode(_copy.Text("home.agency.intro")));
+        c.Add(new ListNode(_copy.List("home.agency.proof")));
+        c.Add(new LinkListNode(new[]
+        {
             new LinkItem(_copy.Text("home.hero.primaryCta"), "/free-audit"), new LinkItem(_copy.Text("home.hero.secondaryCta"), "/book-a-consultation"),
         }));
-        c.Add(new HeadingNode(2, _copy.Text("home.audit.title")));
+        c.Add(new HeadingNode(3, _copy.Text("home.audit.title")));
         c.Add(new ListNode(_copy.List("home.audit.items")));
+        c.Add(new ActionNode(_copy.Text("home.audit.cta"), "/free-audit"));
 
         c.Add(new HeadingNode(2, _copy.Text("home.services.title")));
         c.Add(new ParagraphNode(_copy.Text("home.services.intro")));
-        foreach (var group in home.ServiceCategories)
+        for (var gi = 0; gi < home.ServiceCategories.Count; gi++)
         {
+            var group = home.ServiceCategories[gi];
             c.Add(new HeadingNode(3, group.Name));
-            c.Add(new LinkListNode(group.Services.Select(s => new LinkItem(s.Name, $"/services/{s.Slug}", s.Tagline)).ToList()));
+            if (!string.IsNullOrWhiteSpace(group.Description)) c.Add(new ParagraphNode(group.Description));
+            c.Add(new LinkListNode(group.Services.Take(gi < 2 ? 6 : 4).Select(s => new LinkItem(s.Name, $"/services/{s.Slug}")).ToList()));
         }
         c.Add(new ActionNode(_copy.Text("home.services.cta"), "/services"));
 
@@ -68,7 +88,7 @@ public sealed partial class SeoPageResolver
         if (home.Industries.Count > 0)
         {
             c.Add(new HeadingNode(2, _copy.Text("home.industries.title")));
-            c.Add(new LinkListNode(home.Industries.Select(i => new LinkItem(i.Name, $"/industries/{i.Slug}", i.Summary)).ToList()));
+            c.Add(new LinkListNode(home.Industries.Take(6).Select(i => new LinkItem(i.Name, $"/industries/{i.Slug}", i.Summary)).ToList()));
         }
         if (home.Testimonials.Count > 0)
         {
@@ -83,6 +103,19 @@ public sealed partial class SeoPageResolver
             c.Add(new FactsNode(home.PricingTeaser.Select(p => KeyValuePair.Create($"{p.ServiceName} — {p.Package.Name}", PackagePrice(p.Package))).ToList()));
             c.Add(new ActionNode(_copy.Text("home.pricing.cta"), "/pricing"));
         }
+        c.Add(new ParagraphNode(_copy.Text("home.trust.eyebrow")));
+        c.Add(new HeadingNode(2, _copy.Text("home.trust.title")));
+        c.Add(new ParagraphNode(_copy.Text("home.trust.intro")));
+        foreach (var (title, text) in _copy.Pairs("home.trust.items"))
+        {
+            c.Add(new HeadingNode(3, title));
+            c.Add(new ParagraphNode(text));
+        }
+        c.Add(new LinkListNode(new[]
+        {
+            new LinkItem("Privacy policy", "/privacy-policy"), new LinkItem("Accessibility statement", "/accessibility"),
+            new LinkItem("Cookie policy", "/cookie-policy"), new LinkItem("Terms of service", "/terms-of-service"),
+        }));
         if (home.LatestPosts.Count > 0)
         {
             c.Add(new HeadingNode(2, _copy.Text("home.blog.title")));
@@ -90,7 +123,17 @@ public sealed partial class SeoPageResolver
         }
         c.Add(new HeadingNode(2, _copy.Text("home.creators.title")));
         c.Add(new ParagraphNode(_copy.Text("home.creators.intro")));
-        c.Add(new ActionNode(_copy.Text("home.creators.secondaryCta"), "/creators"));
+        c.Add(new LinkListNode(new[]
+        {
+            new LinkItem(_copy.Text("home.creators.primaryCta"), "/register"), new LinkItem(_copy.Text("home.creators.secondaryCta"), "/creators"),
+        }));
+        c.Add(new HeadingNode(2, _copy.Text("home.final.title")));
+        c.Add(new ParagraphNode(_copy.Text("home.final.text")));
+        c.Add(new LinkListNode(new[]
+        {
+            new LinkItem(_copy.Text("home.final.learnCta"), "/learn", _copy.Text("home.academy.eyebrow")),
+            new LinkItem(_copy.Text("home.final.agencyCta"), "/free-audit", _copy.Text("home.agency.eyebrow")),
+        }));
         page.ModifiedAt = Latest(_settingsUpdatedAt, _copyUpdatedAt, home.LatestPosts.Select(p => p.PublishedAt).Max());
         return AddCatalogVideos(page);
     }
@@ -109,7 +152,7 @@ public sealed partial class SeoPageResolver
         page.JsonLd.Add(_seoLd.WebPage(webPageType, _copy.Text($"{prefix}.seo.title"), page.Description, path));
         page.Content.Add(new HeadingNode(1, _copy.Text($"{prefix}.hero.title")));
         if (_copy.Text($"{prefix}.hero.lead") is { Length: > 0 } lead) page.Content.Add(new ParagraphNode(lead));
-        page.ModifiedAt = _copyUpdatedAt;
+        page.ModifiedAt = Latest(_copyUpdatedAt, _settingsUpdatedAt);
         return page;
     }
 
@@ -185,29 +228,35 @@ public sealed partial class SeoPageResolver
         var pages = Math.Max(1, (int)Math.Ceiling(index.Total / (double)index.PageSize));
         if (pageNumber > pages) return NotFound("/blog");
 
-        // Paginated archive: each page is its own canonical URL with prev/next links; filters and searches are noindex.
-        string Url(int number) => number <= 1 ? "/blog" : $"/blog?page={number}";
-        if (category is not null)
+        // Paginated archives (the blog and each topic): every page is its own canonical URL with prev/next links and a
+        // "page N" title and description; tag filters and searches are noindex.
+        void Paginate(Func<int, string> url, string title, string? description)
+        {
+            page.Canonical = _ld.Url(url(pageNumber));
+            page.Title = SeoText.ApplyTemplate(pageNumber > 1 ? $"{title} — page {pageNumber}" : title, _settings.Seo.TitleTemplate, _settings.SiteName);
+            page.Description = SeoText.Clamp(pageNumber > 1 ? $"Page {pageNumber} of {pages}. {description}" : description);
+            if (pageNumber > 1) page.PrevUrl = url(pageNumber - 1);
+            if (pageNumber < pages) page.NextUrl = url(pageNumber + 1);
+        }
+        if (category is not null && tag is null && search is null)
         {
             var cat = index.Categories.FirstOrDefault(c => c.Slug == category);
             if (cat is null) return NotFound("/blog");
-            page.Title = SeoText.ApplyTemplate($"{cat.Name} articles", _settings.Seo.TitleTemplate, _settings.SiteName);
-            page.Description = SeoText.Clamp(cat.Description ?? page.Description);
-            page.Canonical = _ld.Url($"/blog?category={Uri.EscapeDataString(category)}" + (pageNumber > 1 ? $"&page={pageNumber}" : string.Empty));
+            var topic = $"/blog?category={Uri.EscapeDataString(category)}";
+            Paginate(n => n <= 1 ? topic : $"{topic}&page={n}", $"{cat.Name} articles", cat.Description ?? page.Description);
             page.Content[0] = new HeadingNode(1, $"{cat.Name} articles");
+            // The topic sits under the blog in the breadcrumb trail.
+            page.Breadcrumbs.Clear();
+            page.JsonLd.RemoveAll(n => n.TryGetProperty("@type", out var t) && t.ValueKind == JsonValueKind.String && t.GetString() == "BreadcrumbList");
+            CrumbsLd(page, ("Blog", "/blog"), ($"{cat.Name} articles", topic));
         }
-        else if (tag is not null || search is not null)
+        else if (tag is not null || search is not null || category is not null)
         {
             page.NoIndex = true;
             page.Canonical = _ld.Url("/blog");
         }
         else
-        {
-            page.Canonical = _ld.Url(Url(pageNumber));
-            if (pageNumber > 1) page.Title = SeoText.ApplyTemplate($"{_copy.Text("blog.seo.title")} — page {pageNumber}", _settings.Seo.TitleTemplate, _settings.SiteName);
-            if (pageNumber > 1) page.PrevUrl = Url(pageNumber - 1);
-            if (pageNumber < pages) page.NextUrl = Url(pageNumber + 1);
-        }
+            Paginate(n => n <= 1 ? "/blog" : $"/blog?page={n}", _copy.Text("blog.seo.title"), page.Description);
         foreach (var post in index.Items)
         {
             page.Content.Add(new HeadingNode(2, post.Title));
@@ -220,7 +269,12 @@ public sealed partial class SeoPageResolver
             page.Content.Add(new LinkListNode(index.Categories.Select(c => new LinkItem(c.Name, $"/blog?category={c.Slug}")).ToList()));
         }
         if (_seoLd.ItemList("Articles", index.Items.Select(i => (i.Title, $"/blog/{i.Slug}")).ToList()) is { } list) page.JsonLd.Add(list);
-        page.ModifiedAt = Latest(_copyUpdatedAt, index.Items.Select(i => i.PublishedAt).Max());
+        // Same rule as the sitemap: the page texts / settings and the latest update of a live post in the archive.
+        var live = await db.Set<BlogPost>().AsNoTracking().Where(p => p.Status == BlogPostStatus.Published && p.PublishedAt <= Now)
+            .Select(p => new { p.UpdatedAt, p.CategoryIds }).ToListAsync(ct);
+        var catId = category is null ? (Guid?)null : await db.Set<BlogCategory>().AsNoTracking().Where(c => c.Slug == category).Select(c => (Guid?)c.Id).FirstOrDefaultAsync(ct);
+        var inArchive = live.Where(p => catId is null || p.CategoryIds.Contains(catId.Value)).Select(p => (DateTime?)p.UpdatedAt).ToList();
+        page.ModifiedAt = Latest(_copyUpdatedAt, _settingsUpdatedAt, inArchive.Count > 0 ? inArchive.Max() : null);
         return page;
     }
 
@@ -257,7 +311,9 @@ public sealed partial class SeoPageResolver
         page.Content.Add(new ParagraphNode(_copy.Text("careers.cta.text")));
         page.Content.Add(new ActionNode("Contact us", "/contact"));
         if (_seoLd.ItemList("Open roles", jobs.Select(j => (j.Title, $"/careers/{j.Slug}")).ToList()) is { } list) page.JsonLd.Add(list);
-        page.ModifiedAt = Latest(_copyUpdatedAt, jobs.Select(j => j.PostedAt).Max());
+        var openUpdated = await db.Set<JobOpening>().AsNoTracking()
+            .Where(j => j.Status == JobOpeningStatus.Open && (j.ClosesAt == null || j.ClosesAt > Now)).Select(j => (DateTime?)j.UpdatedAt).MaxAsync(ct);
+        page.ModifiedAt = Latest(_copyUpdatedAt, _settingsUpdatedAt, openUpdated);
         return AddCatalogVideos(page);
     }
 
@@ -332,7 +388,7 @@ public sealed partial class SeoPageResolver
         c.Add(new HeadingNode(2, _copy.Text("creators.cta.title")));
         c.Add(new ParagraphNode(_copy.Text("creators.cta.text")));
         if (_ld.FaqPage(faqs) is { } faqLd) page.JsonLd.Add(faqLd);
-        page.ModifiedAt = _copyUpdatedAt;
+        page.ModifiedAt = Latest(_copyUpdatedAt, _settingsUpdatedAt);
         return AddCatalogVideos(page);
     }
 
@@ -351,7 +407,7 @@ public sealed partial class SeoPageResolver
             foreach (var f in group) page.Content.Add(new QuestionNode(f.Question, f.Answer));
         }
         if (_ld.FaqPage(items.Select(f => new FaqEntry(f.Question, f.Answer)).ToList()) is { } faqLd) page.JsonLd.Add(faqLd);
-        page.ModifiedAt = Latest(_copyUpdatedAt, items.Select(f => (DateTime?)f.UpdatedAt).Max());
+        page.ModifiedAt = Latest(_copyUpdatedAt, _settingsUpdatedAt, items.Select(f => (DateTime?)f.UpdatedAt).Max());
         return page;
     }
 
@@ -591,6 +647,15 @@ public sealed partial class SeoPageResolver
             page.Content.Add(new HeadingNode(1, p.Title));
             if (!string.IsNullOrWhiteSpace(p.Summary)) page.Content.Add(new ParagraphNode(p.Summary));
         }
+        if (slug == "academy")
+        {
+            // /academy (web app: PillarPages.tsx AcademyOverviewPage): the CMS hero, the live academy sections, then the rest.
+            var hero = p.Blocks.FirstOrDefault()?.Type == PageBlockTypes.Hero ? p.Blocks.Take(1).ToList() : new List<PageBlock>();
+            page.Content.AddRange(BlockNodes(page, hero, p.Title, p.Testimonials, p.CaseStudies, p.ServiceCategories, p.UpdatedAt));
+            page.Content.AddRange(await AcademyPageLiveNodesAsync(ct));
+            page.Content.AddRange(BlockNodes(page, p.Blocks.Skip(hero.Count).ToList(), p.Title, p.Testimonials, p.CaseStudies, p.ServiceCategories, p.UpdatedAt, firstIsTop: false));
+            return AddCatalogVideos(page);
+        }
         page.Content.AddRange(BlockNodes(page, p.Blocks, p.Title, p.Testimonials, p.CaseStudies, p.ServiceCategories, p.UpdatedAt));
         return AddCatalogVideos(page);
     }
@@ -611,7 +676,7 @@ public sealed partial class SeoPageResolver
     }
 
     private List<ContentNode> BlockNodes(SeoPage page, IReadOnlyList<PageBlock> blocks, string pageTitle, IReadOnlyList<PublicTestimonialDto> testimonials,
-        IReadOnlyList<CaseStudyCardDto> caseStudies, IReadOnlyList<ServiceCategoryGroupDto> groups, DateTime updatedAt)
+        IReadOnlyList<CaseStudyCardDto> caseStudies, IReadOnlyList<ServiceCategoryGroupDto> groups, DateTime updatedAt, bool firstIsTop = true)
     {
         var nodes = new List<ContentNode>();
         T? Read<T>(PageBlock b) where T : class
@@ -626,7 +691,7 @@ public sealed partial class SeoPageResolver
             {
                 case PageBlockTypes.Hero when Read<HeroBlock>(block) is { } h:
                     if (h.Eyebrow is not null) nodes.Add(new ParagraphNode(h.Eyebrow));
-                    nodes.Add(new HeadingNode(index == 0 ? 1 : 2, h.Title ?? pageTitle));
+                    nodes.Add(new HeadingNode(index == 0 && firstIsTop ? 1 : 2, h.Title ?? pageTitle));
                     if (h.Subtitle is not null) nodes.Add(new ParagraphNode(h.Subtitle));
                     if (h.ImageUrl is not null) nodes.Add(new ImageNode(h.ImageUrl, string.Empty, 640, 480, Priority: index == 0));
                     var links = new[] { h.PrimaryCta, h.SecondaryCta }.OfType<SiteLink>().Select(l => new LinkItem(l.Label, l.Url)).ToList();

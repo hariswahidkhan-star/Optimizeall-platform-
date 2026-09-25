@@ -122,11 +122,28 @@ public sealed partial class SeoPageResolver
         foreach (var j in jobs)
             Add($"/careers/{j.Slug}", j.UpdatedAt, GroupCareers, j.Title);
 
+        // Blog topics (/blog?category=…): self-canonical, indexable archive pages of every category with a live post.
+        var liveCategories = await db.Set<BlogPost>().AsNoTracking().Where(p => p.Status == BlogPostStatus.Published && p.PublishedAt <= now)
+            .Select(p => new { p.CategoryIds, p.UpdatedAt, p.Seo.NoIndex }).ToListAsync(ct);
+        foreach (var cat in await db.Set<BlogCategory>().AsNoTracking().OrderBy(c => c.SortOrder).ThenBy(c => c.Name).ToListAsync(ct))
+        {
+            var inCategory = liveCategories.Where(p => p.CategoryIds.Contains(cat.Id)).ToList();
+            if (inCategory.Count > 0)
+                Add($"/blog?category={Uri.EscapeDataString(cat.Slug)}", Latest(copyOrSettings, inCategory.Max(p => p.UpdatedAt)), GroupBlog, $"{cat.Name} articles");
+        }
+
         await AddLandingPagesAsync(urls, ct);
+        var known = urls.Select(u => u.Path).ToHashSet(StringComparer.Ordinal);
         foreach (var contributor in sitemapContributors)
             foreach (var u in await contributor.UrlsAsync(ct))
-                if (urls.All(x => x.Path != u.Path))
-                    Add(u.Path, u.Modified, contributor.Group, u.Title, u.ImageUrl is null ? null : Img((u.ImageUrl, u.Title)), u.Videos);
+            {
+                if (!known.Add(u.Path)) continue;
+                var images = new[] { (u.ImageUrl, (string?)u.Title) }.Concat((u.Images ?? Array.Empty<string>()).Select(i => ((string?)i, (string?)u.Title))).ToArray();
+                var videos = (u.Videos ?? Array.Empty<SeoVideo>())
+                    .Select(v => v with { Mp4Url = Abs(v.Mp4Url), WebmUrl = Abs(v.WebmUrl), PosterUrl = Abs(v.PosterUrl), CaptionsUrl = Abs(v.CaptionsUrl), EmbedUrl = Abs(v.EmbedUrl) })
+                    .ToList();
+                Add(u.Path, u.Modified, contributor.Group, u.Title, Img(images), videos);
+            }
         return urls.Select(u => u with { Images = u.Images.DistinctBy(i => i.Url).ToList() }).ToList();
     }
 
