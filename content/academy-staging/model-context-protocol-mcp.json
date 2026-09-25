@@ -3788,6 +3788,108 @@
           2
         ],
         "explanation": "Evidence, evals and operating plans belong; secrets never go in documents."
+      },
+      {
+        "id": "mcp-046",
+        "module": "why-mcp",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "In MCP, which component launches a local stdio server?",
+        "options": [
+          "The client inside the host",
+          "The registry",
+          "The model",
+          "The authorization server"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "For stdio, the host's client starts the server as a subprocess."
+      },
+      {
+        "id": "mcp-047",
+        "module": "mcp-primitives-and-transports",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which transport should a team-wide, remote MCP server use?",
+        "options": [
+          "FTP",
+          "Streamable HTTP",
+          "Email",
+          "stdio"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Remote, shared servers use Streamable HTTP, usually with OAuth."
+      },
+      {
+        "id": "mcp-048",
+        "module": "building-mcp-servers",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "In the Python SDK v2, what turns a function into an MCP tool?",
+        "options": [
+          "@mcp.tool()",
+          "@mcp.resource()",
+          "@mcp.prompt()",
+          "mcp.run()"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "The tool decorator registers a function as a tool; type hints become its schema."
+      },
+      {
+        "id": "mcp-049",
+        "module": "connecting-clients",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which command adds a local MCP server to Claude Code?",
+        "options": [
+          "npm start",
+          "pip install claude",
+          "mcp-publisher publish",
+          "claude mcp add <name> -- <launch command>"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "claude mcp add registers the server with its launch command."
+      },
+      {
+        "id": "mcp-050",
+        "module": "authorization-and-security",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Where should an access token be sent to a remote MCP server?",
+        "options": [
+          "In the URL query string",
+          "In the prompt",
+          "In the Authorization bearer header on every request",
+          "In the tool description"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Tokens go in the Authorization header and never in URLs."
+      },
+      {
+        "id": "mcp-051",
+        "module": "mcp-in-production",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the MCP Inspector mainly used for?",
+        "options": [
+          "Publishing to app stores",
+          "Billing",
+          "Interactively exploring and calling a server's tools, resources and prompts",
+          "Training models"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "The Inspector is the official tool for exploring and debugging servers."
       }
     ]
   }

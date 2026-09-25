@@ -3666,6 +3666,91 @@
           1
         ],
         "explanation": "Defense in depth: retain the gate, add regression coverage and an earlier validator."
+      },
+      {
+        "id": "agt-046",
+        "module": "tools-and-reasoning",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which tool name is best for an agent that looks up a customer by email?",
+        "options": [
+          "helper",
+          "tool1",
+          "find_customer_by_email",
+          "db_query_v2"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Intent-revealing verb_noun names help the model choose correctly."
+      },
+      {
+        "id": "agt-047",
+        "module": "memory-and-state",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Where should an agent's progress be stored so a crash doesn't lose work?",
+        "options": [
+          "In browser local storage",
+          "In the model's context window",
+          "In a durable store keyed by run ID",
+          "Only in the worker's memory"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Durable, external state lets any worker resume the run."
+      },
+      {
+        "id": "agt-048",
+        "module": "safety-and-control",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which action should always require human approval in a typical marketing agent?",
+        "options": [
+          "Sending a bulk email to all customers",
+          "Searching the CRM",
+          "Reading analytics",
+          "Drafting a caption"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Irreversible, high-impact actions like bulk sends belong in the highest risk tier."
+      },
+      {
+        "id": "agt-049",
+        "module": "evaluation-and-observability",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does a trace record for an agent run?",
+        "options": [
+          "Only the final answer",
+          "Each model call and tool call with timing, tokens and errors",
+          "Nothing useful",
+          "The user's password"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Traces capture the steps of a run so you can see what the agent did."
+      },
+      {
+        "id": "agt-050",
+        "module": "capstone-market-scout",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "In Market Scout, which tool must be called first according to the eval checks?",
+        "options": [
+          "web_search",
+          "propose_ticket",
+          "send_email",
+          "read_client_notes"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Reading the client's notes first makes the research relevant, and the eval checks this ordering."
       }
     ]
   }
