@@ -166,7 +166,7 @@ api_pid="$(cd "$ROOT" && start_bg e2e-api "$API_LOG" env \
   Email__Mode=File Email__PickupDirectory="$MAIL_DIR" Email__AppBaseUrl="http://localhost:$E2E_WEB_PORT" \
   DevTools__MailboxEnabled=true DevTools__TestLoginEnabled=true \
   Authentication__Google__ClientId= Authentication__Google__ClientSecret= \
-  RateLimiting__AuthPerMinute=1000 RateLimiting__GlobalPerMinute=6000 \
+  RateLimiting__AuthPerMinute=1000 RateLimiting__GlobalPerMinute=6000 RateLimiting__DocumentsPerMinute=6000 RateLimiting__PublicPerMinute=6000 \
   Jobs__Enabled=false \
   Storage__RootPath="$FILES_DIR" \
   SocialMedia__GraphApiBaseUrl="http://127.0.0.1:$E2E_STUB_PORT/graph" SocialMedia__XApiBaseUrl="http://127.0.0.1:$E2E_STUB_PORT/x" \

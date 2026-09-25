@@ -28,7 +28,12 @@ public static class RateLimitPolicies
     /// <summary>Staff global search (command palette, typed as you go): 60/minute per user.</summary>
     public const string Search = "search";
 
-    /// <summary>Public unauthenticated endpoints (landing pages, tracking redirects, postbacks): 120/minute per IP.</summary>
+    /// <summary>
+    /// Public unauthenticated endpoints (the public website and academy API, landing pages, tracking redirects, postbacks):
+    /// 240/minute per IP by default (<c>RateLimiting:PublicPerMinute</c>). One bucket per address for all of them, and a
+    /// public page view makes several calls (site settings, page copy, partner list and ad unit, the academy), so this
+    /// allows roughly 40 page views a minute from one address (an office behind NAT).
+    /// </summary>
     public const string Public = "public";
 
     /// <summary>
@@ -115,7 +120,7 @@ public static class RateLimitPolicies
             options.AddPolicy(Public, ctx => !enabled ? RateLimitPartition.GetNoLimiter("off")
                 : RateLimitPartition.GetFixedWindowLimiter(ClientKey(ctx), _ => new FixedWindowRateLimiterOptions
                 {
-                    PermitLimit = 120, Window = TimeSpan.FromMinutes(1), QueueLimit = 0,
+                    PermitLimit = config.GetValue("RateLimiting:PublicPerMinute", 240), Window = TimeSpan.FromMinutes(1), QueueLimit = 0,
                 }));
 
             options.AddPolicy(Tracking, ctx => !enabled ? RateLimitPartition.GetNoLimiter("off")

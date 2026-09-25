@@ -201,7 +201,7 @@ a square; + `.webp` variants and `certuvo-wordmark.webp`).
 
 - Every public form fetches a signed token (`GET /public/forms/token`). Submissions faster than
   `Website:MinFormFillSeconds` (default 3 s) or with a token older than 24 hours are rejected; a hidden honeypot
-  field silently drops bots; the `public` rate limit (120/min per IP) applies. Tokens are single-use: a successful
+  field silently drops bots; the `public` rate limit (240/min per IP, `RateLimiting__PublicPerMinute`) applies. Tokens are single-use: a successful
   inquiry, consultation booking or job application stores the SHA-256 of the token id (`website_used_form_tokens`),
   and a replay gets 409 `website.form_already_submitted` (the site fetches a fresh token after each success; the
   newsletter form, which is idempotent per address, does not spend tokens). `UsedFormTokenCleanupJob` deletes the

@@ -14,7 +14,8 @@ namespace OptimizeAll.IntegrationTests.EmailMarketing;
 public sealed class TrackingRateLimitTests(ApiFactory api) : IClassFixture<ApiFactory>
 {
     private WebApplicationFactory<Program> Limited() => api.WithWebHostBuilder(b => b.ConfigureAppConfiguration((_, c) =>
-        c.AddInMemoryCollection(new Dictionary<string, string?> { ["RateLimiting:Enabled"] = "true" })));
+        // The public limit is pinned (its default is 240/min) so 125 requests from one address go over it.
+        c.AddInMemoryCollection(new Dictionary<string, string?> { ["RateLimiting:Enabled"] = "true", ["RateLimiting:PublicPerMinute"] = "120" })));
 
     [Fact]
     public async Task Open_pixels_and_webhooks_are_not_capped_by_the_global_per_ip_limit()

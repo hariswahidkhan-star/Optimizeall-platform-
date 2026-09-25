@@ -40,7 +40,7 @@ async function audit(page: Page, watcher: PageWatcher, path: string, retry = tru
   await page.waitForURL((url) => `${url.pathname}${url.search}` === path);
   await watcher.settle();
   await auditPage(page, watcher);
-  // The API limits public requests per IP (RateLimiting.Public, 120/min) and the whole run, portal crawls included,
+  // The API limits public requests per IP (RateLimiting.Public; the e2e harness raises it) and the whole run, portal crawls included,
   // comes from one address. A 429 is the limiter doing its job, not a broken page: wait for the window and look again.
   const mine = watcher.findings.slice(before);
   if (retry && mine.some((f) => / 429 /.test(f.detail))) {
@@ -97,18 +97,28 @@ test('every sitemap URL renders a page and robots.txt points to the sitemap', as
     urls.push(...locs(await child.text()));
   }
   expect(urls.length, 'the sitemap lists the public pages').toBeGreaterThan(10);
-  // Every URL is loaded and audited in the browser; the budget grows with the sitemap (partner pages, partner blog
-  // posts, …) instead of a fixed 10 minutes: about 10 s per page on a loaded CI machine.
-  test.setTimeout(10 * 60_000 + urls.length * 10_000);
+  // Academy lessons (hundreds, one template) are sampled: the first lesson of each course is audited in the browser;
+  // every lesson URL is still fetched and checked over HTTP by the j-seo suite (02-sitemaps-robots-llms).
+  const seenCourses = new Set<string>();
+  const audited = urls.filter((url) => {
+    const lesson = /^\/learn\/([^/]+)\/[^/]+$/.exec(new URL(url).pathname);
+    if (!lesson) return true;
+    if (seenCourses.has(lesson[1]!)) return false;
+    seenCourses.add(lesson[1]!);
+    return true;
+  });
+  // Every audited URL is loaded in the browser; the budget grows with the sitemap (partner pages, partner blog posts,
+  // courses, …) instead of a fixed 10 minutes: about 10 s per page on a loaded CI machine.
+  test.setTimeout(10 * 60_000 + audited.length * 10_000);
   expect((await request.get(`${API_URL}/api/v1/public/sitemap.xml`)).status()).toBe(200);
 
   const watcher = new PageWatcher(page, 'visitor');
   const origin = new URL(baseURL!).origin;
-  for (const url of urls) {
+  for (const url of audited) {
     const { pathname, search } = new URL(url);
     await audit(page, watcher, `${pathname}${search}`);
     expect(new URL(page.url()).origin).toBe(origin);
   }
-  writeReport('public-sitemap', { visited: urls, findings: watcher.findings });
+  writeReport('public-sitemap', { visited: audited, findings: watcher.findings });
   expect(watcher.findings, 'problems on sitemap pages').toEqual([]);
 });

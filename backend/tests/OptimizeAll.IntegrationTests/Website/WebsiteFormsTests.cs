@@ -218,8 +218,9 @@ public sealed class WebsiteFormsTests : IClassFixture<ApiFactory>, IAsyncLifetim
     [Fact]
     public async Task Public_forms_are_rate_limited_per_ip()
     {
+        // The public limit is pinned to 120/min (default 240) so 125 requests from one address go over it.
         await using var limited = _api.WithWebHostBuilder(b => b.ConfigureAppConfiguration((_, c) =>
-            c.AddInMemoryCollection(new Dictionary<string, string?> { ["RateLimiting:Enabled"] = "true" })));
+            c.AddInMemoryCollection(new Dictionary<string, string?> { ["RateLimiting:Enabled"] = "true", ["RateLimiting:PublicPerMinute"] = "120" })));
         await limited.StartAsync();
         var client = limited.CreateClient();
         var statuses = new List<HttpStatusCode>();

@@ -311,8 +311,9 @@ target's email to be typed) starts a time-boxed session:
   refreshes silently and an office behind one NAT address shares the budget, so it is generous; refresh tokens are
   random, rotate on use and trigger reuse detection, so nothing can be guessed through this endpoint.
 * `submissions` policy: 30 writes/min per user for actions that create staff work (submissions, tickets, appeals).
-* `public` policy: 120 requests/min per IP for unauthenticated endpoints (landing pages, `/t/{code}`, postbacks, the
-  public academy and certificate verification).
+* `public` policy: 240 requests/min per IP (`RateLimiting__PublicPerMinute`) for unauthenticated endpoints (the public
+  website API, landing pages, `/t/{code}`, postbacks, the public academy and certificate verification); one bucket per
+  address, and a public page view makes several calls (site settings, copy, partners, academy).
 * `learning` policy: 120 writes/min per user for learner progress (enrol, lesson start/complete, knowledge checks, exam
   answer autosave), `RateLimiting__LearningPerMinute`; exam starts and submissions use the `submissions` policy.
 * `tracking` policy: 1,200 requests/min per IP for email open pixels, click redirects and one-click unsubscribes
