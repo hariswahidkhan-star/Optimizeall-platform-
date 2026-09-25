@@ -48,6 +48,14 @@ http {
     location = /_document/moved { return 301 /page; }
     location = /llms.txt { default_type text/plain; return 200 'llms'; }
     location = /_markdown/index { default_type text/markdown; return 200 '# home'; }
+    location = /sitemap.xml { default_type application/xml; return 200 '<sitemapindex/>'; }
+    location = /sitemaps/pages.xml { default_type application/xml; return 200 '<urlset/>'; }
+    # An older API that doesn't know these routes yet, or fails on them: JSON problems (never passed to a browser).
+    location = /robots.txt { default_type application/problem+json; return 500 '{"status":500}'; }
+    location = /llms-full.txt { default_type application/problem+json; return 429 '{"status":429}'; }
+    location = /sitemaps/unknown.xml { default_type application/problem+json; return 404 '{"status":404}'; }
+    location = /_markdown/missing { default_type application/problem+json; return 404 '{"status":404}'; }
+    location = /_markdown/broken { default_type application/problem+json; return 500 '{"status":500}'; }
     location = /api/v1/public/site { default_type application/json; return 200 '{"ok":true}'; }
     # Echoes the forwarded scheme and host: the API builds links on them when no public URL is configured.
     location = /_document/origin { return 200 '<!doctype html>origin=\$http_x_forwarded_proto://\$http_x_forwarded_host'; }
@@ -91,6 +99,14 @@ for code in 400 401 403 405 429 500 503; do expect "/e$code" 503 text/html SHELL
 expect /nobody-type 503 text/html SHELL
 expect /llms.txt 200 text/plain
 expect /index.md 200 text/markdown
+expect /sitemap.xml 200 application/xml
+expect /sitemaps/pages.xml 200 application/xml
+# SEO files: API errors become short text/plain answers with the same status (never problem+json downloads).
+expect /robots.txt 500 text/plain "not available"
+expect /llms-full.txt 429 text/plain "not available"
+expect /sitemaps/unknown.xml 404 text/plain "Not found"
+expect /missing.md 404 text/plain "Not found"
+expect /broken.md 500 text/plain "not available"
 expect /api/v1/public/site 200 application/json
 expect /app 200 text/html SHELL
 # X-Forwarded-Proto/Host carry the visitor's scheme and host (with its port) to the API (docs/RENDER.md#public-url).
@@ -103,6 +119,10 @@ expect /healthz 200 text/plain
 expect / 503 text/html SHELL
 expect /page 503 text/html SHELL
 expect /api/v1/public/site 503 application/problem+json service_unavailable
+expect /llms.txt 503 text/plain "not available"
+expect /robots.txt 503 text/plain "not available"
+expect /sitemap.xml 503 text/plain "not available"
+expect /index.md 503 text/plain "not available"
 
 [ "$failures" = 0 ] || die "$failures nginx check(s) failed"
 ok "nginx serves every page as HTML, whatever the API answers"

@@ -104,21 +104,25 @@ server {
     location = /robots.txt {
         proxy_pass ${OA_API_PROXY};
         include /etc/nginx/snippets/proxy-api.conf;
+        include /etc/nginx/snippets/seo-file-errors.conf;
     }
 
     location = /sitemap.xml {
         proxy_pass ${OA_API_PROXY};
         include /etc/nginx/snippets/proxy-api.conf;
+        include /etc/nginx/snippets/seo-file-errors.conf;
     }
 
     location /sitemaps/ {
         proxy_pass ${OA_API_PROXY};
         include /etc/nginx/snippets/proxy-api.conf;
+        include /etc/nginx/snippets/seo-file-errors.conf;
     }
 
     location ~ "^/(llms\.txt|llms-full\.txt|humans\.txt|\.well-known/security\.txt|[A-Za-z0-9-]{8,128}\.txt)$" {
         proxy_pass ${OA_API_PROXY};
         include /etc/nginx/snippets/proxy-api.conf;
+        include /etc/nginx/snippets/seo-file-errors.conf;
     }
 
     # Markdown version of every public page for AI assistants: /services/seo.md, /index.md (home).
@@ -126,6 +130,26 @@ server {
         rewrite ^/(.+)\.md$ /_markdown/$1 break;
         proxy_pass ${OA_API_PROXY};
         include /etc/nginx/snippets/proxy-api.conf;
+        include /etc/nginx/snippets/seo-file-errors.conf;
+    }
+
+    # Error bodies of the SEO files above (snippets/seo-file-errors.conf keeps the status). "types { }": always text/plain,
+    # whatever the extension (.xml, .md).
+    location @text_missing {
+        types { }
+        default_type text/plain;
+        add_header Cache-Control "no-store" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        return 200 "Not found.\n";
+    }
+
+    location @text_error {
+        types { }
+        default_type text/plain;
+        add_header Cache-Control "no-store" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header Retry-After "30" always;
+        return 200 "This file is not available right now (the service is starting or returned an error). Try again in a few seconds.\n";
     }
 
     location = /healthz {
