@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { BookOpen, Clock, Layers, Sparkles } from 'lucide-react';
+import { Award, BookOpen, CheckCircle2, Clock, Layers, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ProgressBar } from '@/components/ui/Progress';
 import { CATEGORY_LABELS, formatMinutes, type CourseCard as CourseCardData, type CourseCategory, type CourseLevel } from '../api';
@@ -49,57 +49,71 @@ export interface CourseCardProps {
   progress?: { percent: number; passed: boolean } | null;
 }
 
-/** A premium course card: category colour band, badge preview, level, duration and lesson count. */
+/**
+ * A premium course card: a category-tinted art panel with the course badge, category chip and flags; the title, a
+ * two-line subtitle and level / duration / lessons; a footer with the "Free" pill and the certificate (or the learner's
+ * progress). The title link stretches over the whole card.
+ */
 export function CourseCard({ course, to, headingLevel = 3, progress }: CourseCardProps) {
   const Heading = `h${headingLevel}` as const;
   return (
     <article className={clsx('lx-card', categoryClass(course.category))}>
-      <div className="lx-card__band" aria-hidden="true" />
-      <div className="lx-card__top">
-        <CategoryTag category={course.category} />
-        <div className="lx-card__flags">
-          {course.isFeatured && (
-            <span className="lx-flag">
-              <Sparkles aria-hidden="true" /> Featured
-            </span>
-          )}
-          {course.isNew && <span className="lx-flag lx-flag--new">New</span>}
+      <div className="lx-card__art">
+        <div className="lx-card__top">
+          <CategoryTag category={course.category} />
+          <div className="lx-card__flags">
+            {course.isFeatured && (
+              <span className="lx-flag">
+                <Sparkles aria-hidden="true" /> Featured
+              </span>
+            )}
+            {course.isNew && <span className="lx-flag lx-flag--new">New</span>}
+          </div>
         </div>
+        <BadgeImage src={course.badgeImageUrl} size={104} className="lx-card__badge" />
       </div>
-      <div className="lx-card__main">
-        <div className="lx-card__text">
-          <Heading className="lx-card__title">
-            <Link to={to} className="lx-card__link">
-              {course.title}
-            </Link>
-          </Heading>
-          <p className="lx-card__subtitle">{course.subtitle}</p>
-        </div>
-        <BadgeImage src={course.badgeImageUrl} size={64} className="lx-card__badge" />
+      <div className="lx-card__body">
+        <Heading className="lx-card__title">
+          <Link to={to} className="lx-card__link">
+            {course.title}
+          </Link>
+        </Heading>
+        <p className="lx-card__subtitle">{course.subtitle}</p>
+        <ul className="lx-card__meta" aria-label="Course details">
+          <li>
+            <LevelTag level={course.level} />
+          </li>
+          <li>
+            <Clock aria-hidden="true" /> {formatMinutes(course.estimatedMinutes)}
+          </li>
+          <li>
+            <BookOpen aria-hidden="true" /> {course.lessonCount} lessons
+          </li>
+          <li>
+            <Layers aria-hidden="true" /> {course.moduleCount} modules
+          </li>
+        </ul>
       </div>
-      <ul className="lx-card__meta" aria-label="Course details">
-        <li>
-          <LevelTag level={course.level} />
-        </li>
-        <li>
-          <Clock aria-hidden="true" /> {formatMinutes(course.estimatedMinutes)}
-        </li>
-        <li>
-          <BookOpen aria-hidden="true" /> {course.lessonCount} lessons
-        </li>
-        <li>
-          <Layers aria-hidden="true" /> {course.moduleCount} modules
-        </li>
-      </ul>
-      {progress ? (
-        progress.passed ? (
-          <p className="lx-card__status lx-card__status--done">Completed · certificate earned</p>
+      <div className="lx-card__foot">
+        {progress ? (
+          progress.passed ? (
+            <p className="lx-card__status lx-card__status--done">
+              <CheckCircle2 aria-hidden="true" /> Completed · certificate earned
+            </p>
+          ) : (
+            <ProgressBar value={progress.percent} label="Your progress" className="lx-card__progress" />
+          )
         ) : (
-          <ProgressBar value={progress.percent} label="Your progress" className="lx-card__progress" />
-        )
-      ) : (
-        <p className="lx-card__status">Free · certificate: {course.badgeName}</p>
-      )}
+          <p className="lx-card__status">
+            <span className="lx-free">Free</span>
+            <span className="lx-card__cert">
+              <Award aria-hidden="true" />
+              <span className="visually-hidden">certificate: </span>
+              <span className="lx-card__cert-name">{course.badgeName}</span>
+            </span>
+          </p>
+        )}
+      </div>
     </article>
   );
 }
