@@ -191,6 +191,17 @@ in this workstream.
   (Mon–Fri 09:00–12:00 and 13:00–17:00 UTC, 30-minute slots, 12 h notice, 30 days ahead). Edits made in the CMS are never overwritten.
 - **Demo** (`WebsiteDemoSeeder`, Order 300, `Demo` seed profile, once): team members, case studies,
   testimonials, blog posts in every workflow state, jobs and applications, inquiries, bookings and subscribers.
+- **Partner content** (`PartnerContentSeeder`, Order 65, `Baseline` profile, so it runs in production): the 19 PCI AI /
+  Certuvo blog posts in `Modules/Website/Content/partner-posts/*.md` (front matter: slug, title ≤ 60, description ≤ 155,
+  cluster, primaryKeyword, categories, tags, related, publishedDaysAgo, cover, coverAlt; embedded in the API assembly),
+  published under the "Optimize All Editorial" byline in two new categories (Project controls & finance, Certification &
+  exam prep), with one public PNG cover per cluster (`covers/*.png`, stored as a public content image and served from
+  `/api/v1/files/{id}`, so seeded posts stay editable under the image URL policy). Publish dates are staggered 1–29 days
+  before the first seeding. Insert-only and idempotent by slug under a named lock and a write transaction; the
+  `seed.website_partner_content` ledger stops deleted or renamed posts from coming back. **On by default**; set
+  `Website__PartnerContent__Enabled=false` to skip it (the integration-test factory does, except in
+  `PartnerContentSeedTests`). Editorial rules are enforced by `PartnerPostLibraryTests`. Strategy and outreach material:
+  `docs/marketing/`.
 
 ## Operations
 
