@@ -2,6 +2,7 @@
 import { fileURLToPath, URL } from 'node:url';
 import react from '@vitejs/plugin-react';
 import { defineConfig, loadEnv } from 'vite';
+import { seoShell } from './seoShell';
 import { devProxy } from './src/app/devProxy';
 
 export default defineConfig(({ mode }) => {
@@ -10,7 +11,8 @@ export default defineConfig(({ mode }) => {
   const proxy = devProxy(apiTarget);
 
   return {
-    plugins: [react()],
+    // seoShell: public pages are server-rendered by the API and served with the app shell (docs/SEO_CRO.md § Rendering).
+    plugins: [react(), seoShell(apiTarget)],
     resolve: {
       alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
     },

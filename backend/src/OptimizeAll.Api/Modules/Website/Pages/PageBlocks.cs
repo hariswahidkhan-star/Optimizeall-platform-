@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using OptimizeAll.Api.Modules.Website.Settings;
+using OptimizeAll.Api.Modules.Website.SiteSeo;
 using OptimizeAll.Api.Modules.Website.Shared;
 using OptimizeAll.Domain.Website;
 
@@ -19,10 +20,20 @@ public static class PageBlockTypes
     public const string LogoCloud = "logoCloud";
     public const string ServicesGrid = "servicesGrid";
     public const string CaseStudyHighlight = "caseStudyHighlight";
+    public const string Video = "video";
 
     public static readonly string[] All =
-        { Hero, RichText, FeaturesGrid, Stats, Cta, Faq, Testimonials, LogoCloud, ServicesGrid, CaseStudyHighlight };
+        { Hero, RichText, FeaturesGrid, Stats, Cta, Faq, Testimonials, LogoCloud, ServicesGrid, CaseStudyHighlight, Video };
 }
+
+/// <summary>
+/// A self-hosted video (docs/SEO_CRO.md § Video): MP4 and/or WebM files, a poster image and a WebVTT captions track,
+/// served from the site's <c>/media/videos/</c> folder (frontend/public/media/videos), uploads or an allowed https host.
+/// Rendered as an accessible, lazy <c>&lt;video&gt;</c> player and described by a VideoObject + the video sitemap.
+/// </summary>
+public sealed record VideoBlock(
+    string Title, string? Description, string? Mp4Url, string? WebmUrl, string? PosterUrl, string? CaptionsUrl, string? CaptionsLanguage,
+    int? DurationSeconds, DateOnly? UploadDate, string? Transcript);
 
 public sealed record HeroBlock(string? Eyebrow, string Title, string? Subtitle, SiteLink? PrimaryCta, SiteLink? SecondaryCta, string? ImageUrl);
 
@@ -215,6 +226,34 @@ public sealed class PageBlockValidator(WebsiteRules rules)
             {
                 var b = Read<CaseStudyHighlightBlock>();
                 return new CaseStudyHighlightBlock(Opt(b.Title, "title", 150), WebsiteRules.Slug(b.CaseStudySlug, $"{f}.data.caseStudySlug", e));
+            }
+            case PageBlockTypes.Video:
+            {
+                var b = Read<VideoBlock>();
+                string? Media(string? value, string field, string kind)
+                {
+                    var v = WebsiteRules.Clean(value);
+                    if (v is null) return null;
+                    if (v.StartsWith("/media/", StringComparison.Ordinal))
+                    {
+                        if (!SiteMedia.IsSiteMediaPath(v, kind)) e.Add($"{f}.data.{field}", SiteMedia.Message(kind));
+                        return v;
+                    }
+                    return rules.Image(v, $"{f}.data.{field}", e);
+                }
+                var mp4 = Media(b.Mp4Url, "mp4Url", "mp4");
+                var webm = Media(b.WebmUrl, "webmUrl", "webm");
+                if (mp4 is null && webm is null) e.Add($"{f}.data.mp4Url", "Add the MP4 (or WebM) file of the video.");
+                var poster = Media(b.PosterUrl, "posterUrl", "image");
+                if (poster is null) e.Add($"{f}.data.posterUrl", "Add a poster image: it is shown before the video plays and used by search engines.");
+                var captions = Media(b.CaptionsUrl, "captionsUrl", "vtt");
+                if (captions is null) e.Add($"{f}.data.captionsUrl", "Add a WebVTT captions file (.vtt): videos need captions for viewers who can't hear them.");
+                var language = Opt(b.CaptionsLanguage, "captionsLanguage", 10) ?? "en";
+                if (!System.Text.RegularExpressions.Regex.IsMatch(language, "^[a-z]{2,3}(-[A-Z]{2})?$"))
+                    e.Add($"{f}.data.captionsLanguage", "Use a language code such as en or en-GB.");
+                if (b.DurationSeconds is { } d && (d < 1 || d > 36000)) e.Add($"{f}.data.durationSeconds", "Enter the length in seconds.");
+                return new VideoBlock(Req(b.Title, "title", 150), Opt(b.Description, "description", 500), mp4, webm, poster, captions, language,
+                    b.DurationSeconds, b.UploadDate, WebsiteRules.Markdown(b.Transcript, $"{f}.data.transcript", e, 20000));
             }
             default:
                 return null;

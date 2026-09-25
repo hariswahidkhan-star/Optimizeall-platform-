@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import { SiteChrome } from '@/features/public/site/SiteChrome';
+import { PageVideos } from '@/features/public/site/SiteVideo';
 import { ImpersonationBanner } from './ImpersonationBanner';
 import './PublicLayout.css';
 
@@ -14,6 +15,8 @@ export function PublicLayout() {
       <ImpersonationBanner />
       <SiteChrome>
         <Outlet />
+        {/* Videos placed on built-in pages in code (siteVideos.json); CMS pages use the Video block. */}
+        <PageVideos />
       </SiteChrome>
     </>
   );

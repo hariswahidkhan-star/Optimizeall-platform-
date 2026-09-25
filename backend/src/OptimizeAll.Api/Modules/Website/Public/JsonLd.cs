@@ -38,7 +38,13 @@ public sealed class JsonLd(string baseUrl, SiteSettings site)
         var org = OrganizationRef();
         org["@context"] = "https://schema.org";
         org["@id"] = Url("/") + "#organization";
-        org["logo"] = o.LogoUrl is null ? Url("/og-image.png") : Url(o.LogoUrl);
+        org["logo"] = new Dictionary<string, object?>
+        {
+            ["@type"] = "ImageObject",
+            ["url"] = o.LogoUrl is null ? Url("/og-image.png") : Url(o.LogoUrl),
+            ["width"] = o.LogoUrl is null ? 554 : null,
+            ["height"] = o.LogoUrl is null ? 554 : null,
+        }.Where(kv => kv.Value is not null).ToDictionary(kv => kv.Key, kv => kv.Value);
         org["description"] = site.Seo.DefaultDescription;
         org["slogan"] = site.Tagline;
         org["email"] = site.Contact.Email;
@@ -46,19 +52,50 @@ public sealed class JsonLd(string baseUrl, SiteSettings site)
         org["foundingDate"] = o.FoundingYear?.ToString(CultureInfo.InvariantCulture);
         org["sameAs"] = site.Social.Count > 0 ? site.Social.Select(s => s.Url).ToArray() : null;
         org["areaServed"] = o.AreaServed.Count > 0 ? o.AreaServed.ToArray() : null;
-        if (o.StreetAddress is not null || o.Locality is not null || o.CountryCode is not null)
-        {
-            org["address"] = new Dictionary<string, object?>
-            {
-                ["@type"] = "PostalAddress",
-                ["streetAddress"] = o.StreetAddress,
-                ["addressLocality"] = o.Locality,
-                ["addressRegion"] = o.Region,
-                ["postalCode"] = o.PostalCode,
-                ["addressCountry"] = o.CountryCode,
-            }.Where(kv => kv.Value is not null).ToDictionary(kv => kv.Key, kv => kv.Value);
-        }
+        if (o.StreetAddress is not null || o.Locality is not null || o.CountryCode is not null) org["address"] = Address();
         return Element(org);
+    }
+
+    /// <summary>True when the organization settings carry a street address or locality (enables the LocalBusiness node).</summary>
+    public bool HasAddress => site.Organization.StreetAddress is not null || site.Organization.Locality is not null;
+
+    private Dictionary<string, object?> Address()
+    {
+        var o = site.Organization;
+        return new Dictionary<string, object?>
+        {
+            ["@type"] = "PostalAddress",
+            ["streetAddress"] = o.StreetAddress,
+            ["addressLocality"] = o.Locality,
+            ["addressRegion"] = o.Region,
+            ["postalCode"] = o.PostalCode,
+            ["addressCountry"] = o.CountryCode,
+        }.Where(kv => kv.Value is not null).ToDictionary(kv => kv.Key, kv => kv.Value);
+    }
+
+    /// <summary>
+    /// <c>ProfessionalService</c> (a LocalBusiness subtype) for the agency's office, only when an address is configured in
+    /// the organization settings. Linked to the Organization node by <c>parentOrganization</c>.
+    /// </summary>
+    public JsonElement? LocalBusiness()
+    {
+        if (!HasAddress) return null;
+        var o = site.Organization;
+        return Element(new()
+        {
+            ["@context"] = "https://schema.org",
+            ["@type"] = "ProfessionalService",
+            ["@id"] = Url("/") + "#business",
+            ["name"] = o.LegalName ?? site.SiteName,
+            ["url"] = Url("/"),
+            ["image"] = o.LogoUrl is null ? Url("/og-image.png") : Url(o.LogoUrl),
+            ["description"] = site.Seo.DefaultDescription,
+            ["email"] = site.Contact.Email,
+            ["telephone"] = site.Contact.Phone,
+            ["address"] = Address(),
+            ["areaServed"] = o.AreaServed.Count > 0 ? o.AreaServed.ToArray() : null,
+            ["parentOrganization"] = new Dictionary<string, object?> { ["@id"] = Url("/") + "#organization" },
+        });
     }
 
     public JsonElement WebSite() => Element(new()
@@ -67,7 +104,16 @@ public sealed class JsonLd(string baseUrl, SiteSettings site)
         ["@type"] = "WebSite",
         ["name"] = site.SiteName,
         ["url"] = Url("/"),
+        ["@id"] = Url("/") + "#website",
+        ["inLanguage"] = "en",
         ["publisher"] = new Dictionary<string, object?> { ["@id"] = Url("/") + "#organization" },
+        // The site search (/search?q=…): lets search engines and assistants query the site directly.
+        ["potentialAction"] = new Dictionary<string, object?>
+        {
+            ["@type"] = "SearchAction",
+            ["target"] = new Dictionary<string, object?> { ["@type"] = "EntryPoint", ["urlTemplate"] = Url("/search") + "?q={search_term_string}" },
+            ["query-input"] = "required name=search_term_string",
+        },
     });
 
     public JsonElement Breadcrumbs(params (string Name, string Path)[] items) => Element(new()

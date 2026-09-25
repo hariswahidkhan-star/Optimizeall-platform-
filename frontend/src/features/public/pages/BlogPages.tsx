@@ -22,7 +22,25 @@ export function BlogPage() {
   const debounced = useDebouncedValue(search, 300);
   const { data, isLoading, error } = useBlog({ page, category, tag, search: debounced || undefined });
   const copy = useSiteCopy();
-  useDocumentHead({ title: copy.text('blog.seo.title'), description: copy.text('blog.seo.description') });
+  // Same rules as the server-rendered page (SeoPageResolver.BlogAsync): each archive page and each category is its own
+  // canonical URL; tag filters and searches are noindex (links still followed) and point at /blog.
+  const categoryInfo = category ? data?.categories.find((c) => c.slug === category) : undefined;
+  const paged = page > 1 ? `page=${page}` : '';
+  useDocumentHead(
+    tag || debounced
+      ? { title: copy.text('blog.seo.title'), description: copy.text('blog.seo.description'), canonical: '/blog', noIndex: true, follow: true }
+      : categoryInfo
+        ? {
+            title: `${categoryInfo.name} articles`,
+            description: categoryInfo.description || copy.text('blog.seo.description'),
+            canonical: `/blog?category=${encodeURIComponent(categoryInfo.slug)}${paged ? `&${paged}` : ''}`,
+          }
+        : {
+            title: page > 1 ? `${copy.text('blog.seo.title')} — page ${page}` : copy.text('blog.seo.title'),
+            description: copy.text('blog.seo.description'),
+            canonical: paged ? `/blog?${paged}` : '/blog',
+          },
+  );
 
   const update = (changes: Record<string, string | undefined>) => {
     const next = new URLSearchParams(params);

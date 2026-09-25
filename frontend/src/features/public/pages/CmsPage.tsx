@@ -17,7 +17,7 @@ export function CmsPage({ slug: fixedSlug }: { slug?: string }) {
   const { data: page, isLoading, error } = usePage(slug);
   useDocumentHead(page ? headFromSeo(page.seo, page.jsonLd) : { title: null });
 
-  if (isApiError(error) && error.status === 404) return <NotFound />;
+  if (isApiError(error) && error.status === 404) return <NotFound siteLinks />;
 
   const startsWithHero = page?.blocks[0]?.type === 'hero';
   return (

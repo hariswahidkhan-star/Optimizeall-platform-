@@ -15,12 +15,20 @@ export function devProxy(apiTarget: string): Record<string, DevProxyRule> {
     // Campaign tracking links (/t/{code}) and email open pixel, click redirect and one-click unsubscribe (/e/…).
     '^/t/': { target: apiTarget, changeOrigin: false },
     '^/e/': { target: apiTarget, changeOrigin: false },
-    // The API generates robots.txt and the sitemap.
+    // The API generates the SEO files: robots.txt, the sitemap index and sitemaps, llms.txt / llms-full.txt,
+    // security.txt, humans.txt, the IndexNow key file and the Markdown version of every page (/{path}.md).
+    // Page documents themselves are rendered by the API through the seoShell plugin (seoShell.ts).
     '^/robots\\.txt$': { target: apiTarget, changeOrigin: false },
-    '^/sitemap\\.xml$': {
+    '^/sitemap\\.xml$': { target: apiTarget, changeOrigin: false },
+    '^/sitemaps/': { target: apiTarget, changeOrigin: false },
+    '^/llms(-full)?\\.txt$': { target: apiTarget, changeOrigin: false },
+    '^/humans\\.txt$': { target: apiTarget, changeOrigin: false },
+    '^/\\.well-known/security\\.txt$': { target: apiTarget, changeOrigin: false },
+    '^/[A-Za-z0-9-]{8,128}\\.txt$': { target: apiTarget, changeOrigin: false },
+    '^/(?!api/|assets/|src/|node_modules/)[^?]+\\.md(\\?.*)?$': {
       target: apiTarget,
       changeOrigin: false,
-      rewrite: () => '/api/v1/public/sitemap.xml',
+      rewrite: (path) => `/_markdown${path.split('?')[0].replace(/\.md$/, '')}`,
     },
   };
 }

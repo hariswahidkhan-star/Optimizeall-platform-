@@ -26,6 +26,22 @@ export const BLOCK_TYPES: { value: string; label: string; empty: Record<string, 
   { value: 'logoCloud', label: 'Logo cloud', empty: { title: 'Trusted by', logos: [] } },
   { value: 'servicesGrid', label: 'Services grid', empty: { title: 'Our services', intro: '', categorySlug: null } },
   { value: 'caseStudyHighlight', label: 'Case study highlight', empty: { title: 'Featured case study', caseStudySlug: '' } },
+  {
+    value: 'video',
+    label: 'Video',
+    empty: {
+      title: 'Video title',
+      description: '',
+      mp4Url: null,
+      webmUrl: null,
+      posterUrl: null,
+      captionsUrl: null,
+      captionsLanguage: 'en',
+      durationSeconds: null,
+      uploadDate: null,
+      transcript: null,
+    },
+  },
 ];
 
 const labelOf = (type: string) => BLOCK_TYPES.find((b) => b.value === type)?.label ?? type;
@@ -167,6 +183,31 @@ function BlockForm({ block, update, errors, index }: { block: PageBlock; update:
         <>
           <TextField label="Title" value={s(d.title)} onChange={(v) => set('title', v)} />
           <TextField label="Case study slug" required value={s(d.caseStudySlug)} onChange={(v) => set('caseStudySlug', v)} error={e('caseStudySlug')} />
+        </>
+      );
+    case 'video':
+      return (
+        <>
+          <TextField label="Title" required value={s(d.title)} onChange={(v) => set('title', v)} error={e('title')} hint="Labels the player and names the video for search engines." />
+          <AreaField label="Description" value={s(d.description)} onChange={(v) => set('description', v || null)} rows={2} error={e('description')} />
+          <p className="text-small text-muted">
+            Self-hosted files live in the site's /media/videos/ folder (for example /media/videos/intro.mp4); uploads and allowed https hosts also work.
+          </p>
+          <div className="cms-grid-2">
+            <TextField label="MP4 file" value={s(d.mp4Url)} onChange={(v) => set('mp4Url', v || null)} error={e('mp4Url')} />
+            <TextField label="WebM file" value={s(d.webmUrl)} onChange={(v) => set('webmUrl', v || null)} error={e('webmUrl')} />
+            <TextField label="Poster image" required value={s(d.posterUrl)} onChange={(v) => set('posterUrl', v || null)} error={e('posterUrl')} hint="Shown before playback; 16:9, at least 1280×720." />
+            <TextField label="Captions (WebVTT)" required value={s(d.captionsUrl)} onChange={(v) => set('captionsUrl', v || null)} error={e('captionsUrl')} />
+            <TextField label="Captions language" value={s(d.captionsLanguage)} onChange={(v) => set('captionsLanguage', v || null)} error={e('captionsLanguage')} hint="For example en or en-GB." />
+            <TextField
+              label="Length in seconds"
+              value={d.durationSeconds == null ? '' : String(d.durationSeconds)}
+              onChange={(v) => set('durationSeconds', /^\d+$/.test(v) ? Number(v) : null)}
+              error={e('durationSeconds')}
+            />
+            <TextField label="Upload date (YYYY-MM-DD)" value={s(d.uploadDate)} onChange={(v) => set('uploadDate', v || null)} error={e('uploadDate')} />
+          </div>
+          <AreaField label="Transcript (Markdown)" value={s(d.transcript)} onChange={(v) => set('transcript', v || null)} rows={4} error={e('transcript')} />
         </>
       );
     default:

@@ -178,7 +178,10 @@ test.describe.serial('CMS pages', () => {
     expect(await meta(pub, 'description')).toBe('Response times and service levels for every client.');
     expect(await meta(pub, 'og:title')).toBe(`Service promise ${id} | Optimize All`);
     expect(await meta(pub, 'og:url')).toMatch(new RegExp(`/${slug}$`));
-    expect(await meta(pub, 'robots')).toBeNull();
+    // Indexable pages state it explicitly (the server-rendered HTML and the head manager agree), with rich previews.
+    expect(await meta(pub, 'robots')).toBe(
+      'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+    );
     expect(await canonical(pub)).toMatch(new RegExp(`^https?://[^/]+/${slug}$`));
     const ld = await jsonLd(pub);
     const breadcrumbs = ld.find((x) => x['@type'] === 'BreadcrumbList') as

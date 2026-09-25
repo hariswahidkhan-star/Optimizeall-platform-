@@ -79,7 +79,8 @@ public sealed class PublicSiteService(AppDbContext db, SiteSettingsService setti
         var s = await SettingsAsync(ct);
         return new PublicSeoDto(
             seo?.Title ?? fallbackTitle,
-            seo?.Description ?? fallbackDescription ?? s.Seo.DefaultDescription,
+            // Search engines show about 155 characters; longer fallbacks (summaries, hero copy) are cut at a word boundary.
+            SiteSeo.SeoText.Clamp(seo?.Description ?? fallbackDescription ?? s.Seo.DefaultDescription),
             seo?.OgImageUrl ?? fallbackImage ?? s.Seo.DefaultOgImageUrl,
             ld.Url(seo?.CanonicalUrl ?? path),
             seo?.NoIndex ?? false);
@@ -121,7 +122,7 @@ public sealed class PublicSiteService(AppDbContext db, SiteSettingsService setti
 
         return new HomeDto(Groups(cat), caseStudies, testimonials, industries, posts, teaser, s.HomeStats, s.TrustLogos,
             await SeoAsync(null, s.Seo.DefaultTitle, s.Seo.DefaultDescription, null, "/", ct),
-            new[] { ld.Organization(), ld.WebSite() });
+            ld.LocalBusiness() is { } business ? new[] { ld.Organization(), ld.WebSite(), business } : new[] { ld.Organization(), ld.WebSite() });
     }
 
     // ---------------------------------------------------------------- Services & pricing
@@ -303,71 +304,5 @@ public sealed class PublicSiteService(AppDbContext db, SiteSettingsService setti
             services.OrderBy(s => Rank(s.Name, q)).Select(s => new SearchHitDto("service", s.Slug, s.Name, s.Tagline, $"/services/{s.Slug}")).ToList(),
             posts.OrderBy(p => Rank(p.Title, q)).Select(p => new SearchHitDto("post", p.Slug, p.Title, p.Excerpt, $"/blog/{p.Slug}")).ToList(),
             cases.OrderBy(c => Rank(c.Title, q)).Select(c => new SearchHitDto("caseStudy", c.Slug, c.Title, c.Summary, $"/case-studies/{c.Slug}")).ToList());
-    }
-
-    // ---------------------------------------------------------------- Sitemap & robots
-
-    /// <summary>
-    /// XML sitemap of every published, indexable URL: home, index pages, services, industries, case studies, blog posts,
-    /// CMS pages and open jobs. Unpublished, scheduled and noindex content is never listed.
-    /// </summary>
-    public async Task<string> SitemapAsync(CancellationToken ct)
-    {
-        var baseUrl = await BaseUrlAsync(ct);
-        var now = clock.GetUtcNow().UtcDateTime;
-        var cat = await CatalogAsync(ct);
-        var urls = new List<(string Path, DateTime? Modified)>
-        {
-            ("/", null), ("/services", null), ("/industries", null), ("/case-studies", null), ("/pricing", null), ("/blog", null),
-            ("/team", null), ("/careers", null), ("/contact", null), ("/free-audit", null), ("/get-a-quote", null),
-            ("/book-a-consultation", null), ("/creators", null),
-        };
-        urls.AddRange(cat.Services.Where(s => !s.Seo.NoIndex).Select(s => ($"/services/{s.Slug}", (DateTime?)s.UpdatedAt)));
-        urls.AddRange((await db.Set<Industry>().AsNoTracking().Where(i => i.IsPublished && !i.Seo.NoIndex).Select(i => new { i.Slug, i.UpdatedAt }).ToListAsync(ct))
-            .Select(i => ($"/industries/{i.Slug}", (DateTime?)i.UpdatedAt)));
-        urls.AddRange((await db.Set<CaseStudy>().AsNoTracking().Where(c => c.IsPublished && !c.Seo.NoIndex).Select(c => new { c.Slug, c.UpdatedAt }).ToListAsync(ct))
-            .Select(c => ($"/case-studies/{c.Slug}", (DateTime?)c.UpdatedAt)));
-        urls.AddRange((await db.Set<BlogPost>().AsNoTracking()
-                .Where(p => p.Status == BlogPostStatus.Published && p.PublishedAt <= now && !p.Seo.NoIndex).Select(p => new { p.Slug, p.UpdatedAt }).ToListAsync(ct))
-            .Select(p => ($"/blog/{p.Slug}", (DateTime?)p.UpdatedAt)));
-        urls.AddRange((await db.Set<SitePage>().AsNoTracking().Where(p => p.IsPublished && (p.PublishAt == null || p.PublishAt <= now) && !p.Seo.NoIndex).Select(p => new { p.Slug, p.UpdatedAt }).ToListAsync(ct))
-            .Where(p => urls.All(u => u.Path != $"/{p.Slug}"))
-            .Select(p => ($"/{p.Slug}", (DateTime?)p.UpdatedAt)));
-        urls.AddRange((await db.Set<JobOpening>().AsNoTracking()
-                .Where(j => j.Status == JobOpeningStatus.Open && (j.ClosesAt == null || j.ClosesAt > now)).Select(j => new { j.Slug, j.UpdatedAt }).ToListAsync(ct))
-            .Select(j => ($"/careers/{j.Slug}", (DateTime?)j.UpdatedAt)));
-
-        var sb = new StringBuilder();
-        using (var writer = XmlWriter.Create(sb, new XmlWriterSettings { Indent = true, OmitXmlDeclaration = false, Encoding = Encoding.UTF8 }))
-        {
-            writer.WriteStartDocument();
-            writer.WriteStartElement("urlset", "http://www.sitemaps.org/schemas/sitemap/0.9");
-            foreach (var (path, modified) in urls)
-            {
-                writer.WriteStartElement("url");
-                writer.WriteElementString("loc", baseUrl + path);
-                if (modified is { } m) writer.WriteElementString("lastmod", m.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
-                writer.WriteEndElement();
-            }
-            writer.WriteEndElement();
-            writer.WriteEndDocument();
-        }
-        return sb.ToString().Replace("encoding=\"utf-16\"", "encoding=\"utf-8\"");
-    }
-
-    /// <summary>Paths crawlers must not visit: every signed-in portal and the API.</summary>
-    public static readonly string[] DisallowedPaths = { "/app", "/agency", "/client", "/admin", "/finance", "/review", "/manage", "/api" };
-
-    public async Task<string> RobotsAsync(CancellationToken ct)
-    {
-        var baseUrl = await BaseUrlAsync(ct);
-        var sb = new StringBuilder();
-        sb.Append("User-agent: *\n");
-        foreach (var path in DisallowedPaths) sb.Append("Disallow: ").Append(path).Append('\n');
-        // The sitemap itself lives under /api, so allow exactly that path.
-        sb.Append("Allow: /api/v1/public/sitemap.xml\n");
-        sb.Append("Allow: /\n\n");
-        sb.Append("Sitemap: ").Append(baseUrl).Append("/api/v1/public/sitemap.xml\n");
-        return sb.ToString();
     }
 }

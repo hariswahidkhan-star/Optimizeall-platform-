@@ -30,6 +30,8 @@
   <ItemGroup>
     <!-- Editable page copy catalog (kept identical to frontend/src/features/public/site/siteCopy.json). -->
     <EmbeddedResource Include="Modules\Content\Copy\site-copy.json" LogicalName="OptimizeAll.SiteCopy.json" />
+    <!-- Videos placed on built-in public pages in code (kept identical to frontend/src/features/public/site/siteVideos.json). -->
+    <EmbeddedResource Include="Modules\Website\SiteSeo\site-videos.json" LogicalName="OptimizeAll.SiteVideos.json" />
   </ItemGroup>
 
   <ItemGroup>

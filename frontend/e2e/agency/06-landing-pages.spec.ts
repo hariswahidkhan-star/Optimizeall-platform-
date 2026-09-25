@@ -54,6 +54,8 @@ test('landing page from a template → publish → public page and form → subm
   const anon = await (await browser.newContext()).newPage();
   const anonErrors = watchErrors(anon);
   anonErrors.ignore(new RegExp(`HTTP 404 GET \\S+/public/lp/${clients.nimbus.slug}/${slug}`));
+  // The document itself is a real 404 until the page is published (docs/SEO_CRO.md § 9.2).
+  anonErrors.ignore(new RegExp(`HTTP 404 GET \\S+/lp/${clients.nimbus.slug}/${slug}`));
   await anon.goto(publicPath);
   await expect(anon.getByRole('heading', { level: 1, name: 'This page isn’t available' })).toBeVisible();
 

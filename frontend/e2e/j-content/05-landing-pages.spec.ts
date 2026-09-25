@@ -248,7 +248,10 @@ test.describe.serial('landing pages', () => {
     await expect(main.getByLabel('Full name')).toBeVisible();
     await expect(pub).toHaveTitle(`Nimbus Bootcamp ${id}`);
     expect(await meta(pub, 'description')).toBe('An eight-week small-group bootcamp in central Manchester.');
-    expect(await meta(pub, 'robots')).toBeNull();
+    // Indexable: the server-rendered head states it explicitly (docs/SEO_CRO.md § 9.3).
+    expect(await meta(pub, 'robots')).toBe(
+      'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+    );
     // The Open Graph settings of the page reach the head (title, description, image as an absolute URL).
     await expect.poll(() => meta(pub, 'og:image')).toMatch(new RegExp(`^https?://[^/]+${og.url}$`));
     expect(await meta(pub, 'og:title')).toBe(`Nimbus Bootcamp ${id}`);
@@ -337,8 +340,8 @@ test.describe.serial('landing pages', () => {
     const hidden = await openPublic(browser, newPath);
     await expect(hidden.getByRole('heading', { level: 1 })).toBeVisible();
     await expect.poll(() => meta(hidden, 'robots')).toBe('noindex, nofollow');
-    // Landing pages are never listed in the site's sitemap (they belong to clients).
-    expect((await anonGet('/api/v1/public/sitemap.xml')).text).not.toContain('/lp/');
+    // A noindex landing page is kept out of the sitemaps (live, indexable ones are listed: docs/SEO_CRO.md § 9.6).
+    expect((await anonGet('/api/v1/public/sitemap.xml')).text).not.toContain(`${newPath}</loc>`);
 
     await designerApi.post(`/agency/pages/landing-pages/${pageId}/unpublish`);
     const offline = await openPublic(browser, newPath);

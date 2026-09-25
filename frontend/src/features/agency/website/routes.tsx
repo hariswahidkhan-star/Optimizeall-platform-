@@ -9,6 +9,7 @@ import {
   Mail,
   MessageSquareQuote,
   Package,
+  SearchCheck,
   Settings2,
   Trophy,
   Type,
@@ -62,6 +63,7 @@ export const nav: PortalNavItem[] = [
   { to: 'website/bookings', label: 'Consultations', icon: CalendarClock, description: 'Booked consultations and availability.', requires: requires.site },
   { to: 'website/newsletter', label: 'Newsletter', icon: Mail, description: 'Double opt-in subscribers.', requires: requires.site },
   { to: 'website/copy', label: 'Page texts', icon: Type, description: 'Headlines, introductions and buttons of the built-in pages.', requires: requires.site },
+  { to: 'website/seo', label: 'SEO', icon: SearchCheck, description: 'Titles, descriptions, indexing and crawler access for every public page.', requires: requires.site },
   { to: 'website/settings', label: 'Site settings', icon: Settings2, description: 'Navigation, footer, SEO defaults and analytics.', requires: requires.site },
 ];
 
@@ -82,6 +84,7 @@ export const routes: RouteObject[] = [
   page('website/bookings', leads, 'BookingsPage', requires.site),
   page('website/newsletter', leads, 'SubscribersPage', requires.site),
   page('website/copy', () => import('./pages/CopyAdmin'), 'SiteCopyPage', requires.site),
+  page('website/seo', () => import('./pages/SeoAdmin'), 'SeoAdminPage', requires.site),
   page('website/settings', () => import('./pages/SettingsAdmin'), 'SiteSettingsPage', requires.site),
 ];
 

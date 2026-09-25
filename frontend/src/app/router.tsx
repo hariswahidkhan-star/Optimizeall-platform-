@@ -143,7 +143,7 @@ export const routes: RouteObject[] = [
       })),
       {
         element: <PublicLayout />,
-        children: [{ path: '*', element: <NotFound /> }],
+        children: [{ path: '*', element: <NotFound siteLinks /> }],
       },
     ],
   },

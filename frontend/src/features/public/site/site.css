@@ -1570,3 +1570,32 @@ button.site-chip {
   padding: 8px;
   cursor: pointer;
 }
+
+/* Website video (SiteVideo.tsx): the 16:9 box is reserved before the poster loads, so nothing shifts. */
+.site-video {
+  margin: 0 0 var(--space-6, 1.5rem);
+}
+.site-video__frame {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--radius-lg, 12px);
+  background: #000;
+}
+.site-video__player {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.site-video__caption {
+  margin-top: 0.5rem;
+  color: var(--color-text-muted, inherit);
+}
+.site-video__transcript {
+  margin-top: 0.75rem;
+}
+
+/* Core Web Vitals: the page body fills at least one screen, so the footer starts below the fold while a page loads
+   its content and is never pushed down inside the viewport (layout shift). */
+.site-layout .public-main {
+  min-height: 100dvh;
+}

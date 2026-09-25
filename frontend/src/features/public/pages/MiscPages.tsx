@@ -110,7 +110,7 @@ export function SearchPage() {
   const [q, setQ] = useState(params.get('q') ?? '');
   const debounced = useDebouncedValue(q.trim(), 300);
   const { data, isFetching } = useSearch(debounced);
-  useDocumentHead({ title: 'Search', noIndex: true });
+  useDocumentHead({ title: 'Search', noIndex: true, follow: true });
   useEffect(() => {
     setParams(debounced ? { q: debounced } : {}, { replace: true });
   }, [debounced, setParams]);

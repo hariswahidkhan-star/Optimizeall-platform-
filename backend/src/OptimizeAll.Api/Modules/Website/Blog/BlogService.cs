@@ -416,7 +416,7 @@ public static class PublicBlogQueries
         var ld = new JsonLd(await site.BaseUrlAsync(ct), await site.SettingsAsync(ct));
         var path = $"/blog/{p.Slug}";
         var settings = await site.SettingsAsync(ct);
-        var seo = new PublicSeoDto(p.Seo.Title ?? p.Title, p.Seo.Description ?? p.Excerpt, p.Seo.OgImageUrl ?? p.CoverImageUrl ?? settings.Seo.DefaultOgImageUrl,
+        var seo = new PublicSeoDto(p.Seo.Title ?? p.Title, SiteSeo.SeoText.Clamp(p.Seo.Description ?? p.Excerpt),p.Seo.OgImageUrl ?? p.CoverImageUrl ?? settings.Seo.DefaultOgImageUrl,
             ld.Url(p.Seo.CanonicalUrl ?? path), p.Seo.NoIndex);
         return new PublicPostDto(p.Slug, p.Title, p.Excerpt, p.BodyMarkdown, p.CoverImageUrl, p.CoverImageAlt, author,
             p.CategoryIds.Where(l.Categories.ContainsKey).Select(id => new BlogCategoryRefDto(l.Categories[id].Slug, l.Categories[id].Name)).ToList(),

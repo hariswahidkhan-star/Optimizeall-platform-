@@ -246,9 +246,14 @@ public sealed class WebsiteCmsTests(ApiFactory api) : IClassFixture<ApiFactory>
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("text/plain", response.Content.Headers.ContentType!.MediaType);
         var text = await response.Content.ReadAsStringAsync();
-        foreach (var path in new[] { "/app", "/agency", "/client", "/admin", "/finance", "/review", "/manage", "/api" })
-            Assert.Contains($"Disallow: {path}\n", text);
-        Assert.Contains("Sitemap: http://app.test/api/v1/public/sitemap.xml", text);
+        // Each area is blocked exactly (/app$ and /app/…), so public pages such as /apple-case-study stay crawlable.
+        foreach (var path in new[] { "/app", "/agency", "/client", "/admin", "/finance", "/review", "/manage" })
+        {
+            Assert.Contains($"Disallow: {path}$\n", text);
+            Assert.Contains($"Disallow: {path}/\n", text);
+        }
+        Assert.Contains("Disallow: /api/\n", text);
+        Assert.Contains("Sitemap: http://app.test/sitemap.xml", text);
     }
 
     [Fact]

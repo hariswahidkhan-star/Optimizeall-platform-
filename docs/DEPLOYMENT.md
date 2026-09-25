@@ -15,8 +15,8 @@ controls are in [SECURITY.md](SECURITY.md); every configuration key is documente
              +------------+-------------+
                           | http :8080  (X-Forwarded-For / X-Forwarded-Proto)
              +------------v-------------+
-             |  web  (nginx, non-root)  |   SPA static files (frontend/dist)
-             |  optimizeall-web image   |   /api/*, /t/*, /health/*  --> api
+             |  web  (nginx, non-root)  |   SPA static files (frontend/dist); public pages rendered by the
+             |  optimizeall-web image   |   API (/_document, SSI shell) ; /api/*, /t/*, /health/*, SEO files --> api
              +------------+-------------+
                           | http :8080
              +------------v-------------+        +---------------------------+
@@ -35,6 +35,11 @@ controls are in [SECURITY.md](SECURITY.md); every configuration key is documente
    migrate (one-shot)  optimizeall-migrator image: EF Core migrations bundle, runs before a new api version
 ```
 
+* **Server-rendered public pages.** Every public URL (home, services, blog, CMS pages, landing pages…) is sent by nginx
+  to the API as `/_document{path}`; the API answers with the real status (200/301/404/410) and a complete HTML page
+  (SEO head, JSON-LD, crawlable content) containing two SSI includes that nginx fills with the app shell from
+  `dist/__shell/`. Portals and sign-in pages are served as the plain app shell with `X-Robots-Tag: noindex, nofollow`.
+  If the API is down, visitors still get the app (503 + shell). Details: [SEO_CRO.md § 9](SEO_CRO.md#9-technical-seo-of-the-public-website).
 * **Single origin.** The browser only talks to the web container; nginx proxies the API. No CORS is needed and
   the refresh cookie (`SameSite=Strict`, path `/api/v1/auth`) works without cross-site exceptions.
 * **Stateless API.** Sessions are JWT access tokens + refresh tokens stored in MySQL. ASP.NET Data Protection
@@ -165,6 +170,10 @@ publish job with registry credentials when a registry is chosen.
   `frontend/nginx/default.conf.template` → `$oa_img_src_extra` in `snippets/security-headers.conf`). Several hosts are
   space-separated in `IMG_SRC_EXTRA` and indexed (`__0`, `__1`, …) in the API setting.
 * Redirect HTTP to HTTPS at the proxy. Allow request bodies of at least 12 MB (screenshot uploads).
+* Canonical host: redirect the other host form (`example.com` ↔ `www.example.com`) with a 301 at the proxy, and set
+  **Site settings → SEO → Site URL** to the canonical https origin: canonical links, Open Graph URLs, the sitemaps,
+  robots.txt and llms.txt all use it. The web server already redirects trailing slashes, duplicate slashes and
+  upper-case paths to the one lower-case form (301).
 
 ### 5.3 Database: managed MySQL 8
 
@@ -282,6 +291,11 @@ BASE=https://app.example.com
 curl -fsS $BASE/health/live               # "Healthy"
 curl -fsS $BASE/health/ready              # "Healthy" (database reachable)
 curl -fsSI $BASE/ | grep -i content-security-policy
+curl -fsS $BASE/services | grep -c '<h1>'  # 1: public pages are server-rendered (SSI shell filled, no "include" left)
+curl -fsS $BASE/services | grep -c 'include virtual'   # 0
+curl -fsS -o /dev/null -w '%{http_code}\n' $BASE/no-such-page   # 404
+curl -fsS $BASE/robots.txt | tail -1      # Sitemap: https://…/sitemap.xml (the site URL, not an internal host)
+curl -fsS $BASE/sitemap.xml | head -3     # <sitemapindex …>
 curl -fsS -o /dev/null -w '%{http_code}\n' $BASE/api/docs/v1/openapi.json   # 404 in production (Swagger off)
 ```
 

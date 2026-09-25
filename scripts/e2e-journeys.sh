@@ -6,6 +6,8 @@
 #      background jobs off, relaxed auth rate limit, bootstrap admin, non-production test sign-in on, Google sign-in
 #      not configured)
 #   3. builds the frontend and serves it with `vite preview` on :$E2E_WEB_PORT, proxying /api/, /t/ and /e/ to the API
+#      and rendering public pages through the API (seoShell plugin) — or, with E2E_WEB_SERVER=nginx, with the
+#      production nginx configuration (scripts/serve-web-nginx.sh: SSI shell includes, SEO files, portal headers)
 #   4. waits for /health/ready and runs `E2E_SUITE=$E2E_SUITE npx playwright test` (desktop + mobile projects)
 #   5. always tears down (kills the servers by PID, drops the database) and exits with Playwright's exit code
 #
@@ -29,6 +31,8 @@
 #                           j-social        social media + paid ads; publishes through a local Graph/X API stub that
 #                                           the suite's global setup serves on $E2E_STUB_PORT (Demo seed)
 #                           j-lead-to-cash  website inquiry → CRM → proposal → contract → paid recurring invoice (Demo seed)
+#                           j-seo           technical SEO without JavaScript: server-rendered pages, sitemaps, robots,
+#                                           llms.txt, 404/301/noindex, hydration, video block, Core Web Vitals (Demo seed)
 #   E2E_SEED              comma-separated seed profiles (default: Baseline for journeys and j-participant,
 #                         Baseline,Demo for everything else)
 #   E2E_DB_PROVIDER=mysql mysql (default) or sqlite (a fresh file in $E2E_WORK_DIR; no MySQL server needed)
@@ -38,6 +42,7 @@
 #   E2E_STUB_PORT      local stand-in for the Meta Graph / X APIs (default E2E_API_PORT+2000): the API never calls the
 #                      real networks during a run
 #   E2E_SKIP_BUILD=1   reuse existing API (Release) and frontend (dist/) builds (CI builds them in earlier steps)
+#   E2E_WEB_SERVER     vite (default: `vite preview`) or nginx (the production nginx config with a local nginx binary)
 #   E2E_KEEP_DB=1      keep the database after the run (for debugging)
 #   E2E_WORK_DIR       where mail, uploaded files and server logs go (default: a new mktemp directory)
 set -uo pipefail
@@ -62,6 +67,9 @@ case "$E2E_SUITE" in
   *) E2E_SEED="${E2E_SEED:-Baseline}" ;;
 esac
 E2E_DB_PROVIDER="$(printf '%s' "${E2E_DB_PROVIDER:-mysql}" | tr '[:upper:]' '[:lower:]')"
+E2E_WEB_SERVER="$(printf '%s' "${E2E_WEB_SERVER:-vite}" | tr '[:upper:]' '[:lower:]')"
+case "$E2E_WEB_SERVER" in vite|nginx) ;; *) die "E2E_WEB_SERVER must be vite or nginx" ;; esac
+[ "$E2E_WEB_SERVER" = nginx ] && { have nginx || die "E2E_WEB_SERVER=nginx needs nginx on PATH"; }
 case "$E2E_DB_PROVIDER" in mysql|sqlite) ;; *) die "E2E_DB_PROVIDER must be mysql or sqlite" ;; esac
 SQLITE_FILE="$E2E_WORK_DIR/e2e.db"
 
@@ -154,15 +162,20 @@ api_pid="$(cd "$ROOT" && start_bg e2e-api "$API_LOG" env \
   dotnet run --project "$API_PROJECT" -c Release --no-build --no-launch-profile)"
 
 # ------------------------------------------------------------------ web
-log "Starting vite preview on :$E2E_WEB_PORT (proxy → :$E2E_API_PORT)"
-web_pid="$(cd "$FRONTEND_DIR" && VITE_API_PROXY_TARGET="http://127.0.0.1:$E2E_API_PORT" \
-  start_bg e2e-web "$WEB_LOG" npx vite preview --port "$E2E_WEB_PORT" --strictPort --host localhost)"
+if [ "$E2E_WEB_SERVER" = nginx ]; then
+  log "Starting nginx (production configuration) on :$E2E_WEB_PORT (API → :$E2E_API_PORT)"
+  web_pid="$(start_bg e2e-web "$WEB_LOG" "$ROOT/scripts/serve-web-nginx.sh" "$E2E_WEB_PORT" "http://127.0.0.1:$E2E_API_PORT" "$E2E_WORK_DIR/nginx")"
+else
+  log "Starting vite preview on :$E2E_WEB_PORT (proxy → :$E2E_API_PORT)"
+  web_pid="$(cd "$FRONTEND_DIR" && VITE_API_PROXY_TARGET="http://127.0.0.1:$E2E_API_PORT" \
+    start_bg e2e-web "$WEB_LOG" npx vite preview --port "$E2E_WEB_PORT" --strictPort --host localhost)"
+fi
 
 wait_for_url "http://localhost:$E2E_API_PORT/health/ready" 300 "$api_pid" \
   || { tail -n 60 "$API_LOG" >&2; die "API did not become ready"; }
 ok "API ready"
 wait_for_url "http://localhost:$E2E_WEB_PORT/" 60 "$web_pid" \
-  || { tail -n 40 "$WEB_LOG" >&2; die "vite preview did not start"; }
+  || { tail -n 40 "$WEB_LOG" >&2; die "the web server ($E2E_WEB_SERVER) did not start"; }
 ok "Web ready"
 
 # ------------------------------------------------------------------ playwright

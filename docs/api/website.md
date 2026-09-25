@@ -113,12 +113,29 @@ Budget ranges, timelines and quote packages are validated against the server's l
 packages of published services. Every accepted inquiry or booking is stored as a `WebsiteInquiry` and published once
 as `WebsiteInquiryReceived` after commit (see [events](#domain-events)).
 
-## SEO files
+## SEO files and server-rendered pages
+
+Anonymous, `documents` rate-limit policy (600/min per IP). Reference: [SEO_CRO.md § 9](../SEO_CRO.md#9-technical-seo-of-the-public-website).
 
 | Path | Notes |
 |---|---|
-| `GET /robots.txt` | Served by the API (nginx proxies it). Disallows every signed-in portal (`/app`, `/agency`, `/client`, `/admin`, `/finance`, `/review`, `/manage`) and `/api` except the sitemap; points to the sitemap. |
-| `GET /api/v1/public/sitemap.xml` (also `/sitemap.xml` via nginx) | Every published, indexable URL: home, index pages, services, industries, case studies, blog posts, CMS pages and open jobs, with `lastmod`. `noIndex`, unpublished and scheduled content is never listed. Absolute URLs use `seo.siteUrl` from site settings, else `Email:AppBaseUrl`. |
+| `GET/HEAD /_document/{path}` | The HTML document of a public URL (nginx and the Vite `seoShell` plugin call it for every page request). Status 200 / 301 (`Location`: URL normalization, managed redirects) / 404 / 410 / 503 (render failure, shell only). Head: title, description, robots, canonical, Open Graph, Twitter, article dates, prev/next, JSON-LD; body: crawlable content inside `#root`, plus the two SSI shell includes. `X-Robots-Tag` on non-indexable pages. |
+| `GET /robots.txt` | Crawler groups per the SEO settings; portals, sign-in pages, `/api/`, personal links and search closed to all; `Sitemap:` line. ETag. |
+| `GET /sitemap.xml` | Sitemap index of `/sitemaps/{name}.xml`. ETag + Last-Modified, 304 on `If-None-Match`. |
+| `GET /sitemaps/{name}.xml` | `pages`, `services`, `case-studies`, `blog`, `careers`, `landing-pages`, `images`, `videos` (split as `{name}-2`… above `Website:Seo:SitemapMaxUrls`). 404 for unknown names. |
+| `GET /api/v1/public/sitemap.xml` | Legacy: all page URLs in one urlset. |
+| `GET /llms.txt`, `GET /llms-full.txt` | llmstxt.org guide and full Markdown of the indexable pages (404 when turned off). |
+| `GET /_markdown/{path}` | Markdown version of an indexable page (`/{path}.md` via nginx; `/_markdown/index` is the home page). 404 otherwise. |
+| `GET /.well-known/security.txt`, `GET /humans.txt` | RFC 9116 contact; team/site credits. |
+| `GET /{key}.txt` | IndexNow key file, only while IndexNow is enabled and only for the configured key. |
+
+## SEO overview and settings (`site.manage`)
+
+| Method & path | Notes |
+|---|---|
+| `GET /seo/overview` | `{ siteUrl, total, indexable, withErrors, withWarnings, rows[], generatedAt }`; each row: `path, url, status, title, titleLength, description, descriptionLength, canonical, indexable, robots, inSitemap, jsonLdTypes, h1Count, imageCount, videoCount, lastModified, source, editPath, copyKeys { title, description } | null, warnings[{ code, severity: error/warning/notice, message }]`. |
+| `GET /seo/settings` | `{ crawlerGroups[{ key, label, description, allowedByDefault, allowed, userAgents }], indexNowEnabled, indexNowKey, llmsTxtEnabled, securityContactEmail, updatedAt, concurrencyStamp }` (stamp `00000000-…` until first saved). |
+| `PUT /seo/settings` | `{ crawlerGroups: { key: bool }, indexNowEnabled, llmsTxtEnabled, securityContactEmail, concurrencyStamp }`. 400 `website.invalid` (unknown group, invalid email), 409 `concurrency.conflict`, 403 `auth.impersonation_forbidden_action` while impersonating. Audited (`website.seo_settings_updated`). |
 
 ## Services & packages (`site.manage`)
 

@@ -38,8 +38,15 @@ public static class RateLimitPolicies
     /// </summary>
     public const string Webhooks = "webhooks";
 
+    /// <summary>
+    /// Server-rendered public pages and SEO files (HTML documents, sitemaps, robots.txt, llms.txt): 600/minute per IP by
+    /// default (<c>RateLimiting:DocumentsPerMinute</c>). Search engine crawlers fetch many pages from few addresses, and
+    /// every visit to the site loads one document, so this sits above the global per-IP limiter it is exempt from.
+    /// </summary>
+    public const string Documents = "documents";
+
     /// <summary>Policies whose endpoints bypass the global per-IP limiter (they carry their own, higher limits).</summary>
-    private static readonly HashSet<string> HighVolumePolicies = new(StringComparer.Ordinal) { Tracking, Webhooks };
+    private static readonly HashSet<string> HighVolumePolicies = new(StringComparer.Ordinal) { Tracking, Webhooks, Documents };
 
     public static IServiceCollection AddAppRateLimiting(this IServiceCollection services)
     {
@@ -100,6 +107,12 @@ public static class RateLimitPolicies
                 : RateLimitPartition.GetFixedWindowLimiter(ClientKey(ctx), _ => new FixedWindowRateLimiterOptions
                 {
                     PermitLimit = config.GetValue("RateLimiting:TrackingPerMinute", 1200), Window = TimeSpan.FromMinutes(1), QueueLimit = 0,
+                }));
+
+            options.AddPolicy(Documents, ctx => !enabled ? RateLimitPartition.GetNoLimiter("off")
+                : RateLimitPartition.GetFixedWindowLimiter("documents:" + ClientKey(ctx), _ => new FixedWindowRateLimiterOptions
+                {
+                    PermitLimit = config.GetValue("RateLimiting:DocumentsPerMinute", 600), Window = TimeSpan.FromMinutes(1), QueueLimit = 0,
                 }));
 
             options.AddPolicy(Webhooks, ctx => !enabled ? RateLimitPartition.GetNoLimiter("off")
