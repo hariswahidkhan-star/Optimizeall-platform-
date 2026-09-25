@@ -1,0 +1,1660 @@
+{
+  "slug": "technical-seo-mastery",
+  "version": 1,
+  "title": "Technical SEO Mastery",
+  "subtitle": "Crawling, rendering, indexing, performance and migrations — the engineering side of search, done properly",
+  "category": "seo",
+  "level": "advanced",
+  "estimatedMinutes": 330,
+  "description": "This is the deep, hands-on course for people who need to make search engines *work* with a website — not just talk about keywords. You will learn how Google discovers, crawls, renders and indexes pages (including JavaScript single-page apps), and how to control that pipeline with robots.txt, meta robots, X-Robots-Tag, status codes, redirects and canonicals.\n\nWe then go into the structures that matter on real sites: internal linking and architecture, XML sitemaps, pagination and faceted navigation, hreflang for multi-country sites, structured data, Core Web Vitals and mobile-first indexing. The course closes with site migrations and a professional auditing and monitoring workflow built on Search Console and server logs.\n\nEvery lesson includes copy-ready snippets, checklists and worked examples from e-commerce, SaaS and agency sites across the UK, US, Gulf and Pakistan. Guidance is based on Google's published documentation as of 2026, with uncertainty flagged honestly — and no ranking guarantees.",
+  "outcomes": [
+    "Diagnose why a URL is not ranking by locating the failed stage in the crawl, render and index pipeline",
+    "Audit JavaScript sites by comparing raw and rendered HTML and fix rendering, linking and soft 404 issues",
+    "Write correct robots.txt, meta robots and X-Robots-Tag rules and choose the right one for each goal",
+    "Design redirect, canonical, pagination and faceted navigation strategies that consolidate signals",
+    "Implement valid hreflang sets and JSON-LD structured data and validate them at scale",
+    "Diagnose and prioritise LCP, INP and CLS fixes using field data",
+    "Plan and run a site migration with benchmarks, redirect maps, QA and post-launch monitoring",
+    "Use log files and Search Console to monitor crawling and indexing continuously"
+  ],
+  "skills": [
+    "Technical SEO",
+    "JavaScript SEO",
+    "Log-file analysis",
+    "Structured data",
+    "International SEO",
+    "Core Web Vitals",
+    "Site migrations",
+    "Google Search Console"
+  ],
+  "prerequisites": [],
+  "badge": {
+    "name": "Certified Technical SEO Specialist",
+    "description": "The holder has demonstrated advanced knowledge of how search engines crawl, render and index websites, and can audit and fix crawl control, redirects, canonicalisation, faceted navigation, hreflang, structured data, Core Web Vitals and site migrations using Search Console and server logs.",
+    "criteria": "Completed all lessons and scored ≥ 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "crawl-render-index",
+      "title": "How search engines crawl, render and index",
+      "summary": "The pipeline every URL passes through before it can rank, and how JavaScript changes it. Get this model right and every other technical decision becomes easier.",
+      "lessons": [
+        {
+          "slug": "the-crawl-render-index-pipeline",
+          "title": "The crawl, render and index pipeline",
+          "type": "article",
+          "durationMinutes": 14,
+          "body": "### Why the pipeline matters\n\nEvery technical SEO problem you will ever debug is a failure at one stage of a pipeline: **discovery → crawling → rendering → indexing → serving**. When a page \"doesn't rank\", the first question an expert asks is not \"what keywords?\" but \"which stage did this URL fail at?\". This lesson gives you the mental model, using Google's documented behaviour as the reference, because Google publishes the most detailed guidance and other engines (Bing, and the crawlers feeding AI answer engines) broadly follow the same shape.\n\n### Stage 1: Discovery\n\nA search engine can only crawl URLs it knows about. It learns about them from:\n\n- **Links** from pages it has already crawled (internal and external) — still the dominant discovery route.\n- **XML sitemaps** submitted in Search Console or referenced in robots.txt.\n- **Redirect targets** and canonical targets it encounters.\n- **Other feeds**, such as IndexNow for engines that support it (Bing, Yandex and others; Google does not use IndexNow at the time of writing).\n\nA URL that is not linked from anywhere and not in a sitemap is an *orphan*. Orphans are often discovered slowly or not at all.\n\n### Stage 2: Crawling\n\nGooglebot takes URLs from its crawl queue, checks **robots.txt** for permission, and requests the URL. It records the HTTP status code, response headers and the raw HTML. Key facts:\n\n- robots.txt controls **crawling, not indexing**. A disallowed URL can still be indexed (without its content) if other pages link to it.\n- Crawl rate adapts to your server. If responses slow down or return 5xx/429 errors, Googlebot backs off.\n- Google crawls primarily with its **smartphone** user agent (mobile-first indexing).\n- Google documents a limit on how much of each file it processes, so very large HTML documents risk content being ignored. Keep critical content and links early and HTML lean.\n\n### Stage 3: Rendering\n\nModern pages depend on JavaScript. Google's Web Rendering Service (WRS) runs an evergreen version of Chromium to execute scripts and build the rendered DOM. Pages that return a 200 status are queued for rendering; the rendered HTML is then parsed again for links and content.\n\nWhat rendering does **not** do:\n\n- It does not click, scroll like a user, or fill forms. Content that requires interaction (a \"Load more\" button without a real link, a tab loaded only on click) may never be seen.\n- It does not keep state between page loads — no cookies, localStorage or session persistence.\n- It will not execute resources blocked by robots.txt. Blocking `/static/js/` can make your page render blank for Google.\n\n### Stage 4: Indexing\n\nAfter rendering, Google analyses the content, clusters duplicates, chooses a **canonical** URL for each cluster, and decides whether the page is worth storing. Indexing is **not guaranteed**. The Page indexing report in Search Console will show statuses such as:\n\n| Status | What it usually means |\n|---|---|\n| Discovered – currently not indexed | Known URL, not yet crawled (often crawl demand/capacity or low perceived value) |\n| Crawled – currently not indexed | Crawled, judged not worth indexing right now (often quality or duplication) |\n| Duplicate, Google chose different canonical than user | Your canonical signals disagree with Google's choice |\n| Excluded by 'noindex' tag | A noindex directive was found — check it is intended |\n| Soft 404 | Returns 200 but looks like an error or empty page |\n\n### Stage 5: Serving (ranking)\n\nOnly indexed canonical URLs are eligible to be served. Ranking systems then evaluate relevance, quality, usefulness and many other signals. Technical SEO's job is to make sure the *right* URLs reach this stage with their full content — it does not, by itself, guarantee rankings.\n\n### A diagnostic routine you can use today\n\nWhen a URL underperforms, walk the pipeline in order:\n\n1. **Discovery** — Is it in the sitemap? Is it linked internally from an indexable page? (Check a crawler's inlinks report.)\n2. **Crawl permission** — Test the URL against robots.txt (Search Console's robots.txt report shows the fetched file; a crawler can test rules).\n3. **Response** — Does it return 200 directly, not via a redirect chain? Use `curl -I`:\n\n```bash\ncurl -sI -A \"Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0 Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\" https://example.com/page\n```\n\n4. **Render** — Use URL Inspection → *Test live URL* → *View tested page* to see the rendered HTML and screenshot. Is the main content and are the links present?\n5. **Index directives** — Look for `noindex` in the rendered HTML *and* the `X-Robots-Tag` header. Check the canonical in both.\n6. **Index status** — Read the URL Inspection verdict and the Google-selected canonical.\n7. **Serving** — Only now look at content quality, intent match and competition.\n\n### Common mistakes\n\n- Blaming \"the algorithm\" for pages that were never indexed.\n- Using robots.txt to \"remove\" pages from the index (it prevents Google from seeing the noindex).\n- Assuming what you see in your browser is what Googlebot sees — cookie banners, geo-redirects and A/B tests can all change the response.\n- Treating \"Crawled – currently not indexed\" as a technical bug when it is usually a quality or duplication signal.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Debug by stage: discovery, crawl, render, index, serve — in that order.",
+            "robots.txt controls crawling, not indexing; noindex controls indexing but must be crawlable to be seen.",
+            "Rendering does not click, scroll or keep state, and cannot run resources blocked by robots.txt.",
+            "Indexing is selective; Search Console's Page indexing statuses tell you which stage failed."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A URL is disallowed in robots.txt but still appears in Google results with no description. Why?",
+              "options": [
+                "robots.txt blocks crawling, not indexing, so Google indexed the URL from links pointing to it",
+                "The page has a noindex tag",
+                "Google ignored robots.txt",
+                "The sitemap overrides robots.txt"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "robots.txt prevents fetching, but Google can index a known URL (without content) based on external signals such as links. To keep it out, allow crawling and use noindex."
+            },
+            {
+              "question": "Which statement about Google's rendering is correct?",
+              "options": [
+                "It persists cookies between page loads",
+                "It runs an evergreen Chromium but does not interact like a user",
+                "It clicks buttons to reveal hidden content",
+                "It only renders pages listed in a sitemap"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Google's WRS uses an up-to-date Chromium but loads pages statelessly and does not click or fill forms."
+            },
+            {
+              "question": "'Crawled – currently not indexed' most often points to…",
+              "options": [
+                "A robots.txt block",
+                "A missing XML sitemap",
+                "Quality or duplication concerns about the page",
+                "A server outage"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "The URL was fetched successfully; Google chose not to index it, usually because it judged the page low value or too similar to others."
+            }
+          ],
+          "activity": "Pick five important URLs on a site you manage and run them through the seven-step diagnostic routine. Record which stage, if any, each one fails."
+        },
+        {
+          "slug": "javascript-seo-spas-ssr-prerendering",
+          "title": "JavaScript SEO: SPAs, SSR and prerendering",
+          "type": "video",
+          "durationMinutes": 15,
+          "body": "### The core problem\n\nA classic server-rendered page sends complete HTML: content, links and meta tags are all in the first response. A client-side rendered **single-page application (SPA)** often sends an almost empty shell:\n\n```html\n<body>\n  <div id=\"root\"></div>\n  <script src=\"/static/js/main.4f2a.js\"></script>\n</body>\n```\n\nEverything a search engine needs — text, internal links, titles, canonicals — only exists after JavaScript runs. Google can render JavaScript, but you add risk and delay at every step, and many other crawlers (including several AI crawlers and social preview bots) do not execute JavaScript at all.\n\n### Rendering strategies compared\n\n| Strategy | How it works | SEO risk |\n|---|---|---|\n| Client-side rendering (CSR) | Browser builds page from JS | Highest: content and links depend on successful rendering |\n| Server-side rendering (SSR) | Server returns full HTML per request, then hydrates | Low, if hydration does not change content |\n| Static site generation (SSG) | HTML built at deploy time | Lowest; great for content that changes infrequently |\n| Incremental/on-demand regeneration | Static pages rebuilt on a schedule or trigger | Low; watch for stale content |\n| Dynamic rendering | Serve prerendered HTML to bots, CSR to users | Google calls this a *workaround*, not a long-term solution |\n\nFrameworks such as Next.js, Nuxt, SvelteKit, Remix and Astro make SSR or SSG the default. For most sites the recommendation is simple: **send meaningful HTML in the initial response** for anything you want indexed.\n\n### The non-negotiables for JavaScript sites\n\n1. **Real links.** Google discovers links from `a` elements with an `href`. Router links that render as proper anchors are fine; click handlers on `div` or `span` are not.\n\n```html\n<!-- Crawlable -->\n<a href=\"/pricing\">Pricing</a>\n<!-- Not reliably crawlable -->\n<span onclick=\"router.push('/pricing')\">Pricing</span>\n<a href=\"javascript:void(0)\" onclick=\"goTo('pricing')\">Pricing</a>\n```\n\n2. **Real URLs, not fragments.** Use the History API (`/products/red-shoes`), not hash routing (`/#/products/red-shoes`). Google generally ignores everything after `#`.\n3. **Correct status codes.** An SPA that shows \"Product not found\" but returns 200 creates soft 404s. Either route unknown paths to a server-generated 404, or add a `noindex` robots meta tag via JavaScript on error views (Google documents both approaches).\n4. **Meta tags in the initial HTML where possible.** Titles, canonicals and robots meta can be set with JavaScript and Google usually honours them after rendering, but conflicting values between raw and rendered HTML cause unpredictable results. Never put `noindex` in the raw HTML and remove it with JavaScript — Google may not render a page that says noindex.\n5. **Do not block resources.** Allow crawling of JS, CSS and API endpoints the page needs to render.\n6. **Lazy-load safely.** Use native `loading=\"lazy\"` or IntersectionObserver; do not require scroll events to load primary content.\n\n### Hydration mismatches\n\nWith SSR, the server HTML is \"hydrated\" by client JS. If the client renders different content (a different price, or different canonical because of a locale cookie), Google may index whichever version it saw. Audit by comparing raw HTML with rendered HTML.\n\n### How to audit a JavaScript site\n\n1. **Compare raw vs rendered.** Crawl twice with a desktop crawler (Screaming Frog, Sitebulb or similar): once text-only, once with JavaScript rendering. Diff word counts, links, titles and canonicals. Big differences mean you depend on rendering.\n2. **Inspect with Google.** URL Inspection → Test live URL → View tested page → HTML tab. Search the rendered HTML for a unique sentence from your main content.\n3. **Check the console and resources.** The \"More info\" tab lists page resources that could not be loaded and JavaScript console messages.\n4. **Test without JavaScript.** Disable JS in Chrome DevTools. What remains is roughly what non-rendering crawlers see.\n5. **Check internal link discovery.** In your rendered crawl, compare the number of unique internal URLs found against the text-only crawl.\n\n### Worked example\n\nAn e-commerce brand in Dubai rebuilt its catalogue as a React SPA. Category pages returned only the shell; products loaded from `/api/products`, which was disallowed in robots.txt \"to save crawl budget\". The rendered page in URL Inspection showed an empty grid, so Google saw thin category pages with no product links. The fix: allow the API path, switch category and product templates to SSR, output product links as real anchors, and return 404 for discontinued products. Illustratively, a fix like this typically shows up first as more pages moving into \"Indexed\" in the Page indexing report over the following weeks — measure it there rather than assuming.\n\n### Common mistakes\n\n- Testing only in a browser where you are logged in or have cookies set.\n- Relying on dynamic rendering indefinitely, and letting the bot version drift from the user version (which can look like cloaking).\n- Infinite scroll with no paginated URLs.\n- Forgetting that social, many AI and some search crawlers do not run JavaScript.\n",
+          "video": {
+            "script": "Here's a question that saves hours of debugging: what does the very first HTML response of your page contain? Not what you see in the browser. The first response. On a classic website, that response already holds the text, the links and the meta tags. On a client-side single-page app, it can be an empty div and a script tag. Google can render JavaScript using an up-to-date version of Chromium, but rendering is an extra step with extra ways to fail. Blocked scripts, API calls that time out, content that only appears after a click. And many other crawlers, including social preview bots and several AI crawlers, don't run JavaScript at all. So the principle is simple. For anything you want indexed, send meaningful HTML in the first response. Server-side rendering and static generation, which modern frameworks make easy, solve most problems. Then check the non-negotiables. Links must be real anchor elements with an href. URLs must be real paths, not hash fragments. Unknown pages must return a real 404, or carry a noindex, so you don't create soft 404s. And never block the JavaScript or API endpoints your pages need. To audit, crawl the site twice: once without rendering and once with it. Compare word counts, links and canonicals. Then use URL Inspection in Search Console to view the rendered HTML Google actually saw. If your main content isn't in there, neither is your ranking potential.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Send meaningful HTML (content, links, meta tags) in the initial response for anything you want indexed.",
+            "Use real anchor links and History API URLs; avoid hash routing and click-only navigation.",
+            "SPAs must avoid soft 404s by returning real 404s or adding noindex on error views.",
+            "Audit JavaScript sites by diffing raw and rendered crawls and checking URL Inspection's rendered HTML."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which link is reliably crawlable by Googlebot?",
+              "options": [
+                "A button that calls router.push()",
+                "An a element with href=\"javascript:void(0)\"",
+                "A span with an onclick handler",
+                "An a element with href=\"/pricing\""
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Google extracts links from anchor elements with a resolvable href. Click handlers without an href are not reliably followed."
+            },
+            {
+              "question": "Google's documentation describes dynamic rendering as…",
+              "options": [
+                "A form of cloaking that is always penalised",
+                "The recommended default for all JavaScript sites",
+                "A workaround rather than a long-term solution",
+                "Required for sites using React"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Google explicitly calls dynamic rendering a workaround and recommends SSR, static rendering or hydration instead."
+            },
+            {
+              "question": "Why is putting noindex in the raw HTML and removing it with JavaScript risky?",
+              "options": [
+                "Google may skip rendering a page whose raw HTML says noindex, so the removal is never seen",
+                "JavaScript cannot modify meta tags",
+                "It breaks hreflang",
+                "It slows down LCP"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Google documents that if it encounters noindex it may not render the page, so JavaScript cannot be relied on to remove it."
+            }
+          ],
+          "activity": "Crawl one JavaScript-heavy template twice (text-only and rendered) and write down the differences in word count, internal links and meta tags."
+        }
+      ]
+    },
+    {
+      "slug": "crawl-control",
+      "title": "Crawl budget, robots.txt and indexing directives",
+      "summary": "Control what gets crawled and what gets indexed — with the right tool for each job — and use server logs to see what bots actually do.",
+      "lessons": [
+        {
+          "slug": "crawl-budget-and-log-file-analysis",
+          "title": "Crawl budget and log-file analysis",
+          "type": "article",
+          "durationMinutes": 15,
+          "body": "### What crawl budget actually is\n\nGoogle describes crawl budget as the set of URLs Googlebot *can and wants to* crawl. It combines two things:\n\n- **Crawl capacity limit** — how much Googlebot can crawl without overloading your server. It rises when your server responds quickly and falls with slow responses, 5xx errors and 429s.\n- **Crawl demand** — how much Google *wants* to crawl, driven by perceived popularity, staleness and the size of the URL inventory it knows about.\n\n**Who should care?** Google's own guidance says crawl budget is mainly a concern for very large sites (hundreds of thousands to millions of URLs) or sites whose content changes very often, plus sites with many URLs stuck in \"Discovered – currently not indexed\". A 200-page brochure site does not have a crawl budget problem — it has a quality or linking problem.\n\n### The biggest crawl budget wasters\n\n1. **Faceted and parameter URLs** — `?colour=red&size=9&sort=price` combinations can generate millions of near-duplicates.\n2. **Infinite spaces** — calendars with endless \"next month\" links, internal search result pages, session IDs in URLs.\n3. **Redirect chains and soft 404s** — each hop or empty page costs a fetch.\n4. **Duplicate URLs** — http/https, www/non-www, trailing slash variants, uppercase variants all resolving with 200.\n5. **Slow server responses** — reduce capacity directly.\n\n### Log files: the only ground truth\n\nCrawlers and Search Console tell you what *could* be crawled. **Server logs tell you what was crawled.** A typical combined log line:\n\n```text\n66.249.66.1 - - [14/Mar/2026:06:25:24 +0000] \"GET /shoes/red-trainers?sort=price HTTP/1.1\" 200 51234 \"-\" \"Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\"\n```\n\nFields to extract: IP, timestamp, method, path (with query string), status, bytes, user agent. If your CDN terminates traffic, get logs from the CDN (Cloudflare, Akamai, Fastly, CloudFront) — origin logs may miss cached hits.\n\n### Verify the bot before you trust it\n\nAnyone can fake a Googlebot user agent. Verify by:\n\n- **Reverse DNS** of the IP resolving to `googlebot.com`, `google.com` or `googleusercontent.com`, followed by a forward lookup that returns the same IP; or\n- Matching against the **IP range JSON files** Google publishes for its crawlers.\n\n```bash\nhost 66.249.66.1        # -> crawl-66-249-66-1.googlebot.com\nhost crawl-66-249-66-1.googlebot.com   # -> 66.249.66.1\n```\n\n### Log analysis procedure\n\n1. Collect at least 2–4 weeks of logs (longer for large sites).\n2. Filter to verified search engine bots.\n3. Classify each URL by **template** (product, category, blog, facet, search, asset) using path patterns.\n4. Join with your crawl data (indexability, canonical, in-sitemap) and Search Console data (clicks).\n5. Answer the key questions:\n\n| Question | What a problem looks like |\n|---|---|\n| What share of bot hits go to non-indexable URLs? | A large share on parameters, redirects or noindex pages |\n| Are important pages crawled regularly? | Money pages with no bot hits in weeks |\n| Are there status code problems? | Spikes of 5xx or 404 to URLs you thought were fixed |\n| Are orphan URLs being crawled? | URLs in logs but not in your crawl — old links, forgotten sections |\n| Is crawl activity changing? | Sudden drops after a release, or spikes from a parameter bug |\n\nA quick command-line pass for a small site:\n\n```bash\ngrep \"Googlebot\" access.log | awk '{print $9}' | sort | uniq -c | sort -rn   # status codes\ngrep \"Googlebot\" access.log | awk '{print $7}' | cut -d'?' -f1 | sort | uniq -c | sort -rn | head -50   # top paths\n```\n\nFor large volumes use a dedicated log analyser or load the data into BigQuery or a spreadsheet pivot.\n\n### Improving crawl efficiency\n\n- Remove internal links to parameter URLs you do not want crawled; block truly useless patterns in robots.txt.\n- Return 404/410 for gone content rather than redirecting everything to the home page.\n- Fix redirect chains by linking directly to final URLs.\n- Keep sitemaps limited to canonical, indexable, 200-status URLs.\n- Improve server response times and caching; watch the **Crawl stats** report (Settings → Crawl stats) for average response time and host status.\n- Use `304 Not Modified` responses with `If-Modified-Since`/ETag support where your stack allows — it saves resources on both sides.\n\n### Common mistakes\n\n- Using `noindex` to save crawl budget — noindexed pages still get crawled.\n- Using `crawl-delay` for Google — Googlebot ignores it.\n- Analysing unverified \"Googlebot\" traffic that is actually scrapers.\n- Treating crawl frequency as a ranking factor in itself; it is a symptom, not a lever.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Crawl budget = crawl capacity (server health) + crawl demand (Google's interest); mostly a large-site concern.",
+            "Server logs show what bots actually crawled; always verify Googlebot by reverse DNS or published IP ranges.",
+            "Segment logs by template and join with crawl and Search Console data to find waste.",
+            "noindex does not save crawl budget and Google ignores crawl-delay."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which site is most likely to benefit from crawl budget optimisation?",
+              "options": [
+                "A 150-page law firm website",
+                "A single landing page",
+                "A marketplace with millions of faceted URLs",
+                "A 40-post blog"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Google's guidance targets very large or rapidly changing sites. Small sites rarely hit crawl limits."
+            },
+            {
+              "question": "How do you confirm a request claiming to be Googlebot is genuine?",
+              "options": [
+                "Check the user-agent string",
+                "Check if it requested robots.txt first",
+                "Reverse DNS to a Google domain plus forward DNS confirmation, or match Google's published IP ranges",
+                "Look at the referrer"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "User agents are trivially spoofed. Google documents DNS verification and publishes IP range files."
+            },
+            {
+              "question": "Adding noindex to 100,000 parameter URLs will…",
+              "options": [
+                "Stop Googlebot crawling them",
+                "Remove them from server logs",
+                "Increase crawl rate for other pages immediately",
+                "Keep them out of the index but they will still be crawled"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "noindex is an indexing directive; Google must crawl a page to see it, and may keep recrawling it at a lower rate."
+            }
+          ],
+          "activity": "Export two weeks of logs (or a CDN log sample), verify Googlebot hits, and build a pivot of hits by page template and status code."
+        },
+        {
+          "slug": "robots-txt-meta-robots-x-robots-tag",
+          "title": "robots.txt, meta robots and X-Robots-Tag",
+          "type": "article",
+          "durationMinutes": 14,
+          "body": "### Right tool, right job\n\n| Goal | Tool | Notes |\n|---|---|---|\n| Stop crawling of a path | robots.txt `Disallow` | Does not guarantee de-indexing |\n| Keep a crawlable page out of the index | `meta name=\"robots\" content=\"noindex\"` | Page must *not* be blocked in robots.txt |\n| Noindex non-HTML files (PDF, images) | `X-Robots-Tag: noindex` HTTP header | Set at server/CDN level |\n| Consolidate duplicates | `rel=\"canonical\"` or redirects | Covered in Module 3 |\n| Remove urgently | Search Console Removals tool | Temporary (about six months); fix the source too |\n| Protect private content | Authentication | Never rely on robots.txt for secrecy — it is public |\n\n### robots.txt fundamentals\n\nThe file lives at the root of each host and protocol: `https://www.example.com/robots.txt` does not cover `https://shop.example.com/`. It follows RFC 9309 (the Robots Exclusion Protocol standard).\n\n```text\n# robots.txt for https://www.example.com\nUser-agent: *\nDisallow: /cart/\nDisallow: /checkout/\nDisallow: /search\nDisallow: /*?*sessionid=\nAllow: /search/help\n\nUser-agent: Googlebot-Image\nDisallow: /internal-diagrams/\n\nSitemap: https://www.example.com/sitemap_index.xml\n```\n\nRules to remember:\n\n- **Grouping:** a crawler obeys only the *most specific* user-agent group that matches it. If you add a `User-agent: Googlebot` group, Googlebot ignores the `*` group entirely — repeat any shared rules.\n- **Precedence:** for Google, the most specific (longest) matching rule wins; if an Allow and Disallow are equally specific, Allow wins.\n- **Wildcards:** `*` matches any sequence; `$` anchors the end. `Disallow: /*.pdf$` blocks URLs ending in .pdf.\n- **Case-sensitive paths:** `/Search` and `/search` are different.\n- **Size:** Google processes the first 500 KiB.\n- **Unsupported by Google:** `noindex`, `crawl-delay`, `nofollow` lines in robots.txt. Bing does support crawl-delay.\n- **Errors:** if robots.txt returns 4xx, Google treats it as \"no restrictions\". If it returns 5xx for an extended period, Google may stop crawling the site. A broken robots.txt server can therefore halt crawling.\n\n### Meta robots and X-Robots-Tag\n\n```html\n<meta name=\"robots\" content=\"noindex, follow\">\n<meta name=\"googlebot\" content=\"noindex\">\n<meta name=\"robots\" content=\"max-snippet:160, max-image-preview:large\">\n```\n\n```text\nHTTP/1.1 200 OK\nContent-Type: application/pdf\nX-Robots-Tag: noindex, nofollow\n```\n\nUseful values: `noindex`, `nofollow`, `none` (= noindex, nofollow), `nosnippet`, `max-snippet:[n]`, `max-image-preview:[none|standard|large]`, `max-video-preview:[n]`, `notranslate`, `noimageindex`, `unavailable_after:[date]`. There is also the `data-nosnippet` HTML attribute to exclude a section of a page from snippets.\n\nNote that snippet controls such as `nosnippet` also apply to how Google may show your content in AI features in Search. Treat them as a blunt instrument — you will lose normal snippets too.\n\nExample Apache and Nginx configuration for noindexing all PDFs:\n\n```apache\n<FilesMatch \"\\.pdf$\">\n  Header set X-Robots-Tag \"noindex\"\n</FilesMatch>\n```\n\n```nginx\nlocation ~* \\.pdf$ {\n  add_header X-Robots-Tag \"noindex\" always;\n}\n```\n\n### The classic trap: blocked + noindex\n\nIf you Disallow a path in robots.txt **and** add noindex to the pages, Google cannot crawl them, never sees the noindex, and may keep the URLs indexed from links. To de-index: allow crawling, serve noindex, wait until the URLs drop out (confirm in URL Inspection or the Page indexing report), and only then consider a Disallow if you also want to stop crawling.\n\n### Staging and development sites\n\nStaging environments get indexed constantly because someone links to them or a sitemap leaks. The robust approach is **HTTP authentication** (or IP allow-listing). A global `X-Robots-Tag: noindex` header is a good second layer. Do not rely on `Disallow: /` alone, and make sure deploy scripts cannot copy staging robots rules to production — a production `Disallow: /` is one of the most damaging one-line mistakes in SEO.\n\n### Testing checklist\n\n1. Fetch `/robots.txt` on every host (www, non-www, subdomains, each protocol) and confirm a 200 or intended 404.\n2. Review the robots.txt report in Search Console for fetch errors and the last fetched version.\n3. Test critical URLs (home, categories, products, articles, JS/CSS) against the rules with a crawler or parser.\n4. Crawl the site and list all URLs with `noindex` in meta or header; confirm each one is intended.\n5. Check that no noindexed URL is in the XML sitemap and no canonical points to a noindexed URL.\n6. Add robots.txt and key directives to your release regression tests.\n\n### Common mistakes\n\n- Blocking CSS/JS \"to save budget\", breaking rendering.\n- Assuming robots.txt hides confidential URLs — it advertises them.\n- Leaving `noindex` on templates after launch.\n- Forgetting that a specific Googlebot group overrides the `*` group.\n",
+          "video": null,
+          "keyTakeaways": [
+            "robots.txt manages crawling; noindex (meta or X-Robots-Tag) manages indexing — never combine Disallow with noindex when de-indexing.",
+            "A crawler follows only the most specific matching user-agent group; Google applies the longest matching rule.",
+            "Use X-Robots-Tag for PDFs and other non-HTML files.",
+            "Protect staging with authentication, not robots.txt, and regression-test robots rules on every release."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A robots.txt has a `User-agent: *` group with Disallow: /cart/ and a separate `User-agent: Googlebot` group with only Disallow: /tmp/. Can Googlebot crawl /cart/?",
+              "options": [
+                "Only on mobile",
+                "Yes, because Googlebot obeys only its most specific group",
+                "No, Disallow rules are cumulative",
+                "No, both groups apply"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Crawlers follow the single most specific matching group. Shared rules must be repeated in the Googlebot group."
+            },
+            {
+              "question": "How should you keep 5,000 PDF files out of Google's index?",
+              "options": [
+                "Add 'Noindex: /*.pdf' to robots.txt",
+                "Serve an X-Robots-Tag: noindex header for .pdf responses",
+                "Add a meta robots tag to each PDF",
+                "Remove them from the sitemap only"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "PDFs cannot contain HTML meta tags; the X-Robots-Tag HTTP header applies directives to any file type. Google does not support noindex in robots.txt."
+            },
+            {
+              "question": "What happens if robots.txt consistently returns a 5xx error?",
+              "options": [
+                "Nothing, it is ignored",
+                "Google may stop or severely limit crawling of the site",
+                "Google indexes the robots.txt file",
+                "Google assumes everything is allowed"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Google treats a server error on robots.txt as a signal to be cautious and may halt crawling; a 4xx is treated as no restrictions."
+            }
+          ],
+          "activity": "Audit a live robots.txt against the testing checklist and write a corrected version with comments explaining each rule."
+        }
+      ]
+    },
+    {
+      "slug": "urls-status-and-duplication",
+      "title": "Status codes, redirects, canonicals and duplicate URLs",
+      "summary": "Make every URL return the right response, consolidate duplicates deliberately, and tame pagination and faceted navigation.",
+      "lessons": [
+        {
+          "slug": "status-codes-redirects-soft-404s",
+          "title": "Status codes, redirects and soft 404s",
+          "type": "article",
+          "durationMinutes": 14,
+          "body": "### Status codes are instructions\n\nSearch engines read the HTTP status code before anything else. Getting it right is one of the highest-leverage technical fixes because it tells Google what to do with the URL and its signals.\n\n| Code | Meaning | What Google does |\n|---|---|---|\n| 200 | OK | Content eligible for indexing |\n| 301 | Moved permanently | Strong signal that the target should be canonical |\n| 308 | Permanent redirect (method preserved) | Treated like 301 |\n| 302 / 307 | Temporary redirect | Weak canonical signal; source may stay indexed. If it persists, Google may treat it as permanent |\n| 304 | Not modified | Reuses the previously fetched content |\n| 404 | Not found | URL dropped from index over time; no penalty for having 404s |\n| 410 | Gone | Similar to 404; may be processed slightly faster |\n| 429 | Too many requests | Treated like a server error; slows crawling |\n| 500 / 503 | Server error / unavailable | Crawling slows; prolonged errors can drop URLs |\n\n**Key insight:** 404s are normal and healthy for content that no longer exists. The problem is 404s on URLs that *should* exist, or with valuable backlinks pointing at them.\n\n### Choosing the right redirect\n\n- **Permanent move (URL change, HTTPS, domain move, merged content):** 301 or 308.\n- **Temporary (short promotion, maintenance on a specific page, geo or A/B test where the original should stay canonical):** 302 or 307.\n- **Planned downtime:** 503 with a `Retry-After` header, not a redirect to a maintenance page returning 200.\n- **Avoid:** meta refresh and JavaScript redirects when a server redirect is possible. Google can follow them, but they are slower and weaker signals.\n\n```nginx\n# Nginx: single-hop redirects\nserver {\n  listen 80;\n  server_name example.com www.example.com;\n  return 301 https://www.example.com$request_uri;\n}\nlocation = /old-guide { return 301 /guides/new-guide; }\n```\n\n```apache\n# Apache .htaccess\nRewriteEngine On\nRewriteCond %{HTTPS} off [OR]\nRewriteCond %{HTTP_HOST} !^www\\. [NC]\nRewriteRule ^(.*)$ https://www.example.com/$1 [L,R=301]\nRedirect 301 /old-guide /guides/new-guide\n```\n\n### Redirect chains and loops\n\nA chain is `A → B → C`. Google documents following up to 10 hops, but every hop costs crawl resources, adds latency for users, and adds risk. Best practice:\n\n1. Redirect every legacy URL **directly** to its final destination (one hop).\n2. Update internal links, canonicals, hreflang and sitemaps to point at final URLs, so users and bots rarely hit redirects at all.\n3. When you add new redirects, rewrite older ones that point at the now-redirected URL.\n\nA quick chain check:\n\n```bash\ncurl -sIL https://example.com/old-page | grep -Ei \"^(HTTP|location)\"\n```\n\n### Redirect mapping principles\n\n- Map to the **most relevant equivalent**, not the home page. Mass-redirecting unrelated URLs to the home page is typically treated as a soft 404.\n- If there is no equivalent, a 404/410 is honest and acceptable.\n- Keep redirects in place long term — Google's migration guidance suggests at least a year, and many practitioners keep them indefinitely because external links persist.\n\n### Soft 404s\n\nA soft 404 is a URL that returns **200** but looks like an error or empty page: \"No products found\", \"This item is unavailable\", a thin template with no main content, or an irrelevant redirect. Search Console reports these in Page indexing.\n\nFixes by cause:\n\n| Cause | Fix |\n|---|---|\n| Deleted product showing \"not found\" with 200 | Return 404/410, or 301 to a close replacement |\n| Empty category/filter results | Return 404, or noindex and remove internal links to it |\n| Out-of-stock product | Keep 200 if it will return, with useful content (alternatives, restock date); avoid thin \"unavailable\" pages |\n| SPA error view | Server 404 or JavaScript-injected noindex |\n| Redirect to irrelevant page | Redirect to a relevant page or return 404 |\n\n### Worked example\n\nA UK retailer's audit finds 12,000 discontinued product URLs returning 200 with \"Sorry, this product is no longer available\". Some have backlinks. The plan: pull backlink data and Search Console clicks for each URL; 301 those with links or traffic to the closest current product or the parent category (only where genuinely relevant); return 410 for the rest; remove them from sitemaps and internal links; monitor the soft 404 count trending down in Search Console.\n\n### Common mistakes\n\n- Using 302s for permanent moves because it is the platform default (check your CMS or plugin).\n- Redirecting everything to the home page.\n- Custom error pages that return 200.\n- Letting redirect rules pile up for years without flattening chains.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Use 301/308 for permanent moves, 302/307 for temporary, 503 plus Retry-After for maintenance.",
+            "Redirect legacy URLs in a single hop to the most relevant equivalent, then update internal links to the final URL.",
+            "404 and 410 are healthy for genuinely gone content; mass home-page redirects become soft 404s.",
+            "Soft 404s are 200 responses that look empty or erroneous — fix the status code or the content."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A site is down for four hours of planned maintenance. What should it return?",
+              "options": [
+                "302 to a maintenance page",
+                "404",
+                "200 with a maintenance message",
+                "503 with a Retry-After header"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "503 tells crawlers the outage is temporary so they come back later without dropping URLs."
+            },
+            {
+              "question": "You retire 300 blog posts with no equivalent content and no backlinks. Best response?",
+              "options": [
+                "Return 404 or 410",
+                "301 all of them to the home page",
+                "Keep them live with noindex forever",
+                "302 them to the blog index"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "With no relevant replacement, an honest 404/410 is correct; irrelevant home-page redirects are treated as soft 404s."
+            },
+            {
+              "question": "Which is a soft 404?",
+              "options": [
+                "A 301 to a relevant product",
+                "A 410 response",
+                "A 404 page with helpful links",
+                "A product URL returning 200 that says 'This product does not exist'"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "A soft 404 returns a success code while the content signals the page does not exist."
+            }
+          ],
+          "activity": "Run a crawl, export all 3xx URLs with their redirect chains, and produce a flattened one-hop redirect map for the worst ten chains."
+        },
+        {
+          "slug": "canonicalisation-and-duplicate-content",
+          "title": "Canonicalisation and duplicate content",
+          "type": "article",
+          "durationMinutes": 13,
+          "body": "### Duplicate content is a consolidation problem, not a penalty\n\nGoogle's position is consistent: duplicate content on your own site is normal and not a penalty in itself (deliberately deceptive, scraped or manipulative duplication is different). The real costs are practical:\n\n- Signals such as links get **split** across URL variants.\n- Google may choose a **different canonical** than you want — the wrong one shows in results.\n- Crawl resources are **wasted** on duplicates.\n\nCanonicalisation is the process of telling search engines which URL of a duplicate cluster is the representative one.\n\n### Where duplicates come from\n\n| Source | Example |\n|---|---|\n| Protocol and host | `http://`, `https://`, `www.`, non-www |\n| Trailing slash and case | `/Shoes/` vs `/shoes` |\n| Parameters | `?utm_source=`, `?sort=price`, `?sessionid=` |\n| Index files | `/index.html` vs `/` |\n| Faceted paths | `/shoes/red/` and `/red/shoes/` |\n| Print/AMP/alternate views | `/page?print=1` |\n| Product in multiple categories | `/men/trainers/x` and `/sale/x` |\n| Syndication | Your article republished on a partner site |\n| Near-duplicates | City pages with only the town name changed |\n\n### The canonical signals, strongest first\n\nGoogle combines signals; none is an absolute directive.\n\n1. **Redirects** (301/308) — strongest; the source effectively disappears.\n2. **rel=\"canonical\"** in HTML head or HTTP header — strong hint.\n3. **Internal linking consistency** — which variant you link to.\n4. **Sitemap inclusion** — weak hint.\n5. **HTTPS over HTTP**, and other preferences such as cleaner URLs.\n\nWhen signals conflict (canonical says A, internal links and sitemap say B), Google may pick B. Consistency is the whole game.\n\n### Implementing rel=canonical correctly\n\n```html\n<link rel=\"canonical\" href=\"https://www.example.com/shoes/red-trainers/\">\n```\n\nFor non-HTML files:\n\n```text\nLink: <https://www.example.com/whitepaper.pdf>; rel=\"canonical\"\n```\n\nRules:\n\n- Use **absolute URLs** with the correct protocol and host.\n- Place it in the `head`; a canonical in the body is ignored. Invalid elements in the head (for example an unclosed tag or injected `div`) can end the head early, pushing the canonical into the body.\n- Use **one** canonical per page. Multiple conflicting canonicals are typically ignored.\n- **Self-reference** on canonical pages — it protects against parameter variants.\n- The canonical target must be **indexable**: 200 status, not noindexed, not blocked, not redirected.\n- Do not canonicalise paginated pages 2, 3, 4 to page 1 — they are not duplicates.\n- Do not combine `noindex` with a canonical pointing elsewhere — it sends mixed signals.\n- For cross-domain syndication, ask partners to add a cross-domain canonical to your original. Google notes this may not always be honoured for syndicated content, so also ask for a clear link back to the original, or for noindex on their copy if appropriate.\n\n### Checking what Google chose\n\nURL Inspection shows the **user-declared canonical** and **Google-selected canonical**. In the Page indexing report, look at \"Duplicate, Google chose different canonical than user\" and \"Duplicate without user-selected canonical\". Sample URLs from each and ask: which signal is pulling Google the other way?\n\n### A canonical audit procedure\n\n1. Crawl the site with canonical extraction on (both raw and rendered for JS sites).\n2. Flag: missing canonicals on indexable pages; canonicals to non-200 URLs; canonicals to noindexed URLs; canonical chains (A→B, B→C); relative or wrong-host canonicals; mismatches between raw and rendered HTML.\n3. Compare canonical targets with internal link targets — are you linking to the non-canonical variant?\n4. Compare with sitemap URLs — every sitemap URL should be self-canonical.\n5. Enforce host and protocol with sitewide redirects; strip tracking parameters from internal links.\n\n### Near-duplicates and thin variants\n\nCanonical tags cannot fix pages that are *meant* to rank separately but are nearly identical — for example 200 \"SEO services in [city]\" pages with swapped place names. Either make each genuinely useful (local proof, staff, case studies, pricing, directions) or consolidate. Large volumes of templated doorway-style pages can fall under Google's spam policies on doorway abuse and scaled content abuse.\n\n### Common mistakes\n\n- Every page canonicalised to the home page (a CMS misconfiguration that can wipe out indexing).\n- Canonical tags pointing to URLs that redirect.\n- Parameter variants linked internally (sort orders in navigation) while the canonical says otherwise.\n- Relying on canonical to fix a problem a redirect should solve (e.g. http vs https).\n",
+          "video": null,
+          "keyTakeaways": [
+            "Duplicate content is a signal-splitting and canonical-selection problem, not an automatic penalty.",
+            "Redirects are the strongest consolidation signal; rel=canonical is a strong hint that needs consistent supporting signals.",
+            "Canonical targets must be absolute, indexable, 200-status URLs; paginated pages should self-canonicalise.",
+            "Use URL Inspection to compare the user-declared and Google-selected canonical."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Page A has rel=canonical to B, but the sitemap and all internal links point to A. What is likely?",
+              "options": [
+                "Google may choose A because other signals conflict with the canonical",
+                "Google must use B",
+                "Both will be indexed as separate pages",
+                "The site gets a duplicate content penalty"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "rel=canonical is a hint combined with other signals. Conflicting signals often lead Google to pick a different canonical."
+            },
+            {
+              "question": "How should page 3 of a paginated category declare its canonical?",
+              "options": [
+                "Canonical to the view-all page always",
+                "Self-referencing canonical to page 3",
+                "Canonical to page 1",
+                "No canonical and noindex"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Paginated pages contain different items and are not duplicates of page 1; each should self-canonicalise."
+            },
+            {
+              "question": "Where must a rel=canonical link element sit to be honoured?",
+              "options": [
+                "In the head, before anything that would close the head early",
+                "Inside the first h1",
+                "Anywhere in the body",
+                "In the footer"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Google only honours canonical link elements in the head; invalid elements can end the head early and push it into the body."
+            }
+          ],
+          "activity": "Pick one template, list every URL variant that returns 200 for the same content, and write the redirect and canonical rules that consolidate them."
+        },
+        {
+          "slug": "pagination-and-faceted-navigation",
+          "title": "Pagination and faceted navigation",
+          "type": "article",
+          "durationMinutes": 14,
+          "body": "### Why these two patterns cause most large-site problems\n\nCategory listings split across pages, and filters that combine colour, size, brand, price and sort order, are essential for users. For crawlers, they can create an almost infinite number of URLs with overlapping content. Handling them well is a hallmark of senior technical SEO.\n\n### Pagination: what Google recommends now\n\nGoogle stopped using `rel=\"next\"` and `rel=\"prev\"` as an indexing signal in 2019 (they remain harmless and some other engines and accessibility tools may use them). Current best practice:\n\n1. **Give each page a unique URL**, e.g. `/shoes/?page=2` or `/shoes/page/2/`.\n2. **Link pages sequentially** with real anchor links (next, previous, and ideally numbered links so deep pages are fewer clicks away).\n3. **Self-canonicalise** each page. Do not canonicalise everything to page 1 — items on page 5 may then never be discovered through that path.\n4. **Keep page 1 at the clean URL** and redirect `?page=1` to it (or canonicalise it there).\n5. **Do not noindex paginated pages by default.** It can reduce crawling of the links on them over time. Consider it only if you have another strong discovery path (for example complete sitemaps and dense internal linking) and a real reason.\n6. **View-all pages** are fine if they load fast; then paginated pages can canonicalise to the view-all.\n\n```html\n<!-- On /shoes/?page=2 -->\n<link rel=\"canonical\" href=\"https://www.example.com/shoes/?page=2\">\n<nav aria-label=\"Pagination\">\n  <a href=\"/shoes/\">1</a> <a href=\"/shoes/?page=2\" aria-current=\"page\">2</a>\n  <a href=\"/shoes/?page=3\">3</a> <a href=\"/shoes/?page=3\">Next</a>\n</nav>\n```\n\n**Infinite scroll and \"Load more\":** Google does not scroll or click. Back infinite scroll with paginated URLs that are also linked as anchors, and update the URL with the History API as users scroll.\n\n### Faceted navigation: decide, then implement\n\nGoogle published dedicated faceted navigation guidance (December 2024). The first step is a business decision per facet:\n\n| Facet type | Search demand? | Treatment |\n|---|---|---|\n| Brand, key colour or type (`/trainers/nike/`) | Often yes | Indexable, clean static URL, unique title/H1/intro, in sitemap |\n| Size, price range, rating | Usually low | Crawlable for users only, or blocked |\n| Sort order, view mode, items-per-page | None | Block or keep out of crawl paths |\n| Multi-select combinations (3+ facets) | Rarely | Block |\n\nImplementation options for facets you do **not** want in search:\n\n1. **robots.txt disallow** for parameter patterns — the most effective way to stop crawling of large facet spaces:\n\n```text\nUser-agent: *\nDisallow: /*?*sort=\nDisallow: /*?*price=\nDisallow: /*?*size=*&\n```\n\n2. **URL fragments** (`/shoes#size=9`) — Google generally ignores fragments, so filter states are not crawled as separate URLs.\n3. **rel=canonical** to the unfiltered category — reduces indexing of variants, but Google still crawls them, so it does little for crawl efficiency on huge sites.\n4. **noindex** — keeps variants out of the index but they are still crawled.\n5. **nofollow on filter links** — a hint only; not a reliable crawl control.\n\nFor facets you **do** want indexed:\n\n- Use a clean, consistent path or parameter order (`?brand=nike&colour=red`, never also `?colour=red&brand=nike`).\n- Return **404** for filter combinations with no results rather than an empty 200 page.\n- Generate unique titles, headings and ideally a short intro.\n- Include them in sitemaps and link to them from relevant categories.\n\n### Worked example: a fashion marketplace\n\nA Karachi-based marketplace has 3,000 categories and 14 filter types. Logs show the large majority of Googlebot hits going to parameter URLs, while new products take weeks to be crawled. The team:\n\n1. Pulls keyword demand for each facet type; brand and colour for key categories have demand, others do not.\n2. Creates static indexable URLs for demand-backed brand and colour pages (a few thousand pages, each with a unique intro).\n3. Moves all other filters to parameters disallowed in robots.txt, with consistent ordering.\n4. Returns 404 for zero-result combinations.\n5. Re-measures in logs after several weeks: share of bot hits on parameter URLs, crawl frequency of new product pages, and indexed count of valuable facet pages.\n\n(The approach is standard; how quickly and how much crawl behaviour shifts varies by site — measure rather than promise.)\n\n### Common mistakes\n\n- Blocking in robots.txt URLs that are already indexed *and* noindexed — Google can no longer see the noindex. Sequence your changes.\n- Canonicalising all pages of a category to page 1.\n- Allowing sort parameters to be linked from every listing.\n- Letting internal search result pages be crawled and indexed — Google's guidelines have long advised against indexing auto-generated search result pages.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Paginated pages need unique URLs, crawlable sequential links and self-referencing canonicals; rel=next/prev is no longer a Google signal.",
+            "Back infinite scroll and Load more with linked paginated URLs.",
+            "Decide per facet whether it has search demand; index only demand-backed facets with clean, consistent URLs.",
+            "robots.txt or fragments control facet crawling most effectively; canonical and noindex still allow crawling."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which method most effectively stops Google crawling millions of sort and price filter URLs?",
+              "options": [
+                "noindex on filter pages",
+                "rel=next/prev",
+                "robots.txt disallow rules for those parameters",
+                "rel=canonical to the category"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Canonical and noindex still require crawling; robots.txt prevents the fetches. Google's faceted guidance recommends robots.txt for facets you do not need indexed."
+            },
+            {
+              "question": "A filter combination returns zero products. What should the URL return?",
+              "options": [
+                "404",
+                "200 with 'no results'",
+                "302 to the category",
+                "301 to the home page"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Google's faceted navigation guidance suggests returning 404 for empty combinations to avoid soft 404s and wasted crawling."
+            },
+            {
+              "question": "A site uses infinite scroll with no paginated URLs. What is the SEO risk?",
+              "options": [
+                "Items beyond the first load may never be discovered",
+                "It causes duplicate titles",
+                "It breaks HTTPS",
+                "None; Google scrolls pages"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Googlebot does not scroll or click, so items loaded only on scroll are not discovered without paginated, linked URLs."
+            }
+          ],
+          "activity": "For one category on a site you know, classify every filter as index / crawl-only / block, and draft the robots.txt rules and URL patterns."
+        }
+      ]
+    },
+    {
+      "slug": "architecture-and-sitemaps",
+      "title": "Site architecture, internal linking and XML sitemaps",
+      "summary": "Design structures that help crawlers discover and prioritise your important pages, and build sitemaps that search engines can trust.",
+      "lessons": [
+        {
+          "slug": "site-architecture-and-internal-linking",
+          "title": "Site architecture and internal linking",
+          "type": "article",
+          "durationMinutes": 14,
+          "body": "### Architecture is how you tell search engines what matters\n\nInternal links do three jobs at once: they let crawlers **discover** URLs, they pass **signals** between pages (Google still uses links, including internal ones, to understand importance and relationships), and they give **context** through anchor text. A good architecture puts your most valuable pages close to the home page, groups related content, and links it all with descriptive anchors.\n\n### Principles\n\n1. **Shallow click depth for priority pages.** Important categories and products should be reachable in a few clicks from the home page. Depth is not a ranking factor in itself, but deep pages tend to be crawled less often and receive less internal link value.\n2. **Topical grouping (hubs and spokes).** A hub page covers a topic broadly and links to detailed spoke pages; spokes link back to the hub and to closely related siblings.\n3. **Descriptive anchor text.** \"Technical SEO audit checklist\" beats \"click here\". Avoid over-engineered exact-match anchors on every link — write for users.\n4. **Every indexable page gets at least one crawlable internal link** from an indexable page. No orphans.\n5. **Consistent URLs.** Link to the canonical, final URL — not to redirects or parameter variants.\n6. **Breadcrumbs** on hierarchical sites, marked up with `BreadcrumbList` structured data.\n\n### Typical structures\n\n```text\nHome\n├── /services/                     (hub)\n│   ├── /services/technical-seo/   (spoke)\n│   ├── /services/local-seo/\n│   └── /services/link-building/\n├── /guides/                       (hub)\n│   ├── /guides/core-web-vitals/\n│   └── /guides/hreflang/\n└── /case-studies/\n```\n\nFor e-commerce: Home → Department → Category → Subcategory → Product, supported by cross-links (related products, \"shop by brand\", recently viewed rendered as real links).\n\n### Where internal link value leaks or pools\n\n| Pattern | Effect | Fix |\n|---|---|---|\n| Mega-menus linking to hundreds of pages | Dilutes emphasis; can bloat HTML | Keep menus to real priority pages |\n| Links only in JS widgets without href | Not discovered | Render real anchors |\n| Sitewide footer links to low-value pages | Wasted emphasis | Trim footers |\n| Important pages only reachable via internal search | Effectively orphaned | Add category and contextual links |\n| Blog posts never linked after falling off page 1 of the blog index | Deep, rarely crawled | Topic hubs, related-post links, updated evergreen hubs |\n| nofollow on internal links | Wastes the link's signal; does not \"save\" value | Remove internal nofollow |\n\n### Measuring your architecture\n\nUse a crawler to export for each indexable URL:\n\n- **Crawl depth** (clicks from home).\n- **Unique inlinks** and the linking pages.\n- **Internal link score** (tools such as Screaming Frog's Link Score or Sitebulb's equivalents approximate relative internal importance).\n- **Anchor texts** used to link to it.\n\nThen join with Search Console clicks and impressions and business value. The classic finding: high-value pages with low inlinks and high depth, and low-value pages (tags, archives, filters) soaking up most internal links.\n\n### Orphan page discovery\n\nOrphans are pages that exist (in sitemaps, logs or analytics) but have no internal links. To find them:\n\n1. Crawl from the home page.\n2. Separately collect URLs from XML sitemaps, Search Console (Performance and Page indexing exports), analytics landing pages and server logs.\n3. URLs present in step 2 but not in step 1 are orphans. Decide for each: link it, redirect it, or remove it.\n\n### Worked example: an agency blog\n\nAn agency has 400 blog posts. The top converting guide, on Google Business Profile optimisation, sits at depth 7, linked only from paginated blog archives. Fix:\n\n1. Create a **Local SEO hub** at `/guides/local-seo/` linked from the main navigation.\n2. Link the hub to the 25 most relevant local posts with descriptive anchors; each post links back to the hub.\n3. Add contextual links from the three service pages that mention Google Business Profile.\n4. Retire or merge weak, overlapping posts (with 301s to the best version).\n\nAfter recrawling, the guide sits at depth 2 with dozens of relevant internal links. Monitor impressions and crawl frequency in logs; do not promise a ranking outcome.\n\n### Internal linking audit checklist\n\n- Home page links to top categories/hubs.\n- No internal links to 3xx, 4xx or non-canonical URLs.\n- No important page deeper than a sensible depth for the site's size.\n- Every indexable page has inlinks from indexable pages.\n- Anchor text is descriptive and varied.\n- Breadcrumbs present and marked up on hierarchical templates.\n- Pagination and faceted links behave as designed.\n\n### Common mistakes\n\n- Adding internal nofollow to \"sculpt PageRank\" — the value is not redistributed.\n- Relying on XML sitemaps instead of links for discovery of important pages.\n- Automated \"related links\" that link randomly rather than by topic.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Internal links drive discovery, pass signals and provide anchor-text context.",
+            "Keep priority pages shallow, group content into hubs and spokes, and avoid orphans.",
+            "Link to final canonical URLs; remove internal nofollow and links to redirects or errors.",
+            "Find orphans by comparing a link-based crawl with sitemaps, logs, analytics and Search Console URLs."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "How do you identify orphan pages?",
+              "options": [
+                "Check pages with low word count",
+                "Compare URLs found by crawling links with URLs from sitemaps, logs and analytics",
+                "Look for pages with noindex",
+                "Search for pages with no title tag"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Orphans exist in other sources but are not reachable by following internal links."
+            },
+            {
+              "question": "What does adding nofollow to internal links to low-value pages achieve?",
+              "options": [
+                "It increases crawl budget",
+                "It de-indexes those pages",
+                "It mostly wastes that link's value rather than reallocating it",
+                "It redistributes the link value to other links"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Nofollowed internal links do not reallocate value to other links; remove the link if you do not want it, or leave it followed."
+            }
+          ],
+          "activity": "Crawl a site, sort indexable pages by business value, and identify three high-value pages with high depth or few inlinks. Propose specific links to add."
+        },
+        {
+          "slug": "xml-sitemaps-done-properly",
+          "title": "XML sitemaps done properly",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### What sitemaps are (and are not)\n\nAn XML sitemap is a list of URLs you want search engines to know about, with optional metadata. It **aids discovery**, especially for large sites, new sites with few links, and pages that change often. It does **not** guarantee crawling or indexing, and it does not replace internal linking.\n\n### Hard limits and core rules\n\n- Up to **50,000 URLs** or **50 MB uncompressed** per sitemap file (gzip is allowed).\n- Use a **sitemap index** to list multiple sitemaps (an index can list up to 50,000 sitemaps).\n- Use **absolute, canonical URLs** that return 200 and are indexable.\n- UTF-8 encoding, entity-escape special characters (`&` becomes `&amp;`).\n- A sitemap can include URLs only from its own host and path unless cross-submission is verified in Search Console.\n\n```xml\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n  <sitemap>\n    <loc>https://www.example.com/sitemaps/products-1.xml.gz</loc>\n    <lastmod>2026-03-14T08:00:00+00:00</lastmod>\n  </sitemap>\n  <sitemap>\n    <loc>https://www.example.com/sitemaps/guides.xml</loc>\n  </sitemap>\n</sitemapindex>\n```\n\n```xml\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n  <url>\n    <loc>https://www.example.com/guides/core-web-vitals/</loc>\n    <lastmod>2026-02-27</lastmod>\n  </url>\n</urlset>\n```\n\n### lastmod, priority and changefreq\n\n- **lastmod**: Google uses it *if it is consistently and verifiably accurate* — meaning it reflects the last significant change to the main content, not the time the sitemap was generated. Setting every URL to \"today\" teaches Google to ignore your lastmod.\n- **priority** and **changefreq**: Google ignores them. You can omit them.\n\n### Specialised sitemaps\n\n**Image sitemaps** help discovery of images loaded in ways crawlers may miss:\n\n```xml\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"\n        xmlns:image=\"http://www.google.com/schemas/sitemap-image/1.1\">\n  <url>\n    <loc>https://www.example.com/products/oud-perfume/</loc>\n    <image:image><image:loc>https://cdn.example.com/img/oud-perfume.avif</image:loc></image:image>\n  </url>\n</urlset>\n```\n\nGoogle deprecated the image caption, title, geo_location and licence tags; `image:loc` is what matters.\n\n**Video sitemaps** list video landing pages with `video:thumbnail_loc`, `video:title`, `video:description` and either `video:content_loc` or `video:player_loc`. They help Google find videos and understand metadata; the video must be on a page where it is prominent.\n\n**News sitemaps** (for publishers eligible for Google News features) should include only articles published in the **last two days**, up to **1,000 URLs** per sitemap, with `news:publication`, `news:publication_date` and `news:title`.\n\n**hreflang in sitemaps** is an alternative to HTML tags for international sites (Module 5).\n\n### Submission and discovery\n\n1. Reference sitemaps in robots.txt: `Sitemap: https://www.example.com/sitemap_index.xml`.\n2. Submit in Search Console (Sitemaps report) and Bing Webmaster Tools.\n3. Note that Google's old sitemap \"ping\" endpoint was retired in 2023; rely on robots.txt, Search Console and accurate lastmod. Bing and others support **IndexNow** for faster change notifications.\n\n### Segmentation for diagnostics\n\nSplit sitemaps by template or section: `products-*.xml`, `categories.xml`, `guides.xml`, `locations.xml`. In Search Console you can then filter the Page indexing report by sitemap and see, for example, that most products are \"Crawled – currently not indexed\" while guides are fine. That is a powerful diagnostic that one giant file hides.\n\n### Sitemap hygiene audit\n\n1. Download all sitemaps (follow the index).\n2. Crawl the URL list: every URL should return **200**, be **self-canonical**, **indexable** and **not blocked** by robots.txt.\n3. Compare with your site crawl: indexable canonical pages *missing* from sitemaps, and sitemap URLs *missing* from the crawl (orphans).\n4. Check lastmod accuracy against CMS update dates on a sample.\n5. Check Search Console for \"Couldn't fetch\" or parsing errors.\n6. Confirm generation is automatic — sitemaps built by hand drift out of date.\n\n### Large-site tip: sitemaps as a freshness feed\n\nOn sites with millions of URLs, keep a small \"recent changes\" sitemap containing only URLs created or substantially updated in the last few days, alongside the full segmented set. Because its lastmod values are genuine, it gives crawlers a compact, trustworthy list of what changed — useful for marketplaces, classifieds and publishers where new inventory must be discovered quickly. Rotate URLs out once they are older than your chosen window.\n\n### Common mistakes\n\n- Including redirected, 404, noindexed or non-canonical URLs (\"dirty\" sitemaps weaken trust in the file).\n- Letting a plugin generate sitemaps for tag archives, attachment pages or internal search.\n- Using lastmod as a \"freshness hack\".\n- Forgetting to update sitemaps after a migration — the new sitemap should list new URLs, and temporarily submitting the old URL list can help Google discover the redirects.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Sitemaps aid discovery; they do not guarantee indexing or replace internal links.",
+            "Limits: 50,000 URLs or 50 MB uncompressed per file; use a sitemap index beyond that.",
+            "Google uses lastmod only when consistently accurate and ignores priority and changefreq.",
+            "Segment sitemaps by template to diagnose indexing by section in Search Console."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which sitemap field does Google use when it is accurate?",
+              "options": [
+                "changefreq",
+                "priority",
+                "lastmod",
+                "All three equally"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Google documents that it ignores priority and changefreq and uses lastmod if it is consistently accurate."
+            },
+            {
+              "question": "A sitemap contains 12% redirected and noindexed URLs. Why fix it?",
+              "options": [
+                "Sitemaps should list only canonical, indexable URLs; dirty files send conflicting signals and waste crawling",
+                "It triggers a manual action",
+                "It has no effect",
+                "Sitemaps must be under 10% errors or they are rejected"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "There is no fixed error threshold, but listing non-canonical URLs conflicts with canonical signals and reduces the usefulness of the sitemap."
+            },
+            {
+              "question": "What should a Google News sitemap contain?",
+              "options": [
+                "All articles ever published",
+                "Only video content",
+                "Only category pages",
+                "Articles from the last two days, up to 1,000 URLs"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Google's news sitemap guidance limits entries to recent articles (last two days) and 1,000 URLs per sitemap."
+            }
+          ],
+          "activity": "Download a site's sitemaps, crawl the URL list, and report how many URLs are non-200, non-canonical or noindexed."
+        }
+      ]
+    },
+    {
+      "slug": "international-and-structured-data",
+      "title": "International SEO and structured data",
+      "summary": "Serve the right language and country version with hreflang, and describe your content to machines with valid JSON-LD.",
+      "lessons": [
+        {
+          "slug": "hreflang-and-international-seo",
+          "title": "hreflang and international SEO",
+          "type": "article",
+          "durationMinutes": 15,
+          "body": "### Two separate decisions\n\nInternational SEO has two layers: **site structure** (where each version lives) and **annotation** (how you tell search engines which version is for whom).\n\n### Choosing a structure\n\n| Structure | Example | Pros | Cons |\n|---|---|---|---|\n| ccTLD | `example.ae`, `example.pk` | Clear country signal, local trust | Separate domains to build and maintain |\n| Subdirectory | `example.com/en-gb/`, `example.com/ar-sa/` | Consolidated authority, simpler ops | Weaker country signal alone |\n| Subdomain | `uk.example.com` | Can host separately | Operates somewhat like a separate site |\n| Parameters | `example.com?lang=ar` | Easy to build | Not recommended |\n\nFor most businesses expanding from one site, **subdirectories** are the pragmatic default. Search Console's old International Targeting (country targeting) report was retired in 2022, so geotargeting now relies on the ccTLD, hreflang, and local signals such as currency, addresses, language and local links.\n\n### Language and locale fundamentals\n\n- Translate content genuinely. Machine translation without review risks low quality; a region version with only currency changed may be seen as duplicate.\n- Mark the language in HTML: `html lang=\"ar\" dir=\"rtl\"` for Arabic.\n- **Never auto-redirect by IP** without an alternative. Googlebot crawls mostly from US IP addresses, so IP redirects can hide your local versions. Use a dismissible banner suggesting the local version instead.\n- Let users switch versions with crawlable links.\n\n### hreflang syntax\n\nhreflang tells Google that URLs are equivalents in different languages or regions, so it can show the right one. Values are an **ISO 639-1 language code**, optionally followed by an **ISO 3166-1 alpha-2 region code**.\n\n```html\n<link rel=\"alternate\" hreflang=\"en-gb\" href=\"https://www.example.com/en-gb/pricing/\">\n<link rel=\"alternate\" hreflang=\"en-ae\" href=\"https://www.example.com/en-ae/pricing/\">\n<link rel=\"alternate\" hreflang=\"ar-ae\" href=\"https://www.example.com/ar-ae/pricing/\">\n<link rel=\"alternate\" hreflang=\"ar-sa\" href=\"https://www.example.com/ar-sa/pricing/\">\n<link rel=\"alternate\" hreflang=\"ur-pk\" href=\"https://www.example.com/ur-pk/pricing/\">\n<link rel=\"alternate\" hreflang=\"en\" href=\"https://www.example.com/en/pricing/\">\n<link rel=\"alternate\" hreflang=\"x-default\" href=\"https://www.example.com/pricing/\">\n```\n\nEvery version in the set must include this **same complete list**, including itself.\n\n### The rules that break most implementations\n\n1. **Return links (reciprocity).** If page A lists B, B must list A. Unconfirmed annotations may be ignored.\n2. **Self-reference.** Each page includes itself.\n3. **Canonical alignment.** hreflang URLs must be the canonical versions that return 200. Pointing to redirected or non-canonical URLs breaks the set. Each language version should self-canonicalise — never canonicalise `/ar-ae/` to `/en/`.\n4. **Valid codes.** `en-uk` is invalid (the region code is `gb`). A region alone (`hreflang=\"gb\"`) is invalid. Language comes first.\n5. **x-default** for the fallback version (often a language selector or global English page).\n6. **Consistency across methods.** Use one method: HTML `link` tags, HTTP `Link` headers (for PDFs), or XML sitemaps. Mixing them invites conflicts.\n\n### hreflang in XML sitemaps\n\nFor large sites, sitemaps keep HTML lighter and are easier to generate centrally:\n\n```xml\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"\n        xmlns:xhtml=\"http://www.w3.org/1999/xhtml\">\n  <url>\n    <loc>https://www.example.com/en-gb/pricing/</loc>\n    <xhtml:link rel=\"alternate\" hreflang=\"en-gb\" href=\"https://www.example.com/en-gb/pricing/\"/>\n    <xhtml:link rel=\"alternate\" hreflang=\"ar-ae\" href=\"https://www.example.com/ar-ae/pricing/\"/>\n    <xhtml:link rel=\"alternate\" hreflang=\"x-default\" href=\"https://www.example.com/pricing/\"/>\n  </url>\n  <!-- repeat a url block for each version, with the full set -->\n</urlset>\n```\n\n### hreflang audit procedure\n\n1. Crawl all language versions with hreflang extraction.\n2. Check for: missing return links, non-200 or non-canonical targets, invalid codes, missing self-reference, missing x-default, and pages whose canonical conflicts with hreflang.\n3. Check coverage: does every version of a page exist? Missing translations should be omitted from the set, not pointed at another language.\n4. In Search Console, filter Performance by country and check which URL version is getting impressions in each market.\n5. Search from the target market (VPN or a SERP localisation tool) for branded and key queries.\n\n### Worked example\n\nA SaaS company runs `/en/`, `/en-gb/`, `/ar/`. UAE users see the UK page with GBP pricing. Audit shows `/ar/` pages canonicalise to `/en/` (a CMS default), so Google drops them from the hreflang cluster. Fixes: self-canonicals, add `en-ae` pages with AED pricing where the business actually serves the UAE, a complete reciprocal set, and x-default pointing to a selector page.\n\n### Common mistakes\n\n- Using hreflang to target countries you do not actually serve with distinct content.\n- Relying on hreflang to fix poor translations.\n- Forgetting that hreflang is a hint; strong local relevance signals still matter.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Pick a structure (ccTLD, subdirectory, subdomain) first; subdirectories are a pragmatic default.",
+            "hreflang values use ISO 639-1 language plus optional ISO 3166-1 region (en-gb, not en-uk).",
+            "Sets must be complete, self-referencing, reciprocal and point only at canonical 200 URLs.",
+            "Do not force IP-based redirects; Googlebot mostly crawls from US IPs."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which hreflang value is valid for English in the United Kingdom?",
+              "options": [
+                "gb-en",
+                "en-uk",
+                "en-gb",
+                "uk"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "The ISO 3166-1 alpha-2 code for the United Kingdom is GB; the language code comes first."
+            },
+            {
+              "question": "The Arabic page lists English as an alternate, but the English page does not list Arabic. Result?",
+              "options": [
+                "Both pages are de-indexed",
+                "The annotation may be ignored because return links are missing",
+                "Google follows the one-way link",
+                "Google adds x-default automatically"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "hreflang requires confirmation from both sides; missing return links can cause the annotations to be ignored."
+            },
+            {
+              "question": "Why is automatic IP-based redirection risky for international sites?",
+              "options": [
+                "It slows TTFB",
+                "Googlebot mostly crawls from US IPs and may never see other versions",
+                "It breaks HTTPS",
+                "It is a spam policy violation"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "If every request from a US IP is redirected to the US version, Google may not crawl the local versions."
+            }
+          ],
+          "activity": "Write a complete hreflang set (HTML tags) for a page available in English (UK), English (UAE), Arabic (Saudi Arabia) and Urdu (Pakistan), plus x-default."
+        },
+        {
+          "slug": "structured-data-and-rich-results",
+          "title": "Structured data, JSON-LD and rich results",
+          "type": "article",
+          "durationMinutes": 14,
+          "body": "### What structured data does\n\nStructured data is machine-readable information about a page, usually using the **schema.org** vocabulary. Google uses it to understand content and to make pages **eligible** for rich results (review stars, product price and availability, breadcrumbs, event details, video features and more). Two important truths:\n\n1. Structured data makes you **eligible**, not guaranteed. Google decides whether to show rich results.\n2. Structured data is **not a direct ranking boost**. Its value is understanding and presentation.\n\nGoogle recommends **JSON-LD**, placed in a `script type=\"application/ld+json\"` block, because it is separate from the visible HTML and easy to maintain. Microdata and RDFa are also supported.\n\n### A solid starter set by site type\n\n| Site type | Common types |\n|---|---|\n| Every site | `Organization` (logo, sameAs, contact), `WebSite`, `BreadcrumbList` |\n| E-commerce | `Product` with `Offer`, `AggregateRating`/`Review` (where genuine), merchant return and shipping details |\n| Publishers | `Article`/`NewsArticle` with author, dates, images |\n| Local businesses | `LocalBusiness` subtypes with address, geo, opening hours |\n| Events | `Event` with dates, location, offers |\n| Video | `VideoObject` |\n| Jobs | `JobPosting` |\n\n### Example: Product with offer\n\n```json\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Product\",\n  \"name\": \"Handmade Leather Messenger Bag\",\n  \"image\": [\"https://www.example.com/img/messenger-1x1.jpg\"],\n  \"description\": \"Full-grain leather messenger bag, hand-stitched in Sialkot.\",\n  \"sku\": \"MB-204\",\n  \"brand\": {\"@type\": \"Brand\", \"name\": \"Example Leather\"},\n  \"offers\": {\n    \"@type\": \"Offer\",\n    \"url\": \"https://www.example.com/bags/messenger/\",\n    \"priceCurrency\": \"GBP\",\n    \"price\": \"149.00\",\n    \"availability\": \"https://schema.org/InStock\",\n    \"itemCondition\": \"https://schema.org/NewCondition\"\n  }\n}\n```\n\n### Example: Organization with entity links\n\n```json\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Organization\",\n  \"@id\": \"https://www.example.com/#organization\",\n  \"name\": \"Example Agency\",\n  \"url\": \"https://www.example.com/\",\n  \"logo\": \"https://www.example.com/logo.png\",\n  \"sameAs\": [\n    \"https://www.linkedin.com/company/example-agency\",\n    \"https://www.youtube.com/@exampleagency\"\n  ]\n}\n```\n\nUsing stable `@id` values lets you connect entities across pages (an `Article` whose `publisher` references the organisation's `@id`), which builds a clean graph.\n\n### Policies that trip people up\n\n- **Mark up only what is visible** and true on the page. Hidden or misleading markup violates Google's structured data guidelines and can lead to a manual action that removes rich result eligibility.\n- **Self-serving reviews**: review rich results are not shown for reviews a `LocalBusiness` or `Organization` publishes about itself on its own site.\n- **Rich result types change.** Google has retired or restricted several over time — for example HowTo rich results were removed and FAQ rich results were limited to well-known authoritative government and health sites in 2023, and further little-used types were phased out in 2025. Always check the current Search Gallery before investing; valid markup for a retired type does no harm but earns no rich result.\n\n### Validation workflow\n\n1. **Rich Results Test** — shows which Google rich results the page is eligible for, and errors/warnings, using the rendered page.\n2. **Schema Markup Validator** (validator.schema.org) — checks general schema.org validity, including types Google does not use for rich results.\n3. **Search Console enhancement reports** — sitewide monitoring of valid items, errors and warnings per type (for example Products, Breadcrumbs, Videos).\n4. **Crawl-based extraction** — use your crawler's structured data extraction to check every template at scale.\n5. **Spot-check SERPs** after deployment.\n\nErrors block eligibility; warnings mean optional recommended properties are missing — fix those that are true and available.\n\n### Implementation tips\n\n- Generate JSON-LD from the same data source as the visible page (price, stock, rating) so they never drift apart.\n- Keep dates in ISO 8601 with timezone (`2026-03-14T09:00:00+05:00`).\n- If you inject JSON-LD with JavaScript or a tag manager, confirm it appears in the rendered HTML in URL Inspection; server-side output is more robust.\n- Avoid duplicate conflicting blocks from multiple plugins (a theme and an SEO plugin both outputting `Organization`).\n\n### Common mistakes\n\n- Marking up reviews that are not on the page, or ratings aggregated from other sites.\n- Product markup on category pages listing many products as if each were the page's main item.\n- Expecting rankings to improve because markup was added.\n- Letting structured data prices go stale after a sale ends.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Structured data provides eligibility for rich results and aids understanding; it is not a direct ranking boost.",
+            "Use JSON-LD generated from the same data as the visible page; mark up only visible, truthful content.",
+            "Rich result types are added and retired over time; check Google's current Search Gallery.",
+            "Validate with the Rich Results Test, Schema Markup Validator and Search Console enhancement reports."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A plumbing company adds AggregateRating markup for reviews it collected and displays on its own homepage. Will Google show review stars?",
+              "options": [
+                "Yes, but only on mobile",
+                "No, self-serving reviews for LocalBusiness/Organization are not eligible for review rich results",
+                "Yes, if the markup is valid",
+                "Only in the UK"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Google does not show review rich results for self-serving reviews about the business on its own site."
+            },
+            {
+              "question": "Which tool shows whether a page is eligible for specific Google rich results?",
+              "options": [
+                "Schema Markup Validator",
+                "PageSpeed Insights",
+                "Rich Results Test",
+                "robots.txt report"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "The Rich Results Test checks Google rich result eligibility; the Schema Markup Validator checks general schema.org validity."
+            },
+            {
+              "question": "What is the main risk of hidden or misleading structured data?",
+              "options": [
+                "Broken hreflang",
+                "Slower page loads",
+                "Lower crawl budget",
+                "A manual action removing rich result eligibility"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Structured data that does not match visible content violates Google's guidelines and can trigger a structured data manual action."
+            }
+          ],
+          "activity": "Write valid JSON-LD for your organisation (with @id and sameAs) and one key page type, then validate both in the Rich Results Test and Schema Markup Validator."
+        }
+      ]
+    },
+    {
+      "slug": "performance-and-page-experience",
+      "title": "Core Web Vitals, mobile-first indexing and security",
+      "summary": "Diagnose and fix LCP, INP and CLS with field data, ensure mobile parity, and harden HTTPS and security headers.",
+      "lessons": [
+        {
+          "slug": "core-web-vitals-diagnosis-and-fixes",
+          "title": "Core Web Vitals: diagnosis and fixes",
+          "type": "article",
+          "durationMinutes": 16,
+          "body": "### The three metrics\n\nCore Web Vitals measure real-user experience. Google evaluates them at the **75th percentile** of page loads, split by mobile and desktop.\n\n| Metric | Measures | Good | Needs improvement | Poor |\n|---|---|---|---|---|\n| **LCP** Largest Contentful Paint | Loading: when the main content appears | ≤ 2.5 s | ≤ 4.0 s | > 4.0 s |\n| **INP** Interaction to Next Paint | Responsiveness across all interactions | ≤ 200 ms | ≤ 500 ms | > 500 ms |\n| **CLS** Cumulative Layout Shift | Visual stability | ≤ 0.1 | ≤ 0.25 | > 0.25 |\n\nINP replaced First Input Delay (FID) as a Core Web Vital in March 2024.\n\n**Keep perspective:** Google says Core Web Vitals are used by its ranking systems, but good scores do not guarantee top rankings, and relevance and helpfulness still dominate. Treat CWV as a user-experience and conversion investment with a modest search component, especially where competing pages are otherwise similar.\n\n### Field data versus lab data\n\n- **Field data** (real users): Chrome UX Report (CrUX), shown in PageSpeed Insights and the Search Console Core Web Vitals report, and your own RUM using the `web-vitals` JavaScript library. This is what counts.\n- **Lab data** (simulated): Lighthouse, PageSpeed Insights lab section, Chrome DevTools. Use it to **debug**, not to judge success. Lab tools cannot measure INP directly (Total Blocking Time is a rough proxy).\n\nThe Search Console report groups similar URLs, so fixes are usually template-level.\n\n### Fixing LCP\n\nBreak LCP into four parts and fix the largest one:\n\n1. **Time to First Byte** — slow servers, uncached HTML, far-away origins. Fixes: full-page caching, CDN edge caching, database and backend optimisation.\n2. **Resource load delay** — the browser discovers the LCP image late (for example a CSS background, or JS-inserted image).\n3. **Resource load duration** — the image is too heavy.\n4. **Element render delay** — render-blocking CSS/JS or client-side rendering delays paint.\n\n```html\n<!-- Make the hero image discoverable and prioritised -->\n<link rel=\"preload\" as=\"image\" href=\"/img/hero-1200.avif\" fetchpriority=\"high\">\n<img src=\"/img/hero-1200.avif\" width=\"1200\" height=\"600\" alt=\"Team reviewing an SEO audit\"\n     fetchpriority=\"high\" decoding=\"async\">\n<!-- Never lazy-load the LCP image -->\n```\n\nOther LCP levers: modern formats (AVIF/WebP) with responsive `srcset`, inlining critical CSS, deferring non-critical JS, self-hosting key fonts, and avoiding client-side rendering for above-the-fold content.\n\n### Fixing INP\n\nINP measures the delay from a user interaction (click, tap, key press) to the next frame painted. Poor INP almost always means **long tasks on the main thread**.\n\n- Reduce and split JavaScript; remove unused third-party scripts (chat widgets, tag managers loaded with dozens of tags, heavy A/B testing tools).\n- **Break up long tasks** and yield to the main thread:\n\n```js\nasync function processItems(items) {\n  for (const item of items) {\n    doWork(item);\n    // Yield so the browser can respond to input\n    if (globalThis.scheduler?.yield) await scheduler.yield();\n    else await new Promise(r => setTimeout(r, 0));\n  }\n}\n```\n\n- Give immediate visual feedback, then do heavy work afterwards.\n- Avoid large DOM sizes and forced synchronous layouts (reading layout properties right after writing styles).\n- Debounce input handlers; move heavy computation to Web Workers.\n\nUse Chrome DevTools' Performance panel and RUM attribution (the `web-vitals` library's attribution build reports which element and script caused slow interactions).\n\n### Fixing CLS\n\n- Always set `width` and `height` (or CSS `aspect-ratio`) on images, videos and iframes.\n- Reserve space for ads, embeds and cookie banners; do not push content down after load.\n- Avoid inserting content above existing content, except in response to user interaction.\n- Font swaps: use `font-display: optional` or matched fallbacks (`size-adjust`) to reduce shift.\n- Animate with `transform`, not properties that trigger layout (`top`, `height`).\n- Check back/forward cache eligibility; pages restored from bfcache avoid many shifts.\n\n### Prioritisation workflow\n\n1. Open the Search Console Core Web Vitals report; list poor and needs-improvement URL groups on mobile.\n2. Map groups to templates and weigh by traffic and revenue.\n3. For each template, pull PageSpeed Insights field data and run a lab trace to find the dominant sub-part.\n4. Write tickets with the specific fix and expected metric movement.\n5. After release, wait for field data to update (CrUX uses a rolling 28-day window) before declaring success. Use the \"Validate fix\" button in Search Console to track.\n\n### Common mistakes\n\n- Chasing a Lighthouse score of 100 while field data is fine (or vice versa).\n- Lazy-loading everything including the hero image.\n- Ignoring third-party scripts because \"marketing needs them\" — audit their value.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Good thresholds at the 75th percentile: LCP ≤ 2.5 s, INP ≤ 200 ms, CLS ≤ 0.1; INP replaced FID in March 2024.",
+            "Judge success with field data (CrUX, Search Console, RUM); use lab tools to debug.",
+            "LCP: fix TTFB, discovery, weight and render delay; INP: break long tasks; CLS: reserve space.",
+            "CWV are a ranking input but not a shortcut to top positions; prioritise by template and business value."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which metric replaced First Input Delay as a Core Web Vital?",
+              "options": [
+                "Interaction to Next Paint",
+                "First Contentful Paint",
+                "Total Blocking Time",
+                "Time to First Byte"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "INP became a Core Web Vital in March 2024, replacing FID."
+            },
+            {
+              "question": "The LCP element is a hero image with loading=\"lazy\" set by a theme. Best fix?",
+              "options": [
+                "Add more JavaScript",
+                "Convert it to a CSS background",
+                "Remove lazy-loading from the hero and give it high fetch priority",
+                "Increase image quality"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Lazy-loading delays the LCP resource. The LCP image should load eagerly with fetchpriority=high; CSS backgrounds are discovered later."
+            },
+            {
+              "question": "Lighthouse shows a perfect score but Search Console shows poor INP on mobile. Which should you trust for user experience?",
+              "options": [
+                "Neither",
+                "Search Console field data, because it reflects real users",
+                "Lighthouse, because it is controlled",
+                "Whichever is better"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Field data reflects real users and devices; lab tools cannot fully measure INP."
+            }
+          ],
+          "activity": "Run PageSpeed Insights on your three highest-traffic templates, record field LCP/INP/CLS, and identify the dominant cause for the worst metric on each."
+        },
+        {
+          "slug": "mobile-first-https-and-security-headers",
+          "title": "Mobile-first indexing, HTTPS and security headers",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Mobile-first indexing in practice\n\nGoogle predominantly uses the **mobile version** of content, crawled with the smartphone Googlebot, for indexing and ranking. For responsive sites where the same HTML serves every device, this is mostly a non-issue. Problems appear when the mobile experience differs from desktop.\n\n### The parity checklist\n\nYour mobile version should have the same:\n\n- **Primary content** — text, images, videos. Content hidden in accordions or tabs for mobile UX is fine as long as it is in the HTML; content *removed* from mobile is effectively removed from Google.\n- **Meta data** — titles, meta descriptions, robots meta. A mobile template that accidentally outputs `noindex` affects the whole index.\n- **Structured data** — same markup, pointing to mobile URLs on separate-URL setups.\n- **Internal links** — a slimmed-down mobile menu that drops links to key categories reduces discovery and internal link signals.\n- **Images** — same quality, supported formats, descriptive alt text; lazy-loading that works without user interaction.\n- **Lazy-loaded content** — loaded based on visibility in the viewport, not on swipe or click.\n\nFor legacy separate mobile sites (`m.example.com`), you need `rel=\"alternate\"` from desktop to mobile and `rel=\"canonical\"` from mobile to desktop, plus equivalent content. Migrating to responsive design removes a whole class of errors and is recommended.\n\nHow to check: use URL Inspection (which uses the smartphone crawler), crawl with a mobile user agent, and compare content, links and directives against a desktop crawl.\n\n### Intrusive interstitials\n\nFull-screen pop-ups that block content right after a user arrives from search create a poor experience. Legally required interstitials (cookie consent, age verification) are acceptable; design them to be small and dismissible. Keep the underlying content in the HTML so it can still be crawled.\n\n### HTTPS\n\nHTTPS is a lightweight ranking signal and a baseline of trust. Checklist:\n\n1. Valid certificate covering all hosts (www and non-www, subdomains).\n2. Sitewide 301 from HTTP to HTTPS in a single hop.\n3. Canonicals, hreflang, sitemaps and internal links all use `https://` URLs.\n4. No **mixed content** (HTTP images, scripts or iframes on HTTPS pages); browsers block or warn.\n5. Modern TLS configuration (TLS 1.2 minimum, TLS 1.3 preferred).\n\n### Security headers\n\nSecurity headers are not ranking factors in their own right, but they protect users and your site's reputation, and a hacked site suffers severely in search (spam injections, malware warnings, manual actions). A sensible baseline:\n\n```text\nStrict-Transport-Security: max-age=31536000; includeSubDomains\nContent-Security-Policy: default-src 'self'; img-src 'self' https://cdn.example.com data:; script-src 'self' https://www.googletagmanager.com; frame-ancestors 'self'\nX-Content-Type-Options: nosniff\nReferrer-Policy: strict-origin-when-cross-origin\nPermissions-Policy: camera=(), microphone=(), geolocation=()\n```\n\nNotes:\n\n- **HSTS** forces HTTPS for returning browsers. Start with a short `max-age`, confirm every subdomain supports HTTPS, then increase. Only add `preload` when you are certain — preload lists are slow to undo.\n- **CSP** prevents many script injection attacks; deploy first as `Content-Security-Policy-Report-Only` to discover what would break (tag managers and third-party widgets often need allow-listing).\n- `frame-ancestors` in CSP supersedes the older `X-Frame-Options` for clickjacking protection.\n- Set a `Referrer-Policy` that keeps origin data for analytics while not leaking full URLs cross-site.\n\n### Hacked-site and spam monitoring\n\n- Watch Search Console's **Security issues** and **Manual actions** reports; enable email notifications.\n- Use `site:example.com` searches with spam terms (pharma, casino, replica) occasionally to spot injected pages; also check for unfamiliar URLs in the Page indexing report and Performance queries in languages you do not publish in.\n- Keep CMS, themes and plugins patched; remove unused plugins; enforce multi-factor authentication for admin accounts.\n- If compromised: clean, close the vulnerability, then request a review in Search Console.\n\n### Common mistakes\n\n- A mobile template with fewer internal links or missing structured data.\n- Mixed content after a CDN or image domain change.\n- Setting HSTS with `includeSubDomains` before a legacy subdomain supports HTTPS — it becomes unreachable for returning visitors.\n- Believing security headers themselves will lift rankings; their value is protection.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Google indexes the mobile version; content, links, meta and structured data must match desktop.",
+            "Content hidden in tabs is fine if it is in the HTML; content removed on mobile is lost to Google.",
+            "HTTPS needs single-hop redirects, HTTPS URLs everywhere and no mixed content.",
+            "Security headers protect users and reputation rather than directly boosting rankings; roll out HSTS and CSP carefully."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A responsive redesign hides the FAQ section on mobile using CSS display:none but keeps it in the HTML. Impact on mobile-first indexing?",
+              "options": [
+                "The content is still in the HTML so it can be indexed",
+                "The content is ignored",
+                "The site is penalised",
+                "Only desktop Googlebot sees it"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Content in the HTML but visually collapsed or hidden for UX is still available to Google. Content removed from the mobile HTML is not."
+            },
+            {
+              "question": "What is the safest way to introduce a Content Security Policy?",
+              "options": [
+                "Deploy the strictest policy immediately",
+                "Add it only to robots.txt",
+                "Use meta refresh",
+                "Start with Content-Security-Policy-Report-Only and review reports"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Report-only mode shows what would break without blocking anything, so you can refine the policy."
+            }
+          ],
+          "activity": "Compare mobile and desktop crawls of your site for word count, internal link count, structured data and robots directives on five templates; list any parity gaps."
+        }
+      ]
+    },
+    {
+      "slug": "migrations-auditing-monitoring",
+      "title": "Migrations, auditing workflow and monitoring",
+      "summary": "Run site migrations without losing visibility, audit systematically, and monitor with Search Console so problems are caught in days, not months.",
+      "lessons": [
+        {
+          "slug": "site-migrations-checklist",
+          "title": "Site migrations: a zero-drama checklist",
+          "type": "article",
+          "durationMinutes": 16,
+          "body": "### What counts as a migration\n\nAny change that alters URLs, hosts, templates or rendering at scale: **domain change**, **HTTP to HTTPS**, **URL restructure**, **platform/CMS change** (e.g. WordPress to Shopify, or a move to a headless front end), **merging sites**, and **major redesigns**. Several at once multiplies risk — if you can, separate a domain move from a replatform.\n\nEven perfect migrations can cause temporary fluctuation while Google recrawls and reprocesses. Google has said a medium-sized site can take a few weeks for most pages to move, and larger sites longer. Set expectations in writing before you start.\n\n### Phase 1: Planning (weeks before)\n\n1. **Define scope and owners.** Who signs off redirects, who deploys, who monitors?\n2. **Benchmark everything:** full crawl of the old site; Search Console exports (performance by page and query, Page indexing counts); analytics landing-page traffic and conversions; rank tracking for priority queries; backlink list of top-linked URLs; log sample.\n3. **Inventory URLs** from all sources: crawl, sitemaps, Search Console, analytics, backlinks, logs. Crawls alone miss old URLs that still receive links.\n4. **Build the redirect map** — old URL to most relevant new URL, one hop, 301/308. Prioritise by traffic, links and revenue. Pages with no equivalent get 404/410 intentionally.\n\n```text\nold_url,new_url,type,priority,notes\n/services/seo-audit.html,/services/technical-seo-audit/,301,high,top converter\n/blog/2019/05/gbp-tips,/guides/google-business-profile/,301,high,merged into guide\n/careers/intern-2018,,410,low,no equivalent\n```\n\n5. **Plan content and template parity.** Titles, meta descriptions, headings, body content, internal links, structured data, hreflang, canonicals, image alt text — carry them over or consciously improve them.\n6. **Choose timing** away from peak seasons (Ramadan and Eid campaigns for Gulf retailers, Black Friday, Diwali, back-to-school).\n\n### Phase 2: Staging and pre-launch QA\n\n- Staging protected by authentication (not only robots.txt).\n- Crawl staging and compare against the benchmark: missing pages, title changes, lost internal links, structured data errors, canonicals pointing at staging hosts.\n- **Test the redirect map** against staging with a list crawl: every old URL should return one 301 to a 200 destination.\n- Check robots.txt and meta robots for the **production** configuration — confirm `Disallow: /` and staging `noindex` will not ship.\n- Check rendering and Core Web Vitals of new templates.\n- Prepare new XML sitemaps.\n\n### Phase 3: Launch day\n\n1. Deploy redirects together with the new site.\n2. Verify robots.txt, a sample of meta robots and canonicals on production immediately.\n3. Crawl the old URL list: confirm 301s resolve in one hop to 200 pages.\n4. **Domain moves:** verify both properties in Search Console and use the **Change of Address** tool (for domain-level moves).\n5. Submit new sitemaps. Keeping a sitemap of old URLs available for a short time can help Google discover the redirects.\n6. Update external profiles you control: Google Business Profile website link, social profiles, directories, ad destination URLs, email templates.\n\n### Phase 4: Post-launch monitoring (first 4–12 weeks)\n\n| Check | Frequency | Where |\n|---|---|---|\n| 404s and 5xx on old and new URLs | Daily, first two weeks | Logs, crawler, Search Console |\n| Googlebot crawl of new URLs | Daily | Logs, Crawl stats |\n| Indexing of new URLs vs old | Weekly | Page indexing, URL Inspection samples |\n| Traffic and conversions by page group | Daily then weekly | Analytics vs benchmark |\n| Rankings for priority queries | Weekly | Rank tracker |\n| Structured data and CWV | Weekly | Enhancement and CWV reports |\n\nKeep redirects in place for **at least a year** (Google's guidance), and ideally indefinitely. Keep the old domain registered.\n\n### Worked example: platform change\n\nA Lahore-based retailer moves from a custom PHP store to a hosted e-commerce platform. The platform forces `/products/` and `/collections/` URL patterns. The team exports every legacy URL (including those only found in backlinks and logs), maps products by SKU and categories by name, uses the platform's redirect manager for one-hop 301s, recreates custom title templates, and moves blog content with matching slugs where possible. After launch, logs reveal thousands of hits to old image URLs used in Google Images; they add image redirects too — a commonly forgotten item.\n\n### Rollback criteria\n\nAgree in advance what triggers a rollback or an emergency fix: for example, robots.txt blocking the site, redirects failing for a large share of legacy URLs, or checkout broken. Without predefined criteria, teams argue while visibility drops.\n\n### Common mistakes\n\n- Redirecting everything to the home page.\n- Changing URLs, content and design at once without benchmarks, so nobody can diagnose drops.\n- Removing redirects after a few months \"because traffic moved\".\n- Forgetting image, PDF and hreflang URLs.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Benchmark crawl, Search Console, analytics, rankings and backlinks before any migration.",
+            "Build a one-hop 301 redirect map from every known old URL, prioritised by traffic, links and revenue.",
+            "QA staging and redirects before launch, and verify production robots.txt and directives immediately after.",
+            "Use Change of Address for domain moves, keep redirects at least a year, and monitor for weeks."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Where should you source old URLs for a migration redirect map?",
+              "options": [
+                "Only top-10 pages by traffic",
+                "Only the current site crawl",
+                "Crawl, sitemaps, Search Console, analytics, backlink tools and server logs",
+                "Only the XML sitemap"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Crawls miss URLs that are no longer linked internally but still receive links or traffic; combine sources."
+            },
+            {
+              "question": "Which Search Console tool supports a domain name change?",
+              "options": [
+                "URL Inspection",
+                "Removals",
+                "Disavow",
+                "Change of Address"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "The Change of Address tool tells Google about a move from one domain to another, alongside 301 redirects."
+            },
+            {
+              "question": "How long does Google recommend keeping migration redirects?",
+              "options": [
+                "At least one year",
+                "Two weeks",
+                "One month",
+                "Until rankings recover"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Google's site move guidance recommends keeping redirects for at least a year; many keep them indefinitely."
+            }
+          ],
+          "activity": "Draft a migration plan outline for a site you know: benchmarks, URL sources, redirect map columns, QA steps, launch checks and rollback criteria."
+        },
+        {
+          "slug": "auditing-workflow-and-search-console-monitoring",
+          "title": "Auditing workflow, tools and Search Console monitoring",
+          "type": "video",
+          "durationMinutes": 15,
+          "body": "### A repeatable audit workflow\n\nSenior technical SEOs work from a consistent sequence so nothing important is skipped and findings are comparable over time.\n\n1. **Context** — business goals, priority templates, recent releases, known incidents, markets, CMS and hosting stack.\n2. **Access** — Search Console (Domain property), Bing Webmaster Tools, analytics, logs or CDN logs, CMS read access, staging.\n3. **Crawl** — a full crawl with JavaScript rendering where relevant, mobile user agent, and crawl-source integrations (sitemaps, Search Console, analytics).\n4. **Indexation review** — Page indexing report by sitemap segment; sample URL Inspection.\n5. **Template review** — for each key template: status, directives, canonical, rendering, content, internal links, structured data, CWV.\n6. **Logs** — what bots actually crawl.\n7. **Prioritise** — impact × effort × confidence, tied to business value.\n8. **Report and ticket** — clear actions, owners, acceptance criteria.\n9. **Verify and monitor** — recrawl, Search Console validation, alerting.\n\n### The tool stack (vendor-neutral)\n\n| Job | Examples |\n|---|---|\n| Desktop/cloud crawling | Screaming Frog SEO Spider, Sitebulb, Lumar, JetOctopus, Oncrawl |\n| Google data | Search Console (UI, API, bulk data export to BigQuery) |\n| Bing data | Bing Webmaster Tools (also useful because Bing's index feeds several AI assistants) |\n| Performance | PageSpeed Insights, CrUX, Lighthouse, Chrome DevTools, RUM via web-vitals |\n| Structured data | Rich Results Test, Schema Markup Validator |\n| Logs | Log analysers from crawler vendors, BigQuery, ELK stack, CDN analytics |\n| Change monitoring | Tools that alert on robots.txt, title, canonical or status changes; custom scripts |\n\nThe tool matters less than configuration. Always record crawl settings (user agent, rendering, limits, excluded patterns) in the audit so results are reproducible.\n\n### Search Console: the reports that matter most\n\n- **Page indexing** — why URLs are not indexed; filter by sitemap for segment-level views. Use \"Validate fix\" after resolving an issue type.\n- **URL Inspection** — index status, Google-selected canonical, last crawl, crawl user agent, rendered HTML and resources (live test). The API supports bulk inspection within quota.\n- **Performance** — clicks, impressions, CTR and position by query, page, country, device and search appearance. Use regex filters to segment brand vs non-brand.\n- **Crawl stats** (Settings) — requests per day, response codes, file types, average response time, host status (robots.txt fetch, DNS, server connectivity).\n- **Sitemaps** — submission status and discovered URLs.\n- **Core Web Vitals** and **HTTPS** reports.\n- **Enhancements** — structured data items by type.\n- **Manual actions** and **Security issues** — check on every audit.\n- **Removals** — temporary removals and outdated content requests.\n- **robots.txt report** — fetched versions and errors per host.\n\n### Monitoring: catch problems in days\n\nSet up a lightweight monitoring layer:\n\n1. **Email alerts** from Search Console (on by default for verified owners — make sure the right people are verified users).\n2. **Scheduled crawls** of key templates weekly, compared to the previous run (new noindex, canonical changes, status changes, title changes).\n3. **Change monitoring** on robots.txt and a set of critical URLs.\n4. **Dashboards** — Search Console data by page group in a BI tool (Looker Studio, Power BI, or BigQuery with the bulk export), with annotations for releases.\n5. **Log alerts** — spikes in 5xx to Googlebot, or drops in Googlebot hits.\n6. **Release checklist** — SEO sign-off for changes affecting templates, routing or robots directives.\n\nA simple regex to split brand and non-brand queries in the Performance report:\n\n```text\n^(?!.*(optimize ?all|optimiseall)).*$\n```\n\n### Reading Search Console data correctly\n\n- Performance data is sampled and anonymised queries are omitted, so query totals will not sum to page totals.\n- Average position is an impression-weighted average; mixing many queries hides detail. Analyse by query-page pairs.\n- Report timelines lag by a few days; indexing reports update less frequently than performance data.\n- Compare like-for-like periods (same weekday mix, seasonality such as Ramadan, Eid, Christmas or summer holidays).\n\n### Common mistakes\n\n- Running a crawler with default settings on a JavaScript site and reporting \"no content\".\n- Delivering a 200-row spreadsheet with no priorities.\n- Auditing once a year instead of monitoring continuously.\n- Only verifying a URL-prefix property and missing subdomains or protocol variants (use a Domain property).\n",
+          "video": {
+            "script": "Most technical SEO disasters are not discovered by audits. They are discovered by traffic graphs, weeks too late. A noindex left on a template. A robots.txt copied from staging. A canonical that suddenly points to the home page. The fix is to treat technical SEO as monitoring, not a yearly event. Start with a repeatable audit workflow: understand the business and recent releases, get access to Search Console, logs and analytics, crawl with the right settings, review indexing, review each key template, check the logs, then prioritise by impact, effort and confidence. In Search Console, four reports do most of the work. Page indexing tells you why URLs are not indexed. Filter it by sitemap to see which section is struggling. URL Inspection shows the canonical Google picked and the HTML it rendered. Performance shows clicks and impressions by page, query and country. And Crawl stats, hidden under Settings, shows response codes and server response times for Googlebot. Then build a monitoring layer. Make sure the right people get Search Console emails. Schedule weekly crawls of key templates and compare them with the previous run. Watch robots.txt for changes. Alert on spikes of server errors to Googlebot. And add an SEO check to every release that touches templates or routing. Do this and you'll catch most problems in days, while they're still cheap to fix.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Use a consistent workflow: context, access, crawl, indexation, templates, logs, prioritise, ticket, verify.",
+            "Page indexing, URL Inspection, Performance and Crawl stats are the core Search Console reports for technical work.",
+            "Monitor continuously with alerts, scheduled crawls, change detection and release sign-off.",
+            "Interpret Search Console data carefully: sampling, anonymised queries and weighted average position."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which Search Console report shows average server response time for Googlebot and host status?",
+              "options": [
+                "Enhancements",
+                "Crawl stats",
+                "Links",
+                "Performance"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Crawl stats (under Settings) shows request volumes, response codes, response times and host status."
+            },
+            {
+              "question": "Why use a Domain property rather than a URL-prefix property?",
+              "options": [
+                "It removes sampling",
+                "It includes all protocols and subdomains",
+                "It is required for sitemaps",
+                "It unlocks more ranking data"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "A Domain property aggregates http/https and all subdomains, avoiding blind spots."
+            },
+            {
+              "question": "Why might the sum of query-level clicks be lower than page-level clicks?",
+              "options": [
+                "Bots are filtered",
+                "A reporting bug",
+                "Anonymised queries are omitted from query-level data",
+                "Clicks from images are excluded"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Google omits rare, anonymised queries for privacy, so query tables do not sum to totals."
+            }
+          ],
+          "activity": "Set up a weekly monitoring routine for a site: list the Search Console reports, crawl comparisons and alerts you will check, and who owns each."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 25,
+    "timeLimitMinutes": 40,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "tsm-001",
+        "module": "crawl-render-index",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which order correctly describes how a URL reaches search results?",
+        "options": [
+          "Discover → crawl → render → index → serve",
+          "Render → discover → crawl → index",
+          "Index → crawl → render → discover",
+          "Crawl → discover → serve → index"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "URLs are discovered (links, sitemaps), fetched, rendered, evaluated for indexing, then eligible to be served. Debugging follows the same order."
+      },
+      {
+        "id": "tsm-002",
+        "module": "crawl-render-index",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "URL Inspection's rendered HTML for a product page shows an empty product grid, while the page looks fine in your browser. What is the most likely cause?",
+        "options": [
+          "The page has too many internal links",
+          "Resources needed to render (e.g. an API or JS bundle) are blocked or failing for Googlebot",
+          "The page title is too long",
+          "The XML sitemap is missing lastmod"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "If rendering depends on blocked or failing resources, Google sees the empty shell. Titles, lastmod and link counts do not empty the rendered DOM."
+      },
+      {
+        "id": "tsm-003",
+        "module": "crawl-render-index",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "An SPA shows 'Product not found' for deleted products but returns HTTP 200. Which fixes are consistent with Google's guidance? (Choose all that apply.)",
+        "options": [
+          "Add a robots meta noindex via JavaScript on the error view",
+          "Canonicalise the error view to the home page",
+          "Route unknown URLs to a server response with a 404 status",
+          "Add the URLs to the XML sitemap"
+        ],
+        "correct": [
+          0,
+          2
+        ],
+        "explanation": "Google documents both a real 404 and JS-injected noindex for SPA error states. Sitemaps and home-page canonicals do not fix soft 404s."
+      },
+      {
+        "id": "tsm-004",
+        "module": "crawl-render-index",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A site's raw HTML contains `<meta name=\"robots\" content=\"noindex\">`, which JavaScript removes after load for indexable pages. What happens?",
+        "options": [
+          "Google always renders and indexes the page",
+          "Google indexes the raw HTML only",
+          "Bing and Google both ignore the tag",
+          "Google may not render the page and will treat it as noindex"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Google may skip rendering when the initial HTML contains noindex, so the JavaScript removal is never processed."
+      },
+      {
+        "id": "tsm-005",
+        "module": "crawl-render-index",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which navigation link is reliably crawlable?",
+        "options": [
+          "`<div onclick=\"go('/services')\">Services</div>`",
+          "`<a href=\"#\" onclick=\"go()\">Services</a>`",
+          "A URL only reachable via internal site search",
+          "`<a href=\"/services/\">Services</a>`"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Google follows anchors with resolvable href values; click handlers and search-only paths are not reliable discovery routes."
+      },
+      {
+        "id": "tsm-006",
+        "module": "crawl-render-index",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why is hash-based routing (`/#/pricing`) a problem for SEO?",
+        "options": [
+          "Hashes slow down LCP",
+          "Hash routes cannot have titles",
+          "Google generally ignores the fragment, so all views look like one URL",
+          "Hashes are blocked by robots.txt"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Fragments are typically ignored for indexing; use History API paths so each view has its own URL."
+      },
+      {
+        "id": "tsm-007",
+        "module": "crawl-control",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which directive keeps a crawlable HTML page out of Google's index?",
+        "options": [
+          "Disallow in robots.txt",
+          "rel=nofollow on links to it",
+          "priority 0.0 in the sitemap",
+          "meta robots noindex"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "noindex is the indexing directive. Disallow blocks crawling; nofollow and sitemap priority do not remove pages."
+      },
+      {
+        "id": "tsm-008",
+        "module": "crawl-control",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A team disallowed /old-offers/ in robots.txt and added noindex to those pages last month. They are still indexed. What should they do?",
+        "options": [
+          "Wait; it always takes a year",
+          "Remove the Disallow so Google can crawl and see the noindex",
+          "Add crawl-delay",
+          "Add the pages to the sitemap with priority 0"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Blocked pages cannot be crawled, so the noindex is never seen. Allow crawling until they drop out."
+      },
+      {
+        "id": "tsm-009",
+        "module": "crawl-control",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which of these does Googlebot ignore in robots.txt?",
+        "options": [
+          "Allow",
+          "crawl-delay",
+          "Disallow",
+          "Sitemap"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Google does not support crawl-delay (Bing does). Disallow, Allow and Sitemap lines are supported."
+      },
+      {
+        "id": "tsm-010",
+        "module": "crawl-control",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Rules for Googlebot: `Disallow: /shop/` and `Allow: /shop/sale/`. Which URLs can Googlebot crawl? (Choose all that apply.)",
+        "options": [
+          "/blog/shop-guide",
+          "/shop/sale/summer",
+          "/shop/",
+          "/shop/shoes"
+        ],
+        "correct": [
+          0,
+          1
+        ],
+        "explanation": "The longer, more specific Allow wins for /shop/sale/…; /blog/shop-guide does not start with /shop/. /shop/shoes and /shop/ match the Disallow."
+      },
+      {
+        "id": "tsm-011",
+        "module": "crawl-control",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Log analysis shows a large share of Googlebot requests hitting `?sort=` and `?view=` URLs while new products are crawled slowly. Best first action?",
+        "options": [
+          "Stop linking to those parameter URLs internally and disallow the patterns in robots.txt",
+          "Submit each product in URL Inspection",
+          "Increase sitemap priority for products",
+          "Add noindex to sort URLs"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Removing crawl paths and disallowing useless parameters frees crawling for valuable URLs. noindex still requires crawling."
+      },
+      {
+        "id": "tsm-012",
+        "module": "crawl-control",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "You see heavy traffic with a Googlebot user agent from IPs that reverse-resolve to a hosting provider. What is the right interpretation?",
+        "options": [
+          "It indicates a crawl budget increase",
+          "Google is using a new data centre",
+          "It is likely a spoofed bot and should be excluded from Googlebot analysis",
+          "It is Google-Extended"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Genuine Googlebot IPs resolve to Google domains or match Google's published ranges; others are impostors."
+      },
+      {
+        "id": "tsm-013",
+        "module": "urls-status-and-duplication",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which status code is best for content permanently moved to a new URL?",
+        "options": [
+          "302",
+          "301",
+          "503",
+          "307"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "301 (or 308) signals a permanent move and is a strong canonical signal for the target."
+      },
+      {
+        "id": "tsm-014",
+        "module": "urls-status-and-duplication",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "An audit finds `/a → /b → /c → /d` redirect chains on 4,000 URLs. What is the correct remediation? (Choose all that apply.)",
+        "options": [
+          "Point each legacy URL directly to the final destination",
+          "Update internal links to the final URLs",
+          "Leave them because Google follows up to 10 hops",
+          "Convert the chains to 302s"
+        ],
+        "correct": [
+          0,
+          1
+        ],
+        "explanation": "Flatten to one hop and remove internal links to redirects. Google following hops does not make chains free; 302s weaken the signal."
+      },
+      {
+        "id": "tsm-015",
+        "module": "urls-status-and-duplication",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Page A declares rel=canonical to page B, but B returns a 301 to C. What is the issue?",
+        "options": [
+          "It breaks hreflang only",
+          "None; Google follows it",
+          "It creates a soft 404",
+          "The canonical target is not an indexable 200 URL, sending conflicting signals"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Canonical targets should be final, indexable 200 URLs; canonical-to-redirect weakens and confuses the signal."
+      },
+      {
+        "id": "tsm-016",
+        "module": "urls-status-and-duplication",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is the recommended canonical on page 4 of a paginated blog archive?",
+        "options": [
+          "No canonical and noindex",
+          "Page 1",
+          "The home page",
+          "A self-referencing canonical to page 4"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Paginated pages are distinct and should self-canonicalise."
+      },
+      {
+        "id": "tsm-017",
+        "module": "urls-status-and-duplication",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A marketplace wants brand + category facet pages indexed but sort, price and multi-select combinations kept out of crawling. Which plan fits Google's faceted navigation guidance?",
+        "options": [
+          "Use rel=next/prev on facets",
+          "Canonicalise all facets to the category and allow crawling",
+          "noindex every facet including brand pages",
+          "Static clean URLs for demand-backed facets; robots.txt disallow for sort/price/multi-select parameters; 404 for empty combinations"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Index only facets with demand using clean URLs, block low-value parameter spaces from crawling, and return 404 on empty results."
+      },
+      {
+        "id": "tsm-018",
+        "module": "urls-status-and-duplication",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A retailer 301-redirects 8,000 discontinued, unrelated product URLs to the home page. How will Google likely treat these?",
+        "options": [
+          "As strong relevance signals for the home page",
+          "As soft 404s",
+          "As a manual action",
+          "As duplicate canonicals"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Irrelevant mass redirects to the home page are commonly treated as soft 404s; use relevant targets or 404/410."
+      },
+      {
+        "id": "tsm-019",
+        "module": "urls-status-and-duplication",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which statement about duplicate content on your own site is accurate?",
+        "options": [
+          "It only matters for images",
+          "Google indexes all duplicates equally",
+          "It always triggers a penalty",
+          "It mainly splits signals and lets Google choose a canonical you may not want"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Ordinary duplication is not penalised; the cost is signal splitting, crawl waste and unpredictable canonical selection."
+      },
+      {
+        "id": "tsm-020",
+        "module": "architecture-and-sitemaps",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is an orphan page?",
+        "options": [
+          "A page with no outbound links",
+          "A page without a canonical",
+          "A page blocked by robots.txt",
+          "A page that exists but has no internal links pointing to it"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Orphans are not reachable by following internal links, so discovery depends on sitemaps or external links."
+      },
+      {
+        "id": "tsm-021",
+        "module": "architecture-and-sitemaps",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "How many URLs can a single XML sitemap file contain?",
+        "options": [
+          "1,000",
+          "Unlimited",
+          "10,000",
+          "50,000"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Up to 50,000 URLs or 50 MB uncompressed per file; use a sitemap index for more."
+      },
+      {
+        "id": "tsm-022",
+        "module": "architecture-and-sitemaps",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A plugin sets every URL's lastmod to the sitemap generation time daily. Consequence?",
+        "options": [
+          "The sitemap is rejected",
+          "Google crawls everything daily",
+          "Rankings improve through freshness",
+          "Google may learn lastmod is unreliable and ignore it"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Google uses lastmod only when it is consistently accurate; fake freshness teaches it to ignore the field."
+      },
+      {
+        "id": "tsm-023",
+        "module": "architecture-and-sitemaps",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which XML sitemap practices are correct? (Choose all that apply.)",
+        "options": [
+          "Split sitemaps by template to diagnose indexing by section",
+          "Reference the sitemap index in robots.txt",
+          "List only canonical, indexable 200 URLs",
+          "Set priority to 1.0 on money pages to rank them higher"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Clean URLs, segmentation and robots.txt references are best practice. Google ignores priority."
+      },
+      {
+        "id": "tsm-024",
+        "module": "architecture-and-sitemaps",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A high-revenue guide sits at click depth 8 with two internal links from paginated archives. Which intervention is most likely to improve its crawl frequency and internal signals?",
+        "options": [
+          "Increase its word count",
+          "Add nofollow to other blog links",
+          "Add it to the sitemap with changefreq=daily",
+          "Link it from a relevant hub in main navigation and from related service pages with descriptive anchors"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Contextual internal links from prominent, relevant pages reduce depth and pass signals; changefreq is ignored and internal nofollow does not reallocate value."
+      },
+      {
+        "id": "tsm-025",
+        "module": "architecture-and-sitemaps",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why add BreadcrumbList structured data alongside visible breadcrumbs?",
+        "options": [
+          "It guarantees higher rankings",
+          "It is required for indexing",
+          "It replaces internal links",
+          "It helps Google understand hierarchy and can make the page eligible for breadcrumb display in results"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Breadcrumb markup aids understanding and presentation; it is not a ranking guarantee or an indexing requirement."
+      },
+      {
+        "id": "tsm-026",
+        "module": "international-and-structured-data",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does the x-default hreflang value indicate?",
+        "options": [
+          "The most important language version",
+          "The canonical URL",
+          "The fallback page for users whose language/region is not matched",
+          "The desktop version"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "x-default designates the default or selector page for unmatched users."
+      },
+      {
+        "id": "tsm-027",
+        "module": "international-and-structured-data",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "The /ar-sa/ pages canonicalise to /en/ equivalents while hreflang lists both. Result?",
+        "options": [
+          "Google may drop /ar-sa/ from the cluster because the pages declare themselves non-canonical",
+          "Nothing; canonicals are ignored on international sites",
+          "Both rank equally",
+          "hreflang overrides the canonical"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "hreflang should reference canonical URLs; each language version must self-canonicalise."
+      },
+      {
+        "id": "tsm-028",
+        "module": "international-and-structured-data",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which hreflang implementations are valid? (Choose all that apply.)",
+        "options": [
+          "hreflang=\"ur-pk\"",
+          "hreflang=\"gb\"",
+          "hreflang=\"ar-ae\"",
+          "hreflang=\"en-uk\""
+        ],
+        "correct": [
+          0,
+          2
+        ],
+        "explanation": "ar-ae (Arabic, UAE) and ur-pk (Urdu, Pakistan) are valid. en-uk uses an invalid region code (GB is correct) and a region alone is invalid."
+      },
+      {
+        "id": "tsm-029",
+        "module": "international-and-structured-data",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which format does Google recommend for structured data?",
+        "options": [
+          "JSON-LD",
+          "RDFa only",
+          "Microdata only",
+          "Plain text in comments"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Google supports several formats but recommends JSON-LD for ease of implementation and maintenance."
+      },
+      {
+        "id": "tsm-030",
+        "module": "international-and-structured-data",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "After adding valid Product markup, rich results do not appear. What is the most accurate explanation?",
+        "options": [
+          "Valid markup makes a page eligible, but Google decides whether to show rich results",
+          "Google needs a Merchant Center account for any rich result",
+          "The markup must be broken",
+          "Rich results only show after 12 months"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Eligibility is not a guarantee; quality, relevance and other factors influence display."
+      },
+      {
+        "id": "tsm-031",
+        "module": "international-and-structured-data",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which is a structured data policy violation?",
+        "options": [
+          "Using @id to link entities",
+          "Marking up the price visible on the page",
+          "Adding AggregateRating markup for reviews that are not shown on the page",
+          "Including sameAs links to official profiles"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Markup must reflect visible content. Invisible or fabricated reviews are misleading and can cause a manual action."
+      },
+      {
+        "id": "tsm-032",
+        "module": "performance-and-page-experience",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the 'good' threshold for INP?",
+        "options": [
+          "≤ 500 ms",
+          "≤ 2.5 s",
+          "≤ 100 ms",
+          "≤ 200 ms"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "INP is good at 200 ms or less at the 75th percentile."
+      },
+      {
+        "id": "tsm-033",
+        "module": "performance-and-page-experience",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Mobile CLS is poor on article pages. Ads load into slots with no reserved height. Which fix addresses the cause?",
+        "options": [
+          "Increase TTFB",
+          "Minify CSS",
+          "Reserve space for ad slots with min-height or aspect-ratio",
+          "Lazy-load the hero image"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Unreserved ad slots push content down; reserving space prevents layout shifts."
+      },
+      {
+        "id": "tsm-034",
+        "module": "performance-and-page-experience",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "INP field data is poor on a product page. A trace shows a 450 ms task running on click of 'Add to basket' from a third-party personalisation script. Which actions are appropriate? (Choose all that apply.)",
+        "options": [
+          "Break up the long task and yield to the main thread",
+          "Preload the LCP image",
+          "Give immediate visual feedback and defer the non-essential work",
+          "Review whether the third-party script is needed or can load later"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "INP is about main-thread work after interactions. Feedback, yielding and trimming third-party JS address it; LCP preload does not."
+      },
+      {
+        "id": "tsm-035",
+        "module": "performance-and-page-experience",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which statement about mobile-first indexing is correct?",
+        "options": [
+          "Desktop content is used if mobile lacks it",
+          "Tabs and accordions are never indexed",
+          "Only AMP pages are indexed",
+          "Content removed from the mobile HTML is effectively invisible to Google"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Google indexes the mobile version. Content in collapsed UI in the HTML is fine; content absent from mobile HTML is lost."
+      },
+      {
+        "id": "tsm-036",
+        "module": "performance-and-page-experience",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which data source reflects real-user Core Web Vitals?",
+        "options": [
+          "A single DevTools trace",
+          "robots.txt report",
+          "Chrome UX Report (CrUX) field data",
+          "Lighthouse lab score"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "CrUX field data, surfaced in PageSpeed Insights and Search Console, reflects real users."
+      },
+      {
+        "id": "tsm-037",
+        "module": "performance-and-page-experience",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Before enabling HSTS with includeSubDomains, what must you confirm?",
+        "options": [
+          "That the site has hreflang",
+          "That the sitemap is gzipped",
+          "That CSP is disabled",
+          "That every subdomain serves valid HTTPS"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "includeSubDomains forces HTTPS on all subdomains; any HTTP-only subdomain becomes unreachable for returning browsers."
+      },
+      {
+        "id": "tsm-038",
+        "module": "migrations-auditing-monitoring",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What should happen first when planning a site migration?",
+        "options": [
+          "Benchmark crawl, Search Console, analytics, rankings and backlinks",
+          "Change the domain in Search Console",
+          "Delete the old sitemap",
+          "Remove old redirects"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Benchmarks let you verify parity and diagnose any post-launch drop."
+      },
+      {
+        "id": "tsm-039",
+        "module": "migrations-auditing-monitoring",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "After launch, traffic collapses. The new site's robots.txt contains `Disallow: /` copied from staging. Which steps are right? (Choose all that apply.)",
+        "options": [
+          "Fix robots.txt immediately",
+          "Wait a month before changing anything",
+          "Check the robots.txt report in Search Console to confirm Google refetched the new file",
+          "Add rollback and robots.txt checks to the release checklist"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Fix fast, confirm Google has the new file, and prevent recurrence. Waiting prolongs the damage."
+      },
+      {
+        "id": "tsm-040",
+        "module": "migrations-auditing-monitoring",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which is the correct redirect mapping principle for a replatform?",
+        "options": [
+          "Each old URL to its most relevant new equivalent in one hop; intentional 404/410 where none exists",
+          "302 redirects until rankings stabilise",
+          "Only redirect URLs that are in the old sitemap",
+          "All old URLs to the home page"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Relevant one-hop 301s preserve signals; honest 404/410 for no-equivalent pages avoids soft 404s."
+      },
+      {
+        "id": "tsm-041",
+        "module": "migrations-auditing-monitoring",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A migration went live six weeks ago. Old URLs 301 correctly, but many new URLs show 'Discovered – currently not indexed' and logs show few Googlebot hits to them. What is the most useful next step?",
+        "options": [
+          "Disavow old backlinks",
+          "Change all 301s to 302s",
+          "Remove the redirects",
+          "Check crawl capacity (server response time, 5xx) and internal linking/sitemaps to new URLs, and review Crawl stats"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Discovered-not-crawled suggests capacity or demand issues; investigate server health, crawl stats and discovery paths."
+      },
+      {
+        "id": "tsm-042",
+        "module": "migrations-auditing-monitoring",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which Search Console report shows the Google-selected canonical for a single URL?",
+        "options": [
+          "URL Inspection",
+          "Performance",
+          "Links",
+          "Sitemaps"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "URL Inspection shows user-declared and Google-selected canonicals."
+      },
+      {
+        "id": "tsm-043",
+        "module": "migrations-auditing-monitoring",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why can the query table in Search Console show fewer clicks than the page table for the same period?",
+        "options": [
+          "Google double counts pages",
+          "Only desktop is shown by query",
+          "Clicks from anonymised queries are omitted from query-level data",
+          "Bots are included in page data"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Rare queries are anonymised and omitted from query rows, so totals differ."
+      }
+    ]
+  }
+}

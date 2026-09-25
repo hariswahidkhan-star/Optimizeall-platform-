@@ -1,0 +1,1384 @@
+{
+  "slug": "local-seo-and-google-business-profile",
+  "version": 1,
+  "title": "Local SEO & Google Business Profile",
+  "subtitle": "Get found by nearby customers: profile optimisation, reviews, citations, local pages and tracking",
+  "category": "seo",
+  "level": "beginner",
+  "estimatedMinutes": 230,
+  "description": "When people search for \"dentist near me\", \"AC repair Dubai\" or \"best karahi in Lahore\", the businesses that appear in the map pack win calls, visits and bookings. This practical course shows business owners, marketers and agency staff how local search really works — and how to compete within Google's rules.\n\nYou will learn Google's documented local ranking factors (relevance, distance and prominence), set up and verify a Google Business Profile correctly, and optimise categories, services, attributes, hours, photos and posts. We cover a policy-compliant review system and professional responses, citations and NAP consistency, local landing pages that are genuinely useful rather than doorways, local link building, and the extra complexity of multi-location and service-area businesses.\n\nFinally, you will measure local visibility with grid-based rank tracking and business metrics, and run a complete local SEO audit with a 90-day plan. Examples come from the UK, US, UAE, KSA and Pakistan.",
+  "outcomes": [
+    "Explain how relevance, distance and prominence shape local results",
+    "Set up, verify and govern a Google Business Profile within Google's guidelines",
+    "Optimise categories, services, attributes, hours, photos and posts",
+    "Run a policy-compliant review programme and respond to reviews professionally",
+    "Build consistent citations and local pages that avoid doorway abuse",
+    "Manage multi-location and service-area businesses and earn local links",
+    "Track local visibility with grid tracking and run a full local SEO audit"
+  ],
+  "skills": [
+    "Local SEO",
+    "Google Business Profile",
+    "Review management",
+    "Citation building",
+    "Local link building",
+    "Local rank tracking"
+  ],
+  "prerequisites": [],
+  "badge": {
+    "name": "Certified Local SEO Specialist",
+    "description": "The holder can set up and optimise Google Business Profiles within Google's guidelines, run compliant review programmes, build consistent citations and useful local pages, manage multi-location and service-area businesses, earn local links, and measure local visibility with grid tracking and business metrics.",
+    "criteria": "Completed all lessons and scored ≥ 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "local-search-fundamentals",
+      "title": "How local search works and getting set up",
+      "summary": "Understand how Google ranks local results, and set up and verify a Google Business Profile correctly from day one.",
+      "lessons": [
+        {
+          "slug": "how-local-search-works",
+          "title": "How local search works",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### What \"local search\" means\n\nLocal search covers any query where the searcher wants something nearby or in a specific place: \"dentist near me\", \"best biryani in Karachi\", \"AC repair Dubai Marina\", \"plumber Manchester\". Google shows several local features:\n\n- **The local pack (map pack)**: a map with a small set of business listings, usually near the top of results.\n- **The local finder**: the expanded list you see after clicking \"More places\".\n- **Google Maps results**: searches made directly in Maps.\n- **Organic results** with local intent: city service pages, directories, review sites.\n- **AI features** in Search and Maps that may summarise places and reviews. These are evolving quickly; the fundamentals in this course still underpin them.\n\nMost local businesses need visibility in **both** the map results (driven largely by Google Business Profile) and organic results (driven by the website).\n\n### The three local ranking factors Google documents\n\nGoogle's own help documentation says local results are based mainly on:\n\n1. **Relevance** — how well a Business Profile matches what someone is searching for. Influenced by categories, business description, services, products, reviews content and your website.\n2. **Distance** — how far each potential result is from the location used in the search (the searcher's location or a location named in the query).\n3. **Prominence** — how well known the business is. Google mentions information from across the web (links, articles, directories), review count and ratings, and your position in web results.\n\nGoogle also states that you **cannot pay** to improve your Business Profile's local ranking, and that there is no way to request or pay for a better position.\n\n### What you can and cannot control\n\n| Factor | Control | Levers |\n|---|---|---|\n| Relevance | High | Correct categories, complete profile, services, clear website content |\n| Distance | Very low | Your real address; you cannot fake proximity (virtual offices violate guidelines) |\n| Prominence | Medium, over time | Reviews, local links and coverage, citations, organic strength |\n\nUnderstanding distance is liberating: a business will naturally rank better near its location and worse far away. That is not a failure of your SEO — it's how local search works. For wider coverage, you use organic pages and, where legitimate, additional real locations.\n\n### Organic local results matter too\n\nMany valuable queries show organic results beneath or instead of the pack — especially research-heavy services (\"cost of invisalign London\", \"how to choose a wedding photographer in Lahore\"). Your website's service pages, location pages, content and links influence these. Google also lists \"your position in web results\" as part of prominence, so organic and local SEO reinforce each other.\n\n### How people search locally\n\n- **Explicit location**: \"tailor in Gulberg Lahore\".\n- **Implicit location**: \"tailor\" — Google infers local intent and uses the device's location.\n- **\"Near me\"**: Google uses the device's location; you do not need to stuff \"near me\" into your content.\n- **Branded**: \"[business name] opening hours\" — your profile must be accurate.\n- **Discovery in Maps**: people browsing categories on the map.\n\n### Worked example\n\nA family-owned bakery in Jumeirah, Dubai, wonders why it ranks in the pack for \"bakery\" when searched near its shop but not from Dubai Marina. That is distance. To reach more customers across the city, it:\n\n1. Perfects its Business Profile for relevance (primary category \"Bakery\", secondary \"Cake shop\"; products for custom cakes).\n2. Builds prominence with steady reviews, local press about its Emirati date cakes, and listings in reputable local directories.\n3. Creates website content for delivery across Dubai and a custom cake ordering page that can rank organically citywide.\n\n### Common myths\n\n- \"Keyword stuffing the business name is a ranking hack.\" It violates Google's guidelines and can lead to suspension.\n- \"Paying for Google Ads improves map rankings.\" Google says it does not.\n- \"A virtual office will make us rank in a new city.\" Addresses must be where you actually serve customers in person or are staffed; virtual offices typically violate guidelines.\n- \"Posting daily guarantees top rankings.\" Activity helps engagement, not guaranteed positions.\n\n### Common mistakes\n\n- Measuring local rankings only from the office computer (which is right next to the business).\n- Ignoring organic local results.\n- Treating the Business Profile as \"set and forget\".\n",
+          "video": null,
+          "keyTakeaways": [
+            "Local results appear in the map pack, local finder, Maps, organic results and evolving AI features.",
+            "Google documents three main factors: relevance, distance and prominence; you cannot pay for local ranking.",
+            "Distance is largely outside your control; relevance and prominence are where you work.",
+            "Organic local pages and Business Profile optimisation reinforce each other."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which is NOT one of the local ranking factors Google documents?",
+              "options": [
+                "Ad spend",
+                "Prominence",
+                "Distance",
+                "Relevance"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Google says you cannot pay to improve local ranking."
+            },
+            {
+              "question": "A clinic ranks well for 'dentist' near its address but not across the city. Why?",
+              "options": [
+                "Its website is not HTTPS",
+                "Distance from the searcher is a core local factor",
+                "It has been penalised",
+                "It lacks meta keywords"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Proximity naturally limits map visibility further from the location."
+            }
+          ],
+          "activity": "Search three core service queries from different locations (or with a location-simulation tool) and note how the local pack changes with distance."
+        },
+        {
+          "slug": "setting-up-and-verifying-gbp",
+          "title": "Setting up and verifying your Google Business Profile",
+          "type": "video",
+          "durationMinutes": 13,
+          "body": "### Who is eligible\n\nA Google Business Profile (GBP) is for businesses that make **in-person contact with customers** during stated hours:\n\n- **Storefront businesses** — customers visit you (shops, restaurants, clinics, salons).\n- **Service-area businesses (SABs)** — you visit customers (plumbers, cleaners, mobile car wash, home tutors).\n- **Hybrid** — both (a café that caters; a repair shop that also does call-outs).\n\nOnline-only businesses without in-person contact are generally not eligible. Rented or virtual offices, mailboxes and co-working addresses where you are not staffed during business hours typically violate guidelines.\n\n### The guidelines that matter most at setup\n\nGoogle's guidelines for representing your business are strict. The big ones:\n\n**Business name** — use your real-world name as it appears consistently on your signage, stationery and branding. Do **not** add keywords, locations or taglines.\n\n```text\nCorrect:   Al Noor Dental Clinic\nViolation: Al Noor Dental Clinic - Best Dentist Dubai | Teeth Whitening | Braces\n```\n\n**Address** — a precise, real address. SABs should **hide** their address and list service areas instead. One profile per location.\n\n**Phone** — a local number that reaches the business directly where possible (call-tracking numbers are acceptable if configured properly, with the main number as an additional phone).\n\n**Website** — link to the most relevant page; for multi-location businesses, the specific location page.\n\n**Hours** — accurate regular hours; special hours for holidays (Eid, Ramadan timings, Christmas, bank holidays).\n\n### Step-by-step setup\n\n1. **Search Google Maps first** for your business name and address. A profile may already exist (created by Google or a customer). If so, claim it instead of creating a duplicate; if someone else owns it, use Google's request-access process.\n2. **Create or claim** at the Business Profile manager with a business Google account that the organisation controls (not a freelancer's personal account).\n3. **Choose the primary category** (Module 2 covers this in depth).\n4. **Enter location or service areas**.\n5. **Add contact details**: phone, website.\n6. **Verify**. Google chooses which methods are available; they can include **video recording** (showing signage, the location, tools of the trade, proof of management such as keys or business documents), phone or SMS, email, or postcard. Some businesses need to complete more than one step.\n7. **Complete the profile**: description, services, products, attributes, photos, hours.\n\n### Verification tips\n\n- Prepare for video verification: a continuous recording showing the street or area, the exterior signage, then inside, plus proof you manage the business (unlocking the door, point-of-sale, business licence). For SABs, show branded vehicles and equipment.\n- Make sure the details you submit **match** your real signage and documents. Mismatches trigger rejections.\n- Don't make many edits to core details while verification is pending.\n- If verification fails repeatedly, use the support routes Google provides rather than creating new profiles.\n\n### Ownership and access management\n\n- **Primary owner**: a business-controlled account (e.g. a shared marketing Google account with multi-factor authentication).\n- **Owners and managers**: add agency staff as managers, not primary owners. Remove access when people leave.\n- Agencies should never hold the primary ownership of a client's profile. It creates disputes and risk.\n\n### Features that have changed\n\nGoogle periodically retires GBP features: for example, **chat/messaging** was discontinued in 2024, and **websites built with Business Profile** were shut down the same year. Question-and-answer functionality has also been changing. Always check current documentation rather than old tutorials.\n\n### Suspensions\n\nProfiles can be suspended for guideline violations (keyword-stuffed names, ineligible addresses, suspicious edits) or sometimes in error. If suspended:\n\n1. Read the notice and review guidelines honestly.\n2. Fix any violation (e.g. remove keywords from the name).\n3. Submit an appeal with evidence: business licence, utility bill, signage photos, website showing the same details.\n\n### Common mistakes\n\n- Creating a new profile when one already exists (duplicates).\n- Agencies owning client profiles.\n- Adding city names to the business name \"for SEO\".\n- Using a co-working or virtual office address.\n",
+          "video": {
+            "script": "Setting up a Google Business Profile properly is the single most valuable hour a local business can spend. Here's how to do it right. First, check eligibility. Business Profiles are for businesses that meet customers in person. Either customers visit you, or you visit them, or both. Virtual offices and mailboxes don't qualify. Second, search Google Maps for your business before creating anything. A profile might already exist. Claim it rather than creating a duplicate. Third, use your real-world business name, exactly as it appears on your signage and documents. No extra keywords, no city names, no taglines. Keyword-stuffed names are one of the most common reasons profiles get suspended. If you visit customers, like a plumber or a home tutor, set up as a service-area business. Hide your address and list the areas you serve. Then verify. Google decides which methods you're offered, and video verification is common. Record one continuous clip showing your street, your signage, the inside of your business, and proof you manage it, like unlocking the door or your business licence. Make sure everything matches what you entered. Finally, ownership. The business should own its profile, using an account the business controls. Agencies and freelancers should be added as managers, never as the primary owner. Get these foundations right, and everything else in this course builds on solid ground.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "GBP is for businesses with in-person customer contact: storefronts, service-area businesses or hybrids.",
+            "Use your real-world business name with no added keywords; SABs hide their address and set service areas.",
+            "Verification methods vary (video, phone/SMS, email, postcard); submitted details must match reality.",
+            "The business must own its profile; agencies should be managers."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which business name follows Google's guidelines?",
+              "options": [
+                "'Rizwan Plumbing Services' (matching signage and documents)",
+                "'Karachi Plumbers - Best 24/7 Plumbing'",
+                "'Plumber Near Me Karachi'",
+                "'Cheap Plumber DHA'"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Names must match the real-world name without added keywords or locations."
+            },
+            {
+              "question": "A mobile car wash with no customer-facing premises should…",
+              "options": [
+                "Show its home address",
+                "Not create a profile",
+                "Use a virtual office",
+                "Set up as a service-area business, hide the address and list service areas"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "SABs hide their address and define where they serve."
+            },
+            {
+              "question": "Who should be the primary owner of a client's Business Profile?",
+              "options": [
+                "Whoever created it first",
+                "The agency's account manager",
+                "A freelancer's personal Gmail",
+                "A business-controlled account; agencies are added as managers"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Businesses must retain ownership to avoid disputes and lockouts."
+            }
+          ],
+          "activity": "Audit an existing Business Profile's name, address, phone, website, hours and ownership against the guidelines and list fixes."
+        }
+      ]
+    },
+    {
+      "slug": "gbp-optimisation",
+      "title": "Optimising your Google Business Profile",
+      "summary": "Choose categories strategically, complete services and attributes, and manage photos, posts, products and hours as ongoing work.",
+      "lessons": [
+        {
+          "slug": "categories-services-attributes",
+          "title": "Categories, services and attributes",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### The primary category is your most important relevance choice\n\nYour **primary category** tells Google what your business fundamentally is. It strongly influences which searches you appear for and which features your profile gets (booking buttons, menus, services lists). Google allows one primary category and additional secondary categories (up to nine additional at the time of writing).\n\n### Choosing categories: a step-by-step method\n\n1. **List your core services** and how customers search for them.\n2. **Find the matching categories** in GBP's category list. Categories are fixed — you must choose from Google's list, which differs by language and country.\n3. **Research competitors**: check the primary and secondary categories of businesses ranking in the pack for your main queries. (Browser extensions and local SEO tools can reveal categories; you can also see the primary category on the listing.)\n4. **Pick the primary category** that matches your main revenue service *and* the query you most want. For a clinic that mainly does orthodontics, \"Orthodontist\" may be better than \"Dentist\" — or vice versa, depending on demand and what the clinic mainly is.\n5. **Add secondary categories** only for services you genuinely provide as a meaningful part of the business. Irrelevant categories dilute relevance and can be removed by Google.\n6. **Test and measure**: category changes can shift visibility. Change one thing at a time and track rankings and actions over several weeks.\n\nExample:\n\n| Business | Primary | Secondary |\n|---|---|---|\n| Lahore restaurant specialising in Karahi, also does catering | Pakistani restaurant | Caterer, Barbecue restaurant, Takeout restaurant |\n| Dubai AC repair company visiting homes | Air conditioning repair service | Air conditioning contractor, HVAC contractor |\n| London accountancy firm for small businesses | Accountant | Tax preparation service, Bookkeeping service |\n\n### Business description\n\n750 characters to explain what you do, who you serve and what makes you different. Write for people: natural language, key services, areas served, years in business, specialisms. Do not include URLs, promotional claims (\"best\", \"cheapest\"), or keyword lists. Google says the description is used for relevance only indirectly; its main job is to help customers choose.\n\n### Services\n\nAdd **services** for each category (Google suggests some; you can add custom ones). Include a short description and, where sensible, price or \"from\" price. Services help relevance and customer understanding.\n\n```text\nService: Emergency boiler repair\nDescription: Same-day call-outs across South Manchester for gas and combi boilers.\nGas Safe registered engineers. Call-out fee from £65 (illustrative).\n```\n\n### Products\n\nProducts are useful not just for retailers: service businesses can list packages (\"Wedding photography package — full day\"). Include a photo, name, description, category, price (optional) and a link to the relevant page.\n\n### Attributes\n\nAttributes describe features: accessibility (wheelchair-accessible entrance), amenities (Wi-Fi, parking), service options (delivery, dine-in, online appointments), payments, and identity-based attributes where available (e.g. women-owned — self-declared and region-dependent). Complete all that accurately apply; they help customers filter and appear in profile details.\n\n### Opening hours and special hours\n\n- Accurate regular hours are important — Google may show \"Closed\" at the time of search, which affects visibility and clicks for \"open now\" queries.\n- Set **special hours** for public holidays, Ramadan schedules, Eid, Christmas, New Year.\n- Use **more hours** for specific services (delivery hours, drive-through, senior hours) where available.\n\n### Keep the profile in sync with the website\n\nRelevance is reinforced when your website says the same things: a page for each main service, the same business name, address and phone, and schema markup (`LocalBusiness` subtype) matching the profile.\n\n```json\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Dentist\",\n  \"name\": \"Al Noor Dental Clinic\",\n  \"address\": {\"@type\": \"PostalAddress\", \"streetAddress\": \"Office 204, Example Tower, Al Wasl Road\",\n              \"addressLocality\": \"Dubai\", \"addressCountry\": \"AE\"},\n  \"telephone\": \"+971-4-000-0000\",\n  \"url\": \"https://www.alnoordental.example/\",\n  \"openingHoursSpecification\": [{\"@type\": \"OpeningHoursSpecification\",\n    \"dayOfWeek\": [\"Monday\",\"Tuesday\",\"Wednesday\",\"Thursday\",\"Saturday\",\"Sunday\"],\n    \"opens\": \"09:00\", \"closes\": \"21:00\"}]\n}\n```\n\n### Common mistakes\n\n- Choosing a broad primary category (\"Store\") when a specific one exists.\n- Adding many loosely related secondary categories.\n- Keyword-stuffed descriptions.\n- Forgetting holiday hours, leading to angry reviews from customers who find the shop closed.\n",
+          "video": null,
+          "keyTakeaways": [
+            "The primary category is the most important relevance choice; pick from Google's list based on core revenue and demand.",
+            "Add secondary categories only for genuine, meaningful services; test changes one at a time.",
+            "Complete services, products and attributes accurately; write a helpful, non-promotional description.",
+            "Keep regular and special hours accurate and the website consistent with the profile."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "How should you choose the primary category?",
+              "options": [
+                "The category with the most businesses",
+                "The broadest one available",
+                "Whatever is alphabetically first",
+                "The one matching your main business and priority searches, informed by competitors in the pack"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Specific, accurate primary categories drive relevance."
+            },
+            {
+              "question": "A salon adds 'Hospital' and 'Software company' as secondary categories. The effect?",
+              "options": [
+                "A higher rating",
+                "More visibility everywhere",
+                "Diluted relevance and possible removal; it misrepresents the business",
+                "Nothing"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Categories must reflect genuine services."
+            },
+            {
+              "question": "Why set special hours for Eid or bank holidays?",
+              "options": [
+                "It removes competitors",
+                "It is required for verification",
+                "It boosts reviews automatically",
+                "Accurate hours prevent disappointed customers and show correct open/closed status"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Wrong hours hurt trust, clicks and reviews."
+            }
+          ],
+          "activity": "Research the categories used by the top three map-pack competitors for your main query and propose your primary and secondary categories with reasons."
+        },
+        {
+          "slug": "photos-posts-products-ongoing-management",
+          "title": "Photos, posts and ongoing profile management",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### A Business Profile is a living asset\n\nProfiles that are complete, accurate and active tend to convert more searchers into customers. Google also notes that complete and accurate information helps match profiles to searches. This lesson turns profile maintenance into a simple routine.\n\n### Photos and videos\n\nPhotos help people choose. Upload real, high-quality images:\n\n| Type | What to show |\n|---|---|\n| Logo and cover | Brand recognition; cover photo representing the business |\n| Exterior | How to recognise the entrance from the street, at different times of day |\n| Interior | Atmosphere, cleanliness, seating, waiting area |\n| Products/work | Dishes, finished projects, before/after (where appropriate and permitted) |\n| Team | Real staff at work (with consent) |\n| Short videos | Walk-through, process, a quick introduction |\n\nTips: use natural light, avoid heavy filters and stock photos, keep images current, and add new photos regularly (for example monthly). Customer photos appear too; report inappropriate ones.\n\n### Posts (updates, offers, events)\n\nGBP posts let you share news, offers and events directly on the profile. They are useful for conversions and freshness of information; treat any ranking effect as unproven.\n\n- **Updates**: new services, seasonal messages, tips.\n- **Offers**: with dates and terms; comply with advertising standards and consumer law.\n- **Events**: workshops, launches, open days.\n\nGood post structure: an image, a short clear message, a call to action button, and a UTM-tagged link so you can track clicks in analytics.\n\n```text\nRamadan hours & iftar platters\nFrom 1 March we're open 11:00–02:00. Pre-order family iftar platters (serves 6)\nby 3pm for same-day pickup. [Order online]\nLink: https://www.example.com/iftar?utm_source=google&utm_medium=organic&utm_campaign=gbp-post\n```\n\n### Tracking GBP traffic properly\n\nAdd UTM parameters to the **website link** on your profile so GBP visits are distinguishable from other organic traffic:\n\n```text\nhttps://www.example.com/?utm_source=google&utm_medium=organic&utm_campaign=gbp-listing\n```\n\nFor multi-location businesses, point each profile to its location page with its own UTM campaign or content value. (Keep the canonical tag on the landing page pointing to the clean URL.)\n\n### Performance insights\n\nThe Business Profile **Performance** view shows interactions such as calls, messages where available, bookings, direction requests and website clicks, plus how people found you (searches used, Search vs Maps, mobile vs desktop). Use it for trends, recognising that it is aggregated and sometimes thresholded. Combine it with:\n\n- Call tracking (configured correctly) for phone-heavy businesses.\n- Analytics (UTM-tagged visits and conversions).\n- Point-of-sale or CRM data asking \"how did you hear about us?\".\n\n### Handling edits by Google and the public\n\nAnyone can **suggest edits** to a profile, and Google can update information from other sources. Check the profile regularly for changes to hours, categories, address or website that you did not make. The dashboard notifies you of some updates; review and reject incorrect changes promptly.\n\n### Monthly profile routine\n\n```text\nWeek 1: Check core info (name, address, phone, website, hours, categories) for unwanted edits\n        Upload 3–5 new photos\nWeek 2: Publish a post (update or offer) with UTM link\n        Review services/products for accuracy and pricing\nWeek 3: Respond to all new reviews (see Module 3)\n        Check photos added by customers\nWeek 4: Review Performance insights and analytics; note changes in searches and actions\n        Plan next month's posts around calendar moments\n```\n\n### Messaging and bookings\n\nBooking buttons can be enabled through supported scheduling partners in some categories and countries. Direct GBP chat was discontinued in 2024, so make sure your phone number and website contact routes work well, and consider WhatsApp links on your website where customers in the Gulf and Pakistan prefer them.\n\n### Spam and competitor violations\n\nIf competitors use keyword-stuffed names, fake addresses or fake reviews, you can suggest edits or report them via Google's redressal process with evidence. Do this factually; it can level the playing field, but focus most effort on your own profile.\n\n### Common mistakes\n\n- Using stock photos or overly edited images.\n- Posting without tracking, so nobody knows what works.\n- Ignoring public edits until hours or phone numbers are wrong.\n- Relying only on GBP insights without connecting to real business outcomes.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Upload real, current photos and videos regularly; they help customers choose.",
+            "Use posts for updates, offers and events with UTM-tagged links; any ranking effect is unproven.",
+            "UTM-tag the profile's website link and combine GBP insights with analytics, call tracking and CRM data.",
+            "Check for public and Google edits regularly and follow a monthly maintenance routine."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why add UTM parameters to the website link on a Business Profile?",
+              "options": [
+                "To separate GBP visits from other organic traffic in analytics",
+                "To verify the profile",
+                "To rank higher",
+                "To hide the URL"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "UTMs make GBP-driven sessions measurable."
+            },
+            {
+              "question": "Your profile's hours changed without your action. What happened most likely?",
+              "options": [
+                "A penalty",
+                "Verification expired",
+                "A user-suggested or Google-sourced edit was applied; review and correct it",
+                "Your website crashed"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Public and Google edits can change details; check regularly."
+            }
+          ],
+          "activity": "Create a three-month GBP content calendar with posts tied to local calendar moments, each with a UTM-tagged link and photo idea."
+        }
+      ]
+    },
+    {
+      "slug": "reviews-strategy",
+      "title": "Reviews strategy for local businesses",
+      "summary": "Generate a steady flow of genuine reviews within Google's policies, respond well, and deal with fake or abusive reviews.",
+      "lessons": [
+        {
+          "slug": "earning-reviews-compliantly",
+          "title": "Earning reviews the policy-compliant way",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Why reviews matter locally\n\nGoogle lists review count and rating as part of **prominence**, and reviews are often the deciding factor for customers choosing between businesses in the pack. Review content can also reinforce relevance — customers naturally mention services (\"my root canal was painless\") and locations.\n\n### The rules: Google's review policies\n\nGoogle's prohibited and restricted content policies for reviews include:\n\n- **Fake engagement**: reviews that do not reflect a genuine experience, reviews written by the business or its staff, reviews bought from third parties.\n- **Incentives**: you must not offer or accept money, products, discounts or other benefits in exchange for reviews, or to change or remove reviews.\n- **Selective solicitation (review gating)**: you should not discourage negative reviews or selectively ask only satisfied customers for reviews.\n- **Conflicts of interest**: owners reviewing their own business, employees reviewing their employer, reviewing competitors.\n\nGoogle actively removes policy-violating reviews and may apply restrictions to profiles that engage in fake review activity, including warning notices shown to users. Consumer protection laws also apply — for example the US FTC rule on reviews and testimonials and the UK's DMCC Act 2024 ban on fake reviews.\n\n### Building a review system (not a one-off campaign)\n\nA sudden burst of reviews followed by silence looks unnatural and does not reflect ongoing service. Aim for a **steady flow**.\n\n**1. Get your review link**\nIn the Business Profile, use \"Ask for reviews\" to get a short link or QR code that opens the review form directly.\n\n**2. Identify the moments of delight**\nThe best time to ask is right after a positive moment:\n\n| Business | Moment |\n|---|---|\n| Restaurant | When the bill is paid or the customer compliments the food |\n| Clinic | After the follow-up confirming the treatment went well |\n| Tradesperson | When the job is finished and checked with the customer |\n| E-commerce with showroom | After delivery confirmation |\n| Agency | After a successful project milestone |\n\n**3. Ask everyone**\nAsk all customers, not just the happy ones (no gating). Most customers who had a good experience will be glad to help; those with issues give you a chance to learn.\n\n**4. Make it effortless**\n- Short SMS, WhatsApp or email with the direct link.\n- QR code on receipts, table cards, invoices, delivery packaging.\n- Staff trained to ask verbally in a natural way.\n\n**5. Use neutral language**\n\n```text\nThanks for visiting Noor Opticians today, Hamza. If you have a minute, we'd appreciate\nyour honest review — it helps us improve and helps others choose: [short link]\n```\n\nAvoid: \"Please give us 5 stars\", \"Leave a review for 10% off your next visit\".\n\n**6. Follow up once**\nA single reminder a few days later is reasonable. Do not pester.\n\n### Multi-language reviews\n\nIn the UAE, KSA and Pakistan, customers may review in Arabic, Urdu or English. All are fine. Respond in the language of the review where you can.\n\n### Reviews on other platforms\n\nDepending on industry and market, customers also check other platforms: Tripadvisor (hospitality), Trustpilot, Facebook, industry-specific sites (healthcare directories, wedding directories), and app stores. Balance your requests across platforms that matter to your customers, following each platform's own rules.\n\n### Staff incentives: be careful\n\nRewarding staff for the **number** of reviews collected can push them into pressuring customers or gating. If you use staff incentives, tie them to service quality and following the process, not to star ratings, and check they don't breach platform policies.\n\n### Measuring review performance\n\n- New reviews per month (velocity) and trend.\n- Average rating trend.\n- Response rate and response time.\n- Themes in review content (what customers praise or complain about).\n- Share of customers asked vs reviews received.\n\n### Illustrative example\n\nA physiotherapy clinic in Birmingham adds a review request to its discharge process: the physio mentions it at the last session, and reception sends an SMS with the review link the same day. Over the following months the clinic receives a steady stream of reviews rather than occasional bursts, and review text frequently mentions specific treatments. (Illustrative scenario.)\n\n### Common mistakes\n\n- Offering discounts or prize draws for reviews.\n- Only sending review links to customers who rated you highly in an internal survey.\n- Posting reviews \"on behalf of\" customers.\n- Asking everyone on one day, then never again.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Reviews contribute to prominence and help customers choose; review text can reinforce relevance.",
+            "Google prohibits fake, incentivised, gated and conflict-of-interest reviews; consumer law also applies.",
+            "Build a steady system: direct review link, moments of delight, ask everyone, neutral language, one follow-up.",
+            "Track velocity, rating trend, response rate and themes."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which review request complies with Google's policies?",
+              "options": [
+                "Asking staff to post reviews",
+                "'We'd appreciate your honest review: [link]' sent to all customers",
+                "Sending the link only to customers who rated 9–10 internally",
+                "'Leave us 5 stars and get a free dessert'"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Neutral requests to all customers comply; incentives, gating and staff reviews do not."
+            },
+            {
+              "question": "What is 'review gating'?",
+              "options": [
+                "Blocking bots from reviews",
+                "Responding to reviews quickly",
+                "Selectively asking only satisfied customers to leave public reviews",
+                "Using a QR code"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Google's policy prohibits selective solicitation."
+            }
+          ],
+          "activity": "Map the moments of delight in a local business's customer journey and write the review request message and process for each."
+        },
+        {
+          "slug": "responding-to-reviews-and-fake-reviews",
+          "title": "Responding to reviews and dealing with fake ones",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Why responses matter\n\nResponding to reviews shows prospective customers that you care, turns some unhappy customers around, and demonstrates professionalism. Google encourages businesses to respond to reviews. Responses are public — write for the next hundred readers, not only the reviewer.\n\n### Response principles\n\n1. **Respond to every review**, positive and negative, within a few days (faster for negatives).\n2. **Be human and specific**. Mention what they mentioned.\n3. **Never reveal private information** (medical details, order contents, addresses). This is especially important in healthcare, legal and financial services — confidentiality rules may apply.\n4. **Stay calm**. Never argue publicly.\n5. **Take resolution offline** with a direct contact route.\n6. **Keep it natural** — do not stuff keywords into responses.\n\n### Templates to adapt (not copy verbatim)\n\n**Positive review**\n\n```text\nThank you, Maria! We're so glad the team could fit your boiler repair in the same day,\nand that Tom explained everything clearly. We'll pass on your kind words. — Jake, Owner\n```\n\n**Mixed review**\n\n```text\nThanks for the feedback, Adeel. Glad you enjoyed the karahi — and you're right, the wait\non Friday evening was too long. We've added another server for weekend peaks. We hope to\nwelcome you back soon. — Sana, Manager\n```\n\n**Negative review**\n\n```text\nHi Khalid, I'm sorry your installation wasn't completed on the agreed day — that's not the\nstandard we set. I'd like to understand what happened and make it right. Please call me\ndirectly on 04 000 0000 or email ops@example.com. — Rashid, Operations Manager\n```\n\n**Healthcare (privacy-safe)**\n\n```text\nThank you for your feedback. We take all concerns seriously, but to protect patient\nprivacy we can't discuss details here. Please contact our practice manager on\n020 0000 0000 so we can look into this personally.\n```\n\n### Turning negatives into improvements\n\nLog negative themes monthly (waiting times, pricing clarity, communication). Fixing root causes improves future reviews more than any response template. When you have genuinely resolved an issue, it's fine to follow up privately and — without pressure or incentives — let the customer know they're welcome to update their review if they wish. Never make any offer conditional on changing or removing a review.\n\n### Identifying fake or policy-violating reviews\n\nWarning signs:\n\n- Reviewer never visited (no record of the name, date or service).\n- Profile has reviewed many businesses in distant cities on the same day.\n- Content is off-topic, hateful, contains personal attacks or conflicts of interest (e.g. a former employee or a competitor).\n- A sudden wave of 1-star reviews with similar wording (review bombing).\n\n### Removing policy-violating reviews\n\n1. **Flag/report the review** through the Business Profile (or Maps), choosing the most accurate policy reason.\n2. If it remains, use Google's **review management tool** to check the status of reports and, where available, **appeal** decisions.\n3. For extortion attempts (someone demanding payment to remove negative reviews), Google has specific reporting routes; do not pay.\n4. For large-scale attacks, document everything (screenshots, dates) and use Google's support channels.\n\nGoogle removes reviews that violate policy, not reviews that are merely negative or that you disagree with. Public responses remain your main tool for genuine but unfair-feeling reviews.\n\n### What not to do\n\n- Threaten legal action in a public reply.\n- Post fake positive reviews to \"balance out\" negatives.\n- Ask friends to report a genuine negative review.\n- Offer refunds conditional on removing a review — this is review suppression and may breach consumer law.\n\n### Responding at scale (multi-location)\n\n- Assign an owner per location or a central team with local input.\n- Build a response style guide with tone, escalation rules and privacy rules.\n- Use a review management platform or GBP's interface; avoid fully automated generic replies — personalise at least the first sentence.\n- Escalate serious complaints (safety, discrimination, legal) to management immediately.\n\n### Common mistakes\n\n- Copy-paste responses for every review.\n- Defensive replies that blame the customer.\n- Disclosing personal or medical information.\n- Ignoring reviews on other platforms customers use.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Respond to every review promptly, specifically and calmly; write for future readers.",
+            "Never disclose private information; take resolution offline.",
+            "Report reviews that violate policy with the right reason and appeal where available; negative is not the same as fake.",
+            "Never make offers conditional on removing reviews; fix root causes instead."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A dental patient leaves a negative review mentioning their treatment. What should the response avoid?",
+              "options": [
+                "Signing with a name",
+                "Thanking them",
+                "Discussing any details of their treatment publicly",
+                "Offering a direct contact route"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Patient confidentiality must be protected in public replies."
+            },
+            {
+              "question": "A competitor's employee leaves a fake 1-star review. What is the right approach?",
+              "options": [
+                "Report it for conflict of interest, respond calmly if needed, and document evidence",
+                "Threaten them publicly",
+                "Post fake 5-star reviews to balance",
+                "Ignore all reviews"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Conflict-of-interest reviews violate policy and can be reported."
+            },
+            {
+              "question": "Which offer to an unhappy customer is appropriate?",
+              "options": [
+                "A gift for a new 5-star review",
+                "Resolving the problem without any condition relating to the review",
+                "A discount for changing the rating",
+                "A refund if they delete the review"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Conditioning benefits on review changes is suppression."
+            }
+          ],
+          "activity": "Write responses to five sample reviews (two positive, one mixed, two negative including one healthcare case) and one report justification for a fake review."
+        }
+      ]
+    },
+    {
+      "slug": "citations-and-local-pages",
+      "title": "Citations, NAP consistency and local landing pages",
+      "summary": "Make your business information consistent across the web, and build local pages that are genuinely useful rather than doorways.",
+      "lessons": [
+        {
+          "slug": "citations-and-nap-consistency",
+          "title": "Citations and NAP consistency",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### What citations are\n\nA **citation** is any online mention of your business's **Name, Address and Phone number (NAP)**, often with the website. Citations appear in directories (Yelp, Apple Maps, Bing Places), industry sites, social profiles, local chambers, news articles and data aggregators.\n\nCitations matter because they:\n\n- Help search engines **corroborate** that your business exists at that location.\n- Contribute to **prominence** (\"information from across the web\").\n- Put your business where customers search (directories, apps, maps, voice assistants).\n- Feed other platforms: Apple Maps, Bing Places and others supply data to assistants and car systems.\n\nTheir ranking influence is generally considered smaller than it was years ago — consistency and presence on the key platforms matter more than hundreds of low-quality listings.\n\n### NAP consistency\n\nInconsistent information confuses search engines and customers. Common inconsistencies:\n\n- Old addresses after a move.\n- Different phone numbers (old line, tracking numbers, personal mobiles).\n- Name variations (\"Al Noor Dental\", \"Al-Noor Dental Clinic LLC\", \"AlNoor Dental\").\n- Suite or unit formatting (\"Office 204\" vs \"#204\") — minor; don't panic about formatting differences, but fix substantive ones.\n- Duplicate listings on the same platform.\n\n**Define your canonical NAP** and use it everywhere:\n\n```text\nName:    Al Noor Dental Clinic\nAddress: Office 204, Example Tower, Al Wasl Road, Jumeirah 1, Dubai, UAE\nPhone:   +971 4 000 0000\nWebsite: https://www.alnoordental.example/\nHours:   Mon–Thu, Sat–Sun 09:00–21:00; Fri 14:00–21:00\n```\n\nPut this in a shared document and use it for every listing.\n\n### The core citation list\n\nPrioritise quality over quantity:\n\n**Tier 1 — platforms that feed maps and assistants**\n- Google Business Profile\n- Apple Business Connect (Apple Maps)\n- Bing Places for Business (can import from GBP)\n- Facebook business page\n- Major data aggregators relevant to your country (in the US, key aggregators feed many directories; research the current providers for your market)\n\n**Tier 2 — major directories and review platforms relevant to your market**\n- Yelp (strong in the US; present in UK and some other markets)\n- Tripadvisor (hospitality)\n- Trustpilot (many sectors)\n- Country-specific directories (business directories, Yellow Pages equivalents, chambers of commerce)\n\n**Tier 3 — industry and local niche sites**\n- Professional bodies and associations (law societies, medical councils, trade associations)\n- Industry directories (wedding, healthcare, home services, B2B)\n- Local community sites, city portals, business improvement districts\n\nResearch what actually ranks for your key queries: directories that appear in organic results for \"[service] [city]\" are worth being listed on, because customers find them there.\n\n### Running a citation audit\n\n1. **Search** for your business name, variants, old names, phone numbers and old addresses.\n2. **Use a citation tool** (several local SEO platforms scan major directories) to find listings and inconsistencies.\n3. **Record** each listing: platform, URL, NAP shown, issues, login access.\n4. **Fix** priority listings first: claim, update, merge or remove duplicates.\n5. **Build** missing Tier 1 and relevant Tier 2/3 listings using the canonical NAP.\n6. **Monitor** twice a year and after any change (move, rebrand, new phone).\n\n### After a move or rebrand\n\n- Update GBP first (address change may require re-verification).\n- Update Apple, Bing, Facebook, aggregators.\n- Update top directories and industry sites.\n- Update the website footer, contact page and structured data.\n- Search for the old address and phone periodically to catch stragglers.\n\n### Call tracking numbers\n\nCall tracking is useful for measurement but can create NAP inconsistency. Best practice on GBP: use the tracking number as the primary phone and the main business number as an additional phone, and use your main number on directories and the website (or dynamic number insertion for website visitors). Be consistent in your approach.\n\n### Common mistakes\n\n- Paying for hundreds of low-quality directory submissions.\n- Leaving old addresses live after moving.\n- Creating duplicate listings instead of claiming existing ones.\n- Different people creating listings with different name formats.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Citations are online mentions of your NAP; they corroborate existence and support prominence.",
+            "Define a canonical NAP and use it everywhere; fix substantive inconsistencies and duplicates.",
+            "Prioritise platforms that feed maps and assistants, major relevant directories and industry sites.",
+            "Audit and monitor citations, especially after moves, rebrands or phone changes."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which is the best citation strategy?",
+              "options": [
+                "Only Google Business Profile, nothing else",
+                "Different phone numbers on each directory for tracking",
+                "Consistent NAP on key platforms, major relevant directories and industry sites",
+                "Submit to 500 directories as fast as possible"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Quality and consistency on relevant platforms beat volume."
+            },
+            {
+              "question": "A business moved offices a year ago. What is the biggest citation risk?",
+              "options": [
+                "Their logo changed",
+                "Old address and phone still live on directories and data sources",
+                "Too many reviews",
+                "Too many photos"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Outdated NAP confuses customers and search engines."
+            }
+          ],
+          "activity": "Run a citation audit for a local business: find 15 listings, record NAP issues, and prioritise fixes."
+        },
+        {
+          "slug": "local-landing-pages-not-doorways",
+          "title": "Local landing pages that aren't doorways",
+          "type": "article",
+          "durationMinutes": 13,
+          "body": "### Why local pages exist\n\nYour website supports local visibility in two ways: it reinforces relevance for your Business Profile (Google looks at your website as part of relevance and prominence), and it can rank in organic results for local queries. **Local landing pages** — location pages for each branch, or service-in-area pages — are the main tools.\n\n### The doorway page trap\n\nGoogle's spam policies define **doorway abuse** as creating sites or pages to rank for specific, similar search queries that lead users to intermediate pages that are not as useful as the final destination. Classic examples:\n\n- Hundreds of \"[service] in [town]\" pages with identical text except the town name.\n- Pages for areas the business does not meaningfully serve.\n- Pages that only exist to funnel users to a single contact page.\n\nThese pages often fail to rank, and at scale they can harm how Google views the site (and fall under scaled content abuse if mass-produced).\n\n### Two legitimate page types\n\n**1. Location pages (for real branches)**\n\nOne page per physical location, linked from the GBP profile for that location. Include:\n\n- Exact NAP, map embed, directions and parking/transport notes.\n- Opening hours (including special hours).\n- Services offered at *that* location, team members, photos of *that* location.\n- Reviews or testimonials from that location's customers (genuine; review markup only where eligible).\n- Local details: nearby landmarks, areas served from this branch, accessibility.\n- Unique content: this is a page about a real place.\n- `LocalBusiness` schema with the location's details.\n\n**2. Service-area pages (for areas genuinely served)**\n\nFor SABs or businesses serving multiple towns, create pages only where you can provide **genuinely area-specific value**:\n\n- Projects completed in that area (case studies, photos, with client permission).\n- Area-specific considerations (e.g. \"Older terraced houses in Salford often have...\", \"In Dubai's older villa communities, AC systems commonly...\").\n- Local pricing or response times if they differ.\n- Testimonials from customers in that area.\n- Local team or depot information.\n\nIf you cannot write something meaningfully different about an area, you probably should not have a separate page for it; list it on a \"Areas we serve\" page instead.\n\n### A location page template\n\n```text\nH1: Al Noor Dental Clinic — Jumeirah, Dubai\nIntro: 2–3 sentences about this clinic, its team and specialisms\nKey info block: address, phone, hours, directions button, parking notes\nServices at this clinic: list linking to service pages\nMeet the team: dentists at this location with short bios\nPhotos: reception, treatment rooms, exterior signage\nPatient reviews: selected genuine reviews\nGetting here: landmarks, metro/bus, parking\nFAQs specific to this location (insurance accepted, languages spoken: Arabic, English, Urdu)\nMap embed\nSchema: Dentist (LocalBusiness subtype) with address, geo, hours, telephone\n```\n\n### Internal linking and store locators\n\n- A **store locator** or locations index should link to every location page with crawlable links (not only a JavaScript map that search engines cannot navigate).\n- Link location pages to relevant service pages and vice versa.\n- Include the locations index in the main navigation or footer.\n\n### Language and localisation\n\nFor bilingual markets, consider separate language versions of location pages (e.g. English and Arabic), implemented with hreflang (see the Technical SEO course). Use local phrasing and landmarks people actually use.\n\n### Measuring local pages\n\nTrack organic impressions and clicks per location page in Search Console, GBP-linked traffic via UTMs, calls and direction requests, and conversions. Pages that attract no impressions over months may be too thin or unnecessary.\n\n### Illustrative example\n\nA home-cleaning company in London had 120 near-identical \"cleaners in [borough]\" pages. It consolidated them into 12 area hub pages for zones it genuinely serves, each with team information, customer stories and area-specific advice, and redirected the thin pages to the relevant hub. The consolidated pages were easier to maintain and more useful to visitors. (Illustrative scenario; outcomes vary.)\n\n### Common mistakes\n\n- City-swap template pages.\n- Location pages without real local content or photos.\n- Store locators that search engines cannot crawl.\n- Linking all GBP profiles to the home page instead of the location page (for multi-location businesses).\n",
+          "video": null,
+          "keyTakeaways": [
+            "Doorway abuse includes near-identical city-swap pages created only to rank.",
+            "Build location pages for real branches with unique, useful details and LocalBusiness schema.",
+            "Create service-area pages only where you can add genuinely area-specific value; otherwise use one 'areas served' page.",
+            "Make location pages reachable via crawlable store locators and link each GBP profile to its location page."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which local page is most likely to be seen as a doorway?",
+              "options": [
+                "A branch page with the team, photos, hours and directions",
+                "One of 200 pages identical except for the town name",
+                "A contact page",
+                "A case study from a real local project"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "City-swap pages with no unique value fit Google's doorway abuse definition."
+            },
+            {
+              "question": "A multi-location business links every Business Profile to its home page. Better approach?",
+              "options": [
+                "Use a URL shortener",
+                "Link each profile to its own location page",
+                "Link to the blog",
+                "Remove website links"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Location pages are more relevant to searchers and reinforce each profile."
+            }
+          ],
+          "activity": "Draft a location page for a real or fictional branch using the template, making sure at least five elements are unique to that location."
+        }
+      ]
+    },
+    {
+      "slug": "local-links-multi-location-sab",
+      "title": "Local links, multi-location and service-area businesses",
+      "summary": "Earn local prominence through community links, and manage the extra complexity of multi-location brands and service-area businesses.",
+      "lessons": [
+        {
+          "slug": "local-link-building",
+          "title": "Local link building",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Why local links are different\n\nFor local businesses, a handful of **relevant local links** — from the community, local media and industry bodies — can matter more than many generic links. They build prominence, send local referral traffic and corroborate that the business is part of its community.\n\n### Local link opportunities\n\n| Source | How to earn it | Notes |\n|---|---|---|\n| Local news and media | Newsworthy stories: community initiatives, local data, expert comment on local issues | Links not guaranteed; mentions still valuable |\n| Chambers of commerce and business associations | Membership directories | Membership is paid; directory links are generally fine as they reflect real membership |\n| Sponsorships | Local sports teams, events, charities | Links resulting from sponsorship should be `rel=\"sponsored\"`; value is community visibility |\n| Schools and universities | Careers talks, internships, scholarships, workshops | Must be genuine programmes, not link schemes |\n| Community events | Hosting workshops, meetups, charity drives | Event listings and recaps |\n| Local suppliers and partners | Stockist pages, partner directories | Real relationships |\n| Local bloggers and creators | Reviews, features, collaborations | Disclosure required if gifted; links sponsored/nofollow if compensated |\n| Local resource pages | \"Moving to [city]\" guides, community resource lists | Offer genuinely useful resources |\n| Industry bodies | Accreditation directories (Gas Safe, medical councils, bar associations) | Strong trust signals |\n\n### Creating local linkable assets\n\nLocal businesses can create useful local resources that others want to reference:\n\n- **Local guides**: \"A parent's guide to school uniforms in Lahore\" by a uniform shop; \"Where to recycle electronics in Dubai\" by an IT repair shop.\n- **Local data**: a lettings agent publishing an annual rent report for the neighbourhoods it covers.\n- **Seasonal advice**: \"Preparing your home AC for summer in Riyadh\" from an AC service company, pitched to local media before the heat arrives.\n- **Community maps or directories**: halal restaurants near the university; accessible venues in a town centre.\n\n### Local PR angles\n\nLocal journalists look for stories about their area:\n\n- A business milestone with community relevance (hiring locally, opening a new branch, 25 years in the town).\n- Charity work and fundraising.\n- Expert comment on local issues (a local estate agent on a new transport link; a pharmacist on seasonal allergies).\n- Human-interest stories (a founder's journey, a staff member's achievement).\n\nKeep pitches short, localised and sent to the right reporter.\n\n### Qualifying local links\n\nApply the same quality thinking as any link building:\n\n- Is the site genuinely local or relevant to your industry?\n- Does it have real readers or members?\n- Is the link editorial, or from a real relationship?\n- Avoid \"local directories\" that are just link farms with every business in the country.\n\n### Compliance reminders\n\n- Sponsorship and paid placement links should use `rel=\"sponsored\"`.\n- Gifted products to local influencers require disclosure under advertising rules (FTC in the US, ASA/CAP in the UK, and local rules in the UAE, KSA and Pakistan).\n- Don't create fake \"scholarships\" purely to get .edu or .ac links — these are widely recognised as manipulative and universities increasingly reject them.\n\n### Illustrative example\n\nA family-run hardware store in Leeds runs free weekend DIY workshops for first-time homeowners. The local council's community events page lists them, a neighbourhood blog writes a feature, and the local paper covers the store's 40th anniversary with a quote from the owner. The store also sponsors a youth football team (sponsored link on the club site). None of this is a \"link scheme\"; it is local marketing that naturally earns local links. (Illustrative scenario.)\n\n### Measuring local link efforts\n\n- New local and industry referring domains.\n- Referral traffic from local sites.\n- Brand searches in the area.\n- Changes in local pack visibility (via grid tracking, Module 6), considered alongside other activity.\n\n### Common mistakes\n\n- Buying links from generic \"local SEO link packages\".\n- Fake scholarships and sponsorships purely for links.\n- Ignoring non-link benefits of community involvement.\n- Pitching national angles to local reporters.\n",
+          "video": null,
+          "keyTakeaways": [
+            "A few relevant local links from community, media and industry bodies can matter more than many generic links.",
+            "Earn links through real local involvement: sponsorships (sponsored), events, schools, partners and local resources.",
+            "Create local linkable assets like guides and local data; pitch localised stories to local reporters.",
+            "Qualify links and follow disclosure and link attribute rules."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Your client sponsors a local cricket club, which links to them from its sponsors page. What attribute is appropriate?",
+              "options": [
+                "rel=\"sponsored\"",
+                "rel=\"canonical\"",
+                "rel=\"ugc\"",
+                "None needed"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Links resulting from sponsorship should be qualified as sponsored."
+            },
+            {
+              "question": "Which is a strong local linkable asset?",
+              "options": [
+                "A thin city-swap page",
+                "A generic 'SEO tips' post",
+                "A local guide or local data resource that community sites would reference",
+                "A page listing your prices only"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Locally useful resources attract local references."
+            }
+          ],
+          "activity": "List ten genuine local link opportunities for a business, grouped by type, and draft one local media pitch."
+        },
+        {
+          "slug": "multi-location-and-service-area-businesses",
+          "title": "Multi-location and service-area businesses",
+          "type": "article",
+          "durationMinutes": 13,
+          "body": "### Multi-location businesses: scale without chaos\n\nChains, franchises, clinics with several branches and banks face the same local SEO basics multiplied — plus governance challenges.\n\n**Profile structure**\n\n- One Business Profile per real, eligible location.\n- Use **business groups** (location groups) in the Business Profile manager to organise profiles and manage user access.\n- Businesses with many locations (10 or more) can request **bulk verification** via Google's process.\n- Consistent naming: the brand name, without location keywords unless the location name is genuinely part of the real-world name (e.g. a mall's branch signage) — follow Google's guidelines on names carefully.\n- Each profile links to its own location page with UTM tracking.\n\n**Governance**\n\n| Item | Central team | Local team |\n|---|---|---|\n| Brand name, categories, core attributes | Owns | Suggests |\n| Hours, special hours | Sets defaults | Updates local exceptions |\n| Photos | Brand guidelines | Uploads local photos |\n| Reviews | Response guidelines, escalation | Responds or feeds info |\n| Posts | Campaign posts | Local events |\n| Monitoring | Dashboards, audits | Reports issues |\n\nUse a **store data master** (a single source of truth spreadsheet or location data management platform) to push consistent data to GBP, Apple, Bing, the website and aggregators. Many platforms offer API-based management for large estates.\n\n**Website**\n\n- Crawlable locations index linking to every location page (by country, region, city).\n- Location pages with unique content (Module 4).\n- `LocalBusiness` schema per location; Organization schema for the brand.\n- Local pages in the right languages for each market.\n\n**Common multi-location problems**\n\n- Duplicate profiles created by staff or customers.\n- Closed branches still showing as open — mark them \"permanently closed\" rather than deleting (preserves history and avoids confusion).\n- Franchisees creating their own inconsistent profiles; set franchise agreements that cover profile ownership and brand standards.\n- Practitioner listings (individual doctors or lawyers) competing with the practice profile — Google allows individual practitioner profiles in some cases; follow the specific guidelines for practitioners and departments.\n\n### Service-area businesses (SABs)\n\nSABs — plumbers, electricians, mobile mechanics, cleaners, tutors — serve customers at the customer's location.\n\n**Setup rules**\n\n- Hide the address if customers do not visit it (e.g. a home-based business).\n- Set service areas by city, postcode or region. Google allows up to 20 service areas, and recommends the overall area not extend further than about two hours' driving from where the business is based.\n- Hybrid businesses (e.g. a workshop customers can visit, plus call-outs) can show the address and add service areas.\n\n**Ranking reality for SABs**\n\nSetting service areas does **not** make you rank everywhere in them. Visibility is still strongest near the business's verified location, because distance remains a factor. To reach customers across your area:\n\n- Build strong **organic service and area pages** (with genuine area-specific value).\n- Earn reviews that mention locations and services naturally.\n- Build local links and citations across the area.\n- Where the business genuinely operates staffed premises in another area (a real depot or office meeting guidelines), a separate profile may be legitimate. Fake addresses or virtual offices are not.\n\n**Trust signals for SABs**\n\n- Licences and accreditations prominently shown.\n- Real team photos and branded vehicles.\n- Clear pricing guidance and call-out policies.\n- Reviews and case studies from across the service area.\n\n### Illustrative example: a regional AC service company\n\nA company based in Sharjah serves Sharjah, Dubai and Ajman. It sets up as an SAB with its verified workshop location and service areas covering the three emirates. It builds service pages for AC maintenance, repair and installation, plus area pages for Dubai and Ajman with real project examples, response time commitments and customer stories. When it later opens a staffed branch in Dubai with signage and customer-facing hours, it creates a second profile for that branch. (Illustrative scenario.)\n\n### Common mistakes\n\n- Expecting service areas to deliver rankings across the whole area.\n- Creating profiles at virtual offices to \"cover\" more cities.\n- No central data source, leading to inconsistent hours and phones across locations.\n- Deleting closed-location profiles instead of marking them closed.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Multi-location brands need one profile per real location, business groups, a store data master and clear central/local governance.",
+            "Each profile links to its own location page; the locations index must be crawlable.",
+            "SABs hide their address when customers don't visit and can set up to 20 service areas, but distance still limits map visibility.",
+            "Reach wider areas with organic pages, reviews and local links — not fake addresses."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A branch has permanently closed. What should you do with its profile?",
+              "options": [
+                "Delete it immediately",
+                "Mark it as permanently closed",
+                "Leave it open",
+                "Change its address to another branch"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Marking closed preserves accuracy and avoids confusion."
+            },
+            {
+              "question": "An electrician sets 20 service areas across a region. What should they expect?",
+              "options": [
+                "Automatic top-3 placement",
+                "Equal rankings across all areas",
+                "Strongest map visibility near their verified location; organic pages and prominence help elsewhere",
+                "Rankings only in the farthest area"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Service areas don't override distance."
+            },
+            {
+              "question": "What is a 'store data master' for multi-location brands?",
+              "options": [
+                "A type of schema",
+                "A single source of truth for location data pushed to all platforms",
+                "A Google product",
+                "A review platform"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Centralised data keeps NAP and hours consistent at scale."
+            }
+          ],
+          "activity": "Design a governance table and data workflow for a 15-location business across two countries."
+        }
+      ]
+    },
+    {
+      "slug": "local-measurement-and-audits",
+      "title": "Local rank tracking, reporting and audits",
+      "summary": "Measure local visibility realistically with grid tracking and business metrics, and run a complete local SEO audit.",
+      "lessons": [
+        {
+          "slug": "local-rank-tracking-and-reporting",
+          "title": "Local rank tracking and reporting",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Why local rankings are tricky\n\nLocal results depend heavily on **where the searcher is**. The same query can show a completely different pack a few streets away. Personalisation, device, and the exact query phrasing add more variation. A single ranking number (\"we're #2 for dentist Dubai\") is therefore misleading.\n\n### Grid-based (geo-grid) rank tracking\n\nGrid tracking tools simulate searches from many points in a grid around the business (for example a 7×7 grid spaced 1 km apart) and record the business's position in the local results at each point. The result is a heat map:\n\n```text\nQuery: \"ac repair\"   Grid: 7×7, 1 km spacing   Centre: business location\n  3  2  2  4  7 12 20+\n  2  1  1  2  5  9 15\n  1  1  1  1  3  6 11\n  1  1  (B) 1 2  4  8\n  2  1  1  1  2  5  9\n  4  2  2  3  4  8 14\n  9  6  5  6  9 15 20+\n(B) = business location; numbers = local rank at each point (illustrative)\n```\n\nThis shows where you are strong (near the business), where visibility fades, and whether changes expand your \"radius\". Tools typically also report an **average rank** across the grid and share of points in the top 3.\n\n### Setting up tracking sensibly\n\n1. **Choose queries** that reflect how customers search: core services, service + area, a few brand queries. Include both \"near me\"-style implicit queries and explicit city queries.\n2. **Choose grid size and spacing** based on the business's realistic catchment. A café in a dense city area needs a small, tight grid; a regional SAB needs a wider one.\n3. **Track consistently**: same queries, grid, day of week and time.\n4. **Track competitors** too: relative visibility matters.\n5. **Combine with organic rank tracking** for city-level queries and service pages.\n\n### Metrics that matter more than rank\n\nRankings are a means to an end. Report business-relevant actions:\n\n| Metric | Source |\n|---|---|\n| Calls from the profile | GBP Performance; call tracking |\n| Direction requests | GBP Performance |\n| Website clicks from the profile | GBP Performance; UTM-tagged sessions in analytics |\n| Bookings | Booking integrations; CRM |\n| Conversions from GBP and organic local pages | Analytics goals/events |\n| Reviews: velocity, rating, response rate | GBP, review tools |\n| Revenue or footfall | POS, CRM, \"how did you hear about us?\" |\n\n### A monthly local SEO report\n\n```text\n1. Summary (3 bullets): what changed, why, what next\n2. Visibility: grid heat maps for top 3 queries vs last month; competitor comparison\n3. Actions: calls, directions, website clicks (trend, YoY where possible)\n4. Website: organic sessions & conversions to location/service pages\n5. Reviews: new reviews, average rating, response rate, themes\n6. Work completed: profile updates, posts, citations, links, content\n7. Issues: suspensions, unwanted edits, spam competitors reported\n8. Next month plan\n```\n\n### Interpreting changes honestly\n\nLocal visibility can shift due to competitor activity, Google updates to local systems, seasonality, new competitors opening nearby, or even edits to your profile. Avoid over-reacting to week-to-week fluctuations. Annotate known changes (category change, new photos, review surge, algorithm updates) and look at trends over months.\n\n### Tracking multi-location performance\n\nFor many locations, aggregate by region and flag outliers: locations with falling actions, low review velocity or poor ratings. Use location-level dashboards so local managers see their own data.\n\n### Privacy and data use\n\nWhen using call recordings or customer data to attribute results, follow data protection rules (GDPR/UK GDPR, local laws in the UAE, KSA and Pakistan), inform callers where required, and limit access.\n\n### Common mistakes\n\n- Reporting a single \"rank\" checked from the office.\n- Tracking only vanity queries (brand name) or overly broad queries.\n- Ignoring calls and direction requests in reporting.\n- Changing many profile elements at once, making it impossible to learn what worked.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Local rankings vary by searcher location; use grid-based tracking to see visibility across the catchment.",
+            "Track consistent queries, grids and competitors, alongside organic rank tracking.",
+            "Report business actions: calls, directions, website clicks, bookings, conversions and reviews.",
+            "Interpret changes over months, annotate known events, and follow privacy rules for call data."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why is a single local rank checked from the office misleading?",
+              "options": [
+                "Offices have slow internet",
+                "Google blocks office IPs",
+                "Ranks are always the same",
+                "Local results vary by searcher location, and the office is next to the business"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Proximity to the business inflates the result; grid tracking shows the wider picture."
+            },
+            {
+              "question": "Which metric is most closely tied to business outcomes for a plumber?",
+              "options": [
+                "Number of photos",
+                "Average rank for the brand name",
+                "Calls from the profile and tracked website leads",
+                "Number of posts"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Calls and leads reflect real demand captured."
+            }
+          ],
+          "activity": "Set up (or design) a grid tracking plan for a local business: queries, grid size, spacing, competitors and the monthly report outline."
+        },
+        {
+          "slug": "local-seo-audit-and-action-plan",
+          "title": "Local SEO audit and 90-day action plan",
+          "type": "article",
+          "durationMinutes": 13,
+          "body": "### Putting it all together\n\nThis lesson gives you a complete local SEO audit checklist and a template for turning findings into a 90-day action plan — ready to use with clients or your own business.\n\n### The local SEO audit checklist\n\n**A. Business Profile**\n- [ ] Profile claimed, verified, owned by a business-controlled account; agency as manager\n- [ ] Name matches real-world name with no added keywords\n- [ ] Address accurate (or hidden for SABs) and eligible; service areas set appropriately\n- [ ] Primary category optimal; secondary categories relevant\n- [ ] Description helpful and non-promotional\n- [ ] Services and products complete with descriptions\n- [ ] Attributes complete and accurate\n- [ ] Regular and special hours accurate (Ramadan, Eid, public holidays)\n- [ ] Website link to the correct page with UTM tagging\n- [ ] Photos: logo, cover, exterior, interior, team, work; recent uploads\n- [ ] Posts in the last month\n- [ ] No duplicate profiles; no unwanted public edits\n- [ ] Performance trends reviewed\n\n**B. Reviews**\n- [ ] Review velocity and rating vs competitors\n- [ ] Response rate and tone\n- [ ] Compliant review request process in place (no incentives or gating)\n- [ ] Policy-violating reviews reported\n- [ ] Other relevant platforms monitored\n\n**C. Citations**\n- [ ] Canonical NAP document exists\n- [ ] Tier 1 platforms (Apple, Bing, Facebook, relevant aggregators) claimed and consistent\n- [ ] Key directories and industry sites consistent\n- [ ] Old addresses/phones cleaned up; duplicates removed\n\n**D. Website**\n- [ ] NAP in footer/contact page matching GBP\n- [ ] Service pages for each core service\n- [ ] Location pages (real branches) or genuinely valuable area pages; no doorways\n- [ ] Crawlable locations index for multi-location\n- [ ] `LocalBusiness` schema with correct details\n- [ ] Mobile performance acceptable; click-to-call and directions easy\n- [ ] Technical basics: indexable, HTTPS, no major errors (see Technical SEO courses)\n\n**E. Links and prominence**\n- [ ] Local and industry links vs competitors\n- [ ] Local media coverage and community involvement\n- [ ] Sponsorship links correctly qualified\n\n**F. Measurement**\n- [ ] Grid tracking for core queries and competitors\n- [ ] UTM tagging, call tracking, conversion tracking\n- [ ] Monthly reporting of actions and outcomes\n\n### Competitor benchmark\n\nFor the top three competitors in the pack for your main query, record: primary/secondary categories, review count and rating, review velocity (recent months), photo count and recency, posts, website quality (service and location pages), and notable local links. The gaps become your opportunities.\n\n| Item | You | Competitor A | Competitor B | Competitor C |\n|---|---|---|---|---|\n| Primary category | Dentist | Cosmetic dentist | Dentist | Dental clinic |\n| Reviews (count / rating) | 58 / 4.6 | 310 / 4.8 | 145 / 4.7 | 90 / 4.5 |\n| Reviews in last 90 days | 4 | 38 | 12 | 9 |\n| Location page quality | Thin | Strong | Medium | Medium |\n\n*Illustrative numbers.*\n\n### Prioritising findings\n\nUse a simple impact × effort view:\n\n1. **Fix violations and risks first** — keyword-stuffed names, ineligible addresses, duplicates (risk of suspension or confusion).\n2. **Quick wins** — categories, hours, services, photos, website link and UTMs, citation fixes on Tier 1 platforms.\n3. **Systems** — review request process, monthly profile routine, reporting.\n4. **Compounding work** — location/service pages, local links, local PR.\n\n### The 90-day plan template\n\n```text\nDays 1–14:  Ownership & access fixed · name/category/hours corrected · UTMs · duplicates merged\n            Canonical NAP document · Tier 1 citations fixed · grid tracking baseline\nDays 15–45: Review system live (link, QR, scripts, staff training) · services/products complete\n            Location page rebuilt · LocalBusiness schema · photo shoot\nDays 46–90: Local link & PR plan: 2 community partnerships, 1 local guide, 1 media pitch\n            Monthly posts · review responses · first monthly report & review of results\n```\n\n### Setting expectations\n\nExplain to clients or managers that:\n\n- Some fixes (hours, categories, website link) can influence visibility and actions relatively quickly; prominence-building (reviews, links) compounds over months.\n- Distance limits map visibility; the plan focuses on maximising relevance and prominence within the realistic catchment and using organic pages for wider reach.\n- No one can guarantee a top-3 map position.\n\n### Common mistakes\n\n- Auditing only the Business Profile and ignoring the website.\n- Competing on review count by any means — stay compliant.\n- Plans without owners or a reporting rhythm.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Audit six areas: Business Profile, reviews, citations, website, links/prominence and measurement.",
+            "Benchmark the top pack competitors on categories, reviews, photos, pages and links.",
+            "Prioritise violations first, then quick wins, systems and compounding work.",
+            "Set expectations honestly: prominence compounds, distance limits reach, no guaranteed positions."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What should be fixed first in a local audit?",
+              "options": [
+                "Adding new blog posts",
+                "Guideline violations such as keyword-stuffed names or ineligible addresses",
+                "Adding more categories",
+                "Changing the logo"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Violations risk suspension and should come first."
+            },
+            {
+              "question": "Competitor A has far more reviews in the last 90 days. What is the compliant response?",
+              "options": [
+                "Offer discounts for reviews",
+                "Buy reviews to catch up",
+                "Build a consistent, compliant review request system asking all customers",
+                "Report all their reviews"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "A steady, compliant system is the sustainable path."
+            }
+          ],
+          "activity": "Run the full local SEO audit checklist on a business and produce a prioritised 90-day plan using the template."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 25,
+    "timeLimitMinutes": 40,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "lsg-001",
+        "module": "local-search-fundamentals",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which three factors does Google say mainly determine local results?",
+        "options": [
+          "Relevance, distance, prominence",
+          "Price, speed, design",
+          "Keywords, posts, photos",
+          "Ads, reviews, links"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Google's help documentation names relevance, distance and prominence."
+      },
+      {
+        "id": "lsg-002",
+        "module": "local-search-fundamentals",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A client asks whether increasing Google Ads spend will improve their map pack position. Correct answer?",
+        "options": [
+          "No; Google states you cannot pay to improve local ranking",
+          "Yes, directly",
+          "Only for new businesses",
+          "Only in the UAE"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Ads and organic local rankings are separate."
+      },
+      {
+        "id": "lsg-003",
+        "module": "local-search-fundamentals",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which business is eligible for a Google Business Profile?",
+        "options": [
+          "An online-only e-book store with no customer contact",
+          "A virtual office address",
+          "A PO box",
+          "A mobile hairdresser who visits clients' homes"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Service-area businesses with in-person contact are eligible."
+      },
+      {
+        "id": "lsg-004",
+        "module": "local-search-fundamentals",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which business names violate Google's guidelines? (Choose all that apply.)",
+        "options": [
+          "'Sunrise Bakery | Birthday Cakes | Cupcakes'",
+          "'Sunrise Bakery - Best Cakes Lahore'",
+          "'Cheap Cakes Near Me'",
+          "'Sunrise Bakery'"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Names must reflect the real-world brand without keywords, locations or taglines."
+      },
+      {
+        "id": "lsg-005",
+        "module": "local-search-fundamentals",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A consultant wants to rank in a second city by renting a virtual office there and creating a profile. What is the risk?",
+        "options": [
+          "None",
+          "Virtual offices typically violate guidelines and can lead to suspension; build organic pages and a real staffed presence instead",
+          "It only affects reviews",
+          "It guarantees rankings"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Addresses must be real, staffed locations for eligibility."
+      },
+      {
+        "id": "lsg-006",
+        "module": "local-search-fundamentals",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What should you do if a profile for your business already exists on Maps?",
+        "options": [
+          "Report it as spam",
+          "Create a new one",
+          "Ignore it",
+          "Claim it (or request access) rather than creating a duplicate"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Duplicates cause confusion and violations."
+      },
+      {
+        "id": "lsg-007",
+        "module": "local-search-fundamentals",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Who should own a client's Business Profile?",
+        "options": [
+          "A freelancer",
+          "Google",
+          "The agency",
+          "The business, via an account it controls"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Agencies should be managers, not primary owners."
+      },
+      {
+        "id": "lsg-008",
+        "module": "gbp-optimisation",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is the most important category decision?",
+        "options": [
+          "The attribute list",
+          "The primary category",
+          "The last secondary category",
+          "The logo"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "The primary category drives relevance and features."
+      },
+      {
+        "id": "lsg-009",
+        "module": "gbp-optimisation",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "How should you choose secondary categories?",
+        "options": [
+          "Add only categories for genuine, meaningful services you provide",
+          "Copy all competitor categories",
+          "Add as many as allowed regardless of relevance",
+          "Use categories from another country"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Irrelevant categories misrepresent the business and dilute relevance."
+      },
+      {
+        "id": "lsg-010",
+        "module": "gbp-optimisation",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which profile elements should be kept accurate and updated? (Choose all that apply.)",
+        "options": [
+          "Photos of the premises and work",
+          "A keyword list in the description",
+          "Services and products",
+          "Special hours for Ramadan and public holidays"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Accuracy and real visuals help customers; keyword lists violate guidance."
+      },
+      {
+        "id": "lsg-011",
+        "module": "gbp-optimisation",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Why add UTM parameters to the GBP website link?",
+        "options": [
+          "To verify the business",
+          "To hide the URL",
+          "To measure GBP-driven visits in analytics",
+          "To improve rankings"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "UTMs separate GBP traffic in analytics."
+      },
+      {
+        "id": "lsg-012",
+        "module": "gbp-optimisation",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "After changing the primary category, calls dropped over several weeks while nothing else changed. Best next step?",
+        "options": [
+          "Consider reverting or testing the previous category, since the change is the likely cause",
+          "Change five other things at once",
+          "Delete the profile",
+          "Buy reviews"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Change one thing at a time and roll back if results worsen."
+      },
+      {
+        "id": "lsg-013",
+        "module": "gbp-optimisation",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which statement about GBP posts is accurate?",
+        "options": [
+          "They guarantee top rankings",
+          "They replace reviews",
+          "They are useful for sharing updates and offers and can support conversions; any ranking effect is unproven",
+          "They are required for verification"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Treat posts as conversion and communication tools."
+      },
+      {
+        "id": "lsg-014",
+        "module": "gbp-optimisation",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Your profile phone number was changed by a public edit. What should you do?",
+        "options": [
+          "Create a new profile",
+          "Nothing",
+          "Remove the phone",
+          "Review and correct it promptly, and check the profile regularly"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Public and Google edits must be monitored."
+      },
+      {
+        "id": "lsg-015",
+        "module": "reviews-strategy",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which review practice does Google prohibit?",
+        "options": [
+          "Asking all customers for honest reviews",
+          "Offering discounts in exchange for reviews",
+          "Sharing a review link via QR code",
+          "Responding to reviews"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Incentives are prohibited."
+      },
+      {
+        "id": "lsg-016",
+        "module": "reviews-strategy",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which are signs of a fake review? (Choose all that apply.)",
+        "options": [
+          "Detailed mention of a real service they received",
+          "Sudden wave of similar 1-star reviews",
+          "No record of the reviewer as a customer",
+          "Reviewer posted reviews for many businesses in distant cities the same day"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Genuine detailed reviews aren't suspicious; the others are warning signs."
+      },
+      {
+        "id": "lsg-017",
+        "module": "reviews-strategy",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What is the best timing for a review request?",
+        "options": [
+          "Right after a positive moment, such as job completion or confirmed delivery",
+          "Only when complaints arrive",
+          "Six months later",
+          "Before the service"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Asking at moments of delight improves response."
+      },
+      {
+        "id": "lsg-018",
+        "module": "reviews-strategy",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A clinic's staff are rewarded per 5-star review they collect. What is the risk and a better approach?",
+        "options": [
+          "No risk",
+          "Only risky in the UK",
+          "It encourages gating and pressure; reward following the process and service quality instead",
+          "It's required by Google"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Incentivising ratings pushes staff towards non-compliant behaviour."
+      },
+      {
+        "id": "lsg-019",
+        "module": "reviews-strategy",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "How should a business respond to a negative, genuine review?",
+        "options": [
+          "Acknowledge, apologise where appropriate, and offer an offline resolution route",
+          "Ask them to delete it for a refund",
+          "Argue publicly",
+          "Ignore it"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Professional responses reassure future customers."
+      },
+      {
+        "id": "lsg-020",
+        "module": "reviews-strategy",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why should a healthcare provider avoid detailed public replies to patient reviews?",
+        "options": [
+          "Patient confidentiality obligations",
+          "It is too slow",
+          "Google hides them",
+          "It hurts page speed"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Confidentiality must be protected in public."
+      },
+      {
+        "id": "lsg-021",
+        "module": "reviews-strategy",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A reviewer demands payment to remove negative reviews. What should you do?",
+        "options": [
+          "Post fake reviews",
+          "Pay quickly",
+          "Do not pay; document and report through Google's routes for extortion",
+          "Threaten publicly"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Google provides reporting routes for extortion; paying encourages more."
+      },
+      {
+        "id": "lsg-022",
+        "module": "citations-and-local-pages",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does NAP stand for?",
+        "options": [
+          "Nearby Aggregated Places",
+          "Network Access Point",
+          "New Area Page",
+          "Name, Address, Phone"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Core business details used in citations."
+      },
+      {
+        "id": "lsg-023",
+        "module": "citations-and-local-pages",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which citation platforms should be prioritised? (Choose all that apply.)",
+        "options": [
+          "Hundreds of unrelated low-quality directories",
+          "Bing Places",
+          "Apple Business Connect",
+          "Relevant industry directories"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Platforms that feed maps/assistants and relevant directories matter most."
+      },
+      {
+        "id": "lsg-024",
+        "module": "citations-and-local-pages",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What is doorway abuse in local SEO?",
+        "options": [
+          "A map embed",
+          "A location page for a real branch",
+          "Many near-identical city-swap pages created to rank for similar queries",
+          "A contact page"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "It is defined in Google's spam policies."
+      },
+      {
+        "id": "lsg-025",
+        "module": "citations-and-local-pages",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A cleaning company has 120 near-identical borough pages with no unique content. Best fix?",
+        "options": [
+          "Noindex the home page",
+          "Add more borough pages",
+          "Add keyword-stuffed footers",
+          "Consolidate into fewer genuinely useful area hubs with unique content and redirect thin pages"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Consolidation removes doorway risk and improves usefulness."
+      },
+      {
+        "id": "lsg-026",
+        "module": "citations-and-local-pages",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What should a location page for a real branch include?",
+        "options": [
+          "Exact NAP, hours, directions, services and photos for that location",
+          "Links to competitors",
+          "Only the city name",
+          "A list of keywords"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Unique, useful local information defines a good location page."
+      },
+      {
+        "id": "lsg-027",
+        "module": "citations-and-local-pages",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "How should call tracking numbers be handled on a Business Profile?",
+        "options": [
+          "Hide the phone",
+          "Never track calls",
+          "Tracking number as primary, main business number as an additional phone",
+          "Use a different number everywhere"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "This keeps measurement while preserving consistency."
+      },
+      {
+        "id": "lsg-028",
+        "module": "citations-and-local-pages",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why must store locators include crawlable links?",
+        "options": [
+          "Google requires iframes",
+          "It improves CLS",
+          "It removes duplicates",
+          "Search engines may not navigate JavaScript-only maps to find location pages"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Crawlable links ensure location pages are discovered."
+      },
+      {
+        "id": "lsg-029",
+        "module": "local-links-multi-location-sab",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is a genuine local link opportunity?",
+        "options": [
+          "A generic link package from an overseas vendor",
+          "A PBN",
+          "A fake scholarship page",
+          "Membership listing in the local chamber of commerce"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Real memberships and relationships produce legitimate links."
+      },
+      {
+        "id": "lsg-030",
+        "module": "local-links-multi-location-sab",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A service-area business sets 20 service areas. What still limits its map visibility?",
+        "options": [
+          "Its logo",
+          "Distance from its verified location",
+          "Its number of posts",
+          "Its website colour"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Distance remains a core factor."
+      },
+      {
+        "id": "lsg-031",
+        "module": "local-links-multi-location-sab",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which multi-location practices are recommended? (Choose all that apply.)",
+        "options": [
+          "One profile per real, eligible location",
+          "A single source of truth for location data",
+          "Using business groups to manage access",
+          "Linking all profiles to the home page"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Each profile should link to its own location page."
+      },
+      {
+        "id": "lsg-032",
+        "module": "local-links-multi-location-sab",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A franchisee created their own profile with a different name format and personal account ownership. What is the best long-term fix?",
+        "options": [
+          "Delete all franchise profiles",
+          "Bring ownership under brand governance, align the name to guidelines, and address profile ownership in franchise agreements",
+          "Create another duplicate",
+          "Leave it"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Governance and agreements prevent recurring inconsistency."
+      },
+      {
+        "id": "lsg-033",
+        "module": "local-links-multi-location-sab",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What should you do with a permanently closed branch's profile?",
+        "options": [
+          "Keep it open",
+          "Mark it permanently closed",
+          "Move it to another address",
+          "Delete it"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Marking closed keeps information accurate."
+      },
+      {
+        "id": "lsg-034",
+        "module": "local-links-multi-location-sab",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which local asset is most likely to earn community links for an AC service firm in Riyadh?",
+        "options": [
+          "A thin price page",
+          "A list of keywords",
+          "A practical 'prepare your AC for summer' guide pitched to local media before the heat",
+          "A doorway page"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Timely, useful local advice attracts local coverage."
+      },
+      {
+        "id": "lsg-035",
+        "module": "local-links-multi-location-sab",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A local influencer receives free services and links to the business. What's required?",
+        "options": [
+          "Nothing",
+          "A dofollow link",
+          "Disclosure of the gifted relationship and a sponsored or nofollow link",
+          "A press release"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Advertising disclosure rules and link policies apply."
+      },
+      {
+        "id": "lsg-036",
+        "module": "local-measurement-and-audits",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does grid-based local rank tracking show?",
+        "options": [
+          "Page speed",
+          "Local rankings from many points around the business",
+          "Backlink counts",
+          "Only one rank position"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "It maps visibility across the catchment."
+      },
+      {
+        "id": "lsg-037",
+        "module": "local-measurement-and-audits",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which metrics belong in a monthly local SEO report? (Choose all that apply.)",
+        "options": [
+          "Number of keywords in the description",
+          "Calls and direction requests",
+          "Grid visibility vs competitors",
+          "Review velocity and response rate"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Business actions, visibility and reviews matter; keyword counts do not."
+      },
+      {
+        "id": "lsg-038",
+        "module": "local-measurement-and-audits",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why track at consistent times with the same grid and queries?",
+        "options": [
+          "To improve rankings",
+          "So changes reflect real visibility shifts, not tracking differences",
+          "Google requires it",
+          "To reduce costs only"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Consistency makes comparisons valid."
+      },
+      {
+        "id": "lsg-039",
+        "module": "local-measurement-and-audits",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Visibility dropped for one week after a Google local update, then partly recovered. What is the right reporting approach?",
+        "options": [
+          "Annotate the update, report the trend over months, and avoid over-reacting to weekly fluctuations",
+          "Blame the client",
+          "Hide the data",
+          "Panic and change everything"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Local results fluctuate; trends and annotations matter."
+      },
+      {
+        "id": "lsg-040",
+        "module": "local-measurement-and-audits",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "In a local audit, what should be addressed first?",
+        "options": [
+          "Guideline violations and suspension risks",
+          "Logo redesign",
+          "New blog content",
+          "Social media bios"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Risks come before optimisations."
+      },
+      {
+        "id": "lsg-041",
+        "module": "local-measurement-and-audits",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which is an honest expectation to set with a local client?",
+        "options": [
+          "'Some fixes can help quickly; reviews and links compound over months; no one can guarantee positions'",
+          "'Posts alone will fix rankings'",
+          "'Top 3 in the map pack guaranteed in 30 days'",
+          "'Distance doesn't matter'"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Honest expectations build trust."
+      },
+      {
+        "id": "lsg-042",
+        "module": "local-measurement-and-audits",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "In a competitor benchmark, you have fewer recent reviews and a thin location page, but a more specific primary category. Which plan fits best?",
+        "options": [
+          "Buy reviews",
+          "Create new profiles",
+          "Keep the category, build a compliant review system and improve the location page",
+          "Switch to a broader category"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Close the real gaps compliantly while keeping strengths."
+      }
+    ]
+  }
+}

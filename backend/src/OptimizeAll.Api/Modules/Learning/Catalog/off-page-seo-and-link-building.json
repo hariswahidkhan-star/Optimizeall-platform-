@@ -1,0 +1,1460 @@
+{
+  "slug": "off-page-seo-and-link-building",
+  "version": 1,
+  "title": "Off-Page SEO & Link Building",
+  "subtitle": "Earn links that last: quality signals, spam policies, white-hat tactics, outreach and measurement",
+  "category": "seo",
+  "level": "intermediate",
+  "estimatedMinutes": 260,
+  "description": "Links still help search engines discover, understand and trust websites — but the shortcuts that once worked now waste budgets and put clients at risk. This course teaches link building the professional way.\n\nYou will learn how links and authority work conceptually (without made-up metrics), how to judge a link opportunity with a 12-point checklist, and exactly what Google's spam policies say about paid links, link schemes, site reputation abuse and link attributes (sponsored, ugc, nofollow). We cover manual actions and when the disavow tool is — and is not — appropriate.\n\nThen we get practical: linkable assets and original research, broken-link building, resource pages, unlinked mentions, expert commentary, partnerships and podcasts; prospecting, personalised outreach templates and email compliance; relationship building; honest measurement; and competitor backlink analysis that turns into a 90-day plan. Examples span the UK, US, UAE, KSA and Pakistan.",
+  "outcomes": [
+    "Explain how links influence discovery, relevance and importance without relying on third-party metrics",
+    "Evaluate any link opportunity with a written quality and risk checklist",
+    "Apply Google's link spam policies and link attributes correctly to real scenarios",
+    "Decide when disavow is warranted and prepare a disavow file and reconsideration request",
+    "Plan and execute white-hat tactics: assets, broken links, resource pages, mentions, commentary and podcasts",
+    "Write compliant, personalised outreach that earns replies",
+    "Measure link campaigns by quality and business outcomes and build a 90-day plan from competitor gaps"
+  ],
+  "skills": [
+    "Link building",
+    "Off-page SEO",
+    "Blogger outreach",
+    "Backlink analysis",
+    "Google spam policies",
+    "Content marketing",
+    "Relationship building"
+  ],
+  "prerequisites": [],
+  "badge": {
+    "name": "Certified Link Building Strategist",
+    "description": "The holder can evaluate link quality, apply Google's link spam policies and attributes, decide when disavow is appropriate, run white-hat link-earning tactics with compliant personalised outreach, analyse competitor backlink profiles and measure campaigns by business outcomes.",
+    "criteria": "Completed all lessons and scored ≥ 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "links-and-authority",
+      "title": "How links and authority work",
+      "summary": "A clear, hype-free model of why links matter, what makes one link worth more than another, and how to judge opportunities.",
+      "lessons": [
+        {
+          "slug": "how-links-and-authority-work",
+          "title": "How links and authority work",
+          "type": "article",
+          "durationMinutes": 13,
+          "body": "### Links are still a signal — but not the only one\n\nWhen Google launched, its breakthrough was **PageRank**: treating a link from one page to another as a vote, weighted by the importance of the linking page. Much has changed since, but Google still documents links as one of the ways it discovers pages and assesses relevance and importance. Google representatives have also said links matter less than they once did compared with many other signals, and that you do not need a huge number of links to rank well. Hold both ideas at once: **links help**, and **they are not a substitute for a genuinely useful page**.\n\n### What a link does\n\n1. **Discovery.** Crawlers find new pages and sites by following links.\n2. **Importance.** A link from a page that is itself well linked and trusted passes more value than one from an obscure page.\n3. **Relevance and context.** The linking page's topic, the surrounding text and the **anchor text** tell search engines what the target is about.\n4. **Referral traffic and brand.** Real people click good links. That traffic, and the brand awareness that comes with coverage, has value regardless of rankings.\n\n### A conceptual model of \"link value\"\n\nSearch engines do not publish a formula, so treat the following as a mental model rather than a measurement:\n\n| Factor | Higher value | Lower value |\n|---|---|---|\n| Relevance | Linking site and page cover your topic or audience | Unrelated topic |\n| Editorial choice | A writer chose to link because it helps readers | Paid, swapped or self-placed without disclosure |\n| Placement | In the main content, in context | Footer, sidebar, sitewide, author bio boilerplate |\n| Linking page's own signals | Well linked, visited, indexed | Orphaned, thin, not indexed |\n| Uniqueness | First link from a new, relevant domain | Hundredth link from the same domain |\n| Outbound patterns | Links out sparingly and selectively | Links to anyone who pays |\n| Attributes | Followed editorial link | `nofollow`, `sponsored`, `ugc` (treated as hints) |\n\n### About third-party \"authority\" metrics\n\nTools such as Ahrefs (Domain Rating), Moz (Domain Authority), Semrush (Authority Score) and Majestic (Trust Flow) estimate link strength from their own crawls of the web. They are useful for **comparison and prioritisation**, but:\n\n- They are **not Google metrics**, and Google does not use them.\n- Different tools give different numbers for the same site.\n- They can be **manipulated** (sites inflate them with low-quality links to sell placements).\n- A relevant link from a small, respected specialist site can be worth far more to your business than a link from a high-metric general site.\n\nUse metrics as one input next to relevance, real traffic and editorial standards — never as the sole buying or pitching criterion.\n\n### Anchor text\n\nAnchor text helps search engines understand the target page. Natural link profiles contain a mix: brand names (\"Optimize All\"), URLs, generic phrases (\"this guide\"), and descriptive topical phrases (\"technical SEO checklist\"). A profile dominated by exact-match commercial anchors (\"best SEO agency Dubai\") is a classic footprint of manipulation and can attract scrutiny under the link spam policies. You rarely control anchors on earned links — and that is a feature, because it keeps the profile natural.\n\n### Internal vs external links\n\nInternal links (covered in technical SEO courses) distribute signals within your site. External links bring **new** signals in. Good off-page work and good internal linking reinforce each other: when a campaign earns links to a data study, internal links from that study to your commercial pages help spread its value.\n\n### What links cannot do\n\n- Rescue a page that does not satisfy search intent.\n- Overcome serious technical problems (a noindexed page will not rank no matter how many links it has).\n- Guarantee a position. Rankings depend on many systems and on competitors.\n\n### A quick worked example\n\nA Manchester-based accounting firm earns two links in a month:\n\n- **Link A:** a national business publication cites its analysis of small-business tax deadlines in an article, linking to the guide from the body text.\n- **Link B:** a \"top 100 accountants\" directory with thousands of outbound links, which it paid to join.\n\nLink A is relevant, editorial, in context, from a page people read, and is likely to bring referral visits. Link B is a paid listing that should carry `rel=\"sponsored\"` (or nofollow), sits among hundreds of other links and brings little traffic. Even if a tool shows Link B's domain with a higher metric, Link A is the more valuable link on almost every dimension that matters.\n\n### Common mistakes\n\n- Treating a third-party score as the goal (\"get our DR to 50\") instead of business outcomes.\n- Chasing link volume rather than relevance.\n- Ignoring referral traffic and brand value in evaluating links.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Links help discovery, importance and relevance, but do not replace a genuinely useful page.",
+            "Relevance, editorial choice, contextual placement and the linking page's own signals drive link value.",
+            "DR, DA and similar scores are vendor estimates, not Google metrics; use them only for comparison.",
+            "Natural anchor text is varied; exact-match commercial anchors in bulk are a manipulation footprint."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which statement about Domain Authority or Domain Rating is accurate?",
+              "options": [
+                "They measure traffic exactly",
+                "Google uses them in ranking",
+                "They are third-party estimates useful for comparison but not Google metrics",
+                "They cannot be manipulated"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "They come from each vendor's own crawl and models; Google does not use them."
+            },
+            {
+              "question": "Which link is likely most valuable?",
+              "options": [
+                "An in-content editorial citation on a relevant industry publication",
+                "A sitewide footer link on an unrelated site",
+                "A paid directory listing among thousands of links",
+                "A link in a forum signature"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Relevant, editorial, contextual links from real publications are the strongest kind."
+            },
+            {
+              "question": "A profile where most links use the anchor 'cheap SEO services Lahore' suggests…",
+              "options": [
+                "A technical error",
+                "Excellent relevance",
+                "A natural profile",
+                "Possible manipulation that may attract scrutiny under link spam policies"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Heavy exact-match commercial anchors are a common footprint of link schemes."
+            }
+          ],
+          "activity": "Pick ten backlinks to a site you know and score each on relevance, editorial choice, placement and likely referral traffic."
+        },
+        {
+          "slug": "evaluating-link-opportunities",
+          "title": "Evaluating link opportunities: a quality checklist",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Why you need a written checklist\n\nLink building involves hundreds of quick yes/no decisions: pitch this site or not, accept this offer or not, pursue this partnership or not. Without a written standard, teams drift toward whatever is easiest, which is often low-quality. A checklist protects your clients and your reputation.\n\n### The 12-point link opportunity checklist\n\nScore each item as pass/fail (or 0/1/2 if you want nuance).\n\n**Relevance**\n1. Does the site cover topics related to yours, or serve your audience (industry, location, profession)?\n2. Would a link from this specific page make sense to its readers?\n\n**Editorial quality**\n3. Does the site publish original, useful content with real authors or an identifiable organisation?\n4. Does it have an editorial process — or does it accept any submission for a fee? Look for \"write for us — all topics accepted\", price lists, and \"sponsored post\" menus.\n5. Are its outbound links selective, or does every article link to casinos, CBD, loans and unrelated businesses?\n\n**Real audience**\n6. Is there evidence of real readers — comments, social shares, newsletter, estimated organic traffic trending stable or up in a third-party tool (treat estimates as directional)?\n7. Is the site indexed? Search `site:example.com` and a unique sentence from a recent article.\n\n**Page-level factors**\n8. Would the link be in the main content, in context — not in a footer, sidebar or bio?\n9. Is the page itself linked from elsewhere on the site (not an orphaned \"guest post\" page)?\n\n**Risk**\n10. Any sign of a private blog network (PBN)? Shared themes, same hosting footprints, expired domain with unrelated history, thin posts linking to unrelated money sites.\n11. Does the site sell links without `rel=\"sponsored\"`?\n12. Has the site recently dropped sharply in estimated organic visibility (possible penalty or policy impact)?\n\nPass on anything that fails relevance **and** editorial quality, regardless of its metrics.\n\n### Red flags at a glance\n\n- \"Guaranteed DA 50+ links for $50.\"\n- A site with high third-party metrics but negligible organic traffic.\n- Every post is 500 words, published daily, on a random mix of topics.\n- A domain's history (via the Internet Archive) shows it used to be a local bakery; now it is a \"business and tech\" blog.\n- \"Do-follow link guaranteed\" in the offer.\n\n### Using tools sensibly\n\n- **Backlink tools** (Ahrefs, Semrush, Majestic, Moz): referring domains, organic traffic estimates, outbound link counts, anchor profiles. Different indexes, different numbers — look for consistency across signals.\n- **Search operators**: `site:`, `intitle:`, `inurl:resources` for prospecting and quick checks.\n- **Internet Archive**: domain history.\n- **Manual review**: always read at least two recent articles. Nothing replaces human judgement.\n\n### Worked example: triaging three opportunities\n\nA Dubai-based interior design studio is considering:\n\n| Opportunity | Relevance | Editorial | Audience | Risk | Decision |\n|---|---|---|---|---|---|\n| Regional design magazine asking for commentary on 2026 material trends | High | Staff editors | Newsletter, social, organic traffic | Low | Pursue |\n| \"Home & Lifestyle\" blog selling posts for a fee, no disclosure | Medium | Pay-to-publish | Low, falling | Selling unlabelled links | Decline |\n| University architecture department resource page for local suppliers | High (local, professional) | Curated by staff | Students and faculty | Low | Pursue with a genuinely useful resource |\n\n### When a paid placement is legitimate\n\nPaying for **advertising or sponsorship** is fine — sponsoring a conference, buying a newsletter ad, paying for a directory listing. The requirement is that any link resulting from a payment is qualified with `rel=\"sponsored\"` (or `nofollow`). Evaluate those placements on the audience and referral value, not on passing ranking signals.\n\n### Documenting decisions\n\nRecord each opportunity in your CRM or spreadsheet with the score, decision and reason. Over time this builds an internal \"approved\" and \"blocked\" list, which speeds up prospecting and trains new team members.\n\n### Common mistakes\n\n- Using a single metric threshold (\"only DR 40+\") as the whole checklist.\n- Skipping manual review because the tool says the site is strong.\n- Accepting \"free\" guest post offers that come with a request to include links to unrelated third-party sites.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Use a written checklist covering relevance, editorial quality, real audience, placement and risk.",
+            "Decline opportunities that fail relevance and editorial quality regardless of metrics.",
+            "Paid advertising and sponsorships are fine when resulting links carry rel=sponsored or nofollow.",
+            "Always read the site; tools are directional, human judgement is decisive."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A site shows high third-party authority but almost no organic traffic and posts on every topic for a fee. Decision?",
+              "options": [
+                "Buy several links to be safe",
+                "Pursue; the metric is high",
+                "Decline; it fails editorial and audience checks and looks like a link seller",
+                "Pursue only with exact-match anchors"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "High metrics with no audience and pay-to-publish policies signal a link farm."
+            },
+            {
+              "question": "Your client sponsors a local charity run and gets a link on the sponsors page. What should the link have?",
+              "options": [
+                "rel=\"sponsored\" (or nofollow)",
+                "rel=\"ugc\"",
+                "Nothing special",
+                "A canonical tag"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Links that result from payment or sponsorship should be qualified as sponsored."
+            }
+          ],
+          "activity": "Apply the 12-point checklist to five link opportunities in your niche and record decisions with reasons."
+        }
+      ]
+    },
+    {
+      "slug": "spam-policies-and-risk",
+      "title": "Spam policies, penalties and disavow",
+      "summary": "Know exactly what Google treats as link spam, how link attributes work, and when (rarely) to disavow.",
+      "lessons": [
+        {
+          "slug": "google-link-spam-policies-and-attributes",
+          "title": "Google's link spam policies and link attributes",
+          "type": "article",
+          "durationMinutes": 14,
+          "body": "### Why every link builder must know the policies\n\nGoogle's spam policies define what it considers manipulation. Breaking them can result in links being **ignored** algorithmically (Google says its systems, including SpamBrain, are designed to neutralise spammy links) or in a **manual action** against your site. For an agency, recommending violating tactics also creates legal and reputational risk with clients.\n\n### What Google defines as link spam\n\nGoogle's spam policies describe **link spam** as creating links to or from a site primarily to manipulate rankings. Examples Google lists include:\n\n- **Buying or selling links** for ranking purposes: exchanging money for links, or for posts containing links; exchanging goods or services for links; sending someone a free product in exchange for a review with a link.\n- **Excessive link exchanges** (\"link to me and I'll link to you\") or partner pages exclusively for cross-linking.\n- **Automated programs or services** to create links.\n- **Requiring a link** as part of a terms of service, contract or similar arrangement, without allowing the owner to qualify the link.\n- **Text advertisements or text links** that pass ranking credit.\n- **Advertorials or native advertising** where payment is received for articles that include links passing ranking credit.\n- **Articles, guest posts or advertorials with optimised anchor text** links.\n- **Low-quality directory or bookmark site** links.\n- **Keyword-rich, hidden or low-quality links** embedded in widgets distributed across sites.\n- **Widely distributed links in footers or templates**.\n- **Forum comments with optimised links** in the post or signature.\n\nNote what is **not** banned: guest posting itself, directories, partnerships, sponsorships and advertising. The issue is links placed *primarily to manipulate ranking* and not qualified appropriately.\n\n### Related spam policies link builders run into\n\n- **Site reputation abuse** — publishing third-party pages on a reputable site mainly to exploit its ranking signals (for example, a news site hosting unrelated coupon, casino or \"best payday loans\" pages produced by a third party). Google has clarified that this applies even when the host is involved in producing the content. Buying placement in such sections is a risky tactic.\n- **Expired domain abuse** — buying an expired domain and repurposing it primarily to manipulate rankings with low-value content that exploits the old domain's reputation.\n- **Scaled content abuse** — mass-producing pages (including with AI) primarily to manipulate rankings. Relevant to link networks built on churned content.\n\n### Link attributes\n\n| Attribute | Use for | Notes |\n|---|---|---|\n| `rel=\"sponsored\"` | Ads, sponsorships, paid placements, affiliate links | Preferred for paid relationships |\n| `rel=\"ugc\"` | User-generated content: comments, forum posts | Signals the site owner did not vouch for the link |\n| `rel=\"nofollow\"` | Any link you do not want to vouch for or associate with | Still acceptable for paid links |\n\n```html\n<a href=\"https://brand.example/\" rel=\"sponsored\">Our event sponsor</a>\n<a href=\"https://user-site.example/\" rel=\"ugc nofollow\">Commenter's site</a>\n```\n\nSince 2020, Google treats all three as **hints** for ranking — it may choose to use or ignore them — and may use them for crawling and indexing decisions. You can combine values (`rel=\"ugc nofollow\"`).\n\n### Practical guidance for common scenarios\n\n| Scenario | Compliant approach |\n|---|---|\n| Influencer or blogger receives free product and links to you | Link should be `sponsored` or `nofollow`, and the relationship disclosed to readers (FTC in the US, ASA/CAP in the UK, and similar local advertising rules) |\n| Guest post on an industry site | Write genuinely useful content; link where it helps readers; avoid keyword-stuffed anchors; many publications now nofollow contributor links — accept that |\n| Affiliate programme | Affiliate links `sponsored` |\n| Client asks you to buy \"niche edits\" | Explain the policy risk in writing; propose earned alternatives |\n| Partner page with suppliers | Fine if genuinely useful to users; avoid reciprocal link swaps at scale |\n| Press release distribution | Links in widely syndicated releases should be nofollow; value is exposure, not ranking credit |\n\n### Why the \"undetectable\" argument fails\n\nLink sellers argue their networks are invisible. Even if a tactic appears to work temporarily, Google's systems may devalue those links at any time, wasting the client's budget; manual reviewers act on reports and patterns; and your client carries the risk. Professional practice is to build a profile you would be comfortable showing a Google reviewer.\n\n### Common mistakes\n\n- Believing \"nofollow links are worthless\" — they can drive traffic, brand awareness and may be used as hints.\n- Paying for \"guest posts\" that are simply paid links with no disclosure.\n- Ignoring advertising disclosure law when gifting products for reviews.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Link spam is creating links primarily to manipulate rankings: paid, exchanged, automated or embedded at scale.",
+            "Paid links, sponsorships and affiliate links must use rel=sponsored (or nofollow).",
+            "sponsored, ugc and nofollow are hints; Google may use them for ranking, crawling and indexing decisions.",
+            "Site reputation abuse and expired domain abuse policies make parasite placements and repurposed domains risky."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which is explicitly listed by Google as link spam?",
+              "options": [
+                "A nofollowed sponsorship link",
+                "Earning a citation in a news article",
+                "Exchanging money for links that pass ranking credit",
+                "Linking to a source in your own article"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Buying or selling links for ranking purposes is a core link spam example."
+            },
+            {
+              "question": "How does Google currently treat rel=nofollow, sponsored and ugc for ranking?",
+              "options": [
+                "As strict directives that are always obeyed",
+                "As hints it may use or ignore",
+                "As canonical signals",
+                "As penalties"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Since 2020 these attributes are hints."
+            },
+            {
+              "question": "A newspaper hosts a third-party 'best casino bonuses' section to exploit its ranking signals. Which policy applies?",
+              "options": [
+                "Hidden text",
+                "Cloaking",
+                "Site reputation abuse",
+                "Scaled content abuse only"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Third-party content hosted primarily to exploit the host's reputation is site reputation abuse."
+            }
+          ],
+          "activity": "Review your client's current link-building activities against Google's link spam examples and flag anything that needs sponsored/nofollow or should stop."
+        },
+        {
+          "slug": "manual-actions-disavow-and-recovery",
+          "title": "Manual actions, disavow and recovery",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Two ways links can hurt\n\n1. **Algorithmic neutralisation** — Google's systems identify and ignore spammy links. Usually the effect is that the links simply stop helping; you will not get a notification.\n2. **Manual action** — a human reviewer at Google applies an action for unnatural links. You will see it in Search Console's **Manual actions** report, with a description such as \"Unnatural links to your site\". Actions can affect specific pages or the whole site.\n\nThere is also \"Unnatural links **from** your site\" — for sites selling or exchanging links. That action typically targets the site's outbound links' trust rather than its rankings, but it signals a serious problem.\n\n### Do you need to disavow?\n\nGoogle's documented position: **most sites do not need to use the disavow tool**. Google ignores most random, spammy links automatically. The tool is intended for cases where you have a considerable number of spammy, artificial or low-quality links pointing to your site, **and** those links have caused or are likely to cause a manual action — typically because you (or a previous agency) built them.\n\n| Situation | Disavow? |\n|---|---|\n| Random spammy links from scraper sites you never built | Generally no |\n| \"Toxic score\" alerts from an SEO tool | Not on that basis alone — tool scores are not Google's view |\n| You have an unnatural links manual action | Yes, after trying to remove links |\n| A previous agency bought hundreds of paid links with keyword anchors | Consider it proactively, even without a manual action |\n| Negative SEO worry after a sudden spike of spam links | Usually not needed; monitor; disavow only if clearly harmful patterns and you are concerned |\n\nDisavowing good links can harm you, so be precise.\n\n### The disavow file format\n\nA UTF-8 or 7-bit ASCII `.txt` file, one URL or domain per line:\n\n```text\n# Links bought by previous agency in 2023 — removal requests sent 2026-02-10, no response\ndomain:cheap-links-network.example\ndomain:seo-articles-hub.example\n# Individual pages where site owner refused removal\nhttps://blog.example.net/best-plumbers-2023/\n```\n\n- Use `domain:` to disavow an entire domain (usually safer than individual URLs, since spam sites have many pages).\n- Comments start with `#`.\n- File limits: 2 MB and 100,000 lines.\n- Uploading a new file **replaces** the previous one for that property — always maintain a master file.\n- The disavow tool works per property; use the Domain property or the property matching your canonical version.\n\n### Recovering from a manual action for unnatural links\n\n1. **Read the manual action** in Search Console carefully — scope and example links.\n2. **Export all backlinks** from Search Console's Links report plus at least one third-party tool, and deduplicate by domain.\n3. **Classify each linking domain**: natural, questionable, unnatural. Look for paid posts, link networks, exact-match anchors, sitewide footer links, low-quality directories.\n4. **Attempt removal**: contact site owners (politely, with specific URLs). Log every attempt with dates.\n5. **Disavow** the unnatural links you could not remove, at domain level where appropriate.\n6. **Stop the cause** — end any contracts with link vendors and document it.\n7. **Submit a reconsideration request** explaining: what happened, what you did (with a link to a shared spreadsheet of removal efforts), and how you will prevent it recurring. Be honest and specific; vague requests are often rejected.\n8. **Wait** — responses can take days to weeks. If rejected, review the feedback and repeat with more thorough clean-up.\n\nA reconsideration request template (outline):\n\n```text\nWe received a manual action for unnatural links on [date].\nCause: Between 2022 and 2024 our previous SEO vendor bought guest posts with\nkeyword-rich anchors on ~180 domains. We ended that contract on [date].\nActions: We audited all 1,240 linking domains (spreadsheet: [link]). We requested\nremoval from 180 domains (log with dates attached); 64 removed the links.\nWe disavowed the remaining 116 domains at domain level (file uploaded [date]).\nPrevention: All link acquisition now follows our written policy (attached):\nno paid links without rel=sponsored; monthly review of new links.\n```\n\n### After recovery\n\nRankings rarely return exactly to pre-action levels, because the manipulative links that inflated them are gone. Recovery means you are now eligible to rank on genuine merit — which is why the rest of this course focuses on building that merit.\n\n### Negative SEO: keep perspective\n\nCompetitors pointing spam at you is a common fear. Google says its systems are good at ignoring such links. Monitor your new links monthly; if you see a large, clearly malicious pattern (for example, thousands of exact-match adult anchors) and you are worried, a targeted disavow is a low-cost precaution. Do not obsess over every spammy link.\n\n### Common mistakes\n\n- Disavowing based solely on a tool's toxicity score.\n- Uploading a new disavow file that accidentally removes previous entries.\n- Submitting a reconsideration request without real removal efforts.\n- Disavowing high-quality links out of panic.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Google neutralises most spammy links automatically; most sites never need to disavow.",
+            "Disavow when you have unnatural links you or a vendor built, especially with a manual action.",
+            "Use domain: entries, keep a master file, and remember uploads replace the previous file.",
+            "Reconsideration requests need honest detail: cause, removal efforts, disavow, prevention."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "An SEO tool flags 300 'toxic' links from scraper sites you never built. No manual action exists. Best course?",
+              "options": [
+                "Generally no action needed; Google typically ignores such links — monitor instead",
+                "Buy more links to balance them",
+                "Submit a reconsideration request",
+                "Disavow them all immediately"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Google's guidance says most sites don't need to disavow; tool scores are not Google's assessment."
+            },
+            {
+              "question": "What happens when you upload a new disavow file for a property?",
+              "options": [
+                "It replaces the previous file",
+                "It is rejected if the old one exists",
+                "It applies only to new links",
+                "It is merged with the old one"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "The new file replaces the old one, so maintain a complete master file."
+            },
+            {
+              "question": "Which element strengthens a reconsideration request most?",
+              "options": [
+                "Documented removal attempts, the disavow file, and a prevention policy",
+                "A promise that it won't happen again, with no details",
+                "Threatening legal action",
+                "A list of competitors doing the same"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Reviewers look for genuine, documented clean-up and prevention."
+            }
+          ],
+          "activity": "Write a disavow file for a hypothetical clean-up of five domains and a matching three-paragraph reconsideration request."
+        }
+      ]
+    },
+    {
+      "slug": "white-hat-link-earning",
+      "title": "White-hat link-earning tactics",
+      "summary": "Practical, policy-compliant ways to earn links: linkable assets, broken-link building, resource pages, unlinked mentions, expert commentary, partnerships and podcasts.",
+      "lessons": [
+        {
+          "slug": "linkable-assets-and-data-driven-content",
+          "title": "Linkable assets and data-driven content",
+          "type": "article",
+          "durationMinutes": 13,
+          "body": "### Why assets come first\n\nOutreach amplifies what you have; it cannot manufacture value. The most reliable white-hat link building starts with a **linkable asset** — something other publishers want to reference because it helps *their* readers. (The companion course on digital PR goes deeper into newsworthy campaigns; here we focus on assets that earn links steadily over time.)\n\n### Types of linkable assets\n\n| Asset | Why people link | Example |\n|---|---|---|\n| Original data and research | Journalists and bloggers need sources for claims | Survey of 500 small UAE retailers on e-commerce adoption |\n| Free tools and calculators | Useful utility others recommend | VAT calculator for KSA and UAE; freelancer tax estimator for Pakistan |\n| Definitive guides | Reference material for a topic | \"Complete guide to hreflang for Gulf e-commerce\" |\n| Templates and checklists | Save time; frequently cited in \"resources\" posts | Downloadable migration checklist |\n| Visual assets | Easy to embed and explain | Annotated diagram of how Google crawls |\n| Glossaries and explainers | Beginners' pages link to clear definitions | SEO glossary in English and Arabic |\n| Industry benchmarks and indexes updated periodically | Recurring citations each year | Annual \"state of\" report |\n\n### Designing an asset for links (not just traffic)\n\nAsk four questions before investing:\n\n1. **Who will link?** Name the types of sites: trade publications, university course pages, government small-business portals, bloggers writing \"how to\" posts.\n2. **Why would they link?** It supports a point they make, saves their readers time, or gives them data they cannot get elsewhere.\n3. **Does something better already exist?** Search the topic and study the top-linked pages (using a backlink tool's \"best by links\" report on competitors). Your asset must be meaningfully better, newer or more specific (for example localised for Pakistan or the Gulf).\n4. **Can we maintain it?** Out-of-date data stops earning links and can harm trust.\n\n### Running original research responsibly\n\n- **Clear methodology**: sample size, how respondents were recruited, dates, geography, margin of error where relevant. Publish it on the page.\n- **Avoid leading questions** and cherry-picked findings.\n- **Use a reputable panel or your own anonymised platform data** (with appropriate privacy safeguards and consent under GDPR, UK GDPR, or local law such as the UAE PDPL or Saudi PDPL).\n- **Headline findings** written as quotable, specific statements — but never overstated.\n- **Downloadable charts** with your brand and a clear source line.\n\nA findings page structure:\n\n```text\nH1: [Topic]: [Year] [Region] Report\nSummary: 5 key findings as short bullet statements\nMethodology: who, how many, when, how\nFindings: one section per theme with chart + 2–3 sentences\nEmbed/share: download charts, suggested citation, press contact\nRelated: links to your relevant guides/services\n```\n\n### Tools and calculators\n\nTools earn links when they solve a recurring problem precisely. Good candidates are calculations your audience does often and gets wrong (shipping duties, salary after tax, ad budget pacing). Make them fast, mobile-friendly, and explain the assumptions. A tool page with helpful explanatory text also ranks for its own queries.\n\n### Promoting assets\n\n- **Owned channels**: newsletter, social, community groups, partner newsletters.\n- **Targeted outreach**: journalists covering the topic, bloggers who wrote about it recently, resource page curators (next lesson), educators.\n- **Internal linking**: link from relevant evergreen pages so the asset is discovered and passes value on to commercial pages.\n- **Refresh cycles**: update annually and re-pitch \"new data for [year]\".\n\n### Illustrative worked example\n\nA Riyadh-based HR software company publishes an annual \"Remote work in KSA\" survey with a transparent methodology, plus a free end-of-service benefit calculator. Each year it pitches the new findings to regional business journalists and HR bloggers, and emails universities with HR courses offering the calculator as a teaching resource. The calculator becomes a steady link earner between survey launches. (Illustrative scenario; results vary by market and execution.)\n\n### Common mistakes\n\n- Building an asset nobody in your niche needs to cite.\n- Gating the asset behind a form so publishers cannot link to useful content.\n- Publishing research with weak methodology that journalists won't trust.\n- Launching without a promotion plan.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Start with a linkable asset: data, tools, definitive guides, templates, visuals or benchmarks.",
+            "Before building, define who will link, why, what exists already, and how you will maintain it.",
+            "Original research needs transparent methodology and privacy-compliant data handling.",
+            "Promote with targeted outreach and internal links, and refresh assets periodically."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which question should come first when planning a linkable asset?",
+              "options": [
+                "What colour should the charts be?",
+                "Which DR threshold to target?",
+                "Who will link to it and why?",
+                "How many words should it be?"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Assets succeed when they serve specific linkers' needs."
+            },
+            {
+              "question": "Why publish your survey methodology on the page?",
+              "options": [
+                "It is required by Google",
+                "It prevents scraping",
+                "It improves Core Web Vitals",
+                "Journalists and publishers are more likely to trust and cite transparent research"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Credible methodology is essential for citations."
+            }
+          ],
+          "activity": "List five linkable asset ideas for a client, and for each, name three types of sites that would realistically link to it."
+        },
+        {
+          "slug": "broken-links-resource-pages-unlinked-mentions",
+          "title": "Broken-link building, resource pages and unlinked mentions",
+          "type": "article",
+          "durationMinutes": 13,
+          "body": "### Three tactics with a common strength\n\nThese tactics work because they **help the site owner**: fixing a broken link, improving a resource list, or completing a mention they already made. That makes the request reasonable and the resulting link editorial.\n\n### 1. Broken-link building\n\n**Concept:** find pages that link to content that no longer exists (404 or dead domain), create or identify an equivalent resource, and suggest it as a replacement.\n\n**Procedure:**\n\n1. **Find dead resources in your niche.** Use a backlink tool's \"broken backlinks\" or \"best by links\" report on competitors and industry sites, filtered to 404 status. Look for defunct tools, retired studies and closed blogs that still have many linking domains.\n2. **Check the Wayback Machine** to see what the dead page contained and why people linked to it.\n3. **Create or match a replacement** — better, current and on-topic. Don't pitch a loosely related page.\n4. **Export linking pages** to the dead resource; filter for relevant, quality sites using your checklist.\n5. **Outreach:** tell them about the broken link (useful in itself), and offer your resource as one option.\n\n```text\nSubject: Broken link on your \"Small business tax resources\" page\n\nHi Amna,\n\nI was using your small business tax resources page this week — the section on\nfiling deadlines is really clear. The link to the \"FBR Filing Calendar\" in the\nthird list now returns a 404 (the site seems to have closed).\n\nIf you're looking for a replacement, we maintain an up-to-date filing calendar\nfor Pakistani freelancers here: [URL]. Totally fine if another source suits you better.\n\nThanks for putting the page together,\nBilal\n```\n\n### 2. Resource page link building\n\n**Concept:** many sites maintain curated lists — \"useful links\", \"resources for students\", \"tools we recommend\". If your asset genuinely belongs, ask to be considered.\n\n**Finding them with search operators:**\n\n```text\nintitle:resources \"technical seo\"\ninurl:resources \"small business\" Pakistan\n\"useful links\" \"digital marketing\" site:.ac.uk\n\"recommended tools\" \"local seo\"\nintitle:\"helpful links\" \"e-commerce\" UAE\n```\n\nQualify each page: is it maintained (recent updates, few broken links)? Is it curated, not a link dump? Are the listed resources similar in type to yours? University and public-sector pages rarely list commercial services but often list **free educational resources** — which is why tools, guides and templates work well here.\n\n### 3. Unlinked brand mentions\n\n**Concept:** publications sometimes mention your brand, founder, product or research without linking. A polite request to add a link (for readers' convenience) often succeeds because the editorial decision to mention you has already been made.\n\n**Procedure:**\n\n1. Set up monitoring: Google Alerts (free, limited), or a media monitoring or backlink tool's mention alerts. Search for brand name, founder names, product names and names of your studies.\n2. Check whether each mention links. If not, check the page is relevant and reputable.\n3. Contact the author or editor soon after publication — they are more likely to update fresh articles.\n4. Ask for a link to the most useful page (the study, the product), not necessarily the home page.\n\n```text\nSubject: Thanks for citing our Gulf e-commerce survey\n\nHi Daniel,\n\nThanks for including our Gulf e-commerce survey findings in your piece on\ncross-border returns — great analysis. Would you be open to linking the survey\npage so readers can see the full methodology and charts? It's here: [URL].\n\nHappy to share any extra data if useful for a follow-up.\n\nBest,\nSara\n```\n\nAlso look for **image reuse**: reverse image search your charts and infographics. Sites using them without credit can be asked to add a source link.\n\n### Link reclamation (your own broken links)\n\nBefore chasing new links, recover the ones you have lost. Use a backlink tool or Search Console's Links report to find external links pointing to **your** 404 pages or pages that redirect in chains, then 301 those URLs to the most relevant live page. This is often the quickest win in any link project, especially after migrations.\n\n### Measuring tactic efficiency\n\nTrack per tactic: prospects found, qualified, contacted, replies, links won, and time spent. Some niches convert resource pages well; others respond better to unlinked mentions. Let your data guide effort allocation.\n\n### Common mistakes\n\n- Pitching a page that is not a real replacement for the broken resource.\n- Mass-emailing every resource page regardless of fit.\n- Aggressive or entitled tone (\"you must link to us\").\n- Ignoring your own lost links while chasing new ones.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Broken-link building replaces dead resources with genuinely equivalent, better ones.",
+            "Find curated resource pages with operators like intitle:resources and qualify them before pitching.",
+            "Unlinked mentions are warm opportunities; contact authors soon after publication.",
+            "Reclaim your own lost links by redirecting linked 404 URLs to relevant live pages first."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What makes broken-link outreach likely to succeed?",
+              "options": [
+                "Helping the owner fix a broken link and offering a genuinely equivalent replacement",
+                "Offering payment",
+                "Pitching any page on your site",
+                "Asking for exact-match anchors"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "The value to the site owner is the fix; the replacement must truly fit."
+            },
+            {
+              "question": "Which search operator helps find resource pages?",
+              "options": [
+                "info:",
+                "intitle:resources \"topic\"",
+                "cache:",
+                "related:"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "intitle:resources with a topic phrase surfaces curated resource pages."
+            },
+            {
+              "question": "What is often the quickest link win after a migration?",
+              "options": [
+                "Changing anchor text",
+                "Buying new links",
+                "Disavowing all links",
+                "Redirecting your own linked 404 URLs to relevant live pages"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Reclaiming existing links through redirects restores value you already earned."
+            }
+          ],
+          "activity": "Find ten unlinked mentions or broken links pointing at dead resources in your niche, qualify them, and draft two outreach emails."
+        },
+        {
+          "slug": "expert-commentary-partnerships-podcasts",
+          "title": "Expert commentary, partnerships and podcasts",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Leverage expertise you already have\n\nMany businesses sit on untapped link opportunities: founders and staff with real expertise, suppliers and partners with websites, communities they belong to. This lesson covers three relationship-driven tactics.\n\n### Expert commentary\n\nJournalists and content writers need expert quotes to add credibility. Providing timely, useful commentary can earn citations and links from publications.\n\n**How to do it well:**\n\n1. **Identify genuine experts** in the business and their specific topics. A payroll firm's head of compliance is an expert on labour law changes; the CEO may not be.\n2. **Build a short expert bio page** for each on your site with credentials, experience and headshot — this is often where journalists link.\n3. **Monitor requests**: journalist request services and communities (for example Qwoted, Featured, and hashtag requests such as #journorequest on social platforms) — the companion Digital PR course covers these in depth.\n4. **Respond fast and specifically**: 3–5 sentences of quotable insight, with credentials and a link to the expert page. No sales pitch.\n5. **Proactive commentary**: when news breaks in your field (a regulation change, a platform update), send a short expert reaction to journalists who cover the beat.\n\n**Quality bar:** say something specific. \"Businesses should prepare\" is not quotable. \"Retailers in the UAE should check that their product pages show VAT-inclusive prices before the change takes effect, because...\" is.\n\nAccept that some publications will not link, or will nofollow. A mention in a respected publication still builds brand and trust signals.\n\n### Partnerships\n\nReal business relationships naturally generate links when there is a genuine reason:\n\n| Partnership | Natural link |\n|---|---|\n| Technology integrations | Integration directory and case studies on partner sites |\n| Suppliers and manufacturers | \"Where to buy\" or stockist pages |\n| Clients | Case studies co-published, testimonials on your site with their consent; some agencies are credited in client footers (keep these sponsored/nofollow or remove them — sitewide footer credits at scale can look manipulative) |\n| Associations and chambers of commerce | Member directories |\n| Universities | Guest lectures, internship programmes, research collaborations |\n| Events | Speaker pages, sponsor pages (sponsored) |\n| Co-marketing | Joint webinars, co-authored reports |\n\nThe line to avoid: **reciprocal link swaps at scale** (\"I'll link to you if you link to me\") with no user value. Links that reflect real relationships are fine.\n\n### Podcasts\n\nPodcast guesting builds authority, relationships and often a link from the episode page (show notes).\n\n**Process:**\n\n1. **Find relevant shows**: search podcast directories and Google for your topic plus \"podcast\", check your audience's favourite shows, look at where competitors' founders have appeared.\n2. **Qualify**: active (recent episodes), relevant audience, show notes with guest links, reasonable production quality.\n3. **Pitch with value**: three specific episode ideas tailored to the show's audience, a short bio, links to previous talks or appearances.\n\n```text\nSubject: Episode idea for [Show]: How Gulf retailers are adapting to AI search\n\nHi Omar,\n\nI've listened to your episodes with retail founders — the one on quick-commerce\nlogistics was excellent. I run SEO for regional e-commerce brands and could share:\n\n1. What changes when AI answers appear above product results\n2. Three technical mistakes we see on Arabic/English sites\n3. A simple framework for measuring organic revenue, not just rankings\n\nPrevious talk: [link]. Happy to work around your schedule.\n\nBest,\nHina\n```\n\n4. **Prepare and deliver** a useful episode — stories, specifics, no sales pitch.\n5. **Follow through**: share the episode, send the host a thank-you, provide a correct link and bio for the show notes.\n\n### Community and events\n\nSpeaking at meetups, contributing to open-source projects or answering in professional communities builds recognition. Links there are often `ugc`/`nofollow`, but the relationships lead to editorial links later. Consistency beats one-off appearances.\n\n### Common mistakes\n\n- Sending generic quotes that add nothing to a story.\n- Treating partners as link sources rather than relationships.\n- Pitching podcasts you have never listened to.\n- Using client footer credits across hundreds of sites with keyword anchors.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Expert commentary works when quotes are fast, specific and backed by a credible expert page.",
+            "Real partnerships (integrations, suppliers, associations, universities) produce natural links.",
+            "Avoid reciprocal link swaps at scale; sponsor and event links should be sponsored.",
+            "Pitch podcasts with tailored episode ideas and follow through with correct show-note links."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which expert quote is most likely to be used by a journalist?",
+              "options": [
+                "A 1,000-word essay",
+                "A specific, actionable insight with a clear reason and credentials",
+                "A link to your pricing page",
+                "'Businesses should prepare for change.'"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Journalists need concise, specific and credible commentary."
+            },
+            {
+              "question": "Which partnership linking practice is risky?",
+              "options": [
+                "An integration directory listing",
+                "An association member directory",
+                "A supplier listing you on its stockist page",
+                "Agreeing reciprocal links with dozens of unrelated sites purely for SEO"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Excessive link exchanges are named in Google's link spam policies."
+            }
+          ],
+          "activity": "List every real partner, supplier, association and event relationship your business has and note whether a genuinely useful link or listing exists or is missing."
+        }
+      ]
+    },
+    {
+      "slug": "outreach",
+      "title": "Prospecting and outreach that earns replies",
+      "summary": "Build qualified prospect lists, write personalised outreach that respects recipients and the law, and follow up without being a nuisance.",
+      "lessons": [
+        {
+          "slug": "prospecting-and-qualifying",
+          "title": "Prospecting and qualifying at scale",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Good outreach starts with a good list\n\nResponse rates depend far more on **who** you contact than on clever subject lines. A small, well-qualified list beats a large scraped one every time — and protects your email domain's reputation.\n\n### Prospecting sources\n\n| Source | How | Best for |\n|---|---|---|\n| Competitor backlinks | Export referring domains of top competitors (Module 6) | Sites already linking in your space |\n| Search operators | `intitle:`, `inurl:`, quoted phrases, `site:` | Resource pages, guest contributors, roundups |\n| Content explorers | Tools that search articles by topic and show linking domains | Authors who recently covered your topic |\n| News search | Google News, publication archives | Journalists on the beat |\n| Social and communities | LinkedIn, X, industry Slack/Discord groups | Relationship-first outreach |\n| Podcast directories | Search by topic | Guest appearances |\n| Your own network | Clients, suppliers, alumni, event contacts | Warmest prospects |\n\nUseful operator patterns:\n\n```text\n\"write for us\" OR \"contribute\" \"marketing\" -casino -loans\n\"best [topic] tools\" 2026\nintitle:\"[topic] statistics\"          # pages that cite data — pitch fresh data\ninurl:blog \"[topic]\" \"Pakistan\"\n\"[competitor name]\" -site:competitor.example   # sites mentioning competitors\n```\n\n### Qualifying: the quick pass and the deep pass\n\n**Quick pass (seconds per site):** relevance, real content, not obviously a link seller, active in the last few months. Discard 50–80% here — that is normal.\n\n**Deep pass (minutes per site):** apply the 12-point checklist from Module 1, find the right person, and note a personalisation hook.\n\n### Finding the right contact\n\n- For articles: the **author**, not a generic inbox. Find them from the byline, author page, or LinkedIn.\n- For resource pages: the page owner or site editor.\n- For businesses: the marketing or content lead.\n- Email-finding tools can help; verify addresses to avoid bounces that damage your sender reputation.\n\n### The prospect sheet\n\n```text\nDomain | Page URL | Opportunity type | Relevance (1–3) | Quality pass (Y/N) |\nContact name | Role | Email (verified) | Personalisation hook | Pitch angle |\nStatus | Date sent | Follow-up date | Outcome | Link URL | Notes\n```\n\nThe **personalisation hook** is the key column: something specific you noticed — a recent article, a gap in their resource list, a quote they used, a shared connection. If you cannot write a hook, that prospect probably is not a good fit.\n\n### Segmenting for relevance\n\nGroup prospects by the angle that fits them:\n\n- **Journalists** covering e-commerce → data study pitch.\n- **Bloggers** who wrote \"how to choose X\" guides → tool or template.\n- **Resource page owners** at universities → free educational guide.\n- **Sites with broken links** → replacement resource.\n\nEach segment gets its own template, which you then personalise individually.\n\n### Scale without spam\n\n\"Scale\" in link building means **efficient process**, not blasting thousands of emails:\n\n- Use a CRM or outreach tool to manage sequences, but personalise the first lines manually.\n- Cap daily sending per mailbox and warm up new domains gradually.\n- Send from a real person's address with a proper signature.\n- Suppress anyone who asks not to be contacted, across all campaigns.\n\n### Compliance essentials\n\nOutreach is still commercial email in many jurisdictions:\n\n- **US (CAN-SPAM):** accurate headers and subject lines, identify the sender, include a physical postal address and an easy opt-out for commercial messages, honour opt-outs promptly.\n- **UK and EU (UK GDPR/EU GDPR and PECR/ePrivacy):** processing work email addresses of individuals requires a lawful basis (often legitimate interests for relevant B2B outreach, with a balancing test); be transparent, keep data minimal and honour objections. Rules for emailing individuals (including sole traders) are stricter than for corporate subscribers under PECR.\n- **Other markets** (for example the UAE and Saudi data protection laws, or Pakistan's evolving rules): check local requirements — this area changes, so get advice for large programmes.\n\nThis is general information, not legal advice.\n\n### Common mistakes\n\n- Buying scraped email lists.\n- Contacting generic inboxes (info@) for editorial pitches.\n- No personalisation hook column — a sign you are about to spam.\n- Ignoring opt-outs across campaigns.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Who you contact matters more than clever copy; small qualified lists beat large scraped ones.",
+            "Use competitor backlinks, operators, content explorers and your network to prospect.",
+            "Every prospect needs a verified contact and a specific personalisation hook.",
+            "Outreach is subject to email and data protection law; honour opt-outs everywhere."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the best contact for pitching an update to a specific article?",
+              "options": [
+                "Any address found by a scraper",
+                "The company's accounts department",
+                "The article's author",
+                "info@ address"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Authors control their articles and respond best to relevant, personalised pitches."
+            },
+            {
+              "question": "Which practice is consistent with CAN-SPAM for commercial outreach emails?",
+              "options": [
+                "Hiding the sender",
+                "Including a physical postal address and an easy opt-out, honouring opt-outs promptly",
+                "Ignoring unsubscribe requests",
+                "Misleading subject lines"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "CAN-SPAM requires accurate headers, identification, a postal address and working opt-outs."
+            }
+          ],
+          "activity": "Build a prospect sheet of 25 qualified targets for one linkable asset, with a personalisation hook for each."
+        },
+        {
+          "slug": "outreach-emails-that-get-replies",
+          "title": "Outreach emails that get replies",
+          "type": "video",
+          "durationMinutes": 13,
+          "body": "### What editors actually want\n\nEditors, journalists and site owners receive a lot of outreach. They respond to emails that are **relevant, brief, specific, and useful to their readers**. They ignore flattery, generic templates and anything that looks like a link sale.\n\n### Anatomy of a good outreach email\n\n1. **Subject line**: specific and honest. \"Broken link on your SEO resources page\" or \"New data: how Pakistani freelancers find clients (2026)\". Avoid clickbait and fake \"Re:\" prefixes.\n2. **Opening (personalisation)**: one line proving you know their work. Specific, not flattering: \"Your guide on Shopify SEO covers theme speed really well.\"\n3. **Value**: what you offer and why it helps *their readers*.\n4. **The ask**: clear and low-friction. One ask per email.\n5. **Easy out**: \"No worries if it's not a fit.\"\n6. **Signature**: real name, role, company, website.\n\nKeep it under about 150 words. Mobile readers decide in seconds.\n\n### Templates (personalise every one)\n\n**Data study pitch to a journalist**\n\n```text\nSubject: New data: how UAE shoppers use Google Maps reviews before visiting stores\n\nHi Fatima,\n\nYou covered Dubai retail footfall last month, so this may be useful. We surveyed\n[n] UAE residents in February (methodology on the page). Three findings:\n\n• [Finding 1 — one specific sentence]\n• [Finding 2]\n• [Finding 3]\n\nFull results and charts: [URL]. Our head of research can comment by phone today.\n\nBest,\nAhmed Khan | Research lead, [Company]\n```\n\n*(The subject line's claim must match your real data — never inflate findings.)*\n\n**Resource page suggestion**\n\n```text\nSubject: Suggestion for your digital marketing resources page\n\nHi Dr Clarke,\n\nYour marketing resources page for MSc students is a great list — I especially\nliked the analytics section. We publish a free technical SEO checklist (no sign-up)\nthat students could use alongside the Google Search Central links you include: [URL].\n\nHappy for you to take a look; no problem if it doesn't fit.\n\nKind regards,\nZainab\n```\n\n**Guest contribution pitch**\n\n```text\nSubject: Article idea: 5 hreflang mistakes on Arabic–English e-commerce sites\n\nHi Tom,\n\nI read your recent pieces on international SEO — the one on ccTLD vs subfolders\ngot a lot of discussion. I'd like to contribute an article on hreflang mistakes\nwe see on bilingual Gulf stores, with code examples and screenshots.\n\nOutline: [3 bullet points]. Writing samples: [2 links].\n\nWould that interest your readers?\n\nThanks,\nImran\n```\n\nNote: a guest article should be genuinely useful, with links included only where they help readers. Do not request specific keyword anchors, and accept the publication's link policy (many nofollow contributor links).\n\n### Follow-ups\n\n- One or two follow-ups, spaced several days apart, are acceptable. Stop after that.\n- Add something new in the follow-up (a new data point, a different angle), not just \"bumping this\".\n- Never guilt-trip (\"I've emailed you three times...\").\n\n```text\nSubject: Re: New data: how UAE shoppers use Google Maps reviews\n\nHi Fatima — one more angle that might help: the pattern differs sharply by\nage group (chart: [URL]). Happy to leave it there if it's not for you.\nAhmed\n```\n\n### Personalisation at scale\n\nUse a structure where the **first line and angle** are handwritten per prospect, and the body is a segment template. Good personalisation shows you understand the recipient's content and audience; bad personalisation is inserting `{first_name}` and `{article_title}` into a generic compliment.\n\n### What never to do\n\n- Offer payment for a followed link (link spam policies).\n- Misrepresent yourself (pretending to be a reader, student or journalist).\n- Send attachments to cold contacts (spam filters and security concerns); use links.\n- Threaten or pressure (\"remove our competitor and add us\").\n- Mass-mail the same pitch to every writer at a publication simultaneously.\n\n### Handling replies\n\n- **Yes**: thank them, provide exactly what they need (URL, image, quote), confirm when live, and share their piece.\n- **Not now**: ask if you may check back in a few months or offer something else.\n- **Payment request**: politely decline paid followed links. If the placement has real audience value as advertising, it can be considered only as a clearly labelled, `sponsored` ad.\n- **No / unsubscribe**: honour it immediately and suppress the contact.\n\n### Tracking\n\nMeasure per template and segment: open rate (unreliable due to privacy features — treat as directional), reply rate, positive reply rate, links won. Improve the list and the angle before rewriting the subject line.\n\n### Common mistakes\n\n- Emails over 300 words.\n- Asking for a link in the first sentence without offering value.\n- Follow-up sequences of five or more messages.\n",
+          "video": {
+            "script": "Picture an editor's inbox on a Monday morning. Dozens of pitches. Most start with \"I love your content\" and end with a request for a link. They get deleted in seconds. So how do you get a reply? Four things. Be relevant, be brief, be specific, and be useful to their readers. Start with an honest, specific subject line. \"Broken link on your SEO resources page\" tells them exactly what's inside. Then open with one line proving you know their work, not flattery, but something concrete, like the section of their guide you found useful. Next, the value. What are you offering and why does it help their audience? New data, a replacement for a dead link, a free tool their readers would use. Then one clear, low-friction ask, and an easy way out: no problem if it's not a fit. Keep it under about a hundred and fifty words. Sign it with your real name and role. If you don't hear back, one or two follow-ups are fine, but add something new each time, like a fresh data point. Then stop. And a few lines you never cross. Don't pay for followed links. Don't pretend to be someone you're not. And when someone says no or asks not to be contacted again, honour it straight away. Great outreach isn't a trick. It's a useful message, sent to the right person, at the right time.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Good outreach is relevant, brief, specific and useful to the recipient's readers.",
+            "Personalise the opening and angle for each prospect; keep templates as structure only.",
+            "One or two follow-ups that add value, then stop.",
+            "Never offer payment for followed links or misrepresent who you are."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which subject line is best practice?",
+              "options": [
+                "\"Re: our conversation\" (when there was none)",
+                "\"URGENT: link request\"",
+                "\"You won't believe this!!!\"",
+                "\"Broken link on your SEO resources page\""
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Specific and honest subject lines perform better and avoid deception."
+            },
+            {
+              "question": "A blogger replies asking for $150 to include a followed link. Compliant response?",
+              "options": [
+                "Decline paid followed links; any paid placement must be labelled and rel=sponsored",
+                "Ask for nofollow later",
+                "Pay and ask for a followed link",
+                "Pay via gift card to avoid detection"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Paying for followed links violates Google's link spam policies; paid placements must be qualified."
+            },
+            {
+              "question": "How many follow-ups are reasonable for a cold pitch?",
+              "options": [
+                "Daily until they reply",
+                "Zero ever",
+                "Five or more",
+                "One or two, adding value, spaced several days apart"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "A small number of useful follow-ups respects recipients."
+            }
+          ],
+          "activity": "Write three personalised outreach emails for different prospect segments and one value-adding follow-up for each."
+        }
+      ]
+    },
+    {
+      "slug": "relationships-and-measurement",
+      "title": "Relationships and measuring link campaigns",
+      "summary": "Turn one-off wins into lasting relationships and measure link building by business outcomes, not vanity metrics.",
+      "lessons": [
+        {
+          "slug": "building-relationships-that-compound",
+          "title": "Building relationships that compound",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Why relationships beat transactions\n\nA single link from a pitch is a one-off. A relationship with a journalist, editor, community organiser or complementary business can produce citations, collaborations, referrals and introductions for years. The most effective link builders spend a meaningful share of their time on relationships rather than cold outreach.\n\n### Where relationships come from\n\n- **Successful outreach**: every \"yes\" is the start of a relationship, not the end of a transaction.\n- **Giving first**: sharing a journalist's article, offering data without an ask, introducing two contacts who can help each other.\n- **Showing up**: industry events, meetups, conferences, webinars, trade shows (GITEX in Dubai, local chambers of commerce, SEO meetups in Karachi, Lahore, London or New York).\n- **Being useful in public**: answering questions in professional communities, publishing helpful posts on LinkedIn, contributing to open resources.\n\n### A lightweight relationship system\n\nUse your CRM or a simple spreadsheet:\n\n```text\nName | Publication/Org | Beat/Topics | How we met | Last contact | What they need |\nWhat we've given | What they've given | Next touch (date + idea)\n```\n\nRules of thumb:\n\n1. **Know their beat.** Read what they publish. Note what topics they cover and what formats they like.\n2. **Offer before you ask.** Tip them off to a story that is not about you. Share data they could use.\n3. **Be reliable.** When you promise a quote by 3pm, deliver by 2pm. Journalists remember sources who save their deadlines.\n4. **Respect boundaries.** No pestering; no pitching everything you do.\n5. **Close loops.** Thank them when coverage runs and share it with your audience.\n\n### Relationship-driven tactics\n\n| Tactic | Example |\n|---|---|\n| Source relationships | A retail journalist asks you first when e-commerce data is needed |\n| Content collaborations | Co-authored report with a complementary SaaS company |\n| Community partnerships | Sponsoring and speaking at a local startup meetup (sponsor link sponsored; talk recap links earned) |\n| Expert panels | Hosting a roundtable and publishing insights, crediting participants |\n| Alumni and professional networks | University alumni magazines featuring founders' stories |\n\n### Internal relationships matter too\n\nLink building works best when the whole organisation contributes:\n\n- **Sales and account managers** know which clients might co-publish a case study.\n- **Product teams** can produce data or tools.\n- **Executives and specialists** provide commentary and speaking.\n- **PR and social teams** share contacts and amplification.\n\nCreate a simple intake: a form or Slack channel where colleagues flag opportunities (a speaking invite, a partner launch, an interesting dataset).\n\n### Ethical lines in relationships\n\n- Do not offer gifts or payment to journalists in exchange for coverage or links; most publications forbid it and it may breach their codes of conduct and your local laws.\n- Disclose commercial relationships where relevant.\n- Never ask a friend at a publication to add links that do not serve readers.\n\n### Measuring relationship health\n\nRelationship value is long-term, but you can track leading signs: number of active contacts per beat, inbound requests from journalists, repeat coverage, co-created assets. Review quarterly.\n\n### Worked example\n\nA London-based fintech SEO lead meets a trade journalist at a conference, then shares a useful regulatory analysis without asking for coverage. Months later, the journalist emails asking for comment on a new rule; the lead responds within an hour with a clear, specific quote. Over the next year the journalist cites the company in several articles — some with links, some without — and introduces the lead to a podcast host. (Illustrative scenario.)\n\n### Common mistakes\n\n- Only contacting people when you want something.\n- Treating a relationship as a pipeline for links, not a two-way exchange.\n- Letting contacts go cold because nobody owns them.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Relationships produce repeat citations, collaborations and introductions; transactions produce one link.",
+            "Know each contact's beat, give before you ask, be reliable and close loops.",
+            "Involve sales, product, experts and PR through a simple internal intake process.",
+            "Never pay journalists for coverage or links, and disclose commercial relationships."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the best way to start a relationship with a journalist?",
+              "options": [
+                "Follow up daily",
+                "Offer genuinely useful help or data without an immediate ask",
+                "Send a gift in exchange for a link",
+                "Pitch every company announcement"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Giving first builds trust and positions you as a useful source."
+            },
+            {
+              "question": "Why set up an internal intake channel for link opportunities?",
+              "options": [
+                "To bypass SEO",
+                "To send more cold emails",
+                "Colleagues across sales, product and leadership often spot partnership, data and speaking opportunities",
+                "Google requires it"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Many of the best opportunities originate outside the SEO team."
+            }
+          ],
+          "activity": "Build a relationship tracker with ten contacts in your niche and plan a 'give first' touchpoint for each over the next month."
+        },
+        {
+          "slug": "measuring-link-campaigns",
+          "title": "Measuring link campaigns",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Measure what matters to the business\n\nLink reports full of third-party metric jumps satisfy nobody for long. Good measurement connects link activity to outcomes the business cares about, while being honest about attribution.\n\n### A measurement framework in three layers\n\n**1. Output (did we do the work?)**\n\n- Prospects qualified, pitches sent, reply rate, positive reply rate.\n- Links and mentions won, by tactic.\n- Time or cost per link, by tactic.\n\n**2. Quality (was it the right work?)**\n\n- **New relevant referring domains** — count unique domains, not total links.\n- Share of links that are editorial and in-content.\n- Relevance mix (industry, local, trade, national media).\n- Mentions without links (brand exposure still counts).\n- Follow/nofollow/sponsored mix (reported factually; nofollow is not \"failure\").\n\n**3. Outcome (did it matter?)**\n\n- **Referral traffic** and conversions from linking pages (GA4: Traffic acquisition by session source).\n- **Organic performance of target pages**: impressions, clicks and rankings for target queries in Search Console, compared against a baseline and, where possible, against pages that did not receive links.\n- **Branded search demand**: branded query impressions in Search Console — often rises after strong coverage.\n- **Leads and revenue** attributed to organic and referral channels over time.\n\n### Setting a baseline\n\nBefore the campaign, record:\n\n- Referring domains to the target pages and the site (from one consistent tool — do not switch tools mid-campaign).\n- Search Console clicks and impressions for target pages and query groups.\n- Branded impressions.\n- Referral traffic levels.\n\n### A monthly report layout\n\n```text\n1. Summary: 3 bullets — what we won, what moved, what's next\n2. Wins: table of new links/mentions (publication, page, type, follow status, target URL)\n3. Quality: new relevant referring domains by category\n4. Outcomes: target-page clicks/impressions vs baseline; referral sessions and conversions;\n   branded impressions trend\n5. Pipeline: pitches in progress, relationship touchpoints, upcoming assets\n6. Learnings: which tactics and angles worked; what we'll change\n```\n\n### Attribution honesty\n\nRankings respond to many factors, often with delays of weeks or months, and links are processed over time. Good practice:\n\n- **Use control groups**: compare pages that received links with similar pages that did not.\n- **Annotate confounders**: site changes, algorithm updates, seasonality, PR spikes.\n- **Report ranges and trends**, not single-day rank snapshots.\n- **Avoid claiming causation** from correlation — say \"target pages' non-brand clicks rose X% over the quarter while comparable pages without new links were flat\", with numbers from your real data.\n\n### Unit economics\n\nEstimate cost per relevant referring domain by tactic (people time plus tools and asset production). Combined with outcomes, this shows where to invest. For example, an agency might find that unlinked mention reclamation is cheap per link but limited in volume, while a data study is expensive but produces higher-quality links and brand exposure. Your numbers will differ — calculate them.\n\n### Tools\n\n- Search Console Links report (Google's sample of links; not complete, but free and useful).\n- One primary third-party backlink index for consistency, plus alerts for new/lost links.\n- GA4 for referral traffic and conversions.\n- A simple dashboard (Looker Studio or similar) combining these.\n\n### Qualitative wins worth reporting\n\nNot everything valuable fits a chart. Record, with evidence: a journalist who now contacts you first for comment; an invitation to speak or contribute; a partner who proposes a co-marketing project; sales calls where prospects mention seeing your research; and citations of your brand or data in AI-generated answers (spot-checked manually, because measurement there is still immature). These signal growing authority even before search metrics move.\n\n### Lost links\n\nMonitor lost links monthly. Common causes: page deleted, redesign, link removed by editor, or your URL changed. Reclaim where possible (redirect your changed URLs; politely ask about removed links when relevant).\n\n### Common mistakes\n\n- Reporting only DA/DR changes.\n- Counting total links instead of unique relevant referring domains.\n- Switching backlink tools mid-campaign and comparing incompatible numbers.\n- Promising ranking outcomes by a date.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Measure in three layers: output, quality, outcome.",
+            "Count unique relevant referring domains and in-content editorial links, not raw link totals or DA/DR changes.",
+            "Tie outcomes to target-page performance, referral traffic, branded demand and revenue against a baseline.",
+            "Use control groups and annotate confounders for honest attribution."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which metric best reflects link-building quality?",
+              "options": [
+                "Total number of links including sitewide duplicates",
+                "Number of emails sent",
+                "Change in a third-party DA score",
+                "New relevant referring domains with editorial, in-content links"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Unique, relevant, editorial referring domains are the quality measure."
+            },
+            {
+              "question": "Why might branded search impressions be tracked in a link/PR campaign report?",
+              "options": [
+                "They replace all other metrics",
+                "Google requires it",
+                "Strong coverage often increases brand awareness and branded searches",
+                "They measure backlinks"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Brand demand is a meaningful outcome of coverage beyond direct links."
+            },
+            {
+              "question": "Why use one consistent backlink tool throughout a campaign?",
+              "options": [
+                "Google certifies one tool",
+                "It is cheaper",
+                "Tools are identical anyway",
+                "Different tools have different indexes, so switching makes comparisons unreliable"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Index differences make cross-tool comparisons misleading."
+            }
+          ],
+          "activity": "Design a monthly link-campaign report for a client using the three-layer framework and define each metric's data source."
+        }
+      ]
+    },
+    {
+      "slug": "competitor-backlink-analysis",
+      "title": "Competitor backlink analysis and planning",
+      "summary": "Reverse-engineer how competitors earned their links and turn gaps into a realistic 90-day plan.",
+      "lessons": [
+        {
+          "slug": "competitor-backlink-analysis",
+          "title": "Competitor backlink analysis",
+          "type": "article",
+          "durationMinutes": 13,
+          "body": "### What competitor analysis tells you\n\nCompetitor backlink analysis answers three questions: **who links in our space**, **what content earns those links**, and **where are the gaps** we can realistically close. It is also a reality check on the link profile needed to compete.\n\n### Choose the right competitors\n\nYour **search competitors** may differ from your business competitors. For a Karachi digital agency, the pages ranking for \"technical SEO audit\" might include global SaaS blogs, a UK agency and a news publisher. Pick:\n\n- 3–5 sites ranking for your priority query groups (from Search Console and a rank tracker).\n- 1–2 direct business competitors of similar size.\n- 1 aspirational leader.\n\n### The analysis workflow\n\n**Step 1: Profile overview**\n\nFor each competitor, from one tool: referring domains trend (growing, flat, falling), new and lost domains per month, anchor text distribution, follow/nofollow mix, top countries/TLDs of linking sites.\n\nLook for patterns: a sudden spike of referring domains with exact-match anchors may indicate paid links (do not copy it); a steady climb often reflects content and PR.\n\n**Step 2: Top linked pages**\n\nThe \"best by links\" report shows which pages attract links. Classify each:\n\n| Page type | Example | Replicable? |\n|---|---|---|\n| Data study | \"State of e-commerce in the Gulf 2025\" | Yes — with our own better or more specific data |\n| Free tool | Keyword density checker | Maybe — is there a better angle? |\n| Guide | \"What is hreflang?\" | Yes — if we can be better or more localised |\n| Home page | Brand links, directories, partners | Partly — partnerships and mentions |\n| Press/news | Funding announcement | No — situational |\n\n**Step 3: Link gap (link intersect)**\n\nFind domains linking to **two or more competitors but not you**. These sites are demonstrably willing to link in your space.\n\n```text\nLink intersect: target = ours.example\nCompetitors: comp-a.example, comp-b.example, comp-c.example\nFilter: domains linking to ≥2 competitors, not linking to us\nOutput columns: domain, linked competitors, linking page, link type, estimated traffic\n```\n\nQualify every result with the link opportunity checklist. Classify by the tactic that could win it: resource page, industry directory (legitimate, curated), media coverage, partner listing, conference sponsor, guest contribution, podcast.\n\n**Step 4: Link types and tactics**\n\nSample 30–50 competitor links manually. Estimate what share come from: editorial media, resource pages, partners/integrations, events, directories, guest posts, and questionable sources. This reveals their strategy — and what you should *not* imitate.\n\n**Step 5: Anchor and target patterns**\n\nWhich pages receive links, and with what anchors? If competitors' commercial pages get links directly, how (partners, directories)? If links flow mainly to content assets, how do they pass value to commercial pages through internal linking?\n\n### Reading the results sensibly\n\n- **Do not chase parity for its own sake.** A competitor's 5,000 referring domains may include many low-value ones. Focus on relevant, reachable, high-quality gaps.\n- **Watch for spam footprints** in competitor profiles. Seeing competitors \"get away with\" paid links is not a reason to follow; the links may already be ignored, and your client bears the risk.\n- **Consider content gaps too.** If competitors earn links with data you do not have, the solution may be a new asset, not outreach.\n\n### Worked example (illustrative)\n\nAn Abu Dhabi dental clinic compares itself with three competitors ranking in the local pack and organic results. The link intersect shows several relevant opportunities: a community health portal listing clinics, two local parenting blogs that reviewed family dentists, and a university dental faculty page listing training partners. One competitor's profile contains many links from unrelated overseas \"guest post\" blogs with keyword anchors — noted as a risk, not a tactic. The plan targets the health portal (legitimate listing), a genuinely useful children's dental care guide for the parenting blogs, and a training partnership with the faculty.\n\n### Output\n\nEnd the analysis with a short, prioritised list:\n\n```text\nOpportunity | Tactic | Effort | Expected value | Owner | Target date\n```\n\n### Common mistakes\n\n- Choosing only business competitors, missing the sites that actually rank.\n- Copying competitors' spammy link sources.\n- Presenting raw link gap exports with thousands of unqualified domains.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Pick search competitors that actually rank for your priority queries, not only business rivals.",
+            "Analyse profile trends, top linked pages, link intersect gaps, link types and anchor patterns.",
+            "Qualify every gap with your quality checklist; never copy spam footprints.",
+            "Turn findings into a short prioritised list of opportunities, tactics and owners."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What does a link intersect (link gap) report show?",
+              "options": [
+                "Your internal links",
+                "Domains linking to multiple competitors but not to you",
+                "Your broken links",
+                "Disavowed domains"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "It finds sites demonstrably willing to link in your space."
+            },
+            {
+              "question": "A competitor has many links from unrelated guest post blogs with exact-match anchors. What should you do?",
+              "options": [
+                "Report yourself to Google",
+                "Note it as a risk pattern and focus on legitimate opportunities",
+                "Copy the tactic immediately",
+                "Disavow your own links"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Imitating spam footprints transfers risk to your client; these links may already be ignored."
+            }
+          ],
+          "activity": "Run a link intersect for your site against three search competitors and qualify the top 30 domains into tactic buckets."
+        },
+        {
+          "slug": "building-a-90-day-link-plan",
+          "title": "Building a 90-day link plan",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### From ideas to a plan\n\nYou now have the ingredients: quality standards, policy knowledge, tactics, outreach skills, measurement and competitor insights. This lesson assembles them into a realistic 90-day plan for a client — the kind of plan an agency can sell, deliver and report on.\n\n### Step 1: Define goals and target pages\n\n- **Business goal**: for example, increase qualified leads from organic search for \"SEO services for e-commerce\" in the UAE and UK.\n- **Target pages**: the service page, two supporting guides, and one linkable asset to build.\n- **Baseline**: referring domains, target-page Search Console data, referral traffic, branded impressions.\n\n### Step 2: Audit the starting point\n\n- Current link profile health (any legacy manipulative links? manual actions?).\n- Lost links to reclaim (404s with links).\n- Unlinked mentions to convert.\n- Existing assets with link potential.\n- Relationships and partnerships already in place.\n\n### Step 3: Choose a tactic mix\n\nBalance quick wins with compounding work:\n\n| Horizon | Tactics | Why |\n|---|---|---|\n| Weeks 1–3 | Link reclamation, unlinked mentions, partner listings | Fast, low effort, uses existing equity |\n| Weeks 2–8 | Linkable asset creation (e.g. data study or tool); expert commentary programme | Compounding value; builds PR capability |\n| Weeks 4–12 | Asset outreach, resource pages, broken-link building, podcast guesting | Scale earned links from the asset |\n| Ongoing | Relationship building, internal linking from assets to commercial pages | Makes links count |\n\n### Step 4: Resource and capacity plan\n\nEstimate time honestly. Illustrative weekly capacity for one link specialist: prospecting and qualifying, outreach and follow-up, relationship touches, reporting. Asset creation needs research, writing, design and development time. If the capacity is not there, reduce scope rather than cut quality.\n\n### Step 5: The plan document\n\n```text\n90-day link plan — [Client]\nGoal: [business goal]; Target pages: [URLs]\nBaseline (date): referring domains [n]; target-page clicks [n]; referral sessions [n]\nStandards: link quality checklist v2; no paid followed links; disclosure rules apply\n\nMonth 1\n - Reclaim links to 404s (redirect map) — owner: tech SEO\n - Convert unlinked mentions from last 12 months — owner: outreach\n - Partner and association listings audit — owner: account manager\n - Asset: plan and field survey (methodology agreed) — owner: research\n - Expert bios live; journalist request monitoring set up — owner: PR\nMonth 2\n - Publish asset; internal links to service pages\n - Journalist and blogger outreach (segment templates, personalised)\n - Resource page and broken-link prospect lists (qualified)\nMonth 3\n - Continued outreach and follow-ups; podcast pitches (5 shows)\n - Refresh top guide; pitch to resource pages\n - Quarter review: outputs, quality, outcomes; plan next quarter\n\nReporting: monthly (template), quarterly review\nRisks: asset delays; low reply rates → adjust angle/segments\n```\n\n### Step 6: Set expectations\n\nExplain to the client:\n\n- Link building compounds; the first month often produces fewer links than later months.\n- Outcomes in search lag behind link acquisition and depend on many factors.\n- Some coverage will be nofollow or unlinked — still valuable for brand and traffic.\n- You will not buy links or use networks, and why that protects them.\n\n### Step 7: Review and adapt\n\nAt the end of each month, compare tactics by cost per relevant referring domain and by outcome contribution. Shift effort towards what works in that niche. Keep a \"learnings\" log — the most valuable internal asset an agency builds over time.\n\n### Adapting for small budgets\n\nFor a small local business with a few hours a month: focus on reclamation, local partnerships, community sponsorships (sponsored links), local media stories, and one useful local resource. For enterprise clients: dedicated research assets, a PR programme, and multi-market outreach teams with local-language pitching (Arabic, Urdu, English).\n\n### Common mistakes\n\n- Plans that list tactics without owners, capacity or dates.\n- Promising a fixed number of high-authority links per month (it incentivises low quality).\n- Forgetting internal links from earned-link assets to commercial pages.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Start with business goals, target pages and a baseline.",
+            "Balance quick wins (reclamation, mentions, partners) with compounding assets and relationships.",
+            "Plan capacity honestly and assign owners and dates to every activity.",
+            "Set expectations: links compound, outcomes lag, no paid links; review and adapt monthly."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which activities are typical quick wins early in a link plan?",
+              "options": [
+                "Building a PBN",
+                "Buying expired domains",
+                "Launching a year-long research programme",
+                "Link reclamation and converting unlinked mentions"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "They use existing equity and relationships and can be done quickly."
+            },
+            {
+              "question": "Why avoid promising a fixed number of high-authority links per month?",
+              "options": [
+                "It incentivises chasing volume and low-quality or paid links",
+                "Clients dislike numbers",
+                "Google forbids reports",
+                "It is illegal"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Volume promises push teams toward risky shortcuts."
+            }
+          ],
+          "activity": "Write a 90-day link plan for a real or fictional client using the template, including owners, capacity and a baseline."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 25,
+    "timeLimitMinutes": 40,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "olb-001",
+        "module": "links-and-authority",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is NOT a documented role of links for search engines?",
+        "options": [
+          "Understanding relevance through anchor text and context",
+          "Assessing importance",
+          "Discovering new pages",
+          "Directly setting a page's Core Web Vitals score"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Links aid discovery, relevance and importance; they have nothing to do with CWV."
+      },
+      {
+        "id": "olb-002",
+        "module": "links-and-authority",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A client wants to 'get DA to 50 this year'. What is the best response?",
+        "options": [
+          "Explain DA is a third-party estimate and reframe goals around relevant links and business outcomes",
+          "Ignore the request",
+          "Agree and buy links to hit it",
+          "Promise DR 60 instead"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Vendor metrics are proxies; goals should be relevant links, visibility and revenue."
+      },
+      {
+        "id": "olb-003",
+        "module": "links-and-authority",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which factors generally increase the value of a link? (Choose all that apply.)",
+        "options": [
+          "Being one of 400 sitewide footer links",
+          "Editorial placement within main content",
+          "Topical relevance of the linking page",
+          "The linking page being well linked and read"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Relevance, editorial context and the linking page's own signals increase value; sitewide footers do not."
+      },
+      {
+        "id": "olb-004",
+        "module": "links-and-authority",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which anchor text profile looks most natural?",
+        "options": [
+          "90% 'best SEO agency Dubai'",
+          "Only 'click here'",
+          "A mix of brand names, URLs, generic phrases and descriptive topical phrases",
+          "Only exact-match product keywords"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Natural profiles are varied and brand-heavy."
+      },
+      {
+        "id": "olb-005",
+        "module": "links-and-authority",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Two opportunities: a niche trade journal with modest third-party metrics but real readers in your industry, and a general 'news' site with high metrics that sells posts on any topic. Which is the better target and why?",
+        "options": [
+          "Neither; links do not matter",
+          "The general site, because metrics are higher",
+          "Both equally",
+          "The trade journal, because relevance, editorial standards and real audience outweigh inflated metrics"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Metrics can be manipulated; relevance and editorial integrity predict value and safety."
+      },
+      {
+        "id": "olb-006",
+        "module": "links-and-authority",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What should you check to see if a prospective linking site is actually indexed?",
+        "options": [
+          "A site: search and a search for a unique sentence from a recent article",
+          "Its logo",
+          "Its DA",
+          "Its social followers"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Search operators show whether Google indexes the site's pages."
+      },
+      {
+        "id": "olb-007",
+        "module": "links-and-authority",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which statement about links is accurate?",
+        "options": [
+          "Google no longer uses links at all",
+          "Links can make any page rank regardless of content",
+          "Links help but cannot rescue a page that fails search intent or is noindexed",
+          "Nofollow links always harm rankings"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Links are one signal among many and cannot override intent mismatch or technical blocks."
+      },
+      {
+        "id": "olb-008",
+        "module": "spam-policies-and-risk",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What attribute should an affiliate link carry?",
+        "options": [
+          "rel=\"ugc\"",
+          "rel=\"canonical\"",
+          "No attribute",
+          "rel=\"sponsored\""
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Affiliate and paid links should use sponsored (nofollow is also acceptable)."
+      },
+      {
+        "id": "olb-009",
+        "module": "spam-policies-and-risk",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which activities fall under Google's link spam examples? (Choose all that apply.)",
+        "options": [
+          "Earning a citation for original research",
+          "Widely distributed keyword-rich links in widget embeds",
+          "Excessive reciprocal link exchanges",
+          "Sending free products in exchange for reviews with followed links"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Product-for-link swaps, widget links and excessive exchanges are listed; earned citations are not spam."
+      },
+      {
+        "id": "olb-010",
+        "module": "spam-policies-and-risk",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "When does Google recommend using the disavow tool?",
+        "options": [
+          "When you have many unnatural links (often ones you built) that have caused or may cause a manual action",
+          "Monthly as routine hygiene",
+          "Never",
+          "Whenever a tool shows toxic links"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Google says most sites don't need it; it's for significant unnatural link problems."
+      },
+      {
+        "id": "olb-011",
+        "module": "spam-policies-and-risk",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which disavow file lines are correctly formatted? (Choose all that apply.)",
+        "options": [
+          "# removal requested 2026-02-10",
+          "disavow spam-network.example",
+          "domain:spam-network.example",
+          "https://blog.example.net/paid-post/"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Valid lines are domain: entries, full URLs and # comments."
+      },
+      {
+        "id": "olb-012",
+        "module": "spam-policies-and-risk",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A site receives a manual action for unnatural links. What must precede the reconsideration request?",
+        "options": [
+          "Auditing links, attempting removals, disavowing what remains and stopping the cause",
+          "Buying new links to dilute",
+          "Deleting the Search Console property",
+          "Changing domain"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Reviewers expect genuine, documented clean-up and prevention."
+      },
+      {
+        "id": "olb-013",
+        "module": "spam-policies-and-risk",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A publisher hosts third-party 'best loans' reviews produced by an outside company to benefit from the publisher's ranking strength. The publisher edits them lightly. What applies?",
+        "options": [
+          "Only a structured data issue",
+          "Site reputation abuse can still apply, as Google clarified first-party involvement doesn't exempt such content",
+          "Only an affiliate disclosure issue",
+          "No policy, because the publisher is involved"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Google clarified that host involvement does not exempt content hosted mainly to exploit the host's signals."
+      },
+      {
+        "id": "olb-014",
+        "module": "spam-policies-and-risk",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "How does Google treat rel=nofollow today?",
+        "options": [
+          "As a strict block on crawling",
+          "As a penalty",
+          "As a hint",
+          "As noindex"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Nofollow, sponsored and ugc are hints."
+      },
+      {
+        "id": "olb-015",
+        "module": "white-hat-link-earning",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is broken-link building?",
+        "options": [
+          "Redirecting your pages to 404s",
+          "Breaking competitors' links",
+          "Finding links to dead resources and suggesting a genuinely equivalent replacement",
+          "Disavowing broken links"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "It helps site owners fix dead links while earning an editorial link."
+      },
+      {
+        "id": "olb-016",
+        "module": "white-hat-link-earning",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which assets typically earn links from university resource pages? (Choose all that apply.)",
+        "options": [
+          "Useful templates and checklists",
+          "A sales page for paid services",
+          "Free calculators or tools",
+          "Free, ungated educational guides"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Educational resources get listed; commercial sales pages rarely do."
+      },
+      {
+        "id": "olb-017",
+        "module": "white-hat-link-earning",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A journalist mentions your study without linking. Best approach?",
+        "options": [
+          "Thank them and politely ask if they'd link the study so readers can see the methodology",
+          "Ignore it",
+          "Demand removal of the mention",
+          "Offer payment for a link"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Unlinked mention outreach is polite, reader-focused and fast."
+      },
+      {
+        "id": "olb-018",
+        "module": "white-hat-link-earning",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "You plan a survey-based study. Which practices increase its chances of earning credible links? (Choose all that apply.)",
+        "options": [
+          "Downloadable charts with source lines",
+          "Publishing a transparent methodology",
+          "Privacy-compliant data handling",
+          "Headlines that overstate findings to attract journalists"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Transparency, usability and compliance build credibility; overstated findings damage trust."
+      },
+      {
+        "id": "olb-019",
+        "module": "white-hat-link-earning",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is often the quickest link win for an established site?",
+        "options": [
+          "Creating a PBN",
+          "Reclaiming links pointing to your 404 URLs with relevant redirects",
+          "Buying expired domains",
+          "Commenting on forums"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Reclamation restores existing link value quickly."
+      },
+      {
+        "id": "olb-020",
+        "module": "white-hat-link-earning",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which partnership linking practice is compliant and natural?",
+        "options": [
+          "A technology partner's integration directory listing your integration",
+          "Adding keyword-anchored footer credits across hundreds of client sites",
+          "Paying for followed links on partner blogs",
+          "Agreeing to link swaps with 50 unrelated sites"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Integration directories reflect real relationships and help users."
+      },
+      {
+        "id": "olb-021",
+        "module": "white-hat-link-earning",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What makes a podcast pitch effective?",
+        "options": [
+          "A generic request to be a guest",
+          "A demand for a link",
+          "A long company history",
+          "Tailored episode ideas for that show's audience, a short bio and evidence of speaking ability"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Hosts want relevant, valuable episodes."
+      },
+      {
+        "id": "olb-022",
+        "module": "outreach",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which element should every prospect row include before outreach?",
+        "options": [
+          "A payment offer",
+          "The site's DA only",
+          "A personalisation hook",
+          "A generic compliment"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Without a hook, the pitch is likely generic and a poor fit."
+      },
+      {
+        "id": "olb-023",
+        "module": "outreach",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which outreach behaviours are appropriate? (Choose all that apply.)",
+        "options": [
+          "Verifying email addresses to avoid bounces",
+          "Honouring opt-outs across all campaigns",
+          "Sending from a real person's address with a full signature",
+          "Fake 'Re:' subject lines"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Honesty and list hygiene protect recipients and your sender reputation; fake replies are deceptive."
+      },
+      {
+        "id": "olb-024",
+        "module": "outreach",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Under UK GDPR, what is commonly relied upon as the lawful basis for relevant B2B outreach to named individuals at companies?",
+        "options": [
+          "Public task",
+          "Legitimate interests, with a balancing test and transparency",
+          "No lawful basis is needed",
+          "Vital interests"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Legitimate interests is typically used for relevant B2B outreach, with obligations to be transparent and honour objections. (General information, not legal advice.)"
+      },
+      {
+        "id": "olb-025",
+        "module": "outreach",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is a reasonable length for a cold outreach email?",
+        "options": [
+          "At least 800 words",
+          "As long as possible",
+          "Around 150 words or less",
+          "Exactly one sentence"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Short, specific emails are read and answered more often."
+      },
+      {
+        "id": "olb-026",
+        "module": "outreach",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A pitch gets no reply after two follow-ups. The prospect is highly relevant. Best next step?",
+        "options": [
+          "Send daily follow-ups",
+          "Complain publicly",
+          "Email their boss",
+          "Stop this sequence; consider a genuinely different, useful touchpoint months later or build the relationship elsewhere"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Respect silence; relationships can be built in other ways over time."
+      },
+      {
+        "id": "olb-027",
+        "module": "outreach",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What is the main purpose of the first line of an outreach email?",
+        "options": [
+          "To flatter the recipient",
+          "To show specific relevance to the recipient's work",
+          "To state your company history",
+          "To ask for the link"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Specific relevance earns attention."
+      },
+      {
+        "id": "olb-028",
+        "module": "outreach",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Why avoid attachments in cold outreach?",
+        "options": [
+          "Editors prefer printed mail",
+          "Attachments slow Google",
+          "They trigger spam filters and security concerns; links are safer",
+          "They are illegal"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Links avoid security and deliverability problems."
+      },
+      {
+        "id": "olb-029",
+        "module": "relationships-and-measurement",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is an outcome metric (not an output metric) for a link campaign?",
+        "options": [
+          "Number of emails sent",
+          "Prospects qualified",
+          "Referral conversions from linking pages",
+          "Templates written"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Outcomes are business results; outputs are activity."
+      },
+      {
+        "id": "olb-030",
+        "module": "relationships-and-measurement",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which approaches support honest attribution of link-building results? (Choose all that apply.)",
+        "options": [
+          "Annotating algorithm updates and seasonality",
+          "Claiming every ranking gain as caused by links",
+          "Comparing target pages with similar pages that did not receive links",
+          "Reporting trends rather than single-day snapshots"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Controls, annotations and trends are honest; blanket causal claims are not."
+      },
+      {
+        "id": "olb-031",
+        "module": "relationships-and-measurement",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which is the better way to count link-building quality?",
+        "options": [
+          "Unique relevant referring domains",
+          "Emails opened",
+          "Total links including duplicates",
+          "Number of nofollow links removed"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Unique relevant domains reflect breadth of editorial endorsement."
+      },
+      {
+        "id": "olb-032",
+        "module": "relationships-and-measurement",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the most effective way to start a relationship with a journalist?",
+        "options": [
+          "Pitch every press release",
+          "Offer genuinely useful help without an immediate ask",
+          "Send a gift for coverage",
+          "Follow up daily"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Giving first builds trust."
+      },
+      {
+        "id": "olb-033",
+        "module": "relationships-and-measurement",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A report shows a data study earned many links, but target service pages saw no change. What is the most useful next step?",
+        "options": [
+          "Check internal links from the study to service pages and allow time, comparing with control pages",
+          "Disavow the new links",
+          "Buy links to service pages",
+          "Declare the study a failure"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Internal linking passes value onward; outcomes lag, so measure against controls over time."
+      },
+      {
+        "id": "olb-034",
+        "module": "relationships-and-measurement",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why track branded search impressions after a PR-driven link campaign?",
+        "options": [
+          "Google requires it",
+          "They replace referral traffic",
+          "Coverage often increases brand awareness, reflected in branded searches",
+          "They measure DA"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Brand demand is a meaningful effect of coverage."
+      },
+      {
+        "id": "olb-035",
+        "module": "relationships-and-measurement",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which practice is unethical when working with journalists?",
+        "options": [
+          "Offering payment or gifts in exchange for links or coverage",
+          "Sharing data without an ask",
+          "Thanking them after publication",
+          "Meeting deadlines"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Paying for coverage breaches journalistic codes and link policies."
+      },
+      {
+        "id": "olb-036",
+        "module": "competitor-backlink-analysis",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which competitors should a backlink analysis focus on?",
+        "options": [
+          "Only your suppliers",
+          "Sites that actually rank for your priority queries plus a few direct business rivals",
+          "Only the biggest brand in the country",
+          "Random sites"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Search competitors reveal what it takes to rank for your queries."
+      },
+      {
+        "id": "olb-037",
+        "module": "competitor-backlink-analysis",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What does a competitor's 'best by links' report primarily reveal?",
+        "options": [
+          "Which pages and asset types attract links in your space",
+          "Their revenue",
+          "Their ad spend",
+          "Their disavow file"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Top linked pages show link-earning content types."
+      },
+      {
+        "id": "olb-038",
+        "module": "competitor-backlink-analysis",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "A link gap export returns 3,000 domains. What should you present to the client? (Choose all that apply.)",
+        "options": [
+          "Opportunities grouped by tactic",
+          "The raw 3,000-row export as the plan",
+          "A qualified, prioritised shortlist with tactic, effort and owner",
+          "Notes on spam footprints you will not imitate"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Raw exports are not plans; qualify, group and prioritise."
+      },
+      {
+        "id": "olb-039",
+        "module": "competitor-backlink-analysis",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "In a 90-day plan, why pair linkable assets with internal links to commercial pages?",
+        "options": [
+          "It removes nofollow",
+          "Internal links pass value earned by assets on to pages that convert",
+          "It improves CLS",
+          "Google requires it"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Internal linking helps asset equity support commercial targets."
+      },
+      {
+        "id": "olb-040",
+        "module": "competitor-backlink-analysis",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is typically a quick win in the first weeks of a link plan?",
+        "options": [
+          "Buying expired domains",
+          "Mass directory submissions",
+          "Launching a PBN",
+          "Converting unlinked mentions and reclaiming lost links"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "They use existing equity and relationships."
+      },
+      {
+        "id": "olb-041",
+        "module": "competitor-backlink-analysis",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "What should a 90-day link plan include to be deliverable? (Choose all that apply.)",
+        "options": [
+          "A baseline of links and target-page performance",
+          "A guarantee of position 1",
+          "Quality standards and policy commitments",
+          "Owners and dates for each activity"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Plans need ownership, baselines and standards; ranking guarantees are not credible."
+      },
+      {
+        "id": "olb-042",
+        "module": "competitor-backlink-analysis",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A competitor spiked by thousands of referring domains in one month with exact-match anchors from unrelated sites. What is the best interpretation?",
+        "options": [
+          "A technical error in your tool only",
+          "A successful PR campaign to copy",
+          "Proof that link spam works permanently",
+          "Likely manipulative links that may be ignored or risky; not a tactic to imitate"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Sudden unnatural spikes with exact anchors are classic manipulation footprints."
+      }
+    ]
+  }
+}
