@@ -204,6 +204,16 @@
     display: none;
   }
 
+  /* Only the current page is shown on phones: say where it sits ("2 of 3"); the button's accessible name is unchanged. */
+  .ui-pagination__page[aria-current='page'][data-of] {
+    padding-inline: var(--space-3);
+  }
+
+  .ui-pagination__page[aria-current='page'][data-of]::after {
+    content: ' of ' attr(data-of);
+    white-space: pre;
+  }
+
   .ui-pagination__ellipsis {
     display: none;
   }

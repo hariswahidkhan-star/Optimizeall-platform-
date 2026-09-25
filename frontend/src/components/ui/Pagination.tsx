@@ -97,6 +97,7 @@ export function Pagination({
                   className="ui-pagination__page"
                   aria-label={`Page ${p}`}
                   aria-current={p === page ? 'page' : undefined}
+                  data-of={p === page ? totalPages : undefined}
                   onClick={() => onPageChange(p)}
                 >
                   {p}
