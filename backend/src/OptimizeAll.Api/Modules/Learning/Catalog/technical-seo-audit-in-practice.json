@@ -1,0 +1,1256 @@
+{
+  "slug": "technical-seo-audit-in-practice",
+  "version": 1,
+  "title": "Technical SEO Audit Workshop",
+  "subtitle": "Run a complete audit on a realistic site — from crawl setup to developer tickets and stakeholder reporting",
+  "category": "seo",
+  "level": "intermediate",
+  "estimatedMinutes": 200,
+  "description": "Knowing technical SEO concepts is not the same as running an audit that gets implemented. In this workshop you audit **Kiran Home**, a fictional Lahore-based homeware brand selling to Pakistan, the UAE and the UK, whose organic traffic fell after a storefront relaunch.\n\nStep by step, you will scope the engagement and request the right access, configure a crawl that approximates Googlebot, and combine crawl data with Search Console, server logs and Core Web Vitals field data. You will then group findings into root causes, prioritise them with an impact × effort × confidence model, and write tickets with testable acceptance criteria that developers can act on.\n\nFinally, you will verify fixes in production, in Search Console and in logs, and report progress honestly to founders and managers. All data is illustrative; the workflow, templates and checklists are ready to reuse on real client sites.",
+  "outcomes": [
+    "Scope a technical audit with clear objectives, access, deliverables and testable hypotheses",
+    "Configure a crawl with the right user agent, rendering, seeds, segments and custom extraction",
+    "Combine crawl, Search Console, log and field performance data into evidence-backed findings",
+    "Group findings into root causes and prioritise them with an impact × effort × confidence model",
+    "Write developer tickets with precise expected behaviour and binary acceptance criteria",
+    "Verify fixes across production, Search Console and logs, and report outcomes honestly"
+  ],
+  "skills": [
+    "Technical SEO auditing",
+    "SEO prioritisation",
+    "Developer ticket writing",
+    "Log-file analysis",
+    "Google Search Console",
+    "Stakeholder reporting"
+  ],
+  "prerequisites": [],
+  "badge": {
+    "name": "Certified Technical SEO Auditor",
+    "description": "The holder has completed an end-to-end technical SEO audit workshop: scoping, crawl configuration, evidence gathering from Search Console and logs, root-cause triage, impact × effort prioritisation, developer-ready tickets, fix verification and stakeholder reporting.",
+    "criteria": "Completed all lessons and scored ≥ 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "scoping-and-setup",
+      "title": "Scoping the audit and setting up",
+      "summary": "Meet the fictional client, agree goals and access, and configure a crawl that reflects how Google actually sees the site.",
+      "lessons": [
+        {
+          "slug": "meet-the-client-and-scope-the-audit",
+          "title": "Meet the client and scope the audit",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### The client for this workshop\n\nThroughout this course you will audit one fictional business end to end. Everything about it is invented for teaching, and every number is **illustrative**.\n\n**Kiran Home** (`www.kiranhome.example`) sells handmade homeware — cushions, block-print bedding, brassware and rugs — from a workshop in Lahore. It ships to Pakistan, the UAE and the UK.\n\n| Fact | Detail |\n|---|---|\n| Platform | Headless storefront (React with server-side rendering) on a hosted commerce back end |\n| Size | Around 4,000 products, 180 categories, 300 blog posts |\n| Markets | `/en-pk/`, `/en-ae/`, `/ar-ae/`, `/en-gb/` subdirectories |\n| Team | Founder, marketing manager (your contact), two in-house developers, a freelance designer |\n| Recent change | New storefront launched three months ago; organic sessions have fallen noticeably since |\n| Tooling | Search Console (URL-prefix property only), GA4, Cloudflare CDN |\n\nThe marketing manager's brief: *\"Organic traffic dropped after the relaunch. Find out why, tell us what to fix first, and give our developers something they can actually work with.\"*\n\n### Why scoping comes first\n\nAudits fail more often from poor scoping than from missed issues. A 300-row spreadsheet of every warning a crawler produces is not an audit — it is a data dump. Scoping tells you **which questions matter**, **which templates carry revenue**, and **who can act on your findings**.\n\n### The scoping call: questions to ask\n\n**Business**\n\n1. Which products, categories and markets generate most revenue? Which have the best margin?\n2. What does success look like in six months — revenue, leads, visibility in a new market?\n3. Any seasonal peaks? (For Kiran Home: Eid gifting, wedding season, Black Friday in the UK and UAE.)\n\n**History**\n\n4. What changed and when? Relaunch date, URL changes, redirects, content removed, tracking changes.\n5. Any known manual actions, security incidents or outages?\n6. Were any previous audits done — and what happened to their recommendations?\n\n**Team and process**\n\n7. Who implements changes? How do they receive work (Jira, Linear, Trello, email)?\n8. Sprint length and release process? Is there a staging environment?\n9. What can the marketing team change without developers (CMS fields, redirects, content)?\n\n**Constraints**\n\n10. Budget and time for fixes this quarter. Platform limits (for example, fixed URL patterns).\n\n### The access checklist\n\nRequest everything in one message so you are not blocked mid-audit:\n\n- [ ] Search Console — ideally a **Domain property** (the client only has URL-prefix; ask them to verify the domain via DNS so you see all subdomains and protocols).\n- [ ] Bing Webmaster Tools (can be imported from Search Console).\n- [ ] GA4 with at least read access, plus pre-relaunch data for comparison.\n- [ ] CDN or server logs (Cloudflare Logpush or equivalent) — at least a few weeks.\n- [ ] Staging URL and credentials.\n- [ ] Old site crawl or URL list, and the redirect map used at launch.\n- [ ] CMS read access; list of apps/plugins installed.\n- [ ] Rank-tracking history, if any.\n\n### Writing the scope statement\n\nCapture the agreement in a short document the client signs off:\n\n```text\nAudit scope — Kiran Home (www.kiranhome.example)\nObjective: Identify technical causes of the post-relaunch organic decline and\n           produce a prioritised, developer-ready fix plan.\nIn scope:  All four market subdirectories; product, category, blog, home and\n           static templates; indexing, crawling, rendering, redirects, hreflang,\n           structured data, Core Web Vitals.\nOut of scope: Keyword research, content rewrites, link building (separate workstreams).\nDeliverables: Findings workbook, prioritised roadmap, up to 15 developer tickets,\n              stakeholder report, 30-minute walkthrough.\nTimeline:  Access by day 2; findings by day 10; walkthrough day 12.\nOwners:    Client PM — marketing manager; Dev lead — senior developer.\n```\n\n### Forming initial hypotheses\n\nBefore crawling, write down what you suspect. Hypotheses focus the audit and prevent you from drowning in data. For Kiran Home, sensible starting hypotheses are:\n\n1. **Redirect gaps** — some old URLs were not redirected, or were redirected to irrelevant pages.\n2. **Rendering or indexability regressions** — the new storefront may output different canonicals, noindex tags or thinner content.\n3. **International signals broke** — hreflang or market routing may have changed.\n4. **Performance regressions** on mobile templates.\n\nYou will confirm or reject each with evidence. Keep an open mind: the cause could also be non-technical (for example, seasonality or a broad core update coinciding with the relaunch). Check the dates of confirmed Google updates against the traffic drop before blaming the relaunch.\n\n### Common mistakes\n\n- Starting to crawl before understanding what makes money.\n- Accepting a URL-prefix property and missing half the picture.\n- Promising \"we will recover traffic by X date\". Promise a diagnosis and a plan, not a ranking outcome.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Scope before you crawl: revenue templates, markets, history, team and constraints.",
+            "Request all access in one message, including logs, pre-launch data and the launch redirect map.",
+            "Write a signed scope statement with objectives, in/out of scope, deliverables and owners.",
+            "Form testable hypotheses, and check algorithm update dates before blaming a relaunch."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why ask for a Domain property instead of the existing URL-prefix property?",
+              "options": [
+                "It unlocks ranking guarantees",
+                "It shows data for all protocols and subdomains",
+                "It speeds up crawling",
+                "It is required for GA4"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "A Domain property aggregates http/https and all subdomains so nothing is missed."
+            },
+            {
+              "question": "Traffic dropped after a relaunch. What should you check before concluding the relaunch caused it?",
+              "options": [
+                "Social media followers",
+                "The colour scheme",
+                "The number of blog posts",
+                "Whether a confirmed Google update or seasonal pattern coincides with the drop"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Correlation is not causation; updates and seasonality can coincide with launches."
+            }
+          ],
+          "activity": "Write a one-page scope statement and five hypotheses for a real or fictional client that recently relaunched its website."
+        },
+        {
+          "slug": "configuring-the-crawl",
+          "title": "Configuring the crawl like Googlebot",
+          "type": "video",
+          "durationMinutes": 13,
+          "body": "### Why configuration decides the quality of the audit\n\nThe same crawler produces completely different results depending on its settings. A text-only crawl of a JavaScript storefront may report \"no content\"; a crawl that ignores robots.txt may flag issues Google never sees. Your job is to configure a crawl that approximates **how Googlebot experiences the site**, and to record those settings so the crawl can be repeated after fixes.\n\n### The configuration sheet\n\nFor Kiran Home, the crawl configuration is:\n\n| Setting | Choice | Reason |\n|---|---|---|\n| Start URL | `https://www.kiranhome.example/` | The canonical host |\n| Additional seeds | All XML sitemaps, list of old URLs from the launch redirect map | Find orphans and test redirects |\n| User agent | Googlebot Smartphone | Mobile-first indexing |\n| Rendering | JavaScript rendering on | Headless React storefront |\n| Robots.txt | Respect | See what Google may crawl; run a second crawl ignoring it to see what is hidden |\n| Crawl limits | No depth limit; cap at a sensible URL count, then review patterns | Detect infinite spaces |\n| Speed | Modest concurrent threads, agreed with dev team | Avoid overloading origin/CDN rules |\n| Parameters | Crawl all initially | Discover facet and tracking parameter problems |\n| Extraction | Canonical, meta robots, X-Robots-Tag, hreflang, JSON-LD, H1, word count, price element | Template checks |\n| Integrations | Search Console API, GA4 | Join traffic and index data to URLs |\n\nTwo practical safeguards:\n\n- **Allow-list your crawler** with the client's CDN or bot-protection tool, or you will crawl a wall of challenge pages. Ask the developers to create a WAF rule for your crawler's IP or user agent for the audit window.\n- **Crawl staging separately** with authentication and a noindex check, not the other way round.\n\n### Custom extraction: check what matters to the business\n\nDefault reports catch generic issues. Custom extraction answers client-specific questions. For Kiran Home we want to know if product prices and \"Add to basket\" buttons exist in the rendered HTML, and whether JSON-LD price matches the visible price.\n\n```text\nExtractor 1 — visible price     CSS: .product-price__amount\nExtractor 2 — JSON-LD blocks     XPath: //script[@type=\"application/ld+json\"]\nExtractor 3 — add to basket      CSS: button[data-action=\"add-to-basket\"]\nExtractor 4 — breadcrumb links   CSS: nav.breadcrumb a\n```\n\n### Segmentation before you crawl\n\nConfigure segments by URL pattern so every report can be read per template:\n\n```text\nproduct    ^/(en-pk|en-ae|ar-ae|en-gb)/products/\ncategory   ^/(en-pk|en-ae|ar-ae|en-gb)/collections/\nblog       ^/(en-pk|en-ae|ar-ae|en-gb)/journal/\nfacet      \\?(.*&)?(colour|size|price|sort)=\nsearch     ^/(en-pk|en-ae|ar-ae|en-gb)/search\n```\n\nSegmenting early is the difference between \"3,200 pages have duplicate titles\" and \"all 3,100 duplicate titles are facet URLs, which should not be crawlable anyway\".\n\n### Two crawls are better than one\n\nRun:\n\n1. **Rendered crawl** — JavaScript on, respecting robots.txt, Googlebot Smartphone. This is your primary dataset.\n2. **Raw crawl** — JavaScript off. Comparing the two reveals what depends on rendering: links, canonicals, content, structured data.\n\nOptionally, a **list crawl** of old URLs from the pre-relaunch site to test redirects, and a **sitemap-only crawl** to test sitemap hygiene.\n\n### Sanity-check the first minutes\n\nWatch the crawl as it starts, and stop to fix config if you see:\n\n- All URLs returning 403 or a challenge page (bot protection).\n- The crawl exploding into parameter URLs within minutes (facet trap — cap it, note it as a finding, and exclude for the main crawl).\n- Rendered pages with no content (rendering timeouts; increase the AJAX timeout or check blocked resources).\n- Redirects to a login or geo page (geo-redirects by IP — itself a finding for an international site).\n\n### Recording the configuration\n\nSave the crawler's configuration file and add a short note to your findings workbook: crawler version, date, settings, seeds, exclusions. When you re-crawl for verification in Module 5, you will use the **identical** configuration, so any difference is caused by fixes and not by settings.\n\n### Common mistakes\n\n- Crawling with a desktop user agent for a mobile-first world.\n- Leaving rendering off on a JavaScript site, or on with a timeout so short that content never loads.\n- Crawling from a blocked IP and reporting \"site returns 403\" as a finding.\n- Not seeding with old URLs, so redirect problems from the relaunch are never tested.\n",
+          "video": {
+            "script": "Before you look at a single finding, look at your crawler settings. They decide what you'll find. Our client, Kiran Home, runs a React storefront with server-side rendering, four market folders, and a CDN with bot protection. So our configuration has to reflect that. First, the user agent: Googlebot Smartphone, because Google indexes the mobile version. Second, rendering: switched on, with a sensible timeout, because parts of the page depend on JavaScript. Third, seeds: not just the home page, but every XML sitemap and the list of old URLs from before the relaunch. That's how we'll test the redirects and find orphans. Next, segments. We tell the crawler which URL patterns are products, categories, blog posts, facets and search pages. Every report can then be read per template, which turns noise into a story. Then custom extraction. We pull the visible price, the JSON-LD block and the add-to-basket button, so we can check that the things that make money actually exist in the rendered HTML. Finally, watch the first few minutes. If everything returns 403, the CDN is blocking you. Get allow-listed. If the URL count explodes into filter parameters, you've found your first finding. Note it, cap it, and carry on. And save the configuration. When we verify fixes later, we'll use exactly the same settings.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Configure the crawl to approximate Googlebot Smartphone, with JavaScript rendering on JS sites.",
+            "Seed with sitemaps and old URLs; integrate Search Console and analytics data.",
+            "Use custom extraction and URL-pattern segments to answer business-specific questions per template.",
+            "Record the configuration so verification crawls are directly comparable."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why run both a rendered and a raw (JavaScript off) crawl?",
+              "options": [
+                "To double the page count",
+                "To see which content, links and tags depend on rendering",
+                "To avoid robots.txt",
+                "Because Google uses both user agents equally"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "The difference between raw and rendered output shows rendering dependence and risk."
+            },
+            {
+              "question": "Your crawler receives 403s on every URL. What is the most likely explanation?",
+              "options": [
+                "hreflang errors",
+                "The sitemap is broken",
+                "Bot protection or the CDN is blocking your crawler",
+                "The site is de-indexed"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "WAF or bot protection often blocks crawlers; get your crawler allow-listed rather than reporting it as a site-wide issue."
+            },
+            {
+              "question": "Why seed the crawl with old pre-relaunch URLs?",
+              "options": [
+                "Because Google ignores sitemaps",
+                "To inflate the report",
+                "To find duplicate titles",
+                "To test whether legacy URLs redirect correctly"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "After a relaunch, old URLs with links and history must redirect in one hop to relevant pages; a link-based crawl will not find them."
+            }
+          ],
+          "activity": "Create a crawl configuration sheet for a site you manage, including user agent, rendering, seeds, segments and three custom extractions."
+        }
+      ]
+    },
+    {
+      "slug": "crawl-and-evidence",
+      "title": "Running the crawl and gathering evidence",
+      "summary": "Turn raw crawl, Search Console, log and performance data into evidence-backed findings for the fictional client.",
+      "lessons": [
+        {
+          "slug": "reading-the-crawl-findings",
+          "title": "Reading the crawl: indexability, status and templates",
+          "type": "article",
+          "durationMinutes": 14,
+          "body": "### From thousands of rows to a handful of patterns\n\nThe Kiran Home rendered crawl has finished. The crawler found about 61,000 URLs (illustrative). Only around 4,500 are products, categories, blog posts and static pages the business actually wants indexed. The first job is to explain that gap.\n\n### Step 1: Indexability overview by segment\n\nPivot the crawl by segment and indexability:\n\n| Segment | URLs | Indexable | Non-indexable reasons |\n|---|---|---|---|\n| Product | 16,200 | 3,900 | Canonicalised to another market (see below) |\n| Category | 720 | 690 | A few noindexed |\n| Facet | 41,800 | 41,800 | Nothing prevents indexing |\n| Search | 1,900 | 1,900 | Internal search results crawlable and indexable |\n| Blog | 1,200 | 290 | Canonicalised to `/en-gb/` versions |\n| Static | 80 | 70 | Mixed |\n\n*All figures are illustrative for this exercise.*\n\nThree patterns jump out immediately:\n\n1. **Facets and internal search** are crawlable and indexable — an infinite-space problem.\n2. **Product and blog canonicals** point across markets, suggesting only one market version is treated as canonical.\n3. There are four market versions of each product (roughly 4,000 × 4), which is expected — but most are canonicalised away.\n\n### Step 2: Investigate each pattern with samples\n\nNever report a pattern without opening real examples. For pattern 2, open five products in each market:\n\n```html\n<!-- https://www.kiranhome.example/en-ae/products/brass-lantern-large -->\n<link rel=\"canonical\" href=\"https://www.kiranhome.example/en-gb/products/brass-lantern-large\">\n<link rel=\"alternate\" hreflang=\"en-ae\" href=\"https://www.kiranhome.example/en-ae/products/brass-lantern-large\">\n<link rel=\"alternate\" hreflang=\"en-gb\" href=\"https://www.kiranhome.example/en-gb/products/brass-lantern-large\">\n```\n\nFinding: every non-UK product canonicalises to the UK version while declaring hreflang. The canonical tells Google the UAE and Pakistan pages are duplicates of the UK page, so hreflang cannot work. That fits the hypothesis that international signals broke at relaunch — and explains why UAE users might see UK pricing.\n\n### Step 3: Status code and redirect review\n\nFilter the list crawl of 5,600 pre-relaunch URLs:\n\n| Result | Count | Notes |\n|---|---|---|\n| Single 301 to relevant 200 page | 3,100 | Good |\n| 301 chain (2+ hops) | 900 | Old `.html` → new slug → market folder |\n| 301 to home page | 700 | Old blog category and tag URLs |\n| 404 | 850 | Mostly old product URLs with a different slug pattern |\n| 200 (old URL still live) | 50 | Legacy pages the platform kept |\n\nThe 850 old product 404s need checking against backlinks and Search Console clicks: those with links or traffic are high priority.\n\n### Step 4: Template-level checks\n\nFor each key template, open a representative URL and review the rendered HTML against a checklist:\n\n- Title and H1: present, unique, descriptive?\n- Canonical: self-referencing on the correct market?\n- Robots directives: none unexpected in meta or headers?\n- Main content in rendered HTML; product description, price and reviews present?\n- Internal links: breadcrumbs, related products and category links as real anchors?\n- JSON-LD: valid, matching visible data?\n\nFor Kiran Home, category pages render only the first 24 products; \"Load more\" uses a button with no paginated URLs. Products beyond the first 24 in each category have few internal links — a discovery issue.\n\n### Step 5: Content signals the crawler can reveal\n\n- **Duplicate titles** mostly on facets (a symptom, not a separate issue).\n- **Thin pages**: 400 products with fewer than 30 words of description.\n- **Near-duplicate** market pages where only currency changes — acceptable for regional pages if hreflang is correct, but worth noting.\n\n### Recording findings properly\n\nEach finding in the workbook gets:\n\n```text\nID:        F-03\nTitle:     Non-UK product pages canonicalise to UK versions\nEvidence:  16,200 product URLs crawled; 12,300 canonicalise to /en-gb/ equivalents.\n           Examples: 5 URLs listed. URL Inspection: Google-selected canonical = /en-gb/.\nAffected:  All product and blog templates in /en-pk/, /en-ae/, /ar-ae/\nHypothesis link: H3 (international signals)\nSeverity:  To be scored in triage\n```\n\n### Common mistakes\n\n- Reporting the crawler's issue list verbatim.\n- Treating symptoms (duplicate titles on facets) as separate root issues.\n- Stating a finding without URL-level examples and the evidence source.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Pivot the crawl by segment and indexability to find the big patterns first.",
+            "Validate every pattern with real URL samples in the rendered HTML and URL Inspection.",
+            "Test legacy URLs with a list crawl and classify outcomes (one-hop, chain, home-page, 404, still live).",
+            "Record each finding with ID, evidence, examples, affected templates and linked hypothesis."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Non-UK product pages declare hreflang but canonicalise to the UK version. Why is this a critical finding?",
+              "options": [
+                "It only affects page speed",
+                "The canonical declares them duplicates, so hreflang cannot work and local versions may not be shown",
+                "It breaks the sitemap index",
+                "It creates a manual action"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "hreflang must reference self-canonical pages; cross-market canonicals collapse the cluster into the UK version."
+            },
+            {
+              "question": "Thousands of duplicate titles all sit on facet URLs. How should this be reported?",
+              "options": [
+                "As a hreflang issue",
+                "Ignored entirely",
+                "As a symptom of the facet crawlability root issue",
+                "As a separate high-priority title issue"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Group symptoms under the root cause; fixing facet crawlability removes the duplicate titles from scope."
+            }
+          ],
+          "activity": "Take a crawl export from any site and build a segment × indexability pivot. Write up the three biggest patterns with five sample URLs each."
+        },
+        {
+          "slug": "search-console-logs-and-performance-evidence",
+          "title": "Search Console, logs and performance evidence",
+          "type": "article",
+          "durationMinutes": 13,
+          "body": "### Crawl data shows what could happen; other sources show what did\n\nA crawler simulates. Search Console shows what Google did with your URLs, logs show what Googlebot actually requested, and field performance data shows what real users experienced. A strong audit joins all four.\n\n### Search Console: questions and where to answer them\n\n| Question | Report | Kiran Home finding (illustrative) |\n|---|---|---|\n| When did the decline start and where? | Performance, compare periods, filter by page segment via regex | Drop starts the week of relaunch; concentrated in UAE and Pakistan traffic to product pages |\n| Which URLs are not indexed and why? | Page indexing, filtered by sitemap | Many product URLs under \"Alternate page with proper canonical tag\" and \"Duplicate, Google chose different canonical\" |\n| What canonical did Google pick? | URL Inspection on samples | Google-selected canonical = UK product for UAE pages |\n| Are rich results intact? | Enhancements (Products, Breadcrumbs) | Product items fell after relaunch; missing `offers` in JSON-LD on some templates |\n| Is the server healthy for Googlebot? | Crawl stats | Response time increased after relaunch; some 5xx spikes |\n\nUseful regex filters in the Performance report:\n\n```text\nPage contains regex:  /en-ae/products/|/ar-ae/products/\nQuery does not match regex: kiran ?home|kiranhome\n```\n\nCompare 28 days before relaunch with 28 days after, and also year-on-year to control for seasonality (for example, if the relaunch coincided with a Ramadan period one year and not the other).\n\n### Logs: what Googlebot actually did\n\nCloudflare logs for four weeks, filtered to verified Googlebot, then classified by segment:\n\n| Segment | Share of Googlebot requests | Observation |\n|---|---|---|\n| Facet parameters | Large majority | Crawl trapped in filter combinations |\n| Internal search | Noticeable share | `/search?q=` URLs linked from \"popular searches\" widget |\n| Products | Small share | Many products not requested at all in four weeks |\n| Old URLs (redirects/404s) | Moderate | Googlebot still requests pre-relaunch URLs heavily |\n\n*Shares described qualitatively; your real audit would quantify them.*\n\nTwo conclusions for the report: Googlebot's attention is being spent on URLs with no value, and legacy URLs are still important to Google, so redirect gaps matter.\n\nA simple join makes the point unarguable: products with **zero Googlebot hits** in four weeks cross-referenced with **revenue from the pre-relaunch period**. If many former best-sellers have not been crawled, that is a headline finding for the stakeholder report.\n\n### Performance evidence\n\nRun PageSpeed Insights for each template and read the **field data** (CrUX) first:\n\n| Template (mobile) | LCP | INP | CLS | Status |\n|---|---|---|---|---|\n| Home | Needs improvement | Good | Good | — |\n| Category | Poor | Needs improvement | Good | Hero carousel image lazy-loaded |\n| Product | Needs improvement | Poor | Poor | Reviews widget shifts layout and blocks main thread |\n| Blog | Good | Good | Good | — |\n\n*Illustrative statuses.* Where CrUX has insufficient data for a URL, use the origin-level data and the Search Console Core Web Vitals report groups. Then use a lab trace to identify the cause.\n\n### Rendering evidence\n\nFor three products, use URL Inspection's live test and view the rendered HTML. Search for a unique sentence from the product description and the price. On Kiran Home, the description renders, but \"Customers also bought\" links are loaded after interaction and do not appear — so they provide no discovery value.\n\n### Building the evidence log\n\nEvery claim in the final report must trace back to evidence. Keep an evidence log:\n\n```text\nE-07 | Source: Cloudflare logs 1–28 Mar | Filter: verified Googlebot | Finding: facet URLs dominate requests | File: logs_segment_pivot.xlsx\nE-08 | Source: GSC Page indexing, sitemap products-en-ae.xml | Finding: most URLs 'Alternate page with proper canonical tag' | Screenshot: e08.png\n```\n\nThis protects you when a stakeholder challenges a recommendation, and it makes verification later straightforward.\n\n### Common mistakes\n\n- Reading Performance data without regex segmentation, so a market-specific drop is diluted.\n- Comparing with the previous 28 days only, ignoring seasonality.\n- Using unverified \"Googlebot\" log lines.\n- Treating Lighthouse lab scores as the verdict on Core Web Vitals.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Join crawl data with Search Console, logs and field performance data for evidence-backed findings.",
+            "Segment Search Console Performance with regex and compare both period-over-period and year-over-year.",
+            "Log analysis shows where Googlebot's attention actually goes; join it with revenue to show business impact.",
+            "Keep an evidence log so every recommendation traces to a source."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which source tells you what Googlebot actually requested?",
+              "options": [
+                "Server or CDN logs filtered to verified Googlebot",
+                "The XML sitemap",
+                "Google Trends",
+                "A desktop crawler"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Only logs record real bot requests; crawlers simulate and Search Console summarises."
+            },
+            {
+              "question": "Why compare year-over-year as well as the 28 days before a relaunch?",
+              "options": [
+                "Because data older than 28 days is more accurate",
+                "To increase sample size only",
+                "Search Console requires it",
+                "To control for seasonality such as Ramadan or holiday peaks"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Seasonal shifts can mimic or mask a relaunch impact."
+            },
+            {
+              "question": "A product page's 'Customers also bought' links only load after a click. What does this mean for SEO?",
+              "options": [
+                "Google will not see them, so they add no discovery value",
+                "They cause a manual action",
+                "They pass full link value",
+                "They are treated as nofollow"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Googlebot does not click; content loaded only on interaction is not seen."
+            }
+          ],
+          "activity": "Create an evidence log template and fill in five entries from a real site's Search Console, logs or PageSpeed Insights."
+        }
+      ]
+    },
+    {
+      "slug": "triage-and-prioritisation",
+      "title": "Triage and prioritisation",
+      "summary": "Group findings into root causes and rank them with an impact × effort × confidence model tied to business value.",
+      "lessons": [
+        {
+          "slug": "from-findings-to-root-causes",
+          "title": "From findings to root causes",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Why grouping matters\n\nYour Kiran Home workbook now holds about 40 findings. Many are symptoms of the same underlying cause. Developers and managers act on **causes**, not symptoms. Grouping transforms \"40 issues\" into \"7 problems with clear fixes\".\n\n### The 5 Whys, applied to SEO\n\nTake the finding \"3,100 duplicate title tags\".\n\n1. Why duplicate titles? Because facet URLs reuse the category title.\n2. Why are facet URLs crawled? Because filters are links with parameters, and nothing blocks them.\n3. Why are they linked as crawlable links? The storefront's filter component outputs anchor links for every combination.\n4. Why was that not caught? No SEO requirements were specified for the new filter component.\n5. Why? The relaunch had no SEO acceptance criteria.\n\nRoot cause: **facet URLs are crawlable and indexable by default**. Process cause: **no SEO acceptance criteria in releases**. The duplicate titles, the crawl waste in logs, and part of the \"Crawled – currently not indexed\" growth are all symptoms.\n\n### Kiran Home: root-cause map\n\n| Root cause | Symptoms (finding IDs) |\n|---|---|\n| RC1: Cross-market canonicals on product and blog templates | Non-UK pages not indexed (F-03), hreflang ineffective (F-11), UAE users see UK prices in results (F-12), Page indexing \"Alternate page with proper canonical\" (E-08) |\n| RC2: Facets and internal search crawlable and indexable | Duplicate titles (F-05), crawl waste (E-07), thin search pages indexed (F-09) |\n| RC3: Incomplete relaunch redirects | Legacy 404s with backlinks (F-06), home-page redirects (F-07), chains (F-08) |\n| RC4: Category pagination not crawlable | Deep products with few inlinks (F-14), products not crawled in logs (E-09) |\n| RC5: Product template performance | Poor INP/CLS from reviews widget (F-16), LCP image lazy-loaded on categories (F-17) |\n| RC6: Product structured data incomplete | Product rich result items dropped (F-19) |\n| RC7: Process — no SEO release checks | Enables recurrence of all of the above |\n\n### Distinguishing issue types\n\nLabel each root cause, because it changes who owns it and how it is fixed:\n\n- **Configuration** — a setting or rule (robots.txt, canonical logic, redirect manager).\n- **Template/code** — component behaviour (filters, pagination, JSON-LD output).\n- **Content** — thin or duplicate copy; owned by marketing.\n- **Infrastructure** — server response, CDN, caching.\n- **Process** — missing checks, ownership, documentation.\n\n### Estimating affected scope\n\nFor each root cause, quantify scope with your data:\n\n- Number of URLs and templates affected.\n- Share of revenue or organic traffic flowing through those templates (from GA4 and Search Console).\n- Markets affected.\n\nRC1 affects every non-UK product and blog URL, in the three markets that the founder said account for most revenue — a very large scope. RC6 affects all products but its impact is limited to rich result presentation.\n\n### Watch for false positives\n\nNot every crawler warning is a problem:\n\n- **\"Missing meta description\"** on paginated category pages — low value; Google often rewrites snippets anyway.\n- **\"Multiple H1s\"** — HTML5 allows it; not a meaningful issue if the page is clear.\n- **\"Low word count\"** on a contact page — expected.\n- **\"Non-indexable canonicalised URLs\"** that are intentionally canonicalised (UTM variants) — working as designed.\n\nExplicitly list notable non-issues in the report so stakeholders do not receive the same alerts from a tool and panic.\n\n### Tie back to hypotheses\n\n| Hypothesis | Verdict | Evidence |\n|---|---|---|\n| H1 Redirect gaps | Confirmed (partial) | RC3 |\n| H2 Rendering/indexability regressions | Confirmed | RC1, RC4 |\n| H3 International signals broke | Confirmed | RC1 |\n| H4 Mobile performance regression | Confirmed on product/category templates | RC5 |\n| Alternative: algorithm update | Not supported — no confirmed update aligned with the drop, and the drop is concentrated in affected templates/markets | Performance segmentation |\n\n### Common mistakes\n\n- Handing developers 40 symptom tickets that all touch the same component.\n- Omitting process causes — the next release reintroduces the problems.\n- Presenting tool warnings as issues without judging their relevance.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Group symptoms into root causes using a 5 Whys chain; developers act on causes.",
+            "Label root causes by type (configuration, template, content, infrastructure, process) to route ownership.",
+            "Quantify scope with URL counts and traffic or revenue share per template and market.",
+            "Call out false positives and close the loop on each hypothesis with evidence."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Duplicate titles, crawl waste in logs and indexed thin search pages share which root cause at Kiran Home?",
+              "options": [
+                "Missing hreflang",
+                "Incomplete JSON-LD",
+                "Slow server",
+                "Crawlable, indexable facets and internal search"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "All three flow from filter and search URLs being crawlable and indexable."
+            },
+            {
+              "question": "Which crawler warning is often a false positive?",
+              "options": [
+                "Canonical pointing to a 404",
+                "Multiple H1 elements on a clear, well-structured page",
+                "robots.txt disallowing CSS",
+                "noindex on the home page"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Multiple H1s are valid HTML and rarely an SEO problem; the others are real issues."
+            }
+          ],
+          "activity": "Take ten findings from an audit and group them into root causes using the 5 Whys. Label each by type and owner."
+        },
+        {
+          "slug": "prioritising-impact-effort-confidence",
+          "title": "Prioritising with impact × effort × confidence",
+          "type": "article",
+          "durationMinutes": 13,
+          "body": "### Why a model beats intuition\n\nEvery stakeholder has a favourite issue. A transparent scoring model turns debate into a shared decision and makes trade-offs explicit. It also protects you: if the business later asks why something was not done first, the reasoning is documented.\n\n### The scoring model\n\nScore each root cause from 1 to 5 on three dimensions:\n\n- **Impact** — how much organic performance or business value is at stake? Consider the share of revenue templates affected, severity (blocking indexing vs cosmetic), and markets.\n- **Effort** — developer and content time, testing complexity, risk. Score *inverted* so low effort gets a high score (5 = trivial, 1 = major project).\n- **Confidence** — how sure are you that fixing it will produce the benefit? High when evidence is direct (Google-selected canonical is wrong), lower when inferred (CWV improvements may help conversion but have an uncertain ranking effect).\n\n**Priority score = Impact × Effort (inverted) × Confidence**, maximum 125.\n\n| Scale | Impact | Effort (inverted) | Confidence |\n|---|---|---|---|\n| 5 | Blocks indexing of key revenue templates | Config change, under a day | Direct evidence and documented Google behaviour |\n| 3 | Affects discovery or rich results on important templates | A sprint of work | Strong but indirect evidence |\n| 1 | Cosmetic or best-practice | Multi-sprint rebuild | Speculative |\n\n### Scoring Kiran Home\n\n| Root cause | Impact | Effort (inv.) | Confidence | Score | Notes |\n|---|---|---|---|---|---|\n| RC1 Cross-market canonicals | 5 | 4 | 5 | **100** | One template change; directly explains non-UK losses |\n| RC3 Relaunch redirect gaps | 4 | 4 | 4 | **64** | Redirect manager bulk import; prioritise URLs with links/traffic |\n| RC2 Facets and search crawlable | 4 | 3 | 4 | **48** | Filter component changes + robots.txt |\n| RC4 Pagination not crawlable | 3 | 3 | 4 | **36** | Paginated URLs behind Load more |\n| RC6 Product structured data | 3 | 4 | 3 | **36** | Add offers to JSON-LD; eligibility, not ranking |\n| RC5 Product/category performance | 3 | 2 | 3 | **18** | Third-party widget replacement; strong conversion case |\n| RC7 Process — SEO release checks | 4 | 4 | 3 | **48** | Prevents recurrence; cheap to start |\n\n*All scores illustrative.* Notice RC5 scores lower on SEO grounds but may still be scheduled early because performance often affects conversion rate — say so, and let the business weigh it.\n\n### Sequencing, not just ranking\n\nScores give an order; dependencies and risk shape the plan:\n\n1. **Quick wins with high impact first** — RC1 and the top slice of RC3 (legacy URLs with backlinks or historic traffic).\n2. **Sequence dependent changes** — for RC2, stop internal linking to facets and add robots.txt rules *after* checking none of the facet URLs are ones you want indexed; if some are already indexed and you want them gone, consider noindex first, then block once they drop out.\n3. **Bundle work by component** — RC4 and RC2 both touch the category/filter component; ship them in the same sprint to reduce testing overhead.\n4. **Process fix early** — RC7 so new releases do not undo the work.\n\n### The roadmap view\n\n```text\nSprint 1 (weeks 1–2):  RC1 canonical fix · RC3 redirects (priority tier) · RC7 release checklist\nSprint 2 (weeks 3–4):  RC2 facets/search + RC4 pagination (category component) · RC3 remaining\nSprint 3 (weeks 5–6):  RC6 Product JSON-LD · RC5 reviews widget and LCP image fix\nOngoing:               Monitoring, verification crawls, stakeholder updates\n```\n\n### Communicating uncertainty\n\nAvoid forecasting precise traffic gains. Instead, frame expected outcomes as observable leading indicators:\n\n- RC1: non-UK product URLs move from \"Alternate page with proper canonical tag\" to Indexed; Google-selected canonical matches the declared one.\n- RC2: Googlebot share of requests on facet URLs falls in logs.\n- RC3: legacy 404s with links drop to near zero.\n\nTraffic outcomes depend on competition, demand and Google's systems; leading indicators are what you can commit to.\n\n### Common mistakes\n\n- Prioritising by crawler \"severity\" labels instead of business impact.\n- Ignoring effort, so the roadmap starts with a six-month rebuild.\n- Promising specific traffic recovery numbers.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Score root causes on impact, inverted effort and confidence; multiply for a transparent priority.",
+            "Sequence by dependencies, risk and shared components, not just by score.",
+            "Include process fixes early so releases do not reintroduce problems.",
+            "Commit to leading indicators rather than precise traffic forecasts."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "In the model, why is effort scored inverted?",
+              "options": [
+                "To match Google's scoring",
+                "So that low-effort items contribute a higher score",
+                "So that high-effort items score higher",
+                "Because effort is irrelevant"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Inverting effort means cheap fixes rank higher, all else equal."
+            },
+            {
+              "question": "Which is the best way to express the expected outcome of fixing cross-market canonicals?",
+              "options": [
+                "'Rankings will reach position 1'",
+                "'Non-UK product URLs should move to Indexed with matching Google-selected canonicals'",
+                "'Traffic will rise 40% in 30 days'",
+                "'Nothing measurable will change'"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Leading indicators are observable and honest; precise traffic forecasts are not credible."
+            },
+            {
+              "question": "Why bundle the facet and pagination fixes into one sprint?",
+              "options": [
+                "They have the same score",
+                "They affect only the blog",
+                "Both change the category/filter component, so testing overhead is shared",
+                "Google requires it"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Grouping work by component reduces development and QA effort and risk."
+            }
+          ],
+          "activity": "Score five root causes from an audit you know using impact × effort × confidence and turn them into a three-sprint roadmap."
+        }
+      ]
+    },
+    {
+      "slug": "developer-tickets",
+      "title": "Writing tickets developers act on",
+      "summary": "Translate SEO findings into precise, testable tickets and work effectively within a development team's process.",
+      "lessons": [
+        {
+          "slug": "anatomy-of-a-great-seo-ticket",
+          "title": "Anatomy of a great SEO ticket",
+          "type": "article",
+          "durationMinutes": 13,
+          "body": "### Why most SEO recommendations are never implemented\n\nDevelopers receive vague requests like \"fix canonicals\" or \"improve site speed\". They cannot estimate, test or close such tickets, so the work stalls. A good ticket reads like a small specification: what is wrong, where, why it matters, exactly what should change, and how to prove it is done.\n\n### The ticket template\n\n```text\nTitle:          [SEO] <Component>: <specific change>\nType / Priority: Bug | Improvement — P1/P2/P3 (from roadmap score)\nSummary:        One or two sentences a non-SEO can understand.\nBusiness impact: Why it matters, linked to revenue templates/markets.\nCurrent behaviour: What happens now, with 2–5 example URLs.\nExpected behaviour: Precise rule, including edge cases.\nAcceptance criteria: Testable statements (Given/When/Then or checklist).\nHow to test:    Commands, tools, URLs to verify.\nOut of scope:   What not to change.\nDependencies / risks: Related tickets, rollback notes.\nReferences:     Google documentation links, evidence IDs.\n```\n\n### Example ticket 1: cross-market canonicals (RC1)\n\n```text\nTitle: [SEO] Product & blog templates: canonical must self-reference the current market URL\n\nSummary: Product and journal pages in /en-pk/, /en-ae/ and /ar-ae/ currently set their\ncanonical to the /en-gb/ equivalent. Google therefore treats non-UK pages as duplicates\nand shows UK pages (with GBP prices) to users in Pakistan and the UAE.\n\nBusiness impact: Affects all product and journal URLs in three markets that account for\nmost revenue (per GA4). Evidence: E-08, F-03, F-11.\n\nCurrent behaviour:\n  /en-ae/products/brass-lantern-large → canonical: /en-gb/products/brass-lantern-large\n\nExpected behaviour:\n  - The canonical equals the page's own absolute URL: protocol https, host www, current\n    market folder, no query string, lowercase, trailing slash rule as per site standard.\n  - Parameterised variants (?utm_*, ?variant=) canonicalise to the clean URL of the same market.\n  - hreflang tags continue to list all four markets plus x-default (no change).\n\nAcceptance criteria:\n  [ ] For every product and journal URL in each market, rendered HTML contains exactly one\n      canonical link element in the head, equal to its own clean URL.\n  [ ] Canonical is present in the server-rendered (raw) HTML, not only after hydration.\n  [ ] No canonical points to a URL that redirects or returns non-200.\n  [ ] Automated test added to the template test suite.\n\nHow to test:\n  curl -s https://staging.kiranhome.example/en-ae/products/brass-lantern-large | grep -i canonical\n  Crawl staging product list (list provided) and check canonical = address.\n\nOut of scope: Changing URL structure, hreflang values.\nRisk: Low. Rollback = revert template commit.\n```\n\n### Example ticket 2: facets (RC2)\n\n```text\nTitle: [SEO] Category filters: stop exposing crawlable parameter links; block low-value parameters\n\nExpected behaviour:\n  1. Filter options for size, price, sort and multi-select combinations update the listing\n     without outputting crawlable anchor links to parameter URLs (use buttons with JS\n     state or URL fragments). Brand and colour filters for the approved list (attached)\n     continue to link to clean static URLs, e.g. /en-gb/collections/cushions/indigo/.\n  2. Parameter order is normalised: brand, colour, size, price.\n  3. Zero-result filter combinations return HTTP 404.\n  4. robots.txt adds (after ticket SEO-12 confirms no approved facets use these parameters):\n       Disallow: /*?*sort=\n       Disallow: /*?*price=\n       Disallow: /*?*size=\n       Disallow: /*/search\nAcceptance criteria:\n  [ ] Rendered category HTML contains no anchor href with sort=, price= or size= parameters.\n  [ ] Approved facet pages return 200, self-canonical, unique title/H1.\n  [ ] /en-gb/collections/cushions/?size=xl&price=0-10 with no results returns 404.\n  [ ] robots.txt changes deployed only after staging tests pass.\n```\n\n### Writing good acceptance criteria\n\nAcceptance criteria must be **binary** (pass/fail) and **checkable** by a QA engineer without SEO knowledge:\n\n- Good: \"Returns HTTP 404 for zero-result combinations.\"\n- Bad: \"Handle empty filters properly.\"\n- Good: \"The LCP image on category templates has no loading=lazy attribute and has fetchpriority=high.\"\n- Bad: \"Improve LCP.\"\n\n### Give developers the why — briefly\n\nLink to Google's documentation for context (canonicalisation, faceted navigation, redirects) and keep the explanation short. Developers respect specificity; long SEO essays inside tickets are skipped.\n\n### Sizing and splitting\n\nIf a ticket would take more than a sprint, split it by template or by market. Tickets that can ship independently get value live sooner and are easier to roll back.\n\n### Common mistakes\n\n- Tickets without example URLs.\n- Expected behaviour that ignores edge cases (parameters, trailing slashes, uppercase, pagination).\n- Mixing several unrelated fixes into one ticket.\n- Not specifying whether a tag must be in the raw HTML or can be added client-side.\n",
+          "video": null,
+          "keyTakeaways": [
+            "A great ticket states current vs expected behaviour with example URLs and precise rules.",
+            "Acceptance criteria must be binary and testable by someone without SEO knowledge.",
+            "Specify edge cases and whether output must exist in the raw server-rendered HTML.",
+            "Split large work by template or market so value ships sooner and rollback is easier."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which acceptance criterion is testable?",
+              "options": [
+                "'Every product URL's raw HTML contains one canonical equal to its own clean URL'",
+                "'Improve crawlability'",
+                "'Make the canonicals better'",
+                "'Fix SEO on products'"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Testable criteria are specific, binary and checkable."
+            },
+            {
+              "question": "Why specify that the canonical must be in the raw server-rendered HTML?",
+              "options": [
+                "Google ignores canonicals entirely",
+                "Relying on client-side injection adds rendering risk and possible raw/rendered conflicts",
+                "Raw HTML loads faster",
+                "It is required for hreflang in sitemaps"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Server-rendered tags avoid rendering dependence and conflicting signals."
+            }
+          ],
+          "activity": "Rewrite a vague SEO recommendation you have seen (e.g. 'fix redirects') into a complete ticket using the template."
+        },
+        {
+          "slug": "working-with-development-teams",
+          "title": "Working with development teams: sprints, QA and release risk",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### SEO is a team sport\n\nEven perfect tickets fail if they arrive at the wrong time, to the wrong person, in the wrong format. This lesson covers how to get Kiran Home's two developers to ship the roadmap — and how to avoid breaking something in the process.\n\n### Fit into their process, not yours\n\n- **Use their tool** (Jira, Linear, GitHub Issues, Trello). Tickets in a PDF appendix are not tickets.\n- **Attend sprint planning** (or send a short brief before it). Explain the top three tickets in five minutes: problem, evidence, expected outcome.\n- **Respect estimation.** Let developers size the work. If their estimate is much larger than you expected, ask what drives it — often there is a simpler implementation.\n- **Offer alternatives.** \"If changing the filter component is too big this sprint, the robots.txt rule plus removing the 'popular searches' links gets most of the crawl benefit.\"\n\n### A definition of done for SEO-affecting changes\n\nAgree a short checklist with the team and add it to their pull request template. For Kiran Home:\n\n```text\nSEO checks for any change touching templates, routing, redirects or robots:\n[ ] Status codes correct for new/changed URLs (200/301/404 as intended)\n[ ] Canonical: one, absolute, self-referencing (unless specified), in raw HTML\n[ ] Meta robots / X-Robots-Tag: no unexpected noindex/nofollow\n[ ] hreflang set complete and reciprocal for affected templates\n[ ] Internal links are anchor elements with href\n[ ] Structured data valid (Rich Results Test on one URL per template)\n[ ] robots.txt unchanged unless ticket says otherwise\n[ ] No LCP image lazy-loaded; no new layout shift\n```\n\n### Automate what you can\n\nManual checks do not scale. Suggest lightweight automation that developers are comfortable with:\n\n- **Template tests** asserting canonical, robots meta and hreflang output for sample routes.\n- **A robots.txt check in CI** that fails the build if production robots.txt contains `Disallow: /` or differs from an approved version.\n- **Lighthouse CI or similar** on key templates, with budgets for LCP and CLS in the lab.\n- **Post-deploy smoke test** requesting ten critical URLs and asserting status codes and key tags.\n\n```bash\n# post-deploy smoke test sketch\nfor url in / /en-ae/products/brass-lantern-large/ /en-gb/collections/cushions/; do\n  code=$(curl -s -o /tmp/p.html -w \"%{http_code}\" \"https://www.kiranhome.example$url\")\n  grep -q 'name=\"robots\" content=\"noindex' /tmp/p.html && echo \"NOINDEX on $url\"\n  echo \"$code $url\"\ndone\n```\n\n### QA on staging\n\nBefore each release:\n\n1. List-crawl the URLs affected by the tickets on staging (with authentication).\n2. Check acceptance criteria per ticket and record pass/fail in the ticket.\n3. Diff against the pre-change crawl to catch unintended side effects (for example, a canonical fix that also changed trailing-slash behaviour sitewide).\n\n### Release risk management\n\nSome SEO changes are high-risk: robots.txt edits, sitewide canonical logic, redirects in bulk, and changes to rendering. For these:\n\n- Deploy at a time when someone can monitor (not late on a Thursday before Eid holidays or a bank-holiday weekend).\n- Have a **rollback plan** written in the ticket.\n- Monitor logs and Search Console for 48–72 hours afterwards.\n- For robots.txt, check the Search Console robots.txt report to confirm Google fetched the new version.\n\n### Handling pushback\n\n| Pushback | Productive response |\n|---|---|\n| \"Google can handle it\" | \"Sometimes — here is the Search Console evidence that it currently isn't.\" |\n| \"It's just SEO, it can wait\" | Tie it to revenue: \"These are the best-selling products not crawled in four weeks.\" |\n| \"Our framework does it automatically\" | \"Great — here is a staging URL where the output differs; can we check the config?\" |\n| \"Too big for this sprint\" | Offer a smaller first step that captures most value. |\n\n### Common mistakes\n\n- Sending tickets directly to developers and bypassing their lead or product owner.\n- Assuming a merged PR means the issue is fixed in production.\n- Treating developers as an audience for SEO lectures instead of partners with constraints.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Work inside the team's tools and ceremonies; brief sprint planning with problem, evidence and outcome.",
+            "Agree an SEO definition of done and add it to pull request templates.",
+            "Automate checks for canonicals, robots directives and robots.txt in tests, CI and post-deploy smoke tests.",
+            "Treat robots.txt, canonical logic, bulk redirects and rendering changes as high-risk releases with rollback plans."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which safeguard best prevents a staging 'Disallow: /' reaching production?",
+              "options": [
+                "Disallowing Googlebot-Image",
+                "A reminder email",
+                "Adding more sitemaps",
+                "A CI check that fails the build if production robots.txt blocks the whole site or differs from an approved version"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Automated checks catch the error before release, regardless of who deploys."
+            },
+            {
+              "question": "A developer says the requested filter change is too big for this sprint. Best response?",
+              "options": [
+                "Offer a smaller first step, such as removing links to search pages and adding robots.txt rules, that captures much of the value",
+                "Escalate to the CEO",
+                "Ask them to work overtime",
+                "Drop the issue"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Smaller steps keep momentum and deliver value while the larger change is planned."
+            }
+          ],
+          "activity": "Draft an SEO definition-of-done checklist and a post-deploy smoke test list of ten critical URLs for a site you work on."
+        }
+      ]
+    },
+    {
+      "slug": "verification-and-reporting",
+      "title": "Verifying fixes and reporting to stakeholders",
+      "summary": "Prove that fixes worked with repeatable checks, and communicate progress and outcomes clearly to decision makers.",
+      "lessons": [
+        {
+          "slug": "verifying-fixes",
+          "title": "Verifying fixes: recrawl, Search Console and logs",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Merged is not fixed\n\nA ticket is not done when the pull request merges. It is done when **production behaves as specified** and **search engines have processed the change**. Verification has three layers.\n\n### Layer 1: Production behaviour (same day)\n\nUse the **same crawl configuration** saved in Module 1 and list-crawl the affected URLs in production.\n\nFor RC1 (canonicals), a check in a spreadsheet or script:\n\n```python\n# pseudo-check on crawl export\nbad = df[(df.segment == \"product\") & (df.canonical != df.address)]\nprint(len(bad), \"product URLs still not self-canonical\")\n```\n\nFor RC3 (redirects), recrawl the legacy URL list and confirm:\n\n| Check | Target |\n|---|---|\n| Legacy URLs with backlinks → one 301 → 200 relevant page | All |\n| Chains of 2+ hops | None in priority tier |\n| Redirects to home page | Only where the home page is genuinely the closest match |\n| Deliberate 410s | Only on the agreed no-equivalent list |\n\nRecord results in the ticket with the crawl date and export file.\n\n### Layer 2: Google's processing (days to weeks)\n\n1. **URL Inspection** on a sample of fixed URLs: request a live test to confirm Google sees the new canonical; optionally request indexing for a handful of key pages (it is rate-limited and not needed for thousands of URLs).\n2. **Page indexing report** — use **Validate fix** for the relevant issue type once the fix is live. Validation can take a while (often up to a couple of weeks, sometimes longer on large sites) and will show passed/failed samples.\n3. **Sitemaps** — resubmit updated sitemaps so recrawling is prompted.\n4. **Enhancement reports** for structured data changes (RC6) — valid Product items should rise.\n5. **Core Web Vitals report** (RC5) — field data updates on a rolling 28-day window, so expect a delay before groups move; use Validate fix to track.\n\n### Layer 3: Behaviour change in logs (weeks)\n\nLogs confirm that Google's crawling reacts to your changes:\n\n- After RC2, Googlebot requests to `sort=`, `price=`, `size=` URLs should fall sharply once the robots.txt rules are fetched; requests to product URLs should become a larger share.\n- After RC4, previously uncrawled deep products should begin to appear in logs.\n- After RC3, Googlebot hits on legacy 404s should decline as redirects are followed and 404 URLs recrawled less often.\n\nCreate a simple weekly chart of Googlebot requests by segment, annotated with release dates. It becomes the most persuasive visual in your stakeholder report.\n\n### Regression watch\n\nFixes can regress when unrelated code changes. For the first months:\n\n- Weekly scheduled crawl of a fixed URL sample per template, diffed against the post-fix baseline.\n- Alert if any product canonical differs from its address, any noindex appears on product/category templates, or robots.txt changes.\n\n### What if the fix did not work?\n\nDiagnose with the pipeline:\n\n- Production correct, but Google still selects the old canonical? Check conflicting signals (internal links, sitemaps, hreflang pointing at other URLs) and wait for recrawl; look at last crawl date in URL Inspection.\n- Validation failed on some samples? Open each failed URL — often an edge case (uppercase URLs, trailing slashes, a second template variant).\n- Log behaviour unchanged? Confirm the robots.txt Google fetched (robots.txt report) and that internal links to the blocked patterns were removed.\n\n### Verification record\n\nClose each ticket with a short note:\n\n```text\nSEO-07 verified 2026-04-18\n- Production crawl (config v1.2): 0 of 12,300 product URLs non-self-canonical.\n- GSC validation 'Alternate page with proper canonical tag' started 2026-04-19.\n- 10/10 sampled URLs: Google-selected canonical = user-declared (URL Inspection, 2026-05-02).\n- Evidence: verify_SEO-07.xlsx, screenshots v07-1..3.\n```\n\n### Common mistakes\n\n- Verifying on staging only.\n- Requesting indexing for thousands of URLs manually instead of fixing signals and sitemaps.\n- Declaring victory from one URL Inspection sample.\n- Forgetting that CWV field data lags by weeks.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Verify in three layers: production behaviour, Google's processing, and crawl behaviour in logs.",
+            "Reuse the saved crawl configuration so before and after results are comparable.",
+            "Use Validate fix in Search Console and expect processing to take days to weeks.",
+            "Record verification evidence in each ticket and watch for regressions."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A canonical fix is live in production, but URL Inspection still shows the old Google-selected canonical a few days later. First step?",
+              "options": [
+                "Disavow links",
+                "Request indexing for every URL",
+                "Revert the fix",
+                "Check the last crawl date and conflicting signals such as internal links, sitemaps and hreflang"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Google may not have recrawled yet, or other signals may conflict; investigate before changing course."
+            },
+            {
+              "question": "Why do Core Web Vitals improvements appear slowly in Search Console?",
+              "options": [
+                "Google must manually approve them",
+                "Field data is aggregated over a rolling 28-day window",
+                "Lab data must be submitted",
+                "Search Console updates yearly"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "CrUX data uses a rolling 28-day period, so changes take weeks to show fully."
+            }
+          ],
+          "activity": "Write a verification plan for one fix: production checks, Search Console steps, log indicators and a regression alert."
+        },
+        {
+          "slug": "reporting-to-stakeholders",
+          "title": "Reporting to stakeholders",
+          "type": "article",
+          "durationMinutes": 13,
+          "body": "### Different audiences, different reports\n\nThe Kiran Home founder, the marketing manager and the developers all need different things from your audit:\n\n| Audience | Wants | Format |\n|---|---|---|\n| Founder / leadership | What happened, what it costs, what we do, when we will know | One-page executive summary, 3–5 slides |\n| Marketing manager | Plan, progress, what they own | Roadmap, status tracker, monthly report |\n| Developers | Exact tasks | Tickets (Module 4) |\n\n### The executive summary structure\n\nKeep it to one page. Lead with the answer.\n\n```text\nKiran Home — Technical SEO audit: executive summary\n\nWhat happened\nAfter the relaunch, the new storefront told Google that UAE and Pakistan product\npages were duplicates of UK pages. Google therefore stopped showing most local\npages, and UK pages with GBP prices appeared instead. At the same time, Google spent\nmost of its crawling on filter and search URLs rather than products.\n\nWhat it means\nThe markets that drive most revenue lost much of their product visibility in organic\nsearch. (Illustrative: organic product-page sessions from the UAE and Pakistan fell\nsharply after launch; UK was stable.)\n\nWhat we will do (next 6 weeks)\n1. Fix product and journal canonicals (1 sprint) — the main cause.\n2. Restore redirects for old URLs that have links or historic traffic.\n3. Stop filters and search pages being crawled; make category pages fully crawlable.\n4. Fix product structured data and the slow reviews widget.\n5. Add SEO checks to every release.\n\nHow we will know it's working\n- Local product pages move to 'Indexed' in Search Console (weeks 2–6).\n- Google's crawling shifts from filters to products in server logs (weeks 2–4).\n- Organic sessions and revenue from UAE/PK product pages trend back towards\n  pre-launch levels. Timing depends on Google's recrawl and competition.\n\nDecisions needed\n- Approve 2 developer sprints; confirm the reviews-widget replacement budget.\n```\n\n### Visuals that persuade\n\n1. **Traffic by market/segment with the relaunch annotated** — shows *where* the drop is.\n2. **Googlebot requests by segment over time** — the crawl-waste story in one chart.\n3. **Indexed vs not indexed by sitemap segment** — before and after.\n4. **Roadmap timeline** with owners.\n\nKeep charts simple: one message per chart, a title that states the conclusion (\"Googlebot spends most of its time on filter pages\"), and annotations for releases.\n\n### Monthly progress report\n\nFor the marketing manager, a recurring report with:\n\n- **Status tracker**: each ticket — owner, sprint, status (planned / in progress / live / verified).\n- **Leading indicators**: index coverage by segment, Googlebot request mix, CWV status by template, rich result items.\n- **Lagging indicators**: organic clicks, sessions and revenue by market and template, year-over-year.\n- **Risks and blockers**: what is slipping and what decision unblocks it.\n- **Next month's focus**.\n\n### Honest attribution\n\nOrganic performance is affected by many factors: seasonality, demand, competitors, Google's updates, pricing and stock. Be careful with claims:\n\n- Say \"after the fix went live, local product pages returned to the index and organic sessions to those pages recovered over the following weeks\", not \"our fix increased revenue by X\".\n- Where possible, compare fixed segments to an unaffected control (UK pages were largely unaffected by RC1 — a natural comparison).\n- Annotate confounders (a big promotion, a Google core update, Eid sales).\n\n### The walkthrough meeting\n\nA 30-minute agenda that works:\n\n1. Five minutes: the story (executive summary).\n2. Ten minutes: top three root causes with one piece of evidence each.\n3. Ten minutes: roadmap and what each person owns.\n4. Five minutes: decisions and next steps.\n\nSend the materials in advance, record decisions in writing afterwards, and set the date for the first progress check.\n\n### Common mistakes\n\n- Opening with methodology instead of the answer.\n- Burying the three things that matter in a 90-page PDF.\n- Taking full credit for recovery without acknowledging other factors.\n- Reporting only rankings, not revenue-relevant outcomes and leading indicators.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Tailor reports: executive summary for leaders, roadmap and tracker for marketing, tickets for developers.",
+            "Lead with the answer: what happened, what it means, what we will do, how we will know, decisions needed.",
+            "Use simple, annotated charts with conclusion-style titles.",
+            "Attribute results honestly, using control segments and noting confounders."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What should come first in an executive summary for the founder?",
+              "options": [
+                "What happened and what it means for the business",
+                "A glossary of SEO terms",
+                "The full list of 40 findings",
+                "Crawler configuration details"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Leaders need the answer and its business impact before any detail."
+            },
+            {
+              "question": "How can you strengthen the case that a canonical fix caused a recovery?",
+              "options": [
+                "Remove seasonal data",
+                "Claim all revenue growth as SEO",
+                "Only show ranking screenshots",
+                "Compare the fixed segments against an unaffected control segment and annotate confounders"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "A control segment and annotated confounders make attribution more credible."
+            },
+            {
+              "question": "Which chart title is most effective?",
+              "options": [
+                "'Googlebot data'",
+                "'Googlebot spends most of its crawling on filter pages'",
+                "'Chart 7'",
+                "'Log analysis results (see appendix)'"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Conclusion-style titles communicate the message immediately."
+            }
+          ],
+          "activity": "Write a one-page executive summary for an audit (real or the Kiran Home case) using the five-part structure."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 25,
+    "timeLimitMinutes": 40,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "tsa-001",
+        "module": "scoping-and-setup",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the main purpose of the scoping call before an audit?",
+        "options": [
+          "To understand revenue templates, history, team and constraints so the audit answers the right questions",
+          "To sell additional services",
+          "To run the crawl together",
+          "To agree ranking targets"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Scoping focuses the audit on what matters and who can act on findings."
+      },
+      {
+        "id": "tsa-002",
+        "module": "scoping-and-setup",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which access items should be requested before a post-relaunch audit? (Choose all that apply.)",
+        "options": [
+          "The redirect map used at launch",
+          "Pre-relaunch analytics data",
+          "The developers' personal social accounts",
+          "CDN or server logs"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Redirect maps, logs and pre-launch data are essential evidence; personal accounts are irrelevant."
+      },
+      {
+        "id": "tsa-003",
+        "module": "scoping-and-setup",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which user agent should your main crawl use for a typical site in 2026?",
+        "options": [
+          "Googlebot Desktop",
+          "Bingbot",
+          "A generic browser without a bot token",
+          "Googlebot Smartphone"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Google predominantly indexes the mobile version."
+      },
+      {
+        "id": "tsa-004",
+        "module": "scoping-and-setup",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "The crawl's URL count explodes into thousands of `?colour=&size=&sort=` URLs within minutes. What should you do?",
+        "options": [
+          "Ignore it and let the crawl run for days",
+          "Switch rendering off",
+          "Note it as a finding, cap or exclude the pattern for the main crawl, and continue",
+          "Report the site as broken"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "It is evidence of a facet trap; record it, control it and complete the main crawl."
+      },
+      {
+        "id": "tsa-005",
+        "module": "scoping-and-setup",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Why save the crawler configuration file with the audit?",
+        "options": [
+          "For billing",
+          "To share with competitors",
+          "Google requires it",
+          "So verification crawls use identical settings and differences reflect fixes, not configuration"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Comparable before/after crawls depend on identical configuration."
+      },
+      {
+        "id": "tsa-006",
+        "module": "scoping-and-setup",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which statement is an appropriate hypothesis to form before crawling a relaunched site?",
+        "options": [
+          "'The relaunch definitely caused all losses'",
+          "'Competitors hacked the site'",
+          "'SEO is dead'",
+          "'Some legacy URLs may not redirect, or may redirect to irrelevant pages'"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Good hypotheses are specific and testable; certainty before evidence is a bias."
+      },
+      {
+        "id": "tsa-007",
+        "module": "scoping-and-setup",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which scoping promise is appropriate?",
+        "options": [
+          "'We will deliver a diagnosis and a prioritised, developer-ready plan'",
+          "'We will fix everything in one sprint'",
+          "'We will get you to position 1'",
+          "'We guarantee traffic recovery in 30 days'"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Commit to deliverables and process, not ranking outcomes."
+      },
+      {
+        "id": "tsa-008",
+        "module": "scoping-and-setup",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why add custom extraction for price and 'Add to basket' elements on a headless storefront?",
+        "options": [
+          "To check that revenue-critical content exists in the rendered HTML across templates",
+          "To change prices",
+          "To produce hreflang tags",
+          "To increase crawl speed"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Custom extraction answers business-specific questions that default reports miss."
+      },
+      {
+        "id": "tsa-009",
+        "module": "crawl-and-evidence",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the first useful pivot of a large crawl?",
+        "options": [
+          "By file size only",
+          "Alphabetical by URL",
+          "Segment (template) by indexability",
+          "By meta keywords"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Segment × indexability quickly reveals the major patterns."
+      },
+      {
+        "id": "tsa-010",
+        "module": "crawl-and-evidence",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Legacy URL list-crawl results show 700 old blog tag URLs 301 to the home page. How should you classify them?",
+        "options": [
+          "Correct implementation",
+          "A hreflang issue",
+          "A Core Web Vitals issue",
+          "Likely soft 404s; map to relevant equivalents or return 404/410"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Irrelevant home-page redirects are typically treated as soft 404s."
+      },
+      {
+        "id": "tsa-011",
+        "module": "crawl-and-evidence",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which regex filter isolates non-brand queries in Search Console for Kiran Home?",
+        "options": [
+          "Page contains: /products/",
+          "Query does not match regex: kiran ?home|kiranhome",
+          "Query matches regex: kiran",
+          "Country: UAE"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Excluding brand variants leaves non-brand queries."
+      },
+      {
+        "id": "tsa-012",
+        "module": "crawl-and-evidence",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Logs show many former best-selling products received zero verified Googlebot requests in four weeks, while facet URLs dominate requests. What makes this a strong stakeholder finding? (Choose all that apply.)",
+        "options": [
+          "It joins crawl behaviour with revenue, showing business impact",
+          "It suggests internal linking and crawl-waste fixes",
+          "It proves a manual action",
+          "It is direct evidence of where Googlebot's attention goes"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Joining logs with revenue makes impact concrete and points to fixes; it does not indicate a manual action."
+      },
+      {
+        "id": "tsa-013",
+        "module": "crawl-and-evidence",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which data source reflects real-user Core Web Vitals for a template?",
+        "options": [
+          "CrUX field data in PageSpeed Insights or Search Console",
+          "robots.txt",
+          "Crawler word count",
+          "Lighthouse lab run"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Field data reflects real users; lab data is for debugging."
+      },
+      {
+        "id": "tsa-014",
+        "module": "crawl-and-evidence",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why must every finding include example URLs?",
+        "options": [
+          "To improve rankings",
+          "Because crawlers require it",
+          "So developers and stakeholders can reproduce and verify it",
+          "To pad the report"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Reproducible examples make findings credible and actionable."
+      },
+      {
+        "id": "tsa-015",
+        "module": "crawl-and-evidence",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Page indexing, filtered to the UAE product sitemap, shows most URLs as 'Alternate page with proper canonical tag'. What does that mean?",
+        "options": [
+          "The sitemap failed to parse",
+          "The pages are penalised",
+          "Pages are blocked by robots.txt",
+          "Google is honouring canonicals that point elsewhere, so these URLs are not indexed themselves"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "The status means the URL declares another page as canonical and Google agrees; here the canonical logic itself is wrong."
+      },
+      {
+        "id": "tsa-016",
+        "module": "crawl-and-evidence",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Why maintain an evidence log with sources, filters and files?",
+        "options": [
+          "To satisfy Google",
+          "It is required by GA4",
+          "So each recommendation is traceable, defensible when challenged, and easy to verify later",
+          "To increase the page count"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Traceable evidence builds trust and speeds verification."
+      },
+      {
+        "id": "tsa-017",
+        "module": "triage-and-prioritisation",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is a root cause, as opposed to a symptom?",
+        "options": [
+          "The underlying reason that produces one or more observed issues",
+          "Any crawler error",
+          "The oldest finding",
+          "The finding with the most rows"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Fixing root causes removes multiple symptoms at once."
+      },
+      {
+        "id": "tsa-018",
+        "module": "triage-and-prioritisation",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which is a process root cause?",
+        "options": [
+          "Missing offers in JSON-LD",
+          "Cross-market canonical logic",
+          "Lazy-loaded LCP image",
+          "No SEO acceptance criteria in the release process"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Process causes explain why technical issues were introduced and not caught."
+      },
+      {
+        "id": "tsa-019",
+        "module": "triage-and-prioritisation",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Using impact × inverted effort × confidence (1–5 each), which scores highest?",
+        "options": [
+          "Impact 3, effort 2, confidence 3",
+          "Impact 5, effort 4, confidence 5",
+          "Impact 4, effort 3, confidence 4",
+          "Impact 5, effort 1, confidence 3"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "5×4×5 = 100, versus 18, 48 and 15."
+      },
+      {
+        "id": "tsa-020",
+        "module": "triage-and-prioritisation",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A performance fix scores low on SEO grounds but the product team believes it will improve conversion. What is the best handling?",
+        "options": [
+          "Inflate the SEO impact score",
+          "Remove it from the roadmap",
+          "Report the SEO score honestly, note the conversion case, and let the business weigh priority",
+          "Claim it will guarantee rankings"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Be transparent about SEO confidence while surfacing other business value."
+      },
+      {
+        "id": "tsa-021",
+        "module": "triage-and-prioritisation",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which crawler warning is usually low priority?",
+        "options": [
+          "Canonical to a 404",
+          "Sitewide noindex",
+          "robots.txt blocking JS",
+          "Missing meta description on paginated category pages"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Meta descriptions on pagination rarely matter; the others can block indexing or rendering."
+      },
+      {
+        "id": "tsa-022",
+        "module": "triage-and-prioritisation",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why sequence noindex before robots.txt blocking for already-indexed facet URLs you want removed?",
+        "options": [
+          "Google requires both at once",
+          "noindex is faster to deploy",
+          "robots.txt blocks crawling, so Google could not see the noindex",
+          "To improve INP"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Blocking first hides the noindex; let URLs drop out, then block if desired."
+      },
+      {
+        "id": "tsa-023",
+        "module": "triage-and-prioritisation",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which outcomes are leading indicators you can commit to? (Choose all that apply.)",
+        "options": [
+          "A guaranteed 50% traffic increase",
+          "Legacy 404s with backlinks falling to near zero",
+          "Affected URLs moving to Indexed",
+          "Googlebot request mix shifting to products in logs"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Observable leading indicators are honest commitments; precise traffic guarantees are not."
+      },
+      {
+        "id": "tsa-024",
+        "module": "triage-and-prioritisation",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An algorithm update was confirmed two months before the relaunch, and the drop is concentrated in non-UK product pages starting relaunch week. What should the audit conclude?",
+        "options": [
+          "The update caused it",
+          "The timing and segment concentration support the relaunch changes as the main cause, while noting the update as context",
+          "UK pages must be penalised",
+          "It is impossible to say anything"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Timing plus segment concentration is strong evidence; mention other factors for honesty."
+      },
+      {
+        "id": "tsa-025",
+        "module": "developer-tickets",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which ticket title is most useful?",
+        "options": [
+          "'Fix site'",
+          "'Google issue urgent'",
+          "'[SEO] Product template: canonical must self-reference the current market URL'",
+          "'SEO problems'"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Specific titles name the component and the change."
+      },
+      {
+        "id": "tsa-026",
+        "module": "developer-tickets",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which elements belong in a developer-ready SEO ticket? (Choose all that apply.)",
+        "options": [
+          "A 3,000-word history of PageRank",
+          "Current vs expected behaviour with example URLs",
+          "Binary acceptance criteria",
+          "How to test"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Concise, testable specifications get implemented; long essays are skipped."
+      },
+      {
+        "id": "tsa-027",
+        "module": "developer-tickets",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why specify edge cases such as parameters, uppercase URLs and trailing slashes?",
+        "options": [
+          "To slow developers down",
+          "They are where implementations commonly fail",
+          "They affect only desktop",
+          "Google requires uppercase URLs"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Edge cases often break canonical and redirect logic."
+      },
+      {
+        "id": "tsa-028",
+        "module": "developer-tickets",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Where should SEO tickets live?",
+        "options": [
+          "In the development team's own tracker (e.g. Jira, Linear, GitHub Issues)",
+          "In the sitemap",
+          "In a personal notebook",
+          "In a PDF appendix"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Tickets must be in the team's workflow to be planned and delivered."
+      },
+      {
+        "id": "tsa-029",
+        "module": "developer-tickets",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which changes should be treated as high-risk releases with rollback plans? (Choose all that apply.)",
+        "options": [
+          "Fixing a typo in one blog post",
+          "robots.txt edits",
+          "Sitewide canonical logic",
+          "Bulk redirects"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Sitewide crawl and indexing controls can cause large, fast damage; a typo fix cannot."
+      },
+      {
+        "id": "tsa-030",
+        "module": "developer-tickets",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What is the purpose of a post-deploy smoke test?",
+        "options": [
+          "To confirm critical URLs return expected status codes and tags right after release",
+          "To improve rankings directly",
+          "To replace the audit",
+          "To submit sitemaps"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Smoke tests catch regressions immediately after deployment."
+      },
+      {
+        "id": "tsa-031",
+        "module": "developer-tickets",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A developer's estimate is far larger than you expected. Best first move?",
+        "options": [
+          "Insist on your estimate",
+          "Escalate immediately",
+          "Ask what drives the effort and explore simpler implementations",
+          "Cancel the ticket"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Understanding constraints often reveals a cheaper route."
+      },
+      {
+        "id": "tsa-032",
+        "module": "developer-tickets",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which acceptance criterion is binary and testable?",
+        "options": [
+          "'Make LCP good'",
+          "'Speed things up'",
+          "'The category LCP image has no loading=lazy attribute and has fetchpriority=high'",
+          "'Optimise images'"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "It can be checked as pass/fail without SEO knowledge."
+      },
+      {
+        "id": "tsa-033",
+        "module": "verification-and-reporting",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "When is an SEO ticket truly done?",
+        "options": [
+          "When the client pays",
+          "When the sprint ends",
+          "When the pull request merges",
+          "When production behaves as specified and search engines have processed the change"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Verification covers production behaviour and Google's processing."
+      },
+      {
+        "id": "tsa-034",
+        "module": "verification-and-reporting",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which Search Console feature tracks whether Google confirms a fix across affected URLs?",
+        "options": [
+          "Validate fix in the Page indexing report",
+          "Removals",
+          "Disavow",
+          "Change of Address"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Validate fix checks affected URLs and reports passed/failed samples."
+      },
+      {
+        "id": "tsa-035",
+        "module": "verification-and-reporting",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "After deploying robots.txt rules for facets, what log change indicates success?",
+        "options": [
+          "A sharp fall in Googlebot requests to blocked parameters and a larger share to products",
+          "No change at all",
+          "More Googlebot requests to facet URLs",
+          "More 5xx errors"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Logs confirm crawling shifted away from low-value URLs."
+      },
+      {
+        "id": "tsa-036",
+        "module": "verification-and-reporting",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Who is the executive summary primarily for?",
+        "options": [
+          "Crawlers",
+          "Developers",
+          "Founders and leadership",
+          "Search engines"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Leaders need the story, impact, plan and decisions."
+      },
+      {
+        "id": "tsa-037",
+        "module": "verification-and-reporting",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Recovery follows the canonical fix, but a large promotion ran at the same time. How should you report it? (Choose all that apply.)",
+        "options": [
+          "Show leading indicators such as indexing changes that align with the fix",
+          "Compare against the unaffected UK control segment",
+          "Credit SEO for all revenue growth",
+          "Annotate the promotion as a confounder"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Controls, annotations and leading indicators support honest attribution; claiming everything is not credible."
+      },
+      {
+        "id": "tsa-038",
+        "module": "verification-and-reporting",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why use the same crawl configuration for verification as for the original audit?",
+        "options": [
+          "It is faster",
+          "Differences then reflect the fixes rather than changed settings",
+          "Google requires it",
+          "To avoid robots.txt"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Comparable configurations make before/after results valid."
+      },
+      {
+        "id": "tsa-039",
+        "module": "verification-and-reporting",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A product team wants the audit's full 90-page workbook presented at the leadership meeting. Better approach?",
+        "options": [
+          "Skip the meeting",
+          "Present every finding",
+          "Present only charts with no conclusions",
+          "Present a one-page summary with the top root causes, plan and decisions, and share the workbook as backup"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Leaders need focus; detail stays available for those who need it."
+      },
+      {
+        "id": "tsa-040",
+        "module": "verification-and-reporting",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Validation fails for 3 of 20 sampled URLs after a canonical fix. What is the most likely next step?",
+        "options": [
+          "Revert the entire fix",
+          "Open the failed URLs to find edge cases (e.g. uppercase paths, another template variant) and fix them",
+          "Submit a disavow file",
+          "Ignore the failures"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Failures usually reveal edge cases the rule did not cover."
+      }
+    ]
+  }
+}

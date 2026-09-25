@@ -1,0 +1,1272 @@
+{
+  "slug": "digital-pr-and-brand-authority",
+  "version": 1,
+  "title": "Digital PR, Brand Mentions & E-E-A-T",
+  "subtitle": "Earn coverage, build a recognised brand entity, and demonstrate experience, expertise and trust",
+  "category": "seo",
+  "level": "advanced",
+  "estimatedMinutes": 200,
+  "description": "Search engines and AI answer engines increasingly reward brands that are **recognised, cited and trusted**. This advanced course shows you how to build that recognition through digital PR and brand authority work — ethically and measurably.\n\nYou will learn how journalists judge newsworthiness and run a repeatable campaign process from ideation and data methodology to sell-in and launch. We cover when to use press releases versus personalised pitches, how to win reactive coverage through journalist request services, and how to build thought leadership that earns invitations and citations.\n\nWe then turn to trust: policy-compliant review strategies under Google's rules, the US FTC review rule and the UK DMCC Act; entity and brand signals; E-E-A-T and author pages; and knowledge panels. Finally, you will measure PR with a balanced scorecard instead of vanity metrics. Examples draw on the UK, US, UAE, KSA and Pakistan.",
+  "outcomes": [
+    "Evaluate and generate campaign ideas using news values, hooks and brand relevance",
+    "Run a digital PR campaign from validated idea and methodology to launch and review",
+    "Choose between press releases and pitches and write both effectively",
+    "Win reactive coverage with fast, specific expert commentary",
+    "Build compliant review and reputation programmes under platform policies and consumer law",
+    "Strengthen entity signals, E-E-A-T and author pages, and manage knowledge panels",
+    "Measure digital PR and brand authority with a balanced, honest scorecard"
+  ],
+  "skills": [
+    "Digital PR",
+    "Media relations",
+    "Thought leadership",
+    "Reputation management",
+    "E-E-A-T",
+    "Entity SEO",
+    "PR measurement"
+  ],
+  "prerequisites": [],
+  "badge": {
+    "name": "Certified Digital PR & Brand Authority Specialist",
+    "description": "The holder can ideate and run newsworthy digital PR campaigns, pitch journalists and win reactive coverage, build thought leadership, manage reviews within platform policies and consumer law, strengthen entity signals, E-E-A-T and knowledge panels, and measure brand authority credibly.",
+    "criteria": "Completed all lessons and scored ≥ 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "newsworthy-campaigns",
+      "title": "Newsworthy campaign ideation",
+      "summary": "Understand what journalists consider news and turn that into a repeatable process for ideating, validating and launching digital PR campaigns.",
+      "lessons": [
+        {
+          "slug": "what-makes-a-story-newsworthy",
+          "title": "What makes a story newsworthy",
+          "type": "article",
+          "durationMinutes": 13,
+          "body": "### Digital PR in one sentence\n\nDigital PR earns **coverage, links, mentions and brand authority** by giving journalists stories their readers want. Unlike link building outreach, the \"customer\" is a newsroom working to deadlines with its own editorial standards. Your job is to think like an editor.\n\n### The news values\n\nJournalism schools teach variations of the same list. A story needs at least two of these to have a chance:\n\n| News value | Question an editor asks | Example angle |\n|---|---|---|\n| **Timeliness** | Why now? | New data released the week a regulation takes effect |\n| **Proximity** | Why does this matter to *our* readers? | City-by-city rankings; \"Karachi vs Lahore\" comparisons |\n| **Impact** | How many people does it affect, and how much? | Cost-of-living, salaries, rents, bills |\n| **Novelty** | Is this new or surprising? | First-ever data on an emerging behaviour |\n| **Conflict / tension** | Is there a debate or contrast? | Remote vs office; generational differences |\n| **Human interest** | Is there a person or emotion at the heart of it? | Founder story, customer transformation |\n| **Prominence** | Does it involve a well-known person, place or brand? | Analysis of a famous event's ripple effects |\n| **Usefulness** | Will readers act on it? | Practical guide tied to a deadline (tax, school admissions) |\n\n### Hooks: connecting your expertise to the news\n\nA **hook** is the reason a journalist would publish now. Common hooks:\n\n- **Calendar moments**: Ramadan, Eid, Diwali, Christmas, Black Friday, back-to-school, tax deadlines, budget announcements, national days (UAE National Day, Saudi National Day, Pakistan Independence Day).\n- **News events**: regulation changes, platform updates, economic data releases.\n- **Trends**: rising search interest, social conversations.\n- **Anniversaries**: \"five years since...\".\n- **Data releases**: your own proprietary data or new analysis of public data.\n\n### Reactive vs proactive PR\n\n- **Reactive (newsjacking)**: respond quickly to breaking news with expert comment or rapid data. Speed matters — hours, not days. Requires experts on standby and pre-approved sign-off processes.\n- **Proactive**: planned campaigns with original data, creative assets or stories, launched on a chosen date. Longer shelf life, more links, more effort.\n\nHealthy programmes run both: reactive work keeps relationships warm; proactive campaigns deliver big moments.\n\n### Campaign formats that tend to work\n\n1. **Data studies and indexes** — \"The most affordable cities for freelancers\", using public data plus your analysis.\n2. **Surveys** — opinions or behaviours of a defined group (with rigorous methodology).\n3. **Proprietary data insights** — anonymised, aggregated data from your platform (with privacy safeguards).\n4. **Tools and interactive experiences** — calculators, quizzes, maps that journalists can reference.\n5. **Expert guides tied to a moment** — \"How to protect your home during a sandstorm\" from a property maintenance firm.\n6. **Creative visual campaigns** — reimagined maps, illustrations, visualisations.\n\n### The \"so what?\" test\n\nFor every idea, write the headline a journalist might use. Then ask: *would I click this if I were not in the industry?* If the headline only interests your marketing team (\"Company X launches new feature\"), it is not news for consumer or business media — though it might suit trade press.\n\n```text\nWeak:   \"Optimize All releases 2026 SEO report\"\nBetter: \"Half of small business websites in the UAE still can't be found for their own\n         brand name, study finds\"   ← only if your data genuinely shows this\n```\n\nThe second headline has impact, proximity and surprise — but **only publish claims your data supports**. Fabricated or exaggerated findings damage your reputation with journalists permanently and can breach advertising and consumer protection rules.\n\n### Relevance to the brand\n\nA campaign must connect to what the brand does, or the links and mentions will not help its authority on relevant topics. A tyre retailer running a celebrity-baby-names study may win coverage but builds little topical authority. Aim for the overlap between **what journalists want**, **what your audience cares about**, and **what you are credible on**.\n\n### Common mistakes\n\n- Pitching company news as if it were consumer news.\n- Ignoring timing — the best idea launched in a crowded news week sinks.\n- Stretching data to fit a headline.\n- Campaigns with no connection to the brand's expertise.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Newsworthy stories combine news values: timeliness, proximity, impact, novelty, conflict, human interest, usefulness.",
+            "A hook explains why now; calendar moments and news events are reliable hooks.",
+            "Run reactive commentary and proactive campaigns together.",
+            "Every campaign must sit where journalist interest, audience interest and brand credibility overlap."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which headline has the strongest news value for national media?",
+              "options": [
+                "A data-backed finding about how a regulation change affects household bills in specific cities",
+                "'Company X celebrates 10 years'",
+                "'Company X hires a new manager'",
+                "'Company X redesigns its logo'"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "It combines impact, proximity and timeliness."
+            },
+            {
+              "question": "What is the main risk of a campaign unrelated to the brand's expertise?",
+              "options": [
+                "Coverage builds little topical authority or relevance for the brand",
+                "It violates Google's policies automatically",
+                "It cannot get any coverage",
+                "It costs nothing"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Relevance determines whether coverage supports the brand's authority on its topics."
+            }
+          ],
+          "activity": "Brainstorm ten campaign headlines for a brand you know and score each against the news values and the brand relevance overlap."
+        },
+        {
+          "slug": "from-ideation-to-launch",
+          "title": "From ideation to launch: running a campaign",
+          "type": "video",
+          "durationMinutes": 14,
+          "body": "### A repeatable campaign process\n\nSuccessful digital PR teams do not rely on inspiration. They run a process that turns many ideas into a few strong, validated campaigns.\n\n### Stage 1: Ideation\n\n- **Inputs**: brand expertise, audience questions (from search data, sales calls, social), calendar moments, recent coverage in target publications, public datasets.\n- **Session format**: 45 minutes, diverse participants, quantity first. Use prompts: \"What does our data know that nobody else does?\", \"What do people in [city] argue about?\", \"What would change if [trend] continued?\"\n- Aim for 30+ rough ideas.\n\n### Stage 2: Validation\n\nScore each idea from 1 to 5:\n\n| Criterion | Question |\n|---|---|\n| News value | Which news values does it hit? |\n| Brand relevance | Are we credible here? |\n| Data feasibility | Can we get robust data quickly and ethically? |\n| Target media fit | Can we name ten journalists who cover this? |\n| Link potential | Will coverage naturally link (e.g. to a tool, full data, methodology)? |\n| Risk | Could it offend, mislead or backfire? |\n\n**Pre-validation trick:** search news for similar stories in the past two years. If similar campaigns got coverage, the topic has appetite; if identical ones exist, find a new angle (localisation, update, different dataset).\n\n### Stage 3: Data and methodology\n\n- **Public data**: government statistics (e.g. the UK Office for National Statistics, US Census Bureau, Pakistan Bureau of Statistics, UAE and Saudi statistics authorities), open data portals, academic sources. Cite them precisely.\n- **Surveys**: reputable panel providers, clear sampling, neutral wording, adequate sample sizes for any sub-group you plan to report.\n- **Proprietary data**: aggregated and anonymised, with legal/privacy review.\n\nWrite the methodology *before* analysing, to avoid cherry-picking. Keep an audit trail of calculations — journalists and fact-checkers may ask.\n\n### Stage 4: Asset creation\n\nThe landing page on your site is the **link target**. Include:\n\n- A headline and short summary of key findings.\n- Data tables and charts (downloadable, with source lines).\n- Methodology section.\n- Expert commentary with a named, credentialed spokesperson.\n- Localised cuts (by city, country, age group) — each is a separate story for regional media.\n- Press contact details.\n\nMake the page fast, mobile-friendly and crawlable. Link from it to relevant service or product pages where helpful.\n\n### Stage 5: Sell-in (pitching)\n\n- Build a **media list** by beat: journalists who have covered similar stories recently. Personal, relevant, verified.\n- Write **tailored pitches** by segment — national consumer, business, regional, trade — each leading with the angle that suits them (Module 2 covers pitch craft).\n- Consider an **exclusive** with one top-tier outlet, then a wider release once it runs.\n- Pitch **early in the day and early in the week** in the journalist's time zone (UAE and KSA newsrooms, UK and US timings differ; Friday/Saturday weekends apply in some Gulf media).\n\n### Stage 6: Launch and follow-through\n\n- Monitor coverage with alerts and media monitoring.\n- Reply to journalist questions within the hour.\n- Ask for links politely when coverage uses your data without one (link to the methodology is a reasonable request).\n- Share coverage on owned channels.\n\n### Stage 7: Review\n\nWithin two weeks: coverage count and quality, links (followed/nofollow), referral traffic, brand search change, lessons learned. A campaign that underperforms often succeeds with a second round of localised or re-angled pitching.\n\n### Ethics and risk review\n\nBefore launch, run a short risk review:\n\n- Could the data be misinterpreted or misused?\n- Does the campaign stereotype a group, city or nationality?\n- Is it sensitive in any market (religious, political or cultural context in the Gulf, South Asia, UK or US)?\n- Is anything presented as fact that is actually opinion or estimate?\n- Does any claim need legal or compliance sign-off (financial, health)?\n\n### Illustrative example\n\nA Karachi-based fintech analyses anonymised, aggregated transaction patterns (with legal sign-off) and public inflation data to publish a \"cost of a school term\" index for major Pakistani cities ahead of the new academic year. It pitches national business desks with the headline figures, regional outlets with city cuts, and parenting bloggers with a savings guide. The landing page includes a calculator and methodology, so coverage links naturally. (Illustrative scenario; outcomes vary.)\n\n### Common mistakes\n\n- Skipping validation and building the first idea.\n- Landing pages that bury the data or gate it behind a form.\n- Pitching everyone the same angle.\n- Launching on a day dominated by major breaking news without a plan to pause.\n",
+          "video": {
+            "script": "Great digital PR looks spontaneous from the outside. Inside, it's a process. It starts with ideation. Gather your brand's expertise, your audience's questions, the calendar of moments like Ramadan, back-to-school or budget day, and public data sources. Then generate lots of ideas, thirty or more, without judging them. Next, validate. Score each idea on news value, brand relevance, data feasibility, media fit, link potential and risk. Check whether similar stories have been covered before. If they have, the topic has appetite. Find your fresh angle. Then the data. Write your methodology before you analyse anything, so you're not tempted to cherry-pick. Use credible public sources, reputable survey panels, or anonymised data from your own platform with legal sign-off. Build a landing page that deserves the link: key findings, charts people can download, the methodology, a named expert, and local breakdowns for regional media. When you pitch, tailor the angle. National, business, regional and trade journalists want different stories from the same data. Before you launch, pause for a risk review. Could this be misread? Does it stereotype anyone? Is it sensitive in any of your markets? And after launch, respond to journalists fast, ask politely for links where your data is used, and review what worked. The process is what makes success repeatable.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Run a process: ideate widely, validate on news value, relevance, feasibility, media fit, link potential and risk.",
+            "Write the methodology before analysis and keep an audit trail.",
+            "Build a crawlable landing page with data, charts, methodology, expert comment and local cuts as the link target.",
+            "Tailor sell-in by segment, respond fast, and run a pre-launch ethics and risk review."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why write the methodology before analysing survey data?",
+              "options": [
+                "To avoid cherry-picking results to fit a headline",
+                "To save time on charts",
+                "Journalists never read it",
+                "Google requires it"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "A pre-defined method protects integrity and credibility."
+            },
+            {
+              "question": "What is the purpose of localised cuts of campaign data?",
+              "options": [
+                "To avoid methodology",
+                "To create relevant stories for regional and city media",
+                "To confuse journalists",
+                "To reduce links"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Proximity is a strong news value; local cuts multiply relevant pitches."
+            },
+            {
+              "question": "A campaign lands on a day of huge breaking news. Best move?",
+              "options": [
+                "Delete the page",
+                "Pitch harder",
+                "Pause and relaunch when attention returns",
+                "Buy coverage"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Timing matters; journalists' attention will be elsewhere."
+            }
+          ],
+          "activity": "Take your best idea from the previous activity and complete the validation scorecard, methodology outline and landing page structure."
+        }
+      ]
+    },
+    {
+      "slug": "pitching-and-journalist-requests",
+      "title": "Press releases, pitches and journalist requests",
+      "summary": "Know when to write a press release versus a pitch, craft each well, and use journalist request services for reactive coverage.",
+      "lessons": [
+        {
+          "slug": "press-releases-vs-pitches",
+          "title": "Press releases vs pitches",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Two different tools\n\n| | Press release | Pitch |\n|---|---|---|\n| What | Formal, complete announcement in news style | Short, personal email proposing a story angle |\n| Audience | Many outlets, newswires, your newsroom page | One journalist or a small segment |\n| Best for | Official company news, financial results, major launches, regulated disclosures | Data stories, expert commentary, features, exclusives |\n| SEO value | Wire-distributed releases produce mostly nofollow, syndicated copies; value is exposure | Earned editorial coverage and links when journalists use it |\n\nA common misconception is that distributing a press release through a wire service \"builds links\". Syndicated release pages are typically nofollowed or not indexed, and Google has long treated links in widely distributed releases as not passing ranking credit. The value of a release is **visibility** — journalists and the public may see it and write original coverage.\n\n### When a press release is the right choice\n\n- Funding rounds, acquisitions, leadership appointments, financial results.\n- Official responses where the exact wording matters (legal or crisis statements).\n- Regulated sectors that need a public, formal record.\n- A major launch where you want a canonical, quotable source on your newsroom page.\n\n### Writing a press release\n\n```text\nFOR IMMEDIATE RELEASE   (or: EMBARGOED UNTIL 00:01 GST, 12 March 2026)\n\nHeadline: Clear, factual, under ~12 words\nSubheadline: One sentence adding the key detail\n\nCITY, Country — Date — Lead paragraph: who, what, when, where, why in 1–2 sentences.\n\nSecond paragraph: the most important supporting detail or data.\n\nQuote from a named spokesperson — adds opinion and meaning, not repetition.\n\nFurther detail: context, availability, pricing, methodology.\n\nSecond quote (optional): partner, customer or expert.\n\nAbout [Company]: 50–80 words boilerplate.\n\nMedia contact: name, email, phone.\n###\n```\n\nKeep it to one page where possible. Avoid superlatives (\"world-leading\", \"revolutionary\") unless you can prove them.\n\n### Embargoes\n\nAn embargo allows journalists to prepare a story before a set publication time. Use them for significant data or news, state the time zone clearly, send only to journalists you trust, and never punish a journalist for your own unclear embargo terms.\n\n### Writing a pitch\n\nA pitch is a personal note. Structure:\n\n1. **Subject line = the headline** you imagine them running.\n2. **One-line hook**: why this matters to their readers now.\n3. **Three bullet findings or key facts** — specific and verifiable.\n4. **What you can offer**: full data, expert interview, images, local cuts, exclusive.\n5. **Link** to the landing page (no attachments).\n6. **Signature** with direct phone number for fast responses.\n\n```text\nSubject: Rents in Dubai Marina rose faster than salaries for young professionals, analysis shows\n\nHi Priya,\n\nWith new-year lease renewals under way, our analysis of public rental listings\nand salary survey data might be useful for your property coverage:\n\n• [Specific finding 1 with figure from your data]\n• [Specific finding 2]\n• [Specific finding 3, e.g. neighbourhoods where the gap narrowed]\n\nFull data, methodology and city charts: [URL]. Our head of research, Dr Faisal\nRahman, is available for interview today (Arabic or English).\n\nBest,\nLeena | +971 ...\n```\n\n*(The subject and findings must reflect your actual analysis.)*\n\n### Exclusives\n\nOffering one outlet an exclusive gives them a reason to prioritise your story. Be clear about what \"exclusive\" means (first to publish, or only outlet) and for how long. After it runs, pitch the wider media with a new angle.\n\n### Newsroom pages\n\nMaintain a newsroom or press page on your site with releases, media kit, logos, spokesperson bios and contact details. It becomes a source journalists and search engines can reference, and a home for canonical statements.\n\n### Common mistakes\n\n- Using press release wires to \"build links\".\n- Sending the full release as a pitch with no personalisation.\n- Headlines full of jargon.\n- Burying the news in paragraph four.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Press releases are formal announcements; pitches are personal story proposals.",
+            "Wire-distributed releases mainly provide visibility; their links are typically nofollow and pass no ranking credit.",
+            "Pitches lead with the headline, a hook, three specific facts, an offer and a link.",
+            "Use embargoes and exclusives deliberately, and maintain a newsroom page."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the main value of distributing a press release on a wire service?",
+              "options": [
+                "Guaranteed followed links",
+                "A knowledge panel",
+                "Visibility that may prompt original coverage",
+                "Improved Core Web Vitals"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Syndicated release links generally do not pass ranking credit; exposure is the value."
+            },
+            {
+              "question": "Which situation calls for a formal press release?",
+              "options": [
+                "Pitching a data story to one journalist",
+                "Answering a journalist request",
+                "A podcast pitch",
+                "Announcing a funding round or leadership appointment"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Formal corporate news suits releases; stories suit pitches."
+            }
+          ],
+          "activity": "Rewrite one company announcement as both a press release and a personalised pitch to a named type of journalist."
+        },
+        {
+          "slug": "journalist-requests-and-reactive-pr",
+          "title": "Journalist request services and reactive PR",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Reactive PR: being the source journalists need\n\nJournalists often need expert input fast. Reactive PR means monitoring those needs and responding with useful, credible commentary — often within hours. Done consistently, it builds mentions, links and relationships with modest effort.\n\n### Where requests appear\n\n- **Journalist request platforms**: services such as Qwoted, Featured, Help a B2B Writer, Source of Sources, and in the UK ResponseSource. The landscape changes frequently: HARO, for years the best-known service, was shut down by its owner in late 2024 and later relaunched under new ownership. Check current terms, pricing and quality before committing.\n- **Social media hashtags**: #journorequest and #PRrequest on X, and journalist posts on LinkedIn.\n- **Direct relationships**: journalists you know emailing you (the best source — see relationship building).\n- **Regional communities**: in the Gulf and Pakistan, many journalists source through WhatsApp groups, LinkedIn and industry associations; relationships matter even more.\n\n### Qualifying requests quickly\n\nRespond only when you have **genuine expertise** and can meet the deadline. Check:\n\n1. Is the outlet reputable and relevant to your audience?\n2. Does your expert meet the stated criteria (location, credentials, experience)?\n3. Can you answer specifically and on time?\n4. Is it a genuine journalist request, not a disguised content farm or a \"pay to be featured\" scheme?\n\nSome \"requests\" are low-quality sites collecting free content for listicles. They may still be worth it if relevant, but prioritise real publications.\n\n### Writing a strong response\n\n```text\nSubject: [Request title] — comment from Sana Malik, Head of E-commerce SEO\n\nHi Jordan,\n\nSana Malik, Head of E-commerce SEO at [Company] (12 years in retail search):\n\n\"[Direct, specific answer in 2–4 sentences. Include one concrete example or\npractical tip. Avoid jargon and self-promotion.]\"\n\n\"[Optional second point that adds a different angle.]\"\n\nCredentials: [one line]. Headshot and bio: [URL to expert page].\nAvailable for a quick call today until 6pm GMT.\n\nBest,\n[Name, phone]\n```\n\nPrinciples:\n\n- **Answer the exact question first.** Journalists skim.\n- **Be quotable**: short sentences, a clear opinion, a specific example.\n- **Do not sell**. No product mentions unless asked.\n- **Be accurate**: if you cite a statistic, name the source.\n- **Include credentials** and a link to an expert bio page on your site.\n- **Speed**: many journalists use the first few good answers.\n\n### Setting up a reactive programme\n\n1. **Expert roster**: list each expert, topics, languages, availability and approved bio.\n2. **Monitoring rota**: someone checks requests several times a day.\n3. **Pre-approved positions**: agree the company's stance on recurring topics so responses do not wait for sign-off.\n4. **Response library**: save strong answers to adapt (never paste identical answers across outlets — journalists notice).\n5. **Tracking**: log requests answered, published results, links and outlets.\n\n### Newsjacking responsibly\n\nWhen news breaks in your sector — a Google algorithm update, a new data protection rule, a platform outage — send a short, useful reaction to journalists covering it:\n\n```text\nSubject: Comment: what [new rule] means for small online sellers in the UAE\n\nHi Maryam — if helpful for your coverage of [rule], three practical points for\nsmall sellers from our compliance lead: [1] [2] [3]. Happy to expand by phone.\n```\n\nAvoid newsjacking tragedies, disasters or sensitive political events for commercial gain. It damages trust and can cause serious backlash.\n\n### Expectations\n\nMany responses will not be used; that is normal. Some coverage will mention you without a link, or with a nofollow link. Brand mentions in reputable publications still support recognition and trust. Measure over quarters, not weeks.\n\n### Common mistakes\n\n- Answering requests outside your expertise.\n- Long, generic answers that bury the insight.\n- Sending the same answer to multiple outlets.\n- Paying for \"guaranteed features\" presented as editorial coverage without disclosure.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Reactive PR supplies expert commentary to journalists on deadline; speed and specificity win.",
+            "Request services change often; check current status and quality before relying on one.",
+            "Strong responses answer first, are quotable, include credentials and avoid selling.",
+            "Build an expert roster, monitoring rota, pre-approved positions and tracking log."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What should come first in a response to a journalist request?",
+              "options": [
+                "The direct answer to their question",
+                "A product link",
+                "A request for a followed link",
+                "Company history"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Journalists skim; lead with the answer."
+            },
+            {
+              "question": "A breaking tragedy dominates the news. Should you newsjack it for a campaign?",
+              "options": [
+                "Yes, attention is high",
+                "Only with a press release",
+                "No; exploiting tragedies for commercial gain damages trust",
+                "Only on social media"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Commercial newsjacking of sensitive events causes backlash and harm."
+            },
+            {
+              "question": "Why maintain pre-approved positions on recurring topics?",
+              "options": [
+                "Google requires it",
+                "To avoid needing experts",
+                "So responses can go out quickly without waiting for sign-off",
+                "To reuse identical answers everywhere"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Speed is critical; pre-approval removes bottlenecks."
+            }
+          ],
+          "activity": "Set up an expert roster for your organisation and draft two responses to realistic journalist requests in your field."
+        }
+      ]
+    },
+    {
+      "slug": "thought-leadership-and-reputation",
+      "title": "Thought leadership, reviews and reputation",
+      "summary": "Build recognised expertise through thought leadership, and manage reviews and reputation within platform policies and consumer law.",
+      "lessons": [
+        {
+          "slug": "thought-leadership-that-builds-authority",
+          "title": "Thought leadership that builds authority",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### What thought leadership is (and isn't)\n\nThought leadership is **publicly sharing distinctive, expert perspectives that help your audience think or act better**. It is not generic content with an executive's name on it. Real thought leadership earns speaking invitations, podcast appearances, bylines, citations and, over time, the brand and entity signals that support search visibility.\n\n### The three ingredients\n\n1. **Expertise**: real experience and knowledge — the person has done the work.\n2. **A point of view**: a clear, defensible stance (\"most small businesses should not start with SEO — here's what to do first\").\n3. **Evidence**: data, case studies, frameworks and examples that back the view.\n\n### Formats and channels\n\n| Format | Where | Notes |\n|---|---|---|\n| Bylined articles | Trade and business publications | Pitch ideas to editors; follow their guidelines; links may be nofollow |\n| Owned long-form | Your blog or insights hub | The home of your frameworks and data; link target |\n| LinkedIn posts and newsletters | Professional audience | Consistency matters; share lessons, not just announcements |\n| Speaking | Conferences, meetups, webinars, university lectures | Speaker pages often link; talks create video and quotable content |\n| Podcasts | Industry and business shows | Build relationships and reach |\n| Research and reports | Owned, promoted via PR | Strongest for citations |\n| Video and short-form | YouTube, social platforms | Show the person; builds recognition |\n\n### A thought leadership plan\n\n1. **Choose the people**: two or three genuine experts, not only the CEO.\n2. **Define territories**: two or three topics each person can own (e.g. \"e-commerce SEO for bilingual Gulf stores\").\n3. **Develop signature ideas**: a framework, a contrarian insight, an annual data point. Name them — named frameworks are easier to cite.\n4. **Create a cadence**: for example, one substantial owned article a month, weekly LinkedIn posts, one pitch for a byline per quarter, speaking submissions twice a year.\n5. **Repurpose**: a talk becomes an article, a LinkedIn series, a podcast conversation and a video clip.\n6. **Support with author infrastructure**: expert profile pages, consistent bios and headshots across platforms (important for entity and E-E-A-T, covered in Module 4).\n\n### Ghostwriting honestly\n\nMany executives work with writers. That is fine when the ideas, experiences and opinions are genuinely theirs and they review what is published under their name. Publishing AI-generated or ghostwritten content that misrepresents someone's experience undermines trust — and trust is the foundation of the whole strategy.\n\n### Bylines in publications\n\n- Study the publication: tone, length, audience, contributor guidelines.\n- Pitch an idea, not a finished article, unless the publication asks for full drafts.\n- Offer genuinely useful, non-promotional content.\n- Accept the publication's link policy. Many limit contributor links or make them nofollow; a byline's value is audience and credibility.\n- Avoid \"contributor networks\" that sell placements — those can be link schemes.\n\n### Regional considerations\n\n- In the Gulf, bilingual (Arabic and English) thought leadership reaches wider audiences; regional business publications and events such as industry summits are influential.\n- In Pakistan, LinkedIn, YouTube and industry associations are strong channels; English and Urdu content can reach different segments.\n- In the UK and US, niche trade publications often drive more qualified attention than broad national outlets.\n\n### Measuring thought leadership\n\n- Inbound invitations (speaking, podcasts, commentary requests).\n- Coverage and citations of named frameworks or data.\n- Growth in branded and person-name searches.\n- Engagement quality (comments from target audience, not vanity likes).\n- Sales conversations referencing the content.\n\n### Common mistakes\n\n- Publishing opinions without evidence.\n- Only the CEO speaks, on every topic.\n- Inconsistent bios and names across platforms.\n- Paying for \"featured expert\" placements presented as editorial.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Thought leadership combines genuine expertise, a clear point of view and evidence.",
+            "Define people, topic territories, signature ideas and a cadence; repurpose across formats.",
+            "Ghostwriting is fine when ideas and experiences are genuinely the named expert's and they review the work.",
+            "Measure by invitations, citations, branded and person-name searches and sales conversations."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which is the best example of thought leadership?",
+              "options": [
+                "A data-backed framework with a clear, defensible point of view from a practitioner",
+                "A press release about office relocation",
+                "A paid 'featured expert' listing",
+                "A generic '10 SEO tips' post under the CEO's name"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Distinctive, evidenced perspectives from real experts define thought leadership."
+            },
+            {
+              "question": "A publication makes contributor links nofollow. Should you still write for it?",
+              "options": [
+                "Only with exact-match anchors",
+                "Possibly yes — audience reach and credibility can justify it",
+                "Never",
+                "Only if they change policy"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Bylines' value is audience and authority, not just links."
+            }
+          ],
+          "activity": "Create a six-month thought leadership plan for one expert: territories, signature idea, cadence and channels."
+        },
+        {
+          "slug": "reviews-and-reputation",
+          "title": "Reviews and reputation management",
+          "type": "article",
+          "durationMinutes": 13,
+          "body": "### Why reviews matter beyond local SEO\n\nReviews influence purchase decisions, click-through from search results, local rankings (see the Local SEO course), and how both people and systems perceive a brand's trustworthiness. Google's Search Quality Rater Guidelines direct raters to research a website's and creator's reputation using independent sources, including reviews. Reputation is not a single signal you can manipulate; it is what others say about you.\n\n### The rules you must follow\n\n**Platform policies** (Google, Trustpilot, Tripadvisor, app stores and others) generally prohibit:\n\n- **Fake reviews** — written by owners, staff, agencies or paid reviewers.\n- **Incentivised reviews** — offering discounts, gifts or payment in exchange for reviews (Google prohibits this for Business Profile reviews).\n- **Review gating** — asking only happy customers to review, or filtering customers before sending them to review sites.\n- **Conflicts of interest** — employees reviewing their employer, competitors leaving negative reviews.\n- **Review suppression** — pressuring customers to remove negative reviews.\n\n**Consumer protection law** increasingly targets fake reviews:\n\n- **US**: the FTC's rule on consumer reviews and testimonials (in force since late 2024) prohibits fake reviews, buying positive or negative reviews, certain insider reviews without disclosure, and review suppression, with civil penalties possible.\n- **UK**: the Digital Markets, Competition and Consumers Act 2024 made commissioning, publishing or facilitating fake reviews a banned practice (from April 2025), enforced by the CMA.\n- **EU**: consumer rules require businesses to disclose whether and how they verify that reviews come from real customers.\n- **Gulf and Pakistan**: consumer protection and cybercrime laws may apply to deceptive practices; seek local advice.\n\nThis is general information, not legal advice.\n\n### A compliant review generation system\n\n1. **Ask everyone** — every customer, at the right moment (after delivery, after a successful project milestone).\n2. **Make it easy** — a direct link to the review form, QR codes in-store, short request messages.\n3. **Use neutral language** — \"Would you share your experience?\" not \"Please leave us 5 stars\".\n4. **Spread across platforms** relevant to your market (Google, industry sites, Trustpilot, app stores).\n5. **Never incentivise** reviews on platforms that forbid it. If you run incentives on your own site (where allowed), disclose them clearly.\n\n```text\nHi Ayesha, thanks for choosing [Business]. We'd really value your honest feedback —\nit helps us improve and helps others decide. It takes about a minute: [review link]\n```\n\n### Responding to reviews\n\nRespond to reviews — positive and negative — professionally:\n\n- **Positive**: thank them specifically; avoid keyword-stuffed replies.\n- **Negative**: acknowledge, apologise where appropriate, avoid arguments or sharing private details, offer an offline route to resolve, and follow up.\n- **Fake or policy-violating reviews**: report through the platform's process with evidence; do not accuse the reviewer publicly.\n\n```text\nHi Omar, thank you for the feedback and I'm sorry your order arrived late.\nThat's not the experience we want for anyone. I've asked our operations lead to\nlook into it — could you email support@example.com with your order number so\nwe can put it right? — Nadia, Customer Experience Manager\n```\n\nFuture customers read responses; calm, helpful replies build trust even on bad reviews.\n\n### Reputation beyond reviews\n\nMonitor your **brand SERP** — what appears when people search your brand name: your site, social profiles, reviews, news, forum threads, complaint sites. Improving it involves:\n\n- Owning and maintaining official profiles (LinkedIn, YouTube, industry directories).\n- Earning coverage in reputable publications.\n- Addressing legitimate complaints publicly and fixing root causes.\n- Publishing clear About, policies and contact pages.\n- Legal routes only for genuinely defamatory or unlawful content — not for honest criticism.\n\n### Crisis readiness\n\nPrepare a simple crisis plan: who responds, approval chain, holding statements, and monitoring. In a crisis, speed, honesty and empathy matter more than polished wording.\n\n### Common mistakes\n\n- \"Review swaps\" with other businesses.\n- Buying reviews through agencies that promise \"real accounts\".\n- Responding defensively or revealing customer details.\n- Ignoring reviews on niche platforms your audience uses.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Fake, incentivised, gated and suppressed reviews violate platform policies and increasingly consumer law (FTC rule, UK DMCC Act).",
+            "Ask every customer at the right moment with neutral language and an easy link.",
+            "Respond professionally to all reviews; report policy-violating ones through platform processes.",
+            "Manage the brand SERP with official profiles, reputable coverage and transparent pages."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which review practice is compliant with Google's policies?",
+              "options": [
+                "Only asking customers who rated you 5/5 in a survey",
+                "Offering a 10% discount for a Google review",
+                "Asking every customer for honest feedback with a direct link",
+                "Having staff post reviews"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Asking everyone neutrally is compliant; incentives, gating and staff reviews are not."
+            },
+            {
+              "question": "Under the UK DMCC Act 2024, what became a banned practice?",
+              "options": [
+                "Using Trustpilot",
+                "Commissioning or publishing fake reviews",
+                "Responding to reviews",
+                "Asking for feedback"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Fake reviews became a banned practice enforced by the CMA from April 2025."
+            },
+            {
+              "question": "How should you respond to a negative but genuine review?",
+              "options": [
+                "Ignore it",
+                "Argue publicly",
+                "Ask the customer to delete it in exchange for a refund",
+                "Acknowledge, apologise where appropriate, and offer an offline route to resolve"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Professional responses build trust; pressuring removal is review suppression."
+            }
+          ],
+          "activity": "Audit a brand's review profiles and brand SERP, then write a compliant review request message and responses to one positive and one negative review."
+        }
+      ]
+    },
+    {
+      "slug": "entities-and-eeat",
+      "title": "Entities, brand signals and E-E-A-T",
+      "summary": "Help search engines understand who you are, and demonstrate experience, expertise, authoritativeness and trust on-site and off-site.",
+      "lessons": [
+        {
+          "slug": "entities-and-brand-signals",
+          "title": "Entities and brand signals",
+          "type": "article",
+          "durationMinutes": 13,
+          "body": "### From strings to things\n\nModern search engines understand the web in terms of **entities** — people, organisations, places, products, concepts — and the relationships between them. Google's Knowledge Graph is a database of entities and facts. When Google confidently understands that your brand is a distinct entity (with a name, logo, founders, location, industry and official profiles), it can connect mentions across the web to you, show knowledge panels, and interpret your content in context.\n\n### Why entity clarity matters for SEO and PR\n\n- **Disambiguation**: \"Optimize All\" the agency vs a generic phrase; \"Noor\" the brand vs the name. Clear signals help search engines attribute mentions correctly.\n- **Knowledge panels and rich brand SERPs**.\n- **Attribution of coverage**: unlinked mentions still contribute to recognition when the entity is clear.\n- **AI search**: answer engines rely on entity understanding to decide which brands to mention (see the AI Search course).\n\n### Building consistent entity signals\n\n1. **Canonical name**: choose one official brand name and use it consistently (including capitalisation and spacing). Note legal names and common variants.\n2. **Official website as the hub**: a thorough About page with founding date, founders, leadership, location, what you do, and links to official profiles.\n3. **Organization structured data** with a stable `@id`, logo, `sameAs` links to official profiles, contact points and address where relevant:\n\n```json\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Organization\",\n  \"@id\": \"https://www.example.com/#organization\",\n  \"name\": \"Example Studio\",\n  \"legalName\": \"Example Studio FZ-LLC\",\n  \"url\": \"https://www.example.com/\",\n  \"logo\": \"https://www.example.com/assets/logo.png\",\n  \"foundingDate\": \"2019\",\n  \"founder\": {\"@type\": \"Person\", \"@id\": \"https://www.example.com/team/sara-ahmed#person\", \"name\": \"Sara Ahmed\"},\n  \"sameAs\": [\n    \"https://www.linkedin.com/company/example-studio\",\n    \"https://www.instagram.com/examplestudio\",\n    \"https://www.youtube.com/@examplestudio\"\n  ]\n}\n```\n\n4. **Consistent profiles**: same name, logo, description and website link on LinkedIn, social platforms, industry directories, business registries, app stores and review sites.\n5. **Third-party corroboration**: coverage in reputable publications, industry associations, awards, conference speaker pages. Independent sources confirm facts better than self-description.\n6. **People entities**: founders and experts with consistent bios, headshots and profile links; `Person` markup on author pages.\n\n### Wikipedia and Wikidata: proceed with care\n\nWikipedia and Wikidata are influential sources for knowledge graphs, but:\n\n- **Wikipedia notability**: an article requires significant coverage in reliable, independent sources. Most small businesses do not meet it.\n- **Conflict of interest**: Wikipedia's guidelines strongly discourage editing articles about yourself or your clients, and paid editing requires disclosure under its terms of use. Undisclosed paid editing can lead to deletion and reputational damage.\n- **Wikidata** has its own notability criteria; entries should be factual and referenced.\n\nThe ethical route is to **earn** coverage that makes the brand notable, and let independent editors write about it.\n\n### Brand mentions as signals\n\nGoogle has patents and statements suggesting it can recognise brand mentions and entity references without links, but it does not publish how, or how much, unlinked mentions affect ranking. Treat unlinked mentions as valuable for **brand awareness, entity understanding and AI visibility**, without claiming a precise ranking effect.\n\n### Branded search demand\n\nAs PR and thought leadership raise awareness, more people search for your brand by name, sometimes combined with topics (\"Optimize All technical SEO course\"). Branded demand is a strong business signal and is easy to track in Search Console. It also makes your brand SERP more important to manage.\n\n### An entity audit checklist\n\n- [ ] One consistent brand name across site, profiles and citations\n- [ ] About page with founders, history, location and profile links\n- [ ] Organization (and Person) structured data with @id and sameAs\n- [ ] Official social and directory profiles claimed, consistent and linked from the site\n- [ ] Logo consistent and marked up\n- [ ] Coverage in independent reputable sources\n- [ ] Brand SERP reviewed: what appears, what's missing, any confusion with other entities\n\n### Common mistakes\n\n- Several name variants used interchangeably.\n- sameAs links to profiles you do not control or that are abandoned.\n- Creating a self-promotional Wikipedia article.\n- Claiming precise ranking gains from unlinked mentions.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Search engines model entities and relationships; clear entity signals aid disambiguation, panels and AI answers.",
+            "Use one canonical brand name, a thorough About page, Organization/Person schema with @id and sameAs, and consistent profiles.",
+            "Independent coverage corroborates facts better than self-description.",
+            "Respect Wikipedia notability and conflict-of-interest rules; earn coverage instead."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What does sameAs in Organization structured data do?",
+              "options": [
+                "Sets the canonical URL",
+                "Adds review stars",
+                "Links the entity to its official profiles elsewhere on the web",
+                "Declares duplicate pages"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "sameAs connects the organisation to its official profiles, aiding entity understanding."
+            },
+            {
+              "question": "A client asks you to write their Wikipedia page. What is the right advice?",
+              "options": [
+                "Pay an editor secretly",
+                "Copy their About page",
+                "Explain notability and conflict-of-interest rules; focus on earning independent coverage",
+                "Write it anonymously"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Undisclosed COI or paid editing violates Wikipedia's rules and risks deletion and reputational harm."
+            }
+          ],
+          "activity": "Run the entity audit checklist on a brand and fix the three biggest inconsistencies."
+        },
+        {
+          "slug": "eeat-author-pages-and-quality",
+          "title": "E-E-A-T, author pages and quality signals",
+          "type": "article",
+          "durationMinutes": 14,
+          "body": "### What E-E-A-T is\n\n**E-E-A-T** stands for **Experience, Expertise, Authoritativeness and Trust**. It comes from Google's **Search Quality Rater Guidelines**, used by human raters who evaluate search results to help Google test and improve its systems. Key points:\n\n- E-E-A-T is a **framework for assessing quality**, not a single ranking factor or score. Google has said its systems use a mix of signals that align with what raters would consider E-E-A-T.\n- **Trust** is the most important element; experience, expertise and authoritativeness support it.\n- The bar is highest for **YMYL (Your Money or Your Life)** topics — health, finance, safety, legal, civic information — where poor content could harm people.\n\n### The four components\n\n| Component | Question | Evidence examples |\n|---|---|---|\n| **Experience** | Has the creator actually used, done or lived this? | First-hand photos, original test results, \"we tried it for three months\" details, case studies |\n| **Expertise** | Does the creator have the knowledge or skill? | Qualifications, professional role, track record, depth and accuracy |\n| **Authoritativeness** | Is the creator or site a go-to source? | Citations by others, reputable coverage, industry recognition |\n| **Trust** | Is the page accurate, honest, safe and reliable? | Clear sourcing, transparency about who is behind it, secure checkout, policies, corrections |\n\n### Google's \"Who, How, Why\" questions\n\nGoogle's guidance on helpful content suggests asking:\n\n- **Who** created the content? Make it self-evident — bylines, author pages.\n- **How** was it created? Explain methodology, testing, and where appropriate, how automation or AI was used.\n- **Why** was it created? Primarily to help people, not to manipulate rankings.\n\nUsing AI to help create content is not against Google's guidelines; using automation primarily to manipulate rankings (scaled content abuse) is. Where readers would reasonably expect to know how content was produced, disclosure helps trust.\n\n### Author pages that work\n\nFor every author and expert:\n\n```text\n/team/sara-ahmed/\n- Name, headshot, role\n- Short bio: experience in specifics (\"has run technical SEO for 40+ e-commerce migrations\")\n- Credentials and qualifications (with verifiable links)\n- Areas of expertise (topic list)\n- Links to official profiles (LinkedIn, professional bodies)\n- Selected publications, talks, media coverage\n- List of their articles on this site\n```\n\nAdd `Person` structured data and reference it from articles:\n\n```json\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Article\",\n  \"headline\": \"How to plan a hreflang rollout for a bilingual store\",\n  \"author\": {\n    \"@type\": \"Person\",\n    \"@id\": \"https://www.example.com/team/sara-ahmed#person\",\n    \"name\": \"Sara Ahmed\",\n    \"url\": \"https://www.example.com/team/sara-ahmed/\",\n    \"jobTitle\": \"Head of Technical SEO\",\n    \"sameAs\": [\"https://www.linkedin.com/in/example-sara-ahmed\"]\n  },\n  \"publisher\": {\"@id\": \"https://www.example.com/#organization\"},\n  \"datePublished\": \"2026-02-10\",\n  \"dateModified\": \"2026-03-01\"\n}\n```\n\nMarkup does not create expertise; it describes it. The underlying reality — real experts, real experience — is what matters.\n\n### Site-level trust signals\n\n- **About page** with the real people and organisation behind the site.\n- **Contact information** that works (address, phone, email appropriate to the business).\n- **Editorial policy**: how content is researched, reviewed, updated and corrected.\n- **Review process for YMYL**: e.g. \"Medically reviewed by Dr ...\" — only if genuinely done.\n- **Customer service and policies**: returns, shipping, privacy, terms — especially for e-commerce.\n- **Transparent monetisation**: affiliate disclosures, sponsored content labels.\n- **Accuracy**: cite sources, update outdated content, show dates honestly.\n\n### Off-site E-E-A-T\n\nRaters are asked to look for independent information about a site and its creators: news coverage, reviews, awards, professional bodies, Wikipedia where applicable. This is where digital PR, thought leadership and reputation management directly support quality perception.\n\n### An E-E-A-T review for a page\n\n1. Is the author clear, and are their experience and expertise evident and verifiable?\n2. Does the content show first-hand experience (original photos, data, examples)?\n3. Are claims sourced and accurate? Are dates honest?\n4. Is the purpose to help the reader, with commercial intent transparent?\n5. Would the site be trusted by someone checking independent reviews and coverage?\n6. For YMYL, is there appropriate expert review?\n\n### Common mistakes\n\n- Fake author personas or stock-photo \"experts\".\n- Adding \"reviewed by\" labels without real review.\n- Updating the date without updating the content.\n- Treating E-E-A-T as a checklist of schema tags.\n",
+          "video": null,
+          "keyTakeaways": [
+            "E-E-A-T is a quality framework from the rater guidelines, not a single ranking score; trust matters most.",
+            "YMYL topics require the highest standards of expertise and trust.",
+            "Author pages with verifiable experience, credentials and profile links, plus Person markup, make the 'who' clear.",
+            "Site-level trust (policies, contact, editorial standards) and off-site reputation both matter."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which component of E-E-A-T does Google describe as most important?",
+              "options": [
+                "Authoritativeness",
+                "Trust",
+                "Experience",
+                "Expertise"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Google describes trust as the most important member of the E-E-A-T family."
+            },
+            {
+              "question": "Is using AI to help write content against Google's guidelines?",
+              "options": [
+                "Only if disclosed",
+                "No, but using automation primarily to manipulate rankings is spam",
+                "Only for YMYL topics",
+                "Yes, always"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Google targets manipulative scaled content, not the use of AI per se."
+            },
+            {
+              "question": "Which is a genuine experience signal?",
+              "options": [
+                "A longer word count",
+                "More keywords",
+                "Original photos and results from actually testing the product",
+                "A stock photo of a smiling expert"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "First-hand evidence shows experience."
+            }
+          ],
+          "activity": "Audit one article against the six-question E-E-A-T review and rewrite its author box and author page."
+        }
+      ]
+    },
+    {
+      "slug": "knowledge-panels-and-measurement",
+      "title": "Knowledge panels and measuring brand authority",
+      "summary": "Earn and manage knowledge panels, and measure digital PR and brand authority credibly.",
+      "lessons": [
+        {
+          "slug": "knowledge-panels",
+          "title": "Knowledge panels: earning and managing them",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### What a knowledge panel is\n\nA knowledge panel is the information box Google shows for entities it understands well — organisations, people, places, works. It draws on the Knowledge Graph, which is built from many sources: the entity's own website, structured data, licensed data, public sources such as Wikipedia and Wikidata, and other reputable websites. Local businesses see a different feature — the **Google Business Profile** panel — which is managed separately (see the Local SEO course).\n\nYou **cannot buy or directly create** a knowledge panel. Google generates it automatically when it has enough confidence about an entity and there is search demand for it.\n\n### Why panels matter\n\n- They dominate the brand SERP on desktop and show prominently on mobile.\n- They present facts (founders, founding date, social profiles) that users trust.\n- They indicate that Google understands the entity — a foundation for accurate representation in AI features too.\n\n### Factors that make a panel more likely\n\nGoogle does not publish a formula, but practitioners observe that panels are more likely when:\n\n1. **The entity is clearly defined** on its official site (About page, Organization/Person markup, consistent name).\n2. **Independent reputable sources** describe the entity consistently — news coverage, industry bodies, reference sites.\n3. **Official profiles** are consistent and interlinked (sameAs).\n4. **There is search demand** for the name.\n5. **For people**: a consistent public presence — author pages, speaker bios, interviews, books, professional listings.\n\nTreat this as a set of good practices that also help brand understanding generally — not a guaranteed trigger.\n\n### Claiming a knowledge panel\n\nIf a panel exists for you or your organisation, you can request verification through Google's process (\"Get verified on Google\" / claiming the panel). Typically you sign in with an account associated with an official presence (for example, the official website in Search Console, or official social or YouTube accounts) and follow the verification steps. Once verified you can:\n\n- **Suggest changes** to facts (which Google reviews, often requiring supporting sources).\n- **Suggest a featured image** from available options in some cases.\n- **Receive updates** about the panel.\n\nAnyone can also use the **Feedback** link on a panel to report inaccuracies, but verified representatives' suggestions carry more weight.\n\n### Correcting wrong information\n\n1. Identify the source of the error — often a third-party site or an outdated profile.\n2. Fix it at the source where possible (update your About page, profiles, Wikidata entry via proper processes, press bios).\n3. Submit a suggested edit through the panel (verified or feedback), citing authoritative sources.\n4. Be patient; changes are reviewed and can take weeks.\n\n### Person panels for experts and founders\n\nFor thought leaders, a person panel reinforces credibility. Supportive actions:\n\n- A detailed author/founder page on the company site with Person markup and sameAs to official profiles.\n- Consistent name (including transliteration choices — for example, Muhammad vs Mohammed — pick one publicly and use it everywhere).\n- Speaker pages, interviews, podcast show notes and bylines with consistent bios.\n- Where genuinely notable, independent coverage in reputable outlets.\n\n### Ethical boundaries\n\n- Do not fabricate awards, credentials or press mentions to build a panel.\n- Avoid paid \"knowledge panel creation\" services that rely on low-quality press releases, fake profiles or undisclosed Wikipedia edits — they may produce short-lived results and reputational risk.\n- Keep facts accurate: panels displaying false information about founders or dates are embarrassing and hard to fix.\n\n### Monitoring\n\nSearch the brand and key people monthly (logged out, and from different locations or with a SERP localisation tool). Check the panel's facts, images and social links. After rebrands, leadership changes or moves, update the website and profiles first, then suggest panel edits.\n\n### Common mistakes\n\n- Confusing Google Business Profile management with knowledge panel management.\n- Trying to \"create\" a panel via mass press release distribution.\n- Using different name spellings across profiles.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Knowledge panels are generated automatically from the Knowledge Graph; they cannot be bought or created directly.",
+            "Clear entity definition, consistent profiles, independent coverage and search demand make panels more likely.",
+            "Verified representatives can claim a panel and suggest edits with supporting sources.",
+            "Avoid fabricated credentials and paid 'panel creation' schemes."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "How can a brand get a knowledge panel?",
+              "options": [
+                "Buy one from Google",
+                "Use more keywords on the home page",
+                "Build clear, consistent entity signals and independent coverage; Google generates panels automatically",
+                "Submit a form to create it"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Panels are algorithmically generated; you can influence the underlying signals."
+            },
+            {
+              "question": "A knowledge panel shows the wrong founding year sourced from an outdated directory. First step?",
+              "options": [
+                "Buy a press release",
+                "Fix the error at the source and then suggest an edit via the panel with authoritative sources",
+                "Create a new website",
+                "Ignore it"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Fixing sources and suggesting edits with evidence is the documented route."
+            }
+          ],
+          "activity": "Search your brand and two key people. Document whether panels exist, their facts and sources, and a plan to improve accuracy."
+        },
+        {
+          "slug": "measuring-digital-pr-and-brand-authority",
+          "title": "Measuring digital PR and brand authority",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Measure what the business values\n\nDigital PR sits between SEO, communications and brand. Good measurement speaks to all three without inflating results.\n\n### Avoid vanity measures\n\n- **Advertising Value Equivalency (AVE)** — the cost of buying equivalent ad space — is widely rejected by the communications industry (the Barcelona Principles, maintained by the measurement body AMEC, explicitly reject AVEs as a measure of communication value).\n- **\"Potential reach\"** totals (sum of publications' audiences) wildly overstate actual exposure.\n- **Third-party authority score changes** alone say little about business impact.\n\n### A balanced scorecard\n\n**Coverage quality**\n\n| Metric | How |\n|---|---|\n| Coverage count by tier | Define tiers: Tier 1 (national/top trade), Tier 2 (regional/major niche), Tier 3 (blogs/aggregators) |\n| Relevance | Share of coverage in outlets your customers read |\n| Message pull-through | Did coverage include the key message, brand name, spokesperson? |\n| Sentiment | Positive/neutral/negative, assessed by a human |\n\n**Search and site impact**\n\n| Metric | How |\n|---|---|\n| Links earned | New linking domains, followed/nofollow split, link targets |\n| Referral traffic and conversions | GA4 traffic acquisition by source |\n| Branded search demand | Search Console branded query impressions and clicks over time |\n| Target page performance | Impressions/clicks for topic pages supported by the campaign |\n| Brand SERP quality | Panel presence, positive results in the top ten |\n\n**Brand and business**\n\n| Metric | How |\n|---|---|\n| Share of voice | Your mentions vs competitors' in target media over a period |\n| Inbound requests | Journalist enquiries, speaking and podcast invitations |\n| Sales influence | Leads citing coverage; sales team feedback |\n| AI visibility | Whether AI assistants mention or cite the brand for key topics (manual sampling; measurement tools are immature) |\n\n### Setting baselines and targets\n\nBefore a campaign: capture branded search levels, referring domains, share of voice, and brand SERP state. Set targets as ranges and directions (\"increase Tier 1–2 coverage in UAE business media; grow branded impressions year-over-year\") rather than fixed promises.\n\n### Reporting cadence\n\n- **Campaign reports** two to four weeks after launch: coverage list, links, referral traffic, highlights, lessons.\n- **Monthly programme reports**: cumulative results, reactive PR wins, pipeline.\n- **Quarterly reviews**: branded demand, share of voice, business outcomes, strategic adjustments.\n\n### A campaign report template\n\n```text\nCampaign: [Name]  Launch: [date]  Markets: UAE, KSA, UK\nSummary: 3 lines on outcome and what we learned\n\nCoverage: [n] pieces — Tier 1: [n], Tier 2: [n], Tier 3: [n]\nHighlights: [outlet, headline, link, whether it links]\nLinks: [n] new linking domains ([n] followed); top links listed\nTraffic: [n] referral sessions; [n] conversions (GA4)\nBrand: branded impressions [change vs prior period and YoY]\nMessages: key message present in [x of y] articles\nLessons: angles that worked; outlets to prioritise; what we'd change\nNext: follow-up pitches, localised angles, relationship notes\n```\n\n### Attribution honesty\n\nBrand growth has many causes: advertising, product launches, seasonality, word of mouth. When you report changes in branded search or organic traffic, note concurrent activities. Where possible, compare markets that received the campaign with those that did not.\n\n### Tools\n\nMedia monitoring platforms, Google Alerts for lightweight monitoring, backlink tools, Search Console, GA4, and a simple spreadsheet or BI dashboard for share-of-voice tracking. Choose tools that cover your languages and markets — Arabic and Urdu media coverage is poorly tracked by some tools, so supplement with manual monitoring.\n\n### Common mistakes\n\n- Reporting AVE or potential reach as value.\n- Counting syndicated copies of one article as separate coverage wins.\n- Only reporting links, ignoring brand and business outcomes.\n- Using tools that miss non-English coverage in your markets.\n",
+          "video": null,
+          "keyTakeaways": [
+            "Avoid AVE and inflated 'potential reach'; the Barcelona Principles reject AVEs.",
+            "Use a balanced scorecard: coverage quality, search and site impact, brand and business outcomes.",
+            "Set baselines and directional targets; report per campaign, monthly and quarterly.",
+            "Attribute honestly and ensure monitoring covers your markets' languages."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why should Advertising Value Equivalency not be used to measure PR?",
+              "options": [
+                "It is too cheap to calculate",
+                "It does not measure communication outcomes and is rejected by the Barcelona Principles",
+                "Google uses it",
+                "It only works for TV"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "AVE equates coverage with ad cost and ignores impact; the industry rejects it."
+            },
+            {
+              "question": "Which metric best indicates growing brand awareness from PR?",
+              "options": [
+                "Word count of coverage",
+                "Branded search impressions over time",
+                "Number of press releases sent",
+                "Potential reach total"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Branded search demand reflects real awareness and interest."
+            },
+            {
+              "question": "Why supplement tools with manual monitoring in Gulf and Pakistani markets?",
+              "options": [
+                "Manual monitoring is required by law",
+                "Tools are banned there",
+                "To inflate counts",
+                "Some tools poorly track Arabic and Urdu coverage"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Coverage gaps in non-English media can understate results."
+            }
+          ],
+          "activity": "Build a measurement scorecard for a PR programme, including baselines, data sources and a campaign report template."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 25,
+    "timeLimitMinutes": 40,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "dpr-001",
+        "module": "newsworthy-campaigns",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is a 'news value' journalists look for?",
+        "options": [
+          "Page speed",
+          "Keyword density",
+          "Timeliness",
+          "Domain rating"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Timeliness is a classic news value."
+      },
+      {
+        "id": "dpr-002",
+        "module": "newsworthy-campaigns",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which campaign ideas combine several news values? (Choose all that apply.)",
+        "options": [
+          "A list of the company's office plants",
+          "City-by-city cost analysis released as a new regulation starts",
+          "Survey on how parents budget for back-to-school, released in August",
+          "A new logo announcement"
+        ],
+        "correct": [
+          1,
+          2
+        ],
+        "explanation": "Both have timeliness, proximity/impact and usefulness; the others lack news value."
+      },
+      {
+        "id": "dpr-003",
+        "module": "newsworthy-campaigns",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What is a 'hook' in digital PR?",
+        "options": [
+          "A link in the footer",
+          "The reason a journalist should publish the story now",
+          "An email tracking pixel",
+          "A type of structured data"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Hooks tie the story to a moment or event."
+      },
+      {
+        "id": "dpr-004",
+        "module": "newsworthy-campaigns",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A tyre retailer's celebrity-baby-names study wins national coverage. What is the main limitation?",
+        "options": [
+          "It creates a manual action",
+          "Coverage has little topical relevance to the brand, so it builds limited authority on its topics",
+          "It cannot earn links",
+          "It violates spam policies automatically"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Relevance matters for topical authority, though coverage still has some value."
+      },
+      {
+        "id": "dpr-005",
+        "module": "newsworthy-campaigns",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Why validate ideas before building a campaign?",
+        "options": [
+          "To reduce the number of ideas considered",
+          "To check news value, relevance, data feasibility, media fit, link potential and risk",
+          "To avoid writing a methodology",
+          "Google requires it"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Validation focuses effort on ideas likely to succeed."
+      },
+      {
+        "id": "dpr-006",
+        "module": "newsworthy-campaigns",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What must a campaign landing page include to earn and deserve links?",
+        "options": [
+          "Autoplay video",
+          "Only a press release PDF",
+          "A form gate for the data",
+          "Key findings, charts, methodology, expert comment and local cuts"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "An ungated, useful, credible page is the natural link target."
+      },
+      {
+        "id": "dpr-007",
+        "module": "newsworthy-campaigns",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Survey results don't support the dramatic headline the team wanted. What should you do?",
+        "options": [
+          "Drop the methodology section",
+          "Change the sample until it fits",
+          "Report what the data supports and find the genuine story in it",
+          "Publish the dramatic headline anyway"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Stretching data damages credibility and can breach advertising and consumer rules."
+      },
+      {
+        "id": "dpr-008",
+        "module": "newsworthy-campaigns",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What is newsjacking?",
+        "options": [
+          "Responding quickly to breaking news with relevant expert commentary or data",
+          "Buying news placements",
+          "Stealing journalists' articles",
+          "Hacking news sites"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Reactive commentary tied to breaking news."
+      },
+      {
+        "id": "dpr-009",
+        "module": "pitching-and-journalist-requests",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "When is a formal press release most appropriate?",
+        "options": [
+          "For a funding round or acquisition announcement",
+          "For a podcast pitch",
+          "For a personalised data pitch",
+          "For a journalist request response"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Formal corporate news suits releases."
+      },
+      {
+        "id": "dpr-010",
+        "module": "pitching-and-journalist-requests",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why don't wire-distributed press releases reliably build ranking value through links?",
+        "options": [
+          "They cannot contain links",
+          "Syndicated release links are typically nofollow and Google treats widely distributed release links as not passing credit",
+          "They are banned",
+          "Journalists delete them"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Their value is exposure, not link equity."
+      },
+      {
+        "id": "dpr-011",
+        "module": "pitching-and-journalist-requests",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which elements belong in a strong pitch? (Choose all that apply.)",
+        "options": [
+          "Subject line written as the likely headline",
+          "An offer of expert interview and link to full data",
+          "Three specific, verifiable findings",
+          "A large attachment"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Headlines, specifics and offers help; attachments hurt."
+      },
+      {
+        "id": "dpr-012",
+        "module": "pitching-and-journalist-requests",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is an embargo?",
+        "options": [
+          "An agreed time before which journalists will not publish the story",
+          "A type of nofollow",
+          "A ban on linking",
+          "A Google penalty"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Embargoes let journalists prepare before publication time."
+      },
+      {
+        "id": "dpr-013",
+        "module": "pitching-and-journalist-requests",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "HARO was shut down by its owner in late 2024 and later relaunched under new ownership. What does this imply for your PR programme?",
+        "options": [
+          "Diversify request sources and periodically re-check each service's status and quality",
+          "Stop reactive PR",
+          "Only use one service forever",
+          "Pay for guaranteed coverage instead"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "The request-service landscape changes; relying on one source is fragile."
+      },
+      {
+        "id": "dpr-014",
+        "module": "pitching-and-journalist-requests",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What makes a journalist request response more likely to be used?",
+        "options": [
+          "Long company background first",
+          "A direct, specific answer with credentials, sent quickly",
+          "Identical answers sent to many outlets",
+          "A request for a followed link"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Speed, specificity and credibility win."
+      },
+      {
+        "id": "dpr-015",
+        "module": "pitching-and-journalist-requests",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is an exclusive?",
+        "options": [
+          "A story offered first (or only) to one outlet for an agreed period",
+          "A nofollow link",
+          "A paid advertorial",
+          "A press release on a wire"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Exclusives give an outlet a reason to prioritise your story."
+      },
+      {
+        "id": "dpr-016",
+        "module": "pitching-and-journalist-requests",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which reactive PR setup elements speed up responses? (Choose all that apply.)",
+        "options": [
+          "Pre-approved positions on recurring topics",
+          "Requiring CEO sign-off on every quote",
+          "Expert roster with topics and availability",
+          "A monitoring rota"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Rosters, pre-approval and rotas reduce delay; universal CEO sign-off slows things down."
+      },
+      {
+        "id": "dpr-017",
+        "module": "thought-leadership-and-reputation",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is a core ingredient of thought leadership?",
+        "options": [
+          "A clear, evidenced point of view from a genuine expert",
+          "Paid featured-expert listings",
+          "Anonymous content",
+          "Keyword-stuffed blog posts"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Expertise plus a defensible view plus evidence."
+      },
+      {
+        "id": "dpr-018",
+        "module": "thought-leadership-and-reputation",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which review practices violate Google's policies? (Choose all that apply.)",
+        "options": [
+          "Asking only customers who rated you highly in a survey to review",
+          "Offering discounts in exchange for Google reviews",
+          "Staff reviewing their employer",
+          "Asking every customer neutrally"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Incentives, gating and conflicts of interest are prohibited; neutral requests to all customers are fine."
+      },
+      {
+        "id": "dpr-019",
+        "module": "thought-leadership-and-reputation",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Under the US FTC rule on consumer reviews (in force since late 2024), which is prohibited?",
+        "options": [
+          "Responding to reviews",
+          "Buying fake positive reviews",
+          "Displaying genuine reviews",
+          "Asking customers for honest feedback"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "The rule prohibits fake and purchased reviews, among other practices."
+      },
+      {
+        "id": "dpr-020",
+        "module": "thought-leadership-and-reputation",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A customer leaves a harsh but genuine review. The owner wants to offer a refund if they delete it. Advice?",
+        "options": [
+          "Report the review as fake",
+          "Don't condition refunds on deletion — that's review suppression; respond professionally and resolve the issue",
+          "Do it; it's standard",
+          "Post a counter-review"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Conditioning benefits on removal is suppression, prohibited by platform policies and consumer law in some jurisdictions."
+      },
+      {
+        "id": "dpr-021",
+        "module": "thought-leadership-and-reputation",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is a brand SERP?",
+        "options": [
+          "A sitemap",
+          "A paid ad format",
+          "The results page for searches of your brand name",
+          "A review platform"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Managing what appears for brand searches is part of reputation work."
+      },
+      {
+        "id": "dpr-022",
+        "module": "thought-leadership-and-reputation",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "When is ghostwritten thought leadership acceptable?",
+        "options": [
+          "Never",
+          "Only in the UK",
+          "When the ideas and experiences are genuinely the named expert's and they review it",
+          "Only if AI writes it"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Authenticity of the ideas and review by the named person maintain trust."
+      },
+      {
+        "id": "dpr-023",
+        "module": "thought-leadership-and-reputation",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which channels suit bilingual thought leadership in the Gulf? (Choose all that apply.)",
+        "options": [
+          "Arabic and English articles in regional business media",
+          "LinkedIn content in both languages",
+          "Speaking at regional industry summits",
+          "Buying fake followers"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Bilingual media, events and LinkedIn reach wider audiences; fake followers do not build authority."
+      },
+      {
+        "id": "dpr-024",
+        "module": "thought-leadership-and-reputation",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is a good response to a positive review?",
+        "options": [
+          "No response ever",
+          "A specific, genuine thank-you",
+          "A discount code for another review",
+          "A keyword-stuffed reply"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Genuine, specific thanks builds trust."
+      },
+      {
+        "id": "dpr-025",
+        "module": "entities-and-eeat",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does E-E-A-T stand for?",
+        "options": [
+          "Experience, Expertise, Authoritativeness, Trust",
+          "Entities, Expertise, Anchors, Trust",
+          "Experience, Engagement, Accuracy, Timeliness",
+          "Engagement, Efficiency, Authority, Traffic"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "It comes from Google's Search Quality Rater Guidelines."
+      },
+      {
+        "id": "dpr-026",
+        "module": "entities-and-eeat",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which statement about E-E-A-T is accurate?",
+        "options": [
+          "It is a quality framework from the rater guidelines; Google's systems use signals aligned with it",
+          "It is a single numerical ranking factor",
+          "It only applies to e-commerce",
+          "It is measured by DA"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "It is a conceptual framework, not a score."
+      },
+      {
+        "id": "dpr-027",
+        "module": "entities-and-eeat",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which improvements genuinely strengthen E-E-A-T for a financial advice article? (Choose all that apply.)",
+        "options": [
+          "A 'reviewed by' badge without any real review",
+          "Clear sourcing and honest update dates",
+          "A named author page with verifiable qualifications",
+          "Original worked examples from real client scenarios (anonymised)"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Verifiable expertise, experience and accuracy build trust; fake review labels damage it."
+      },
+      {
+        "id": "dpr-028",
+        "module": "entities-and-eeat",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What is the purpose of a stable @id in Organization and Person markup?",
+        "options": [
+          "To set the canonical URL",
+          "To trigger review stars",
+          "To connect entity references consistently across pages",
+          "To hide the entity"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "@id lets you reference the same entity throughout your structured data graph."
+      },
+      {
+        "id": "dpr-029",
+        "module": "entities-and-eeat",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which topics are YMYL?",
+        "options": [
+          "Health, finance and safety topics",
+          "Recipes only",
+          "Cat memes",
+          "Celebrity gossip only"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "YMYL topics could significantly affect people's health, finances or safety."
+      },
+      {
+        "id": "dpr-030",
+        "module": "entities-and-eeat",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why use one canonical brand name consistently everywhere?",
+        "options": [
+          "It aids entity disambiguation and correct attribution of mentions",
+          "Google requires trademarks",
+          "It increases crawl budget",
+          "It improves CLS"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Consistency helps search engines understand the entity."
+      },
+      {
+        "id": "dpr-031",
+        "module": "entities-and-eeat",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Which statement about unlinked brand mentions is most accurate?",
+        "options": [
+          "They cause penalties",
+          "Google has published their exact ranking weight",
+          "They support awareness, entity understanding and AI visibility, but their direct ranking effect isn't published",
+          "They are worthless"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Be honest about uncertainty while recognising their brand value."
+      },
+      {
+        "id": "dpr-032",
+        "module": "entities-and-eeat",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Google's 'Who, How, Why' questions encourage creators to…",
+        "options": [
+          "Make authorship clear, explain how content was made, and create it to help people",
+          "Publish more often",
+          "Use more keywords",
+          "Hide authorship"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "They are part of Google's helpful content guidance."
+      },
+      {
+        "id": "dpr-033",
+        "module": "knowledge-panels-and-measurement",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Can you buy a Google knowledge panel?",
+        "options": [
+          "Yes, via Search Console",
+          "Yes, from Google Ads",
+          "No; Google generates panels automatically",
+          "Only for people"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Panels are algorithmic; you can influence underlying signals only."
+      },
+      {
+        "id": "dpr-034",
+        "module": "knowledge-panels-and-measurement",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What can a verified knowledge panel representative do?",
+        "options": [
+          "Buy placement",
+          "Suggest changes to facts, supported by sources, for Google to review",
+          "Remove competitors' panels",
+          "Write any content into the panel instantly"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Verification allows suggesting edits, which Google reviews."
+      },
+      {
+        "id": "dpr-035",
+        "module": "knowledge-panels-and-measurement",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which measures belong in a digital PR scorecard? (Choose all that apply.)",
+        "options": [
+          "Advertising Value Equivalency",
+          "Branded search impressions over time",
+          "Coverage by tier and relevance",
+          "Referral traffic and conversions"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "AVE is rejected by the Barcelona Principles; the rest measure real impact."
+      },
+      {
+        "id": "dpr-036",
+        "module": "knowledge-panels-and-measurement",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A client's branded search rose 30% during a PR campaign, which ran alongside a TV ad campaign. How should you report it?",
+        "options": [
+          "Report the rise, note the concurrent TV campaign, and use market comparisons or timing to indicate PR's likely contribution",
+          "Ignore branded search",
+          "Hide the TV campaign",
+          "Attribute it all to PR"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Honest attribution acknowledges confounders."
+      },
+      {
+        "id": "dpr-037",
+        "module": "knowledge-panels-and-measurement",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which feature is managed separately from knowledge panels for local businesses?",
+        "options": [
+          "Google Business Profile",
+          "XML sitemaps",
+          "Disavow",
+          "robots.txt"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Local businesses manage their GBP panel directly."
+      },
+      {
+        "id": "dpr-038",
+        "module": "knowledge-panels-and-measurement",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why avoid 'knowledge panel creation' services built on mass press releases and fake profiles?",
+        "options": [
+          "Google requires an agency",
+          "They are illegal everywhere",
+          "They risk short-lived results, inaccurate facts and reputational damage",
+          "They are too slow"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Low-quality signals are unreliable and can harm reputation."
+      },
+      {
+        "id": "dpr-039",
+        "module": "knowledge-panels-and-measurement",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What does 'share of voice' measure in PR?",
+        "options": [
+          "Number of press releases",
+          "Email open rates",
+          "Podcast audio volume",
+          "Your share of mentions in target media compared with competitors over a period"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "It benchmarks visibility against competitors."
+      },
+      {
+        "id": "dpr-040",
+        "module": "knowledge-panels-and-measurement",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Before a founder's name change for public use (e.g. adopting a consistent transliteration), what sequence best supports an accurate person panel?",
+        "options": [
+          "Issue 50 press releases",
+          "Suggest a panel edit first, update nothing else",
+          "Create a Wikipedia page yourself",
+          "Update the website author page and official profiles consistently, then suggest panel edits citing those sources"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Fix sources first so edits are supported by consistent evidence."
+      }
+    ]
+  }
+}
