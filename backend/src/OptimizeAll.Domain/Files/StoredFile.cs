@@ -9,6 +9,8 @@ public enum FilePurpose
     /// <summary>Public campaign creative.</summary>
     CampaignAsset,
     ContentImage,
+    /// <summary>Private proof of a discount-code sale (receipt/screenshot): the owner and staff with sales.review or codes.view.</summary>
+    SaleProof,
 }
 
 /// <summary>Metadata of an uploaded file. Bytes live in private storage keyed by <see cref="StorageKey"/>, never under the web root.</summary>

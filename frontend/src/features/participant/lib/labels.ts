@@ -42,6 +42,10 @@ export function earningTypeLabel(type: string): string {
       return 'Quality bonus';
     case 'ReferralReward':
       return 'Referral reward';
+    case 'SaleCommission':
+      return 'Code sale commission';
+    case 'SaleTierBonus':
+      return 'Code sales bonus';
     default:
       return humanize(type);
   }

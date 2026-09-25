@@ -137,6 +137,11 @@ any permission that opens one of its sections, but post-login landing there is r
 | `campaigns.publish` | | | ✓ | | ✓ |
 | `rewards.edit` *(sensitive)* | | | ✓ | | ✓ |
 | `rewards.approve_bonus` | | | ✓ | ✓ | ✓ |
+| `codes.view` | | | ✓ | ✓ | ✓ |
+| `codes.manage` *(sensitive)* | | | ✓ | | ✓ |
+| `codes.assign` *(sensitive)* | | | ✓ | | ✓ |
+| `sales.review` *(sensitive)* | | ✓ | | | ✓ |
+| `sales.reverse` *(sensitive)* | | | | ✓ | ✓ |
 | `submissions.review` | | ✓ | | | ✓ |
 | `submissions.reverse` | | | | ✓ | ✓ |
 | `appeals.resolve` | | ✓ | | | ✓ |
@@ -351,6 +356,8 @@ target's email to be typed) starts a time-boxed session:
 * **Screenshot access**: the owner; users with `submissions.review`; and campaign managers only for submissions to
   campaigns they created (`Campaign.CreatedByUserId`). Anyone else gets `404` (existence is not revealed).
 * Use a private volume/bucket with encryption at rest; never make it public.
+* Discount-code sale proofs (`FilePurpose.SaleProof`) are private images like submission screenshots: readable by
+  their owner and by staff with `sales.review` or `codes.view` only.
 
 ## 6. Encryption of payout destinations
 
@@ -442,6 +449,14 @@ target's email to be typed) starts a time-boxed session:
   manual bonus or adjustment cannot approve it. Sensitive actions require confirmation and a reason.
 * **Versioned reward rules**: submissions capture the rule-set version at creation; approvals compute
   earnings from that version, so rate changes never retroactively alter pending work.
+* **Discount-code sales** (DISCOUNT_CODES.md): one live claim per order and program (unique index + per-program named
+  lock → the first report wins, `409 code_sale.duplicate_order`); nobody decides a sale that is theirs or that they
+  entered/imported (`403 code_sale.self_review` / `code_sale.four_eyes`); commissions go through `ILedgerWriter` with a
+  per-sale idempotency key and are never priced at 0 when an exchange rate is missing (`409 fx.rate_missing`); refunds
+  reverse through the ledger (clawback when paid); payout-rule changes need confirm + reason and are audited;
+  participants only ever see their own codes and sales (another person's code or sale is a 404). Every money-affecting
+  write (payout rules, overrides, code imports, assignment, approvals, refunds, sales-report import) and the
+  participant's sale claims are denied while impersonating.
 * Money uses `DECIMAL(19,4)` and currency-aware rounding; every amount carries its ISO currency; FX conversions
   store the original amount and rate.
 * Generating or finalizing a batch never marks anything paid; payments are recorded per item with an external

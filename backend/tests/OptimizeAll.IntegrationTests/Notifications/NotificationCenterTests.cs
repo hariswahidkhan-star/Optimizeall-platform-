@@ -116,8 +116,9 @@ public sealed class NotificationCenterTests(ApiFactory api) : IClassFixture<ApiF
         Assert.False(string.IsNullOrEmpty(whatsApp.GetProperty("reason").GetString()));
 
         var types = prefs.GetProperty("types").EnumerateArray().ToList();
-        // Every kind except the two staff-only ones.
-        Assert.Equal(18, types.Count);
+        // Every kind except the two staff-only ones (including the two discount-code kinds).
+        Assert.Equal(20, types.Count);
+        Assert.Contains(types, t => t.GetProperty("type").GetString() == NotificationTypes.CodeSaleDecision);
         var essential = types.Single(t => t.GetProperty("type").GetString() == NotificationTypes.PayoutPaid);
         Assert.True(essential.GetProperty("essential").GetBoolean());
         Assert.All(essential.GetProperty("channels").EnumerateArray(), c => Assert.True(c.GetProperty("locked").GetBoolean()));

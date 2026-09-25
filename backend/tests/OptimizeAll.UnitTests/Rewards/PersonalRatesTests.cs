@@ -217,7 +217,10 @@ public sealed class PersonalRatesTests
             RateSourceLevel.CampaignPersonalCustom, RateSourceLevel.CampaignPersonalCard, RateSourceLevel.CampaignGroup,
             RateSourceLevel.GlobalPersonalCustom, RateSourceLevel.GlobalPersonalCard, RateSourceLevel.GlobalGroup,
             RateSourceLevel.CampaignSegment, RateSourceLevel.GlobalSegment, RateSourceLevel.CampaignRules,
-        }, Enum.GetValues<RateSourceLevel>().OrderBy(l => (int)l));
+        }, Enum.GetValues<RateSourceLevel>().Where(l => l <= RateSourceLevel.CampaignRules).OrderBy(l => (int)l));
+        // Discount-code payout sources rank after every post-pricing level (they never compete with post rates).
+        Assert.All(new[] { RateSourceLevel.CodePersonOverride, RateSourceLevel.CodeGroupOverride, RateSourceLevel.CodeProgramTier,
+            RateSourceLevel.CodeProgramRules }, l => Assert.True(l > RateSourceLevel.CampaignRules));
     }
 
     [Theory]

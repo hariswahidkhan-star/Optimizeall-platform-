@@ -26,6 +26,18 @@ public static class Permissions
     /// <summary>Sensitive (money): assign rate cards to people/groups and manage group membership.</summary>
     public const string RatesAssign = "rates.assign";
 
+    // Discount codes / affiliate sales (docs/DISCOUNT_CODES.md)
+    /// <summary>Read discount-code programs, codes, assignments, sales and reports (commercial terms).</summary>
+    public const string CodesView = "codes.view";
+    /// <summary>Sensitive (money): programs and payout rules, codes (add/import/generate), overrides, brand sales-report import, staff-entered sales.</summary>
+    public const string CodesManage = "codes.manage";
+    /// <summary>Sensitive (money): assign / reassign / unassign codes to people and rate groups.</summary>
+    public const string CodesAssign = "codes.assign";
+    /// <summary>Sensitive (money): approve / reject code sales (four-eyes: never your own).</summary>
+    public const string SalesReview = "sales.review";
+    /// <summary>Sensitive (money): refund / cancel approved code sales (reverses their earnings).</summary>
+    public const string SalesReverse = "sales.reverse";
+
     // Review
     public const string SubmissionsReview = "submissions.review";
     public const string SubmissionsReverse = "submissions.reverse";
@@ -128,13 +140,14 @@ public static class RolePermissions
         [Role.Reviewer] = new[]
         {
             Permissions.CampaignsView, Permissions.SubmissionsReview, Permissions.AppealsResolve,
-            Permissions.SocialAccountsVerify, Permissions.UsersView, Permissions.SupportManage,
+            Permissions.SocialAccountsVerify, Permissions.UsersView, Permissions.SupportManage, Permissions.SalesReview,
         },
         [Role.CampaignManager] = new[]
         {
             Permissions.CampaignsView, Permissions.CampaignsManage, Permissions.CampaignsPublish, Permissions.RewardsEdit,
             Permissions.RewardsApproveBonus, Permissions.MarketingManage, Permissions.AnalyticsView, Permissions.ReviewAssign,
             Permissions.UsersView, Permissions.RatesView, Permissions.RatesManage, Permissions.RatesAssign,
+            Permissions.CodesView, Permissions.CodesManage, Permissions.CodesAssign,
         },
         [Role.Finance] = new[]
         {
@@ -143,7 +156,7 @@ public static class RolePermissions
             Permissions.PayoutSettingsEdit, Permissions.RewardsApproveBonus, Permissions.SubmissionsReverse,
             Permissions.AnalyticsView, Permissions.UsersView, Permissions.AuditView,
             Permissions.BillingView, Permissions.BillingManage, Permissions.BillingSettings, Permissions.ClientsView,
-            Permissions.TimeViewAll, Permissions.RatesView,
+            Permissions.TimeViewAll, Permissions.RatesView, Permissions.CodesView, Permissions.SalesReverse,
         },
         [Role.Admin] = Permissions.All.Where(p => p != Permissions.ClientPortal && p != Permissions.ParticipantPortal)
             .Append(Permissions.ParticipantPortal).ToArray(),

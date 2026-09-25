@@ -85,6 +85,16 @@ public enum RateSourceLevel
     GlobalSegment = 8,
     /// <summary>No person-level rate applied: the campaign's BaseRate / RateOverride rules.</summary>
     CampaignRules = 9,
+
+    // Discount-code sales (not part of post pricing precedence; recorded on SaleCommission earnings).
+    /// <summary>A per-person payout override on a discount-code program.</summary>
+    CodePersonOverride = 20,
+    /// <summary>A rate-group payout override on a discount-code program.</summary>
+    CodeGroupOverride = 21,
+    /// <summary>A discount-code program's tier rate (after N sales).</summary>
+    CodeProgramTier = 22,
+    /// <summary>A discount-code program's default payout rule.</summary>
+    CodeProgramRules = 23,
 }
 
 /// <summary>A reusable, named set of per-post rates in one currency. Rates live in immutable versions.</summary>
@@ -313,6 +323,10 @@ public static class RateSources
         RateSourceLevel.GlobalGroup => "Group rate (all campaigns)",
         RateSourceLevel.CampaignSegment => "Automatic segment rate for this campaign",
         RateSourceLevel.GlobalSegment => "Automatic segment rate (all campaigns)",
+        RateSourceLevel.CodePersonOverride => "Personal discount-code payout",
+        RateSourceLevel.CodeGroupOverride => "Group discount-code payout",
+        RateSourceLevel.CodeProgramTier => "Discount-code tier rate",
+        RateSourceLevel.CodeProgramRules => "Discount-code program rate",
         _ => "Campaign rate",
     };
 

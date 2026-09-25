@@ -46,6 +46,7 @@ using OptimizeAll.Api.Modules.Payouts;
 using OptimizeAll.Api.Modules.Retention;
 using OptimizeAll.Api.Modules.Review;
 using OptimizeAll.Api.Modules.Rates;
+using OptimizeAll.Api.Modules.Codes;
 using OptimizeAll.Api.Modules.Rewards;
 using OptimizeAll.Api.Modules.Seed;
 using OptimizeAll.Api.Modules.Social;
@@ -238,6 +239,7 @@ services
     .AddCampaignsModule(config)
     .AddRewardsModule(config)
     .AddRatesModule(config)
+    .AddCodesModule(config)
     .AddSubmissionsModule(config)
     .AddReviewModule(config)
     .AddFilesModule(config)

@@ -91,7 +91,9 @@ public sealed record LedgerRowDto(
     Guid? RateCardId = null,
     int? RateCardVersion = null,
     Guid? RateGroupId = null,
-    Guid? RateAssignmentId = null);
+    Guid? RateAssignmentId = null,
+    Guid? CodeProgramId = null,
+    Guid? CodeSaleId = null);
 
 public class MyEarningsQuery : PageQuery
 {

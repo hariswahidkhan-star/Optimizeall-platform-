@@ -174,6 +174,7 @@ public static class LedgerCsv
         "Settlement currency", "Rule version", "Available at (UTC)", "Approved at (UTC)", "Payout item ID",
         "Paid at (UTC)", "Reverses earning ID", "Reversed by earning ID", "Reason",
         "Rate source", "Rate source detail", "Rate card ID", "Rate card version", "Rate group ID", "Rate assignment ID",
+        "Code program ID", "Code sale ID",
     };
 
     public static IEnumerable<object?> Row(LedgerRow r)
@@ -186,6 +187,7 @@ public static class LedgerCsv
             e.SettlementCurrency, e.RewardRuleSetVersion, e.AvailableAt, e.ApprovedAt, e.PayoutItemId,
             e.PaidAt, e.ReversesEntryId, e.ReversedByEntryId, e.Reason,
             e.RateSource?.ToString(), e.RateSourceLabel, e.RateCardId, e.RateCardVersion, e.RateGroupId, e.RateAssignmentId,
+            e.CodeProgramId, e.CodeSaleId,
         };
     }
 }

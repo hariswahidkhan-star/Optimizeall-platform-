@@ -184,6 +184,8 @@ public sealed class LedgerAdminService(
         EarningType.TimeLimitedBonus => "bonus",
         EarningType.QualityBonus => "quality bonus",
         EarningType.ReferralReward => "referral reward",
+        EarningType.SaleCommission => "sale commission",
+        EarningType.SaleTierBonus => "sales tier bonus",
         _ => "earning",
     };
 

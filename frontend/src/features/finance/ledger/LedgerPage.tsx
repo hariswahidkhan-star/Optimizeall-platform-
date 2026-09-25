@@ -83,7 +83,9 @@ function LedgerDetail({ row }: { row: LedgerRow }) {
         {
           label: 'Rate source',
           value: row.rateSource
-            ? `${row.rateSourceLabel ?? humanize(row.rateSource)}${row.rateSource === 'CampaignRules' ? '' : ' — locked at submission'}`
+            ? `${row.rateSourceLabel ?? humanize(row.rateSource)}${
+                row.rateSource === 'CampaignRules' ? '' : String(row.rateSource).startsWith('Code') ? ' — priced at approval' : ' — locked at submission'
+              }`
             : '—',
         },
         { label: 'Created', value: <DateTime value={row.createdAt} /> },

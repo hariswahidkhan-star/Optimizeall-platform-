@@ -1,5 +1,5 @@
 import { lazyPage } from '@/app/lazyPage';
-import { BadgeCheck, Inbox, LayoutDashboard, Radar, Scale } from 'lucide-react';
+import { BadgeCheck, Inbox, LayoutDashboard, Radar, Scale, TicketPercent } from 'lucide-react';
 import type { RouteObject } from 'react-router-dom';
 import type { PortalNavItem } from '@/app/portalTypes';
 import { type PermissionRequirement, Permissions } from '@/lib/auth/permissions';
@@ -16,11 +16,21 @@ const SocialVerificationPage = lazyPage(
   'SocialVerificationPage',
 );
 const WorkspacePage = lazyPage(() => import('./pages/WorkspacePage'), 'WorkspacePage');
+const CodeSalesReviewQueuePage = lazyPage(
+  () => import('../codes/staff/CodeSalesQueuePage'),
+  'CodeSalesReviewQueuePage',
+);
+const ReviewCodeSaleDetailPage = lazyPage(
+  () => import('../codes/staff/CodeSalesQueuePage'),
+  'ReviewCodeSaleDetailPage',
+);
 
 /** Portal entry (the queue and live checks call submissions.review APIs). */
 export const portalRequires: PermissionRequirement = { anyOf: [Permissions.SubmissionsReview] };
 
 const appeals: PermissionRequirement = { allOf: [Permissions.SubmissionsReview, Permissions.AppealsResolve] };
+/** Discount-code sales review (sales.review). */
+const codeSales: PermissionRequirement = { allOf: [Permissions.SubmissionsReview, Permissions.SalesReview] };
 const socialVerification: PermissionRequirement = {
   allOf: [Permissions.SubmissionsReview, Permissions.SocialAccountsVerify],
 };
@@ -34,6 +44,13 @@ export const nav: PortalNavItem[] = [
     label: 'Live checks',
     icon: Radar,
     description: 'Re-check approved posts are still live and unchanged.',
+  },
+  {
+    to: 'code-sales',
+    label: 'Code sales',
+    icon: TicketPercent,
+    description: 'Approve sales participants reported with brand discount codes.',
+    requires: codeSales,
   },
   {
     to: 'appeals',
@@ -61,6 +78,14 @@ export const routes: RouteObject[] = [
     ],
   },
   { path: 'live-checks', element: <LiveChecksPage /> },
+  {
+    path: 'code-sales',
+    handle: { requires: codeSales },
+    children: [
+      { index: true, element: <CodeSalesReviewQueuePage /> },
+      { path: ':saleId', element: <ReviewCodeSaleDetailPage /> },
+    ],
+  },
   {
     path: 'appeals',
     handle: { requires: appeals },

@@ -28,6 +28,8 @@ export type EarningType =
   | 'TimeLimitedBonus'
   | 'QualityBonus'
   | 'ReferralReward'
+  | 'SaleCommission'
+  | 'SaleTierBonus'
   | 'Adjustment'
   | 'Reversal';
 
@@ -39,6 +41,8 @@ export const EARNING_TYPES: EarningType[] = [
   'TimeLimitedBonus',
   'QualityBonus',
   'ReferralReward',
+  'SaleCommission',
+  'SaleTierBonus',
   'Adjustment',
   'Reversal',
 ];

@@ -42,6 +42,7 @@ public sealed class PersonRatesService(
     private DateTime Now => clock.GetUtcNow().UtcDateTime;
 
     public static IReadOnlyList<PrecedenceLevelDto> Precedence { get; } = Enum.GetValues<RateSourceLevel>()
+        .Where(l => l <= RateSourceLevel.CampaignRules) // discount-code payout sources are not part of post pricing
         .OrderBy(l => (int)l).Select(l => new PrecedenceLevelDto((int)l, l, RateSources.Describe(l))).ToList();
 
     public async Task<PersonRatesDto> PersonRatesAsync(Guid userId, Guid? campaignId, CancellationToken ct)

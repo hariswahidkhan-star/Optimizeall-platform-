@@ -130,6 +130,8 @@ public static class NotificationCatalog
         new(NotificationTypes.Achievement, GroupParticipant, "Achievements", "Badges and milestones you unlock.", Participants),
         new(NotificationTypes.ReferralQualified, GroupParticipant, "Referrals", "When someone you referred qualifies.", Participants),
         new(NotificationTypes.SupportReply, GroupParticipant, "Support replies", "When our team replies to your support ticket.", Participants),
+        new(NotificationTypes.CodeAssigned, GroupParticipant, "Discount codes", "When a brand's discount code is assigned to you.", Participants),
+        new(NotificationTypes.CodeSaleDecision, GroupParticipant, "Code sale decisions", "When a sale you reported is approved, rejected, queried or refunded.", Participants),
 
         new(NotificationTypes.ReviewLiveCheckDue, GroupReview, "Live checks due (staff)", "Submissions waiting for a live-post check.", new[] { Permissions.SubmissionsReview }),
         new(NotificationTypes.BatchPrepared, GroupReview, "Payout batch prepared (staff)", "A payout batch is ready for finance review.", new[] { Permissions.PayoutsView }),

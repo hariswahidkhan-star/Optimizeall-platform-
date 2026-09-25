@@ -3705,6 +3705,67 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "code_programs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Name = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    BrandName = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ClientAccountId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    CampaignId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    Description = table.Column<string>(type: "varchar(2000)", maxLength: 2000, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Terms = table.Column<string>(type: "varchar(4000)", maxLength: 4000, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    StoreUrl = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DiscountLabel = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Currency = table.Column<string>(type: "char(3)", fixedLength: true, maxLength: 3, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    StartsAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    EndsAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    Status = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PayoutType = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FlatAmount = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: true),
+                    Percent = table.Column<decimal>(type: "decimal(9,4)", precision: 9, scale: 4, nullable: true),
+                    DailyCapPerPerson = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: true),
+                    ProgramCapPerPerson = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: true),
+                    BudgetAmount = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: true),
+                    MaxOrderAgeDays = table.Column<int>(type: "int", nullable: false),
+                    RequireProof = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    PayoutVersion = table.Column<int>(type: "int", nullable: false),
+                    CreatedByUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ArchivedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_code_programs", x => x.Id);
+                    table.CheckConstraint("ck_code_programs_flat", "`FlatAmount` IS NULL OR `FlatAmount` > 0");
+                    table.CheckConstraint("ck_code_programs_percent", "`Percent` IS NULL OR (`Percent` > 0 AND `Percent` <= 100)");
+                    table.ForeignKey(
+                        name: "FK_code_programs_campaigns_CampaignId",
+                        column: x => x.CampaignId,
+                        principalTable: "campaigns",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_code_programs_client_accounts_ClientAccountId",
+                        column: x => x.ClientAccountId,
+                        principalTable: "client_accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "crm_companies",
                 columns: table => new
                 {
@@ -4881,90 +4942,6 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "earning_entries",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    CampaignId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    SubmissionId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    ReferralId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    Type = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Status = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Amount = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: false),
-                    Currency = table.Column<string>(type: "char(3)", fixedLength: true, maxLength: 3, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ExchangeRate = table.Column<decimal>(type: "decimal(18,8)", precision: 18, scale: 8, nullable: false),
-                    ExchangeRateId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    SettlementAmount = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: false),
-                    SettlementCurrency = table.Column<string>(type: "char(3)", fixedLength: true, maxLength: 3, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    RewardRuleSetId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    RewardRuleSetVersion = table.Column<int>(type: "int", nullable: true),
-                    RewardRuleId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    RateSource = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    RateSourceLabel = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    RateCardId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    RateCardVersion = table.Column<int>(type: "int", nullable: true),
-                    RateGroupId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    RateAssignmentId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    IdempotencyKey = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Reason = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ReversesEntryId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    ReversedByEntryId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
-                    CreatedByUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    AvailableAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
-                    ApprovedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
-                    ApprovedByUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    PayoutItemId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    PaidAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
-                    ReversedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
-                    ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_earning_entries", x => x.Id);
-                    table.CheckConstraint("ck_earning_rate_positive", "`ExchangeRate` > 0");
-                    table.CheckConstraint("ck_earning_reason_required", "`Type` NOT IN ('Adjustment','Reversal') OR (`Reason` IS NOT NULL AND CHAR_LENGTH(`Reason`) > 0)");
-                    table.CheckConstraint("ck_earning_reversal_negative", "`Type` <> 'Reversal' OR (`Amount` < 0 AND `ReversesEntryId` IS NOT NULL)");
-                    table.CheckConstraint("ck_earning_sign_consistent", "(`Amount` >= 0 AND `SettlementAmount` >= 0) OR (`Amount` <= 0 AND `SettlementAmount` <= 0)");
-                    table.ForeignKey(
-                        name: "FK_earning_entries_earning_entries_ReversesEntryId",
-                        column: x => x.ReversesEntryId,
-                        principalTable: "earning_entries",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_earning_entries_exchange_rates_ExchangeRateId",
-                        column: x => x.ExchangeRateId,
-                        principalTable: "exchange_rates",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_earning_entries_payout_items_PayoutItemId",
-                        column: x => x.PayoutItemId,
-                        principalTable: "payout_items",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_earning_entries_users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "payment_attempts",
                 columns: table => new
                 {
@@ -5688,6 +5665,107 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         name: "FK_ads_media_plan_lines_ads_media_plans_PlanId",
                         column: x => x.PlanId,
                         principalTable: "ads_media_plans",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "code_import_batches",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ProgramId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Kind = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FileName = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Rows = table.Column<int>(type: "int", nullable: false),
+                    Created = table.Column<int>(type: "int", nullable: false),
+                    Matched = table.Column<int>(type: "int", nullable: false),
+                    Flagged = table.Column<int>(type: "int", nullable: false),
+                    Rejected = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    CreatedByUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_code_import_batches", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_code_import_batches_code_programs_ProgramId",
+                        column: x => x.ProgramId,
+                        principalTable: "code_programs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "code_payout_overrides",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ProgramId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Target = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    GroupId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    PayoutType = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FlatAmount = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: true),
+                    Percent = table.Column<decimal>(type: "decimal(9,4)", precision: 9, scale: 4, nullable: true),
+                    Reason = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    CreatedByUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    EndedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    EndedByUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    EndReason = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_code_payout_overrides", x => x.Id);
+                    table.CheckConstraint("ck_code_payout_overrides_target", "(`Target` = 'Person' AND `UserId` IS NOT NULL AND `GroupId` IS NULL) OR (`Target` = 'Group' AND `GroupId` IS NOT NULL AND `UserId` IS NULL)");
+                    table.ForeignKey(
+                        name: "FK_code_payout_overrides_code_programs_ProgramId",
+                        column: x => x.ProgramId,
+                        principalTable: "code_programs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_code_payout_overrides_rate_groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "rate_groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_code_payout_overrides_users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "code_program_tiers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ProgramId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ThresholdSales = table.Column<int>(type: "int", nullable: false),
+                    FlatAmount = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: true),
+                    Percent = table.Column<decimal>(type: "decimal(9,4)", precision: 9, scale: 4, nullable: true),
+                    BonusAmount = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_code_program_tiers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_code_program_tiers_code_programs_ProgramId",
+                        column: x => x.ProgramId,
+                        principalTable: "code_programs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -7297,6 +7375,48 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "discount_codes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ProgramId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Code = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NormalizedCode = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Status = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Source = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ValidFrom = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    ValidTo = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    Note = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ImportBatchId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedByUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_discount_codes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_discount_codes_code_import_batches_ImportBatchId",
+                        column: x => x.ImportBatchId,
+                        principalTable: "code_import_batches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_discount_codes_code_programs_ProgramId",
+                        column: x => x.ProgramId,
+                        principalTable: "code_programs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "crm_deals",
                 columns: table => new
                 {
@@ -7665,6 +7785,59 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         principalTable: "ads_ad_groups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "discount_code_assignments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CodeId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ProgramId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Target = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    GroupId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    ValidFrom = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    ValidTo = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    Reason = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    CreatedByUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    EndedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    EndedByUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    EndReason = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_discount_code_assignments", x => x.Id);
+                    table.CheckConstraint("ck_discount_code_assignments_target", "(`Target` = 'Person' AND `UserId` IS NOT NULL AND `GroupId` IS NULL) OR (`Target` = 'Group' AND `GroupId` IS NOT NULL AND `UserId` IS NULL)");
+                    table.ForeignKey(
+                        name: "FK_discount_code_assignments_code_programs_ProgramId",
+                        column: x => x.ProgramId,
+                        principalTable: "code_programs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_discount_code_assignments_discount_codes_CodeId",
+                        column: x => x.CodeId,
+                        principalTable: "discount_codes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_discount_code_assignments_rate_groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "rate_groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_discount_code_assignments_users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -8087,6 +8260,114 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "code_sales",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ProgramId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CodeId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    AssignmentId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    GroupId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    OrderReference = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NormalizedOrderReference = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ActiveOrderKey = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    OrderDate = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    NetAmount = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: false),
+                    DiscountAmount = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: false),
+                    Currency = table.Column<string>(type: "char(3)", fixedLength: true, maxLength: 3, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ExchangeRate = table.Column<decimal>(type: "decimal(18,8)", precision: 18, scale: 8, nullable: false),
+                    ExchangeRateId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    ProgramNetAmount = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: false),
+                    ProgramDiscountAmount = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: false),
+                    ProductNote = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProofFileId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    Status = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Source = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedByUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    SubmittedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    EstimatedCommission = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: true),
+                    DecidedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    DecidedByUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    DecisionReason = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CommissionAmount = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: true),
+                    PayoutSourceLabel = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AppliedCaps = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PayoutVersion = table.Column<int>(type: "int", nullable: true),
+                    Verification = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    VerificationNote = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ReportedNetAmount = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: true),
+                    ReportedOrderDate = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    ImportBatchId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    RefundedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    RefundReason = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_code_sales", x => x.Id);
+                    table.CheckConstraint("ck_code_sales_amounts", "`NetAmount` > 0 AND `DiscountAmount` >= 0 AND `ExchangeRate` > 0");
+                    table.ForeignKey(
+                        name: "FK_code_sales_code_import_batches_ImportBatchId",
+                        column: x => x.ImportBatchId,
+                        principalTable: "code_import_batches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_code_sales_code_programs_ProgramId",
+                        column: x => x.ProgramId,
+                        principalTable: "code_programs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_code_sales_discount_code_assignments_AssignmentId",
+                        column: x => x.AssignmentId,
+                        principalTable: "discount_code_assignments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_code_sales_discount_codes_CodeId",
+                        column: x => x.CodeId,
+                        principalTable: "discount_codes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_code_sales_rate_groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "rate_groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_code_sales_stored_files_ProofFileId",
+                        column: x => x.ProofFileId,
+                        principalTable: "stored_files",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_code_sales_users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "contracts",
                 columns: table => new
                 {
@@ -8279,6 +8560,133 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         name: "FK_deliverable_versions_delivery_files_FileId",
                         column: x => x.FileId,
                         principalTable: "delivery_files",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "code_sale_events",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    SaleId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    FromStatus = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ToStatus = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Action = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ActorUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    Reason = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    At = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_code_sale_events", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_code_sale_events_code_sales_SaleId",
+                        column: x => x.SaleId,
+                        principalTable: "code_sales",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "earning_entries",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CampaignId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    SubmissionId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    ReferralId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    CodeProgramId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    CodeSaleId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    Type = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Status = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Amount = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: false),
+                    Currency = table.Column<string>(type: "char(3)", fixedLength: true, maxLength: 3, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ExchangeRate = table.Column<decimal>(type: "decimal(18,8)", precision: 18, scale: 8, nullable: false),
+                    ExchangeRateId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    SettlementAmount = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: false),
+                    SettlementCurrency = table.Column<string>(type: "char(3)", fixedLength: true, maxLength: 3, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RewardRuleSetId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    RewardRuleSetVersion = table.Column<int>(type: "int", nullable: true),
+                    RewardRuleId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    RateSource = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RateSourceLabel = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RateCardId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    RateCardVersion = table.Column<int>(type: "int", nullable: true),
+                    RateGroupId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    RateAssignmentId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    IdempotencyKey = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Description = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Reason = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ReversesEntryId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    ReversedByEntryId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    CreatedByUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    AvailableAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    ApprovedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    ApprovedByUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    PayoutItemId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    PaidAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    ReversedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_earning_entries", x => x.Id);
+                    table.CheckConstraint("ck_earning_rate_positive", "`ExchangeRate` > 0");
+                    table.CheckConstraint("ck_earning_reason_required", "`Type` NOT IN ('Adjustment','Reversal') OR (`Reason` IS NOT NULL AND CHAR_LENGTH(`Reason`) > 0)");
+                    table.CheckConstraint("ck_earning_reversal_negative", "`Type` <> 'Reversal' OR (`Amount` < 0 AND `ReversesEntryId` IS NOT NULL)");
+                    table.CheckConstraint("ck_earning_sign_consistent", "(`Amount` >= 0 AND `SettlementAmount` >= 0) OR (`Amount` <= 0 AND `SettlementAmount` <= 0)");
+                    table.ForeignKey(
+                        name: "FK_earning_entries_code_programs_CodeProgramId",
+                        column: x => x.CodeProgramId,
+                        principalTable: "code_programs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_earning_entries_code_sales_CodeSaleId",
+                        column: x => x.CodeSaleId,
+                        principalTable: "code_sales",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_earning_entries_earning_entries_ReversesEntryId",
+                        column: x => x.ReversesEntryId,
+                        principalTable: "earning_entries",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_earning_entries_exchange_rates_ExchangeRateId",
+                        column: x => x.ExchangeRateId,
+                        principalTable: "exchange_rates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_earning_entries_payout_items_PayoutItemId",
+                        column: x => x.PayoutItemId,
+                        principalTable: "payout_items",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_earning_entries_users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 })
@@ -9120,6 +9528,108 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_code_import_batches_ProgramId_CreatedAt",
+                table: "code_import_batches",
+                columns: new[] { "ProgramId", "CreatedAt" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_code_payout_overrides_GroupId",
+                table: "code_payout_overrides",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_code_payout_overrides_ProgramId_GroupId",
+                table: "code_payout_overrides",
+                columns: new[] { "ProgramId", "GroupId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_code_payout_overrides_ProgramId_UserId",
+                table: "code_payout_overrides",
+                columns: new[] { "ProgramId", "UserId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_code_payout_overrides_UserId",
+                table: "code_payout_overrides",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_code_program_tiers_ProgramId_ThresholdSales",
+                table: "code_program_tiers",
+                columns: new[] { "ProgramId", "ThresholdSales" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_code_programs_CampaignId",
+                table: "code_programs",
+                column: "CampaignId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_code_programs_ClientAccountId",
+                table: "code_programs",
+                column: "ClientAccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_code_programs_Status_CreatedAt",
+                table: "code_programs",
+                columns: new[] { "Status", "CreatedAt" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_code_sale_events_SaleId_At",
+                table: "code_sale_events",
+                columns: new[] { "SaleId", "At" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_code_sales_AssignmentId",
+                table: "code_sales",
+                column: "AssignmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_code_sales_CodeId",
+                table: "code_sales",
+                column: "CodeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_code_sales_GroupId",
+                table: "code_sales",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_code_sales_ImportBatchId",
+                table: "code_sales",
+                column: "ImportBatchId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_code_sales_ProgramId_ActiveOrderKey",
+                table: "code_sales",
+                columns: new[] { "ProgramId", "ActiveOrderKey" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_code_sales_ProgramId_NormalizedOrderReference",
+                table: "code_sales",
+                columns: new[] { "ProgramId", "NormalizedOrderReference" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_code_sales_ProgramId_Status",
+                table: "code_sales",
+                columns: new[] { "ProgramId", "Status" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_code_sales_ProofFileId",
+                table: "code_sales",
+                column: "ProofFileId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_code_sales_Status_SubmittedAt",
+                table: "code_sales",
+                columns: new[] { "Status", "SubmittedAt" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_code_sales_UserId_ProgramId",
+                table: "code_sales",
+                columns: new[] { "UserId", "ProgramId" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_content_calendar_entries_CampaignId",
                 table: "content_calendar_entries",
                 column: "CampaignId");
@@ -9432,9 +9942,55 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 column: "ClientAccountId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_discount_code_assignments_CodeId_EndedAt",
+                table: "discount_code_assignments",
+                columns: new[] { "CodeId", "EndedAt" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_discount_code_assignments_GroupId_ProgramId",
+                table: "discount_code_assignments",
+                columns: new[] { "GroupId", "ProgramId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_discount_code_assignments_ProgramId",
+                table: "discount_code_assignments",
+                column: "ProgramId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_discount_code_assignments_UserId_ProgramId",
+                table: "discount_code_assignments",
+                columns: new[] { "UserId", "ProgramId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_discount_codes_ImportBatchId",
+                table: "discount_codes",
+                column: "ImportBatchId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_discount_codes_ProgramId_NormalizedCode",
+                table: "discount_codes",
+                columns: new[] { "ProgramId", "NormalizedCode" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_discount_codes_ProgramId_Status",
+                table: "discount_codes",
+                columns: new[] { "ProgramId", "Status" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_earning_entries_CampaignId_Status",
                 table: "earning_entries",
                 columns: new[] { "CampaignId", "Status" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_earning_entries_CodeProgramId_UserId",
+                table: "earning_entries",
+                columns: new[] { "CodeProgramId", "UserId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_earning_entries_CodeSaleId",
+                table: "earning_entries",
+                column: "CodeSaleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_earning_entries_ExchangeRateId",
@@ -11534,6 +12090,15 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "client_team_assignments");
 
             migrationBuilder.DropTable(
+                name: "code_payout_overrides");
+
+            migrationBuilder.DropTable(
+                name: "code_program_tiers");
+
+            migrationBuilder.DropTable(
+                name: "code_sale_events");
+
+            migrationBuilder.DropTable(
                 name: "content_calendar_entries");
 
             migrationBuilder.DropTable(
@@ -11978,6 +12543,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "deliverables");
 
             migrationBuilder.DropTable(
+                name: "code_sales");
+
+            migrationBuilder.DropTable(
                 name: "exchange_rates");
 
             migrationBuilder.DropTable(
@@ -12092,6 +12660,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "project_tasks");
 
             migrationBuilder.DropTable(
+                name: "discount_code_assignments");
+
+            migrationBuilder.DropTable(
                 name: "email_automations");
 
             migrationBuilder.DropTable(
@@ -12114,9 +12685,6 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "rate_cards");
-
-            migrationBuilder.DropTable(
-                name: "rate_groups");
 
             migrationBuilder.DropTable(
                 name: "reward_rule_sets");
@@ -12143,25 +12711,37 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "project_milestones");
 
             migrationBuilder.DropTable(
-                name: "invoices");
+                name: "discount_codes");
 
             migrationBuilder.DropTable(
-                name: "campaigns");
+                name: "rate_groups");
+
+            migrationBuilder.DropTable(
+                name: "invoices");
 
             migrationBuilder.DropTable(
                 name: "projects");
 
             migrationBuilder.DropTable(
+                name: "code_import_batches");
+
+            migrationBuilder.DropTable(
                 name: "contracts");
 
             migrationBuilder.DropTable(
-                name: "campaign_categories");
+                name: "code_programs");
 
             migrationBuilder.DropTable(
                 name: "proposals");
 
             migrationBuilder.DropTable(
+                name: "campaigns");
+
+            migrationBuilder.DropTable(
                 name: "crm_deals");
+
+            migrationBuilder.DropTable(
+                name: "campaign_categories");
 
             migrationBuilder.DropTable(
                 name: "crm_contacts");

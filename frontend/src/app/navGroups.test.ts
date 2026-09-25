@@ -40,4 +40,15 @@ describe('sidebar nav groups', () => {
       expect.arrayContaining(['campaigns', 'rate-cards', 'rate-groups']),
     );
   });
+
+  it.each([
+    ['participant', 'codes', 'Money'],
+    ['manager', 'codes', 'Campaigns'],
+    ['reviewer', 'code-sales', 'Review'],
+    ['finance', 'code-sales', 'Controls'],
+  ] as const)('puts %s → %s (discount codes) in the %s section', (portal, to, label) => {
+    const sections = groupNav(portal, getPortal(portal).nav);
+    const section = sections.find((s) => s.items.some((i) => i.to === to));
+    expect(section?.label).toBe(label);
+  });
 });

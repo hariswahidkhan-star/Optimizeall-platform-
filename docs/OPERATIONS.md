@@ -152,7 +152,8 @@ sends them with retry and backoff. In-app notifications are unaffected by channe
 
 **Export caps** (`Exports__<Name>`, rows): `Ledger` 100,000 · `PaymentsHub` 20,000 · `AuditLog` 50,000 · `Users`
 50,000 · `CrmContacts` 50,000 · `FormSubmissions` 50,000 · `EmailList` 200,000 · `NewsletterSubscribers` 100,000 ·
-`Inquiries` 50,000 · `TimeEntries` 50,000. An export over its cap is refused (422, never a silently cut file) and the
+`Inquiries` 50,000 · `TimeEntries` 50,000 · `CodeSales` 100,000 · `CodeReportSales` 200,000 (sales a code report export
+aggregates). An export over its cap is refused (422, never a silently cut file) and the
 web app shows the message.
 
 ## 5. Backup and restore (MySQL)

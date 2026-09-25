@@ -119,6 +119,8 @@ internal sealed partial class DemoRun
         await RunQueueAsync(ct);
 
         _clock.Now = _now;
+        await CreateCodeProgramsAsync(ct);
+        _clock.Now = _now;
         await CreateGrowthDataAsync(ct);
         await CreateContentAndSupportAsync(ct);
         await AwardAchievementsAsync(ct);

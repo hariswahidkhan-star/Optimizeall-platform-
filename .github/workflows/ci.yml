@@ -450,6 +450,17 @@ jobs:
           E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-seo-nginx
         run: scripts/e2e-journeys.sh
 
+      # Discount-code (affiliate) sales: a brand program with CSV-imported codes, personal and group (shared) codes,
+      # a participant's reported sale → review → ledger commission with its payout source, the brand's sales report
+      # matching/flagging and a refund reversing the commission. Baseline + Demo, SQLite.
+      - name: Discount-code sales journey (scripts/e2e-journeys.sh, E2E_SUITE=j-codes, SQLite)
+        env:
+          E2E_SUITE: j-codes
+          E2E_DB_PROVIDER: sqlite
+          E2E_SKIP_BUILD: "1"
+          E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-codes
+        run: scripts/e2e-journeys.sh
+
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v4
@@ -508,6 +519,8 @@ jobs:
             ${{ runner.temp }}/e2e-j-seo-nginx/nginx/error.log
             ${{ runner.temp }}/e2e-j-partners/api.log
             ${{ runner.temp }}/e2e-j-partners/web.log
+            ${{ runner.temp }}/e2e-j-codes/api.log
+            ${{ runner.temp }}/e2e-j-codes/web.log
             ${{ runner.temp }}/web-smoke.log
           retention-days: 7
           if-no-files-found: ignore

@@ -9,6 +9,10 @@ public enum EarningType
     TimeLimitedBonus,
     QualityBonus,
     ReferralReward,
+    /// <summary>Commission for an approved discount-code sale (docs/DISCOUNT_CODES.md).</summary>
+    SaleCommission,
+    /// <summary>One-off bonus for reaching a discount-code program tier (N approved sales).</summary>
+    SaleTierBonus,
     /// <summary>Manual credit/debit by finance (e.g. dispute outcome). Always carries a reason.</summary>
     Adjustment,
     /// <summary>Negative entry cancelling a previously paid earning (clawback netted against future payouts).</summary>
@@ -41,6 +45,10 @@ public class EarningEntry : Entity, IConcurrencyStamped
     public Guid? CampaignId { get; set; }
     public Guid? SubmissionId { get; set; }
     public Guid? ReferralId { get; set; }
+
+    /// <summary>Discount-code sales: the program and (for commissions) the sale the earning pays for.</summary>
+    public Guid? CodeProgramId { get; set; }
+    public Guid? CodeSaleId { get; set; }
 
     public EarningType Type { get; set; }
     public EarningStatus Status { get; set; }
@@ -100,7 +108,7 @@ public class EarningEntry : Entity, IConcurrencyStamped
     /// <summary>Properties that may never change after insert.</summary>
     public static readonly string[] ImmutableProperties =
     {
-        nameof(UserId), nameof(CampaignId), nameof(SubmissionId), nameof(ReferralId), nameof(Type),
+        nameof(UserId), nameof(CampaignId), nameof(SubmissionId), nameof(ReferralId), nameof(CodeProgramId), nameof(CodeSaleId), nameof(Type),
         nameof(Amount), nameof(Currency), nameof(ExchangeRate), nameof(ExchangeRateId), nameof(SettlementAmount),
         nameof(SettlementCurrency), nameof(RewardRuleSetId), nameof(RewardRuleSetVersion), nameof(RewardRuleId),
         nameof(RateSource), nameof(RateSourceLabel), nameof(RateCardId), nameof(RateCardVersion), nameof(RateGroupId), nameof(RateAssignmentId),

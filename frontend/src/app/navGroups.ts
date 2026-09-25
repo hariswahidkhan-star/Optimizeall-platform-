@@ -10,6 +10,8 @@ const RULES: Record<PortalId, [prefix: string, group: string][]> = {
     ['campaigns', 'Earn'],
     ['submissions', 'Earn'],
     ['earnings', 'Money'],
+    // Discount codes pay commissions through the ledger, next to earnings and payouts.
+    ['codes', 'Money'],
     ['payouts', 'Money'],
     ['social-accounts', 'Grow'],
     ['referrals', 'Grow'],
@@ -24,6 +26,7 @@ const RULES: Record<PortalId, [prefix: string, group: string][]> = {
     // Person-level pricing sits with the campaigns it prices (rate cards and groups apply per campaign).
     ['rate-cards', 'Campaigns'],
     ['rate-groups', 'Campaigns'],
+    ['codes', 'Campaigns'],
     ['templates', 'Campaigns'],
     ['calendar', 'Campaigns'],
     ['invitations', 'Growth'],
@@ -37,6 +40,8 @@ const RULES: Record<PortalId, [prefix: string, group: string][]> = {
     ['batches', 'Payouts'],
     ['ledger', 'Payouts'],
     ['approvals', 'Controls'],
+    // Code-sale commissions awaiting or after review (refunds, clawbacks), next to approvals and holds.
+    ['code-sales', 'Controls'],
     ['holds', 'Controls'],
     ['exchange-rates', 'Configuration'],
     ['schedule', 'Configuration'],

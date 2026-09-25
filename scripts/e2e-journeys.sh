@@ -41,6 +41,8 @@
 #                           j-edge          cross-cutting edge cases: time zones, currencies, lists at volume (Demo seed)
 #                           j-partners      partners and sponsored placements: home strip, footer, /partners, profiles,
 #                                           blog ad unit, rel="sponsored", click redirect, admin editor and report (Demo seed)
+#                           j-codes         discount-code sales: programs, CSV codes, person/group assignment, sale →
+#                                           approval → ledger, brand report reconciliation and refunds (Demo seed)
 #   E2E_SEED              comma-separated seed profiles (default: Baseline for journeys and j-participant,
 #                         Baseline,Demo for everything else)
 #   E2E_DB_PROVIDER=mysql mysql (default) or sqlite (a fresh file in $E2E_WORK_DIR; no MySQL server needed)

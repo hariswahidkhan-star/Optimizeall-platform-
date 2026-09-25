@@ -23,7 +23,9 @@ public sealed record NewEarning(
     Guid? RewardRuleId = null,
     string? Reason = null,
     Guid? CreatedByUserId = null,
-    EarningRateSource? RateSource = null);
+    EarningRateSource? RateSource = null,
+    Guid? CodeProgramId = null,
+    Guid? CodeSaleId = null);
 
 /// <summary>Where a post reward's rate came from (campaign rules, or a person-level card / group / custom rate).</summary>
 public sealed record EarningRateSource(
@@ -156,6 +158,8 @@ public sealed class LedgerWriter(
             CampaignId = earning.CampaignId,
             SubmissionId = earning.SubmissionId,
             ReferralId = earning.ReferralId,
+            CodeProgramId = earning.CodeProgramId,
+            CodeSaleId = earning.CodeSaleId,
             Type = earning.Type,
             Status = earning.RequiresApproval ? EarningStatus.PendingApproval : EarningStatus.Approved,
             Amount = amount,
@@ -242,6 +246,8 @@ public sealed class LedgerWriter(
             CampaignId = entry.CampaignId,
             SubmissionId = entry.SubmissionId,
             ReferralId = entry.ReferralId,
+            CodeProgramId = entry.CodeProgramId,
+            CodeSaleId = entry.CodeSaleId,
             Type = EarningType.Reversal,
             // A paid earning becomes a clawback owed by the participant; an unpaid one is simply cancelled.
             Status = wasPaid ? EarningStatus.Approved : EarningStatus.Reversed,

@@ -151,6 +151,21 @@ home with the banner → **Exit** → back on the users page.
   * Karachi Eats uses **campaign rates only**; Aurora Pro limits personal rates to 3× the campaign rate;
   * the submissions of the last 18 days are priced with these rates (USD cards converted into AED for Desert Bloom),
     so their ledger lines show the rate source.
+* **Discount codes** (docs/DISCOUNT_CODES.md), created about a month ago by the manager:
+  * program **Glow Cosmetics — summer affiliate** (Active, USD): 10 % of the order value, a tier *from 5 sales: 12 %
+    + 25 USD bonus*, a 50 USD bonus at 15 sales, daily cap 150, per-person cap 1,000, budget 5,000; and a draft
+    **Aurora Travel — autumn codes (draft)**;
+  * 14 codes: 12 imported from the brand's CSV (one import batch) and 2 added by hand — assigned, available, one
+    **paused**, one **retired** ("leaked on a coupon site") and one **expired** 5 days ago;
+  * personal codes **GLOW-SARA15** (Sara) and **GLOW-LAYLA15** (Layla, with a negotiated **6 USD per order** override)
+    and the shared code **GLOWSQUAD** for the rate group **Glow beauty squad** (Zainab, Kavya, Mona, Chloe; group
+    override 12 %); Hannah holds GLOW-HANNAH;
+  * sales in every state: Sara's six approved sales (the 5th earns the tier bonus, the 6th is priced at 12 %), one
+    **refunded** (reported by the brand; commission reversed), one **pending**, one **needs info**, one **rejected**,
+    and an **unclaimed use created from the brand's report**; Layla and Zainab approved; Kavya's pending sale
+    **matched by the brand's report** (bulk-approvable) and Mona's pending one;
+  * approved sales have `SaleCommission` / `SaleTierBonus` ledger entries with the payout source
+    (`CodeProgramRules`, `CodeProgramTier`, `CodePersonOverride`, `CodeGroupOverride`).
 * **About 170 submissions** in every status (Pending, UnderReview, Approved, NeedsCorrection, Rejected, Reversed):
   * one live reviewer claim and one expired claim;
   * risk flags: duplicate screenshot, outside the campaign window, high velocity, repeated content, unverified
@@ -308,6 +323,20 @@ API paths are given for reference (`/api/v1/...`); in the web app use the matchi
    * Hamza's urgent dispute with an internal note;
    * Aisha's ticket awaiting staff;
    * the resolved tickets.
+
+### 6. Discount codes (brand codes → sales → commission)
+
+1. **Sara** → *My codes*: GLOW-SARA15 with copy and share link, "You earn 10% of net", the tier perk, her stats and
+   sales. *Report a sale* (order number, date, value, discount, optional receipt) → the sale page shows the estimate.
+   Open the **needs info** sale to see what the reviewer asked for and update it.
+2. **manager** → *Discount codes* → Glow Cosmetics: payout rules and overrides (*Overview*), codes with statuses and
+   holders (*Codes*: import a CSV — check first —, generate, assign to a person or a rate group, "give a group one code
+   each", pause/retire), *Sales* (add a sale, **import the brand's sales report**), *Report* (by person / code / group,
+   CSV).
+3. **reviewer1** → *Code sales*: approve, reject or request info; select Kavya's matched sale and *Approve matched*.
+   A sale you reported or entered can't be decided by you (four-eyes).
+4. **finance1** → *Code sales* → an approved sale → *Mark refunded*: the commission is reversed (a clawback if paid);
+   *Ledger* shows `SaleCommission` rows with their payout source.
 
 ## Automated checks
 

@@ -125,6 +125,12 @@ import { defineConfig, devices } from '@playwright/test';
  * rel="sponsored noopener" on every outbound partner link and the click redirect with UTM tags, and the Website →
  * Partners editor and report. Serial, one worker, desktop only. Run it with
  * `E2E_SUITE=j-partners E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
+ *
+ * The j-codes suite walks discount-code (affiliate) sales end to end: a manager creates a brand program, imports the
+ * brand's codes from CSV, assigns one to a person and one (shared) to a rate group; the participant sees the code and
+ * reports a sale; a reviewer approves it and finance sees the commission with its payout source on the ledger; the
+ * brand's sales-report CSV matches, flags and reports a refund that reverses the commission. Serial, one worker,
+ * desktop only, against Baseline + Demo: `E2E_SUITE=j-codes E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
  */
 const suite = process.env.E2E_SUITE ?? 'smoke';
 /** Suites whose mobile project runs only responsive.spec.ts (and whose desktop project runs everything else). */
@@ -147,6 +153,7 @@ const desktopJourney = [
   'j-rates',
   'j-seo',
   'j-partners',
+  'j-codes',
 ].includes(suite);
 /** The finance journey compares datetime-local input (browser time) with UTC periods, so its browser runs in UTC. */
 const finance = suite === 'j-finance';

@@ -21733,6 +21733,1681 @@
         }
       }
     },
+    "/api/v1/admin/code-programs": {
+      "get": {
+        "tags": [
+          "CodePrograms"
+        ],
+        "parameters": [
+          {
+            "name": "Status",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeProgramStatus"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sort",
+            "in": "query",
+            "schema": {
+              "maxLength": 50,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Desc",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Codes.CodeProgramListItemDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Codes.CodeProgramListItemDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Codes.CodeProgramListItemDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "CodePrograms"
+        ],
+        "summary": "Creates a program with its payout rules (draft unless \"activate\": true). 409 fx.rate_missing when commissions couldn't be settled.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.CreateCodeProgramRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.CreateCodeProgramRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.CreateCodeProgramRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeProgramDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeProgramDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeProgramDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/code-programs/{id}": {
+      "get": {
+        "tags": [
+          "CodePrograms"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeProgramDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeProgramDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeProgramDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "CodePrograms"
+        ],
+        "summary": "Edits brand, window, terms and store URL (payout rules change through PUT payout). 409 concurrency.conflict / code_program.currency_locked.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.UpdateCodeProgramRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.UpdateCodeProgramRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.UpdateCodeProgramRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeProgramDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeProgramDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeProgramDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/code-programs/{id}/payout": {
+      "put": {
+        "tags": [
+          "CodePrograms"
+        ],
+        "summary": "Replaces the payout rules (confirm + reason; audited; bumps payoutVersion). Applies to sales approved from now on.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.UpdatePayoutRulesRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.UpdatePayoutRulesRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.UpdatePayoutRulesRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeProgramDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeProgramDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeProgramDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/code-programs/{id}/status": {
+      "post": {
+        "tags": [
+          "CodePrograms"
+        ],
+        "summary": "Active / Paused / Archived (archiving needs every pending sale decided: 409 code_program.has_pending_sales).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.ChangeProgramStatusRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.ChangeProgramStatusRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.ChangeProgramStatusRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeProgramDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeProgramDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeProgramDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/code-programs/{id}/overrides": {
+      "post": {
+        "tags": [
+          "CodePrograms"
+        ],
+        "summary": "Per-person or per-rate-group payout override (replaces the per-sale rate). 409 code_override.duplicate.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.CreatePayoutOverrideRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.CreatePayoutOverrideRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.CreatePayoutOverrideRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeProgramDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeProgramDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeProgramDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/code-programs/{id}/overrides/{overrideId}/end": {
+      "post": {
+        "tags": [
+          "CodePrograms"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "overrideId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.EndPayoutOverrideRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.EndPayoutOverrideRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.EndPayoutOverrideRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeProgramDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeProgramDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeProgramDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/code-programs/{id}/codes": {
+      "get": {
+        "tags": [
+          "CodePrograms"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Status",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.DiscountCodeStatus"
+            }
+          },
+          {
+            "name": "UserId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "GroupId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sort",
+            "in": "query",
+            "schema": {
+              "maxLength": 50,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Desc",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Codes.DiscountCodeDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Codes.DiscountCodeDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Codes.DiscountCodeDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "CodePrograms"
+        ],
+        "summary": "Adds one code. 409 code.duplicate (codes are unique per program, case-insensitive).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.AddCodeRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.AddCodeRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.AddCodeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.DiscountCodeDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.DiscountCodeDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.DiscountCodeDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/code-programs/{id}/codes/import": {
+      "post": {
+        "tags": [
+          "CodePrograms"
+        ],
+        "summary": "CSV from the brand (multipart field \"file\"): code, optional validFrom, validTo, note, email (assign). dryRun=true only validates.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "dryRun",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeImportResultDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeImportResultDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeImportResultDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/code-programs/{id}/codes/generate": {
+      "post": {
+        "tags": [
+          "CodePrograms"
+        ],
+        "summary": "Generates unique codes from a pattern (# digit, ? letter, * either). dryRun=true previews.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "dryRun",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.GenerateCodesRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.GenerateCodesRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.GenerateCodesRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeImportResultDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeImportResultDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeImportResultDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/code-programs/{id}/codes/auto-assign": {
+      "post": {
+        "tags": [
+          "CodePrograms"
+        ],
+        "summary": "One unique available code per member of a rate group who has no personal code in the program yet.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.AutoAssignRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.AutoAssignRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.AutoAssignRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.AutoAssignResultDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.AutoAssignResultDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.AutoAssignResultDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/code-programs/{id}/assignments": {
+      "get": {
+        "tags": [
+          "CodePrograms"
+        ],
+        "summary": "Assignment history of the program (newest first).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sort",
+            "in": "query",
+            "schema": {
+              "maxLength": 50,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Desc",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Codes.CodeAssignmentDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Codes.CodeAssignmentDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Codes.CodeAssignmentDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/code-programs/{id}/sales": {
+      "post": {
+        "tags": [
+          "CodePrograms"
+        ],
+        "summary": "Staff-entered sale (attributed to the code's holder on the order date unless userId is given). Someone else must approve it.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.AdminCreateSaleRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.AdminCreateSaleRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.AdminCreateSaleRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeSaleDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeSaleDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeSaleDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/code-programs/{id}/sales/import": {
+      "post": {
+        "tags": [
+          "CodePrograms"
+        ],
+        "summary": "The brand's sales report (multipart \"file\": order id, code, amount, date, optional status/currency/discount): matches\r\nreported sales, flags differences, creates unclaimed sales for the code's holder, cancels/refunds. dryRun=true previews.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "dryRun",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.SalesImportResultDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.SalesImportResultDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.SalesImportResultDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/code-reports": {
+      "get": {
+        "tags": [
+          "CodeReports"
+        ],
+        "parameters": [
+          {
+            "name": "GroupBy",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Codes.CodeReportGrouping"
+            }
+          },
+          {
+            "name": "ProgramId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "From",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "To",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeReportDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeReportDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeReportDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/code-reports/export.csv": {
+      "get": {
+        "tags": [
+          "CodeReports"
+        ],
+        "parameters": [
+          {
+            "name": "GroupBy",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Codes.CodeReportGrouping"
+            }
+          },
+          {
+            "name": "ProgramId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "From",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "To",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/admin/code-sales": {
+      "get": {
+        "tags": [
+          "CodeSales"
+        ],
+        "parameters": [
+          {
+            "name": "ProgramId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Status",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeSaleStatus"
+            }
+          },
+          {
+            "name": "Verification",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeSaleVerification"
+            }
+          },
+          {
+            "name": "Source",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeSaleSource"
+            }
+          },
+          {
+            "name": "UserId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "CodeId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "GroupId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "From",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "To",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sort",
+            "in": "query",
+            "schema": {
+              "maxLength": 50,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Desc",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Codes.CodeSaleListItemDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Codes.CodeSaleListItemDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Codes.CodeSaleListItemDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/code-sales/{id}": {
+      "get": {
+        "tags": [
+          "CodeSales"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeSaleDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeSaleDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeSaleDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/code-sales/{id}/decision": {
+      "post": {
+        "tags": [
+          "CodeSales"
+        ],
+        "summary": "Approve (commission to the ledger, caps/budget applied), Reject or RequestInfo (reason required). Never your own sale or one\r\nyou entered/imported (403 code_sale.self_review / code_sale.four_eyes); 409 code_sale.already_decided, participant.not_active.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.CodeSaleDecisionRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.CodeSaleDecisionRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.CodeSaleDecisionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeSaleDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeSaleDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeSaleDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/code-sales/bulk-approve": {
+      "post": {
+        "tags": [
+          "CodeSales"
+        ],
+        "summary": "Approves up to 200 sales one by one (by default only those the brand's report matched); per-sale results.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.BulkApproveSalesRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.BulkApproveSalesRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.BulkApproveSalesRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.BulkDecisionResultDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.BulkDecisionResultDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.BulkDecisionResultDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/code-sales/{id}/refund": {
+      "post": {
+        "tags": [
+          "CodeSales"
+        ],
+        "summary": "Refund / cancellation: approved → Refunded with its commission reversed (clawback if paid); pending → Cancelled.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.RefundCodeSaleRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.RefundCodeSaleRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.RefundCodeSaleRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeSaleDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeSaleDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.CodeSaleDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/code-sales/export.csv": {
+      "get": {
+        "tags": [
+          "CodeSales"
+        ],
+        "parameters": [
+          {
+            "name": "ProgramId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Status",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeSaleStatus"
+            }
+          },
+          {
+            "name": "Verification",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeSaleVerification"
+            }
+          },
+          {
+            "name": "Source",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeSaleSource"
+            }
+          },
+          {
+            "name": "UserId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "CodeId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "GroupId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "From",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "To",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sort",
+            "in": "query",
+            "schema": {
+              "maxLength": 50,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Desc",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v1/agency/crm/options": {
       "get": {
         "tags": [
@@ -24619,6 +26294,223 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/admin/discount-codes/{codeId}": {
+      "get": {
+        "tags": [
+          "DiscountCodes"
+        ],
+        "parameters": [
+          {
+            "name": "codeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.DiscountCodeDetailDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.DiscountCodeDetailDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.DiscountCodeDetailDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "DiscountCodes"
+        ],
+        "summary": "Pause / resume (Available) / retire, validity and note. 409 concurrency.conflict / code.retired.",
+        "parameters": [
+          {
+            "name": "codeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.UpdateCodeRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.UpdateCodeRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.UpdateCodeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.DiscountCodeDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.DiscountCodeDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.DiscountCodeDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/discount-codes/{codeId}/assign": {
+      "post": {
+        "tags": [
+          "DiscountCodes"
+        ],
+        "summary": "Personal (userId) or shared with a rate group (groupId). 409 code.already_assigned unless \"reassign\": true; code.paused/expired/retired.",
+        "parameters": [
+          {
+            "name": "codeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.AssignCodeRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.AssignCodeRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.AssignCodeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.DiscountCodeDetailDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.DiscountCodeDetailDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.DiscountCodeDetailDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/discount-codes/{codeId}/unassign": {
+      "post": {
+        "tags": [
+          "DiscountCodes"
+        ],
+        "parameters": [
+          {
+            "name": "codeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.UnassignCodeRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.UnassignCodeRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.UnassignCodeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.DiscountCodeDetailDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.DiscountCodeDetailDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.DiscountCodeDetailDto"
+                }
+              }
+            }
           }
         }
       }
@@ -33448,6 +35340,468 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/LandingPages.Controllers.PageAnalyticsDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/code-sales": {
+      "get": {
+        "tags": [
+          "MeCodeSales"
+        ],
+        "parameters": [
+          {
+            "name": "Status",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeSaleStatus"
+            }
+          },
+          {
+            "name": "CodeId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sort",
+            "in": "query",
+            "schema": {
+              "maxLength": 50,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Desc",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "description": "Rows to skip. Computed in 64 bits and capped: a far-out page (e.g. page=85899347) must be an empty page, not an\r\nint overflow that wraps to a negative offset and serves the first page again (or a SQL error on MySQL).",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Codes.MyCodeSaleDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Codes.MyCodeSaleDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizeAll.Api.Common.Http.PagedResult`1[[Codes.MyCodeSaleDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "MeCodeSales"
+        ],
+        "summary": "Reports a sale (multipart/form-data; optional \"proof\" image). The code must be yours (or your group's) on the order date;\r\n409 code_sale.duplicate_order when the order was already reported (the first report counts).",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "CodeId",
+                  "Currency",
+                  "NetAmount",
+                  "OrderDate",
+                  "OrderReference"
+                ],
+                "type": "object",
+                "properties": {
+                  "CodeId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "OrderReference": {
+                    "maxLength": 100,
+                    "minLength": 2,
+                    "type": "string"
+                  },
+                  "OrderDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "NetAmount": {
+                    "maximum": 100000000,
+                    "minimum": 0.01,
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "DiscountAmount": {
+                    "maximum": 100000000,
+                    "minimum": 0,
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "Currency": {
+                    "maxLength": 3,
+                    "minLength": 3,
+                    "type": "string"
+                  },
+                  "ProductNote": {
+                    "maxLength": 1000,
+                    "type": "string"
+                  },
+                  "Proof": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "CodeId": {
+                  "style": "form"
+                },
+                "OrderReference": {
+                  "style": "form"
+                },
+                "OrderDate": {
+                  "style": "form"
+                },
+                "NetAmount": {
+                  "style": "form"
+                },
+                "DiscountAmount": {
+                  "style": "form"
+                },
+                "Currency": {
+                  "style": "form"
+                },
+                "ProductNote": {
+                  "style": "form"
+                },
+                "Proof": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.MyCodeSaleDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.MyCodeSaleDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.MyCodeSaleDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/code-sales/{id}": {
+      "get": {
+        "tags": [
+          "MeCodeSales"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.MyCodeSaleDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.MyCodeSaleDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.MyCodeSaleDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "MeCodeSales"
+        ],
+        "summary": "Edits a Pending sale, or answers a request for information (NeedsInfo → Pending). multipart/form-data.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "ConcurrencyStamp"
+                ],
+                "type": "object",
+                "properties": {
+                  "OrderReference": {
+                    "maxLength": 100,
+                    "minLength": 2,
+                    "type": "string"
+                  },
+                  "OrderDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "NetAmount": {
+                    "maximum": 100000000,
+                    "minimum": 0.01,
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "DiscountAmount": {
+                    "maximum": 100000000,
+                    "minimum": 0,
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "Currency": {
+                    "maxLength": 3,
+                    "minLength": 3,
+                    "type": "string"
+                  },
+                  "ProductNote": {
+                    "maxLength": 1000,
+                    "type": "string"
+                  },
+                  "Proof": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "ConcurrencyStamp": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              },
+              "encoding": {
+                "OrderReference": {
+                  "style": "form"
+                },
+                "OrderDate": {
+                  "style": "form"
+                },
+                "NetAmount": {
+                  "style": "form"
+                },
+                "DiscountAmount": {
+                  "style": "form"
+                },
+                "Currency": {
+                  "style": "form"
+                },
+                "ProductNote": {
+                  "style": "form"
+                },
+                "Proof": {
+                  "style": "form"
+                },
+                "ConcurrencyStamp": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.MyCodeSaleDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.MyCodeSaleDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.MyCodeSaleDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/code-sales/{id}/withdraw": {
+      "post": {
+        "tags": [
+          "MeCodeSales"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.WithdrawCodeSaleRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.WithdrawCodeSaleRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Codes.WithdrawCodeSaleRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.MyCodeSaleDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.MyCodeSaleDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codes.MyCodeSaleDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/codes": {
+      "get": {
+        "tags": [
+          "MeCodes"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Codes.MyCodeDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Codes.MyCodeDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Codes.MyCodeDto"
+                  }
                 }
               }
             }
@@ -68287,6 +70641,2142 @@
         },
         "additionalProperties": false
       },
+      "Codes.AddCodeRequest": {
+        "required": [
+          "code"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "maxLength": 64,
+            "minLength": 2,
+            "type": "string"
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "note": {
+            "maxLength": 300,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.AdminCreateSaleRequest": {
+        "required": [
+          "code",
+          "currency",
+          "netAmount",
+          "orderDate",
+          "orderReference",
+          "reason"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "maxLength": 64,
+            "minLength": 2,
+            "type": "string"
+          },
+          "userId": {
+            "type": "string",
+            "description": "Who the sale is attributed to; default the code's personal assignee on the order date.",
+            "format": "uuid",
+            "nullable": true
+          },
+          "orderReference": {
+            "maxLength": 100,
+            "minLength": 2,
+            "type": "string"
+          },
+          "orderDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "netAmount": {
+            "maximum": 100000000,
+            "minimum": 0.01,
+            "type": "number",
+            "format": "double"
+          },
+          "discountAmount": {
+            "maximum": 100000000,
+            "minimum": 0,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "currency": {
+            "maxLength": 3,
+            "minLength": 3,
+            "type": "string"
+          },
+          "productNote": {
+            "maxLength": 1000,
+            "type": "string",
+            "nullable": true
+          },
+          "reason": {
+            "maxLength": 500,
+            "minLength": 5,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.AssignCodeRequest": {
+        "required": [
+          "reason",
+          "target"
+        ],
+        "type": "object",
+        "properties": {
+          "target": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeAssignmentTarget"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "groupId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "validFrom": {
+            "type": "string",
+            "description": "Default now. May be in the past (orders from then on are attributed) but not before the program starts.",
+            "format": "date-time",
+            "nullable": true
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "reassign": {
+            "type": "boolean",
+            "description": "End the code's current assignment (history is kept) instead of answering 409 code.already_assigned."
+          },
+          "reason": {
+            "maxLength": 500,
+            "minLength": 5,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.AutoAssignRequest": {
+        "required": [
+          "groupId",
+          "reason"
+        ],
+        "type": "object",
+        "properties": {
+          "groupId": {
+            "type": "string",
+            "description": "Give every member of this rate group without a live personal code in the program one unique available code.",
+            "format": "uuid"
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "reason": {
+            "maxLength": 500,
+            "minLength": 5,
+            "type": "string"
+          },
+          "dryRun": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.AutoAssignResultDto": {
+        "type": "object",
+        "properties": {
+          "dryRun": {
+            "type": "boolean"
+          },
+          "members": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "assigned": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "alreadyHadCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "skipped": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "availableCodes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Codes.CodeIssueDto"
+            },
+            "nullable": true
+          },
+          "assignments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Codes.CodeAssignmentDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.BulkApproveSalesRequest": {
+        "required": [
+          "saleIds"
+        ],
+        "type": "object",
+        "properties": {
+          "saleIds": {
+            "maxItems": 200,
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "reason": {
+            "maxLength": 1000,
+            "type": "string",
+            "nullable": true
+          },
+          "onlyMatched": {
+            "type": "boolean",
+            "description": "Only approve sales the brand's report matched (Verification = Matched); others are skipped."
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.BulkDecisionItemDto": {
+        "type": "object",
+        "properties": {
+          "saleId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.BulkDecisionResultDto": {
+        "type": "object",
+        "properties": {
+          "requested": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "approved": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "skipped": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Codes.BulkDecisionItemDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.ChangeProgramStatusRequest": {
+        "required": [
+          "concurrencyStamp",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeProgramStatus"
+          },
+          "reason": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.CodeAssignmentDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "codeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "target": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeAssignmentTarget"
+          },
+          "person": {
+            "$ref": "#/components/schemas/Rewards.UserRefDto"
+          },
+          "group": {
+            "$ref": "#/components/schemas/Codes.NamedRefDto"
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "endedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "endReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "$ref": "#/components/schemas/Rewards.UserRefDto"
+          },
+          "isLive": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.CodeImportResultDto": {
+        "type": "object",
+        "properties": {
+          "dryRun": {
+            "type": "boolean"
+          },
+          "rows": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "valid": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "created": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "duplicates": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rejected": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Codes.CodeIssueDto"
+            },
+            "nullable": true
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Codes.CodeIssueDto"
+            },
+            "nullable": true
+          },
+          "sample": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.CodeIssueDto": {
+        "type": "object",
+        "properties": {
+          "row": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.CodePayoutOverrideDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "target": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeAssignmentTarget"
+          },
+          "person": {
+            "$ref": "#/components/schemas/Rewards.UserRefDto"
+          },
+          "group": {
+            "$ref": "#/components/schemas/Codes.NamedRefDto"
+          },
+          "payoutType": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodePayoutType"
+          },
+          "flatAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "percent": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "$ref": "#/components/schemas/Rewards.UserRefDto"
+          },
+          "endedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "endReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.CodePayoutRulesInput": {
+        "required": [
+          "payoutType"
+        ],
+        "type": "object",
+        "properties": {
+          "payoutType": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodePayoutType"
+          },
+          "flatAmount": {
+            "maximum": 1000000,
+            "minimum": 0.0001,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "percent": {
+            "maximum": 100,
+            "minimum": 0.0001,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "tiers": {
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Codes.CodeTierInput"
+            },
+            "nullable": true
+          },
+          "dailyCapPerPerson": {
+            "maximum": 100000000,
+            "minimum": 0.0001,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "programCapPerPerson": {
+            "maximum": 100000000,
+            "minimum": 0.0001,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "budgetAmount": {
+            "maximum": 1000000000,
+            "minimum": 0.0001,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Payout rules: per-sale rate, tiers, caps and budget (all in the program currency)."
+      },
+      "Codes.CodeProgramDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "brandName": {
+            "type": "string",
+            "nullable": true
+          },
+          "client": {
+            "$ref": "#/components/schemas/Codes.NamedRefDto"
+          },
+          "campaign": {
+            "$ref": "#/components/schemas/Codes.NamedRefDto"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "terms": {
+            "type": "string",
+            "nullable": true
+          },
+          "storeUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "discountLabel": {
+            "type": "string",
+            "nullable": true
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "startsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endsAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeProgramStatus"
+          },
+          "payoutType": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodePayoutType"
+          },
+          "flatAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "percent": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "tiers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Codes.CodeTierDto"
+            },
+            "nullable": true
+          },
+          "dailyCapPerPerson": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "programCapPerPerson": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "budgetAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "maxOrderAgeDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "requireProof": {
+            "type": "boolean"
+          },
+          "payoutVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payoutSummary": {
+            "type": "string",
+            "nullable": true
+          },
+          "overrides": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Codes.CodePayoutOverrideDto"
+            },
+            "nullable": true
+          },
+          "stats": {
+            "$ref": "#/components/schemas/Codes.CodeProgramStatsDto"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.CodeProgramListItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "brandName": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeProgramStatus"
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "startsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endsAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "payoutSummary": {
+            "type": "string",
+            "nullable": true
+          },
+          "codes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "assignedCodes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pendingSales": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "approvedSales": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "commissionApproved": {
+            "type": "number",
+            "format": "double"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.CodeProgramStatsDto": {
+        "type": "object",
+        "properties": {
+          "codes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "availableCodes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "assignedCodes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pendingSales": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "approvedSales": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "commissionApproved": {
+            "type": "number",
+            "format": "double"
+          },
+          "commissionPaid": {
+            "type": "number",
+            "format": "double"
+          },
+          "budgetRemaining": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.CodeReportDto": {
+        "type": "object",
+        "properties": {
+          "groupBy": {
+            "$ref": "#/components/schemas/Codes.CodeReportGrouping"
+          },
+          "program": {
+            "$ref": "#/components/schemas/Codes.ProgramRefDto"
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "from": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "to": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "totals": {
+            "$ref": "#/components/schemas/Codes.CodeReportRowDto"
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Codes.CodeReportRowDto"
+            },
+            "nullable": true
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.CodeReportGrouping": {
+        "enum": [
+          "Program",
+          "Code",
+          "Person",
+          "Group"
+        ],
+        "type": "string"
+      },
+      "Codes.CodeReportRowDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "label": {
+            "type": "string",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "uses": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pending": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "approved": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rejected": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "refunded": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "grossSales": {
+            "type": "number",
+            "format": "double"
+          },
+          "discountGiven": {
+            "type": "number",
+            "format": "double"
+          },
+          "netSales": {
+            "type": "number",
+            "format": "double"
+          },
+          "commissionPending": {
+            "type": "number",
+            "format": "double"
+          },
+          "commissionApproved": {
+            "type": "number",
+            "format": "double"
+          },
+          "commissionPaid": {
+            "type": "number",
+            "format": "double"
+          },
+          "commissionReversed": {
+            "type": "number",
+            "format": "double"
+          },
+          "clicks": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "conversionRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.CodeSaleDecision": {
+        "enum": [
+          "Approve",
+          "Reject",
+          "RequestInfo"
+        ],
+        "type": "string"
+      },
+      "Codes.CodeSaleDecisionRequest": {
+        "required": [
+          "concurrencyStamp",
+          "decision"
+        ],
+        "type": "object",
+        "properties": {
+          "decision": {
+            "$ref": "#/components/schemas/Codes.CodeSaleDecision"
+          },
+          "reason": {
+            "maxLength": 1000,
+            "type": "string",
+            "nullable": true
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.CodeSaleDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "program": {
+            "$ref": "#/components/schemas/Codes.ProgramRefDto"
+          },
+          "code": {
+            "$ref": "#/components/schemas/Codes.NamedRefDto"
+          },
+          "person": {
+            "$ref": "#/components/schemas/Rewards.UserRefDto"
+          },
+          "personEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "group": {
+            "$ref": "#/components/schemas/Codes.NamedRefDto"
+          },
+          "orderReference": {
+            "type": "string",
+            "nullable": true
+          },
+          "orderDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "netAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "discountAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "exchangeRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "programNetAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "programDiscountAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "productNote": {
+            "type": "string",
+            "nullable": true
+          },
+          "proofUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeSaleStatus"
+          },
+          "source": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeSaleSource"
+          },
+          "createdBy": {
+            "$ref": "#/components/schemas/Rewards.UserRefDto"
+          },
+          "submittedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "estimatedCommission": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "commissionAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "payoutSourceLabel": {
+            "type": "string",
+            "nullable": true
+          },
+          "appliedCaps": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "payoutVersion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "verification": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeSaleVerification"
+          },
+          "verificationNote": {
+            "type": "string",
+            "nullable": true
+          },
+          "reportedNetAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "reportedOrderDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "decidedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "decidedBy": {
+            "$ref": "#/components/schemas/Rewards.UserRefDto"
+          },
+          "decisionReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "refundedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "refundReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "isTestAccount": {
+            "type": "boolean"
+          },
+          "userStatus": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Identity.UserStatus"
+          },
+          "canDecide": {
+            "type": "boolean"
+          },
+          "cannotDecideReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Codes.CodeSaleEventDto"
+            },
+            "nullable": true
+          },
+          "earnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Codes.CodeSaleEarningDto"
+            },
+            "nullable": true
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.CodeSaleEarningDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Ledger.EarningType"
+          },
+          "status": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Ledger.EarningStatus"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "rateSourceLabel": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.CodeSaleEventDto": {
+        "type": "object",
+        "properties": {
+          "fromStatus": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeSaleStatus"
+          },
+          "toStatus": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeSaleStatus"
+          },
+          "action": {
+            "type": "string",
+            "nullable": true
+          },
+          "actor": {
+            "$ref": "#/components/schemas/Rewards.UserRefDto"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.CodeSaleListItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "program": {
+            "$ref": "#/components/schemas/Codes.ProgramRefDto"
+          },
+          "code": {
+            "$ref": "#/components/schemas/Codes.NamedRefDto"
+          },
+          "person": {
+            "$ref": "#/components/schemas/Rewards.UserRefDto"
+          },
+          "sharedCode": {
+            "type": "boolean"
+          },
+          "orderReference": {
+            "type": "string",
+            "nullable": true
+          },
+          "orderDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "netAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "discountAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "programNetAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "status": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeSaleStatus"
+          },
+          "source": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeSaleSource"
+          },
+          "verification": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeSaleVerification"
+          },
+          "submittedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "estimatedCommission": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "commissionAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "isTestAccount": {
+            "type": "boolean"
+          },
+          "userStatus": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Identity.UserStatus"
+          },
+          "canDecide": {
+            "type": "boolean"
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.CodeTierDto": {
+        "type": "object",
+        "properties": {
+          "thresholdSales": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "flatAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "percent": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "bonusAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.CodeTierInput": {
+        "type": "object",
+        "properties": {
+          "thresholdSales": {
+            "maximum": 100000,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "flatAmount": {
+            "maximum": 1000000,
+            "minimum": 0.0001,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "percent": {
+            "maximum": 100,
+            "minimum": 0.0001,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "bonusAmount": {
+            "maximum": 1000000,
+            "minimum": 0.0001,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.CreateCodeProgramRequest": {
+        "required": [
+          "brandName",
+          "currency",
+          "name",
+          "payout",
+          "startsAt"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 120,
+            "minLength": 2,
+            "type": "string"
+          },
+          "brandName": {
+            "maxLength": 120,
+            "minLength": 2,
+            "type": "string"
+          },
+          "clientAccountId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "campaignId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "description": {
+            "maxLength": 2000,
+            "type": "string",
+            "nullable": true
+          },
+          "terms": {
+            "maxLength": 4000,
+            "type": "string",
+            "nullable": true
+          },
+          "storeUrl": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true
+          },
+          "discountLabel": {
+            "maxLength": 120,
+            "type": "string",
+            "nullable": true
+          },
+          "currency": {
+            "maxLength": 3,
+            "minLength": 3,
+            "type": "string"
+          },
+          "startsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endsAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "maxOrderAgeDays": {
+            "maximum": 365,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "requireProof": {
+            "type": "boolean"
+          },
+          "payout": {
+            "$ref": "#/components/schemas/Codes.CodePayoutRulesInput"
+          },
+          "activate": {
+            "type": "boolean",
+            "description": "Open the program to participants immediately (otherwise it starts as a draft)."
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.CreatePayoutOverrideRequest": {
+        "required": [
+          "payoutType",
+          "reason",
+          "target"
+        ],
+        "type": "object",
+        "properties": {
+          "target": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeAssignmentTarget"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "groupId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "payoutType": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodePayoutType"
+          },
+          "flatAmount": {
+            "maximum": 1000000,
+            "minimum": 0.0001,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "percent": {
+            "maximum": 100,
+            "minimum": 0.0001,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "reason": {
+            "maxLength": 500,
+            "minLength": 5,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.DiscountCodeDetailDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/Codes.DiscountCodeDto"
+          },
+          "program": {
+            "$ref": "#/components/schemas/Codes.ProgramRefDto"
+          },
+          "history": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Codes.CodeAssignmentDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.DiscountCodeDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "programId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.DiscountCodeStatus"
+          },
+          "source": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.DiscountCodeSource"
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "assignment": {
+            "$ref": "#/components/schemas/Codes.CodeAssignmentDto"
+          },
+          "sales": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.EndPayoutOverrideRequest": {
+        "required": [
+          "reason"
+        ],
+        "type": "object",
+        "properties": {
+          "reason": {
+            "maxLength": 500,
+            "minLength": 5,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.GenerateCodesRequest": {
+        "required": [
+          "pattern"
+        ],
+        "type": "object",
+        "properties": {
+          "pattern": {
+            "maxLength": 40,
+            "minLength": 3,
+            "type": "string",
+            "description": "# = digit, ? = letter, * = letter or digit; anything else literal (e.g. GLOW-????-##)."
+          },
+          "count": {
+            "maximum": 5000,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "note": {
+            "maxLength": 300,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.MyCodeDto": {
+        "type": "object",
+        "properties": {
+          "codeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "programId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "programName": {
+            "type": "string",
+            "nullable": true
+          },
+          "brandName": {
+            "type": "string",
+            "nullable": true
+          },
+          "discountLabel": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "terms": {
+            "type": "string",
+            "nullable": true
+          },
+          "storeUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "shareUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "shared": {
+            "type": "boolean"
+          },
+          "assignedFrom": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "assignedUntil": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "inactiveReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "yourRate": {
+            "type": "string",
+            "nullable": true
+          },
+          "tierPerks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "requireProof": {
+            "type": "boolean"
+          },
+          "maxOrderAgeDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "programStartsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "programEndsAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "stats": {
+            "$ref": "#/components/schemas/Codes.MyCodeStatsDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.MyCodeSaleDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "programId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "programName": {
+            "type": "string",
+            "nullable": true
+          },
+          "brandName": {
+            "type": "string",
+            "nullable": true
+          },
+          "codeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "orderReference": {
+            "type": "string",
+            "nullable": true
+          },
+          "orderDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "netAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "discountAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "productNote": {
+            "type": "string",
+            "nullable": true
+          },
+          "proofUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeSaleStatus"
+          },
+          "source": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodeSaleSource"
+          },
+          "submittedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "decisionReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "estimatedCommission": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "commissionAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "programCurrency": {
+            "type": "string",
+            "nullable": true
+          },
+          "canEdit": {
+            "type": "boolean"
+          },
+          "canWithdraw": {
+            "type": "boolean"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Codes.CodeSaleEventDto"
+            },
+            "nullable": true
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.MyCodeStatsDto": {
+        "type": "object",
+        "properties": {
+          "sales": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pending": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "approved": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "grossSales": {
+            "type": "number",
+            "format": "double"
+          },
+          "commissionPending": {
+            "type": "number",
+            "format": "double"
+          },
+          "commissionApproved": {
+            "type": "number",
+            "format": "double"
+          },
+          "commissionPaid": {
+            "type": "number",
+            "format": "double"
+          },
+          "clicks": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.NamedRefDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.ProgramRefDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "brandName": {
+            "type": "string",
+            "nullable": true
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.RefundCodeSaleRequest": {
+        "required": [
+          "reason"
+        ],
+        "type": "object",
+        "properties": {
+          "reason": {
+            "maxLength": 1000,
+            "minLength": 5,
+            "type": "string"
+          },
+          "confirm": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.SalesImportIssueDto": {
+        "type": "object",
+        "properties": {
+          "row": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "orderReference": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "outcome": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.SalesImportResultDto": {
+        "type": "object",
+        "properties": {
+          "dryRun": {
+            "type": "boolean"
+          },
+          "rows": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "matched": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "mismatched": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "created": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cancelled": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "refunded": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unchanged": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rejected": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Codes.SalesImportIssueDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.UnassignCodeRequest": {
+        "required": [
+          "reason"
+        ],
+        "type": "object",
+        "properties": {
+          "reason": {
+            "maxLength": 500,
+            "minLength": 5,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.UpdateCodeProgramRequest": {
+        "required": [
+          "brandName",
+          "concurrencyStamp",
+          "currency",
+          "name",
+          "startsAt"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 120,
+            "minLength": 2,
+            "type": "string"
+          },
+          "brandName": {
+            "maxLength": 120,
+            "minLength": 2,
+            "type": "string"
+          },
+          "clientAccountId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "campaignId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "description": {
+            "maxLength": 2000,
+            "type": "string",
+            "nullable": true
+          },
+          "terms": {
+            "maxLength": 4000,
+            "type": "string",
+            "nullable": true
+          },
+          "storeUrl": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true
+          },
+          "discountLabel": {
+            "maxLength": 120,
+            "type": "string",
+            "nullable": true
+          },
+          "currency": {
+            "maxLength": 3,
+            "minLength": 3,
+            "type": "string"
+          },
+          "startsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endsAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "maxOrderAgeDays": {
+            "maximum": 365,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "requireProof": {
+            "type": "boolean"
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.UpdateCodeRequest": {
+        "required": [
+          "concurrencyStamp"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.DiscountCodeStatus"
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "note": {
+            "maxLength": 300,
+            "type": "string",
+            "nullable": true
+          },
+          "reason": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.UpdatePayoutRulesRequest": {
+        "required": [
+          "concurrencyStamp",
+          "payoutType",
+          "reason"
+        ],
+        "type": "object",
+        "properties": {
+          "payoutType": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Codes.CodePayoutType"
+          },
+          "flatAmount": {
+            "maximum": 1000000,
+            "minimum": 0.0001,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "percent": {
+            "maximum": 100,
+            "minimum": 0.0001,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "tiers": {
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Codes.CodeTierInput"
+            },
+            "nullable": true
+          },
+          "dailyCapPerPerson": {
+            "maximum": 100000000,
+            "minimum": 0.0001,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "programCapPerPerson": {
+            "maximum": 100000000,
+            "minimum": 0.0001,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "budgetAmount": {
+            "maximum": 1000000000,
+            "minimum": 0.0001,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "reason": {
+            "maxLength": 500,
+            "minLength": 5,
+            "type": "string"
+          },
+          "confirm": {
+            "type": "boolean",
+            "description": "Must be true: payout rules move money."
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Codes.WithdrawCodeSaleRequest": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "Content.AnnouncementDto": {
         "type": "object",
         "properties": {
@@ -77423,6 +81913,16 @@
             "type": "string",
             "format": "uuid",
             "nullable": true
+          },
+          "codeProgramId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "codeSaleId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -79883,6 +84383,156 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Clients.ClientSummaryDto"
+            },
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OptimizeAll.Api.Common.Http.PagedResult`1[[Codes.CodeAssignmentDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Codes.CodeAssignmentDto"
+            },
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OptimizeAll.Api.Common.Http.PagedResult`1[[Codes.CodeProgramListItemDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Codes.CodeProgramListItemDto"
+            },
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OptimizeAll.Api.Common.Http.PagedResult`1[[Codes.CodeSaleListItemDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Codes.CodeSaleListItemDto"
+            },
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OptimizeAll.Api.Common.Http.PagedResult`1[[Codes.DiscountCodeDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Codes.DiscountCodeDto"
+            },
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OptimizeAll.Api.Common.Http.PagedResult`1[[Codes.MyCodeSaleDto, OptimizeAll.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Codes.MyCodeSaleDto"
             },
             "nullable": true
           },
@@ -82457,6 +87107,76 @@
         ],
         "type": "string"
       },
+      "OptimizeAll.Domain.Codes.CodeAssignmentTarget": {
+        "enum": [
+          "Person",
+          "Group"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Codes.CodePayoutType": {
+        "enum": [
+          "FlatPerSale",
+          "PercentOfNet"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Codes.CodeProgramStatus": {
+        "enum": [
+          "Draft",
+          "Active",
+          "Paused",
+          "Archived"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Codes.CodeSaleSource": {
+        "enum": [
+          "Participant",
+          "Admin",
+          "Import"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Codes.CodeSaleStatus": {
+        "enum": [
+          "Pending",
+          "NeedsInfo",
+          "Approved",
+          "Rejected",
+          "Withdrawn",
+          "Cancelled",
+          "Refunded"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Codes.CodeSaleVerification": {
+        "enum": [
+          "Unverified",
+          "Matched",
+          "Mismatch",
+          "ReportedByBrand"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Codes.DiscountCodeSource": {
+        "enum": [
+          "Manual",
+          "Import",
+          "Generated"
+        ],
+        "type": "string"
+      },
+      "OptimizeAll.Domain.Codes.DiscountCodeStatus": {
+        "enum": [
+          "Available",
+          "Assigned",
+          "Paused",
+          "Expired",
+          "Retired"
+        ],
+        "type": "string"
+      },
       "OptimizeAll.Domain.Common.ContentFormat": {
         "enum": [
           "Post",
@@ -82994,7 +87714,8 @@
         "enum": [
           "SubmissionScreenshot",
           "CampaignAsset",
-          "ContentImage"
+          "ContentImage",
+          "SaleProof"
         ],
         "type": "string"
       },
@@ -83102,6 +87823,8 @@
           "TimeLimitedBonus",
           "QualityBonus",
           "ReferralReward",
+          "SaleCommission",
+          "SaleTierBonus",
           "Adjustment",
           "Reversal"
         ],
@@ -83770,7 +88493,11 @@
           "GlobalGroup",
           "CampaignSegment",
           "GlobalSegment",
-          "CampaignRules"
+          "CampaignRules",
+          "CodePersonOverride",
+          "CodeGroupOverride",
+          "CodeProgramTier",
+          "CodeProgramRules"
         ],
         "type": "string"
       },

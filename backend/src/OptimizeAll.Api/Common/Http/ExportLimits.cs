@@ -23,6 +23,9 @@ public sealed class ExportOptions
     public int NewsletterSubscribers { get; set; } = 100_000;
     public int Inquiries { get; set; } = 50_000;
     public int TimeEntries { get; set; } = 50_000;
+    public int CodeSales { get; set; } = 100_000;
+    /// <summary>Discount-code sales a code report export aggregates (the report itself reads at most this many).</summary>
+    public int CodeReportSales { get; set; } = 200_000;
 }
 
 /// <summary>Refuses an export whose matching rows exceed its cap, instead of cutting the file short without saying so.</summary>

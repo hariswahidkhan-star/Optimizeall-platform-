@@ -58,6 +58,11 @@ public static class PermissionCatalog
         new(Permissions.RatesView, Campaigns, "View person-level rates", "See rate cards, rate groups, assignments and each person's effective rates (commercial terms)."),
         new(Permissions.RatesManage, Campaigns, "Manage rate cards", "Create, version, archive and approve rate cards, rate groups and negotiated custom rates.", Sensitive: true),
         new(Permissions.RatesAssign, Campaigns, "Assign rates", "Assign rate cards to people and groups and manage group members (bulk, CSV).", Sensitive: true),
+        new(Permissions.CodesView, Campaigns, "View discount codes", "See discount-code programs, codes, who holds them, reported sales and commission reports."),
+        new(Permissions.CodesManage, Campaigns, "Manage discount codes", "Create programs and payout rules, add/import/generate codes, import the brand's sales report and enter sales.", Sensitive: true),
+        new(Permissions.CodesAssign, Campaigns, "Assign discount codes", "Assign, reassign and unassign codes to people and rate groups.", Sensitive: true),
+        new(Permissions.SalesReview, Campaigns, "Review code sales", "Approve, reject or query reported discount-code sales (never your own).", Sensitive: true),
+        new(Permissions.SalesReverse, Finance, "Refund code sales", "Mark approved discount-code sales refunded or cancelled, reversing their commission.", Sensitive: true),
 
         new(Permissions.SubmissionsReview, Review, "Review submissions", "Claim and decide participant submissions."),
         new(Permissions.SubmissionsReverse, Review, "Reverse submissions", "Reverse approved submissions and their earnings."),
