@@ -158,3 +158,19 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* A tier: fields share the row, the remove button sits at the end (wraps as one row on phones). */
+.dc-tier-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.dc-tier-row > :not(button) {
+  flex: 1 1 9rem;
+  min-width: 0;
+}

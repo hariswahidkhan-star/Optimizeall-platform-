@@ -331,7 +331,7 @@ export function PayoutFields({
           </p>
         )}
         {value.tiers.map((t, i) => (
-          <div key={i} className="dc-form-grid" style={{ alignItems: 'end' }}>
+          <div key={i} className="dc-tier-row">
             <FormField
               label="After (approved sales)"
               error={err(errors, `tiers[${i}].thresholdSales`) ?? err(errors, `tiers[${i}]`)}

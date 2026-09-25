@@ -63,7 +63,7 @@ test.describe.serial('program, codes and assignment', () => {
 
     const table = page.getByRole('table', { name: 'Codes' });
     for (const code of [c.ivy, c.spare, c.squad])
-      await expect(table.getByRole('button', { name: code })).toBeVisible();
+      await expect(table.getByRole('button', { name: code, exact: true })).toBeVisible();
 
     // The same code again is refused.
     const manager = await api(state().manager);

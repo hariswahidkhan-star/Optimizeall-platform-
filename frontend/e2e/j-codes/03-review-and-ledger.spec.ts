@@ -54,6 +54,6 @@ test.describe.serial('review and ledger', () => {
     await expect(page.getByText('You earned').first()).toBeVisible();
     await expect(page.getByText(/12\.00/).first()).toBeVisible();
     await page.goto('/app/earnings');
-    await expect(page.getByText('Code sale commission').first()).toBeVisible();
+    await expect(page.getByRole('table').getByText(/Sale commission — Glow/).first()).toBeVisible();
   });
 });
