@@ -16,12 +16,15 @@ export function devProxy(apiTarget: string): Record<string, DevProxyRule> {
     '^/t/': { target: apiTarget, changeOrigin: false },
     '^/e/': { target: apiTarget, changeOrigin: false },
     // The API generates the SEO files: robots.txt, the sitemap index and sitemaps, llms.txt / llms-full.txt,
-    // security.txt, humans.txt, the IndexNow key file and the Markdown version of every page (/{path}.md).
+    // the llms/ section files, security.txt, humans.txt, the IndexNow key file and the Markdown version of every page (/{path}.md).
     // Page documents themselves are rendered by the API through the seoShell plugin (seoShell.ts).
     '^/robots\\.txt$': { target: apiTarget, changeOrigin: false },
     '^/sitemap\\.xml$': { target: apiTarget, changeOrigin: false },
     '^/sitemaps/': { target: apiTarget, changeOrigin: false },
     '^/llms(-full)?\\.txt$': { target: apiTarget, changeOrigin: false },
+    '^/llms/[a-z0-9-]+\\.txt$': { target: apiTarget, changeOrigin: false },
+    // Generated social cards (Open Graph images): /og{path}.png.
+    '^/og/': { target: apiTarget, changeOrigin: false },
     '^/humans\\.txt$': { target: apiTarget, changeOrigin: false },
     '^/\\.well-known/security\\.txt$': { target: apiTarget, changeOrigin: false },
     '^/[A-Za-z0-9-]{8,128}\\.txt$': { target: apiTarget, changeOrigin: false },

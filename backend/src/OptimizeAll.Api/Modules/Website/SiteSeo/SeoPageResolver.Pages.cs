@@ -109,7 +109,7 @@ public sealed partial class SeoPageResolver
         page.JsonLd.Add(_seoLd.WebPage(webPageType, _copy.Text($"{prefix}.seo.title"), page.Description, path));
         page.Content.Add(new HeadingNode(1, _copy.Text($"{prefix}.hero.title")));
         if (_copy.Text($"{prefix}.hero.lead") is { Length: > 0 } lead) page.Content.Add(new ParagraphNode(lead));
-        page.ModifiedAt = _copyUpdatedAt;
+        page.ModifiedAt = Latest(_copyUpdatedAt, _settingsUpdatedAt);
         return page;
     }
 
@@ -185,29 +185,35 @@ public sealed partial class SeoPageResolver
         var pages = Math.Max(1, (int)Math.Ceiling(index.Total / (double)index.PageSize));
         if (pageNumber > pages) return NotFound("/blog");
 
-        // Paginated archive: each page is its own canonical URL with prev/next links; filters and searches are noindex.
-        string Url(int number) => number <= 1 ? "/blog" : $"/blog?page={number}";
-        if (category is not null)
+        // Paginated archives (the blog and each topic): every page is its own canonical URL with prev/next links and a
+        // "page N" title and description; tag filters and searches are noindex.
+        void Paginate(Func<int, string> url, string title, string? description)
+        {
+            page.Canonical = _ld.Url(url(pageNumber));
+            page.Title = SeoText.ApplyTemplate(pageNumber > 1 ? $"{title} — page {pageNumber}" : title, _settings.Seo.TitleTemplate, _settings.SiteName);
+            page.Description = SeoText.Clamp(pageNumber > 1 ? $"Page {pageNumber} of {pages}. {description}" : description);
+            if (pageNumber > 1) page.PrevUrl = url(pageNumber - 1);
+            if (pageNumber < pages) page.NextUrl = url(pageNumber + 1);
+        }
+        if (category is not null && tag is null && search is null)
         {
             var cat = index.Categories.FirstOrDefault(c => c.Slug == category);
             if (cat is null) return NotFound("/blog");
-            page.Title = SeoText.ApplyTemplate($"{cat.Name} articles", _settings.Seo.TitleTemplate, _settings.SiteName);
-            page.Description = SeoText.Clamp(cat.Description ?? page.Description);
-            page.Canonical = _ld.Url($"/blog?category={Uri.EscapeDataString(category)}" + (pageNumber > 1 ? $"&page={pageNumber}" : string.Empty));
+            var topic = $"/blog?category={Uri.EscapeDataString(category)}";
+            Paginate(n => n <= 1 ? topic : $"{topic}&page={n}", $"{cat.Name} articles", cat.Description ?? page.Description);
             page.Content[0] = new HeadingNode(1, $"{cat.Name} articles");
+            // The topic sits under the blog in the breadcrumb trail.
+            page.Breadcrumbs.Clear();
+            page.JsonLd.RemoveAll(n => n.TryGetProperty("@type", out var t) && t.ValueKind == JsonValueKind.String && t.GetString() == "BreadcrumbList");
+            CrumbsLd(page, ("Blog", "/blog"), ($"{cat.Name} articles", topic));
         }
-        else if (tag is not null || search is not null)
+        else if (tag is not null || search is not null || category is not null)
         {
             page.NoIndex = true;
             page.Canonical = _ld.Url("/blog");
         }
         else
-        {
-            page.Canonical = _ld.Url(Url(pageNumber));
-            if (pageNumber > 1) page.Title = SeoText.ApplyTemplate($"{_copy.Text("blog.seo.title")} — page {pageNumber}", _settings.Seo.TitleTemplate, _settings.SiteName);
-            if (pageNumber > 1) page.PrevUrl = Url(pageNumber - 1);
-            if (pageNumber < pages) page.NextUrl = Url(pageNumber + 1);
-        }
+            Paginate(n => n <= 1 ? "/blog" : $"/blog?page={n}", _copy.Text("blog.seo.title"), page.Description);
         foreach (var post in index.Items)
         {
             page.Content.Add(new HeadingNode(2, post.Title));
@@ -220,7 +226,12 @@ public sealed partial class SeoPageResolver
             page.Content.Add(new LinkListNode(index.Categories.Select(c => new LinkItem(c.Name, $"/blog?category={c.Slug}")).ToList()));
         }
         if (_seoLd.ItemList("Articles", index.Items.Select(i => (i.Title, $"/blog/{i.Slug}")).ToList()) is { } list) page.JsonLd.Add(list);
-        page.ModifiedAt = Latest(_copyUpdatedAt, index.Items.Select(i => i.PublishedAt).Max());
+        // Same rule as the sitemap: the page texts / settings and the latest update of a live post in the archive.
+        var live = await db.Set<BlogPost>().AsNoTracking().Where(p => p.Status == BlogPostStatus.Published && p.PublishedAt <= Now)
+            .Select(p => new { p.UpdatedAt, p.CategoryIds }).ToListAsync(ct);
+        var catId = category is null ? (Guid?)null : await db.Set<BlogCategory>().AsNoTracking().Where(c => c.Slug == category).Select(c => (Guid?)c.Id).FirstOrDefaultAsync(ct);
+        var inArchive = live.Where(p => catId is null || p.CategoryIds.Contains(catId.Value)).Select(p => (DateTime?)p.UpdatedAt).ToList();
+        page.ModifiedAt = Latest(_copyUpdatedAt, _settingsUpdatedAt, inArchive.Count > 0 ? inArchive.Max() : null);
         return page;
     }
 
@@ -257,7 +268,9 @@ public sealed partial class SeoPageResolver
         page.Content.Add(new ParagraphNode(_copy.Text("careers.cta.text")));
         page.Content.Add(new ActionNode("Contact us", "/contact"));
         if (_seoLd.ItemList("Open roles", jobs.Select(j => (j.Title, $"/careers/{j.Slug}")).ToList()) is { } list) page.JsonLd.Add(list);
-        page.ModifiedAt = Latest(_copyUpdatedAt, jobs.Select(j => j.PostedAt).Max());
+        var openUpdated = await db.Set<JobOpening>().AsNoTracking()
+            .Where(j => j.Status == JobOpeningStatus.Open && (j.ClosesAt == null || j.ClosesAt > Now)).Select(j => (DateTime?)j.UpdatedAt).MaxAsync(ct);
+        page.ModifiedAt = Latest(_copyUpdatedAt, _settingsUpdatedAt, openUpdated);
         return AddCatalogVideos(page);
     }
 
@@ -332,7 +345,7 @@ public sealed partial class SeoPageResolver
         c.Add(new HeadingNode(2, _copy.Text("creators.cta.title")));
         c.Add(new ParagraphNode(_copy.Text("creators.cta.text")));
         if (_ld.FaqPage(faqs) is { } faqLd) page.JsonLd.Add(faqLd);
-        page.ModifiedAt = _copyUpdatedAt;
+        page.ModifiedAt = Latest(_copyUpdatedAt, _settingsUpdatedAt);
         return AddCatalogVideos(page);
     }
 
@@ -351,7 +364,7 @@ public sealed partial class SeoPageResolver
             foreach (var f in group) page.Content.Add(new QuestionNode(f.Question, f.Answer));
         }
         if (_ld.FaqPage(items.Select(f => new FaqEntry(f.Question, f.Answer)).ToList()) is { } faqLd) page.JsonLd.Add(faqLd);
-        page.ModifiedAt = Latest(_copyUpdatedAt, items.Select(f => (DateTime?)f.UpdatedAt).Max());
+        page.ModifiedAt = Latest(_copyUpdatedAt, _settingsUpdatedAt, items.Select(f => (DateTime?)f.UpdatedAt).Max());
         return page;
     }
 

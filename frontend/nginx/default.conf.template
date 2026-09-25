@@ -58,8 +58,11 @@ server {
     gzip_proxied      any;
     gzip_comp_level   5;
     gzip_min_length   1024;
-    gzip_types        text/plain text/css text/csv application/javascript application/json application/problem+json
-                      application/xml image/svg+xml application/manifest+json font/ttf font/otf;
+    # HTML is always compressed (nginx's default type); these add the SEO files (sitemaps, feeds, llms.txt, Markdown
+    # page versions, JSON-LD) and the other text assets. Brotli would need a module the stock nginx image lacks.
+    gzip_types        text/plain text/css text/csv text/markdown text/xml application/javascript application/json
+                      application/problem+json application/ld+json application/xml application/rss+xml application/atom+xml
+                      image/svg+xml image/x-icon application/manifest+json font/ttf font/otf;
 
     # ---------------------------------------------------------------- API (same origin)
     location /api/ {
@@ -119,10 +122,19 @@ server {
         include /etc/nginx/snippets/seo-file-errors.conf;
     }
 
-    location ~ "^/(llms\.txt|llms-full\.txt|humans\.txt|\.well-known/security\.txt|[A-Za-z0-9-]{8,128}\.txt)$" {
+    location ~ "^/(llms\.txt|llms-full\.txt|llms/[a-z0-9-]+\.txt|humans\.txt|\.well-known/security\.txt|[A-Za-z0-9-]{8,128}\.txt)$" {
         proxy_pass ${OA_API_PROXY};
         include /etc/nginx/snippets/proxy-api.conf;
         include /etc/nginx/snippets/seo-file-errors.conf;
+    }
+
+    # Generated social cards (Open Graph / Twitter images): /og{page path}.png?v={version}, rendered by the API. A
+    # versioned URL is immutable (the API sends a year's max-age); the API's Cache-Control passes through.
+    location /og/ {
+        proxy_pass ${OA_API_PROXY};
+        include /etc/nginx/snippets/proxy-api.conf;
+        include /etc/nginx/snippets/seo-file-errors.conf;
+        access_log off;
     }
 
     # Markdown version of every public page for AI assistants: /services/seo.md, /index.md (home).

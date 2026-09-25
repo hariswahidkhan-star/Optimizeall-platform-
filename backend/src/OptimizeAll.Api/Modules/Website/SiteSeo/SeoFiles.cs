@@ -35,9 +35,12 @@ public static class SitemapWriter
         }
         foreach (var group in SeoPageResolver.UrlGroups) AddChunks(group, "urls", urls.Where(u => u.Group == group).ToList());
         AddChunks("images", "images", urls.Where(u => u.Images.Count > 0).ToList());
-        AddChunks("videos", "videos", urls.Where(u => u.Videos.Count > 0).ToList());
+        AddChunks("videos", "videos", urls.Where(u => u.Videos.Any(Listable)).ToList());
         return files;
     }
+
+    /// <summary>Google's video sitemap needs a thumbnail and the video file or a player URL.</summary>
+    public static bool Listable(SeoVideo v) => v.PosterUrl is not null && (v.ContentUrl is not null || v.EmbedUrl is not null);
 
     private static string Date(DateTime value) => DateTime.SpecifyKind(value, DateTimeKind.Utc).ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture);
 
@@ -89,7 +92,7 @@ public static class SitemapWriter
                         w.WriteEndElement();
                     }
                 if (file.Kind == "videos")
-                    foreach (var v in u.Videos.Where(v => v.PosterUrl is not null))
+                    foreach (var v in u.Videos.Where(Listable))
                     {
                         w.WriteStartElement("video", "video", VideoNs);
                         w.WriteElementString("video", "thumbnail_loc", VideoNs, v.PosterUrl!);

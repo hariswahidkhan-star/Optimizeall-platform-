@@ -47,6 +47,9 @@ http {
     location = /_document/gone { return 410 '<!doctype html><h1>API gone</h1>'; }
     location = /_document/moved { return 301 /page; }
     location = /llms.txt { default_type text/plain; return 200 'llms'; }
+    location = /llms/academy.txt { default_type text/plain; return 200 'academy'; }
+    location = /og/services/seo.png { default_type image/png; add_header Cache-Control "public, max-age=31536000, immutable"; return 200 'PNG'; }
+    location = /og/missing.png { default_type application/problem+json; return 404 '{"status":404}'; }
     location = /_markdown/index { default_type text/markdown; return 200 '# home'; }
     location = /sitemap.xml { default_type application/xml; return 200 '<sitemapindex/>'; }
     location = /sitemaps/pages.xml { default_type application/xml; return 200 '<urlset/>'; }
@@ -98,6 +101,9 @@ expect /moved 301 text/html
 for code in 400 401 403 405 429 500 503; do expect "/e$code" 503 text/html SHELL; done
 expect /nobody-type 503 text/html SHELL
 expect /llms.txt 200 text/plain
+expect /llms/academy.txt 200 text/plain academy
+expect "/og/services/seo.png?v=abc" 200 image/png PNG
+expect /og/missing.png 404 text/plain "Not found"
 expect /index.md 200 text/markdown
 expect /sitemap.xml 200 application/xml
 expect /sitemaps/pages.xml 200 application/xml
@@ -123,6 +129,7 @@ expect /llms.txt 503 text/plain "not available"
 expect /robots.txt 503 text/plain "not available"
 expect /sitemap.xml 503 text/plain "not available"
 expect /index.md 503 text/plain "not available"
+expect /og/services/seo.png 503 text/plain "not available"
 
 [ "$failures" = 0 ] || die "$failures nginx check(s) failed"
 ok "nginx serves every page as HTML, whatever the API answers"

@@ -19,7 +19,8 @@ namespace OptimizeAll.Api.Modules.Website.SiteSeo;
 [AllowAnonymous]
 [EnableRateLimiting(RateLimitPolicies.Documents)]
 [ApiExplorerSettings(IgnoreApi = true)]
-public sealed class SeoDocumentController(SeoPageResolver resolver, IConfiguration configuration, ILogger<SeoDocumentController> logger)
+public sealed class SeoDocumentController(SeoPageResolver resolver, SeoSettingsService seoSettings, IConfiguration configuration,
+    ILogger<SeoDocumentController> logger)
     : ControllerBase
 {
     public const string Prefix = "/_document";
@@ -54,7 +55,8 @@ public sealed class SeoDocumentController(SeoPageResolver resolver, IConfigurati
                 Response.Headers.CacheControl = page.Status == 301 || page.Status == 308 ? "public, max-age=3600" : "no-cache";
                 return StatusCode(page.Status);
             }
-            html = SeoDocumentWriter.Write(page, await resolver.ChromeAsync(ct), resolver.Settings.SiteName, resolver.Settings.Seo.TwitterHandle,
+            var chrome = await resolver.ChromeAsync(ct) with { LlmsTxt = (await seoSettings.GetAsync(ct)).LlmsTxtEnabled };
+            html = SeoDocumentWriter.Write(page, chrome, resolver.Settings.SiteName, resolver.Settings.Seo.TwitterHandle,
                 resolver.BaseUrl, await resolver.PartnerLinkRulesAsync(ct));
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
@@ -152,6 +154,15 @@ public sealed class SeoFilesController(SeoPageResolver resolver, SeoSettingsServ
     {
         if (!(await settings.GetAsync(ct)).LlmsTxtEnabled) return NotFound();
         return Cached(await llms.LlmsFullAsync(ct), "text/plain; charset=utf-8", 3600);
+    }
+
+    /// <summary>A section file of llms.txt (<c>/llms/academy.txt</c>): see <see cref="LlmsTxtService.Sections"/>.</summary>
+    [HttpGet("/llms/{name}.txt")]
+    public async Task<IActionResult> LlmsSection(string name, CancellationToken ct)
+    {
+        if (!(await settings.GetAsync(ct)).LlmsTxtEnabled) return NotFound();
+        var body = await llms.SectionAsync(name, ct);
+        return body is null ? NotFound() : Cached(body, "text/plain; charset=utf-8", 3600);
     }
 
     /// <summary>Markdown version of a page: the web server sends <c>/{path}.md</c> here as <c>/_markdown/{path}</c>.</summary>

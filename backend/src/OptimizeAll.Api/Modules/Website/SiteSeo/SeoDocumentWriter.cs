@@ -38,6 +38,18 @@ public static class SeoDocumentWriter
     /// link to a partner's website in the page gets <c>rel="sponsored noopener"</c>, <c>target="_blank"</c> and the
     /// partner's UTM tags (<see cref="SeoPartnerLinks"/>, Google's link-spam policy).
     /// </summary>
+    /// <summary>The MIME type of a social image from its file extension (generated cards are PNG); null when unknown.</summary>
+    public static string? ImageType(string? url)
+    {
+        if (url is null) return null;
+        var path = url.Split('?', '#')[0].ToLowerInvariant();
+        if (path.Contains("/og/", StringComparison.Ordinal) || path.EndsWith(".png", StringComparison.Ordinal)) return "image/png";
+        if (path.EndsWith(".jpg", StringComparison.Ordinal) || path.EndsWith(".jpeg", StringComparison.Ordinal)) return "image/jpeg";
+        if (path.EndsWith(".webp", StringComparison.Ordinal)) return "image/webp";
+        if (path.EndsWith(".gif", StringComparison.Ordinal)) return "image/gif";
+        return null;
+    }
+
     public static string Write(SeoPage page, SiteChromeLinks chrome, string siteName, string? twitterHandle, string baseUrl,
         IReadOnlyList<OptimizeAll.Domain.Website.PartnerLinkRule>? partnerLinks = null)
     {
@@ -53,6 +65,12 @@ public static class SeoDocumentWriter
         Meta("name", "description", page.Description);
         Meta("name", "robots", page.Robots);
         if (page.Canonical is not null) sb.Append("<link rel=\"canonical\" href=\"").Append(e(page.Canonical)).Append("\" data-oa-head data-oa-ssr>\n");
+        // One language: the page is its own English and default version (hreflang must point at the canonical URL).
+        if (page.IsIndexable && page.Canonical is not null)
+        {
+            sb.Append("<link rel=\"alternate\" hreflang=\"en\" href=\"").Append(e(page.Canonical)).Append("\" data-oa-ssr>\n");
+            sb.Append("<link rel=\"alternate\" hreflang=\"x-default\" href=\"").Append(e(page.Canonical)).Append("\" data-oa-ssr>\n");
+        }
         if (page.PrevUrl is not null) sb.Append("<link rel=\"prev\" href=\"").Append(e(baseUrl + page.PrevUrl)).Append("\" data-oa-ssr>\n");
         if (page.NextUrl is not null) sb.Append("<link rel=\"next\" href=\"").Append(e(baseUrl + page.NextUrl)).Append("\" data-oa-ssr>\n");
 
@@ -64,6 +82,7 @@ public static class SeoDocumentWriter
         Meta("property", "og:description", page.Description);
         Meta("property", "og:url", url);
         Meta("property", "og:image", page.OgImage);
+        Meta("property", "og:image:type", ImageType(page.OgImage));
         if (page.OgImageWidth is { } w) Meta("property", "og:image:width", w.ToString(CultureInfo.InvariantCulture));
         if (page.OgImageHeight is { } h) Meta("property", "og:image:height", h.ToString(CultureInfo.InvariantCulture));
         Meta("property", "og:image:alt", page.OgImageAlt);
@@ -73,6 +92,7 @@ public static class SeoDocumentWriter
             if (page.ModifiedAt is { } modified) Meta("property", "article:modified_time", SeoText.Iso(modified));
             Meta("property", "article:section", page.Section);
         }
+        Meta("name", "author", page.Author);
         // A square default logo reads better as a small card; page images get the large card.
         var squareDefault = page.OgImageWidth is not null && page.OgImageWidth == page.OgImageHeight;
         Meta("name", "twitter:card", squareDefault ? "summary" : "summary_large_image");

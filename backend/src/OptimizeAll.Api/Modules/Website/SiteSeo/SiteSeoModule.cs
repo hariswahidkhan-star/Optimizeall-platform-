@@ -10,6 +10,7 @@ public static class SiteSeoModule
     {
         services.AddScoped<SeoSettingsService>();
         services.AddSingleton<SocialCards.SocialCardRenderer>();
+        services.AddMemoryCache();
         services.AddScoped<SeoPageResolver>();
         services.AddScoped<LlmsTxtService>();
         services.AddScoped<SeoOverviewService>();
