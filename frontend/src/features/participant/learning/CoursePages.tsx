@@ -1,6 +1,6 @@
 import { Award, CheckCircle2, GraduationCap, PlayCircle } from 'lucide-react';
-import { useEffect, useRef } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/Button';
 import { ButtonLink } from '@/components/ui/ButtonLink';
 import { Card, CardBody } from '@/components/ui/Card';
@@ -12,7 +12,10 @@ import { errorMessage } from '@/lib/api/errors';
 import { useAnswerCheck, useEnrol, useLessonProgress, useMyCourse, useMyLesson } from '@/features/learning/api';
 import { CourseView } from '@/features/learning/components/CourseView';
 import { LessonView } from '@/features/learning/components/LessonView';
+import { Celebrate } from '@/features/learning/components/Motion';
+import { clearEnrolIntent, ENROL_PARAM } from '@/features/learning/enrolIntent';
 import '@/features/learning/learning.css';
+import '@/features/learning/academy.css';
 import { learningPaths } from './LearningHomePages';
 
 export function LearningCoursePage() {
@@ -20,6 +23,26 @@ export function LearningCoursePage() {
   const q = useMyCourse(slug);
   const enrol = useEnrol(slug);
   const toast = useToast();
+  const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const autoRan = useRef(false);
+
+  // ?enrol=1 (from a public course page or a sign-in return path): enrol once and open the first unfinished lesson.
+  useEffect(() => {
+    if (params.get(ENROL_PARAM) !== '1' || !q.data || autoRan.current) return;
+    autoRan.current = true;
+    const openLesson = (lesson: string | null | undefined) => {
+      clearEnrolIntent();
+      navigate(lesson ? learningPaths.lesson(slug, lesson) : learningPaths.course(slug), { replace: true });
+    };
+    if (q.data.progress) openLesson(q.data.progress.resumeLessonSlug);
+    else
+      enrol.mutate(undefined, {
+        onSuccess: (data) => openLesson(data.progress?.resumeLessonSlug ?? data.course.modules[0]?.lessons[0]?.slug),
+        onError: (e) => toast.error('Enrolment failed', errorMessage(e)),
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params, q.data]);
 
   if (q.isPending) return <Skeleton height={420} radius="var(--radius-xl)" />;
   if (q.isError)
@@ -121,6 +144,7 @@ export function LearningLessonPage() {
   const enrol = useEnrol(slug);
   const toast = useToast();
   const started = useRef<string | null>(null);
+  const [celebrate, setCelebrate] = useState({ n: 0, big: false });
 
   const enrolled = q.data?.enrolled ?? false;
   // Opening a lesson records the resume point (once per lesson view).
@@ -150,8 +174,9 @@ export function LearningLessonPage() {
       </CardBody>
     </Card>
   ) : (
-    <Card className="lx-complete">
+    <Card className="lx-complete lx-celebrate-host">
       <CardBody>
+        <Celebrate trigger={celebrate.n} size={celebrate.big ? 'lg' : 'sm'} />
         {completed ? (
           <p className="lx-ok" role="status">
             <CheckCircle2 aria-hidden="true" /> Lesson completed
@@ -172,7 +197,11 @@ export function LearningLessonPage() {
             onClick={() =>
               complete.mutate(undefined, {
                 // Confirmed inline (the status above) rather than with a toast, which would cover the lesson navigation.
-                onSuccess: () => void q.refetch(),
+                onSuccess: (p) => {
+                  // A little celebration; a bigger one when this was the last lesson (the final assessment unlocks).
+                  setCelebrate((c) => ({ n: c.n + 1, big: !!p?.examUnlocked }));
+                  void q.refetch();
+                },
                 onError: (e) => toast.error('Couldn’t save your progress', errorMessage(e)),
               })
             }

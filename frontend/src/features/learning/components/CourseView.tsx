@@ -1,3 +1,4 @@
+import '../academy.css';
 import clsx from 'clsx';
 import {
   Award,
@@ -5,18 +6,21 @@ import {
   Check,
   CheckCircle2,
   ChevronDown,
+  Clapperboard,
   Clock,
   FileText,
   PlayCircle,
+  RefreshCw,
   RotateCcw,
   Timer,
+  Wrench,
 } from 'lucide-react';
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
 import { PartnerLinksProvider } from '@/features/public/partners/PartnerLinksContext';
 import { Markdown } from '@/features/public/site/Markdown';
-import { courseKeywords, formatMinutes, type CourseDetail } from '../api';
+import { courseKeywords, formatMinutes, formatReviewed, type CourseDetail } from '../api';
 import { LearnSlot } from './LearnSlot';
 import { BadgeImage, CategoryTag, categoryClass, LevelTag } from './CourseCard';
 
@@ -28,6 +32,8 @@ export interface CourseViewProps {
   courseLink: (slug: string) => string;
   /** Primary actions in the hero (enrol, continue, sign-up CTA). */
   actions: ReactNode;
+  /** Compact actions for the phone sticky bar (defaults to `actions`). */
+  stickyActions?: ReactNode;
   /** Progress panel under the hero actions (portal). */
   progress?: ReactNode;
   completedLessons?: ReadonlySet<string>;
@@ -71,6 +77,7 @@ export function CourseView({
   lessonLink,
   courseLink,
   actions,
+  stickyActions,
   progress,
   completedLessons,
   aside,
@@ -106,9 +113,19 @@ export function CourseView({
               <li>
                 <FileText aria-hidden="true" /> {card.lessonCount} lessons in {card.moduleCount} modules
               </li>
+              {course.lectureCount > 0 && (
+                <li>
+                  <Clapperboard aria-hidden="true" /> {formatMinutes(course.lectureMinutes)} of video lectures
+                </li>
+              )}
               <li>
                 <Award aria-hidden="true" /> Certificate + LinkedIn badge
               </li>
+              {formatReviewed(course.lastReviewed) && (
+                <li className="lx-hero__updated">
+                  <RefreshCw aria-hidden="true" /> Updated {formatReviewed(course.lastReviewed)}
+                </li>
+              )}
             </ul>
             <div className="lx-hero__actions" ref={actionsRef}>
               {actions}
@@ -148,6 +165,19 @@ export function CourseView({
                     </li>
                   ))}
                 </ul>
+                {course.tools.length > 0 && (
+                  <>
+                    <h3 className="lx-subhead">Tools you’ll use</h3>
+                    <ul className="lx-tools" aria-label="Tools you’ll use">
+                      {course.tools.map((t) => (
+                        <li key={t}>
+                          <Wrench aria-hidden="true" />
+                          {t}
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
                 {course.card.skills.length > 0 && (
                   <>
                     <h3 className="lx-subhead">Skills</h3>
@@ -258,7 +288,7 @@ export function CourseView({
         {sticky && (
           <div className="lx-sticky-cta" role="region" aria-label="Course actions">
             <p className="lx-sticky-cta__title">{card.title}</p>
-            <div className="lx-sticky-cta__actions">{actions}</div>
+            <div className="lx-sticky-cta__actions">{stickyActions ?? actions}</div>
           </div>
         )}
       </div>
@@ -314,7 +344,9 @@ function SyllabusModule({
           <ChevronDown aria-hidden="true" className="lx-syllabus__chevron" />
         </button>
       </h3>
+      {/* Smooth accordion: opening animates the panel's height (grid rows 0fr → 1fr, academy.css); closed stays [hidden]. */}
       <div id={panelId} hidden={!open} className="lx-syllabus__panel">
+        <div className="lx-syllabus__panel-inner">
         <p className="lx-syllabus__summary">{module.summary}</p>
         <ol className="lx-syllabus__lessons">
           {module.lessons.map((l) => {
@@ -332,6 +364,13 @@ function SyllabusModule({
                   {isNext && <span className="lx-lesson-row__next">Up next</span>}
                 </span>
                 <span className="lx-lesson-row__dur">
+                  {l.hasLecture && (
+                    <span className="lx-lesson-row__lecture" title={`${l.lectureMinutes} min video lecture`}>
+                      <Clapperboard aria-hidden="true" />
+                      <span className="visually-hidden">Video lecture, </span>
+                      {l.lectureMinutes}′ ·{' '}
+                    </span>
+                  )}
                   {l.type === 'Video' ? 'Video · ' : ''}
                   {l.durationMinutes} min
                   {isDone ? <span className="visually-hidden"> (completed)</span> : null}
@@ -340,6 +379,7 @@ function SyllabusModule({
             );
           })}
         </ol>
+        </div>
       </div>
     </li>
   );

@@ -71,6 +71,9 @@ export interface LessonSummary {
   type: LessonType;
   durationMinutes: number;
   hasVideo: boolean;
+  /** Pack v2: the lesson has a video lecture (produced or coming soon). */
+  hasLecture: boolean;
+  lectureMinutes: number;
 }
 
 export interface CourseModule {
@@ -99,6 +102,33 @@ export interface CourseDetail {
   updatedAt: string;
   seo: LearningSeo;
   jsonLd: JsonLd[];
+  /** Pack v2: review month ("2026-09"), shown as "Updated Sep 2026". */
+  lastReviewed: string | null;
+  tools: string[];
+  lectureMinutes: number;
+  lectureCount: number;
+}
+
+export interface LectureChapter {
+  index: number;
+  title: string;
+  points: string[];
+  narration: string;
+  startSeconds: number;
+  seconds: number;
+}
+
+/** A lesson's video lecture: produced (src) or "coming soon" with chapters and the full transcript. */
+export interface LessonLecture {
+  title: string;
+  targetMinutes: number;
+  totalSeconds: number;
+  produced: boolean;
+  src: string | null;
+  poster: string | null;
+  captions: string | null;
+  chapters: LectureChapter[];
+  transcriptWords: number;
 }
 
 export interface KnowledgeCheck {
@@ -131,6 +161,8 @@ export interface Lesson {
   lessonCount: number;
   seo: LearningSeo;
   jsonLd: JsonLd[];
+  lecture: LessonLecture | null;
+  lastReviewed: string | null;
 }
 
 export interface CourseProgress {
@@ -305,6 +337,61 @@ export interface CertificateVerification {
   jsonLd: JsonLd[];
 }
 
+// ---------------------------------------------------------------- learning paths
+
+export interface PathBadge {
+  courseSlug: string;
+  courseTitle: string;
+  badgeName: string;
+  imageUrl: string;
+}
+
+export interface PathCard {
+  slug: string;
+  title: string;
+  subtitle: string;
+  level: CourseLevel;
+  courseCount: number;
+  lessonCount: number;
+  totalMinutes: number;
+  categories: CourseCategory[];
+  badges: PathBadge[];
+}
+
+export interface PathDetail {
+  card: PathCard;
+  description: string;
+  outcomes: string[];
+  audience: string[];
+  courses: { position: number; course: CourseCard }[];
+  seo: LearningSeo;
+  jsonLd: JsonLd[];
+}
+
+export interface PathsIndex {
+  paths: PathCard[];
+  seo: LearningSeo;
+  jsonLd: JsonLd[];
+}
+
+export interface PathCourseProgress {
+  slug: string;
+  enrolled: boolean;
+  progressPercent: number;
+  passed: boolean;
+  certificateId: string | null;
+}
+
+export interface PathProgress {
+  slug: string;
+  completedCourses: number;
+  courseCount: number;
+  progressPercent: number;
+  nextCourseSlug: string | null;
+  started: boolean;
+  courses: PathCourseProgress[];
+}
+
 export interface CatalogFilters {
   category?: CourseCategory | '';
   level?: CourseLevel | '';
@@ -322,6 +409,10 @@ export const learningKeys = {
   publicCourse: (slug: string) => ['learning', 'public', 'course', slug] as const,
   publicLesson: (slug: string, lesson: string) => ['learning', 'public', 'lesson', slug, lesson] as const,
   verify: (id: string) => ['learning', 'verify', id] as const,
+  paths: ['learning', 'public', 'paths'] as const,
+  path: (slug: string) => ['learning', 'public', 'paths', slug] as const,
+  myPaths: ['me', 'learning', 'paths'] as const,
+  myPath: (slug: string) => ['me', 'learning', 'paths', slug] as const,
   me: ['me', 'learning'] as const,
   myCatalog: (f: CatalogFilters) => ['me', 'learning', 'catalog', f] as const,
   myCourse: (slug: string) => ['me', 'learning', 'course', slug] as const,
@@ -382,6 +473,39 @@ export function useCertificateVerification(id: string) {
   return useQuery({
     queryKey: learningKeys.verify(id),
     queryFn: () => api.get<CertificateVerification>(`/public/learning/certificates/${encodeURIComponent(id)}`),
+    retry: false,
+  });
+}
+
+export function usePaths() {
+  return useQuery({
+    queryKey: learningKeys.paths,
+    queryFn: () => api.get<PathsIndex>('/public/learning/paths'),
+    staleTime: 5 * 60_000,
+  });
+}
+
+export function usePath(slug: string) {
+  return useQuery({
+    queryKey: learningKeys.path(slug),
+    queryFn: () => api.get<PathDetail>(`/public/learning/paths/${encodeURIComponent(slug)}`),
+  });
+}
+
+/** The signed-in learner's progress on every path (participants only; pass enabled=false otherwise). */
+export function useMyPaths(enabled = true) {
+  return useQuery({
+    queryKey: learningKeys.myPaths,
+    queryFn: () => api.get<{ card: PathCard; progress: PathProgress }[]>('/me/learning/paths'),
+    enabled,
+  });
+}
+
+export function useMyPath(slug: string, enabled = true) {
+  return useQuery({
+    queryKey: learningKeys.myPath(slug),
+    queryFn: () => api.get<{ path: PathDetail; progress: PathProgress }>(`/me/learning/paths/${encodeURIComponent(slug)}`),
+    enabled,
     retry: false,
   });
 }
@@ -512,6 +636,32 @@ export function useMyCertificate(id: string) {
 /** Page keywords for partner slots and topic matching: the course's skills plus its category label. */
 export function courseKeywords(skills: readonly string[], category: CourseCategory): string[] {
   return [...skills, CATEGORY_LABELS[category]];
+}
+
+/** "Sep 2026" from a pack's review month ("2026-09"); null when absent or malformed. */
+export function formatReviewed(lastReviewed: string | null | undefined): string | null {
+  const m = /^(\d{4})-(\d{2})$/.exec(lastReviewed ?? '');
+  if (!m) return null;
+  const month = Number(m[2]);
+  if (month < 1 || month > 12) return null;
+  const names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  return `${names[month - 1]} ${m[1]}`;
+}
+
+/** 0:00 / 1:05:09 style time for the lecture chapters. */
+export function formatClock(totalSeconds: number): string {
+  const s = Math.max(0, Math.floor(totalSeconds));
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = String(s % 60).padStart(2, '0');
+  return h > 0 ? `${h}:${String(m).padStart(2, '0')}:${sec}` : `${m}:${sec}`;
+}
+
+/** Hours for path and hub totals ("12 h", "1.5 h"). */
+export function formatHours(minutes: number): string {
+  const h = minutes / 60;
+  if (h < 1) return `${minutes} min`;
+  return `${h >= 10 ? Math.round(h) : Math.round(h * 2) / 2} h`;
 }
 
 export function formatMinutes(minutes: number): string {

@@ -6,6 +6,7 @@ import { defaultLandingPath } from '@/app/portals';
 import { Button } from '@/components/ui/Button';
 import { ButtonLink } from '@/components/ui/ButtonLink';
 import { Spinner } from '@/components/ui/Spinner';
+import { pendingEnrolPath } from '@/features/learning/enrolIntent';
 import { api } from '@/lib/api/client';
 import { errorMessage, isApiError } from '@/lib/api/errors';
 import type { MessageResponse } from '@/lib/api/types';
@@ -68,8 +69,12 @@ export function VerifyEmailPage() {
   }
 
   if (verify.isSuccess) {
+    // A learner who registered from a course's "Enrol" button goes back to that course (enrolled automatically).
+    const course = pendingEnrolPath();
     const continueTo =
-      status === 'authenticated' && user ? defaultLandingPath(user.permissions) : '/login?verified=1';
+      status === 'authenticated' && user
+        ? defaultLandingPath(user.permissions, course)
+        : `/login?verified=1${course ? `&next=${encodeURIComponent(course)}` : ''}`;
     return (
       <div className="auth-page">
         <span className="auth-page__icon auth-page__icon--success" aria-hidden="true">
@@ -83,7 +88,13 @@ export function VerifyEmailPage() {
           </p>
         </div>
         <ButtonLink to={continueTo} size="lg" fullWidth>
-          {status === 'authenticated' ? 'Continue to your dashboard' : 'Sign in'}
+          {course
+            ? status === 'authenticated'
+              ? 'Continue to your course'
+              : 'Sign in and start learning'
+            : status === 'authenticated'
+              ? 'Continue to your dashboard'
+              : 'Sign in'}
         </ButtonLink>
       </div>
     );

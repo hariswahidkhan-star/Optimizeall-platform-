@@ -43,8 +43,8 @@ const course: CourseDetail = {
       title: 'How it works',
       summary: 'Basics.',
       lessons: [
-        { slug: 'l1', title: 'Campaigns and eligibility', type: 'Article', durationMinutes: 10, hasVideo: false },
-        { slug: 'l2', title: 'Submitting posts', type: 'Video', durationMinutes: 12, hasVideo: false },
+        { slug: 'l1', title: 'Campaigns and eligibility', type: 'Article', durationMinutes: 10, hasVideo: false, hasLecture: false, lectureMinutes: 0 },
+        { slug: 'l2', title: 'Submitting posts', type: 'Video', durationMinutes: 12, hasVideo: false, hasLecture: false, lectureMinutes: 0 },
       ],
     },
   ],
@@ -52,6 +52,10 @@ const course: CourseDetail = {
   updatedAt: '2026-09-20T00:00:00Z',
   seo,
   jsonLd: [{ '@context': 'https://schema.org', '@type': 'Course', name: 'Getting started', isAccessibleForFree: true }],
+  lastReviewed: null,
+  tools: [],
+  lectureMinutes: 0,
+  lectureCount: 0,
 };
 
 const lesson: Lesson = {
@@ -77,6 +81,8 @@ const lesson: Lesson = {
   lessonCount: 2,
   seo,
   jsonLd: [],
+  lecture: null,
+  lastReviewed: null,
 };
 
 const certificate: MyCertificate = {
@@ -128,15 +134,20 @@ const catalogRoutes = {
   'GET /public/learning/courses/platform-getting-started': () => json(200, course),
   'GET /public/learning/courses/platform-getting-started/lessons/l2': () => json(200, lesson),
   'GET /public/site': () => problem(404, 'http_404', 'Not found'),
+  'GET /public/learning/paths': () => json(200, { paths: [], seo, jsonLd: [] }),
 };
 
 describe('public academy', () => {
   it('lists courses with category filters and no axe violations', async () => {
     mockFetch({ ...anonymous, ...catalogRoutes });
     const { container } = renderWithApp(<AcademyPage />, { route: '/learn', path: '/learn', withAuth: true });
-    expect(await screen.findByRole('link', { name: card.title })).toHaveAttribute('href', '/learn/platform-getting-started');
-    expect(screen.getByRole('button', { name: /Optimize All platform/ })).toHaveAttribute('aria-pressed', 'false');
-    expect(screen.getByText('Featured', { selector: '.lx-flag' })).toBeInTheDocument();
+    const links = await screen.findAllByRole('link', { name: card.title });
+    links.forEach((l) => expect(l).toHaveAttribute('href', '/learn/platform-getting-started'));
+    const filters = screen.getByRole('group', { name: 'Filter by category' });
+    expect(within(filters).getByRole('button', { name: /Optimize All platform/ })).toHaveAttribute('aria-pressed', 'false');
+    // The hub: subject tiles (animated illustrations) filter the catalog.
+    expect(screen.getByRole('button', { name: /Optimize All platform\s*1 course/ })).toBeInTheDocument();
+    expect(screen.getAllByText('Featured', { selector: '.lx-flag' }).length).toBeGreaterThan(0);
     expect(await axeViolations(container)).toEqual([]);
   });
 
@@ -166,7 +177,7 @@ describe('public academy', () => {
     await userEvent.click(within(group).getByRole('button', { name: 'Check answer' }));
     expect(await within(group).findByText('Not quite')).toBeInTheDocument();
     expect(calls.some((c) => c.method === 'POST' && c.path.includes('/checks/'))).toBe(false);
-    expect(screen.getByText('Create a free account to track progress, take the exam and earn your certificate')).toBeInTheDocument();
+    expect(screen.getByText('Enrol for free to track progress, take the exam and earn your certificate')).toBeInTheDocument();
     expect(await axeViolations(container)).toEqual([]);
   });
 
