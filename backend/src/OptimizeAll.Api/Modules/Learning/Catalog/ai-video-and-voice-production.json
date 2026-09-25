@@ -1,0 +1,1047 @@
+{
+  "slug": "ai-video-and-voice-production",
+  "version": 1,
+  "title": "AI Video & Voice Production with ElevenLabs and HeyGen",
+  "subtitle": "Create voiceovers, avatar videos and multilingual content with AI, with consent, quality control and clear disclosure",
+  "category": "ai",
+  "level": "intermediate",
+  "estimatedMinutes": 190,
+  "description": "AI voice and video tools let a single creator or small team produce professional voiceovers, presenter videos and multilingual versions in a fraction of the time. Used carelessly, they also create legal, ethical and reputational risk.\n\nThis course teaches the concepts and workflows behind modern AI media production. You will learn how text-to-speech, voice design, voice cloning and AI dubbing work, using ElevenLabs-style voice platforms as the running example. You will learn when AI avatars and talking-head videos, as in HeyGen, help or hurt, and how to use AI b-roll and text-to-video responsibly.\n\nYou will write scripts for the ear, build an end-to-end pipeline that combines specialist voice and video tools, caption for accessibility and run a thorough quality check. Throughout, you will put consent and rights first, and disclose synthetic media in line with platform policies and advertising rules.",
+  "outcomes": [
+    "Explain how text-to-speech, voice design, cloning and AI dubbing work at a workflow level",
+    "Obtain and document informed consent before cloning any voice or likeness",
+    "Decide when AI avatars, AI b-roll or real footage best serve a video's purpose",
+    "Write scripts optimised for AI voices and avatars using a scene-based format",
+    "Build a repeatable pipeline combining a voice platform with avatar or editing tools",
+    "Caption, localise and quality-check AI media before publishing",
+    "Disclose synthetic media in line with platform policies and advertising rules"
+  ],
+  "skills": [
+    "AI voiceover production",
+    "Voice cloning ethics",
+    "AI avatar video",
+    "AI dubbing and localisation",
+    "Video scripting",
+    "Synthetic media disclosure"
+  ],
+  "prerequisites": [
+    "ai-fundamentals-for-marketers"
+  ],
+  "badge": {
+    "name": "Certified AI Video & Voice Producer",
+    "description": "The holder can plan and produce AI voiceovers, avatar videos and dubbed content using specialist voice and video platforms, write scripts for synthetic performers, secure documented consent for voices and likenesses, caption and quality-check media, and disclose synthetic content in line with platform and advertising rules.",
+    "criteria": "Completed all lessons and scored at least 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "ai-voice-foundations",
+      "title": "AI voice: text-to-speech, cloning and dubbing",
+      "summary": "How synthetic voice works, how to design or clone voices with proper consent, and how AI dubbing opens new language markets.",
+      "lessons": [
+        {
+          "slug": "how-ai-voice-works",
+          "title": "How AI voice works: text-to-speech in plain language",
+          "type": "video",
+          "durationMinutes": 9,
+          "body": "### From robotic to realistic\n\nText-to-speech (TTS) converts written text into spoken audio. Earlier systems stitched together recorded sound fragments, which is why they sounded choppy. Modern neural TTS models are trained on large amounts of recorded speech and generate audio directly, learning pronunciation, intonation, pacing, breath and emotional colour. The best current voices are hard to distinguish from human narration in short clips.\n\nLeading voice platforms such as ElevenLabs typically offer a family of related capabilities:\n\n- **Text-to-speech:** type or paste a script, pick a voice, generate audio.\n- **Speech-to-speech (voice changing):** record yourself with the timing and emotion you want, then convert it into another voice while keeping your performance.\n- **Voice design:** create a new synthetic voice from a text description.\n- **Voice cloning:** create a voice that replicates a specific real person, with that person's consent.\n- **Dubbing and translation:** translate audio or video into other languages while preserving voice characteristics.\n- **Transcription (speech-to-text), sound effects and conversational voice agents** as related tools.\n\nFeatures, model names and plans change frequently, so check the current documentation of whichever tool you use.\n\n### Key concepts\n\n**Voice types**\n\n- **Library or stock voices:** pre-made voices you can use under the platform's licence. Fast, low risk, but other brands may use the same voice.\n- **Designed voices:** generated from a description (\"calm, deep, middle-aged male narrator with a neutral Gulf Arabic accent\"). Unique to you, no real person's likeness involved.\n- **Cloned voices:** trained on recordings of a real person. Best for creators who want to scale their own voice, and only with explicit consent.\n\n**Models**\n\nPlatforms usually offer several models that trade off quality, emotional range, latency and language coverage. A fast, low-latency model suits live agents; a more expressive model suits ads and storytelling. Multilingual models can speak many languages, but quality varies by language and accent. Always test in your target language, for example Urdu, Arabic or Hindi, before committing.\n\n**Settings you will meet**\n\nExact names vary, but common controls include:\n\n- **Stability:** higher values give a more consistent, even delivery; lower values allow more variation and emotion, but also more unpredictability.\n- **Similarity or clarity:** how closely output sticks to the original voice's characteristics.\n- **Style or expressiveness:** exaggerates the voice's style; too much can sound theatrical.\n- **Speed:** delivery pace.\n\nStart with default settings, change one at a time and compare.\n\n### The script is your direction\n\nAn AI narrator cannot ask what you meant. Your text is the direction:\n\n- **Punctuation shapes pacing.** Commas create short pauses; full stops create longer ones; dashes and ellipses add hesitation.\n- **Sentence length shapes energy.** Short sentences feel punchy. Long ones feel calm and explanatory.\n- **Spell out tricky items.** Write \"twenty twenty-six\" or \"2026\" consistently, and spell out brand names, acronyms and local names phonetically if mispronounced. Many tools support pronunciation dictionaries or phonetic hints for recurring terms.\n- **Some models accept delivery cues** in text, such as emotional or tonal tags, while others read everything literally. Test before relying on them.\n\n### Worked example\n\nNadia, a Karachi-based e-commerce marketer, needs English and Urdu voiceovers for 20 product videos a month. She tests three library voices and one designed voice across five sample scripts in both languages, rating naturalness, pronunciation of product names and consistency. The designed voice wins in English; a different library voice handles Urdu better. She creates a pronunciation list for the brand name and product terms, and documents the chosen voice, model and settings in a one-page \"voice spec\" so every video sounds consistent.\n\n### Pitfalls\n\n- Choosing a voice from a single demo sentence. Test full scripts.\n- Changing several settings at once, so you cannot tell what helped.\n- Assuming multilingual means equally good in every language.\n- Forgetting licensing: check the platform's commercial-use terms for your plan.",
+          "video": {
+            "script": "In this course, we're going to produce professional voice and video content with AI. Let's start with voice, because it underpins almost everything else.\n\nText-to-speech, or TTS, turns written text into spoken audio. Older systems sounded robotic because they stitched together recorded fragments. Modern AI voices, from tools like ElevenLabs, are generated by models trained on large amounts of speech. They learn not just pronunciation, but rhythm, emphasis, breath and emotion. That's why today's best voices can sound remarkably human.\n\nYou'll work with three kinds of voices. Library voices, which are ready-made voices licensed for use under the tool's terms. Designed voices, where you describe the voice you want, such as a warm, mid-thirties female narrator with a light British accent, and the tool generates it. And cloned voices, which replicate a real person's voice from recordings. Cloning is powerful, and it comes with serious consent and rights responsibilities, which we'll cover next.\n\nThe quality of your output depends on three things. The model you choose, because some prioritise expressiveness and others speed. Your settings, like stability and similarity, which trade consistency against emotional range. And most importantly, your script. AI voices read exactly what you write, so punctuation, spelling and structure become your direction to the performer.\n\nBy the end of this module, you'll know how to choose, design and direct AI voices, and how to use them to reach audiences in new languages, legally and ethically.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Modern neural TTS generates speech directly and can sound very natural.",
+            "Voice platforms offer TTS, speech-to-speech, voice design, cloning and dubbing.",
+            "Library, designed and cloned voices carry different uniqueness and consent implications.",
+            "Your script's punctuation, sentence length and spelling are your direction to the AI voice."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What does speech-to-speech (voice changing) let you do?",
+              "options": [
+                "Translate text into images",
+                "Generate music from text",
+                "Remove captions from video",
+                "Record your own performance and convert it into another voice while keeping timing and emotion"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Speech-to-speech keeps your delivery but changes the voice, which is useful when you want precise emotional timing."
+            },
+            {
+              "question": "A voice sounds flat and monotone. Which setting change is most likely to add expressiveness?",
+              "options": [
+                "Increase stability to maximum",
+                "Lower stability somewhat and test again",
+                "Remove all punctuation",
+                "Increase file size"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Lower stability typically allows more variation and emotion, at the cost of some consistency."
+            },
+            {
+              "question": "Why create a pronunciation list for a brand?",
+              "options": [
+                "So brand names, product terms and local names are pronounced consistently",
+                "To translate the script",
+                "Platforms require it by law",
+                "To make files smaller"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Pronunciation hints fix recurring mispronunciations and keep output consistent."
+            }
+          ],
+          "activity": "Test three voices on the same 60-second script in your main language, rate them on naturalness and pronunciation, and write a one-page voice spec for the winner."
+        },
+        {
+          "slug": "voice-design-and-cloning-with-consent",
+          "title": "Voice design and cloning: consent and rights first",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Your voice is part of your identity\n\nA voice is personal. It identifies you, carries your reputation and, for creators and voice actors, is part of how you earn a living. Voice cloning makes it possible to replicate someone's voice from recordings, which is powerful for scaling your own content, and dangerous when misused for scams, fake endorsements and harassment.\n\nThe non-negotiable rule of this course: **only clone a voice with the explicit, informed, documented consent of its owner, for defined uses.**\n\n### Design versus clone\n\n**Voice design** creates a new, synthetic voice from a text description. No real person's voice is replicated, so it is usually the right choice when you need a brand voice, a character or a narrator without tying the brand to one individual.\n\n**Voice cloning** replicates a real person. Platforms often offer two tiers:\n\n- **Instant or quick cloning** from a short sample. Faster, less precise.\n- **Professional or high-fidelity cloning** from longer, high-quality recordings. Closer to the original.\n\nReputable platforms put safeguards around cloning, such as requiring you to confirm you have the rights, voice-verification steps for high-fidelity clones, and restrictions on cloning public figures. These safeguards support you, but they do not replace your own legal and ethical duty to obtain consent.\n\n### What good consent looks like\n\nA proper voice consent should be written and specific:\n\n- **Who** is consenting and who may use the voice (you, your agency, the client).\n- **What** it may be used for: specific channels, campaigns, languages and content types.\n- **What it may not be used for:** for example political content, adult content, endorsements of other products, or anything that misrepresents the person's views.\n- **Duration and territory:** how long and where.\n- **Approval rights:** can the person review scripts or outputs before release?\n- **Payment:** fees, usage-based payments or royalties, especially for professional voice actors.\n- **Revocation and deletion:** how the person can withdraw consent and how the voice model and files will be deleted.\n- **Storage and access:** who can access the voice in your accounts.\n\nGet legal advice for commercial agreements; the checklist above tells you what to discuss.\n\n### Rights and the law, at principle level\n\nLaws differ by country, and many jurisdictions are actively updating them, but common threads include:\n\n- **Personality, publicity and image rights:** many jurisdictions protect a person's name, likeness and in some cases voice against unauthorised commercial use. Some US states have specific protections for voice and digital replicas, and more are being introduced.\n- **Data protection:** a voice recording, and especially a voiceprint used to identify someone, can be personal data, and biometric data may attract stricter rules under laws such as GDPR, UK GDPR, the UAE and KSA data protection laws, and others.\n- **Consumer protection and advertising law:** using a cloned voice to imply someone endorses a product when they did not is misleading.\n- **Fraud and cybercrime laws:** impersonation for deception is illegal in virtually every market, including Pakistan, the UAE and KSA, which have strict cybercrime laws.\n- **Union and industry agreements:** in some markets, voice actors' unions have negotiated rules on AI replicas.\n\n### Protecting your own voice\n\nIf you are a creator:\n\n- Keep your clone in an account with strong security (unique password, two-factor authentication).\n- Limit team access and log who uses it.\n- Tell your audience you use an AI version of your voice for certain content, and how to verify genuine messages. Scammers increasingly clone creators' voices for fake giveaways.\n- Never let a brand deal include unlimited rights to your voice model without careful review.\n\n### Worked example\n\nAn agency in Abu Dhabi wants to use its client's CEO's voice for Arabic and English explainer videos. They:\n\n1. Explain to the CEO how cloning works, including risks.\n2. Sign a consent covering specific video series, two languages, a twelve-month term, script approval by the CEO's office, and deletion at the end of the term.\n3. Record high-quality samples in a quiet room.\n4. Restrict access to two named producers.\n5. Label videos appropriately and keep a record of every published use.\n\nWhen a regional manager later asks to \"just use the CEO voice\" for a recruitment ad, the producer checks the consent: not covered. They ask for written approval first.\n\n### Pitfalls\n\n- \"It's my client, so it's fine\": the client company may not own the individual's voice rights.\n- Cloning a celebrity or politician \"as a joke\": it may be illegal and is likely against platform terms.\n- Verbal consent only: it is hard to prove and easy to misunderstand.",
+          "video": null,
+          "keyTakeaways": [
+            "Only clone a voice with explicit, informed, written consent for defined uses.",
+            "Voice design creates a new synthetic voice and avoids replicating a real person.",
+            "Good consent covers uses, exclusions, duration, approval, payment, revocation and deletion.",
+            "Voice can be protected by publicity rights, data protection, advertising and cybercrime laws."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A brand wants a unique narrator voice without tying it to any real person. What is the best option?",
+              "options": [
+                "Clone the intern's voice without asking",
+                "Clone a famous actor's voice",
+                "Record the CEO secretly",
+                "Use voice design to create a new synthetic voice"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Voice design creates a unique voice without replicating a real individual, avoiding likeness and consent issues."
+            },
+            {
+              "question": "Which item is essential in a voice cloning consent?",
+              "options": [
+                "The platform's share price",
+                "A promise that nobody will ever hear it",
+                "Permitted uses, exclusions, duration and how consent can be withdrawn and the model deleted",
+                "The person's favourite colour"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Consent must be specific about scope, limits, duration and revocation to be meaningful."
+            }
+          ],
+          "activity": "Draft a one-page voice consent template for your business using the checklist in this lesson, and mark which points need legal review in your country."
+        },
+        {
+          "slug": "dubbing-and-translation",
+          "title": "AI dubbing and translation for new markets",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### One video, many languages\n\nAI dubbing lets you take a video in one language and produce versions in others, often keeping the original speaker's voice characteristics. Some tools also adjust lip movements to match the new language (lip-sync). For creators and brands serving Pakistan, the Gulf, the UK, the US and diaspora audiences, this can open markets that were previously too expensive to reach.\n\n### How AI dubbing works (conceptually)\n\n1. **Transcription:** speech is converted into text with timings.\n2. **Speaker separation:** voices are separated from music and effects, and individual speakers are identified.\n3. **Translation:** text is translated into the target language.\n4. **Voice generation:** the translated text is spoken, often in a voice matching the original speaker.\n5. **Timing and mixing:** new audio is aligned to the video and mixed with the original background audio.\n6. **Optional lip-sync:** video tools such as HeyGen's video translation can adjust mouth movements to match the new audio.\n\nEach step can introduce errors, which is why human review matters.\n\n### Where AI dubbing works well\n\n- Educational and explainer content with a clear single speaker.\n- Product demos and tutorials.\n- Talking-head content with clean audio.\n- Internal training and onboarding.\n\n### Where it struggles\n\n- **Humour, idioms and wordplay:** a literal translation of a Punjabi joke will not land in Gulf Arabic.\n- **Cultural references:** festivals, sports and local brands may need adapting, not translating.\n- **Overlapping speakers and noisy audio.**\n- **Dialects:** \"Arabic\" is not one market. Gulf, Egyptian, Levantine and Modern Standard Arabic suit different audiences and contexts. The same applies to Urdu versus Hindi, and British versus American English.\n- **Length differences:** some languages need more words for the same idea, so speech may be sped up or timings may drift.\n\n### Translation versus localisation\n\nTranslation changes the words. **Localisation** adapts the message for a market: examples, measurements, currency, humour, formality, visuals and calls to action. The best workflow is:\n\n1. Adapt the **script** for the target market first (with AI help and a native reviewer).\n2. Then generate the dubbed audio.\n3. Then review the full video with a native speaker.\n\nMany dubbing tools let you edit the translated transcript before generating audio. Use that step; it is far cheaper than fixing audio afterwards.\n\n### Rights and consent\n\n- **Dubbing someone else's video** requires the rights to that content, and dubbing a person in their own voice into another language also involves their likeness and voice. Get consent.\n- **Your own content:** you may still need to consider music licences, which can be territory-specific, and on-screen text.\n- **Disclosure:** if a video makes a real person appear to speak a language they do not speak, consider telling the audience it has been AI-dubbed. Some platforms require labelling of realistic synthetic content (see Module 4).\n\n### Worked example\n\nA UK-based halal food brand wants its English recipe videos in Arabic for KSA and UAE and in Urdu for Pakistan.\n\n- **Script adaptation:** AI drafts Arabic and Urdu versions; native reviewers adjust ingredient names to local ones, swap measurements from ounces to grams, and change \"pop to your local supermarket\" to phrasing that fits each market.\n- **Dubbing:** audio is generated in the presenter's voice (with her written consent covering these languages).\n- **Lip-sync:** applied for close-up talking segments.\n- **Review:** native speakers watch the full videos, flag two mispronounced dish names, and these are fixed via the pronunciation tool.\n- **Label:** description notes \"AI-dubbed from English with the presenter's permission\".\n\n### Pitfalls\n\n- Publishing without a native-speaker review.\n- Assuming a single \"Arabic\" version fits all Arabic-speaking markets.\n- Forgetting on-screen text, captions and thumbnails still in the original language.",
+          "video": null,
+          "keyTakeaways": [
+            "AI dubbing chains transcription, translation, voice generation and mixing, with optional lip-sync.",
+            "It works best for clear single-speaker explainers and struggles with humour, dialects and noisy audio.",
+            "Localise the script with a native reviewer before generating audio.",
+            "Dubbing a person in their own voice needs their consent, and disclosure is often wise or required."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the most cost-effective point to fix translation problems in an AI dubbing workflow?",
+              "options": [
+                "By re-recording the original video",
+                "By adding louder music",
+                "By editing the translated script before audio is generated",
+                "After publishing"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Editing the transcript before generation avoids regenerating audio and re-reviewing video."
+            },
+            {
+              "question": "Why might one 'Arabic' dub not suit every Arabic-speaking audience?",
+              "options": [
+                "Arabic cannot be dubbed",
+                "Platforms block Arabic",
+                "Dialects and registers such as Gulf, Egyptian, Levantine and MSA suit different audiences and contexts",
+                "Arabic has no dialects"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Choosing the right dialect or register is part of localisation."
+            }
+          ],
+          "activity": "Pick one of your videos, write a localisation checklist for one target market (language, dialect, references, units, CTA), and adapt the script before any dubbing."
+        }
+      ]
+    },
+    {
+      "slug": "ai-avatars-and-video",
+      "title": "AI avatars, talking heads and generated video",
+      "summary": "How avatar platforms such as HeyGen work, when avatars help or hurt, and how to use AI b-roll and text-to-video responsibly.",
+      "lessons": [
+        {
+          "slug": "avatars-and-talking-heads",
+          "title": "AI avatars and talking-head videos",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### What an AI avatar is\n\nAn AI avatar is a digital presenter that speaks a script with synchronised lip movements, facial expressions and gestures. Platforms such as HeyGen let you generate talking-head videos from text or audio without filming each time.\n\nCommon avatar types:\n\n- **Stock avatars:** pre-made presenters licensed for use on the platform. Quick to use; many other businesses may use the same faces.\n- **Custom or \"digital twin\" avatars:** created from video footage of a real person, usually you, so you can produce new videos in your likeness from a script. Reputable platforms require the person to record a consent statement or pass verification.\n- **Photo avatars:** animated from a still image. Useful for simple formats, less natural for long videos.\n- **Generated avatars:** new, fictional presenters created from a prompt.\n\nAvatar platforms typically also offer templates, brand kits, multi-scene editing, video translation with lip-sync, and integrations with voice tools such as ElevenLabs. Features and naming evolve quickly; focus on the workflow concepts.\n\n### When avatars make sense\n\nAvatars shine when **consistency, scale and updates** matter more than personal presence:\n\n- Training, onboarding and how-to videos that need frequent updates.\n- Product explainers in multiple languages.\n- Personalised sales videos at scale (with care, see below).\n- FAQ and customer support clips.\n- Creators producing routine updates in their own twin while saving camera time for high-trust content.\n\n### When they can backfire\n\n- **Trust-heavy moments:** apologies, crisis responses, personal stories and testimonials should be genuinely human.\n- **Audiences that value authenticity:** some creator audiences react badly if they discover an avatar was presented as the real person.\n- **Emotional range:** avatars still tend to look less natural with strong emotion, fast movement, or long unbroken takes.\n- **Uncanny moments:** odd hand movements, blinking or lip-sync errors break immersion.\n\nA useful principle: **use the avatar for information, use the human for connection.**\n\n### Creating a good custom avatar (general best practice)\n\nSpecific steps vary by platform, but quality inputs matter everywhere:\n\n1. **Consent:** the person being cloned records any required consent and signs your internal consent form (scope, duration, deletion).\n2. **Setting:** a well-lit, quiet space with a simple background; soft, even lighting on the face.\n3. **Camera:** stable, eye level, good resolution; frame as you want the final videos.\n4. **Performance:** natural, relaxed delivery; neutral gestures; follow the platform's recording guidance on length and movement.\n5. **Wardrobe:** solid colours that match your brand; avoid fine patterns that can shimmer.\n6. **Test:** generate a short test with a script containing tricky words, and check lip-sync, eye contact and gestures.\n\n### Personalised video at scale: handle with care\n\nAvatar tools can generate many variations of a video, for example addressing each prospect by name. This can boost relevance, but:\n\n- Use only data the recipient would expect you to have, and comply with data protection and anti-spam rules.\n- Do not imply you personally recorded a message if you did not. A small note such as \"made with my AI avatar\" keeps trust.\n- Test a few before sending hundreds.\n\n### Worked example\n\nA Lahore-based SaaS company for clinics produces monthly feature-update videos in English and Urdu. The product lead creates a digital twin (with a signed consent and a deletion clause if she leaves the company). Each month:\n\n- The product team writes a two-minute script (Module 3 techniques).\n- The avatar video is generated in English, then translated to Urdu with lip-sync.\n- A native Urdu reviewer and the product lead review both versions.\n- Videos carry a line in the description: \"Presented by Ayesha's AI avatar\".\n\nThe product lead records a real, personal video only for major announcements and customer thank-yous, where connection matters.\n\n### Pitfalls\n\n- Using a stock avatar as a fake customer giving a testimonial. This is deceptive and likely breaches advertising rules.\n- Creating an avatar of a staff member without clear rights for after they leave.\n- Long monologues. Break content into short scenes with b-roll and on-screen text.",
+          "video": null,
+          "keyTakeaways": [
+            "AI avatars generate talking-head videos from scripts; types include stock, custom twin, photo and generated.",
+            "Use avatars for information at scale, and real humans for trust and connection.",
+            "Custom avatars need documented consent, good lighting, stable framing and natural performance.",
+            "Never use avatars to fake testimonials or imply a personal recording that did not happen."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which use is the best fit for an AI avatar?",
+              "options": [
+                "A public apology after a product failure",
+                "A fake customer testimonial",
+                "A heartfelt personal story",
+                "Monthly product update tutorials in two languages"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Routine, informational, frequently updated content suits avatars. Trust-heavy moments need a real person; fake testimonials are deceptive."
+            },
+            {
+              "question": "What should an agency secure before creating a digital twin of a client's employee?",
+              "options": [
+                "Nothing; the client owns the employee's likeness",
+                "The employee's documented consent including scope, duration and what happens if they leave",
+                "A higher platform plan",
+                "Only the manager's verbal approval"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "The individual's likeness is theirs. Consent must be documented, scoped and include an exit clause."
+            }
+          ],
+          "activity": "List five videos you plan to make this quarter and label each 'avatar suitable' or 'human needed', giving a one-line reason for each."
+        },
+        {
+          "slug": "ai-broll-and-text-to-video",
+          "title": "AI b-roll, text-to-video and generated visuals",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### What text-to-video can do in 2026\n\nText-to-video and image-to-video models generate short clips from a prompt or a reference image. Quality has improved rapidly: many tools can produce cinematic shots, product-style visuals and stylised scenes, typically in short clips of a few seconds to tens of seconds that you then edit together. Many avatar and editing platforms now integrate these generators directly.\n\nFor marketers, the sweet spot is usually **b-roll**: supporting footage that illustrates what a narrator or avatar is saying, such as abstract concepts, establishing shots, product-in-context mood shots and transitions.\n\n### Good uses\n\n- **Illustrating concepts:** \"a time-lapse of a city skyline shifting from night to day\" for a productivity script.\n- **Mood and atmosphere:** steaming chai on a rainy window, desert dunes at golden hour.\n- **Stylised or animated explainers** where realism does not matter.\n- **Background loops and transitions.**\n- **Storyboarding and pre-visualisation** before a real shoot.\n\n### Risky or inappropriate uses\n\n- **Showing your actual product performing** in a way it does not. Generated footage of a product that looks better, bigger or more effective than reality is misleading advertising.\n- **Fake \"real\" events:** generated news-like footage, crowds at an event that did not happen, or before-and-after results.\n- **Real people and places** that could be misrepresented, including recognisable individuals, landmarks in sensitive contexts or religious sites.\n- **Imitating a specific artist's or brand's distinctive style**, which raises copyright and trademark concerns and can damage reputation.\n\nA simple rule: **generated visuals may illustrate ideas; they must not stand in as evidence.**\n\n### Prompting for video\n\nVideo prompts work best when they describe a shot the way a director would:\n\n- **Subject:** what is in the frame.\n- **Action:** what moves and how.\n- **Setting:** location, time of day, weather.\n- **Camera:** shot type (close-up, wide), movement (slow push-in, pan, handheld), lens feel.\n- **Style and lighting:** photorealistic, 3D animation, film grain, soft daylight, neon.\n- **Duration and aspect ratio:** vertical 9:16 for Reels, Shorts and TikTok; 16:9 for YouTube.\n\n**Example prompt:**\n\"Close-up of hands pouring karak chai into a small glass on a wooden table, steam rising, soft morning light from a window, slow push-in, shallow depth of field, photorealistic, 9:16.\"\n\nGenerate several variations, pick the best and trim. Expect artefacts such as odd hands, flickering text and morphing objects, and check every frame used.\n\n### Combining sources\n\nA practical explainer might combine:\n\n- Your real product footage (shot on a phone) for anything factual.\n- An avatar or your own face for the presenter.\n- AI b-roll for concepts and atmosphere.\n- Licensed stock footage where you need real-world locations.\n- Motion graphics for data and key points.\n\n### Rights and licences\n\n- Check the tool's terms for **commercial use** of outputs on your plan.\n- Copyright protection for purely AI-generated material is limited or uncertain in several jurisdictions, so you may not be able to stop others from copying it. Human creative contribution such as editing and arrangement can strengthen your position.\n- Avoid prompts naming living artists, film studios or brands to copy their style.\n- Keep a record of prompts and tools used for important commercial assets.\n\n### Worked example\n\nA Jeddah travel agency makes a 30-second Reel promoting a family Umrah package. They use real footage of partner hotels (licensed), generated b-roll only for abstract transitions such as a stylised map animation and a sunrise sky, a human presenter from the team, and on-screen prices checked against the package terms. They avoid generating footage of the holy sites themselves, both for accuracy and out of respect for religious sensitivities.\n\n### Pitfalls\n\n- Letting generated b-roll dominate so the video feels hollow.\n- Missing small artefacts that viewers screenshot and mock.\n- Using AI visuals as product proof.",
+          "video": null,
+          "keyTakeaways": [
+            "Text-to-video is strongest for b-roll: concepts, mood, transitions and stylised scenes.",
+            "Generated visuals may illustrate ideas but must never serve as product proof or fake events.",
+            "Prompt like a director: subject, action, setting, camera, style, duration and aspect ratio.",
+            "Check commercial-use terms, avoid copying artists' styles and inspect every frame for artefacts."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which is an appropriate use of AI-generated video for a skincare brand?",
+              "options": [
+                "A generated dermatologist recommending the product",
+                "Generated before-and-after footage showing clearer skin",
+                "Footage implying a celebrity uses the product",
+                "Abstract b-roll of water droplets to set a fresh mood behind a real product demo"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Mood b-roll illustrates without claiming. The other options fake evidence, experts or endorsements."
+            },
+            {
+              "question": "Which prompt element specifies a 'slow push-in' or 'handheld'?",
+              "options": [
+                "Subject",
+                "Setting",
+                "Aspect ratio",
+                "Camera"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Camera movement and shot type belong in the camera part of a video prompt."
+            }
+          ],
+          "activity": "Write three director-style b-roll prompts for your next video, generate them in any tool you have access to, and note any artefacts you would need to cut."
+        }
+      ]
+    },
+    {
+      "slug": "scripting-and-workflows",
+      "title": "Scripting and production workflows",
+      "summary": "Write scripts that AI voices and avatars perform well, and combine ElevenLabs, HeyGen and editing tools in a repeatable pipeline.",
+      "lessons": [
+        {
+          "slug": "scripting-for-ai-voice-and-avatars",
+          "title": "Scripting for AI voices and avatars",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Writing for the ear, not the eye\n\nScripts for AI voices and avatars must be written to be **heard**. A sentence that reads well on a page can sound robotic when spoken, especially by a synthetic voice that performs exactly what is written.\n\n### Core rules\n\n1. **Short sentences.** Aim for one idea per sentence. Long, clause-heavy sentences flatten intonation.\n2. **Conversational words.** \"Use\" not \"utilise\". \"Help\" not \"facilitate\". Contractions sound natural.\n3. **Front-load the point.** Viewers decide in the first seconds. Open with the hook, not a greeting.\n4. **Write numbers the way you want them spoken.** \"Two thousand five hundred rupees\" versus \"Rs 2,500\". Test which your tool reads correctly.\n5. **Spell out acronyms and brand names** as they should sound: \"S-E-O\" or \"seo\", \"HeyGen\" as \"Hey Jen\".\n6. **Use punctuation as direction.** Commas for breath, full stops for beats, a new paragraph for a longer pause. Some tools support explicit pause markup; check your tool.\n7. **Avoid tongue-twisters and dense lists.** Three items read aloud is plenty.\n8. **Mark emphasis sparingly.** Rephrasing (\"Here's the key part:\") is often more reliable than formatting tricks.\n\n### Pacing guide\n\nComfortable narration typically runs at about 130 to 160 words per minute, depending on language, voice and style. Use this to size scripts:\n\n| Video length | Approximate words |\n|---|---|\n| 15 seconds | 35–40 |\n| 30 seconds | 65–80 |\n| 60 seconds | 130–160 |\n| 2 minutes | 260–320 |\n\nLeave room for pauses, visuals and on-screen text.\n\n### Structure for short-form\n\n- **Hook (0–3s):** a problem, surprising statement or promise the video keeps.\n- **Setup (3–10s):** why it matters to this viewer.\n- **Value (10–45s):** two or three concrete points, each with an example.\n- **CTA (last 5s):** one clear action.\n\n### Scripts for avatars\n\nAvatars add visual considerations:\n\n- **Scene breaks:** split scripts into scenes of about 10 to 20 seconds. Cut to b-roll, screen recordings or text between scenes to keep energy and hide avatar limitations.\n- **Gestures and expressions:** some platforms allow gesture or expression cues. Use them lightly; overuse looks artificial.\n- **Eye contact and framing:** keep the avatar talking to camera; use b-roll for demonstrations.\n- **On-screen text:** plan key phrases as captions or titles; do not rely on the avatar alone.\n\n### Two-column script format\n\nUse this format so voice, avatar and editor stay aligned:\n\n| Scene | Voiceover / avatar line | Visual |\n|---|---|---|\n| 1 (0–4s) | \"Your Reels get views, but no DMs? Here's why.\" | Avatar, close-up. Text: \"Views ≠ DMs\" |\n| 2 (4–15s) | \"Most captions end with 'link in bio'. That's a dead end for DM-first buyers.\" | B-roll: phone scrolling; screenshot of generic caption (anonymised) |\n| 3 (15–35s) | \"Instead, give one keyword to comment. Then reply with a helpful DM, not a sales pitch.\" | Screen recording of the comment-to-DM flow |\n| 4 (35–40s) | \"Comment 'DM' and I'll send you my three best CTA templates.\" | Avatar. Text: \"Comment DM\" |\n\n### Using AI to draft scripts\n\nCombine this lesson with your prompt skills:\n\n> Write a 40-second vertical video script for [audience] about [topic]. Written for the ear: short sentences, contractions, no acronyms without phonetic spelling. Target 90–100 words. Format as a table with Scene, Voiceover, Visual. Split into 4 scenes. Hook in under 8 words. Do not add claims beyond these facts: [facts].\n\nThen **read it aloud yourself** before generating. If you stumble, the AI voice will sound off too.\n\n### Worked example: fixing a script line\n\n**Before:** \"Utilising our cutting-edge, AI-driven, multi-channel CRM (customer relationship management) platform, SMEs can streamline their omnichannel engagement workflows.\"\n\n**After:** \"Here's the problem. Your customers message you on WhatsApp, Instagram and email. And you're losing track. Our CRM puts every message in one inbox.\"\n\nShorter, spoken, concrete, and much easier for an AI voice to deliver naturally.\n\n### Pitfalls\n\n- Pasting blog copy straight into a voice tool.\n- Scripts too long for the target length, which forces rushed speed settings.\n- Forgetting to test pronunciation of local names such as place names, dishes and people.",
+          "video": null,
+          "keyTakeaways": [
+            "Write for the ear: short sentences, conversational words, a front-loaded hook.",
+            "Size scripts at roughly 130–160 spoken words per minute, leaving room for pauses.",
+            "Split avatar scripts into short scenes with b-roll and on-screen text between them.",
+            "Use a two-column Scene / Voiceover / Visual format and read scripts aloud before generating."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "About how many words suit a 30-second AI voiceover?",
+              "options": [
+                "65–80",
+                "400",
+                "200–250",
+                "15–20"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "At roughly 130–160 words per minute, 30 seconds is about 65–80 words."
+            },
+            {
+              "question": "Why split an avatar script into short scenes?",
+              "options": [
+                "It makes captions unnecessary",
+                "To add b-roll and text between scenes, keep energy up and hide avatar limitations",
+                "Platforms charge by scene",
+                "Avatars cannot speak more than 5 words"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Scene breaks improve pacing and reduce reliance on long, less natural avatar takes."
+            }
+          ],
+          "activity": "Rewrite a paragraph from your website or blog as a 30-second spoken script in the two-column format, read it aloud, and fix every line you stumble on."
+        },
+        {
+          "slug": "end-to-end-production-workflow",
+          "title": "An end-to-end workflow: ElevenLabs voice plus HeyGen video",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Why combine tools\n\nSpecialist tools each do one job very well. A common professional pattern is to generate the **voice** in a dedicated voice platform such as ElevenLabs, for fine control over voice choice, pronunciation and emotion, then bring that audio into a **video** platform such as HeyGen for avatar lip-sync, or into a regular editor for b-roll-based videos. Many platforms also integrate with each other directly, so you may be able to select an external voice inside the video tool. The concepts below apply either way.\n\n### The pipeline\n\n**Stage 1: Brief and script**\n\n- Define audience, goal, platform, length and languages.\n- Write the script in the two-column format (Module 3, Lesson 1).\n- Get facts and claims approved before any production.\n\n**Stage 2: Voice**\n\n- Choose the voice (library, designed, or consented clone) and model.\n- Apply your pronunciation list.\n- Generate in sections, one per scene. This makes fixes easier: you regenerate one line, not the whole video.\n- Listen critically: mispronunciations, odd emphasis, unnatural pauses, audio glitches.\n- Export in a high-quality format your video tool accepts.\n\n**Stage 3: Visuals**\n\n- **Avatar route:** upload or connect the audio to your avatar so the lip-sync follows it, or use the platform's own voice if quality is sufficient.\n- **B-roll route:** assemble real footage, stock and generated b-roll in an editor against the voice track.\n- Add on-screen text, brand elements and music, checking music licences.\n\n**Stage 4: Captions and accessibility**\n\n- Generate captions, correct them, and style them for readability (Module 4).\n\n**Stage 5: Review and QC**\n\n- Run the quality checklist (Module 4).\n- Native-speaker review for each language.\n- Stakeholder approval (client, legal where needed).\n\n**Stage 6: Localise**\n\n- For additional languages, adapt the script, regenerate the voice or use the video translation feature, and re-review.\n\n**Stage 7: Publish and label**\n\n- Apply platform AI-content labels where required, add disclosures (#ad, paid partnership) where applicable, and keep a production record.\n\n### Production record\n\nFor each asset, keep a simple log: script version, voice used (and consent reference if cloned), avatar used (and consent reference), generated b-roll prompts, music licence, reviewers and approval date, and labels applied. This protects you if a client, platform or regulator asks how content was made.\n\n### Worked example: a weekly explainer series\n\nA small US-based accounting firm serving South Asian small-business owners wants weekly 60-second tax-tip videos in English and Urdu.\n\n1. **Script:** the accountant drafts key points; AI shapes them into a 140-word spoken script; the accountant verifies every tax statement and adds \"This is general information, not individual advice.\"\n2. **Voice:** the accountant has cloned her own voice with a professional clone, under her own account with two-factor authentication. English audio is generated per scene. Pronunciation hints fix \"IRS\" and client-facing terms.\n3. **Video:** her digital-twin avatar in HeyGen is driven by the ElevenLabs audio; b-roll of forms and calendars is added in the editor.\n4. **Urdu version:** the script is adapted by a bilingual colleague, then generated with her voice in Urdu, and reviewed for terminology.\n5. **Captions:** both languages captioned and corrected.\n6. **Labels:** the platform's AI or synthetic content disclosure is applied where required, plus a description line: \"Created with my AI voice and avatar; content reviewed by me.\"\n7. **Time check:** she compares production time with her previous filming routine and keeps what saves time without lowering quality.\n\n### Troubleshooting common issues\n\n| Problem | Likely fix |\n|---|---|\n| Lip-sync drifts | Regenerate the problem scene; check audio sample rate and length limits |\n| Voice sounds different across scenes | Keep the same model and settings; avoid very low stability |\n| Mispronounced names | Pronunciation dictionary or phonetic spelling |\n| Robotic delivery | Rewrite for the ear; try speech-to-speech with your own read |\n| Avatar looks stiff | Shorter scenes, more b-roll, adjust expression settings modestly |\n\n### Pitfalls\n\n- Generating the full video before the script is approved.\n- One giant audio file that forces a full regeneration for a single fix.\n- No production record, leaving you unable to prove consent or licences later.",
+          "video": null,
+          "keyTakeaways": [
+            "Generate voice in a specialist tool and drive avatar or b-roll video with that audio.",
+            "Work in stages: script, voice, visuals, captions, QC, localisation, publish and label.",
+            "Generate audio per scene so fixes are quick and targeted.",
+            "Keep a production record of voices, avatars, consents, licences, reviewers and labels."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why generate voice audio scene by scene?",
+              "options": [
+                "It removes the need for review",
+                "It is required by law",
+                "It makes the voice deeper",
+                "So a single mistake can be fixed by regenerating one scene, not the whole video"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Scene-level generation keeps corrections fast and contained."
+            },
+            {
+              "question": "What belongs in a production record?",
+              "options": [
+                "The editor's playlist",
+                "Viewer comments",
+                "Only the final video file",
+                "Script version, voice and avatar used with consent references, licences, reviewers and labels applied"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "A production record documents how content was made and that rights and consents were in place."
+            }
+          ],
+          "activity": "Map your own seven-stage pipeline for one video format, naming the tool, owner and review step for each stage."
+        }
+      ]
+    },
+    {
+      "slug": "quality-accessibility-and-disclosure",
+      "title": "Quality, accessibility and disclosure",
+      "summary": "Caption and quality-check AI media, and disclose synthetic content in line with platform policies and advertising rules.",
+      "lessons": [
+        {
+          "slug": "captions-accessibility-and-qc",
+          "title": "Captions, accessibility and quality control",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### Accessibility is quality\n\nCaptions are not optional extras. Many people watch video with the sound off, and viewers who are deaf or hard of hearing rely on captions entirely. Good captions also help non-native speakers and can support discoverability. Accessibility laws and public-sector requirements in several markets reinforce this, and it is simply good practice.\n\n### Captioning workflow\n\n1. **Auto-generate** captions using your editor, avatar platform or a transcription tool.\n2. **Correct them.** Automatic captions often err on names, brand terms, numbers, local words and mixed languages such as Urdu-English.\n3. **Style for readability:**\n   - High contrast (light text with dark outline or background, or the reverse).\n   - Large enough for mobile.\n   - One or two lines at a time, broken at natural phrases.\n   - Positioned away from platform UI (bottom buttons, side icons) and away from faces.\n4. **Timing:** captions appear with speech and stay long enough to read.\n5. **Language versions:** caption each dubbed version in its own language; do not leave English captions on an Arabic dub.\n6. **Upload caption files** where platforms support them (for example on YouTube) as well as, or instead of, burned-in captions, so viewers can toggle them and platforms can index them.\n\n### Other accessibility practices\n\n- **Describe key visuals** in narration when they carry meaning (\"As you can see on the chart, sales doubled\" becomes \"Sales doubled from March to June\").\n- **Avoid rapid flashing** effects that can harm people with photosensitive conditions.\n- **Colour contrast** for on-screen text.\n- **Plain language:** short sentences help everyone, including viewers using translation tools.\n- **Alt text** for thumbnails and images in posts where platforms support it.\n\n### Quality control checklist for AI media\n\nRun this for every video before publishing.\n\n**Audio**\n- [ ] Every word pronounced correctly, including names, places and brand terms.\n- [ ] No glitches, clicks, artefacts or sudden volume changes.\n- [ ] Consistent voice across scenes.\n- [ ] Music licensed and not overpowering speech.\n\n**Visuals**\n- [ ] Lip-sync accurate in all scenes.\n- [ ] No distorted hands, faces, text or morphing objects in generated footage.\n- [ ] Brand colours, logos and fonts correct.\n- [ ] No unintended recognisable people, logos or sensitive locations.\n\n**Content**\n- [ ] Facts, prices and claims match approved sources.\n- [ ] Localised versions reviewed by native speakers.\n- [ ] Cultural and religious sensitivities considered.\n- [ ] Generated visuals illustrate, never prove.\n\n**Compliance**\n- [ ] Consent on file for any cloned voice or custom avatar.\n- [ ] Platform AI-content labels applied where required.\n- [ ] Sponsorship disclosures present where applicable.\n- [ ] Captions accurate in each language.\n\n**Final**\n- [ ] Watched in full, on a phone, with sound on and with sound off.\n\n### Why \"watch on a phone with sound off\"?\n\nMost short-form viewers watch on phones and often without sound. This final pass reveals captions hidden under platform buttons, text too small to read, and whether the video still makes sense silently.\n\n### Worked example\n\nA Dubai fitness studio's AI-dubbed Arabic promo passes the audio check, but the sound-off phone test shows captions still in English and positioned under the like and comment buttons. They regenerate Arabic captions, correct two misspelt class names, move captions up, and publish. That ten-minute check prevented a confusing launch.\n\n### Pitfalls\n\n- Trusting auto-captions without reading them.\n- Burned-in captions only, with no caption file, where the platform supports one.\n- QC by the same person who made the video, when a fresh pair of eyes is available.",
+          "video": null,
+          "keyTakeaways": [
+            "Captions are essential for sound-off viewing, accessibility and non-native speakers.",
+            "Always correct auto-captions, especially names, numbers and mixed-language speech.",
+            "Use a structured QC checklist covering audio, visuals, content and compliance.",
+            "Do a final phone check with sound on and off before publishing."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why should auto-generated captions always be reviewed?",
+              "options": [
+                "They are always perfect",
+                "Captions are only decorative",
+                "Platforms delete unreviewed captions",
+                "They often misspell names, brand terms, numbers and mixed-language speech"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Automatic transcription struggles with proper nouns, numbers and code-switching, so human correction is needed."
+            },
+            {
+              "question": "What does a 'phone, sound off' final check most help reveal?",
+              "options": [
+                "Captions hidden by platform UI, unreadable text and whether the video makes sense silently",
+                "Music licence issues",
+                "Script word count",
+                "Voice pronunciation errors"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "It simulates how many viewers actually watch, exposing caption placement and readability problems."
+            }
+          ],
+          "activity": "Run the full QC checklist on one of your recent videos and fix at least two issues it reveals."
+        },
+        {
+          "slug": "disclosure-and-platform-policies",
+          "title": "Disclosing synthetic media and following platform policies",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Why disclosure matters\n\nSynthetic voices and avatars are now realistic enough to fool people. That creates real harm: scams using cloned voices, fake endorsements, political deepfakes and loss of trust in genuine content. Platforms, regulators and audiences increasingly expect clear labelling of AI-generated or altered media, especially when it is realistic.\n\nFor creators and brands, good disclosure is also a trust asset. Being upfront (\"made with my AI voice\") rarely hurts performance as much as being caught hiding it.\n\n### What platforms generally require\n\nPolicies change often, so always check the current help centre of each platform. As of 2026, the broad direction across major platforms is consistent:\n\n- **YouTube** asks creators to disclose content that is realistic and meaningfully altered or synthetic, such as making a real person appear to say or do something they did not, or realistic depictions of events that did not happen, using its disclosure setting at upload. Labels may appear on the video. Obviously unrealistic, animated or minor edits, such as colour correction or beauty filters, generally do not need disclosure.\n- **Meta (Facebook, Instagram, Threads)** applies \"AI info\" style labels, using industry signals and creator self-disclosure, and expects disclosure of realistic AI-generated or altered video and audio.\n- **TikTok** requires creators to label AI-generated content that shows realistic scenes, and can auto-label content carrying content-credential metadata. It prohibits certain harmful synthetic content, such as fake endorsements or misleading depictions of real people in some contexts.\n- **Ad platforms** (Google, Meta, TikTok) have additional rules for ads, especially political and social-issue ads, which in many regions must disclose synthetic content, and they prohibit deceptive impersonation.\n\n### Content credentials\n\nMany tools and platforms support **content credentials** based on the C2PA standard: tamper-evident metadata recording how content was created and edited, including AI involvement. Some AI tools add credentials or invisible watermarks automatically, and platforms may read them to apply labels. Do not strip this metadata to avoid labels; that undermines trust and may breach platform rules.\n\n### Legal direction\n\nLaws are evolving. At principle level:\n\n- The **EU AI Act** includes transparency obligations requiring deepfakes and certain AI-generated content to be disclosed, phasing in over 2025 to 2027.\n- **Advertising regulators** such as the UK ASA/CAP, the US FTC and Gulf media regulators apply existing rules: ads must not mislead. A synthetic presenter implying a real customer, expert or celebrity endorsement is misleading regardless of AI-specific laws.\n- **Influencer and sponsorship disclosure** rules still apply independently: #ad, paid partnership labels and local regulator requirements (for example UAE advertiser permit requirements for influencers) are separate from AI labels. You may need both.\n- **Election and political content** faces the strictest rules in many countries.\n\n### A practical disclosure policy\n\nLabel, or use the platform's disclosure tool, when:\n\n1. A real, identifiable person appears to say or do something they did not actually say or do, even if it is yourself via your avatar or clone, and especially in a new language.\n2. Realistic footage depicts events, places or products in a way that did not happen.\n3. The platform's policy requires it.\n4. A reasonable viewer would feel misled if they later learned it was AI.\n\nLabelling is usually unnecessary (though harmless) for obviously animated or stylised content, minor AI edits (noise removal, colour grading) and AI-assisted scripting where a real human presents.\n\n**Wording examples:**\n- \"This video uses an AI version of my voice. Script written and checked by me.\"\n- \"Presented by our AI avatar. Information reviewed by our team.\"\n- \"AI-dubbed from English with the presenter's permission.\"\n- \"Some scenes in this video are AI-generated.\"\n\n### Worked example\n\nA Pakistani creator with a large YouTube following uses her HeyGen digital twin and ElevenLabs voice clone for a weekly news-roundup Short in Urdu and English. Her routine: she toggles the platform's altered or synthetic content disclosure, adds \"Made with my AI avatar\" to the description, keeps a pinned FAQ explaining she never asks for money via DMs or voice notes, and records genuine videos for sponsored segments, which also carry #ad and the paid partnership label.\n\n### Pitfalls\n\n- Relying on a hashtag only when the platform provides a dedicated disclosure tool.\n- Assuming AI labels replace sponsorship disclosures.\n- Using an avatar to deliver a \"personal\" testimonial that you never gave.",
+          "video": null,
+          "keyTakeaways": [
+            "Disclose realistic synthetic or altered media, especially when a real person appears to say or do something new.",
+            "Major platforms provide disclosure tools and labels; use them and check policies regularly.",
+            "Content credentials (C2PA) record AI involvement; do not strip them.",
+            "AI labels and sponsorship disclosures are separate obligations, and you may need both."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A creator uses her own AI avatar to deliver a realistic video in a language she does not speak. Should she disclose?",
+              "options": [
+                "Only in the comments if someone asks",
+                "Only if it goes viral",
+                "Yes, because a real person appears to say something she did not actually say, and platforms expect disclosure of realistic synthetic content",
+                "No, because it is her own face"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Realistic synthetic depictions of real people, including yourself, generally require disclosure."
+            },
+            {
+              "question": "A sponsored video uses an AI voiceover. Which disclosures apply?",
+              "options": [
+                "Only #ad",
+                "Neither",
+                "Both the sponsorship disclosure and any required AI-content label",
+                "Only the AI label"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Sponsorship and AI-content disclosure address different things and can both be required."
+            },
+            {
+              "question": "What are content credentials (C2PA)?",
+              "options": [
+                "Tamper-evident metadata recording how content was created and edited, including AI use",
+                "A copyright registration",
+                "A creator's login details",
+                "A type of caption file"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "C2PA content credentials document provenance and can trigger platform AI labels."
+            }
+          ],
+          "activity": "Write your personal synthetic-media disclosure policy with three standard label wordings, and apply it to your next AI-assisted video."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 20,
+    "timeLimitMinutes": 30,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "avv-001",
+        "module": "ai-voice-foundations",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does text-to-speech (TTS) do?",
+        "options": [
+          "Creates avatars from photos",
+          "Converts written text into spoken audio",
+          "Translates video captions only",
+          "Converts speech into text"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "TTS turns text into speech. Speech-to-text is the reverse."
+      },
+      {
+        "id": "avv-002",
+        "module": "ai-voice-foundations",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A brand needs a unique narrator voice not linked to any real person. What is the most appropriate approach?",
+        "options": [
+          "Clone the receptionist's voice from voicemail",
+          "Use a celebrity sound-alike",
+          "Use voice design to generate a new synthetic voice from a description",
+          "Clone a well-known actor from YouTube clips"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Voice design creates a new voice without replicating an individual, avoiding likeness and consent problems."
+      },
+      {
+        "id": "avv-003",
+        "module": "ai-voice-foundations",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which should a voice-cloning consent specify? Select all that apply.",
+        "options": [
+          "The person's social media passwords",
+          "Duration and territory",
+          "How consent can be withdrawn and the voice model deleted",
+          "Permitted uses and channels"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Scope, duration and revocation make consent specific and meaningful. Passwords are irrelevant and must never be collected."
+      },
+      {
+        "id": "avv-004",
+        "module": "ai-voice-foundations",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A client asks to clone its former employee's voice from old webinars for new ads. What is the correct response?",
+        "options": [
+          "Proceed; the company owns the webinars",
+          "Proceed if the ads are short",
+          "Proceed but lower the similarity setting",
+          "Do not clone without the individual's explicit, documented consent for this use"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Owning recordings does not grant rights to replicate a person's voice. Voice and likeness rights and data protection require the individual's consent."
+      },
+      {
+        "id": "avv-005",
+        "module": "ai-voice-foundations",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "An AI voice consistently mispronounces your brand name. What is the best fix?",
+        "options": [
+          "Change the brand name",
+          "Use a pronunciation dictionary or phonetic spelling in the script",
+          "Increase speed",
+          "Remove punctuation"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Pronunciation hints and phonetic spellings are designed to fix recurring mispronunciations."
+      },
+      {
+        "id": "avv-006",
+        "module": "ai-voice-foundations",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What is the most cost-effective point to fix a translation error in an AI dub?",
+        "options": [
+          "After publishing, via a pinned comment",
+          "In the translated script before audio generation",
+          "By re-shooting the original",
+          "By adding background music"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Editing the transcript first avoids regenerating and re-reviewing audio and video."
+      },
+      {
+        "id": "avv-007",
+        "module": "ai-voice-foundations",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A UK brand plans one Arabic dub for audiences in KSA, Egypt and Morocco. What is the main risk?",
+        "options": [
+          "Arabic cannot be dubbed",
+          "Captions are banned",
+          "Dialect and cultural differences mean a single version may feel unnatural or miss the audience in some markets",
+          "Lip-sync never works in Arabic"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Arabic-speaking markets differ in dialect, references and norms; localisation may need separate versions or a deliberate register choice."
+      },
+      {
+        "id": "avv-008",
+        "module": "ai-voice-foundations",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which statements about speech-to-speech are accurate? Select all that apply.",
+        "options": [
+          "It keeps your timing and emotion",
+          "It is useful when you want precise delivery",
+          "It converts your recorded performance into another voice",
+          "It requires no consent if the target is a real person's cloned voice"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Speech-to-speech transfers your performance into another voice. Using a real person's cloned voice still requires their consent."
+      },
+      {
+        "id": "avv-009",
+        "module": "ai-avatars-and-video",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which content is the best fit for an AI avatar presenter?",
+        "options": [
+          "A personal wedding message",
+          "Frequently updated how-to and onboarding videos",
+          "A customer testimonial",
+          "A crisis apology"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Routine, informational, frequently updated content suits avatars; trust-heavy personal moments do not."
+      },
+      {
+        "id": "avv-010",
+        "module": "ai-avatars-and-video",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A marketer suggests using a stock avatar to play a 'happy customer' in an ad. What is the issue?",
+        "options": [
+          "It is fine if the script is accurate",
+          "Presenting a synthetic person as a real customer is a deceptive testimonial likely to breach advertising rules",
+          "Avatars cannot smile",
+          "Stock avatars are low resolution"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Fake testimonials mislead consumers regardless of how accurate the script is."
+      },
+      {
+        "id": "avv-011",
+        "module": "ai-avatars-and-video",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which recording practices improve a custom avatar? Select all that apply.",
+        "options": [
+          "Stable, eye-level camera",
+          "Busy patterned clothing",
+          "Soft, even lighting on the face",
+          "Natural, relaxed delivery"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Good lighting, stable framing and natural delivery help. Fine patterns can shimmer and distract."
+      },
+      {
+        "id": "avv-012",
+        "module": "ai-avatars-and-video",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the safest role for AI-generated b-roll in a product video?",
+        "options": [
+          "Replacing all real footage",
+          "Proof that the product works",
+          "Illustrating concepts and mood alongside real product footage",
+          "Showing fake customer results"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Generated visuals may illustrate ideas but must not serve as evidence."
+      },
+      {
+        "id": "avv-013",
+        "module": "ai-avatars-and-video",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which elements make a strong director-style video prompt?",
+        "options": [
+          "The number of followers",
+          "Only hashtags",
+          "Only the brand name",
+          "Subject, action, setting, camera movement, style and aspect ratio"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Describing the shot like a director gives the model concrete visual direction."
+      },
+      {
+        "id": "avv-014",
+        "module": "ai-avatars-and-video",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A travel agency wants AI-generated footage of a sacred religious site for a promo. What is the most appropriate decision?",
+        "options": [
+          "Generate it and exaggerate crowd sizes",
+          "Generate it; it saves filming costs",
+          "Generate it in cartoon style with jokes",
+          "Avoid generating it; use licensed real footage or abstract visuals for accuracy and respect"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Generated depictions of sacred sites risk inaccuracy and offence. Licensed real footage or respectful abstract visuals are safer."
+      },
+      {
+        "id": "avv-015",
+        "module": "ai-avatars-and-video",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Your company produces personalised avatar videos that address each prospect by name. Which practice keeps trust?",
+        "options": [
+          "Use only expected data, follow data and anti-spam rules, and note it is made with an AI avatar",
+          "Imply you personally recorded each video",
+          "Send thousands without testing",
+          "Scrape personal social media for details"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Transparent, lawful and tested personalisation maintains trust."
+      },
+      {
+        "id": "avv-016",
+        "module": "scripting-and-workflows",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Roughly how many words fit a 60-second narration at a comfortable pace?",
+        "options": [
+          "130–160",
+          "300–350",
+          "500",
+          "30–40"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Comfortable narration runs at about 130–160 words per minute."
+      },
+      {
+        "id": "avv-017",
+        "module": "scripting-and-workflows",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which script line will an AI voice most likely deliver naturally?",
+        "options": [
+          "'SEO/SEM/CRO/KPIs etc.'",
+          "'Pursuant to the aforementioned considerations...'",
+          "'Utilising our synergistic, AI-driven, omnichannel CRM (customer relationship management) platform...'",
+          "'Your customers message you everywhere. You're losing track. We fix that.'"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Short, conversational sentences suit the ear; jargon, acronyms and long clauses sound robotic."
+      },
+      {
+        "id": "avv-018",
+        "module": "scripting-and-workflows",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why generate voice audio per scene rather than as one long file?",
+        "options": [
+          "It changes the voice",
+          "It is cheaper in every tool",
+          "A single error can be fixed by regenerating one scene",
+          "Avatars require it"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Scene-level audio keeps fixes targeted."
+      },
+      {
+        "id": "avv-019",
+        "module": "scripting-and-workflows",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Lip-sync drifts in one scene of a HeyGen video driven by ElevenLabs audio. What is the most sensible first step?",
+        "options": [
+          "Delete the voice clone",
+          "Publish and hope nobody notices",
+          "Regenerate the problem scene and check audio length and format against the platform's requirements",
+          "Regenerate the whole video in a different language"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Targeted regeneration and checking audio specifications usually solve scene-level sync issues."
+      },
+      {
+        "id": "avv-020",
+        "module": "scripting-and-workflows",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which items belong in a production record for an AI video? Select all that apply.",
+        "options": [
+          "Reviewers and approval date",
+          "Voice used and consent reference if cloned",
+          "Music licence",
+          "The editor's lunch order"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Production records document rights, consents and approvals."
+      },
+      {
+        "id": "avv-021",
+        "module": "scripting-and-workflows",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What should you do before generating an AI voiceover from a new script?",
+        "options": [
+          "Add more acronyms",
+          "Translate it into five languages",
+          "Read it aloud and fix lines you stumble on",
+          "Remove all punctuation"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "If you stumble reading it, the AI voice will likely sound off too."
+      },
+      {
+        "id": "avv-022",
+        "module": "scripting-and-workflows",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "An accountant uses her voice clone and avatar for tax tips. Which steps are essential? Select all that apply.",
+        "options": [
+          "Let the AI add extra tax tips without checking",
+          "Apply required AI-content disclosure",
+          "Verify every tax statement herself",
+          "Secure her voice account with strong authentication"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Accuracy review, account security and disclosure are essential. Unchecked AI-added advice is risky."
+      },
+      {
+        "id": "avv-023",
+        "module": "quality-accessibility-and-disclosure",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Why are captions important for short-form video?",
+        "options": [
+          "Platforms ban audio",
+          "Many viewers watch with sound off, and captions support accessibility",
+          "They replace the need for a script",
+          "They slow videos down"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Captions serve sound-off viewers, deaf and hard-of-hearing viewers and non-native speakers."
+      },
+      {
+        "id": "avv-024",
+        "module": "quality-accessibility-and-disclosure",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "An Arabic dub still shows English captions under the platform's buttons. Which QC step would have caught this?",
+        "options": [
+          "Reviewing the script word count",
+          "Checking the voice stability setting",
+          "Watching on a phone with sound off before publishing",
+          "Checking the music licence"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "The phone, sound-off check reveals caption language and placement problems."
+      },
+      {
+        "id": "avv-025",
+        "module": "quality-accessibility-and-disclosure",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which statement about platform AI labels and sponsorship disclosure is correct?",
+        "options": [
+          "They cover different things and both may be required",
+          "#ad replaces AI labels",
+          "AI labels replace #ad",
+          "Neither is needed for short videos"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Sponsorship disclosure and AI-content labelling are separate obligations."
+      },
+      {
+        "id": "avv-026",
+        "module": "quality-accessibility-and-disclosure",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A creator's realistic AI avatar appears to endorse a product she has never used. What is the problem?",
+        "options": [
+          "It is fine for short-form content",
+          "None if the video is labelled AI",
+          "Only the lighting is wrong",
+          "It is a misleading endorsement; AI labelling does not cure a false claim of use or endorsement"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Advertising rules prohibit misleading endorsements. A label does not make a false endorsement truthful."
+      },
+      {
+        "id": "avv-027",
+        "module": "quality-accessibility-and-disclosure",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What are C2PA content credentials?",
+        "options": [
+          "Tamper-evident metadata recording how content was made, including AI involvement",
+          "Caption files",
+          "Login tokens for AI tools",
+          "Copyright certificates"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Content credentials document provenance and may trigger platform labels."
+      },
+      {
+        "id": "avv-028",
+        "module": "quality-accessibility-and-disclosure",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "In which cases is disclosure most clearly expected? Select all that apply.",
+        "options": [
+          "A creator is dubbed into a language she does not speak",
+          "AI removed background noise from a real recording",
+          "Realistic footage depicts an event that never happened",
+          "A real person appears to say something they did not say"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Realistic depictions of real people or events that did not happen call for disclosure. Minor edits such as noise removal generally do not."
+      },
+      {
+        "id": "avv-029",
+        "module": "quality-accessibility-and-disclosure",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An editor suggests stripping AI metadata so a video avoids an automatic platform label. What is the best response?",
+        "options": [
+          "Do it; labels reduce reach",
+          "Do it only for ads",
+          "Decline; removing provenance data undermines trust and may breach platform rules, so disclose instead",
+          "Do it but add #AI in the comments"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Stripping provenance to evade labels is deceptive and risky. Transparent disclosure is the right practice."
+      },
+      {
+        "id": "avv-030",
+        "module": "quality-accessibility-and-disclosure",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which caption practice best supports accessibility?",
+        "options": [
+          "High-contrast, readable text in one or two lines, positioned clear of platform UI",
+          "Rapid flashing captions",
+          "Captions only in English for all language versions",
+          "Tiny white text over bright backgrounds"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Contrast, size, line length and placement make captions readable for everyone."
+      },
+      {
+        "id": "avv-031",
+        "module": "ai-avatars-and-video",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why might purely AI-generated visuals have limited copyright protection?",
+        "options": [
+          "They are always low resolution",
+          "AI visuals are always public domain by treaty",
+          "Platforms delete them",
+          "Several jurisdictions limit or question copyright for works without meaningful human authorship"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Copyright for purely AI-generated works is limited or uncertain in several jurisdictions; human creative input can strengthen protection."
+      },
+      {
+        "id": "avv-032",
+        "module": "ai-voice-foundations",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which statement about multilingual voice models is most accurate?",
+        "options": [
+          "They are equally good in every language",
+          "They never need pronunciation fixes",
+          "They only work in English",
+          "Quality varies by language and accent, so test in your target language"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Multilingual coverage does not guarantee equal quality; always test your target languages."
+      }
+    ]
+  }
+}

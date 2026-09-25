@@ -1,0 +1,1019 @@
+{
+  "slug": "responsible-ai-disclosure-and-compliance",
+  "version": 1,
+  "title": "Responsible AI, Disclosure & Compliance",
+  "subtitle": "Use AI ethically and lawfully: bias, misinformation, IP, likeness rights, labelling, ad disclosure and data protection",
+  "category": "ai",
+  "level": "intermediate",
+  "estimatedMinutes": 180,
+  "description": "AI makes content faster and cheaper to produce, and it also makes it easier to mislead, infringe and harm by accident. For creators, marketers and agencies, responsible AI use is now a core professional skill and a real commercial advantage.\n\nThis course covers the issues you will actually face. You will learn how bias enters AI outputs and how to review campaigns for fair representation; how to verify information and respond when you are deepfaked; what is and is not settled on copyright and training data; and why likeness and voice rights require specific consent.\n\nYou will learn how to label AI-generated content on major platforms, meet advertising and influencer disclosure rules across the US, UK, UAE, KSA, Pakistan and the EU, and apply GDPR-style data protection principles to AI tools. Finally, you will build a practical AI usage policy and a public-facing summary you can share with clients and brands.",
+  "outcomes": [
+    "Identify and reduce bias in AI-generated images, copy, targeting and moderation",
+    "Verify facts and media before publishing and respond effectively to deepfakes",
+    "Apply copyright and IP safeguards to AI-assisted creative work",
+    "Obtain valid consent for using a real person's likeness or voice",
+    "Label AI-generated content correctly using platform disclosure tools",
+    "Meet commercial and AI disclosure duties in sponsored content across key markets",
+    "Apply data protection principles to AI tools and build an AI usage policy"
+  ],
+  "skills": [
+    "Responsible AI",
+    "AI content labelling",
+    "Advertising disclosure",
+    "Data protection",
+    "IP and likeness rights",
+    "AI governance policy"
+  ],
+  "prerequisites": [
+    "ai-fundamentals-for-marketers"
+  ],
+  "badge": {
+    "name": "Certified Responsible AI Practitioner",
+    "description": "The holder can identify and reduce bias and misinformation in AI-assisted work, apply copyright and likeness-rights safeguards, label synthetic content correctly on major platforms, meet advertising and influencer disclosure duties, apply data protection principles to AI tools, and build a practical AI usage policy for a business.",
+    "criteria": "Completed all lessons and scored at least 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "bias-and-misinformation",
+      "title": "Bias and misinformation",
+      "summary": "How bias enters AI outputs, how AI can amplify misinformation, and practical checks to prevent both in your content.",
+      "lessons": [
+        {
+          "slug": "bias-in-ai-outputs",
+          "title": "Understanding and reducing bias in AI outputs",
+          "type": "video",
+          "durationMinutes": 10,
+          "body": "### Where bias comes from\n\nAI bias is not usually the result of someone deliberately programming prejudice. It emerges from:\n\n- **Training data:** models learn from existing text and images, which over-represent some groups, languages and viewpoints and under-represent others. Content in English and from Western markets is often more heavily represented than content in Urdu, Arabic or regional languages.\n- **Historical patterns:** if past content mostly showed men as executives and women as assistants, the model learns that association.\n- **Design and tuning choices:** how a model is fine-tuned and filtered affects what it produces.\n- **Your prompt:** vague prompts let default patterns take over; loaded prompts can add bias.\n\n### How bias shows up in marketing work\n\n- **Images:** \"a successful entrepreneur\" returns mostly one gender, age or ethnicity; \"a family\" returns one family structure; \"a beautiful woman\" reflects narrow beauty standards, sometimes including lighter skin as the default, a particularly sensitive issue in South Asian and Gulf markets.\n- **Copy:** personas and customer descriptions that rely on stereotypes (\"busy mums who love shopping\", \"tech-savvy young men\").\n- **Translation and localisation:** misgendering, wrong honorifics or culturally inappropriate phrasing.\n- **Targeting and scoring:** AI-driven lead scoring or creator selection that disadvantages people based on names, locations or dialects correlated with ethnicity, religion or class.\n- **Moderation:** tools that misclassify dialects or code-switched language (such as Roman Urdu or Arabizi) as spam or offensive.\n\n### Why it matters\n\n- **Commercial:** your audience is diverse. Narrow representation leaves customers out and can trigger backlash.\n- **Ethical:** stereotypes can harm the people they portray.\n- **Legal and regulatory:** advertising codes such as the UK CAP Code restrict harmful gender stereotypes; equality and anti-discrimination laws in many jurisdictions apply to areas such as employment, housing and credit; ad platforms prohibit discriminatory targeting in some categories.\n\n### A practical bias review routine\n\n**1. Prompt deliberately.**\nSpecify representation that reflects your real audience: \"a group of young professionals in Karachi, mixed genders, varied skin tones, some women wearing hijab and some not, in a modern co-working space.\"\n\n**2. Generate variety.**\nProduce several outputs and look at them as a set. Patterns such as everyone looking the same only appear across multiple outputs.\n\n**3. Review with a checklist.**\n- Who is shown, and who is missing?\n- Are any groups portrayed through clichés or in lower-status roles?\n- Are skin tones, bodies, ages and abilities represented realistically for this audience?\n- Is language inclusive and culturally appropriate?\n- Would someone from the group depicted feel respected?\n\n**4. Get lived-experience feedback.**\nAsk colleagues, community members or paid consultants from the communities you portray, especially for campaigns around religion, ethnicity, disability or gender.\n\n**5. Keep humans responsible for decisions about people.**\nDo not let AI alone decide who gets a creator deal, a job interview or a special offer. Use AI to organise information, and apply human judgement with clear, fair criteria.\n\n### Worked example\n\nAn agency uses an image tool to generate lifestyle visuals for a Pakistani banking app. The first batch shows only young, light-skinned men in suits. The team rewrites the prompt to reflect their actual customers (women and men, varied ages and skin tones, small shopkeepers as well as office workers, urban and semi-urban settings), reviews the set with the checklist, and asks two customer-facing staff whether the images feel like \"our customers\". They replace two images that portray shopkeepers in a patronising way.\n\n### Pitfalls\n\n- Tokenism: adding one diverse face while the overall story stays stereotyped.\n- Over-correcting in ways that feel inauthentic or historically inaccurate.\n- Assuming a tool is \"neutral\" because it is a machine.",
+          "video": {
+            "script": "Welcome to Responsible AI, Disclosure and Compliance. This course is about using AI in a way that protects your audience, your clients and your own reputation. We start with bias.\n\nAI models learn from huge amounts of human-created content. That content reflects the world as it has been described, including its stereotypes, gaps and imbalances. So when you ask an image tool for a CEO, a nurse or a family, or ask a writing tool to describe an ideal customer, the output can quietly repeat those patterns.\n\nFor marketers, this matters in three ways. First, it can exclude or misrepresent the very people you want to reach, like showing only one skin tone, age or body type, or portraying cultures through clichés. Second, it can harm people, for example when AI is used to screen creators, score leads or target ads in ways that disadvantage certain groups. And third, it can break rules. Advertising codes, platform policies and equality laws in many markets prohibit discriminatory targeting and harmful stereotypes.\n\nThe good news is that you can reduce bias with simple habits. Be specific in prompts about the diversity that reflects your real audience. Review outputs with a checklist asking who is shown, who is missing, and how each group is portrayed. Get feedback from people with lived experience of the communities you depict. And never let AI make significant decisions about people on its own.\n\nIn this lesson, you'll learn where bias comes from, how to spot it, and a practical review routine you can apply to every campaign.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "AI bias mainly comes from imbalanced training data, historical patterns, tuning choices and vague prompts.",
+            "Bias appears in images, copy, translation, targeting, scoring and moderation.",
+            "Prompt deliberately, review outputs as a set with a checklist, and seek lived-experience feedback.",
+            "Keep humans responsible for significant decisions about people."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the most common root cause of bias in AI outputs?",
+              "options": [
+                "Using dark mode",
+                "Deliberate programming of prejudice",
+                "Patterns and imbalances in the data models learn from, plus vague prompts",
+                "Slow internet"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Bias usually emerges from training data and defaults, not intentional design."
+            },
+            {
+              "question": "Why review AI images as a set rather than one at a time?",
+              "options": [
+                "Platforms require sets",
+                "Single images cannot be biased",
+                "Sets are cheaper",
+                "Patterns like everyone looking the same only become visible across multiple outputs"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Representation problems are often only visible when you look at the whole batch."
+            }
+          ],
+          "activity": "Generate eight images or personas for your audience using a vague prompt and then a deliberate one, and review both sets using the bias checklist."
+        },
+        {
+          "slug": "misinformation-and-verification",
+          "title": "Misinformation, AI and your responsibility",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Why this is now your problem\n\nGenerative AI makes it cheap to produce convincing text, images, audio and video at scale. That creates three risks for creators and marketers:\n\n1. **You accidentally publish false information** because an AI tool hallucinated it.\n2. **You share or amplify fakes** created by others, such as a fake screenshot, a synthetic video of a public figure or a fabricated news story.\n3. **Your brand or face is used in misinformation**, such as a deepfake of you promoting a scam.\n\nCreators with large audiences have real influence. Sharing false information, even by accident, can harm people, damage trust and in some cases breach laws on false information, defamation or consumer protection, as well as platform policies.\n\n### Common forms of AI-enabled misinformation\n\n- **Fabricated facts and statistics** in AI-written content.\n- **Fake quotes** attributed to public figures or experts.\n- **Synthetic images of events** that never happened, including disasters, protests and celebrity sightings.\n- **Voice clones** in scam calls or fake announcements.\n- **Deepfake endorsements:** celebrities or creators \"promoting\" investment schemes, supplements or giveaways.\n- **Out-of-context real media** relabelled with false claims (not AI-generated, but often amplified alongside it).\n\n### A verification routine before you post or share\n\n**For facts in your own content:**\n- Trace each claim to a primary source: the official report, the regulator, the company's own site.\n- Prefer \"according to [source]\" with a link over unsourced assertions.\n- If you cannot verify, cut it or rewrite it qualitatively.\n\n**For media you are about to share:**\n- **Source:** who posted it first? Is it a credible, identifiable account?\n- **Corroboration:** are reputable news outlets or official bodies reporting the same thing?\n- **Reverse search:** use reverse image search to see if an image appeared earlier in a different context.\n- **Visual and audio clues:** odd hands, mismatched lighting, warped text, unnatural blinking, robotic breaths. These clues are becoming less reliable as quality improves, so do not rely on them alone.\n- **Provenance:** check for content credentials (C2PA) or platform AI labels where available.\n- **Pause on emotion:** content designed to make you angry or afraid is more likely to be manipulative. Slow down.\n\nIf in doubt, don't share. Or share with clear context about what is and is not verified.\n\n### Special care zones\n\n- **Health and medical claims:** especially during outbreaks or around products.\n- **Financial content:** investment tips, crypto schemes, \"guaranteed returns\".\n- **Elections and politics:** many countries and platforms have strict rules on synthetic political content.\n- **Religion and communal issues:** in markets such as Pakistan, the Gulf and India, false or inflammatory content can cause real-world harm and carries serious legal risk.\n- **Breaking news and disasters:** early information is often wrong.\n\n### When your likeness is faked\n\nIf a deepfake of you or your brand appears:\n\n1. **Document it:** screenshots, links, dates.\n2. **Report it** to the platform using impersonation or synthetic media reporting tools.\n3. **Warn your audience** through your official channels. State clearly what you will never do, for example \"I never ask for money in DMs or promote investment schemes\".\n4. **Escalate** to legal counsel or authorities where fraud is involved; many countries have cybercrime reporting channels.\n5. **Prevent:** keep a pinned \"how to verify it's really me\" post, and enable account security features.\n\n### Correcting your own mistakes\n\nIf you publish something false: correct it promptly and visibly, update or remove the original, and do not quietly delete it and hope. Transparent correction preserves trust.\n\n### Worked example\n\nA UK personal-finance creator is sent a video appearing to show a well-known business figure endorsing a new crypto platform. It is emotional and urgent. Using the routine, she finds no coverage by reputable outlets, the account that posted it first is new, and the business figure's official channels warn about deepfake scams. She does not share it; instead she makes a short video warning her audience about deepfake investment scams, without linking to the fake.\n\n### Pitfalls\n\n- Relying on \"it looks real\".\n- Resharing with \"Is this true?\", which still amplifies it.\n- Assuming AI detectors are definitive; they produce false positives and false negatives.",
+          "video": null,
+          "keyTakeaways": [
+            "AI makes false content cheap to produce, and creators' reach amplifies both truth and fakes.",
+            "Verify facts against primary sources and media through source, corroboration, reverse search and provenance.",
+            "Take extra care with health, finance, elections, religion and breaking news.",
+            "If you are deepfaked, document, report, warn your audience and escalate; correct your own mistakes visibly."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "You receive a dramatic video of a public figure endorsing an investment scheme. What is the best first step?",
+              "options": [
+                "Share it with 'Is this real?'",
+                "Share it quickly before others do",
+                "Check the original source, look for reputable corroboration and official statements before doing anything",
+                "Trust it if the lip-sync looks good"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Verification comes first. Sharing with a question still amplifies potentially harmful content."
+            },
+            {
+              "question": "Which statement about AI detection tools is most accurate?",
+              "options": [
+                "They can produce false positives and false negatives, so use them as one signal among several",
+                "They are illegal",
+                "They only work on text",
+                "They are always correct"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Detectors are imperfect; combine them with source checks, corroboration and provenance."
+            }
+          ],
+          "activity": "Write and pin a short 'how to verify it's really me' post or story for your channels, stating what you and your brand will never ask followers to do."
+        }
+      ]
+    },
+    {
+      "slug": "copyright-likeness-and-deepfakes",
+      "title": "Copyright, likeness and deepfakes",
+      "summary": "Ownership of AI outputs, training-data questions, and the rights of people whose face, voice or name you use.",
+      "lessons": [
+        {
+          "slug": "copyright-and-training-data",
+          "title": "Copyright, AI outputs and training-data questions",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### An evolving area: principles, not final answers\n\nCopyright law around AI is changing quickly, with courts and legislators in many countries still working through key questions. This lesson gives you the stable principles and practical habits that protect you now. For high-value or contentious work, get legal advice in your jurisdiction.\n\n### Question 1: Can I own what AI creates?\n\nIn several major jurisdictions, copyright protects works created by humans. The US Copyright Office has taken the position that purely AI-generated material, without sufficient human creative contribution, is not protected, while human contributions such as selection, arrangement and substantial editing, or human-authored parts of a work, can be. Other jurisdictions take different approaches; the UK, for example, has a specific provision for \"computer-generated works\" that is under review, and approaches elsewhere vary.\n\n**Practical implications:**\n- You may not be able to stop others from copying purely AI-generated images or text.\n- Your **human contribution** (concept, script, editing, arrangement, combination with your own photos, video or writing) strengthens your position.\n- For logos and key brand assets, consider human-created or substantially human-modified designs so you can register and protect them.\n- Keep records of your creative process for important assets.\n\n### Question 2: Is AI training on copyrighted material legal?\n\nAI models are trained on large datasets that often include copyrighted works. Whether this is lawful is being tested in multiple court cases and policy debates worldwide, with approaches such as fair use in the US, text-and-data-mining exceptions and opt-outs in the EU and elsewhere, and ongoing consultations in the UK. The EU AI Act also requires providers of general-purpose AI models to have a copyright compliance policy and publish a summary of training content.\n\n**What this means for you as a user:**\n- The legal risk of training mainly sits with AI developers, but it can affect you if outputs reproduce protected material.\n- Prefer reputable tools with clear terms, and in some cases commercial indemnities for business plans. Read what they actually cover.\n- Some tools emphasise training on licensed or permissioned content, which some brands prefer for commercial work.\n\n### Question 3: Could my AI output infringe someone else's rights?\n\nYes, it can, especially if you:\n\n- **Prompt for a specific copyrighted character or work:** \"Mickey Mouse in our café\", \"a poster in the style of a named film franchise\".\n- **Imitate a living artist's distinctive style** by name. Style itself is often not protected by copyright, but outputs can come close to specific works, and it raises ethical and reputational issues.\n- **Include trademarks and logos** of other brands, implying association.\n- **Generate music or lyrics** that closely resemble existing songs.\n- **Upload someone else's copyrighted content** (a photographer's image, a competitor's video) as input for editing or remixing without permission.\n\n### Practical safeguards\n\n1. **Don't prompt with protected names**: characters, franchises, living artists, brands.\n2. **Check outputs** for recognisable characters, logos, watermarks or near-copies. Reverse image search helps.\n3. **Use licensed inputs:** your own photos and footage, licensed stock, or content you have permission to use.\n4. **Read tool terms** for commercial use, ownership and any indemnity.\n5. **Keep records** of prompts, tools, dates and your human edits for key assets.\n6. **Respect platform music rules:** use platform-licensed libraries or properly licensed AI music, and check terms for commercial use.\n7. **Credit and pay** collaborators whose work you build on.\n\n### Contracts with clients and creators\n\nUpdate your agreements to cover:\n\n- Whether AI tools may be used and for which deliverables.\n- Who owns outputs, acknowledging that AI-only elements may not be protectable.\n- Warranties: agencies should avoid warranting full copyright ownership of AI-generated elements they cannot guarantee.\n- Responsibility for checking third-party rights.\n\n### Worked example\n\nA Dubai restaurant asks its agency for an \"anime-style poster like [a famous studio]\" with a well-known cartoon character eating their burger. The agency explains the copyright and trademark risk, then proposes an original illustrated character designed by their illustrator, refined with AI assistance, in a broadly anime-inspired style without naming or imitating a specific studio. The final poster involves substantial human creative work, the illustrator's contract assigns rights to the client, and the process is documented.\n\n### Pitfalls\n\n- Assuming \"AI made it, so it's free to use\".\n- Promising clients exclusive ownership of AI-only outputs.\n- Uploading clients' competitors' ads for AI to \"remix\".",
+          "video": null,
+          "keyTakeaways": [
+            "In several major jurisdictions, purely AI-generated material may not be protected by copyright; human contribution matters.",
+            "The legality of training on copyrighted works is still being tested, and developers carry most of that risk.",
+            "Your outputs can still infringe if you prompt for protected characters, brands or artists' work.",
+            "Use licensed inputs, check outputs, read tool terms, keep records and update contracts."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why might a brand struggle to stop competitors copying a purely AI-generated image?",
+              "options": [
+                "In several jurisdictions, copyright requires sufficient human authorship, which purely AI output may lack",
+                "AI images are always public domain worldwide",
+                "Competitors have special rights",
+                "Images cannot be copyrighted"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Protection often depends on human creative contribution; purely AI output may not qualify."
+            },
+            {
+              "question": "Which prompt carries the highest infringement risk?",
+              "options": [
+                "A cosy café interior with warm light",
+                "A bowl of biryani on a wooden table",
+                "An abstract gradient background",
+                "A famous cartoon character holding our product"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Using a protected character and implying brand association creates copyright and trademark risk."
+            },
+            {
+              "question": "What should an agency avoid promising in contracts about AI-generated elements?",
+              "options": [
+                "That it uses licensed stock",
+                "That it reviews outputs",
+                "That it keeps records",
+                "Guaranteed exclusive copyright ownership of purely AI-generated material"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Ownership of AI-only material may be unprotectable, so guaranteeing it is risky."
+            }
+          ],
+          "activity": "Review one AI-assisted asset you use commercially: list the tool, its commercial terms, the inputs used and your human contributions, and note any rights risks."
+        },
+        {
+          "slug": "likeness-voice-rights-and-deepfakes",
+          "title": "Likeness, voice rights and deepfakes",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### People own their identity\n\nA person's face, voice, name and persona are central to their identity and, for public figures and creators, their livelihood. AI makes it easy to replicate all of these. Using them without permission can be unlawful, unethical and deeply harmful.\n\n### What counts as a deepfake\n\nA **deepfake** is synthetic or manipulated media that realistically depicts a real person saying or doing something they did not. Not all synthetic media is a deepfake in the harmful sense. Your own consented avatar is synthetic, but used transparently it is not deceptive. The harm comes from **realism combined with lack of consent or deception**.\n\n### The legal landscape, at principle level\n\nLaws vary widely and are changing fast, but several strands apply in many markets:\n\n- **Personality, publicity and image rights:** many jurisdictions protect against unauthorised commercial use of a person's name, image or likeness, and some explicitly cover voice. Several US states have enacted laws on digital replicas and voice. Some European countries have proposed or adopted specific protections against deepfakes of a person's likeness.\n- **Passing off, false endorsement and advertising law:** implying someone endorses a product when they do not is misleading under consumer-protection and advertising rules (for example FTC rules in the US and ASA/CAP rules in the UK).\n- **Defamation:** synthetic content that damages someone's reputation can be defamatory.\n- **Privacy and data protection:** images and voice recordings are personal data; biometric processing attracts stricter rules under GDPR-style laws, including in the UAE and KSA.\n- **Cybercrime and criminal law:** impersonation, fraud and non-consensual intimate imagery are criminal offences in many countries, including under cybercrime laws in Pakistan, the UAE and KSA, and US federal law now specifically addresses non-consensual intimate deepfakes.\n- **AI-specific transparency rules:** the EU AI Act requires deepfakes to be disclosed, with obligations applying from 2026.\n\n### Clear no-go zones\n\nNever create or share:\n\n- Synthetic media of a real person in sexual or intimate contexts without explicit consent. This is illegal in many places and deeply harmful.\n- Fake endorsements by celebrities, creators, experts or customers.\n- Synthetic political content depicting real candidates or officials saying or doing things they did not.\n- Content impersonating a real person to deceive, such as scam calls or fake announcements.\n- Parody or satire that a reasonable viewer could mistake for real, especially around politics, religion or public safety.\n\n### When using a real person's likeness is legitimate\n\nWith **informed, written consent** covering:\n\n- The specific uses (channels, campaigns, formats, languages).\n- Duration and territory.\n- Approval rights over scripts and outputs.\n- Payment terms.\n- Restrictions (no political, adult or unrelated endorsements).\n- Revocation and deletion of models and assets.\n- For employees: what happens when they leave.\n\nAnd with **transparent disclosure** to audiences where the content is realistic.\n\n### Your own identity as a creator\n\n- Protect your accounts (two-factor authentication, limited team access) because voice and face models are valuable targets.\n- Read brand contracts carefully: watch for clauses granting perpetual or broad rights to create AI replicas of you.\n- Consider registering your name or brand as a trademark if relevant.\n- Tell your audience how to identify genuine content and what you never do.\n- Monitor for impersonation and report quickly.\n\n### Worked example\n\nA Saudi fashion brand wants to \"bring back\" a popular creator they worked with last year using an AI avatar built from old campaign footage, without contacting her. The agency advises against it: the original contract did not cover AI replicas; using her likeness would imply a current endorsement; and it could breach her image rights, data protection law and advertising rules. Instead they approach the creator for a new deal that includes a clearly scoped, time-limited avatar licence with script approval and fair payment. She agrees, and the campaign carries clear disclosure.\n\n### Pitfalls\n\n- \"It's just a joke\" deepfakes of friends, colleagues or public figures that spread beyond the intended audience.\n- Assuming old contracts cover AI uses they never mentioned.\n- Using \"AI-generated\" labels as a licence to depict real people however you like.",
+          "video": null,
+          "keyTakeaways": [
+            "Deepfakes are realistic synthetic depictions of real people without consent or with deception.",
+            "Publicity rights, advertising law, defamation, data protection and criminal law can all apply.",
+            "Never create fake endorsements, intimate deepfakes, deceptive political content or impersonations.",
+            "Legitimate use needs specific, written consent and transparent disclosure; creators should protect their own likeness."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A brand wants to reuse a creator's face via AI from an old campaign that never mentioned AI. What is correct?",
+              "options": [
+                "It is fine if labelled AI-generated",
+                "New, specific consent is needed; otherwise it risks image rights, data protection and misleading endorsement",
+                "It is fine if the creator is not famous",
+                "Old footage means old consent covers it"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Consent must cover the specific use; labels do not replace consent."
+            },
+            {
+              "question": "What makes synthetic media a harmful deepfake?",
+              "options": [
+                "Realism combined with lack of consent or intent to deceive",
+                "Being made with AI at all",
+                "Being in a language other than English",
+                "Being under 60 seconds"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Transparent, consented synthetic media differs from deceptive, non-consensual deepfakes."
+            }
+          ],
+          "activity": "Review one brand or creator contract template and add clauses covering AI replicas of likeness and voice: scope, duration, approval, payment and deletion."
+        }
+      ]
+    },
+    {
+      "slug": "labelling-and-advertising-disclosure",
+      "title": "Labelling AI content and advertising disclosure",
+      "summary": "How to label AI-generated content on platforms and meet advertising and influencer disclosure rules when AI is involved.",
+      "lessons": [
+        {
+          "slug": "labelling-ai-content-on-platforms",
+          "title": "Labelling AI-generated content on social platforms",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### The direction of travel\n\nPlatforms have moved from voluntary experiments to structured AI-labelling systems. Policies change frequently, so treat this lesson as principles plus the general approach of major platforms as of 2026, and always check the current help centre before campaigns.\n\n### What platforms typically ask of creators\n\nAcross YouTube, Meta (Facebook, Instagram, Threads), TikTok and others, the common thread is:\n\n**Disclose realistic content that is AI-generated or significantly altered**, especially when it:\n\n- Makes a real person appear to say or do something they did not.\n- Depicts a realistic event or scene that did not happen.\n- Alters footage of a real event or place in a meaningful way.\n\n**Disclosure is usually not required** for:\n\n- Clearly unrealistic, animated or fantastical content.\n- Minor edits such as colour correction, filters, background blur, noise reduction or captions.\n- Using AI for behind-the-scenes productivity, such as scripting ideas, outlines or editing assistance, where the final content shows real people and real events.\n\nPlatforms provide **disclosure tools** (for example an \"altered or synthetic content\" setting at upload, or an \"AI-generated\" label toggle). Some platforms also **automatically label** content that carries industry-standard metadata such as C2PA content credentials or invisible watermarks from AI tools.\n\nConsequences for failing to disclose can include labels added by the platform, reduced distribution, content removal and, for repeated violations, penalties on the account or monetisation.\n\n### Stricter areas\n\n- **Political, election and social-issue content**, especially in ads, where many platforms and countries require explicit AI disclosure.\n- **Health, finance and news-like content**, where realistic synthetic media can cause real harm.\n- **Content involving minors**, which has additional protections.\n\n### Your labelling decision tree\n\n1. **Is it realistic?** If obviously animated or fantastical, labelling is usually optional.\n2. **Does it depict a real person, place or event in a way that did not happen?** If yes, label.\n3. **Would a reasonable viewer feel misled if they learned AI was involved?** If yes, label.\n4. **Does the platform policy require it?** Check, and use the platform's native tool, not just a hashtag.\n5. **Is it an ad?** Apply ad-specific disclosure rules as well (next lesson).\n\n### How to label well\n\n- **Use native tools first.** Platform toggles and labels are what the platform recognises.\n- **Add plain-language context** in captions or descriptions where helpful: \"Voiceover created with my AI voice.\" \"Scenes 2 and 4 are AI-generated.\" \"AI-dubbed from Urdu with the presenter's consent.\"\n- **Be specific, not scary.** \"Made with AI\" with no context can confuse; say what was AI.\n- **Keep provenance metadata intact.** Don't strip content credentials to avoid labels.\n- **Be consistent** across platforms and campaigns; keep a standard wording list.\n\n### Beyond social platforms\n\n- **Websites and emails:** consider labelling AI avatars and synthetic spokespeople; say that chatbots are AI.\n- **Customer service:** tell people when they are talking to an AI agent, and offer a human route.\n- **Print and outdoor:** where realistic synthetic imagery could mislead, a small \"AI-generated image\" note is good practice.\n\n### Regulation reinforcing platform rules\n\nThe EU AI Act introduces transparency obligations: deepfakes must be disclosed, and people should be informed when they interact with AI systems such as chatbots, with obligations applying from 2026. Other countries, including China, have introduced AI content-labelling requirements, and many more are considering them. Even where no AI-specific law applies, consumer protection laws prohibit misleading consumers.\n\n### Worked example\n\nAn Islamabad travel creator posts three videos:\n\n1. A vlog shot on her phone, with AI used only to write the script outline and remove background noise. **No AI label needed.**\n2. A Short with a realistic AI-generated drone-style shot of a mountain lake she has never filmed. **Label**, using the platform tool plus \"Opening shot is AI-generated\".\n3. Her AI avatar presenting a travel news roundup in Arabic, a language she does not speak. **Label**, using the platform tool plus \"Presented by my AI avatar, AI-dubbed\".\n\n### Pitfalls\n\n- Relying on #AI in hashtags when a native disclosure tool exists.\n- Over-labelling everything so labels lose meaning, or under-labelling realistic content.\n- Assuming a platform's automatic label is always correct; check and add context.",
+          "video": null,
+          "keyTakeaways": [
+            "Platforms generally require disclosure of realistic AI-generated or significantly altered content.",
+            "Minor edits and clearly unrealistic content usually do not need labels; realistic depictions of real people or events do.",
+            "Use native platform disclosure tools first and add specific, plain-language context.",
+            "Keep provenance metadata intact, and apply stricter care to political, health, finance and news-like content."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which content most clearly requires an AI disclosure on major platforms?",
+              "options": [
+                "A cartoon animation of a talking cat",
+                "A caption drafted with AI help",
+                "A vlog where AI removed background noise",
+                "A realistic AI video showing a real politician saying something they never said"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Realistic depictions of real people saying things they did not say are core disclosure cases."
+            },
+            {
+              "question": "What is the best way to label AI content on a platform with a native disclosure tool?",
+              "options": [
+                "Mention it in a comment a week later",
+                "Use the platform's disclosure tool and add plain-language context where helpful",
+                "Only add #AI in hashtags",
+                "Strip the metadata so no label appears"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Native tools are recognised by platforms; context helps viewers understand what was AI."
+            }
+          ],
+          "activity": "Apply the labelling decision tree to your last ten posts and note which needed a label, which had one and what you will change."
+        },
+        {
+          "slug": "advertising-disclosure-and-ai",
+          "title": "Advertising and influencer disclosure when AI is involved",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Two separate duties\n\nWhen AI meets paid content, you usually have **two separate disclosure duties**:\n\n1. **Commercial disclosure:** telling audiences when content is advertising, sponsored or involves a material connection (payment, free products, affiliate commission, family or business ties).\n2. **AI disclosure:** telling audiences when realistic content is AI-generated or altered, where required or where it would otherwise mislead.\n\nOne does not replace the other. A sponsored Reel with an AI voiceover may need both \"#ad\" and the paid-partnership label, and an AI label.\n\n### Commercial disclosure principles\n\nRules differ by country, but the core principles are consistent:\n\n- **Clear and prominent:** at the start of the caption or visible in the video, not buried among hashtags or behind \"more\".\n- **Unambiguous wording:** \"#ad\", \"Ad\", \"Advert\", \"Paid partnership with [brand]\". Vague tags like \"#sp\", \"#collab\" or \"thanks to [brand]\" are often considered insufficient.\n- **Use platform tools** such as paid-partnership labels in addition to, not instead of, clear wording where regulators expect it.\n- **Every format:** stories, livestreams, short video, podcasts and newsletters.\n- **Truthful claims:** endorsements must reflect genuine opinions and experience; claims must be substantiated.\n\n### Regional snapshot (principles; check current rules)\n\n- **United States:** the FTC Endorsement Guides require clear disclosure of material connections, and the FTC's rule on fake reviews and testimonials prohibits fake reviews, including AI-generated ones, and misrepresented endorsements.\n- **United Kingdom:** the ASA/CAP Code requires ads to be obviously identifiable, with \"#ad\" upfront commonly expected; the CMA enforces consumer protection law, including a ban on fake reviews under the Digital Markets, Competition and Consumers Act.\n- **UAE:** the UAE Media Council regulates advertising content and requires influencers and content creators engaged in paid advertising to hold the appropriate permit or licence; ads must be clearly identified.\n- **Saudi Arabia:** the General Commission for Audiovisual Media (GCAM) licenses influencer advertising (for example through the Mawthooq licence), and ads must be clearly disclosed.\n- **Pakistan:** consumer protection, cybercrime and broadcasting rules apply, and platform policies are key; the principle of clear, honest disclosure is the safe standard.\n- **EU:** the Unfair Commercial Practices Directive, the Digital Services Act and national influencer rules require clear commercial disclosure.\n\n### Where AI creates new advertising risks\n\n- **AI-generated testimonials or reviews:** fabricating reviews or \"customer\" videos with AI avatars is deceptive and specifically prohibited in several markets.\n- **Synthetic influencers and virtual creators:** fully AI personas promoting products should be clear that they are virtual and that the content is paid. They cannot have genuinely \"tried\" a product, so avoid implying personal experience.\n- **Cloned voices or avatars of real people** implying endorsement without consent: false endorsement.\n- **Exaggerated visuals:** AI-enhanced product images showing results the product cannot deliver, such as flawless skin from a cream or oversized food portions, can be misleading. Some regulators already scrutinise filters on beauty ads.\n- **Auto-generated ad variations:** hundreds of AI variants can introduce unapproved claims. Every variant must meet the same standards.\n\n### A compliance checklist for AI-assisted sponsored content\n\n- [ ] Commercial relationship disclosed upfront (\"#ad\" or local equivalent plus platform paid-partnership tool).\n- [ ] Creator licence or permit in place where required (for example UAE or KSA).\n- [ ] Claims substantiated and approved by the brand; no AI-invented benefits.\n- [ ] No fabricated testimonials, reviews or personas presented as real customers.\n- [ ] Realistic AI elements labelled per platform policy.\n- [ ] Any real person's likeness or voice used with written consent.\n- [ ] Product visuals not misleadingly enhanced.\n- [ ] Records kept: brief, approvals, disclosures, screenshots.\n\n### Worked example\n\nA US skincare brand briefs a Dubai-based creator for a campaign across UAE and US audiences. The agency's AI tool generates caption variants, one of which says \"clinically proven to erase wrinkles\". The checklist catches it: the brand's approved claim is \"helps improve the appearance of fine lines in 4 weeks (brand consumer study)\". The creator's UAE advertising permit is confirmed, captions open with \"#ad\", the paid-partnership tool is used, and a shot using AI-generated b-roll of a laboratory is labelled \"illustrative AI visual\". The creator only posts after actually using the product.\n\n### Pitfalls\n\n- Believing an AI label covers commercial disclosure.\n- Letting AI generate ad variants without claim review.\n- Virtual influencers implying real-life product experience.",
+          "video": null,
+          "keyTakeaways": [
+            "Commercial disclosure and AI disclosure are separate duties, and you often need both.",
+            "Commercial disclosures must be clear, upfront and unambiguous across every format.",
+            "Rules vary by market, including FTC, ASA/CAP and CMA, UAE Media Council and GCAM licensing, so check local requirements.",
+            "AI-generated reviews, false endorsements and misleadingly enhanced visuals are key AI advertising risks."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A sponsored Reel uses an AI-generated voiceover of the creator. Which disclosures apply?",
+              "options": [
+                "Only an AI label",
+                "Commercial disclosure and any required AI-content label",
+                "Only #ad",
+                "None if the creator approves"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Commercial and AI disclosures address different things and can both be required."
+            },
+            {
+              "question": "Which is a clear AI-related advertising violation?",
+              "options": [
+                "Creating AI avatar 'customers' giving testimonials presented as real",
+                "Scheduling posts with automation",
+                "Using AI to correct grammar",
+                "Using AI to brainstorm hooks"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Fabricated testimonials mislead consumers and are prohibited in several markets."
+            },
+            {
+              "question": "Why is '#collab' at the end of 30 hashtags a weak disclosure?",
+              "options": [
+                "It is too short",
+                "It uses too many characters",
+                "Hashtags are illegal",
+                "It is ambiguous and not prominent, so audiences may not recognise the ad"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Disclosures must be clear and prominent; ambiguous tags buried in hashtags are often insufficient."
+            }
+          ],
+          "activity": "Apply the compliance checklist to your last sponsored post or client campaign and fix any gaps you find."
+        }
+      ]
+    },
+    {
+      "slug": "data-protection-and-ai-policy",
+      "title": "Data protection and your AI usage policy",
+      "summary": "Apply data protection principles to AI use across regions and build a practical AI usage policy for your business.",
+      "lessons": [
+        {
+          "slug": "data-protection-principles",
+          "title": "Data protection principles for AI use",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Why data protection applies to AI\n\nWhenever AI processes information about identifiable people (customers, followers, leads, employees, creators), data protection law applies. That includes pasting a customer email into a chatbot, running an AI lead-scoring tool, transcribing sales calls, cloning a voice and building a lookalike audience.\n\n### The core principles\n\nMost modern data protection laws, including the EU GDPR, UK GDPR, the UAE federal Personal Data Protection Law, Saudi Arabia's PDPL, laws in DIFC and ADGM, US state privacy laws, and data protection frameworks being developed in Pakistan and elsewhere, share principles like these:\n\n1. **Lawfulness, fairness and transparency:** have a valid legal basis (such as consent, contract or legitimate interests where recognised) and tell people how you use their data, including AI processing.\n2. **Purpose limitation:** use data only for the purposes you told people about. Customer support emails collected to answer queries should not quietly become training data for a marketing model.\n3. **Data minimisation:** use only what you need. Remove names and contact details before AI analysis where possible.\n4. **Accuracy:** keep data correct, and be aware that AI-generated inferences about people can be wrong.\n5. **Storage limitation:** don't keep data, including chat logs and transcripts, longer than necessary.\n6. **Security:** protect data with access controls, business-grade tools and secure accounts.\n7. **Accountability:** be able to show what you do: records, policies and assessments.\n\n### Rights people have\n\nCommonly: access to their data, correction, deletion, objection to certain processing (including direct marketing), and in some laws, safeguards around **solely automated decisions with significant effects**. If an AI system alone decides something significant about a person, such as rejecting an application, you may need human involvement, an explanation and a way to contest.\n\n### Key AI-specific issues\n\n**Sharing with AI providers.**\nWhen you send personal data to an AI provider, they typically act as your processor or service provider. Under GDPR-style laws you generally need a **data processing agreement** covering security, confidentiality, sub-processors and use restrictions. Business plans from major providers usually offer these; consumer plans often do not.\n\n**Training on your data.**\nCheck whether the provider uses your inputs to train models, and opt out or use business tiers for personal and client data.\n\n**International transfers.**\nData sent to providers in other countries may trigger transfer rules. The EU, UK, UAE, KSA and others restrict cross-border transfers of personal data unless safeguards apply. Some Gulf clients, especially in regulated sectors, may require data to stay in-region.\n\n**Sensitive data.**\nHealth, religion, ethnicity, biometric data (including voiceprints and face geometry used for identification), children's data and financial data attract stricter rules. Avoid putting them into AI tools unless you have a clear legal basis, strong safeguards and, often, explicit consent.\n\n**Profiling and targeting.**\nUsing AI to infer sensitive characteristics, such as guessing religion from names or health from purchases, for targeting is high risk legally and ethically, and often banned by ad platforms.\n\n**Transparency.**\nUpdate your privacy notice to mention AI tools where they process personal data: what, why and which kinds of providers.\n\n### A data protection impact assessment (DPIA), simplified\n\nFor higher-risk AI uses (large-scale profiling, sensitive data, new technologies affecting people significantly), many laws expect a DPIA. A simple version asks:\n\n1. What personal data, whose, and for what purpose?\n2. What is the legal basis?\n3. Which tools and providers process it, and where?\n4. What are the risks to individuals?\n5. What safeguards reduce those risks (minimisation, human review, security, retention)?\n6. Is the remaining risk acceptable?\n\n### Worked example\n\nA Riyadh e-commerce brand wants to use AI to analyse customer service chats to improve products. Their approach: they use a business-tier AI tool with a data processing agreement and no training on inputs; check data residency preferences with legal advisers given the PDPL's transfer rules; strip names, phone numbers and order IDs before analysis; update their privacy notice; keep outputs aggregated as themes, not individual profiles; and delete raw exports after 30 days.\n\n### Pitfalls\n\n- \"It's public on Instagram, so we can do anything with it.\" Public availability does not remove data protection.\n- Using consumer AI accounts for customer data.\n- Forgetting employees' and creators' data is personal data too.",
+          "video": null,
+          "keyTakeaways": [
+            "Data protection applies whenever AI processes information about identifiable people.",
+            "Core principles: lawfulness, purpose limitation, minimisation, accuracy, storage limitation, security and accountability.",
+            "Use business tools with processing agreements, manage cross-border transfers and avoid sensitive data.",
+            "Update privacy notices, assess higher-risk uses with a DPIA and keep humans in significant decisions."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which principle is applied by stripping names and phone numbers before AI analysis of customer chats?",
+              "options": [
+                "Storage limitation",
+                "Data minimisation",
+                "Portability",
+                "Accuracy"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Minimisation means using only the personal data you need."
+            },
+            {
+              "question": "Why might a business plan from an AI provider be required for client data?",
+              "options": [
+                "It is always cheaper",
+                "It has more fonts",
+                "It removes all legal obligations",
+                "It typically offers a data processing agreement and restrictions on using inputs for training"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Processing agreements and training opt-outs are key safeguards under GDPR-style laws."
+            },
+            {
+              "question": "A follower's details are publicly visible on Instagram. Does data protection still apply if you process them with AI?",
+              "options": [
+                "Yes, public availability does not remove data protection obligations",
+                "Only in the EU",
+                "No, public data is exempt",
+                "Only if they have over 10,000 followers"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Publicly available personal data is still personal data under most laws."
+            }
+          ],
+          "activity": "Map one AI use in your business against the seven principles and complete the six-question DPIA for it."
+        },
+        {
+          "slug": "building-an-ai-usage-policy",
+          "title": "Building your AI usage policy",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Why every business needs one\n\nWhether you are a solo creator with a freelance editor or a 30-person agency, people are already using AI in your work. A written **AI usage policy** turns good intentions into consistent practice, protects clients and customers, and gives you something clear to share when a brand or client asks, \"How do you use AI?\"\n\nKeep it short enough that people actually read it: typically two to four pages, plus checklists.\n\n### The policy structure\n\n**1. Purpose and principles**\nWhy you use AI and the values that guide it. For example:\n> We use AI to work faster and more creatively, while keeping humans accountable for everything we publish. We are honest with our audiences and clients, respect people's rights and data, and never use AI to deceive.\n\n**2. Scope**\nWho it applies to (staff, freelancers, creators you manage) and which activities (content, sales, customer service, operations).\n\n**3. Approved tools**\nA list of approved tools and plan tiers, who can approve new ones, and the evaluation criteria (data terms, commercial rights, security, regional requirements).\n\n**4. Data rules**\n- **Red (never):** passwords, payment data, government IDs, sensitive personal data, customer lists in non-approved tools, client confidential material without permission.\n- **Amber (approved tools only, minimised):** client briefs, strategy, call transcripts, performance data.\n- **Green:** public information, your own drafts, anonymised data.\n\n**5. Human review and accountability**\nRisk tiers and required review (for example, all public content reviewed by a named person; sponsored and regulated content by two people). A named person is accountable for every published output.\n\n**6. Accuracy and fact-checking**\nAll facts, statistics, quotes and claims verified against primary sources; no invented statistics or testimonials.\n\n**7. Disclosure and labelling**\n- Commercial disclosure rules by market.\n- AI labelling rules (the decision tree from Module 3) and standard wording.\n- Chatbots and agents identify as AI.\n\n**8. Likeness, voice and IP**\n- Written consent for any real person's voice or likeness, with scope, duration and deletion terms.\n- No prompts imitating living artists, protected characters or other brands.\n- Licensed inputs only; records for key assets.\n\n**9. Fairness and bias**\nRepresentation review for campaigns; no AI-only decisions about people (hiring, creator selection, credit-like decisions); no inference of sensitive traits for targeting.\n\n**10. Automation and agents**\nAutomation register, least privilege, human approval for sensitive actions, kill switches, testing after changes.\n\n**11. Security**\nBusiness accounts, two-factor authentication, access reviews and prompt offboarding.\n\n**12. Incidents**\nHow to report mistakes such as data pasted wrongly, a false claim published, a deepfake discovered or an agent misbehaving: who to tell, how fast, and what happens next. Encourage reporting without blame.\n\n**13. Training and review**\nOnboarding training for new team members; policy reviewed at least every six months given how fast tools and laws change.\n\n### Making it real\n\n- **Checklists over prose:** a one-page pre-publish checklist and a one-page data checklist get used; long documents do not.\n- **Templates:** consent forms, client AI clauses, disclosure wording and an agent spec template.\n- **Examples:** include a few \"good\" and \"not allowed\" examples relevant to your work.\n- **Leadership example:** owners and leads must follow the policy visibly.\n\n### Talking to clients and brands\n\nPrepare a short public-facing summary:\n\n> How we use AI: We use approved AI tools to speed up research, drafting and production. Every piece of content is reviewed by our team, and every claim is checked. We don't put your confidential information into tools that train on it. We never create synthetic voices or likenesses without written consent, and we label AI-generated content in line with platform rules and local advertising law.\n\nMany brands now ask for this in onboarding and procurement. Having it ready builds trust and can differentiate you.\n\n### Worked example\n\nA three-person creator management agency serving clients in Pakistan and the UAE writes a three-page policy in an afternoon using this structure. They add a pre-publish checklist to their project tool, a consent template for avatars and voices, and a client AI clause for proposals. Within a month, a UAE client's procurement team asks about AI governance; the agency sends the public summary and policy, and the client notes it as a strength.\n\n### Pitfalls\n\n- Copying a big company's policy that does not fit how you work.\n- Banning AI entirely, which usually pushes use underground rather than stopping it.\n- Writing the policy and never training anyone on it.",
+          "video": null,
+          "keyTakeaways": [
+            "A short AI usage policy turns good intentions into consistent, defensible practice.",
+            "Cover principles, tools, data rules, review, accuracy, disclosure, likeness and IP, fairness, automation, security, incidents and training.",
+            "Use checklists, templates and examples, and review the policy at least every six months.",
+            "Prepare a public-facing summary for clients and brands; it builds trust."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why is banning AI entirely often ineffective?",
+              "options": [
+                "It tends to push use underground rather than stopping it, removing oversight",
+                "AI tools are free",
+                "Clients require AI",
+                "Bans are illegal"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Clear rules and approved tools usually achieve better oversight than bans."
+            },
+            {
+              "question": "How often should an AI usage policy be reviewed?",
+              "options": [
+                "Never",
+                "At least every six months, given how quickly tools and laws change",
+                "Every five years",
+                "Only after a lawsuit"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Rapid change in tools and regulation requires frequent review."
+            }
+          ],
+          "activity": "Draft your AI usage policy using the thirteen-part structure, create a one-page pre-publish checklist from it, and write a public-facing summary for clients."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 20,
+    "timeLimitMinutes": 30,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "rai-001",
+        "module": "bias-and-misinformation",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the most common source of bias in AI outputs?",
+        "options": [
+          "Imbalances and historical patterns in training data, plus vague prompts",
+          "Screen brightness",
+          "Using paid plans",
+          "Deliberate programming"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Bias usually emerges from data and defaults rather than intent."
+      },
+      {
+        "id": "rai-002",
+        "module": "bias-and-misinformation",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "An AI tool generates 'successful entrepreneurs' for a Pakistani fintech ad and all are young, light-skinned men. What is the best response?",
+        "options": [
+          "Switch off image generation forever",
+          "Rewrite the prompt to reflect the real audience, review the set with a checklist and get feedback",
+          "Use them; the AI knows best",
+          "Add one different face and publish"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Deliberate prompting, set review and lived-experience feedback address bias; tokenism does not."
+      },
+      {
+        "id": "rai-003",
+        "module": "bias-and-misinformation",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which are good practices to reduce bias in campaigns? Select all that apply.",
+        "options": [
+          "Specify representation that reflects your real audience",
+          "Let AI alone select which creators get deals",
+          "Get feedback from people with lived experience",
+          "Review outputs as a set with a checklist"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Human decisions with fair criteria matter; AI-only decisions about people are risky."
+      },
+      {
+        "id": "rai-004",
+        "module": "bias-and-misinformation",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An AI moderation tool keeps hiding comments written in Roman Urdu as spam. What does this illustrate?",
+        "options": [
+          "Bias from under-representation of certain languages or dialects, requiring human review and tool adjustment",
+          "A platform outage",
+          "Correct functioning",
+          "The comments are spam"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Tools trained mostly on other languages can misclassify dialects and code-switching."
+      },
+      {
+        "id": "rai-005",
+        "module": "bias-and-misinformation",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What should you do before sharing a dramatic video of a public figure?",
+        "options": [
+          "Share with 'Is this true?'",
+          "Share it quickly",
+          "Check the source, look for reputable corroboration and official statements",
+          "Trust it if it looks realistic"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Verify before sharing; questioning captions still amplify fakes."
+      },
+      {
+        "id": "rai-006",
+        "module": "bias-and-misinformation",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which signals help assess whether media may be fake? Select all that apply.",
+        "options": [
+          "Who posted it first and whether they are credible",
+          "How many emojis are in the caption",
+          "Reverse image search results",
+          "Content credentials or platform AI labels"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Source, reverse search and provenance are useful signals; emoji count is irrelevant."
+      },
+      {
+        "id": "rai-007",
+        "module": "bias-and-misinformation",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A deepfake of a creator promoting a crypto scheme is circulating. Which response is best?",
+        "options": [
+          "Delete all accounts",
+          "Ignore it",
+          "Post the fake widely to show it is fake",
+          "Document it, report it to platforms, warn followers via official channels and escalate fraud to authorities or counsel"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Document, report, warn and escalate, without amplifying the fake."
+      },
+      {
+        "id": "rai-008",
+        "module": "bias-and-misinformation",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "You discover a false statistic in a post you published last week. What should you do?",
+        "options": [
+          "Quietly delete it",
+          "Correct it promptly and visibly, and update the original",
+          "Leave it; few people saw it",
+          "Blame the AI publicly"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Transparent correction preserves trust."
+      },
+      {
+        "id": "rai-009",
+        "module": "copyright-likeness-and-deepfakes",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "In several major jurisdictions, what matters most for copyright protection of AI-assisted work?",
+        "options": [
+          "The file format",
+          "Sufficient human creative contribution",
+          "The number of prompts",
+          "The price of the AI tool"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Human authorship is central to protection in several jurisdictions."
+      },
+      {
+        "id": "rai-010",
+        "module": "copyright-likeness-and-deepfakes",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which prompt carries the highest IP risk?",
+        "options": [
+          "'Our product held by [a famous cartoon character], in the style of [a named living illustrator]'",
+          "'A plate of samosas on a steel tray'",
+          "'An abstract pattern in brand colours'",
+          "'A modern minimalist bakery storefront at dusk'"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Protected characters and imitating a named living artist create copyright, trademark and reputational risk."
+      },
+      {
+        "id": "rai-011",
+        "module": "copyright-likeness-and-deepfakes",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which safeguards reduce IP risk with AI outputs? Select all that apply.",
+        "options": [
+          "Read tool terms on commercial use and indemnities",
+          "Upload competitors' ads to remix",
+          "Use your own or licensed inputs",
+          "Check outputs for logos, characters and near-copies"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Licensed inputs, output checks and terms review reduce risk; remixing others' content increases it."
+      },
+      {
+        "id": "rai-012",
+        "module": "copyright-likeness-and-deepfakes",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A client wants a guarantee of exclusive copyright in a logo generated entirely by AI. What is the best advice?",
+        "options": [
+          "Give the guarantee",
+          "Refuse to make logos",
+          "Explain that AI-only outputs may not be protectable, and propose a human-created or substantially human-modified logo",
+          "Register it quickly before anyone notices"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Protectability may depend on human authorship; a human-led design supports registration and ownership."
+      },
+      {
+        "id": "rai-013",
+        "module": "copyright-likeness-and-deepfakes",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What makes synthetic media a harmful deepfake?",
+        "options": [
+          "Realistic depiction of a real person without consent or with intent to deceive",
+          "Any use of AI",
+          "Being posted on TikTok",
+          "Being shorter than a minute"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Realism plus lack of consent or deception is the harm."
+      },
+      {
+        "id": "rai-014",
+        "module": "copyright-likeness-and-deepfakes",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A brand wants to reuse a former ambassador's likeness via an AI avatar built from old footage. What is required?",
+        "options": [
+          "New, specific, written consent covering AI use, scope, duration, approval and payment",
+          "Only an AI label",
+          "A higher-resolution camera",
+          "Nothing; they own the footage"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Owning footage does not grant rights to create new synthetic performances."
+      },
+      {
+        "id": "rai-015",
+        "module": "copyright-likeness-and-deepfakes",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which uses are clear no-go zones? Select all that apply.",
+        "options": [
+          "Your own consented, labelled avatar presenting a tutorial",
+          "Synthetic intimate imagery of a real person without consent",
+          "Deceptive synthetic videos of election candidates",
+          "Fake celebrity endorsements"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Fake endorsements, non-consensual intimate deepfakes and deceptive political content are harmful and often illegal. A consented, labelled avatar is legitimate."
+      },
+      {
+        "id": "rai-016",
+        "module": "copyright-likeness-and-deepfakes",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which legal areas can apply to unauthorised use of someone's voice clone in an ad? Select all that apply.",
+        "options": [
+          "Maritime law",
+          "Advertising and consumer-protection law on false endorsement",
+          "Publicity or image rights",
+          "Data protection"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Voice misuse can engage publicity rights, advertising law and data protection."
+      },
+      {
+        "id": "rai-017",
+        "module": "labelling-and-advertising-disclosure",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which content most clearly needs an AI label on major platforms?",
+        "options": [
+          "An obvious cartoon",
+          "A caption written with AI help",
+          "A realistic AI video of a real person saying things they never said",
+          "A vlog where AI reduced wind noise"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Realistic depictions of real people saying or doing things they did not are core disclosure cases."
+      },
+      {
+        "id": "rai-018",
+        "module": "labelling-and-advertising-disclosure",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What is the best way to label AI content where a platform offers a disclosure tool?",
+        "options": [
+          "Remove the content credentials",
+          "Use the native tool and add specific plain-language context",
+          "Only add #AI",
+          "Say nothing"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Native tools are recognised by platforms; context helps audiences."
+      },
+      {
+        "id": "rai-019",
+        "module": "labelling-and-advertising-disclosure",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An editor proposes removing C2PA metadata from a video to avoid an automatic AI label. What is the correct response?",
+        "options": [
+          "Do it and add #AI in comments",
+          "Do it for better reach",
+          "Decline; stripping provenance to evade labelling is deceptive and may breach platform rules",
+          "Do it only for ads"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Evading labels undermines trust and platform policies."
+      },
+      {
+        "id": "rai-020",
+        "module": "labelling-and-advertising-disclosure",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A sponsored post uses an AI voiceover. Which disclosures apply?",
+        "options": [
+          "None",
+          "AI label only",
+          "Commercial disclosure plus any required AI label",
+          "#ad only"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Commercial and AI disclosures are separate duties."
+      },
+      {
+        "id": "rai-021",
+        "module": "labelling-and-advertising-disclosure",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which commercial disclosure is clearest?",
+        "options": [
+          "'#ad' or 'Paid partnership with [brand]' at the start, plus the platform's partnership tool",
+          "'#sp' at the end of 30 hashtags",
+          "'Thanks to my friends'",
+          "No disclosure if the product was gifted"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Clear, upfront, unambiguous disclosure plus platform tools is the standard."
+      },
+      {
+        "id": "rai-022",
+        "module": "labelling-and-advertising-disclosure",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An agency's AI generates 200 ad variants, one claiming the product is 'clinically proven to cure acne'. What process failure does this show?",
+        "options": [
+          "None; it is a variant",
+          "Variants were not reviewed against approved, substantiated claims",
+          "The wrong font",
+          "Too few variants"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Every AI variant must meet claim-substantiation standards."
+      },
+      {
+        "id": "rai-023",
+        "module": "labelling-and-advertising-disclosure",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "A virtual (fully AI) influencer promotes a snack. What must be clear to audiences? Select all that apply.",
+        "options": [
+          "That the influencer is virtual",
+          "That the influencer personally tasted the snack",
+          "That any claims are substantiated",
+          "That the content is paid advertising"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Virtual influencers cannot have personal experience; implying it would mislead."
+      },
+      {
+        "id": "rai-024",
+        "module": "labelling-and-advertising-disclosure",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A UAE-based creator starts paid brand partnerships. Beyond #ad, what should she check?",
+        "options": [
+          "Only her follower count",
+          "Whether she needs the applicable UAE advertising permit or licence for paid content",
+          "Nothing else",
+          "Whether AI is used"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "The UAE regulates paid influencer advertising and requires the appropriate permit or licence."
+      },
+      {
+        "id": "rai-025",
+        "module": "data-protection-and-ai-policy",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which principle means using only the personal data you need?",
+        "options": [
+          "Transparency",
+          "Data minimisation",
+          "Portability",
+          "Accuracy"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Minimisation limits data to what is necessary."
+      },
+      {
+        "id": "rai-026",
+        "module": "data-protection-and-ai-policy",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Why use business-tier AI tools for customer data? Select all that apply.",
+        "options": [
+          "Inputs are often excluded from model training",
+          "Admin and access controls",
+          "They typically offer data processing agreements",
+          "They remove all legal obligations"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Business tiers provide safeguards but never remove legal obligations."
+      },
+      {
+        "id": "rai-027",
+        "module": "data-protection-and-ai-policy",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A lead-scoring AI automatically rejects applicants for a creator programme with no human involvement. What is the concern?",
+        "options": [
+          "None; automation is efficient",
+          "Solely automated decisions with significant effects may require human involvement, explanation and a way to contest, and risk unfair bias",
+          "It uses too much storage",
+          "It is too slow"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "GDPR-style laws include safeguards on solely automated significant decisions, and bias risk is high."
+      },
+      {
+        "id": "rai-028",
+        "module": "data-protection-and-ai-policy",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A Riyadh brand plans to send customer chats to an overseas AI provider. What must it consider?",
+        "options": [
+          "Nothing if chats are in Arabic",
+          "The provider's logo",
+          "Only the price",
+          "Cross-border transfer rules, processing agreements, minimisation and privacy notice updates"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Transfers of personal data abroad are regulated under the PDPL and similar laws."
+      },
+      {
+        "id": "rai-029",
+        "module": "data-protection-and-ai-policy",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which item belongs in an AI usage policy?",
+        "options": [
+          "Office seating plan",
+          "Staff birthdays",
+          "Approved tools and data rules",
+          "Favourite prompts only"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Approved tools and data rules are core policy elements."
+      },
+      {
+        "id": "rai-030",
+        "module": "data-protection-and-ai-policy",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why include an incident process in an AI policy?",
+        "options": [
+          "So mistakes like data leaks or false claims are reported quickly and handled consistently",
+          "To punish staff",
+          "Regulators require blame",
+          "To avoid telling clients"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "A clear, blame-free incident process speeds up containment and learning."
+      },
+      {
+        "id": "rai-031",
+        "module": "data-protection-and-ai-policy",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A small agency bans all AI use, but staff keep using personal chatbots secretly. What is the better approach?",
+        "options": [
+          "Let everyone use any tool with any data",
+          "Ignore it",
+          "Approve suitable tools with clear rules, training and review so use is visible and governed",
+          "Stricter bans and monitoring only"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Governed, approved use provides oversight that bans fail to achieve."
+      },
+      {
+        "id": "rai-032",
+        "module": "data-protection-and-ai-policy",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which statement about publicly available social media data is correct?",
+        "options": [
+          "It becomes anonymous once scraped",
+          "It is still personal data, and data protection principles still apply",
+          "It is only protected in the EU",
+          "It is free to use for any AI purpose"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Public availability does not remove data protection obligations."
+      }
+    ]
+  }
+}

@@ -1,0 +1,1057 @@
+{
+  "slug": "ai-fundamentals-for-marketers",
+  "version": 1,
+  "title": "AI Fundamentals for Marketers & Creators",
+  "subtitle": "Understand how generative AI works, what it can and cannot do, and how to use it safely across your funnel",
+  "category": "ai",
+  "level": "beginner",
+  "estimatedMinutes": 150,
+  "description": "Generative AI is now part of everyday marketing, but most people use it by trial and error. This course gives creators, marketers, sales teams and small-business owners a clear, practical foundation without technical jargon.\n\nYou will learn what large language models actually do, and why concepts such as tokens, context windows, training and inference explain most of their behaviour. You will learn why AI sometimes invents facts, and a simple routine to catch it. You will map where AI saves real time and where it creates risk, choose a lean toolkit without the hype, and protect client and customer data with practical rules that fit GDPR-style principles and local laws in Pakistan, the UAE, KSA, the UK and the US.\n\nFinally, you will apply AI across awareness, consideration, conversion and retention, and document your first repeatable AI workflow with human checkpoints and clear metrics.",
+  "outcomes": [
+    "Explain in plain language how large language models generate text, including tokens, context and training",
+    "Identify high-risk hallucination zones and apply a five-step verification routine",
+    "Decide which marketing tasks suit AI, need heavy review or should stay human-only",
+    "Choose and evaluate AI tools using a vendor-neutral scorecard",
+    "Protect personal and client data using red, amber and green data rules",
+    "Map practical AI uses to each stage of the marketing funnel",
+    "Document a repeatable AI workflow with human checkpoints and metrics"
+  ],
+  "skills": [
+    "Generative AI literacy",
+    "AI tool evaluation",
+    "Fact-checking AI output",
+    "Data privacy",
+    "AI marketing workflows"
+  ],
+  "prerequisites": [],
+  "badge": {
+    "name": "Certified AI-Ready Marketer",
+    "description": "The holder understands how generative AI and large language models work, can identify and verify hallucinations, chooses AI tools against clear criteria, protects personal and client data, and applies AI responsibly across the marketing funnel using documented workflows with human review.",
+    "criteria": "Completed all lessons and scored at least 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "how-generative-ai-works",
+      "title": "How generative AI actually works",
+      "summary": "A plain-language model of what large language models are, how they produce text, and why they sometimes get things confidently wrong.",
+      "lessons": [
+        {
+          "slug": "what-generative-ai-is",
+          "title": "What generative AI is (and is not)",
+          "type": "video",
+          "durationMinutes": 9,
+          "body": "### A new kind of software\n\nMost software you have used follows rules someone wrote by hand: if the customer clicks \"Buy\", charge the card. Generative AI is different. Instead of following hand-written rules, it has *learned patterns* from a very large amount of example material, and it uses those patterns to *generate* new material: text, images, audio or video.\n\nWhen you type a request into a chat assistant such as ChatGPT, Claude, Gemini or Copilot, you are talking to a **large language model (LLM)**. An LLM is a statistical model trained on huge collections of text. Its core skill is surprisingly simple to describe: given some text, predict what text is likely to come next. Repeat that prediction many times, one small piece at a time, and you get paragraphs, captions, emails and scripts.\n\n### Why \"predicting the next word\" is so powerful\n\nIt sounds too simple to be useful, but think about what it takes to predict the next word well. To continue \"The best time to post a Reel for a Karachi bakery is probably...\" sensibly, the model must have absorbed something about social media, audiences, time zones and bakeries. Scale that across billions of examples and the model picks up grammar, tone, formats, reasoning patterns and a broad (but imperfect) map of world knowledge.\n\nThat is why the same tool can draft a WhatsApp broadcast in Roman Urdu, rewrite a UK-style product description in American English, and summarise a 40-page brief. It is not looking these answers up in a database; it is *generating* a plausible response based on patterns.\n\n### What generative AI is not\n\nGetting the mental model right protects you from the most common mistakes:\n\n- **It is not a search engine.** Unless a tool is explicitly connected to the web or your files, it answers from its learned patterns, which may be outdated or wrong. Some assistants now browse the web and show sources; many answers still come purely from memory.\n- **It is not a person.** It does not \"know\" your brand, your client or your audience unless you tell it in the conversation. It has no stake in whether your campaign succeeds.\n- **It is not a fact database.** It produces fluent text, and fluency is not the same as accuracy.\n- **It is not magic or sentient.** It is a pattern engine. Treat it like a very fast, very well-read junior assistant who never gets tired but sometimes makes things up.\n\n### The family of generative tools\n\nAs a marketer or creator you will meet several kinds of generative model:\n\n| Type | Input | Output | Typical marketing use |\n|---|---|---|---|\n| Language models | Text (and often images/files) | Text | Captions, scripts, emails, research summaries |\n| Image models | Text prompt, reference images | Images | Concept visuals, thumbnails, mood boards |\n| Voice models | Text or audio | Speech | Voiceovers, dubbing, audio ads |\n| Video models | Text, images, scripts | Video | B-roll, avatar explainers, product teasers |\n\nMany modern tools are **multimodal**: one assistant can read a screenshot of your analytics, listen to a voice note, and write a report about both.\n\n### A worked example\n\nAmna runs a small skincare brand in Lahore. She asks an assistant: \"Write three Instagram captions for our new vitamin C serum.\" The output is fluent but generic, and one caption claims the serum \"removes dark spots in 7 days\", which Amna has never claimed and cannot prove.\n\nWhat happened? The model predicted what serum captions *typically* sound like, including common but risky claims. It did not know Amna's brand voice, her regulatory limits or her actual product results. The fix is not to abandon AI; it is to give better context (brand voice, approved claims, audience) and to review every output before it goes live. That is what the rest of this course teaches.\n\n### Do and don't\n\n- **Do** treat AI output as a first draft from a capable assistant.\n- **Do** give context: who you are, who the audience is, what you want.\n- **Don't** publish claims, numbers or quotes without checking them.\n- **Don't** assume the tool remembers your previous projects unless it has a memory feature you have deliberately switched on.",
+          "video": {
+            "script": "Welcome to AI Fundamentals for Marketers and Creators. Let's start with the most important idea in the whole course: what generative AI actually is.\n\nTraditional software follows rules that a programmer wrote. Generative AI is different. It has learned patterns from an enormous amount of example material, and it uses those patterns to create something new: a caption, an email, an image, a voiceover, even a video.\n\nThe chat assistants you've heard of are powered by large language models. Their core skill is simple to describe. Given some text, predict what comes next. Do that thousands of times in a row, and you get a full paragraph, a script, or a sales email.\n\nBecause these models have seen so much text, they pick up grammar, tone, formats and a broad map of the world. That's why one tool can write in English, Urdu or Arabic, and switch from a formal pitch to a playful Reel caption in seconds.\n\nBut here's the catch. The model is generating what sounds plausible, not looking up what is true. It isn't a search engine, it isn't a fact database, and it doesn't know your brand unless you tell it. So it can write something confident, fluent, and completely wrong.\n\nThe winning mindset is this: treat AI like a brilliant, tireless junior assistant. Give it clear context, let it produce a fast first draft, and then apply your own judgement before anything goes live.\n\nIn the next lessons, we'll open the hood a little further, and then get very practical about using these tools safely and profitably.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Generative AI creates new content by applying patterns learned from large amounts of example data.",
+            "A large language model works by repeatedly predicting the most likely next piece of text.",
+            "AI assistants are not search engines, fact databases or people; they generate plausible text.",
+            "Treat every output as a first draft that needs your context and your review."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the core task a large language model performs when it writes text?",
+              "options": [
+                "It copies the closest matching web page",
+                "It follows rules a programmer wrote for each topic",
+                "It repeatedly predicts the most likely next piece of text",
+                "It looks up the answer in a verified database"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "LLMs generate text by predicting what comes next, one small piece at a time. They do not look up verified answers or follow hand-written topic rules."
+            },
+            {
+              "question": "Amna's AI-written caption claimed her serum 'removes dark spots in 7 days'. What is the best explanation?",
+              "options": [
+                "The model is designed to lie",
+                "The model was hacked",
+                "The model generated a common-sounding claim without knowing her real, approved claims",
+                "The model checked her lab results"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "The model produced a plausible claim based on patterns in similar captions. It had no knowledge of Amna's product evidence, so a human must review claims."
+            },
+            {
+              "question": "Which statement about multimodal assistants is correct?",
+              "options": [
+                "They never make mistakes",
+                "They can accept and reason about more than one kind of input, such as text and images",
+                "They are always connected to the internet",
+                "They can only output images"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Multimodal means handling several types of input or output, e.g. reading a screenshot and writing text about it. It says nothing about accuracy or web access."
+            }
+          ],
+          "activity": "Ask any AI assistant to write a caption for one of your real products with no context, then again with your audience, tone and approved claims. Note three differences between the outputs."
+        },
+        {
+          "slug": "tokens-context-and-training",
+          "title": "Tokens, context windows, training and inference",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Four terms that explain most AI behaviour\n\nYou do not need to be an engineer to use AI well, but four concepts explain almost every \"why did it do that?\" moment: **tokens**, **context window**, **training** and **inference**.\n\n### Tokens: how AI reads and counts\n\nModels do not read words the way we do. They break text into **tokens**, small chunks that are often a whole short word, part of a longer word, or a punctuation mark. \"Marketing\" might be one token; an unusual brand name might be split into several.\n\nWhy it matters to you:\n\n- **Pricing and limits** for many AI tools are measured in tokens, not words. As a rough rule of thumb, English text uses somewhat more tokens than words. Languages written in other scripts, such as Urdu or Arabic, often use more tokens for the same meaning, so long prompts in those languages can hit limits sooner.\n- **Spelling-level tasks** (counting letters, exact character limits) can trip models up because they \"see\" tokens, not letters. Always check character counts for ad headlines and SMS yourself or with a counter tool.\n\n### The context window: the model's working memory\n\nThe **context window** is how much text the model can consider at once: your instructions, any files you pasted, and the conversation so far. Modern assistants have large windows, enough for long documents, but they are still finite.\n\nPractical consequences:\n\n- In a very long chat, early instructions can get less attention or eventually fall outside the window. If the tool starts ignoring your brand rules, start a fresh chat and re-paste your key instructions.\n- The model only knows what is in the context (plus its training). If you want it to use your price list, *paste the price list* or attach it.\n- More context is not always better. Irrelevant material can distract the model. Give what matters.\n\nSome tools add **memory** or **project** features that store notes about you between chats. These are convenient, but check what is saved and whether it includes anything confidential.\n\n### Training: how the model learned\n\n**Training** is the expensive, one-off process where the model learns patterns from a massive dataset. After the main training, developers typically fine-tune the model to follow instructions and behave helpfully and safely.\n\nTwo consequences:\n\n1. **Knowledge cut-off.** The model's built-in knowledge stops at some point in time. Ask about a platform policy that changed last month and a model without web access may confidently describe the old rule.\n2. **Your chats are not training in real time.** The model does not learn from your conversation the moment you type. However, depending on the provider and your account settings, your conversations *may* be used to improve future models. Business and enterprise plans often exclude your data from training by default; consumer plans vary. Check the settings.\n\n### Inference: the model at work\n\n**Inference** is what happens every time you send a prompt: the trained model processes your input and generates a response. Each response is generated fresh, which is why the same prompt can give different answers. Many tools add a degree of randomness (sometimes called temperature) to make writing less repetitive.\n\nFor marketers, this variability is a feature: ask for ten hook options and pick the best. For facts and numbers, it is a warning: a different answer each time means you need an authoritative source.\n\n### A worked example\n\nBilal, a Dubai-based real estate marketer, pastes a 90-page developer brochure into an assistant and asks for Instagram posts. Halfway through a long session the tool starts inventing amenities. Why?\n\n- The conversation grew very long, so earlier details got less attention.\n- Bilal asked about \"the payment plan\" without the relevant page being clearly referenced.\n- The model filled the gap with plausible real-estate language.\n\nFix: start a fresh chat, paste only the relevant sections (amenities list, payment plan page), instruct \"Use only the facts in the text below; if something is missing, say 'not in brochure'\", and check every claim against the brochure.\n\n### Quick reference\n\n- **Token:** the unit of text the model reads and generates.\n- **Context window:** what the model can see right now.\n- **Training:** how the model learned, which fixes its knowledge cut-off.\n- **Inference:** the model generating an answer to your prompt, fresh each time.",
+          "video": null,
+          "keyTakeaways": [
+            "Models read and write in tokens, so limits and costs are measured in tokens rather than words.",
+            "The context window is the model's working memory; paste what it needs and restart long chats.",
+            "Training fixes a knowledge cut-off; recent changes may be unknown unless the tool has web access.",
+            "Inference generates a fresh answer each time, which is great for ideas and risky for facts."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "An assistant starts ignoring the brand rules you gave at the start of a very long chat. What is the most likely cause and fix?",
+              "options": [
+                "You used too few tokens; write longer prompts",
+                "The model has learned new rules from other users",
+                "Early instructions are getting less attention in a long context; start a new chat and restate key rules",
+                "The model is broken; switch tools"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Long conversations dilute or push out early instructions. A fresh chat with key rules restated is the reliable fix."
+            },
+            {
+              "question": "Why might an AI tool describe an outdated platform policy?",
+              "options": [
+                "Tokens expire after a month",
+                "Inference only works on old data",
+                "It is deliberately hiding the new policy",
+                "Its knowledge comes from training data with a cut-off date and it may not have web access"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Training fixes the model's knowledge at a point in time. Without browsing, it cannot know about recent changes."
+            },
+            {
+              "question": "You need an ad headline under 30 characters. What is the safest approach?",
+              "options": [
+                "Generate options with AI, then verify length with a counter tool",
+                "Avoid AI for headlines entirely",
+                "Trust the model's character count",
+                "Ask the model to promise it counted correctly"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Models work in tokens, not letters, so exact character counts are unreliable. Use AI for ideas and a tool for counting."
+            }
+          ],
+          "activity": "Take a long document you use at work, identify the two or three sections an AI would actually need for a task, and write a prompt that includes only those sections plus the instruction to use only the supplied facts."
+        },
+        {
+          "slug": "why-ai-hallucinates",
+          "title": "Hallucinations: why AI gets things confidently wrong",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### What a hallucination is\n\nA **hallucination** is when an AI produces information that sounds right but is false or unsupported: a made-up statistic, a fake quote, a non-existent study, a wrong product feature, or a URL that leads nowhere. It is not a rare bug; it is a natural side effect of how language models work. They are optimised to produce plausible text, and plausible is not the same as true.\n\n### Why it happens\n\n- **Pattern completion over facts.** If most marketing articles cite a percentage at this point, the model may produce a percentage, whether or not one exists.\n- **Gaps in knowledge.** When the model lacks information (a niche local regulation, your client's pricing, last week's news), it may fill the gap rather than admit uncertainty.\n- **Pressure from your prompt.** \"Give me five statistics proving influencer marketing works\" invites the model to supply five statistics, real or not.\n- **Ambiguity.** Vague questions produce confident guesses.\n\nModern models hallucinate less than earlier ones, and tools with web search or document grounding can cite sources, but no current tool is hallucination-free. Even cited sources can be misread or misquoted.\n\n### High-risk zones for marketers\n\nBe most careful with:\n\n1. **Numbers and statistics** such as market sizes, conversion benchmarks and follower counts.\n2. **Quotes and attributions** such as \"As Gary Vee said...\" or client testimonials.\n3. **Legal, medical and financial claims** such as health benefits, investment returns and regulatory rules.\n4. **Product details** such as ingredients, specifications, prices and delivery times.\n5. **People and brands**: biographies, partnerships and awards.\n6. **Links and references**: book titles, study names and URLs.\n\nA made-up claim in a sponsored post can mislead consumers, breach advertising rules in markets like the UK, US, UAE and KSA, and damage the trust your brand depends on.\n\n### A five-step verification routine\n\nUse this routine whenever AI output contains facts:\n\n1. **Highlight every factual claim.** Numbers, names, dates, quotes, features.\n2. **Ask where it came from.** If the source is \"the AI said so\", it is unverified.\n3. **Check against a primary source.** The brand's official page, the regulator, the original study, the client's brief.\n4. **Remove or rewrite** anything you cannot verify. \"Many customers tell us...\" beats a fake \"87% of customers...\".\n5. **Keep a note** of the source for important claims, especially in sponsored content, in case you are asked.\n\n### Prompting to reduce hallucinations\n\nYou can lower the risk, though not eliminate it:\n\n- \"Use only the information in the text below. If the answer is not in the text, say 'Not provided'.\"\n- \"Do not invent statistics, quotes or sources. Where a statistic would help, insert [STAT NEEDED] instead.\"\n- \"List any assumptions you made at the end.\"\n- \"Rate your confidence for each claim and flag anything I should verify.\"\n\n### A worked example\n\nHassan, a freelance copywriter in Manchester, asks for a blog post on \"why small businesses should use email marketing\". The draft cites a specific return-on-investment figure attributed to a named research firm. Hassan searches for it and finds no such report, only similar-sounding figures from different sources with different methods.\n\nHe rewrites the paragraph: \"Email remains one of the most cost-effective channels for many small businesses because you own the list and pay little per message.\" Qualitative, true and still persuasive. Where he wants a number, he uses one from a report he has actually opened, and links to it.\n\n### Do and don't\n\n- **Do** ask for placeholders instead of invented numbers.\n- **Do** verify anything that would embarrass you if wrong.\n- **Don't** ask AI to \"find statistics that prove X\" and paste them straight in.\n- **Don't** treat a confident tone or a neat citation as evidence.",
+          "video": null,
+          "keyTakeaways": [
+            "Hallucinations are fluent but false outputs and are a natural side effect of how LLMs work.",
+            "Numbers, quotes, legal or health claims, product details and links are the highest-risk zones.",
+            "Verify every factual claim against a primary source, or remove it.",
+            "Prompts that restrict the model to supplied facts and request placeholders reduce, but do not eliminate, risk."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which prompt is MOST likely to produce hallucinated content?",
+              "options": [
+                "Summarise the attached brief using only its contents",
+                "Rewrite this paragraph in a friendlier tone",
+                "Suggest ten hook ideas for a Reel about morning routines",
+                "Give me five statistics proving influencer marketing works"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Demanding specific statistics pressures the model to supply numbers whether or not real ones exist. The other tasks are grounded or creative."
+            },
+            {
+              "question": "An AI draft includes a quote attributed to a well-known entrepreneur. What should you do?",
+              "options": [
+                "Change one word so it is not a direct quote",
+                "Verify it in a reliable original source or remove it",
+                "Ask the AI if it is sure",
+                "Publish it; famous quotes are usually right"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Quotes are a high-risk hallucination zone. Asking the AI again is not verification; check an original source or remove it."
+            }
+          ],
+          "activity": "Take an AI-written piece you have used before. Highlight every factual claim and label each one as verified, unverified or removed."
+        }
+      ]
+    },
+    {
+      "slug": "capabilities-and-limits",
+      "title": "Capabilities, limits and choosing tools",
+      "summary": "Where AI genuinely saves time for marketers and creators, where it fails, and how to build a lean, vendor-neutral toolkit.",
+      "lessons": [
+        {
+          "slug": "what-ai-does-well",
+          "title": "What AI does well and where it falls short",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### A realistic map of strengths\n\nGenerative AI is exceptional at some tasks and unreliable at others. Knowing the difference is the single biggest factor in whether AI saves you time or creates extra work.\n\n**Strong, dependable uses:**\n\n- **Ideation at volume.** Twenty hook angles, ten campaign names, fifteen content pillars in seconds. You still choose.\n- **First drafts.** Captions, emails, scripts, product descriptions, proposals. Faster to edit than to write from a blank page.\n- **Rewriting and repurposing.** Turning a YouTube transcript into a LinkedIn post, a blog into ten tweets, a formal brief into a WhatsApp message.\n- **Summarising.** Long reports, meeting transcripts, customer reviews, competitor pages.\n- **Tone and language shifts.** British to American English, formal to casual, English to Arabic or Urdu as a draft for a native speaker to polish.\n- **Structuring messy thinking.** Turning a voice note into an outline, a brain-dump into a content calendar.\n- **Classification.** Sorting 200 comments into praise, questions, complaints and spam.\n\n**Weak or risky uses:**\n\n- **Facts, numbers and recent events** without a verified source.\n- **Original strategy for your specific market** without your data; AI gives average advice unless you give it specifics.\n- **Truly distinctive creative voice.** Default output tends towards the generic middle. Your taste and lived experience are the differentiator.\n- **Exact constraints** such as character limits, precise word counts and complex formatting rules.\n- **Cultural nuance.** Humour, religious sensitivities, local slang and festival norms (Ramadan, Eid, Diwali, Christmas) need a human who knows the audience.\n- **Legal, medical and financial judgement.** Use AI to draft questions for a professional, not to replace one.\n\n### The \"average\" problem\n\nBecause models learn from vast amounts of existing content, their default output gravitates to the most common phrasing: \"Unlock your potential\", \"In today's fast-paced world\", \"Elevate your brand\". Audiences increasingly recognise this style and scroll past it.\n\nThe fix is to feed in what makes you different: your stories, customer language, opinions, examples and banned phrases. The next course, Prompt Engineering for Content & Sales, goes deep on this.\n\n### The 70/30 mindset\n\nA useful working model is that AI can often take you most of the way on routine drafting, and your final stretch (judgement, specifics, taste, verification) is what makes it good and safe. The exact split varies by task; the point is that the human part is where the value is.\n\n### A decision checklist\n\nBefore using AI for a task, ask:\n\n1. **Is the output easy to check?** Captions, yes. Tax advice, no.\n2. **What is the cost of an error?** A weak hook costs little; a false health claim can cost a lot.\n3. **Do I have the context to give it?** If not, gather that first.\n4. **Would a human expert do this better, faster?** Sometimes the honest answer is yes.\n5. **Does this involve anyone's personal or confidential data?** If so, see Module 3 first.\n\n### A worked example\n\nA Riyadh coffee brand wants a Ramadan campaign. Good AI uses include generating 30 concept angles, drafting Arabic and English caption options, summarising last year's comment feedback, and outlining a content calendar. Human-only decisions include which concepts respect the spirit of the month, final Arabic copy approved by a native speaker, timing around iftar and suhoor, and any claims about the product.\n\nThe team saves hours on drafting and spends that time where it matters: cultural fit and quality.",
+          "video": null,
+          "keyTakeaways": [
+            "AI is strongest at ideation, first drafts, repurposing, summarising, tone shifts and classification.",
+            "AI is weakest at unverified facts, market-specific strategy, exact constraints and cultural nuance.",
+            "Default AI output drifts towards generic phrasing; your specifics are the differentiator.",
+            "Decide per task: ease of checking, cost of error, available context and data sensitivity."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which task is the BEST fit for AI with light human review?",
+              "options": [
+                "Stating this month's platform algorithm changes from memory",
+                "Writing final Arabic copy without a native-speaker check",
+                "Sorting 300 Instagram comments into questions, complaints and praise",
+                "Deciding whether a supplement claim is legal in the UAE"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Classification of comments is easy to spot-check and low risk. The others involve legal judgement, cultural nuance or recent facts."
+            },
+            {
+              "question": "Why does default AI copy often sound generic?",
+              "options": [
+                "Generic copy uses fewer tokens",
+                "Platforms require generic language",
+                "Models gravitate towards the most common phrasing in their training data unless given specifics",
+                "Models are trained to be boring"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Models reproduce the statistical middle of what they have seen. Your stories, data and voice move output away from generic."
+            }
+          ],
+          "activity": "List ten tasks from your last working week. Mark each as strong fit, needs heavy review, or human-only, using the decision checklist."
+        },
+        {
+          "slug": "choosing-your-ai-toolkit",
+          "title": "Choosing your AI toolkit without the hype",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### Start with jobs, not tools\n\nNew AI tools launch every week, and it is easy to collect subscriptions you barely use. Flip the process: list the jobs you do repeatedly, then choose the smallest set of tools that does those jobs well.\n\nTypical creator and marketer jobs:\n\n- Writing and editing (captions, scripts, emails, proposals)\n- Research and summarising\n- Visuals (thumbnails, product mock-ups, mood boards)\n- Audio (voiceovers, podcast clean-up, dubbing)\n- Video (editing, captions, avatars, b-roll)\n- Admin and sales (meeting notes, CRM updates, follow-ups)\n\n### The main tool categories\n\n1. **General-purpose assistants.** Chat-based LLM assistants from the major AI labs. Most people need only one or two of these as their everyday workhorse for writing, analysis and brainstorming.\n2. **AI inside tools you already use.** Office suites, design tools such as Canva or Adobe, email platforms, CRMs and social schedulers increasingly include built-in AI. Often the cheapest, lowest-friction option because your content already lives there.\n3. **Specialist creative tools.** Voice (e.g. ElevenLabs), avatar video (e.g. HeyGen), image and video generation, transcription and captioning.\n4. **Automation platforms.** No-code tools that connect apps and add AI steps, covered in the advanced course.\n\n### An evaluation scorecard\n\nScore each candidate from 1 to 5 on:\n\n| Criterion | Questions to ask |\n|---|---|\n| Output quality | Run the same three real tasks in each tool. Which needs the least editing? |\n| Language support | Does it handle Urdu, Arabic, Roman Urdu or your market's languages well enough? |\n| Data and privacy | Is your data used for training? Can you opt out? Is there a business plan with stronger terms? |\n| Commercial rights | Do the terms allow commercial use of outputs? Any restrictions on voices, likenesses or logos? |\n| Integration | Does it connect with where you work (Drive, Notion, Slack, your scheduler)? |\n| Cost and limits | Monthly price, usage caps, team seats, payment options available in your country |\n| Reliability | Uptime, support, company track record |\n\nAlways test with *your* real tasks, not the demo examples on the tool's website.\n\n### Free vs paid\n\nFree tiers are fine for learning. For client work, paid business tiers often matter less for extra features and more for **data terms**: whether your inputs are used for training, admin controls, and contractual commitments. If you handle client briefs, unreleased products or customer data, that difference is important.\n\n### Avoiding lock-in\n\n- Keep your **prompt library, brand voice guide and templates** in your own documents, not only inside one tool.\n- Export important outputs such as voice files, video projects and transcripts.\n- Prefer tools that let you download your data.\n- Re-evaluate your stack every few months; the market moves fast, and a tool that led last year may not lead now.\n\n### A worked example: a lean creator stack\n\nSana, a lifestyle creator in Islamabad with a part-time editor, sets up:\n\n- One general assistant (paid tier) for scripts, captions and brand emails\n- The AI features in her existing design tool for thumbnails\n- A voice tool for English and Urdu voiceovers of her own voice, with her consent and control\n- Her video editor's auto-captions\n\nShe keeps a \"Prompt Library\" document with her best prompts and a one-page brand voice guide she pastes into every new chat. Total: a handful of subscriptions she actually uses, reviewed each quarter.",
+          "video": null,
+          "keyTakeaways": [
+            "Choose tools by listing your repeated jobs first, then pick the smallest toolkit that covers them.",
+            "Built-in AI in tools you already use is often the lowest-friction option.",
+            "Evaluate with your own real tasks and a scorecard covering quality, language, privacy, rights, integration and cost.",
+            "Keep prompts, voice guides and outputs in your own files to avoid lock-in."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the strongest reason to choose a paid business tier for client work?",
+              "options": [
+                "It guarantees no hallucinations",
+                "It always writes better captions",
+                "It often offers stronger data terms such as not training on your inputs, plus admin controls",
+                "It removes the need for human review"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Business tiers typically differ most on data handling and controls. No tier removes hallucinations or the need for review."
+            },
+            {
+              "question": "How should you compare two AI writing tools?",
+              "options": [
+                "Choose the one with the most features",
+                "Run the same real tasks from your work in both and compare editing effort",
+                "Read their marketing pages",
+                "Choose whichever is trending on social media"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Side-by-side testing on your real tasks reveals which tool actually saves you time."
+            },
+            {
+              "question": "Which habit best reduces lock-in to a single AI tool?",
+              "options": [
+                "Deleting outputs after use",
+                "Using free tiers only",
+                "Only ever using one tool",
+                "Keeping your prompt library and brand voice guide in your own documents"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Owning your prompts, guides and exports means you can switch tools without losing your working system."
+            }
+          ],
+          "activity": "Fill in the evaluation scorecard for two AI assistants using three real tasks from your work, and decide which one becomes your everyday workhorse."
+        }
+      ]
+    },
+    {
+      "slug": "data-privacy-and-confidentiality",
+      "title": "Data privacy and confidentiality",
+      "summary": "What you should never paste into an AI tool, how data is handled, and safe workflows for client and customer information.",
+      "lessons": [
+        {
+          "slug": "what-not-to-paste",
+          "title": "What never to paste into an AI tool",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### Why this matters\n\nWhen you type into an AI tool, your text is sent to the provider's servers. Depending on the provider, the plan and your settings, it may be stored, reviewed for safety, or used to improve future models. For a creator or agency, that creates three kinds of risk:\n\n1. **Privacy risk:** exposing personal data about customers, followers or colleagues.\n2. **Confidentiality risk:** leaking a client's unreleased product, pricing or strategy, often in breach of an NDA.\n3. **Security risk:** exposing passwords, API keys or account access.\n\nData protection laws such as the EU and UK GDPR, Pakistan's emerging data protection framework, the UAE's federal data protection law, Saudi Arabia's Personal Data Protection Law (PDPL) and US state privacy laws share common principles: collect only what you need, use it only for the stated purpose, keep it secure, and be transparent. Pasting customer lists into a consumer chatbot can conflict with all of them.\n\n### The red list: never paste\n\n- **Passwords, API keys, one-time codes, recovery phrases** or login links.\n- **Payment data:** card numbers, bank details, IBANs, wallet credentials.\n- **Government identifiers:** CNIC, Emirates ID, Iqama, passport or national insurance numbers.\n- **Health, religious, biometric or other sensitive personal data** about identifiable people.\n- **Customer lists** with names, phone numbers or emails, such as your WhatsApp broadcast list or CRM export.\n- **Client material under NDA** unless the client has agreed and you are using an approved tool with suitable terms.\n- **Private messages and DMs** from followers that identify them.\n\n### The amber list: only in approved tools, minimised\n\n- Internal strategy documents and pricing\n- Sales call recordings and transcripts\n- Unreleased campaign creative\n- Performance data tied to named accounts\n\nFor amber material, use a business tier or company-approved tool where inputs are not used for training, share only the parts you need, and follow your agency's or client's rules.\n\n### The green list: generally fine\n\n- Public information (your published posts, public web pages)\n- Your own drafts and ideas\n- Anonymised or aggregated data (\"32 comments asked about delivery times\")\n- Generic questions (\"How do I structure a product launch email?\")\n\n### Anonymise before you paste\n\nOften you can get the same value without the risk:\n\n- Replace names with roles: \"Customer A\", \"Client (skincare brand)\".\n- Replace exact figures with ranges, or remove them if they are not needed.\n- Strip phone numbers, emails, order IDs and addresses.\n- Summarise instead of pasting raw: \"Three customers complained about late delivery in Jeddah\" instead of the full chat logs.\n\n### A worked example\n\nOmar, an account manager at a small Dubai agency, wants help replying to an angry client email. The email includes the client's unreleased launch date, the CEO's mobile number, and a budget figure.\n\nUnsafe: paste the whole email into a personal free chatbot account.\n\nSafe: use the agency's approved AI tool, or rewrite the context: \"A client is upset that a campaign deliverable was two days late. They are worried about an upcoming launch. Draft a calm, accountable reply that apologises, explains the fix and confirms the new timeline.\" Same useful output, none of the sensitive details.\n\n### Check your settings\n\nTake five minutes in each tool you use to check whether your chats are used for training and how to opt out, how long chats are kept and how to delete them, whether memory features are on and what they store, and who else on your team can see shared projects or chats.",
+          "video": null,
+          "keyTakeaways": [
+            "Anything you type into an AI tool leaves your device and may be stored or used under the provider's terms.",
+            "Never paste passwords, payment data, government IDs, sensitive personal data or customer lists.",
+            "Client or confidential material belongs only in approved tools, with only the parts you need.",
+            "Anonymising and summarising usually gives the same value with far less risk."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which item is on the never-paste list?",
+              "options": [
+                "A generic question about email structure",
+                "A public product page URL",
+                "A CSV of customer names and WhatsApp numbers",
+                "Your own draft caption"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Customer lists with contact details are personal data. The other items are public or your own non-sensitive content."
+            },
+            {
+              "question": "A client shares unreleased launch details under NDA. What is the best practice?",
+              "options": [
+                "Email them to the AI provider",
+                "Post them publicly to test reactions",
+                "Paste them into any AI tool; NDAs do not cover AI",
+                "Use only an approved tool with suitable data terms and share only what is needed, or anonymise"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "NDAs cover sharing with third parties, which can include AI providers. Use approved tools, minimise and anonymise."
+            }
+          ],
+          "activity": "Audit the privacy and training settings of every AI tool you use, and write down one change you made."
+        },
+        {
+          "slug": "safe-workflows-client-work",
+          "title": "Safe AI workflows for client and customer work",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### From rules to routines\n\nKnowing what not to paste is the start. The next step is building routines so that safe behaviour is automatic, for you and anyone who works with you.\n\n### The five-question pre-flight check\n\nBefore using AI on any client or customer task, ask:\n\n1. **Whose data is this?** Mine, a client's, a customer's or the public's?\n2. **Is there an agreement that covers it?** NDA, contract clause or client AI policy?\n3. **Is this tool approved for this data?** Business terms, training opt-out, access controls?\n4. **Can I minimise or anonymise it?** What is the least information needed?\n5. **Will a human review the output before it reaches anyone?**\n\nIf you cannot answer confidently, pause and ask the client or your manager.\n\n### Talk to clients about AI\n\nMany clients now have AI policies of their own. Agree up front:\n\n- Whether you may use AI tools on their work, and which ones.\n- Whether AI-generated assets (images, voices, avatars) are acceptable in their brand, and how they must be labelled.\n- Who owns outputs and who is responsible for checking claims.\n\nA simple clause in your proposal helps: \"We use approved AI tools to accelerate drafting and research. All outputs are reviewed and edited by our team. We do not input your confidential information into tools that use it for model training. We will not create synthetic voices or likenesses of any person without written consent.\"\n\n### Customer data in sales and support\n\nSales teams increasingly use AI for call summaries and follow-ups. Good practice:\n\n- Tell customers when calls are recorded or transcribed, as required by local law and platform rules.\n- Keep transcripts inside your approved CRM or note-taking tool rather than copying them into personal chat accounts.\n- Delete what you no longer need.\n- Do not use AI to infer sensitive traits (health, religion, finances) about individual customers for targeting.\n\n### A team AI policy on one page\n\nEven a two-person business benefits from written rules. A basic policy covers:\n\n- **Approved tools** and which plan tier to use.\n- **Data rules**: the red, amber and green lists.\n- **Review rules**: who checks what before publishing.\n- **Disclosure rules**: when you label AI-generated content.\n- **Likeness and voice rules**: consent required, in writing.\n- **Incident process**: what to do if someone pastes something they should not have (tell the lead, delete the chat, assess whether the client must be informed).\n\nThe Responsible AI, Disclosure & Compliance course helps you build a fuller version.\n\n### A worked example\n\nA three-person social media agency in Karachi manages accounts for a clinic, a clothing brand and a restaurant. Their routine:\n\n- All client work happens in one business-tier assistant with training disabled, under a shared team workspace.\n- The clinic's patient messages are never pasted into AI; the team summarises themes manually (\"questions about appointment times\").\n- Each client has a pasted \"brand brief\" (voice, banned words, approved claims) with no personal data in it.\n- Every post is reviewed by the account lead before scheduling, with a checklist that includes \"claims verified\" and \"AI disclosure applied where needed\".\n\nWhen a new intern pasted a customer phone list into a free chatbot, the incident process kicked in: the chat was deleted, the account lead assessed the exposure, and the intern was trained. The rule became a checklist line in onboarding.\n\n### Key habits\n\n- Default to anonymised inputs.\n- Keep sensitive work in approved tools.\n- Get consent in writing for anything involving a real person's likeness or voice.\n- Review before anything is published or sent.",
+          "video": null,
+          "keyTakeaways": [
+            "Run a five-question pre-flight check before using AI on client or customer data.",
+            "Agree AI usage, labelling and ownership with clients up front, ideally in writing.",
+            "Keep call transcripts and customer data inside approved systems and delete what you do not need.",
+            "A one-page team AI policy with an incident process makes safe behaviour routine."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "An intern pasted a customer phone list into a free chatbot. What is the best first response?",
+              "options": [
+                "Ignore it; nothing will happen",
+                "Follow the incident process: inform the lead, delete the chat, assess exposure and whether anyone must be told",
+                "Post an apology on social media immediately",
+                "Ban all AI tools permanently"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "A calm, documented incident process limits harm and supports any obligations to inform clients or customers."
+            },
+            {
+              "question": "Which clause is most useful in an agency proposal about AI?",
+              "options": [
+                "Clients are responsible for anything AI writes",
+                "AI does all our work so prices are lower",
+                "We never use AI",
+                "We use approved AI tools, review all outputs, and do not put confidential information into tools that train on it"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Clear, honest commitments on tools, review and data handling build trust and set expectations."
+            }
+          ],
+          "activity": "Draft a one-page AI policy for your business covering approved tools, data rules, review, disclosure, likeness consent and incidents."
+        }
+      ]
+    },
+    {
+      "slug": "ai-in-the-marketing-funnel",
+      "title": "AI across the marketing funnel",
+      "summary": "Applying AI at each stage of awareness, consideration, conversion and retention, and building your first repeatable workflow.",
+      "lessons": [
+        {
+          "slug": "ai-across-the-funnel",
+          "title": "Mapping AI to awareness, consideration, conversion and retention",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Why think in funnels\n\nIt is tempting to use AI randomly, a caption here and an email there. You get far more value by mapping it to the stages customers move through. A simple funnel has four stages: **awareness** (they discover you), **consideration** (they evaluate you), **conversion** (they buy or book) and **retention** (they stay, return and refer).\n\n### Awareness: getting discovered\n\nAI helps you produce more relevant top-of-funnel content without burning out.\n\n- **Content ideation:** \"Give me 20 video ideas for first-time home buyers in Dubai, grouped by fear, dream and myth.\"\n- **Hook variations:** multiple opening lines to test on short-form video.\n- **Repurposing:** one long video into shorts, carousel slides, a newsletter and a thread.\n- **Localisation:** draft versions for different languages or regions, polished by native speakers.\n- **Search and discovery:** outline articles around the questions your audience actually asks.\n\nHuman role: choose ideas that fit your brand and positioning, add real stories, and check trends are real and current.\n\n### Consideration: building trust\n\nPeople compare options, read reviews and look for proof.\n\n- **FAQ and objection content:** summarise real customer questions from DMs and comments (anonymised), then draft answers.\n- **Comparison and explainer content:** \"Explain the difference between our two packages for a busy restaurant owner.\"\n- **Case study drafts** from interview notes, with the client's approval of final wording.\n- **Personalised outreach drafts** for sales, based on public information about a prospect's business.\n\nHuman role: every claim, testimonial and comparison must be accurate and fair. Never invent reviews or testimonials; that is deceptive and illegal in many markets.\n\n### Conversion: making it easy to say yes\n\n- **Landing page and ad copy variants** for testing.\n- **Sales email and follow-up sequences.**\n- **Chat assistants** that answer common pre-purchase questions from an approved knowledge base, with a human hand-off.\n- **Proposal drafts** from a discovery-call summary.\n\nHuman role: price, offer terms and guarantees must match reality exactly. Watch for pressure tactics or false urgency, which consumer-protection regulators treat as misleading.\n\n### Retention: keeping and growing customers\n\n- **Onboarding sequences** and how-to content.\n- **Review and feedback analysis:** cluster hundreds of reviews into themes.\n- **Win-back and loyalty messages** tailored by segment.\n- **Community management:** draft replies to common comments for a human to approve.\n\nHuman role: respect opt-outs and consent, and keep a human voice for complaints and sensitive situations.\n\n### Measurement across the funnel\n\nAI can also help you interpret results: paste an anonymised performance export and ask for patterns, then verify them in the platform. Treat AI analysis as a hypothesis generator, not the final word.\n\n### A worked example: a UK online tutor\n\nPriya runs GCSE maths tutoring online.\n\n- **Awareness:** AI drafts 30 short-video ideas around common exam mistakes; she films her ten favourites.\n- **Consideration:** she anonymises parent WhatsApp questions, has AI cluster them, and turns the top five into an FAQ carousel.\n- **Conversion:** AI drafts a three-email sequence for parents who downloaded her free worksheet. She edits for accuracy and adds a real (consented) parent testimonial.\n- **Retention:** AI turns her lesson notes into a weekly progress-update template she personalises for each student.\n\nShe measures bookings from each stage and keeps what works.\n\n### Pitfalls to avoid\n\n- Flooding every channel with average AI content. Quality and relevance beat volume.\n- Fake social proof, whether invented reviews, AI \"customers\" or fabricated case studies.\n- Personalisation that feels creepy because it uses data people did not expect you to have.",
+          "video": null,
+          "keyTakeaways": [
+            "Map AI to funnel stages: awareness, consideration, conversion and retention.",
+            "Awareness uses ideation, hooks and repurposing; consideration uses FAQs and honest comparisons.",
+            "Conversion copy must match real prices, offers and terms, with no false urgency.",
+            "Never fabricate reviews or testimonials, and treat AI analysis as a hypothesis to verify."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which AI use belongs mainly in the consideration stage?",
+              "options": [
+                "Turning anonymised customer questions into an FAQ carousel",
+                "Writing a win-back email for lapsed customers",
+                "Generating 30 short-video ideas for discovery",
+                "Designing a loyalty programme"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "FAQ and objection-handling content help people evaluate you, which is consideration. The others are awareness or retention."
+            },
+            {
+              "question": "A client asks you to 'generate some customer reviews with AI' for their new product page. What should you do?",
+              "options": [
+                "Generate them; everyone does it",
+                "Generate them but use fake names",
+                "Generate them and mark them 'illustrative' in small print",
+                "Refuse to fabricate reviews and suggest collecting genuine reviews, for example from early customers"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Fake reviews are deceptive and prohibited by consumer-protection and advertising rules in many markets. Help collect real ones instead."
+            }
+          ],
+          "activity": "Draw your own funnel and list at least one AI use and one human-only responsibility at each stage."
+        },
+        {
+          "slug": "your-first-ai-workflow",
+          "title": "Building your first repeatable AI workflow",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### From one-off prompts to workflows\n\nA one-off prompt saves minutes. A repeatable workflow saves hours every week and produces consistent quality. A workflow is simply a documented sequence of steps, some done by AI and some by you, that you run the same way each time.\n\n### The anatomy of a good workflow\n\n1. **Trigger:** what starts it (a new long video is published, a client sends a brief, a week begins).\n2. **Inputs:** what you feed in (transcript, brief, brand voice guide, approved claims).\n3. **AI steps:** clear prompts saved in your library.\n4. **Human checkpoints:** where you review, choose, edit and verify.\n5. **Output:** the finished deliverable and where it goes.\n6. **Measure:** what you track to know it is working.\n\n### Worked example: the \"one video, seven assets\" workflow\n\nFaisal is a fitness creator in Jeddah who publishes one long YouTube video a week in Arabic and English.\n\n**Trigger:** the weekly video is uploaded.\n\n**Inputs:** the auto-generated transcript (checked for major errors), his one-page brand voice guide, and a list of topics he never gives advice on (medical conditions, supplements).\n\n**Step 1 (AI): Summarise.** \"Here is the transcript of my video. List the five most useful, specific points, in my words where possible. Quote timestamps.\"\n\n**Step 2 (human): Choose.** Faisal picks the three strongest points.\n\n**Step 3 (AI): Draft.** Using his saved prompt: \"Using my brand voice guide below, write: (a) three short-video scripts under 45 seconds, each built around one point with a strong first-line hook; (b) one carousel with 7 slides; (c) one newsletter section of about 200 words; (d) two community posts. Do not add advice beyond what is in the transcript.\"\n\n**Step 4 (human): Edit and verify.** He checks every fitness claim against what he actually said, removes anything that sounds like medical advice, adds a personal detail, and has his Arabic editor polish the Arabic versions.\n\n**Step 5 (human + tool): Schedule.** Assets go into his scheduler with captions and appropriate disclosures for any sponsored segments.\n\n**Measure:** time spent per week, and views, saves and newsletter clicks for repurposed assets versus before.\n\nIllustratively, if repurposing used to take him most of a working day, a workflow like this might cut it to a couple of hours, with better consistency. Your numbers will differ; measure your own.\n\n### Documenting your workflow\n\nWrite it down in a simple template:\n\n| Field | Your answer |\n|---|---|\n| Name | e.g. Weekly video repurposing |\n| Trigger | |\n| Inputs | |\n| Prompts used (link to library) | |\n| Human checkpoints | |\n| Output and destination | |\n| Quality checklist | |\n| Metric | |\n\nKeep prompts in a shared document so a teammate or freelancer can run the workflow too.\n\n### Quality checklist (use for every output)\n\n- Does it sound like us, not like generic AI?\n- Is every fact, number and claim verified?\n- Is it right for this audience, culture and platform?\n- Are disclosures (#ad, paid partnership, AI labels where required) correct?\n- Is there any personal or confidential data that should not be there?\n\n### Common pitfalls\n\n- **Automating a bad process.** Fix the process first.\n- **Skipping checkpoints** when busy, which is exactly when errors slip through.\n- **Never updating prompts.** Review monthly and improve based on what you had to edit.\n- **Measuring only volume.** More posts is not the goal; better results for less effort is.\n\n### Where to go next\n\nYou now have the fundamentals: how AI works, where it helps, how to protect data, and how to use it across the funnel. Continue with Prompt Engineering for Content & Sales to sharpen your prompts, AI Video & Voice Production to create media, and Responsible AI, Disclosure & Compliance to stay on the right side of the rules.",
+          "video": null,
+          "keyTakeaways": [
+            "A workflow is a documented sequence of AI steps and human checkpoints that you repeat.",
+            "Every workflow needs a trigger, inputs, saved prompts, human checkpoints, an output and a metric.",
+            "Human checkpoints for choosing, verifying and cultural polish are non-negotiable.",
+            "Measure time saved and results, not just output volume, and improve prompts regularly."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "In Faisal's workflow, why does he restrict the AI to what is in the transcript?",
+              "options": [
+                "To save tokens",
+                "Because AI cannot write fitness content",
+                "To make the output longer",
+                "To prevent the AI adding unverified or risky advice he never gave"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Grounding the AI in the transcript reduces hallucinated or risky advice, especially on health topics."
+            },
+            {
+              "question": "Which metric best shows a content workflow is working?",
+              "options": [
+                "Number of posts produced",
+                "Time saved alongside engagement or conversion results compared to before",
+                "Length of prompts",
+                "Number of AI tools used"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Volume alone is not success. Compare time and results before and after the workflow."
+            }
+          ],
+          "activity": "Document one repeatable AI workflow for your own work using the template, run it once this week, and record the time taken and one improvement."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 20,
+    "timeLimitMinutes": 30,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "aif-001",
+        "module": "how-generative-ai-works",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What best describes how a large language model produces a caption?",
+        "options": [
+          "It copies the top-ranking caption from the platform",
+          "It generates text by repeatedly predicting likely next tokens based on learned patterns",
+          "It asks a human writer in real time",
+          "It retrieves the best caption from a database of approved posts"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "LLMs generate text token by token from learned patterns. They do not retrieve approved posts or copy live content."
+      },
+      {
+        "id": "aif-002",
+        "module": "how-generative-ai-works",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "A friend says, 'AI is basically Google that writes nicely.' What is the most accurate correction?",
+        "options": [
+          "Not quite; many answers come from learned patterns, not live search, so they can be outdated or invented",
+          "Not quite; it only works offline",
+          "Correct; it searches the web for every answer",
+          "Correct; it only shows verified facts"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Unless connected to search or your files, an assistant answers from training patterns, which can be wrong or out of date."
+      },
+      {
+        "id": "aif-003",
+        "module": "how-generative-ai-works",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "You paste a 100-page brochure and after a long session the assistant begins inventing features. What is the BEST fix?",
+        "options": [
+          "Switch the language to English",
+          "Keep asking in the same chat until it gets it right",
+          "Start a fresh chat, paste only the relevant sections and instruct it to use only the supplied facts",
+          "Ask it to be more creative"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Long contexts dilute attention. A fresh chat with focused, grounded input and a 'use only these facts' instruction is the reliable fix."
+      },
+      {
+        "id": "aif-004",
+        "module": "how-generative-ai-works",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why can long prompts in Urdu or Arabic hit a tool's limits sooner than similar English prompts?",
+        "options": [
+          "Tools charge extra for non-English words",
+          "The context window shrinks for non-English users",
+          "Those languages are not supported at all",
+          "Text in those scripts often uses more tokens for the same meaning"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Tokenisation often splits text in other scripts into more tokens, so limits are reached sooner."
+      },
+      {
+        "id": "aif-005",
+        "module": "how-generative-ai-works",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is the clearest example of an AI hallucination?",
+        "options": [
+          "A caption that is slightly too long",
+          "An image with a blue background",
+          "A blog draft citing a research report that does not exist",
+          "A reply written in a formal tone"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Hallucinations are fluent but false or unsupported content, such as a non-existent report."
+      },
+      {
+        "id": "aif-006",
+        "module": "how-generative-ai-works",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which prompt instructions help reduce hallucinated statistics? Select all that apply.",
+        "options": [
+          "'Do not invent statistics; insert [STAT NEEDED] where one would help'",
+          "'Give me as many impressive numbers as possible'",
+          "'List any assumptions you made at the end'",
+          "'Use only the information in the text below'"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Placeholders, grounding and surfacing assumptions reduce risk. Asking for impressive numbers encourages fabrication."
+      },
+      {
+        "id": "aif-007",
+        "module": "how-generative-ai-works",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "You ask the same factual question twice and get two different numbers. What does this MOST strongly suggest?",
+        "options": [
+          "Your account has been hacked",
+          "The model is learning from your chat in real time",
+          "Inference is variable and the model lacks a reliable grounded source; verify with a primary source",
+          "The second answer is correct because it is newer"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Different answers to the same factual question signal uncertainty. Neither is reliable until checked against an authoritative source."
+      },
+      {
+        "id": "aif-008",
+        "module": "how-generative-ai-works",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which statement about training and your chats is most accurate?",
+        "options": [
+          "Every message instantly retrains the model",
+          "Chats may or may not be used to improve future models depending on the provider, plan and settings",
+          "No provider ever uses chats for training",
+          "Only images are used for training"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Models do not learn live from your chat, but providers' policies on using conversations for future training vary by plan and settings."
+      },
+      {
+        "id": "aif-009",
+        "module": "capabilities-and-limits",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which task is generally the STRONGEST fit for AI?",
+        "options": [
+          "Turning a video transcript into draft posts for several platforms",
+          "Final legal review of an influencer contract",
+          "Guaranteeing a headline is exactly 30 characters",
+          "Stating the exact current advertising rules in KSA from memory"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Repurposing existing content is a core strength. Legal rules, legal review and exact character counts need verification or professionals."
+      },
+      {
+        "id": "aif-010",
+        "module": "capabilities-and-limits",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A café's AI-written captions all sound like 'Elevate your coffee experience'. What is the MOST effective fix?",
+        "options": [
+          "Add more emojis",
+          "Use a different AI tool",
+          "Ask for longer captions",
+          "Give the model specifics: real stories, customer phrases, a voice guide and banned phrases"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Generic output comes from lack of specifics. Brand-specific context and banned phrases move output away from the average."
+      },
+      {
+        "id": "aif-011",
+        "module": "capabilities-and-limits",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "When evaluating AI tools for an agency, which criteria belong on the scorecard? Select all that apply.",
+        "options": [
+          "Quality on your own real tasks",
+          "Whether inputs are used for training and whether you can opt out",
+          "How many followers the founder has",
+          "Commercial-use rights for outputs"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Data terms, real-task quality and commercial rights matter. Founder popularity does not predict fitness for your work."
+      },
+      {
+        "id": "aif-012",
+        "module": "capabilities-and-limits",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is usually the lowest-friction way to start using AI for design work?",
+        "options": [
+          "Hiring a data scientist",
+          "Using AI features built into the design tool you already use",
+          "Building your own model",
+          "Subscribing to every new tool"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Built-in AI in existing tools fits your current workflow with minimal setup or cost."
+      },
+      {
+        "id": "aif-013",
+        "module": "capabilities-and-limits",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A Riyadh brand wants a Ramadan campaign. Which split of responsibilities is MOST appropriate?",
+        "options": [
+          "AI decides timing around iftar; humans pick emojis",
+          "AI generates concepts and drafts; humans decide cultural fit, final Arabic wording, timing and claims",
+          "Humans do everything because AI cannot write Arabic",
+          "AI writes and publishes final Arabic copy; humans review metrics later"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "AI accelerates ideation and drafting, while cultural sensitivity, final language, timing and claims need human judgement."
+      },
+      {
+        "id": "aif-014",
+        "module": "capabilities-and-limits",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why keep your prompt library and brand voice guide in your own documents?",
+        "options": [
+          "It lets you switch tools or onboard teammates without losing your working system",
+          "AI tools forbid saving prompts",
+          "It makes outputs longer",
+          "It prevents hallucinations entirely"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Owning your prompts avoids lock-in and makes workflows shareable. It does not eliminate hallucinations."
+      },
+      {
+        "id": "aif-015",
+        "module": "capabilities-and-limits",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which question belongs in a decision checklist before using AI on a task?",
+        "options": [
+          "Is it Friday?",
+          "How many tokens is my name?",
+          "Which colour is the tool's logo?",
+          "Is the output easy to check, and what does an error cost?"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Ease of checking and cost of error determine how much review a task needs."
+      },
+      {
+        "id": "aif-016",
+        "module": "data-privacy-and-confidentiality",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which item should NEVER be pasted into a general AI tool?",
+        "options": [
+          "An anonymised summary of complaint themes",
+          "A client's social media login password",
+          "A generic question about hooks",
+          "A public blog post you wrote"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Credentials are on the red list. Public, generic and anonymised content is low risk."
+      },
+      {
+        "id": "aif-017",
+        "module": "data-privacy-and-confidentiality",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "You want AI help analysing customer complaints from your WhatsApp Business chats. What is the safest approach?",
+        "options": [
+          "Post the chats publicly for feedback",
+          "Summarise or anonymise the complaints (themes, no names or numbers), then use an approved tool",
+          "Export all chats with phone numbers into a free chatbot",
+          "Ask customers to paste their own chats into AI"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Anonymising and minimising data before using an approved tool keeps the insight without exposing personal data."
+      },
+      {
+        "id": "aif-018",
+        "module": "data-privacy-and-confidentiality",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which principles are shared by GDPR-style data protection laws in many regions? Select all that apply.",
+        "options": [
+          "Use data only for the stated purpose",
+          "Share data freely once it is online",
+          "Collect only the data you need",
+          "Keep data secure"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Data minimisation, purpose limitation and security are common principles. Online availability does not remove protection."
+      },
+      {
+        "id": "aif-019",
+        "module": "data-privacy-and-confidentiality",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An agency's clinic client sends patient enquiries for social content ideas. What is the BEST practice?",
+        "options": [
+          "Manually extract anonymised themes (e.g. 'questions about appointment times') and never input patient details into AI",
+          "Store enquiries in a personal AI chat for later",
+          "Paste enquiries into AI so it can find patterns",
+          "Use patient names in posts to add authenticity"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Health data is highly sensitive. Extract anonymised themes manually and keep identifiable patient information out of AI tools."
+      },
+      {
+        "id": "aif-020",
+        "module": "data-privacy-and-confidentiality",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the most useful first step to reduce data risk in a tool you already use?",
+        "options": [
+          "Turn on notifications",
+          "Change its theme to dark mode",
+          "Check its training, retention and memory settings",
+          "Increase your prompt length"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Reviewing training opt-outs, retention and memory settings directly reduces how your data is stored and used."
+      },
+      {
+        "id": "aif-021",
+        "module": "data-privacy-and-confidentiality",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which proposal clause about AI is most appropriate for a small agency?",
+        "options": [
+          "'We do not disclose tool use under any circumstances'",
+          "'We use approved AI tools, review all outputs, avoid putting confidential information into tools that train on it, and require written consent for any likeness or voice'",
+          "'AI is responsible for all errors'",
+          "'We may use any AI tool with any data you provide'"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Transparent commitments on approved tools, review, data and consent set clear, trustworthy expectations."
+      },
+      {
+        "id": "aif-022",
+        "module": "data-privacy-and-confidentiality",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "A teammate pasted a client's unreleased pricing into a personal free chatbot. Which steps are appropriate? Select all that apply.",
+        "options": [
+          "Assess whether the client must be informed under the contract",
+          "Delete the chat and check the tool's data settings",
+          "Report it to the account lead",
+          "Hide the incident so the client never finds out"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "A transparent incident process limits harm and respects contractual duties. Hiding it increases legal and trust risk."
+      },
+      {
+        "id": "aif-023",
+        "module": "ai-in-the-marketing-funnel",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Generating 20 short-video ideas to reach new audiences mainly supports which funnel stage?",
+        "options": [
+          "Retention",
+          "Consideration",
+          "Awareness",
+          "Conversion"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Discovery content that reaches new people is awareness."
+      },
+      {
+        "id": "aif-024",
+        "module": "ai-in-the-marketing-funnel",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which AI use is most appropriate for the retention stage?",
+        "options": [
+          "Buying followers",
+          "Clustering existing customer reviews into themes to improve onboarding",
+          "Cold outreach to new prospects",
+          "Writing hooks for first-time viewers"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Retention focuses on existing customers; review analysis and onboarding improvements serve that stage."
+      },
+      {
+        "id": "aif-025",
+        "module": "ai-in-the-marketing-funnel",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An AI-drafted sales email says 'Only 2 spots left, offer ends tonight!' but neither is true. What is the correct action?",
+        "options": [
+          "Send it only to international customers",
+          "Send it; urgency increases conversions",
+          "Soften it to 'probably ends tonight'",
+          "Remove or correct the false urgency, because misleading scarcity claims can breach consumer-protection rules"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "False urgency and scarcity are misleading practices in many markets. Offer terms must match reality."
+      },
+      {
+        "id": "aif-026",
+        "module": "ai-in-the-marketing-funnel",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which elements belong in a documented AI workflow? Select all that apply.",
+        "options": [
+          "Saved prompts",
+          "A promise that no editing is needed",
+          "A trigger that starts it",
+          "Human review checkpoints"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Triggers, prompts and human checkpoints define a repeatable workflow. No responsible workflow skips editing."
+      },
+      {
+        "id": "aif-027",
+        "module": "ai-in-the-marketing-funnel",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the best way to judge whether an AI content workflow is working?",
+        "options": [
+          "Count how many AI tools are involved",
+          "Compare time spent and results such as saves, clicks or bookings before and after",
+          "Ask the AI if it is working",
+          "Count how many posts it produces"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Effectiveness is time saved plus results, measured against a baseline."
+      },
+      {
+        "id": "aif-028",
+        "module": "ai-in-the-marketing-funnel",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A fitness creator's AI-drafted short script suggests a supplement dose never mentioned in his video. What does this reveal about his workflow?",
+        "options": [
+          "Supplement advice is always safe",
+          "The AI is helping by adding value",
+          "He should stop making videos",
+          "The prompt should restrict the AI to transcript content and his checkpoint must catch unapproved health advice"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Grounding plus a human verification checkpoint prevents risky, unsourced health advice."
+      },
+      {
+        "id": "aif-029",
+        "module": "ai-in-the-marketing-funnel",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A tutor wants to personalise parent emails using AI. Which approach balances effectiveness and trust?",
+        "options": [
+          "Use information parents knowingly shared (child's level, goals) and respect opt-outs",
+          "Let AI send emails automatically without review",
+          "Scrape parents' social media to infer income and target offers",
+          "Send identical emails to everyone forever"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Personalisation using expected, consented data with opt-outs respected builds trust; inferring sensitive traits from scraped data feels invasive and may be unlawful."
+      },
+      {
+        "id": "aif-030",
+        "module": "how-generative-ai-works",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which statements about the context window are accurate? Select all that apply.",
+        "options": [
+          "It permanently stores all your past conversations",
+          "It limits how much text the model can consider at once",
+          "Relevant documents must be supplied for the model to use them",
+          "Pasting irrelevant material can distract the model"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "The context window is working memory for the current interaction, not permanent storage. Relevant, focused context gives better results."
+      },
+      {
+        "id": "aif-031",
+        "module": "capabilities-and-limits",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An owner wants AI to 'decide our pricing strategy'. What is the most appropriate use of AI here?",
+        "options": [
+          "Let AI set prices based on general knowledge",
+          "Use AI to structure the analysis and draft questions, while decisions rest on the owner's own cost, demand and competitor data",
+          "Avoid AI completely for any business thinking",
+          "Copy competitor prices suggested by AI without checking"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "AI helps structure thinking but gives average advice without your data. Decisions need your specific numbers and judgement."
+      },
+      {
+        "id": "aif-032",
+        "module": "ai-in-the-marketing-funnel",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is an appropriate AI use in the consideration stage?",
+        "options": [
+          "Creating fake reviewer accounts",
+          "Inventing testimonials",
+          "Hiding prices",
+          "Drafting an honest comparison of your two service packages"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Honest explainers and comparisons help people evaluate you. Fabricated social proof is deceptive."
+      }
+    ]
+  }
+}
