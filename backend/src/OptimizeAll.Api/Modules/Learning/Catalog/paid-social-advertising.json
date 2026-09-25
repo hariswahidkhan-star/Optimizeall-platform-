@@ -1,0 +1,1218 @@
+{
+  "slug": "paid-social-advertising",
+  "version": 1,
+  "title": "Paid Social Advertising",
+  "subtitle": "Plan, launch, test and scale ads on Meta, TikTok, LinkedIn and X, including creator-licensed ads",
+  "category": "marketing",
+  "level": "intermediate",
+  "estimatedMinutes": 146,
+  "description": "Paid social is where many creators, agencies and small businesses spend most of their ad budget, and where mistakes get expensive quickly. This course teaches how Meta, TikTok, LinkedIn and X structure campaigns, how to choose objectives and audiences in a privacy-first world, and how to produce and test creative systematically.\n\nYou will learn how auctions, budgets, bid strategies and the learning phase interact; how pixels and conversions APIs feed accurate data (including cash-on-delivery markets); how to report with clear decision rules; and how to avoid the most common policy rejections. The final module covers **Spark Ads, partnership ads and whitelisting**: running ads through creators' identities with the right permissions, contracts and disclosures. Designed for junior marketers, freelancers and creators who already know the basics of digital marketing.",
+  "outcomes": [
+    "Structure campaigns and choose objectives and optimisation events that match business goals",
+    "Build broad, custom, lookalike and B2B audiences and respect special ad category rules",
+    "Run hypothesis-led creative tests and document learnings",
+    "Set budgets and bid strategies that allow the learning phase to complete",
+    "Implement pixel plus conversions API tracking with deduplication",
+    "Diagnose performance top-down and avoid common ad policy rejections",
+    "Run Spark Ads and partnership ads with proper permissions, contracts and disclosure"
+  ],
+  "skills": [
+    "Paid social advertising",
+    "Meta Ads",
+    "TikTok Ads",
+    "LinkedIn Ads",
+    "Creative testing",
+    "Conversion tracking",
+    "Creator whitelisting"
+  ],
+  "prerequisites": [
+    "digital-marketing-foundations"
+  ],
+  "badge": {
+    "name": "Certified Paid Social Specialist",
+    "description": "The holder can plan, launch and optimise paid social campaigns on Meta, TikTok, LinkedIn and X. They choose objectives and audiences correctly, test creative systematically, manage budgets and bidding, implement pixel and conversions API tracking, avoid policy rejections and run compliant creator-licensed ads.",
+    "criteria": "Completed all lessons and scored ≥ 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "structure-and-audiences",
+      "title": "Campaign structure, objectives and audiences",
+      "summary": "Understand how Meta, TikTok, LinkedIn and X organise campaigns, choose the right objective and build audiences that let algorithms work.",
+      "lessons": [
+        {
+          "slug": "campaign-structure-and-objectives",
+          "title": "Campaign structure and objectives across platforms",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### The three-level structure\n\nAlmost every paid social platform uses the same hierarchy, even if the names differ:\n\n| Level | Meta (Facebook/Instagram) | TikTok | LinkedIn | X |\n|---|---|---|---|---|\n| 1. Campaign | Campaign | Campaign | Campaign group | Campaign |\n| 2. Targeting and budget unit | Ad set | Ad group | Campaign | Ad group |\n| 3. Creative | Ad | Ad | Ad | Ad |\n\n- **Campaign level:** the **objective** (what you want the platform to optimise for) and sometimes the budget.\n- **Ad set / ad group level:** audience, placements, schedule, optimisation event, bid strategy and often budget.\n- **Ad level:** the creative, copy, call-to-action button, destination URL and tracking.\n\nUnderstanding this matters because each decision lives at a specific level. If you want to compare two audiences, they need separate ad sets. If you want to compare two videos for the same audience, they go into the same ad set (or a formal A/B test).\n\n### Objectives: tell the algorithm what success looks like\n\nThe **objective** is the most important setting you choose. Delivery systems find people most likely to take the action you optimise for. Choose \"Traffic\" and you get people who click; choose \"Sales\" and the system looks for people likely to buy. Choosing the wrong objective is one of the most expensive beginner mistakes.\n\nMeta groups objectives into six options: **Awareness, Traffic, Engagement, Leads, App promotion and Sales**. TikTok offers similar goals, such as Reach, Traffic, Video views, Community interaction, App promotion, Lead generation and Sales. LinkedIn offers objectives including Brand awareness, Engagement, Video views, Website visits, Lead generation and Website conversions. X offers goals such as Reach, Video views, Engagements, Website traffic, App installs and Followers. Names and options change periodically, so check each platform's current list.\n\n### Matching objective to goal\n\n| Business goal | Suitable objective | Optimisation event |\n|---|---|---|\n| Launch awareness for a new brand in Dubai | Awareness / Reach | Reach or ad recall |\n| Grow a creator's following | Engagement or Followers | Follows / profile visits |\n| Collect B2B leads in the UK | Leads (LinkedIn Lead Gen Forms or Meta instant forms) | Lead submitted |\n| Sell products on a Shopify or WooCommerce store | Sales | Purchase |\n| Drive WhatsApp enquiries in Pakistan | Engagement or Leads with a messaging destination | Conversations started |\n\n**Rule of thumb:** optimise for the deepest event that happens often enough for the algorithm to learn. If you get very few purchases, you may temporarily optimise for \"Add to cart\" or \"Initiate checkout\", then move to purchase as volume grows.\n\n### Automated campaign types\n\nPlatforms increasingly offer highly automated campaign types (for example Meta's **Advantage+** options and TikTok's automated sales campaigns). They combine targeting, placements and creative combinations and let machine learning allocate spend. They often work well for e-commerce advertisers with good conversion tracking and plenty of creative, but they give you less manual control and fewer insights. A sensible approach is to test automated campaigns against your manual structure rather than choosing one blindly.\n\n### A simple, scalable account structure\n\nFor a small or medium advertiser:\n\n1. **Prospecting campaign** (new customers): one or two ad sets with broad or lightly guided targeting, several creatives each.\n2. **Retargeting campaign** (warm audiences): website visitors, video viewers, engaged users – excluding recent purchasers.\n3. **Testing campaign** (optional): a controlled space for new creative concepts before moving winners into prospecting.\n\nAvoid over-segmentation. Ten ad sets each spending a tiny budget will struggle to exit the learning phase (covered later). Fewer, better-funded ad sets usually outperform many small ones.\n\n### Naming conventions\n\nUse consistent names so reports are readable by anyone on the team:\n\n`2026-10_Sales_Prospecting_KSA_Broad_Video` for an ad set, and `Hook-Problem_CreatorAmina_v2` for an ad.\n\n### Common mistakes\n\n- Choosing Traffic or Engagement when the real goal is sales.\n- Putting creatives you want to compare into different audiences.\n- Too many small ad sets.\n- Unclear naming that makes analysis painful.",
+          "video": null,
+          "keyTakeaways": [
+            "Campaign → ad set/ad group → ad is the shared structure; each decision belongs at a specific level.",
+            "The objective tells the algorithm whom to find, so match it to the real business goal.",
+            "Optimise for the deepest event that occurs often enough to learn from.",
+            "Keep structure simple: prospecting, retargeting and optional testing, with clear naming."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A brand wants online purchases but runs a Traffic objective. What is the likely result?",
+              "options": [
+                "More purchases at a lower cost",
+                "No ads will be delivered",
+                "Many clicks from people less likely to buy",
+                "The same result as a Sales objective"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "The algorithm optimises for clicks, finding click-happy users rather than buyers."
+            },
+            {
+              "question": "At which level do you usually set audience targeting on Meta?",
+              "options": [
+                "Campaign",
+                "Ad",
+                "Ad set",
+                "Business Manager"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Audience, placements, optimisation and schedule live at the ad set level."
+            },
+            {
+              "question": "Your store gets only a handful of purchases a week. What optimisation event might you use temporarily?",
+              "options": [
+                "A higher-volume event such as Add to cart or Initiate checkout",
+                "Impressions",
+                "Page likes",
+                "Video views of 2 seconds"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "A higher-frequency event closer to purchase gives the algorithm enough signal while volume builds."
+            }
+          ],
+          "activity": "Sketch a campaign structure for a real or imagined brand: name the campaigns, ad sets and ads using a consistent convention and state the objective and optimisation event for each."
+        },
+        {
+          "slug": "audiences-and-targeting",
+          "title": "Audiences and targeting in a privacy-first era",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### How targeting has changed\n\nA few years ago, advertisers built narrow audiences stacked with interests and demographics. Privacy changes (such as Apple's App Tracking Transparency), regulation and improved machine learning have shifted best practice. Today, platforms often find buyers better with **broad targeting plus strong creative and good conversion data** than with narrow manual audiences. Your creative increasingly *is* your targeting: the message attracts the right people and the algorithm learns from who responds.\n\nThat does not make audiences irrelevant. You still need to understand the main types and when to use them.\n\n### Main audience types\n\n1. **Broad / Advantage-style audiences:** only location, language and basic age limits, letting the algorithm decide. Works best with enough conversion data and budget.\n2. **Interest and behaviour targeting:** people the platform associates with topics (for example \"skincare\" or \"small business\"). Useful as a guide or for small budgets, but less precise than it looks.\n3. **Custom audiences (first-party):** people who already interacted with you – website visitors, video viewers, page or profile engagers, lead-form openers, app users, or customer lists uploaded with a lawful basis.\n4. **Lookalike / similar audiences:** new people who resemble a source audience such as purchasers. Their value has declined somewhat as broad targeting has improved, but they remain useful for some accounts.\n5. **B2B targeting (LinkedIn):** job title, function, seniority, company, company size and industry. Powerful for B2B but costs per click are generally higher than on consumer platforms.\n6. **Exclusions:** remove recent purchasers from acquisition ads, or existing leads from lead campaigns, to avoid wasted spend. Note that some platforms have restricted certain detailed exclusions.\n\n### Special and restricted categories\n\nAds related to **housing, employment, credit or financial products**, and **social issues, elections or politics** fall into special categories on Meta and similar policies on other platforms. Targeting options are restricted (for example age, gender and postcode targeting may be limited), and political ads usually require authorisation and \"paid for by\" disclaimers. Some platforms restrict or do not allow political ads at all. Declare the category honestly; failing to do so leads to rejections and account restrictions.\n\nHealth and wellness advertisers may also face limits on the data and events they can use for targeting and optimisation in some markets. Always check current policy for your industry.\n\n### Location and language nuance\n\n- **Gulf markets:** audiences are highly multicultural. A UAE campaign may need Arabic and English versions, and sometimes Urdu, Hindi, Tagalog or Malayalam for specific communities.\n- **Pakistan:** Urdu, English and Roman Urdu creatives can perform differently; test them.\n- **UK and US:** regional targeting (for example by city) can help local businesses, but avoid audiences so small that delivery stalls.\n- Target by **location** carefully: \"people living in\" versus \"people recently in\" a place matters for tourism and events.\n\n### Audience sizing and overlap\n\n- Very small audiences drive up costs and frequency quickly.\n- Overlapping ad sets compete against each other in the same auction. Consolidate where overlap is high.\n- Retargeting pools shrink if you stop generating new awareness, so balance prospecting and retargeting spend.\n\n### Worked example: a UK B2B SaaS company\n\nA Manchester-based invoicing app for freelancers:\n\n- **LinkedIn:** targets job functions and seniority associated with self-employed consultants and small agency owners, with a Lead Gen Form offering a free invoice template.\n- **Meta:** broad audience in the UK aged 21+ with creative that calls out freelancers explicitly (\"Freelancer? Stop chasing invoices\"), letting the creative filter the audience.\n- **Retargeting:** website visitors in the last 30 days who did not sign up, with a testimonial video.\n- **Exclusions:** existing customers uploaded from the CRM (covered by the company's privacy notice) are excluded from acquisition campaigns.\n\n### Common mistakes\n\n- Stacking many interests into tiny audiences.\n- Ignoring special ad category rules.\n- Uploading customer lists without an appropriate lawful basis or notice.\n- Forgetting to exclude recent customers.",
+          "video": null,
+          "keyTakeaways": [
+            "Broad targeting with strong creative and good conversion data often beats narrow manual audiences today.",
+            "Know the main types: broad, interests, custom, lookalike, B2B firmographic and exclusions.",
+            "Special ad categories (housing, employment, credit, politics) restrict targeting and must be declared.",
+            "Consider language and location nuances, avoid tiny or overlapping audiences and use lists lawfully."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why has broad targeting become more effective for many advertisers?",
+              "options": [
+                "Platforms banned all targeting",
+                "Broad audiences are always cheaper per click",
+                "Machine learning can find likely buyers using conversion signals and creative responses",
+                "It removes the need for creative"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Delivery algorithms learn from who responds, so creative and conversion data guide delivery even with broad settings."
+            },
+            {
+              "question": "A recruitment agency is advertising jobs on Meta. What must it do?",
+              "options": [
+                "Run the ads under the employment special ad category",
+                "Target only people under 30",
+                "Hide the company name",
+                "Avoid any disclosure"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Employment ads fall into a special ad category with restricted targeting to prevent discrimination."
+            },
+            {
+              "question": "Which audience is best for retargeting?",
+              "options": [
+                "A random lookalike of page likers from years ago",
+                "A broad national audience",
+                "People interested in a competitor's brand",
+                "People who watched most of your video or visited your website recently"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Retargeting reaches people who have already engaged, using first-party custom audiences."
+            }
+          ],
+          "activity": "For a business you know, write down one broad prospecting audience, one custom retargeting audience and one exclusion. Note whether any special ad category applies."
+        }
+      ]
+    },
+    {
+      "slug": "creative-and-testing",
+      "title": "Creative and testing",
+      "summary": "Build ad creative that fits each platform and test it systematically so you scale winners with confidence.",
+      "lessons": [
+        {
+          "slug": "ad-creative-that-converts",
+          "title": "Ad creative that converts",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Creative is the biggest lever\n\nWith automated targeting and bidding, the main thing you control that differentiates your ads is **creative**: the video or image, the copy, the offer and the call to action. Advertisers who produce a steady flow of good creative variations usually outperform those who spend hours adjusting settings.\n\n### The anatomy of a high-performing social ad\n\n1. **Hook (first seconds):** stops the scroll with a visual pattern-break, a bold statement, a question or a problem call-out.\n2. **Problem or desire:** makes the viewer feel understood.\n3. **Solution and demonstration:** shows the product working, not just describes it.\n4. **Proof:** reviews, UGC testimonials, numbers the brand can substantiate, press mentions, guarantees.\n5. **Offer:** why act now (bundle, free delivery, trial). Avoid fake urgency.\n6. **Call to action:** one clear next step that matches the button.\n\n### Formats and when to use them\n\n| Format | Best for |\n|---|---|\n| Short vertical video (UGC style) | TikTok, Reels, Stories; demos and testimonials |\n| Creator-led video via Spark/partnership ads | Borrowed trust and native feel |\n| Static image | Clear offers, retargeting, simple messages |\n| Carousel | Multiple products, step-by-step stories, features |\n| Collection / catalogue ads | E-commerce ranges with product feeds |\n| Document and thought-leader ads (LinkedIn) | B2B education and authority |\n| Lead forms | Low-friction lead capture on mobile |\n\n### Platform-native creative\n\n- **TikTok:** lo-fi, fast, creator-led, sound-on. Polished TV-style adverts often underperform.\n- **Instagram and Facebook:** both polished and UGC styles can work; Stories and Reels placements need vertical assets.\n- **LinkedIn:** professional but human. Real people, data the company can back up, practical advice. Avoid consumer-style hype.\n- **X:** concise copy, timely hooks, conversation-driven; images and short videos with a clear point.\n- **Snapchat (important in KSA):** full-screen, fast, playful vertical video.\n\n### Angles: different reasons to buy\n\nThe same product can be sold through different **angles**. For a meal-kit service:\n\n- Time-saving: \"Dinner in 20 minutes, no planning.\"\n- Health: \"Balanced meals without counting calories.\"\n- Money: \"Less food waste than a weekly supermarket shop.\"\n- Family: \"Kids actually eat it.\"\n- Ramadan: \"Iftar sorted every day this Ramadan.\"\n\nTest angles before polishing execution; the right angle can matter more than production quality.\n\n### Copy basics\n\n- Front-load the key message; only the first line or two are visible before \"more\".\n- Speak to one person (\"you\").\n- Keep claims honest and substantiated.\n- Match the language and tone of the audience (Arabic, Urdu, English or bilingual), and have native speakers check translations.\n\n### Creative fatigue and refresh\n\nAs frequency rises, performance usually falls. Signs include falling CTR and rising CPA with rising frequency. Plan a pipeline: new concepts regularly, plus iterations (new hooks, new creators, new first frames) of proven winners.\n\n### Worked example: a Lahore activewear brand\n\n- **Concept 1:** creator try-on haul (UGC), angle \"comfortable in summer heat\".\n- **Concept 2:** static image with a bundle offer for retargeting.\n- **Concept 3:** carousel of five best-sellers with prices.\n- **Iterations:** three hooks for Concept 1 (\"Gym clothes that don't stick in 40°C\", \"My honest review after a month\", \"Stop buying see-through leggings\").\n\nThe brand runs them in one prospecting ad set, lets delivery favour winners, and replaces the weakest regularly.\n\n### Common mistakes\n\n- Running the same one or two ads for months.\n- Repurposing TV adverts unchanged for TikTok.\n- Burying the offer or CTA.\n- Testing tiny tweaks (button colour) before testing big ideas (angle, format, creator).",
+          "video": null,
+          "keyTakeaways": [
+            "Creative is the biggest lever you control: hook, problem, demonstration, proof, offer and CTA.",
+            "Match format and style to the platform; creator-led, native content often wins on TikTok and Reels.",
+            "Test different angles (reasons to buy) before polishing execution.",
+            "Watch frequency and fatigue signals and keep a steady pipeline of new concepts and iterations."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What should you test first when launching a new product on paid social?",
+              "options": [
+                "Button colour",
+                "Different angles or concepts",
+                "Font size",
+                "Ad name"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Big ideas such as angles and concepts drive the largest performance differences."
+            },
+            {
+              "question": "Which is a typical sign of creative fatigue?",
+              "options": [
+                "Falling frequency with rising CTR",
+                "Rising frequency with falling CTR and rising CPA",
+                "Stable CPM and CPA",
+                "More comments than yesterday"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "When the same people see an ad repeatedly, they respond less, raising costs."
+            },
+            {
+              "question": "Which creative style usually performs best on TikTok?",
+              "options": [
+                "Unchanged television adverts",
+                "Horizontal videos with black bars",
+                "Text-only slides with no audio",
+                "Native, creator-led, sound-on video"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "TikTok users respond to content that feels native to the platform."
+            }
+          ],
+          "activity": "Write three different angles for one product and a hook for each. Decide which format each angle suits best on two platforms."
+        },
+        {
+          "slug": "creative-testing-framework",
+          "title": "A creative testing framework",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Why structured testing\n\nWithout a structure, creative testing becomes \"we launched lots of ads and one did well\". You cannot tell why, and you cannot repeat it. A testing framework turns creative into a learning system.\n\n### Step 1: Write a hypothesis\n\nA good hypothesis names the variable, the expected effect and the reason:\n\n> \"A problem-first hook ('Tired of chasing invoices?') will produce a higher hook rate and lower CPA than a product-first hook, because our audience is more motivated by pain than by features.\"\n\n### Step 2: Isolate one variable\n\nTest one major variable at a time:\n\n| Level | Variable examples |\n|---|---|\n| Concept | Testimonial vs demo vs founder story |\n| Angle | Time-saving vs money-saving |\n| Hook | Three different openings with the same body |\n| Format | Video vs static vs carousel |\n| Creator | Creator A vs Creator B with the same script |\n| Offer | Free delivery vs 10% off |\n\nChanging concept, hook and offer at once may find a winner but will not tell you what worked.\n\n### Step 3: Choose a testing method\n\n- **Platform A/B test tools:** Meta's A/B test feature and TikTok's split testing divide audiences so each person sees only one version, giving a cleaner comparison.\n- **Multiple ads in one ad set:** faster and cheaper, but delivery will favour some ads early, so results are directional, not controlled.\n- **Dynamic or flexible creative:** the platform mixes headlines, texts and assets. Useful for optimisation, less useful for learning exactly why something worked.\n\n### Step 4: Decide your success metric and budget in advance\n\n- Pick one primary metric that reflects the goal: CPA or ROAS for sales, cost per qualified lead for lead generation. Use hook rate, hold rate and CTR as diagnostic metrics.\n- Set a minimum spend or number of conversions per variant before judging. A frequently used rule of thumb is to let each variant spend at least a couple of times your target CPA before deciding, and to prefer waiting for a meaningful number of conversions.\n- Set a time frame (for example 5–7 days) to smooth out day-of-week effects.\n\n### Step 5: Read results carefully\n\n- **Statistical caution:** small differences on small samples are often noise. Platform A/B tools report a confidence level or likelihood; use it.\n- **Look at the full funnel:** a hook with a great hook rate but poor CPA may attract curious viewers who are not buyers.\n- **Segment sensibly:** check performance by placement and age only if you have enough data.\n\n### Step 6: Document and iterate\n\nKeep a simple testing log:\n\n| Date | Hypothesis | Variants | Result | Learning | Next test |\n|---|---|---|---|---|---|\n| 1–7 Oct | Problem hook beats product hook | H1 vs H2 | H1 lower CPA with a meaningful difference | Pain-led hooks work for this audience | Test three new pain-led hooks |\n\nOver months, the log becomes your most valuable asset: a playbook of what your audience responds to.\n\n### A practical weekly cadence\n\n- **Monday:** review last week's tests, record learnings.\n- **Tuesday:** brief new creatives (in-house or creators) based on learnings.\n- **Wednesday–Thursday:** launch new tests.\n- **Ongoing:** move clear winners into scaling campaigns; pause clear losers once they hit your stop-loss threshold.\n\n### Worked example (illustrative numbers)\n\nAn online course creator in Dubai tests two hooks for 7 days at AED 1,500 each:\n\n- Hook A (\"I failed my first launch…\"): 38 sign-ups, CPA ≈ AED 39.\n- Hook B (\"Five steps to launch a course\"): 21 sign-ups, CPA ≈ AED 71.\n\nThe platform's A/B tool reports a high likelihood that A wins. She scales A and briefs three new story-led hooks to test next.\n\n### Common mistakes\n\n- Testing many variables at once.\n- Declaring winners after a day or a handful of conversions.\n- Judging only on CTR when the goal is sales.\n- Never writing down learnings.",
+          "video": null,
+          "keyTakeaways": [
+            "Start with a hypothesis that names the variable, expected effect and reason.",
+            "Test one major variable at a time, from concept and angle down to hooks and offers.",
+            "Set the primary metric, minimum spend and time frame before launching; be cautious with small samples.",
+            "Log every test and use learnings to brief the next round of creative."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which is the best-written hypothesis?",
+              "options": [
+                "Let's try some new ads",
+                "Video is better",
+                "A testimonial concept will lower CPA versus a demo because our audience needs social proof",
+                "Change everything and see"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "It names the variable, the expected outcome and the reason, so the result teaches you something."
+            },
+            {
+              "question": "Two ads have CPAs of $20 and $22 after three conversions each. What should you conclude?",
+              "options": [
+                "The $20 ad is clearly the winner",
+                "The sample is too small to call a winner",
+                "Pause both",
+                "Double the budget on the $22 ad"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "With so few conversions, the difference is likely noise."
+            },
+            {
+              "question": "What is the main drawback of dynamic or flexible creative for learning?",
+              "options": [
+                "It is not allowed on Meta",
+                "It makes it harder to know exactly which element drove performance",
+                "It always costs more",
+                "It only works for static images"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Automatic mixing optimises delivery but blurs the reasons behind results."
+            }
+          ],
+          "activity": "Write three hypotheses for your next creative tests, each isolating one variable. Define the primary metric, minimum spend per variant and test duration for each."
+        }
+      ]
+    },
+    {
+      "slug": "budgets-bidding-and-tracking",
+      "title": "Budgets, bidding and conversion tracking",
+      "summary": "Set budgets and bid strategies that give algorithms room to learn, and send accurate conversion data with pixels and conversions APIs.",
+      "lessons": [
+        {
+          "slug": "budgets-and-bidding",
+          "title": "Budgets, auctions and bid strategies",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### How the ad auction works (simplified)\n\nSocial platforms sell ad space through auctions. The winner is not simply the highest bidder. Meta, for example, describes a **total value** that combines:\n\n- **Bid:** what the advertiser is willing to pay for the result.\n- **Estimated action rate:** how likely the person is to take the optimisation action.\n- **Ad quality / relevance:** based on feedback and quality signals.\n\nOther platforms use similar logic. This means a relevant, engaging ad can win auctions at a lower cost than a poor ad with a higher bid. Good creative literally lowers your prices.\n\n### Budget types\n\n- **Daily budget:** average spend per day. Platforms may spend somewhat more on some days and less on others while keeping close to the average over a week.\n- **Lifetime budget:** total spend over a fixed period; useful for launches and time-bound promotions like Eid or Black Friday, and required for some scheduling options.\n- **Campaign-level budget** (Meta's Advantage campaign budget, TikTok's campaign budget optimisation): the platform distributes budget across ad sets towards the best opportunities.\n- **Ad set-level budget:** you control spend per ad set. Useful for strict tests or when you must guarantee spend on specific audiences.\n\n### The learning phase\n\nAfter launch or a significant edit, delivery systems go through a **learning phase** while they explore who responds. Performance is less stable during this time. Meta, for example, indicates an ad set usually needs around 50 optimisation events within a week after the last significant edit to exit learning.\n\nPractical implications:\n\n- Budget each ad set so it can realistically generate enough optimisation events. If your CPA is around $20 and you need about 50 events a week, that is roughly $1,000 a week or about $140 a day. If that is unrealistic, optimise for a higher-volume event or consolidate ad sets.\n- Avoid frequent significant edits (budget jumps, targeting changes, new creative in the same ad set) that reset learning.\n- When scaling, increase budgets gradually rather than doubling overnight, or duplicate winners into new campaigns.\n\n### Bid strategies\n\n| Strategy (Meta naming; others similar) | How it works | When to use |\n|---|---|---|\n| **Highest volume / lowest cost** (TikTok: Maximum delivery) | Spends the budget to get as many results as possible | Default; new accounts; learning what CPA is achievable |\n| **Cost per result goal** (cost cap) | Aims to keep average cost around your target | When you know your target CPA and can accept lower volume |\n| **ROAS goal** (minimum ROAS) | Aims for a minimum return on value-optimised campaigns | E-commerce with reliable purchase value tracking |\n| **Bid cap** | Sets a maximum bid in each auction | Advanced users who understand auction dynamics |\n\nLinkedIn offers options such as maximum delivery, cost cap and manual bidding. Start with automated \"highest volume\" bidding until you have data, then add controls if costs drift above your break-even.\n\n### Budget allocation across the funnel\n\nA common approach for a growing e-commerce brand:\n\n- **Majority to prospecting** (new people), because retargeting pools depend on new traffic.\n- **Smaller share to retargeting**, sized to the audience (a small audience cannot absorb a big budget without extreme frequency).\n- **Ring-fenced test budget** for new creative.\n\n### Seasonality\n\nCPMs often rise during peak periods (Ramadan and Eid in Muslim-majority markets, Black Friday/White Friday, Christmas in the UK and US, 11.11 in some markets) because more advertisers compete. Plan creative and budgets early, warm up audiences before the peak and set expectations with clients that costs can increase.\n\n### Worked example (illustrative)\n\nA Pakistani electronics store's target CPA is PKR 2,000. It currently runs eight ad sets, each spending PKR 3,000 per day and getting one or two purchases daily. None exits learning. The team consolidates into two ad sets with PKR 12,000 daily each on campaign budget, broad targeting and six creatives each. With more events per ad set, delivery stabilises and CPA becomes more predictable.\n\n### Common mistakes\n\n- Many small ad sets that never exit learning.\n- Big, sudden budget changes that reset learning.\n- Setting cost caps below realistic levels, causing little or no delivery.\n- Ignoring seasonal CPM changes.",
+          "video": null,
+          "keyTakeaways": [
+            "Auctions combine bid, estimated action rate and ad quality, so good creative lowers costs.",
+            "Choose daily or lifetime budgets and campaign- or ad-set-level budgets deliberately.",
+            "Budget for enough optimisation events to exit learning; avoid frequent significant edits.",
+            "Start with automated highest-volume bidding, then add cost or ROAS goals once you know your numbers."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Your target CPA is $25 and the platform suggests about 50 optimisation events a week to exit learning. Roughly what weekly budget does one ad set need?",
+              "options": [
+                "$250",
+                "$625",
+                "$1,250",
+                "$5,000"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "50 × $25 = $1,250 per week. Less than that makes exiting learning unlikely."
+            },
+            {
+              "question": "Why can a relevant ad win an auction with a lower bid?",
+              "options": [
+                "Auction value also considers estimated action rate and ad quality",
+                "Platforms give discounts to small advertisers",
+                "Bids are ignored",
+                "Relevant ads are never charged"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Total value combines bid, likelihood of action and quality, rewarding relevant ads."
+            },
+            {
+              "question": "When should you consider a cost per result goal (cost cap)?",
+              "options": [
+                "When you have no data at all",
+                "When you know your target CPA and accept potentially lower volume to control cost",
+                "Only for awareness campaigns",
+                "Never"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Cost goals control average cost but may limit delivery; they work best once you know achievable costs."
+            }
+          ],
+          "activity": "Calculate the weekly budget each of your ad sets needs to reach about 50 optimisation events at your target CPA. If it is unrealistic, redesign the structure or optimisation event."
+        },
+        {
+          "slug": "pixels-and-conversions-api",
+          "title": "Pixels, conversions APIs and data quality",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Why conversion data matters more than ever\n\nAd platforms optimise towards the conversions you send them. If data is missing, delayed or wrong, the algorithm learns from a distorted picture, and your reported results are unreliable. With browser tracking limits, ad blockers and privacy changes, a single browser pixel often misses conversions.\n\n### Browser pixels\n\nA **pixel** (Meta Pixel, TikTok Pixel, LinkedIn Insight Tag, X Pixel) is a small piece of JavaScript on your website. When someone takes an action, it sends an **event** to the platform, for example:\n\n- PageView\n- ViewContent\n- AddToCart\n- InitiateCheckout\n- Purchase (with value and currency)\n- Lead / CompleteRegistration\n\nPixels are easy to install through tag managers or e-commerce integrations (for example Shopify, WooCommerce or Salla apps), but they depend on the visitor's browser and consent choices.\n\n### Server-side conversions APIs\n\nA **conversions API** (Meta Conversions API, TikTok Events API, LinkedIn Conversions API, X Conversion API) sends events directly from your server or a partner platform to the ad platform.\n\nBenefits:\n\n- More resilient to browser restrictions and ad blockers.\n- Can include offline or back-end events (for example a lead that becomes a paying customer in your CRM, or a cash-on-delivery order that is actually delivered).\n- Often improves the platform's ability to match events to people.\n\nConversions APIs still require you to respect consent and privacy law. Sending data from a server does not make it lawful by itself.\n\n### Using both: deduplication\n\nBest practice is usually to run **both** pixel and server events. To avoid counting the same purchase twice, send a shared **event ID** (and the same event name) from both sources so the platform can **deduplicate**. Test deduplication with the platform's diagnostic tools (for example Meta's Events Manager test events).\n\n### Match quality\n\nServer events include **customer information parameters** (such as hashed email or phone, IP address, user agent and click IDs like fbclid or ttclid) that help the platform match an event to an ad interaction. More accurate, consented parameters generally improve **event match quality**, which improves attribution and optimisation. Personal identifiers must be hashed as the platform specifies and collected lawfully.\n\n### Priorities for iOS and aggregated measurement\n\nSince Apple's App Tracking Transparency, platforms use aggregated and modelled measurement for some iOS traffic. Settings and requirements have evolved over time (for example, Meta has changed how it handles web event configuration). Keep your domain verified in each platform where required and follow current guidance in the platform's events manager.\n\n### Cash on delivery and offline conversions\n\nIn Pakistan and parts of the Gulf, many orders are cash on delivery (COD), and some are refused at the door. If you optimise for \"Purchase\" at checkout, the algorithm may learn to find people who order but do not pay. Options include:\n\n- Sending a separate **\"Delivered\" or \"Paid\" event** via the conversions API when the order is confirmed.\n- Using order-confirmation calls or WhatsApp confirmation before counting a conversion.\n- Comparing ad-reported purchases with delivered orders when evaluating campaigns.\n\n### Tracking QA checklist\n\n- Pixel installed once (not duplicated by a theme and a plugin).\n- Standard events fire at the right moment with correct value and currency.\n- Server events sent with event IDs matching browser events.\n- Consent choices respected: tags wait for consent where required.\n- Test purchase completed and visible in events manager.\n- UTMs on all ads for analytics cross-checking.\n- Domain verified in each ad account where required.\n\n### Worked example\n\nA Riyadh fashion store sees Meta report 180 purchases while Shopify shows 140. Investigation finds the pixel fires twice: once from the theme and once from an app. After removing the duplicate and adding deduplicated server events, reported purchases align more closely with store data and CPA reporting becomes trustworthy.\n\n### Common mistakes\n\n- Duplicate pixels inflating conversions.\n- Missing value and currency on purchase events.\n- Server and browser events without matching event IDs.\n- Optimising for COD orders that are never paid.",
+          "video": null,
+          "keyTakeaways": [
+            "Platforms optimise towards the events you send, so data quality directly affects performance.",
+            "Use browser pixels plus server-side conversions APIs, deduplicated with shared event IDs.",
+            "Better, lawfully collected match parameters improve event match quality; consent still applies to server events.",
+            "For cash-on-delivery markets, consider sending delivered or paid events so optimisation targets real buyers."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why send a shared event ID from both the pixel and the conversions API?",
+              "options": [
+                "So the platform can deduplicate the same event",
+                "To double the number of conversions",
+                "It is required for image ads",
+                "To bypass consent"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Matching event IDs let the platform count one purchase once even if both sources report it."
+            },
+            {
+              "question": "A COD-heavy store sees many ad-reported purchases but many refused deliveries. What is a good improvement?",
+              "options": [
+                "Stop tracking purchases",
+                "Increase the budget",
+                "Send a delivered or paid event and use it for evaluation or optimisation",
+                "Switch to the Traffic objective"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Optimising for confirmed, paid orders teaches the algorithm to find genuine buyers."
+            },
+            {
+              "question": "Which statement about conversions APIs is true?",
+              "options": [
+                "They make any data collection lawful",
+                "They still require respecting consent and privacy law",
+                "They replace the need for a website",
+                "They only work for app installs"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Server-side delivery changes the technology, not the legal obligations."
+            }
+          ],
+          "activity": "Run a tracking QA on a site you manage (or a test store): check for duplicate pixels, confirm purchase value and currency, and verify deduplication in the platform's test tool."
+        }
+      ]
+    },
+    {
+      "slug": "reporting-and-policy",
+      "title": "Reporting, optimisation and ad policy",
+      "summary": "Turn platform data into decisions and client-ready reports, and avoid the most common ad rejections.",
+      "lessons": [
+        {
+          "slug": "reporting-and-optimisation",
+          "title": "Reporting and optimisation decisions",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### From dashboards to decisions\n\nAds Manager, TikTok Ads Manager and Campaign Manager contain hundreds of columns. A good report answers three questions: **What happened? Why? What will we do next?** Everything else is supporting detail.\n\n### Build a standard column set\n\nCreate saved column presets so you read the same metrics every time:\n\n- **Delivery:** spend, impressions, reach, frequency, CPM.\n- **Engagement and creative:** hook rate, hold rate or ThruPlays, CTR (link), CPC (link).\n- **Conversion:** results, cost per result, conversion value, ROAS.\n- **Funnel:** landing page views, add to carts, checkouts initiated.\n\nUse **link CTR** and **link CPC** (clicks to your destination) rather than \"all clicks\", which include likes, profile clicks and expanding text.\n\n### Diagnose top-down\n\nWhen results change, work from the top of the funnel to the bottom:\n\n1. **Did spend or delivery change?** Budget, learning resets, policy issues.\n2. **Did CPM change?** Seasonal competition, audience saturation, a new competitor.\n3. **Did CTR change?** Creative fatigue, a weaker new ad.\n4. **Did landing page view rate change?** Page speed or tracking problems.\n5. **Did conversion rate change?** Offer, stock, price, website bugs, payment issues.\n\nMany \"the ads stopped working\" problems are actually website, stock or pricing problems.\n\n### Decision rules (write them down)\n\nPre-agreed rules keep teams from emotional decisions:\n\n- **Pause** an ad when it spends a set multiple of target CPA (for example 2–3×) without a conversion, or its CPA is far above target after sufficient spend.\n- **Scale** an ad set when CPA stays below target for several consecutive days; increase budget gradually.\n- **Refresh** creative when frequency rises and CTR falls over a sustained period.\n- **Investigate** when platform-reported conversions and store or CRM data diverge sharply.\n\n### Attribution settings and comparisons\n\nEach platform reports conversions using its own attribution setting (for example 7-day click and 1-day view). Always note the setting in reports, keep it consistent when comparing periods and compare platform numbers against your source of truth (store or CRM). Blended metrics such as **MER (marketing efficiency ratio) = total revenue ÷ total marketing spend** give a platform-neutral view of overall efficiency.\n\n### Client-ready reporting template\n\n1. **Summary (three bullets):** results against goal, key insight, next actions.\n2. **KPIs vs target:** spend, results, CPA, ROAS or cost per lead, compared with the previous period.\n3. **Creative insights:** top and bottom performers with thumbnails and why.\n4. **Audience/placement insights** if meaningful.\n5. **Tests running and learnings.**\n6. **Next steps and requests** (for example new creator content, landing page fixes).\n\nWrite for a busy business owner. Replace jargon with plain language: \"People are clicking but not buying because delivery costs are shown late in checkout.\"\n\n### Worked example (illustrative)\n\nA London bakery's click-and-collect campaign CPA rose from £6 to £11 in a week. Top-down check: spend stable; CPM flat; CTR stable; landing page view rate stable; conversion rate halved. Investigation shows the online ordering system started requiring account creation. The fix is on the website, not in Ads Manager. After removing forced sign-up, CPA returns towards £6.\n\n### Common mistakes\n\n- Reporting \"all clicks\" CTR.\n- Changing attribution settings between reports.\n- Reacting to one bad day.\n- Reports full of numbers with no insight or next steps.",
+          "video": null,
+          "keyTakeaways": [
+            "Good reports answer what happened, why and what we will do next.",
+            "Use a consistent column set with link CTR and link CPC and funnel metrics.",
+            "Diagnose top-down: delivery, CPM, CTR, landing page view rate, conversion rate.",
+            "Write decision rules in advance, note attribution settings and cross-check with blended metrics like MER."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "CPA doubled, but CPM and CTR are unchanged and conversion rate halved. Where is the problem most likely?",
+              "options": [
+                "The audience",
+                "The creative",
+                "The website, offer or checkout",
+                "The bid strategy"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Unchanged delivery and click metrics with a lower conversion rate point to the post-click experience."
+            },
+            {
+              "question": "What does MER measure?",
+              "options": [
+                "Total revenue divided by total marketing spend",
+                "Clicks divided by impressions",
+                "Conversions from Meta only",
+                "Cost per thousand impressions"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "MER is a blended, platform-neutral efficiency metric."
+            },
+            {
+              "question": "Why use link CTR instead of 'all clicks' CTR?",
+              "options": [
+                "It is always higher",
+                "It measures only clicks to your destination, not likes or profile taps",
+                "It includes video views",
+                "It is required by law"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Link CTR reflects genuine intent to visit your site."
+            }
+          ],
+          "activity": "Create a one-page report for a real or illustrative campaign using the six-section template, including three decision rules for next week."
+        },
+        {
+          "slug": "ad-policy-and-rejections",
+          "title": "Ad policies and common rejections",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Why policy knowledge saves money\n\nRejected ads delay campaigns; repeated violations can restrict ad accounts, pages or business portfolios. Most rejections are avoidable once you know the common patterns. Policies differ by platform and country and change frequently, so always check the current advertising policies and local laws before launching.\n\n### The most common rejection reasons\n\n**1. Personal attributes**\nAds must not assert or imply personal characteristics such as health conditions, financial status, religion, ethnicity or sexual orientation.\n- Rejected: \"Struggling with your debt?\" \"Are you diabetic?\"\n- Better: \"Tools to help you manage monthly repayments.\" \"Recipes designed for balanced blood sugar.\"\n\n**2. Unrealistic or misleading claims**\nGuaranteed income, miracle results or unsubstantiated claims.\n- Rejected: \"Earn $10,000 a month from home, guaranteed.\"\n- Better: \"Learn the skills to start freelancing.\" (and make sure the landing page matches)\n\n**3. Before-and-after and body image**\nWeight loss and cosmetic procedure ads face strict rules, including limits on before/after images and targeting restrictions by age.\n\n**4. Restricted and prohibited products**\nExamples include weapons, tobacco and vaping, drugs, adult content, certain supplements, gambling, alcohol, financial products such as crypto, and prescription medicines. Many are prohibited outright; others need prior authorisation and are allowed only in some countries. Rules in the Gulf and Pakistan can be stricter than in the UK or US (for example, alcohol advertising restrictions).\n\n**5. Special ad categories not declared**\nHousing, employment, credit/financial and social issues/politics ads must be declared.\n\n**6. Landing page problems**\nBroken links, pages that do not match the ad, pop-up-heavy pages, pages without clear business information, or downloads that start automatically.\n\n**7. Sensational or shocking content**\nGraphic imagery, excessive profanity, scare tactics and misleading interface elements (such as fake play buttons or fake notification icons).\n\n**8. Intellectual property**\nUsing another brand's trademarks, copyrighted music or footage without permission.\n\n**9. Community standards and sensitive topics**\nContent that could be discriminatory, exploit tragedies or disrespect religion or culture.\n\n### Local laws on top of platform policy\n\nPlatform approval does not mean an ad is legal. Examples:\n\n- **UK:** the CAP Code and ASA rules on misleading claims, health claims, gambling, alcohol, children and influencer disclosure.\n- **US:** FTC rules on deceptive advertising and endorsements; sector rules (for example health and finance).\n- **UAE:** the UAE Media Council's advertising standards, including respecting religious values and national identity and restrictions on certain categories.\n- **Saudi Arabia:** GCAM advertising rules and licensing for advertisers and influencers.\n- **Pakistan:** consumer protection laws, and sector regulators for areas such as finance, telecoms and pharmaceuticals.\n\n### Preventing rejections: a pre-launch checklist\n\n- No personal-attribute phrasing (\"you\", combined with a sensitive condition).\n- Claims substantiated and qualified.\n- Category restrictions checked for each target country.\n- Special ad category declared if applicable.\n- Landing page loads fast, matches the ad and shows business details, privacy policy and contact information.\n- Music, fonts, footage and trademarks licensed.\n- Creator disclosure (paid partnership labels) in place for creator content.\n\n### When an ad is rejected\n\n1. Read the specific policy cited.\n2. Fix the ad or landing page rather than re-submitting the same thing repeatedly.\n3. If you believe it is a mistake, **request a review** through the official process with a brief, factual explanation.\n4. Keep account health good: verified business details, two-factor authentication for all admins and no borrowed or rented ad accounts.\n\n### Common mistakes\n\n- Using \"you\" with sensitive attributes.\n- Re-uploading rejected ads again and again (this can flag the account).\n- Assuming what is allowed in one country is allowed in another.\n- Neglecting the landing page.",
+          "video": null,
+          "keyTakeaways": [
+            "Most rejections come from personal attributes, misleading claims, restricted products, undeclared special categories and poor landing pages.",
+            "Rephrase attribute-based copy to describe the product, not the person's condition.",
+            "Platform approval is not legal approval; local rules (ASA/CAP, FTC, UAE Media Council, GCAM, Pakistani regulators) also apply.",
+            "Fix the cause and use official review channels instead of repeatedly re-submitting."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which ad copy is most likely to be rejected for personal attributes?",
+              "options": [
+                "Healthy snacks for busy days",
+                "Are you depressed? Try our app",
+                "Meditation guides for calmer evenings",
+                "Sleep sounds for relaxing"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Directly asserting a person's mental health condition breaches personal attribute policies."
+            },
+            {
+              "question": "An ad is approved by the platform. Does that guarantee it complies with UK advertising rules?",
+              "options": [
+                "Yes, always",
+                "Only if it is under 30 seconds",
+                "Only for video ads",
+                "No; the ASA/CAP rules apply independently"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Platform review and legal compliance are separate; advertisers remain responsible for local law."
+            },
+            {
+              "question": "What should you do first after a rejection?",
+              "options": [
+                "Re-upload the same ad ten times",
+                "Change the budget",
+                "Create a new ad account",
+                "Read the cited policy and fix the cause or request a review if it is a genuine mistake"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Understanding and fixing the issue protects account health; repeated re-submission can cause restrictions."
+            }
+          ],
+          "activity": "Rewrite five ad headlines that break the personal attributes or misleading-claims rules into compliant versions for the same product."
+        }
+      ]
+    },
+    {
+      "slug": "creator-licensed-ads",
+      "title": "Creator-licensed ads: Spark, partnership and whitelisting",
+      "summary": "Run ads using creators' posts and identities with the right permissions, disclosures and contracts.",
+      "lessons": [
+        {
+          "slug": "spark-and-partnership-ads",
+          "title": "Spark Ads, partnership ads and whitelisting",
+          "type": "video",
+          "durationMinutes": 12,
+          "body": "### Why run ads through creators\n\nContent from a real creator's handle often feels more native and trustworthy than a brand's own ad. Running paid media behind creator content combines the creator's credibility with the brand's targeting and budget. Platforms now offer formal tools for this.\n\n### The main formats\n\n**TikTok Spark Ads**\nSpark Ads let a brand boost an organic TikTok post (its own or a creator's) as an ad. The ad keeps the creator's handle and engagement (likes, comments and follows go to the original post). The creator generates an **authorisation code** in the TikTok app (or grants access through TikTok's creator marketplace tools) for a defined period and shares it with the brand, which enters it in Ads Manager. The creator's post must remain public and the authorisation has an expiry date.\n\n**Meta partnership ads**\nPartnership ads (which evolved from branded content ads) show both the creator's and the brand's names in the ad header. The creator and brand link accounts through the partnership ads permissions or an ad code, and the brand runs the ad from its own ad account. Partnership ads display a \"Paid partnership\" label. Brands can use them with existing creator posts or new content.\n\n**LinkedIn Thought Leader Ads**\nThese let a company sponsor posts from individual members – such as employees or, with permission, other LinkedIn members – so B2B ads come from a real person's profile.\n\n**Promoting creator posts on other platforms**\nOther platforms, including X and Snapchat, offer ways to promote or amplify partner content; features vary by market. Check current availability.\n\n### What \"whitelisting\" means\n\n**Whitelisting** is industry shorthand for a creator giving a brand permission to run ads using the creator's identity – historically by granting access to their page or account through business tools. Today, much of this is done through the official partnership ad and Spark Ad permissions above, which are safer because the creator does not share login details.\n\n**Never** ask for or share passwords. Use official permission flows only.\n\n### Benefits and risks\n\nBenefits:\n- More native feel; social proof on the creator's post.\n- Access to the creator's credibility and style.\n- Often strong performance for prospecting, though results vary by account and creative.\n\nRisks:\n- The creator's reputation becomes linked to the ad (and vice versa).\n- Comments on the ad may be negative or off-topic and need moderation.\n- Poorly agreed terms lead to disputes over duration, spend or edits.\n\n### Contract essentials for creator-licensed ads\n\n- **Scope:** which posts or assets, which platforms and which ad formats.\n- **Duration:** start and end dates for ad use (for example a 30-, 60- or 90-day authorisation) and whether renewal is possible for an extra fee.\n- **Territories:** countries where ads will run.\n- **Edits:** whether the brand may cut, add text, change music or combine with other footage.\n- **Spend visibility:** some creators ask for an approximate spend range or reporting access.\n- **Comment moderation:** who moderates and what is hidden or deleted.\n- **Fees:** usage/licensing fee separate from content creation fee.\n- **Disclosure:** partnership labels on and clear \"#ad\" or equivalent in copy where required.\n- **Termination:** what happens if either party's reputation is damaged (morality/conduct clauses).\n\n### Disclosure remains mandatory\n\nCreator-licensed ads are advertising. Use the platform's paid partnership label or content disclosure setting, keep \"#ad\" or \"Ad\" clear in the copy where required (for example under ASA/CAP guidance in the UK and FTC guidance in the US), and follow local rules in the UAE (Media Council) and KSA (GCAM). If a creator promotes regulated products (finance, health), additional rules apply.\n\n### Worked example\n\nA Dubai-based skincare brand works with four micro-creators. Each posts an organic Reel and TikTok. The brand:\n\n1. Reviews organic performance for a week.\n2. Requests Spark Ad codes and partnership ad permissions for the two best posts, with 60-day authorisation in the UAE and KSA, as agreed in the contract with a separate usage fee.\n3. Runs them in a prospecting campaign alongside brand-handle ads.\n4. Moderates comments daily with the creators' agreement.\n5. Shares a performance summary with the creators at the end.\n\n### Common mistakes\n\n- Asking creators for their passwords.\n- Running ads beyond the agreed period or in unagreed countries.\n- No usage fee because \"they already got paid to post\".\n- Missing disclosure labels.",
+          "video": {
+            "script": "Some of the best-performing ads on social media don't look like ads from a brand at all. They look like posts from real creators, because they are. That's the idea behind creator-licensed ads. On TikTok, they're called Spark Ads. A creator generates an authorisation code for a set period, and the brand uses it to put paid budget behind the creator's original post. The likes and comments stay on that post, and the creator's handle stays on the ad. On Instagram and Facebook, partnership ads show both the creator's name and the brand's name, with a paid partnership label. On LinkedIn, Thought Leader Ads let a company sponsor posts from real people. You'll also hear the word whitelisting. It simply means a creator licensing their identity for a brand's ads. Today, that should always happen through official permission tools, never by sharing passwords. Here's the part people get wrong: ad usage is a separate licence. If a creator was paid to post, running that post as an ad for ninety days is additional value, so agree the duration, countries, edits, comment moderation and a usage fee in writing. And remember, these are ads. Keep the paid partnership label switched on and make disclosure clear, whether you're following FTC rules in the US, ASA rules in the UK, or regulators in the UAE and Saudi Arabia. Done right, creator-licensed ads are a win for the brand, the creator and the audience.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Spark Ads (TikTok), partnership ads (Meta) and Thought Leader Ads (LinkedIn) let brands run ads through creators' or individuals' posts.",
+            "Whitelisting means licensing a creator's identity for ads; use official permission flows, never passwords.",
+            "Contracts must cover scope, duration, territories, edits, moderation, fees and termination.",
+            "Creator-licensed ads are advertising and need clear disclosure labels in every market."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "How does a brand usually get permission to run a creator's TikTok as a Spark Ad?",
+              "options": [
+                "The creator generates an authorisation code (or grants access through official tools) for a set period",
+                "The creator shares their password",
+                "The brand downloads and re-uploads the video",
+                "No permission is needed for public posts"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Spark Ads use authorisation codes or official access flows with an expiry date."
+            },
+            {
+              "question": "What does a Meta partnership ad display in its header?",
+              "options": [
+                "Only the brand name",
+                "The agency's name",
+                "Only the creator's name with no label",
+                "Both the creator's and the brand's names with a paid partnership label"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Partnership ads show both identities and a paid partnership label."
+            },
+            {
+              "question": "A creator was paid to post organically. The brand now wants to run the post as an ad for 90 days. What should happen?",
+              "options": [
+                "Nothing extra; the post is already paid for",
+                "Run it without telling the creator",
+                "Agree the ad usage terms and a separate usage fee in writing",
+                "Remove the creator's handle"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Ad usage is a separate licence with value; terms and fees should be agreed in writing."
+            }
+          ],
+          "activity": "Draft the usage clause for a creator-licensed ad agreement, covering platforms, duration, territories, edits, moderation, fee and disclosure."
+        },
+        {
+          "slug": "managing-creator-ad-programmes",
+          "title": "Managing a creator ad programme end to end",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### From one-off boosts to a programme\n\nMany brands start by boosting a single creator post. Brands and agencies that get consistent results run creator-licensed ads as a **programme**: a repeatable pipeline that sources creators, produces content, tests it in ads and feeds learnings back into briefs.\n\n### The five-stage pipeline\n\n1. **Source:** identify creators whose audience and style fit the brand (through creator marketplaces, platform creator tools, searches and agency rosters). Check authenticity, brand safety and past sponsored content.\n2. **Brief:** give a clear, flexible brief with the key message, mandatory points, things to avoid and the ad usage plan so the creator knows the content may be used in paid media.\n3. **Produce and publish:** the creator posts organically (if agreed) and supplies raw files and extra hooks.\n4. **Test in ads:** run creator posts via Spark or partnership ads alongside brand ads using a structured creative test.\n5. **Learn and renew:** identify winning creators, angles and hooks; renew authorisation for winners; re-brief with learnings.\n\n### Operational checklist\n\n- **Permissions tracker:** a shared sheet listing each creator, post link, platform, authorisation code or permission status, start and end dates, territories and fees. Set reminders before expiry.\n- **Naming conventions:** include creator name, angle and hook in ad names so reporting shows which creator and message win.\n- **Asset library:** store raw files, final edits, music licences and contracts together.\n- **Comment moderation plan:** agreed with creators; response templates for common questions; escalation path for complaints or misinformation.\n- **Payment tracking:** content fees, usage fees and any performance bonuses, paid on agreed terms.\n\n### Measuring creator ads fairly\n\n- Compare creator ads with brand-handle ads in the same campaign and objective.\n- Judge on your primary metric (CPA, ROAS, cost per lead) with diagnostic metrics (hook rate, hold rate, CTR).\n- Account for the organic reach and content value the creator provided, not just paid performance.\n- Share results with creators where appropriate. Creators who understand what worked create better content next time.\n\n### Performance-linked fees (optional)\n\nSome programmes add a bonus when ads hit agreed thresholds (for example a bonus if a creator's ad reaches a target spend at or below target CPA). Keep these simple, measurable from data both parties can see, and in writing. Avoid arrangements where the creator's pay depends on data they cannot verify.\n\n### Risk management\n\n- **Brand safety:** re-check a creator's recent content before renewing authorisation.\n- **Crisis plan:** if a creator becomes involved in controversy, pause their ads immediately (the contract should allow this) and assess before resuming.\n- **Regulatory:** keep disclosure labels on; for regulated sectors (finance, health, alcohol where legal, gambling where legal), confirm the creator and content meet sector rules and platform authorisations.\n- **Data:** do not share customer data with creators; share performance summaries only.\n\n### Worked example (illustrative)\n\nA UK meal-kit company runs a quarterly programme with 10 creators:\n\n- Month 1: 10 creators each deliver one video plus three hooks; all are tested via partnership ads at equal budgets.\n- Month 2: three creators produce CPA below target; their authorisations are extended for 90 days with renewal fees; the others receive feedback.\n- Month 3: new briefs to the top three focus on the winning \"weeknight time-saving\" angle, and five new creators are onboarded to keep the pipeline fresh.\n\n### Common mistakes\n\n- Losing track of authorisation expiry dates and running ads without permission.\n- No hooks or raw files, leaving nothing to test.\n- Judging creators on one small test.\n- Ignoring comments on high-spend creator ads.",
+          "video": null,
+          "keyTakeaways": [
+            "Treat creator-licensed ads as a programme: source, brief, produce, test and learn.",
+            "Keep a permissions tracker with dates, territories and fees, and set reminders before expiry.",
+            "Measure creator ads against brand ads fairly and share learnings with creators.",
+            "Manage risk: re-check brand safety before renewals, pause quickly in a crisis and keep disclosures on."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the main purpose of a permissions tracker?",
+              "options": [
+                "To store creators' passwords",
+                "To track authorisation status, dates, territories and fees so ads never run without permission",
+                "To count followers",
+                "To schedule organic posts"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Tracking permissions and expiry prevents unauthorised use and disputes."
+            },
+            {
+              "question": "A creator in your programme becomes involved in a public controversy. What should you do first?",
+              "options": [
+                "Increase spend on their ads",
+                "Ignore it",
+                "Delete all the brand's social accounts",
+                "Pause their ads and assess before deciding next steps"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Pausing protects both parties while you assess; the contract should allow it."
+            },
+            {
+              "question": "Which is a fair way to evaluate creator ads?",
+              "options": [
+                "Use one day of data",
+                "Judge only on likes",
+                "Compare TikTok views with LinkedIn clicks",
+                "Compare them with brand-handle ads in the same campaign using the primary metric"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Like-for-like comparisons on the goal metric give fair results."
+            }
+          ],
+          "activity": "Design a permissions tracker (column headings plus two example rows) and a one-paragraph moderation plan for a creator ad programme."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 20,
+    "timeLimitMinutes": 30,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "psa-001",
+        "module": "structure-and-audiences",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "In Meta's structure, where is the campaign objective chosen?",
+        "options": [
+          "Ad level",
+          "Ad set level",
+          "Campaign level",
+          "Page settings"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "The objective is set at the campaign level; audiences and budgets usually sit at the ad set level."
+      },
+      {
+        "id": "psa-002",
+        "module": "structure-and-audiences",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which objective fits a Shopify store whose goal is online revenue?",
+        "options": [
+          "Sales",
+          "Engagement",
+          "Awareness",
+          "Video views"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Sales optimises for purchases; the others optimise for earlier actions."
+      },
+      {
+        "id": "psa-003",
+        "module": "structure-and-audiences",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A UK B2B consultancy wants leads from finance directors at mid-sized companies. Which platform and targeting best fit?",
+        "options": [
+          "TikTok interest targeting for 'finance'",
+          "LinkedIn targeting by job function, seniority and company size",
+          "Snapchat broad targeting",
+          "X keyword targeting only"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "LinkedIn's professional targeting reaches decision-makers by role and company attributes."
+      },
+      {
+        "id": "psa-004",
+        "module": "structure-and-audiences",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "You want to compare two audiences with the same creative on Meta. How should you structure it?",
+        "options": [
+          "Put both audiences in one ad set",
+          "Use separate ad sets (ideally in a formal A/B test) with the same creative",
+          "Use two different objectives",
+          "Create two ads in the same ad set"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Audiences are set at ad set level, so each audience needs its own ad set for a fair comparison."
+      },
+      {
+        "id": "psa-005",
+        "module": "structure-and-audiences",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Select the TWO ad types that fall under Meta's special ad categories.",
+        "options": [
+          "Job vacancies",
+          "Mortgage offers",
+          "Clothing sale",
+          "Restaurant opening"
+        ],
+        "correct": [
+          0,
+          1
+        ],
+        "explanation": "Employment and credit/housing ads are special categories with targeting restrictions; retail and restaurant ads are not."
+      },
+      {
+        "id": "psa-006",
+        "module": "structure-and-audiences",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An account has 12 ad sets with heavily stacked interests, each spending a small amount and none leaving learning. What is the best restructure?",
+        "options": [
+          "Add more interests to each ad set",
+          "Switch every ad set to the Traffic objective",
+          "Split into 24 ad sets",
+          "Consolidate into fewer ad sets with broader targeting and more budget each"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Consolidation gives each ad set enough events to learn; broad targeting lets creative and signals do the work."
+      },
+      {
+        "id": "psa-007",
+        "module": "structure-and-audiences",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A Pakistani brand's goal is WhatsApp sales conversations. Which setup is most aligned?",
+        "options": [
+          "An objective with a messaging destination optimised for conversations, with creatives inviting people to message",
+          "Awareness objective optimised for reach",
+          "Traffic objective sending people to the homepage",
+          "Video views objective"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Optimising for conversations started aligns delivery with the actual business action."
+      },
+      {
+        "id": "psa-008",
+        "module": "creative-and-testing",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is a creative 'angle'?",
+        "options": [
+          "The camera tilt",
+          "The bid strategy",
+          "The ad's aspect ratio",
+          "A distinct reason to buy, such as saving time or money"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Angles frame the product around different motivations."
+      },
+      {
+        "id": "psa-009",
+        "module": "creative-and-testing",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which method gives the cleanest comparison between two creatives?",
+        "options": [
+          "Posting them on different days organically",
+          "Putting them in different campaigns with different objectives",
+          "A platform A/B test that splits audiences so each person sees one version",
+          "Asking friends which they prefer"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "A/B test tools divide the audience so results are comparable."
+      },
+      {
+        "id": "psa-010",
+        "module": "creative-and-testing",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A new hook has a much higher hook rate, but CPA is worse than the control. What is the most likely explanation?",
+        "options": [
+          "The hook attracts curious viewers who are not likely buyers",
+          "The pixel stopped working",
+          "CPM fell",
+          "The ad was rejected"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Attention alone is not the goal; the hook may attract the wrong people or over-promise."
+      },
+      {
+        "id": "psa-011",
+        "module": "creative-and-testing",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Select ALL good practices for creative testing.",
+        "options": [
+          "Write a hypothesis before launching",
+          "Change hook, offer and format at the same time",
+          "Set minimum spend and duration in advance",
+          "Record learnings in a test log"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Hypotheses, pre-set thresholds and a log make tests reliable and repeatable. Changing several variables hides the cause."
+      },
+      {
+        "id": "psa-012",
+        "module": "creative-and-testing",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Ad A: CPA $18 from 4 purchases. Ad B: CPA $24 from 60 purchases. Your target is $25. What is the most sensible decision?",
+        "options": [
+          "Pause B immediately and scale A heavily",
+          "Pause both",
+          "Keep B running (it is reliably under target) and give A more budget to see if its early result holds",
+          "Scale A and B equally based on CPA alone"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "B's performance is proven on a large sample; A's is promising but based on very little data."
+      },
+      {
+        "id": "psa-013",
+        "module": "creative-and-testing",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which creative approach best fits LinkedIn B2B ads?",
+        "options": [
+          "Fast dance trends",
+          "Horizontal TV adverts with no captions",
+          "Unsubstantiated hype claims",
+          "Professional but human content such as practical advice from real people and data the company can support"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "LinkedIn audiences respond to credible, useful and human professional content."
+      },
+      {
+        "id": "psa-014",
+        "module": "budgets-bidding-and-tracking",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the main function of a conversions API?",
+        "options": [
+          "To send conversion events from a server directly to the ad platform",
+          "To design ad creative",
+          "To set budgets",
+          "To replace the ad account"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Conversions APIs send events server-side, complementing browser pixels."
+      },
+      {
+        "id": "psa-015",
+        "module": "budgets-bidding-and-tracking",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which budget type suits a fixed 10-day Eid promotion?",
+        "options": [
+          "Lifetime budget with a start and end date",
+          "An unlimited daily budget",
+          "No budget",
+          "A bid cap only"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Lifetime budgets are designed for fixed periods and scheduled delivery."
+      },
+      {
+        "id": "psa-016",
+        "module": "budgets-bidding-and-tracking",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Your store's orders are 70% cash on delivery and many are refused. Which improvement helps optimisation most?",
+        "options": [
+          "Optimise for page views",
+          "Turn off the pixel",
+          "Increase the daily budget",
+          "Send a delivered or paid event via the conversions API and evaluate on it"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Feeding confirmed, paid orders helps the platform find real buyers and gives honest reporting."
+      },
+      {
+        "id": "psa-017",
+        "module": "budgets-bidding-and-tracking",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Meta reports noticeably more purchases than your store records, and diagnostics show purchase events firing twice per order. What should you do?",
+        "options": [
+          "Nothing; more is better",
+          "Remove the duplicate pixel or configure deduplication with shared event IDs",
+          "Change the objective to Traffic",
+          "Double the budget"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Duplicate events inflate results and mislead optimisation; fix the implementation."
+      },
+      {
+        "id": "psa-018",
+        "module": "budgets-bidding-and-tracking",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Select the TWO actions most likely to reset or prolong the learning phase.",
+        "options": [
+          "Making a large, sudden budget increase",
+          "Changing the targeting significantly",
+          "Checking the report",
+          "Replying to comments"
+        ],
+        "correct": [
+          0,
+          1
+        ],
+        "explanation": "Significant edits to budget or targeting restart learning; viewing reports and replying to comments do not."
+      },
+      {
+        "id": "psa-019",
+        "module": "budgets-bidding-and-tracking",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A brand sets a cost per result goal far below its historical CPA and delivery nearly stops. What is the best fix?",
+        "options": [
+          "Raise the goal towards a realistic level or switch to highest-volume bidding to rebuild data",
+          "Lower the goal further",
+          "Add more interests",
+          "Pause the pixel"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "An unrealistic cost goal blocks the auction; set it near achievable levels or let automated bidding gather data."
+      },
+      {
+        "id": "psa-020",
+        "module": "budgets-bidding-and-tracking",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which factors combine to decide an ad auction winner on Meta? Select all that apply.",
+        "options": [
+          "The advertiser's bid",
+          "Estimated action rate",
+          "Ad quality or relevance",
+          "The advertiser's follower count"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Total value combines bid, estimated action rate and ad quality. Follower count is not part of it."
+      },
+      {
+        "id": "psa-021",
+        "module": "reporting-and-policy",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which ad headline is likely to violate personal-attribute policies?",
+        "options": [
+          "New skincare range for summer",
+          "Dermatologist-developed moisturiser",
+          "Gentle cleansers for sensitive skin types",
+          "Do you have acne? This cream fixes it"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "It asserts the viewer has a medical condition and makes a strong claim."
+      },
+      {
+        "id": "psa-022",
+        "module": "reporting-and-policy",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which metric shows clicks that go to your destination rather than likes or profile taps?",
+        "options": [
+          "All clicks",
+          "Frequency",
+          "Reach",
+          "Link clicks"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Link clicks count visits to your destination; 'all clicks' includes other interactions."
+      },
+      {
+        "id": "psa-023",
+        "module": "reporting-and-policy",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "CPM has jumped across all campaigns during the last week of Ramadan while CTR and conversion rate are steady. What is the most likely cause?",
+        "options": [
+          "Seasonal competition raising auction prices",
+          "Creative fatigue",
+          "A broken checkout",
+          "A pixel error"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Peak seasons increase advertiser demand, raising CPMs even when ads perform the same."
+      },
+      {
+        "id": "psa-024",
+        "module": "reporting-and-policy",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Select the TWO landing page issues that commonly cause ad rejections.",
+        "options": [
+          "The page does not match the ad's offer",
+          "The page is broken or does not load",
+          "The page uses a sans-serif font",
+          "The page has a privacy policy"
+        ],
+        "correct": [
+          0,
+          1
+        ],
+        "explanation": "Mismatched and non-functional pages are common rejection causes. Fonts and privacy policies are not problems."
+      },
+      {
+        "id": "psa-025",
+        "module": "reporting-and-policy",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An ad for an investment course says 'Earn AED 20,000 a month guaranteed'. It is approved on one platform. What is the most accurate assessment?",
+        "options": [
+          "It is fine because it was approved",
+          "It is fine if the font is small",
+          "It is only a problem in the US",
+          "It remains a misleading income claim that may breach platform policy on review and local advertising rules"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Platform approval is not a guarantee; guaranteed-income claims are misleading and risky under policies and regulators."
+      },
+      {
+        "id": "psa-026",
+        "module": "reporting-and-policy",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A client's report shows platform ROAS of 5, but store revenue has not grown while spend doubled. What should you check first?",
+        "options": [
+          "Nothing; ROAS of 5 is excellent",
+          "The ad font",
+          "Attribution settings, overlap across platforms and blended MER against store data",
+          "Only the CTR"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Platform ROAS may over-credit ads; blended MER and store data reveal whether ads are truly adding revenue."
+      },
+      {
+        "id": "psa-027",
+        "module": "creator-licensed-ads",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is TikTok's format for boosting an existing organic post as an ad called?",
+        "options": [
+          "Spark Ads",
+          "Collection Ads",
+          "Dynamic Showcase",
+          "Pangle"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Spark Ads let brands promote organic posts, including creators' posts, with authorisation."
+      },
+      {
+        "id": "psa-028",
+        "module": "creator-licensed-ads",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does 'whitelisting' mean in creator marketing?",
+        "options": [
+          "Adding a creator to an email list",
+          "Blocking a creator",
+          "A creator permitting a brand to run ads using the creator's identity",
+          "A creator following the brand"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Whitelisting is licensing a creator's handle for paid ads, now done through official permission tools."
+      },
+      {
+        "id": "psa-029",
+        "module": "creator-licensed-ads",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A brand asks a creator for their Instagram password to run ads. What is the correct response?",
+        "options": [
+          "Share it to save time",
+          "Share it but change it later",
+          "Refuse and use Meta's official partnership ads permissions instead",
+          "Send it by email only"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Official permission flows are safer and do not require sharing credentials."
+      },
+      {
+        "id": "psa-030",
+        "module": "creator-licensed-ads",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Select ALL items that belong in a creator-licensed ad agreement.",
+        "options": [
+          "Duration of ad usage",
+          "Territories where ads run",
+          "Usage fee",
+          "Comment moderation responsibilities",
+          "The creator's login details"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "explanation": "Duration, territories, fees and moderation should be agreed. Login details should never be shared."
+      },
+      {
+        "id": "psa-031",
+        "module": "creator-licensed-ads",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A Spark Ad authorisation expired last week, but the ad is still running according to the tracker. What should the agency do?",
+        "options": [
+          "Keep running it since it performs well",
+          "Stop the ad, contact the creator to renew on agreed terms and fix the tracking process",
+          "Download and re-upload the video",
+          "Remove the creator's name and continue"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Running beyond authorisation breaches the agreement; stop, renew properly and improve expiry reminders."
+      },
+      {
+        "id": "psa-032",
+        "module": "creator-licensed-ads",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Which statement about disclosure for partnership ads is correct?",
+        "options": [
+          "No disclosure is needed because the brand pays for the ad",
+          "Use the paid partnership label and clear ad disclosures required by local rules such as ASA/CAP, FTC and Gulf regulators",
+          "Disclosure is only needed on TikTok",
+          "A single emoji is enough"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Creator-licensed ads are advertising and must be clearly disclosed in each market."
+      },
+      {
+        "id": "psa-033",
+        "module": "creator-licensed-ads",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why include creator name, angle and hook in ad names?",
+        "options": [
+          "It is required by the platform",
+          "So reports show which creators and messages drive results",
+          "It reduces CPM",
+          "It improves the video quality"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Structured naming turns reports into learning about creators and messages."
+      }
+    ]
+  }
+}

@@ -1,0 +1,1233 @@
+{
+  "slug": "short-form-video-content-creation",
+  "version": 1,
+  "title": "Short-Form Video & Content Creation",
+  "subtitle": "Hook, script, film, edit and publish short videos that people watch, share and trust",
+  "category": "marketing",
+  "level": "beginner",
+  "estimatedMinutes": 138,
+  "description": "Short-form video is the main discovery engine for creators and brands on TikTok, Instagram Reels and YouTube Shorts. This course teaches the full craft with nothing more than a smartphone: writing hooks that earn attention in the first seconds, structuring and scripting stories, filming with good framing, light and sound, and editing quickly for retention.\n\nYou will also learn how to adapt one video to each platform, make every video accessible with accurate captions, balance trends with evergreen content and turn one idea into many assets. The final module prepares you to create brand-safe **UGC** for paid campaigns: reading briefs, agreeing usage rights, making honest claims and disclosing correctly under FTC, ASA and Gulf rules. Suitable for new creators and junior marketers, with enough depth for intermediate creators who want a repeatable system.",
+  "outcomes": [
+    "Write three-layer hooks and test several openings for the same video",
+    "Script short videos using proven structures in a two-column audio/visual format",
+    "Film well-lit, clear-sounding vertical video on a smartphone",
+    "Edit efficiently for retention using licensed music and quality checks",
+    "Publish accessible videos with accurate captions and inclusive design",
+    "Adapt content for TikTok, Reels and Shorts and repurpose one idea into many assets",
+    "Deliver brand-safe, properly disclosed UGC that matches the brief and usage terms"
+  ],
+  "skills": [
+    "Short-form video",
+    "Scriptwriting",
+    "Mobile videography",
+    "Video editing",
+    "Accessible content",
+    "Content strategy",
+    "UGC creation"
+  ],
+  "prerequisites": [],
+  "badge": {
+    "name": "Certified Short-Form Video Creator",
+    "description": "The holder can plan, script, film, edit and publish short-form video for TikTok, Reels and Shorts using strong hooks, clear structure, good light and sound, and accurate captions. They can build a content mix, repurpose efficiently and deliver brand-safe, correctly disclosed UGC for campaigns.",
+    "criteria": "Completed all lessons and scored ≥ 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "hooks-and-storytelling",
+      "title": "Hooks, stories and scripts",
+      "summary": "Earn attention in the first seconds and hold it with simple, repeatable story structures and tight scripts.",
+      "lessons": [
+        {
+          "slug": "hooks-that-stop-the-scroll",
+          "title": "Hooks that stop the scroll",
+          "type": "video",
+          "durationMinutes": 10,
+          "body": "### Why the first seconds decide everything\n\nOn TikTok, Instagram Reels and YouTube Shorts, viewers decide almost instantly whether to keep watching. Platforms notice when people swipe away early and show the video to fewer people. A great middle and ending are wasted if the opening does not earn attention.\n\nA **hook** is everything in the opening moment: the first frame, the first words, the on-screen text and the first movement or sound. The best hooks work on three layers at once.\n\n### The three layers of a hook\n\n1. **Visual hook** – what people see in the first frame. Movement, a surprising object, a before/after split, a close-up of a face with a clear expression, or the result shown first.\n2. **Text hook** – a short on-screen line (roughly 3–8 words) readable in a second, placed away from the platform buttons.\n3. **Spoken hook** – the first sentence you say. It should create curiosity, promise a benefit or name a problem the viewer has.\n\nWhen all three say the same thing in slightly different ways, the hook works even for people watching with the sound off.\n\n### Ten hook formulas you can adapt\n\n| Formula | Example |\n|---|---|\n| Call out the viewer | \"If you sell on Instagram and hate writing captions, watch this.\" |\n| Bold outcome | \"This 20-second change doubled my bookings last month.\" (only if true) |\n| Mistake warning | \"Stop doing this when you film on your phone.\" |\n| Curiosity gap | \"Nobody tells new freelancers about this fee.\" |\n| Result first | Show the finished room, dish or design, then \"Here's how.\" |\n| Contrarian | \"Posting every day is hurting your account. Here's why.\" |\n| How-to promise | \"Three lighting setups that cost nothing.\" |\n| Story opener | \"A client almost cancelled on me yesterday…\" |\n| Question | \"Why do some Reels get 100 views and others 100,000?\" |\n| List/number | \"Five apps I use to edit every video.\" |\n\nAlways deliver on the hook's promise. A hook that tricks viewers (clickbait) might earn a few seconds but damages retention, comments and trust.\n\n### Hook checklist\n\n- Does the first frame have movement or a clear subject within the first second?\n- Could someone understand the topic with the sound off?\n- Is the payoff specific (\"three lighting setups\") rather than vague (\"some tips\")?\n- Is the text inside the safe zone, clear of captions, buttons and the username?\n- Is there no slow intro, logo sting or \"Hey guys, welcome back\"?\n\n### Worked example: rewriting a weak hook\n\nA Karachi home baker films a cake-decorating video.\n\n- **Weak:** Opens with her kitchen, says \"Hi everyone, today I'm going to show you something.\"\n- **Strong:** Opens on the finished cake rotating on a stand. Text: \"Bakery finish with a Rs 300 tool.\" Spoken: \"You don't need a fancy kit for smooth buttercream. This scraper is all I use.\"\n\nThe strong version shows the result, names a specific benefit and promises a low-cost method.\n\n### Testing hooks\n\nHooks are the easiest part of a video to test. Film one main video and record three different openings. Publish them on different days (or use a platform's built-in testing tools where available) and compare the percentage of viewers still watching after the first few seconds in your analytics. Keep the winning style and iterate.\n\n### Common mistakes\n\n- Starting with greetings, logos or context the viewer does not care about yet.\n- Text hooks too long to read or hidden behind platform buttons.\n- Promising something the video does not deliver.\n- Only testing topics, never openings.",
+          "video": {
+            "script": "You have about the length of a breath to earn someone's attention. On TikTok, Reels and Shorts, people decide almost instantly whether to keep watching, and the platforms notice. That's why every video needs a hook, and a strong hook works on three layers at once. First, the visual: what's in the very first frame? Show movement, a face, or the finished result. Second, the text: a short line on screen, readable in a second, kept away from the buttons. Third, the spoken line: the first sentence out of your mouth should name a problem, promise a benefit, or open a curiosity gap. Here's an example. A home baker opens with her finished cake spinning on a stand. The text says, \"Bakery finish with a three-hundred-rupee tool.\" And she says, \"You don't need a fancy kit for smooth buttercream.\" Result, benefit and promise, all in the opening moment. Cut the greetings, the logo animations and the long introductions. Get to the point, and then keep the promise, because a hook that tricks people will hurt you later. Your practice task: take one video idea and record three different openings. Compare how many viewers are still watching after the first few seconds. That single habit will improve your content faster than almost anything else.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "The hook is the first frame, first words and first on-screen text working together.",
+            "Use proven formulas such as call-outs, mistake warnings, result-first and curiosity gaps.",
+            "Design hooks to work with the sound off and keep text inside the safe zone.",
+            "Always deliver on the promise; test several openings for the same video."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which opening is the strongest hook for a video about budget home décor?",
+              "options": [
+                "'Hi guys, welcome back to my channel'",
+                "A slow pan of the street outside",
+                "The brand logo animation",
+                "The finished room first, with text 'Room makeover under $50'"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Showing the result with a specific promise earns attention immediately; greetings, logos and slow establishing shots do not."
+            },
+            {
+              "question": "Why should the text hook repeat the spoken hook?",
+              "options": [
+                "Many people watch with the sound off, so the idea must work visually too",
+                "Platforms require it",
+                "It makes the video longer",
+                "It prevents copyright claims"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "On-screen text makes the hook work for silent viewers and reinforces it for everyone else."
+            },
+            {
+              "question": "What is the simplest way to test hooks?",
+              "options": [
+                "Change the video topic every day",
+                "Add more hashtags",
+                "Only post at midnight",
+                "Record several different openings for the same core video and compare early retention"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Keeping the body constant and varying only the opening isolates the effect of the hook."
+            }
+          ],
+          "activity": "Pick one video idea and write three different hooks using three formulas from the table. Film all three openings and note which one you would publish first and why."
+        },
+        {
+          "slug": "story-structures-and-scripting",
+          "title": "Story structures and scripting",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Why structure beats improvisation\n\nShort videos feel spontaneous, but the ones that perform consistently are usually planned. A simple structure keeps you focused, removes rambling and makes editing faster. Most short-form videos between 15 and 60 seconds need only four or five beats.\n\n### Five structures that work across niches\n\n**1. Hook – Value – Payoff – CTA (the tutorial)**\nHook the viewer, deliver the steps, show the result, then tell them what to do next.\n\n**2. Problem – Agitate – Solve (PAS)**\nName a problem, show why it is frustrating, then present the solution. Ideal for products and services.\n\n**3. Before – After – Bridge**\nShow the \"before\", show the \"after\", then explain the bridge (how to get there). Perfect for makeovers, fitness, design and cleaning.\n\n**4. Story arc (setup – conflict – resolution)**\n\"A client refused to pay… here's what I did… here's what I learned.\" Stories build connection and are highly shareable.\n\n**5. List or countdown**\n\"Three mistakes…\", \"Five tools…\". Easy to follow and naturally paced by the numbers.\n\n### The one-idea rule\n\nEach short video should communicate **one idea**. If you have five tips, consider five videos or a list video where each tip is a short, snappy beat. Trying to cover everything creates dense, fast talking and weak retention.\n\n### Writing the script\n\nWrite for the ear, not the eye:\n\n- Use short sentences and everyday words.\n- Put the most interesting line first.\n- Replace \"In this video I will…\" with the actual content.\n- Read it out loud and cut any sentence that does not add value. A useful habit is to cut the first draft by a third.\n- Plan the visuals next to each line so you know what B-roll or on-screen text is needed.\n\n### A two-column script template\n\n| Audio (what you say) | Visual (what we see / text on screen) |\n|---|---|\n| \"Your Reels look dark because of this.\" | Close-up, dim face. Text: \"Why your videos look dark\" |\n| \"You're filming with the window behind you.\" | Wide shot, window behind creator |\n| \"Turn around. Face the window.\" | Creator turns; face now bright |\n| \"Instant soft light, no gear.\" | Side-by-side before/after |\n| \"Follow for more free filming tips.\" | Text: \"Part 2: audio fixes\" |\n\nThis script is about 35 words and runs roughly 15 seconds.\n\n### Calls to action that feel natural\n\nA call to action (CTA) should match the viewer's stage and the platform:\n\n- **Engagement:** \"Comment 'guide' and I'll send you the checklist\" (only if you actually follow up, and within platform rules on automated messages).\n- **Follow:** \"Follow for part two.\"\n- **Save/share:** \"Save this for your next shoot.\"\n- **Conversion:** \"Link in bio for the free template.\"\n\nAvoid stacking four CTAs at the end. Pick one.\n\n### Pacing and loops\n\n- Keep a new visual every few seconds: a cut, a zoom, a new angle, a text change.\n- Consider a **loop**: an ending that flows naturally back into the beginning, so re-watches feel seamless.\n- Cut dead air, \"umm\"s and repeated words in editing.\n\n### Worked example: PAS for a freelance accountant in Manchester\n\n- **Problem:** \"Self-employed? Your tax bill might surprise you in January.\"\n- **Agitate:** \"Most freelancers forget to set money aside and panic when it's due.\"\n- **Solve:** \"Move a fixed percentage of every invoice into a separate pot the day you get paid. I'll show you how I set mine up.\"\n- **CTA:** \"Follow for more money tips for freelancers.\"\n\n(Note: general education only; for financial content, avoid personalised advice and follow any rules that apply to regulated financial promotions in your country.)\n\n### Common mistakes\n\n- Several ideas in one short video.\n- Scripts written like essays, then read robotically.\n- Endings that trail off with no clear next step.\n- Forgetting to plan visuals, then filming only a talking head.",
+          "video": null,
+          "keyTakeaways": [
+            "Use a clear structure: tutorial, PAS, before-after-bridge, story arc or list.",
+            "One idea per video keeps pacing tight and retention high.",
+            "Write for the ear in a two-column script (audio and visual) and cut the first draft by about a third.",
+            "End with a single CTA matched to the platform and the viewer's stage."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What does PAS stand for in scripting?",
+              "options": [
+                "Post, Analyse, Share",
+                "Problem, Agitate, Solve",
+                "Plan, Act, Sell",
+                "Pitch, Ask, Score"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Problem – Agitate – Solve names a pain, deepens it, then offers the solution."
+            },
+            {
+              "question": "You have seven tips about lighting. What is usually the best approach for short-form?",
+              "options": [
+                "Talk very fast to fit all seven into 15 seconds",
+                "Only post the first tip and never the rest",
+                "Split them into several videos or a tightly paced list with one idea per beat",
+                "Put all seven in the caption and leave the video blank"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "The one-idea rule keeps each video clear; a list or series spreads the tips out without cramming."
+            },
+            {
+              "question": "Why use a two-column script?",
+              "options": [
+                "It is required by TikTok",
+                "It doubles the length of the video",
+                "It plans what you say and what the viewer sees at the same time",
+                "It removes the need to edit"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Pairing audio with visuals ensures you capture the right shots and text for every line."
+            }
+          ],
+          "activity": "Write a two-column script (audio and visual) for a 30–45 second video using one of the five structures. Read it aloud, time it and cut it by a third."
+        }
+      ]
+    },
+    {
+      "slug": "filming-and-editing",
+      "title": "Filming and editing on a phone",
+      "summary": "Get sharp, well-lit, clear-sounding footage from a smartphone and edit it efficiently into a polished short video.",
+      "lessons": [
+        {
+          "slug": "phone-filming-light-and-sound",
+          "title": "Phone filming: framing, light and sound",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Your phone is enough\n\nModern smartphones shoot excellent video. The difference between amateur and professional-looking content is rarely the camera; it is framing, light, sound and stability. Master these and a mid-range phone will serve you well.\n\n### Camera settings checklist\n\n- **Clean the lens.** Fingerprints cause haze and glow. This is the most common and easiest fix.\n- **Vertical 9:16** for TikTok, Reels and Shorts. 1080 × 1920 pixels is the standard delivery size.\n- **Resolution and frame rate:** 1080p or 4K at 30 fps is a safe default; use 60 fps if you plan slow motion. Keep frame rate consistent across clips.\n- **Lock exposure and focus** by long-pressing on your subject (on most phones) so brightness does not pump as you move.\n- **Use the rear camera** when you can; it is usually higher quality than the selfie camera. A small monitor or a flip-screen phone mount helps you frame yourself.\n- **Turn on Do Not Disturb** so notifications do not ruin takes.\n\n### Framing and composition\n\n- **Rule of thirds:** place eyes roughly one-third from the top of the frame.\n- **Headroom:** leave a little space above the head, not a large empty gap.\n- **Safe zones:** platform buttons, captions and usernames cover parts of the bottom and right of the screen. Keep faces, products and text away from those areas.\n- **Eye level:** place the phone at eye level. Low angles looking up are rarely flattering and feel unstable.\n- **Background:** tidy, with some depth. Sit a metre or more away from the wall to avoid flat shadows.\n- **Shot variety:** plan close-ups (details, hands, product), medium shots (you talking) and wide shots (context).\n\n### Lighting on any budget\n\nLight shapes how professional you look more than anything else.\n\n1. **Window light (free):** face a window so soft daylight falls on your face. Avoid having the window behind you, which turns you into a silhouette.\n2. **Avoid harsh overhead light:** ceiling lights create shadows under the eyes. Turn them off if you have a better source.\n3. **Soft beats hard:** a sheer curtain or white sheet over a bright window softens light.\n4. **Budget lights:** a small LED panel or ring light helps when daylight is unreliable. Place it slightly above eye level and to one side for gentle shadows that give shape.\n5. **Match colour temperature:** mixing warm bulbs with cool daylight gives patchy skin tones. Use one type of light where possible.\n\nIn hot climates such as the Gulf, film in the morning or late afternoon for softer light, or indoors with curtains; midday sun is harsh and heats equipment quickly.\n\n### Audio: viewers forgive average video, not bad sound\n\n- **Get close to the mic.** The phone's built-in mic works best within an arm's length in a quiet room.\n- **Reduce echo:** rooms with soft furnishings (curtains, sofas, rugs) sound better than bare rooms. A wardrobe full of clothes is a classic budget vocal booth.\n- **Use an external mic** when you can: a wireless clip-on (lavalier) mic is often the single best upgrade for talking videos.\n- **Monitor noise:** fans, air conditioners, traffic and the call to prayer outside can interrupt takes. Plan filming around predictable noise, or pause and re-record.\n- **Record a few seconds of room silence** – editors can use it for noise reduction.\n\n### Stability and movement\n\nUse a tripod or propped surface for talking shots. For moving shots, hold the phone with both hands, elbows tucked in, and move slowly. Most phones have stabilisation modes; test them for your use case.\n\n### Pre-shoot checklist\n\n- Lens cleaned, storage free, battery charged.\n- Do Not Disturb on.\n- Light facing you; no harsh overheads.\n- Mic tested with a 10-second recording and played back on headphones.\n- Background tidy; nothing branded that you do not have permission to show.\n- Script or bullet points visible.\n\n### Common mistakes\n\n- Filming with the window behind you.\n- Using the zoom instead of moving closer (digital zoom reduces quality).\n- Ignoring echo and background noise.\n- Placing key text or products where platform buttons will cover them.",
+          "video": null,
+          "keyTakeaways": [
+            "Clean lens, 9:16 vertical, consistent frame rate and locked exposure and focus are the basic settings.",
+            "Frame at eye level with the rule of thirds and keep key elements inside platform safe zones.",
+            "Face soft light such as a window; avoid backlight and harsh overheads.",
+            "Good audio matters more than perfect video: get close to the mic, reduce echo and consider a clip-on mic."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Your face looks dark and the window behind you is bright. What is the quickest fix?",
+              "options": [
+                "Increase the video resolution",
+                "Turn around so you face the window",
+                "Add a filter in editing",
+                "Use the digital zoom"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Facing the light source puts soft light on your face; resolution and filters cannot fix a silhouette well."
+            },
+            {
+              "question": "Which upgrade usually improves talking-head videos the most for little cost?",
+              "options": [
+                "A more expensive phone",
+                "A drone",
+                "A clip-on (lavalier) microphone",
+                "A bigger memory card"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Clear audio has a huge effect on perceived quality, and clip-on mics are affordable."
+            },
+            {
+              "question": "Why keep text and products away from the bottom and right edges of the frame?",
+              "options": [
+                "Those areas are blurred by the platform",
+                "It improves battery life",
+                "Platform buttons, captions and usernames cover them",
+                "It is required by copyright law"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Safe zones exist because interface elements overlay those areas on TikTok, Reels and Shorts."
+            }
+          ],
+          "activity": "Film the same 10-second talking clip three ways: window behind you, window to the side, and facing the window. Compare the results and note which one you will use as your default setup."
+        },
+        {
+          "slug": "editing-workflow",
+          "title": "An efficient editing workflow",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Editing is where retention is won\n\nEditing turns raw clips into a tight story. The goal is not flashy effects; it is **removing everything that makes a viewer leave** and adding only what helps them understand or feel something.\n\n### Choosing an editor\n\nPopular options include CapCut, InShot, VN, Instagram's Edits app and the built-in editors in TikTok, Instagram and YouTube for mobile, plus Premiere Pro, DaVinci Resolve and Final Cut Pro on desktop. Pick one and learn it well. Check each tool's terms: for example, templates, fonts, effects and music inside some apps may have restrictions on commercial or brand use.\n\n### A six-step workflow\n\n**1. Organise.** Create a folder per video. Name clips simply (A-roll for talking, B-roll for supporting footage).\n\n**2. Assemble the A-roll.** Lay down your best takes in script order. Do not polish yet.\n\n**3. Cut ruthlessly.** Remove pauses, false starts, \"umm\"s and repeated sentences. A **jump cut** (cutting out a pause within the same shot) is normal in short-form and keeps energy high. Aim for the shortest version that still delivers the idea.\n\n**4. Add B-roll and visual changes.** Cover jump cuts and illustrate points with close-ups, screen recordings, product shots or reactions. A new visual every few seconds maintains interest.\n\n**5. Add text, captions and graphics.** On-screen hook, key points and burned-in or auto-generated captions (see the accessibility lesson). Keep fonts readable and consistent.\n\n**6. Sound design and export.** Balance voice and music so speech is always clear (music noticeably quieter than voice). Add subtle sound effects to emphasise transitions if they suit your style. Export at 1080 × 1920, the same frame rate you filmed at, with high quality settings.\n\n### Music and copyright\n\nMusic choice is a legal decision, not only a creative one:\n\n- **Personal accounts** often have access to a wider music library than business accounts, but that access is for personal, non-commercial use under the platform's licences.\n- **Business accounts and brand campaigns** should use each platform's commercial music library (for example TikTok's Commercial Music Library or Meta's Sound Collection) or properly licensed royalty-free music.\n- Adding popular songs to a paid ad or brand video without a licence risks takedowns, muted audio or legal claims.\n- If you repurpose a video to another platform, the music licence may not travel with it. Re-check.\n\n### Editing for different lengths\n\nA strong approach is to create a **core edit** of about 20–45 seconds, then cut:\n\n- A **short teaser** (under 15 seconds) that delivers only the hook and one payoff.\n- A **longer version** (up to a few minutes, where the platform allows) with extra detail for audiences who want depth.\n\n### Quality control checklist before publishing\n\n- Watch it once on mute: does it still make sense?\n- Watch it once with eyes closed: is the audio clear and balanced?\n- Check spelling in text and captions.\n- Check safe zones on a phone preview.\n- Check the first frame works as a thumbnail or cover, or choose a custom cover image.\n- Confirm music and any third-party footage are licensed for this use.\n\n### Worked example: from 3 minutes of raw footage to 35 seconds\n\nA Riyadh fitness coach records a three-minute explanation of warm-up mistakes. In the edit she:\n\n- Moves the most surprising mistake to the very start as the hook.\n- Cuts two of five mistakes to save for a second video.\n- Removes all pauses, reducing the talking to 30 seconds.\n- Adds B-roll of each mistake and the correct version.\n- Adds captions and a text hook: \"3 warm-up mistakes killing your gains.\"\n- Uses a track from the platform's commercial library at low volume.\n\nResult: a 35-second video with a new visual roughly every two to three seconds and a second video planned from the leftover footage.\n\n### Common mistakes\n\n- Over-editing with distracting transitions and effects.\n- Music louder than the voice.\n- Exporting at low resolution or the wrong aspect ratio.\n- Using unlicensed music in brand content.",
+          "video": null,
+          "keyTakeaways": [
+            "Follow a repeatable flow: organise, assemble, cut, add B-roll, add text and captions, then sound and export.",
+            "Cut ruthlessly; jump cuts and frequent visual changes keep energy high.",
+            "Music is a licensing decision: use commercial libraries or licensed tracks for business and brand content.",
+            "Quality-check on mute and eyes closed, check safe zones and spelling before publishing."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A business account wants to use music in a sponsored video. What is the safest choice?",
+              "options": [
+                "Any trending song from a personal account's library",
+                "A track from the platform's commercial music library or properly licensed music",
+                "A song ripped from YouTube",
+                "A chart hit at low volume so it will not be noticed"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Commercial libraries and licensed tracks are cleared for business use; popular songs usually are not."
+            },
+            {
+              "question": "What is a jump cut in short-form editing?",
+              "options": [
+                "A transition with a spinning effect",
+                "A cut to a completely different video",
+                "A cut that removes a pause or section within the same shot",
+                "Speeding up the whole video"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Jump cuts remove dead air inside a continuous shot and are a standard way to keep pace."
+            },
+            {
+              "question": "What is the purpose of watching your edit on mute?",
+              "options": [
+                "To check that the story and hook still work for silent viewers",
+                "To test the music licence",
+                "To reduce file size",
+                "To check the frame rate"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Many viewers watch without sound, so the video must be understandable visually and with text."
+            }
+          ],
+          "activity": "Take any raw clip longer than one minute and edit it into a video under 40 seconds using the six-step workflow. Run the quality-control checklist before exporting."
+        }
+      ]
+    },
+    {
+      "slug": "platforms-and-accessibility",
+      "title": "Platforms, captions and accessibility",
+      "summary": "Adapt content to TikTok, Reels and Shorts, and make every video accessible with captions and inclusive design.",
+      "lessons": [
+        {
+          "slug": "captions-and-accessibility",
+          "title": "Captions and accessible video",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Accessibility is good content practice\n\nAccessible content can be enjoyed by people who are Deaf or hard of hearing, blind or partially sighted, neurodivergent, or watching in a noisy café or a quiet office. Designing for accessibility nearly always improves the experience for everyone, and it is increasingly expected by brands and required by some organisations' policies.\n\n### Captions: the essentials\n\n**Captions** show the spoken words and important sounds as text. There are two main types:\n\n- **Closed captions (CC):** viewers can turn them on or off. TikTok, Instagram and YouTube all offer automatic captions that viewers can enable.\n- **Open (burned-in) captions:** part of the video image and always visible. Popular in short-form because many people watch with the sound off.\n\nWhichever you use, **always check and correct auto-captions**. Automatic transcription often gets names, brand terms, accents, Urdu, Arabic or Hinglish/Roman Urdu words wrong. A caption that says the wrong product name is both inaccessible and embarrassing.\n\n### Caption style guide\n\n- One or two short lines at a time.\n- High contrast: white or yellow text with a dark outline or semi-transparent background box.\n- A clear sans-serif font at a readable size on a phone.\n- Stay in sync with speech, including speaker changes.\n- Keep captions inside the safe zone so they are not covered by buttons.\n- Add important non-speech sounds in brackets, for example [doorbell rings] or [laughter].\n- Avoid word-by-word animated captions that flash too quickly to read comfortably; if you use animated styles, keep them legible.\n\n### Beyond captions\n\n- **Describe what matters visually.** If a key point is only visible (\"look at this difference\"), say what the difference is. This helps blind and partially sighted viewers and anyone listening without watching.\n- **Text on screen:** keep it on screen long enough to read twice. Do not rely on colour alone to convey meaning (for example, red for \"wrong\", green for \"right\"); add a word or symbol too.\n- **Flashing content:** avoid rapid flashing or strobe effects, which can trigger seizures in people with photosensitive epilepsy. Accessibility guidelines such as WCAG advise against content that flashes more than three times in any one second.\n- **Alt text and descriptions:** where the platform supports it (for example alt text on Instagram images), describe the content. Write a descriptive caption on every post.\n- **Hashtags:** write multi-word hashtags in CamelCase (#SmallBusinessTips) so screen readers pronounce them correctly.\n- **Emojis:** screen readers read emojis aloud by name. Avoid long strings of emojis or using them to replace words.\n- **Language:** plain, clear language helps non-native speakers and neurodivergent viewers.\n\n### Multilingual audiences\n\nCreators in Pakistan, the Gulf and diaspora communities in the UK and US often speak to mixed-language audiences. Options:\n\n- Speak in one language and add captions in another (for example Urdu speech with English captions).\n- Use platform translation features where available, but check quality for important content.\n- For Arabic captions, confirm your editing app supports right-to-left text correctly; misordered Arabic text looks careless.\n\n### Accessibility checklist for every video\n\n- Captions present, accurate and readable.\n- Key visual information described in speech or text.\n- No rapid flashing effects.\n- Sufficient contrast for text.\n- CamelCase hashtags; limited emoji strings.\n- Descriptive post caption.\n\n### Worked example\n\nA UK beauty creator's tutorial previously said \"Now do this, then this, and see the difference!\" with no captions. The revised version says \"Blend the concealer outward in small tapping motions until the edge disappears,\" adds burned-in captions corrected for product names and removes a strobe transition. The video is now useful to more people, and comments asking \"what did she say?\" disappear.\n\n### Common mistakes\n\n- Publishing uncorrected auto-captions.\n- Tiny or low-contrast caption text.\n- Captions covered by the platform interface.\n- Relying on \"this\" and \"that\" while pointing at the screen.",
+          "video": null,
+          "keyTakeaways": [
+            "Captions help Deaf and hard-of-hearing viewers and everyone watching on mute; always correct auto-captions.",
+            "Use high-contrast, short caption lines inside the safe zone and include important sounds.",
+            "Describe key visuals verbally, avoid rapid flashing and do not rely on colour alone.",
+            "Use CamelCase hashtags, limit emoji strings and check right-to-left text for Arabic captions."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why must you review automatic captions before publishing?",
+              "options": [
+                "Platforms delete uncorrected captions",
+                "Captions reduce video quality",
+                "Auto-captions often misspell names, brand terms and mixed-language words",
+                "Reviewing captions increases reach automatically"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Automatic transcription makes errors, particularly with names, accents and mixed languages, which harms accessibility and credibility."
+            },
+            {
+              "question": "Which hashtag format is best for screen-reader users?",
+              "options": [
+                "#smallbusinesstips",
+                "#SMALLBUSINESSTIPS",
+                "#SmallBusinessTips",
+                "#s_m_a_l_l"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "CamelCase lets screen readers separate and pronounce each word."
+            },
+            {
+              "question": "Which editing effect should you avoid for accessibility reasons?",
+              "options": [
+                "Slow zooms",
+                "Rapid strobe or flashing transitions",
+                "Burned-in captions",
+                "Soft background music"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Rapid flashing can trigger seizures in people with photosensitive epilepsy."
+            }
+          ],
+          "activity": "Take one of your published videos and audit it with the accessibility checklist. Fix the captions, add a descriptive post caption and re-export if needed."
+        },
+        {
+          "slug": "tiktok-reels-shorts",
+          "title": "TikTok vs Reels vs Shorts: what changes",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Same format, different ecosystems\n\nTikTok, Instagram Reels and YouTube Shorts all use vertical, full-screen, short video. It is tempting to post the same file everywhere and move on. That works as a baseline, but each platform has different audiences, discovery mechanics, features and cultures. Small adjustments often make a noticeable difference.\n\nPlatform features, length limits and policies change frequently. Treat details below as a starting point and check each platform's current help centre before planning.\n\n### TikTok\n\n- **Discovery:** the For You feed recommends content based on interests and engagement signals, so accounts of any size can reach new viewers if a video resonates.\n- **Culture:** native, lo-fi, personality-led, trend-aware. Heavily polished ads can feel out of place unless they borrow the platform's style.\n- **Features:** sounds and trends, duets and stitches, replies to comments with video, TikTok Search, LIVE, TikTok Shop in supported markets, and creator programmes.\n- **Search:** many users search TikTok for recommendations, how-tos and reviews, so spoken keywords, on-screen text and captions help discovery.\n- **Business accounts:** limited to the Commercial Music Library for sounds.\n\n### Instagram Reels\n\n- **Discovery:** Reels appear in the Reels tab, Explore, the main feed and are shareable in DMs and Stories. Instagram has signalled that shares (for example sends via DM) matter for reaching new people.\n- **Culture:** more aesthetic and lifestyle-oriented, strong for fashion, beauty, food, travel and local businesses. Relationships with existing followers matter.\n- **Features:** Collab posts (co-authored with another account, shown to both audiences), trial Reels shown to non-followers first where available, templates, Stories integration, the \"Paid partnership\" label and partnership ads.\n- **Cross-app:** Reels can be shared to Facebook, extending reach to a different demographic.\n\n### YouTube Shorts\n\n- **Discovery:** the Shorts feed plus YouTube search, and connection to your long-form channel. Shorts can drive viewers to longer videos, which build deeper relationships.\n- **Culture:** search-friendly and evergreen. Educational, explainer and entertainment content can keep getting views over a long period.\n- **Features:** linking a Short to a related long video, remixing, Shorts in search results, YouTube Partner Program monetisation for eligible channels.\n- **Titles matter** more than on the other two because YouTube is a search engine.\n\n### Adapting one video for three platforms\n\n| Element | TikTok | Reels | Shorts |\n|---|---|---|---|\n| Opening | Raw, direct-to-camera hook | Visually polished first frame | Clear, searchable topic hook |\n| Text/captions | Native-style text | Clean, on-brand fonts | Keyword-rich title |\n| Sound | Trending or commercial sound | Instagram audio or original | Original or licensed |\n| CTA | \"Follow for part 2\" / comment | \"Send this to a friend who…\" | \"Watch the full video\" (linked) |\n| Upload | Native, no other platform's watermark | Native, no other platform's watermark | Native |\n\n**Remove watermarks.** Export a clean master file from your editor and upload that to each platform. Instagram has stated it may reduce the distribution of content with visible watermarks from other apps, and it looks unprofessional everywhere.\n\n### Regional considerations\n\n- In Saudi Arabia and the wider Gulf, Snapchat Spotlight is also a meaningful short-video surface worth testing alongside TikTok.\n- In Pakistan, TikTok and YouTube are widely used, and content in Urdu and regional languages can perform strongly.\n- Access to platforms can be affected by local regulation; diversify rather than relying on one app.\n\n### Reading your analytics per platform\n\nLook at the same few metrics on each platform, then compare only within a platform:\n\n- **Retention / average watch time** and the retention curve.\n- **Shares and saves** (strong signals of value).\n- **Follows from the video.**\n- **Traffic source** (For You, search, profile, following).\n\nA video that flops on TikTok might do well on Shorts because of search. Judge each platform on its own terms.\n\n### Common mistakes\n\n- Uploading a TikTok-watermarked file to Reels or Shorts.\n- Using identical captions and hashtags everywhere.\n- Ignoring platform-native features such as Collab posts or linked long videos.\n- Comparing views across platforms as if they meant the same thing.",
+          "video": null,
+          "keyTakeaways": [
+            "TikTok rewards native, personality-led, trend-aware content and is heavily used as a search tool.",
+            "Reels thrive on aesthetics, shares and Collab posts; Shorts benefit from search, titles and links to long-form.",
+            "Export one clean master and adapt openings, text, sound and CTA per platform; never upload another app's watermark.",
+            "Compare performance within a platform, not across platforms, and check current platform rules often."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why should you upload a clean master file rather than a downloaded TikTok with its watermark to Reels?",
+              "options": [
+                "Watermarks break the video codec",
+                "TikTok charges a fee",
+                "It is illegal",
+                "Instagram has said it may reduce distribution of content with other apps' watermarks, and it looks unprofessional"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "A clean, native upload avoids reduced distribution and looks native to the platform."
+            },
+            {
+              "question": "Which feature lets a Reel appear to both your audience and a partner creator's audience?",
+              "options": [
+                "Duet",
+                "Remix",
+                "Stitch",
+                "Collab post"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Instagram Collab posts are co-authored and shown to both accounts' followers."
+            },
+            {
+              "question": "Which platform's short videos most directly benefit from keyword-rich titles due to its search engine?",
+              "options": [
+                "WhatsApp Status",
+                "Snapchat Stories",
+                "YouTube Shorts",
+                "LinkedIn Events"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "YouTube is a search engine, so Shorts titles help discovery through search."
+            }
+          ],
+          "activity": "Take one finished video and create three versions: adjust the opening, on-screen text, sound choice and CTA for TikTok, Reels and Shorts. Publish natively and compare each platform's retention after a week."
+        }
+      ]
+    },
+    {
+      "slug": "content-strategy",
+      "title": "Trends, evergreen content and repurposing",
+      "summary": "Balance fast-moving trends with evergreen content and build a system to turn one idea into many assets.",
+      "lessons": [
+        {
+          "slug": "trends-vs-evergreen",
+          "title": "Trends vs evergreen: a balanced content mix",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Two kinds of content\n\n- **Trend content** rides a sound, meme, format or news moment. It can bring quick reach and signals that you are current, but it has a short shelf life.\n- **Evergreen content** stays useful for months or years: tutorials, explainers, FAQs, reviews, stories and behind-the-scenes. It builds authority and keeps getting discovered through search and recommendations.\n\nHealthy accounts use both, deliberately.\n\n### Content pillars\n\nBefore choosing trends, define three to five **content pillars**: recurring themes your audience values and that connect to what you offer. For a Dubai-based personal trainer:\n\n1. Quick home workouts (education)\n2. Healthy eating in the UAE heat and during Ramadan (education, seasonal)\n3. Client transformations and stories (proof)\n4. Day-in-the-life of a trainer (personality)\n5. Myth-busting (authority)\n\nEvery video, trend or not, should fit a pillar. This keeps your account coherent so new viewers understand quickly why they should follow.\n\n### A simple content mix\n\nA useful starting ratio (adapt to your results):\n\n- **About 60–70% evergreen pillar content** – your foundation.\n- **About 20–30% trend or timely content** – adapted to your pillars.\n- **About 10% experiments** – new formats, series ideas, collaborations.\n\n### How to use trends well\n\n1. **Spot early:** watch the For You feed, Reels tab and each platform's trend or creative centre tools (for example TikTok Creative Center) regularly.\n2. **Check fit:** does the trend make sense for your pillars and audience? Would your ideal customer get the joke?\n3. **Add your angle:** do not simply copy. Apply the format to your niche. A trending \"things I would never do\" format becomes \"Things I'd never do as a wedding photographer.\"\n4. **Move fast but safely:** trends move quickly, but still check context. Some trends reference sensitive events or have origins that could embarrass a brand.\n5. **Check sound rights:** a trending sound may not be available to business accounts or licensed for ads.\n\n### Brand-safety filter for trends\n\nSkip a trend if it:\n\n- Mocks a group of people, a religion or a culture.\n- Involves dangerous stunts or challenges.\n- Relates to a tragedy or a divisive political or religious issue your brand has no role in.\n- Uses audio that is unlicensed for your account type.\n- Could be misread in another market you serve (humour does not always travel from the UK to the Gulf or vice versa).\n\n### Making evergreen content discoverable\n\n- Say the keyword out loud early (\"How to price your first freelance project\").\n- Put it in on-screen text and the caption.\n- Answer questions your audience types into search bars and comments.\n- Build **series** (\"Pricing Tip #1, #2, #3\") so viewers binge and follow.\n- Pin your best evergreen videos to your profile.\n\n### Planning a content calendar\n\nA weekly rhythm for a solo creator might be:\n\n| Day | Content | Type |\n|---|---|---|\n| Mon | Tutorial from pillar 1 | Evergreen |\n| Tue | Reply to a comment with a video | Community |\n| Wed | Trend adapted to pillar 3 | Trend |\n| Thu | Client story | Evergreen/proof |\n| Fri | Myth-busting | Evergreen |\n| Weekend | Batch filming for next week | Production |\n\nAdd seasonal moments relevant to your audience: Ramadan and Eid, Independence Day, national days such as UAE National Day or Saudi National Day, back-to-school, Black Friday or White Friday, Diwali or Christmas where relevant.\n\nConsistency matters more than volume. Choose a frequency you can sustain with quality for months.\n\n### Common mistakes\n\n- Chasing every trend, producing an account with no identity.\n- Ignoring trends entirely and seeming out of touch.\n- Copying trends without adding a niche angle.\n- Posting frequency you cannot sustain, then disappearing.",
+          "video": null,
+          "keyTakeaways": [
+            "Trends bring quick reach; evergreen content builds authority and keeps working over time.",
+            "Define three to five content pillars and make every piece fit one.",
+            "Start with roughly two-thirds evergreen, a quarter trend-led and a slice of experiments, then adjust from data.",
+            "Filter trends for brand safety, cultural fit and sound licensing before jumping in."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the main advantage of evergreen content?",
+              "options": [
+                "It is guaranteed to go viral",
+                "It avoids the need for hooks",
+                "It never needs editing",
+                "It stays useful and discoverable for a long time"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Evergreen content keeps delivering value and discovery through search and recommendations long after posting."
+            },
+            {
+              "question": "A trending audio mocks a religious practice. Your brand serves customers in the Gulf and UK. What should you do?",
+              "options": [
+                "Use it because it is trending",
+                "Use it but disable comments",
+                "Use it only on TikTok",
+                "Skip it; it fails the brand-safety filter"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Content that mocks religion or culture risks offence and reputational harm, regardless of reach."
+            },
+            {
+              "question": "What is a content pillar?",
+              "options": [
+                "A paid ad format",
+                "A recurring theme your audience values that connects to your offer",
+                "A type of tripod",
+                "A trending hashtag"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Pillars keep content coherent and aligned with both audience interests and business goals."
+            }
+          ],
+          "activity": "Define four content pillars for yourself or a client and plan a two-week calendar with the evergreen/trend/experiment mix, including one seasonal moment."
+        },
+        {
+          "slug": "repurposing-system",
+          "title": "Repurposing: one idea, many assets",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Why repurpose\n\nCreating strong ideas is hard; distributing them is easier. Repurposing means turning one core piece of content into multiple formats for different platforms and audiences. It saves time, reinforces your message (people rarely see everything you post) and lets you learn which format works best for each idea.\n\nRepurposing is not the same as reposting identical files everywhere. It means **adapting** the idea to each format.\n\n### The pillar-and-slice model\n\n1. **Create one pillar piece** – a long video (YouTube, podcast, live session, webinar) or a detailed blog post or newsletter.\n2. **Slice it** into short videos, carousels, quote graphics, threads and email snippets.\n3. **Distribute** each slice natively on the right platform.\n4. **Learn** from which slices perform best, and turn winners into new pillar pieces.\n\n### Worked example: one 20-minute YouTube video\n\nA Lahore freelancer publishes \"How I got my first 10 international clients.\"\n\nFrom it she creates:\n\n- **Five short videos** (one per key lesson) for TikTok, Reels and Shorts, each with its own hook.\n- **One carousel** on Instagram and LinkedIn: \"10 lessons from my first 10 clients.\"\n- **A LinkedIn text post** telling the story of client number one.\n- **A newsletter** summarising the lessons with a link to the full video.\n- **A blog post** with the transcript cleaned into a readable guide (useful for search).\n- **Quote graphics** from the best lines for Stories.\n- **A Short linking to the full video** so interested viewers can go deeper.\n\nOne recording session now fuels two to three weeks of content.\n\n### A repurposing workflow\n\n| Step | Action | Tool type |\n|---|---|---|\n| 1 | Record the pillar piece | Camera, mic |\n| 2 | Transcribe it | Transcription tool or editor's auto-transcript |\n| 3 | Highlight the 5–10 strongest moments | Transcript + timestamps |\n| 4 | Write a new hook for each moment | Script template |\n| 5 | Edit vertical clips with captions | Mobile or desktop editor |\n| 6 | Turn key lists into carousels | Design tool |\n| 7 | Schedule natively per platform | Native scheduler or management tool |\n\nAI-assisted clipping tools can find highlight moments automatically. They save time, but always review for context, accuracy, captions and whether the clip makes sense on its own.\n\n### Rules for good repurposing\n\n- **Re-hook every clip.** A moment from the middle of a long video needs its own opening.\n- **Reframe for vertical.** Keep the speaker centred and inside safe zones when cropping from horizontal.\n- **Stand-alone test:** would someone who has never seen the long version understand the clip?\n- **Adapt the caption and CTA** to each platform.\n- **Space it out.** Post slices over days or weeks, not all at once.\n- **Update evergreen winners.** Re-record or refresh an old high performer with new examples.\n\n### Rights and permissions when repurposing\n\n- If a guest appears in your video or podcast, get permission (ideally written) to use their likeness in clips and ads.\n- Music licensed for one platform may not be licensed for another or for ads.\n- Content made for a brand under contract may have **usage limits** on where and how long it can be used. Check the agreement before reposting brand work to new channels or ads.\n- User comments or duets you feature belong to their creators; ask before using them in marketing.\n\n### Common mistakes\n\n- Posting a horizontal video with black bars on vertical platforms.\n- Clipping a moment that needs context and confuses new viewers.\n- Posting the same clip on every platform on the same day with the same caption.\n- Reusing guest or brand content beyond the agreed permissions.",
+          "video": null,
+          "keyTakeaways": [
+            "Repurposing adapts one core idea into many native formats; it is not copy-paste reposting.",
+            "Use the pillar-and-slice model: create a pillar piece, slice it, distribute natively and learn.",
+            "Re-hook every clip, reframe for vertical and check that each piece stands alone.",
+            "Check permissions for guests, music and brand-contracted content before repurposing."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the key difference between repurposing and reposting?",
+              "options": [
+                "Repurposing adapts the idea to each format and platform",
+                "Repurposing is only for text",
+                "Reposting is always better",
+                "There is no difference"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Repurposing reshapes the content (hook, framing, caption, format) for each platform instead of copying it."
+            },
+            {
+              "question": "You clip a great moment from minute 12 of a podcast. What must you add before posting it as a Short?",
+              "options": [
+                "The podcast intro music",
+                "A new hook so it works on its own",
+                "The full episode title only",
+                "Nothing; clips never need changes"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Clips from the middle of a long piece need their own opening to earn attention and give context."
+            },
+            {
+              "question": "Before reusing a brand-sponsored video in a new paid ad, what should you check?",
+              "options": [
+                "The number of likes it got",
+                "The contract's usage rights and duration",
+                "Whether it was filmed in 4K",
+                "The time it was posted"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Brand content is often licensed for specific channels and periods; reuse outside them may breach the contract."
+            }
+          ],
+          "activity": "Choose one long piece of content you have (or record a 10-minute talk) and plan at least eight repurposed assets with the platform, hook and CTA for each."
+        }
+      ]
+    },
+    {
+      "slug": "brand-safe-ugc",
+      "title": "Brand-safe UGC for campaigns",
+      "summary": "Create user-generated-style content for brands that meets the brief, respects disclosure rules and protects everyone's reputation.",
+      "lessons": [
+        {
+          "slug": "ugc-for-brand-campaigns",
+          "title": "Creating UGC for brand campaigns",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### What UGC means in 2026\n\n**User-generated content (UGC)** originally meant content customers created spontaneously. Today it also describes a service: **UGC creators** are paid to produce authentic-looking, customer-style videos that brands use in ads, websites and social channels. Unlike influencer posts, UGC is often published on the **brand's** accounts or in ads, not the creator's own profile.\n\nCommon UGC formats:\n\n- Unboxing and first impressions\n- Testimonial or review-style talking head\n- Problem–solution demos\n- \"Three reasons I switched to…\"\n- Tutorials and how-tos\n- Before/after (only where genuine and compliant)\n\n### Reading a brief properly\n\nA good brief states the product, audience, key messages, mandatory points, things to avoid, deliverables, format, deadlines, usage rights and payment. Before filming, confirm:\n\n- **Deliverables:** how many videos, lengths, aspect ratios, raw footage or edited, hooks variations.\n- **Mandatory claims:** exact wording the brand needs, and anything you must not say.\n- **Usage rights:** where the content will run (organic, paid ads, website), for how long, and in which countries. Paid usage and longer periods are usually priced higher.\n- **Exclusivity:** whether you can work with competitors, and for how long.\n- **Revisions:** how many rounds are included.\n\nIf anything is unclear, ask in writing before you start.\n\n### Honest claims only\n\n- Only say what you have genuinely experienced or what the brand can substantiate. If you have used a serum for three days, do not imply three months of results.\n- Health, beauty, finance, weight-loss and children's products carry extra rules in most markets. Avoid medical claims (\"cures acne\") unless the product is licensed and the brand has approved the wording.\n- Do not use filters that exaggerate a product's effect (for example, a beauty filter on a foundation demo). UK regulators have ruled against such ads.\n- Before/after content must be real, comparable (same lighting, angle, time of day) and not misleading.\n\n### Disclosure: know who is responsible\n\nWhen content is published on **your** profile as part of a paid or gifted arrangement, it must be clearly disclosed:\n\n- **UK:** the ASA/CAP guidance expects a clear, upfront label such as \"#ad\" or \"Ad\" when a brand has paid you or has control over the content; gifted items with no brand control generally need a disclosure too under consumer protection rules.\n- **US:** the FTC Endorsement Guides require clear and conspicuous disclosure of any material connection (payment, free products, family or employment relationships). \"#ad\" or \"Sponsored\" works; vague tags like \"#sp\" or \"#collab\" alone are not clear enough.\n- **UAE:** the UAE Media Council regulates advertising content, including requirements for people who publish paid promotional content to hold the relevant permit or licence, and to label ads clearly. Check current Media Council requirements.\n- **Saudi Arabia:** the General Commission for Audiovisual Media (GCAM) licenses influencers who advertise (the \"Mawthouq\" licence) and expects ads to be clearly identified.\n- **Everywhere:** use the platform's built-in tools (for example Instagram's \"Paid partnership\" label, TikTok's content disclosure setting, YouTube's paid promotion checkbox) **as well as** a clear verbal or text disclosure where appropriate.\n\nWhen the brand publishes UGC in its own ads, the content is clearly the brand's advertising, but it must still not mislead – for example, a paid actor must not be presented as a genuine independent customer if that would mislead viewers.\n\n### Brand-safety checklist before submitting\n\n- No other brands' logos, products or music in shot unless agreed.\n- No identifiable people (including children) without their permission.\n- No personal information visible (addresses, phone screens, documents).\n- Culturally appropriate clothing, language and gestures for the target markets.\n- Claims match the approved brief.\n- Music is licensed for the stated usage, or delivered without music so the brand can add its own.\n- Captions are spelled correctly, including the product name.\n\n### Delivering professionally\n\n- Deliver clearly named files (Brand_Product_Hook1_9x16_v1.mp4).\n- Provide several hook variations; brands test openings in paid ads.\n- Offer clean versions without text or music if requested so editors can adapt them.\n- Keep raw files for an agreed period in case edits are needed.\n- Invoice with the deliverables and usage terms stated.\n\n### Worked example\n\nA skincare brand hires a Jeddah-based UGC creator for three 30-second videos for paid social ads in KSA and the UAE for six months. The creator confirms in writing: three videos, two extra hooks each, delivered without music, no before/after claims, product name spelled per brand guide, paid usage in two countries for six months, one revision round. She films in natural light, removes a competitor's bottle from the background and flags a claim in the brief (\"clinically proven\") by asking for the supporting evidence before she says it on camera.\n\n### Common mistakes\n\n- Starting work before usage rights and payment are agreed.\n- Exaggerating results or using beauty filters on product demos.\n- Forgetting disclosure on your own profile.\n- Leaving competitors' products or personal information visible.",
+          "video": null,
+          "keyTakeaways": [
+            "UGC creators produce customer-style content that brands usually publish in ads or on their own channels.",
+            "Confirm deliverables, mandatory claims, usage rights, exclusivity and revisions in writing before filming.",
+            "Make only honest, substantiated claims; never use filters that exaggerate product effects.",
+            "Disclose paid or gifted content clearly under FTC, ASA/CAP and UAE/KSA rules, using platform tools plus clear labels."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A brand wants to run your UGC video as a paid ad for 12 months in three countries. What should this affect?",
+              "options": [
+                "The price and the written usage terms",
+                "Nothing; usage does not matter",
+                "Only the video length",
+                "Only the caption"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Broader, paid and longer usage is more valuable to the brand and should be priced and documented accordingly."
+            },
+            {
+              "question": "You post a sponsored review on your own Instagram for a UK audience. Which disclosure is appropriate?",
+              "options": [
+                "'#sp' at the end of 30 hashtags",
+                "No disclosure if you genuinely like the product",
+                "A clear, upfront 'Ad' or '#ad' plus the Paid partnership label",
+                "A disclosure only in your bio"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "UK guidance requires clear, upfront labelling; hidden or vague tags are not sufficient."
+            },
+            {
+              "question": "Why should you avoid beauty filters on a foundation demo?",
+              "options": [
+                "Filters reduce resolution",
+                "Filters remove captions",
+                "Platforms ban all filters",
+                "They can exaggerate the product's effect and mislead viewers"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Filters that change how a cosmetic performs can make the ad misleading, which regulators have ruled against."
+            }
+          ],
+          "activity": "Write a one-page confirmation email to a (real or imagined) brand summarising deliverables, claims, usage rights, exclusivity, revisions, timeline and fee for a UGC project."
+        },
+        {
+          "slug": "ugc-performance-and-portfolio",
+          "title": "UGC that performs: ad metrics, iterations and your portfolio",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### UGC is judged by performance, not likes\n\nWhen a brand runs your UGC as a paid ad, success is measured by ad metrics, not by comments on your profile. Understanding these metrics lets you create better content, speak the brand's language and win repeat work.\n\n### The metrics brands look at\n\n| Metric | What it means | What influences it |\n|---|---|---|\n| **Hook rate** (sometimes called thumb-stop rate) | Share of impressions where people watched the first few seconds (commonly 3-second video views ÷ impressions) | First frame, text hook, opening line |\n| **Hold rate** | Share of viewers who keep watching deeper into the video (for example ThruPlays or 15-second views ÷ impressions or ÷ 3-second views, depending on the brand's definition) | Pacing, clarity, story, visual changes |\n| **CTR** | Clicks ÷ impressions | Offer clarity, CTA, relevance |\n| **CPA / ROAS** | Cost per result and revenue per unit of spend | Everything above, plus the landing page and offer |\n\nDefinitions vary by brand and platform, so always ask how a brand calculates hook and hold rates before comparing numbers.\n\n### Designing for iteration\n\nBrands rarely find a winner with one video. They test **variations**. You make yourself valuable by building testability into your content:\n\n- **Modular structure:** hook, problem, demo, proof, CTA as separable sections so editors can remix them.\n- **Multiple hooks:** film three to five different openings for the same body.\n- **Different angles:** the same product pitched as a time saver, a money saver or a gift.\n- **Different settings or creators:** in a car, in a kitchen, at a desk.\n- **Clean and captioned versions:** so the brand can localise text for Urdu, Arabic or English audiences.\n\nA simple naming convention (Brand_Angle_Hook2_9x16_v1) helps the brand track which variation won and helps you learn.\n\n### Learning from results\n\nAsk brands for performance feedback after a campaign. Useful questions:\n\n- Which hook had the highest hook rate?\n- Where did viewers drop off?\n- Which angle produced the lowest cost per purchase?\n\nFeed the answers into your next scripts. Creators who can say \"My problem–solution hooks tend to hold viewers better for skincare brands\" (based on real feedback) stand out.\n\n### Building a UGC portfolio\n\nA portfolio should make a brand's decision easy:\n\n- **Six to ten short samples** covering different formats: unboxing, testimonial, demo, tutorial, voice-over with B-roll.\n- **Niche focus:** show the categories you want to be hired for (beauty, tech, home, food, fitness, apps).\n- **Hook variations** for at least one sample, demonstrating you understand testing.\n- **Clear information:** languages you speak, markets you know (for example Pakistan, UAE, KSA, UK), turnaround times and what is included.\n- **Results only if permitted:** share metrics from brand work only with the brand's permission, and never invent numbers.\n\nIf you have no clients yet, create **spec work** using products you own. Do not present spec work as a real paid campaign, and do not use a brand's logo in a way that implies they hired you.\n\n### Pricing and packaging (principles)\n\nRates vary widely by market, niche, experience and usage. Rather than copying a number from social media, structure your pricing so the brand pays for what it uses:\n\n- **Base fee per video** (creation).\n- **Add-ons:** extra hooks, raw footage, rush delivery, scripting.\n- **Usage fee:** organic only, paid ads, whitelisting on your handle, duration and territories.\n- **Packages:** for example three videos with two extra hooks each and 90 days of paid usage.\n\nPut everything in a written agreement and invoice, and keep records for tax purposes in your country.\n\n### Common mistakes\n\n- Only filming one hook, leaving the brand nothing to test.\n- Ignoring feedback and repeating what did not work.\n- Portfolio with no niche focus or low-quality audio.\n- Presenting spec work as paid work or sharing a client's results without permission.",
+          "video": null,
+          "keyTakeaways": [
+            "Brands judge UGC ads by hook rate, hold rate, CTR and CPA or ROAS; confirm each brand's metric definitions.",
+            "Build testability in: modular structure, several hooks, different angles and clean versions.",
+            "Ask for performance feedback and use it to improve future scripts.",
+            "A focused portfolio with varied formats, clear terms and honest, permitted results wins work; price creation and usage separately."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What does a low hook rate combined with a strong hold rate among people who stay suggest?",
+              "options": [
+                "The ending is weak",
+                "The landing page is broken",
+                "The opening is not stopping enough people, but the body works",
+                "The price is too high"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Few people get past the opening, but those who do keep watching, so improve the first seconds."
+            },
+            {
+              "question": "Why film several hooks for the same UGC video?",
+              "options": [
+                "Brands test openings in paid ads to find the best-performing version",
+                "It makes the file larger",
+                "Platforms require at least three hooks",
+                "It replaces the need for a brief"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Hook variations give the brand options to test, which is a key part of finding a winning ad."
+            },
+            {
+              "question": "You have no clients yet. What is an honest way to build a UGC portfolio?",
+              "options": [
+                "Create spec videos with products you own and label them as samples",
+                "Claim you worked for major brands",
+                "Use another creator's videos",
+                "Invent performance metrics"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Spec work shows your skills honestly as long as you do not imply a paid relationship."
+            }
+          ],
+          "activity": "Film one 20-second product video with three different hooks and two angles. Name the files using a clear convention and write a short note explaining what each variation tests."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 20,
+    "timeLimitMinutes": 30,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "sfv-001",
+        "module": "hooks-and-storytelling",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which three layers make up a strong short-form hook?",
+        "options": [
+          "Visual, text and spoken",
+          "Hashtags, location and music",
+          "Logo, tagline and URL",
+          "Resolution, frame rate and bitrate"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "The first frame, on-screen text and first spoken line work together to earn attention."
+      },
+      {
+        "id": "sfv-002",
+        "module": "hooks-and-storytelling",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which opening line is the best hook for a video about saving money on wedding décor?",
+        "options": [
+          "'Hi everyone, hope you're well'",
+          "'Please like and subscribe before we begin'",
+          "'Today's video is about weddings'",
+          "'Stop overpaying for wedding flowers. Here's what florists won't tell you.'"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "It names a problem, creates curiosity and promises value. The others delay the content."
+      },
+      {
+        "id": "sfv-003",
+        "module": "hooks-and-storytelling",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A creator's analytics show many viewers leave in the first two seconds, but those who stay watch to the end. What should they change first?",
+        "options": [
+          "The ending",
+          "The hashtags",
+          "The hook and first frame",
+          "The posting time only"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Early drop-off with strong completion among stayers points to the opening, not the body or ending."
+      },
+      {
+        "id": "sfv-004",
+        "module": "hooks-and-storytelling",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which structure best suits a home-cleaning product demo?",
+        "options": [
+          "An interview with no visuals",
+          "A countdown of unrelated facts",
+          "Before – After – Bridge",
+          "A list of hashtags"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Showing the dirty 'before', the clean 'after' and then the product as the bridge is a natural fit."
+      },
+      {
+        "id": "sfv-005",
+        "module": "hooks-and-storytelling",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Select the TWO practices that improve a short-form script.",
+        "options": [
+          "Reading it aloud and cutting unnecessary lines",
+          "Opening with 'In this video I will talk about…'",
+          "Pairing each spoken line with a planned visual",
+          "Adding every idea you have on the topic"
+        ],
+        "correct": [
+          0,
+          2
+        ],
+        "explanation": "Reading aloud tightens the script and a two-column plan ensures visuals match. Long intros and cramming several ideas hurt retention."
+      },
+      {
+        "id": "sfv-006",
+        "module": "hooks-and-storytelling",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A hook promises 'the secret to 10k followers in a week', but the video gives generic tips. Views start high, then comments turn negative and follows are low. What is the best explanation?",
+        "options": [
+          "The algorithm is broken",
+          "The video was too short",
+          "The hook over-promised, so the payoff disappointed viewers and damaged trust",
+          "The captions were in the wrong font"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Clickbait hooks can earn early views but create disappointment, negative comments and poor follow rates."
+      },
+      {
+        "id": "sfv-007",
+        "module": "hooks-and-storytelling",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Which ending is most likely to support re-watches on a 12-second video?",
+        "options": [
+          "A long outro with credits",
+          "A loop where the final line flows naturally into the first frame",
+          "A black screen for three seconds",
+          "Four different calls to action"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "A seamless loop encourages re-watching; outros, blank screens and stacked CTAs push people away."
+      },
+      {
+        "id": "sfv-008",
+        "module": "filming-and-editing",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the standard delivery size for vertical short-form video?",
+        "options": [
+          "1920 × 1080",
+          "1080 × 1920",
+          "1080 × 1080",
+          "720 × 480"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Vertical 9:16 at 1080 × 1920 is standard for TikTok, Reels and Shorts."
+      },
+      {
+        "id": "sfv-009",
+        "module": "filming-and-editing",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the simplest fix for hazy, soft footage from a phone?",
+        "options": [
+          "Clean the lens",
+          "Buy a new phone",
+          "Add a sharpening filter",
+          "Film at night"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Fingerprints on the lens are the most common cause of haze."
+      },
+      {
+        "id": "sfv-010",
+        "module": "filming-and-editing",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Your talking video has a noticeable echo. Which change will help most?",
+        "options": [
+          "Film in a room with soft furnishings and get the mic closer",
+          "Increase the video resolution",
+          "Add a louder music track",
+          "Switch to the selfie camera"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Soft furnishings absorb reflections and a closer mic captures more voice relative to room sound."
+      },
+      {
+        "id": "sfv-011",
+        "module": "filming-and-editing",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Select ALL items that belong on a pre-publish quality-control check.",
+        "options": [
+          "Watch on mute to confirm the story works",
+          "Check spelling in captions",
+          "Confirm music is licensed for the use",
+          "Check safe zones on a phone preview",
+          "Increase the file's frame rate after editing"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "explanation": "Mute checks, spelling, licensing and safe zones all protect quality. Changing frame rate after editing does not improve footage and can cause stutter."
+      },
+      {
+        "id": "sfv-012",
+        "module": "filming-and-editing",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A brand asks you to use a chart-topping song in a paid TikTok ad because 'everyone uses it'. What is the right response?",
+        "options": [
+          "Use it; trending songs are free for ads",
+          "Use it but lower the volume",
+          "Explain that ads need licensed music, and suggest a track from the Commercial Music Library or a licensed alternative",
+          "Use it but only for the first week"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Popularity does not grant a licence. Paid ads need commercially cleared music; volume and duration do not change that."
+      },
+      {
+        "id": "sfv-013",
+        "module": "filming-and-editing",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why lock exposure and focus before recording?",
+        "options": [
+          "It makes the file smaller",
+          "It increases storage space",
+          "It turns on captions",
+          "It stops brightness and focus shifting as you move"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Locking prevents the camera re-adjusting mid-shot, which causes pulsing brightness and focus hunting."
+      },
+      {
+        "id": "sfv-014",
+        "module": "platforms-and-accessibility",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What are closed captions?",
+        "options": [
+          "Captions permanently burned into the video",
+          "Captions viewers can turn on or off",
+          "Hashtags in the caption field",
+          "Comments pinned to the top"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Closed captions can be toggled by the viewer; open captions are burned in."
+      },
+      {
+        "id": "sfv-015",
+        "module": "platforms-and-accessibility",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which hashtag is most accessible for screen-reader users?",
+        "options": [
+          "#ramadanrecipes",
+          "#RAMADANRECIPES",
+          "#RamadanRecipes",
+          "#r4m4d4n"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "CamelCase helps screen readers pronounce each word separately."
+      },
+      {
+        "id": "sfv-016",
+        "module": "platforms-and-accessibility",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A tutorial says 'do this, then this, then look at that'. Why is this an accessibility problem?",
+        "options": [
+          "It is too short",
+          "Viewers who cannot see the screen miss the key information",
+          "It breaks copyright",
+          "It reduces the frame rate"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Key visual steps should be described in words so blind, partially sighted and listening-only viewers can follow."
+      },
+      {
+        "id": "sfv-017",
+        "module": "platforms-and-accessibility",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Select the TWO changes that make a Reel more likely to perform well when cross-posted from TikTok.",
+        "options": [
+          "Uploading a clean master without the TikTok watermark",
+          "Adapting the caption and CTA for Instagram, such as encouraging shares",
+          "Using the exact same TikTok-only trending sound regardless of availability",
+          "Keeping TikTok's username overlay visible"
+        ],
+        "correct": [
+          0,
+          1
+        ],
+        "explanation": "Native, watermark-free uploads and platform-specific captions and CTAs help. Unavailable sounds and visible watermarks work against you."
+      },
+      {
+        "id": "sfv-018",
+        "module": "platforms-and-accessibility",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Your video gets modest views on TikTok but keeps growing on YouTube Shorts months later, mostly from search. What does this suggest?",
+        "options": [
+          "The video should be deleted from TikTok",
+          "TikTok penalised the account",
+          "YouTube is broken",
+          "The topic is evergreen and search-driven, so invest in similar searchable content and strong titles on YouTube"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Long-tail search traffic on YouTube signals evergreen demand; lean into keyword-led titles and similar topics."
+      },
+      {
+        "id": "sfv-019",
+        "module": "platforms-and-accessibility",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "You add Arabic captions to a video, but some sentences appear in the wrong word order. What is the likely cause and fix?",
+        "options": [
+          "The editing app is not handling right-to-left text correctly; use a tool that supports RTL and proofread",
+          "The font is too small; increase it",
+          "The frame rate is too high",
+          "Arabic cannot be captioned"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "RTL rendering errors are common in some editors; use RTL-capable tools and have a fluent speaker proofread."
+      },
+      {
+        "id": "sfv-020",
+        "module": "platforms-and-accessibility",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which is a platform-native way to show a Reel to both your followers and a partner's followers?",
+        "options": [
+          "Duet",
+          "Collab post",
+          "Stitch",
+          "Spark Ads"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Instagram Collab posts share authorship and distribution across both accounts."
+      },
+      {
+        "id": "sfv-021",
+        "module": "content-strategy",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is an example of evergreen content?",
+        "options": [
+          "A step-by-step guide to setting up a WhatsApp Business catalogue",
+          "A reaction to today's viral meme",
+          "A countdown to a single event this weekend",
+          "A joke using this week's trending audio"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "How-to guides stay useful for a long time; the others are time-sensitive."
+      },
+      {
+        "id": "sfv-022",
+        "module": "content-strategy",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the purpose of content pillars?",
+        "options": [
+          "To avoid posting evergreen content",
+          "To guarantee virality",
+          "To replace hooks",
+          "To keep content focused on recurring themes that matter to your audience and business"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Pillars create coherence so viewers quickly understand why to follow you."
+      },
+      {
+        "id": "sfv-023",
+        "module": "content-strategy",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A fitness creator jumps on every dance trend, but followers rarely book coaching. What should they change?",
+        "options": [
+          "Stop posting entirely",
+          "Rebalance towards evergreen pillar content and adapt only relevant trends to their niche",
+          "Post twice as many dance trends",
+          "Remove their booking link"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Trends unrelated to the offer can bring views without the right audience; pillar content attracts potential clients."
+      },
+      {
+        "id": "sfv-024",
+        "module": "content-strategy",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "When repurposing a horizontal podcast clip for Reels, what should you do?",
+        "options": [
+          "Post it with black bars",
+          "Stretch it to fill the screen",
+          "Reframe to vertical, keep the speaker centred and add a new hook and captions",
+          "Post the full hour-long episode"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Vertical reframing, a fresh hook and captions make the clip native and watchable."
+      },
+      {
+        "id": "sfv-025",
+        "module": "content-strategy",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Select the TWO permissions to check before turning a podcast guest's comments into paid ads.",
+        "options": [
+          "The guest's permission to use their likeness and words in ads",
+          "That the music in the clip is licensed for advertising",
+          "The guest's follower count",
+          "The podcast's download numbers"
+        ],
+        "correct": [
+          0,
+          1
+        ],
+        "explanation": "Using a person's likeness in ads and using music in ads both need appropriate permission. Audience numbers are irrelevant to rights."
+      },
+      {
+        "id": "sfv-026",
+        "module": "content-strategy",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Which trend should a halal food brand serving the UK and Gulf most clearly avoid?",
+        "options": [
+          "A 'what I eat in a day' format adapted to their menu",
+          "A trend built around drinking alcohol",
+          "A recipe-hack trend",
+          "A 'rate my lunchbox' trend"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "An alcohol-centred trend conflicts with the brand's values and audience; the others can be adapted to its niche."
+      },
+      {
+        "id": "sfv-027",
+        "module": "brand-safe-ugc",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What typically distinguishes UGC creator content from classic influencer posts?",
+        "options": [
+          "UGC is usually published on the brand's own channels or in its ads",
+          "UGC is never paid",
+          "UGC must be filmed in a studio",
+          "UGC cannot include people"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "UGC creators are paid to produce content that brands usually run themselves, often in ads."
+      },
+      {
+        "id": "sfv-028",
+        "module": "brand-safe-ugc",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which disclosure is clear enough for a sponsored post aimed at US audiences?",
+        "options": [
+          "#sp hidden among other hashtags",
+          "A thank-you emoji",
+          "'#ad' or 'Sponsored' placed clearly and upfront",
+          "A link in the bio"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "The FTC expects clear and conspicuous disclosures; vague or hidden tags are not enough."
+      },
+      {
+        "id": "sfv-029",
+        "module": "brand-safe-ugc",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A brief asks you to say a product is 'clinically proven to remove wrinkles'. What should you do?",
+        "options": [
+          "Ask the brand for the substantiation and approved wording before filming",
+          "Say it; the brand is responsible",
+          "Change it to 'cures wrinkles'",
+          "Say it only in the captions"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Strong claims must be substantiated; creators should confirm evidence and approved wording rather than repeat unverified claims."
+      },
+      {
+        "id": "sfv-030",
+        "module": "brand-safe-ugc",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Select ALL items to confirm in writing before starting a UGC project.",
+        "options": [
+          "Deliverables and formats",
+          "Usage rights: channels, duration and countries",
+          "Exclusivity with competitors",
+          "Revision rounds and payment terms",
+          "Your favourite editing app"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "explanation": "Deliverables, usage, exclusivity, revisions and payment protect both sides. Your choice of editing app is not a contract term."
+      },
+      {
+        "id": "sfv-031",
+        "module": "brand-safe-ugc",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "While reviewing your UGC before delivery, you notice a competitor's product on the shelf behind you and your home address on a parcel label. What should you do?",
+        "options": [
+          "Deliver it; nobody will notice",
+          "Ask the brand to fix it after launch",
+          "Blur only the competitor product",
+          "Re-film or edit to remove both before delivery"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Competitor products create brand-safety issues and visible addresses expose personal information; both must be removed."
+      },
+      {
+        "id": "sfv-032",
+        "module": "brand-safe-ugc",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A Saudi-based creator is paid to promote a restaurant on her Snapchat. Which statement is most accurate?",
+        "options": [
+          "No rules apply to Snapchat",
+          "Advertising influencers in KSA are expected to hold the relevant GCAM licence and clearly identify ads",
+          "She only needs to disclose if the restaurant asks",
+          "Disclosure is only required in English"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Saudi Arabia's audiovisual media regulator licenses advertising influencers and expects ads to be clearly identified, regardless of platform."
+      },
+      {
+        "id": "sfv-033",
+        "module": "brand-safe-ugc",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A brand reports that your video's hook rate is strong but viewers drop off sharply after five seconds. What should you adjust in the next version?",
+        "options": [
+          "The pacing and content just after the hook, such as moving the demo earlier",
+          "The first frame only",
+          "The disclosure label",
+          "The file name"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "The opening works, so the problem is what comes immediately after it; tighten pacing and deliver value sooner."
+      },
+      {
+        "id": "sfv-034",
+        "module": "brand-safe-ugc",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is the best way to price UGC so the brand pays for what it uses?",
+        "options": [
+          "One flat fee regardless of usage",
+          "A fee based only on your follower count",
+          "Free content in exchange for exposure",
+          "A base creation fee plus separate fees for add-ons and usage such as paid ads, duration and territories"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Separating creation from usage reflects the extra value of paid, longer or wider usage."
+      }
+    ]
+  }
+}

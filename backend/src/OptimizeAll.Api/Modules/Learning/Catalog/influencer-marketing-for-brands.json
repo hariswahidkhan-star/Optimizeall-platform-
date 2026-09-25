@@ -1,0 +1,1218 @@
+{
+  "slug": "influencer-marketing-for-brands",
+  "version": 1,
+  "title": "Influencer Marketing Strategy",
+  "subtitle": "Plan, contract, measure and protect creator campaigns that deliver real business results",
+  "category": "marketing",
+  "level": "advanced",
+  "estimatedMinutes": 145,
+  "description": "Influencer marketing has matured from gifting and one-off posts into a strategic channel that drives awareness, sales and a steady supply of high-performing ad creative. This advanced course is for brand marketers, agency strategists and experienced creators who want to run programmes professionally.\n\nYou will learn to set objectives that tie to business outcomes, build a creator mix across tiers and platforms, find and vet creators with native data, and write briefs that protect the brand without killing authenticity. You will negotiate **contracts, usage rights and exclusivity**, compare pricing models from flat fees and CPM to affiliate codes and hybrids, and measure **ROI** honestly with codes, UTMs, lift methods and creator-level unit economics. Finally, you will apply disclosure and licensing rules (FTC, ASA/CAP, UAE Media Council, Saudi GCAM) and handle crises calmly with a clear playbook.",
+  "outcomes": [
+    "Translate business goals into influencer objectives, KPIs and campaign models",
+    "Build a creator portfolio across tiers, platforms and markets",
+    "Vet creators for audience fit, authenticity, performance and brand safety",
+    "Write briefs and contracts covering claims, disclosure, usage rights and exclusivity",
+    "Choose and negotiate flat, CPM, affiliate and hybrid pricing using break-even analysis",
+    "Measure and report ROI with codes, UTMs, lift methods and creator-level economics",
+    "Apply FTC, ASA/CAP, UAE and KSA disclosure and licensing rules and manage crises"
+  ],
+  "skills": [
+    "Influencer marketing",
+    "Creator vetting",
+    "Campaign planning",
+    "Contract negotiation",
+    "Usage rights",
+    "Marketing ROI",
+    "Advertising compliance",
+    "Crisis management"
+  ],
+  "prerequisites": [
+    "digital-marketing-foundations",
+    "paid-social-advertising"
+  ],
+  "badge": {
+    "name": "Certified Influencer Marketing Strategist",
+    "description": "The holder can plan influencer programmes from business objectives, select and vet creators, write briefs and contracts with clear usage rights, choose fair pricing models, measure ROI honestly, apply disclosure and licensing rules across the US, UK, UAE and KSA, and manage creator crises.",
+    "criteria": "Completed all lessons and scored ≥ 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "strategy-and-planning",
+      "title": "Strategy and campaign planning",
+      "summary": "Set influencer objectives that tie to business outcomes and choose the right creator mix and campaign model.",
+      "lessons": [
+        {
+          "slug": "influencer-strategy-and-objectives",
+          "title": "Influencer strategy: from objective to plan",
+          "type": "video",
+          "durationMinutes": 12,
+          "body": "### Why strategy comes before creators\n\nMany influencer campaigns start with \"Let's find some influencers\" and end with a report full of views and no clear business result. Advanced practitioners start with **the business problem**, decide what role creators play in solving it and only then pick people. Creators are a channel, a content engine and a source of trust; a clear strategy says which of those you need.\n\n### The three jobs creators can do\n\n1. **Reach and awareness:** introducing a brand to new audiences through trusted voices.\n2. **Consideration and conversion:** demonstrating products, answering objections and driving action with links and codes.\n3. **Content production:** creating authentic assets for the brand's own channels and paid ads (often the most durable value).\n\nMost campaigns emphasise one job and support the others. Name the primary job explicitly.\n\n### Setting objectives and KPIs\n\nUse a simple chain: **Business goal → Campaign objective → KPIs → Targets**.\n\n| Business goal | Campaign objective | Primary KPIs | Secondary KPIs |\n|---|---|---|---|\n| Enter the Saudi market | Build awareness among women 20–35 in Riyadh and Jeddah | Reach in target audience, brand search lift | Engagement quality, follower growth |\n| Grow online sales in Pakistan | Drive first purchases | Sales from codes/links, CPA, ROAS | Click-through, new customer share |\n| Improve paid social performance in the UK | Produce high-performing ad creative | Ad CPA using creator content vs brand content | Hook rate, hold rate, number of usable assets |\n| Launch an app in the UAE | Drive installs and activation | Installs and activated users from creator traffic | Cost per activated user |\n\nTargets should be based on your own historical data or clearly labelled estimates, and agreed with stakeholders before launch.\n\n### Audience first\n\nDefine the audience you need to reach, then find creators whose **audiences** match – not just creators who look on-brand. Consider:\n\n- Demographics and location (a UAE-based creator may have a large audience in India or Pakistan; check).\n- Language (Arabic, English, Urdu, bilingual).\n- Interests and values.\n- Where they spend attention (TikTok, Instagram, YouTube, Snapchat, LinkedIn, podcasts).\n\n### Choosing the campaign model\n\n- **One-off activation:** a single post or burst around a launch or seasonal moment (Ramadan, Eid, White Friday, back-to-school). Quick but limited learning.\n- **Always-on / ambassador programme:** longer relationships with fewer creators who post regularly. Builds credibility (repeated mentions feel more genuine) and usually improves results over time.\n- **Seeding/gifting:** sending products without obligation. Low cost, unpredictable coverage, and still requires disclosure if creators post about gifts.\n- **Affiliate programme:** many creators earn commission on sales. Scalable and performance-based, but attracts fewer top creators without a base fee.\n- **Content partnerships for ads:** paying primarily for content and usage rights, with creator-licensed ads (Spark/partnership ads) amplifying the best pieces.\n- **Events and experiences:** creator trips, launches or workshops.\n\n### Budget allocation\n\nA plan should cover:\n\n- Creator fees (content and usage).\n- Product costs and shipping.\n- Paid amplification budget for the best content.\n- Tools (discovery, contracting, tracking).\n- Management time (in-house or agency).\n- Contingency (for reshoots, delays or replacing a creator).\n\nCreator content often performs best when paid media amplifies it, so plan amplification from the start rather than as an afterthought.\n\n### Worked example: a Pakistani modest fashion brand\n\n- **Business goal:** increase online sales during the Eid season.\n- **Primary job:** conversion, with content for ads as a secondary job.\n- **Model:** 3 ambassador creators (always-on) plus 15 micro-creators for an Eid burst, each with unique codes.\n- **KPIs:** code sales, CPA, ROAS; ad CPA using creator content.\n- **Budget split (illustrative):** 55% creator fees, 30% paid amplification, 10% product and logistics, 5% tools and contingency.\n\n### Common mistakes\n\n- Choosing creators before defining objectives.\n- Judging a conversion campaign on reach, or an awareness campaign on sales codes alone.\n- No amplification budget.\n- One-off posts when the goal requires repeated exposure.",
+          "video": {
+            "script": "Here's a question that separates amateur influencer campaigns from professional ones: what job are the creators doing? Creators can do three jobs. They can build reach, introducing your brand to new audiences through voices people trust. They can drive consideration and conversion, demonstrating the product and answering objections with links and codes. And they can produce content, authentic assets you can use on your own channels and in paid ads, which is often the most lasting value of all. Most campaigns lean on one job and support the others. So name it. Then build a chain: business goal, campaign objective, KPIs and targets. If the goal is entering the Saudi market, you'll measure reach in your target audience and brand search lift. If the goal is online sales in Pakistan, you'll measure code sales, cost per acquisition and return on ad spend. Next, choose your model. A one-off burst around Eid or White Friday, an always-on ambassador programme, product seeding, an affiliate programme, or content partnerships that feed your ads. And don't forget the budget beyond creator fees: product, shipping, tools, management time, contingency and, crucially, paid amplification for the content that performs best. Strategy first, creators second. In the next lessons you'll learn exactly how to find and vet the right people for the job you've defined.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Start with the business problem and define the creator's primary job: reach, conversion or content production.",
+            "Chain business goal to campaign objective, KPIs and agreed targets.",
+            "Select creators for their audience fit, not just their aesthetic.",
+            "Choose the right model (one-off, ambassador, seeding, affiliate, content-for-ads, events) and budget for amplification and contingency."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A brand's main goal is lower-cost ad creative for paid social. What is the creators' primary job?",
+              "options": [
+                "Content production for ads",
+                "Reach",
+                "Event hosting",
+                "Follower growth"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "The objective is usable, high-performing creative, so content production is primary."
+            },
+            {
+              "question": "Why do ambassador programmes often outperform one-off posts?",
+              "options": [
+                "They are always cheaper",
+                "Repeated, long-term mentions feel more genuine and allow learning over time",
+                "They avoid disclosure rules",
+                "They need no brief"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Consistency builds credibility and lets both sides optimise."
+            },
+            {
+              "question": "A UAE-based creator has 300,000 followers. What should you check before assuming they reach UAE consumers?",
+              "options": [
+                "Their camera",
+                "Their favourite brands",
+                "Their posting time only",
+                "Audience location data, since many followers may be in other countries"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Follower location often differs from the creator's location; verify audience demographics."
+            }
+          ],
+          "activity": "Write a one-page influencer strategy for a real or fictional brand: business goal, the creators' primary job, KPIs with targets, campaign model and budget split."
+        },
+        {
+          "slug": "creator-tiers-and-mix",
+          "title": "Creator tiers and building the right mix",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Follower count is not a strategy\n\nCreators are often grouped by follower count. Definitions vary between agencies and tools, but a common set of labels is:\n\n| Tier | Typical follower range (approximate) | Typical strengths |\n|---|---|---|\n| **Nano** | Up to about 10,000 | Close communities, high trust, affordable, often happy with product or small fees |\n| **Micro** | About 10,000–100,000 | Niche authority, strong engagement, good value for content |\n| **Mid-tier** | About 100,000–500,000 | Balance of reach and relevance |\n| **Macro** | About 500,000–1 million | Large reach, professional production |\n| **Mega/celebrity** | 1 million+ | Mass awareness, cultural moments, PR value; highest cost and least control |\n\nThese tiers are labels, not quality ratings. A 20,000-follower cybersecurity creator on LinkedIn may be worth more to a B2B brand than a 2-million-follower entertainment account.\n\n### Trade-offs to weigh\n\n- **Reach vs relevance:** larger creators reach more people, but the audience is usually broader and less specific.\n- **Cost efficiency:** smaller creators often deliver better cost per engagement, but managing many creators adds operational effort.\n- **Control and professionalism:** larger creators often have managers and more formal processes; smaller creators may be more flexible but need more guidance.\n- **Content volume:** many micro-creators produce more varied content for ad testing than a single celebrity.\n- **Risk concentration:** one big creator concentrates reputational risk; many smaller ones spread it.\n\n### Building a portfolio mix\n\nThink of creators like an investment portfolio aligned with your objective:\n\n- **Awareness launch:** one or two macro or mega creators for a headline moment, supported by micro-creators to create a wave of authentic content.\n- **Conversion programme:** many micro and mid-tier creators in relevant niches, with affiliate codes and a performance bonus.\n- **Content-for-ads programme:** a pool of UGC-style and micro-creators producing high volumes of testable content.\n- **B2B:** expert creators and industry voices on LinkedIn, YouTube and podcasts, plus employee advocacy.\n\n### Platform and format mix\n\n- **TikTok:** discovery, trends, strong for younger audiences and fast testing.\n- **Instagram:** Reels, Stories with link stickers, Collab posts; strong for fashion, beauty, food and lifestyle in all target regions.\n- **YouTube:** long-form reviews and tutorials with lasting search value; Shorts for discovery.\n- **Snapchat:** particularly important in Saudi Arabia and parts of the Gulf.\n- **LinkedIn and podcasts:** B2B authority.\n- **X:** conversation and commentary; useful for tech, finance and news-driven topics.\n\nMatch format to purpose: Stories for time-sensitive offers and links, Reels/TikTok for discovery, YouTube for in-depth consideration.\n\n### Regional nuances\n\n- **Gulf:** creators are often licensed or registered with regulators (see the compliance module); bilingual content is common; family-friendly and culturally respectful content matters.\n- **Pakistan:** strong creator communities on TikTok, YouTube and Instagram; content in Urdu and regional languages can outperform English for mass audiences.\n- **UK and US:** mature markets with established agency processes, detailed contracts and strict disclosure enforcement.\n\n### Worked example (illustrative)\n\nA UK plant-based snack brand with a £40,000 quarterly budget:\n\n- 2 mid-tier food creators for recipe videos on YouTube and Instagram (long shelf life).\n- 12 micro-creators on TikTok and Reels in fitness and student niches with discount codes.\n- 20 nano creators seeded with product boxes (no obligation, disclosure guidance provided).\n- Paid amplification of the top-performing five pieces via partnership ads.\n\n### Common mistakes\n\n- Choosing by follower count alone.\n- Using only mega creators and learning little.\n- Using hundreds of nano creators without the operational capacity to manage them.\n- Ignoring platform fit (for example Snapchat in KSA or YouTube for considered purchases).",
+          "video": null,
+          "keyTakeaways": [
+            "Tiers (nano to mega) are labels for scale, not quality; relevance often matters more than reach.",
+            "Weigh reach, relevance, cost efficiency, control, content volume and risk concentration.",
+            "Build a creator portfolio aligned to the objective, mixing tiers, platforms and formats.",
+            "Account for regional platform habits, languages and cultural expectations."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which is usually a key advantage of micro-creators?",
+              "options": [
+                "Guaranteed mass reach",
+                "No need for disclosure",
+                "Niche authority and strong engagement at good value",
+                "Only work on LinkedIn"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Micro-creators often combine relevance and engagement with manageable costs."
+            },
+            {
+              "question": "Why might a brand spread budget across many smaller creators instead of one celebrity?",
+              "options": [
+                "To avoid contracts",
+                "Because celebrities cannot post ads",
+                "To spread risk and generate more varied content for testing",
+                "To avoid measuring results"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Many creators diversify risk and produce more assets to learn from."
+            },
+            {
+              "question": "Which platform is especially important to consider for creator campaigns in Saudi Arabia?",
+              "options": [
+                "Google+",
+                "MySpace",
+                "Snapchat",
+                "Vine"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Snapchat has a notably strong audience in Saudi Arabia."
+            }
+          ],
+          "activity": "Design a creator mix for a campaign objective of your choice: tiers, number of creators, platforms, formats and the role each group plays."
+        }
+      ]
+    },
+    {
+      "slug": "selection-and-briefing",
+      "title": "Creator selection, vetting and briefs",
+      "summary": "Find the right creators, vet them for authenticity and brand safety, and brief them so content is on-message and still authentic.",
+      "lessons": [
+        {
+          "slug": "finding-and-vetting-creators",
+          "title": "Finding and vetting creators",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Where to find creators\n\n- **Your own community:** customers, followers and people already tagging your brand – often the most authentic partners.\n- **Platform tools:** TikTok One (TikTok's creator marketplace), Instagram's creator marketplace and partnership tools, YouTube's BrandConnect, where available in your market.\n- **Discovery tools:** third-party platforms that search creators by niche, location and audience data.\n- **Hashtag and keyword search** on each platform, including local-language terms.\n- **Agencies and talent managers**, especially for macro and celebrity creators.\n- **Competitor and adjacent brand partnerships** (to see who already works in your category – and check exclusivity).\n\n### The vetting framework: FIT, TRUST, PERFORMANCE, SAFETY\n\n**1. Fit**\n- Does the audience match your target (location, age, gender, language, interests)? Ask for **screenshots or exports of native analytics** (audience demographics, reach, views) rather than relying on public follower counts.\n- Does the creator's content style and values align with your brand?\n- Would their audience find a partnership with you natural?\n\n**2. Trust and authenticity**\nSigns of inauthentic audiences or engagement:\n- Sudden follower spikes without a viral post or media appearance to explain them.\n- Engagement that is very low compared with followers, or suspiciously high with generic comments (\"Nice pic!\", emoji-only comments from unrelated accounts).\n- Audience mostly in countries unrelated to the creator's content or language.\n- Views that do not match engagement or comments that do not relate to the content.\n\nUse discovery tools' audience quality indicators as a signal, but verify with native analytics and your own review.\n\n**3. Performance**\n- Typical reach and views per post (median rather than average, to reduce the effect of one viral hit).\n- Engagement quality: comments that show genuine conversation, questions and saves/shares.\n- Past sponsored content: does it perform close to their organic content, or much worse?\n- If available and shared with permission: past campaign results (clicks, codes, sales).\n\n**4. Brand safety**\n- Review several months of content, including Stories highlights, older posts and comments.\n- Look for offensive language, discriminatory content, misinformation, risky stunts, undisclosed ads or controversial associations.\n- Check how they handle criticism and negative comments.\n- Check competitor partnerships and exclusivity conflicts.\n- Confirm required licences (for example advertiser licences or permits in the UAE and Saudi Arabia).\n\n### Engagement rate: calculate it consistently\n\nA common formula is:\n\n**Engagement rate by followers = (Likes + Comments + Shares + Saves) ÷ Followers × 100**\n\nFor short-video platforms, many marketers prefer **engagement rate by views** = engagements ÷ views × 100, because reach is driven more by recommendation than by followers. Be consistent within a comparison and compare creators on the same platform and in similar niches. Treat any generic \"good engagement rate\" benchmark with caution.\n\n### Vetting scorecard (example)\n\n| Criterion | Weight | Creator A | Creator B |\n|---|---|---|---|\n| Audience fit (verified analytics) | 30% | 4/5 | 5/5 |\n| Content quality and style fit | 20% | 5/5 | 3/5 |\n| Authenticity signals | 20% | 5/5 | 3/5 |\n| Performance (median views, engagement quality) | 20% | 3/5 | 4/5 |\n| Brand safety | 10% | 5/5 | 4/5 |\n\nScore, discuss and document. A written scorecard prevents \"we picked them because the founder likes their feed\".\n\n### Worked example\n\nA Dubai-based fitness supplement brand shortlists 10 creators. Native analytics show one creator's audience is only 12% in the GCC despite being Dubai-based; another had a follower spike of 80,000 in a week with no viral post and low comment quality. Both are removed. A third has great fit but promoted a banned supplement brand two years ago; the team discusses it with the creator, who explains the change of stance publicly. The team decides case by case and records the reasoning.\n\n### Common mistakes\n\n- Relying on follower counts and public screenshots.\n- Using average views skewed by a single viral video.\n- Skipping content history reviews.\n- Ignoring licensing requirements in regulated markets.",
+          "video": null,
+          "keyTakeaways": [
+            "Source creators from your community, platform marketplaces, discovery tools, search and agencies.",
+            "Vet for fit, trust and authenticity, performance and brand safety using native analytics.",
+            "Watch for fake-follower signs: unexplained spikes, mismatched audience locations and generic comments.",
+            "Calculate engagement rate consistently (by followers or by views) and use a written scorecard."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why ask creators for native analytics screenshots or exports?",
+              "options": [
+                "They are more colourful",
+                "They are legally required for all posts",
+                "They verify audience demographics and reach instead of relying on public follower counts",
+                "They improve engagement"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Native data reveals who actually sees the content."
+            },
+            {
+              "question": "Which is a warning sign of inauthentic followers?",
+              "options": [
+                "A sudden large follower spike without any viral post or media appearance",
+                "Steady growth after regular posting",
+                "Thoughtful comments from real followers",
+                "Consistent views across posts"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Unexplained spikes often indicate purchased followers."
+            },
+            {
+              "question": "Why use median rather than average views when assessing creators?",
+              "options": [
+                "Median is always higher",
+                "One viral video can distort the average",
+                "Platforms only show medians",
+                "It is a legal requirement"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Median reflects typical performance better than an average skewed by outliers."
+            }
+          ],
+          "activity": "Create a vetting scorecard for your next campaign and score three real creators in your niche using publicly available information, noting what you would ask them to verify."
+        },
+        {
+          "slug": "briefs-that-work",
+          "title": "Writing briefs that get great, compliant content",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### The brief balances control and creativity\n\nA brief tells creators what the brand needs while leaving room for the creator's voice – the reason you hired them. Too loose, and content misses key messages or breaks rules. Too tight, and content feels like a stiff advert that the creator's audience ignores.\n\n### Anatomy of a strong brief\n\n1. **Brand and product background** – short, plain-English overview.\n2. **Campaign objective** – what success looks like (\"drive first purchases using code X\").\n3. **Audience** – who we want to reach and what they care about.\n4. **Key message** – one core idea, plus two or three supporting points.\n5. **Mandatories** – things that must appear: product name spelling, code, link, platform disclosure tools, required visuals.\n6. **Do's and don'ts** – for example do show the product in use; don't mention competitors, don't make health claims, don't film in unsafe settings.\n7. **Approved claims and wording** – exact phrasing for any regulated or technical claims.\n8. **Disclosure requirements** – labels and wording required in each market (for example \"#ad\" upfront, paid partnership label on).\n9. **Deliverables and formats** – number of posts, platforms, lengths, aspect ratios, raw files, hooks.\n10. **Timeline** – concept approval, draft submission, feedback rounds, posting date and time.\n11. **Usage rights** – how the brand will use the content (organic reposts, ads, duration, territories).\n12. **Approval process** – who reviews, how quickly and how many revision rounds are included.\n13. **Inspiration, not scripts** – examples of content that worked, clearly marked as inspiration.\n14. **Contact and logistics** – product shipping, point of contact, payment terms.\n\n### Creative freedom zones\n\nExplicitly say where creators have freedom: format, storyline, humour, setting, music (within licensing rules), and how they integrate the product. Creators know their audience; the best briefs ask for their ideas.\n\nA good approach: request a **short concept** (a few lines or bullet points) before filming, approve the direction, then let them create.\n\n### Claims and compliance in briefs\n\n- Provide only claims the brand can substantiate, with approved wording.\n- Explicitly prohibit claims you cannot support (for example \"cures\", \"guaranteed results\", \"clinically proven\" without evidence).\n- For regulated sectors (health, finance, alcohol where legal, gambling where legal, children's products), include sector-specific rules and involve legal review.\n- Include required disclosures per market and platform. The brand shares legal responsibility for disclosure in many jurisdictions.\n\n### Feedback and approvals\n\n- Give consolidated feedback in one document, not scattered messages from multiple people.\n- Separate **must-fix** items (factual errors, compliance, mandatories) from **suggestions**.\n- Respect agreed revision limits; additional changes may cost extra.\n- Avoid rewriting the creator's voice into corporate language.\n\n### Brief template excerpt\n\n| Section | Example |\n|---|---|\n| Objective | Drive first orders in KSA during White Friday with code NOURA15 |\n| Key message | Lightweight abayas that stay cool in the heat |\n| Mandatories | Show two styles in motion; say the code clearly; paid partnership label on; Arabic caption |\n| Don'ts | No competitor mentions; no claims about fabric technology beyond approved wording |\n| Deliverables | 1 Reel (30–45 s), 3 Story frames with link sticker, raw files |\n| Timeline | Concept by 1 Nov; draft by 10 Nov; live 24 Nov, 8 pm KSA time |\n| Usage | Organic reposts and partnership ads in KSA and UAE for 60 days |\n\n### Common mistakes\n\n- Word-for-word scripts that sound unnatural.\n- Missing disclosure or claims guidance.\n- Feedback from five people in five channels.\n- Unclear usage rights leading to disputes later.",
+          "video": null,
+          "keyTakeaways": [
+            "A brief balances brand needs with the creator's authentic voice.",
+            "Cover objective, audience, key message, mandatories, do's and don'ts, approved claims, disclosure, deliverables, timeline, usage and approvals.",
+            "Define creative freedom zones and approve a short concept before filming.",
+            "Give consolidated feedback that separates must-fix items from suggestions."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the main risk of giving creators a word-for-word script?",
+              "options": [
+                "Content sounds unnatural and loses the creator's authentic connection with their audience",
+                "Content becomes too long",
+                "It breaks copyright",
+                "It improves engagement"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Audiences respond to the creator's voice; rigid scripts feel like adverts."
+            },
+            {
+              "question": "Which item must a brief include to support legal compliance?",
+              "options": [
+                "The creator's favourite colour",
+                "Disclosure requirements and approved claims",
+                "The brand's revenue",
+                "The CEO's biography"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Disclosure and claims guidance help both parties comply."
+            },
+            {
+              "question": "What is a good way to protect creative quality while reducing reshoots?",
+              "options": [
+                "Approve a short concept before filming",
+                "Require daily video calls",
+                "Rewrite captions yourself",
+                "Skip feedback entirely"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Concept approval aligns direction early while leaving execution to the creator."
+            }
+          ],
+          "activity": "Write a full brief for a creator campaign using the 14-section anatomy, including creative freedom zones and approved claims."
+        }
+      ]
+    },
+    {
+      "slug": "contracts-and-pricing",
+      "title": "Contracts, usage rights and pricing",
+      "summary": "Agree clear contracts, license content correctly and choose pricing models that align incentives.",
+      "lessons": [
+        {
+          "slug": "contracts-and-usage-rights",
+          "title": "Contracts and usage rights",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Why contracts matter\n\nInformal DMs and handshakes cause disputes: content posted late, ads running longer than agreed, missing disclosures, unpaid invoices. A clear written agreement protects both brand and creator. Templates help, but have contracts reviewed by a qualified lawyer for your jurisdiction, especially for large or long-term deals. This lesson covers the commercial essentials, not legal advice.\n\n### Core contract sections\n\n1. **Parties and term** – who is contracting (creator directly, their company, their agency) and the campaign period.\n2. **Deliverables** – exact posts, platforms, formats, lengths, number of Stories frames, raw footage and hooks.\n3. **Timeline** – draft deadlines, approval windows, posting dates.\n4. **Content approval** – review process, number of revision rounds, response times.\n5. **Fees and payment terms** – amounts, currency, milestones (for example 50% on signing, 50% after posting), invoice requirements, payment deadline, late-payment terms, taxes.\n6. **Usage rights (licence)** – see below.\n7. **Exclusivity** – whether the creator may work with competitors, which categories and for how long.\n8. **Disclosure and compliance** – the creator agrees to use required labels and follow applicable rules; the brand provides accurate claims.\n9. **Content ownership** – whether the creator keeps copyright and licenses it to the brand (common) or assigns it.\n10. **Minimum posting duration** – how long organic posts must stay live.\n11. **Performance data** – what analytics the creator will share and when (for example screenshots of reach, views and link clicks within 7 days).\n12. **Conduct / morality clause** – rights to pause or terminate if either party's conduct causes serious reputational harm.\n13. **Cancellation and kill fees** – what happens if the brand cancels after work has started.\n14. **Confidentiality** – embargoes on launches.\n15. **Governing law and dispute resolution.**\n\n### Usage rights: the most misunderstood area\n\nWhen a creator posts on their own channel, the brand usually does **not** automatically get the right to reuse the content. Usage rights specify:\n\n- **Channels:** organic reposting on brand social accounts, website, email, in-store screens, paid social ads, TV or out-of-home.\n- **Paid vs organic:** paid usage (ads) is usually more valuable and priced higher.\n- **Duration:** for example 30, 90 or 365 days, with renewal options.\n- **Territory:** countries or regions.\n- **Modifications:** whether the brand can edit, cut, add text or combine with other footage.\n- **Creator-licensed ads:** Spark Ads or partnership ads through the creator's handle require specific permissions and are often priced separately.\n- **Perpetual rights:** \"in perpetuity, all media, worldwide\" requests should command a significantly higher fee; many creators refuse them.\n\nA simple usage matrix helps:\n\n| Usage | Duration | Territory | Included? | Fee |\n|---|---|---|---|---|\n| Brand organic repost | 12 months | Global | Yes | Included |\n| Paid social ads (brand handle) | 90 days | UAE, KSA | Yes | + usage fee |\n| Partnership/Spark ads (creator handle) | 60 days | UAE, KSA | Yes | + usage fee |\n| Website and email | 12 months | Global | Yes | Included |\n| TV/out-of-home | – | – | No | Negotiate separately |\n\n### Exclusivity\n\nExclusivity limits the creator's income, so it has a cost. Keep it narrow: specific competitor brands or a tightly defined category, for a limited period (for example 30 days before and after posting). Broad, long exclusivity requires higher fees.\n\n### Payment practice\n\n- Pay on time; late payment damages relationships and reputation in creator communities.\n- Clarify taxes and invoicing requirements in each country (for example VAT registration in the UAE, KSA or UK where applicable).\n- For cross-border payments to Pakistan or elsewhere, agree currency, method and who pays transfer fees.\n\n### Worked example\n\nA UK beauty brand contracts a Manchester creator for one TikTok and one Reel. The contract includes a 50/50 payment schedule, two revision rounds, 60 days of paid usage on Meta and TikTok in the UK and Ireland, a 30-day exclusivity for competing skincare brands, disclosure obligations under ASA/CAP guidance, analytics screenshots within 7 days and a kill fee of 50% if cancelled after filming.\n\n### Common mistakes\n\n- No written agreement.\n- Assuming a paid post includes ad usage.\n- Perpetual, worldwide rights for a standard fee.\n- Broad, long exclusivity without compensation.",
+          "video": null,
+          "keyTakeaways": [
+            "Written contracts cover deliverables, timelines, approvals, fees, usage, exclusivity, disclosure, conduct, cancellation and disputes.",
+            "Usage rights specify channels, paid vs organic, duration, territory and modifications; posting does not automatically grant ad usage.",
+            "Exclusivity has a cost; keep it narrow and time-limited.",
+            "Pay on time and clarify currency, taxes and cross-border payment terms."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A creator was paid for an organic Reel. The brand wants to run it as a paid ad for 6 months. What is needed?",
+              "options": [
+                "Nothing; the post is already paid",
+                "A new logo",
+                "Only the creator's password",
+                "A usage licence for paid ads, agreed in writing, usually with an additional fee"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Paid usage is a separate, valuable licence."
+            },
+            {
+              "question": "What is a kill fee?",
+              "options": [
+                "A fee for deleting a post",
+                "A penalty for late posting",
+                "Compensation to the creator if the brand cancels after work has started",
+                "A platform charge"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Kill fees fairly compensate creators for work done before cancellation."
+            },
+            {
+              "question": "Which exclusivity clause is most reasonable for a standard fee?",
+              "options": [
+                "No work with any brand for two years",
+                "No work with named direct competitors for 30 days around the campaign",
+                "No posting at all for six months",
+                "Exclusive worldwide rights to the creator's identity forever"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Narrow, time-limited exclusivity balances brand protection with the creator's livelihood."
+            }
+          ],
+          "activity": "Draft a usage-rights matrix and exclusivity clause for a creator deal, stating channels, paid vs organic, duration, territories, modifications and fees."
+        },
+        {
+          "slug": "pricing-models",
+          "title": "Pricing models: flat fee, CPM, performance and hybrids",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### No universal rate card\n\nCreator rates vary widely by platform, niche, market, audience quality, production effort, usage rights, exclusivity and demand. Published \"rate calculators\" give rough ranges at best. Build pricing from the value exchanged and the risk each side takes.\n\n### The main pricing models\n\n**1. Flat fee**\nA fixed price per deliverable or package.\n- *Pros:* simple, predictable; creators prefer guaranteed income.\n- *Cons:* the brand carries all performance risk.\n- *Best for:* awareness, content production, established creators.\n\n**2. CPM-based (cost per thousand views or impressions)**\nFee is benchmarked to expected or actual views.\n- *Formula:* Fee = (Expected views ÷ 1,000) × agreed CPM.\n- *Example (illustrative):* expected 80,000 views at a benchmark of $15 CPM → 80 × $15 = $1,200.\n- *Pros:* links price to reach; useful to compare with paid media costs.\n- *Cons:* views vary widely between posts; must define which views (for example views within 7 days, verified by native analytics).\n\n**3. Cost per engagement (CPE) or per click (CPC)**\nPays for interactions or link clicks. Rarely used alone because creators control only part of the outcome, and it can encourage low-quality engagement tactics.\n\n**4. Affiliate commission / discount codes**\nThe creator earns a percentage of sales generated through their unique link or code.\n- *Example:* 10% commission on sales from code AMNA10.\n- *Pros:* pay for results, scalable, easy to track sales.\n- *Cons:* codes leak to coupon sites; attribution misses people who buy without the code; top creators rarely work on commission only.\n\n**5. Gifting / product seeding**\nProduct only, no obligation to post. Low cost but unpredictable coverage. If creators post about gifted products, disclosure is still required in many markets.\n\n**6. Hybrid**\nA base fee plus performance incentive – for example a flat fee to cover creation, plus commission on sales or a bonus if a cost-per-acquisition threshold is achieved. Hybrids align incentives and are increasingly common.\n\n### Building a fee: components\n\n| Component | Driver |\n|---|---|\n| Content creation | Production effort, format, length, number of revisions |\n| Distribution (posting) | Audience size and quality, typical views |\n| Usage rights | Channels, paid vs organic, duration, territory |\n| Exclusivity | Scope and duration |\n| Extras | Raw footage, extra hooks, rush delivery, whitelisting/Spark access |\n\nAsk creators to price components separately. It makes negotiation transparent and lets you buy only what you need.\n\n### Evaluating whether a fee is fair\n\nUse several lenses together:\n\n- **Effective CPM:** fee ÷ (expected views ÷ 1,000). Compare with your paid media CPM, remembering creator content often carries more trust.\n- **Cost per usable asset:** if you will use the content in ads, what would equivalent production cost?\n- **Break-even sales:** fee ÷ gross profit per order = orders needed to break even on direct sales (ignoring longer-term value).\n- **Past performance:** results from similar campaigns.\n\n**Worked break-even example (illustrative):** a creator charges AED 6,000. Gross profit per order is AED 60. Break-even orders = 6,000 ÷ 60 = **100 orders** attributable to the creator. If the creator's past campaigns drove 30–40 tracked orders, a flat fee may only make sense if awareness or ad content value justifies the difference, or if you move to a hybrid structure.\n\n### Negotiation principles\n\n- Be transparent about budget ranges and what matters most.\n- Negotiate scope (fewer deliverables, shorter usage) rather than simply pushing price down.\n- Offer longer-term partnerships in exchange for better rates.\n- Respect creators' time and expertise; unpaid \"exposure\" offers damage brand reputation.\n- Put everything in writing.\n\n### Common mistakes\n\n- Commission-only offers to established creators and then complaining about low uptake.\n- Ignoring usage and exclusivity in price comparisons.\n- Using a single viral post to estimate expected views.\n- Discount codes without unique codes per creator.",
+          "video": null,
+          "keyTakeaways": [
+            "There is no universal rate card; price from value, risk, usage and exclusivity.",
+            "Models include flat fee, CPM-based, CPE/CPC, affiliate commission, gifting and hybrids.",
+            "Ask for component pricing: creation, distribution, usage, exclusivity and extras.",
+            "Evaluate fees with effective CPM, cost per usable asset, break-even orders and past performance."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A creator expects 50,000 views and you agree a $20 CPM. What is the fee?",
+              "options": [
+                "$100",
+                "$1,000",
+                "$2,500",
+                "$10,000"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Fee = (50,000 ÷ 1,000) × $20 = $1,000."
+            },
+            {
+              "question": "A creator charges £2,000 and gross profit per order is £25. How many attributable orders are needed to break even on direct sales?",
+              "options": [
+                "50",
+                "80",
+                "125",
+                "200"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Break-even orders = 2,000 ÷ 25 = 80."
+            },
+            {
+              "question": "What is a key weakness of discount codes as the only measurement method?",
+              "options": [
+                "They are illegal",
+                "They are too easy to track",
+                "Codes leak to coupon sites and miss buyers who purchase without the code",
+                "They cannot be unique"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Codes both over- and under-attribute sales, so combine them with other methods."
+            }
+          ],
+          "activity": "Build a hybrid pricing proposal for a creator: base fee components, performance bonus or commission and the break-even orders calculation."
+        }
+      ]
+    },
+    {
+      "slug": "measurement-and-roi",
+      "title": "Measurement and ROI",
+      "summary": "Track creator impact with links, codes and lift methods, calculate ROI honestly and report in a way that drives better decisions.",
+      "lessons": [
+        {
+          "slug": "tracking-creator-performance",
+          "title": "Tracking creator performance",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Measure what the objective needs\n\nMeasurement starts with the objective set in your strategy. Awareness campaigns need reach and lift; conversion campaigns need sales data; content-for-ads programmes need ad performance. Decide the measurement plan before contracts are signed, because contracts should oblige creators to share the data you need.\n\n### Metrics by objective\n\n| Objective | Core metrics | Data source |\n|---|---|---|\n| Awareness | Reach, views, audience match, brand search lift, follower growth | Native creator analytics, brand lift studies, Search Console/Google Trends |\n| Engagement/consideration | Saves, shares, comments quality, profile visits, link clicks, landing page views | Native analytics, UTMs in web analytics |\n| Conversion | Orders, revenue, new customers, CPA, ROAS | Codes, UTMs, affiliate platform, store data |\n| Content for ads | Ad CPA/ROAS vs brand creative, hook and hold rates, number of usable assets | Ad platforms |\n\n### Tracking tools\n\n- **Unique UTM links** per creator and per post: `utm_source=instagram&utm_medium=influencer&utm_campaign=eid26&utm_content=creator_sara_reel1`.\n- **Unique discount codes** per creator. Single-use or limited codes reduce leakage.\n- **Affiliate platforms** that track clicks and sales and handle commissions.\n- **Link-in-bio and Story link stickers** tagged with UTMs.\n- **Native analytics screenshots or exports** from creators (required by contract, within an agreed number of days).\n- **Platform partnership tools** that give brands access to post metrics with the creator's permission (for example partnership ad insights, TikTok One campaign data).\n- **Post-purchase surveys** (\"How did you hear about us?\") with creator names or \"social media creator\" as options.\n\n### Beyond last click\n\nCreator content often influences people who buy later, on another device or without the code. Useful methods to estimate broader impact:\n\n- **Baseline comparison:** compare sales, branded search and direct traffic in the campaign period against a pre-campaign baseline, adjusting for seasonality.\n- **Geo or market tests:** activate creators in one region and not in a comparable one, then compare changes.\n- **Brand lift studies:** surveys comparing exposed and unexposed groups (available through some ad platforms when content is amplified with paid media).\n- **Creator-licensed ads with holdouts:** where platforms offer lift tests.\n- **Marketing mix modelling** for larger brands with sufficient data.\n\n### Earned media value: use with care\n\n**Earned media value (EMV)** assigns a monetary value to engagements or impressions, often based on what equivalent advertising would cost. Methods vary widely between tools, and EMV is not revenue. Use it, if at all, as a relative indicator with a clearly stated method – never present it as return on investment.\n\n### Data hygiene\n\n- Build a campaign tracker with every post link, date, platform, UTM, code and metrics.\n- Capture metrics at consistent times (for example 7 and 30 days after posting).\n- Screenshot Stories metrics before they expire (24 hours) – request them in the contract.\n- Verify creator-reported numbers with platform tools where possible.\n\n### Worked example (illustrative)\n\nA Lahore skincare brand runs 12 creators during Eid. Tracking: unique codes and UTMs, affiliate dashboard, 7-day analytics screenshots and a post-purchase survey. Code sales total 410 orders; the survey suggests many more customers heard about the brand from creators but did not use codes; branded search rises noticeably during the campaign compared with the previous month. The brand reports code-attributed ROI and, separately, indicators of wider influence.\n\n### Common mistakes\n\n- No measurement plan before contracting.\n- Missing Story metrics because nobody captured them in time.\n- Presenting EMV as ROI.\n- Treating code sales as the complete picture.",
+          "video": null,
+          "keyTakeaways": [
+            "Match metrics to the objective: awareness, consideration, conversion or content for ads.",
+            "Use unique UTMs and codes per creator, affiliate platforms, native analytics and post-purchase surveys.",
+            "Estimate wider impact with baselines, geo tests, brand lift studies and holdouts.",
+            "Treat EMV as a relative indicator, never as ROI, and maintain disciplined data capture."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why must Story metrics be requested promptly?",
+              "options": [
+                "Stories have no metrics",
+                "Stories disappear from public view after 24 hours and metrics may be hard to retrieve later",
+                "They are illegal to measure",
+                "They double in value after a week"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Capturing Story data on time needs a contractual requirement and a process."
+            },
+            {
+              "question": "What is the main problem with presenting EMV as ROI?",
+              "options": [
+                "EMV is always zero",
+                "EMV is an estimated media-equivalent value, not revenue or profit, and methods vary",
+                "EMV is illegal",
+                "EMV only works on YouTube"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "EMV is not a financial return and should not be treated as one."
+            },
+            {
+              "question": "Which UTM parameter best distinguishes individual creators within one campaign?",
+              "options": [
+                "utm_source",
+                "utm_medium",
+                "utm_content",
+                "utm_campaign"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "utm_content is typically used for creator or post-level variations."
+            }
+          ],
+          "activity": "Build a measurement plan for an upcoming creator campaign: metrics per objective, tracking tools, data capture schedule and the clauses needed in contracts."
+        },
+        {
+          "slug": "roi-and-reporting",
+          "title": "Calculating ROI and reporting programmes",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### ROI: be explicit about what you count\n\n**ROI = (Attributable gross profit − Total campaign cost) ÷ Total campaign cost × 100**\n\n- **Attributable gross profit:** revenue attributed to the campaign × gross margin (or contribution margin after variable costs).\n- **Total campaign cost:** creator fees, product and shipping, agency or management time, tools, paid amplification and discounts given via codes.\n\nUse gross profit rather than revenue so the result reflects real business return.\n\n### Worked ROI example (illustrative)\n\nA UAE home fragrance brand's campaign:\n\n- Creator fees: AED 30,000\n- Product and shipping: AED 3,000\n- Paid amplification: AED 12,000\n- Tools and management: AED 5,000\n- **Total cost: AED 50,000**\n\nTracked revenue (codes + UTMs): AED 140,000. Gross margin: 55%. Attributable gross profit = AED 77,000.\n\nROI = (77,000 − 50,000) ÷ 50,000 × 100 = **54%**.\n\nROAS on tracked revenue = 140,000 ÷ 50,000 = **2.8**.\n\nState clearly that this uses tracked (last-touch) sales only. If the brand also saw a lift in direct sales and branded search, present that as additional evidence with its method, not added directly to ROI unless measured through a test.\n\n### Creator-level unit economics\n\nBreak results down by creator:\n\n| Creator | Cost | Tracked orders | Gross profit | Cost per order | Creator ROI |\n|---|---|---|---|---|---|\n| A | AED 8,000 | 160 | AED 14,000 | AED 50 | 75% |\n| B | AED 12,000 | 60 | AED 5,300 | AED 200 | −56% |\n| C | AED 5,000 | 110 | AED 9,700 | AED 45 | 94% |\n\n(Illustrative figures.) Before cutting Creator B, check other objectives: did B's content become the best-performing paid ad? Did B deliver strong reach in a new market? Judge each creator against the job they were hired to do.\n\n### Content value\n\nWhen creator content is reused in ads, measure:\n\n- Ad CPA or ROAS using creator content vs brand-produced content.\n- Number of usable assets per creator.\n- Estimated production cost saved (what equivalent assets would have cost) – a reasonable secondary metric when clearly labelled as an estimate.\n\n### Lifetime value perspective\n\nCustomers acquired through creators may have different repeat-purchase behaviour from customers acquired through discounts or ads. Where your data allows, compare **LTV of creator-acquired customers** with other channels over several months. Heavy discount codes can attract lower-LTV customers; trusted recommendations can attract loyal ones. Your own data will tell you which applies.\n\n### The programme report\n\nA strong report for leadership or clients:\n\n1. **Executive summary:** objective, headline results against targets, key decision.\n2. **Results by objective:** reach/lift, engagement quality, conversions, content performance.\n3. **Financials:** total cost, attributable gross profit, ROI and ROAS, with methods stated.\n4. **Creator league table:** results against each creator's job.\n5. **Content insights:** which hooks, formats and messages worked, with examples.\n6. **Audience insights:** comments themes, questions and objections raised by audiences.\n7. **Learnings and recommendations:** which creators to renew, which to replace, what to test next.\n8. **Appendix:** tracking methods, attribution caveats, data sources.\n\n### Using insights to improve\n\n- Renew and deepen partnerships with creators who hit their objectives.\n- Share learnings with creators (what worked in their content) to improve the next round.\n- Feed audience questions into product pages, FAQs and ad copy.\n- Update your vetting scorecard weights based on what predicted success.\n\n### Common mistakes\n\n- Using revenue instead of gross profit in ROI.\n- Excluding product, amplification or management costs.\n- Cutting creators on sales alone when hired for another job.\n- Reports without recommendations.",
+          "video": null,
+          "keyTakeaways": [
+            "ROI = (attributable gross profit − total campaign cost) ÷ total cost; include all costs and state attribution methods.",
+            "Break results down by creator and judge each against the job they were hired to do.",
+            "Measure content value in ads and, where possible, the LTV of creator-acquired customers.",
+            "Report with an executive summary, financials, creator league table, insights and clear recommendations."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Total campaign cost is $20,000. Tracked revenue is $60,000 at a 40% gross margin. What is the ROI?",
+              "options": [
+                "20%",
+                "40%",
+                "200%",
+                "300%"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Gross profit = $24,000. ROI = (24,000 − 20,000) ÷ 20,000 × 100 = 20%."
+            },
+            {
+              "question": "A creator had poor code sales but their content became the lowest-CPA ad. What should you conclude?",
+              "options": [
+                "Drop them immediately",
+                "Ask for a refund",
+                "Evaluate them against the content-for-ads objective where they performed strongly",
+                "Ignore ad performance"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Creators should be judged against the job they were hired to do, including content value."
+            },
+            {
+              "question": "Which cost is most often wrongly left out of influencer ROI?",
+              "options": [
+                "Creator fees",
+                "Paid amplification and management time",
+                "Revenue",
+                "Gross margin"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Amplification, product, tools and management are real costs."
+            }
+          ],
+          "activity": "Build an ROI calculation and creator league table for a real or illustrative campaign, then write three recommendations based on the results."
+        }
+      ]
+    },
+    {
+      "slug": "compliance-and-crisis",
+      "title": "Disclosure compliance and crisis handling",
+      "summary": "Meet advertising disclosure and licensing rules across markets and handle creator or campaign crises calmly and quickly.",
+      "lessons": [
+        {
+          "slug": "disclosure-compliance",
+          "title": "Disclosure and regulatory compliance",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### The principle everywhere: audiences must know it is advertising\n\nAcross markets, regulators share one principle: when a creator is paid, gifted or otherwise rewarded to promote something, the audience must be able to recognise it as advertising **immediately and clearly**. Rules, enforcement and licensing requirements differ by country and change often. This lesson summarises key frameworks; it is not legal advice.\n\n### United States: FTC\n\n- The FTC's **Endorsement Guides** (updated in 2023) require clear and conspicuous disclosure of any **material connection** between an endorser and a brand – payment, free products, discounts, family or employment relationships, affiliate commissions.\n- Disclosures should be hard to miss: in the video itself (spoken and on screen) for video content, not only in the caption or buried among hashtags.\n- Acceptable examples: \"#ad\", \"Advertisement\", \"Sponsored\", \"Paid partnership with [Brand]\". Vague tags like \"#sp\", \"#collab\" or \"#thanks\" alone are not enough.\n- Platform disclosure tools help but may not be sufficient on their own.\n- Brands can be held responsible for creators' misleading claims and missing disclosures, so they must monitor. The FTC has also adopted a rule addressing fake reviews and testimonials.\n\n### United Kingdom: ASA/CAP and CMA\n\n- If a brand pays (money, free products or other benefits) **and** has any control over the content, it is an **ad** under the CAP Code, and must be labelled clearly and upfront – \"Ad\", \"Advert\" or \"#ad\" – before people engage with it.\n- Gifted products without control are not \"ads\" under the CAP Code, but consumer protection law (enforced by the CMA) still requires the commercial relationship to be disclosed, for example \"gifted\".\n- Affiliate links in content are generally ads and require labelling.\n- Labels like \"#sp\", \"#spon\", \"#collab\", \"in association with\" or only tagging the brand are considered unclear.\n- The ASA publicly names non-compliant creators and brands.\n\n### European Union\n\nUnfair commercial practices rules require that commercial intent be clear, and many member states have specific influencer rules (for example France's influencer law). EU consumer authorities have coordinated reviews of influencer marketing.\n\n### United Arab Emirates\n\n- The **UAE Media Council** regulates media and advertising content, including content by influencers and social media advertisers.\n- People who publish paid advertising content on social media are required to hold the relevant licence or permit (the Media Council has introduced an **advertiser permit** framework for social media advertisers). Check the current requirements and deadlines before contracting.\n- Advertising standards require respect for religious values, national identity and public morals, accurate claims and clear distinction of ads from other content.\n\n### Saudi Arabia\n\n- The **General Commission for Audiovisual Media (GCAM)** licenses influencers who advertise, through the **Mawthouq** licence.\n- Brands are expected to work with licensed influencers for advertising, and ads must be clearly identified.\n- Rules also address content standards, including respect for religious and cultural values.\n\n### Pakistan\n\n- There is no single influencer-specific disclosure code comparable to the UK or US at the time of writing, but consumer protection laws, sector regulations and platform policies apply, and misleading advertising can be challenged.\n- Best practice: apply clear disclosure (\"#ad\", \"Paid partnership\") consistently, especially when campaigns also reach UK, US or Gulf audiences.\n\n### Platform tools\n\n- **Instagram/Facebook:** \"Paid partnership\" label.\n- **TikTok:** content disclosure setting (branded content toggle) plus Branded Content Policy.\n- **YouTube:** \"includes paid promotion\" checkbox and on-screen disclosure.\n- **Snapchat and X:** paid partnership tools and ad policies.\n\nUse platform tools **plus** clear wording.\n\n### Claims compliance\n\nDisclosure alone is not enough; the content must not mislead. Watch for:\n\n- Unsubstantiated performance or health claims.\n- Filters that exaggerate cosmetic product effects.\n- Financial promotions (investment, crypto, loans) – highly regulated in the UK (FCA rules on financial promotions) and elsewhere; many brands prohibit creators from these topics.\n- Age-restricted products (alcohol, gambling where legal, vaping) – audience age restrictions and strict content rules.\n- Children: advertising to or featuring children carries additional rules.\n\n### A brand compliance process\n\n1. Include disclosure and claims requirements in briefs and contracts.\n2. Verify licences where required (UAE, KSA).\n3. Review drafts for disclosure, claims and brand safety before posting.\n4. Check live posts within hours of publishing and keep screenshots.\n5. Fix issues immediately (edit captions, add labels, repost if necessary).\n6. Keep records for audits or regulator enquiries.\n\n### Common mistakes\n\n- Disclosure only at the end of a long caption or in hashtags.\n- Assuming gifted content needs no disclosure.\n- Contracting unlicensed advertisers in markets that require licences.\n- Approving claims the brand cannot substantiate.",
+          "video": null,
+          "keyTakeaways": [
+            "Everywhere, audiences must recognise paid or rewarded content as advertising immediately and clearly.",
+            "FTC: disclose material connections clearly in the content; UK: label ads upfront under ASA/CAP and disclose gifts under consumer law.",
+            "UAE Media Council and Saudi GCAM (Mawthouq) require licensing or permits for social media advertisers; check current rules.",
+            "Combine platform tools with clear wording, control claims and run a review-and-monitor process."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Under UK ASA/CAP guidance, when is creator content an 'ad' that must be labelled upfront?",
+              "options": [
+                "When the creator has been paid or rewarded and the brand has some control over the content",
+                "Only when the post is longer than 60 seconds",
+                "Only on YouTube",
+                "Never, if the creator likes the product"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Payment plus control makes it an ad under the CAP Code."
+            },
+            {
+              "question": "Which disclosure is clear enough for US audiences on a sponsored TikTok?",
+              "options": [
+                "#sp at the end of 20 hashtags",
+                "A heart emoji",
+                "A spoken and on-screen 'ad' or 'sponsored' mention plus the platform's disclosure setting",
+                "Tagging the brand only"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "The FTC expects clear, conspicuous disclosure within the content itself."
+            },
+            {
+              "question": "Before contracting a creator to advertise in Saudi Arabia, what should the brand check?",
+              "options": [
+                "Whether they hold the required GCAM advertising licence",
+                "Their horoscope",
+                "Their phone model",
+                "Nothing"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Saudi Arabia requires advertising influencers to be licensed through GCAM."
+            }
+          ],
+          "activity": "Audit five recent sponsored posts in your niche against FTC or ASA/CAP guidance and the relevant Gulf rules. Note which are compliant, which are not and how you would fix them."
+        },
+        {
+          "slug": "crisis-handling",
+          "title": "Crisis handling for creator campaigns",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Crises are a question of when, not if\n\nWorking with people means working with unpredictability. A creator may say something offensive, be linked to a scandal, post without disclosure, misstate a claim or face a backlash for the partnership itself. The brand might face criticism for choosing a creator, for product issues highlighted by creators, or for cultural insensitivity. Preparation turns a potential disaster into a manageable incident.\n\n### Types of crisis\n\n1. **Creator conduct:** offensive statements, discriminatory content, legal issues, controversial associations (past or present).\n2. **Content error:** wrong claim, missing disclosure, unsafe behaviour, offensive visuals, cultural insensitivity.\n3. **Audience backlash against the partnership:** followers accuse the creator of \"selling out\", or the brand's audience objects to the creator.\n4. **Product or service problem:** creators or their audiences report defects, delivery failures or bad experiences.\n5. **Fraud:** fake engagement discovered after the campaign, fabricated metrics.\n6. **Regulatory:** a regulator or self-regulatory body contacts the brand or creator.\n\n### Before a crisis: preparation\n\n- **Vetting:** thorough content-history and brand-safety checks (covered earlier).\n- **Contract clauses:** conduct/morality clauses, rights to pause or remove content and ads, cooperation obligations, confidentiality.\n- **Approval process:** review drafts for claims, disclosure and cultural sensitivity.\n- **Monitoring:** social listening and comment monitoring on campaign posts and ads, especially in the first 24–48 hours.\n- **Crisis playbook:** roles (who decides, who speaks, who handles legal), escalation thresholds, holding statements and contact lists.\n- **Cultural review:** for multi-market campaigns (for example UK and KSA), have people with local cultural knowledge review content.\n\n### During a crisis: the first hours\n\n**1. Pause and contain**\n- Pause paid amplification of affected content immediately.\n- Pause scheduled posts in the campaign if relevant.\n- Do not delete content hastily without assessing – deletion can appear to be a cover-up and may be needed as evidence. Hide or pause where possible while assessing.\n\n**2. Assess facts**\n- What exactly happened? Is it verified?\n- How widely is it spreading? Which markets and audiences?\n- Is there legal, safety or regulatory exposure?\n- Does it conflict with the brand's values?\n\n**3. Decide and communicate**\n- Speak with the creator (and their manager) privately before making public statements where possible.\n- Choose a response proportionate to the issue: correct and continue, pause the partnership, or end it.\n- Use holding statements if facts are unclear: \"We're aware of the concerns raised and are looking into this urgently.\"\n- Be honest, take responsibility for the brand's part and avoid blaming the creator publicly for a brand decision.\n\n**4. Fix**\n- Correct errors (add disclosures, correct claims, edit captions).\n- Offer remedies to affected customers where there is a product issue.\n- If ending a partnership, follow the contract and communicate respectfully.\n\n### After a crisis: learn\n\n- Hold a short review: what happened, what worked, what did not.\n- Update vetting criteria, briefs, approvals and the playbook.\n- Monitor sentiment recovery.\n\n### Worked example\n\nDuring a Ramadan campaign in the UAE, a micro-creator's Reel shows a scene some viewers consider culturally inappropriate. Comments turn negative within an hour. The brand pauses the partnership ad, contacts the creator, who agrees the scene was a misjudgement and removes the Reel after the brand has saved a copy for records. The creator posts a short, sincere apology; the brand replies to comments with a statement acknowledging the concern and explaining the content has been removed. Paid spend shifts to other creators. The team adds a cultural review step for seasonal campaigns.\n\n### Holding statement template\n\n> \"We've seen the concerns raised about [issue]. We take this seriously and have paused [the content/partnership] while we look into it. We'll share an update by [time].\"\n\n### Common mistakes\n\n- Silence while criticism grows.\n- Defensive or dismissive responses.\n- Publicly blaming the creator for decisions the brand approved.\n- No contract right to pause content or ads.",
+          "video": null,
+          "keyTakeaways": [
+            "Crises range from creator conduct and content errors to backlash, product issues, fraud and regulatory contact.",
+            "Prepare with vetting, conduct clauses, approvals, monitoring, cultural review and a written playbook.",
+            "In the first hours: pause amplification, assess facts, talk to the creator, respond proportionately and fix errors.",
+            "Use honest holding statements, avoid public blame and update processes after every incident."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What should be the first action when a creator's sponsored post sparks serious backlash?",
+              "options": [
+                "Increase ad spend to drown it out",
+                "Ignore it for a week",
+                "Delete all brand accounts",
+                "Pause paid amplification and assess the facts"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Containment and assessment come first."
+            },
+            {
+              "question": "Why might immediately deleting content be a mistake?",
+              "options": [
+                "Deletion is illegal",
+                "It can look like a cover-up and remove evidence before the facts are assessed",
+                "It increases reach",
+                "It breaks DKIM"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Hide or pause while assessing and keep records."
+            },
+            {
+              "question": "Which contract clause is most useful in a creator crisis?",
+              "options": [
+                "A clause banning comments",
+                "A clause about the creator's favourite food",
+                "A conduct/morality clause with rights to pause or remove content and ads",
+                "A clause fixing the posting font"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "It gives the brand clear rights to act quickly and fairly."
+            }
+          ],
+          "activity": "Write a one-page crisis playbook for a creator campaign: roles, escalation thresholds, first-hour actions, a holding statement and post-crisis review steps."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 20,
+    "timeLimitMinutes": 30,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "imk-001",
+        "module": "strategy-and-planning",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What should an influencer strategy define before selecting creators?",
+        "options": [
+          "The business goal, the creators' primary job and the KPIs",
+          "The creators' favourite platforms",
+          "The brand's logo colours",
+          "The number of followers wanted"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Objectives and KPIs guide every later decision."
+      },
+      {
+        "id": "imk-002",
+        "module": "strategy-and-planning",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which campaign model involves sending products without an obligation to post?",
+        "options": [
+          "Content-for-ads partnership",
+          "Affiliate programme",
+          "Ambassador programme",
+          "Seeding or gifting"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Seeding sends product with no guaranteed coverage."
+      },
+      {
+        "id": "imk-003",
+        "module": "strategy-and-planning",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A brand launching in the UK wants awareness among young professionals and also needs ad creative. Which mix fits best?",
+        "options": [
+          "One mega celebrity only",
+          "Only nano creators with no budget for ads",
+          "A few mid-tier creators for reach plus several micro-creators producing testable content, with paid amplification",
+          "Only affiliate creators on commission"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "A blended mix delivers reach and a volume of content for ads."
+      },
+      {
+        "id": "imk-004",
+        "module": "strategy-and-planning",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Select the TWO costs that are often forgotten in influencer budgets.",
+        "options": [
+          "Paid amplification of the best content",
+          "Contingency for delays or replacements",
+          "Creator fees",
+          "The campaign objective"
+        ],
+        "correct": [
+          0,
+          1
+        ],
+        "explanation": "Amplification and contingency are common omissions; fees are rarely forgotten and the objective is not a cost."
+      },
+      {
+        "id": "imk-005",
+        "module": "strategy-and-planning",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A B2B cybersecurity firm is choosing between a 2-million-follower entertainment creator and a 25,000-follower security expert on LinkedIn. Which is the better starting point and why?",
+        "options": [
+          "The entertainment creator, because reach always wins",
+          "The security expert, because audience relevance and credibility matter more for B2B",
+          "Neither; B2B cannot use creators",
+          "Both equally, regardless of goal"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "For B2B, a relevant expert audience usually beats broad reach."
+      },
+      {
+        "id": "imk-006",
+        "module": "strategy-and-planning",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An ambassador programme is judged after one post per creator and deemed a failure. What is the flaw?",
+        "options": [
+          "Ambassador programmes should be judged after one post",
+          "Ambassadors should never post",
+          "The model relies on repeated exposure and learning over time, so one post is too early to judge",
+          "It should have been measured on EMV"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Always-on programmes build credibility through repetition; early judgment misreads the model."
+      },
+      {
+        "id": "imk-007",
+        "module": "selection-and-briefing",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is the best source of reliable audience demographics for a creator?",
+        "options": [
+          "Native analytics screenshots or exports",
+          "Their bio",
+          "A fan's comment",
+          "Their follower count"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Native analytics show actual audience data."
+      },
+      {
+        "id": "imk-008",
+        "module": "selection-and-briefing",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the purpose of a creative freedom zone in a brief?",
+        "options": [
+          "To remove all mandatories",
+          "To avoid disclosure",
+          "To state where creators may use their own style, format and storytelling",
+          "To shorten the timeline"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Freedom zones protect authenticity while mandatories protect the brand."
+      },
+      {
+        "id": "imk-009",
+        "module": "selection-and-briefing",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A creator has 400,000 followers but posts average 3,000 views with generic emoji comments from unrelated accounts. What is the most likely conclusion?",
+        "options": [
+          "An exceptionally loyal audience",
+          "A perfect fit for any campaign",
+          "Possible inauthentic followers or engagement; investigate further or exclude",
+          "They are too famous"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Low views relative to followers and generic comments suggest inauthentic audiences."
+      },
+      {
+        "id": "imk-010",
+        "module": "selection-and-briefing",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Select ALL items that should appear in a creator brief.",
+        "options": [
+          "Approved claims and wording",
+          "Disclosure requirements",
+          "Usage rights",
+          "Deliverables and timeline",
+          "The brand's internal salary data"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "explanation": "Claims, disclosure, usage and deliverables are essential; internal salary data is irrelevant and confidential."
+      },
+      {
+        "id": "imk-011",
+        "module": "selection-and-briefing",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Five stakeholders send conflicting feedback to a creator via WhatsApp, email and comments on the draft. What is the best fix?",
+        "options": [
+          "Let the creator decide which to follow",
+          "Ask the creator to reshoot five versions",
+          "Consolidate feedback into one document separating must-fix items from suggestions, within agreed revision rounds",
+          "Cancel the campaign"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Consolidated, prioritised feedback respects the creator and protects quality."
+      },
+      {
+        "id": "imk-012",
+        "module": "selection-and-briefing",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "When vetting, you find a creator promoted an unsafe product two years ago but has since publicly changed stance. What is the most professional approach?",
+        "options": [
+          "Automatically reject them",
+          "Ask them to delete all old posts secretly",
+          "Ignore it entirely",
+          "Discuss it with the creator, assess the current risk against brand values and document the decision"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Case-by-case assessment with documentation balances fairness and brand safety."
+      },
+      {
+        "id": "imk-013",
+        "module": "selection-and-briefing",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why use a written vetting scorecard?",
+        "options": [
+          "To replace contracts",
+          "Because platforms require it",
+          "To avoid paying creators",
+          "To make decisions consistent, evidence-based and documented"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Scorecards reduce bias and make selection defensible."
+      },
+      {
+        "id": "imk-014",
+        "module": "contracts-and-pricing",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which pricing model pays creators a percentage of sales through their link or code?",
+        "options": [
+          "Flat fee",
+          "Gifting",
+          "CPM",
+          "Affiliate commission"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Affiliate commission ties pay to tracked sales."
+      },
+      {
+        "id": "imk-015",
+        "module": "contracts-and-pricing",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What do usage rights define?",
+        "options": [
+          "How the brand may reuse creator content: channels, duration, territory and modifications",
+          "How many followers the creator has",
+          "The creator's posting time",
+          "The creator's camera settings"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Usage rights license the content for specific uses."
+      },
+      {
+        "id": "imk-016",
+        "module": "contracts-and-pricing",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A creator expects 120,000 views and you agree a CPM of $12. What is the fee?",
+        "options": [
+          "$144",
+          "$1,000",
+          "$1,440",
+          "$14,400"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Fee = (120,000 ÷ 1,000) × $12 = $1,440."
+      },
+      {
+        "id": "imk-017",
+        "module": "contracts-and-pricing",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Select the TWO factors that typically justify a higher creator fee.",
+        "options": [
+          "Paid ad usage for 12 months across several countries",
+          "Broad category exclusivity for six months",
+          "The brand wanting fewer revisions",
+          "Organic-only usage for 30 days"
+        ],
+        "correct": [
+          0,
+          1
+        ],
+        "explanation": "Extensive paid usage and broad exclusivity add value and restrict the creator, so they cost more."
+      },
+      {
+        "id": "imk-018",
+        "module": "contracts-and-pricing",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A brand requests perpetual, worldwide, all-media rights for a standard single-post fee. What is the best response from a fair-dealing perspective?",
+        "options": [
+          "Accept; it is standard",
+          "Negotiate a narrower licence (defined channels, duration and territory) or a significantly higher fee",
+          "Refuse all usage",
+          "Sign without reading"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Perpetual all-media rights are highly valuable and should be priced accordingly or narrowed."
+      },
+      {
+        "id": "imk-019",
+        "module": "contracts-and-pricing",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A creator charges PKR 300,000. Gross profit per order is PKR 1,500 and their past campaigns drove about 80 tracked orders. What is the best option?",
+        "options": [
+          "Pay the flat fee as it will clearly break even",
+          "Recognise the break-even is 200 orders and consider a hybrid fee or justify the gap with awareness or ad-content value",
+          "Offer commission only and nothing else",
+          "Ignore the numbers"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Break-even orders = 300,000 ÷ 1,500 = 200, well above past performance; restructure or justify with other value."
+      },
+      {
+        "id": "imk-020",
+        "module": "contracts-and-pricing",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What is a kill fee designed to do?",
+        "options": [
+          "Penalise creators for late posts",
+          "Compensate creators if the brand cancels after work has started",
+          "Pay for deleted posts",
+          "Cover platform fees"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Kill fees fairly compensate work already done."
+      },
+      {
+        "id": "imk-021",
+        "module": "measurement-and-roi",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which tool helps attribute website traffic to a specific creator's post?",
+        "options": [
+          "A unique UTM-tagged link",
+          "A generic homepage link",
+          "A screenshot of followers",
+          "A hashtag"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Unique UTMs identify the creator and post in analytics."
+      },
+      {
+        "id": "imk-022",
+        "module": "measurement-and-roi",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Why should ROI use gross profit rather than revenue?",
+        "options": [
+          "Gross profit reflects the real business return after product costs",
+          "Revenue is not tracked",
+          "Gross profit is always higher",
+          "Regulators require it"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Revenue overstates returns by ignoring the cost of goods."
+      },
+      {
+        "id": "imk-023",
+        "module": "measurement-and-roi",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A campaign's code sales are modest, but branded search and direct sales rose sharply during the campaign compared with a seasonally adjusted baseline. What does this suggest?",
+        "options": [
+          "The campaign had no impact",
+          "The campaign likely influenced buyers who did not use codes; report this as additional evidence with its method",
+          "Codes were broken",
+          "The brand should stop measuring"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Codes under-attribute; baseline comparisons reveal wider influence."
+      },
+      {
+        "id": "imk-024",
+        "module": "measurement-and-roi",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Select the TWO statements about EMV that are accurate.",
+        "options": [
+          "It is an estimated media-equivalent value, not revenue",
+          "Calculation methods vary widely between tools",
+          "It is the same as ROI",
+          "It is regulated and standardised worldwide"
+        ],
+        "correct": [
+          0,
+          1
+        ],
+        "explanation": "EMV is a non-standard estimate and must not be presented as ROI."
+      },
+      {
+        "id": "imk-025",
+        "module": "measurement-and-roi",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Total cost is £30,000 including fees, product, amplification and management. Tracked revenue is £90,000 with a 50% gross margin. What are ROI and ROAS?",
+        "options": [
+          "ROI 300%, ROAS 2.0",
+          "ROI 200%, ROAS 3.0",
+          "ROI 50%, ROAS 1.5",
+          "ROI 50%, ROAS 3.0"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Gross profit £45,000; ROI = (45,000 − 30,000) ÷ 30,000 = 50%. ROAS = 90,000 ÷ 30,000 = 3.0."
+      },
+      {
+        "id": "imk-026",
+        "module": "measurement-and-roi",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Creator X had a high cost per order, but X's video became the lowest-CPA ad in the brand's paid campaigns. How should X be evaluated?",
+        "options": [
+          "On code sales only",
+          "Against the content-for-ads value as well as direct sales, based on the job X was hired for",
+          "On follower growth",
+          "On EMV only"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Content value in paid media can outweigh direct code sales."
+      },
+      {
+        "id": "imk-027",
+        "module": "compliance-and-crisis",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which label is clear enough for a paid post under UK ASA/CAP guidance?",
+        "options": [
+          "#sp",
+          "#collab",
+          "Tagging the brand only",
+          "'Ad' placed upfront"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "A clear, upfront 'Ad' label is expected; the others are unclear."
+      },
+      {
+        "id": "imk-028",
+        "module": "compliance-and-crisis",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which Saudi body licenses influencers who advertise?",
+        "options": [
+          "Ofcom",
+          "FTC",
+          "ASA",
+          "GCAM"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "The General Commission for Audiovisual Media issues the Mawthouq licence."
+      },
+      {
+        "id": "imk-029",
+        "module": "compliance-and-crisis",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A US creator receives a free product and posts a review without mentioning it was free. Is disclosure required?",
+        "options": [
+          "No, because no money changed hands",
+          "Only if the review is negative",
+          "Yes, a free product is a material connection that must be disclosed",
+          "Only on YouTube"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "The FTC treats free products as material connections."
+      },
+      {
+        "id": "imk-030",
+        "module": "compliance-and-crisis",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Select ALL appropriate first-hour actions when a creator campaign triggers a serious backlash.",
+        "options": [
+          "Pause paid amplification of the affected content",
+          "Assess and verify the facts",
+          "Contact the creator privately",
+          "Publicly blame the creator immediately"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Contain, assess and talk to the creator; public blame escalates the crisis and is unfair if the brand approved the content."
+      },
+      {
+        "id": "imk-031",
+        "module": "compliance-and-crisis",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A UAE campaign involves a creator who does not hold the permit required by the UAE Media Council for social media advertisers. What should the brand do?",
+        "options": [
+          "Proceed; permits are optional",
+          "Move the campaign to private Stories",
+          "Ask the creator to post without disclosure",
+          "Confirm current requirements and only contract advertisers who meet them, or adjust the arrangement"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Brands should verify licensing requirements and work with compliant advertisers."
+      },
+      {
+        "id": "imk-032",
+        "module": "compliance-and-crisis",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Which holding statement is most appropriate while facts are unclear?",
+        "options": [
+          "'We're aware of the concerns raised, have paused the content and are looking into it urgently. We'll update by 6 pm.'",
+          "'This is fake news.'",
+          "'No comment.' followed by deleting all posts",
+          "'The creator is entirely to blame.'"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Honest, specific and time-bound statements maintain trust while facts are gathered."
+      },
+      {
+        "id": "imk-033",
+        "module": "compliance-and-crisis",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why should a brand monitor sponsored posts within hours of them going live?",
+        "options": [
+          "To count likes for fun",
+          "Because platforms delete unmonitored posts",
+          "To catch missing disclosures, incorrect claims or backlash early and fix them quickly",
+          "To change the creator's caption without consent"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Early monitoring allows fast correction and limits risk."
+      }
+    ]
+  }
+}
