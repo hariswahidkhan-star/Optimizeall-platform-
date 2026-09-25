@@ -1,0 +1,1834 @@
+{
+  "slug": "project-finance-and-financial-modelling",
+  "version": 1,
+  "title": "Project Finance & Financial Modelling",
+  "subtitle": "From NPV and capital structure to cash-flow waterfalls, DSCR/LLCR/PLCR, PPPs, financial close and AI-enabled analysis",
+  "category": "business",
+  "level": "intermediate",
+  "estimatedMinutes": 303,
+  "description": "A practical course on how large projects are appraised, structured, financed and monitored. You will compare project and corporate finance, set up SPVs and capital structures, evaluate investments with NPV, IRR and payback, budget capex and opex, and allocate risk through contracts and procurement. You will learn financial modelling best practice, build CFADS, run cash-flow waterfalls, size and sculpt debt, and calculate DSCR, LLCR and PLCR with worked examples. The course also covers bankability, PPP and concession structures, due diligence and financial close, reporting after close, and how to use AI for analysis with proper governance.\n\nPreparing for PCI AI's PFL-AI (Project Finance Leader) credential? This course builds the foundations; see pciai.org for official exam details. Certuvo (certuvo.com) offers exam preparation for PCL-AI, PFL-AI and PML-AI. This course is independent and is not official PCI AI content.",
+  "outcomes": [
+    "Explain project vs corporate finance, SPVs and limited recourse, and when each fits",
+    "Calculate NPV, IRR, payback and WACC, and budget capex, opex and sources and uses",
+    "Allocate risks through EPC, O&M, offtake and procurement to make a project bankable",
+    "Structure a transparent financial model with timing flags, CFADS, scenarios and checks",
+    "Run a cash-flow waterfall, size and sculpt debt, and calculate DSCR, LLCR and PLCR",
+    "Describe PPP and concession models, due diligence, conditions precedent and financial close",
+    "Use AI for modelling and diligence with risk-tiered review, validation and audit trails"
+  ],
+  "skills": [
+    "Project finance",
+    "Financial modelling",
+    "Investment appraisal (NPV/IRR)",
+    "Debt sizing and coverage ratios",
+    "Risk allocation",
+    "PPP structures",
+    "AI governance"
+  ],
+  "prerequisites": [],
+  "badge": {
+    "name": "Project Finance & Financial Modelling",
+    "description": "The holder has demonstrated applied knowledge of project finance: SPVs and capital structure, investment appraisal, risk allocation and bankability, model structure and CFADS, cash-flow waterfalls, debt sizing and sculpting, DSCR, LLCR and PLCR, PPP and concession structures, financial close and the governed use of AI in financial analysis.",
+    "criteria": "Completed all lessons and scored ≥ 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "finance-foundations",
+      "title": "Project finance foundations",
+      "summary": "How project finance differs from corporate finance, how capex, opex and cash flow are budgeted, and how to evaluate investments with NPV, IRR and payback.",
+      "lessons": [
+        {
+          "slug": "project-vs-corporate-finance",
+          "title": "Project finance vs corporate finance",
+          "type": "article",
+          "durationMinutes": 14,
+          "body": "### Two ways to pay for a big asset\n\nImagine a company wants to build a 200 MW solar plant. It can pay in two broad ways.\n\n**Corporate finance (on-balance-sheet):** the company borrows or uses its own funds, and lenders look to the **whole company's** balance sheet and cash flows for repayment. If the solar plant fails, lenders can still claim against the company's other businesses.\n\n**Project finance (off-balance-sheet or limited recourse):** a new, legally separate company, the **special purpose vehicle (SPV)**, is created to own the project. Lenders are repaid **only from the project's own cash flows**, and their security is the project's assets, contracts and shares. The sponsors' exposure is largely limited to the equity they invest (plus any specific support they agree to provide).\n\n| Feature | Corporate finance | Project finance |\n|---|---|---|\n| Borrower | Existing company | Newly formed SPV |\n| Repayment source | All company cash flows | Project cash flows only |\n| Recourse to sponsors | Full | None or limited |\n| Typical leverage | Lower, set by company credit | Often high, set by project cash flow strength |\n| Due diligence | Company-level | Very detailed project-level (technical, legal, market, insurance, model) |\n| Documentation | Relatively simple | Complex contract web |\n| Transaction cost and time | Lower, faster | Higher, slower |\n\n### Why use project finance?\n\n- **Risk ring-fencing:** a failure does not sink the sponsor.\n- **Higher leverage:** strong contracted cash flows can support more debt, improving equity returns.\n- **Risk sharing:** risks are allocated by contract to the parties best able to manage them.\n- **Enabling large projects:** sponsors can undertake projects larger than their balance sheets would allow.\n- **Discipline:** lenders' scrutiny often improves project structuring.\n\nProject finance is widely used for power generation (including renewables), transmission, water and desalination, toll roads, airports, social infrastructure under PPPs, telecoms infrastructure, and resources. In the Gulf, independent power and water projects (IPPs/IWPs) have long relied on it; Pakistan has used it for IPPs and infrastructure; the UK pioneered PFI and later PPP models; the US uses it widely for energy projects and increasingly for infrastructure.\n\n### The SPV and the contract web\n\nThe SPV sits at the centre of a network of contracts:\n\n```\n                  Sponsors (equity) ──── Shareholders' agreement\n                           │\nLenders ── Loan agreement ─┤\n(security, accounts)       │\n                     ┌─── SPV ───┐\n   Offtaker/grantor ─┤           ├─ EPC contractor (build)\n (PPA / concession)  │           ├─ O&M operator (run)\n   Fuel/input supplier            ├─ Insurers\n                                  └─ Government permits/licences\n```\n\nEach contract allocates specific risks. For example, the EPC contract typically transfers construction cost and time risk to the contractor through a fixed price, a completion date and liquidated damages. The offtake agreement (e.g., a power purchase agreement) provides revenue certainty.\n\n### Limited vs non-recourse\n\nPure non-recourse finance is rare. Sponsors often provide limited support such as completion guarantees during construction, equity commitment letters, or cost-overrun facilities. Once the project reaches stable operations, recourse typically falls away. Understanding exactly what support is given, and when it ends, is critical for sponsors.\n\n### Worked example: choosing the route\n\n*Illustrative.* Falcon Utilities, a fictional mid-sized UAE company, has equity of $300M and wants to develop a $450M desalination plant with a 25-year water purchase agreement from a creditworthy state utility.\n\n- **Corporate route:** borrowing $350M on its balance sheet would stretch its credit metrics and risk a downgrade, and a problem at the plant would affect the whole company.\n- **Project finance route:** an SPV raises roughly 75–80% debt against the contracted cash flows (illustrative gearing), with Falcon and a partner contributing the equity. Falcon's exposure is limited to its share of equity plus a completion support package that ends at commercial operation.\n\nFalcon chooses project finance, accepting higher transaction costs and a longer timeline in exchange for risk ring-fencing and scalable leverage.\n\n### When project finance is a poor fit\n\n- Small projects where transaction costs outweigh benefits.\n- Projects without predictable, contractable revenues (unless sponsors accept merchant risk and lenders price it).\n- Situations requiring speed and flexibility that complex documentation would slow down.\n- Weak legal frameworks where contracts and security are hard to enforce.\n\n### Common mistakes\n\n- Assuming \"non-recourse\" means sponsors carry no risk at all.\n- Underestimating the time and cost of due diligence and documentation.\n- Treating the SPV as a formality rather than the legal and financial core of the deal.\n- Ignoring how contracts interact; a gap between the EPC and offtake terms can leave the SPV exposed.",
+          "video": null,
+          "keyTakeaways": [
+            "Project finance lends to an SPV and relies on project cash flows, with limited or no recourse to sponsors.",
+            "Benefits include risk ring-fencing, higher leverage and contractual risk sharing; costs include complexity and time.",
+            "The SPV sits at the centre of a contract web (loan, EPC, O&M, offtake, supply, insurance, permits).",
+            "Pure non-recourse is rare; sponsors often provide limited support such as completion guarantees."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "In project finance, lenders primarily look to what for repayment?",
+              "options": [
+                "Government budget allocations",
+                "The sponsor's entire balance sheet",
+                "Equity investors' personal guarantees",
+                "The project's own cash flows and assets"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "The defining feature is repayment from the ring-fenced project, not the sponsor's wider business."
+            },
+            {
+              "question": "What is the main purpose of creating an SPV?",
+              "options": [
+                "To legally separate the project so its risks and cash flows are ring-fenced",
+                "To eliminate the need for contracts",
+                "To make the project a government entity",
+                "To avoid paying any tax"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "The SPV isolates the project's assets, liabilities and cash flows, enabling limited-recourse lending."
+            },
+            {
+              "question": "A sponsor provides a completion guarantee until commercial operation. What type of financing is this?",
+              "options": [
+                "Limited recourse",
+                "Pure non-recourse",
+                "Full corporate recourse",
+                "Grant funding"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Sponsor support for a defined period or risk means lenders have limited recourse beyond project cash flows."
+            }
+          ],
+          "activity": "Pick a real type of infrastructure in your country (e.g., a solar plant, toll road, hospital). List the contracts the SPV would need and the main risk each one allocates."
+        },
+        {
+          "slug": "capex-opex-and-budgets",
+          "title": "Capex, opex, budgeting and cash flow",
+          "type": "article",
+          "durationMinutes": 14,
+          "body": "### Capital vs operating expenditure\n\n**Capital expenditure (capex)** buys or builds long-lived assets: land, construction, equipment, major upgrades. It is usually capitalised on the balance sheet and depreciated over the asset's life. **Operating expenditure (opex)** covers the day-to-day costs of running the asset: staff, maintenance, insurance, utilities, consumables, management fees. It is expensed in the period incurred.\n\n| Item | Typically capex | Typically opex |\n|---|---|---|\n| Building a warehouse | ✓ | |\n| Annual routine maintenance | | ✓ |\n| Replacing a major component that extends asset life | ✓ (often) | |\n| Software licences (subscription) | | ✓ (often) |\n| Customised software development | ✓ (often, if criteria met) | |\n| Staff salaries for operations | | ✓ |\n\nExact classification depends on accounting standards (e.g., IFRS used widely in Pakistan, the UAE, KSA and the UK; US GAAP in the US) and company policy. Always check with finance. The classification matters because it changes reported profit, tax timing and how budgets are approved.\n\n### Whole-life cost\n\nA cheap asset with high running costs may cost more over its life. **Whole-life (life-cycle) cost** = capex + present value of opex + major maintenance + decommissioning − residual value. PPP and project finance models are built on this view because the SPV bears costs for decades.\n\n### Development, construction and operations budgets\n\nA project finance budget typically has three phases:\n\n1. **Development costs:** feasibility, permits, advisers (legal, technical, financial), land options, bid costs. At risk until financial close.\n2. **Construction costs (the \"uses\" of funds):** EPC price, owner's costs, contingency, development fees, financing costs during construction (interest during construction, arrangement and commitment fees), initial reserve account funding, working capital.\n3. **Operating costs:** fixed and variable opex, lifecycle/major maintenance, insurance, taxes.\n\n### Sources and uses\n\nEvery project finance model starts with a **sources and uses table**: the uses (all costs to reach operations) must equal the sources (debt + equity + any grants).\n\n```\nUSES (illustrative, $M)                SOURCES ($M)\nEPC contract                  310       Senior debt                 330\nOwner's costs                  18       Sponsor equity              110\nDevelopment costs & fees       12\nContingency                    25\nInterest during construction   38\nFinancing fees                  9\nInitial DSRA funding           20\nWorking capital                 8\nTOTAL                         440       TOTAL                       440\n```\n\nNotice that financing costs are themselves uses that must be funded, which creates a circular calculation (more debt means more interest, which needs more funding). Models handle this carefully, as covered later.\n\n### From budget to cash flow\n\nBudgets say *how much*; cash flow says *when*. Build a monthly or quarterly construction cash-flow forecast from the EPC payment schedule, owner's cost timing and financing fees. Then decide the **funding order**: equity first, pro rata with debt, or via an equity bridge loan. Lenders often require equity to be committed and injected first or pro rata, so their money is not at risk before sponsors' money.\n\n### Worked example: capex vs opex decision\n\n*Illustrative.* A fictional hospital operator in Lahore compares two chiller options for a new wing:\n\n| | Option A | Option B |\n|---|---|---|\n| Capex | $1.2M | $1.6M |\n| Annual energy + maintenance | $260k | $180k |\n| Life | 15 years | 15 years |\n\nAt an 8% discount rate, the annuity factor for 15 years is about 8.56. PV of opex: A ≈ 260k × 8.56 ≈ $2.23M; B ≈ 180k × 8.56 ≈ $1.54M. Whole-life cost: A ≈ $3.43M, B ≈ $3.14M. Option B costs more upfront but is cheaper over its life. If the capex budget is capped, the finance team might explore leasing or energy-performance contracting to access Option B.\n\n### Budget control essentials\n\n- Budget by WBS and phase, with explicit contingency.\n- Track commitments, not just spend.\n- Separate capex and opex codes from day one.\n- Re-forecast regularly; compare forecast uses to available sources.\n\n### Common mistakes\n\n- Forgetting financing costs, reserves and working capital in the uses.\n- Misclassifying costs, then being surprised by profit or tax effects.\n- Choosing the lowest capex option without whole-life analysis.\n- Assuming funds are available when needed without a drawdown plan.\n\n### Quick self-check\n\nTake the last budget you worked with and ask four questions. Are capex and opex coded separately from the first transaction? Does the uses side include financing costs, reserves and working capital, or only the headline construction price? Is there a cash-flow profile showing when each source is drawn? And has any major option been compared on whole-life cost rather than purchase price alone? A \"no\" to any of these is a common root cause of funding surprises later in the project.",
+          "video": null,
+          "keyTakeaways": [
+            "Capex builds long-lived assets; opex runs them. Classification follows accounting standards and policy.",
+            "Whole-life cost combines capex, the present value of opex, lifecycle costs and residual value.",
+            "Sources must equal uses, and uses include financing costs, reserves and working capital.",
+            "Budgets show how much; cash-flow forecasts show when, and drive funding order."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which item is most likely to be classified as opex?",
+              "options": [
+                "Constructing a new substation",
+                "Purchasing land for a plant",
+                "Routine annual maintenance",
+                "Installing a new production line"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Routine maintenance keeps an asset running and is expensed; the others create or enhance long-lived assets."
+            },
+            {
+              "question": "In a sources and uses table, which is a 'use' that is often forgotten?",
+              "options": [
+                "Senior debt",
+                "Interest during construction and initial reserve funding",
+                "Sponsor equity",
+                "Government grant"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Financing costs and reserve account funding must be paid for during construction, so they are uses of funds."
+            },
+            {
+              "question": "Option X has lower capex but higher running costs than Option Y over the same life. How should you compare them?",
+              "options": [
+                "Compare whole-life costs using present values",
+                "Choose the lower capex",
+                "Compare only maintenance costs",
+                "Choose the lower annual running cost"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Whole-life cost captures both upfront and ongoing costs on a comparable present-value basis."
+            }
+          ],
+          "activity": "Draft a sources and uses table for a small project you know (even a business expansion). Include financing costs, contingency and working capital."
+        },
+        {
+          "slug": "npv-irr-payback",
+          "title": "Investment appraisal: NPV, IRR and payback",
+          "type": "video",
+          "durationMinutes": 16,
+          "body": "### The time value of money\n\nA dollar, rupee or dirham today is worth more than the same amount in the future, because it can be invested and because the future is uncertain. **Discounting** converts future cash flows into today's value:\n\n```\nPresent value (PV) = Cash flow in year t / (1 + r)^t\nNPV = Σ [CF_t / (1 + r)^t]  for t = 0 ... n   (CF_0 is usually the negative investment)\n```\n\nThe discount rate *r* reflects the cost of capital and the risk of the cash flows.\n\n### Net present value (NPV)\n\nNPV is the sum of all discounted cash flows. **Decision rule:** accept projects with NPV > 0 (they create value above the required return); among mutually exclusive projects, prefer the higher NPV, all else being equal.\n\n### Worked example: Project A\n\n*Illustrative.* Investment 1,000 (in thousands of any currency) now; cash inflows of 300, 350, 400 and 300 in years 1–4; discount rate 10%.\n\n| Year | Cash flow | Discount factor (10%) | PV |\n|---|---|---|---|\n| 0 | −1,000 | 1.0000 | −1,000.0 |\n| 1 | 300 | 0.9091 | 272.7 |\n| 2 | 350 | 0.8264 | 289.3 |\n| 3 | 400 | 0.7513 | 300.5 |\n| 4 | 300 | 0.6830 | 204.9 |\n| **NPV** | | | **67.4** |\n\nNPV is positive, so the project earns more than 10%.\n\n### Internal rate of return (IRR)\n\nThe **IRR** is the discount rate at which NPV = 0. For Project A, trial and error (or a spreadsheet IRR function) gives an IRR of about **13.0%**. Since 13.0% exceeds the 10% required return, the project is acceptable, consistent with the positive NPV.\n\nUseful cautions:\n\n- IRR ignores scale: a small project can have a higher IRR but create less value than a large one.\n- Non-conventional cash flows (negative, positive, then negative again, e.g., decommissioning) can produce multiple IRRs.\n- IRR implicitly assumes interim cash flows are reinvested at the IRR, which may be unrealistic; **modified IRR (MIRR)** addresses this.\n- In project finance, you will see both **project IRR** (on total project cash flows, before financing) and **equity IRR** (on sponsors' cash flows after debt service). Leverage typically makes equity IRR higher than project IRR, at the cost of higher risk.\n\n### Payback period\n\n**Payback** is the time until cumulative cash flows turn positive. For Project A: cumulative −1,000, −700, −350, +50. Payback = 2 + 350/400 = **2.9 years**.\n\n**Discounted payback** uses discounted cash flows: cumulative −1,000, −727, −438, −138, +67. Discounted payback = 3 + 137.5/204.9 ≈ **3.7 years**.\n\nPayback is simple and useful as a liquidity and risk indicator, but it ignores cash flows after the payback point and (in its simple form) the time value of money. Use it alongside NPV, not instead of it.\n\n### Why NPV is the primary measure\n\n*Illustrative.* Project B costs 1,000 and returns 0, 0, 200, 600, 700 in years 1–5. Undiscounted, B returns 1,500 versus A's 1,350, which looks better. At 10%, B's NPV is about **−5**, while A's is +67. B's cash arrives too late to cover the cost of capital. NPV captures this; simple totals and payback do not.\n\n### Choosing the discount rate\n\n- For a company, a common starting point is the **weighted average cost of capital (WACC)**, adjusted for the specific project's risk.\n- For project finance equity, sponsors set a target equity return (hurdle rate) reflecting project and country risk.\n- Higher-risk markets or merchant (uncontracted) revenues justify higher rates.\n- Be consistent: nominal cash flows (including inflation) use nominal rates; real cash flows use real rates.\n\n### Appraisal template\n\n```\nProject: ______   Currency: ______   Nominal/real: ______\nDiscount rate: ____% (basis: ______)\nYear:        0    1    2    3 ...  n\nCapex\nRevenue\nOpex\nTax\nNet cash flow\nDiscount factor\nPV\nNPV: ____   IRR: ____   Payback: ____   Discounted payback: ____\nKey sensitivities: ______\n```\n\n### Common mistakes\n\n- Mixing nominal cash flows with real discount rates.\n- Using accounting profit instead of cash flow.\n- Ignoring terminal or residual values, or decommissioning costs.\n- Ranking projects by IRR alone.\n- Including sunk costs (money already spent that cannot be recovered).",
+          "video": {
+            "script": "Welcome. In this lesson we answer a question every investor, lender and board member asks: is this project worth doing? The starting point is the time value of money. Money today is worth more than money tomorrow, because it can earn a return and because the future is uncertain. So we discount future cash flows back to today. Net present value, or NPV, adds up all those discounted cash flows, including the initial investment as a negative number. If NPV is positive, the project earns more than your required return. It creates value. Take our example. We invest one thousand today and receive three hundred, three hundred and fifty, four hundred and three hundred over four years. Discounted at ten percent, those inflows are worth about one thousand and sixty-seven today. So the NPV is about sixty-seven. Positive. Good. Internal rate of return, or IRR, is the discount rate at which NPV becomes zero. Here it is about thirteen percent, comfortably above ten. IRR is intuitive, but be careful. It ignores the size of a project, and unusual cash flow patterns can produce more than one IRR. Payback tells you how quickly you get your money back. Here, a little under three years. It is a useful signal of liquidity risk, but it ignores everything after the payback point. Now the key lesson. Project B returns more cash in total, one thousand five hundred versus one thousand three hundred and fifty. But its cash arrives late. At ten percent, its NPV is slightly negative. Timing matters. So use NPV as your primary measure, IRR and payback as supporting views, keep inflation treatment consistent, and always use cash flows rather than accounting profit.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "NPV discounts all cash flows at the required return; accept if NPV > 0.",
+            "IRR is the rate where NPV = 0; beware scale, multiple IRRs and reinvestment assumptions.",
+            "Payback shows liquidity risk but ignores later cash flows; discounted payback adds time value.",
+            "Use consistent nominal/real treatment and cash flows, not accounting profit."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A project costs 500 today and returns 600 in one year. At a 10% discount rate, what is the NPV?",
+              "options": [
+                "About −45.5",
+                "100",
+                "About 54.5",
+                "About 45.5"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "PV of 600 = 600/1.10 = 545.5; NPV = 545.5 − 500 = 45.5."
+            },
+            {
+              "question": "Two mutually exclusive projects: X has IRR 25% and NPV 40; Y has IRR 15% and NPV 120 at the same discount rate. Which is generally preferred and why?",
+              "options": [
+                "Y, because it creates more value (higher NPV)",
+                "X, because it is smaller",
+                "Neither, because IRRs differ",
+                "X, because IRR is always the deciding metric"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "IRR ignores scale. When projects are mutually exclusive, the higher NPV adds more value."
+            },
+            {
+              "question": "Cash flows: −800, 300, 300, 300, 300. What is the simple payback period?",
+              "options": [
+                "2 years",
+                "4 years",
+                "About 2.7 years",
+                "3 years"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Cumulative: −800, −500, −200, +100. Payback = 2 + 200/300 ≈ 2.7 years."
+            },
+            {
+              "question": "Why is equity IRR usually higher than project IRR in a leveraged project?",
+              "options": [
+                "Project IRR excludes revenue",
+                "Debt is cheaper than the project return, so leverage magnifies equity returns (with higher risk)",
+                "Lenders subsidise equity",
+                "Equity investors pay no tax"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "When debt costs less than the project earns, leverage increases the return on the smaller equity base, while increasing equity risk."
+            }
+          ],
+          "activity": "Build the Project A table in a spreadsheet, confirm NPV and IRR, then test how NPV changes at 8% and 12% discount rates."
+        }
+      ]
+    },
+    {
+      "slug": "capital-structure-and-bankability",
+      "title": "Capital structure, risk allocation and bankability",
+      "summary": "Design debt and equity structures, allocate risks through contracts, and understand what makes a project bankable, including procurement and contract basics.",
+      "lessons": [
+        {
+          "slug": "capital-structure",
+          "title": "Capital structure, gearing and the cost of capital",
+          "type": "article",
+          "durationMinutes": 14,
+          "body": "### What capital structure means\n\n**Capital structure** is the mix of funding sources used to pay for the project: senior debt, subordinated (mezzanine) debt, shareholder loans and equity, and sometimes grants or export credit agency support. The structure determines who gets paid first, who bears losses first, and the overall cost of capital.\n\n### The capital stack\n\n```\nPriority of repayment (highest first)          Risk / required return\n┌──────────────────────────────────────┐\n│ Senior secured debt                  │       Lowest\n├──────────────────────────────────────┤\n│ Mezzanine / subordinated debt        │\n├──────────────────────────────────────┤\n│ Shareholder loans                    │\n├──────────────────────────────────────┤\n│ Ordinary equity                      │       Highest\n└──────────────────────────────────────┘\n```\n\nSenior lenders are repaid first from cash flows and have first claim on security. Equity is paid last (dividends only after debt service and reserves) and absorbs losses first, so it demands the highest return.\n\n### Gearing\n\n**Gearing (leverage)** is usually expressed as debt ÷ (debt + equity), based on total project cost. Illustrative ranges: contracted infrastructure with strong offtakers can support high gearing (often in the 70–85% range), while projects with merchant or volume risk support less. Actual levels depend on market conditions, lender appetite, country risk and the strength of cash flows; lenders ultimately size debt from cash flow coverage (covered in module 4), and the gearing ratio acts as a cap.\n\n### Why leverage increases equity returns\n\n*Illustrative.* A project costs 100 and produces a steady project return of 9% a year. Debt costs 6% (after considering tax effects for simplicity, ignore tax here).\n\n| Structure | Debt | Equity | Annual cash after interest | Equity return |\n|---|---|---|---|---|\n| All equity | 0 | 100 | 9.0 | 9.0% |\n| 50% gearing | 50 | 50 | 9.0 − 3.0 = 6.0 | 12.0% |\n| 80% gearing | 80 | 20 | 9.0 − 4.8 = 4.2 | 21.0% |\n\nLeverage magnifies returns because debt costs less than the project earns. But it also magnifies risk: if the project return falls to 5%, the 80% geared equity earns (5.0 − 4.8)/20 = 1%, and a further drop wipes it out. That is why lenders impose coverage ratios and reserves.\n\n### Weighted average cost of capital (WACC)\n\n```\nWACC = (D/V) × Kd × (1 − tax rate) + (E/V) × Ke\n```\n\nwhere D = debt, E = equity, V = D + E, Kd = cost of debt, Ke = cost of equity.\n\n*Illustrative.* 70% debt at 8% pre-tax, tax rate 20%, 30% equity at a required 15%: WACC = 0.7 × 8% × 0.8 + 0.3 × 15% = 4.48% + 4.5% ≈ **9.0%**.\n\nNote that interest tax deductibility depends on local tax law, which varies (some jurisdictions have limited or zero corporate tax for certain entities, and some restrict interest deductions). Islamic finance structures, common in the Gulf and Pakistan, replace interest with profit-sharing, lease (ijara) or cost-plus (murabaha) arrangements; the economic analysis of cost of funds is similar, though the legal structure differs.\n\n### Instruments at a glance\n\n| Instrument | Key features |\n|---|---|\n| Commercial bank loans | Flexible, floating or fixed rates, often hedged; common in construction |\n| Project bonds | Longer tenors, fixed rates; attractive for operating assets with stable cash flows |\n| Export credit agency (ECA) cover | Supports loans linked to equipment exports; can extend tenor |\n| Development finance institutions (DFIs) | Multilateral and bilateral lenders active in emerging markets, often with environmental and social standards |\n| Islamic finance (e.g., ijara, istisna'a, sukuk) | Sharia-compliant structures widely used in the Gulf and Pakistan |\n| Equity bridge loans | Short-term loans that defer equity injection, backed by sponsor guarantees |\n| Shareholder loans | Sponsor funding ranking behind senior debt, often tax-efficient |\n\n### Hedging\n\nFloating-rate debt exposes the SPV to interest rate rises; lenders typically require a large share to be hedged with interest rate swaps. Currency mismatches (e.g., revenue in local currency, debt in USD) are a major risk in some emerging markets and must be addressed via indexation in tariffs, local-currency debt or hedging.\n\n### Common mistakes\n\n- Maximising gearing without testing downside cases.\n- Ignoring currency mismatch between revenues and debt.\n- Treating shareholder loans as equivalent to equity without checking tax and legal ranking.\n- Using a corporate WACC for a project with very different risk.",
+          "video": null,
+          "keyTakeaways": [
+            "The capital stack ranks funding by repayment priority; equity is last and riskiest.",
+            "Gearing = debt ÷ (debt + equity); lenders cap it but size debt mainly on cash flow coverage.",
+            "Leverage magnifies equity returns when debt costs less than the project earns, and magnifies losses too.",
+            "WACC = (D/V)·Kd·(1−t) + (E/V)·Ke; adjust for project risk and local tax and financing structures."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A project costs 200, with 150 debt and 50 equity. What is the gearing?",
+              "options": [
+                "33%",
+                "75%",
+                "300%",
+                "25%"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Gearing = debt ÷ (debt + equity) = 150/200 = 75%."
+            },
+            {
+              "question": "60% debt at 7% pre-tax, tax 25%, 40% equity at 14%. What is WACC?",
+              "options": [
+                "About 7.0%",
+                "About 9.8%",
+                "About 10.5%",
+                "About 8.75%"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "0.6 × 7% × 0.75 = 3.15%; 0.4 × 14% = 5.6%; total ≈ 8.75%."
+            },
+            {
+              "question": "Why does higher gearing increase equity risk?",
+              "options": [
+                "Gearing reduces the project's total cost",
+                "Lenders share equity dividends",
+                "Fixed debt service must be paid before equity, so falls in cash flow hit equity harder",
+                "Debt holders absorb losses first"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Equity is residual. With more debt service ahead of it, smaller cash-flow shortfalls wipe out equity returns."
+            }
+          ],
+          "activity": "Recreate the leverage table for a project return of 7% and debt cost of 6%. At what gearing does the equity return exceed 12%?"
+        },
+        {
+          "slug": "risk-allocation-and-bankability",
+          "title": "Risk allocation and bankability",
+          "type": "article",
+          "durationMinutes": 15,
+          "body": "### What \"bankable\" means\n\nA project is **bankable** when lenders are willing to finance it on acceptable terms. Bankability is not a single test; it is the combined result of predictable cash flows, sensible risk allocation, creditworthy counterparties, robust contracts, enforceable security and a sound legal framework.\n\n### The core principle of risk allocation\n\n**Allocate each risk to the party best able to manage it, at the lowest cost.** Risks that nobody can manage (e.g., some natural catastrophes) are insured, shared, or retained with appropriate pricing.\n\n### The risk allocation matrix\n\n| Risk | Typically borne by | Mitigation mechanism |\n|---|---|---|\n| Construction cost overrun | EPC contractor | Fixed-price, date-certain EPC contract |\n| Construction delay | EPC contractor | Delay liquidated damages (LDs) sized to cover debt service and fixed costs |\n| Performance shortfall | EPC contractor / O&M operator | Performance LDs, guarantees, warranties |\n| Demand/volume | Offtaker or grantor (in contracted models) or SPV (merchant) | Take-or-pay PPA, availability payments, minimum revenue guarantees |\n| Price | Offtaker or market | Fixed or indexed tariffs |\n| Operating cost | O&M operator (partly) / SPV | Fixed-price O&M contract, indexation |\n| Input/fuel supply | Supplier / offtaker | Long-term supply agreements, pass-through clauses |\n| Interest rate | SPV | Hedging |\n| Currency | SPV / offtaker | Tariff indexation, local currency debt, hedging |\n| Change in law | Grantor/offtaker (often) | Compensation clauses |\n| Political risk | Shared | Political risk insurance, DFI participation, government support |\n| Force majeure | Shared | Insurance, relief and termination provisions |\n\n### Key contract features lenders examine\n\n- **EPC contract:** fixed price, fixed completion date, single-point responsibility, LDs, performance guarantees, security (performance bonds, parent guarantees), caps on liability that are not too low.\n- **Offtake contract:** creditworthy offtaker, tenor at least as long as the debt, clear tariff formula, termination payments sufficient to repay debt in most scenarios.\n- **O&M contract:** experienced operator, performance incentives and penalties, alignment with EPC warranties.\n- **Direct agreements:** lenders' rights to step in and cure defaults before key contracts are terminated.\n- **Security package:** mortgages/charges over assets, assignment of contracts and insurances, share pledges, control of project accounts.\n\n### Back-to-back and gaps\n\nThe SPV must not be left holding risks it cannot bear. Check **back-to-back** alignment: if the offtake contract penalises the SPV for late commercial operation, the EPC delay LDs should cover at least that penalty plus debt service and fixed costs during the delay. Gaps (interface risk) are among the most common bankability problems.\n\n### Worked example: a bankability review\n\n*Illustrative.* A fictional 100 MW wind project in Sindh is presented to lenders. The review finds:\n\n| Area | Finding | Lender concern | Fix |\n|---|---|---|---|\n| Offtake | 20-year PPA with state buyer; payment history includes delays | Payment risk | Payment security mechanism, sovereign support or DFI participation |\n| Currency | Tariff partly indexed to USD; debt partly USD | Residual mismatch | Increase indexation or add local-currency tranche |\n| EPC | Delay LDs capped at 10% of contract price | May be insufficient for long delays | Review cap vs expected delay costs; add sponsor completion support |\n| Wind resource | Single year of on-site data | Energy yield uncertainty | Longer data, independent yield assessment, size debt on conservative (e.g., P90) yield |\n| Grid | Connection timetable depends on utility | Interface risk | Deemed energy payments if grid not ready |\n\nAfter these changes, lenders agree to finance, but at a lower gearing than first proposed, reflecting residual risk.\n\n### Energy yield and P50/P90\n\nFor renewables, lenders usually size debt on a conservative production estimate (often a P90 or P99 one-year or ten-year case) while equity may use the P50 case. \"P90\" means production expected to be exceeded with 90% probability. The same logic applies to traffic forecasts in toll roads: lenders use downside cases.\n\n### Environmental and social standards\n\nMany lenders, especially DFIs and banks that have adopted the Equator Principles, require compliance with international environmental and social standards (for example IFC Performance Standards). Non-compliance can make a project unbankable regardless of its economics.\n\n### Common mistakes\n\n- Assuming a contract transfers risk when its liability caps make the transfer meaningless.\n- Offtake tenor shorter than debt tenor.\n- Ignoring interface risk between EPC, O&M and offtake.\n- Underestimating the importance of counterparty creditworthiness.\n- Leaving environmental and social assessments too late.",
+          "video": null,
+          "keyTakeaways": [
+            "Bankability = predictable cash flows + sensible risk allocation + strong counterparties + robust, enforceable contracts.",
+            "Allocate each risk to the party best able to manage it at the lowest cost.",
+            "Check back-to-back alignment between EPC, O&M and offtake to avoid gaps.",
+            "Lenders size on downside cases (e.g., P90 yield) and require environmental and social compliance."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which principle guides risk allocation in project finance?",
+              "options": [
+                "Allocate all risks to lenders",
+                "Allocate all risks to the SPV",
+                "Allocate risks equally between all parties",
+                "Allocate each risk to the party best able to manage it at the lowest cost"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Efficient allocation lowers total cost and increases bankability."
+            },
+            {
+              "question": "The offtake contract runs 15 years but the debt tenor is 18 years. What is the main concern?",
+              "options": [
+                "The EPC price is too low",
+                "The SPV has too much equity",
+                "Revenue certainty ends before the debt is repaid",
+                "The WACC is too high"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Lenders need contracted revenue for at least the life of the debt, often with a tail."
+            },
+            {
+              "question": "What does P90 energy yield mean?",
+              "options": [
+                "90% of the plant's rated capacity",
+                "Production expected to be exceeded with 90% probability",
+                "The yield in 90% of the year",
+                "The best-case production estimate"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "P90 is a conservative estimate; lenders commonly size debt on such downside cases."
+            }
+          ],
+          "activity": "For a project you know, build a risk allocation matrix with at least eight risks, the party bearing each, and the contractual mechanism used."
+        },
+        {
+          "slug": "contracts-and-procurement",
+          "title": "Contracts and procurement basics",
+          "type": "article",
+          "durationMinutes": 13,
+          "body": "### Why contract form matters to finance\n\nThe contract model determines who carries cost and schedule risk, how prices change and how disputes are handled. For financiers and cost managers, the contract is where budget certainty is either secured or lost.\n\n### Main contract pricing models\n\n| Model | How payment works | Cost risk mainly with | Best when |\n|---|---|---|---|\n| Lump sum / fixed price | Fixed price for defined scope | Contractor | Scope well defined; lenders want certainty |\n| EPC turnkey | Fixed price, date, single-point responsibility for engineering, procurement, construction | Contractor | Project finance of power, water, industrial plants |\n| Remeasurement / unit rates | Rates × measured quantities | Owner (quantity) / Contractor (rate) | Quantities uncertain (e.g., earthworks) |\n| Cost-plus / cost-reimbursable | Actual cost + fee | Owner | Scope unclear, speed critical; needs strong controls |\n| Target cost with pain/gain share | Target price; overruns/savings shared | Shared | Collaborative delivery; complex projects |\n| Design and build | Contractor designs and builds to owner requirements | Contractor (design + build) | Owner wants single responsibility |\n\n### Standard forms\n\nMany projects use standard contract suites rather than bespoke contracts. Widely used examples include **FIDIC** (common internationally, including in the Gulf and Pakistan), **NEC** (widely used in the UK and increasingly elsewhere) and, in the US, forms such as AIA and ConsensusDocs. Standard forms bring predictability, but lenders will scrutinise amendments, especially those that shift risk back to the owner.\n\n### Key commercial clauses to understand\n\n- **Scope and specification:** what is included; ambiguity here is the root of most variations.\n- **Price and payment:** milestones or monthly valuations, advance payments, retention, payment periods.\n- **Variations:** how changes are instructed and valued.\n- **Time:** completion dates, extensions of time, delay damages.\n- **Performance:** tests, guarantees, performance damages.\n- **Security:** performance bonds, advance payment guarantees, parent company guarantees.\n- **Liability caps and exclusions:** limits on what the contractor can owe.\n- **Price adjustment:** indexation or fluctuation clauses for inflation or commodity prices.\n- **Termination and dispute resolution:** adjudication, arbitration, governing law.\n\n### The procurement process step by step\n\n1. **Define requirements and strategy:** packaging (one EPC vs multiple contracts), contract model, evaluation criteria.\n2. **Market engagement:** gauge interest and capacity; public bodies must follow applicable procurement rules.\n3. **Prequalification:** assess financial strength, experience, safety record, capacity.\n4. **Tender (RFP/ITT):** issue clear documents with a pricing schedule that enables like-for-like comparison.\n5. **Evaluation:** technical and commercial scoring; normalise bids for exclusions and qualifications.\n6. **Negotiation and award:** clarify, finalise contract terms, obtain approvals.\n7. **Contract management:** administer payments, changes, claims, performance.\n\n### Bid evaluation template\n\n```\nCriterion (weight)           Bidder A   Bidder B   Bidder C\nPrice (40%) – normalised      36         40         31\nTechnical solution (25%)      21         17         22\nSchedule (15%)                12         13         14\nExperience & capacity (10%)    9          7          8\nCommercial terms/risk (10%)    6          8          7\nTOTAL                         84         85         82\nKey exclusions priced in:     +$1.2M     +$3.5M     +$0.4M\n```\n\nAlways **normalise** bids: a low price with large exclusions or qualifications can become the most expensive once gaps are priced. In the example, re-scoring after pricing exclusions could change the ranking.\n\n### Worked example\n\n*Illustrative.* A fictional Saudi logistics operator tendered a warehouse under a lump-sum design-and-build contract. The lowest bid was 9% below the next, but excluded ground improvement and fire-protection approvals. After pricing the exclusions, it was 3% above the second bidder. The operator awarded to the second bidder and avoided a likely early dispute.\n\n### Public procurement and integrity\n\nPublic projects must comply with procurement laws and anti-corruption rules (for example, the UK Bribery Act and US Foreign Corrupt Practices Act apply extraterritorially in many cases). Keep evaluation records, manage conflicts of interest and ensure transparency.\n\n### Common mistakes\n\n- Choosing contract models that do not match scope definition.\n- Evaluating on headline price without normalisation.\n- Accepting liability caps that make risk transfer illusory.\n- Poor contract administration after award, leading to disputed claims.\n\n### Quick self-check\n\nFor your next procurement, write down before tenders arrive: the contract model and why it fits the level of scope definition, the evaluation weights, and how exclusions and qualifications will be priced. Deciding these in advance protects the process against bias towards a favoured bidder and gives you a documented, defensible basis for award, which is essential for public bodies and increasingly expected by lenders and auditors.",
+          "video": null,
+          "keyTakeaways": [
+            "Contract model determines who carries cost and time risk; EPC turnkey is common in project finance.",
+            "Understand key clauses: scope, payment, variations, time, performance, security, liability caps, indexation.",
+            "Run procurement in stages and normalise bids for exclusions before comparing.",
+            "Standard forms (e.g., FIDIC, NEC) add predictability; scrutinise amendments."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which contract model places most cost risk on the owner?",
+              "options": [
+                "EPC turnkey",
+                "Design and build lump sum",
+                "Cost-plus / cost-reimbursable",
+                "Lump sum"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "The owner pays actual costs plus a fee, so overruns flow to the owner."
+            },
+            {
+              "question": "A bid is 9% cheaper than others but excludes several scope items. What should the evaluator do?",
+              "options": [
+                "Price the exclusions to normalise the bid before comparing",
+                "Reject all bids",
+                "Award immediately to the lowest price",
+                "Ignore the exclusions because they are the bidder's risk"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Normalisation reveals the true comparable price; exclusions become the owner's cost if not priced."
+            },
+            {
+              "question": "Why do project finance lenders usually prefer an EPC turnkey contract?",
+              "options": [
+                "It allows unlimited variations",
+                "It has the lowest possible price",
+                "It provides fixed price, fixed date and single-point responsibility",
+                "It removes the need for insurance"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Cost and time certainty with a single responsible contractor reduces construction risk for lenders."
+            }
+          ],
+          "activity": "Review a contract you have access to (or a public standard-form summary) and list the clauses covering payment, variations, delay damages and liability caps."
+        }
+      ]
+    },
+    {
+      "slug": "financial-modelling",
+      "title": "Financial modelling structure and best practice",
+      "summary": "Build transparent, flexible project finance models with clean structure, correct timing, sensible scenarios and robust checks.",
+      "lessons": [
+        {
+          "slug": "model-structure",
+          "title": "Model structure and best practice",
+          "type": "article",
+          "durationMinutes": 15,
+          "body": "### Why structure matters\n\nA project finance model may drive investment decisions worth hundreds of millions, be read by lenders, auditors and advisers, and evolve for years. A model that only its author understands is a liability. Good structure makes models **transparent, flexible, accurate and auditable**.\n\n### The standard flow\n\n```\nINPUTS  ──►  CALCULATIONS  ──►  OUTPUTS\n(assumptions,   (timing, construction,     (summary, ratios,\n scenarios)      revenue, opex, tax,        returns, charts,\n                 debt, waterfall)            checks)\n```\n\nKeep these separate:\n\n- **Inputs:** every hard-coded assumption in one place (or a small set of input sheets), clearly formatted, sourced and dated.\n- **Calculations:** formulas only; no hard-coded numbers.\n- **Outputs:** summaries that reference calculations; nothing calculated here that is not traceable.\n\n### Widely used modelling principles\n\nSeveral published standards and conventions exist (for example, the FAST Standard and other industry best-practice guides). Common principles include:\n\n| Principle | Practice |\n|---|---|\n| Consistency | Same timeline columns across all calculation sheets |\n| One formula per row | A row uses the same formula across the timeline |\n| No hard-codes in formulas | Numbers like 0.05 or 365 live in inputs, labelled |\n| Short, simple formulas | Break complex logic into steps |\n| Flow direction | Calculations flow top-to-bottom and left-to-right where possible |\n| Clear formatting | Distinguish inputs, calculations, links and checks by style |\n| Flags | Use 1/0 flags for periods (construction, operations, debt repayment) |\n| Units | Label every row with units (USD 000, MWh, %) |\n| Checks | Balance sheet balances, sources = uses, cash never negative unless intended |\n\n### Timing and flags\n\nProjects move through phases: development, construction, operations, decommissioning. Build a **timing sheet** with period start and end dates and flags:\n\n```\nPeriod end date        31-Mar  30-Jun  30-Sep  31-Dec ...\nConstruction flag         1       1       1       0\nOperations flag           0       0       0       1\nDebt repayment flag       0       0       0       0   (starts after grace period)\nDays in period           90      91      92      92\n```\n\nMultiply calculations by flags so that, for example, revenue only appears when the operations flag = 1. Changing the construction length input then shifts everything automatically.\n\n### Periodicity\n\nConstruction is often modelled monthly or quarterly; operations semi-annually (aligned with debt repayment dates) or quarterly. Mixed periodicity adds complexity; keep it only if it adds real value.\n\n### Circularity\n\nProject finance models contain natural circularities: interest during construction depends on debt drawn, which depends on total uses, which include interest. Other examples: fees based on debt size, DSRA funding based on future debt service. Approaches include copy-paste macros that iterate to convergence, algebraic solutions, or careful ordering of calculations. Avoid relying on the spreadsheet's iterative-calculation setting without controls, because errors can become hidden and self-reinforcing.\n\n### Checks\n\nA robust model has a **checks sheet** summarising all checks with a master check on the output page:\n\n- Balance sheet balances every period.\n- Sources equal uses at the end of construction.\n- Cash balance never negative.\n- Debt fully repaid by final maturity.\n- Ratios meet covenants in the base case.\n- Sum of periodic values equals annual totals.\n\n### Version control and documentation\n\n- Name versions consistently and log changes (what changed, why, by whom).\n- Keep a **model book** or databook listing every input with its source.\n- Commission an independent **model audit** before financial close; lenders usually require it.\n\n### Worked example: a structure review\n\n*Illustrative.* A fictional developer in Abu Dhabi inherited a model with 40 sheets, inputs scattered across calculation pages, and formulas like =B12*1.035^(C4-2026)*0.92. The modelling team restructured it: all inputs moved to two input sheets with sources; formulas broken into escalation, availability and revenue steps; a timing sheet with flags; and 18 automated checks. A lender's model audit that previously produced 60 findings produced 9 on the restructured version.\n\n### Common mistakes\n\n- Hard-coded numbers inside formulas.\n- Inconsistent timelines between sheets.\n- Hidden rows, sheets or links to external files.\n- No checks, or checks nobody looks at.\n- Unlabelled units and signs (is cost positive or negative?).\n\n### Quick self-check\n\nAsk a colleague who did not build your model to change one input, such as construction length, and tell you what happens to equity IRR. If they can do it in minutes, find the input easily and trust the checks, your structure works. If they need you to explain where things are, invest in restructuring before the model grows further; the cost of poor structure rises with every new sheet.",
+          "video": null,
+          "keyTakeaways": [
+            "Separate inputs, calculations and outputs; keep all assumptions sourced in inputs.",
+            "Use consistent timelines, one formula per row, flags for phases and labelled units.",
+            "Handle circularities deliberately and keep a checks sheet with a master check.",
+            "Document versions, keep a databook and obtain an independent model audit before close."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Where should a 3.5% escalation assumption be stored?",
+              "options": [
+                "In the output summary",
+                "In a hidden sheet",
+                "Typed directly into each formula",
+                "In a labelled input cell referenced by formulas"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Inputs belong in one visible, sourced location so they can be changed and audited."
+            },
+            {
+              "question": "What is the main purpose of timing flags?",
+              "options": [
+                "To hide circular references",
+                "To calculate IRR",
+                "To switch calculations on or off by project phase so timing changes flow automatically",
+                "To format cells"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Flags (1/0) link calculations to phases and make the model flexible to schedule changes."
+            },
+            {
+              "question": "Which check is standard in a project finance model?",
+              "options": [
+                "The balance sheet balances in every period",
+                "Every sheet has a chart",
+                "Revenue exceeds opex in every period",
+                "IRR exceeds 20%"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "A balancing balance sheet is a core integrity check; the others are outcomes, not integrity checks."
+            }
+          ],
+          "activity": "Open a spreadsheet model you use and score it against the principles table. List the three changes that would most improve transparency."
+        },
+        {
+          "slug": "building-the-cash-flows",
+          "title": "Building revenue, costs, tax and cash flow",
+          "type": "article",
+          "durationMinutes": 15,
+          "body": "### The operating model\n\nOnce structure and timing are in place, build the operating cash flows that everything else depends on.\n\n### Revenue\n\nRevenue logic follows the contract:\n\n- **Availability-based** (many PPPs): payment for making the asset available to specified standards, less deductions for unavailability or poor performance.\n- **Volume × price** (e.g., energy sold × tariff; vehicles × toll).\n- **Capacity + energy** (some power contracts): a capacity payment for being available plus an energy payment per unit delivered.\n\nEach component should have its own row: volume, price, indexation, deductions.\n\n```\nEnergy output (MWh)            = capacity (MW) × hours × capacity factor × availability × (1 − degradation)^(years)\nTariff (USD/MWh)               = base tariff × indexation factor\nRevenue (USD 000)              = output × tariff / 1,000 × operations flag\n```\n\n### Indexation\n\nContracts often index prices and costs to inflation indices (CPI, local wage indices, USD exchange rates). Build an **indexation factor** row per index: factor_t = factor_(t−1) × (1 + rate_t), starting at 1.0 at the base date. Use the right base date and lag specified in the contract.\n\n### Operating costs\n\nSeparate fixed and variable costs, each with its own indexation:\n\n| Cost | Driver | Indexation |\n|---|---|---|\n| O&M contract fixed fee | Per period | Contract index |\n| Variable O&M | Per MWh or per unit | Contract index |\n| Insurance | Per period, % of asset value | Market assumption |\n| Land lease | Per period | Lease terms |\n| SPV management and admin | Per period | CPI |\n| Lifecycle / major maintenance | Scheduled (e.g., inverter replacement year 12) | Relevant index |\n\nLifecycle costs are lumpy; lenders often require a **maintenance reserve account (MRA)** to smooth them.\n\n### Working capital\n\nRevenue is rarely received immediately and costs are rarely paid immediately. Model receivables (e.g., 45–60 days) and payables (e.g., 30 days). Working capital movements reduce or increase cash available for debt service.\n\n### Tax\n\nTax logic depends on jurisdiction and can be complex. Model the key elements:\n\n- **Taxable profit** = revenue − opex − tax depreciation (capital allowances) − deductible interest (subject to limits) ± other adjustments.\n- **Tax losses** carried forward (and their limits).\n- **Tax holidays or exemptions** available in some jurisdictions for certain sectors.\n- **Withholding taxes** on interest or dividends paid abroad.\n- **Indirect taxes** such as VAT/GST/sales tax, which mainly affect cash timing.\n\nCorporate tax regimes vary: for example, the UAE introduced a federal corporate tax regime in 2023; KSA applies zakat and income tax depending on ownership; Pakistan and the UK have their own corporate tax and allowance rules; US projects may use federal tax credits and incentives under current law. Always obtain tax advice and have the tax logic reviewed.\n\n### From revenue to CFADS\n\nThe key operating output is **cash flow available for debt service (CFADS)**:\n\n```\nRevenue\n− Operating costs (incl. lifecycle costs, or + release from MRA)\n− Tax paid\n± Working capital movements\n= CFADS\n```\n\nCFADS is typically defined precisely in the loan agreement; the model must follow that definition. (Some definitions exclude certain items or include reserve releases.)\n\n### Worked example: first operating year\n\n*Illustrative.* A 50 MW solar plant in the UAE; capacity factor 24%; availability 99%; first-year degradation ignored; tariff USD 40/MWh.\n\n```\nOutput = 50 × 8,760 × 0.24 × 0.99 ≈ 104,069 MWh\nRevenue = 104,069 × 40 ≈ USD 4.16M\nOpex (fixed O&M, insurance, lease, admin) ≈ USD 0.95M\nTax: assume none payable in year 1 due to allowances (illustrative)\nWorking capital: receivables increase ≈ USD 0.5M (45 days of revenue)\nCFADS ≈ 4.16 − 0.95 − 0.5 ≈ USD 2.71M\n```\n\nIn later years, working capital stabilises, degradation reduces output slightly and indexation adjusts tariff and costs.\n\n### Common mistakes\n\n- Revenue formulas that ignore contract deductions or caps.\n- Wrong indexation base dates.\n- Ignoring working capital in the first year.\n- Tax modelled as a flat percentage of revenue.\n- Defining CFADS differently from the loan agreement.\n\n### Quick self-check\n\nReconcile your first full operating year by hand: output, revenue, each opex line, tax and working capital. If you cannot reproduce the model's CFADS within a small rounding difference on a single page, something in the logic is either wrong or too complex to audit. This simple habit catches a surprising share of errors, including wrong indexation base dates and flags switched on in the wrong period.",
+          "video": null,
+          "keyTakeaways": [
+            "Model revenue as the contract defines it: availability, volume × price, or capacity + energy.",
+            "Build separate indexation factors and split fixed, variable and lifecycle costs.",
+            "Include working capital and jurisdiction-specific tax logic, reviewed by tax advisers.",
+            "CFADS = revenue − opex − tax ± working capital, as defined in the loan agreement."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which is the best description of CFADS?",
+              "options": [
+                "Net profit after depreciation",
+                "Equity dividends",
+                "Revenue before any costs",
+                "Cash from operations after opex, tax and working capital, available to pay lenders"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "CFADS is the cash the project generates that can service debt; it is a cash measure, not accounting profit."
+            },
+            {
+              "question": "Why do lenders often require a maintenance reserve account?",
+              "options": [
+                "To fund dividends",
+                "To smooth lumpy lifecycle costs so they do not disrupt debt service",
+                "To hold tax refunds",
+                "To pay construction costs"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Reserving over time for major maintenance protects cash available for debt service in heavy-spend years."
+            },
+            {
+              "question": "A model calculates tax as 10% of revenue every year. What is the main problem?",
+              "options": [
+                "Tax depends on taxable profit after allowances, interest limits and losses, and local rules",
+                "Tax is not relevant to project finance",
+                "Tax should always be zero",
+                "Tax should be 10% of CFADS"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Tax logic must reflect jurisdiction-specific rules and taxable profit, not a flat share of revenue."
+            }
+          ],
+          "activity": "Build a one-year revenue and CFADS calculation for a small asset (e.g., rooftop solar or a rental property) using the template, stating every assumption."
+        },
+        {
+          "slug": "scenarios-and-sensitivities",
+          "title": "Scenarios, sensitivities and downside cases",
+          "type": "article",
+          "durationMinutes": 13,
+          "body": "### Why test the model?\n\nA base case is a single view of the future. Lenders, sponsors and boards need to know how robust the project is: **what has to go wrong for debt to be at risk or for equity returns to disappear?**\n\n### Sensitivities vs scenarios\n\n- **Sensitivity:** change one input at a time (e.g., opex +10%) to see its effect.\n- **Scenario:** change several related inputs together to represent a coherent story (e.g., \"high inflation\": opex up, tariff indexation partly offsets, interest rates higher).\n- **Breakeven analysis:** find the value of an input at which a threshold is hit (e.g., the energy yield at which minimum DSCR falls to 1.0x).\n\n### Standard lender sensitivities (illustrative list)\n\n| Sensitivity | Typical test |\n|---|---|\n| Construction delay | 6 months late |\n| Capex overrun | +10% |\n| Opex | +10% |\n| Revenue / volume | P90 yield, low traffic case |\n| Availability | −2 percentage points |\n| Inflation | ±2% per year |\n| Interest rate | +2% on unhedged portion |\n| Exchange rate | Local currency depreciation |\n| Combined downside | Several of the above together |\n\nThe exact sensitivities are agreed with lenders and their advisers.\n\n### Outputs to track\n\nFor every case, show: minimum and average DSCR, LLCR, equity IRR, project IRR, NPV, peak funding, and whether debt is fully repaid by maturity. A **sensitivity summary table** is standard:\n\n```\nCase                    Min DSCR  Avg DSCR  LLCR   Equity IRR  Debt repaid?\nBase                    1.30x     1.38x     1.41x  12.8%       Yes\nOpex +10%               1.24x     1.31x     1.34x  11.1%       Yes\nP90 yield               1.18x     1.24x     1.27x  9.4%        Yes\n6-month delay           1.30x     1.37x     1.39x  10.2%       Yes\nCombined downside       1.03x     1.10x     1.12x  4.6%        Yes\n```\n\n(Numbers are illustrative.) Lenders will focus on the combined downside: debt service is still covered, but equity returns are thin. Sponsors may decide the risk is acceptable or restructure.\n\n### Building scenario functionality\n\n- Create a **scenario selector** input (1 = base, 2 = downside, etc.).\n- Store each scenario's input set in columns; the live input picks the selected column.\n- Use data tables or macros to run all cases and paste results into the summary automatically.\n- Keep the base case stable and clearly labelled; never overwrite base inputs to run a sensitivity.\n\n### Tornado charts\n\nRank sensitivities by their effect on a key output (e.g., equity IRR). The result looks like a tornado: the biggest drivers at the top. This focuses due diligence and negotiation on the inputs that matter most.\n\n### Worked example: breakeven\n\n*Illustrative.* For a fictional toll road in Punjab, the team asks: how far can traffic fall below the base case before minimum DSCR hits 1.0x? The model shows traffic can fall 22% before debt service is not covered (illustrative). The traffic adviser's low case is 15% below base. The margin of safety between 15% and 22% gives lenders some comfort, but they request a debt service reserve account and a cash sweep if traffic underperforms.\n\n### Monte Carlo in financial models\n\nSome teams apply probabilistic simulation to key inputs (yield, opex, delay) to produce distributions of DSCR and IRR. This adds insight when inputs are genuinely uncertain and data supports the ranges, but it must be explained clearly and never replace the agreed lender cases.\n\n### Common mistakes\n\n- Running sensitivities by overwriting base inputs.\n- Testing only favourable cases.\n- Scenarios whose inputs are inconsistent (e.g., high inflation with low interest rates without explanation).\n- Presenting dozens of sensitivities without highlighting what matters.\n- Forgetting to check whether the model's checks still pass in each case.\n\n### Presenting results\n\nDecision-makers do not need every sensitivity. Present the base case, the lenders' key downside cases, the combined downside and one or two breakevens, with a sentence each explaining what they mean. For example: \"Energy yield would have to fall 18% below P50 before minimum DSCR reaches 1.0x; the P99 case is 11% below P50.\" This turns a table of numbers into a clear statement of resilience.\n\n### Quick self-check\n\nAfter running each case, confirm that the checks sheet still shows no errors, that debt is fully repaid by maturity, and that no reserve account goes negative. A sensitivity that breaks the model's mechanics is not a result; it is a bug to fix before anyone relies on the numbers.",
+          "video": null,
+          "keyTakeaways": [
+            "Sensitivities change one input; scenarios change related inputs coherently; breakevens find thresholds.",
+            "Report min/avg DSCR, LLCR, IRRs and debt repayment for every case.",
+            "Build a scenario selector and automated results table; never overwrite the base case.",
+            "Use tornado charts and breakeven analysis to focus on what matters."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is a breakeven analysis in a project finance model?",
+              "options": [
+                "Finding the input value at which a threshold, such as DSCR = 1.0x, is reached",
+                "Setting revenue equal to capex",
+                "Calculating the payback period",
+                "Comparing two bidders' prices"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Breakevens show the margin of safety before a critical threshold is breached."
+            },
+            {
+              "question": "Which approach to running sensitivities is best practice?",
+              "options": [
+                "Adjusting outputs manually",
+                "Overwriting base inputs and remembering to change them back",
+                "A scenario selector that picks from stored input sets without changing the base case",
+                "Creating a separate copy of the model for each case"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "A selector keeps the base case intact and makes cases reproducible."
+            },
+            {
+              "question": "Why do lenders pay particular attention to the combined downside case?",
+              "options": [
+                "It shows the maximum equity return",
+                "It determines the EPC price",
+                "It is required for tax purposes",
+                "It tests whether debt is still serviced when several adverse events occur together"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Real-world problems often cluster; the combined case tests resilience of debt service."
+            }
+          ],
+          "activity": "In any model you have, add a scenario selector with base and downside cases, and produce a small results table with at least three outputs."
+        }
+      ]
+    },
+    {
+      "slug": "debt-sizing-and-coverage",
+      "title": "Cash-flow waterfalls, debt sizing and coverage ratios",
+      "summary": "Understand the cash-flow waterfall and reserve accounts, size and sculpt debt using DSCR, and calculate LLCR and PLCR with worked examples.",
+      "lessons": [
+        {
+          "slug": "cash-flow-waterfall",
+          "title": "The cash-flow waterfall and reserve accounts",
+          "type": "article",
+          "durationMinutes": 14,
+          "body": "### What the waterfall does\n\nIn project finance, cash does not flow freely to shareholders. The loan agreement and accounts agreement define a strict **cash-flow waterfall (cascade)**: the order in which project cash is applied each period. Senior obligations are paid first; equity receives cash only after every higher-priority item is satisfied and certain tests are met.\n\n### A typical operating-period waterfall\n\n```\n 1. Revenue received into the proceeds account\n 2. Operating costs and taxes\n 3. Senior lenders' fees and expenses\n 4. Senior interest (and hedging payments)\n 5. Senior principal repayment\n 6. Top-up of debt service reserve account (DSRA)\n 7. Top-up of maintenance reserve account (MRA)\n 8. Mezzanine / subordinated debt service (if any)\n 9. Cash sweep (mandatory prepayment), if triggered\n10. Distribution lock-up test → if passed, distributions to equity\n                              → if failed, cash trapped in the project\n```\n\nExact ordering varies by deal, but the principle is universal: **equity is last**.\n\n### Reserve accounts\n\n| Reserve | Purpose | Typical sizing (illustrative) |\n|---|---|---|\n| Debt service reserve account (DSRA) | Covers debt service if CFADS temporarily falls short | Often the next 6 months of senior debt service |\n| Maintenance reserve account (MRA) | Smooths lumpy lifecycle costs | Based on forecast major maintenance over a forward period |\n| Other reserves | Specific risks (e.g., decommissioning, tax, change in law) | Deal-specific |\n\nThe DSRA can be funded in cash at financial close (part of the uses) or through a bank **letter of credit** instead, which improves equity returns but adds fees.\n\n### Distribution tests (lock-up)\n\nEquity distributions are usually permitted only if:\n\n- The historic (and sometimes projected) DSCR is above a **lock-up level** (e.g., 1.10x–1.20x, deal-specific).\n- Reserve accounts are fully funded.\n- No default is continuing.\n\nIf the test fails, cash is trapped. If performance deteriorates further to a lower **default level** (e.g., 1.05x), lenders gain remedies. These thresholds protect lenders by keeping cash in the project when it is most needed.\n\n### Cash sweeps\n\nA **cash sweep** uses a portion of excess cash to prepay debt. It can be:\n\n- **Mandatory**, triggered by poor performance or specific events (e.g., merchant tail, refinancing risk).\n- **Target repayment profile**, sweeping cash to keep debt on a target balance.\n\nSweeps reduce lenders' risk but defer equity returns.\n\n### Worked example: one period through the waterfall\n\n*Illustrative.* A fictional water treatment SPV in Dubai, semi-annual period, values in USD M:\n\n```\nRevenue received                         12.0\nOperating costs and tax                  (4.5)\nCFADS                                     7.5\nSenior interest                          (2.4)\nSenior principal                         (3.6)\nTotal senior debt service                (6.0)   → DSCR = 7.5 / 6.0 = 1.25x\nDSRA top-up (already full)                0.0\nMRA contribution                         (0.4)\nCash available after reserves             1.1\nLock-up test: DSCR 1.25x ≥ 1.15x lock-up → PASS\nDistribution to equity                    1.1\n```\n\nIf CFADS had been 6.6 instead, DSCR would be 1.10x, below the lock-up threshold. The 0.2 remaining after the MRA contribution would be trapped in the project rather than distributed.\n\n### Accounts structure\n\nLenders usually control a set of project accounts held with an account bank: proceeds, operating, debt service, reserves, distribution and compensation accounts. Transfers follow the waterfall. This control is part of the lenders' security package.\n\n### Why sponsors care\n\nEquity returns depend not just on the project's performance but on when cash can leave the SPV. Lock-ups, sweeps and reserve funding can significantly delay distributions. Sponsors negotiate these terms carefully and model them precisely.\n\n### Common mistakes\n\n- Modelling distributions without lock-up tests.\n- Forgetting the DSRA initial funding in the uses at financial close.\n- Mis-ordering the waterfall compared with the loan agreement.\n- Assuming trapped cash is lost (it is usually released once tests are passed again, subject to terms).\n\n### Modelling the waterfall\n\nIn the model, build the waterfall as a sequence of rows where each line takes the lower of the cash available and the amount due, and passes the remainder to the next line. Include a \"cash available after this item\" row after each step so reviewers can follow the flow. Add checks that no line pays more than the cash available and that trapped cash is carried forward correctly. Then test the logic with a deliberately weak period to make sure lock-up and reserve top-ups behave as the loan agreement requires.\n\n### Quick self-check\n\nTrace one period by hand from revenue to distributions. If you cannot explain every line in plain language, neither can the lenders' model auditor.",
+          "video": null,
+          "keyTakeaways": [
+            "The waterfall applies cash in strict priority: opex and tax, senior debt, reserves, junior debt, then equity.",
+            "DSRA and MRA protect debt service against temporary shortfalls and lumpy maintenance.",
+            "Lock-up tests trap cash when DSCR falls below agreed levels; default levels trigger lender remedies.",
+            "Model the waterfall exactly as the loan agreement defines it."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "In a typical waterfall, which is paid before equity distributions?",
+              "options": [
+                "Nothing; equity is paid first",
+                "Only dividends to sponsors",
+                "Only taxes",
+                "Senior debt service and reserve account top-ups"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Equity is last. Operating costs, debt service and reserves must be satisfied first."
+            },
+            {
+              "question": "CFADS is 9.0 and senior debt service is 7.5. The lock-up DSCR is 1.15x. Can distributions be made (assuming reserves are full and no default)?",
+              "options": [
+                "Yes, but only half",
+                "No, DSCR is 0.83x",
+                "No, DSCR must exceed 1.50x",
+                "Yes, DSCR is 1.20x, above lock-up"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "DSCR = 9.0/7.5 = 1.20x, which passes a 1.15x lock-up test."
+            },
+            {
+              "question": "What is the main purpose of a DSRA?",
+              "options": [
+                "To pay the EPC contractor's bonus",
+                "To pay construction costs",
+                "To cover debt service during temporary CFADS shortfalls",
+                "To fund equity dividends"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "The DSRA holds a buffer, commonly around six months of debt service, to protect lenders."
+            }
+          ],
+          "activity": "Draw the waterfall for a project you know or a hypothetical one, and run two periods through it: one passing and one failing the lock-up test."
+        },
+        {
+          "slug": "dscr-and-debt-sizing",
+          "title": "DSCR, debt sizing and sculpting",
+          "type": "article",
+          "durationMinutes": 16,
+          "body": "### The debt service coverage ratio\n\nThe **DSCR** measures how comfortably each period's cash flow covers debt service:\n\n```\nDSCR_t = CFADS_t / (Senior interest_t + Senior principal_t)\n```\n\nA DSCR of 1.30x means CFADS is 30% more than required debt service. Lenders set a **target (sizing) DSCR** for debt sizing, and lower **lock-up** and **default** levels for ongoing covenants. Target DSCRs reflect risk: projects with highly contracted, creditworthy revenue can often be sized at lower DSCRs than projects with volume or merchant risk (exact levels depend on market, sector and lender).\n\n### How debt is sized\n\nLenders typically size senior debt as the **lower** of two tests:\n\n1. **DSCR test:** the maximum debt that the CFADS can support at the target DSCR.\n2. **Gearing test:** a maximum percentage of total project cost.\n\n### Step by step: DSCR-based sizing\n\n1. Forecast CFADS for each repayment period over the loan tenor (lender's base case).\n2. Divide by the target DSCR to get the **maximum debt service** per period.\n3. Discount the maximum debt service at the all-in interest rate to get the **maximum debt**.\n4. Compare with the gearing cap; the lower figure is the debt size.\n\n### Worked example: flat CFADS\n\n*Illustrative.* CFADS = USD 10M per year for 5 years of repayment; target DSCR 1.30x; all-in interest rate 7%; total project cost USD 45M; gearing cap 75%.\n\n```\nMax debt service = 10 / 1.30 = 7.69M per year\nAnnuity factor (7%, 5 years) = 4.1002\nDSCR-sized debt = 7.69 × 4.1002 ≈ 31.54M\nGearing-capped debt = 75% × 45 = 33.75M\nDebt = min(31.54, 33.75) = 31.54M  → DSCR is the binding constraint\nEquity = 45 − 31.54 = 13.46M (actual gearing ≈ 70%)\n```\n\n### Sculpting\n\nReal CFADS varies year to year. If debt were repaid in equal instalments (an annuity), DSCRs would vary, and the lowest-DSCR year would limit debt. **Sculpting** sets each period's debt service equal to CFADS ÷ target DSCR, so DSCR is constant at the target and debt capacity is maximised.\n\n*Illustrative.* CFADS: 10, 11, 12, 12, 13 (USD M) in years 1–5; target DSCR 1.30x; rate 7%.\n\n| Year | CFADS | Debt service (CFADS/1.30) | Discount factor 7% | PV |\n|---|---|---|---|---|\n| 1 | 10.0 | 7.69 | 0.9346 | 7.19 |\n| 2 | 11.0 | 8.46 | 0.8734 | 7.39 |\n| 3 | 12.0 | 9.23 | 0.8163 | 7.53 |\n| 4 | 12.0 | 9.23 | 0.7629 | 7.04 |\n| 5 | 13.0 | 10.00 | 0.7130 | 7.13 |\n| **Debt capacity** | | | | **≈ 36.3** |\n\nEach year's DSCR is exactly 1.30x. The debt service is split into interest (rate × opening balance) and principal (the remainder), and the balance reaches zero at the end.\n\n### Tenor, tail and grace periods\n\n- **Tenor:** longer tenors increase debt capacity but raise risk; lenders keep the final maturity inside the offtake contract with a **tail** (a buffer period of contracted revenue after the last repayment).\n- **Grace period:** repayments usually start some months after commercial operation to allow for ramp-up.\n- **Balloon/bullet repayments** leave a large amount due at maturity, creating refinancing risk.\n\n### Minimum vs average DSCR\n\nLenders look at **minimum DSCR** (the worst period, which drives risk) and **average DSCR** (overall comfort). In a sculpted structure, base-case DSCRs are flat; under sensitivities they diverge, and the minimum becomes crucial.\n\n### Sensitivity to interest rate and CFADS\n\nDebt capacity is highly sensitive to the interest rate and CFADS assumptions. A higher rate lowers the present value of the same debt service. Lenders therefore size on a conservative CFADS case (e.g., P90 yield) and hedged or fixed rates.\n\n### Common mistakes\n\n- Sizing on P50 CFADS when lenders require a downside case.\n- Forgetting that fees and DSRA funding increase total uses as debt increases (circularity).\n- Confusing DSCR (period test) with LLCR (NPV test).\n- Sculpting on CFADS that includes items the loan agreement excludes.\n\n### Quick self-check\n\nAfter sizing, confirm four things in the model: each period's DSCR equals the target in the lenders' base case (for a sculpted loan), the debt balance reaches zero exactly at final maturity, the gearing cap is respected, and the final maturity leaves the agreed tail before the offtake contract ends. If any of these fail, the sizing logic or the inputs need attention before the numbers go to lenders.",
+          "video": null,
+          "keyTakeaways": [
+            "DSCR = CFADS ÷ debt service; lenders set sizing, lock-up and default levels.",
+            "Debt = lower of DSCR-based capacity and gearing cap.",
+            "DSCR sizing: max debt service = CFADS ÷ target DSCR, discounted at the interest rate.",
+            "Sculpting matches debt service to CFADS, keeping DSCR constant and maximising debt capacity."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "CFADS in a year is 18.0 and debt service is 15.0. What is the DSCR?",
+              "options": [
+                "3.0x",
+                "0.83x",
+                "1.50x",
+                "1.20x"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "DSCR = CFADS ÷ debt service = 18.0 / 15.0 = 1.20x, meaning cash covers debt service with a 20% cushion."
+            },
+            {
+              "question": "DSCR-based capacity is 60M; the gearing cap allows 55M. What will the debt size be?",
+              "options": [
+                "55M, the lower of the two",
+                "60M, the higher of the two",
+                "57.5M, the average",
+                "115M, the sum"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Debt is typically the lower of the two tests; here the gearing cap binds."
+            },
+            {
+              "question": "What is the main effect of sculpting debt repayments to CFADS?",
+              "options": [
+                "DSCR stays at the target each period and debt capacity is maximised",
+                "Debt is repaid in equal instalments",
+                "Interest rates fall",
+                "Equity IRR always decreases"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Sculpting sets debt service equal to CFADS ÷ target DSCR in every period."
+            },
+            {
+              "question": "Why do lenders want a 'tail' between debt maturity and the end of the offtake contract?",
+              "options": [
+                "To pay equity first",
+                "To reduce the DSRA",
+                "To leave contracted revenue available if repayment needs to be extended after problems",
+                "To avoid tax"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "The tail provides a buffer to restructure or extend debt while revenue is still contracted."
+            }
+          ],
+          "activity": "Using a spreadsheet, sculpt debt for a 7-year CFADS profile of your choice at a 1.35x target DSCR and 8% interest. Then check the debt balance reaches zero."
+        },
+        {
+          "slug": "llcr-plcr-and-covenants",
+          "title": "LLCR, PLCR and financial covenants",
+          "type": "article",
+          "durationMinutes": 14,
+          "body": "### Beyond a single period\n\nDSCR tests one period at a time. Lenders also want forward-looking measures of whether the **remaining** cash flows can repay the **remaining** debt. Two common ratios do this.\n\n### Loan life coverage ratio (LLCR)\n\n```\nLLCR = NPV of CFADS over the remaining loan life (discounted at the debt interest rate)\n       ÷ Senior debt outstanding at the calculation date\n```\n\nSome definitions add the DSRA balance to the numerator; always follow the loan agreement definition.\n\n### Project life coverage ratio (PLCR)\n\n```\nPLCR = NPV of CFADS over the remaining project life (discounted at the debt interest rate)\n       ÷ Senior debt outstanding at the calculation date\n```\n\nPLCR includes cash flows after debt maturity (the tail), so it is normally higher than LLCR. It shows how much additional cushion exists if debt had to be extended.\n\n### Worked example\n\n*Illustrative.* Continuing the flat CFADS example: CFADS USD 10M per year; debt of USD 31.54M repaid over 5 years at 7%, with CFADS continuing for 3 more years after maturity (8-year project life).\n\nAt the start of repayment:\n\n```\nNPV of CFADS over loan life (5 years at 7%)    = 10 × 4.1002 ≈ 41.00M\nLLCR = 41.00 / 31.54                            ≈ 1.30x\nNPV of CFADS over project life (8 years at 7%) = 10 × 5.9713 ≈ 59.71M\nPLCR = 59.71 / 31.54                            ≈ 1.89x\n```\n\nWhen debt is sized on a constant DSCR and the LLCR is discounted at the same rate, LLCR equals the target DSCR at the outset (as here, 1.30x). After one year, the outstanding balance is about 26.06M and the NPV of the remaining four years of CFADS is 10 × 3.3872 ≈ 33.87M, so LLCR remains about 1.30x, consistent with a sculpted profile.\n\n### How the ratios are used\n\n| Ratio | Typical use |\n|---|---|\n| DSCR (historic, projected) | Lock-up, default, sizing |\n| LLCR | Sizing cross-check, default covenant, measure of overall debt capacity |\n| PLCR | Assessing tail cushion and refinancing capacity; sometimes a covenant |\n\nLenders often set minimum LLCR levels similar to or slightly above DSCR sizing levels (deal-specific).\n\n### Financial covenants and events of default\n\nThe loan agreement lists covenants, typically including:\n\n- **Financial covenants:** minimum historic DSCR, projected DSCR, LLCR.\n- **Information covenants:** delivery of financial statements, operating reports, updated models, budgets.\n- **Positive covenants:** maintain insurances, permits, reserve accounts, comply with laws and environmental and social standards.\n- **Negative covenants:** no additional debt, no disposal of assets, no change of business, restrictions on distributions.\n\nBreaching a covenant can trigger an **event of default**, allowing lenders to accelerate the loan, enforce security or step in. In practice, lenders and sponsors often negotiate **waivers** or amendments, but the leverage shifts heavily to lenders.\n\n### Monitoring template\n\n```\nTest date: ______\nHistoric DSCR (last 12 months): ____  Lock-up: ____  Default: ____  Status: ____\nProjected DSCR (next 12 months): ____\nLLCR: ____   Minimum required: ____\nReserve accounts: DSRA ____ / required ____; MRA ____ / required ____\nDistribution permitted? ____\nCovenant compliance certificate signed by: ______\n```\n\n### Worked example: early warning\n\n*Illustrative.* A fictional wind SPV in Scotland has a lock-up DSCR of 1.15x and default at 1.05x. Two low-wind years push historic DSCR to 1.12x. Distributions are locked up; cash builds in the SPV. The sponsor's asset management team uses the model to project DSCR recovering to 1.25x with normal wind and agrees with lenders to use part of the trapped cash for a turbine upgrade that improves availability. Communicating early with updated projections preserved trust and avoided a default scenario.\n\n### Common mistakes\n\n- Using the wrong discount rate for LLCR/PLCR (it should follow the loan agreement, usually the debt rate).\n- Including or excluding the DSRA inconsistently with the definition.\n- Monitoring only historic DSCR and missing deterioration in projected ratios.\n- Treating covenants as a finance-team issue only; operations drive CFADS.\n\n### Quick self-check\n\nRecalculate LLCR at a few dates by hand using the loan agreement definition, and compare with the model. Check which discount rate is specified, whether the DSRA balance is included, and whether the calculation date is before or after the scheduled repayment. Small definitional differences can move the ratio enough to change whether a covenant is met.",
+          "video": null,
+          "keyTakeaways": [
+            "LLCR = NPV of CFADS over remaining loan life ÷ debt outstanding.",
+            "PLCR uses CFADS over the remaining project life and is usually higher than LLCR.",
+            "Ratios feed sizing, lock-up and default covenants alongside information and operating covenants.",
+            "Monitor historic and projected ratios and engage lenders early when trends deteriorate."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "NPV of CFADS over the remaining loan life is 65M; debt outstanding is 50M. What is the LLCR?",
+              "options": [
+                "0.77x",
+                "1.30x",
+                "15M",
+                "1.15x"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "LLCR = NPV of loan-life CFADS ÷ debt outstanding = 65 / 50 = 1.30x."
+            },
+            {
+              "question": "Why is PLCR usually higher than LLCR?",
+              "options": [
+                "It is calculated before tax",
+                "It includes CFADS after the debt matures",
+                "It uses a higher discount rate",
+                "It excludes debt outstanding"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "PLCR counts cash flows over the whole project life, including the tail after maturity."
+            },
+            {
+              "question": "Historic DSCR falls to 1.12x with lock-up at 1.15x and default at 1.05x. What happens?",
+              "options": [
+                "Distributions are locked up but there is no default",
+                "The loan is automatically repaid",
+                "Nothing, because DSCR is above 1.0x",
+                "An event of default occurs"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "The DSCR is below lock-up but above default, so cash is trapped while the project remains in compliance with the default covenant."
+            }
+          ],
+          "activity": "For the sculpted example in the previous lesson, calculate LLCR at the start of year 3 and explain why it is close to the target DSCR."
+        }
+      ]
+    },
+    {
+      "slug": "ppp-and-financial-close",
+      "title": "PPPs, concessions and reaching financial close",
+      "summary": "Understand PPP and concession structures, the due diligence and conditions precedent that lead to financial close, and cost management and reporting after close.",
+      "lessons": [
+        {
+          "slug": "ppp-and-concessions",
+          "title": "PPP and concession structures",
+          "type": "article",
+          "durationMinutes": 15,
+          "body": "### What a PPP is\n\nA **public-private partnership (PPP)** is a long-term contract between a public authority and a private party to deliver and usually operate a public asset or service, where the private party bears significant risk and management responsibility, and payment is linked to performance. Many PPPs are financed through an SPV using project finance.\n\n### Common structures\n\n| Structure | Private party does | Ownership during term | Typical example |\n|---|---|---|---|\n| DBFOM (design-build-finance-operate-maintain) | Everything over the term | Public or private depending on law | Hospitals, schools, roads |\n| BOT (build-operate-transfer) | Builds, operates, transfers at end | Private during term, then public | Power plants, toll roads |\n| BOO (build-own-operate) | Builds, owns and operates indefinitely or for asset life | Private | Some IPPs and IWPs |\n| Concession | Operates and collects user fees, often with investment obligations | Public owner; private rights | Airports, ports, toll roads |\n| Availability-payment PPP | Paid by the authority for availability and performance | Varies | Social infrastructure, some roads |\n\n### Payment mechanisms\n\n- **Availability payments:** the authority pays a unitary charge for making the asset available to specified standards; deductions apply for unavailability or poor performance. **Demand risk stays with the public side.**\n- **User-pays (concession):** revenue comes from users (tolls, fees). **Demand risk sits with the private party**, so financing is more expensive and gearing lower.\n- **Hybrids:** minimum revenue guarantees, revenue sharing above caps, shadow tolls.\n\n### Value for money\n\nGovernments typically assess whether a PPP offers **value for money (VfM)** compared with conventional public procurement, often using a **public sector comparator (PSC)**: a risk-adjusted estimate of what the project would cost if delivered publicly. A PPP offers VfM if its risk-adjusted whole-life cost is lower or its service quality meaningfully better. VfM analysis is sensitive to discount rates and risk valuation, so it should be transparent.\n\n### Fiscal and policy considerations\n\n- PPP payments are long-term commitments that affect future budgets; many governments disclose PPP liabilities and assess affordability.\n- Contingent liabilities (guarantees, termination payments) must be recognised and managed.\n- Legal frameworks matter: several countries have dedicated PPP laws and units, including Pakistan's federal and provincial PPP authorities, KSA's National Center for Privatization & PPP, and PPP frameworks in the UAE (such as Dubai's PPP law). The UK moved away from PFI/PF2 for new projects in 2018 but continues to use other models; in the US, PPP use varies by state legislation.\n\n### Key contract features\n\n- **Output specification:** what service standards must be delivered, not how.\n- **Payment mechanism:** unitary charge, deductions, indexation.\n- **Handback requirements:** asset condition at the end of the term.\n- **Change mechanisms:** how the authority can change requirements and how costs are compensated.\n- **Termination and compensation:** payments on termination for authority default, contractor default, or force majeure. Lenders analyse these carefully because they determine recovery in a worst case.\n- **Refinancing gain sharing:** how gains from later refinancing are shared with the authority.\n\n### Worked example: availability deductions\n\n*Illustrative.* A fictional hospital PPP in the UK region pays an annual unitary charge of GBP 20M (indexed). The payment mechanism deducts for unavailable areas weighted by importance (e.g., an operating theatre is weighted much more than a storeroom) and for service failures. In one quarter, a theatre is unavailable for four days due to an HVAC failure; the deduction is calculated per the contract formula. The SPV passes the deduction down to its facilities management contractor under a back-to-back subcontract, protecting CFADS. This pass-through is a core bankability feature.\n\n### Concession example\n\n*Illustrative.* A fictional motorway concession in Pakistan collects tolls for 25 years. Traffic risk sits with the concessionaire; lenders size debt on a conservative traffic case and require a cash sweep if traffic outperforms, to reduce exposure early. The government provides a limited minimum revenue guarantee for the first years to support bankability, which appears as a contingent liability in public finances.\n\n### Common mistakes\n\n- Output specifications that are vague or unmeasurable.\n- Deductions not passed down to subcontractors.\n- Ignoring handback obligations in lifecycle costs.\n- Underestimating the time to reach agreement with public authorities.\n- Assuming a PPP is automatically off the government's balance sheet; accounting and statistical treatment depend on the rules applied.",
+          "video": null,
+          "keyTakeaways": [
+            "PPPs are long-term, performance-based contracts where private parties bear significant risk and often finance via SPVs.",
+            "Availability payments keep demand risk public; user-pays concessions transfer demand risk to the private party.",
+            "Value for money compares risk-adjusted whole-life costs with a public sector comparator.",
+            "Critical terms: output specs, payment mechanism, deductions, handback, change, termination compensation."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Under an availability-payment PPP, who typically bears demand (usage) risk?",
+              "options": [
+                "The EPC contractor",
+                "The lenders only",
+                "The private SPV",
+                "The public authority"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "The authority pays for availability regardless of usage, so demand risk stays public."
+            },
+            {
+              "question": "Why do lenders scrutinise termination compensation clauses in PPPs?",
+              "options": [
+                "They define the tariff indexation",
+                "They determine how much lenders recover if the contract ends early",
+                "They set the construction price",
+                "They are needed to calculate WACC"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Termination payments are the main recovery route in worst cases, affecting bankability."
+            },
+            {
+              "question": "What is a public sector comparator used for?",
+              "options": [
+                "Calculating DSCR",
+                "Setting the private party's equity return",
+                "Assessing whether a PPP offers value for money compared with conventional delivery",
+                "Choosing the EPC contractor"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "The PSC estimates the risk-adjusted cost of public delivery to benchmark the PPP."
+            }
+          ],
+          "activity": "Choose a public service in your region (e.g., a hospital, road or water plant). Sketch whether an availability or user-pays structure fits better and why."
+        },
+        {
+          "slug": "due-diligence-and-financial-close",
+          "title": "Due diligence and financial close",
+          "type": "article",
+          "durationMinutes": 14,
+          "body": "### What financial close means\n\n**Financial close** is the point at which all finance documents are signed and all **conditions precedent (CPs)** to the first drawdown are satisfied or waived, so funds can flow. It follows months (often years) of development, bidding, negotiation and due diligence.\n\n### The due diligence workstreams\n\n| Workstream | Typical adviser | Key questions |\n|---|---|---|\n| Technical | Lenders' technical adviser / independent engineer | Is the design sound? Are capex, schedule, opex and performance assumptions reasonable? Is the EPC contractor capable? |\n| Legal | Lenders' and sponsors' counsel | Are contracts enforceable and consistent? Is security effective? Are permits in place? |\n| Market / revenue | Market or traffic adviser | Are demand and price forecasts credible (for merchant or user-pays risk)? |\n| Insurance | Insurance adviser | Are construction and operating insurances adequate and assignable to lenders? |\n| Financial model | Model auditor | Does the model calculate correctly and reflect the contracts? |\n| Tax and accounting | Tax adviser | Is the tax treatment correct and robust? |\n| Environmental and social | E&S consultant | Does the project meet applicable standards (e.g., IFC Performance Standards, Equator Principles)? |\n| KYC / compliance | Lenders | Are sponsors and counterparties acceptable under sanctions and anti-money-laundering rules? |\n\nDue diligence reports feed a **lenders' base case** and the credit approval of each lender.\n\n### The path to close: step by step\n\n1. **Term sheet agreed** with lenders (pricing, tenor, sizing criteria, key covenants).\n2. **Due diligence** conducted; findings resolved or mitigated.\n3. **Credit approval** by each lender.\n4. **Documentation** negotiated: facility agreement, intercreditor agreement, security documents, accounts agreement, direct agreements, hedging agreements.\n5. **Model audit** completed and base case agreed.\n6. **CP checklist** satisfied: signed project contracts, permits, legal opinions, insurance certificates, corporate approvals, equity commitments, hedging executed, fees paid.\n7. **Signing and close**; first drawdown follows per the funding mechanism.\n\n### CP checklist template\n\n```\nCP ID | Condition                                   | Responsible   | Status      | Evidence\nCP-01 | EPC contract executed and effective          | Sponsor       | Done        | Signed copy\nCP-02 | Offtake agreement executed                   | Sponsor       | Done        | Signed copy\nCP-03 | Environmental permit issued                  | Sponsor       | Pending     | Expected 12-Mar\nCP-04 | Legal opinions (local and English law)       | Counsel       | Draft       | —\nCP-05 | Insurance certificates naming lenders        | Broker        | Done        | Certificates\nCP-06 | Hedging executed                             | SPV / banks   | Scheduled   | At close\nCP-07 | Model audit report issued                    | Model auditor | Final draft | —\nCP-08 | Equity commitment / funding in place         | Sponsors      | Done        | ECL signed\n```\n\n### Interest rate hedging at close\n\nHedges are usually executed at or just before financial close to lock in rates on the lenders' base case. Rates can move between bid and close, so bids may include rate adjustment mechanisms. Final pricing of the tariff or unitary charge is sometimes adjusted at close to reflect actual swap rates, depending on the contract.\n\n### Worked example: a delayed close\n\n*Illustrative.* A fictional solar IPP in KSA reached agreed documentation, but one land-lease registration was delayed. Lenders would not waive the CP because land rights were core security. The sponsor extended the bid bond, negotiated an extension of the scheduled commercial operation date with the offtaker, and kept the EPC contractor on standby under a limited notice to proceed funded by equity. Close occurred six weeks later. The lesson: CPs that depend on government processes need early tracking and contingency.\n\n### Before close: development risk\n\nUntil close, sponsors fund development costs at risk. If the project fails to close, those costs may be lost. This is why development capital commands high returns and why sponsors stage spending.\n\n### Common mistakes\n\n- Starting critical permits and land processes too late.\n- Inconsistencies between project contracts discovered during legal due diligence.\n- Model not updated for final negotiated terms before the audit.\n- Underestimating adviser costs and time in development budgets.\n- Poor CP tracking, causing last-minute delays.\n\n### Quick self-check\n\nSix months before target close, list every CP and ask: who owns it, what evidence is required, what does it depend on, and what is the realistic date? Highlight any CP that depends on a government body, a third-party consent or another CP. These dependencies are where closes slip, and early escalation is usually far cheaper than extending bid bonds and contractor standby arrangements.",
+          "video": null,
+          "keyTakeaways": [
+            "Financial close = finance documents signed and conditions precedent satisfied, allowing drawdown.",
+            "Due diligence spans technical, legal, market, insurance, model, tax, E&S and compliance workstreams.",
+            "Track CPs with owners, status and evidence; government-dependent CPs need early action.",
+            "Hedging is typically executed at close; development costs are at risk until close."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What must happen for financial close to occur?",
+              "options": [
+                "First dividend paid",
+                "Construction completed",
+                "Commercial operation achieved",
+                "Finance documents signed and conditions precedent satisfied or waived"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Close is a financing milestone; construction starts or continues after it."
+            },
+            {
+              "question": "Which adviser typically reviews whether capex, schedule and performance assumptions are reasonable?",
+              "options": [
+                "Insurance broker",
+                "Tax adviser",
+                "Lenders' technical adviser / independent engineer",
+                "Model auditor"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "The technical adviser assesses engineering, construction and operating assumptions."
+            },
+            {
+              "question": "Why are development costs considered 'at risk'?",
+              "options": [
+                "They are always tax-deductible",
+                "If the project never reaches close, sponsors may not recover them",
+                "They are paid by the offtaker",
+                "Lenders refuse to fund them after close"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Development spending precedes financing; failure to close can mean those costs are lost."
+            }
+          ],
+          "activity": "Draft a 10-item CP checklist for a hypothetical project, with owners and the evidence required for each."
+        },
+        {
+          "slug": "construction-and-operations-reporting",
+          "title": "Cost management and financial reporting after close",
+          "type": "article",
+          "durationMinutes": 14,
+          "body": "### After close, the real work begins\n\nFinancial close starts a long period of construction and then operations during which lenders, sponsors and authorities expect regular, accurate reporting. Poor reporting erodes trust and can itself breach information covenants.\n\n### Construction phase: drawdowns and cost to complete\n\nDuring construction, funds are drawn in stages. Each **drawdown request** typically includes:\n\n- Costs incurred and forecast for the period, by category (EPC milestones, owner's costs, fees, interest).\n- Confirmation from the **lenders' technical adviser** that work is progressing and costs are appropriate.\n- A **cost-to-complete test**: remaining available funding (undrawn debt + remaining equity + contingency) must be at least the forecast cost to complete. If not, sponsors may need to inject more equity before further draws.\n\n```\nFunding sufficiency test (illustrative, USD M)\nForecast remaining costs to completion         152.0\nUndrawn senior debt                            118.0\nRemaining committed equity                      30.0\nRemaining contingency (within uses)              9.0\nTotal available                                157.0\nHeadroom                                         5.0  → PASS (but tight)\n```\n\n### Cost estimation and control during construction\n\nThe cost engineering disciplines from project controls apply directly:\n\n- Maintain an **estimate at completion** by cost category and compare with the uses in the financing plan.\n- Track **EPC variations and claims**; contractor claims can erode contingency quickly.\n- Monitor **contingency drawdown** against remaining risk.\n- Use earned value or milestone progress to confirm payments match work done.\n\nThe companion course *Project Controls in the AI Era* covers these techniques in depth.\n\n### Operations phase reporting\n\nTypical periodic reports to lenders include:\n\n| Report | Frequency (typical) | Content |\n|---|---|---|\n| Operating report | Quarterly or semi-annual | Availability, output, incidents, maintenance, HSE |\n| Financial statements | Semi-annual / annual (audited) | P&L, balance sheet, cash flow |\n| Compliance certificate | Each test date | DSCR, LLCR, reserves, covenant compliance |\n| Budget and operating plan | Annual | Next year's opex, lifecycle and capex |\n| Updated model | Annual or on request | Projections using actuals and updated assumptions |\n| Insurance report | Annual | Renewals and claims |\n\n### Project financial KPIs\n\n- CFADS actual vs budget and vs lenders' base case.\n- Historic and projected DSCR; LLCR.\n- Opex per unit (per MWh, per bed, per km).\n- Availability and deductions.\n- Lifecycle spend vs plan and MRA balance.\n- Equity distributions and equity IRR to date vs plan.\n\n### Variance analysis for operating assets\n\nExplain variances between actual and budget in structured buckets:\n\n```\nCFADS variance vs budget (illustrative, USD M)     −1.2\n  Volume (lower wind resource)                      −0.9\n  Price / indexation                                +0.2\n  Availability (gearbox outage)                     −0.4\n  Opex (higher insurance premium)                   −0.2\n  Working capital timing                            +0.1\n```\n\nSeparating uncontrollable (resource, indexation) from controllable (availability, opex) factors focuses management action.\n\n### Worked example: a funding shortfall averted\n\n*Illustrative.* A fictional waste-to-energy plant in the UK found through monthly cost-to-complete reviews that EPC claims for ground conditions could exceed remaining contingency by about GBP 6M. Because the trend was identified four months before the next major drawdown, sponsors negotiated a partial settlement with the contractor and arranged a standby equity facility, and lenders agreed to continue funding. A late discovery could have halted drawdowns mid-construction.\n\n### Accounting perspectives\n\nProject companies prepare statutory accounts under applicable standards (e.g., IFRS or US GAAP). Some items look different in accounts than in the model: capitalised interest during construction, depreciation, lease accounting, derivative (hedge) accounting, and, for certain concession arrangements under IFRS, specific treatment of the concession asset. Reconcile the model to the accounts periodically so both tell a consistent story.\n\n### Common mistakes\n\n- Drawdown requests unsupported by progress evidence.\n- Ignoring pending claims in cost to complete.\n- Late or inconsistent compliance certificates.\n- Variance explanations that do not separate controllable and uncontrollable factors.\n- Models not updated with actuals, drifting away from reality.\n\n### Quick self-check\n\nBefore issuing any lender report, check that figures reconcile to the locked model and the accounts, that variance explanations separate controllable and uncontrollable causes, and that any forecast deterioration is disclosed with the actions being taken. Lenders are generally far more tolerant of problems disclosed early with a plan than of surprises discovered in the next compliance certificate.\n\n### Building trust over time\n\nConsistent formats, on-time delivery and honest commentary build credibility with lenders and authorities. That credibility is valuable later, when you need a waiver, a consent for a change, or support for a refinancing.",
+          "video": null,
+          "keyTakeaways": [
+            "Drawdowns require evidence and a funding sufficiency (cost-to-complete) test.",
+            "Apply project controls: EAC by category, claims tracking and contingency vs risk.",
+            "Operating reports cover performance, financials, covenant compliance, budgets and updated models.",
+            "Explain CFADS variances by volume, price, availability, opex and timing, separating controllable factors."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Forecast remaining costs are 90; undrawn debt 60, remaining equity 20, contingency 5. What does the funding sufficiency test show?",
+              "options": [
+                "It cannot be calculated",
+                "A 5 surplus",
+                "Exactly sufficient",
+                "A 5 shortfall; additional funding or cost action is needed"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Available funding = 85, which is 5 less than the 90 needed."
+            },
+            {
+              "question": "Which item is typically included in a lenders' compliance certificate?",
+              "options": [
+                "Marketing plans",
+                "DSCR, LLCR and reserve account status versus covenant levels",
+                "Employee satisfaction scores",
+                "The EPC contractor's internal budget"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Compliance certificates confirm financial covenant tests and reserve positions."
+            },
+            {
+              "question": "Why separate volume, price, availability and opex in CFADS variance analysis?",
+              "options": [
+                "To increase the report length",
+                "To avoid calculating DSCR",
+                "Because lenders require exactly four categories",
+                "To distinguish controllable from uncontrollable causes and focus action"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Structured variance buckets reveal where management can act."
+            }
+          ],
+          "activity": "Create a one-page quarterly lender report template for an operating asset, including KPIs, covenant tests and a variance bridge."
+        }
+      ]
+    },
+    {
+      "slug": "ai-enabled-project-finance",
+      "title": "AI-enabled analysis with governance",
+      "summary": "Use AI to accelerate modelling, due diligence and monitoring, while governing it with model review, audit trails and human accountability.",
+      "lessons": [
+        {
+          "slug": "ai-in-modelling-and-diligence",
+          "title": "AI in financial modelling and due diligence",
+          "type": "article",
+          "durationMinutes": 14,
+          "body": "### Where AI helps in 2026\n\nAI tools are now widely embedded in spreadsheets, document platforms and data services, and organisations deploy approved enterprise assistants. In project finance, the most valuable uses combine large document volumes, repetitive analysis and pattern detection.\n\n| Task | How AI helps | Human responsibility |\n|---|---|---|\n| Contract review | Extract key terms (tenor, tariff formula, LDs, caps, termination payments) into a term matrix; flag inconsistencies between contracts | Lawyers verify every extracted term and interpret meaning |\n| Model review | Explain formulas, detect hard-codes, inconsistent formulas across rows, broken links | Modellers confirm and fix; model auditor remains independent |\n| Model building support | Draft formula logic for standard blocks (indexation, flags, sculpting) | Modeller tests against known answers |\n| Scenario analysis | Rapidly generate and summarise sensitivity runs | Analyst checks inputs and interprets |\n| Due diligence Q&A | Summarise data rooms; answer questions with citations | Advisers verify against source documents |\n| Monitoring | Detect anomalies in operating data, predict maintenance needs, forecast CFADS | Asset manager validates and decides |\n| Report drafting | Draft lender reports and variance commentary from verified data | Finance lead reviews and signs |\n\n### Worked example: contract term extraction\n\n*Illustrative.* A fictional infrastructure fund in London reviews a 400-page data room for a Gulf water project. An approved AI tool extracts a term matrix: PPA tenor, tariff indexation, availability deductions, EPC LDs and caps, O&M penalties, termination compensation. It flags that the EPC delay LD cap appears lower than the offtaker's late-COD penalty plus debt service for a six-month delay. The legal team verifies the clauses; the flag is correct, and the issue becomes a negotiation point. The AI saved days of reading, but the conclusion and negotiation strategy came from people.\n\n### Worked example: formula consistency checks\n\n*Illustrative.* A modeller asks an AI assistant to scan a 30-sheet model for rows where the formula changes partway across the timeline. It finds 14 inconsistencies; 11 are intentional (phase changes handled with flags would have been better) and 3 are genuine errors, including a tax row that stops indexing after year 10. The modeller fixes the errors and restructures the intentional changes using flags.\n\n### Prompting and workflow tips\n\n- Provide context: model purpose, structure, conventions and the loan agreement definitions.\n- Ask for **citations** to page and clause, or to cell references, for every claim.\n- Ask the AI to list what it could not determine or is uncertain about.\n- Test AI-drafted formulas against hand calculations or known outputs.\n- Never paste confidential deal data into tools not approved by your organisation; many data rooms have strict confidentiality obligations.\n\n### Limitations to respect\n\n- AI can **misread** complex clauses, especially defined terms that cross-reference other documents.\n- It can produce **plausible but wrong formulas**, such as discounting with the wrong period convention.\n- It lacks context about negotiations, relationships and market practice unless provided.\n- Outputs can vary between runs; results used for decisions must be verified and recorded.\n\n### Machine learning for forecasting\n\nFor operating portfolios, machine-learning models can forecast output (e.g., from weather data), predict equipment failures and estimate opex. These can improve CFADS forecasts, but lenders' base cases are typically set by independent advisers using transparent methods. Use ML forecasts as inputs to discussion, with clear documentation of data, validation and limitations.\n\n### Common mistakes\n\n- Treating AI-extracted terms as verified.\n- Using AI to \"fix\" models without understanding the change.\n- Losing the audit trail of what AI changed.\n- Assuming AI can replace the independent model audit.\n\n### A practical workflow\n\nA sensible workflow for AI-assisted diligence has four steps. First, define the questions and the output format, such as a term matrix with clause references. Second, run the AI extraction on approved infrastructure. Third, have a qualified reviewer verify each item against the source, marking it confirmed, corrected or unclear. Fourth, store the verified matrix, the AI draft and the reviewer's notes together. This produces faster diligence and a clear audit trail, and over time it shows where the AI is reliable and where it tends to err.\n\n### Quick self-check\n\nFor any AI-assisted output you are about to rely on, ask: could I show a sceptical reviewer exactly where each fact came from? If not, it is not ready.",
+          "video": null,
+          "keyTakeaways": [
+            "AI accelerates contract extraction, model review, scenario summaries, diligence Q&A, monitoring and drafting.",
+            "Demand citations, uncertainty lists and testing against known answers.",
+            "Humans verify every term and formula and own conclusions and negotiations.",
+            "Use only approved tools for confidential deal data; AI does not replace the independent model audit."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "An AI tool extracts EPC and PPA terms and flags a gap between delay LDs and late-COD penalties. What is the right next step?",
+              "options": [
+                "Lawyers verify the clauses and, if confirmed, the issue is raised in negotiation",
+                "Ask the AI to rewrite the EPC contract",
+                "Ignore it because AI can misread contracts",
+                "Accept the flag and amend the contract directly"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "AI flags focus attention; qualified people verify and decide what to do."
+            },
+            {
+              "question": "Which prompting practice most improves the reliability of AI outputs in due diligence?",
+              "options": [
+                "Requiring citations to specific clauses or cells for every claim",
+                "Asking for shorter answers",
+                "Using the same prompt for every project",
+                "Avoiding any context"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Citations make outputs verifiable and expose unsupported claims."
+            },
+            {
+              "question": "Can AI replace the independent model audit required by lenders?",
+              "options": [
+                "Yes, if the AI is approved",
+                "Yes, if the model is small",
+                "Only in PPPs",
+                "No; it can support internal review but the independent audit remains necessary"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Lenders rely on independent, accountable review; AI assistance does not satisfy that requirement."
+            }
+          ],
+          "activity": "Use an approved AI tool (or simulate the task manually) to build a key-terms matrix from a sample contract, then verify each extracted term against the source text."
+        },
+        {
+          "slug": "governing-ai-in-finance",
+          "title": "Governing AI in financial analysis",
+          "type": "article",
+          "durationMinutes": 13,
+          "body": "### Why governance matters more in finance\n\nFinancial models and reports influence investment decisions, lending, public spending and disclosures to investors. Errors can cause financial loss, regulatory issues and reputational damage. AI introduces new error types (confident mistakes, non-reproducible outputs) that require explicit controls.\n\n### Governance framework\n\n1. **Policy:** which AI tools are approved, for which tasks, with what data.\n2. **Risk tiering:** classify uses by impact.\n3. **Human review:** proportional to risk, by qualified reviewers.\n4. **Audit trail:** record inputs, prompts, outputs, changes and approvals.\n5. **Validation:** test AI-supported calculations against independent methods.\n6. **Confidentiality and privacy:** protect deal data and personal data.\n7. **Monitoring and learning:** track errors found in review and improve prompts, tools and training.\n\n### Risk tiering example\n\n| Tier | Example | Controls |\n|---|---|---|\n| Low | Summarising public market research | Spot check, cite sources |\n| Medium | Drafting variance commentary; extracting terms for internal screening | Full review against source; record changes |\n| High | Formulas in a lender model; figures in an investment committee paper; covenant certificates | Independent check, reconciliation to model outputs, documented sign-off |\n| Not permitted | Autonomous decisions on investments, lending or covenant waivers | Prohibited |\n\n### Model risk management\n\nMany financial institutions apply **model risk management** frameworks (in banking, supervisors in several jurisdictions have issued model risk guidance). Core practices apply to project finance models and AI tools alike:\n\n- Maintain a model inventory with owners and purposes.\n- Validate models independently before use in decisions.\n- Document assumptions, limitations and known issues.\n- Control changes with versioning and testing.\n- Review models periodically.\n\n### Audit trail template\n\n```\nTask: Draft DSCR commentary for Q3 lender report\nTool and version: [approved assistant, version]\nInputs: Model v4.2 outputs (locked), Q3 operating data (validated)\nPrompt/template: LENDER-COMM-01\nAI output stored: yes (link)\nReviewer: [name]   Checks: figures reconciled to model; causes confirmed with asset manager\nEdits: corrected availability figure; removed speculative statement on next year\nApproved by: [finance director]   Date: ______\n```\n\n### Validation techniques\n\n- **Recalculate** key outputs (e.g., DSCR, NPV) by hand or in an independent sheet.\n- **Reconcile** AI-quoted figures to locked model outputs.\n- **Back-test** ML forecasts against actuals.\n- **Reasonableness checks:** does the direction and size of change make sense?\n\n### Regulatory landscape (high level)\n\nAI regulation continues to evolve. The EU AI Act takes a risk-based approach; the UK relies on principles applied by sector regulators; the US mixes federal guidance, sector regulation and state laws; the UAE and KSA have published national AI strategies and ethics principles; Pakistan has national AI policy work. Financial regulators in many jurisdictions expect firms to manage AI and model risks within existing governance. Follow your organisation's legal and compliance guidance.\n\n### Worked example\n\n*Illustrative.* An analyst at a fictional Karachi-based advisory firm used AI to draft an investment memo, which quoted an equity IRR of 14.2%. The reviewer reconciled it to the locked model output of 12.4%: the AI had transposed digits from an earlier draft. Because the firm's policy required reconciliation of every figure in high-tier documents, the error was caught before the memo reached the investment committee. The audit trail showed exactly which inputs the AI had used, allowing a quick fix to the workflow (only locked outputs are now provided to the tool).\n\n### Common mistakes\n\n- No distinction between low- and high-risk uses.\n- Reviewers checking wording but not numbers.\n- Feeding draft or unlocked model versions to AI tools.\n- No record of AI involvement in decision documents.\n\n### Starting small\n\nGovernance does not need to be heavy to be effective. A small team can start with a one-page policy, a short list of approved tools, a three-tier review rule and a simple log recording which documents involved AI and who reviewed them. Review the log each quarter: which errors did reviewers catch, and what change in workflow would prevent them? This continuous-improvement loop matters more than the length of the policy.\n\n### Quick self-check\n\nPick the last decision document your team produced. Could you show which parts were AI-assisted, which inputs were used, and who verified the figures? If not, your governance has a gap worth closing now, before a costly error finds it for you.",
+          "video": null,
+          "keyTakeaways": [
+            "Govern AI with policy, risk tiering, proportional review, audit trails, validation and confidentiality.",
+            "Apply model risk management: inventory, independent validation, documentation, change control, periodic review.",
+            "Reconcile every AI-quoted figure to locked model outputs in high-tier documents.",
+            "Autonomous AI decisions on investment, lending or covenant waivers should not be permitted."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "An AI-drafted investment memo quotes an IRR that differs from the locked model output. What does this show?",
+              "options": [
+                "That AI should write all memos",
+                "The importance of reconciling AI-quoted figures to the model before use",
+                "That IRR is unreliable",
+                "That the model is wrong"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Reconciliation catches transcription and hallucination errors before they influence decisions."
+            },
+            {
+              "question": "Which use should be in the highest review tier?",
+              "options": [
+                "Figures in a lender covenant compliance certificate",
+                "Summarising public news",
+                "Formatting a slide",
+                "Drafting an internal meeting agenda"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Covenant certificates have legal and financial consequences, requiring rigorous checking and sign-off."
+            },
+            {
+              "question": "Which practice belongs to model risk management?",
+              "options": [
+                "Using the latest draft rather than locked outputs",
+                "Avoiding documentation of limitations",
+                "Independent validation and version-controlled changes",
+                "Letting each analyst keep private model versions"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Validation, documentation and change control are core model risk practices."
+            }
+          ],
+          "activity": "Write a one-page AI policy for a project finance team, including risk tiers, required checks and the audit trail fields."
+        },
+        {
+          "slug": "capstone-deal-walkthrough",
+          "title": "Capstone: a project finance deal from idea to operations",
+          "type": "article",
+          "durationMinutes": 15,
+          "body": "### Bringing it together\n\nThis capstone follows a fictional project from concept to operations, linking every module. Use it as a mental map and a revision tool.\n\n### The project\n\n*Illustrative.* Sahara Sun Power (fictional) plans a 150 MW solar plant with battery storage, selling power under a 25-year PPA to a creditworthy state utility in the Gulf region. Total project cost is estimated at USD 180M.\n\n### Stage 1: feasibility and appraisal\n\n- Capex estimate: Class 4-style estimate from benchmarks, presented as a range.\n- Opex and lifecycle: O&M, insurance, land, battery augmentation in later years.\n- Revenue: P50 and P90 energy yields from an independent resource assessment; tariff indexed partially to USD.\n- Appraisal: project IRR and NPV at the sponsor's hurdle rate; payback as a secondary signal.\n- Decision: proceed to bid; development budget approved, recognising it is at risk.\n\n### Stage 2: structuring and bankability\n\n- SPV formed; sponsors: developer (60%) and a strategic partner (40%).\n- Contracts: EPC turnkey (fixed price, date, LDs), O&M agreement, PPA, land lease, grid connection agreement, direct agreements.\n- Risk allocation matrix completed; gaps found between EPC delay LDs and PPA late-COD penalties and fixed via higher LD rates and sponsor completion support.\n- Environmental and social assessment to lenders' standards.\n\n### Stage 3: modelling and debt sizing\n\n- Model structured with inputs, timing flags, calculations and outputs; checks sheet with master check.\n- CFADS built from P90 (lenders' case) and P50 (equity case).\n- Debt sized at the lower of DSCR sculpting (target DSCR set by lenders for contracted solar) and a gearing cap.\n- Illustrative result: debt USD 135M (75%), equity USD 45M (25%), with DSRA funded at close via a letter of credit.\n- Ratios: flat base-case DSCR at target; LLCR at start ≈ target DSCR; PLCR higher because of a PPA tail beyond debt maturity.\n- Sensitivities: delay, capex +10%, opex +10%, P99 yield, combined downside; debt service covered in all cases; equity returns reduced in combined downside.\n\n### Stage 4: due diligence and financial close\n\n- Technical, legal, insurance, model audit, tax and E&S reports.\n- CP checklist tracked weekly; a grid-connection agreement amendment was the longest-lead CP.\n- Interest rate swaps executed at close; tariff adjusted per bid rules for swap movements.\n- Financial close achieved; first drawdown funded equity first, then pro rata.\n\n### Stage 5: construction\n\n- Monthly drawdowns with independent engineer certification and funding sufficiency tests.\n- EAC tracked by cost category; contingency drawn down for a transformer delay; claims log monitored.\n- AI used to extract obligations from contracts into a compliance tracker and to draft monthly lender reports, all reviewed and signed by the finance lead.\n\n### Stage 6: operations\n\n- Commercial operation achieved two weeks late; delay LDs covered the lost revenue and debt service.\n- Quarterly reports: availability, output vs P50/P90, opex, DSCR, reserves.\n- Year 3: low irradiance and an inverter fault reduce DSCR close to lock-up; the team explains the variance by volume and availability, increases spares holdings and communicates early with lenders.\n- Year 5: refinancing opportunity; improved terms reduce debt cost, with refinancing gains shared per the PPA's provisions (if applicable).\n\n### Capstone review questions\n\n1. Why size debt on P90 but evaluate equity on P50?\n2. What would happen to debt capacity if the interest rate rose by 1% before hedging?\n3. Which contracts protect CFADS against a long construction delay?\n4. How would a lock-up event affect sponsors' cash flows and equity IRR?\n5. Which AI uses in this deal needed the highest review tier?\n\n### Model answers (short)\n\n1. Lenders need confidence in debt service under downside conditions; equity accepts more risk for returns.\n2. Debt capacity falls because the same maximum debt service has a lower present value at a higher rate.\n3. EPC delay LDs, sponsor completion support, delay-in-start-up insurance (if purchased) and PPA provisions.\n4. Distributions are deferred and cash trapped, lowering equity IRR even if the cash is later released.\n5. Figures in lender reports, compliance certificates and any model changes affecting the base case.\n\n### Common mistakes across deals\n\n- Optimistic early estimates becoming fixed budgets.\n- Gaps between contracts discovered late.\n- Models that are hard to audit.\n- CP tracking left to the last month.\n- Reporting that surprises lenders rather than informing them early.",
+          "video": null,
+          "keyTakeaways": [
+            "A project finance deal flows through appraisal, structuring, modelling, due diligence, close, construction and operations.",
+            "Contracts, model and financing terms must align; gaps surface as risks later.",
+            "Debt is sized on lender downside cases; equity evaluates on base cases with sensitivities.",
+            "Governed AI use can speed diligence and reporting when humans verify and sign off."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "In the capstone, why were delay LD rates increased and sponsor completion support added?",
+              "options": [
+                "To increase equity IRR directly",
+                "To close the gap between EPC delay compensation and PPA penalties plus debt service",
+                "To avoid a model audit",
+                "To reduce the tariff"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Back-to-back protection for delays is a key bankability requirement."
+            },
+            {
+              "question": "If interest rates rise before hedging, what happens to DSCR-based debt capacity?",
+              "options": [
+                "It rises",
+                "It falls, because the same debt service has a lower present value",
+                "It is unchanged",
+                "It doubles"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Higher discount rates reduce the PV of maximum debt service, lowering debt capacity."
+            },
+            {
+              "question": "During operations, DSCR approaches the lock-up level. What is the best action?",
+              "options": [
+                "Distribute cash quickly before lock-up",
+                "Change the CFADS definition",
+                "Stop reporting until performance improves",
+                "Explain variances, take operational action and communicate early with lenders"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Transparent, early engagement with evidence and actions maintains lender trust and protects the project."
+            }
+          ],
+          "activity": "Write your own one-page capstone for a different asset type (e.g., a toll road or hospital PPP), covering all six stages."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 25,
+    "timeLimitMinutes": 45,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "pfin-001",
+        "module": "finance-foundations",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "A utility wants to build a plant without exposing its other businesses if the plant fails. Which approach best achieves this?",
+        "options": [
+          "Paying from retained earnings",
+          "Corporate loan guaranteed by the parent",
+          "Project finance through a ring-fenced SPV",
+          "Issuing parent-company bonds"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Project finance isolates the plant in an SPV with lenders looking mainly to its cash flows; the other options put the parent's balance sheet at risk."
+      },
+      {
+        "id": "pfin-002",
+        "module": "finance-foundations",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which of these is a 'use' of funds in a project finance sources and uses table?",
+        "options": [
+          "Interest during construction",
+          "Grant funding",
+          "Senior debt",
+          "Sponsor equity"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Interest during construction must be funded, so it is a use. Debt, equity and grants are sources."
+      },
+      {
+        "id": "pfin-003",
+        "module": "finance-foundations",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Cash flows: −2,000 today, then 800 per year for 3 years. At 10%, what is the NPV (annuity factor 2.4869)?",
+        "options": [
+          "About −10.5",
+          "About +189",
+          "About −189",
+          "About +400"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "PV of inflows = 800 × 2.4869 ≈ 1,989.5; NPV ≈ 1,989.5 − 2,000 ≈ −10.5. The project slightly fails to earn 10%."
+      },
+      {
+        "id": "pfin-004",
+        "module": "finance-foundations",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Project P has NPV 250 and IRR 14%; Project Q has NPV 180 and IRR 22%. They are mutually exclusive and evaluated at the same cost of capital. Which should be chosen?",
+        "options": [
+          "P, because it adds more value",
+          "Q, because IRR is higher",
+          "Either, because both are positive",
+          "Neither, because IRRs differ"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "With mutually exclusive projects, higher NPV adds more value. IRR ignores scale and reinvestment assumptions."
+      },
+      {
+        "id": "pfin-005",
+        "module": "finance-foundations",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An analyst discounts nominal cash flows (including 6% inflation) using a real discount rate. What is the likely effect?",
+        "options": [
+          "NPV is understated",
+          "NPV is overstated because future inflated cash flows are discounted too lightly",
+          "IRR becomes undefined",
+          "No effect, because inflation cancels out"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Mixing nominal cash flows with a real rate under-discounts future amounts, inflating NPV. Consistency is required."
+      },
+      {
+        "id": "pfin-006",
+        "module": "finance-foundations",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which statements about payback are correct? (Select all that apply.)",
+        "options": [
+          "A shorter payback always means a higher NPV",
+          "Payback ignores cash flows after the payback point",
+          "Discounted payback is longer than simple payback for a conventional project with positive discount rate",
+          "Simple payback ignores the time value of money"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Payback has known limitations; a shorter payback does not guarantee higher NPV because later cash flows are ignored."
+      },
+      {
+        "id": "pfin-007",
+        "module": "finance-foundations",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which cost is typically capex?",
+        "options": [
+          "Annual insurance premiums",
+          "Routine cleaning",
+          "Construction of a new pumping station",
+          "Monthly operator salaries"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Building a long-lived asset is capital expenditure; the others are operating costs."
+      },
+      {
+        "id": "pfin-008",
+        "module": "capital-structure-and-bankability",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which funding source is repaid first in the capital stack?",
+        "options": [
+          "Senior secured debt",
+          "Shareholder loans",
+          "Ordinary equity",
+          "Mezzanine debt"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Senior debt has priority in the waterfall and on security; equity is last."
+      },
+      {
+        "id": "pfin-009",
+        "module": "capital-structure-and-bankability",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Debt 70% at 9% pre-tax, tax rate 20%, equity 30% at 16%. What is the WACC?",
+        "options": [
+          "About 8.2%",
+          "About 9.84%",
+          "About 11.1%",
+          "About 12.5%"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "0.7 × 9% × 0.8 = 5.04%; 0.3 × 16% = 4.8%; total ≈ 9.84%."
+      },
+      {
+        "id": "pfin-010",
+        "module": "capital-structure-and-bankability",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which features make an offtake contract more bankable? (Select all that apply.)",
+        "options": [
+          "Clear tariff and termination payment provisions",
+          "Creditworthy offtaker",
+          "Offtaker may terminate for convenience without compensation",
+          "Tenor at least as long as the debt, ideally with a tail"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Creditworthiness, adequate tenor and clear payment and termination terms support debt repayment. Termination without compensation undermines bankability."
+      },
+      {
+        "id": "pfin-011",
+        "module": "capital-structure-and-bankability",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An EPC contract caps delay liquidated damages at 5% of the contract price, but a six-month delay would cost the SPV roughly 12% of the contract price in lost revenue and debt service. What is the best response?",
+        "options": [
+          "Raise the cap or add sponsor completion support or delay insurance to close the gap",
+          "Accept it because an EPC contract always transfers delay risk",
+          "Increase gearing to compensate",
+          "Shorten the PPA"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "A low cap makes the risk transfer partial; lenders will require the gap to be covered by other mechanisms."
+      },
+      {
+        "id": "pfin-012",
+        "module": "capital-structure-and-bankability",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "When comparing tender bids, what should happen to a low bid with significant exclusions?",
+        "options": [
+          "Price the exclusions to normalise it before comparison",
+          "Award it immediately",
+          "Disqualify all other bidders",
+          "Ignore the exclusions"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Normalisation reveals the true comparable cost; unpriced exclusions become owner costs later."
+      },
+      {
+        "id": "pfin-013",
+        "module": "capital-structure-and-bankability",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Revenue is in local currency, while 70% of debt is in USD. What is the main risk and a typical mitigation?",
+        "options": [
+          "Demand risk; add a DSRA",
+          "Interest rate risk; issue more equity",
+          "Construction risk; use EPC",
+          "Currency mismatch; use tariff indexation to USD, local-currency debt or hedging"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Depreciation of the local currency would raise debt service in local terms. Indexation, local debt or hedges address this."
+      },
+      {
+        "id": "pfin-014",
+        "module": "capital-structure-and-bankability",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A project returns 8% on total capital; debt costs 7%. What happens to equity returns as gearing increases from 50% to 85% (ignoring tax)?",
+        "options": [
+          "They fall because debt is expensive",
+          "They rise to 15% with no change in risk",
+          "They stay at 8%",
+          "They rise, from 9% to about 13.7%, but equity becomes much more sensitive to cash flow falls"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "At 50%: (8 − 3.5)/50 = 9%. At 85%: (8 − 5.95)/15 ≈ 13.7%. Leverage magnifies both returns and risk."
+      },
+      {
+        "id": "pfin-015",
+        "module": "financial-modelling",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Where should hard-coded assumptions be placed in a well-structured model?",
+        "options": [
+          "Inside calculation formulas",
+          "In clearly labelled input sheets with sources",
+          "In hidden rows",
+          "On the output summary"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Separating inputs makes assumptions visible, changeable and auditable."
+      },
+      {
+        "id": "pfin-016",
+        "module": "financial-modelling",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which are standard integrity checks in a project finance model? (Select all that apply.)",
+        "options": [
+          "Cash balance never negative unless intended",
+          "Equity IRR above 15%",
+          "Balance sheet balances each period",
+          "Sources equal uses at the end of construction"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Integrity checks test the model's mechanics; an IRR level is an outcome, not a check."
+      },
+      {
+        "id": "pfin-017",
+        "module": "financial-modelling",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A 50 MW plant has a 22% capacity factor and 98% availability. What is its approximate annual output?",
+        "options": [
+          "About 94,400 MWh",
+          "About 438,000 MWh",
+          "About 96,400 MWh",
+          "About 10,800 MWh"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "50 × 8,760 × 0.22 × 0.98 ≈ 94,432 MWh."
+      },
+      {
+        "id": "pfin-018",
+        "module": "financial-modelling",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A model's revenue formula changes partway across the timeline from indexed to unindexed without a flag or note. What is the best fix?",
+        "options": [
+          "Leave it, since the result may be intentional",
+          "Delete the indexation input",
+          "Hard-code revenue for later years",
+          "Use a single consistent formula with a flag or input controlling indexation periods"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "One formula per row with flags keeps logic transparent and auditable; hidden changes are a common source of errors."
+      },
+      {
+        "id": "pfin-019",
+        "module": "financial-modelling",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the purpose of a scenario selector?",
+        "options": [
+          "To switch between stored input sets without overwriting the base case",
+          "To select the EPC contractor",
+          "To hide the base case",
+          "To calculate tax"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Selectors keep cases reproducible and protect the base case."
+      },
+      {
+        "id": "pfin-020",
+        "module": "financial-modelling",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Lenders' sensitivity results show minimum DSCR of 1.04x in the combined downside while all single sensitivities are above 1.15x. What does this suggest?",
+        "options": [
+          "Single sensitivities are irrelevant",
+          "The project is unbankable",
+          "The model is wrong",
+          "Debt service is covered but with a thin margin when risks coincide; lenders may seek extra protection"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Combined cases test coinciding risks. A thin margin may lead to reserves, sweeps or lower gearing, not automatic rejection."
+      },
+      {
+        "id": "pfin-021",
+        "module": "financial-modelling",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Why can financing fees and DSRA funding create circularity in a project finance model?",
+        "options": [
+          "They are paid in equity",
+          "They depend on debt size, which depends on total uses that include them",
+          "They are fixed at bid",
+          "They are excluded from CFADS"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Debt funds uses; if uses include debt-dependent items, the calculation loops and must be solved deliberately."
+      },
+      {
+        "id": "pfin-022",
+        "module": "debt-sizing-and-coverage",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "CFADS is 24 and debt service is 20. What is the DSCR?",
+        "options": [
+          "4.0x",
+          "1.20x",
+          "1.44x",
+          "0.83x"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "DSCR = CFADS / debt service = 24 / 20 = 1.20x."
+      },
+      {
+        "id": "pfin-023",
+        "module": "debt-sizing-and-coverage",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "CFADS is 12M per year for 5 years; target DSCR 1.25x; rate 6% (annuity factor 4.2124). What is the DSCR-sized debt?",
+        "options": [
+          "About 48.0M",
+          "About 60.0M",
+          "About 50.5M",
+          "About 40.4M"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Max debt service = 12/1.25 = 9.6M; debt = 9.6 × 4.2124 ≈ 40.4M."
+      },
+      {
+        "id": "pfin-024",
+        "module": "debt-sizing-and-coverage",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which ratio uses the NPV of CFADS over the remaining loan life divided by debt outstanding?",
+        "options": [
+          "Gearing",
+          "LLCR",
+          "DSCR",
+          "PLCR"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "LLCR is the forward-looking loan-life ratio. PLCR uses the whole project life."
+      },
+      {
+        "id": "pfin-025",
+        "module": "debt-sizing-and-coverage",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Historic DSCR is 1.08x; lock-up is 1.15x and default is 1.05x. Which statements are correct? (Select all that apply.)",
+        "options": [
+          "Distributions to equity are blocked",
+          "Sponsors should engage lenders early with projections and actions",
+          "Lenders can immediately accelerate the loan",
+          "No event of default has occurred on this test"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "The ratio is below lock-up but above default. Acceleration requires an event of default."
+      },
+      {
+        "id": "pfin-026",
+        "module": "debt-sizing-and-coverage",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is typically the first item paid from revenue in the operating waterfall?",
+        "options": [
+          "Cash sweep",
+          "Mezzanine interest",
+          "Equity distributions",
+          "Operating costs and taxes"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Opex and taxes keep the project running and are paid before debt service and equity."
+      },
+      {
+        "id": "pfin-027",
+        "module": "debt-sizing-and-coverage",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why does sculpting increase debt capacity compared with equal annuity repayments when CFADS varies?",
+        "options": [
+          "It removes the DSRA",
+          "It lowers the interest rate",
+          "It extends the PPA",
+          "Debt service follows CFADS so no single weak year constrains the whole loan"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "With an annuity, the lowest-CFADS year limits debt; sculpting sets each period's debt service to CFADS ÷ target DSCR."
+      },
+      {
+        "id": "pfin-028",
+        "module": "debt-sizing-and-coverage",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "NPV of CFADS over remaining loan life is 90M, over remaining project life is 126M; debt outstanding is 72M. What are LLCR and PLCR?",
+        "options": [
+          "LLCR 1.25x; PLCR 1.75x",
+          "LLCR 1.75x; PLCR 1.25x",
+          "LLCR 0.80x; PLCR 0.57x",
+          "LLCR 1.25x; PLCR 1.25x"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "LLCR = 90/72 = 1.25x; PLCR = 126/72 = 1.75x. PLCR is higher because it includes the tail."
+      },
+      {
+        "id": "pfin-029",
+        "module": "ppp-and-financial-close",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "In a toll-road concession paid by users, who typically bears traffic (demand) risk?",
+        "options": [
+          "The public authority",
+          "The insurers",
+          "The EPC contractor",
+          "The private concessionaire"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "User-pays concessions transfer demand risk to the private party, which is why debt is sized conservatively."
+      },
+      {
+        "id": "pfin-030",
+        "module": "ppp-and-financial-close",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A hospital PPP deducts payments when an operating theatre is unavailable. How does the SPV typically protect CFADS?",
+        "options": [
+          "By passing deductions down to its facilities management subcontractor back-to-back",
+          "By ignoring deductions",
+          "By raising the unitary charge",
+          "By drawing on management reserve"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Back-to-back pass-down to the party responsible protects the SPV and lenders."
+      },
+      {
+        "id": "pfin-031",
+        "module": "ppp-and-financial-close",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What defines financial close?",
+        "options": [
+          "First equity distribution",
+          "Finance documents signed and conditions precedent satisfied, allowing drawdown",
+          "Selection of preferred bidder",
+          "Completion of construction"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Financial close is when funding becomes available; construction completion comes later."
+      },
+      {
+        "id": "pfin-032",
+        "module": "ppp-and-financial-close",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which are typical conditions precedent to first drawdown? (Select all that apply.)",
+        "options": [
+          "Legal opinions and security documents",
+          "Executed project contracts",
+          "Insurance certificates naming lenders",
+          "First year's audited operating accounts"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "CPs cover contracts, legal and security, insurance and permits. Operating accounts cannot exist before operations."
+      },
+      {
+        "id": "pfin-033",
+        "module": "ppp-and-financial-close",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Forecast cost to complete is 195; undrawn debt 150, remaining equity 40, remaining contingency 12. A pending contractor claim could add 15. What is the prudent conclusion?",
+        "options": [
+          "The claim should be ignored until it is settled",
+          "There is a 7 shortfall today",
+          "Funding is sufficient today by 7, but the claim could create an 8 shortfall; plan mitigation now",
+          "Funding is sufficient by 22, so no action is needed"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Available = 150 + 40 + 12 = 202 versus 195 needed: headroom of 7. If the 15 claim materialises, cost rises to 210 and there is an 8 shortfall, so mitigation (settlement strategy, standby equity) should start now."
+      },
+      {
+        "id": "pfin-034",
+        "module": "ppp-and-financial-close",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What does a value-for-money assessment compare?",
+        "options": [
+          "The EPC price with the O&M price",
+          "The PPA tariff with market prices only",
+          "Equity IRR with project IRR",
+          "The risk-adjusted whole-life cost of the PPP with conventional public delivery"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "VfM tests whether the PPP delivers better value than a public sector comparator."
+      },
+      {
+        "id": "pfin-035",
+        "module": "ppp-and-financial-close",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Why are development costs described as 'at risk'?",
+        "options": [
+          "They are guaranteed by government",
+          "They are always recovered through tariffs",
+          "They are funded by lenders",
+          "They may not be recovered if the project fails to reach financial close"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Sponsors fund development before financing is secured; failure to close can mean losing them."
+      },
+      {
+        "id": "pfin-036",
+        "module": "ai-enabled-project-finance",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is an appropriate AI use in project finance due diligence?",
+        "options": [
+          "Approving a covenant waiver autonomously",
+          "Replacing the lenders' model audit",
+          "Signing the facility agreement",
+          "Extracting key contract terms with clause citations for lawyers to verify"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "AI can accelerate extraction when humans verify; decisions and independent audits remain human responsibilities."
+      },
+      {
+        "id": "pfin-037",
+        "module": "ai-enabled-project-finance",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "An AI-drafted lender report quotes a DSCR of 1.34x; the locked model shows 1.31x. What should the reviewer do?",
+        "options": [
+          "Average the two",
+          "Keep 1.34x because it is close",
+          "Correct it to the locked model output and investigate which input the AI used",
+          "Remove the DSCR from the report"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "High-tier documents require reconciliation to locked outputs and a traceable fix to the workflow."
+      },
+      {
+        "id": "pfin-038",
+        "module": "ai-enabled-project-finance",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which practices improve the reliability of AI-assisted model review? (Select all that apply.)",
+        "options": [
+          "Allowing AI to overwrite the base case directly",
+          "Testing AI-drafted formulas against hand calculations",
+          "Recording what the AI changed and who approved it",
+          "Asking for cell references for every finding"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Testing, citations and audit trails keep AI assistance verifiable. Direct overwrites of the base case bypass control."
+      },
+      {
+        "id": "pfin-039",
+        "module": "ai-enabled-project-finance",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An analyst pastes confidential data-room documents into a public AI tool not approved by the firm to speed up review. What is the main issue?",
+        "options": [
+          "It changes the gearing",
+          "It violates the waterfall",
+          "The tool will produce wrong DSCRs",
+          "Breach of confidentiality obligations and firm AI policy"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Data rooms carry confidentiality obligations; only approved tools with appropriate protections may be used."
+      },
+      {
+        "id": "pfin-040",
+        "module": "ai-enabled-project-finance",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which element is part of model risk management?",
+        "options": [
+          "Independent validation before models are used for decisions",
+          "Using AI outputs without review when deadlines are tight",
+          "Avoiding documentation to save time",
+          "Allowing unlimited private model versions"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Validation, documentation and change control underpin model risk management."
+      },
+      {
+        "id": "pfin-041",
+        "module": "ai-enabled-project-finance",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the right role of machine-learning output forecasts for an operating solar portfolio?",
+        "options": [
+          "Documented inputs to discussion alongside independent, transparent methods",
+          "A reason to stop reporting to lenders",
+          "Grounds for immediate refinancing",
+          "Automatic replacement of the lenders' base case"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "ML forecasts can inform, but lender cases and decisions rely on transparent, validated methods and human judgment."
+      }
+    ]
+  }
+}
