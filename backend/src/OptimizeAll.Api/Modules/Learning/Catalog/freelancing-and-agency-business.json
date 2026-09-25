@@ -1,0 +1,1836 @@
+{
+  "slug": "freelancing-and-agency-business",
+  "version": 1,
+  "title": "Freelancing and Agency Business: From Solo to Micro-Agency",
+  "subtitle": "Position, price, sell, contract, deliver and get paid — then scale into a profitable micro-agency",
+  "category": "business",
+  "level": "intermediate",
+  "estimatedMinutes": 168,
+  "description": "Talent alone does not build a freelance career — business skills do. This course is for designers, marketers, video editors, developers and other creative professionals who already have a craft and want to turn it into a sustainable, well-paid business. You will define a clear position and niche, design offers people understand, build a portfolio with persuasive case studies, and win clients through referrals, outreach, content and platforms.\n\nYou will learn the main pricing models — hourly, project, retainer and value-based — and how to set rates, write proposals, use solid contracts, onboard clients professionally, run reliable delivery systems, and get paid on time, including across borders. We cover tax and legal responsibilities at principle level with a clear reminder to check local rules. Finally, you will learn when and how to scale into a micro-agency with subcontractors, systems and healthy margins.",
+  "outcomes": [
+    "Define a clear positioning statement, niche and ideal client profile",
+    "Package services into clear, productised offers with defined scope",
+    "Build a portfolio and case studies that win the right clients",
+    "Choose and calculate pricing across hourly, project, retainer and value-based models",
+    "Write proposals and contracts that protect scope, payment and intellectual property",
+    "Run onboarding and delivery systems and get paid reliably, including internationally",
+    "Plan the move to a micro-agency with subcontractors, SOPs and healthy margins"
+  ],
+  "skills": [
+    "Freelancing",
+    "Pricing strategy",
+    "Proposal writing",
+    "Client management",
+    "Contracts and invoicing",
+    "Agency operations",
+    "Business development"
+  ],
+  "prerequisites": [],
+  "badge": {
+    "name": "Freelance and Agency Business Professional",
+    "description": "The holder can position and package a freelance service, build persuasive case studies, generate and qualify leads, price with hourly, project, retainer and value-based models, write proposals and contracts, onboard and deliver reliably, invoice and get paid across borders, and scale responsibly into a micro-agency.",
+    "criteria": "Completed all lessons and scored ≥ 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "positioning-and-offers",
+      "title": "Positioning, niche and offers",
+      "summary": "Decide what kind of business you are building, choose a niche and ideal client, and package your services into clear offers.",
+      "lessons": [
+        {
+          "slug": "freelancer-or-agency",
+          "title": "Freelancer, consultant or agency: choosing your model",
+          "type": "video",
+          "durationMinutes": 7,
+          "body": "### Know what you are building\n\n\"Freelancing\" covers very different businesses. A video editor taking tasks on a marketplace, a brand strategist advising founders, and a three-person social media agency all sell creative skills — but their economics, daily work and growth paths differ. Choosing deliberately saves years of drifting.\n\n### Four common models\n\n| Model | What you sell | Income drivers | Trade-offs |\n|---|---|---|---|\n| Task freelancer | Your time on defined tasks | Rate × hours | Easy to start; income capped by hours; price competition |\n| Specialist/consultant | Expertise and outcomes | Value of results, reputation | Higher rates; needs strong positioning and proof |\n| Productised service | A standard package at a fixed price | Volume × margin | Predictable; needs clear scope and efficient delivery |\n| Micro-agency | A team delivering for clients | Margin on others' work + your expertise | Scales beyond your hours; adds management, payroll and risk |\n\nMany people move through these stages: task freelancing to build skills and a portfolio, specialisation to raise rates, productising to create predictability, and then building a small team.\n\n### The time-for-money ceiling\n\nAs a solo freelancer, income is limited by billable hours. Not all working hours are billable — you also spend time on sales, admin, learning, invoicing and revisions. Many freelancers find only a portion of their week is truly billable. That's why raising your *value* per hour (through specialisation, better pricing and productised offers) matters more than simply working longer.\n\n### Positioning: the core decision\n\n**Positioning** is the place you occupy in a client's mind: who you serve, what problem you solve, and why you're the right choice. Strong positioning lets you charge more, win more easily and get referred more often, because people know exactly when to recommend you.\n\nA useful positioning statement:\n\n```\nI help [specific client type]\nachieve [specific outcome]\nthrough [your service/approach]\nunlike [common alternative], because [your proof or difference].\n```\n\nExamples:\n\n- Weak: \"I'm a graphic designer who does logos, social posts and websites.\"\n- Strong: \"I help independent cafés in Lahore and Islamabad attract regulars through Instagram content and menu design — unlike generic agencies, I've designed for 15 food businesses and understand menu engineering.\"\n- Strong: \"I help B2B SaaS startups in the Gulf turn product demos into short videos that sales teams actually use.\"\n\n### Specialist versus generalist\n\nGeneralists can find work early because they say yes to everything — but they compete on price and struggle to stand out. Specialists attract better clients, but a narrow position feels risky. The reality: specialising doesn't mean refusing all other work; it means **leading with a clear focus** in your marketing.\n\nWays to specialise:\n\n- **Industry:** real estate, healthcare, hospitality, fintech.\n- **Service:** email marketing, product photography, motion graphics.\n- **Platform/tool:** a specific e-commerce platform or ad platform.\n- **Client stage:** pre-launch startups, scaling brands, enterprise teams.\n- **Geography/language:** bilingual Arabic–English content for Gulf brands; Urdu content for Pakistani audiences.\n- **Outcome:** \"more booked consultations\", \"higher email revenue\".\n\n### Worked example: choosing a path\n\nHira is a social media designer in Karachi earning through a marketplace at low hourly rates. She notices her best clients are skincare brands, and she understands ingredient claims and regulations better than most designers. Her plan: position as \"social content for skincare and beauty brands expanding to the Gulf\", build three case studies, create two productised packages, and gradually move clients off the marketplace to direct contracts. In a year, she plans to add a subcontracted copywriter.\n\n### Self-assessment\n\n```\nWhich model fits me now?\n- Do I enjoy managing people and processes?          yes / no\n- Do I have enough demand to exceed my own capacity?  yes / no\n- Can I describe my ideal client in one sentence?     yes / no\n- Is my income limited mainly by hours or by leads?   hours / leads\n- What would I like my work week to look like in 2 years? ______\n```\n\n### Common mistakes\n\n- Building an agency before having a repeatable offer and steady demand.\n- Positioning so broadly that nobody remembers you.\n- Assuming working more hours is the only way to earn more.\n- Copying another freelancer's niche without the relevant experience.\n\n### Summary\n\nChoose your model — task freelancer, specialist, productised service or micro-agency — deliberately, understand the time-for-money ceiling, and write a clear positioning statement that leads with a specific client, outcome and proof.",
+          "video": {
+            "script": "Let's start with a question most freelancers never ask themselves: what kind of business am I actually building? There are four common models. A task freelancer sells time on defined jobs. It's easy to start, but income is capped by hours and you often compete on price. A specialist or consultant sells expertise and outcomes, which supports higher rates but needs clear positioning and proof. A productised service sells a standard package at a fixed price, which makes income more predictable. And a micro-agency uses a team to deliver for clients, letting you grow beyond your own hours, but adding management and risk. Here's the uncomfortable truth about solo freelancing: not every hour is billable. You also do sales, admin, invoicing, revisions and learning. So the way to earn more isn't to work longer. It's to increase the value of each hour through specialisation, better pricing and clear offers. That starts with positioning: who you serve, what outcome you deliver, and why you're the right choice. Compare \"I'm a graphic designer who does everything\" with \"I help independent cafés attract regulars through Instagram content and menu design.\" The second one is easy to remember and easy to refer. Specialising can feel risky, but it doesn't mean refusing all other work. It means leading your marketing with a clear focus: an industry, a service, a platform, a client stage, a language or an outcome. Write your positioning statement, decide which model you're building toward, and every other decision in this course — pricing, portfolio, proposals and scaling — becomes easier.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Freelancing includes task work, specialist consulting, productised services and micro-agencies — each with different economics.",
+            "Solo income is capped by billable hours, so raising value per hour matters more than working longer.",
+            "Positioning defines who you serve, the outcome you deliver and why you are the right choice.",
+            "Specialising means leading with a clear focus, not refusing all other work."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why does specialising often increase a freelancer's income?",
+              "options": [
+                "Clear positioning makes it easier to win, get referred and justify higher prices",
+                "Platforms pay specialists more automatically",
+                "It removes the need for a portfolio",
+                "Specialists work more hours"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "A clear focus makes you memorable and credible for specific problems, which supports referrals and higher rates; it does not add hours or remove the need for proof."
+            },
+            {
+              "question": "Which positioning statement is strongest?",
+              "options": [
+                "'I help B2B SaaS startups in the Gulf turn product demos into short videos sales teams use'",
+                "'I love design'",
+                "'I'm a creative who does everything'",
+                "'Affordable designer available now'"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "It names a specific client, outcome and approach, so the right people recognise it is for them; the others are vague or compete only on price."
+            },
+            {
+              "question": "When is building a micro-agency usually premature?",
+              "options": [
+                "Before you have a repeatable offer and steady demand",
+                "When you enjoy managing processes",
+                "When clients ask for larger projects",
+                "When demand consistently exceeds your capacity"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Hiring before demand and offers are stable adds cost and risk without enough work to support the team."
+            }
+          ],
+          "activity": "Write three versions of your positioning statement (industry, service and outcome focus), complete the self-assessment, and choose which model you will build towards over the next 12 months."
+        },
+        {
+          "slug": "niche-and-ideal-client",
+          "title": "Choosing a niche and defining your ideal client",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Why a niche makes selling easier\n\nA niche is the specific market you choose to focus on. The benefits compound: you understand clients' problems faster, your portfolio becomes more relevant, your marketing speaks directly to them, referrals come more easily, and you can charge for expertise. The risk of choosing a niche is usually smaller than the cost of being forgettable.\n\n### Evaluating niche options\n\nScore potential niches on four criteria:\n\n| Criterion | Questions | Score 1–5 |\n|---|---|---|\n| Experience/interest | Have I done work here? Do I understand the industry? Do I enjoy it? | |\n| Demand | Do businesses in this niche regularly need my service? | |\n| Ability to pay | Do they have budgets? Is the service important to their revenue? | |\n| Reachability | Can I find and contact them (communities, events, directories, LinkedIn)? | |\n\nA niche scoring high on all four is a strong candidate. Pay particular attention to **ability to pay** — some niches love your work but have no budget.\n\n### Validating demand\n\nBefore committing, validate:\n\n1. **Past work:** which clients were easiest, most profitable and happiest? What do they have in common?\n2. **Conversations:** talk to five to ten people in the niche. Ask about their challenges, how they currently solve them, and what they spend. Don't pitch.\n3. **Market signals:** job posts, agency competitors, industry events, online communities.\n4. **Small test:** publish content or an offer aimed at the niche and see who responds.\n\n### The ideal client profile (ICP)\n\nAn ICP describes the clients you want more of:\n\n```\nIdeal client profile\nIndustry/segment:     e.g. D2C skincare brands\nSize/stage:           e.g. 5–50 staff, selling online, some marketing budget\nLocation/language:    e.g. UAE and KSA, Arabic and English content needs\nDecision maker:       e.g. founder or marketing manager\nTriggers:             e.g. launching a product line, entering a new market, poor ad results\nProblems:             e.g. inconsistent content, low engagement, no time\nBudget signals:       e.g. already spends on ads; has hired freelancers before\nValues/fit:           e.g. respects deadlines, open to strategy, pays on time\nRed flags:            e.g. wants unlimited revisions, \"exposure\" instead of payment\n```\n\nThe **red flags** section is as valuable as the rest. Bad-fit clients drain time, energy and profit.\n\n### Triggers: timing matters\n\nClients buy when something changes: a launch, funding, a new marketing hire, a rebrand, a seasonal peak (Ramadan, Eid, Black Friday, back-to-school), a new regulation or a bad result. Knowing triggers helps you reach out at the right moment and craft relevant messages.\n\n### Offer-market fit\n\nOnce you know the niche and ICP, shape your service around their real problems rather than your list of skills:\n\n- A café doesn't want \"20 social posts\"; it wants more regular customers.\n- A SaaS sales team doesn't want \"a 90-second video\"; it wants shorter sales cycles.\n\nYour offer should connect your deliverables to the outcome they care about — while being honest about what you can and can't control.\n\n### Worked example: from generalist to niche\n\nOmar, a web designer in Riyadh, reviewed his last 20 projects. The most profitable, smoothest projects were for private clinics (dental and dermatology). He interviewed six clinic managers and learned that their biggest problems were online bookings, trust (doctor credentials) and bilingual content. He scored the niche highly on all four criteria. His new focus: \"Bilingual websites that increase online bookings for private clinics in Saudi Arabia.\" He still accepts some other projects, but all marketing speaks to clinics — and he learns healthcare advertising rules relevant to his clients.\n\n### Common mistakes\n\n- Choosing a niche only because it's \"hot\", without experience or reachability.\n- Ignoring ability to pay.\n- Skipping conversations with real prospects.\n- Defining an ICP with no red flags.\n\n### Testing a niche without burning bridges\n\nYou can test a niche before rebranding everything. Create one landing page or LinkedIn profile section aimed at the niche, publish three pieces of content for it, and run a small outreach campaign. Keep serving existing clients meanwhile. After two or three months, compare the quality of enquiries, conversion and project value. If results are promising, update the rest of your marketing; if not, you have learned cheaply and can try the next option.\n\n### Summary\n\nScore niches on experience, demand, ability to pay and reachability; validate through past work, conversations and small tests; write an ideal client profile including triggers and red flags; and shape your offer around the outcomes the niche cares about.",
+          "video": null,
+          "keyTakeaways": [
+            "A niche compounds benefits: faster understanding, relevant portfolio, clearer marketing and higher rates.",
+            "Score niches on experience, demand, ability to pay and reachability.",
+            "Validate demand with past work, conversations and small tests before committing.",
+            "An ideal client profile should include triggers and red flags, not just demographics."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which criterion is most often overlooked when choosing a niche?",
+              "options": [
+                "Whether the niche is interesting",
+                "Whether the niche has a logo",
+                "Whether clients in the niche can and will pay for the service",
+                "Whether competitors exist"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Many niches appreciate the work but lack budget; ability to pay determines whether the business is viable."
+            },
+            {
+              "question": "Why include red flags in an ideal client profile?",
+              "options": [
+                "To recognise bad-fit clients early and protect time and profit",
+                "To reject every client",
+                "Because contracts require it",
+                "To lower your prices"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Knowing warning signs helps you avoid clients who drain energy and margin."
+            },
+            {
+              "question": "What is a buying trigger?",
+              "options": [
+                "A change in the client's situation, such as a launch or new hire, that creates a need",
+                "An invoice reminder",
+                "A social media algorithm",
+                "A discount code"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Triggers signal timing, helping you reach prospects when they are ready to buy."
+            }
+          ],
+          "activity": "Score three potential niches using the four-criteria table, interview at least three people in your top niche, and write a full ideal client profile including triggers and red flags."
+        },
+        {
+          "slug": "productised-offers",
+          "title": "Designing clear, productised offers",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### From \"what do you charge?\" to \"which package?\"\n\nMany freelancers answer every enquiry with a custom quote, which is slow and leaves clients unsure what they will get. A **productised offer** packages your service with a defined scope, process, timeline and price. Clients understand it quickly, sales conversations get shorter, and delivery becomes more efficient because you repeat the same process.\n\n### Anatomy of a strong offer\n\n```\nOffer template\nName:          e.g. \"Launch-Ready Brand Kit\"\nFor:           who it's for (ICP)\nOutcome:       what changes for the client\nDeliverables:  exactly what they receive (quantities, formats)\nProcess:       steps and client inputs required\nTimeline:      e.g. 3 weeks from kickoff\nRevisions:     e.g. 2 rounds per deliverable\nPrice:         fixed price or \"from\" price with clear conditions\nNot included:  explicit exclusions\nNext step:     how to start (call, form, deposit)\n```\n\nThe **\"not included\"** line prevents most scope disputes later.\n\n### Types of productised offers\n\n| Offer type | Example | Why it works |\n|---|---|---|\n| Entry offer / audit | \"Instagram content audit + 30-day plan\" | Low-risk first purchase; builds trust |\n| Core project | \"Bilingual clinic website in 6 weeks\" | Clear scope and timeline |\n| Sprint | \"5-day ad creative sprint: 12 ad variations\" | Fast, intense, easy to buy |\n| Retainer | \"Monthly content: 12 posts, 4 reels, reporting\" | Recurring revenue |\n| Training/workshop | \"Canva training for marketing teams\" | Scales expertise |\n\nA simple **offer ladder** helps clients start small and grow with you: audit → project → retainer.\n\n### Good-better-best packaging\n\nOffering three tiers often helps clients choose:\n\n| | Essential | Growth (recommended) | Premium |\n|---|---|---|---|\n| Posts per month | 8 | 12 | 16 |\n| Short videos | — | 4 | 8 |\n| Strategy call | Quarterly | Monthly | Fortnightly |\n| Reporting | Basic | Detailed | Detailed + recommendations |\n| Price | lower | middle | higher |\n\nPrinciples: make the middle tier the best fit for most clients; make differences meaningful (not just more of the same); and don't create so many options that choosing becomes hard.\n\n### Defining scope precisely\n\nVague scope (\"social media management\") invites endless requests. Define:\n\n- **Quantities** (posts, pages, minutes of video, revisions).\n- **Channels and formats** (e.g. Instagram and LinkedIn; 4:5 and 9:16).\n- **Client responsibilities** (providing product photos, approvals within 48 hours).\n- **Timelines** and what happens when the client delays.\n- **Revision rounds** and what counts as a revision versus a new request.\n- **Exclusions** (paid ad management, copywriting in additional languages, stock photo costs).\n\n### Pricing productised offers\n\nPrice based on value and your costs, not just hours (covered in the pricing module). Productised offers become more profitable as your process gets faster — a reason to keep improving templates and systems.\n\n### Customisation without chaos\n\nSome clients need adjustments. Handle them with **add-ons** (e.g. \"Extra language version\", \"Rush delivery\") rather than rebuilding the offer each time. If a request doesn't fit any package, it may be a custom project — or a sign the client isn't a fit.\n\n### Worked example: a video editor's offers\n\nBilal edits YouTube and short-form videos for business coaches:\n\n- **Entry:** \"Channel audit + 3 edit samples\" at a fixed price.\n- **Core:** \"Weekly YouTube edit: one 15–20 min video + 3 Shorts, 2 revision rounds, 72-hour turnaround.\"\n- **Retainer tiers:** 4, 8 or 12 videos per month.\n- **Add-ons:** thumbnails, subtitles in additional languages, rush delivery.\n- **Not included:** filming, scriptwriting, paid music licences (client purchases, or billed at cost).\n\n### Common mistakes\n\n- Too many options and custom quotes for everything.\n- Offers described as deliverables without an outcome.\n- No exclusions or revision limits.\n- Tiers that differ only slightly.\n\n### Presenting offers on your website\n\nGive each offer its own clear section or page: who it is for, the outcome, what is included, the timeline, the starting price or price range, and one call to action. Showing a starting price filters out clients who cannot afford you and saves time on both sides. Add a short FAQ covering revisions, what the client must provide and what happens after delivery.\n\n### Summary\n\nPackage services into productised offers with a clear outcome, deliverables, process, timeline, revisions, price and exclusions; build an offer ladder; use good-better-best tiers sparingly; and handle customisation with add-ons.",
+          "video": null,
+          "keyTakeaways": [
+            "Productised offers define scope, process, timeline and price so clients can buy quickly.",
+            "Always state what is not included to prevent scope disputes.",
+            "An offer ladder (audit, project, retainer) lets clients start small and grow.",
+            "Use add-ons for customisation instead of rebuilding offers for every client."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the main benefit of a productised offer?",
+              "options": [
+                "Clients understand scope and price quickly and delivery becomes repeatable",
+                "It guarantees results",
+                "It removes the need for contracts",
+                "It lets you avoid revisions entirely"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Defined packages shorten sales and streamline delivery; contracts and sensible revision terms are still needed."
+            },
+            {
+              "question": "Which element most directly prevents scope creep in an offer?",
+              "options": [
+                "A long biography",
+                "A catchy name",
+                "A high price",
+                "A clear 'not included' list and defined revision rounds"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Explicit exclusions and revision limits set boundaries that both sides can refer to."
+            },
+            {
+              "question": "In good-better-best packaging, which tier should typically suit most clients?",
+              "options": [
+                "The most expensive",
+                "The middle tier",
+                "None of them",
+                "The cheapest"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "The middle tier is usually designed as the best fit, with the others framing the choice."
+            }
+          ],
+          "activity": "Turn your most common service into a productised offer using the template, including exclusions and revision limits, and sketch a three-step offer ladder."
+        }
+      ]
+    },
+    {
+      "slug": "portfolio-and-winning-clients",
+      "title": "Portfolio, lead generation and sales",
+      "summary": "Build case studies that sell, generate a steady flow of leads, and run discovery calls that qualify and convert.",
+      "lessons": [
+        {
+          "slug": "portfolio-and-case-studies",
+          "title": "Portfolios and case studies that win clients",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Your portfolio is a sales tool\n\nClients don't hire the most talented freelancer — they hire the one who seems most likely to solve **their** problem. A portfolio that shows relevant work, your process and results is far more persuasive than a gallery of pretty images.\n\n### Portfolio principles\n\n- **Curate ruthlessly:** show fewer, stronger, more relevant projects. Six great, relevant pieces beat forty mixed ones.\n- **Match your positioning:** if you target clinics, lead with healthcare projects.\n- **Show context:** what was the problem, who was the client, what were the constraints?\n- **Show thinking:** sketches, options, decisions — clients buy your judgement.\n- **Show results where you can:** outcomes supported by evidence (with client permission).\n- **Make it easy to act:** clear contact or booking options.\n\n### The case study structure\n\n```\nCase study template\nTitle:        Outcome-focused (\"How a Dubai clinic grew online bookings with a bilingual site\")\nClient:       Who they are (name if permitted, or anonymised description)\nChallenge:    The problem and why it mattered\nApproach:     Your process and key decisions\nSolution:     What you delivered (visuals)\nResults:      Measurable or observable outcomes (with permission; state timeframe and context)\nTestimonial:  Client quote (with permission)\nNext step:    \"Need something similar? Book a call.\"\n```\n\nKeep case studies scannable: headings, short paragraphs, visuals, and one or two highlighted results.\n\n### Honest results\n\n- Only claim results you can support, and state the timeframe and context (\"in the three months after launch\").\n- Avoid taking full credit for outcomes influenced by many factors (budget changes, seasonality, the client's sales team). Phrase results fairly: \"contributed to\" or \"alongside the client's new ad campaign\".\n- Never invent numbers, testimonials or client logos — this is misleading and can breach consumer-protection and advertising rules, and destroys trust when discovered.\n\n### Confidentiality and permission\n\nMany clients have NDAs or prefer privacy. Options:\n\n- Ask permission during onboarding to feature the work (include a portfolio clause in your contract).\n- Anonymise: \"A Riyadh-based fintech startup\".\n- Show process and redacted visuals.\n- Use personal projects or \"spec\" work — clearly labelled as such — when you lack client examples in a new niche. Don't present concept work as real client work.\n\n### Where to host your portfolio\n\n| Option | Pros | Cons |\n|---|---|---|\n| Personal website | Full control, SEO, professional | Needs setup and maintenance |\n| Portfolio platforms | Community, easy setup | Less control; competitors nearby |\n| PDF/deck | Tailored for proposals | Not discoverable |\n| LinkedIn featured section | Where B2B clients are | Limited formatting |\n| Marketplace profiles | Built-in buyers | Fees, price competition, platform rules |\n\nMany freelancers use a simple website as the hub, plus tailored PDF case studies for proposals.\n\n### Testimonials\n\nAsk at the right moment (right after a successful delivery), make it easy (send three specific questions), and ask permission to use their name, title and photo. Specific testimonials (\"The new menu design helped us launch our breakfast range smoothly and customers kept photographing it\") beat generic praise (\"Great work!\").\n\n### Worked example: rebuilding a portfolio\n\nA motion designer had 35 pieces across weddings, gaming, corporate and music. Targeting fintech explainer videos, she selected her five best corporate explainers, wrote two full case studies (with permission) showing the script-to-animation process and the client's feedback, added one clearly labelled spec project for a fictional fintech app, and placed a booking link on every page.\n\n### Common mistakes\n\n- Showing everything instead of curating.\n- Beautiful images with no context or results.\n- Invented or exaggerated metrics.\n- Using client work without permission.\n\n### Keeping the portfolio current\n\nReview your portfolio every quarter. Replace older or less relevant work with recent projects that match your positioning, update results as more data becomes available (with permission), and remove anything you would not want to be hired to do again. Keep a simple folder for each project as you work — screenshots, drafts, feedback and results — so writing case studies later takes minutes instead of hours of searching.\n\n### Summary\n\nCurate a portfolio that matches your positioning, write outcome-focused case studies with context, process and honest results, get permission or anonymise, label spec work clearly, and collect specific testimonials.",
+          "video": null,
+          "keyTakeaways": [
+            "Portfolios should show relevant work, thinking and results — not everything you've made.",
+            "Structure case studies as challenge, approach, solution, results and testimonial.",
+            "Claim only results you can support, with timeframe and context; never invent metrics.",
+            "Get permission, anonymise when needed, and label spec work clearly."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which portfolio approach usually wins more ideal clients?",
+              "options": [
+                "Only showing logos",
+                "Hiding your process",
+                "Curating a few relevant projects with case studies showing context and results",
+                "Showing every project you've ever done"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Relevant, contextualised work shows clients you can solve their specific problem."
+            },
+            {
+              "question": "A client's campaign improved while they also doubled their ad budget. How should you describe the results?",
+              "options": [
+                "Invent a larger number",
+                "Describe your contribution fairly and mention the context, with permission",
+                "Claim full credit for the improvement",
+                "Leave out the results entirely always"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Honest attribution builds trust; exaggeration can mislead and backfire."
+            },
+            {
+              "question": "You have no client work in a new niche. What is acceptable?",
+              "options": [
+                "Inventing client testimonials",
+                "Creating spec projects clearly labelled as such",
+                "Copying another designer's portfolio",
+                "Presenting concept work as real client projects"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Labelled spec work demonstrates skill without misleading prospects."
+            }
+          ],
+          "activity": "Choose your three most relevant projects and write one full case study using the template, including an honest results section and a request for a specific testimonial."
+        },
+        {
+          "slug": "lead-generation",
+          "title": "Generating a steady flow of leads",
+          "type": "article",
+          "durationMinutes": 8,
+          "body": "### Feast or famine is a pipeline problem\n\nMany freelancers experience cycles: busy months with no time for marketing, followed by empty months scrambling for work. The fix is a **consistent pipeline** — a small amount of lead generation every week, even when busy.\n\n### The main lead channels\n\n| Channel | How it works | Pros | Cons |\n|---|---|---|---|\n| Referrals | Past clients and contacts recommend you | High trust, high conversion | Unpredictable unless nurtured |\n| Warm outreach | Contacting people who know you | Fast, low cost | Limited pool |\n| Cold outreach | Personalised messages to ideal prospects | Controllable, scalable | Low response rates; must be respectful and compliant |\n| Content/inbound | Posts, articles, videos, newsletters showing expertise | Compounds over time, attracts inbound | Slow start |\n| Marketplaces | Platforms connecting buyers and freelancers | Built-in demand | Fees, price competition, platform dependence |\n| Partnerships | Agencies, complementary freelancers, consultants | Steady referrals | Needs relationship building |\n| Communities/events | Industry groups, meetups, conferences | Relationships and trust | Time investment |\n| Paid ads | Ads targeting ideal clients | Fast testing | Costs; needs a strong offer and landing page |\n\nMost successful freelancers rely on two or three channels, not all of them.\n\n### Referrals: make them systematic\n\n- Deliver excellent work and a smooth experience — the foundation.\n- Ask at natural moments: after a success, at project end, or during a positive check-in.\n- Make it easy: \"Do you know one other clinic owner who's struggling with online bookings?\" is easier to answer than \"Do you know anyone?\"\n- Thank referrers; consider a referral fee or gift where appropriate and transparent (and permitted in their organisation).\n\n### Cold outreach done right\n\nEffective, respectful outreach is personal, relevant and short:\n\n```\nOutreach message template\nHi [Name],\nI noticed [specific observation about their business — e.g. your new Jeddah branch\nlaunched last month and the website doesn't have Arabic booking yet].\nI help [ICP] with [outcome]. For example, [short proof].\nWould a quick idea for [their specific opportunity] be useful? Happy to send it over.\n[Name] — [link to relevant case study]\n```\n\nGuidelines:\n\n- Research each prospect; mass-blasted generic messages damage your reputation.\n- Offer value first (an insight, a short audit) rather than a hard sell.\n- Follow up once or twice, then stop.\n- Respect anti-spam and data-protection laws: rules on unsolicited marketing emails and messages vary (for example, the GDPR and PECR in the UK/EU, CAN-SPAM in the US, and rules in the UAE, Saudi Arabia and Pakistan). Use business contact details appropriately, identify yourself, and honour opt-outs.\n\n### Content that attracts clients\n\nContent works when it speaks to your ICP's problems and demonstrates expertise:\n\n- Before/after breakdowns and mini case studies.\n- Practical tips for your niche (\"3 mistakes clinic websites make with bookings\").\n- Opinions and frameworks.\n- Behind-the-scenes process.\n\nChoose one or two platforms where your clients spend time (often LinkedIn for B2B; Instagram or TikTok for consumer brands) and post consistently.\n\n### Marketplaces: use strategically\n\nMarketplaces can be an excellent start — especially for freelancers in countries where direct international client access is harder — but:\n\n- Build a specialised profile matching your positioning.\n- Compete on relevance and quality, not the lowest price.\n- Follow platform rules (many prohibit moving clients off-platform in certain circumstances; read the terms).\n- Aim to diversify so a platform policy change can't destroy your income.\n\n### The weekly pipeline routine\n\n```\nWeekly lead routine (about 3–4 hours)\nMon: 5 personalised outreach messages\nTue: 1 content piece for my ICP\nWed: 2 follow-ups; 1 referral ask\nThu: Engage in 1 community (comment helpfully, answer questions)\nFri: Update pipeline tracker: leads, stage, next action\n```\n\nTrack leads in a simple CRM or spreadsheet: source, stage (new, contacted, call booked, proposal sent, won/lost), value and next action.\n\n### Worked example: building a pipeline from zero\n\nA copywriter in Lahore targets e-commerce brands in the UK. Month 1: 20 personalised emails with a free subject-line audit, two LinkedIn posts per week, and asks three past clients for referrals. Result: several calls, two paid audits, and one retainer. She keeps the routine even after becoming busy, reducing outreach but never stopping.\n\n### Common mistakes\n\n- Only marketing when there's no work.\n- Generic mass messages.\n- Relying entirely on one marketplace.\n- Not tracking leads and follow-ups.\n\n### Summary\n\nBuild a consistent weekly pipeline using two or three channels, systematise referrals, do respectful personalised outreach within anti-spam laws, create content aimed at your ICP, use marketplaces strategically, and track every lead.",
+          "video": null,
+          "keyTakeaways": [
+            "Feast-or-famine cycles come from inconsistent lead generation — keep a weekly routine.",
+            "Referrals convert best; ask specifically and at natural moments.",
+            "Cold outreach must be personal, value-first and compliant with anti-spam and data-protection laws.",
+            "Use marketplaces strategically and diversify to reduce platform dependence."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the most reliable way to avoid feast-or-famine cycles?",
+              "options": [
+                "Lower prices",
+                "Maintain a consistent weekly lead-generation routine even when busy",
+                "Take every project offered",
+                "Only market when you have no work"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "A steady pipeline prevents empty months after busy periods."
+            },
+            {
+              "question": "Which referral request is most effective?",
+              "options": [
+                "'Do you know anyone?'",
+                "Posting 'Refer me!' publicly",
+                "Never asking",
+                "'Do you know one other clinic owner struggling with online bookings?'"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Specific requests make it easy for clients to think of a person."
+            },
+            {
+              "question": "Which practice keeps cold outreach compliant and respectful?",
+              "options": [
+                "Personalising, identifying yourself, offering value and honouring opt-outs under local laws",
+                "Buying email lists and blasting generic messages",
+                "Messaging the same person daily",
+                "Hiding your identity"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Anti-spam and data-protection laws, plus basic respect, require relevant, transparent messaging and opt-outs."
+            }
+          ],
+          "activity": "Choose two lead channels, write five personalised outreach messages using the template, and set up a pipeline tracker with stages and next actions."
+        },
+        {
+          "slug": "discovery-calls-and-sales",
+          "title": "Discovery calls, qualifying and closing",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Sales is diagnosis, not pressure\n\nA discovery call is where you understand the client's situation and decide together whether you're a good fit. Good sales feels like a helpful consultation: you ask smart questions, listen carefully, and recommend the right solution — even if that means saying no.\n\n### Before the call\n\n- Research the client: website, social channels, recent news, competitors.\n- Review their enquiry form answers (use a short form with questions about goals, budget range and timeline).\n- Prepare two or three hypotheses about their needs.\n- Have relevant case studies ready.\n\n### A discovery call structure (30–45 minutes)\n\n```\n1. Rapport and agenda (2–3 min)\n   \"I'd like to understand your goals, share how I work, and see if there's a fit.\"\n2. Situation (5–10 min)\n   \"Tell me about your business and current marketing.\"\n3. Problem and impact (10 min)\n   \"What's not working?\" \"What does that cost you?\" \"Why now?\"\n4. Desired outcome (5 min)\n   \"What would success look like in 6 months?\"\n5. Constraints (5 min)\n   Budget range, timeline, decision process, stakeholders\n6. Recommendation (5–10 min)\n   Outline your suggested approach/package and why\n7. Next steps (2–3 min)\n   Proposal date, follow-up call, any information needed\n```\n\n### Questions that uncover value\n\n- \"What happens if this isn't solved in the next three months?\"\n- \"How are you measuring success today?\"\n- \"What have you tried before, and what happened?\"\n- \"Who else is involved in the decision?\"\n- \"What's your budget range for this?\" (Ask directly; it saves everyone time.)\n\nUnderstanding the **value** of solving the problem prepares you for value-based pricing.\n\n### Qualifying: is this a fit?\n\nUse a simple framework — for example **BANT-style** checks adapted for creative services:\n\n| Check | Question |\n|---|---|\n| Budget | Can they afford your offer? |\n| Authority | Are you speaking with the decision maker? |\n| Need | Is the problem real and important? |\n| Timing | Is there a reason to act now? |\n| Fit | Do values, communication style and expectations match your ICP? |\n\nIf several are missing, it's often better to refer them elsewhere or offer a smaller entry offer.\n\n### Handling common objections\n\n| Objection | Helpful response approach |\n|---|---|\n| \"It's too expensive.\" | Revisit value and scope; offer a smaller package or phased approach — don't just discount |\n| \"We need to think about it.\" | Ask what's uncertain; offer to address it; agree a follow-up date |\n| \"Can you do a free sample?\" | Offer a paid audit or a small paid test, or show relevant case studies |\n| \"Another freelancer is cheaper.\" | Explain differences in process, experience and outcomes; respect their choice |\n| \"Can we start without a contract/deposit?\" | Explain it protects both sides; hold firm |\n\n### After the call\n\n- Send a short recap email the same day: their goals, the problem, your recommended approach, next steps.\n- Send the proposal when promised.\n- Follow up politely if you don't hear back (e.g. after three days and a week).\n- Record the outcome and lessons in your pipeline tracker.\n\n### Saying no gracefully\n\nDeclining bad-fit clients protects your business. A respectful template: \"Thanks for sharing all of this. Based on what you need, I don't think I'm the best fit — [reason]. You might consider [alternative/referral]. I'd be happy to help in the future if [condition].\"\n\n### Worked example: qualifying a lead\n\nA startup founder in Abu Dhabi wants \"a full brand identity, website and six months of social media\" for a budget far below the market rate, launching in two weeks. Discovery reveals the key need is a launch-ready landing page and basic brand kit. The freelancer recommends a focused two-week \"Launch Kit\" (logo refinement, colour/type, landing page) with a deposit, and suggests revisiting social media after launch. The founder agrees; the project is profitable and a retainer follows two months later.\n\n### Common mistakes\n\n- Pitching before understanding the problem.\n- Avoiding budget questions.\n- Discounting instead of adjusting scope.\n- Not following up after sending a proposal.\n\n### Summary\n\nPrepare, structure discovery calls around situation, problem, impact, outcome and constraints, qualify for budget, authority, need, timing and fit, respond to objections by adjusting scope rather than discounting, follow up promptly, and decline bad fits respectfully.",
+          "video": null,
+          "keyTakeaways": [
+            "Discovery calls diagnose the client's situation; sales should feel like consultation.",
+            "Ask about impact, success measures, past attempts, decision makers and budget.",
+            "Qualify for budget, authority, need, timing and fit — and refer out bad fits.",
+            "Handle price objections by adjusting scope or phasing, not by simply discounting."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why ask about budget directly during discovery?",
+              "options": [
+                "Clients always lie",
+                "It saves time and lets you recommend a solution that fits their reality",
+                "To charge the maximum",
+                "It's rude but necessary"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Knowing the range helps you shape an appropriate proposal or refer them elsewhere."
+            },
+            {
+              "question": "A prospect says 'It's too expensive.' What's the best response?",
+              "options": [
+                "Revisit value and scope, and offer a smaller package or phased approach",
+                "End the call",
+                "Argue that they're wrong",
+                "Immediately halve the price"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Adjusting scope preserves your rate while meeting their budget."
+            },
+            {
+              "question": "What should you send the same day after a discovery call?",
+              "options": [
+                "A contract without discussion",
+                "Nothing until they chase you",
+                "A short recap of their goals, the problem, your recommendation and next steps",
+                "An invoice"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "A recap shows you listened and keeps momentum toward the proposal."
+            }
+          ],
+          "activity": "Write your discovery call script using the seven-part structure, add five value questions, and role-play it with a friend playing a price-sensitive client."
+        }
+      ]
+    },
+    {
+      "slug": "pricing-your-work",
+      "title": "Pricing your work",
+      "summary": "Understand hourly, project, retainer and value-based pricing, calculate your minimum rate, and manage raises, discounts and scope changes.",
+      "lessons": [
+        {
+          "slug": "pricing-models",
+          "title": "Pricing models: hourly, project, retainer and value-based",
+          "type": "video",
+          "durationMinutes": 7,
+          "body": "### Pricing shapes your whole business\n\nHow you price affects the clients you attract, how you work, and how much you keep. There's no single right model — each suits different work and stages. Many freelancers combine models.\n\n### The four main models\n\n| Model | How it works | Best for | Risks |\n|---|---|---|---|\n| Hourly/day rate | Client pays for time spent | Unclear scope, ongoing support, consulting, early career | Income capped by hours; penalises efficiency; clients scrutinise time |\n| Project/fixed fee | One price for a defined scope | Clear deliverables (website, brand kit, video) | Underestimating effort; scope creep |\n| Retainer | Recurring monthly fee for ongoing work or access | Content, maintenance, advisory | Scope drift; over-servicing |\n| Value-based | Price linked to the value of the outcome to the client | High-impact work where value is measurable | Needs trust, discovery skill and evidence |\n\n### Hourly and day rates\n\nUseful when scope is uncertain. Tips:\n\n- Use **day rates** for larger blocks to reduce micro-tracking.\n- Set **minimum engagements** (e.g. half-day minimum).\n- Track time accurately and report transparently.\n- Remember the paradox: as you get faster, you earn less per task — a reason to move toward other models as you gain experience.\n\n### Project pricing\n\nEstimate the effort and add a buffer:\n\n```\nProject estimate\nPhases:        discovery, concept, design, revisions, delivery, project management\nHours/phase:   estimate each\nBuffer:        add a contingency for unknowns (e.g. 15–30% depending on uncertainty)\nRate:          your target hourly/day rate\nExpenses:      stock, fonts, software, subcontractors, travel\nPrice:         (hours × rate) + buffer + expenses, then check against value and market\n```\n\nPrice the project, not the hours — clients see the fixed price, and you benefit from efficiency.\n\n### Retainers\n\nRetainers create predictable income. Define:\n\n- **What's included** (e.g. 12 posts, 4 reels, one strategy call, monthly report) or **hours/credits** per month.\n- **Rollover rules** (do unused hours carry over? often no, or limited).\n- **Response times** and communication channels.\n- **Minimum term and notice period** (e.g. three-month minimum, 30 days' notice).\n- **Payment in advance** each month.\n\nAvoid \"unlimited\" retainers unless tightly defined — they encourage over-servicing.\n\n### Value-based pricing\n\nValue-based pricing asks: **what is this outcome worth to the client?** If a new website is expected to generate significant additional bookings, a price reflecting a fraction of that value can be fair to both sides — even if it takes you the same hours as a cheaper project.\n\nRequirements:\n\n- Deep discovery into goals, current performance and the value of improvement.\n- The client's trust in your ability to influence the outcome.\n- Options at different levels of investment.\n- Honesty about what you can and can't control.\n\nValue-based pricing doesn't mean guaranteeing results. It means pricing in proportion to the value your work is designed to create.\n\n### Choosing a model\n\n```\nScope clear + deliverables defined         → Project\nOngoing, recurring needs                    → Retainer\nUnclear scope / advisory / support          → Hourly or day rate\nHigh, measurable value + strong trust       → Value-based (often as project options)\n```\n\n### Currency and regional pricing\n\nFreelancers working across borders (for example, from Pakistan for UK or Gulf clients) often price in the client's currency or a major currency. Consider exchange-rate risk, payment fees and local purchasing power, but price based on the value to the client and your positioning — not on your local cost of living alone.\n\n### Worked example: same project, three prices\n\nA bilingual landing page for a Dubai real-estate developer:\n\n- Hourly: roughly 40 hours at the freelancer's rate — the client worries about the total rising.\n- Project: a fixed price including a buffer, two revision rounds and defined exclusions — clearer for both.\n- Value-based options: the developer expects the page to generate high-value enquiries. The freelancer offers three options (landing page; landing page + A/B test variants; landing page + variants + three months of optimisation) with prices reflecting increasing value. The client chooses the middle option.\n\n### Common mistakes\n\n- Hourly pricing forever, even when work is predictable.\n- Fixed prices without buffers or exclusions.\n- Unlimited retainers.\n- Claiming \"value-based\" pricing without understanding the client's value.\n\n### Summary\n\nMatch the model to the work: hourly or day rates for uncertain scope, project fees for defined deliverables, retainers for ongoing needs, and value-based pricing where value is measurable and trust is strong — always with clear scope, buffers and terms.",
+          "video": {
+            "script": "Pricing is one of the biggest levers in your business, and there are four main models to choose from. Hourly or day rates charge for your time. They're useful when the scope is unclear, for ongoing support or advice. But they have a paradox: the better and faster you get, the less you earn for the same task. And clients tend to watch the clock. Project pricing charges one fee for a defined scope. Estimate the hours for each phase, add a buffer for the unknowns, include expenses, and then sanity-check the price against the value to the client. The client gets certainty, and you benefit from working efficiently. Just define the scope and exclusions clearly. Retainers charge a recurring monthly fee for ongoing work, like content or maintenance. They create predictable income, but only if you define what's included, whether unused hours roll over, the minimum term and the notice period. Avoid \"unlimited\" anything. Value-based pricing asks a different question: what is this outcome worth to the client? If a website is expected to bring in significant new business, a price that reflects part of that value can be fair to both sides. It takes good discovery and trust, and it doesn't mean guaranteeing results. It means pricing in proportion to the value you're designed to create. A simple rule: clear scope, use project pricing. Ongoing needs, use a retainer. Uncertain scope, use hourly or day rates. And where value is high and measurable, offer value-based options. Whatever you choose, write the scope down, and never price below your minimum viable rate, which we'll calculate next.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Hourly suits uncertain scope; project fees suit defined deliverables; retainers suit ongoing needs.",
+            "Project estimates need a buffer, expenses and a check against value.",
+            "Retainers need defined inclusions, rollover rules, minimum terms and advance payment.",
+            "Value-based pricing links price to the outcome's value — without guaranteeing results."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which pricing model is best for a clearly defined brand kit with set deliverables?",
+              "options": [
+                "Pay-what-you-want",
+                "Project/fixed fee with defined scope and exclusions",
+                "Unlimited retainer",
+                "Hourly with no estimate"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Clear deliverables suit a fixed price, which rewards your efficiency and gives the client certainty."
+            },
+            {
+              "question": "What is a key risk of hourly pricing for experienced freelancers?",
+              "options": [
+                "It is illegal in some countries",
+                "Getting faster reduces income for the same work",
+                "It requires a retainer",
+                "Clients always pay late"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Hourly pricing penalises efficiency, so experienced freelancers often move to project or value-based models."
+            },
+            {
+              "question": "What does value-based pricing require?",
+              "options": [
+                "The lowest price in the market",
+                "Deep understanding of the outcome's value to the client and their trust in you",
+                "Guaranteeing specific results",
+                "Charging by the hour"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Value-based pricing depends on discovery and trust; it does not mean guaranteeing results."
+            }
+          ],
+          "activity": "Price one recent or upcoming project three ways — hourly, fixed project (with buffer) and value-based options — and decide which fits best and why."
+        },
+        {
+          "slug": "calculating-your-rate",
+          "title": "Calculating your minimum rate and target pricing",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Know your floor\n\nMany freelancers set rates by guessing or copying others. Instead, calculate your **minimum viable rate** — the lowest rate that covers your costs, taxes, savings and desired income given realistic billable hours. Then set your actual prices above it, based on value and market.\n\n### Step 1: Annual income target\n\nDecide the personal income you need and want (after business costs, before personal taxes where relevant), including savings and a buffer for irregular months.\n\n### Step 2: Business costs\n\n```\nAnnual business costs (illustrative categories)\nSoftware and subscriptions       ______\nEquipment (and replacement)      ______\nInternet, phone, co-working      ______\nInsurance (professional, health where applicable) ______\nAccounting/legal advice          ______\nMarketing (website, ads)         ______\nTraining and courses             ______\nPayment/transfer fees            ______\nLicences, registrations, permits ______\nTotal                            ______\n```\n\n### Step 3: Taxes and contributions\n\nSet aside money for income tax, social contributions and any other obligations in your country. Rates and rules vary widely — check local rules or ask an accountant. A common habit is to move a percentage of every payment into a separate tax account.\n\n### Step 4: Billable hours\n\nBe realistic:\n\n```\nWorking weeks per year:   52 − holidays − sick days − training − festivals/leave\nHours per week worked:    e.g. 40\nBillable share:           e.g. 50–70% (the rest is sales, admin, learning)\nBillable hours per year:  weeks × hours × billable share\n```\n\nExample (illustrative): 46 working weeks × 40 hours × 60% billable ≈ 1,100 billable hours per year.\n\n### Step 5: Minimum rate\n\n```\nMinimum hourly rate = (Income target + Business costs + Tax set-aside) ÷ Billable hours\nMinimum day rate    = Minimum hourly rate × hours in your working day\n```\n\nThis is your **floor**, not your price.\n\n### Step 6: Setting actual prices\n\nAdjust upward based on:\n\n- **Value to the client** (what outcomes are worth).\n- **Market positioning** (specialists charge more than generalists).\n- **Demand** (if you're consistently booked, your prices are likely too low).\n- **Client type and market** (budgets differ by company size, industry and region).\n- **Rush and complexity** premiums.\n\n### Researching market rates\n\nSources: industry surveys, peers (many freelancers share rates in communities), job posts, agency rate cards, and your own win/loss data. Treat any single figure cautiously; rates vary widely by country, niche and experience.\n\n### Checking profitability per project\n\nAfter each project, compare:\n\n```\nProject price                         ______\nActual hours spent                    ______\nEffective hourly rate (price ÷ hours) ______\nDirect costs (subcontractors, stock)  ______\nProfit                                ______\nLessons for next estimate             ______\n```\n\nTracking effective hourly rate reveals which clients and services are profitable — often surprising.\n\n### Worked example: a designer in Karachi working for UK clients\n\nIllustrative only: she sets her annual income target, adds business costs (software, laptop replacement, internet, co-working, accountant, transfer fees) and a tax set-aside based on her accountant's advice, then estimates 1,000 billable hours. Her minimum rate comes out at a certain figure; UK market research shows her specialist positioning supports a considerably higher rate for her niche. She quotes projects in GBP based on value and positioning, keeping the calculated rate as a floor for any discount conversations.\n\n### Common mistakes\n\n- Assuming 40 billable hours a week.\n- Forgetting taxes, equipment replacement and transfer fees.\n- Pricing only by local cost of living when serving international clients.\n- Never checking effective hourly rates after projects.\n\n### Rates for different markets\n\nIf you serve clients in several countries, you may use different price lists — for example, one for local small businesses and one for international companies — provided each is above your floor and consistent within its market. Be transparent and avoid undercutting your own higher-value offers. Over time, many freelancers find that focusing on the markets and client types that value their expertise most is simpler than managing many price levels.\n\n### Revisit your numbers regularly\n\nRecalculate your minimum viable rate at least once a year and whenever something important changes: new equipment, higher taxes, a move to another country, a change in the hours you want to work, or exchange-rate shifts that affect income from foreign clients. Keeping the calculation in a simple spreadsheet makes this a ten-minute task.\n\n### Summary\n\nCalculate your minimum viable rate from income target, business costs, tax set-aside and realistic billable hours; set actual prices above it using value, positioning and demand; and track effective hourly rates on every project.",
+          "video": null,
+          "keyTakeaways": [
+            "Your minimum viable rate covers income, business costs and taxes over realistic billable hours.",
+            "Billable hours are usually well below total working hours because of sales, admin and learning.",
+            "Set actual prices above the floor based on value, positioning and demand.",
+            "Track effective hourly rate per project to find what is truly profitable."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why shouldn't you assume 40 billable hours per week?",
+              "options": [
+                "Software limits billing",
+                "Clients forbid it",
+                "Much of your time goes to sales, admin, learning and revisions that aren't billed",
+                "It's illegal to bill that much"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Non-billable work typically takes a large share of the week, so assuming full billability underprices your work."
+            },
+            {
+              "question": "What is the minimum viable rate used for?",
+              "options": [
+                "As a floor below which you shouldn't go",
+                "As your advertised price",
+                "To calculate competitors' prices",
+                "To set tax rates"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "It's the lowest sustainable rate; actual prices should be higher based on value and market."
+            },
+            {
+              "question": "A fixed-price project took twice as many hours as estimated. What should you do next time?",
+              "options": [
+                "Nothing",
+                "Review the effective hourly rate, adjust estimates, buffers and scope definitions",
+                "Charge the client extra retroactively without agreement",
+                "Stop doing fixed-price projects forever"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Post-project review improves future estimates; retroactive charges without agreement damage trust."
+            }
+          ],
+          "activity": "Calculate your minimum viable hourly and day rate using the six steps, then review your last three projects' effective hourly rates and note which service or client type was most profitable."
+        },
+        {
+          "slug": "raising-rates-and-scope",
+          "title": "Raising rates, discounts and managing scope changes",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Protecting your prices\n\nSetting good prices is only half the work; keeping them healthy over time matters just as much. This lesson covers raising rates, handling discount requests, and managing scope creep — the silent profit killer.\n\n### When to raise rates\n\nSignals that your rates are too low:\n\n- You're consistently fully booked with a waiting list.\n- Almost every proposal is accepted quickly without discussion.\n- Your skills, results and portfolio have improved significantly.\n- Your costs or taxes have increased.\n- You've moved into a more valuable niche.\n\n### How to raise rates\n\n- **New clients first:** quote new rates to new clients immediately.\n- **Existing clients with notice:** give reasonable notice (e.g. 30–60 days) in writing, explain briefly (increased demand, expanded services, costs), and thank them.\n- **Offer choices:** keep the current rate for a reduced scope, or maintain scope at the new rate.\n- **Annual reviews** built into retainer contracts make increases expected rather than surprising.\n\n```\nRate increase email template\nHi [Name],\nThank you for a great year working together on [project/results].\nFrom [date], my rates for [service] will be [new rate/package price].\nThis reflects [brief reason: expanded services / demand / costs].\nYour current retainer will continue at the existing rate until [date].\nIf you'd like to discuss adjusting the scope to fit your budget, I'm happy to.\n[Name]\n```\n\n### Handling discount requests\n\nDiscounts aren't always wrong, but they should be **trades**, not gifts:\n\n| Instead of | Try |\n|---|---|\n| Lowering price for the same scope | Reducing scope to fit the budget |\n| Discount with nothing in return | Discount for upfront payment, longer commitment, case-study rights or referrals |\n| Permanent low rate | Time-limited introductory offer, clearly stated |\n\nNever discount below your minimum viable rate. And be wary of clients whose first move is pushing hard on price — it often continues throughout the project.\n\n### Scope creep\n\n**Scope creep** is the gradual expansion of work beyond what was agreed — \"just one more version\", \"quickly add a page\", \"can you also do the Arabic?\" Individually small, collectively it can erase your profit.\n\nPrevention:\n\n1. **Clear scope in writing** (deliverables, quantities, revisions, exclusions).\n2. **Defined revision rounds** and what counts as a revision versus a new request.\n3. **Kickoff alignment:** walk through scope with the client at the start.\n4. **Change request process** in your contract.\n\n### The change order process\n\nWhen a client requests something outside scope:\n\n```\n1. Acknowledge positively: \"Great idea — that's outside our current scope.\"\n2. Explain options:\n   a) Add it via a change order (cost and timeline impact)\n   b) Swap it for something in the current scope\n   c) Schedule it for a later phase\n3. Document the decision in writing before starting the work.\n```\n\nChange order template:\n\n```\nChange order #__\nProject:          ______\nRequested change: ______\nImpact on scope:  ______\nAdditional fee:   ______\nTimeline impact:  ______\nApproval:         client name, date (email confirmation acceptable if contract allows)\n```\n\n### Saying yes strategically\n\nSometimes you'll choose to absorb small requests to build goodwill. Do it deliberately and visibly: \"Happy to include this small change at no charge this time.\" This keeps the value visible and sets expectations for future requests.\n\n### Worked example: handling creep on a retainer\n\nA social media retainer includes 12 posts per month. The client begins asking for extra stories, event coverage and ad creatives. The freelancer tracks requests for a month, then proposes an upgraded package that includes stories and ad creatives at a higher monthly fee, or a separate hourly rate for ad creatives. The client chooses the upgraded package — the relationship improves because expectations are clear.\n\n### Common mistakes\n\n- Never raising rates for existing clients.\n- Discounting without getting anything in return.\n- Doing out-of-scope work silently and resenting it.\n- No written record of changes.\n\n### Communicating value, not just price\n\nClients accept higher prices more easily when they understand the value behind them. Reinforce value throughout the relationship: share short results summaries, explain decisions and expertise in your updates, and highlight improvements you have made to your process. When the time comes to raise rates, the client already sees the connection between your work and their results.\n\n### Summary\n\nWatch for signals that rates are too low, raise them with notice and options, trade discounts for something of value, prevent scope creep with clear scope and revision limits, and handle extra requests through a documented change order process.",
+          "video": null,
+          "keyTakeaways": [
+            "Full bookings and instant acceptances are signals your rates are too low.",
+            "Raise rates for new clients first and give existing clients notice and options.",
+            "Trade discounts for value — upfront payment, commitment, referrals — and never go below your floor.",
+            "Prevent scope creep with clear scope and handle extras via documented change orders."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which is a strong signal that your rates are too low?",
+              "options": [
+                "Almost every proposal is accepted immediately and you have a waiting list",
+                "You have occasional quiet weeks",
+                "Clients ask questions about your process",
+                "Some clients decline proposals"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Consistent instant acceptance and excess demand suggest you're underpriced."
+            },
+            {
+              "question": "A client asks for a discount. What is the best approach?",
+              "options": [
+                "Give it immediately to keep them",
+                "Double the price",
+                "Refuse to discuss",
+                "Reduce scope or exchange the discount for something of value, like upfront payment"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Discounts as trades protect your value and keep the relationship fair."
+            },
+            {
+              "question": "What should happen before you start out-of-scope work?",
+              "options": [
+                "Agree a change order in writing covering fee and timeline",
+                "Nothing; just do it",
+                "Invoice after without warning",
+                "Ignore the request"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Agreeing the extra fee and timeline in a written change order before starting prevents disputes and protects profit; invoicing afterwards without warning damages trust."
+            }
+          ],
+          "activity": "Draft a rate-increase email for one client, write your personal discount rules (what you will trade discounts for), and create a change order template for your contracts."
+        }
+      ]
+    },
+    {
+      "slug": "proposals-contracts-and-onboarding",
+      "title": "Proposals, contracts and onboarding",
+      "summary": "Write proposals that win, use contracts that protect both sides, and onboard clients professionally.",
+      "lessons": [
+        {
+          "slug": "winning-proposals",
+          "title": "Writing proposals that win",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### A proposal is a decision document\n\nA good proposal helps a client say yes. It shows you understood their problem, presents a clear solution, explains the investment and makes the next step easy. It shouldn't be a generic brochure or a bare price list.\n\n### When to send a proposal\n\nSend proposals **after** a discovery conversation, not before. A proposal based on real understanding wins far more often than one guessing at needs. For small, well-defined requests, a short email proposal or a link to a productised package may be enough.\n\n### Proposal structure\n\n```\n1. Title / cover         Client name, project name, date\n2. Understanding         Their situation, goals and challenges — in their words\n3. Objectives            What success looks like (measurable where possible)\n4. Recommended approach  Your process/phases and why\n5. Scope and deliverables Exactly what's included (quantities, formats)\n6. Exclusions            What's not included\n7. Timeline              Key milestones and client responsibilities\n8. Investment            Options (e.g. 2–3 tiers), payment terms\n9. Why us                Relevant case studies, testimonials\n10. Next steps           How to accept (sign, deposit), proposal validity date\n11. Terms                Reference to contract/terms of service\n```\n\n### The understanding section wins proposals\n\nOpening with the client's situation — not your biography — signals you listened. Use their language:\n\n\"You're launching your second clinic in Jeddah in October. Your current website is English-only, bookings happen by phone, and your team estimates many enquiries are lost after hours. You want a bilingual site that takes online bookings before launch.\"\n\n### Presenting options\n\nOffering two or three options:\n\n- Lets the client choose rather than decide yes/no.\n- Anchors value (a premium option makes the middle feel reasonable).\n- Allows budget flexibility without discounting.\n\nMake each option's outcome clear. Avoid more than three.\n\n### Payment terms\n\nState them clearly:\n\n- Deposit to start (commonly a significant percentage for project work; many freelancers use 30–50%).\n- Milestone payments for larger projects.\n- Final payment on delivery, before handing over final files or transferring rights.\n- Retainers billed in advance monthly.\n- Accepted payment methods and currency.\n- Late payment terms (as permitted by local law).\n\n### Proposal validity\n\nInclude a validity period (e.g. 14 or 30 days). Prices and availability change; an expiry date encourages decisions.\n\n### Format and tools\n\nA clean PDF, a web-based proposal tool, or a well-designed document all work. Ideally the client can review, choose an option, sign and pay a deposit in one flow — reducing friction.\n\n### Follow-up\n\n- Confirm receipt and offer a short call to walk through it.\n- Follow up after a few days if you haven't heard back.\n- If they decline, ask why (price, timing, fit) — valuable learning.\n\n### Worked example: from price list to proposal\n\nBefore: an email with \"Website: [price]. Let me know.\"\n\nAfter: a four-page proposal opening with the clinic's launch goals, three options (bilingual site; + booking integration; + three months of optimisation), a 6-week timeline with client responsibilities (content, photos, approvals within 48 hours), a 40% deposit, two relevant case studies, and a one-click accept-and-pay link. The client chose the middle option and asked when they could start.\n\n### Proposal checklist\n\n```\n[ ] Sent after discovery; reflects client's words and goals\n[ ] Clear objectives and scope with quantities\n[ ] Exclusions and client responsibilities listed\n[ ] 2–3 options with clear outcomes\n[ ] Timeline with milestones\n[ ] Payment terms, currency and methods\n[ ] Relevant proof\n[ ] Validity date and easy acceptance\n```\n\n### Common mistakes\n\n- Sending generic proposals before understanding needs.\n- Leading with your biography instead of their situation.\n- Vague scope (\"social media support\").\n- No deposit or unclear payment terms.\n\n### Learning from wins and losses\n\nTrack every proposal you send: client type, offer, price, outcome and the reason given. After a few months, patterns appear — perhaps a certain option is always chosen, a particular industry rarely converts, or proposals sent within 24 hours of the call win more often. Use these insights to refine your offers, pricing and follow-up timing rather than guessing.\n\n### Summary\n\nSend proposals after discovery; open with the client's situation; define objectives, scope, exclusions and timeline; present two or three options; state payment terms and validity; include proof; and make acceptance easy.",
+          "video": null,
+          "keyTakeaways": [
+            "Send proposals after discovery, and open with the client's situation in their own words.",
+            "Define objectives, scope, exclusions, timeline and client responsibilities clearly.",
+            "Offer two or three options so clients choose between ways to say yes.",
+            "State deposits, payment terms, currency and a validity date, and make acceptance easy."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What should the opening section of a proposal focus on?",
+              "options": [
+                "Your biography and awards",
+                "Your price",
+                "The client's situation, goals and challenges in their words",
+                "Your tools"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Showing you understood the client builds confidence and differentiates you."
+            },
+            {
+              "question": "Why present two or three options?",
+              "options": [
+                "To confuse the client",
+                "To let the client choose how to work with you and provide budget flexibility without discounting",
+                "Because contracts require it",
+                "To triple the workload"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Options shift the decision from yes/no to which option, and anchor value."
+            },
+            {
+              "question": "What is the purpose of a proposal validity date?",
+              "options": [
+                "To encourage decisions and protect you from outdated prices and availability",
+                "It's legally required everywhere",
+                "To look official",
+                "To avoid taxes"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Expiry dates prompt action and prevent old prices being accepted months later."
+            }
+          ],
+          "activity": "Rewrite a recent quote or proposal using the 11-part structure, including an understanding section in the client's words, three options and clear payment terms."
+        },
+        {
+          "slug": "contracts-essentials",
+          "title": "Contracts essentials: protecting both sides",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Contracts prevent most disputes\n\nA contract isn't a sign of distrust — it's a shared understanding in writing. Most freelance disputes (late payment, endless revisions, ownership arguments) are avoidable with clear terms agreed at the start.\n\n**Important:** this lesson explains common principles, not legal advice. Contract law differs between countries. Use reputable templates adapted to your jurisdiction, and consult a lawyer for significant contracts or unusual situations.\n\n### Key clauses\n\n| Clause | What it covers | Why it matters |\n|---|---|---|\n| Parties | Legal names and contact details | Who is bound |\n| Scope of work | Deliverables, quantities, exclusions (or reference to the proposal/SOW) | Prevents scope disputes |\n| Timeline | Milestones, client responsibilities, delays | Manages expectations |\n| Revisions | Number of rounds; definition of a revision | Controls creep |\n| Fees and payment | Amounts, deposit, schedule, currency, method, late fees (where lawful) | Gets you paid |\n| Expenses | Which costs are billed and how | Avoids surprises |\n| Intellectual property | Who owns what, and when rights transfer | Protects both sides |\n| Portfolio rights | Whether you can show the work | Enables marketing |\n| Confidentiality | Handling sensitive information | Builds trust |\n| Termination/kill fee | How either side can end; payment for work done | Protects against cancellation |\n| Warranties and liability | What you promise; limits on liability | Limits risk |\n| Independent contractor status | You're not an employee | Clarifies obligations |\n| Subcontracting | Whether you can use others | Relevant for scaling |\n| Governing law and disputes | Which jurisdiction; mediation/arbitration | Important for international work |\n| Changes | Change order process | Handles new requests |\n\n### Intellectual property (IP)\n\nThis is often the most misunderstood area:\n\n- In many jurisdictions, the creator owns copyright unless it is assigned in writing. Clients often assume they own everything automatically.\n- A common approach: **rights transfer to the client upon full payment**, for the final deliverables.\n- Clarify what is **not** transferred: your pre-existing materials, tools, templates, code libraries, and working files (unless agreed).\n- Third-party assets (fonts, stock images, music) are licensed, not owned — state who purchases licences and on what terms.\n- AI-generated elements may have limited copyright protection in some jurisdictions; disclose AI use if relevant (see AI-related courses).\n\n### Payment protection clauses\n\n- Deposit before work starts.\n- Final files and rights transfer after full payment.\n- Late payment interest or fees where allowed by local law (some jurisdictions have statutory rights to interest on late commercial payments — check local rules).\n- Right to pause work if invoices are overdue.\n\n### Kill fees and cancellation\n\nIf a client cancels mid-project, a **kill fee** clause ensures you're paid for work completed plus a portion of the remaining fee or time reserved. Deposits often serve as partial protection.\n\n### International contracts\n\nWhen clients are in another country:\n\n- Specify **currency**, who pays **transfer fees**, and payment methods.\n- Specify **governing law** and dispute resolution (often your jurisdiction, the client's, or neutral arbitration/mediation).\n- Be aware of local rules affecting enforceability; for large contracts, seek legal advice.\n- Consider language: for bilingual contracts (e.g. Arabic–English), clarify which version prevails.\n\n### Contracting process\n\n- Use e-signature tools for speed and records.\n- For small projects, signed proposals with attached terms of service can work.\n- Keep copies of signed contracts, change orders and key emails.\n- Never start work before the contract is signed and deposit received — however urgent the client says it is.\n\n### Worked example: a dispute avoided\n\nA client refuses to pay the final invoice, claiming the logo \"isn't what we wanted\", after approving each stage by email. The contract stated two revision rounds, stage approvals, and IP transfer on full payment. The freelancer calmly references the approvals and contract, offers an additional revision round as a paid change order, and notes that rights transfer upon payment. The client pays, and requests the extra round separately.\n\n### Common mistakes\n\n- Working without a contract \"because they're a friend\".\n- Transferring all IP before payment.\n- No kill fee or termination clause.\n- Ignoring governing law in international work.\n\n### Summary\n\nUse a written contract for every project, covering scope, timeline, revisions, payment, IP, confidentiality, termination, liability, contractor status and governing law; transfer rights after full payment; and adapt templates to your jurisdiction with legal advice where needed.",
+          "video": null,
+          "keyTakeaways": [
+            "Contracts are shared understanding in writing and prevent most disputes.",
+            "Key clauses cover scope, revisions, payment, IP, confidentiality, termination, liability and governing law.",
+            "Transfer IP on full payment; clarify pre-existing materials and third-party licences.",
+            "Contract law varies by country — adapt templates and seek legal advice when needed."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "In many jurisdictions, who owns copyright in commissioned creative work without a written assignment?",
+              "options": [
+                "The platform used",
+                "The government",
+                "The client automatically",
+                "Often the creator, until rights are assigned in writing"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Clients often assume ownership, but assignment typically needs to be written; contracts should state when rights transfer."
+            },
+            {
+              "question": "Why tie IP transfer to full payment?",
+              "options": [
+                "It's a tradition",
+                "It protects the freelancer's leverage and ensures rights move only when the work is paid for",
+                "It avoids taxes",
+                "It speeds up revisions"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Linking the transfer of rights to full payment keeps the freelancer's leverage and ensures rights move only when the work has been paid for."
+            },
+            {
+              "question": "What does a kill fee clause do?",
+              "options": [
+                "Ensures payment for work done (and reserved time) if the client cancels mid-project",
+                "Sets tax rates",
+                "Prevents clients from cancelling",
+                "Charges clients for revisions"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Kill fees compensate the freelancer when projects are cancelled."
+            }
+          ],
+          "activity": "Compare your current contract (or a reputable template) against the key clauses table, list any missing clauses, and note questions to ask a local lawyer."
+        },
+        {
+          "slug": "client-onboarding",
+          "title": "Client onboarding that sets projects up to succeed",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### First impressions shape the whole project\n\nThe period between \"yes\" and the first deliverable determines how smoothly a project runs. Professional onboarding reassures clients they made the right choice, gathers everything you need, and sets expectations that prevent problems later.\n\n### The onboarding sequence\n\n```\n1. Contract signed + deposit paid  (never skip)\n2. Welcome email/pack               (within 24 hours)\n3. Onboarding questionnaire         (brand, goals, access, contacts)\n4. Asset and access collection      (logos, brand files, logins via secure method)\n5. Kickoff call                     (align on scope, timeline, communication)\n6. Project workspace set up         (tasks, files, timeline shared)\n7. First milestone scheduled\n```\n\n### The welcome pack\n\nA short PDF or page that includes:\n\n- Thank you and what happens next.\n- Project timeline and key milestones.\n- How you communicate (channels, response times, working hours and time zone).\n- How feedback and approvals work (e.g. consolidated feedback in one document, approvals within 48 hours).\n- Revision policy summary.\n- Payment schedule.\n- Who to contact for what.\n\n### The onboarding questionnaire\n\nTailor to your service. For a brand/social project:\n\n```\n- Business goals for the next 6–12 months\n- Target audiences and markets (languages, regions)\n- Competitors and brands you admire (and why)\n- Existing brand assets and guidelines\n- Key messages, offers, products to prioritise\n- Words/topics to avoid; compliance requirements (e.g. health or financial claims)\n- Approvers and decision process\n- Access needed (social accounts, analytics, website)\n- Important dates (launches, holidays, Ramadan/Eid campaigns, sales)\n```\n\n### Access and security\n\n- Ask clients to grant access through proper user roles (e.g. adding you as a collaborator or partner in ad accounts, CMS users, shared drives) instead of sharing passwords.\n- If credentials must be shared, use a password manager's secure sharing feature — never plain email or chat.\n- Use two-factor authentication.\n- Document what access you have and remove it at project end.\n- Follow data-protection obligations when handling customer data.\n\n### The kickoff call\n\nAgenda:\n\n1. Introductions and roles.\n2. Recap goals and success measures.\n3. Walk through scope, deliverables and exclusions.\n4. Timeline and client responsibilities (content, feedback, approvals).\n5. Communication plan (weekly update? which channel?).\n6. Risks and dependencies.\n7. Questions.\n\nSend a written summary after the call.\n\n### Communication norms\n\nSet boundaries early:\n\n- **Channels:** e.g. email for approvals, a project tool for tasks, a chat app for quick questions — and not everything on WhatsApp at midnight.\n- **Response times:** e.g. within one business day.\n- **Working hours and time zones:** state them, especially across Pakistan, the Gulf, Europe and North America.\n- **Update cadence:** e.g. weekly status updates every Thursday.\n\nClear norms reduce anxiety for clients and burnout for you.\n\n### Tools\n\nUse tools that suit your size: a project management board, shared folders, e-signature, invoicing, scheduling. Many freelancers use a simple client portal or shared workspace per client. Templates for welcome emails, questionnaires and kickoff agendas save time.\n\n### Worked example: onboarding a retainer client\n\nA UAE-based fashion brand signs a monthly content retainer. Within 24 hours: welcome pack with the content calendar process, questionnaire including Ramadan and summer sale dates, access requested via the platform's business manager roles, kickoff call scheduled. The kickoff summary confirms 12 posts and 4 reels monthly, approvals within 48 hours, a Thursday weekly update, and a shared folder structure. Three months later, the client renews and refers another brand, citing \"how organised everything is\".\n\n### Common mistakes\n\n- Starting work before contract and deposit.\n- Collecting passwords over chat.\n- No kickoff call, leading to misaligned expectations.\n- Unclear communication channels and response times.\n\n### Onboarding international clients\n\nClients in other countries may have different expectations about formality, response times, holidays and approval processes. Confirm time zones and public holidays for both sides, agree the language of communication and documents, and check whether the client needs specific paperwork from you, such as supplier registration forms or tax documents, before the first invoice. Addressing these details during onboarding prevents payment delays later.\n\n### Measuring onboarding quality\n\nAsk new clients one short question at the end of the first month: \"How clear and easy was getting started with us?\" Note any confusion and fix the welcome pack or questionnaire accordingly.\n\n### Summary\n\nOnboard every client with a clear sequence: contract and deposit, welcome pack, questionnaire, secure access, kickoff call, shared workspace and scheduled milestones — and set communication norms from day one.",
+          "video": null,
+          "keyTakeaways": [
+            "Onboarding between 'yes' and the first deliverable shapes the whole project.",
+            "A welcome pack, questionnaire and kickoff call align scope, timeline and responsibilities.",
+            "Request access through proper user roles and secure sharing — never passwords in chat.",
+            "Set communication channels, response times, working hours and update cadence from day one."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What must happen before project work begins?",
+              "options": [
+                "A kickoff party",
+                "A portfolio update",
+                "Final invoice sent",
+                "Signed contract and deposit received"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Starting without a contract and deposit exposes you to non-payment and disputes."
+            },
+            {
+              "question": "What is the safest way to get access to a client's ad account?",
+              "options": [
+                "Ask for their password by WhatsApp",
+                "Be added through the platform's user roles or partner access",
+                "Guess the password",
+                "Use a shared public document"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Role-based access is more secure and easy to revoke."
+            },
+            {
+              "question": "Why set communication norms at kickoff?",
+              "options": [
+                "To manage expectations about channels, response times and working hours and prevent burnout",
+                "To reduce the price",
+                "Because platforms require it",
+                "To avoid talking to clients"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Clear norms reduce client anxiety and protect your time."
+            }
+          ],
+          "activity": "Create a welcome pack, onboarding questionnaire and kickoff agenda for your main service, and define your communication norms in three sentences."
+        }
+      ]
+    },
+    {
+      "slug": "delivery-payments-and-compliance",
+      "title": "Delivery, getting paid and compliance",
+      "summary": "Run reliable delivery systems, invoice and collect payments including across borders, and handle tax and legal basics responsibly.",
+      "lessons": [
+        {
+          "slug": "delivery-systems",
+          "title": "Delivery systems: projects that run smoothly",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Reliability is your reputation\n\nClients rehire and refer freelancers who are reliable: who hit deadlines, communicate clearly, and deliver consistent quality. Talent gets you hired once; systems get you hired again.\n\n### The delivery system\n\n```\nProject workspace   → one place for tasks, files, timeline and decisions\nStandard process    → the same phases every time (e.g. brief → concept → develop → refine → deliver)\nChecklists / SOPs   → repeatable steps and quality checks\nCommunication rhythm → scheduled updates, clear approvals\nFeedback process    → consolidated, structured, time-bound\nHandover            → organised files, documentation, next steps\nReview              → post-project lessons, testimonial, referral ask\n```\n\n### Project management basics\n\n- **Break work into tasks** with owners and due dates.\n- **Visualise progress** on a board (To do → In progress → Review → Done) or a timeline.\n- **Use milestones** tied to client approvals and payments.\n- **Buffer** your internal deadlines ahead of client deadlines.\n- **Track time** even on fixed-price projects to learn your real effort.\n\nChoose simple tools you'll actually use; a well-maintained spreadsheet beats an abandoned complex system.\n\n### Communication rhythm\n\nProactive communication prevents most anxiety:\n\n```\nWeekly status update template\nProject: ______   Week of: ______\nDone this week:     ______\nNext week:          ______\nNeeded from you:    ______ (by date)\nRisks/blockers:     ______\nOverall status:     On track / At risk / Delayed (with reason)\n```\n\nWhen problems arise (illness, delays, mistakes), tell the client early with a solution. Bad news delivered early is forgiven far more easily than bad news discovered late.\n\n### Managing feedback and revisions\n\n- Ask for **consolidated feedback** from one point of contact, in one document or tool.\n- Provide a **feedback structure**: \"What's working? What's not meeting the objective? Specific changes requested?\"\n- Tie feedback to **objectives**, not only personal taste.\n- Track **revision rounds** against the contract.\n- Present work with context (the reasoning behind decisions) to reduce subjective feedback.\n\n### Quality control\n\nBuild QA into your process with checklists specific to your service:\n\n```\nExample QA checklist (social content)\n[ ] Brief and brand guidelines followed\n[ ] Spelling and grammar checked (all languages)\n[ ] Correct sizes/formats for each platform\n[ ] Claims accurate; disclosures present where needed\n[ ] Accessibility: contrast, captions, alt text\n[ ] Files named and organised per convention\n```\n\n### Handover and offboarding\n\nAt the end of a project:\n\n- Deliver organised final files with a short guide.\n- Transfer ownership of accounts, domains or assets as agreed.\n- Remove your access to client systems (or confirm the client has done so).\n- Send the final invoice.\n- Hold a short review: what went well, what to improve.\n- Ask for a testimonial and referral.\n- Propose next steps if relevant (maintenance, retainer, next phase).\n\n### Worked example: fixing a chaotic workflow\n\nA video editor juggling eight clients kept missing deadlines. Changes: one project board with a column per stage, internal deadlines 48 hours before client deadlines, a Thursday status update to every active client, feedback only through a video review tool with timestamped comments, and a QA checklist before every delivery. Within two months, missed deadlines dropped and two clients increased their monthly volume.\n\n### Common mistakes\n\n- Managing everything from memory and chat messages.\n- No buffer between internal and client deadlines.\n- Accepting scattered feedback from multiple people.\n- Forgetting offboarding: access, files, testimonial and next steps.\n\n### Planning capacity\n\nReliability also depends on not taking on more than you can deliver. Keep a simple capacity plan: list active projects with their estimated hours per week and compare the total with your realistic available time. Before accepting new work, check whether it fits or whether a start date needs to move. Telling a client \"I can start on the 15th\" is far better than accepting immediately and delivering late.\n\n### Handling mistakes\n\nEveryone makes mistakes. When you do, acknowledge it quickly, explain how you will fix it and by when, and then fix it. Afterwards, update your checklist or SOP so the same mistake is less likely to happen again. Clients often trust a freelancer more after a mistake is handled well than if nothing had gone wrong.\n\n### Summary\n\nBuild a delivery system with a single workspace, a standard process, checklists, a communication rhythm, structured feedback, QA and a proper handover — and review every project to improve.",
+          "video": null,
+          "keyTakeaways": [
+            "Reliability — deadlines, communication, consistent quality — drives rehiring and referrals.",
+            "Use a single workspace, standard process, milestones and internal buffers.",
+            "Send regular status updates and deliver bad news early with a solution.",
+            "Consolidate feedback, run QA checklists and offboard properly with files, access removal and a testimonial ask."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why set internal deadlines ahead of client deadlines?",
+              "options": [
+                "To create a buffer for problems and QA before delivery",
+                "Clients require it",
+                "To charge more",
+                "To work fewer hours"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Buffers absorb surprises so client deadlines are met reliably."
+            },
+            {
+              "question": "Three people from the client send conflicting feedback by chat. What's the best fix?",
+              "options": [
+                "Ask for consolidated feedback from one point of contact in one place",
+                "Start over",
+                "Ignore all feedback",
+                "Implement all of it"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "A single, consolidated feedback channel prevents contradictions and wasted revisions."
+            },
+            {
+              "question": "What should happen during offboarding?",
+              "options": [
+                "Nothing — just stop replying",
+                "Keep client passwords for later",
+                "Deliver organised files, handle access, send the final invoice, review and ask for a testimonial",
+                "Delete all files immediately"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Proper offboarding protects security and sets up referrals and future work."
+            }
+          ],
+          "activity": "Map your delivery process into phases, create a status update template and a QA checklist for your main service, and set up a project board for one active client."
+        },
+        {
+          "slug": "invoicing-and-international-payments",
+          "title": "Invoicing and getting paid, including internationally",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Cash flow keeps you in business\n\nProfitable freelancers can still fail if payments arrive late. Clear invoicing, deposits and the right payment methods keep cash flowing — especially when clients are in other countries.\n\n### Invoice essentials\n\n```\nInvoice checklist\n[ ] Your business name, address, contact, and registration/tax numbers (if applicable)\n[ ] Client's legal name and address\n[ ] Unique invoice number and date\n[ ] Description of services (reference proposal/contract), quantities, rates\n[ ] Currency and total; taxes such as VAT/GST if applicable\n[ ] Payment terms and due date (e.g. due within 14 days)\n[ ] Payment methods and details\n[ ] Late payment terms (as permitted by local law)\n[ ] Purchase order number, if the client uses them\n```\n\nSome jurisdictions have specific invoice requirements (e.g. for VAT-registered businesses) — check local rules.\n\n### Payment terms that protect you\n\n- **Deposits** before starting (commonly 30–50% for projects).\n- **Milestone payments** for longer projects.\n- **Retainers billed in advance.**\n- **Shorter terms** (e.g. 7–14 days) where possible; large companies may insist on longer terms — factor that into pricing and cash flow.\n- **Final files/rights on full payment.**\n\n### Chasing late payments\n\n```\nLate payment escalation (example)\nDay 1 after due:   Friendly reminder with invoice attached\nDay 7:             Firm reminder; confirm receipt and expected payment date\nDay 14:            Call or message the decision maker; mention contract terms\nDay 21–30:         Pause work (if contract allows); formal notice; late fees if lawful\nBeyond:            Consider formal debt recovery, mediation or legal options per jurisdiction\n```\n\nStay professional and document everything. Many late payments are process issues (invoice sent to the wrong person, missing PO number) — ask early.\n\n### International payment options (conceptual overview)\n\nFreelancers serving clients abroad — for example, from Pakistan to the UK, or from Egypt to the UAE — use a mix of methods. Availability, fees and rules differ by country and change over time.\n\n| Method | How it works | Considerations |\n|---|---|---|\n| Bank transfer (SWIFT) | Client sends money bank-to-bank | Can involve intermediary fees and exchange-rate margins; slower |\n| Multi-currency accounts/payment platforms | Receive in local-currency accounts (e.g. GBP, USD, EUR) and convert | Often lower fees and better rates; check availability in your country |\n| Freelance payout services | Receive payments from clients and marketplaces | Convenient; check fees and withdrawal options |\n| Online payment processors | Card payments or wallets via invoicing links | Convenient for clients; fees and availability vary |\n| Marketplace payments | Paid through the platform | Platform fees; withdrawal methods vary |\n\nPractical tips:\n\n- **Compare total cost:** transfer fees + exchange-rate margin + withdrawal fees.\n- **Specify who pays fees** in your contract and invoice.\n- **Invoice in a stable, agreed currency** and understand exchange-rate risk.\n- **Use legitimate, regulated channels.** Many countries have rules on foreign currency receipts and remittances (for example, requirements to receive export proceeds through banking channels, or benefits for doing so). Informal channels can create legal and tax problems — check local regulations.\n- **Keep records** of all receipts, conversions and fees for tax purposes.\n\n### Invoicing tools\n\nAccounting and invoicing software can generate professional invoices, track payments, send reminders and produce reports for tax filing. Many integrate with payment platforms. Choose one that supports your currencies and local tax requirements.\n\n### Cash flow habits\n\n- Separate business and personal accounts.\n- Keep a **cash buffer** (e.g. several months of expenses) for slow periods and late payers.\n- Move a percentage of each payment into a **tax account** immediately.\n- Forecast income for the next three months based on signed work.\n\n### Worked example: improving collection\n\nA developer in Lahore working with UK and UAE clients was losing money to fees and waiting weeks for payment. Changes: 40% deposits, invoices in GBP and AED through a multi-currency account with lower conversion costs, 14-day terms, automatic reminders, and a contract clause pausing work after 21 days overdue. Average time to payment shortened, and fees fell noticeably.\n\n### Common mistakes\n\n- No deposit on large projects.\n- Vague invoices sent to the wrong contact.\n- Ignoring transfer and exchange costs.\n- Using informal payment channels that create compliance problems.\n\n### Summary\n\nIssue complete invoices with clear terms, use deposits and milestone payments, follow a professional escalation process for late payments, compare the true cost of international payment methods, use regulated channels, and manage cash flow with separate accounts, buffers and tax set-asides.",
+          "video": null,
+          "keyTakeaways": [
+            "Complete invoices with clear terms reduce payment delays.",
+            "Deposits, milestones and advance retainer billing protect cash flow.",
+            "Compare total international payment cost: fees, exchange margins and withdrawal charges.",
+            "Use legitimate, regulated channels and keep records; separate accounts and keep buffers."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which invoice detail most often causes avoidable delays at larger companies?",
+              "options": [
+                "Invoice colour",
+                "Font choice",
+                "Missing purchase order number or wrong billing contact",
+                "Logo size"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Process details like PO numbers and correct contacts determine whether invoices get paid on time."
+            },
+            {
+              "question": "What should you compare when choosing an international payment method?",
+              "options": [
+                "Nothing — all methods cost the same",
+                "Total cost including transfer fees, exchange-rate margins and withdrawal fees",
+                "Only the transfer fee",
+                "The app's colour scheme"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Exchange-rate margins and withdrawal fees can exceed visible transfer fees."
+            },
+            {
+              "question": "Why avoid informal channels for receiving foreign payments?",
+              "options": [
+                "Banks require informal channels",
+                "They are always slower",
+                "They can create legal, regulatory and tax problems; regulated channels provide records and compliance",
+                "They increase exchange rates"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Many countries regulate foreign receipts; legitimate channels protect you."
+            }
+          ],
+          "activity": "Create an invoice template using the checklist, compare two international payment options by total cost for a sample payment, and write your late-payment escalation steps."
+        },
+        {
+          "slug": "taxes-and-legal-basics",
+          "title": "Taxes, registration and legal basics (principles)",
+          "type": "article",
+          "durationMinutes": 8,
+          "body": "### Treat your freelance work as a business\n\nFreelancers are responsible for their own tax, registration and legal obligations. Rules differ significantly by country, region and even type of service, and they change often. This lesson explains **principles and questions to ask**; it is not tax or legal advice. **Always check local rules and consult a qualified accountant or tax adviser.**\n\n### Business structure\n\nCommon options (names differ by country):\n\n| Structure | Characteristics | Consider when |\n|---|---|---|\n| Sole trader/self-employed individual | Simple; you and the business are legally the same | Starting out |\n| Freelance permit/licence | Some countries require permits to freelance legally (e.g. certain Gulf free-zone or government freelance permits) | Working in countries that require them |\n| Limited company/LLC | Separate legal entity; may limit liability; more admin | Growing income, hiring, larger clients |\n| Partnership | Two or more owners | Co-founding with others |\n\nExamples of country-specific considerations (verify current rules):\n\n- **United Arab Emirates:** freelancing typically requires an appropriate licence or permit (e.g. through free zones or government schemes); federal corporate tax was introduced in 2023, and VAT applies with registration thresholds.\n- **Saudi Arabia:** a government freelance document/permit scheme exists for eligible individuals; VAT applies to businesses above registration thresholds.\n- **Pakistan:** freelancers earning from abroad should register with the tax authority and file returns; there have been specific regimes and incentives for IT and IT-enabled services exports and for receiving proceeds through banking channels, and registration with relevant IT bodies may bring benefits — rules change frequently.\n- **United Kingdom:** self-employed people typically register for Self Assessment, pay income tax and National Insurance, and must register for VAT above a turnover threshold.\n- **United States:** self-employed individuals generally pay income tax and self-employment tax, often make quarterly estimated payments, and receive information returns from some clients.\n\n### Taxes to understand\n\n- **Income tax** on profits.\n- **Social contributions** (e.g. national insurance or social security), where applicable.\n- **Sales taxes** — VAT/GST — which may require registration above thresholds, charging tax on invoices, and filing returns.\n- **Cross-border rules:** for business-to-business services, some jurisdictions apply a **reverse charge** (the client accounts for VAT rather than you). Rules for services to consumers differ.\n- **Withholding taxes:** some clients or countries may withhold tax from payments; double taxation treaties may allow relief.\n- **Tax residency:** where you live and work affects where you pay tax — especially for digital nomads.\n\n### Record-keeping\n\nGood records make compliance and advice cheaper:\n\n```\nKeep for each year (retention periods vary by country)\n- Invoices issued and payments received\n- Expense receipts and business purchase records\n- Bank and payment platform statements\n- Contracts and change orders\n- Currency conversion records\n- Tax filings and correspondence\n```\n\nUse accounting software, separate business accounts, and monthly bookkeeping habits.\n\n### Deductible expenses\n\nMany jurisdictions allow deducting legitimate business expenses (equipment, software, co-working, professional fees, training). What's allowed — and how — varies. Keep receipts and ask your accountant.\n\n### Legal basics beyond tax\n\n- **Contracts** for every client (previous module).\n- **Intellectual property:** understand what you own and license; respect others' IP (fonts, stock, music).\n- **Data protection:** if you handle clients' customer data (e.g. email lists, CRM access), follow applicable laws (such as GDPR/UK GDPR for EU/UK data subjects, and data-protection laws in the UAE, Saudi Arabia, Pakistan and elsewhere). Consider data processing agreements for larger clients.\n- **Advertising and consumer rules:** if you create marketing, help clients avoid misleading claims and ensure disclosures.\n- **Insurance:** professional indemnity/liability insurance can protect against claims of errors or negligence; availability and need vary.\n- **Platform terms:** marketplaces have rules on fees, communication and off-platform contact.\n\n### Annual compliance checklist\n\n```\n[ ] Registration/licence/permit current\n[ ] Tax registrations (income, VAT/GST) checked against thresholds\n[ ] Returns filed and payments made on time\n[ ] Tax set-aside account funded\n[ ] Records organised; accountant review booked\n[ ] Contracts and templates reviewed\n[ ] Insurance reviewed\n[ ] Data protection practices reviewed\n```\n\n### Worked example: a freelancer relocating\n\nA designer moves from Karachi to Dubai while keeping UK and Pakistani clients. Questions for advisers: When does UAE tax residency begin, and what are Pakistan's rules for departing residents? Which UAE licence suits a freelance designer? Does the business need VAT registration given expected turnover? How should invoices to UK business clients handle VAT? How should the change be communicated to clients and payment providers? She books advisers in both countries before moving.\n\n### Common mistakes\n\n- Ignoring registration until a problem arises.\n- Mixing personal and business money.\n- Not setting aside tax from each payment.\n- Assuming rules from another country apply to you.\n\n### Summary\n\nChoose an appropriate business structure, understand income tax, social contributions, VAT/GST, cross-border rules and residency, keep organised records, handle IP, data protection and insurance, and check local rules with qualified advisers every year.",
+          "video": null,
+          "keyTakeaways": [
+            "Tax, registration and legal rules vary by country and change often — always check local rules.",
+            "Understand income tax, social contributions, VAT/GST thresholds, reverse charge and residency.",
+            "Keep organised records and separate business finances, with a tax set-aside.",
+            "Cover legal basics: contracts, IP, data protection, insurance and platform terms."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What does a VAT 'reverse charge' generally mean for cross-border B2B services?",
+              "options": [
+                "Services become tax-free everywhere",
+                "VAT is refunded to the freelancer",
+                "The business client accounts for VAT instead of the supplier, under applicable rules",
+                "The freelancer pays double VAT"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Under reverse-charge rules the customer accounts for VAT; details vary, so check local guidance."
+            },
+            {
+              "question": "Which habit makes tax compliance easier and cheaper?",
+              "options": [
+                "Waiting until the deadline to find receipts",
+                "Separate business accounts, organised records and a tax set-aside from every payment",
+                "Using only cash",
+                "Mixing personal and business spending"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Organised finances simplify filing and reduce accountant time."
+            },
+            {
+              "question": "A freelancer moves to another country while keeping clients abroad. What should they do?",
+              "options": [
+                "Use a friend's account",
+                "Seek advice on tax residency, licences, VAT and invoicing in both countries before moving",
+                "Stop invoicing",
+                "Assume nothing changes"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Residency and registration changes can have significant consequences; professional advice is essential."
+            }
+          ],
+          "activity": "List the registration, tax and legal questions that apply to your situation, organise last quarter's records using the checklist, and book (or plan) a review with a qualified local adviser."
+        }
+      ]
+    },
+    {
+      "slug": "scaling-to-a-micro-agency",
+      "title": "Scaling to a micro-agency",
+      "summary": "Decide when and how to grow beyond yourself, build systems and margins, and retain clients for sustainable growth.",
+      "lessons": [
+        {
+          "slug": "when-and-how-to-scale",
+          "title": "When and how to scale: subcontractors and first hires",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Growth is optional — and should be deliberate\n\nNot every freelancer should build an agency. Some prefer to stay solo, raise prices and work selectively. Others want to serve larger clients, build a team and create a business that doesn't depend entirely on their own hours. Both are valid. The key is scaling for the right reasons, at the right time.\n\n### Signals you may be ready\n\n- Demand consistently exceeds your capacity (waiting lists, declining good projects).\n- You have repeatable offers and processes.\n- Your prices support margins for others' work.\n- Clients ask for broader services you can't deliver alone.\n- You enjoy — or are willing to learn — managing people and processes.\n\nWarning signs you're not ready: inconsistent demand, underpriced offers, undocumented processes, or hoping a team will fix a sales problem.\n\n### Growth paths\n\n| Path | Description | Pros | Cons |\n|---|---|---|---|\n| Subcontracting/collaborators | Bring in freelancers per project | Flexible, low fixed cost | Quality consistency; availability |\n| Virtual assistant/admin support | Delegate admin, scheduling, inbox | Frees your time quickly | Requires clear processes |\n| Specialist partners | Partner with complementary freelancers (e.g. designer + developer) | Broader offers | Shared client relationships need clarity |\n| First employee/contractor on retainer | Part-time or full-time team member | Consistent capacity | Fixed costs, management, employment obligations |\n| Productised team model | Team delivers standardised packages | Scalable margins | Needs strong systems |\n\nMost micro-agencies start with **subcontractors**, then add a few core team members.\n\n### What to delegate first\n\nList your tasks and sort them:\n\n```\nDelegation matrix\nTask                     | Skill needed | Enjoy? | Value of my time | Delegate?\nAdmin/invoicing          | Low          | No     | Low              | Yes (VA/software)\nProduction (e.g. resizing, editing) | Medium | Mixed | Medium        | Yes (subcontractor)\nClient strategy/sales    | High         | Yes    | High             | Keep (for now)\nQuality review           | High         | Mixed  | High             | Keep, then train a lead\n```\n\nKeep strategy, sales and final quality at first; delegate production and admin.\n\n### Finding and vetting subcontractors\n\n- Sources: your network, communities, portfolio platforms, referrals from peers.\n- Vet with portfolio review, a **paid** test task, reference checks and a trial project.\n- Check communication, reliability and cultural fit — not just skill.\n- Agree terms in writing: rates, deadlines, quality standards, confidentiality, IP assignment to you (so you can transfer rights to clients), non-solicitation where lawful, and payment terms.\n\n### Employment vs contractor status\n\nLaws distinguish employees from independent contractors based on factors like control, integration, exclusivity and who provides equipment. Misclassifying employees as contractors can create legal and tax liabilities. Rules vary by country — get advice before hiring anyone full-time or long-term.\n\n### Transparency with clients\n\nTell clients how you work: \"Our team includes specialist collaborators under my direction; I lead strategy and quality.\" Many clients are comfortable with this — they care about results, reliability and confidentiality. Hiding subcontracting can damage trust if discovered and may breach contracts that restrict it.\n\n### Worked example: first steps to a micro-agency\n\nA brand designer in Islamabad has been turning away work for months. She raises prices by a sensible margin, documents her brand-identity process, hires a virtual assistant for scheduling and invoicing, and brings in two vetted subcontractors (a junior designer and a copywriter) on paid trial projects. She keeps discovery, strategy and final review. Within six months she's handling more projects with fewer late nights — and planning a part-time project manager.\n\n### Common mistakes\n\n- Hiring before demand and pricing support it.\n- Delegating strategy and quality too early.\n- No written agreements with subcontractors (especially IP).\n- Misclassifying long-term workers as contractors.\n\n### Leading a small team\n\nManaging people is a new skill. Share context, not just tasks: explain the client's goals so collaborators can make good decisions. Give specific, timely feedback, recognise good work, and pay on time — reliability matters as much to your team as it does to your clients. Hold a short weekly check-in to review priorities and blockers.\n\n### Summary\n\nScale only when demand, offers, pricing and willingness to manage are in place; start with subcontractors and admin support; delegate production before strategy; vet carefully with paid tests; put agreements in writing; respect employment laws; and be transparent with clients.",
+          "video": null,
+          "keyTakeaways": [
+            "Scaling is optional; do it when demand, offers, pricing and management willingness align.",
+            "Start with subcontractors and admin support; keep strategy, sales and final quality initially.",
+            "Vet collaborators with paid tests and written agreements covering IP and confidentiality.",
+            "Respect employment-classification laws and be transparent with clients about your team."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which is a warning sign you're not ready to scale?",
+              "options": [
+                "Clients requesting broader services",
+                "Documented processes",
+                "Consistent waiting lists",
+                "Hoping a team will fix inconsistent sales and underpriced offers"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "A team amplifies existing problems; fix demand and pricing first."
+            },
+            {
+              "question": "Why ensure subcontractors assign IP to you in writing?",
+              "options": [
+                "It's a tradition",
+                "To prevent them from working elsewhere",
+                "To avoid paying them",
+                "So you can transfer rights in final deliverables to your clients"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Without assignment you may not own what you promise to transfer to clients."
+            },
+            {
+              "question": "What should you usually delegate first?",
+              "options": [
+                "Pricing decisions",
+                "Admin and production tasks with clear processes",
+                "Final quality review",
+                "Client strategy and sales"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Delegating lower-leverage tasks frees your time for strategy and sales."
+            }
+          ],
+          "activity": "Fill in the delegation matrix for your current workload, identify two tasks to delegate, and draft a subcontractor agreement checklist including IP, confidentiality and payment terms."
+        },
+        {
+          "slug": "systems-sops-and-margins",
+          "title": "Systems, SOPs and healthy margins",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### An agency is a system\n\nThe difference between a freelancer with helpers and a real micro-agency is systems: documented processes, clear roles, quality control and pricing that leaves healthy margins. Without them, growth means more chaos, not more profit.\n\n### Standard operating procedures (SOPs)\n\nAn SOP documents how a recurring task is done so others can do it consistently.\n\n```\nSOP template\nTitle:          e.g. \"Monthly social content production\"\nPurpose:        why it matters\nOwner:          role responsible\nTrigger:        when it starts (e.g. first Monday of the month)\nInputs:         brief, brand guidelines, content calendar\nSteps:          1) … 2) … 3) … (with screenshots or short videos)\nQuality checks: checklist before client delivery\nOutputs:        deliverables, where saved, naming\nTime estimate:  expected hours\nLast updated:   date / by whom\n```\n\nStart with the most frequent and error-prone processes: onboarding, content production, reporting, invoicing. Record your screen while doing a task and turn it into an SOP — a quick way to document.\n\n### Roles and responsibilities\n\nClarify who does what with a simple RACI-style table:\n\n| Activity | Responsible | Accountable | Consulted | Informed |\n|---|---|---|---|---|\n| Discovery & strategy | Founder | Founder | Designer | Client |\n| Design production | Designer | Founder | Copywriter | Client |\n| Copywriting | Copywriter | Founder | Designer | Client |\n| Scheduling & reporting | Project manager | Founder | Team | Client |\n\nEven in a three-person team, clarity prevents dropped tasks and duplicated work.\n\n### Quality control at scale\n\n- **Checklists** for every deliverable type.\n- **Review stages:** peer review, then founder or lead review for key deliverables.\n- **Templates and brand systems** so work starts from a good baseline.\n- **Feedback loops:** share client feedback with the team; update SOPs when mistakes happen.\n\n### Understanding agency margins\n\nAgency profitability depends on the gap between what you charge and what delivery costs.\n\n```\nProject profitability (illustrative structure)\nRevenue (client price)                        ______\n− Direct costs (subcontractors, freelancer fees, stock, tools per project) ______\n= Gross profit                                ______\nGross margin % = Gross profit ÷ Revenue\n− Overheads (software, admin, your salary, marketing, office) ______\n= Net profit                                  ______\n```\n\nHealthy agencies set target margins and price accordingly. A common pitfall: paying subcontractors a large share of the project fee, leaving too little for management, overheads, sales and profit. When pricing team-delivered work, include:\n\n- Delivery cost (subcontractor or staff time).\n- Project management and QA time (often underestimated).\n- Sales and account management.\n- Overheads and a profit margin.\n\n### Utilisation and capacity\n\nFor team members on salary or retainer, track **utilisation** — the share of paid time spent on client work. Too low means excess cost; too high leads to burnout and quality problems. Plan capacity monthly: expected work vs available hours.\n\n### Pricing shifts as an agency\n\n- Move away from hourly pricing toward project, retainer and value-based pricing.\n- Productise offers so delivery can be standardised and delegated.\n- Review prices at least annually against costs and margins.\n\n### Tools stack\n\nA typical micro-agency stack: project management, shared file storage, communication (with clear channels per client), time tracking (for internal learning), invoicing/accounting, CRM for leads, password manager, and design/production tools with team licences. Keep it simple and documented.\n\n### Worked example: fixing thin margins\n\nA three-person content agency was busy but barely profitable. Analysis showed subcontractors received most of each retainer, and the founder's project-management time was unpaid. Changes: raised retainer prices for new clients, restructured packages to standardise production, moved subcontractors to fixed per-deliverable rates aligned with SOP time estimates, and added a part-time project manager funded by the improved margin. Gross margin improved and the founder reclaimed time for sales.\n\n### Common mistakes\n\n- Growing without documenting processes.\n- Underpricing project management and QA.\n- Not tracking margins per client or service.\n- Overloading team members until quality drops.\n\n### Knowing your numbers each month\n\nSet up a simple monthly dashboard: revenue, direct costs, gross margin, overheads, net profit, cash in the bank, and revenue by client and service. Review it at the same time every month. Seeing the numbers regularly helps you spot problems early, such as a client whose work has grown without a price change, and make confident decisions about hiring and pricing.\n\n### Summary\n\nDocument SOPs for recurring work, clarify roles, build quality control into the process, understand and target healthy margins, manage utilisation and capacity, price team-delivered work to include management and overheads, and keep the tool stack simple.",
+          "video": null,
+          "keyTakeaways": [
+            "Micro-agencies run on systems: SOPs, clear roles and quality control.",
+            "Document frequent, error-prone processes first; screen recordings speed up SOP creation.",
+            "Price team work to cover delivery, project management, sales, overheads and profit.",
+            "Track margins per client and utilisation to stay profitable without burning people out."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the main purpose of an SOP?",
+              "options": [
+                "To document recurring tasks so others can perform them consistently",
+                "To impress clients",
+                "To set prices",
+                "To replace contracts"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "A standard operating procedure documents how a recurring task is done so others can repeat it consistently, which makes quality reliable and delegation possible."
+            },
+            {
+              "question": "An agency pays subcontractors most of each project fee. What's the likely result?",
+              "options": [
+                "Faster delivery",
+                "Thin or negative margins after management, sales and overheads",
+                "High profits",
+                "No need for QA"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Remaining margin must cover management, overheads and profit; otherwise growth adds work without profit."
+            },
+            {
+              "question": "What does gross margin measure?",
+              "options": [
+                "Hours worked",
+                "Total revenue",
+                "Revenue minus direct delivery costs, as a share of revenue",
+                "Number of clients"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Gross margin shows how much remains after direct costs to cover overheads and profit."
+            }
+          ],
+          "activity": "Write one SOP for your most frequent process, build a RACI table for your current or planned team, and calculate the gross margin on your last three projects."
+        },
+        {
+          "slug": "retention-growth-and-sustainability",
+          "title": "Client retention, account growth and sustainability",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Keeping clients is cheaper than finding them\n\nFor most agencies, long-term clients provide the most stable revenue and profit: onboarding costs are behind you, you understand their business, and trust enables bigger projects. Retention and account growth are as important as new sales.\n\n### What drives retention\n\n- **Results** linked to the client's goals — and communicated clearly.\n- **Reliability**: on-time, consistent quality.\n- **Proactivity**: bringing ideas before being asked.\n- **Relationship**: understanding their business and people.\n- **Ease**: smooth processes, clear communication, no surprises on invoices.\n\n### Regular reviews\n\nHold quarterly business reviews (QBRs) with retainer clients:\n\n```\nQuarterly review agenda\n1. Goals recap and results (what worked, what didn't — honestly)\n2. Insights and learnings\n3. Upcoming business priorities (launches, seasons, markets)\n4. Recommendations for next quarter (including new opportunities)\n5. Feedback on our service\n6. Agreed actions and any scope changes\n```\n\nReviews turn you from supplier into partner and surface expansion opportunities naturally.\n\n### Growing accounts ethically\n\n- **Cross-sell** related services that genuinely help (e.g. adding short-form video to a social retainer).\n- **Upsell** to higher tiers when needs grow.\n- **Expand to new teams or markets** within the client's organisation.\n- Recommend only what serves the client's goals; pushing unnecessary services damages trust.\n\n### Monitoring client health\n\nTrack simple indicators:\n\n| Indicator | Healthy | At risk |\n|---|---|---|\n| Communication | Responsive, engaged | Slow replies, missed meetings |\n| Satisfaction | Positive feedback | Complaints, frequent corrections |\n| Payments | On time | Increasingly late |\n| Results | Meeting goals | Declining or unclear |\n| Stakeholders | Stable contacts | Your champion leaves |\n\nWhen risk appears, act early: a call, a review, a revised plan.\n\n### Client concentration risk\n\nIf one client provides a large share of your revenue, losing them can be devastating. Aim to diversify so no single client dominates; keep the pipeline active even when busy.\n\n### Financial sustainability\n\n- **Cash reserves:** several months of operating expenses.\n- **Forecasting:** monthly view of confirmed and likely revenue vs costs.\n- **Pay yourself** a consistent salary; profits above that build reserves and investment.\n- **Annual price and margin review.**\n- **Plan for seasonality** (e.g. slower months in some industries; peaks around Ramadan, Eid, year-end sales).\n\n### Personal sustainability\n\nBurnout is common among freelancers and agency founders. Protect yourself and your team:\n\n- Set working hours and communicate them.\n- Build buffers into timelines.\n- Take real breaks; plan holidays in advance with coverage.\n- Say no to projects that don't fit.\n- Invest in learning and rest as business necessities.\n\n### Ending client relationships well\n\nNot every relationship should continue. If a client is consistently unprofitable, disrespectful or misaligned, end professionally: give notice per the contract, complete agreed work, hand over files and access, and refer them elsewhere if appropriate. Replacing a draining client often improves both profit and morale.\n\n### Worked example: from churn to loyalty\n\nA social media micro-agency lost clients every few months. After adding QBRs, monthly result summaries tied to client goals, a \"proactive idea\" in every monthly report, and client-health tracking, average client tenure increased and several clients expanded into video and paid ads. The founder also reduced concentration: no client exceeded a set share of revenue.\n\n### Common mistakes\n\n- Focusing only on new clients.\n- Reporting activity (posts made) instead of results tied to goals.\n- Ignoring early warning signs.\n- Depending heavily on one client.\n- Treating burnout as a personal failing rather than a business risk.\n\n### Building assets beyond client work\n\nSustainable businesses often build assets that reduce dependence on client hours: templates, courses, workshops, digital products or a newsletter with sponsors. These take time to develop, so start small and use your client experience as the source of ideas. Even a modest additional income stream can smooth cash flow and give you more freedom to choose clients carefully.\n\n### Asking for feedback\n\nOnce or twice a year, ask each client a few simple questions: what they value most, what could be better, and how likely they are to recommend you. Act on the answers and tell clients what you changed.\n\n### Summary\n\nRetain clients through results, reliability, proactivity and relationships; hold quarterly reviews; grow accounts ethically; monitor client health and concentration risk; build financial reserves and forecasts; protect personal and team wellbeing; and end misaligned relationships professionally.",
+          "video": null,
+          "keyTakeaways": [
+            "Retention drives stable revenue — invest in results, reliability, proactivity and relationships.",
+            "Quarterly reviews turn you into a partner and surface ethical growth opportunities.",
+            "Monitor client health and avoid over-dependence on any single client.",
+            "Build reserves, forecast cash flow and treat burnout as a business risk."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the main benefit of quarterly business reviews with retainer clients?",
+              "options": [
+                "They align on goals and results, strengthen partnership and surface growth opportunities",
+                "They reduce the need for delivery",
+                "They replace invoices",
+                "They are legally required"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Regular reviews build trust and reveal ways to add value."
+            },
+            {
+              "question": "One client provides most of your revenue. What's the key risk?",
+              "options": [
+                "No risk — it's efficient",
+                "Your margins will automatically rise",
+                "Losing that client could severely damage the business",
+                "Taxes will be lower"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Concentration risk makes the business fragile; diversification reduces it."
+            },
+            {
+              "question": "Which report is more likely to retain a client?",
+              "options": [
+                "A list of tasks completed",
+                "A generic industry newsletter",
+                "Results tied to the client's goals with insights and a proactive recommendation",
+                "An invoice only"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Clients value outcomes and ideas linked to their goals."
+            }
+          ],
+          "activity": "Create a client-health tracker for your current clients, schedule a quarterly review with your top client using the agenda, and calculate what share of revenue your largest client represents."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 25,
+    "timeLimitMinutes": 40,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "fla-001",
+        "module": "positioning-and-offers",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does a freelancer's positioning statement define?",
+        "options": [
+          "Their office location",
+          "Who they serve, the outcome they deliver and why they are the right choice",
+          "Their hourly rate only",
+          "Their software tools"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Positioning captures client, outcome and differentiation so the right people recognise and refer you."
+      },
+      {
+        "id": "fla-002",
+        "module": "positioning-and-offers",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A designer charges low hourly rates on a marketplace and works 60-hour weeks. Which change most directly raises income without more hours?",
+        "options": [
+          "Adding more software subscriptions",
+          "Lowering rates to win more jobs",
+          "Working weekends too",
+          "Specialising and packaging higher-value offers for a defined niche"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Increasing value per hour through specialisation and offers breaks the time-for-money ceiling; more hours or lower prices do not."
+      },
+      {
+        "id": "fla-003",
+        "module": "positioning-and-offers",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which criteria should you use to evaluate a potential niche? (Choose all that apply.)",
+        "options": [
+          "Clients' ability to pay",
+          "Whether the niche has a trendy name",
+          "Your experience and interest",
+          "Demand for your service"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Experience, demand and ability to pay (plus reachability) indicate viability; trendiness does not."
+      },
+      {
+        "id": "fla-004",
+        "module": "positioning-and-offers",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A web designer's best projects were clinics, but she fears a niche will limit her. What is the most balanced approach?",
+        "options": [
+          "Choose a completely unrelated niche",
+          "Stay a generalist and avoid any focus",
+          "Refuse all non-clinic work immediately",
+          "Lead marketing with the clinic focus while still accepting some suitable projects from other sectors"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Specialising means leading with a focus, not refusing all other work, which reduces the risk while building a clear reputation."
+      },
+      {
+        "id": "fla-005",
+        "module": "positioning-and-offers",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the purpose of a 'not included' section in an offer?",
+        "options": [
+          "To list competitors",
+          "To look professional",
+          "To state exclusions clearly and prevent scope disputes",
+          "To reduce the price"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Explicit exclusions set boundaries both parties can refer to when new requests appear."
+      },
+      {
+        "id": "fla-006",
+        "module": "positioning-and-offers",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which is the best example of an entry offer on an offer ladder?",
+        "options": [
+          "A fixed-price audit with a 30-day action plan",
+          "A 12-month retainer",
+          "A full rebrand",
+          "Unlimited design subscription"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "A low-risk audit lets clients experience your work before larger commitments."
+      },
+      {
+        "id": "fla-007",
+        "module": "positioning-and-offers",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A client keeps requesting small custom changes to your productised package. What is the best way to handle this sustainably?",
+        "options": [
+          "Absorb all requests for free to keep them happy",
+          "Raise the base price for all clients without notice",
+          "Offer defined add-ons or a change order, and treat major changes as a custom project",
+          "Cancel the contract immediately"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Add-ons and change orders keep scope and pricing fair without constant renegotiation of the core offer."
+      },
+      {
+        "id": "fla-008",
+        "module": "portfolio-and-winning-clients",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What makes a case study persuasive?",
+        "options": [
+          "Hiding the client's problem",
+          "Only final images",
+          "Context, process, honest results and a testimonial",
+          "A long list of tools used"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Clients want evidence you understood a problem like theirs and solved it."
+      },
+      {
+        "id": "fla-009",
+        "module": "portfolio-and-winning-clients",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "A freelancer has no work in a new target niche. Which options are appropriate? (Choose all that apply.)",
+        "options": [
+          "Anonymised case studies from related work",
+          "Offering a small paid audit to a niche client to build a first case study",
+          "Presenting concept work as real client projects",
+          "Clearly labelled spec projects"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Honest, labelled or anonymised work and small paid starts build credibility; misrepresenting concepts as client work is deceptive."
+      },
+      {
+        "id": "fla-010",
+        "module": "portfolio-and-winning-clients",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which referral request is most likely to work?",
+        "options": [
+          "'Do you know one other café owner planning a menu refresh this year?'",
+          "Asking before starting the project",
+          "'Refer me to anyone!'",
+          "Sending the same request daily"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Specific, well-timed requests make it easy to think of a real person."
+      },
+      {
+        "id": "fla-011",
+        "module": "portfolio-and-winning-clients",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "A freelancer plans to buy an email list of 5,000 UK marketing managers and send a generic pitch. What are the main issues? (Choose all that apply.)",
+        "options": [
+          "Likely breaches of UK data-protection and electronic marketing rules",
+          "Recipients may not have consented to such messages",
+          "Low relevance and reputational damage from generic messages",
+          "It is the most effective way to win premium clients"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Bought lists and generic blasts raise legal and reputational problems; personalised, lawful outreach works better."
+      },
+      {
+        "id": "fla-012",
+        "module": "portfolio-and-winning-clients",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the main purpose of a discovery call?",
+        "options": [
+          "To show your entire portfolio",
+          "To pressure the client to sign",
+          "To negotiate the lowest price",
+          "To understand the client's situation and decide together if there's a fit"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Discovery diagnoses needs and fit before recommending a solution."
+      },
+      {
+        "id": "fla-013",
+        "module": "portfolio-and-winning-clients",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A prospect asks for a free full sample project before hiring. What's a professional response?",
+        "options": [
+          "Do the full project for free",
+          "Offer relevant case studies or a small paid test/audit",
+          "Refuse to talk further",
+          "Send another client's work as your own"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Paid tests and case studies show capability without giving away unpaid work."
+      },
+      {
+        "id": "fla-014",
+        "module": "portfolio-and-winning-clients",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "During discovery you learn the prospect's budget is a third of your core package, the launch is in two weeks, and the founder is the decision maker. What is the best recommendation?",
+        "options": [
+          "Accept the full scope at their budget",
+          "Decline rudely",
+          "Promise everything and subcontract cheaply without telling them",
+          "Propose a focused entry package that solves the most urgent need within budget and timeline, with a deposit"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Rescoping to the critical need respects both the budget and your rates, and can lead to more work later."
+      },
+      {
+        "id": "fla-015",
+        "module": "pricing-your-work",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which pricing model is based on the value of the outcome to the client?",
+        "options": [
+          "Hourly",
+          "Cost-plus only",
+          "Value-based",
+          "Day rate"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Value-based pricing links the price to the outcome's worth to the client rather than to hours spent."
+      },
+      {
+        "id": "fla-016",
+        "module": "pricing-your-work",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which elements should a retainer agreement define? (Choose all that apply.)",
+        "options": [
+          "Unlimited revisions on everything",
+          "What is included each month",
+          "Minimum term and notice period",
+          "Rollover rules for unused hours or deliverables"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Defined inclusions, rollover and term protect both sides; unlimited revisions invite over-servicing."
+      },
+      {
+        "id": "fla-017",
+        "module": "pricing-your-work",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A freelancer calculates a minimum viable rate but quotes below it to win a client. What is the main risk?",
+        "options": [
+          "The client will pay more later automatically",
+          "None",
+          "Working at a loss once costs, taxes and non-billable time are included",
+          "Higher taxes"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "The floor covers real costs; going below it makes the work unsustainable."
+      },
+      {
+        "id": "fla-018",
+        "module": "pricing-your-work",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Illustrative figures: income target plus costs and tax set-aside total 60,000 (in any currency), with 1,000 billable hours per year. What is the minimum hourly rate, and how should actual prices relate to it?",
+        "options": [
+          "60 per hour; always discount 20% below it",
+          "600 per hour; never quote below this",
+          "6 per hour; price exactly at the floor",
+          "60 per hour; set actual prices above it based on value, positioning and demand"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "60,000 ÷ 1,000 = 60 per hour is the floor; actual prices should sit above it."
+      },
+      {
+        "id": "fla-019",
+        "module": "pricing-your-work",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is scope creep?",
+        "options": [
+          "A payment platform",
+          "Gradual expansion of work beyond what was agreed",
+          "A type of contract",
+          "A pricing model"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Scope creep is the accumulation of extra requests beyond the agreed scope, which erodes profit."
+      },
+      {
+        "id": "fla-020",
+        "module": "pricing-your-work",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A client asks for a 20% discount. Which response best protects your value?",
+        "options": [
+          "Accept to keep them happy",
+          "Refuse and end the relationship",
+          "Offer a reduced scope, or a discount in exchange for upfront payment or a longer commitment",
+          "Accept and quietly reduce quality"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Trading discounts for value or reducing scope preserves your rate and integrity."
+      },
+      {
+        "id": "fla-021",
+        "module": "pricing-your-work",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "You've been fully booked for six months with a waiting list and nearly every proposal is accepted instantly. What is the most sensible action?",
+        "options": [
+          "Raise rates for new clients now and for existing clients with notice and options",
+          "Stop taking new clients permanently",
+          "Lower prices to thank clients",
+          "Work longer hours at the same rate"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Excess demand signals underpricing; staged increases with notice are fair and sustainable."
+      },
+      {
+        "id": "fla-022",
+        "module": "proposals-contracts-and-onboarding",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "When should a proposal usually be sent?",
+        "options": [
+          "Only if the client insists",
+          "After the project is finished",
+          "Before any conversation",
+          "After a discovery conversation that clarifies needs"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Proposals informed by discovery reflect real needs and win more often."
+      },
+      {
+        "id": "fla-023",
+        "module": "proposals-contracts-and-onboarding",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which clauses are essential in a freelance contract? (Choose all that apply.)",
+        "options": [
+          "Scope of work and exclusions",
+          "Payment terms and deposit",
+          "The freelancer's favourite colour",
+          "Intellectual property transfer conditions"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Scope, payment and IP are core protections; personal preferences are irrelevant."
+      },
+      {
+        "id": "fla-024",
+        "module": "proposals-contracts-and-onboarding",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A Gulf-based client wants all rights to designs before paying the final invoice and asks you to start before signing because of urgency. What is the best response?",
+        "options": [
+          "Refuse the project rudely",
+          "Agree to both to win the project",
+          "Start work and send the contract later",
+          "Explain that work starts after signature and deposit, and that rights transfer on full payment, offering a fast-track timeline once signed"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Holding to contract-first and payment-linked IP transfer protects you while still accommodating urgency."
+      },
+      {
+        "id": "fla-025",
+        "module": "proposals-contracts-and-onboarding",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What should a welcome pack include?",
+        "options": [
+          "Your personal social passwords",
+          "Only your invoice",
+          "A list of your other clients' data",
+          "Timeline, communication norms, feedback process, revision policy and payment schedule"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "The welcome pack sets expectations and reassures the client about how the project will run."
+      },
+      {
+        "id": "fla-026",
+        "module": "proposals-contracts-and-onboarding",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Why include client responsibilities (e.g. approvals within 48 hours) in proposals and contracts?",
+        "options": [
+          "To increase prices",
+          "It is a legal requirement everywhere",
+          "To blame clients",
+          "Because projects depend on client inputs, and delays should adjust timelines fairly"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Timelines depend on client inputs; stating responsibilities clarifies what happens when inputs are late."
+      },
+      {
+        "id": "fla-027",
+        "module": "proposals-contracts-and-onboarding",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "For a contract between a freelancer in Pakistan and a client in the UK, which points need explicit attention? (Choose all that apply.)",
+        "options": [
+          "Currency and who pays transfer fees",
+          "Which language version prevails if translated",
+          "Nothing — international contracts work the same as local ones",
+          "Governing law and dispute resolution"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Cross-border work needs clarity on money, jurisdiction and language."
+      },
+      {
+        "id": "fla-028",
+        "module": "proposals-contracts-and-onboarding",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What's the best way to handle access to a client's CMS and social accounts?",
+        "options": [
+          "Collect all passwords in a spreadsheet",
+          "Ask for passwords in chat",
+          "Use role-based user access or secure password-manager sharing, with two-factor authentication, and remove access at the end",
+          "Use the client's personal email login"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Secure, role-based access protects both parties and is easy to revoke."
+      },
+      {
+        "id": "fla-029",
+        "module": "delivery-payments-and-compliance",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What should you do when a project deadline is at risk?",
+        "options": [
+          "Blame the client",
+          "Deliver late without explanation",
+          "Stay silent and hope",
+          "Tell the client early with a proposed solution"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Early, solution-focused communication preserves trust far better than late surprises."
+      },
+      {
+        "id": "fla-030",
+        "module": "delivery-payments-and-compliance",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which practices improve delivery reliability? (Choose all that apply.)",
+        "options": [
+          "QA checklists before delivery",
+          "Internal deadlines before client deadlines",
+          "Weekly status updates",
+          "Accepting feedback from anyone in any channel"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Buffers, updates and QA create reliability; scattered feedback causes errors and rework."
+      },
+      {
+        "id": "fla-031",
+        "module": "delivery-payments-and-compliance",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A client is 10 days late paying. What's an appropriate step?",
+        "options": [
+          "Delete their files",
+          "Publicly shame them on social media",
+          "Do nothing for six months",
+          "Send a firm reminder, confirm they received the invoice and ask for an expected payment date"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Professional escalation resolves most late payments; public shaming and deleting work create legal and reputational risks."
+      },
+      {
+        "id": "fla-032",
+        "module": "delivery-payments-and-compliance",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "A freelancer in Pakistan invoices a UK client. Which considerations are important? (Choose all that apply.)",
+        "options": [
+          "Local tax registration and reporting of foreign income",
+          "The total cost of fees and exchange-rate margins across payment options",
+          "Receiving funds through legitimate, regulated channels and keeping records",
+          "Using an informal channel to avoid documentation"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Cost, compliance and tax reporting all matter; informal channels create legal and tax risk."
+      },
+      {
+        "id": "fla-033",
+        "module": "delivery-payments-and-compliance",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Why keep separate business and personal bank accounts?",
+        "options": [
+          "It's more expensive",
+          "It simplifies record-keeping, tax filing and cash-flow management",
+          "Banks require two accounts for everyone",
+          "To hide income"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Keeping business money separate from personal spending makes records clearer, tax filing simpler and cash flow easier to manage."
+      },
+      {
+        "id": "fla-034",
+        "module": "delivery-payments-and-compliance",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A UAE-based freelancer's turnover is growing quickly. Which question should they raise with an adviser?",
+        "options": [
+          "Whether they can stop invoicing",
+          "Whether their licence is appropriate and when VAT or corporate tax registration obligations may apply",
+          "Whether they can use a friend's licence",
+          "How to avoid all taxes permanently"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Licensing and tax registration depend on activity and thresholds that should be checked with an adviser."
+      },
+      {
+        "id": "fla-035",
+        "module": "delivery-payments-and-compliance",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What is a sensible cash-flow habit for freelancers?",
+        "options": [
+          "Moving a percentage of each payment into a tax account and keeping a cash buffer",
+          "Never invoicing until year end",
+          "Relying on one client",
+          "Spending each payment immediately"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Tax set-asides and buffers protect against bills and slow months."
+      },
+      {
+        "id": "fla-036",
+        "module": "scaling-to-a-micro-agency",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is usually the lowest-risk first step toward a micro-agency?",
+        "options": [
+          "Removing yourself from all client work immediately",
+          "Renting a large office",
+          "Working with vetted subcontractors on defined tasks",
+          "Hiring several full-time employees at once"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Subcontractors add capacity flexibly without large fixed costs."
+      },
+      {
+        "id": "fla-037",
+        "module": "scaling-to-a-micro-agency",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which items belong in a subcontractor agreement? (Choose all that apply.)",
+        "options": [
+          "IP assignment to your business",
+          "Rates, deadlines and quality standards",
+          "Confidentiality obligations",
+          "A promise of unlimited unpaid tests"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "IP, confidentiality and commercial terms protect you and your clients; unpaid tests are unfair."
+      },
+      {
+        "id": "fla-038",
+        "module": "scaling-to-a-micro-agency",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A three-person agency is busy but unprofitable. Which analysis is most useful first?",
+        "options": [
+          "Counting social media followers",
+          "Hiring more people immediately",
+          "Calculating gross margin per client/service, including project management time and subcontractor costs",
+          "Buying more software"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Margin analysis reveals underpricing and cost problems before adding more cost."
+      },
+      {
+        "id": "fla-039",
+        "module": "scaling-to-a-micro-agency",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why track team utilisation?",
+        "options": [
+          "To maximise hours at any cost",
+          "Because clients demand it",
+          "To replace SOPs",
+          "To balance cost efficiency with avoiding burnout and quality problems"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Utilisation that is too low wastes cost; too high harms people and quality."
+      },
+      {
+        "id": "fla-040",
+        "module": "scaling-to-a-micro-agency",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is client concentration risk?",
+        "options": [
+          "Having too many small clients",
+          "Clients concentrating on results",
+          "Working in one city",
+          "Depending on one client for a large share of revenue"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Heavy dependence on one client makes the business fragile if that client leaves."
+      },
+      {
+        "id": "fla-041",
+        "module": "scaling-to-a-micro-agency",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A long-term contractor works full-time exclusively for your agency, on your schedule and equipment, for two years. What should you do?",
+        "options": [
+          "Seek advice on whether employment laws treat this as employment and adjust the arrangement if needed",
+          "End the relationship without notice",
+          "Ask them to invoice under a different name",
+          "Nothing — contractor status is permanent"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Misclassification can create legal and tax liabilities; rules vary by country."
+      },
+      {
+        "id": "fla-042",
+        "module": "scaling-to-a-micro-agency",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which approach grows client accounts ethically?",
+        "options": [
+          "Recommending services that genuinely advance the client's goals, informed by regular reviews",
+          "Pushing every service regardless of need",
+          "Hiding results",
+          "Raising prices without notice"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Recommending only services that advance the client's goals, informed by regular reviews, builds trust and long-term growth; pushing unnecessary services erodes it."
+      }
+    ]
+  }
+}

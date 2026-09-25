@@ -1,0 +1,1833 @@
+{
+  "slug": "ui-ux-design-basics-for-marketers",
+  "version": 1,
+  "title": "UI/UX Design Basics for Marketers",
+  "subtitle": "Design landing pages, flows and forms people can actually use — mobile-first, accessible and tested with real users",
+  "category": "design",
+  "level": "beginner",
+  "estimatedMinutes": 171,
+  "description": "Marketers shape user experience every day: landing pages, sign-up forms, checkout flows, emails and the pages behind every ad. Small UX problems quietly waste budget — confusing navigation, slow mobile pages, forms that ask too much, buttons people cannot find. This course gives marketers, creators and small-agency teams a practical foundation in UI and UX design without needing to become full-time product designers.\n\nYou will learn usability heuristics, user flows and information architecture, UX writing, wireframing and prototyping, landing-page UX, mobile-first design, ethical persuasion, and the essentials of accessibility under WCAG 2.2. Finally, you will learn to test with real users, read analytics and run sensible A/B tests, and turn findings into improvements. Every lesson includes templates and a hands-on activity you can apply to your own pages.",
+  "outcomes": [
+    "Evaluate pages and flows using established usability heuristics",
+    "Map user flows and structure navigation so people find what they need",
+    "Write clear interface copy for buttons, forms, errors and empty states",
+    "Create wireframes and simple prototypes to test ideas before building",
+    "Design mobile-first landing pages with strong message match and ethical persuasion",
+    "Apply WCAG 2.2 accessibility basics to pages, forms and content",
+    "Run lightweight usability tests and interpret analytics and A/B tests responsibly"
+  ],
+  "skills": [
+    "UX design",
+    "UI design",
+    "Landing page optimisation",
+    "Web accessibility",
+    "Usability testing",
+    "Wireframing",
+    "UX writing"
+  ],
+  "prerequisites": [],
+  "badge": {
+    "name": "UI/UX Foundations for Marketers",
+    "description": "The holder can evaluate interfaces with usability heuristics, map user flows and navigation, write clear interface copy, wireframe and prototype ideas, design mobile-first landing pages without dark patterns, apply WCAG 2.2 accessibility basics, and validate improvements through usability testing and responsible analytics and experimentation.",
+    "criteria": "Completed all lessons and scored ≥ 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "ux-foundations",
+      "title": "UX foundations for marketers",
+      "summary": "Understand what UI and UX are, why they drive marketing results, and how to evaluate any interface with proven heuristics and user insight.",
+      "lessons": [
+        {
+          "slug": "ui-ux-and-marketing",
+          "title": "UI, UX and why marketers should care",
+          "type": "video",
+          "durationMinutes": 7,
+          "body": "### Two terms, one experience\n\n- **User experience (UX)** is the whole experience a person has when trying to achieve something with your product, site or service: whether they can find what they need, understand it, trust it and complete their task without frustration.\n- **User interface (UI)** is the part they see and interact with: layouts, buttons, forms, typography, colours, icons, states and feedback.\n\nUI is a big part of UX, but UX also includes content, speed, reliability, customer service, pricing clarity and even what happens after a purchase.\n\n### Why this is a marketing problem\n\nMarketing spends money to bring people to a page. UX determines what happens next.\n\n- An ad can be brilliant, but if the landing page is slow, confusing or broken on mobile, the budget is wasted.\n- A sign-up form that asks for too much information loses people who were ready to convert.\n- Confusing pricing pages create support tickets and abandoned carts.\n- Poor accessibility excludes customers and can create legal exposure.\n\nImproving UX is often one of the most cost-effective ways to improve marketing results, because it increases the value of traffic you already pay for.\n\n### The UX mindset: you are not the user\n\nThe most important principle in UX is simple: **you are not your user**. You know your product, your jargon and where everything is. Visitors do not. They arrive distracted, on a small screen, often from an ad or a social post, with a specific question in mind.\n\nThree habits of the UX mindset:\n\n1. **Start from the user's goal**, not the company's message. \"What is this person trying to do right now?\"\n2. **Observe behaviour, not opinions.** What people do on a page is more reliable than what they say they like.\n3. **Iterate.** Treat pages as hypotheses; test, learn and improve.\n\n### Where marketers touch UX\n\n| Marketing asset | UX questions |\n|---|---|\n| Landing pages | Does the page match the ad's promise? Is the next step obvious? |\n| Forms and sign-ups | Are we asking only what we need? Are errors clear? |\n| Email and SMS | Is the call to action clear on mobile? Are links easy to tap? |\n| Website navigation | Can people find pricing, contact and key information fast? |\n| Checkout and booking | Are costs clear up front? Are there unnecessary steps? |\n| Social profiles and link-in-bio pages | Is the path from post to action short and clear? |\n| Chat and customer support | Can people get help when stuck? |\n\n### A simple UX quality model\n\nMany teams use a set of qualities to judge an experience. A practical version:\n\n```\nUseful      — Does it meet a real need?\nUsable      — Can people complete tasks easily?\nFindable    — Can people locate what they need?\nCredible    — Do people trust it?\nAccessible  — Can people with disabilities use it?\nDesirable   — Does it look and feel appealing and on-brand?\nFast        — Does it load and respond quickly, especially on mobile?\n```\n\nIf any one fails, the experience fails for someone.\n\n### Worked example: a webinar sign-up\n\nA creator runs ads for a free webinar. Clicks are healthy, but few people register.\n\nUX review findings:\n\n- The ad promises \"Grow on LinkedIn in 30 days\" but the landing page headline says \"Welcome to my community\" — weak message match.\n- The registration form asks for name, email, phone, company, job title, country, and \"How did you hear about us?\".\n- On mobile, the register button is below a long biography.\n- The page loads slowly because of a large background video.\n\nFixes: headline repeats the ad promise; form reduced to name and email (optional phone for reminders with clear consent); register button repeated near the top on mobile; video replaced with a compressed image. The creator then measures registrations per visitor over the next campaign rather than assuming the fixes worked.\n\n### Common mistakes\n\n- Treating UX as \"making it pretty\".\n- Designing from the company's perspective (\"what we want to say\") instead of the user's goal.\n- Judging pages on desktop only, when most social traffic is mobile.\n- Changing many things based on opinions without measuring.\n\n### Summary\n\nUX is the whole experience of achieving a goal; UI is the visible, interactive layer. Marketers influence UX constantly, and improving it multiplies the value of traffic. Adopt the UX mindset — you are not the user — and judge experiences on usefulness, usability, findability, credibility, accessibility, desirability and speed.",
+          "video": {
+            "script": "Every time you run an ad, send an email or post a link, you're sending people into an experience. What happens next is user experience, or UX. UX is the whole experience someone has when they try to get something done: finding information, understanding it, trusting it and completing a task without frustration. The user interface, or UI, is the part they see and touch — the layout, the buttons, the forms, the colours and the feedback when they tap something. UI is a big part of UX, but UX also includes speed, content, pricing clarity and what happens after someone converts. Why should marketers care? Because marketing buys attention, and UX decides whether that attention turns into results. A great ad pointing to a slow, confusing mobile page wastes money. A form that asks for ten fields loses people who were ready to sign up. The most important idea in UX is simple: you are not your user. You know your product and your jargon. Your visitors arrive distracted, on a phone, with one question in mind. So start from their goal, watch what people actually do rather than what they say, and treat every page as a hypothesis you can improve. Here's a quick check you can run on any page. Is it useful? Is it easy to use? Can people find what they need? Do they trust it? Can people with disabilities use it? Does it feel appealing and on-brand? And is it fast, especially on mobile? If any one of those fails, the experience fails for someone. In this course, you'll learn to spot these problems and fix them.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "UX is the whole experience of achieving a goal; UI is the visible, interactive layer.",
+            "Improving UX increases the value of traffic you already pay for.",
+            "You are not your user — start from their goal and observe behaviour.",
+            "Judge experiences on usefulness, usability, findability, credibility, accessibility, desirability and speed."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which statement best distinguishes UI from UX?",
+              "options": [
+                "UI is the visible, interactive layer; UX is the overall experience of achieving a goal",
+                "UI covers customer service and pricing",
+                "UX is only about colours",
+                "They are identical"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "UI is part of UX; UX also includes content, speed, support and more."
+            },
+            {
+              "question": "Ads get many clicks but few conversions. Where should a marketer look first?",
+              "options": [
+                "Increase the ad budget",
+                "The landing page experience: message match, clarity, speed and form friction",
+                "Change the logo",
+                "Post more often on social media"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Post-click UX determines whether paid traffic converts; more budget amplifies the problem."
+            },
+            {
+              "question": "What does 'you are not your user' mean in practice?",
+              "options": [
+                "Your knowledge of the product differs from visitors', so observe real users rather than relying on your assumptions",
+                "Users are always wrong",
+                "Only designers can judge UX",
+                "Marketers should not use their own products"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Insiders know jargon and structure; users don't, so evidence beats assumptions."
+            }
+          ],
+          "activity": "Pick one of your landing pages or link-in-bio pages and rate it 1–5 on each of the seven UX qualities. Write the single biggest problem and one change you could test."
+        },
+        {
+          "slug": "usability-heuristics",
+          "title": "The 10 usability heuristics in practice",
+          "type": "article",
+          "durationMinutes": 8,
+          "body": "### A shared checklist for good interfaces\n\nIn the 1990s, usability expert Jakob Nielsen published ten general principles for interaction design, known as **usability heuristics**. They remain one of the most widely used tools for evaluating interfaces quickly. A heuristic evaluation — reviewing a page against these principles — takes little time and reliably uncovers common problems.\n\n### The ten heuristics with marketing examples\n\n| # | Heuristic | What it means | Marketing example |\n|---|---|---|---|\n| 1 | Visibility of system status | Keep users informed about what's happening | \"Sending…\" then \"Thanks! Check your inbox\" after a form submit; progress steps in checkout |\n| 2 | Match between system and the real world | Use users' language and familiar concepts | \"Book a call\" instead of \"Initiate consultation workflow\" |\n| 3 | User control and freedom | Provide clear ways to undo, go back or exit | Easy-to-find close button on pop-ups; editable cart |\n| 4 | Consistency and standards | Follow platform and internal conventions | Links look like links; the logo returns home; buttons look the same site-wide |\n| 5 | Error prevention | Prevent problems before they occur | Date pickers instead of free text; confirming before deleting |\n| 6 | Recognition rather than recall | Make options visible instead of relying on memory | Showing selected plan details at checkout; recently viewed items |\n| 7 | Flexibility and efficiency of use | Support both novices and experts | Autofill, saved details, shortcuts for returning customers |\n| 8 | Aesthetic and minimalist design | Remove information that competes with what matters | One primary call to action per section |\n| 9 | Help users recognise, diagnose and recover from errors | Plain-language error messages with solutions | \"That email looks incomplete — did you mean name@gmail.com?\" |\n| 10 | Help and documentation | Provide easy-to-find help when needed | FAQs near pricing; chat link during checkout |\n\n### Running a quick heuristic evaluation\n\n1. **Define the task** you're evaluating (\"Register for the webinar on mobile\").\n2. **Walk through the task** as a new user would, ideally on the device your audience uses.\n3. **Note each problem**, the heuristic it breaks, and where it happens.\n4. **Rate severity** — for example 0 (not a problem) to 4 (blocks the task).\n5. **Recommend a fix** for each.\n6. **Ideally, have two or three people evaluate independently**, then combine findings; different people spot different problems.\n\n```\nHeuristic evaluation log\nTask: ________________________   Device: ________\nNo Location        Problem                       Heuristic  Severity  Fix\n1  Form            No confirmation after submit   H1         3        Add success message + email\n2  Pricing         \"SKU tiers\" jargon             H2         2        Rename to \"Plans\"\n3  Pop-up          Close button tiny, low contrast H3        3        Larger, clear close button\n```\n\n### Severity helps prioritise\n\nNot every issue matters equally. Prioritise:\n\n- **Frequency:** how many users hit it?\n- **Impact:** how badly does it block them?\n- **Persistence:** is it a one-time annoyance or a repeated one?\n\nFix high-severity, high-frequency issues first. A missing confirmation message on a paid-traffic form may matter more than a slightly inconsistent icon.\n\n### Limitations\n\nHeuristic evaluation is fast and cheap but it is expert judgement, not user evidence. It misses problems specific to your audience's knowledge, context or language, and it can produce false alarms. Combine it with usability testing and analytics (covered later in the course).\n\n### Worked example: a small e-commerce store\n\nTask: \"Buy a phone case on mobile.\"\n\nFindings:\n\n- H1: After tapping \"Add to cart\", nothing visible changes — users tap again and add two cases.\n- H2: Shipping is called \"fulfilment fee\".\n- H4: Some buttons are rounded and green, others square and grey.\n- H5: The phone model is typed as free text, leading to mistakes.\n- H9: Card errors say \"Transaction failed (code 51)\".\n- H10: No delivery information until the last step.\n\nFixes: a toast message and cart badge update; \"Shipping\" wording; one button style; a model dropdown; human-readable payment errors with next steps; delivery times shown on product pages.\n\n### Common mistakes\n\n- Evaluating on desktop when most customers use mobile.\n- Listing problems without severity, so teams fix trivial issues first.\n- Treating heuristics as rigid rules rather than guides.\n- Skipping real user testing because \"we already did a heuristic review\".\n\n### Summary\n\nNielsen's ten heuristics give you a fast, structured way to review any page or flow. Define a task, walk through it on the right device, log problems with the heuristic, severity and fix, and prioritise by frequency and impact — then validate with real users.",
+          "video": null,
+          "keyTakeaways": [
+            "Nielsen's ten heuristics are a fast, widely used checklist for evaluating interfaces.",
+            "Evaluate specific tasks on the device your audience actually uses.",
+            "Log each problem with the heuristic, severity and a recommended fix.",
+            "Heuristic reviews complement — but don't replace — testing with real users."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "After submitting a form, nothing on the page changes. Which heuristic is violated?",
+              "options": [
+                "Help and documentation",
+                "Visibility of system status",
+                "Flexibility and efficiency of use",
+                "Aesthetic and minimalist design"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Users need feedback about what happened; without it they may resubmit or leave."
+            },
+            {
+              "question": "A checkout error reads 'Error 0x80045'. Which heuristic does a better message address?",
+              "options": [
+                "Recognition rather than recall",
+                "User control and freedom",
+                "Help users recognise, diagnose and recover from errors",
+                "Consistency and standards"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Error messages should explain the problem in plain language and suggest a solution."
+            },
+            {
+              "question": "What is a key limitation of heuristic evaluation?",
+              "options": [
+                "It takes months",
+                "It only works on print",
+                "It requires expensive software",
+                "It relies on expert judgement and can miss audience-specific problems, so it should be combined with user testing"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "It's fast and cheap but not a substitute for evidence from real users."
+            }
+          ],
+          "activity": "Run a heuristic evaluation of one key task on your website or a client's, on a mobile phone. Log at least six problems with heuristic, severity and fix, and pick the top three to address."
+        },
+        {
+          "slug": "understanding-users",
+          "title": "Understanding users: goals, jobs and lightweight research",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Design starts with people\n\nEvery UX decision rests on assumptions about users: who they are, what they want, what they already know, and what worries them. Better assumptions — grounded in evidence — lead to better pages. You don't need a research department; lightweight methods get you most of the way.\n\n### Goals, tasks and context\n\nFor each key audience, capture:\n\n- **Goal:** what they ultimately want (\"Get more clients for my salon\").\n- **Task:** what they are trying to do on this page right now (\"Compare booking software prices\").\n- **Context:** device, place, time pressure, language, connection quality.\n- **Anxieties:** what might stop them (\"Hidden fees?\", \"Is my data safe?\", \"Will this work in my country?\").\n- **Knowledge:** familiarity with the category and jargon.\n\n### Jobs to be done\n\nThe **jobs-to-be-done** idea frames users' needs as progress they're trying to make: \"When [situation], I want to [motivation], so I can [expected outcome].\"\n\nExample: \"When I'm launching a new product, I want to get a professional landing page live in a day, so I can start taking pre-orders before my competitors.\"\n\nJob statements help you prioritise content: this user needs speed, templates and payment setup, not a long history of the company.\n\n### Proto-personas\n\nFull research-based personas take time. **Proto-personas** are quick, assumption-based profiles created from what the team knows, then validated over time.\n\n```\nProto-persona\nName/label:     \"Busy salon owner\" (avoid stereotypes; focus on behaviour)\nContext:        Runs a 3-chair salon in Lahore; manages bookings on WhatsApp\nGoal:           Reduce no-shows and admin time\nTasks on site:  Understand features, check price in local currency, see if it works with WhatsApp\nAnxieties:      Cost, learning curve, staff adoption\nChannels:       Instagram, Facebook groups, word of mouth\nEvidence:       3 sales calls, 20 support chats (update as research grows)\n```\n\nMark which parts are assumptions and which are evidenced.\n\n### Lightweight research methods\n\n| Method | What it gives you | Effort |\n|---|---|---|\n| Customer interviews (5–8) | Motivations, language, anxieties | Low–medium |\n| Support tickets, chats, DMs, reviews | Real problems in customers' words | Low |\n| Sales call notes | Objections and decision criteria | Low |\n| On-site surveys (one question) | Why people visit, what's missing | Low |\n| Analytics | What people do, where they drop | Low–medium |\n| Search queries (site search and search engines) | What people look for | Low |\n| Usability tests | Where people struggle | Medium |\n\n### Interview tips\n\n- Ask about **past behaviour**, not hypothetical futures: \"Tell me about the last time you booked a…\" rather than \"Would you use…?\"\n- Ask open questions and follow up with \"Why?\" and \"Tell me more\".\n- Avoid leading questions (\"Don't you think this is easy?\").\n- Record (with consent) or take detailed notes; note exact phrases people use.\n- Respect privacy: collect only what you need, explain how notes are used, and follow data-protection rules in your market.\n\n### Turning research into design decisions\n\nResearch is only useful if it changes something. After collecting insights:\n\n1. Cluster notes into themes (affinity mapping).\n2. Write insights as statements: \"Salon owners worry staff won't adopt new tools.\"\n3. Turn insights into design implications: \"Show a 'staff app in 5 minutes' video and a testimonial from a salon manager.\"\n4. Prioritise implications for the pages that matter most.\n\n### Worked example: a coaching programme page\n\nResearch: 6 interviews and 50 DM questions. Themes: price uncertainty, time commitment, \"Is this for beginners?\", payment options in local currency.\n\nDesign implications: a \"Who this is for / not for\" section; weekly time commitment stated clearly; price shown in multiple currencies where appropriate with clear instalment terms; FAQ addressing beginner concerns in the exact language people used.\n\n### Common mistakes\n\n- Designing for \"everyone\".\n- Personas based on demographics only, with no goals or anxieties.\n- Asking people to predict future behaviour.\n- Doing research and then ignoring it.\n\n### Research ethics and privacy\n\nTreat research participants with respect. Explain why you are talking to them, how long it will take and how notes or recordings will be used, and get their consent before recording. Store notes securely, remove personal details you do not need, and delete recordings when the project ends. Pay or reward participants fairly for their time, and never use research sessions as a disguised sales pitch.\n\n### Summary\n\nCapture users' goals, tasks, context, anxieties and knowledge; express needs as jobs to be done; start with proto-personas and validate them; use lightweight research sources; and translate insights into specific design implications.",
+          "video": null,
+          "keyTakeaways": [
+            "Capture goals, tasks, context, anxieties and knowledge for each key audience.",
+            "Jobs-to-be-done statements focus design on the progress users want to make.",
+            "Proto-personas are quick starting points — mark assumptions and validate them.",
+            "Interview about past behaviour, avoid leading questions and turn insights into design implications."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which interview question is most useful?",
+              "options": [
+                "'Don't you think our design is easy?'",
+                "'Would you use an app like this?'",
+                "'What features should we build?'",
+                "'Tell me about the last time you booked an appointment for your salon.'"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Questions about specific past behaviour yield reliable insight; hypothetical and leading questions do not."
+            },
+            {
+              "question": "What makes a proto-persona different from a research-based persona?",
+              "options": [
+                "It includes photos",
+                "It is always more accurate",
+                "It's built quickly from team knowledge and assumptions, to be validated over time",
+                "It covers every possible user"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Proto-personas are quick, assumption-based profiles built from what the team already knows, then validated and updated as research accumulates; photos and completeness are not what defines them."
+            },
+            {
+              "question": "Research shows users worry about hidden fees. What's the best design implication?",
+              "options": [
+                "Show total costs clearly and early, including fees",
+                "Hide pricing until checkout",
+                "Add more testimonials only",
+                "Remove the pricing page"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Addressing the anxiety directly with transparent pricing builds trust."
+            }
+          ],
+          "activity": "Review 20 recent customer messages, reviews or support tickets. Cluster them into themes, write three insight statements and one design implication for each."
+        }
+      ]
+    },
+    {
+      "slug": "flows-structure-and-copy",
+      "title": "Flows, structure and interface copy",
+      "summary": "Map user flows and journeys, organise navigation and content, and write clear microcopy for buttons, forms and errors.",
+      "lessons": [
+        {
+          "slug": "user-flows-and-journeys",
+          "title": "User flows and journey maps",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Seeing the whole path\n\nMarketers often design single pages, but users experience **paths**: an ad, a landing page, a form, an email confirmation, a reminder, a purchase. Problems frequently hide between pages. User flows and journey maps make those paths visible.\n\n### User flows\n\nA **user flow** is a diagram of the steps a user takes to complete a task, including decisions and alternative paths.\n\nBasic notation:\n\n```\n[Entry point] → (Page/screen) → {Decision?} → (Page) → [Goal]\n                                   ↓ no\n                               (Alternative path)\n```\n\nExample — webinar registration from Instagram:\n\n```\n[Instagram story ad] → (Landing page) → {Registered before?}\n    ↓ no                                       ↓ yes\n(Form: name + email) → (Thank-you page + calendar link) → [Registered]\n    ↓ error\n(Inline error message) → back to form\n[Registered] → (Confirmation email) → (Reminder 1 day before) → (Reminder 1 hour before) → [Attends]\n```\n\nWhat to look for:\n\n- **Number of steps** — can any be removed or combined?\n- **Dead ends** — pages with no clear next step.\n- **Error paths** — what happens when something goes wrong?\n- **Channel switches** — moving from app to browser, social to website, email to WhatsApp — each switch risks drop-off.\n- **Logged-in vs new users** — different paths.\n\n### Happy path and edge cases\n\nThe **happy path** is the ideal route with no problems. Real users take many others:\n\n- Payment declined.\n- Email typed wrongly.\n- Arriving from a shared link on a different device.\n- Returning later to finish.\n- Using a screen reader or keyboard only.\n- Slow or interrupted connections.\n\nDesign at least the most common edge cases explicitly.\n\n### Journey maps\n\nA **customer journey map** zooms out further, capturing stages, actions, thoughts, feelings and touchpoints across the whole relationship.\n\n| Stage | Aware | Consider | Sign up | Onboard | Use/Renew |\n|---|---|---|---|---|---|\n| Actions | Sees reel | Visits site, reads reviews | Starts trial | Sets up account | Uses weekly |\n| Touchpoints | Instagram | Website, Google reviews | Sign-up form | Emails, app | App, support |\n| Thoughts | \"Could this help me?\" | \"Is it worth the price?\" | \"Is this safe?\" | \"How do I start?\" | \"Is it still worth it?\" |\n| Feelings | Curious | Unsure | Anxious | Overwhelmed | Satisfied / frustrated |\n| Opportunities | Clear promise | Transparent pricing, proof | Minimal form, trust signals | Guided setup | Tips, renewal reminders |\n\nJourney maps help marketing, sales, product and support teams see their part of the same experience.\n\n### Creating a flow: step by step\n\n1. Choose one important task and entry point.\n2. List every screen, message and decision.\n3. Walk the flow yourself on mobile, taking screenshots.\n4. Mark friction points: extra steps, unclear copy, slow loads, errors.\n5. Add analytics data where available (drop-off at each step).\n6. Propose a simplified flow.\n\n### Worked example: a consultation booking flow\n\nOriginal: Facebook ad → homepage → Services page → Contact page → long contact form → \"We'll get back to you\" → email back-and-forth to choose a time.\n\nProblems: too many steps, the ad lands on the homepage (weak message match), no instant booking, uncertainty after submitting.\n\nRedesign: ad → dedicated landing page matching the ad → embedded scheduler showing available times in the visitor's time zone → short form (name, email, one qualifying question) → confirmation page and calendar invite → reminder emails/SMS with consent.\n\n### Common mistakes\n\n- Designing screens in isolation.\n- Ignoring error and edge-case paths.\n- Forgetting post-conversion steps (confirmation, onboarding).\n- Mapping the journey the company wishes existed rather than the real one.\n\n### Measuring a flow\n\nOnce a flow is mapped, attach numbers to it. Most analytics tools can show how many people reach each step and where they leave. Even rough figures change priorities: a step that loses half of mobile visitors deserves attention before a cosmetic issue elsewhere. Record the baseline before you change anything, so you can compare results fairly afterwards and explain the improvement to your team or client.\n\n### Summary\n\nUse user flows to map task paths, including decisions and errors, and journey maps to see stages, thoughts, feelings and touchpoints across the relationship. Walk flows on mobile, mark friction, and simplify.",
+          "video": null,
+          "keyTakeaways": [
+            "Users experience paths, not pages — map them.",
+            "User flows show steps, decisions, errors and channel switches for one task.",
+            "Journey maps capture stages, actions, thoughts, feelings and touchpoints across the relationship.",
+            "Design common edge cases, not just the happy path."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the 'happy path' in a user flow?",
+              "options": [
+                "The ideal route through a task with no problems",
+                "The error-handling path",
+                "A path for returning customers only",
+                "The path with the most steps"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "It's the ideal route; real users also encounter edge cases that need design."
+            },
+            {
+              "question": "A consultation flow requires email back-and-forth to choose a time. What is the most effective improvement?",
+              "options": [
+                "Ask users to call during office hours only",
+                "Add more form fields",
+                "Add a longer thank-you message",
+                "Embed a scheduler showing available times so users book instantly"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "An embedded scheduler lets people book instantly, removing email back-and-forth and the uncertainty of waiting; more fields or phone-only booking add friction."
+            },
+            {
+              "question": "Which element belongs in a customer journey map but usually not in a simple user flow?",
+              "options": [
+                "Screens",
+                "Users' thoughts and feelings at each stage",
+                "Buttons",
+                "Decision points"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Journey maps capture emotional and cognitive context across stages."
+            }
+          ],
+          "activity": "Map the flow from one of your ads or social posts to conversion, including at least two edge cases. Mark every friction point and draw a simplified version."
+        },
+        {
+          "slug": "information-architecture-and-navigation",
+          "title": "Information architecture and navigation",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Helping people find things\n\n**Information architecture (IA)** is the structure and labelling of content so people can find what they need and understand where they are. Poor IA shows up as \"I couldn't find your prices\", high bounce rates, and lots of support questions that the website already answers somewhere.\n\n### Core IA concepts\n\n| Concept | Meaning | Example |\n|---|---|---|\n| Organisation | How content is grouped | By service, by audience, by task |\n| Labelling | What groups and links are called | \"Pricing\" vs \"Investment\" |\n| Navigation | How people move around | Header menu, footer, breadcrumbs, search |\n| Search | Finding by query | Site search, filters |\n| Hierarchy | Levels of content | Home → Services → Service detail |\n\n### Labels in users' words\n\nLabels are one of the biggest findability factors. Use words your users use (from interviews, search queries and support tickets), not internal jargon or clever branding.\n\n| Weak label | Clearer label |\n|---|---|\n| Solutions | Services |\n| Investment | Pricing |\n| Our Journey | About us |\n| Resources Hub | Guides / Blog |\n| Connect | Contact |\n\nCreative labels can be fine for brand personality in content, but navigation should be clear.\n\n### Navigation patterns\n\n- **Header navigation:** 4–7 top-level items is a common, manageable range for small business sites. Put the most important tasks first.\n- **Primary call to action** in the header (e.g. \"Book a call\", \"Start free trial\").\n- **Mobile navigation:** a menu icon with a clear label or recognisable icon; keep the key CTA visible outside the menu if possible.\n- **Footer:** secondary links — policies, careers, social links, contact details.\n- **Breadcrumbs:** for deeper sites (shops, knowledge bases).\n- **Search:** essential for large content libraries and shops.\n\n### Organising content: card sorting\n\n**Card sorting** is a simple research method to understand how users group content:\n\n- **Open card sort:** users group topics and name the groups themselves — reveals mental models and labels.\n- **Closed card sort:** users place topics into predefined categories — tests your structure.\n\nCan be done with paper cards or online tools, with even a small number of participants.\n\n**Tree testing** checks whether people can find items in a proposed menu structure (text-only), before any visual design.\n\n### Sitemaps\n\nA **sitemap** (for planning, not the XML file for search engines) shows every page and its hierarchy:\n\n```\nHome\n├── Services\n│   ├── Brand identity\n│   ├── Social media content\n│   └── Websites\n├── Work (case studies)\n├── Pricing\n├── About\n├── Blog\n└── Contact / Book a call\n```\n\nFor marketing sites, keep hierarchy shallow — key pages should be reachable within one or two taps.\n\n### Landing pages and navigation\n\nDedicated campaign landing pages often **remove or reduce main navigation** to keep focus on one conversion goal. This can improve conversion but should still allow users control: keep the logo link or a minimal footer, and provide essential information (pricing, privacy policy, contact) so trust isn't harmed.\n\n### Multilingual and RTL considerations\n\nFor sites serving English, Arabic and Urdu audiences:\n\n- Provide an obvious language switcher (language names in their own script: \"English\", \"العربية\", \"اردو\").\n- Mirror navigation for right-to-left languages.\n- Keep equivalent structure across languages so users can switch without getting lost.\n\n### Worked example: an agency website restructure\n\nProblem: prospects couldn't find pricing or examples; menu had nine items with creative labels (\"The Lab\", \"Our DNA\", \"Let's Talk Magic\").\n\nProcess: reviewed site search and sales call questions; ran an open card sort with eight clients; tree-tested a new structure.\n\nNew IA: Services, Work, Pricing, About, Blog, plus a \"Book a call\" button. Case studies filterable by industry. Result tracked: more visits to pricing and case studies, and fewer \"what do you charge?\" emails (measured over the following quarter).\n\n### Common mistakes\n\n- Clever labels that hide meaning.\n- Too many top-level menu items.\n- Organising by internal team structure instead of user tasks.\n- Hiding essential information in footers or PDFs.\n\n### Summary\n\nOrganise and label content in users' words, keep navigation focused and shallow, use card sorting and tree testing to validate structures, plan with a sitemap, and handle landing-page and multilingual navigation deliberately.",
+          "video": null,
+          "keyTakeaways": [
+            "Information architecture is how content is organised and labelled so people can find it.",
+            "Use labels in users' words, not internal jargon or clever branding.",
+            "Card sorting reveals mental models; tree testing validates a menu structure.",
+            "Keep navigation shallow and focused; plan landing-page and multilingual navigation deliberately."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which navigation label is usually clearest for a pricing page?",
+              "options": [
+                "Pricing",
+                "Value Journey",
+                "Let's Talk Numbers",
+                "Investment"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Plain, familiar labels are found faster than creative alternatives."
+            },
+            {
+              "question": "What does a tree test evaluate?",
+              "options": [
+                "Page load speed",
+                "Whether users can find items in a proposed navigation structure",
+                "Ad performance",
+                "Page colours"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Tree testing checks findability in a text-only menu structure before visual design."
+            },
+            {
+              "question": "Why do many campaign landing pages reduce main navigation?",
+              "options": [
+                "Because navigation is illegal on landing pages",
+                "To keep focus on one conversion goal while still providing essential trust information",
+                "To improve SEO automatically",
+                "To hide information"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Reducing distraction can help conversion, but essential information and control should remain."
+            }
+          ],
+          "activity": "Draw a sitemap for your website or a client's. Rewrite any unclear navigation labels using words from customer messages, and ask three people to find two items using only the new labels."
+        },
+        {
+          "slug": "ux-writing-and-forms",
+          "title": "UX writing, microcopy and forms",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Words are interface\n\nButtons, labels, error messages, hints, empty states and confirmation messages are all **microcopy**. Good microcopy is often the cheapest UX improvement: changing words can make a form clearer, reduce errors and build trust — without redesigning anything.\n\n### Principles of UX writing\n\n1. **Clear before clever.** Say exactly what happens.\n2. **Concise.** Remove words that don't help the user act.\n3. **Useful.** Answer the question users have at that moment.\n4. **Consistent.** Same term for the same thing everywhere (\"Sign in\" everywhere, not mixed with \"Log in\").\n5. **Human.** Match brand voice, but never at the expense of clarity.\n6. **Inclusive.** Plain language, no idioms that don't translate, avoid blaming users.\n\n### Buttons and calls to action\n\nButtons should describe the action or outcome:\n\n| Weak | Better |\n|---|---|\n| Submit | Get my free guide |\n| Click here | Download the checklist |\n| Continue | Continue to payment |\n| OK | Delete project |\n| Learn more (everywhere) | See pricing / Read case study |\n\nUse verbs. Where risk exists, clarify cost and commitment near the button (\"Start free trial — no card needed\", if true).\n\n### Forms: ask less, explain more\n\nForms are where many conversions die. Principles:\n\n- **Ask only what you need now.** Every field adds effort. Collect extra information later if genuinely needed.\n- **Explain why** for sensitive fields (\"We'll only use your phone number for appointment reminders\").\n- **Visible labels above fields** — don't rely on placeholder text alone, which disappears when typing and often has poor contrast.\n- **Mark optional fields** (or required fields) consistently.\n- **Use the right input types** — email keyboards for email, numeric keypad for phone numbers, date pickers where helpful.\n- **Group related fields** and use a single column on mobile.\n- **Support autofill** and international formats (names, addresses, phone numbers vary widely across countries).\n- **Consent:** where marketing consent is needed, use clear, unticked opt-in checkboxes and link to privacy information, in line with data-protection laws such as GDPR/UK GDPR and applicable local laws in your markets.\n\n### Error messages\n\nGood error messages are:\n\n- **Specific:** say what went wrong.\n- **Helpful:** say how to fix it.\n- **Timely:** shown inline, near the field, ideally after the user leaves the field or submits.\n- **Polite:** no blame (\"You entered an invalid…\" → \"Please enter…\").\n- **Accessible:** not only red colour — include text and an icon; make errors announced to screen readers.\n\n```\nError message template\n[What happened] + [How to fix it]\n\"Your card was declined. Please check the details or try another card.\"\n\"That email address is missing an '@'. Please check and try again.\"\n\"Passwords need at least 8 characters.\"\n```\n\n### Empty states, confirmations and loading\n\n- **Empty states** (\"No saved items yet\") are opportunities to guide: \"No saved items yet — tap the heart on any product to save it.\"\n- **Confirmations** should confirm and set expectations: \"You're booked for Thursday at 3 pm. We've sent the details to amina@example.com.\"\n- **Loading messages** reassure: \"Processing payment — please don't close this page.\"\n\n### Localisation\n\nFor multilingual audiences, write microcopy for each language rather than literal translation; watch for text expansion (German, for example) or different lengths in Arabic and Urdu; and ensure buttons can accommodate longer text.\n\n### Worked example: a newsletter sign-up\n\nBefore: headline \"Subscribe\"; fields for first name, last name, email, phone, city, date of birth; a pre-ticked box \"Send me offers from partners\"; button \"Submit\"; error \"Invalid input\".\n\nAfter: headline \"Get one practical marketing tip every Tuesday\"; fields: first name (optional), email; unticked consent for partner offers removed entirely; button \"Send me the tips\"; error \"Please enter an email address like name@example.com\"; confirmation \"Almost done! Check your inbox to confirm your subscription.\"\n\n### Common mistakes\n\n- Generic buttons (\"Submit\", \"Click here\").\n- Placeholder-only labels.\n- Asking for unnecessary personal data.\n- Pre-ticked consent boxes and vague privacy statements.\n- Error messages that blame or confuse.\n\n### A microcopy style sheet\n\nConsistency is easier with a short style sheet. List the terms you use (\"Sign in\", \"Basket\" or \"Cart\", \"Plan\" or \"Package\"), your capitalisation rule for buttons, how you write dates, times and prices for each market, and a few approved examples of error and confirmation messages. Share it with everyone who writes for your site, emails and apps, including freelancers and translators.\n\n### Summary\n\nTreat words as interface: write clear, concise, consistent microcopy; use action-specific buttons; minimise and explain form fields; write specific, helpful, accessible errors; and design empty states and confirmations to guide users.",
+          "video": null,
+          "keyTakeaways": [
+            "Microcopy is often the cheapest, fastest UX improvement.",
+            "Buttons should describe the action or outcome using verbs.",
+            "Ask only for what you need, use visible labels and explain sensitive fields.",
+            "Error messages should say what happened and how to fix it, without relying on colour alone."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which button text is best for a form that sends a free guide?",
+              "options": [
+                "Click here",
+                "Get my free guide",
+                "Submit",
+                "OK"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Action-specific, outcome-focused labels tell users exactly what happens."
+            },
+            {
+              "question": "Why shouldn't forms rely only on placeholder text as labels?",
+              "options": [
+                "They slow the page",
+                "Placeholders are illegal",
+                "They can't be translated",
+                "They disappear when typing and often have poor contrast, hurting usability and accessibility"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Visible labels remain available as users type and review entries."
+            },
+            {
+              "question": "Which error message is most helpful?",
+              "options": [
+                "'You made a mistake'",
+                "'Invalid input'",
+                "'That email address is missing an @. Please check and try again.'",
+                "'Error 400'"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "It explains what went wrong and how to fix it, politely."
+            }
+          ],
+          "activity": "Audit one form you own: remove any unnecessary field, rewrite the button, labels and at least two error messages using the template, and check that consent is clear and unticked."
+        }
+      ]
+    },
+    {
+      "slug": "wireframes-ui-and-prototypes",
+      "title": "Wireframes, UI patterns and prototypes",
+      "summary": "Sketch and wireframe layouts, apply UI fundamentals and design-system thinking, and build simple prototypes to test ideas.",
+      "lessons": [
+        {
+          "slug": "sketching-and-wireframes",
+          "title": "Sketching and wireframing",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Think in structure before style\n\nA **wireframe** is a simplified layout of a page or screen that shows structure, content priority and functionality — without final colours, images or polished typography. Wireframes let you agree on *what goes where and why* before spending time on visual design or development.\n\n### Fidelity levels\n\n| Fidelity | What it looks like | Best for |\n|---|---|---|\n| Sketch (paper or whiteboard) | Boxes and scribbles | Exploring many ideas in minutes |\n| Low-fidelity wireframe | Grey boxes, placeholder text, basic labels | Agreeing structure and content priority |\n| Mid-fidelity wireframe | Real headlines and copy, real form fields, grid | Testing flows and content |\n| High-fidelity mock-up | Final visuals, brand, images | Visual approval and handoff |\n\nMoving too quickly to high fidelity makes stakeholders comment on colours and photos instead of structure. Start low.\n\n### Content-first wireframing\n\nWireframes work best when they use **real content** (or close to it). Lorem ipsum hides problems — a headline that looks fine as placeholder may be twice as long in reality.\n\nBefore wireframing, write a **content priority list**:\n\n```\nLanding page content priority (example: online course)\n1. Headline — the core promise\n2. Subheadline — who it's for + outcome\n3. Primary CTA — \"Enrol now\" / \"Join the waitlist\"\n4. Proof — testimonials, results, logos (real, with permission)\n5. What you'll learn — 3–6 outcomes\n6. Curriculum overview\n7. Instructor credibility\n8. Pricing and payment options\n9. FAQ — objections\n10. Final CTA\n```\n\nThe order reflects what users need to decide, not what the company wants to say first.\n\n### Mobile-first wireframing\n\nStart with the **mobile wireframe**. A narrow screen forces prioritisation — there is only one column, so you must decide what comes first. Then expand to tablet and desktop, where content can sit side by side.\n\nMobile wireframe checks:\n\n- Is the primary message and CTA visible without scrolling far?\n- Are tap targets large and well spaced?\n- Does every section earn its place?\n\n### Wireframing conventions\n\n- Boxes with an \"X\" = images.\n- Horizontal lines = text blocks.\n- Rounded rectangles = buttons (label them).\n- Annotations explain behaviour (\"Opens scheduler in modal\", \"Sticky on mobile\").\n- Use a grid and consistent spacing even in low fidelity.\n\nTools: paper, whiteboards, and digital design tools (Figma-style tools, dedicated wireframing tools, even slides). The tool matters less than the thinking.\n\n### Annotating wireframes\n\nAnnotations turn wireframes into communication tools for developers, copywriters and stakeholders:\n\n```\nAnnotation examples\n[1] Headline: max 10 words; test variant B next month\n[2] CTA: scrolls to pricing section on click\n[3] Testimonials: carousel on mobile, 3-column on desktop; real customers only\n[4] Form: name + email; inline validation; success message replaces form\n[5] Sticky CTA bar appears after 50% scroll on mobile\n```\n\n### Worked example: a service business homepage\n\nA cleaning company in Dubai wants a new homepage.\n\n1. Research showed customers mainly want: price estimate, availability, trust (vetted staff), and easy booking (often via WhatsApp).\n2. Content priority: headline + instant price estimate widget; \"Book now\" and \"Chat on WhatsApp\" CTAs; trust signals (vetting, insurance, reviews); services; how it works (3 steps); areas covered; FAQ.\n3. Mobile sketch: 10 minutes, three variations — one with the estimator at top, one with reviews at top, one with a hero image.\n4. Low-fi wireframe of the chosen variant with annotations; quick review with the owner focused on structure only.\n5. Mid-fi wireframe with real copy, then tested with five users (next module).\n\n### Wireframe review questions\n\n```\n[ ] Does the order match what users need to decide?\n[ ] Is there one clear primary action per section?\n[ ] Are objections answered before the ask?\n[ ] Is anything here only because \"competitors have it\"?\n[ ] Does it work at mobile width first?\n```\n\n### Common mistakes\n\n- Jumping straight to high-fidelity visuals.\n- Using placeholder text that hides content problems.\n- Designing desktop first and cramming onto mobile.\n- Un-annotated wireframes that leave behaviour to guesswork.\n\n### Summary\n\nWireframe structure before style, start from a content priority list and real copy, design mobile first, annotate behaviour, and review wireframes against what users need to decide.",
+          "video": null,
+          "keyTakeaways": [
+            "Wireframes agree structure and priority before visual design.",
+            "Start low-fidelity to keep feedback focused on structure.",
+            "Use real content and a content priority list rather than lorem ipsum.",
+            "Wireframe mobile first and annotate behaviour for others."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why start with low-fidelity wireframes?",
+              "options": [
+                "They are required by developers",
+                "They keep feedback focused on structure and priorities instead of colours and images",
+                "They look more professional",
+                "They replace user testing"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Low fidelity avoids premature visual debates and speeds exploration."
+            },
+            {
+              "question": "What is the main problem with using lorem ipsum in wireframes?",
+              "options": [
+                "It slows down design tools",
+                "It's copyrighted",
+                "It hides real content problems such as long headlines or missing information",
+                "Users like it too much"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Real content reveals layout and messaging issues early."
+            },
+            {
+              "question": "Why wireframe the mobile version first?",
+              "options": [
+                "The narrow screen forces prioritisation of what matters most",
+                "Desktop users don't matter",
+                "Developers require it",
+                "Mobile screens are easier to draw"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "A narrow single-column screen forces you to decide what matters most and in what order; it is not about drawing ease, and desktop users still matter."
+            }
+          ],
+          "activity": "Write a content priority list for one landing page, then sketch three different mobile layouts in 15 minutes. Turn the best into an annotated low-fidelity wireframe."
+        },
+        {
+          "slug": "ui-fundamentals-and-patterns",
+          "title": "UI fundamentals, components and states",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### From wireframe to interface\n\nOnce structure is agreed, UI design makes the interface clear, consistent and attractive. For marketers, the most valuable UI knowledge is about **patterns** users already understand, **components** that can be reused, and **states** that give feedback.\n\n### Visual hierarchy on screens\n\nThe same hierarchy principles from graphic design apply, with extra considerations:\n\n- **One primary action per view.** Make the main button visually dominant; secondary actions look secondary (outlined or text buttons).\n- **Scannable content:** headings, short paragraphs, bullet lists, bold key phrases.\n- **Consistent spacing** using a scale (for example multiples of 4 or 8 px).\n- **Readable text:** body text on the web commonly starts around 16 px, with comfortable line height and line length.\n- **Affordances:** elements that look interactive should be interactive (buttons look tappable; links look like links).\n\n### Common UI patterns\n\nUsers learn patterns across the web. Using familiar patterns reduces effort:\n\n| Pattern | Use | Tips |\n|---|---|---|\n| Hero section | Top of landing pages | Clear headline, supporting line, CTA, relevant image |\n| Cards | Products, articles, case studies | Consistent layout; whole card clickable if appropriate |\n| Tabs | Switch between related views | Keep labels short; don't hide critical info |\n| Accordions | FAQs, long details | Good on mobile; clear expand/collapse icons |\n| Modals | Focused tasks (booking, confirm) | Easy to close; don't interrupt with them on arrival |\n| Sticky CTA bar | Mobile landing pages | Don't cover content or cookie notices |\n| Progress indicators | Multi-step forms, checkout | Show steps and current position |\n| Toasts/snackbars | Brief confirmations | Don't use for critical errors |\n\n### Components and design systems\n\nA **component** is a reusable UI element: button, input, card, navigation bar. A **design system** is a collection of components, styles (colour, type, spacing), patterns and guidelines used consistently across products.\n\nBenefits for marketing teams:\n\n- Landing pages can be assembled quickly from approved sections.\n- Consistency builds trust and brand recognition.\n- Developers build faster when design matches existing components.\n\nMany website builders and landing page tools use a section/block approach — essentially a design system. Define your own set of approved blocks: hero, social proof, features, pricing, FAQ, CTA.\n\n### States: the forgotten half of UI\n\nEvery interactive element has states. Designing only the default state leads to confusing experiences.\n\n```\nButton states:   default | hover (desktop) | focus (keyboard) | pressed | disabled | loading\nInput states:    empty | focused | filled | error | success | disabled\nPage states:     loading | empty | error | success | partial data\n```\n\nExamples:\n\n- A **loading** state on a \"Pay now\" button prevents double payments.\n- A visible **focus** state is essential for keyboard users (and an accessibility requirement).\n- **Disabled** buttons should explain why (\"Fill in all required fields to continue\") — or, better, keep the button enabled and show errors on submit, which is often clearer.\n\n### Touch targets and spacing\n\nOn mobile, fingers are less precise than cursors. WCAG 2.2 includes a minimum target size criterion (generally 24 by 24 CSS pixels, with exceptions), and many platform guidelines recommend larger targets (around 44–48 px) for comfort. Provide spacing between adjacent links and buttons.\n\n### Worked example: a pricing section\n\nBefore: three plans with identical styling, eight bullet points each, \"Buy\" buttons in grey, and a toggle for monthly/annual that doesn't show the price change clearly.\n\nAfter:\n\n- Cards with consistent structure; the recommended plan highlighted with a label (\"Most popular\" — only if true).\n- Short feature lists focusing on differences; full comparison in an expandable table.\n- Primary button for each plan labelled \"Start with Growth\", etc.\n- Monthly/annual toggle updates prices instantly, showing the annual saving clearly and total billed amount.\n- Focus and loading states designed.\n\n### Common mistakes\n\n- Several equally prominent buttons competing.\n- Designing only default states.\n- Tiny tap targets packed together.\n- Inventing unusual patterns where familiar ones work better.\n\n### Summary\n\nApply hierarchy with one primary action per view, use familiar patterns, build with reusable components or approved blocks, design every state, and give touch targets enough size and spacing.",
+          "video": null,
+          "keyTakeaways": [
+            "Keep one primary action per view and make secondary actions visually secondary.",
+            "Familiar UI patterns reduce effort — don't reinvent them without reason.",
+            "Reusable components or approved blocks speed up consistent landing pages.",
+            "Design all states: loading, focus, error, empty, success and disabled."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why design a loading state for a 'Pay now' button?",
+              "options": [
+                "To show progress and prevent repeated taps that could cause duplicate payments",
+                "For decoration",
+                "It's required by payment laws",
+                "To slow users down"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Feedback during processing prevents confusion and double submissions."
+            },
+            {
+              "question": "Which is the best way to show secondary actions next to a primary CTA?",
+              "options": [
+                "Make them equally bold and colourful",
+                "Hide them completely",
+                "Use a less prominent style, such as an outlined or text button",
+                "Make them larger than the primary"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Visual hierarchy guides users to the main action while keeping alternatives available."
+            },
+            {
+              "question": "What does WCAG 2.2 introduce regarding touch/click targets?",
+              "options": [
+                "All targets must be 100 px",
+                "No requirements",
+                "Targets must be circular",
+                "A minimum target size criterion, generally 24 by 24 CSS pixels with exceptions"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Target Size (Minimum) sets a baseline; many guidelines recommend larger targets for comfort."
+            }
+          ],
+          "activity": "Pick one section of your site (pricing, sign-up or product card). List every state its components need and sketch the loading, error and focus states you are missing."
+        },
+        {
+          "slug": "prototyping-and-handoff",
+          "title": "Prototyping and handoff",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Testing before building\n\nA **prototype** is an interactive simulation of an experience — clickable screens that let people try a flow before it's built. Prototypes are cheap to change; live websites and apps are not.\n\n### Prototype fidelity\n\n| Type | Description | Use |\n|---|---|---|\n| Paper prototype | Sketches you \"operate\" by swapping papers | Very early concept tests |\n| Clickable wireframes | Low/mid-fi screens linked together | Test flows and structure |\n| High-fidelity prototype | Near-final visuals, interactions, transitions | Test details, get approval, guide developers |\n| Coded prototype / staging page | Real page not yet public | Test performance, real data |\n\nMatch fidelity to the question. \"Can users find pricing?\" needs clickable wireframes. \"Does the new visual style feel premium?\" needs high fidelity.\n\n### Building a clickable prototype (tool-neutral)\n\nIn Figma-style tools, prototypes are made by linking frames with interactions:\n\n1. Create a frame per screen or state (landing page, form, error, confirmation).\n2. Add hotspots/links: \"On tap → navigate to Confirmation\".\n3. Add overlays for modals and menus.\n4. Set the device frame (e.g. a common phone size) for mobile tests.\n5. Define a starting point for each flow you'll test.\n6. Share a link for testing and review.\n\nMany landing-page builders and no-code tools let you build real pages quickly too — sometimes a live unpublished page is the fastest prototype.\n\n### What to prototype\n\nPrototype the parts where uncertainty or risk is highest:\n\n- New flows (booking, checkout, onboarding).\n- Pages with high traffic or high spend.\n- Complex interactions (filters, calculators, pricing toggles).\n- Content order and messaging for key pages.\n\n### Design handoff to developers\n\nHandoff is where good designs get lost. Reduce friction:\n\n```\nHandoff checklist\n[ ] Final designs for mobile, tablet, desktop (or defined breakpoints)\n[ ] All states: hover, focus, error, loading, empty, success\n[ ] Spacing, typography and colours as tokens/styles\n[ ] Components named consistently with the codebase (where it exists)\n[ ] Assets exported (SVG icons, optimised images) with naming\n[ ] Interaction notes: animations, sticky elements, modals, scroll behaviour\n[ ] Content: final copy, alt text, error messages, microcopy\n[ ] Accessibility notes: heading levels, labels, focus order, contrast verified\n[ ] Tracking plan: events to measure (e.g. CTA clicks, form submits)\n[ ] Acceptance criteria: what \"done\" looks like\n```\n\nDesign tools increasingly provide developer modes with measurements and code snippets, but conversations still matter. Walk developers through the flow and invite questions early.\n\n### Working with no-code builders\n\nMarketers often build pages themselves in website or landing-page builders. The same discipline applies:\n\n- Build from approved sections/blocks.\n- Check every breakpoint — builders often produce odd mobile layouts unless adjusted.\n- Test forms end to end (does the submission arrive? is the confirmation right? does the CRM receive it?).\n- Check page speed and accessibility before launch.\n\n### Quality assurance before launch\n\n```\nPre-launch QA\n[ ] Works on at least one iOS and one Android phone, and major browsers\n[ ] All links and buttons go to the right place\n[ ] Forms submit, validate, confirm and store data correctly\n[ ] Tracking events fire (and consent rules respected)\n[ ] Page loads acceptably on mobile data\n[ ] Keyboard navigation and focus visible\n[ ] Spelling, prices, dates, legal text checked\n[ ] Right-to-left layouts correct (if applicable)\n```\n\n### Worked example: a new checkout step\n\nA small online shop wants to add a \"gift message\" option.\n\n- Clickable prototype with two versions: checkbox that reveals a text field vs. a separate step.\n- Five quick tests: the checkbox version was faster and less confusing.\n- Handoff: states designed (empty, typing, character limit reached, error), copy for helper text, tracking event \"gift_message_added\".\n- QA: tested on two phones, confirmed the message appears on the packing slip.\n\n### Common mistakes\n\n- Skipping prototypes for high-risk flows.\n- Prototypes that only show the happy path.\n- Handing over designs without states, copy or accessibility notes.\n- Launching without end-to-end form and tracking tests.\n\n### Summary\n\nPrototype at the fidelity your question needs, focus on high-risk parts, hand off with states, tokens, copy, accessibility and tracking notes, and QA end to end before launch.",
+          "video": null,
+          "keyTakeaways": [
+            "Prototypes let you test flows cheaply before building.",
+            "Match prototype fidelity to the question you're trying to answer.",
+            "Complete handoff includes states, tokens, copy, accessibility and tracking notes.",
+            "QA forms, tracking, devices and accessibility end to end before launch."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which prototype fidelity best answers 'Can users find the pricing page?'",
+              "options": [
+                "A printed brand guide",
+                "A coded production release",
+                "Clickable wireframes",
+                "High-fidelity with animations"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Findability depends on structure and labels, which clickable wireframes test quickly."
+            },
+            {
+              "question": "Which item is most often missing from design handoffs and causes inconsistent builds?",
+              "options": [
+                "Designs for all states such as error, loading and focus",
+                "The logo file",
+                "Mood boards",
+                "The designer's name"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Without states, developers guess, leading to inconsistent or inaccessible behaviour."
+            },
+            {
+              "question": "A marketer builds a landing page in a no-code builder. What must be tested before launch?",
+              "options": [
+                "Only the desktop layout",
+                "Only spelling",
+                "Nothing — builders handle everything",
+                "Mobile layouts, form submission end to end, tracking and speed"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Builders don't guarantee correct mobile layouts, data flow or performance."
+            }
+          ],
+          "activity": "Build a clickable prototype of one flow (for example sign-up to confirmation) including one error state. Then write a handoff checklist for it using the template."
+        }
+      ]
+    },
+    {
+      "slug": "landing-page-ux",
+      "title": "Landing-page UX and mobile-first design",
+      "summary": "Design landing pages that match the promise, persuade ethically, load fast and work beautifully on mobile.",
+      "lessons": [
+        {
+          "slug": "landing-page-anatomy",
+          "title": "Anatomy of an effective landing page",
+          "type": "article",
+          "durationMinutes": 8,
+          "body": "### One page, one job\n\nA landing page is where visitors arrive from an ad, email, post or search result. The most effective landing pages have **one primary goal** — register, book, buy, download — and every element supports that goal.\n\n### Message match\n\n**Message match** means the landing page continues the conversation started by the ad or link. If an ad says \"Free 7-day meal plan for busy parents\", the page headline should echo that promise, the visuals should feel related, and the offer should be exactly the same. Poor message match makes visitors wonder if they're in the right place.\n\n```\nMessage match checklist\n[ ] Headline echoes the ad's promise\n[ ] Same offer, price and conditions as the ad\n[ ] Visual continuity (imagery, colours, style)\n[ ] Same audience language (e.g. Arabic ad → Arabic page)\n[ ] No bait-and-switch\n```\n\n### The core sections\n\n| Section | Purpose | Tips |\n|---|---|---|\n| Hero | Instant clarity | Headline (benefit), subheadline (who/how), primary CTA, relevant visual |\n| Social proof | Trust | Real testimonials, reviews, client logos with permission, numbers that are true |\n| Benefits/outcomes | Why it matters | Outcomes over features; 3–6 points |\n| How it works | Reduce uncertainty | 3–4 simple steps |\n| Details | Answer \"what exactly do I get?\" | Curriculum, features, specs, inclusions |\n| Pricing/offer | Decision information | Clear totals, currency, payment options, guarantees (only real ones) |\n| Objections/FAQ | Remove blockers | Use real questions from customers |\n| Final CTA | Easy next step | Repeat the CTA, restate the core benefit |\n\nNot every page needs every section; short offers (a free checklist) need short pages, while high-commitment offers (a course or consultation) need more information.\n\n### Headlines that work\n\nA strong headline is specific and centred on the visitor's outcome:\n\n- Weak: \"Welcome to BrightPath Academy\"\n- Better: \"Learn to edit short videos for clients in 4 weeks\"\n- Stronger with audience: \"Freelancers: learn to edit short-form videos clients pay for — in 4 weeks\"\n\nTest headline clarity with the **five-second test**: show the page for five seconds, then ask what it offers and who it's for.\n\n### Calls to action\n\n- Use one primary CTA, repeated at logical points (after the hero, after proof, at the end).\n- Make the CTA label specific (\"Book my free call\").\n- Reduce risk near the CTA: \"Free\", \"Cancel anytime\", \"No card needed\" — only if true.\n- On mobile, consider a sticky CTA bar that doesn't cover content.\n\n### Trust and credibility\n\n- Real testimonials with names/photos (with consent) are more credible than anonymous quotes.\n- Claims must be accurate and evidenced; avoid invented numbers or \"as seen in\" logos without real coverage.\n- Show contact details, business information, privacy policy and refund terms where relevant — these matter for trust and often for legal compliance (for example, consumer-protection and e-commerce rules requiring business identity and terms for online sales in many markets).\n- Security indicators on payment pages should be genuine (reputable payment providers).\n\n### Worked example: a free consultation page for a marketing agency in Riyadh\n\n- Ad: \"Get a free 30-minute ad account audit\" (Arabic and English versions).\n- Page hero (matching language): \"Free 30-minute ad account audit — find wasted spend before your next campaign.\" CTA: \"Book my free audit.\"\n- Proof: three client testimonials with permission; certifications displayed only where genuinely held.\n- What you get: a recorded audit, three priority fixes, no obligation.\n- How it works: book → share read-only access → receive audit call.\n- FAQ: \"Do you need admin access?\" \"Is my data safe?\" \"What happens after?\"\n- Final CTA with scheduler embedded.\n\n### Common mistakes\n\n- Multiple competing goals (subscribe, follow, buy, read the blog).\n- Generic headlines about the company.\n- Fake scarcity or fake testimonials.\n- Hiding price or key conditions until late in the process.\n\n### Page length: how long should it be?\n\nThere is no single right length. The more a visitor has to commit — money, time or personal data — the more information they usually need before acting. A free checklist can succeed with a short page containing a headline, three benefits and a form. A high-priced course or consulting service often needs proof, detail and answers to objections. Use your research: if people keep asking the same questions before buying, the answers belong on the page.\n\n### Summary\n\nGive each landing page one job, match the message that brought visitors there, structure sections around decision needs, write specific outcome-focused headlines and CTAs, and build credibility with honest, evidenced proof.",
+          "video": null,
+          "keyTakeaways": [
+            "Each landing page should have one primary goal.",
+            "Message match continues the ad's promise, offer, visuals and language.",
+            "Structure sections around what visitors need to decide.",
+            "Use honest, evidenced proof and clear terms to build trust."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "An ad promises '30% off your first order' but the landing page shows full prices with no mention of the discount. What is the problem?",
+              "options": [
+                "The page has too few colours",
+                "Nothing",
+                "The ad budget is too low",
+                "Poor message match, which confuses and loses visitors and may mislead"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Landing pages must continue the ad's promise; mismatched offers reduce trust and can breach advertising rules."
+            },
+            {
+              "question": "What does a five-second test check?",
+              "options": [
+                "Form completion",
+                "Whether people can quickly understand what the page offers and who it's for",
+                "Colour contrast",
+                "Page load time"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "A five-second test shows the page briefly and asks what it offers and for whom, testing first-impression clarity rather than speed, contrast or form completion."
+            },
+            {
+              "question": "Which headline is strongest for a course landing page?",
+              "options": [
+                "'Welcome to our academy'",
+                "'Freelancers: learn to edit short-form videos clients pay for — in 4 weeks'",
+                "'The best course ever'",
+                "'Click below'"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "It names the audience, outcome and timeframe specifically."
+            }
+          ],
+          "activity": "Pick one ad or post and its landing page. Run the message-match checklist and a five-second test with two people, then rewrite the headline and primary CTA."
+        },
+        {
+          "slug": "mobile-first-design",
+          "title": "Mobile-first design",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Most of your visitors are on phones\n\nFor traffic from social media, messaging apps and many email campaigns, mobile devices are often the majority. Mobile-first design means designing for small screens, touch input and variable connections **first**, then enhancing for larger screens.\n\n### Why mobile first works\n\n- **Forces prioritisation:** one column means you must decide what matters most.\n- **Improves performance:** fewer, lighter elements.\n- **Aligns with how search engines evaluate sites:** Google uses mobile-first indexing, primarily using the mobile version of content for indexing and ranking.\n- **Reflects real usage:** in many markets, including Pakistan, the Gulf and much of the world, mobile is the main or only way many people access the internet.\n\n### Mobile design principles\n\n| Principle | Practice |\n|---|---|\n| Thumb-friendly | Key actions reachable; large targets (at least WCAG's minimum, ideally around 44–48 px); spacing between links |\n| Readable | Body text around 16 px or larger; short paragraphs; sufficient contrast |\n| Scannable | Clear headings, bullets, accordions for detail |\n| Fast | Compressed images, limited scripts, avoid heavy video backgrounds |\n| Focused | One primary CTA; simplified navigation |\n| Forgiving | Easy to correct mistakes; autofill; appropriate keyboards |\n| Context-aware | Tap-to-call, WhatsApp links, maps, wallet payments where relevant |\n\n### Responsive layouts and breakpoints\n\nResponsive design adapts layouts to screen width:\n\n- **Mobile:** single column, stacked sections, full-width buttons.\n- **Tablet:** two columns where helpful.\n- **Desktop:** multi-column layouts, side-by-side images and text.\n\nDecide how each section transforms: a three-card row becomes a stack or a horizontal swipe; a comparison table becomes stacked cards or a scrollable table with a sticky first column.\n\n### Forms on mobile\n\n- Single column fields.\n- Correct input types (email, tel, number) to show the right keyboard.\n- Autocomplete attributes so browsers can fill details.\n- Minimal typing: selectors, toggles, smart defaults.\n- Keep the submit button visible and clearly labelled.\n- Show errors inline and near the field.\n- Allow wallet payments and local payment methods where relevant.\n\n### Mobile-specific pitfalls\n\n- **Intrusive interstitials:** full-screen pop-ups on arrival frustrate users and can hurt search visibility; Google has guidance against intrusive interstitials on mobile.\n- **Sticky elements** (headers, chat bubbles, cookie banners, CTA bars) stacking up and covering content.\n- **Hover-dependent** interactions that don't work on touch.\n- **Tiny text in images** (infographics that are unreadable on phones).\n- **Horizontal scrolling** caused by oversized elements.\n\n### In-app browsers\n\nMany visitors from social platforms open links in the app's built-in browser. These can behave differently: autofill may be limited, users may not be logged in to other services, and some payment or login flows break. Test your key flows from within the major social apps your audience uses.\n\n### Testing on real devices\n\nEmulators in browser developer tools are helpful, but test on real phones too — including a mid-range Android device on a mobile connection, which reflects many users' reality better than a flagship phone on office Wi-Fi.\n\n```\nMobile QA checklist\n[ ] Hero message and CTA visible quickly\n[ ] Text readable without zoom\n[ ] Tap targets comfortable; no accidental taps\n[ ] No horizontal scrolling\n[ ] Sticky elements don't cover content\n[ ] Forms use correct keyboards and autofill\n[ ] Works inside social in-app browsers\n[ ] Acceptable load time on mobile data\n```\n\n### Worked example: a restaurant ordering page\n\nBefore: desktop-designed menu with small text, a PDF menu link, hover-to-see prices, and a phone number that wasn't tappable.\n\nAfter: mobile-first menu with categories as sticky tabs; dishes as cards with photos, prices and \"Add\" buttons; tap-to-call and WhatsApp buttons; an Arabic/English language switch; checkout with wallet payments and cash-on-delivery options where relevant.\n\n### Common mistakes\n\n- Designing on desktop and \"shrinking\" to mobile.\n- PDF menus or brochures as the main content.\n- Stacking multiple sticky elements.\n- Testing only on flagship phones and fast Wi-Fi.\n\n### Performance budgets for mobile\n\nSet a simple performance budget for campaign pages — for example a maximum total page weight, a limit on third-party scripts, and a target for how quickly the main content appears on a mid-range phone. Check it before every launch. Budgets make trade-offs visible: adding a chat widget or tracking pixel then becomes a deliberate decision rather than something that quietly slows the page.\n\n### Summary\n\nDesign for small screens, touch and variable connections first; prioritise one column; make forms and targets thumb-friendly; avoid intrusive pop-ups and sticky clutter; test in in-app browsers and on real mid-range devices.",
+          "video": null,
+          "keyTakeaways": [
+            "Mobile-first design forces prioritisation and reflects how most social traffic arrives.",
+            "Make targets thumb-friendly, text readable and forms easy with correct keyboards and autofill.",
+            "Avoid intrusive interstitials and stacked sticky elements.",
+            "Test on real mid-range phones, mobile data and social in-app browsers."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why test landing pages inside social apps' in-app browsers?",
+              "options": [
+                "Search engines require it",
+                "They show different colours",
+                "They can behave differently, breaking autofill, logins or payments",
+                "They are always faster"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "In-app browsers have quirks that can break key flows."
+            },
+            {
+              "question": "Which is a mobile-first practice for forms?",
+              "options": [
+                "Hover tooltips for instructions",
+                "Multiple columns of small fields",
+                "Placeholder-only labels",
+                "Correct input types and autocomplete so the right keyboard and autofill appear"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Input types and autocomplete reduce typing effort and errors."
+            },
+            {
+              "question": "A page shows a full-screen pop-up immediately on mobile. What is the likely effect?",
+              "options": [
+                "Faster loading",
+                "Better user experience",
+                "Frustration and potential negative impact on search visibility",
+                "Higher accessibility"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Intrusive interstitials frustrate users and are discouraged by search guidance."
+            }
+          ],
+          "activity": "Open your key landing page on a mid-range phone using mobile data, and from inside one social app. Run the mobile QA checklist and fix the top three issues."
+        },
+        {
+          "slug": "speed-trust-and-ethical-persuasion",
+          "title": "Speed, trust and ethical persuasion",
+          "type": "article",
+          "durationMinutes": 8,
+          "body": "### Three silent conversion killers\n\nVisitors rarely complain about slow pages, hidden fees or manipulative tricks — they just leave, or they buy once and never return. This lesson covers performance, trust and the difference between ethical persuasion and dark patterns.\n\n### Performance\n\nSlow pages lose visitors, especially on mobile connections. Google's **Core Web Vitals** measure key aspects of user experience:\n\n| Metric | Measures | Common causes of poor scores |\n|---|---|---|\n| Largest Contentful Paint (LCP) | How quickly the main content appears | Huge images, slow servers, render-blocking scripts |\n| Interaction to Next Paint (INP) | How quickly the page responds to interactions | Heavy JavaScript, too many third-party scripts |\n| Cumulative Layout Shift (CLS) | Visual stability | Images without dimensions, late-loading banners, ads |\n\nPractical fixes for marketers:\n\n- Compress and correctly size images; use modern formats (e.g. WebP/AVIF) where supported.\n- Avoid autoplay background videos on mobile, or use very light versions.\n- Limit tracking pixels, chat widgets and third-party scripts — each adds weight.\n- Reserve space for images and embeds to prevent layout shifts.\n- Use tools like PageSpeed Insights or Lighthouse to diagnose, and test on real devices.\n\n### Trust signals\n\nTrust determines whether visitors are willing to act.\n\n```\nTrust checklist\n[ ] Clear business identity (name, location/contact, registration details where relevant)\n[ ] Real testimonials and reviews (with consent), not cherry-picked to mislead\n[ ] Transparent pricing including taxes, fees and delivery costs\n[ ] Clear refund/cancellation terms\n[ ] Privacy policy and cookie information\n[ ] Secure, reputable payment options (including locally trusted methods)\n[ ] Consistent, professional design and error-free copy\n[ ] Responsive support channel (chat, email, WhatsApp)\n```\n\n### Persuasion versus manipulation\n\nPersuasion helps people make decisions that are good for them by making benefits, proof and next steps clear. **Dark patterns** (also called deceptive design) trick or pressure people into actions they wouldn't otherwise take.\n\n| Dark pattern | Example | Ethical alternative |\n|---|---|---|\n| Fake urgency | Countdown timer that resets on refresh | Real deadlines, stated honestly |\n| Fake scarcity | \"Only 2 left!\" when untrue | Accurate stock levels |\n| Confirmshaming | \"No thanks, I don't like saving money\" | Neutral decline option: \"No thanks\" |\n| Sneak into basket | Pre-added insurance or add-ons | Opt-in add-ons |\n| Hidden costs | Fees appear only at the last step | All-in price shown early |\n| Roach motel | Easy sign-up, very hard cancellation | Cancellation as easy as sign-up |\n| Forced continuity | Free trial silently converts with no reminder | Reminder before charging, easy cancel |\n| Pre-ticked consent | Marketing consent pre-selected | Unticked, specific consent |\n| Disguised ads | Ads that look like content or reviews | Clear labelling |\n\nRegulators increasingly target these practices. For example, the US FTC has acted against deceptive design and subscription traps; the UK's consumer-protection framework has been strengthened with new enforcement powers and rules on fake reviews and drip pricing; and the EU's Digital Services Act and consumer laws address manipulative interfaces. Similar consumer-protection principles apply in the Gulf and South Asia. Beyond legal risk, dark patterns damage trust, increase refunds and chargebacks, and hurt long-term customer value.\n\n### Cookie consent UX\n\nWhere consent is required (for example under GDPR and the UK's rules for non-essential cookies), consent banners must offer genuine choice. Good practice: \"Accept\" and \"Reject\" options with equal prominence, clear categories, no pre-ticked boxes, and an easy way to change preferences later. Design banners so they don't block key content excessively on mobile.\n\n### Ethical persuasion toolkit\n\n- **Clarity:** specific benefits and honest outcomes.\n- **Social proof:** real reviews, representative results.\n- **Authority:** genuine credentials, real media coverage.\n- **Reciprocity:** useful free content before asking.\n- **Risk reversal:** real guarantees, easy cancellation.\n- **Commitment:** small first steps (a free call, a trial) with transparent terms.\n\n### Worked example: subscription sign-up\n\nBefore: price shown as \"from $9\" with a $29 setup fee revealed at checkout; annual plan pre-selected; cancellation by email only; timer \"Offer ends in 10:00\" resetting.\n\nAfter: full price and setup fee shown upfront; monthly/annual choice with clear totals; cancellation in account settings; reminder email before renewal; honest launch discount with a real end date. Complaints and refund requests are then monitored alongside conversion rate.\n\n### Common mistakes\n\n- Adding scripts and widgets without checking performance.\n- Hiding fees to make prices look lower.\n- Using manipulative copy and fake timers.\n- Cookie banners designed to push \"Accept all\".\n\n### Summary\n\nOptimise performance using Core Web Vitals as a guide, build trust with transparency, and persuade ethically — avoiding dark patterns that increasingly attract regulatory action and erode long-term customer value.",
+          "video": null,
+          "keyTakeaways": [
+            "Core Web Vitals (LCP, INP, CLS) measure loading, responsiveness and visual stability.",
+            "Limit heavy media and third-party scripts; reserve space to avoid layout shifts.",
+            "Trust comes from transparency: identity, real proof, full pricing and clear terms.",
+            "Avoid dark patterns — they harm trust and increasingly attract regulatory enforcement."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which Core Web Vital measures visual stability?",
+              "options": [
+                "Largest Contentful Paint",
+                "Cumulative Layout Shift",
+                "Interaction to Next Paint",
+                "Time on page"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "CLS measures unexpected layout movement; LCP measures loading of main content; INP measures responsiveness."
+            },
+            {
+              "question": "A countdown timer resets every time the page is refreshed. What is this?",
+              "options": [
+                "An accessibility feature",
+                "A fake-urgency dark pattern",
+                "A performance optimisation",
+                "Ethical urgency"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Timers that aren't real deadlines create false urgency and can mislead consumers."
+            },
+            {
+              "question": "What is good practice for cookie consent banners where consent is required?",
+              "options": [
+                "Assuming consent by scrolling",
+                "Only an 'Accept all' button",
+                "Hiding the reject option in settings",
+                "Accept and reject options with equal prominence and no pre-ticked categories"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Genuine choice requires comparable prominence and no pre-selection."
+            }
+          ],
+          "activity": "Run PageSpeed Insights (or a similar tool) on one landing page and fix one issue. Then audit the page and checkout for the dark patterns in the table and replace any you find with ethical alternatives."
+        }
+      ]
+    },
+    {
+      "slug": "accessibility-essentials",
+      "title": "Accessibility essentials (WCAG basics)",
+      "summary": "Understand WCAG 2.2 principles and levels, apply a practical accessibility checklist to marketing content, and test with tools and assistive technology.",
+      "lessons": [
+        {
+          "slug": "wcag-principles",
+          "title": "WCAG principles, levels and why they matter",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Accessibility is for everyone\n\nAccessibility means people with disabilities can perceive, understand, navigate and interact with your content. This includes people who are blind or have low vision, are deaf or hard of hearing, have motor impairments, cognitive or learning disabilities, or temporary and situational limitations (a broken arm, bright sunlight, a noisy environment). The World Health Organization estimates that around 1.3 billion people — about one in six people worldwide — experience significant disability. Accessible design also improves usability for everyone.\n\n### The Web Content Accessibility Guidelines\n\nThe **Web Content Accessibility Guidelines (WCAG)**, published by the W3C, are the internationally recognised standard. **WCAG 2.2** (published in 2023) is the current version; it builds on 2.0 and 2.1, so meeting 2.2 generally satisfies earlier versions too. WCAG 3 is in development but not yet a standard.\n\n### The four principles: POUR\n\n| Principle | Meaning | Examples |\n|---|---|---|\n| Perceivable | Information can be perceived by at least one sense | Alt text, captions, sufficient contrast, text that can be resized |\n| Operable | Interface can be operated by various means | Keyboard access, enough time, no seizure-inducing flashes, target sizes |\n| Understandable | Content and operation are understandable | Clear language, predictable behaviour, helpful error messages |\n| Robust | Works with current and future technologies, including assistive tech | Valid, semantic code; proper names and roles for controls |\n\n### Conformance levels\n\n- **Level A:** the minimum; failures create severe barriers.\n- **Level AA:** the level most laws, policies and organisations target. It includes contrast (4.5:1 for normal text), captions for prerecorded video, visible focus, and more.\n- **Level AAA:** enhanced; not usually required for entire sites because some criteria can't be met for all content.\n\n**Target WCAG 2.2 AA** as your standard.\n\n### What WCAG 2.2 added\n\nUseful to know, as they affect marketing pages and forms:\n\n- **Focus Not Obscured (Minimum, AA):** keyboard focus shouldn't be completely hidden by sticky headers, cookie banners or chat widgets.\n- **Dragging Movements (AA):** functionality that uses dragging (like sliders) needs a simple alternative (such as tapping).\n- **Target Size (Minimum, AA):** interactive targets generally at least 24 × 24 CSS pixels, or with enough spacing, with some exceptions.\n- **Consistent Help (A):** help mechanisms (contact links, chat) appear in a consistent place across pages.\n- **Redundant Entry (A):** don't make users re-enter information they already provided in the same process.\n- **Accessible Authentication (Minimum, AA):** don't require cognitive tests like remembering or transcribing passwords without alternatives (allow paste and password managers, for example).\n\n### Legal and business context\n\nAccessibility is increasingly a legal requirement, though specifics vary:\n\n- **European Union:** the European Accessibility Act applies from June 2025 to many products and services, including e-commerce, with standards aligned to WCAG.\n- **United Kingdom:** the Equality Act requires reasonable adjustments; public-sector bodies have specific website accessibility regulations.\n- **United States:** the ADA has been applied to websites in many legal cases, and federal rules set WCAG-based requirements for state and local government websites.\n- **Other markets:** many countries, including in the Gulf, have disability rights laws and government digital accessibility policies; requirements for private businesses vary.\n\nCheck requirements for the markets you serve and your sector. Regardless of law, accessible sites reach more customers and are usually better for SEO and usability.\n\n### Accessibility overlays\n\nSome vendors sell \"overlay\" widgets claiming to make sites compliant automatically. Accessibility experts and disabled users widely criticise them: they often fail to fix underlying issues and can interfere with assistive technology. Fix the actual design, content and code instead.\n\n### Worked example: quick wins on a creator's course site\n\n- Increased grey body text contrast to meet 4.5:1.\n- Added alt text to instructor and course images; marked decorative images as decorative.\n- Added captions to the sales video.\n- Replaced \"Click here\" links with descriptive text.\n- Made sure the cookie banner and sticky header didn't hide keyboard focus.\n- Enlarged small social icons in the footer to meet target size guidance.\n\n### Common mistakes\n\n- Treating accessibility as a final checklist item.\n- Relying on overlays.\n- Assuming \"few of our users are disabled\" — many disabilities are invisible, and users don't announce them.\n- Ignoring situational impairments like bright sunlight or noisy environments.\n\n### Summary\n\nWCAG 2.2 is the current standard, organised around POUR principles. Target level AA, know the new 2.2 criteria that affect marketing pages, understand that legal requirements are growing, and fix real issues rather than relying on overlays.",
+          "video": null,
+          "keyTakeaways": [
+            "WCAG 2.2 is the current standard; target level AA.",
+            "POUR: Perceivable, Operable, Understandable, Robust.",
+            "WCAG 2.2 added criteria on focus visibility, target size, consistent help, redundant entry and accessible authentication.",
+            "Legal requirements are growing; fix real issues instead of relying on overlays."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which WCAG conformance level do most laws and organisations target?",
+              "options": [
+                "Level AAA",
+                "Level B",
+                "Level A",
+                "Level AA"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "AA is the common target; A is minimal and AAA is enhanced."
+            },
+            {
+              "question": "A sticky header hides the element a keyboard user has tabbed to. Which WCAG 2.2 criterion is relevant?",
+              "options": [
+                "Audio Control",
+                "Language of Page",
+                "Captions (Prerecorded)",
+                "Focus Not Obscured (Minimum)"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Focus Not Obscured requires focused elements not to be entirely hidden by other content."
+            },
+            {
+              "question": "What is the expert consensus on automated accessibility overlays?",
+              "options": [
+                "They guarantee compliance",
+                "They are legally required",
+                "They often fail to fix underlying issues and can interfere with assistive technology",
+                "They replace testing"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Overlays are widely criticised; real fixes in design and code are needed."
+            }
+          ],
+          "activity": "List the pages on your site that matter most for conversions. For each, note one likely barrier under each POUR principle, and pick three to fix this month."
+        },
+        {
+          "slug": "accessibility-checklist-for-marketers",
+          "title": "A practical accessibility checklist for marketers",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Most barriers are in content, not code\n\nMarketers control much of what makes a page accessible: images, videos, headings, link text, colours, forms, documents and social posts. This lesson gives you a checklist you can apply without being a developer.\n\n### Images and graphics\n\n- **Alt text** for meaningful images: describe the content and purpose concisely (\"Instructor demonstrating a video edit on a laptop\"). Don't start with \"Image of\".\n- **Decorative images** should have empty alt text (so screen readers skip them).\n- **Images of text**: avoid where possible; if unavoidable (e.g. a social graphic), put the text in alt text or the caption.\n- **Charts and infographics**: provide a text summary of key points.\n- **Social media**: use platforms' alt-text fields; write alt text for important posts.\n\n```\nAlt-text formula\n[What it is] + [key detail relevant to the context] (+ [text in the image, if any])\n\"Poster for the Eid sale: 30% off all abayas, 10–15 April.\"\n```\n\n### Video and audio\n\n- **Captions** for all prerecorded video with audio (AA). Auto-captions are a starting point — review and correct them, especially names, brands and mixed-language speech.\n- **Transcripts** for podcasts and audio content.\n- **Audio description** or descriptive narration where important visual information isn't conveyed in the audio.\n- **No autoplay with sound**; provide controls.\n- **Avoid flashing** content (no more than three flashes per second).\n\n### Text and structure\n\n- **Headings in order** (H1, then H2, H3…) that describe sections — screen-reader users navigate by headings.\n- **Descriptive links:** \"Download the pricing guide (PDF)\" instead of \"Click here\".\n- **Plain language:** short sentences, common words, explain jargon.\n- **Lists** marked up as lists, not manual dashes.\n- **Language of the page** set correctly (important for multilingual sites so screen readers pronounce Arabic, Urdu or English correctly).\n- **Readable text:** avoid long passages in all caps or italics; allow text to resize without breaking the layout.\n\n### Colour and contrast\n\n- Text contrast at least **4.5:1** (normal) and **3:1** (large text) — AA.\n- UI components and meaningful graphics at least **3:1** against adjacent colours.\n- Never use colour alone to convey meaning (errors, required fields, chart series).\n\n### Forms\n\n- Every field has a **visible label** programmatically associated with it.\n- Instructions before the form, not only in placeholders.\n- Errors identified in text, describing how to fix them, and announced to assistive technology.\n- Don't set tight time limits without the option to extend.\n- Allow pasting into fields (including passwords) and support password managers.\n\n### Keyboard and focus\n\n- Everything usable with a keyboard (Tab, Shift+Tab, Enter, Space, arrow keys).\n- **Visible focus indicator** on every interactive element.\n- Logical focus order matching the visual order.\n- Modals trap focus while open and return focus when closed; they can be closed with Escape.\n\n### Documents and emails\n\n- PDFs: tagged, with headings, reading order and alt text — or provide an accessible web page instead.\n- Emails: real text (not one big image), sufficient contrast, descriptive links, meaningful alt text, and a logical reading order.\n\n### Cognitive accessibility\n\n- Consistent navigation and help location.\n- Clear, predictable interactions — no surprise pop-ups or automatic changes of context.\n- Break long processes into steps with progress indicators.\n- Avoid distracting animations; respect reduced-motion preferences.\n\n### The marketer's quick check\n\n```\nAccessibility quick check (per page/campaign)\n[ ] Alt text on meaningful images; decorative marked decorative\n[ ] Captions reviewed on all videos\n[ ] Headings in logical order\n[ ] Descriptive link and button text\n[ ] Contrast checked (text and UI)\n[ ] Colour not the only cue\n[ ] Forms: visible labels, clear errors, paste allowed\n[ ] Keyboard: all actions reachable; focus visible, not obscured\n[ ] Target sizes adequate on mobile\n[ ] No flashing; no autoplay sound\n[ ] Page language set; RTL content correctly marked\n```\n\n### Worked example: an email campaign\n\nBefore: a single large image containing all text, \"Click here\" link, light grey footer text.\n\nAfter: live text with headings, the hero image with alt text, button \"Shop the Ramadan collection\", footer contrast increased, plain-text version provided. Rendering checked with a screen reader and in dark mode.\n\n### Common mistakes\n\n- Missing or unhelpful alt text (\"image123.jpg\").\n- Uncorrected auto-captions.\n- Heading levels chosen for visual size rather than structure.\n- Emails built entirely as images.\n\n### Summary\n\nMarketers control many accessibility factors: alt text, captions, headings, link text, contrast, forms, keyboard access, documents and emails. Use the quick check on every page and campaign.",
+          "video": null,
+          "keyTakeaways": [
+            "Many accessibility barriers live in content that marketers control.",
+            "Write concise, purposeful alt text; mark decorative images as decorative.",
+            "Review captions, use logical headings and descriptive links.",
+            "Forms need visible labels and clear, announced errors; everything must work with a keyboard."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which alt text is best for a promotional image showing '30% off all abayas, 10–15 April'?",
+              "options": [
+                "No alt text",
+                "'Image of a picture'",
+                "'image'",
+                "'Eid sale poster: 30% off all abayas, 10–15 April'"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Alt text should convey the content and any text in the image concisely."
+            },
+            {
+              "question": "Which link text is most accessible?",
+              "options": [
+                "'Download the pricing guide (PDF)'",
+                "'Here'",
+                "'Click here'",
+                "'Read more'"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Descriptive link text makes sense out of context, which screen-reader users rely on."
+            },
+            {
+              "question": "Auto-generated captions are on your video. What should you do?",
+              "options": [
+                "Review and correct them, especially names, brands and mixed-language speech",
+                "Replace them with music",
+                "Turn them off",
+                "Nothing — they're always accurate"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Auto-captions often mishear names, brands and mixed-language speech, which can change meaning, so they must be reviewed and corrected rather than trusted or removed."
+            }
+          ],
+          "activity": "Run the accessibility quick check on one landing page and one email. Fix alt text, links and contrast issues you find, and correct captions on one video."
+        },
+        {
+          "slug": "accessibility-testing",
+          "title": "Testing accessibility with tools and assistive technology",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Automated tools catch some issues, not all\n\nAutomated accessibility checkers are fast and useful, but they detect only a portion of WCAG issues — often cited as a minority. They can't judge whether alt text is meaningful, whether headings make sense, or whether a flow is understandable. Combine automated, manual and user testing.\n\n### Layer 1: automated checks\n\nTools include browser extensions and built-in audits (for example, Lighthouse in Chrome DevTools, axe-based extensions, WAVE). They flag issues like:\n\n- Missing alt attributes.\n- Low contrast text.\n- Missing form labels.\n- Empty links or buttons.\n- Incorrect ARIA usage.\n- Missing page language.\n\nRun them on key templates and pages, and after major changes.\n\n### Layer 2: manual checks anyone can do\n\n**Keyboard test (10 minutes):**\n\n1. Put the mouse aside.\n2. Press Tab from the top of the page. Can you see where focus is at every step?\n3. Can you reach and operate every link, button, menu, form field, accordion and modal?\n4. Is the focus order logical?\n5. Can you close pop-ups with Escape and return to where you were?\n6. Is focus ever hidden behind sticky elements?\n\n**Zoom and reflow test:**\n\n- Zoom the browser to 200% and 400%. Does content reflow into a single column without horizontal scrolling (except for things like data tables)? Is anything cut off?\n\n**Contrast spot-check:** use a colour picker/contrast tool on text over images and buttons.\n\n**Content review:** are headings logical? Is alt text meaningful? Is language plain?\n\n**Motion check:** turn on your device's \"reduce motion\" setting — do animations calm down?\n\n### Layer 3: screen reader basics\n\nScreen readers read the page aloud and let users navigate by headings, links, landmarks and form fields. Free or built-in options include:\n\n- **VoiceOver** (built into Apple devices).\n- **TalkBack** (built into Android).\n- **NVDA** (free for Windows); **Narrator** (built into Windows).\n\nA basic screen-reader test:\n\n1. Turn on the screen reader and listen to the page from the top.\n2. Navigate by headings — do they outline the page?\n3. Navigate by links — are they descriptive out of context?\n4. Complete the main form — are labels, errors and confirmation announced?\n5. Check that images have sensible descriptions and decorative images are skipped.\n\nIt feels awkward at first; even basic familiarity reveals major issues. Remember that experienced screen-reader users navigate much faster and differently than beginners.\n\n### Layer 4: testing with disabled users\n\nNothing replaces feedback from people who use assistive technology daily. Options:\n\n- Include disabled participants in usability tests (recruit through disability organisations or specialist recruitment services; pay participants fairly).\n- Ask for feedback via an accessibility statement with a contact method.\n- Commission expert audits for major launches or regulated contexts.\n\n### Accessibility statement\n\nAn accessibility statement explains your commitment, the standard you aim for (e.g. WCAG 2.2 AA), known limitations, and how to contact you for help or to report problems. It's required for some public-sector sites and good practice for everyone.\n\n### Building accessibility into the workflow\n\n```\nWhere accessibility fits\nBrief:        Include WCAG 2.2 AA as a requirement\nDesign:       Contrast, target size, focus states, heading structure in wireframes\nContent:      Alt text, captions, plain language, link text\nBuild:        Semantic HTML, labels, keyboard support\nQA:           Automated scan + keyboard test + screen-reader smoke test\nLaunch:       Accessibility statement updated\nOngoing:      Monitor feedback; re-test templates after changes\n```\n\n### Worked example: a booking widget\n\nAn automated scan shows zero errors. A keyboard test reveals the date picker can't be operated without a mouse, and focus disappears when the booking modal opens. A screen-reader test finds the time slots are announced only as \"button\". Fixes: keyboard-operable date picker (or a simple date input alternative), focus moved into the modal and trapped, accessible names like \"Book 3:00 pm Thursday 12 June\". A disabled tester later confirms the flow works.\n\n### Common mistakes\n\n- Treating a clean automated scan as proof of accessibility.\n- Never testing with a keyboard.\n- Using third-party widgets (chat, booking, cookie banners) without checking their accessibility.\n- No way for users to report problems.\n\n### Summary\n\nLayer automated scans, manual keyboard, zoom and content checks, basic screen-reader tests and testing with disabled users. Publish an accessibility statement and build checks into every stage of your workflow.",
+          "video": null,
+          "keyTakeaways": [
+            "Automated tools catch only a portion of issues — combine with manual and user testing.",
+            "A 10-minute keyboard test reveals many serious barriers.",
+            "Built-in screen readers (VoiceOver, TalkBack, Narrator) and free NVDA enable basic testing.",
+            "Include disabled users in testing and publish an accessibility statement with contact details."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "An automated scan reports zero accessibility errors. What can you conclude?",
+              "options": [
+                "The site is fully accessible",
+                "Some issues are absent, but manual and user testing are still needed",
+                "No further testing is ever needed",
+                "The site meets AAA"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Automated tools can't evaluate many criteria, such as meaningful alt text or usable flows."
+            },
+            {
+              "question": "What is the first step of a keyboard accessibility test?",
+              "options": [
+                "Put the mouse aside and press Tab from the top of the page, watching the focus",
+                "Install an overlay",
+                "Zoom to 400%",
+                "Turn up the volume"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Keyboard-only navigation reveals focus visibility and operability issues."
+            },
+            {
+              "question": "What should an accessibility statement include?",
+              "options": [
+                "A claim of perfect compliance without testing",
+                "The standard targeted, known limitations and how to contact you for help",
+                "Marketing slogans",
+                "Only a logo"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Statements explain commitments and provide a feedback route."
+            }
+          ],
+          "activity": "Do a keyboard test and a 200% zoom test on your key page, then try one task with your phone's built-in screen reader. Record three issues and draft a short accessibility statement."
+        }
+      ]
+    },
+    {
+      "slug": "testing-and-iteration",
+      "title": "Testing with users and iterating",
+      "summary": "Run lightweight usability tests, use analytics and A/B tests responsibly, and turn findings into continuous improvements.",
+      "lessons": [
+        {
+          "slug": "usability-testing",
+          "title": "Running lightweight usability tests",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Watch people use it\n\nUsability testing means observing real people as they try to complete realistic tasks with your page, prototype or product. It is the single most reliable way to find out why people struggle — and it doesn't have to be expensive.\n\n### How many participants?\n\nA widely cited guideline from usability research is that testing with around **five users** per round reveals many of the most common problems in a design, especially for a single, fairly homogeneous audience. Rather than one big study, run small rounds, fix issues, and test again. For distinct audiences (for example, customers in different countries or languages), test a few people from each.\n\n### Planning a test\n\n```\nUsability test plan\nGoal:          What do we want to learn? (\"Can mobile users book a consultation?\")\nPrototype/page: Link, device, version\nParticipants:  Who (match target audience), how many, recruitment, incentive\nTasks:         3–5 realistic scenarios\nMetrics:       Task success, time, errors, confidence rating\nMethod:        Moderated/unmoderated, remote/in person\nConsent:       Recording consent, data handling\nSchedule:      Dates, durations (often 20–45 min)\n```\n\n### Writing good tasks\n\nTasks should be **realistic scenarios** that don't give away the answer:\n\n- Poor: \"Click the 'Pricing' link in the menu.\"\n- Better: \"You're considering this service for your salon. Find out how much it would cost for three staff members.\"\n\nAvoid using the exact words on the interface in the task; otherwise you test word-matching, not understanding.\n\n### Moderated vs unmoderated\n\n| Type | How | Strengths | Limitations |\n|---|---|---|---|\n| Moderated (live) | Facilitator observes, asks follow-ups (in person or video call) | Rich insight, can probe \"why\" | Time-intensive |\n| Unmoderated | Participants complete tasks alone, recorded by a tool | Fast, scalable | No follow-up questions; quality varies |\n\nBoth can be remote. For beginners, moderated remote tests over video calls with screen sharing are a practical start.\n\n### Facilitating well\n\n- **Think-aloud:** ask participants to say what they're thinking as they go.\n- **Stay neutral:** don't help, don't defend the design. If asked \"Should I click here?\", respond \"What would you do if I weren't here?\"\n- **Probe gently:** \"What did you expect to happen?\" \"What made you choose that?\"\n- **Observe behaviour over opinions:** what people do matters more than \"I like it\".\n- **Take structured notes** — or have a second person take notes.\n\n### Recruiting participants\n\n- Existing customers, email subscribers, social followers (screen to match your target audience).\n- Friends and colleagues only for very early checks — they aren't your audience and may be polite.\n- Paid recruitment services for specific profiles.\n- Offer a fair incentive (voucher, payment, free product), and respect participants' time.\n- Obtain informed consent for recording and explain how data will be stored and used, in line with privacy laws.\n- Include people with disabilities and a range of devices when possible.\n\n### Analysing results\n\n1. List every observed issue per participant.\n2. Group similar issues.\n3. Rate severity (how many participants, how badly blocked).\n4. Note positive findings too (what worked well).\n5. Recommend fixes; prioritise by severity and effort.\n\n```\nFindings table\nIssue                         Participants  Severity  Evidence (quote/behaviour)       Fix\nCouldn't find price per staff  4/5           High      \"Is this per salon or per user?\" Show per-staff pricing example\nMissed 'Book' button on mobile 3/5           High      Scrolled past sticky banner      Move CTA higher; contrast\nUnclear refund policy          2/5           Medium    \"What if it doesn't work?\"       Add refund FAQ near pricing\n```\n\n### Worked example: a Karachi-based online tutoring service\n\nFive parents tested the sign-up flow on their phones via video call. Findings: parents didn't understand the difference between two plans, missed the free trial class option, and the WhatsApp contact button opened a broken link in one in-app browser. Fixes were made within a week, and a second round with four parents confirmed improvements.\n\n### Common mistakes\n\n- Testing with colleagues instead of target users.\n- Leading tasks that give away the answer.\n- Helping participants during the test.\n- Collecting findings but not acting on them.\n\n### Unmoderated testing tips\n\nIf you use an unmoderated testing tool, write tasks even more carefully because nobody can clarify them. Add a short warm-up task, ask participants to rate how easy each task was, and include one open question at the end. Watch every recording rather than relying only on completion rates, and remove sessions where participants clearly did not attempt the tasks seriously.\n\n### Summary\n\nRun small, frequent rounds with around five representative participants, write realistic scenario tasks, stay neutral while facilitating, recruit and record ethically, and turn observations into prioritised fixes.",
+          "video": null,
+          "keyTakeaways": [
+            "Small rounds with around five representative users reveal many common problems.",
+            "Write realistic scenario tasks that don't give away the answer.",
+            "Stay neutral, use think-aloud and focus on behaviour over opinions.",
+            "Recruit representative participants ethically, with consent and fair incentives."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which task wording is best for a usability test?",
+              "options": [
+                "'You run a salon with three staff. Find out what this service would cost you.'",
+                "'Click the Pricing link'",
+                "'Do you like the pricing page?'",
+                "'Tell me what you think of our logo'"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Realistic scenarios test understanding without giving away the path."
+            },
+            {
+              "question": "A participant asks, 'Should I tap here?' What should the facilitator say?",
+              "options": [
+                "'Yes, tap there'",
+                "Explain how the page works",
+                "'What would you do if I weren't here?'",
+                "'No, that's wrong'"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Neutral responses preserve natural behaviour and reveal real problems."
+            },
+            {
+              "question": "Why is testing with around five users per round often recommended?",
+              "options": [
+                "It's legally required",
+                "It tends to uncover many common problems efficiently, allowing iterative rounds",
+                "More users always confuse results",
+                "Five is the maximum any tool supports"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Small iterative rounds are efficient; different audiences may need separate small groups."
+            }
+          ],
+          "activity": "Write a test plan with three scenario tasks for one of your pages, recruit three to five target users, run the sessions remotely, and complete a findings table."
+        },
+        {
+          "slug": "analytics-and-ab-testing",
+          "title": "Analytics, heatmaps and A/B testing",
+          "type": "article",
+          "durationMinutes": 8,
+          "body": "### Two kinds of evidence\n\nUsability testing tells you **why** people struggle. Analytics tells you **what** happens at scale — where people come from, where they drop off, what they click. You need both.\n\n### Key analytics for UX\n\n| Metric | What it reveals | Caution |\n|---|---|---|\n| Conversion rate | Share of visitors completing the goal | Depends heavily on traffic quality |\n| Funnel drop-off | Which step loses the most users | Needs correct event tracking |\n| Engagement/scroll depth | How far people read | High scroll doesn't mean understanding |\n| Bounce/engagement rate | Leaving without interaction | Definitions differ between tools |\n| Device and browser split | Where problems may be device-specific | Check in-app browsers separately |\n| Traffic source performance | Which channels bring converting visitors | Attribution is imperfect |\n| Site search terms | What people can't find | Great source of label ideas |\n| Form analytics | Which fields cause abandonment | Need privacy-safe setup |\n\n### Setting up useful tracking\n\n- Define **conversion events** (form submitted, purchase, booking confirmed) and **micro-conversions** (CTA clicked, pricing viewed, video played).\n- Name events consistently.\n- Tag campaign links (e.g. with UTM parameters) so you know which ad or post drove visits.\n- Respect privacy: follow consent requirements for cookies and tracking (e.g. under GDPR/UK GDPR and applicable local laws), avoid collecting personal data in analytics, and document what you collect.\n\n### Heatmaps and session recordings\n\nBehaviour analytics tools show:\n\n- **Click maps:** where people click — including on things that aren't clickable (a sign of false affordance).\n- **Scroll maps:** how far people get.\n- **Session recordings:** individual journeys — helpful for spotting confusion (\"rage clicks\", back-and-forth).\n\nUse responsibly: mask sensitive inputs, disclose use in your privacy policy, obtain consent where required, and don't record more than you need.\n\n### A/B testing basics\n\nAn **A/B test** shows different versions of a page (or element) to randomly split groups of visitors and compares outcomes.\n\n```\nA/B test plan\nHypothesis:  Because [insight], changing [element] to [variant] will improve [metric]\n             for [audience].\nExample:     Because 4/5 test users missed per-staff pricing, adding a price calculator\n             will increase booking-call conversions on mobile.\nPrimary metric: Booking-call conversion rate\nGuardrail metrics: Refund requests, lead quality, page speed\nAudience/traffic: Mobile visitors from paid social\nSample size & duration: Calculated in advance; run full weeks\nDecision rule: Ship if variant beats control with pre-agreed confidence\n```\n\n### A/B testing pitfalls\n\n- **Too little traffic:** small sites often can't reach reliable results for small changes. Use qualitative testing and make bolder changes instead.\n- **Stopping early:** checking results daily and stopping when one version looks ahead inflates false positives. Decide sample size or duration in advance.\n- **Testing many things at once** without an appropriate design, making results hard to interpret.\n- **Ignoring segments and seasonality:** results can differ by device, channel or time (e.g. during Ramadan or sales periods).\n- **Optimising the wrong metric:** a manipulative change can raise clicks while increasing refunds or complaints — use guardrail metrics.\n- **Treating one test as universal truth:** results depend on context.\n\n### When not to A/B test\n\n- Fixing obvious usability bugs (just fix them).\n- Accessibility improvements (required, not optional).\n- Very low-traffic pages.\n- Changes that are legally or ethically necessary.\n\n### Combining evidence\n\nA reliable improvement cycle:\n\n1. Analytics shows **where** the problem is (e.g. 60% drop at step 2 on mobile).\n2. Recordings and usability tests show **why** (users can't find the delivery date field).\n3. Design a fix based on the insight.\n4. Validate with a quick usability test.\n5. Launch — as an A/B test if traffic allows, otherwise monitor before/after with care.\n\n### Worked example: a Dubai e-commerce store\n\nAnalytics: mobile checkout conversion far below desktop. Recordings: users repeatedly tapping a tiny promo-code field and leaving to search for codes. Usability test: users felt they were \"missing a discount\". Fix: collapsed the promo field behind a small \"Have a code?\" link and showed automatic discounts clearly. A/B test over three full weeks showed improved mobile checkout completion, with no increase in customer service contacts.\n\n### Common mistakes\n\n- Collecting data without clear questions.\n- Tracking without consent where it's required.\n- Running A/B tests on low traffic and trusting noisy results.\n- Using analytics to confirm opinions rather than to learn.\n\n### Summary\n\nUse analytics to find where problems occur, heatmaps and recordings (responsibly) to see behaviour, usability tests to understand why, and A/B tests with clear hypotheses, pre-set sample sizes and guardrail metrics to validate changes.",
+          "video": null,
+          "keyTakeaways": [
+            "Analytics shows what happens at scale; usability testing shows why.",
+            "Define conversion and micro-conversion events and respect consent and privacy rules.",
+            "A/B tests need a clear hypothesis, pre-set sample size or duration and guardrail metrics.",
+            "Don't A/B test obvious bug fixes or accessibility improvements — just fix them."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why shouldn't you stop an A/B test as soon as one version looks ahead?",
+              "options": [
+                "Early peeking and stopping inflates the chance of false positives",
+                "It makes pages slower",
+                "It's illegal",
+                "Tools don't allow it"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Pre-deciding sample size or duration protects against random fluctuations."
+            },
+            {
+              "question": "What is a guardrail metric?",
+              "options": [
+                "A design grid",
+                "A metric monitored to ensure a change doesn't cause harm elsewhere, such as refunds or complaints",
+                "The metric you want to maximise",
+                "A security setting"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Guardrails catch negative side effects of optimising a primary metric."
+            },
+            {
+              "question": "Which change should not be A/B tested but simply implemented?",
+              "options": [
+                "A new headline idea",
+                "A new hero image",
+                "A pricing layout experiment",
+                "Fixing a broken form submission or an accessibility barrier"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Bugs and accessibility barriers should be fixed, not tested."
+            }
+          ],
+          "activity": "Map the funnel for one conversion path using your analytics, find the biggest drop-off, and write an A/B test plan (or a before/after plan if traffic is low) using the template."
+        },
+        {
+          "slug": "iterating-and-ux-culture",
+          "title": "Iterating and building a UX habit in your team",
+          "type": "article",
+          "durationMinutes": 8,
+          "body": "### UX is a loop, not a launch\n\nGreat experiences come from continuous improvement: observe, learn, change, measure, repeat. For marketing teams, freelancers and small agencies, the challenge is making this a habit alongside campaigns and deadlines.\n\n### The continuous improvement loop\n\n```\n1. Observe   → analytics, recordings, feedback, support tickets, tests\n2. Prioritise → impact × confidence ÷ effort\n3. Design    → sketch, wireframe, prototype, write copy\n4. Validate  → quick usability test or expert review\n5. Ship      → launch (A/B test if traffic allows)\n6. Measure   → primary and guardrail metrics\n7. Share     → document and communicate learnings\n```\n\n### Prioritising improvements\n\nA simple scoring model helps decide what to work on:\n\n| Idea | Impact (1–5) | Confidence (1–5) | Effort (1–5) | Score = I×C÷E |\n|---|---|---|---|---|\n| Show per-staff pricing | 5 | 4 | 2 | 10 |\n| Redesign entire site | 4 | 2 | 5 | 1.6 |\n| Fix mobile CTA contrast | 3 | 5 | 1 | 15 |\n| Add chatbot | 2 | 2 | 3 | 1.3 |\n\nScores are rough guides, not precise truths — but they force explicit discussion of evidence and effort.\n\n### A lightweight UX rhythm for small teams\n\n- **Weekly (30 minutes):** review key funnel metrics and a handful of session recordings or customer messages.\n- **Monthly:** one small usability test round (3–5 people) on the highest-priority flow.\n- **Quarterly:** heuristic review and accessibility check of main templates; update the backlog.\n- **Every campaign:** message-match and mobile QA before launch; post-campaign review of landing-page performance.\n\n### Documenting learnings\n\nKeep a simple **insight log** so knowledge isn't lost:\n\n```\nInsight log entry\nDate:        2026-05-10\nSource:      Usability test (5 participants), analytics\nInsight:     Parents don't understand the difference between Plan A and Plan B\nEvidence:    4/5 participants hesitated; 38% of pricing-page visitors toggled plans repeatedly\nAction:      Added comparison table + \"Which plan is right for me?\" quiz\nResult:      Plan selection completion improved; fewer pre-sale chat questions (monitor)\nNext:        Test quiz copy in Urdu version\n```\n\n### Presenting UX findings to stakeholders\n\nStakeholders — clients, founders, managers — are more persuaded by users than by designers' opinions.\n\n- **Show, don't tell:** short video clips of users struggling are powerful (with participant consent).\n- **Connect to business goals:** \"This issue affects the step where most mobile leads drop off.\"\n- **Be specific:** issue, evidence, recommendation, expected impact, effort.\n- **Include what's working** so the team knows what to protect.\n- **Keep it short:** a one-page summary plus an appendix.\n\n### UX for freelancers and agencies\n\nUX skills are a differentiator for marketing freelancers and agencies:\n\n- Offer **landing-page audits** (heuristic review + analytics + quick tests) as a productised service.\n- Include **message-match and mobile QA** in every campaign launch.\n- Report **conversion improvements** alongside ad metrics, with honest attribution.\n- Build **accessible templates** for clients — a genuine value-add as regulations tighten.\n\n### Ethics and inclusion in iteration\n\nOptimisation can drift toward manipulation if teams chase short-term metrics. Keep ethics in the loop:\n\n- Guardrail metrics for complaints, refunds, cancellations and accessibility.\n- A rule that no dark patterns ship, regardless of test results.\n- Include diverse participants in testing — different ages, abilities, languages and devices.\n\n### Worked example: an agency's 90-day UX programme for a client\n\n- Month 1: heuristic review, analytics funnel analysis, and five usability tests on the booking flow; top five issues fixed.\n- Month 2: A/B test of a simplified form (traffic was sufficient); accessibility fixes to templates; insight log started.\n- Month 3: second test round confirmed improvements; quarterly report showed booking completion improvements and fewer support questions, with notes on seasonality and other campaign changes that may have contributed.\n\n### Common mistakes\n\n- Treating launch as the end of the work.\n- Prioritising by loudest opinion rather than evidence.\n- Not documenting learnings, so the same mistakes repeat.\n- Letting metric-chasing lead to dark patterns.\n\n### Making the case for time and budget\n\nUX work competes with campaigns for time and money. Make the case with evidence: estimate the value of improving a key step by using current traffic and conversion figures, clearly labelled as estimates, and compare it with the effort required. Start with small, visible wins — a clearer form or faster page — and share the results. Early success earns permission for bigger improvements.\n\n### Summary\n\nRun UX as a continuous loop with a realistic rhythm, prioritise by impact, confidence and effort, document insights, present findings with user evidence and business context, and keep ethics and inclusion at the centre of optimisation.",
+          "video": null,
+          "keyTakeaways": [
+            "UX improvement is a continuous loop: observe, prioritise, design, validate, ship, measure, share.",
+            "Prioritise with impact × confidence ÷ effort to make evidence explicit.",
+            "Keep an insight log and present findings with user evidence tied to business goals.",
+            "Protect ethics with guardrail metrics and a firm no-dark-patterns rule."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which prioritisation approach is most evidence-based?",
+              "options": [
+                "Scoring ideas by impact, confidence and effort",
+                "Doing the biggest redesign first",
+                "Whatever the most senior person prefers",
+                "Randomly choosing"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Explicit scoring surfaces evidence and effort; opinions and big-bang redesigns are riskier."
+            },
+            {
+              "question": "What is the most persuasive way to show stakeholders a usability problem?",
+              "options": [
+                "Short, consented video clips of real users struggling, linked to business impact",
+                "A long written theory",
+                "A mood board",
+                "The designer's personal opinion"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Seeing real users struggle is compelling and grounded in evidence."
+            },
+            {
+              "question": "An A/B test shows a manipulative confirmshaming pop-up increases sign-ups. What should the team do?",
+              "options": [
+                "Reject it under the no-dark-patterns rule and look for ethical alternatives, checking guardrail metrics",
+                "Run it only on mobile",
+                "Ship it — the numbers are better",
+                "Hide the results"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Ethical rules and guardrails prevent short-term gains that harm trust and may breach consumer-protection expectations."
+            }
+          ],
+          "activity": "Create an insight log with at least three entries from your recent work, score five improvement ideas with impact × confidence ÷ effort, and plan your team's weekly, monthly and quarterly UX rhythm."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 25,
+    "timeLimitMinutes": 40,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "uxm-001",
+        "module": "ux-foundations",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does UX include beyond the visual interface?",
+        "options": [
+          "Nothing — UX is only visuals",
+          "Only social media posts",
+          "Only logo design",
+          "Content, speed, reliability, support and the overall experience of achieving a goal"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "UX spans the whole experience; UI is one part."
+      },
+      {
+        "id": "uxm-002",
+        "module": "ux-foundations",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A pop-up covering a landing page has a tiny, low-contrast close button. Which heuristic is most directly affected?",
+        "options": [
+          "Match between system and the real world",
+          "Recognition rather than recall",
+          "User control and freedom",
+          "Help and documentation"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Users need an easy way to exit or undo; a hidden close button removes control."
+      },
+      {
+        "id": "uxm-003",
+        "module": "ux-foundations",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which are lightweight user research sources a small marketing team can use this week? (Choose all that apply.)",
+        "options": [
+          "A multi-year ethnographic study",
+          "Sales call notes",
+          "Support tickets and DMs",
+          "Five short customer interviews"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "These are fast and low-cost; long ethnographic studies are not lightweight."
+      },
+      {
+        "id": "uxm-004",
+        "module": "ux-foundations",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Your heuristic review found 25 issues. You have one week before a paid campaign launches. How should you prioritise?",
+        "options": [
+          "Fix issues in the order found",
+          "Fix nothing until a full redesign",
+          "Fix high-severity, high-frequency issues on the campaign's conversion path first",
+          "Fix the easiest cosmetic issues first"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Severity, frequency and impact on the key path guide prioritisation."
+      },
+      {
+        "id": "uxm-005",
+        "module": "ux-foundations",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is a jobs-to-be-done statement?",
+        "options": [
+          "A developer task list",
+          "A list of website pages",
+          "A job advertisement",
+          "A description of progress a user wants to make: 'When…, I want to…, so I can…'"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "JTBD frames needs as desired progress in context."
+      },
+      {
+        "id": "uxm-006",
+        "module": "ux-foundations",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which interview question is leading and should be avoided?",
+        "options": [
+          "'Why did you choose that option?'",
+          "'Tell me about the last time you bought a course online.'",
+          "'What happened next?'",
+          "'Don't you agree our checkout is simple?'"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "It suggests the desired answer; the others are open and behavioural."
+      },
+      {
+        "id": "uxm-007",
+        "module": "ux-foundations",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A company changed checkout copy from 'Fulfilment fee' to 'Shipping' and saw fewer support questions. Which heuristic did this apply?",
+        "options": [
+          "Error prevention",
+          "Flexibility and efficiency of use",
+          "Aesthetic and minimalist design",
+          "Match between system and the real world"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Replacing internal jargon with the word customers already use matches the system to the real world, which reduces confusion and support questions."
+      },
+      {
+        "id": "uxm-008",
+        "module": "flows-structure-and-copy",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does a user flow diagram show?",
+        "options": [
+          "Steps, decisions and paths a user takes to complete a task",
+          "Social media schedule",
+          "Brand colours",
+          "Server architecture"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "User flows visualise task paths including decisions and alternatives."
+      },
+      {
+        "id": "uxm-009",
+        "module": "flows-structure-and-copy",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which edge cases should a registration flow design account for? (Choose all that apply.)",
+        "options": [
+          "Keyboard-only and screen-reader users",
+          "Users who are already registered",
+          "Only users on the fastest connections",
+          "Mistyped email addresses"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Common errors, returning users and accessibility needs are real paths; assuming fast connections ignores many users."
+      },
+      {
+        "id": "uxm-010",
+        "module": "flows-structure-and-copy",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Prospects keep emailing to ask about prices even though a page called 'Investment' exists. What's the most likely fix?",
+        "options": [
+          "Rename the navigation label to 'Pricing' and make it prominent",
+          "Add more blog posts",
+          "Remove prices entirely",
+          "Make the logo larger"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "People scan navigation for familiar words; renaming 'Investment' to 'Pricing' and making it prominent helps them find it, while removing prices would increase uncertainty."
+      },
+      {
+        "id": "uxm-011",
+        "module": "flows-structure-and-copy",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A booking flow has these steps: ad → homepage → services → contact page → 10-field form → wait for email reply. Which redesign best reduces friction while keeping lead quality?",
+        "options": [
+          "Remove the form and ask users to call",
+          "Ad → matching landing page → embedded scheduler → short form with one qualifying question → confirmation and reminders",
+          "Add a CAPTCHA and two more fields",
+          "Send traffic to the blog"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Fewer steps, message match and instant booking reduce friction; one qualifying question maintains quality."
+      },
+      {
+        "id": "uxm-012",
+        "module": "flows-structure-and-copy",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which button label is clearest?",
+        "options": [
+          "Go",
+          "Submit",
+          "Continue to payment",
+          "OK"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "'Continue to payment' tells users exactly what happens next; generic labels like Submit, Go or OK leave them guessing."
+      },
+      {
+        "id": "uxm-013",
+        "module": "flows-structure-and-copy",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which form practices support usability and data-protection compliance? (Choose all that apply.)",
+        "options": [
+          "Explaining why sensitive data is requested",
+          "Unticked, specific marketing consent checkboxes",
+          "Asking only for data needed now",
+          "Pre-ticked partner marketing consent"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Pre-ticked consent is generally not valid consent under laws like GDPR; the others are good practice."
+      },
+      {
+        "id": "uxm-014",
+        "module": "flows-structure-and-copy",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What is an open card sort used for?",
+        "options": [
+          "Measuring load speed",
+          "Discovering how users group and name content",
+          "Testing ad copy",
+          "Testing button colours"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Open card sorts reveal users' mental models and labels."
+      },
+      {
+        "id": "uxm-015",
+        "module": "wireframes-ui-and-prototypes",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is a wireframe?",
+        "options": [
+          "A marketing report",
+          "A simplified layout showing structure and content priority",
+          "A type of server",
+          "A final, polished visual design"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "A wireframe is a simplified layout showing structure, content priority and functionality before final visual style is applied."
+      },
+      {
+        "id": "uxm-016",
+        "module": "wireframes-ui-and-prototypes",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Stakeholders keep debating photo choices during a structure review. What should you change?",
+        "options": [
+          "Present lower-fidelity wireframes so feedback stays on structure",
+          "Add more photos",
+          "Skip reviews",
+          "Go straight to development"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Lower-fidelity wireframes remove photos and colours, so stakeholder feedback stays on structure and priority rather than visual taste."
+      },
+      {
+        "id": "uxm-017",
+        "module": "wireframes-ui-and-prototypes",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which states should be designed for a checkout 'Pay now' button and card form? (Choose all that apply.)",
+        "options": [
+          "Keyboard focus",
+          "Loading/processing",
+          "A decorative animation that plays randomly",
+          "Error (e.g. card declined)"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Loading, error and focus states give feedback and support accessibility; random animation does not."
+      },
+      {
+        "id": "uxm-018",
+        "module": "wireframes-ui-and-prototypes",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why build landing pages from approved sections or components?",
+        "options": [
+          "Faster assembly, consistency and easier development",
+          "It improves ad targeting",
+          "It prevents all bugs",
+          "It's required by law"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Approved sections let teams assemble pages quickly, keep them consistent with the brand and make development easier; they do not prevent all bugs or affect ad targeting."
+      },
+      {
+        "id": "uxm-019",
+        "module": "wireframes-ui-and-prototypes",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is a prototype mainly used for?",
+        "options": [
+          "Testing an experience interactively before building it",
+          "Printing brochures",
+          "Storing passwords",
+          "Final hosting"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Prototypes simulate flows so problems are found cheaply."
+      },
+      {
+        "id": "uxm-020",
+        "module": "wireframes-ui-and-prototypes",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A marketer launches a no-code landing page. Leads aren't appearing in the CRM, though the form shows 'Thanks'. What QA step was missed?",
+        "options": [
+          "Checking colour contrast",
+          "Testing the hero image",
+          "End-to-end testing of form submission and data flow to the CRM",
+          "Checking the favicon"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Forms must be tested from submission through to data arriving where it's needed."
+      },
+      {
+        "id": "uxm-021",
+        "module": "wireframes-ui-and-prototypes",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "What should a handoff include beyond final visuals? (Choose all that apply.)",
+        "options": [
+          "The designer's personal browsing history",
+          "Final copy including error messages and alt text",
+          "All component states",
+          "Tracking events to measure"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "States, content and tracking notes enable accurate builds."
+      },
+      {
+        "id": "uxm-022",
+        "module": "landing-page-ux",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does 'message match' mean?",
+        "options": [
+          "The landing page continues the promise, offer and language of the ad or link",
+          "Sending the same email twice",
+          "Matching competitor pricing",
+          "Matching fonts between pages"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Message match means the page continues the promise, offer, visuals and language that brought visitors there, so they know they are in the right place."
+      },
+      {
+        "id": "uxm-023",
+        "module": "landing-page-ux",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A consultation landing page has buttons for 'Book a call', 'Follow us on Instagram', 'Read our blog' and 'Subscribe'. What is the main UX issue?",
+        "options": [
+          "No logo",
+          "Too few colours",
+          "Multiple competing goals dilute the primary conversion",
+          "The page is too short"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "One primary goal per landing page focuses attention."
+      },
+      {
+        "id": "uxm-024",
+        "module": "landing-page-ux",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which practices are dark patterns likely to attract regulatory or consumer-protection concern? (Choose all that apply.)",
+        "options": [
+          "A neutral 'No thanks' decline option",
+          "Making cancellation much harder than sign-up",
+          "Pre-added paid extras in the basket",
+          "Fees revealed only at the final checkout step"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Drip pricing, sneak-into-basket and subscription traps are deceptive; neutral decline options are ethical."
+      },
+      {
+        "id": "uxm-025",
+        "module": "landing-page-ux",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which change most likely improves Largest Contentful Paint on mobile?",
+        "options": [
+          "Using larger fonts",
+          "Compressing and correctly sizing the hero image",
+          "Adding an autoplay background video",
+          "Adding more tracking scripts"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Optimised hero images load faster; video and scripts add weight."
+      },
+      {
+        "id": "uxm-026",
+        "module": "landing-page-ux",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which body text size is a common starting point for mobile web readability?",
+        "options": [
+          "Around 16 px",
+          "It doesn't matter",
+          "40 px",
+          "8 px"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Around 16 px is a widely used baseline for comfortable reading."
+      },
+      {
+        "id": "uxm-027",
+        "module": "landing-page-ux",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Traffic from Instagram converts far worse than from email, though the landing page is the same. Which investigation is most useful first?",
+        "options": [
+          "Increase the Instagram budget",
+          "Test the flow inside Instagram's in-app browser on mid-range phones, checking message match with the Instagram creative",
+          "Change the brand colours",
+          "Remove the page"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "In-app browser behaviour, device context and creative-to-page match often explain channel differences."
+      },
+      {
+        "id": "uxm-028",
+        "module": "landing-page-ux",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What is the most credible form of social proof?",
+        "options": [
+          "Logos of companies you've never worked with",
+          "Invented statistics",
+          "Real testimonials from identifiable customers, shared with consent",
+          "Anonymous quotes with no details"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Genuine, attributable proof builds trust; fabricated proof misleads and breaches advertising rules."
+      },
+      {
+        "id": "uxm-029",
+        "module": "accessibility-essentials",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does the 'P' in POUR stand for?",
+        "options": [
+          "Perceivable",
+          "Predictable",
+          "Practical",
+          "Programmable"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "The four WCAG principles are Perceivable, Operable, Understandable and Robust (POUR), so the P stands for Perceivable."
+      },
+      {
+        "id": "uxm-030",
+        "module": "accessibility-essentials",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which issues are likely to be missed by automated accessibility checkers? (Choose all that apply.)",
+        "options": [
+          "Illogical heading structure that still passes syntax checks",
+          "Confusing error messages",
+          "A missing form label attribute",
+          "Alt text that exists but is meaningless"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Automated tools detect missing labels but can't judge meaning or clarity."
+      },
+      {
+        "id": "uxm-031",
+        "module": "accessibility-essentials",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which WCAG 2.2 AA requirement relates to small, tightly packed icons in a mobile footer?",
+        "options": [
+          "Target Size (Minimum)",
+          "Audio Description",
+          "Page Titled",
+          "Captions (Prerecorded)"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Target Size (Minimum) generally requires 24×24 CSS px targets or sufficient spacing."
+      },
+      {
+        "id": "uxm-032",
+        "module": "accessibility-essentials",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "A marketing email is sent as a single image with 'Click here' links and grey footer text. Which changes improve accessibility? (Choose all that apply.)",
+        "options": [
+          "Add more images of text",
+          "Descriptive link/button text",
+          "Use live text with headings",
+          "Increase footer text contrast"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Live text, descriptive links and contrast help screen-reader and low-vision users; images of text make it worse."
+      },
+      {
+        "id": "uxm-033",
+        "module": "accessibility-essentials",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What should decorative images have?",
+        "options": [
+          "The file name as alt text",
+          "A caption",
+          "Empty alt text so screen readers skip them",
+          "Long descriptive alt text"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Decorative images should be ignored by assistive technology."
+      },
+      {
+        "id": "uxm-034",
+        "module": "accessibility-essentials",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A vendor offers an overlay widget promising instant WCAG compliance. What is the best response?",
+        "options": [
+          "Buy it and stop testing",
+          "Ignore accessibility entirely",
+          "Install it alongside an accessibility statement claiming full compliance",
+          "Explain that overlays don't fix underlying issues and may interfere with assistive tech; fix design, content and code instead"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Real remediation and testing are required; overlays are widely criticised."
+      },
+      {
+        "id": "uxm-035",
+        "module": "accessibility-essentials",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which manual test quickly reveals whether all interactive elements work without a mouse?",
+        "options": [
+          "Page speed test",
+          "Colour contrast check",
+          "Spell check",
+          "Keyboard-only navigation using Tab, Enter, Space and Escape"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Navigating with only Tab, Enter, Space and Escape shows whether every control can be reached and operated and whether focus stays visible."
+      },
+      {
+        "id": "uxm-036",
+        "module": "testing-and-iteration",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the purpose of the think-aloud method?",
+        "options": [
+          "To collect demographics",
+          "To test audio quality",
+          "To hear participants' thoughts as they complete tasks, revealing confusion and expectations",
+          "To make users talk about their day"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Asking participants to say what they are thinking as they work exposes their expectations and confusion, explaining the reasons behind their behaviour."
+      },
+      {
+        "id": "uxm-037",
+        "module": "testing-and-iteration",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Your site gets a few hundred visitors a month. What's the best way to validate a new checkout design?",
+        "options": [
+          "An A/B test for a small colour change",
+          "Skip validation",
+          "Qualitative usability testing and careful before/after monitoring, making bolder improvements",
+          "Wait years for significance"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Low traffic can't support reliable A/B tests for small changes."
+      },
+      {
+        "id": "uxm-038",
+        "module": "testing-and-iteration",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which elements make a strong A/B test plan? (Choose all that apply.)",
+        "options": [
+          "Sample size or duration decided in advance",
+          "A primary metric and guardrail metrics",
+          "Stopping as soon as the variant looks better",
+          "A hypothesis grounded in an insight"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Pre-registration and guardrails make results trustworthy; early stopping inflates false positives."
+      },
+      {
+        "id": "uxm-039",
+        "module": "testing-and-iteration",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Session recordings show many 'rage clicks' on a product image. What does this suggest?",
+        "options": [
+          "The page is too fast",
+          "The image is too small in file size",
+          "Users love the image",
+          "Users expect the image to do something (e.g. zoom) and it doesn't"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Repeated clicks indicate a false affordance or unmet expectation."
+      },
+      {
+        "id": "uxm-040",
+        "module": "testing-and-iteration",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Who should participate in usability tests?",
+        "options": [
+          "People who represent the target audience",
+          "Only the design team",
+          "Random people who have never heard of the category, always",
+          "Only the CEO"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "People who match the target audience reveal the problems real customers will face; internal teams and executives know too much to behave like users."
+      },
+      {
+        "id": "uxm-041",
+        "module": "testing-and-iteration",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An idea scores Impact 4, Confidence 2, Effort 5; another scores Impact 3, Confidence 5, Effort 1. Using I×C÷E, which should usually come first and why?",
+        "options": [
+          "Neither",
+          "The second (score 15 vs 1.6), because strong evidence and low effort outweigh slightly lower impact",
+          "The first, because impact is higher",
+          "Both at once regardless of effort"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "The second scores far higher; the model makes evidence and effort explicit."
+      },
+      {
+        "id": "uxm-042",
+        "module": "testing-and-iteration",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "What belongs in an insight log entry? (Choose all that apply.)",
+        "options": [
+          "Participants' home addresses",
+          "Next steps",
+          "The insight and its evidence",
+          "The action taken and the result"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Logs capture learning; personal data like addresses shouldn't be stored there."
+      }
+    ]
+  }
+}
