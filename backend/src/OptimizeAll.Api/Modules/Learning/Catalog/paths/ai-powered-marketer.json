@@ -1,0 +1,34 @@
+{
+  "slug": "ai-powered-marketer",
+  "title": "AI-Powered Marketer",
+  "subtitle": "Use AI across research, content, creative, automation and performance — responsibly and at scale",
+  "description": "Marketing teams that use AI well ship more, test more and learn faster, without losing their brand voice or breaking disclosure rules. This path takes you from AI fundamentals for marketers to a working AI marketing system. You learn to prompt for strategy, copy and sales assets, produce images, video and voice, and connect everything with email automation and no-code workflows in tools like n8n, Make and Zapier. Then you apply AI to paid media and to content at scale, with the quality controls that keep search engines and customers on your side.\n\nThe path closes with responsible AI: advertising disclosure, consent, copyright and platform policies, so your team can move fast with confidence. Every course is free and certificated; follow them in order or jump to the skills you need now.",
+  "level": "intermediate",
+  "courses": [
+    "ai-fundamentals-for-marketers",
+    "prompt-engineering-for-content-and-sales",
+    "mastering-chatgpt",
+    "copywriting-that-converts",
+    "ai-image-generation-and-design",
+    "ai-video-and-voice-production",
+    "email-marketing-and-automation",
+    "no-code-ai-automation-n8n-make-zapier",
+    "ai-performance-marketing",
+    "programmatic-seo-and-ai-content-at-scale",
+    "responsible-ai-disclosure-and-compliance"
+  ],
+  "outcomes": [
+    "Build a repeatable AI workflow for research, briefs, copy and creative",
+    "Produce on-brand images, short video and voice-overs with current AI tools",
+    "Automate campaigns and lead handling with email flows and no-code AI automations",
+    "Use AI to plan, test and optimise paid campaigns against real conversion data",
+    "Scale content without thin or duplicate pages that hurt search visibility",
+    "Apply disclosure, consent and copyright rules to AI-assisted marketing"
+  ],
+  "audience": [
+    "Marketers, content leads and small agency teams",
+    "Creators and founders who run their own marketing",
+    "Anyone who wants AI to multiply output without lowering quality"
+  ],
+  "sortOrder": 20
+}

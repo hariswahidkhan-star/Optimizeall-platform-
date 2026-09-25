@@ -1,4 +1,4 @@
-import { Award, BookOpenCheck, Clock, Download, ExternalLink, GraduationCap, Library, PlayCircle, Share2 } from 'lucide-react';
+import { Award, BookOpenCheck, Clock, Download, ExternalLink, GraduationCap, Library, PlayCircle, Route, Share2 } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { ButtonLink } from '@/components/ui/ButtonLink';
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
@@ -16,12 +16,14 @@ import {
   formatMinutes,
   useLearningDashboard,
   useMyCertificate,
+  useMyPaths,
   type EnrolmentCard,
   type MyCertificate,
 } from '@/features/learning/api';
 import { MyCatalog } from '@/features/learning/components/CatalogBrowser';
 import { BadgeImage, CategoryTag, CourseCard, LinkedInIcon } from '@/features/learning/components/CourseCard';
 import { LearnSlot } from '@/features/learning/components/LearnSlot';
+import { PathGrid } from '@/features/learning/components/PathViews';
 import '@/features/learning/learning.css';
 
 export const learningPaths = {
@@ -33,7 +35,30 @@ export const learningPaths = {
   exam: (slug: string) => `/app/learning/courses/${encodeURIComponent(slug)}/exam`,
   attempt: (id: string) => `/app/learning/attempts/${encodeURIComponent(id)}`,
   certificate: (id: string) => `/app/learning/certificates/${encodeURIComponent(id)}`,
+  paths: '/app/learning/paths',
+  path: (slug: string) => `/app/learning/paths/${encodeURIComponent(slug)}`,
 };
+
+/** Learning paths on "My learning": started paths first, with progress. */
+function MyPathsSection() {
+  const q = useMyPaths();
+  if (!q.data || q.data.length === 0) return null;
+  const items = [...q.data].sort((a, b) => Number(b.progress.started) - Number(a.progress.started)).slice(0, 4);
+  const progress = new Map(q.data.map((p) => [p.card.slug, p.progress]));
+  return (
+    <section aria-labelledby="paths-heading" className="stack">
+      <div className="lx-hub-head">
+        <h2 id="paths-heading" className="ui-dash-head">
+          Learning paths
+        </h2>
+        <Link to={learningPaths.paths} className="lx-hub-more">
+          All paths
+        </Link>
+      </div>
+      <PathGrid paths={items.map((p) => p.card)} linkFor={learningPaths.path} progressFor={(s) => progress.get(s)} />
+    </section>
+  );
+}
 
 export function ContinueCard({ item, headingLevel = 2 }: { item: EnrolmentCard; headingLevel?: 2 | 3 }) {
   const Heading = `h${headingLevel}` as const;
@@ -115,9 +140,14 @@ export function LearningHomePage() {
         title="My learning"
         description="Free courses in sales, marketing, SEO and AI — with certificates you can add to LinkedIn."
         actions={
-          <ButtonLink to={learningPaths.catalog} variant="secondary" leadingIcon={<Library aria-hidden="true" />}>
-            Browse all courses
-          </ButtonLink>
+          <>
+            <ButtonLink to={learningPaths.paths} variant="secondary" leadingIcon={<Route aria-hidden="true" />}>
+              Learning paths
+            </ButtonLink>
+            <ButtonLink to={learningPaths.catalog} variant="secondary" leadingIcon={<Library aria-hidden="true" />}>
+              Browse all courses
+            </ButtonLink>
+          </>
         }
       />
       {q.isPending && (
@@ -190,6 +220,8 @@ export function LearningHomePage() {
               </Card>
             </DashboardCell>
           </DashboardGrid>
+
+          <MyPathsSection />
 
           {q.data.recommended.length > 0 && (
             <section aria-labelledby="rec-heading" className="stack">

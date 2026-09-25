@@ -63,7 +63,7 @@ public sealed class MyLearningService(
         {
             var e = enrolments.FirstOrDefault(x => x.CourseId == c.Id);
             var percent = e is null || c.LessonCount == 0 ? 0 : Math.Min(100, completedCounts.GetValueOrDefault(e.Id) * 100 / c.LessonCount);
-            return new MyCourseCardDto(c, e is not null, percent, e?.PassedAt is not null, certs.GetValueOrDefault(c.Id));
+            return new MyCourseCardDto(c, e is not null, percent, e?.PassedAt is not null, certs.TryGetValue(c.Id, out var cid) ? cid : null);
         }).ToList(), page.Total, page.Page, page.PageSize);
     }
 
@@ -222,7 +222,7 @@ public sealed class MyLearningService(
         foreach (var r in rows)
         {
             var doc = await cache.GetAsync(db, r.c.PublishedVersionId!.Value, ct);
-            var state = new ProgressState(r.e, completed.GetValueOrDefault(r.e.Id) ?? new HashSet<string>(), doc, certs.GetValueOrDefault(r.c.Id));
+            var state = new ProgressState(r.e, completed.GetValueOrDefault(r.e.Id) ?? new HashSet<string>(), doc, certs.TryGetValue(r.c.Id, out var cid) ? cid : null);
             var p = ToDto(state);
             lessonsDone += p.CompletedLessonCount;
             minutes += doc.Lessons.Where(l => state.Completed.Contains(l.Lesson.Slug)).Sum(l => l.Lesson.DurationMinutes);

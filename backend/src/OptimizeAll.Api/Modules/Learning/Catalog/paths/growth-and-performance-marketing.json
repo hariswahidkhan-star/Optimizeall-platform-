@@ -1,0 +1,32 @@
+{
+  "slug": "growth-and-performance-marketing",
+  "title": "Growth & Performance Marketing",
+  "subtitle": "Measure what matters, convert more of it and scale the channels that pay back",
+  "description": "Growth is a system: reliable measurement, a site that converts, and channels you can scale because you know what they return. This path starts with the marketing fundamentals and GA4, then shows how to measure in a privacy-first world with consent mode, server-side tagging and modelled conversions. You learn conversion rate optimisation, paid social, AI-assisted performance marketing and lifecycle email, then apply it all to e-commerce growth, influencer programmes and affiliate and discount-code partnerships.\n\nThe emphasis throughout is on decisions you can defend: clear hypotheses, clean data, honest attribution and budgets that follow evidence. Every course is free, practical and ends with a certificate for your LinkedIn profile.",
+  "level": "intermediate",
+  "courses": [
+    "digital-marketing-foundations",
+    "web-analytics-with-ga4",
+    "privacy-first-measurement",
+    "conversion-rate-optimization",
+    "paid-social-advertising",
+    "ai-performance-marketing",
+    "email-marketing-and-automation",
+    "ecommerce-marketing-and-growth",
+    "influencer-marketing-for-brands",
+    "discount-code-affiliate-sales-mastery"
+  ],
+  "outcomes": [
+    "Set up trustworthy measurement in GA4 with consent-aware tracking",
+    "Run conversion experiments with clear hypotheses and honest results",
+    "Plan, launch and optimise paid social campaigns with AI assistance",
+    "Build lifecycle email flows that grow repeat revenue",
+    "Scale e-commerce, influencer and affiliate channels on measured return"
+  ],
+  "audience": [
+    "Performance and growth marketers",
+    "E-commerce and D2C founders",
+    "Agency teams managing client ad budgets"
+  ],
+  "sortOrder": 30
+}

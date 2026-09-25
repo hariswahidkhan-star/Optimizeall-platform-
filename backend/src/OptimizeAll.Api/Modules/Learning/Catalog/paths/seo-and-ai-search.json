@@ -1,0 +1,32 @@
+{
+  "slug": "seo-and-ai-search",
+  "title": "SEO & AI Search",
+  "subtitle": "Rank in Google and get cited by AI answers: strategy, technical SEO, authority and GEO",
+  "description": "Search now happens in two places: classic results pages and AI-generated answers. This path makes you effective in both. You begin with SEO and content strategy, then go deep on technical SEO and run a real audit from crawl to prioritised fixes. Local SEO and Google Business Profile follow, then off-page SEO, link building and digital PR that earn authority the right way.\n\nThe second half focuses on AI search: how answer engines choose sources, how to structure content and entities so you are cited, and how to scale programmatic and AI-assisted content without creating thin pages. You finish by connecting it all to GA4 so you can prove what search contributes. Every course is free and ends with a certificate.",
+  "level": "intermediate",
+  "courses": [
+    "seo-and-content-strategy",
+    "technical-seo-mastery",
+    "technical-seo-audit-in-practice",
+    "local-seo-and-google-business-profile",
+    "off-page-seo-and-link-building",
+    "digital-pr-and-brand-authority",
+    "ai-search-optimization-geo",
+    "programmatic-seo-and-ai-content-at-scale",
+    "web-analytics-with-ga4"
+  ],
+  "outcomes": [
+    "Build a content strategy around search intent and topical authority",
+    "Audit and fix crawling, indexing, rendering and structured data issues",
+    "Win local visibility with Google Business Profile and local signals",
+    "Earn links and brand mentions through digital PR, not link schemes",
+    "Structure content so AI answer engines can find, trust and cite it",
+    "Report organic and AI-search impact in GA4"
+  ],
+  "audience": [
+    "SEO specialists updating their skills for AI search",
+    "Content marketers and editors",
+    "Business owners who want more organic demand"
+  ],
+  "sortOrder": 40
+}

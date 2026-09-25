@@ -126,7 +126,7 @@ public sealed partial class SeoPageResolver
         foreach (var contributor in sitemapContributors)
             foreach (var u in await contributor.UrlsAsync(ct))
                 if (urls.All(x => x.Path != u.Path))
-                    Add(u.Path, u.Modified, contributor.Group, u.Title, u.ImageUrl is null ? null : Img((u.ImageUrl, u.Title)));
+                    Add(u.Path, u.Modified, contributor.Group, u.Title, u.ImageUrl is null ? null : Img((u.ImageUrl, u.Title)), u.Videos);
         return urls.Select(u => u with { Images = u.Images.DistinctBy(i => i.Url).ToList() }).ToList();
     }
 

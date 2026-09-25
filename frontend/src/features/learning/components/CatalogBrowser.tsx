@@ -1,3 +1,4 @@
+import '../academy.css';
 import clsx from 'clsx';
 import { GraduationCap, Search } from 'lucide-react';
 import { useId, type ReactNode } from 'react';
@@ -21,6 +22,7 @@ import {
   type CourseLevel,
 } from '../api';
 import { categoryClass, CourseCard } from './CourseCard';
+import { stagger, useReveal } from './Motion';
 
 const PAGE_SIZE = 24;
 
@@ -78,6 +80,8 @@ function Browser({
 }) {
   const categories = useCategories();
   const searchId = useId();
+  // Re-arm the reveal when the page of results changes (filters, search, pagination).
+  const gridRef = useReveal<HTMLUListElement>(data?.items.map((i) => i.course.id).join(','));
   const counts = new Map(categories.data?.map((c) => [c.category, c.courseCount]) ?? []);
   const shown = categories.data ? categories.data.map((c) => c.category) : (Object.keys(CATEGORY_LABELS) as CourseCategory[]);
   const total = categories.data?.reduce((sum, c) => sum + c.courseCount, 0);
@@ -106,7 +110,7 @@ function Browser({
           </button>
         ))}
       </div>
-      <form className="lx-catalog__filters" role="search" onSubmit={(e) => e.preventDefault()}>
+      <form className="lx-catalog__filters" role="search" aria-label="Filter courses" onSubmit={(e) => e.preventDefault()}>
         <div className="lx-catalog__search">
           <label htmlFor={searchId} className="visually-hidden">
             Search courses
@@ -178,9 +182,9 @@ function Browser({
       )}
       {data && data.items.length > 0 && (
         <>
-          <ul className="lx-grid" aria-label="Courses">
-            {data.items.map((item) => (
-              <li key={item.course.id}>
+          <ul className="lx-grid lx-reveal" aria-label="Courses" ref={gridRef}>
+            {data.items.map((item, i) => (
+              <li key={item.course.id} style={stagger(i)}>
                 <CourseCard course={item.course} to={linkFor(item.course.slug)} headingLevel={headingLevel} progress={item.progress} />
               </li>
             ))}

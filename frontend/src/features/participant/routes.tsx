@@ -45,6 +45,8 @@ const LearningCatalogPage = lazyPage(() => import('./learning/LearningHomePages'
 const LearningCertificatePage = lazyPage(() => import('./learning/LearningHomePages'), 'LearningCertificatePage');
 const LearningCoursePage = lazyPage(() => import('./learning/CoursePages'), 'LearningCoursePage');
 const LearningLessonPage = lazyPage(() => import('./learning/CoursePages'), 'LearningLessonPage');
+const LearningPathsPage = lazyPage(() => import('./learning/PathPages'), 'LearningPathsPage');
+const LearningPathPage = lazyPage(() => import('./learning/PathPages'), 'LearningPathPage');
 const ExamOverviewPage = lazyPage(() => import('./learning/ExamPages'), 'ExamOverviewPage');
 const ExamAttemptPage = lazyPage(() => import('./learning/ExamPages'), 'ExamAttemptPage');
 const SubmissionsPage = lazyPage(() => import('./submissions/SubmissionsPage'), 'SubmissionsPage');
@@ -149,6 +151,8 @@ export const routes: RouteObject[] = [
   { path: 'achievements', element: <AchievementsPage /> },
   { path: 'learning', element: <LearningHomePage /> },
   { path: 'learning/catalog', element: <LearningCatalogPage /> },
+  { path: 'learning/paths', element: <LearningPathsPage /> },
+  { path: 'learning/paths/:pathSlug', element: <LearningPathPage /> },
   { path: 'learning/courses/:slug', element: <LearningCoursePage /> },
   { path: 'learning/courses/:slug/lessons/:lessonSlug', element: <LearningLessonPage /> },
   { path: 'learning/courses/:slug/exam', element: <ExamOverviewPage /> },

@@ -312,7 +312,7 @@ public sealed partial class SiteSettingsService(AppDbContext db, IAuditLogger au
         {
             new("All courses", "/learn", "Free, self-paced courses with certificates.", null),
             new("AI courses", "/learn?category=Ai", "ChatGPT, Claude, prompting, agents and more.", null),
-            new("Learning paths", "/academy#paths", "Beginner to advanced, one course at a time.", null),
+            new("Learning paths", "/learn/paths", "Beginner to advanced, one course at a time.", null),
             new("Certificates", "/academy#certificates", "Verifiable, and ready for LinkedIn.", null),
         }),
         new("Services", "/services", "Everything we do to grow your brand.", Array.Empty<MenuItem>()),
@@ -334,7 +334,7 @@ public sealed partial class SiteSettingsService(AppDbContext db, IAuditLogger au
         new("Academy", new SiteLink[]
         {
             new("All courses", "/learn"), new("AI courses", "/learn?category=Ai"), new("Marketing courses", "/learn?category=Marketing"),
-            new("SEO courses", "/learn?category=Seo"), new("Learning paths", "/academy#paths"), new("Certificates", "/academy#certificates"),
+            new("SEO courses", "/learn?category=Seo"), new("Learning paths", "/learn/paths"), new("Certificates", "/academy#certificates"),
             new("Academy overview", "/academy"),
         }),
         new("Services", new SiteLink[]
@@ -422,9 +422,13 @@ public sealed partial class SiteSettingsService(AppDbContext db, IAuditLogger au
         // Saving settings in the admin turns "no sub-items" (null) into an empty list; both mean the same menu.
         static List<MenuItem> Norm(IEnumerable<MenuItem>? items) =>
             (items ?? Array.Empty<MenuItem>()).Select(m => new MenuItem(m.Label, m.Url, m.Description, Norm(m.Children))).ToList();
+        // The first two-pillar defaults linked "Learning paths" to /academy#paths; the paths now have their own pages.
+        static string FirstTwoPillar(string json) => json.Replace("\"/learn/paths\"", "\"/academy#paths\"", StringComparison.Ordinal);
         var changed = false;
         var header = s.Header;
-        if (J(Norm(header.Menu)) == J(Norm(PreviousDefaults.Menu)) && J(header.Cta) == J(PreviousDefaults.Cta))
+        var menu = J(Norm(header.Menu));
+        if ((menu == J(Norm(PreviousDefaults.Menu)) && J(header.Cta) == J(PreviousDefaults.Cta)) ||
+            (menu == FirstTwoPillar(J(Norm(Defaults.Header.Menu))) && J(header.Cta) == J(Defaults.Header.Cta)))
         {
             header = Defaults.Header;
             changed = true;
@@ -435,7 +439,7 @@ public sealed partial class SiteSettingsService(AppDbContext db, IAuditLogger au
             footer = footer with { Blurb = Defaults.Footer.Blurb };
             changed = true;
         }
-        if (J(footer.Columns) == J(PreviousDefaults.Columns))
+        if (J(footer.Columns) == J(PreviousDefaults.Columns) || J(footer.Columns) == FirstTwoPillar(J(Defaults.Footer.Columns)))
         {
             footer = footer with { Columns = Defaults.Footer.Columns };
             changed = true;

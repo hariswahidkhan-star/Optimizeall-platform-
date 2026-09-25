@@ -1,0 +1,32 @@
+{
+  "slug": "ai-for-business-leaders",
+  "title": "AI for Business Leaders",
+  "subtitle": "Turn AI into productivity, better decisions and new products — with governance you can defend",
+  "description": "Leaders do not need to write code to lead AI well, but they do need to know what works, what it costs and where the risks are. This path starts with everyday productivity and a practical tour of the leading assistants, then moves to data analysis and decision-making with AI. You learn where automation and agents create value in operations, how AI products and workflows are built, and how to manage an AI product from discovery to launch.\n\nGovernance runs through the second half: the EU AI Act and other regulation, disclosure and responsible use, and how to set policies your teams can follow. You close with leadership and communication for change, and an outlook on the technologies coming next, framed as reasoned outlook rather than prediction. Every course is free and certificated.",
+  "level": "beginner",
+  "courses": [
+    "ai-for-everyday-productivity",
+    "gemini-copilot-perplexity-and-more",
+    "ai-for-data-analysis-and-decision-making",
+    "ai-automation-and-agents-for-business",
+    "building-ai-products-and-workflows",
+    "ai-product-management",
+    "ai-governance-eu-ai-act",
+    "responsible-ai-disclosure-and-compliance",
+    "leadership-and-communication",
+    "future-tech-horizons"
+  ],
+  "outcomes": [
+    "Use AI assistants daily for research, writing, analysis and meetings",
+    "Identify automation and agent opportunities with a clear business case",
+    "Lead AI product work from problem framing to measured launch",
+    "Apply the EU AI Act and responsible-AI practices to your organisation",
+    "Communicate AI change so teams adopt it with confidence"
+  ],
+  "audience": [
+    "Founders, executives and team leads",
+    "Operations and strategy managers",
+    "Product owners responsible for AI initiatives"
+  ],
+  "sortOrder": 50
+}

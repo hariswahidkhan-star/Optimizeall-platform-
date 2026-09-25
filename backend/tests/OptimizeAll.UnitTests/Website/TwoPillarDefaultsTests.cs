@@ -84,6 +84,30 @@ public class TwoPillarDefaultsTests
     }
 
     [Fact]
+    public void Stored_first_two_pillar_defaults_move_learning_paths_to_their_own_pages()
+    {
+        static IReadOnlyList<MenuItem> Old(IEnumerable<MenuItem> items) => items.Select(m => m with
+        {
+            Url = m.Url == "/learn/paths" ? "/academy#paths" : m.Url,
+            Children = m.Children is null ? null : Old(m.Children),
+        }).ToList();
+        var d = SiteSettingsService.Defaults;
+        Assert.Contains(d.Header.Menu[0].Children!, c => c.Label == "Learning paths" && c.Url == "/learn/paths");
+        Assert.Contains(d.Footer.Columns[0].Links, l => l.Label == "Learning paths" && l.Url == "/learn/paths");
+        var stored = d with
+        {
+            Header = new HeaderSettings(Old(d.Header.Menu), d.Header.Cta),
+            Footer = d.Footer with
+            {
+                Columns = d.Footer.Columns.Select(c => c with { Links = c.Links.Select(l => l.Url == "/learn/paths" ? l with { Url = "/academy#paths" } : l).ToList() }).ToList(),
+            },
+        };
+        var upgraded = SiteSettingsService.UpgradeFromPreviousDefaults(stored)!;
+        Assert.Contains(upgraded.Header.Menu[0].Children!, c => c.Url == "/learn/paths");
+        Assert.Contains(upgraded.Footer.Columns[0].Links, l => l.Url == "/learn/paths");
+    }
+
+    [Fact]
     public void The_academy_page_ships_with_the_about_page_and_search_snippets_within_limits()
     {
         var academy = Assert.Single(BaselinePages.Pages, p => p.Slug == "academy");

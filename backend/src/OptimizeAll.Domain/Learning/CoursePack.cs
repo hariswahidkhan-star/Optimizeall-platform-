@@ -27,6 +27,24 @@ public sealed class CoursePack
     public List<PackModule>? Modules { get; set; } = new();
     public PackExam? FinalExam { get; set; }
 
+    /// <summary>
+    /// Pack v2 (2026-09): the month the content was last reviewed for accuracy ("YYYY-MM"). A pack that declares it is a
+    /// v2 pack (deeper lessons, a video lecture script on every lesson). Omitted from the stored JSON when null, so v1
+    /// documents keep their exact serialization (and content hash).
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? LastReviewed { get; set; }
+
+    /// <summary>Pack v2: real tools/platforms the course teaches hands-on (0–20 names, ≤ 40 characters each).</summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<string>? Tools { get; set; }
+
+    /// <summary>A v2 pack: it declares <see cref="LastReviewed"/>.</summary>
+    [JsonIgnore] public bool IsV2 => LastReviewed is not null;
+
+    /// <summary>Total produced-or-planned lecture time (sum of every lesson's lecture target minutes).</summary>
+    [JsonIgnore] public int LectureMinutes => AllLessons.Sum(x => x.Lesson.Lecture?.TargetMinutes ?? 0);
+
     [JsonIgnore] public CourseCategory CategoryValue => LearningEnums.ParseCategory(Category) ?? CourseCategory.Platform;
     [JsonIgnore] public CourseLevel LevelValue => LearningEnums.ParseLevel(Level) ?? CourseLevel.Beginner;
 
@@ -99,6 +117,10 @@ public sealed class PackLesson
     public List<PackCheck>? KnowledgeCheck { get; set; } = new();
     public string? Activity { get; set; }
 
+    /// <summary>Pack v2: the lesson's video lecture (production-ready script; media once produced). Required in v2 packs.</summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public PackLecture? Lecture { get; set; }
+
     [JsonIgnore] public LessonType TypeValue => string.Equals(Type, "video", StringComparison.Ordinal) ? LessonType.Video : LessonType.Article;
 }
 
@@ -109,6 +131,86 @@ public sealed class PackVideo
     public string? Src { get; set; }
     public string? Poster { get; set; }
     public string? Captions { get; set; }
+}
+
+/// <summary>
+/// A lesson's video lecture (pack v2): a scene-by-scene script produced later with ElevenLabs (voice + AI visuals, no
+/// avatars). <see cref="Src"/>/<see cref="Poster"/>/<see cref="Captions"/> stay null until the lecture is produced; the
+/// learner then sees the player, before that the chapters and the full transcript.
+/// </summary>
+public sealed class PackLecture
+{
+    /// <summary>Optional title when it differs from the lesson title (≤ 100 characters).</summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? Title { get; set; }
+
+    /// <summary>4–14 minutes (≈ narration words / 140).</summary>
+    public int TargetMinutes { get; set; }
+
+    public List<PackScene>? Scenes { get; set; } = new();
+
+    /// <summary>Terms the voice may mispronounce (acronyms, brands), with how to say them.</summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<PackPronunciation>? Pronunciations { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? Src { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? Poster { get; set; }
+
+    /// <summary>WebVTT captions (needs <see cref="Src"/>).</summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? Captions { get; set; }
+
+    /// <summary>When the produced lecture was published ("YYYY-MM-DD"): the VideoObject's uploadDate.</summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? PublishedAt { get; set; }
+
+    /// <summary>The YouTube video id when <see cref="Src"/> is a YouTube URL (lectures are hosted on YouTube), else null.</summary>
+    [JsonIgnore] public string? YouTubeId => YouTube.IdFrom(Src);
+
+    /// <summary>Total narration words.</summary>
+    [JsonIgnore] public int NarrationWords => (Scenes ?? new()).Sum(s => CoursePackValidator.WordCount(s?.Narration));
+
+    /// <summary>Total planned scene time in seconds.</summary>
+    [JsonIgnore] public int TotalSeconds => (Scenes ?? new()).Sum(s => s?.Seconds ?? 0);
+
+    /// <summary>The spoken transcript: every scene's narration, one paragraph per scene.</summary>
+    [JsonIgnore] public string Transcript => string.Join("\n\n", (Scenes ?? new()).Where(s => s is not null).Select(s => s.Narration.Trim()));
+}
+
+/// <summary>One scene of a lecture: what the voice says, the slide text, the visual direction and its planned length.</summary>
+public sealed class PackScene
+{
+    /// <summary>Spoken English, 40–260 words, no Markdown or URLs.</summary>
+    public string Narration { get; set; } = string.Empty;
+
+    /// <summary>Slide text: a title line, then 0–4 "• " bullet lines separated by newlines (≤ 320 characters).</summary>
+    public string OnScreen { get; set; } = string.Empty;
+
+    /// <summary>Direction for the video generator/editor (≤ 400 characters).</summary>
+    public string Visual { get; set; } = string.Empty;
+
+    /// <summary>15–150 seconds (≈ narration words / 2.3).</summary>
+    public int Seconds { get; set; }
+
+    /// <summary>The chapter title: the first line of <see cref="OnScreen"/> (bullet marker removed).</summary>
+    [JsonIgnore]
+    public string ChapterTitle
+    {
+        get
+        {
+            var first = (OnScreen ?? string.Empty).Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).FirstOrDefault() ?? string.Empty;
+            return first.TrimStart('•', '-', '*', ' ').Trim();
+        }
+    }
+}
+
+public sealed class PackPronunciation
+{
+    public string Term { get; set; } = string.Empty;
+    public string Say { get; set; } = string.Empty;
 }
 
 /// <summary>A non-graded knowledge-check question shown after a lesson.</summary>

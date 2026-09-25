@@ -33,6 +33,11 @@ public sealed partial class PublicLearningService(AppDbContext db, CourseContent
 
     private DateTime Now => clock.GetUtcNow().UtcDateTime;
 
+    private LearningPathService? _paths;
+
+    /// <summary>The learning paths read model (same scope, same data as the catalog).</summary>
+    public LearningPathService Paths => _paths ??= new LearningPathService(db, this, cache, issuers, clock);
+
     public IQueryable<Course> Published() =>
         db.Set<Course>().AsNoTracking().Where(c => c.Status == CourseStatus.Published && c.PublishedVersionId != null);
 
@@ -87,6 +92,32 @@ public sealed partial class PublicLearningService(AppDbContext db, CourseContent
             .ToList();
     }
 
+    /// <summary>
+    /// The academy in numbers for the marketing pages and the header (one small, cacheable response instead of the whole
+    /// catalog): course, lesson, minute and path counts, subjects with counts, featured slugs, up to eight highlight cards
+    /// (featured subject courses first, the platform course last, then the curated order) and up to 36 skills
+    /// (round-robin across subject courses for variety).
+    /// </summary>
+    public async Task<LearningSummaryDto> SummaryAsync(CancellationToken ct)
+    {
+        var now = Now;
+        var courses = await Sort(Published(), null, false).ToListAsync(ct);
+        var categories = Enum.GetValues<CourseCategory>()
+            .Select(c => new CategorySummaryDto(c, CategoryLabels[c], courses.Count(x => x.Category == c)))
+            .Where(c => c.CourseCount > 0).ToList();
+        var highlights = courses.OrderByDescending(c => c.IsFeatured).ThenBy(c => c.Category == CourseCategory.Platform)
+            .ThenBy(c => c.SortOrder).ThenBy(c => c.Title, StringComparer.Ordinal).Take(8).Select(c => Card(c, now)).ToList();
+        var subject = courses.Where(c => c.Category != CourseCategory.Platform).ToList();
+        var depth = subject.Count == 0 ? 0 : subject.Max(c => c.Skills.Count);
+        var skills = Enumerable.Range(0, depth).SelectMany(i => subject.Where(c => c.Skills.Count > i).Select(c => c.Skills[i]))
+            .Distinct(StringComparer.OrdinalIgnoreCase).Take(36).ToList();
+        var bySlug = courses.ToDictionary(c => c.Slug, StringComparer.Ordinal);
+        var pathCount = LearningPathLibrary.Paths.Count(p => LearningPathService.Resolve(p, bySlug).Count > 0);
+        return new LearningSummaryDto(courses.Count, courses.Sum(c => c.LessonCount), courses.Sum(c => c.EstimatedMinutes), pathCount,
+            categories, courses.Where(c => c.IsFeatured).Select(c => c.Slug).ToList(), highlights, skills,
+            courses.Count == 0 ? null : courses.Max(c => c.UpdatedAt));
+    }
+
     /// <summary>A published course and its parsed published version, or 404.</summary>
     public async Task<(Course Course, CourseDocument Doc)> LoadPublishedAsync(string slug, CancellationToken ct)
     {
@@ -113,7 +144,8 @@ public sealed partial class PublicLearningService(AppDbContext db, CourseContent
         var card = Card(course, Now);
         var exam = ExamInfo(pack);
         var modules = (pack.Modules ?? new()).Select(m => new ModuleDto(m.Slug, m.Title, m.Summary,
-            (m.Lessons ?? new()).Select(l => new LessonSummaryDto(l.Slug, l.Title, l.TypeValue, l.DurationMinutes, l.Video?.Src is not null)).ToList())).ToList();
+            (m.Lessons ?? new()).Select(l => new LessonSummaryDto(l.Slug, l.Title, l.TypeValue, l.DurationMinutes,
+                l.Video?.Src is not null || l.Lecture?.Src is not null, l.Lecture is not null, l.Lecture?.TargetMinutes ?? 0)).ToList())).ToList();
         var seo = new LearningSeoDto(SeoTitle($"{pack.Title} — free course with certificate", $"{pack.Title} — free course", pack.Title),
             Truncate(pack.Subtitle, SeoDescriptionMax),
             LearningLinks.CoursePath(pack.Slug), links.BadgeImage(pack.Slug), false);
@@ -125,7 +157,8 @@ public sealed partial class PublicLearningService(AppDbContext db, CourseContent
         return new CourseDetailDto(card, pack.Description, pack.Outcomes ?? new(),
             prerequisiteSlugs.Where(titles.ContainsKey).Select(s => new PrerequisiteDto(s, titles[s])).ToList(),
             new BadgeDto(pack.Badge!.Name, pack.Badge.Description, pack.Badge.Criteria, LearningLinks.BadgeImagePath(pack.Slug)),
-            exam, modules, pack.Version, course.UpdatedAt, seo, jsonLd);
+            exam, modules, pack.Version, course.UpdatedAt, seo, jsonLd,
+            pack.LastReviewed, pack.Tools ?? new(), pack.LectureMinutes, pack.AllLessons.Count(x => x.Lesson.Lecture is not null));
     }
 
     public static ExamInfoDto ExamInfo(CoursePack pack) => new(pack.FinalExam!.QuestionCount, pack.FinalExam.TimeLimitMinutes,
@@ -165,8 +198,42 @@ public sealed partial class PublicLearningService(AppDbContext db, CourseContent
             previous is null ? null : new LessonNavDto(previous.Slug, previous.Title),
             next is null ? null : new LessonNavDto(next.Slug, next.Title),
             r.Index + 1, doc.Lessons.Count,
-            new LearningSeoDto(SeoTitle($"{lesson.Title} — {doc.Pack.Title}", lesson.Title), excerpt, path, links.BadgeImage(doc.Pack.Slug), false),
-            jsonLd);
+            new LearningSeoDto(SeoTitle($"{lesson.Title} — {doc.Pack.Title}", lesson.Title), excerpt, path,
+                lesson.Lecture?.Poster is { } poster ? links.Absolute(poster)
+                : lesson.Lecture?.YouTubeId is { } yt ? YouTube.Thumbnail(yt) : links.BadgeImage(doc.Pack.Slug), false),
+            jsonLd, Lecture(lesson), doc.Pack.LastReviewed);
+    }
+
+    /// <summary>A published lesson's produced lecture as a site video (server-rendered embed/player), or null.</summary>
+    public async Task<Website.SiteSeo.SeoVideo?> LectureVideoAsync(string slug, string lessonSlug, CancellationToken ct)
+    {
+        var (course, doc) = await LoadPublishedAsync(slug, ct);
+        if (!doc.LessonsBySlug.TryGetValue(lessonSlug, out var r)) return null;
+        var links = new LearningLinks((await issuers.GetAsync(ct)).BaseUrl);
+        return LearningJsonLd.SeoVideo(doc.Pack, r.Lesson, Truncate(PlainText(r.Lesson.Body), SeoDescriptionMax), links, course);
+    }
+
+    /// <summary>The lesson's lecture for the player: chapters from scenes (title = first on-screen line), planned times.</summary>
+    public static LessonLectureDto? Lecture(PackLesson lesson)
+    {
+        if (lesson.Lecture is not { } lecture) return null;
+        var chapters = new List<LectureChapterDto>();
+        var start = 0;
+        var scenes = (lecture.Scenes ?? new()).Where(s => s is not null).ToList();
+        for (var i = 0; i < scenes.Count; i++)
+        {
+            var scene = scenes[i];
+            var lines = (scene.OnScreen ?? string.Empty).Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            var title = scene.ChapterTitle;
+            if (title.Length == 0) title = $"Part {i + 1}";
+            var points = lines.Skip(1).Select(l => l.TrimStart('•', '-', '*', ' ').Trim()).Where(l => l.Length > 0).ToList();
+            chapters.Add(new LectureChapterDto(i, title, points, (scene.Narration ?? string.Empty).Trim(), start, scene.Seconds));
+            start += scene.Seconds;
+        }
+        var youTube = lecture.YouTubeId;
+        return new LessonLectureDto(lecture.Title ?? lesson.Title, lecture.TargetMinutes, start, lecture.Src is not null, lecture.Src,
+            lecture.Poster, lecture.Captions, chapters, lecture.NarrationWords, youTube, youTube is null ? null : YouTube.EmbedUrl(youTube),
+            lecture.PublishedAt);
     }
 
     // ---------------------------------------------------------------- text helpers

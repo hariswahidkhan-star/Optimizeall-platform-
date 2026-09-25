@@ -19,6 +19,14 @@ InProgress | Submitted | Expired · `CourseStatus` Draft | Published · `CourseS
 | `GET /public/learning/courses/{slug}` | `CourseDetail`: card, description (Markdown), outcomes, prerequisites (recommended), badge, exam rules, modules with lesson summaries, `seo`, `jsonLd` (schema.org `Course` + `BreadcrumbList`). 404 `course.not_found`. |
 | `GET /public/learning/courses/{slug}/lessons/{lessonSlug}` | `Lesson`: body (Markdown), video (`src`/`poster`/`captions`/`transcript`, video lessons only), key takeaways, knowledge check **with answers and explanations** (not graded), activity, previous/next, position, `seo`, `jsonLd`. 404 `lesson.not_found`. |
 | `GET /public/learning/courses/{slug}/badge.svg` | Course badge (`image/svg+xml`, cacheable, CORP cross-origin). |
+| `GET /public/learning/summary` | The academy in numbers for the marketing pages and the header (`Cache-Control: public, max-age=300`): `{ courseCount, lessonCount, totalMinutes, pathCount, categories, featuredSlugs, highlights (≤ 8 course cards, featured subject courses first), skills (≤ 36), updatedAt }`. |
+| `GET /public/learning/paths` | Learning paths with ≥ 1 published course → `{ paths: PathCard[], seo, jsonLd }` (card: slug, title, subtitle, level, courseCount, lessonCount, totalMinutes, categories, badges). |
+| `GET /public/learning/paths/{slug}` | `PathDetail`: card, description (Markdown), outcomes, audience, `courses` (ordered `{ position, course: CourseCard }`, unpublished/planned slugs skipped), `seo`, `jsonLd` (`ItemList` of `Course`, `BreadcrumbList`, one `EducationalOccupationalCredential` per badge). 404 when unknown or empty. |
+
+Pack v2 fields in the course and lesson DTOs: `CourseDetail.lastReviewed` (`"2026-09"` or null), `tools`, `lectureMinutes`,
+`lectureCount`; `LessonSummary.hasLecture`, `lectureMinutes`; `Lesson.lastReviewed` and `Lesson.lecture` =
+`{ title, targetMinutes, totalSeconds, produced, src, poster, captions, chapters: [{ index, title, points, narration,
+startSeconds, seconds }], transcriptWords, youTubeId, embedUrl, publishedAt }` (null for lessons without a lecture).
 | `GET /public/learning/certificates/{id}` | `CertificateVerification`: status `valid`/`revoked`, holder name, course, badge (+ description, criteria), skills, issue/revocation dates, issuer, links, `seo`, `jsonLd`. |
 | `GET /public/learning/certificates/verify?code=OA-XXXX-XXXX` | Same, by verification code (case-insensitive, `OA-` optional). |
 | `GET /public/learning/certificates/{id}/page` | Server-rendered verification page (`text/html`, OG/Twitter tags, JSON-LD); served at `/verify/certificates/{id}` by nginx. |
@@ -40,6 +48,7 @@ InProgress | Submitted | Expired · `CourseStatus` Draft | Published · `CourseS
 | `POST /me/learning/courses/{slug}/lessons/{lessonSlug}/start` | Resume point → `CourseProgress`. 409 `learning.not_enrolled`. |
 | `POST /me/learning/courses/{slug}/lessons/{lessonSlug}/complete` | → `CourseProgress` (`examUnlocked` once every lesson is complete). |
 | `POST /me/learning/courses/{slug}/lessons/{lessonSlug}/checks/{index}` | Body `{ "selected": [0] }` (1–10 option indices) → `{ index, selected, isCorrect, correct, explanation }`. 400 `learning.invalid_answer`, 404 unknown question. |
+| `GET /me/learning/paths` · `GET /me/learning/paths/{slug}` | Learning paths with the caller's progress: `{ card, progress }[]` / `{ path: PathDetail, progress }`; progress = `{ slug, completedCourses, courseCount, progressPercent, nextCourseSlug, started, courses: [{ slug, enrolled, progressPercent, passed, certificateId }] }`. |
 | `GET /me/learning/certificates` · `GET /me/learning/certificates/{certificateId}` | The caller's certificates with `links` (verification, PDF, image, badge image, Open Badge assertion, LinkedIn add-to-profile, LinkedIn share). Others' → 404. |
 
 ## 3. Exams (`participant.portal`; writes denied while impersonating)
@@ -71,7 +80,7 @@ InProgress | Submitted | Expired · `CourseStatus` Draft | Published · `CourseS
 | `POST /admin/learning/courses/{courseId}/publish` *(manage)* | `{ versionId, concurrencyStamp }`. |
 | `POST /admin/learning/courses/{courseId}/unpublish` *(manage)* | `{ concurrencyStamp }`. |
 | `PUT /admin/learning/courses/{courseId}/settings` *(manage)* | `{ isFeatured, sortOrder (0–10000), concurrencyStamp }`. |
-| `PUT /admin/learning/courses/{courseId}/lessons/{lessonSlug}/video` *(manage)* | `{ src?, poster?, captions?, publish, concurrencyStamp }` (uploads `/api/v1/files/{id}` or https) → new version. 409 `learning.not_a_video_lesson`. |
+| `PUT /admin/learning/courses/{courseId}/lessons/{lessonSlug}/video` *(manage)* | `{ src?, poster?, captions?, publishedAt?, publish, concurrencyStamp }` (uploads `/api/v1/files/{id}` or https; for a lesson with a v2 lecture this sets the **lecture** media — `src` typically a YouTube URL — and `publishedAt`) → new version. 409 `learning.not_a_video_lesson` (no lecture and not a video lesson). |
 | `POST /admin/learning/media` *(manage)* | Multipart `file`: MP4 ≤ 50 MB, WebVTT ≤ 1 MB, PNG/JPEG/WebP poster ≤ 10 MB → **201** `StoredFile` (`url` = `/api/v1/files/{id}`, public). |
 | `GET /admin/learning/certificates` | `PagedResult<AdminCertificate>`; `courseId`, `revoked`, `search` (holder, email, code, course). |
 | `POST /admin/learning/certificates` *(certify)* | `{ userId, courseId, reason, confirm: true }` → **201**. 409 `learning.already_certified`. |

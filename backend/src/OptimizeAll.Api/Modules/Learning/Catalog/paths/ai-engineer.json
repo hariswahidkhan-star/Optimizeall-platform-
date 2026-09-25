@@ -1,0 +1,37 @@
+{
+  "slug": "ai-engineer",
+  "title": "AI Engineer",
+  "subtitle": "Build, evaluate and ship production AI: APIs, RAG, agents, MCP, evals, security and open models",
+  "description": "A hands-on route from your first well-structured prompt to AI systems you would trust in production. You start with prompting fundamentals and the major model APIs, then build retrieval-augmented generation, tool-using agents and Model Context Protocol servers. From there you learn the engineering discipline that separates a demo from a product: evaluation suites, tracing and observability, cost and latency budgets, and security testing against prompt injection and data leakage. The final stretch covers agentic coding workflows, voice and computer-use agents, running open-weight models locally and when fine-tuning is actually worth it.\n\nEvery course is free, includes copy-pasteable code with secrets kept in environment variables, and ends with a certificate you can add to LinkedIn. Courses are listed in the recommended order; skip any you already know.",
+  "level": "advanced",
+  "courses": [
+    "prompt-engineering-foundations",
+    "advanced-prompt-engineering",
+    "ai-platform-apis-integration",
+    "mastering-claude",
+    "latest-ai-techniques-rag-agents-mcp",
+    "model-context-protocol-mcp",
+    "ai-agents-engineering",
+    "agentic-coding-with-ai",
+    "llm-evals-and-observability",
+    "ai-security-and-red-teaming",
+    "open-source-and-local-llms",
+    "fine-tuning-and-custom-models",
+    "voice-ai-agents",
+    "computer-use-and-browser-agents"
+  ],
+  "outcomes": [
+    "Call the major model APIs reliably with streaming, tool use, structured output and retries",
+    "Design and evaluate RAG pipelines and tool-using agents for real business tasks",
+    "Build and secure Model Context Protocol servers that connect models to your systems",
+    "Measure quality with eval suites and tracing before and after every change",
+    "Test AI features for prompt injection, data leakage and unsafe tool use",
+    "Choose between hosted, open-weight and fine-tuned models on evidence, not hype"
+  ],
+  "audience": [
+    "Developers adding AI features to products or internal tools",
+    "Technical marketers and founders who want to build, not just prompt",
+    "Engineers moving from prototypes to production AI systems"
+  ],
+  "sortOrder": 10
+}

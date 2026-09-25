@@ -31,6 +31,21 @@ public static partial class CoursePackValidator
     public const int MaxBadgeName = 60;
     public const double PoolFactor = 1.5;
 
+    // Pack v2 (docs/LEARNING.md § "Pack v2"). A pack that declares lastReviewed is v2.
+    public const int MaxTools = 20;
+    public const int MaxTool = 40;
+    public const int V1BodyMin = 500, V1BodyMax = 1100;
+    public const int V2BodyMin = 700, V2BodyMax = 1800;
+    public const int LectureMinutesMin = 4, LectureMinutesMax = 14;
+    public const int ScenesMin = 5, ScenesMax = 16;
+    public const int SceneWordsMin = 40, SceneWordsMax = 260;
+    public const int LectureWordsMin = 600, LectureWordsMax = 1800;
+    public const int SceneSecondsMin = 15, SceneSecondsMax = 150;
+    public const int MaxOnScreen = 320, MaxVisual = 400, MaxLectureTitle = 100;
+    public const int MaxPronunciations = 30;
+    /// <summary>Speaking rate used to check targetMinutes: ≈ 140 words per minute, within ± 3 minutes.</summary>
+    public const double WordsPerMinute = 140, TargetMinutesTolerance = 3;
+
     [GeneratedRegex("^[a-z0-9]+(?:-[a-z0-9]+)*$")]
     private static partial Regex SlugRegex();
 
@@ -46,10 +61,20 @@ public static partial class CoursePackValidator
     [GeneratedRegex(@"!\[[^\]]*\]\(\s*<?(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//)")]
     private static partial Regex ExternalImageRegex();
 
+    [GeneratedRegex(@"^20\d\d-(0[1-9]|1[0-2])$")]
+    private static partial Regex MonthRegex();
+
+    /// <summary>Narration is spoken: no Markdown symbols and no URLs read aloud.</summary>
+    [GeneratedRegex(@"[#*`\[\]]|https?://")]
+    private static partial Regex NarrationMarkupRegex();
+
     [GeneratedRegex(@"^/api/v1/files/[0-9a-fA-F-]{36}$")]
     private static partial Regex UploadUrlRegex();
 
     private static readonly string[] BannedOptions = { "all of the above", "none of the above" };
+
+    /// <summary>Course slugs that would collide with other /learn/… pages (the learning paths live at /learn/paths).</summary>
+    public static readonly IReadOnlySet<string> ReservedSlugs = new HashSet<string>(StringComparer.Ordinal) { "paths", "search", "catalog" };
 
     public static bool IsSlug(string? value) => !string.IsNullOrEmpty(value) && value.Length <= 80 && SlugRegex().IsMatch(value);
 
@@ -81,6 +106,7 @@ public static partial class CoursePackValidator
         var v = new Collector(mode == PackValidationMode.Strict);
 
         if (!IsSlug(pack.Slug)) v.Add("slug", "Use kebab-case: lower-case letters, digits and single hyphens (max 80 characters).");
+        else if (ReservedSlugs.Contains(pack.Slug)) v.Add("slug", $"'{pack.Slug}' is reserved (/learn/{pack.Slug} is another academy page).");
         if (pack.Version is < 1 or > 100_000) v.Add("version", "Use a whole number of at least 1.");
         v.Text("title", pack.Title, MaxTitle);
         v.Text("subtitle", pack.Subtitle, MaxSubtitle);
@@ -95,6 +121,16 @@ public static partial class CoursePackValidator
         v.List("outcomes", pack.Outcomes, 5, 8, MaxOutcome);
         v.List("skills", pack.Skills, 3, 8, 40);
         v.Unique("skills", pack.Skills);
+
+        var v2 = pack.IsV2;
+        if (pack.LastReviewed is not null && !MonthRegex().IsMatch(pack.LastReviewed))
+            v.Add("lastReviewed", "Use the review month as YYYY-MM (e.g. 2026-09).");
+        if (pack.Tools is not null)
+        {
+            if (pack.Tools.Count > MaxTools) v.Add("tools", $"List at most {MaxTools} tools.");
+            for (var i = 0; i < pack.Tools.Count; i++) v.Text($"tools[{i}]", pack.Tools[i], MaxTool);
+            v.Unique("tools", pack.Tools);
+        }
 
         var prerequisites = pack.Prerequisites ?? new List<string>();
         if (pack.Prerequisites is null) v.Add("prerequisites", "Use an empty list when there are none.");
@@ -134,7 +170,7 @@ public static partial class CoursePackValidator
             {
                 var lp = $"{mp}.lessons[{l}]";
                 if (lessons[l] is null) { v.Add(lp, "A lesson cannot be null."); continue; }
-                ValidateLesson(v, lp, lessons[l], lessonSlugs);
+                ValidateLesson(v, lp, lessons[l], lessonSlugs, v2);
             }
         }
 
@@ -144,7 +180,7 @@ public static partial class CoursePackValidator
         return v.Issues;
     }
 
-    private static void ValidateLesson(Collector v, string lp, PackLesson lesson, HashSet<string> lessonSlugs)
+    private static void ValidateLesson(Collector v, string lp, PackLesson lesson, HashSet<string> lessonSlugs, bool v2)
     {
         if (!IsSlug(lesson.Slug)) v.Add($"{lp}.slug", "Use a kebab-case slug.");
         else if (!lessonSlugs.Add(lesson.Slug)) v.Add($"{lp}.slug", $"Lesson slug '{lesson.Slug}' is used twice in this course.");
@@ -152,7 +188,8 @@ public static partial class CoursePackValidator
         if (lesson.Type is not ("article" or "video")) v.Add($"{lp}.type", "Use article or video.");
         if (lesson.DurationMinutes is < 1 or > 240) v.Add($"{lp}.durationMinutes", "Use a whole number of minutes from 1 to 240.");
         v.Markdown($"{lp}.body", lesson.Body, 20_000);
-        v.Words($"{lp}.body", lesson.Body, 500, 1100);
+        if (v2) v.Words($"{lp}.body", lesson.Body, V2BodyMin, V2BodyMax);
+        else v.Words($"{lp}.body", lesson.Body, V1BodyMin, V1BodyMax);
         // Only real headings count: "#" lines inside fenced code (robots.txt/shell comments, Markdown samples) are code.
         if (!string.IsNullOrEmpty(lesson.Body) && TopHeadingRegex().IsMatch(StripCode(lesson.Body)))
             v.Add($"{lp}.body", "Headings start at ### (the page already has the lesson title).");
@@ -176,6 +213,9 @@ public static partial class CoursePackValidator
             v.Add($"{lp}.video", "Only video lessons have a video block (use null).");
         }
 
+        if (lesson.Lecture is not null) ValidateLecture(v, $"{lp}.lecture", lesson.Lecture);
+        else if (v2) v.Add($"{lp}.lecture", "A v2 pack (it declares lastReviewed) needs a video lecture on every lesson.");
+
         v.List($"{lp}.keyTakeaways", lesson.KeyTakeaways, 3, 5, 300);
 
         var checks = lesson.KnowledgeCheck ?? new List<PackCheck>();
@@ -194,6 +234,58 @@ public static partial class CoursePackValidator
         if (lesson.Activity is not null && (lesson.Activity.Trim().Length == 0 || lesson.Activity.Length > 600))
             v.Add($"{lp}.activity", "Write the activity in 1 to 3 sentences (max 600 characters), or use null.");
         if (lesson.Activity is not null && HtmlRegex().IsMatch(StripCode(lesson.Activity))) v.Add($"{lp}.activity", "No HTML.");
+    }
+
+    private static void ValidateLecture(Collector v, string lp, PackLecture lecture)
+    {
+        if (lecture.Title is not null) v.Text($"{lp}.title", lecture.Title, MaxLectureTitle);
+        if (lecture.TargetMinutes is < LectureMinutesMin or > LectureMinutesMax)
+            v.Add($"{lp}.targetMinutes", $"Use {LectureMinutesMin} to {LectureMinutesMax} minutes (≈ narration words / 140).");
+        var scenes = lecture.Scenes ?? new List<PackScene>();
+        if (lecture.Scenes is null || scenes.Count is < ScenesMin or > ScenesMax)
+            v.Add($"{lp}.scenes", $"A lecture has {ScenesMin} to {ScenesMax} scenes (it has {scenes.Count}).");
+        var words = 0;
+        for (var i = 0; i < scenes.Count; i++)
+        {
+            var sp = $"{lp}.scenes[{i}]";
+            var scene = scenes[i];
+            if (scene is null) { v.Add(sp, "A scene cannot be null."); continue; }
+            v.Text($"{sp}.narration", scene.Narration, 2500);
+            words += WordCount(scene.Narration);
+            v.Words($"{sp}.narration", scene.Narration, SceneWordsMin, SceneWordsMax);
+            if (!string.IsNullOrEmpty(scene.Narration) && NarrationMarkupRegex().IsMatch(scene.Narration))
+                v.Add($"{sp}.narration", "Narration is spoken: no Markdown symbols (# * ` [ ]) and no URLs.");
+            v.Text($"{sp}.onScreen", scene.OnScreen, MaxOnScreen);
+            v.Text($"{sp}.visual", scene.Visual, MaxVisual);
+            if (scene.Seconds is < SceneSecondsMin or > SceneSecondsMax)
+                v.Add($"{sp}.seconds", $"Use {SceneSecondsMin} to {SceneSecondsMax} seconds (≈ narration words / 2.3).");
+        }
+        if (v.Strict && scenes.Count > 0)
+        {
+            if (words is < LectureWordsMin or > LectureWordsMax)
+                v.Add($"{lp}.scenes", $"The narration totals {LectureWordsMin}–{LectureWordsMax} words (it has {words}).");
+            if (words > 0 && lecture.TargetMinutes is >= LectureMinutesMin and <= LectureMinutesMax &&
+                Math.Abs(words / WordsPerMinute - lecture.TargetMinutes) > TargetMinutesTolerance)
+                v.Add($"{lp}.targetMinutes", $"{lecture.TargetMinutes} minutes is far from {words} words / 140 (≈ {Math.Round(words / WordsPerMinute)}).");
+        }
+        var pronunciations = lecture.Pronunciations ?? new List<PackPronunciation>();
+        if (pronunciations.Count > MaxPronunciations) v.Add($"{lp}.pronunciations", $"List at most {MaxPronunciations} pronunciations.");
+        for (var i = 0; i < pronunciations.Count; i++)
+        {
+            var pp = $"{lp}.pronunciations[{i}]";
+            if (pronunciations[i] is null) { v.Add(pp, "A pronunciation cannot be null."); continue; }
+            v.Text($"{pp}.term", pronunciations[i].Term, 60);
+            v.Text($"{pp}.say", pronunciations[i].Say, 120);
+        }
+        v.Media($"{lp}.src", lecture.Src);
+        if (lecture.Src is not null && YouTube.IsYouTubeHost(lecture.Src) && YouTube.IdFrom(lecture.Src) is null)
+            v.Add($"{lp}.src", "Use https://www.youtube.com/watch?v=ID, https://youtu.be/ID or https://www.youtube-nocookie.com/embed/ID (an 11-character video id).");
+        if (lecture.PublishedAt is not null &&
+            !DateOnly.TryParseExact(lecture.PublishedAt, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out _))
+            v.Add($"{lp}.publishedAt", "Use the publication date as YYYY-MM-DD.");
+        v.Media($"{lp}.poster", lecture.Poster);
+        v.Media($"{lp}.captions", lecture.Captions);
+        if (lecture.Captions is not null && lecture.Src is null) v.Add($"{lp}.captions", "Captions need a lecture video source.");
     }
 
     private static void ValidateExam(Collector v, PackExam exam, HashSet<string> moduleSlugs)
@@ -268,6 +360,9 @@ public static partial class CoursePackValidator
     {
         public List<PackIssue> Issues { get; } = new();
 
+        /// <summary>Editorial ranges (word counts, pacing) apply: course packs, not admin authoring.</summary>
+        public bool Strict => strict;
+
         public void Add(string path, string message) => Issues.Add(new PackIssue(path, message));
 
         public void Text(string path, string? value, int max)
@@ -305,9 +400,7 @@ public static partial class CoursePackValidator
         public void Unique(string path, List<string>? items)
         {
             if (items is null) return;
-            // Exact duplicates only: options that differ in capitalisation are distinct answers (e.g. #smallbusinesstips vs
-        // #SmallBusinessTips when the question is about capitalisation).
-        var seen = new HashSet<string>(StringComparer.Ordinal);
+            var seen = new HashSet<string>(StringComparer.Ordinal);
             foreach (var item in items.Where(i => i is not null))
                 if (!seen.Add(item.Trim())) Add(path, $"'{item}' is listed twice.");
         }

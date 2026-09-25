@@ -26,7 +26,9 @@ import {
   type ExamAttempt,
 } from '@/features/learning/api';
 import { LearnSlot } from '@/features/learning/components/LearnSlot';
+import { Celebrate } from '@/features/learning/components/Motion';
 import '@/features/learning/learning.css';
+import '@/features/learning/academy.css';
 import { learningPaths } from './LearningHomePages';
 
 /** Final assessment overview: rules, attempts left, history, start / continue. */
@@ -378,8 +380,10 @@ function AttemptReview({ attempt }: { attempt: ExamAttempt }) {
           { label: 'Result' },
         ]}
       />
-      <Card className={clsx('lx-result', r.passed ? 'lx-result--pass' : 'lx-result--fail')}>
+      <Card className={clsx('lx-result lx-celebrate-host', r.passed ? 'lx-result--pass' : 'lx-result--fail')}>
         <CardBody>
+          {/* Passing: a celebratory burst (decorative; the heading below says it). */}
+          <Celebrate trigger={r.passed ? 1 : 0} size="lg" />
           <div className="lx-result__row">
             <ProgressRing value={r.score} label={`Score ${r.score}%`} size={112} strokeWidth={10} centerText={`${r.score}%`} />
             <div>

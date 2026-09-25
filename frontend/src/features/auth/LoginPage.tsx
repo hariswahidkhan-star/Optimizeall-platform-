@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { defaultLandingPath } from '@/app/portals';
 import { safeNextPath } from '@/app/redirects';
+import { pendingEnrolPath } from '@/features/learning/enrolIntent';
 import { Alert } from '@/components/ui/Alert';
 import { Button } from '@/components/ui/Button';
 import { FormField } from '@/components/ui/FormField';
@@ -16,6 +17,15 @@ import { TestAccountsPanel } from './TestAccountsPanel';
 import '@/app/layouts/AuthLayout.css';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/** "Create an account" keeps the referral code and the (validated) return path, e.g. back to a course to enrol. */
+function registerLink(ref: string | null, next: string | null): string {
+  const query = new URLSearchParams();
+  if (ref) query.set('ref', ref);
+  if (next) query.set('next', next);
+  const text = query.toString();
+  return text ? `/register?${text}` : '/register';
+}
 
 type Notice = { tone: 'info' | 'success' | 'warning'; title: string; text?: string };
 
@@ -68,7 +78,8 @@ export function LoginPage() {
     setSubmitting(true);
     try {
       const user = await login(email.trim(), password);
-      navigate(defaultLandingPath(user.permissions, safeNextPath(params.get('next'))), { replace: true });
+      // No next: resume a remembered "enrol in a course" intent (registration went through email verification).
+      navigate(defaultLandingPath(user.permissions, safeNextPath(params.get('next')) ?? pendingEnrolPath()), { replace: true });
     } catch (error) {
       setServer(mapServerErrors(error, ['email', 'password']));
       if (isApiError(error) && error.code === 'auth.invalid_credentials') setPassword('');
@@ -132,7 +143,7 @@ export function LoginPage() {
         </div>
       )}
 
-      <ContinueWithGoogle returnTo={safeNextPath(params.get('next'))} />
+      <ContinueWithGoogle returnTo={safeNextPath(params.get('next')) ?? pendingEnrolPath()} />
 
       <form className="auth-form" onSubmit={onSubmit} noValidate aria-label="Sign in">
         <FormField id="login-email" label="Email" error={clientErrors.email ?? server?.fields.email} required>
@@ -171,7 +182,7 @@ export function LoginPage() {
         New to Optimize All?{' '}
         <Link
           className="ui-link"
-          to={`/register${params.get('ref') ? `?ref=${encodeURIComponent(params.get('ref')!)}` : ''}`}
+          to={registerLink(params.get('ref'), safeNextPath(params.get('next')))}
         >
           Create an account
         </Link>

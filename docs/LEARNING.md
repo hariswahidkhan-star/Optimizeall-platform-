@@ -85,6 +85,46 @@ The contract is code: `CoursePackValidator` (Domain). Two modes:
 
 Unknown JSON properties are errors (typos never pass silently).
 
+### Pack v2 (2026-09): deeper lessons, lecture scripts, tools
+
+A pack that declares **`lastReviewed`** (`"YYYY-MM"`) is a **v2 pack**. The 52 original packs are v1 and keep validating
+unchanged; content workstreams upgrade them one by one (bump `version` when you do). v2 adds, all optional unless noted:
+
+```jsonc
+{
+  "lastReviewed": "2026-09",                 // required in v2; "Updated Sep 2026" on the course page, JSON-LD dateModified
+  "tools": ["Claude", "n8n"],                // 0–20 names, ≤ 40 chars, unique: "Tools you'll use" chips, JSON-LD teaches
+  "modules": [{ "lessons": [{
+    "body": "Markdown, 700–1800 words in v2 (v1: 500–1100)",
+    "lecture": {                             // REQUIRED on every lesson of a v2 pack (optional, but validated, in v1)
+      "title": "optional, ≤ 100",
+      "targetMinutes": 8,                    // 4–14, within ± 3 of narration words / 140
+      "scenes": [{                           // 5–16 scenes; narration 600–1800 words in total
+        "narration": "40–260 spoken words, no Markdown symbols (# * ` [ ]) and no URLs",
+        "onScreen": "Title line\n• bullet\n• bullet",   // ≤ 320; the first line is the chapter title
+        "visual": "direction for the video editor/generator, ≤ 400",
+        "seconds": 45                        // 15–150
+      }],
+      "pronunciations": [{ "term": "GA4", "say": "G A four" }],   // ≤ 30; term ≤ 60, say ≤ 120
+      "src": null,                           // produced video: a YouTube URL (see below) or an https/uploaded MP4
+      "poster": null, "captions": null,      // optional; captions (WebVTT) need src
+      "publishedAt": null                    // "YYYY-MM-DD" once published (VideoObject uploadDate)
+    }
+  }]}]
+}
+```
+
+* **YouTube** (owner decision: lectures are hosted on YouTube): `src` must be `https://www.youtube.com/watch?v=ID`,
+  `https://youtu.be/ID` or `https://www.youtube-nocookie.com/embed/ID` with an 11-character id (`Domain/Learning/YouTube.cs`);
+  any other URL on a YouTube host is refused. The id is derived from `src`.
+* Word ranges and pacing are editorial (Strict only); structure (scene counts and lengths, media, lecture required in v2)
+  applies in Authoring too.
+* The optional properties are omitted from the stored JSON when null, so v1 documents keep their exact content hash.
+* `course slug` values `paths`, `search` and `catalog` are reserved (`/learn/paths` is the learning paths page).
+* A Python mirror of the validator for content authors: `check_pack_v2.py` (kept in sync with `CoursePackValidator`;
+  `--allow-v1` checks v1 packs with the v1 rules).
+* Production: `scripts/export-lecture-scripts.py` → `docs/lectures/` (see [lectures/README.md](lectures/README.md)).
+
 ### Startup upsert and how pack updates and admin edits interact
 
 `LearningCatalogSeeder` runs in the **Baseline** seed profile (every environment) under the named lock
@@ -107,10 +147,21 @@ repository is never modified. To make a staff edit permanent in the repository, 
 * Lessons render the pack's Markdown with the site's safe Markdown component (headings, lists, **GFM tables,
   blockquotes, task lists as read-only checkboxes**, code, links; no raw HTML).
 * Video lessons show an accessible `<video>` (controls, poster, WebVTT captions track, full transcript = the narration
-  script) when `video.src` is set; otherwise the article plus a "Video coming soon" note. Videos are produced from the
-  narration script with ElevenLabs (voice) and HeyGen (avatar), then uploaded in the admin (Videos tab: MP4 up to 50 MB,
+  script) when `video.src` is set; otherwise the article plus a "Video coming soon" note (v1 video lessons; a v2 lecture
+  replaces this block). Such videos are uploaded in the admin (Videos tab: MP4 up to 50 MB,
   poster image, captions) or linked by https URL (add the host to the web container's `MEDIA_SRC_EXTRA` so the CSP
   allows it).
+* **Video lectures (v2)** — every v2 lesson has a "Video lecture" section (`LectureSection.tsx`):
+  * *YouTube*: a click-to-play facade (thumbnail from `i.ytimg.com`, maxres → hq fallback; no YouTube code or cookie
+    until play), then the privacy-enhanced `youtube-nocookie.com` embed (`enablejsapi=1`). Chapter seek and playback speed
+    are IFrame-API commands sent by `postMessage` to the embed origin only; the player's `infoDelivery` time updates
+    highlight the current chapter in the chapter list and the transcript. Before playing, a chapter starts the player at
+    that chapter (`start=`). CSP: `frame-src 'self' https://www.youtube-nocookie.com`, `img-src … https://i.ytimg.com`
+    (`frontend/nginx/snippets/security-headers.conf`).
+  * *Self-hosted MP4* (fallback): `<video>` with poster and captions track, same chapters, speed and transcript.
+  * *Not produced yet*: "Lecture — coming soon": a slide preview per chapter (title = first on-screen line, bullets), the
+    chapter list and the full transcript (collapsible). The server-rendered page includes the chapters and transcript.
+  * Chapter times come from the scene plan and are scaled to the real video length.
 * Opening a lesson records the resume point; "Mark lesson complete" records completion; knowledge-check answers are
   stored per question (latest answer). When every lesson of the published version is complete the exam unlocks.
 
@@ -200,9 +251,19 @@ No LinkedIn API or credentials are needed.
   `courseMode: Online` and `courseWorkload`, `syllabusSections`, `teaches`, `educationalCredentialAwarded`) +
   `BreadcrumbList`. Lessons: `LearningResource` + `Article` (+ `VideoObject` when a produced video has a poster) +
   `BreadcrumbList`. Titles and descriptions come from the course data (`seo` field of each DTO).
-* The SPA writes these through the site head manager (`useDocumentHead`). *Hook point for server-side rendering:* the
-  API DTOs already carry `seo` + `jsonLd`, so a server renderer can emit the same head for `/learn/**` without new
-  endpoints.
+* The SPA writes these through the site head manager (`useDocumentHead`); the server renderer
+  (`SiteSeo/SeoPageResolver.Learning.cs`) emits the same head and a crawlable body for `/learn`, `/learn/paths`,
+  `/learn/paths/{path}`, `/learn/{course}` and `/learn/{course}/{lesson}`.
+* v2 additions: `Course.teaches` = skills + tools; `dateModified` = the later of `lastReviewed` (first of the month) and the
+  course's last update; `abstract`, `publisher`, `hasCourseInstance.instructor`; the credential carries `description`,
+  `image`, `competencyRequired` and `recognizedBy`. Lessons: `LearningResource` with `isPartOf` the course and `hasPart`
+  the lecture chapters; the **lecture transcript is rendered in the page body** (chapters as headings). `VideoObject` only
+  for a produced lecture: YouTube → `embedUrl` (nocookie embed), `contentUrl` (watch URL), `thumbnailUrl` (i.ytimg.com
+  maxres + hq, or our poster), `uploadDate` (`publishedAt`), `duration` (sum of scene seconds), `transcript`, `hasPart`
+  `Clip`s with `startOffset`/`endOffset` (watch URL `&t=Ns`). The SSR lesson page embeds the player, and the learn
+  sitemap contributions carry the video so the **video sitemap** lists `player_loc` = the embed URL.
+* Learning paths: `ItemList` of `Course` (ordered, with provider and free offer), one `EducationalOccupationalCredential`
+  per badge earned along the way, `BreadcrumbList`; the paths index is an `ItemList` of the paths.
 
 ## 9. Admin
 
@@ -230,6 +291,52 @@ category label, `courseKeywords()` in `features/learning/api.ts`) and categories
 `<PartnerSlot … />`. The public `/learn` pages render inside the public site layout, so site-wide providers (e.g.
 sponsored-link handling of Markdown links) apply to lessons.
 
+## 9b. Learning paths
+
+Ordered tracks of courses towards a role or goal, defined as JSON in
+`backend/src/OptimizeAll.Api/Modules/Learning/Catalog/paths/<slug>.json` (embedded resources, parsed once; content, not
+data — no table and no migration):
+
+```jsonc
+{
+  "slug": "ai-engineer", "title": "AI Engineer", "subtitle": "≤ 140",
+  "description": "Markdown, 60–220 words", "level": "advanced",
+  "courses": ["prompt-engineering-foundations", "…"],   // 3–14 slugs, in order; unpublished/planned slugs are skipped
+  "outcomes": ["4–8, ≤ 140"], "audience": ["2–6, ≤ 140"], "sortOrder": 10
+}
+```
+
+* Validated by `LearningPathValidator` (unknown properties are errors); `UnitTests/Learning/LearningPathTests` checks
+  every path, file name = slug, and that each path already has ≥ 3 courses that exist (planned slugs are allowed).
+* API: `GET /api/v1/public/learning/paths` (cards with course count, lessons, total minutes, categories, badges; SEO +
+  JSON-LD), `GET /public/learning/paths/{slug}` (description, outcomes, audience, ordered course cards, SEO + JSON-LD),
+  `GET /api/v1/me/learning/paths` and `/me/learning/paths/{slug}` (participant progress: per course enrolled / percent /
+  passed / certificate, courses completed, overall percent, next course).
+* Pages: public `/learn/paths` and `/learn/paths/{slug}` (hero, badge grid, ordered timeline with a progress spine), the
+  portal's `/app/learning/paths(/…)`, "Learning paths" on My learning and on the `/learn` hub; sitemap + SSR.
+
+## 9c. Direct enrol ("Enrol for free — start learning")
+
+* Signed-in learner (participant permission): the public course page enrols (idempotent: 201 then 200) and opens the
+  first unfinished lesson (`progress.resumeLessonSlug`) in My learning.
+* Signed out: register (or sign in) with `next=/learn/<slug>?enrol=1`. The path is validated by `safeNextPath` wherever it
+  is read and is carried through register → check-email → sign in, and through Google sign-in (`returnTo`). The intent
+  is also remembered in this browser for 7 days (`features/learning/enrolIntent.ts`, slug-only, validated) so the email
+  verification round trip — often in a new tab — resumes: the verify-email page and the sign-in page fall back to it.
+  Back on the course page with `?enrol=1` and a session, the enrolment completes and lesson 1 opens. The portal course
+  page honours `?enrol=1` too.
+* Staff accounts (no participant permission) see a note instead of being enrolled. "Preview lesson 1" needs no account.
+* Phones: the compact enrol bar sticks to the bottom once the hero's actions scroll away.
+
+## 9d. Motion
+
+CSS/SVG + IntersectionObserver only (`components/Motion.tsx`, `academy.css`): reveal-on-scroll with a stagger for course,
+path and subject grids; progress bars and rings animate in; badge shimmer on course heroes, earned path badges and the
+certificate mock; a glow on the primary enrol CTA; a confetti burst on lesson completion (bigger when the last lesson
+unlocks the assessment) and on passing the exam; a smooth syllabus accordion; a sliding segmented control (playback
+speed); chapter progress bars; animated subject illustrations on `/learn`. Everything uses transform/opacity (no layout
+shift), content is never hidden without an observer, and with `prefers-reduced-motion: reduce` nothing animates.
+
 ## 10. Demo data
 
 The Demo seed (`LearningDemoSeeder`, after the main demo) features the platform course and the first course of other
@@ -246,5 +353,12 @@ more demo participants enrolments, progress and attempts so the admin statistics
   attempt, server timer, daily budget —, tenancy, impersonation, certificates, PDF, Open Badges, revocation, admin
   authoring/publishing/analytics/export, manual issue and the LinkedIn setting); `Seed/DemoSeedTests`; the API contract
   suite covers every new endpoint.
-* Frontend: `features/learning/learning.test.tsx` (vitest + axe); E2E `frontend/e2e/j-learning`
-  (`E2E_SUITE=j-learning scripts/e2e-journeys.sh`).
+* v2: `CoursePackTests` (lastReviewed, tools, body ranges v1/v2, lectures, scenes, pronunciations, media, YouTube URL
+  forms, publishedAt, round trip), `LearningPathTests` (paths, validator, progress summary, Course/VideoObject JSON-LD);
+  `IntegrationTests/Learning/LearningV2Tests` (a v2 pack end to end: API facts, lectures, SSR transcript, VideoObject
+  only when produced, YouTube embed in SSR and `player_loc` in the video sitemap; paths API, sitemap and SSR; path
+  progress and the direct enrol flow).
+* Frontend: `features/learning/learning.test.tsx` and `academyV2.test.tsx` (lecture coming soon / file / YouTube facade,
+  postMessage seek and speed, paths, enrol intent and return path, auto-enrol, staff note; vitest + axe); E2E
+  `frontend/e2e/j-learning` (`E2E_SUITE=j-learning scripts/e2e-journeys.sh`), including the anonymous visitor → course →
+  enrol → register → verify → sign in → back on the course → lesson 1 → progress saved journey.

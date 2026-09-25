@@ -1,3 +1,4 @@
+import '../academy.css';
 import clsx from 'clsx';
 import {
   ArrowLeft,
@@ -25,6 +26,7 @@ import {
 } from '../api';
 import { LearnSlot } from './LearnSlot';
 import { categoryClass } from './CourseCard';
+import { LectureSection } from './LectureSection';
 
 export interface LessonViewProps {
   lesson: Lesson;
@@ -71,11 +73,16 @@ export function LessonView({
           <p className="lx-lesson__meta">
             {lesson.type === 'Video' ? <Clapperboard aria-hidden="true" /> : <BookOpen aria-hidden="true" />}
             {lesson.type === 'Video' ? 'Video lesson' : 'Article'} · {lesson.durationMinutes} min
+            {lesson.lecture ? ` · ${lesson.lecture.targetMinutes} min lecture` : ''}
           </p>
           {header}
         </header>
 
-        {lesson.type === 'Video' && lesson.video && <LessonVideo lesson={lesson} />}
+        {lesson.lecture ? (
+          <LectureSection lecture={lesson.lecture} />
+        ) : (
+          lesson.type === 'Video' && lesson.video && <LessonVideo lesson={lesson} />
+        )}
 
         <Card as="section" aria-label="Lesson" className="lx-lesson__body">
           <CardBody>

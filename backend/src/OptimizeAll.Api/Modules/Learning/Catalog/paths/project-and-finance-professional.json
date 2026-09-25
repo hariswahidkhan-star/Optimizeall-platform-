@@ -1,0 +1,29 @@
+{
+  "slug": "project-and-finance-professional",
+  "title": "Project & Finance Professional",
+  "subtitle": "Lead projects, control cost and schedule, and model the numbers — with AI as your co-pilot",
+  "description": "Projects succeed when scope, schedule, cost and people are managed together. This path covers all four. You begin with project management leadership, including how AI assistants help with planning, risk registers and stakeholder updates. Project controls follow: earned value, schedule analysis and forecasting, with AI used to spot variances early. Project finance and financial modelling teach you to build and stress-test the models that decide whether projects go ahead.\n\nYou then sharpen data analysis and decision-making with AI, adopt everyday AI productivity habits, and strengthen the leadership and communication that keep teams aligned. The path ends with a structured approach to preparing for professional certification exams. Every course is free and ends with a certificate for your LinkedIn profile.",
+  "level": "intermediate",
+  "courses": [
+    "project-management-leadership-with-ai",
+    "project-controls-with-ai",
+    "project-finance-and-financial-modelling",
+    "ai-for-data-analysis-and-decision-making",
+    "ai-for-everyday-productivity",
+    "leadership-and-communication",
+    "professional-certification-exam-success"
+  ],
+  "outcomes": [
+    "Plan and lead projects with clear scope, risks and stakeholder communication",
+    "Control cost and schedule with earned value and early-warning analysis",
+    "Build and stress-test project finance models",
+    "Use AI to analyse data and prepare decision-ready summaries",
+    "Prepare efficiently for professional certification exams"
+  ],
+  "audience": [
+    "Project managers, planners and cost controllers",
+    "Finance professionals working on projects",
+    "Engineers moving into project leadership"
+  ],
+  "sortOrder": 80
+}

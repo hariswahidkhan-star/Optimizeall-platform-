@@ -1,0 +1,31 @@
+{
+  "slug": "sales-in-the-ai-era",
+  "title": "Sales in the AI Era",
+  "subtitle": "Sell with trust, research faster and let AI handle the busywork — ethically",
+  "description": "Buyers now research alone and expect sellers to add real insight. This path builds the human skills that still win deals and the AI workflows that give you more time to use them. You start with social selling and LinkedIn for B2B, then study the psychology of persuasion with a firm ethical line, consultative discovery and closing, and negotiation that protects margins and relationships.\n\nThe AI half shows you how to prompt for prospect research, outreach and proposals, how sales teams use AI assistants and voice agents for follow-up and qualification, and how to connect it all with email automation. You learn where automation helps and where a person must stay in the loop. Every course is free and ends with a certificate.",
+  "level": "intermediate",
+  "courses": [
+    "social-selling-fundamentals",
+    "linkedin-for-professionals-and-b2b",
+    "sales-psychology-and-persuasion-ethics",
+    "consultative-selling-and-closing",
+    "negotiation-and-client-management",
+    "prompt-engineering-for-content-and-sales",
+    "ai-for-sales-teams",
+    "voice-ai-agents",
+    "email-marketing-and-automation"
+  ],
+  "outcomes": [
+    "Build pipeline from LinkedIn and social channels without spamming",
+    "Run discovery calls that uncover real needs and decision criteria",
+    "Negotiate and close while protecting price and relationships",
+    "Use AI for research, outreach, proposals and call follow-up",
+    "Decide where voice agents and automation help and where they hurt trust"
+  ],
+  "audience": [
+    "Account executives, SDRs and founders who sell",
+    "Freelancers and agencies winning clients",
+    "Sales leaders introducing AI to their teams"
+  ],
+  "sortOrder": 70
+}

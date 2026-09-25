@@ -1,7 +1,11 @@
 namespace OptimizeAll.Api.Modules.Website.Public;
 
-/// <summary>A public page a feature contributes to the sitemaps: path, last modification (UTC) and title (for the SEO overview).</summary>
-public sealed record SitemapContribution(string Path, DateTime? Modified, string Title, string? ImageUrl = null);
+/// <summary>
+/// A public page a feature contributes to the sitemaps: path, last modification (UTC), title (for the SEO overview),
+/// an optional image and optional videos (video sitemap: e.g. academy lectures embedded from YouTube).
+/// </summary>
+public sealed record SitemapContribution(string Path, DateTime? Modified, string Title, string? ImageUrl = null,
+    IReadOnlyList<SiteSeo.SeoVideo>? Videos = null);
 
 /// <summary>
 /// Extension point of the sitemap index (<c>SiteSeo/SeoPageResolver.SitemapUrlsAsync</c>): a feature that owns public

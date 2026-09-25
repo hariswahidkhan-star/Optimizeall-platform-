@@ -135,7 +135,7 @@ export function AcademyOverviewPage() {
             <SkillsMarquee skills={academy.data.skills} />
           </section>
           <Section id="paths" eyebrow={copy.text('home.paths.eyebrow')} title={copy.text('home.paths.title')} intro={copy.text('home.paths.intro')}>
-            <SuggestedPaths data={academy.data} />
+            <SuggestedPaths />
           </Section>
         </>
       )}

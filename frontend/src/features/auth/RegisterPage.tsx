@@ -8,6 +8,7 @@ import { FormField } from '@/components/ui/FormField';
 import { Input } from '@/components/ui/Input';
 import { PasswordInput } from '@/components/ui/PasswordInput';
 import { Select } from '@/components/ui/Select';
+import { safeNextPath } from '@/app/redirects';
 import { useAuth } from '@/lib/auth/useAuth';
 import { mapServerErrors, type MappedErrors } from './formErrors';
 import { ContinueWithGoogle } from './google/GoogleButton';
@@ -79,6 +80,8 @@ export function RegisterPage() {
   const [params] = useSearchParams();
   const referralCode = cleanCode(params.get('ref'));
   const inviteCode = cleanCode(params.get('invite'));
+  // Where to continue after verifying and signing in (e.g. back to a course to enrol), validated same-origin.
+  const next = safeNextPath(params.get('next'));
 
   const [values, setValues] = useState<FormState>(() => ({
     email: '',
@@ -151,7 +154,7 @@ export function RegisterPage() {
         acceptTerms: values.acceptTerms,
         marketingEmailOptIn: values.marketingEmailOptIn,
       });
-      navigate('/check-email', { state: { email: values.email.trim() } });
+      navigate('/check-email', { state: { email: values.email.trim(), next } });
     } catch (error) {
       const mapped = mapServerErrors(error, FIELDS, {
         'auth.terms_required': 'acceptTerms',
@@ -208,7 +211,7 @@ export function RegisterPage() {
         </div>
       )}
 
-      <ContinueWithGoogle onBeforeRedirect={() => rememberSignupCodes({ referralCode, inviteCode })} />
+      <ContinueWithGoogle returnTo={next} onBeforeRedirect={() => rememberSignupCodes({ referralCode, inviteCode })} />
 
       <form className="auth-form" onSubmit={onSubmit} noValidate aria-label="Create account">
         <FormField id="register-email" label="Email" required error={errorFor('email')}>
@@ -343,7 +346,7 @@ export function RegisterPage() {
 
       <p className="auth-page__switch">
         Already have an account?{' '}
-        <Link className="ui-link" to="/login">
+        <Link className="ui-link" to={next ? `/login?next=${encodeURIComponent(next)}` : '/login'}>
           Sign in
         </Link>
       </p>

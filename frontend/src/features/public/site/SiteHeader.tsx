@@ -7,7 +7,7 @@ import { Logo } from '@/components/brand/Logo';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { ButtonLink, Drawer, IconButton } from '@/components/ui';
 import { useAuth } from '@/lib/auth/useAuth';
-import { useCategories } from '@/features/learning/api';
+import { useLearningSummary } from '@/features/learning/api';
 import { isInternalHref } from '@/lib/safeHref';
 import { type MenuCategory, type MenuItem, useSite } from './api';
 import { SiteIcon } from './icons';
@@ -21,7 +21,7 @@ export const FALLBACK_MENU: MenuItem[] = [
     children: [
       { label: 'All courses', url: '/learn', description: 'Free, self-paced courses with certificates.', children: null },
       { label: 'AI courses', url: '/learn?category=Ai', description: 'ChatGPT, Claude, prompting, agents and more.', children: null },
-      { label: 'Learning paths', url: '/academy#paths', description: 'Beginner to advanced, one course at a time.', children: null },
+      { label: 'Learning paths', url: '/learn/paths', description: 'Beginner to advanced, one course at a time.', children: null },
       { label: 'Certificates', url: '/academy#certificates', description: 'Verifiable, and ready for LinkedIn.', children: null },
     ],
   },
@@ -203,8 +203,8 @@ function ServicesMega({ categories, onNavigate }: { categories: MenuCategory[]; 
  * the public learning API, fetched once the panel is first opened) and a "start learning" call to action.
  */
 function AcademyMega({ item, onNavigate }: { item: MenuItem; onNavigate: () => void }) {
-  const categories = useCategories();
-  const subjects = (categories.data ?? []).filter((c) => c.courseCount > 0);
+  const summary = useLearningSummary();
+  const subjects = (summary.data?.categories ?? []).filter((c) => c.courseCount > 0);
   const children = item.children ?? [];
   return (
     <div className="site-academy-mega">
