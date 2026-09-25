@@ -280,50 +280,17 @@ public sealed partial class SiteSettingsService(AppDbContext db, IAuditLogger au
         return result;
     }
 
-    /// <summary>Defaults used before an administrator saves settings (and by the baseline seed).</summary>
+    /// <summary>
+    /// Defaults used before an administrator saves settings (and by the baseline seed). Two pillars, academy first:
+    /// Optimize All Academy (free courses with certificates) and Optimize All Agency (full-service digital marketing).
+    /// </summary>
     public static readonly SiteSettings Defaults = new(
         "Optimize All",
         "Discover the world of solution",
-        new HeaderSettings(
-            new MenuItem[]
-            {
-                new("Services", "/services", "Everything we do to grow your brand.", Array.Empty<MenuItem>()),
-                new("Industries", "/industries", null, null),
-                new("Case studies", "/case-studies", null, null),
-                new("Pricing", "/pricing", null, null),
-                new("Academy", "/learn", "Free courses with certificates.", null),
-                new("About", "/about", null, new MenuItem[]
-                {
-                    new("About us", "/about", "Who we are and how we work.", null),
-                    new("Team", "/team", "The people behind your results.", null),
-                    new("Careers", "/careers", "Join the agency.", null),
-                    new("Blog", "/blog", "Playbooks, research and news.", null),
-                }),
-                new("Creators", "/creators", "Get paid to share brands you believe in.", null),
-            },
-            new SiteLink("Get a free audit", "/free-audit")),
+        new HeaderSettings(DefaultMenu, new SiteLink("Start learning free", "/learn")),
         new FooterSettings(
-            "A full-service digital marketing agency: search, social, paid media, content, email, brand and web — measured in revenue, not vanity metrics.",
-            new FooterColumn[]
-            {
-                new("Services", new SiteLink[]
-                {
-                    new("SEO", "/services/seo"), new("Google Ads / PPC", "/services/google-ads-ppc"),
-                    new("Social media management", "/services/social-media-management"),
-                    new("Influencer & UGC marketing", "/services/influencer-ugc-marketing"),
-                    new("Web design & development", "/services/web-design-development"), new("All services", "/services"),
-                }),
-                new("Company", new SiteLink[]
-                {
-                    new("About", "/about"), new("How we work", "/how-we-work"), new("Team", "/team"), new("Careers", "/careers"),
-                    new("Case studies", "/case-studies"), new("Blog", "/blog"), new("Free courses", "/learn"),
-                }),
-                new("Get started", new SiteLink[]
-                {
-                    new("Free marketing audit", "/free-audit"), new("Get a quote", "/get-a-quote"), new("Book a consultation", "/book-a-consultation"),
-                    new("Pricing", "/pricing"), new("Contact", "/contact"), new("Become a creator", "/creators"),
-                }),
-            },
+            "A learning platform and a growth agency: free, certificate-backed courses in AI, marketing, SEO, sales and business — and a full-service digital marketing team that grows revenue and proves it.",
+            DefaultFooterColumns,
             new SiteLink[]
             {
                 new("Privacy policy", "/privacy-policy"), new("Terms of service", "/terms-of-service"), new("Cookie policy", "/cookie-policy"),
@@ -333,11 +300,154 @@ public sealed partial class SiteSettingsService(AppDbContext db, IAuditLogger au
         Array.Empty<SocialProfile>(),
         Array.Empty<TrustLogo>(),
         new AnnouncementBar(false, null, null, null),
-        new DefaultSeo(null, "%s | Optimize All", "Optimize All — Full-service digital marketing agency",
-            "Search, social, paid media, content, email and web — one accountable team focused on measurable growth.", null, null),
+        new DefaultSeo(null, "%s | Optimize All", "Optimize All — Free AI & Marketing Courses + Agency",
+            "Free, certificate-backed courses in AI, marketing, SEO, sales and business — and a full-service digital marketing agency that grows revenue.", null, null),
         new OrganizationSchema("Optimize All", null, null, null, null, null, null, null, Array.Empty<string>()),
         new AnalyticsSettings(null, null, null),
         Array.Empty<HomeStat>());
+
+    private static MenuItem[] DefaultMenu => new MenuItem[]
+    {
+        new("Academy", "/academy", "Free courses with certificates.", new MenuItem[]
+        {
+            new("All courses", "/learn", "Free, self-paced courses with certificates.", null),
+            new("AI courses", "/learn?category=Ai", "ChatGPT, Claude, prompting, agents and more.", null),
+            new("Learning paths", "/academy#paths", "Beginner to advanced, one course at a time.", null),
+            new("Certificates", "/academy#certificates", "Verifiable, and ready for LinkedIn.", null),
+        }),
+        new("Services", "/services", "Everything we do to grow your brand.", Array.Empty<MenuItem>()),
+        new("Industries", "/industries", null, null),
+        new("Case studies", "/case-studies", null, null),
+        new("Pricing", "/pricing", null, null),
+        new("About", "/about", null, new MenuItem[]
+        {
+            new("About us", "/about", "Our mission: the academy and the agency.", null),
+            new("Team", "/team", "The people behind your results.", null),
+            new("Careers", "/careers", "Join the team.", null),
+            new("Blog", "/blog", "Playbooks, research and news.", null),
+            new("Creators", "/creators", "Get paid to share brands you believe in.", null),
+        }),
+    };
+
+    private static FooterColumn[] DefaultFooterColumns => new FooterColumn[]
+    {
+        new("Academy", new SiteLink[]
+        {
+            new("All courses", "/learn"), new("AI courses", "/learn?category=Ai"), new("Marketing courses", "/learn?category=Marketing"),
+            new("SEO courses", "/learn?category=Seo"), new("Learning paths", "/academy#paths"), new("Certificates", "/academy#certificates"),
+            new("Academy overview", "/academy"),
+        }),
+        new("Services", new SiteLink[]
+        {
+            new("SEO", "/services/seo"), new("Google Ads / PPC", "/services/google-ads-ppc"),
+            new("Social media management", "/services/social-media-management"),
+            new("Influencer & UGC marketing", "/services/influencer-ugc-marketing"),
+            new("Web design & development", "/services/web-design-development"), new("All services", "/services"),
+        }),
+        new("Company", new SiteLink[]
+        {
+            new("About", "/about"), new("How we work", "/how-we-work"), new("Team", "/team"), new("Careers", "/careers"),
+            new("Case studies", "/case-studies"), new("Blog", "/blog"), new("Partners", "/partners"),
+        }),
+        new("Get started", new SiteLink[]
+        {
+            new("Start learning free", "/learn"), new("Free marketing audit", "/free-audit"), new("Get a quote", "/get-a-quote"),
+            new("Book a consultation", "/book-a-consultation"), new("Pricing", "/pricing"), new("Contact", "/contact"),
+            new("Become a creator", "/creators"),
+        }),
+    };
+
+    /// <summary>
+    /// The agency-only defaults shipped before the two-pillar repositioning (2026-09). The baseline seed upgrades stored
+    /// settings whose header, footer or SEO defaults still equal these exactly (never an administrator's own edits).
+    /// </summary>
+    internal static class PreviousDefaults
+    {
+        public static readonly IReadOnlyList<MenuItem> Menu = new MenuItem[]
+        {
+            new("Services", "/services", "Everything we do to grow your brand.", Array.Empty<MenuItem>()),
+            new("Industries", "/industries", null, null),
+            new("Case studies", "/case-studies", null, null),
+            new("Pricing", "/pricing", null, null),
+            new("Academy", "/learn", "Free courses with certificates.", null),
+            new("About", "/about", null, new MenuItem[]
+            {
+                new("About us", "/about", "Who we are and how we work.", null),
+                new("Team", "/team", "The people behind your results.", null),
+                new("Careers", "/careers", "Join the agency.", null),
+                new("Blog", "/blog", "Playbooks, research and news.", null),
+            }),
+            new("Creators", "/creators", "Get paid to share brands you believe in.", null),
+        };
+
+        public static readonly SiteLink Cta = new("Get a free audit", "/free-audit");
+
+        public const string Blurb =
+            "A full-service digital marketing agency: search, social, paid media, content, email, brand and web — measured in revenue, not vanity metrics.";
+
+        public static readonly IReadOnlyList<FooterColumn> Columns = new FooterColumn[]
+        {
+            new("Services", new SiteLink[]
+            {
+                new("SEO", "/services/seo"), new("Google Ads / PPC", "/services/google-ads-ppc"),
+                new("Social media management", "/services/social-media-management"),
+                new("Influencer & UGC marketing", "/services/influencer-ugc-marketing"),
+                new("Web design & development", "/services/web-design-development"), new("All services", "/services"),
+            }),
+            new("Company", new SiteLink[]
+            {
+                new("About", "/about"), new("How we work", "/how-we-work"), new("Team", "/team"), new("Careers", "/careers"),
+                new("Case studies", "/case-studies"), new("Blog", "/blog"), new("Free courses", "/learn"),
+            }),
+            new("Get started", new SiteLink[]
+            {
+                new("Free marketing audit", "/free-audit"), new("Get a quote", "/get-a-quote"), new("Book a consultation", "/book-a-consultation"),
+                new("Pricing", "/pricing"), new("Contact", "/contact"), new("Become a creator", "/creators"),
+            }),
+        };
+
+        public const string SeoTitle = "Optimize All — Full-service digital marketing agency";
+
+        public const string SeoDescription = "Search, social, paid media, content, email and web — one accountable team focused on measurable growth.";
+    }
+
+    /// <summary>
+    /// Moves stored settings that still carry the previous agency-only defaults to the two-pillar defaults, part by part:
+    /// the header menu and call to action, the footer blurb and columns, and the default SEO title and description. Any
+    /// part an administrator has changed is kept as it is. Returns null when nothing changes.
+    /// </summary>
+    public static SiteSettings? UpgradeFromPreviousDefaults(SiteSettings s)
+    {
+        static string J<T>(T value) => JsonSerializer.Serialize(value, Json);
+        // Saving settings in the admin turns "no sub-items" (null) into an empty list; both mean the same menu.
+        static List<MenuItem> Norm(IEnumerable<MenuItem>? items) =>
+            (items ?? Array.Empty<MenuItem>()).Select(m => new MenuItem(m.Label, m.Url, m.Description, Norm(m.Children))).ToList();
+        var changed = false;
+        var header = s.Header;
+        if (J(Norm(header.Menu)) == J(Norm(PreviousDefaults.Menu)) && J(header.Cta) == J(PreviousDefaults.Cta))
+        {
+            header = Defaults.Header;
+            changed = true;
+        }
+        var footer = s.Footer;
+        if (footer.Blurb == PreviousDefaults.Blurb)
+        {
+            footer = footer with { Blurb = Defaults.Footer.Blurb };
+            changed = true;
+        }
+        if (J(footer.Columns) == J(PreviousDefaults.Columns))
+        {
+            footer = footer with { Columns = Defaults.Footer.Columns };
+            changed = true;
+        }
+        var seo = s.Seo;
+        if (seo.DefaultTitle == PreviousDefaults.SeoTitle && seo.DefaultDescription == PreviousDefaults.SeoDescription)
+        {
+            seo = seo with { DefaultTitle = Defaults.Seo.DefaultTitle, DefaultDescription = Defaults.Seo.DefaultDescription };
+            changed = true;
+        }
+        return changed ? s with { Header = header, Footer = footer, Seo = seo } : null;
+    }
 
     [GeneratedRegex(@"^\+?[0-9][0-9 ().-]{5,30}$")]
     private static partial Regex PhoneRegex();

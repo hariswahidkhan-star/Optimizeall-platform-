@@ -209,7 +209,7 @@ test.describe.serial('site settings, page texts and SEO', () => {
     await editor.getByRole('button', { name: 'Save 1 change' }).click();
     await expect(toast(editor, 'Texts saved')).toBeVisible();
     const again = await openPublic(browser, '/');
-    await expect(again.getByText('Full-service digital marketing agency').first()).toBeVisible();
+    await expect(again.getByText('Free courses · Verifiable certificates').first()).toBeVisible();
   });
 
   test('robots.txt, sitemap and canonical links follow the configured site URL', async ({ browser }) => {

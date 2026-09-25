@@ -56,9 +56,17 @@
   margin-left: var(--space-6);
 }
 
-.public-header__nav ul {
+/* Only the top-level row is a flex row: lists inside the dropdown panels keep their own layout. */
+.public-header__nav > ul {
   display: flex;
+  align-items: center;
   gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.public-header__nav ul {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -74,6 +82,7 @@
   font-size: var(--text-small);
   font-weight: var(--weight-medium);
   letter-spacing: -0.005em;
+  white-space: nowrap;
   text-decoration: none;
   transition:
     color var(--duration-fast) var(--ease-standard),
@@ -103,7 +112,8 @@
   gap: var(--space-2);
 }
 
-@media (min-width: 900px) {
+/* The full navigation needs ~1100px (six top-level items, both pillars' calls to action); below that the menu sheet. */
+@media (min-width: 1100px) {
   .public-header__nav {
     display: block;
   }

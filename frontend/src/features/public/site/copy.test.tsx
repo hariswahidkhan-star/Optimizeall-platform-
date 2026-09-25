@@ -36,8 +36,8 @@ describe('site copy', () => {
   it('applies overrides and fills placeholders', () => {
     const copy = makeSiteCopy({ 'shared.footer.copyright': '© {year} Acme Ltd' });
     expect(copy.text('shared.footer.copyright', { year: 2030 })).toBe('© 2030 Acme Ltd');
-    expect(copy.text('home.hero.eyebrow')).toBe('Full-service digital marketing agency');
-    expect(copy.list('home.hero.proof')).toEqual(['No long lock-ins', 'Your accounts, your data', 'Senior strategists on every account']);
+    expect(copy.text('home.hero.eyebrow')).toBe('Free courses · Verifiable certificates');
+    expect(copy.list('home.hero.proof')).toEqual(['Free for everyone', 'Verifiable certificates', 'Learn at your own pace']);
   });
 
   it('renders the shipped wording when overrides cannot be loaded, and editor overrides once they are', async () => {
