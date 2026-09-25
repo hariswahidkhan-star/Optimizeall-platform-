@@ -1,0 +1,1050 @@
+{
+  "slug": "prompt-engineering-for-content-and-sales",
+  "version": 1,
+  "title": "Prompt Engineering for Content & Sales",
+  "subtitle": "Write prompts that produce on-brand, accurate content and sales copy you can actually use",
+  "category": "ai",
+  "level": "intermediate",
+  "estimatedMinutes": 180,
+  "description": "Most AI output is generic because most prompts are vague. This course teaches creators, marketers and sales professionals to write prompts that work like professional creative briefs, and to turn the best ones into a reusable system.\n\nYou will master a six-part prompt structure (role, context, task, constraints, examples and output format), use examples to transfer your voice, and refine drafts with specific feedback instead of starting over. You will get ready-to-adapt templates for hooks, captions, short-form scripts, content calendars, ad copy, email sequences, cold outreach and post-call follow-ups, each with built-in guardrails against invented claims and misleading urgency.\n\nFinally, you will build an AI-ready brand voice guide, evaluate outputs with the CLEAR rubric, fact-check before publishing, and use practical techniques to escape the generic AI style that audiences now scroll past.",
+  "outcomes": [
+    "Write structured prompts using role, context, task, constraints, examples and output format",
+    "Use few-shot examples and output formats to control tone, structure and reviewability",
+    "Refine AI drafts with specific, targeted feedback and know when to restart",
+    "Build and adapt reusable templates for content, ads, emails and sales follow-ups",
+    "Create a one-page, AI-ready brand voice guide with guardrails",
+    "Evaluate and fact-check outputs with the CLEAR rubric before publishing",
+    "Apply techniques that make AI-assisted content specific and original"
+  ],
+  "skills": [
+    "Prompt engineering",
+    "AI copywriting",
+    "Brand voice",
+    "Sales email writing",
+    "Content repurposing",
+    "AI output evaluation"
+  ],
+  "prerequisites": [
+    "ai-fundamentals-for-marketers"
+  ],
+  "badge": {
+    "name": "Certified AI Prompt Specialist",
+    "description": "The holder writes structured, context-rich prompts, refines AI drafts through targeted feedback, maintains reusable templates for content and sales, builds AI-ready brand voice guides, and evaluates and fact-checks AI-assisted copy for accuracy, compliance and originality before publishing.",
+    "criteria": "Completed all lessons and scored at least 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "anatomy-of-a-prompt",
+      "title": "The anatomy of a great prompt",
+      "summary": "A six-part structure that turns vague requests into precise briefs, plus how examples and output formats shape results.",
+      "lessons": [
+        {
+          "slug": "six-part-prompt-structure",
+          "title": "The six-part prompt: role, context, task, constraints, examples, format",
+          "type": "video",
+          "durationMinutes": 10,
+          "body": "### Prompts are briefs\n\nThe biggest shift in prompting is to stop thinking of a prompt as a question and start thinking of it as a **creative brief**. If you handed a freelancer the sentence \"write a caption for my bakery\", you would get something generic. If you gave them your audience, your offer, your tone and the platform, you would get something usable. AI works the same way.\n\nA reliable structure has six parts. You will not always need all six, but checking against them fixes most weak prompts.\n\n### 1. Role\n\nTell the model what expertise to bring. \"You are a senior direct-response copywriter who specialises in Instagram ads for food brands in the Gulf.\" A role nudges vocabulary, priorities and standards. Keep it relevant; \"world's greatest genius\" adds nothing.\n\n### 2. Context\n\nThis is where most prompts fail. Include:\n\n- **Who you are:** brand, product, price point, positioning.\n- **Audience:** who they are, what they want, what they worry about, what language they use.\n- **Situation:** campaign goal, platform, season, what has worked before.\n- **Facts the model must use:** approved claims, prices, dates.\n\n### 3. Task\n\nOne clear verb and deliverable: \"Write five caption options\", \"Rewrite this email\", \"Summarise these reviews into three themes\". If you have several tasks, number them or split them into separate prompts.\n\n### 4. Constraints\n\nThe rules: length, tone, words to avoid, compliance requirements, reading level, language variety (British or American English, Gulf or Levantine Arabic, Urdu or Roman Urdu).\n\nExamples: \"Under 150 characters before the 'more' cut-off.\" \"No health claims.\" \"Do not use the words 'elevate', 'unlock' or 'game-changer'.\" \"Include #ad at the start because this is a paid partnership.\"\n\n### 5. Examples\n\nShow, don't just tell. One or two examples of captions you love, or past posts that performed well, teach tone faster than any adjective. (More on this in the next lesson.)\n\n### 6. Output format\n\nSay exactly how you want the answer: a numbered list, a table with columns, a script with timestamps, JSON for a spreadsheet, or \"hook on line one, body, then CTA\".\n\n### Before and after\n\n**Weak:** \"Write a caption for my bakery's new cake.\"\n\n**Strong:**\n\n> **Role:** You are a social media copywriter for independent food brands in Pakistan.\n> **Context:** We are Crumb & Co, a home bakery in Lahore selling custom cakes (from PKR 4,500). Audience: women aged 25–40 planning birthdays, who order via WhatsApp. Our tone is warm, playful and slightly cheeky. We are launching a pistachio-rose cake for Eid.\n> **Task:** Write five Instagram caption options for the launch Reel.\n> **Constraints:** Each under 60 words. First line must work as a hook on its own. Mix English with light Roman Urdu. No claims about being \"the best in Lahore\". End with a CTA to WhatsApp.\n> **Example of our voice:** \"Birthday on Saturday and zero plan? Relax, jaan. We've got the cake. You bring the candles.\"\n> **Format:** Numbered list, each option followed by a one-line note on the angle used.\n\nThe second prompt takes two extra minutes to write and saves twenty minutes of editing.\n\n### Quick checklist\n\nBefore you hit enter, ask:\n\n- Would a human freelancer understand exactly what I want?\n- Did I give facts the model cannot guess?\n- Did I say what to avoid?\n- Did I specify the format I need?\n\n### Pitfalls\n\n- **Over-stuffing:** a two-page prompt full of irrelevant history can dilute the key instructions. Put the most important rules near the task, and keep context relevant.\n- **Conflicting instructions:** \"Be concise\" and \"include every detail\" pull in opposite directions. Decide which wins.\n- **Relying on role alone:** \"You are an expert marketer\" without context still produces generic work.",
+          "video": {
+            "script": "Here's the single biggest upgrade you can make to your AI results. Stop writing questions. Start writing briefs.\n\nThink about it. If you told a freelance copywriter, write a caption for my bakery, you'd get something bland. But if you told them who your customers are, what you're launching, how your brand sounds, and what to avoid, you'd get something you could actually post. AI works exactly the same way.\n\nA great prompt has six parts.\n\nOne. Role. Tell the model what expertise to bring, like a social media copywriter for food brands in Pakistan.\n\nTwo. Context. Who you are, who your audience is, what the campaign is for, and the facts it must use. This is where most prompts fall short.\n\nThree. Task. One clear deliverable. Write five caption options.\n\nFour. Constraints. Length, tone, banned words, and compliance rules, like including hashtag ad on paid partnerships.\n\nFive. Examples. Paste a caption you love. One real example teaches tone faster than a list of adjectives.\n\nSix. Output format. A numbered list, a table, a script with timestamps. Say exactly what you need.\n\nYou won't need all six every time. But when an output disappoints, run through this list, and you'll usually find the missing piece.\n\nA strong prompt might take two extra minutes to write. It routinely saves twenty minutes of editing. That's the trade we're going to practise throughout this course.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Treat a prompt as a creative brief, not a question.",
+            "The six parts are role, context, task, constraints, examples and output format.",
+            "Context (brand, audience, situation, facts) is where most prompts fall short.",
+            "Avoid over-stuffing and conflicting instructions; put key rules near the task."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which part of a prompt is most often missing when output feels generic?",
+              "options": [
+                "A polite greeting",
+                "Context about the brand, audience and situation",
+                "Output format",
+                "Role"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Without specific context the model falls back on the most common patterns. Role and format help, but context drives relevance."
+            },
+            {
+              "question": "'Do not use the words elevate or unlock' is an example of which prompt part?",
+              "options": [
+                "Example",
+                "Constraint",
+                "Role",
+                "Task"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Rules about what to avoid, length or tone are constraints."
+            },
+            {
+              "question": "What is the main risk of a very long prompt packed with background?",
+              "options": [
+                "It always costs nothing extra",
+                "The output becomes shorter",
+                "Key instructions can get diluted by irrelevant material",
+                "The model refuses to answer"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Irrelevant context competes for attention. Keep it focused and place key rules near the task."
+            }
+          ],
+          "activity": "Rewrite one of your recent weak prompts using all six parts, run both versions, and compare how much editing each output needs."
+        },
+        {
+          "slug": "examples-and-output-formats",
+          "title": "Using examples and output formats to control results",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### Why examples are so powerful\n\nLanguage models are exceptional pattern-followers. When you include examples in your prompt, a technique often called **few-shot prompting**, you give the model a concrete pattern to match. It is the fastest way to transfer tone, structure and quality standards.\n\nCompare these two instructions:\n\n- \"Write in a friendly, confident, slightly witty tone.\"\n- \"Here are two captions in our voice: [example 1] [example 2]. Write three more in the same voice.\"\n\nThe second almost always wins, because \"friendly, confident, witty\" means different things to different people, while the examples show exactly what you mean.\n\n### How to use examples well\n\n1. **Use your best real work.** Past posts that performed well, emails that got replies, scripts your audience loved.\n2. **Show variety within the pattern.** Two or three examples that differ in topic but share voice teach the model what to keep constant.\n3. **Label them clearly.** \"Example 1 (Reel caption, product launch):\" helps the model understand what each is.\n4. **Say what to copy and what not to.** \"Match the tone and structure, not the topic or specific phrases.\" Otherwise the model may reuse your exact lines.\n5. **Use counter-examples sparingly.** \"Here is a caption we dislike because it sounds salesy: [...]. Avoid this style.\" This can sharpen boundaries.\n\n### Output formats that save editing time\n\nAsking for a specific structure makes the output easier to review, compare and paste into other tools.\n\n**Numbered options with rationale**\n\"Give 10 hooks as a numbered list. After each, add in brackets the psychological angle (curiosity, fear of missing out, social proof, contrarian).\"\n\n**Tables**\n\"Create a 2-week content calendar as a table with columns: Date, Platform, Format, Hook, Key message, CTA.\"\n\n**Scripts with timing**\n\"Write a 40-second Reel script in three columns: Time, Visual, Voiceover. Keep the voiceover under 100 words.\"\n\n**Structured for other tools**\n\"Return the result as CSV with headers: subject_line, preview_text, angle\", for pasting into a spreadsheet or email platform.\n\n**Fixed templates**\n\"Use exactly this structure: HOOK (1 line) / PROBLEM (2 lines) / SOLUTION (2 lines) / PROOF (1 line) / CTA (1 line).\"\n\n### Worked example: email subject lines\n\nA UK online fashion boutique wants subject lines for a summer sale.\n\n> Here are three past subject lines with high open rates for our audience (women 25–45, UK, value-conscious but style-led):\n> 1. \"The linen edit you asked for (finally)\"\n> 2. \"Your Saturday outfit, sorted\"\n> 3. \"We restocked the dress. Yes, that one.\"\n> Match their voice: conversational, specific, a little knowing, no shouting. Avoid ALL CAPS, excessive emojis and the word \"SALE\" in the first three words.\n> Task: write 12 subject lines for our summer sale (up to 40% off selected lines, ends Sunday).\n> Format: table with columns Subject line, Preview text (under 90 characters), Angle.\n\nThe result is consistent, on-brand and easy to shortlist. The team then tests the top options with their email platform's A/B feature.\n\n### Pitfalls\n\n- **Copying examples too closely.** If outputs repeat your example phrases, add \"Do not reuse phrases from the examples.\"\n- **Examples that break your own rules.** If your example includes a claim you no longer make, the model will copy it.\n- **Too many examples.** Beyond a handful, returns diminish and prompts get long. Choose your best.\n- **Format without substance.** A beautiful table of weak ideas is still weak. Format supports thinking; it does not replace context.\n\n### Mini-template\n\n> Here are [2–3] examples of [content type] in our voice:\n> [examples, labelled]\n> Match their [tone/structure/length], but not their topics or exact phrases.\n> Now write [number] [content type] about [topic] for [audience].\n> Format: [list/table/script columns].",
+          "video": null,
+          "keyTakeaways": [
+            "Examples (few-shot prompting) transfer tone and structure faster than adjectives.",
+            "Use two or three strong, varied, labelled examples and say what to copy and what not to.",
+            "Specify output formats such as numbered lists, tables, timed scripts or CSV to speed up review.",
+            "Check examples against your current rules, because the model will copy their flaws too."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is 'few-shot prompting'?",
+              "options": [
+                "Limiting the model to a few words",
+                "Running a prompt only a few times",
+                "Sending very short prompts",
+                "Including a few examples in the prompt for the model to follow"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Few-shot prompting means giving examples that demonstrate the pattern you want."
+            },
+            {
+              "question": "Your outputs keep reusing exact phrases from your examples. What should you add?",
+              "options": [
+                "A longer role description",
+                "More examples with the same phrases",
+                "Nothing; this is unavoidable",
+                "An instruction to match tone and structure but not reuse phrases from the examples"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Explicitly telling the model what to copy (tone, structure) and what not to (phrases, topics) fixes over-copying."
+            }
+          ],
+          "activity": "Collect your three best-performing captions or emails, label them, and build a few-shot prompt that generates ten new options in the same voice."
+        }
+      ]
+    },
+    {
+      "slug": "iterative-refinement",
+      "title": "Iterative refinement",
+      "summary": "How to improve outputs through focused follow-ups, and advanced techniques for sharper thinking and better options.",
+      "lessons": [
+        {
+          "slug": "refine-dont-restart",
+          "title": "Refine, don't restart: the feedback loop",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### The first answer is a starting point\n\nProfessionals rarely accept a first draft from a human writer, and they should not from AI either. The real skill is **iterative refinement**: giving specific, targeted feedback that moves the output closer to what you need.\n\n### Vague vs specific feedback\n\n| Vague (weak) | Specific (strong) |\n|---|---|\n| \"Make it better.\" | \"The hook is too slow. Start with the customer's problem in under 8 words.\" |\n| \"More engaging.\" | \"Add one concrete detail from a customer's life, such as the school run or a late-night craving.\" |\n| \"Too long.\" | \"Cut to 80 words. Keep the second and fourth sentences.\" |\n| \"Not our tone.\" | \"Less formal. Use contractions, short sentences and one light joke. Remove 'we are delighted'.\" |\n\nSpecific feedback tells the model what to change, how and what to keep.\n\n### A five-move refinement toolkit\n\n1. **Select and build:** \"Option 3 is closest. Write five variations of option 3 with different opening lines.\"\n2. **Surgical edit:** \"Keep everything except the CTA. Rewrite the CTA to push WhatsApp orders, not website visits.\"\n3. **Dial a quality:** \"Make it 30% more playful\" or \"Make it more premium: fewer exclamation marks, more sensory detail.\"\n4. **Change the angle:** \"Rewrite from the perspective of a customer who was sceptical at first.\"\n5. **Critique then revise:** \"Before rewriting, list three weaknesses of this draft from the perspective of a busy mum scrolling Instagram. Then fix them.\"\n\n### Ask the model to critique itself\n\nModels are often better at spotting problems when explicitly asked to evaluate. Useful prompts:\n\n- \"Score this caption from 1 to 10 on hook strength, clarity and brand fit. Explain each score, then write an improved version.\"\n- \"What questions would a sceptical buyer still have after reading this sales page?\"\n- \"Which sentence here is weakest and why?\"\n\nTreat self-critique as a helpful second opinion, not a verdict. The model can be overly positive about its own work, or change good things unnecessarily. You still decide.\n\n### When to restart instead\n\nRefinement works when the draft is roughly right. Start a fresh prompt when:\n\n- The draft is fundamentally off-target (wrong audience, wrong offer). Fix the original prompt instead.\n- The conversation has become long and muddled, with conflicting instructions.\n- The model keeps reverting to a style you have rejected several times.\n\nWhen you restart, **update the original prompt** with what you learned, such as the missing context, the new constraint or a better example. That improved prompt becomes your reusable template.\n\n### Worked example: a sales follow-up\n\nA Dubai interior design studio's first AI draft of a follow-up email after a consultation is polite but generic.\n\n1. \"Too generic. Reference that the client wants a warm, family-friendly majlis and is worried about the timeline before Ramadan.\" The draft improves.\n2. \"The opening apologises for following up. Remove that. Start with the one idea from the consultation that excited them most: the built-in low seating.\" Better.\n3. \"Add a single, low-pressure next step: a 15-minute call to review the mood board. Offer two time slots.\" Done.\n4. \"Now list any claims or promises in this email that I should double-check with the team.\" The model flags the timeline wording; the designer confirms it with the project manager before sending.\n\nFour focused follow-ups turned a generic email into a specific, trustworthy one in a few minutes.\n\n### Pitfalls\n\n- **Endless tinkering.** Set a limit of three or four rounds. If it is still not right, rethink the prompt or write that part yourself.\n- **Accepting subtle drift.** Each revision can introduce new claims or change facts. Re-check facts in the final version.\n- **Forgetting to save the winning prompt.** Capture it in your library.",
+          "video": null,
+          "keyTakeaways": [
+            "Treat the first output as a draft and refine with specific, targeted feedback.",
+            "Use select-and-build, surgical edits, dials, angle changes and critique-then-revise.",
+            "Restart with an improved original prompt when the draft is fundamentally off or the chat is muddled.",
+            "Re-check facts after every revision and save the winning prompt."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which feedback is most likely to improve a caption?",
+              "options": [
+                "More engaging please",
+                "Open with the customer's problem in under 8 words and cut the second sentence",
+                "Try again",
+                "Make it better"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Specific feedback states what to change and how. Vague feedback leaves the model guessing."
+            },
+            {
+              "question": "When should you start a new prompt instead of refining?",
+              "options": [
+                "Never; always keep refining",
+                "When the draft targets the wrong audience or the chat has become muddled",
+                "When the draft is roughly right but too long",
+                "Whenever you want a different CTA"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Fundamental mismatches and muddled long chats are best fixed by improving the original prompt and restarting."
+            },
+            {
+              "question": "Why re-check facts after several rounds of revision?",
+              "options": [
+                "The model deletes facts automatically",
+                "Facts expire after three messages",
+                "Revisions can introduce new claims or subtly change facts",
+                "It is not necessary"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Each rewrite is generated fresh and can drift from the original facts."
+            }
+          ],
+          "activity": "Take one AI draft and improve it using at least three different moves from the refinement toolkit. Save the final improved prompt to your library."
+        },
+        {
+          "slug": "advanced-techniques-for-better-thinking",
+          "title": "Advanced techniques: step-by-step thinking, options and perspectives",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### Beyond one-shot requests\n\nOnce you have mastered structure and refinement, a handful of techniques can noticeably raise the quality of ideas and reasoning. None require technical knowledge.\n\n### 1. Ask for reasoning before the answer\n\nFor strategic or analytical tasks, ask the model to think through the problem first. \"Before recommending a campaign angle, analyse the audience's main motivations and objections, then recommend.\" Many modern models reason internally, but explicitly asking for an analysis step still helps you see and challenge the logic.\n\nUse it for positioning decisions, choosing between offers, diagnosing why a post underperformed (with your real data), and planning a content series.\n\n### 2. Generate many, then filter\n\nQuantity first, then quality. \"Give me 25 hook ideas. Then pick the 5 strongest for a sceptical audience and explain why.\" The first ideas a model produces tend to be the most predictable. Asking for more pushes it into less obvious territory, and asking it to filter gives you a first shortlist to challenge.\n\n### 3. Constrain creatively\n\nConstraints spark originality. Try \"Write the hook as a question a customer would actually text a friend\", \"No adjectives in the first line\", \"Use a metaphor from cricket\", or \"Explain it as if to a grandmother in Multan\".\n\n### 4. Role-play the audience\n\nAsk the model to become your customer and react. \"You are a 32-year-old first-time buyer in Manchester with a tight budget. Read this landing page and tell me honestly what confuses you, what you doubt and what would make you click.\" This is a fast pre-test, not a replacement for real customer research, but it surfaces obvious gaps.\n\n### 5. Multiple perspectives\n\n\"Give me three versions of this ad: one for a price-sensitive buyer, one for a quality-focused buyer, one for a time-poor buyer.\" Or ask for a debate: \"Argue for and against running this campaign during exam season.\"\n\n### 6. Break big tasks into chains\n\nInstead of \"Write a full launch campaign\", chain smaller prompts:\n\n1. Summarise the audience and key message (you review).\n2. Generate ten campaign concepts (you pick one).\n3. Draft the hero video script (you edit).\n4. Create cut-downs, captions and emails from the approved script.\n\nEach step is easier to check, and errors do not compound silently.\n\n### 7. Ask it to ask you\n\n\"Before you write anything, ask me up to five questions that would help you write a better sales email.\" This is especially useful when you are not sure what context matters.\n\n### Worked example: diagnosing a flat Reel\n\nA Karachi streetwear brand's Reel got far fewer views than usual. The creator pastes the script, caption, posting time and simple metrics (average watch time, where viewers dropped off) and prompts:\n\n> Analyse why this Reel may have underperformed compared to our usual posts. Consider the hook, pacing, relevance to our audience and the posting context. List three hypotheses ranked by likelihood, and for each suggest one test we could run next week. Do not assume data I have not given you.\n\nThe model suggests the hook reveals the product too late, the audio trend was already fading, and the caption lacks a reason to share. The creator tests a new hook first, which is a clear, measurable next step. The hypotheses are ideas to test, not proven causes.\n\n### Pitfalls\n\n- **Treating role-play as research.** Simulated customers reflect average patterns, not your real audience. Validate with real comments, surveys or sales data.\n- **Chains without checkpoints.** The value of chaining comes from reviewing between steps.\n- **Over-analysis for simple tasks.** You do not need a reasoning chain for a birthday post.",
+          "video": null,
+          "keyTakeaways": [
+            "Ask for analysis before recommendations on strategic tasks so you can check the logic.",
+            "Generate many options, then filter; the first ideas are usually the most predictable.",
+            "Role-play and multiple perspectives surface gaps quickly but do not replace real research.",
+            "Break big tasks into reviewed steps and let the model ask you clarifying questions."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why ask for 25 hooks rather than 3?",
+              "options": [
+                "It uses fewer tokens",
+                "Platforms require 25 hooks",
+                "Longer lists are always better quality",
+                "The first ideas tend to be predictable; volume pushes into less obvious territory before you filter"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Generating more options, then filtering, helps you get past the obvious first ideas."
+            },
+            {
+              "question": "What is the main limitation of asking the AI to role-play your customer?",
+              "options": [
+                "It reflects average patterns and cannot replace real customer research",
+                "It is against platform rules",
+                "It always gives negative feedback",
+                "It only works in English"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Simulated feedback is a quick pre-test. Validate important decisions with real audience data."
+            }
+          ],
+          "activity": "Use the 'ask it to ask you' technique on a real sales or content task, answer its questions, and compare the result to your usual prompt."
+        }
+      ]
+    },
+    {
+      "slug": "reusable-prompt-templates",
+      "title": "Reusable prompt templates",
+      "summary": "Ready-to-adapt templates for hooks, captions, scripts, emails, ad copy and sales follow-ups, and how to organise a prompt library.",
+      "lessons": [
+        {
+          "slug": "templates-for-content",
+          "title": "Templates for hooks, captions and short-form scripts",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Why templates\n\nOnce you find a prompt that works, turn it into a **template** with [placeholders]. Templates make quality repeatable, save time and let teammates or freelancers produce consistent work. Paste your brand voice guide (Module 4) above any template for best results.\n\n### Template 1: Hook generator\n\n> You are a short-form video strategist for [niche] creators.\n> Audience: [who, age, location, main desire, main frustration].\n> Video topic: [topic]. Key point of the video: [one sentence].\n> Write 15 opening hooks (first 1–2 seconds, spoken, under 12 words each).\n> Use a mix of these angles: curiosity gap, bold contrarian statement, relatable pain, specific result, question, \"mistake\" framing.\n> Avoid clickbait that the video does not deliver on. No false claims.\n> Format: numbered list, with the angle in brackets after each.\n\n**Why it works:** audience plus a single key point keeps hooks relevant; named angles force variety; the honesty rule prevents misleading hooks that hurt retention and trust.\n\n### Template 2: Caption writer\n\n> Write [number] [platform] captions for this post: [describe the visual/video].\n> Goal: [saves / comments / DMs / link clicks / sales].\n> Voice: [3 adjectives + 1 example caption].\n> Structure: hook line that works alone before the \"more\" cut-off; [1–3] short body lines with one specific detail; CTA aligned to the goal.\n> Constraints: under [X] words; [language/variety]; banned words: [list]; [#ad / paid partnership label if sponsored].\n> Format: numbered, with a one-line note on why each should achieve the goal.\n\n### Template 3: Short-form video script\n\n> Write a [length]-second [platform] script about [topic] for [audience].\n> Structure:\n> 0–3s: hook (spoken + on-screen text)\n> 3–[X]s: [2–3] beats delivering the key point with one example\n> Final 5s: CTA ([follow / comment keyword / link in bio])\n> Constraints: voiceover under [word count] words (about 2.5 words per second is a comfortable pace); simple spoken language; one pattern interrupt midway.\n> Format: table with columns Time | Visual | Voiceover | On-screen text.\n\n### Template 4: Content repurposer\n\n> Here is [a transcript / blog / podcast summary]: [paste].\n> Extract the [3–5] most useful, specific ideas, using the speaker's own phrasing where possible.\n> For each, create: one [platform] post, one carousel outline (6–8 slides), one short-video hook.\n> Do not add facts or advice that are not in the source. Mark anything that needs a visual with [VISUAL].\n\n### Template 5: Content calendar\n\n> Create a [2/4]-week content calendar for [brand] on [platforms].\n> Content pillars: [3–5 pillars with a short description].\n> Key dates: [launches, holidays such as Ramadan, Eid, Diwali, Black Friday or back to school].\n> Posting frequency: [per platform].\n> Format: table with columns Date, Platform, Pillar, Format, Hook, CTA.\n> Balance pillars and do not schedule promotional posts back to back.\n\n### Worked example: filling in the hook template\n\nA Lahore-based personal finance creator fills in Template 1: audience \"salaried professionals 24–35 in Pakistan who feel they never save\", topic \"the 50/30/20 budget adapted for high inflation\", key point \"percentages matter less than automating savings on payday\".\n\nSelected outputs:\n\n- (Contrarian) \"The 50/30/20 rule doesn't work in Pakistan. Here's what does.\"\n- (Relatable pain) \"Salary comes on the 1st, gone by the 20th?\"\n- (Mistake) \"You're saving what's left. That's the mistake.\"\n\nShe picks the contrarian hook, checks that the video actually explains the adapted method, and films it. Note what the template prevented: hooks promising \"guaranteed returns\", which would be misleading and potentially a regulatory problem for financial content.\n\n### Adapting templates\n\n- **Swap angles** for your niche. B2B might use \"cost of inaction\" or \"peer benchmark\".\n- **Add platform specifics** such as character limits, hashtag norms and whether captions are read at all.\n- **Localise:** specify language variety and cultural references explicitly.",
+          "video": null,
+          "keyTakeaways": [
+            "Turn prompts that work into templates with placeholders for consistent, shareable quality.",
+            "Hook, caption, script, repurposing and calendar templates cover most creator content needs.",
+            "Build honesty and compliance rules into templates so every output starts safe.",
+            "Adapt angles, platform specifics and language variety to your niche and market."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why does the hook template include 'avoid clickbait the video does not deliver on'?",
+              "options": [
+                "Misleading hooks damage retention and trust, and can mislead viewers",
+                "It makes hooks longer",
+                "Platforms ban questions",
+                "Clickbait is always illegal"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Hooks that over-promise lead to drop-off and erode trust; for some topics they can also be misleading claims."
+            },
+            {
+              "question": "A 30-second voiceover at a comfortable pace of about 2.5 words per second should be roughly how long?",
+              "options": [
+                "About 400 words",
+                "About 75 words",
+                "About 25 words",
+                "About 200 words"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "30 seconds at roughly 2.5 words per second is about 75 words, leaving room for pauses."
+            }
+          ],
+          "activity": "Fill in two of the templates for your own niche, generate outputs, and save the best-performing version to your prompt library."
+        },
+        {
+          "slug": "templates-for-sales-and-ads",
+          "title": "Templates for emails, ad copy and sales follow-ups",
+          "type": "video",
+          "durationMinutes": 10,
+          "body": "### Revenue copy needs guardrails\n\nSales and advertising copy has direct consequences: money, contracts and regulatory exposure. So templates in this lesson share two rules:\n\n1. **Supply the facts** (offer, price, deadline, proof) explicitly.\n2. **Forbid invention:** \"Do not invent testimonials, results, statistics, discounts or deadlines. Use [PLACEHOLDER] where proof would help.\"\n\n### Template 6: Ad copy variations\n\n> You are a performance copywriter for [platform] ads.\n> Product/offer: [what, price, key benefit, guarantee if real].\n> Audience: [segment, main pain, main desire, main objection].\n> Write [8] ad variations using these angles: pain, dream outcome, objection-handling, social proof (use only this approved proof: [paste]), direct offer.\n> For each: primary text (under [X] words), headline (under [X] characters), description (under [X] characters).\n> Constraints: comply with [platform] ad policies; no personal-attribute targeting language (e.g. \"Are you overweight?\"); no exaggerated or absolute claims.\n> Format: table.\n\nNote the personal-attributes rule: major ad platforms restrict copy that implies you know a person's health, finances, religion or other sensitive characteristics.\n\n### Template 7: Email sequence\n\n> Write a [3]-email sequence for [segment: e.g. people who downloaded our free guide on X].\n> Goal: [book a call / buy / start trial].\n> Facts: [offer, price, deadline, what's included].\n> Email 1: deliver value related to the guide, soft mention of offer.\n> Email 2: address the top objection [objection] with a real example [paste or placeholder].\n> Email 3: clear offer, honest deadline, simple CTA.\n> Each: subject line + preview text (under 90 characters), body under [150] words, one CTA.\n> Voice: [paste guide]. Include an unsubscribe reminder line.\n\n### Template 8: Cold outreach (B2B or collaborations)\n\n> Draft a short, personalised outreach message to [role] at [company type] via [email/LinkedIn/Instagram DM].\n> What I know about them (public info only): [paste].\n> What I offer: [one sentence]. Relevant proof: [one real result or client, if permitted].\n> Rules: under [90] words; open with something specific to them, not about me; one clear, low-friction ask; no flattery clichés; no fake familiarity.\n\n### Template 9: Post-call follow-up\n\n> Here are my notes from a discovery call with [prospect]: [paste notes, remove sensitive personal data].\n> Write a follow-up email that:\n> 1. Thanks them and reflects their top two goals in their own words.\n> 2. Summarises what we agreed and any open questions.\n> 3. Proposes one next step with two time options.\n> Tone: [warm, professional, confident]. Under [150] words.\n> Finally, list any promises or figures in the email I should confirm before sending.\n\n### Template 10: Objection handler\n\n> Our prospects often say: \"[objection]\".\n> Our honest answer, in facts: [facts].\n> Write 3 ways to respond: one for a DM, one for a sales call (spoken), one for a FAQ page. Acknowledge the concern first. Do not pressure or dismiss.\n\n### Worked example: follow-up for an influencer collaboration\n\nZara, a UAE-based creator manager, just had a call with a skincare brand about a paid campaign. Her notes cover the brand's goal (awareness in KSA and UAE), budget range, deliverables discussed (three Reels, two story sets), their worry (previous creator content felt \"too ad-like\"), and next steps (Zara to send a proposal).\n\nUsing Template 9, the draft reflects their goals, reassures them about native-feeling content, and proposes a proposal review call. The \"promises to confirm\" list flags that the draft mentioned \"guaranteed reach\", which Zara never promised. She removes it. She also adds a line confirming that all sponsored content will carry clear disclosure in line with platform tools and local advertising rules.\n\n### Pitfalls\n\n- **Pasting raw CRM exports.** Anonymise or trim to what the email needs.\n- **Over-personalisation.** Referencing a prospect's family photos from Instagram is creepy, not clever.\n- **Deadlines that are not real.** \"Offer ends tonight\" must be true.\n- **Automating send.** Draft with AI; send after human review, especially for new templates.",
+          "video": {
+            "script": "Content grabs attention. But it's emails, ads and follow-ups that turn attention into revenue. Let's look at how to prompt for them.\n\nThe golden rule for sales prompts is simple. Give the model the facts it can't guess, and forbid it from inventing anything else. That means your real offer, your real price, your real deadline, and genuine proof you have permission to use.\n\nFor ad copy, ask for variations built on different angles: the pain, the dream outcome, social proof, and a direct offer. Ask for headlines within the platform's character limits, and then check those limits yourself, because models count tokens, not letters.\n\nFor sales emails, give the context of the relationship. Is this a cold prospect, a warm lead who downloaded a guide, or someone who went quiet after a proposal? Each needs a different tone and a different next step.\n\nFor follow-ups after a call, paste your own notes and ask the model to reference the prospect's specific goals, confirm next steps, and offer one easy action, like a fifteen-minute call with two time options.\n\nAnd always add a line like this: do not invent testimonials, results, discounts or deadlines. If proof would help, insert a placeholder.\n\nWhy? Because false urgency, fake reviews and made-up results can break consumer-protection and advertising rules in the UK, the US, the Gulf and beyond. And more importantly, they break trust.\n\nUse the templates in this lesson as your starting point, then adapt them to your voice.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Sales and ad templates must supply real facts and forbid invented proof, discounts or deadlines.",
+            "Ad copy should respect platform policies, including rules on personal-attribute targeting language.",
+            "Post-call follow-ups work best when they reflect the prospect's goals and propose one easy next step.",
+            "Ask the model to list promises and figures to confirm before sending."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why should ad copy avoid lines like 'Are you struggling with debt?'",
+              "options": [
+                "Questions never convert",
+                "It is too short",
+                "Ad platforms restrict copy implying knowledge of sensitive personal attributes",
+                "Debt is not a real problem"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Major ad platforms restrict ads that assert or imply personal attributes such as financial status or health."
+            },
+            {
+              "question": "What is the purpose of asking for 'promises or figures I should confirm' in a follow-up template?",
+              "options": [
+                "To make the email longer",
+                "To impress the prospect",
+                "To avoid writing a CTA",
+                "To surface claims the AI may have added so a human can verify or remove them"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "It creates a built-in checkpoint for accidental over-promises before the email goes out."
+            }
+          ],
+          "activity": "Adapt Template 9 to your last real sales or collaboration call, generate the follow-up, and remove or confirm every promise it flags."
+        }
+      ]
+    },
+    {
+      "slug": "brand-voice-and-quality",
+      "title": "Brand voice, evaluation and originality",
+      "summary": "Build a brand voice guide the AI can follow, evaluate outputs systematically, fact-check, and escape generic AI style.",
+      "lessons": [
+        {
+          "slug": "brand-voice-guides",
+          "title": "Building a brand voice guide for AI",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### Why a voice guide\n\nWithout a voice guide, every prompt reinvents your tone and the output drifts towards generic AI style. A concise, AI-ready **brand voice guide** pasted at the top of prompts (or saved in a tool's project or custom-instructions feature) makes outputs consistent across people, platforms and months.\n\n### What to include (one page)\n\n1. **Brand in one sentence:** who you serve and how you are different.\n2. **Audience snapshot:** who they are, the words they use, what they care about.\n3. **Personality:** three to four traits, each with \"this, not that\". For example: *Warm, not gushing. Confident, not arrogant. Playful, not silly.*\n4. **Language rules:** British or American spelling, Arabic dialect, Urdu or Roman Urdu use, emoji policy, contractions, sentence length.\n5. **Vocabulary:** words and phrases you love; words you ban.\n6. **Formatting habits:** line breaks, lists, hashtags, sign-offs.\n7. **Examples:** three to five real pieces that nail the voice, labelled by type.\n8. **Guardrails:** claims you never make, topics you avoid, required disclosures.\n\n### Example: a compact voice guide\n\n> **Brand:** Chai & Charts, a personal finance creator helping young Pakistani professionals build savings without guilt.\n> **Audience:** 22–35, salaried, urban, bilingual; phrases they use: \"salary khatam\", \"side hustle\", \"committee\".\n> **Personality:** Friendly, not preachy. Honest, not alarmist. Practical, not theoretical.\n> **Language:** Simple English with light Roman Urdu; short sentences; no jargon without a plain explanation; max two emojis.\n> **Love:** \"small wins\", \"boring money is good money\", \"here's the maths\".\n> **Ban:** \"financial freedom guaranteed\", \"get rich\", \"elevate\", \"unlock\", \"hustle harder\".\n> **Guardrails:** Never recommend specific stocks, funds or crypto; never promise returns; always say \"not financial advice\" on investment topics; disclose sponsorships with #ad and the platform's paid partnership label.\n> **Examples:** [3 labelled captions]\n\n### Using it in prompts\n\n- **Paste on top:** \"Follow this brand voice guide strictly: [guide]. Now: [task].\"\n- **Project or custom instructions:** many assistants let you store instructions for a project so you do not have to paste every time. Check what data the feature stores.\n- **Voice check prompt:** \"Review this draft against our voice guide. List each place it breaks the guide, then provide a corrected version.\"\n\n### Building the guide with AI\n\nYou can use AI to draft the guide from your own content:\n\n> Here are 10 of my best-performing posts: [paste]. Analyse the voice: personality traits, sentence patterns, vocabulary, formatting, and what I never do. Draft a one-page brand voice guide using the structure: Brand, Audience, Personality (this, not that), Language rules, Love words, Ban words, Formatting, Guardrails.\n\nThen **edit it yourself**. The model describes patterns; only you know which are intentional and which are bad habits.\n\n### Multiple voices\n\nAgencies and creators with several brands should keep one guide per brand or client, clearly named, and never mix them in the same chat. Test a guide by generating five pieces and asking a colleague or the client, \"Does this sound like us?\"\n\n### Pitfalls\n\n- **Adjective soup:** \"authentic, innovative, bold, human\" means nothing without examples.\n- **Guides that are too long:** keep the core to about a page; the model and your team need to absorb it.\n- **Set and forget:** update when your positioning changes or you notice recurring edits.",
+          "video": null,
+          "keyTakeaways": [
+            "A one-page, AI-ready voice guide keeps tone consistent across prompts, people and platforms.",
+            "Include personality as 'this, not that', language rules, love and ban lists, examples and guardrails.",
+            "Use AI to draft the guide from your best content, then edit it yourself.",
+            "Keep one guide per brand, test it with real people, and update it regularly."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which personality description is most useful to an AI model?",
+              "options": [
+                "Warm, not gushing; confident, not arrogant, plus labelled examples",
+                "Professional",
+                "The best brand ever",
+                "Authentic, innovative, bold"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Contrasts and examples define the voice concretely. Adjective lists alone are ambiguous."
+            },
+            {
+              "question": "An agency manages three clients. What is the best practice for voice guides?",
+              "options": [
+                "No guides; rely on the AI's memory",
+                "Only use a guide for the biggest client",
+                "One combined guide for all clients",
+                "A separate named guide per client, never mixed in the same chat"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Separate guides prevent voices, and confidential details, blending across clients."
+            }
+          ],
+          "activity": "Use the prompt in this lesson to draft a voice guide from ten of your posts, edit it to one page, and test it on five new pieces."
+        },
+        {
+          "slug": "evaluation-and-fact-checking",
+          "title": "Evaluating outputs and fact-checking before you publish",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### Quality is a process, not a feeling\n\n\"It looks good\" is not an evaluation. Professionals use a consistent checklist so quality does not depend on mood or deadline pressure. This lesson gives you a practical evaluation rubric and a fact-checking routine for AI-assisted content.\n\n### The CLEAR rubric\n\nScore each piece from 1 to 5 on:\n\n- **C: Correct.** Are facts, numbers, names, prices, dates and claims verified?\n- **L: Legal and compliant.** Disclosures (#ad, paid partnership, AI labels where required), platform ad policies, no misleading claims, no infringing content.\n- **E: Engaging.** Does the hook earn attention? Is there a specific detail or story?\n- **A: Audience fit.** Right language, culture, sophistication and platform norms?\n- **R: Recognisably us.** Does it match the voice guide and sound human, not generic?\n\nAnything scoring 1 or 2 on C or L does not ship, regardless of how engaging it is.\n\n### Fact-checking routine\n\n1. **Extract claims.** Ask the model: \"List every factual claim in this text as a bullet list.\" That makes checking faster.\n2. **Categorise.** Brand facts (price, ingredients, dates) are checked against the client brief or product page. External facts (market data, news, rules) are checked against primary sources: the regulator, the official report or the platform's help centre.\n3. **Verify or cut.** If you cannot verify within reasonable time, rewrite qualitatively or remove.\n4. **Watch for subtle drift.** AI may turn \"up to 40% off selected items\" into \"40% off everything\". Compare offer wording word for word.\n5. **Record sources** for sponsored and regulated content.\n\n### Using AI to help evaluate\n\nAI can support, but not replace, your evaluation:\n\n- \"Evaluate this caption against the CLEAR rubric and our voice guide. Be critical and specific.\"\n- \"Identify any statements that could be seen as misleading to a consumer.\"\n- \"Which parts of this would a native Gulf Arabic speaker find unnatural?\" This is a pointer only; confirm with a native speaker.\n\nBe aware that models can be agreeable and may rate their own work generously. Use a fresh chat for evaluation, and ask for weaknesses specifically.\n\n### A/B testing: letting the audience decide\n\nFor hooks, subject lines and ads, the best evaluator is your audience. Use AI to generate distinct variants, not near-duplicates, then test them with platform A/B tools or by posting variants over time. Keep a simple log: variant, angle, result. Feed winners back into your examples.\n\n### Worked example: a sponsored post review\n\nA US-based fitness creator receives an AI-assisted caption for a protein bar sponsorship:\n\n> \"Game-changing protein bar with 20g protein that melts fat while you sleep! Use my code for 50% off\"\n\nCLEAR review:\n\n- **Correct:** protein amount confirmed from the pack. \"Melts fat while you sleep\" is unsupported. Discount is actually 20%. Score 1.\n- **Legal:** no sponsorship disclosure; a health claim the brand did not approve; wrong discount. Score 1.\n- **Engaging:** decent energy. 3.\n- **Audience fit:** OK. 3.\n- **Recognisably us:** \"game-changing\" is on the ban list. 2.\n\nRevised: \"#ad I've been keeping these in my gym bag for post-workout snacks: 20g protein and they actually taste like dessert. Code SAM20 gets you 20% off.\" Plus the platform's paid-partnership label.\n\n### Pitfalls\n\n- Skipping review \"just this once\" on a busy day.\n- Checking only the first draft, not the final revised version.\n- Treating AI evaluation as final approval.",
+          "video": null,
+          "keyTakeaways": [
+            "Use a consistent rubric such as CLEAR: correct, legal, engaging, audience fit, recognisably us.",
+            "Nothing ships if it fails on correctness or compliance, however engaging it is.",
+            "Extract claims, verify against primary sources, cut what you cannot verify and watch for drift.",
+            "AI can assist evaluation in a fresh chat, but the audience and humans decide."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "An AI caption turns 'up to 40% off selected items' into '40% off everything'. What is this?",
+              "options": [
+                "A creative improvement",
+                "Acceptable rounding",
+                "Subtle drift that creates a misleading offer and must be corrected",
+                "A platform requirement"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Offer wording must match the real terms exactly; drift like this can mislead consumers."
+            },
+            {
+              "question": "In the CLEAR rubric, which scores should block publishing regardless of engagement?",
+              "options": [
+                "Low Audience fit only",
+                "Low Correct or Legal scores",
+                "Low Engaging scores",
+                "Low Recognisably us only"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Correctness and compliance are non-negotiable. Weak engagement is a quality issue, not a blocker."
+            }
+          ],
+          "activity": "Score your last three published AI-assisted posts with the CLEAR rubric and note one process change that would have raised the lowest score."
+        },
+        {
+          "slug": "escaping-generic-ai-output",
+          "title": "Escaping generic AI output: originality techniques",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### The sameness problem\n\nAs more people use similar tools with similar prompts, a recognisable \"AI voice\" has emerged: tidy three-part lists, the same stock openers, predictable metaphors and upbeat conclusions. Audiences scroll past it. Your competitive advantage is whatever the model cannot know: your experiences, customers, opinions and data.\n\n### Tell-tale signs of generic output\n\n- Openers like \"In today's fast-paced world\" or \"Are you ready to take your X to the next level?\"\n- Over-used words: *elevate, unlock, seamless, game-changer, delve, landscape, journey, empower*.\n- Everything in groups of three; every paragraph the same length.\n- Vague benefits (\"boost your productivity\") without a concrete example.\n- A neat moral at the end of every post.\n- No opinion, no tension, no specifics.\n\n### Seven techniques for original output\n\n**1. Feed it raw material only you have.**\nVoice notes, customer DMs (anonymised), sales call quotes, your failures, behind-the-scenes details. \"Here is a voice note transcript of me explaining why I quit my job. Turn it into a LinkedIn post. Keep my phrases; don't polish away the rough edges.\"\n\n**2. Start with your opinion.**\n\"My contrarian view: most small brands post too often. Write a post defending this view with my reasons: [reasons].\"\n\n**3. Demand specifics.**\n\"Replace every general claim with a specific example, number (from my data only) or story.\" \"Name the exact moment, place or object.\"\n\n**4. Ban the clichés explicitly.**\nMaintain a banned-phrase list in your voice guide and include it in prompts. Ask the model to self-check: \"Before finalising, remove any phrase from the banned list and any sentence that could appear in any brand's post.\"\n\n**5. Change the form.**\nInstead of a standard caption, try a list of mistakes you made, a text-message conversation, a \"things I'd tell my younger self\" format, or a mini case study with a real (consented) customer.\n\n**6. Use AI for structure, you for the words.**\nAsk for an outline, angles or a critique, then write the key lines yourself. Many successful creators use AI mainly for thinking and editing, not final wording.\n\n**7. Edit for rhythm and voice.**\nRead it aloud. Vary sentence length. Cut the throat-clearing first sentence. Add the joke only you would make.\n\n### Worked example: from generic to specific\n\n**Generic AI draft (Dubai real estate agent):**\n\"Looking for your dream home in Dubai? Our expert team is here to guide you through every step of your property journey. Contact us today to unlock the door to your future!\"\n\n**Prompt with raw material:**\n> Rewrite this using these real details: last month I showed a family 11 villas in Arabian Ranches before they chose the 12th because the kids' bedrooms got morning light. My view: most buyers over-focus on the kitchen and under-focus on commute time at 7:30am. Keep it conversational. Ban: dream, journey, unlock, expert team.\n\n**Result (after light human edit):**\n\"Last month a family viewed 11 villas with me. They picked number 12, not for the kitchen, but because the kids' rooms got morning sun. Here's what I tell every buyer: drive the school run at 7:30am before you fall in love with a kitchen island. DM me 'COMMUTE' and I'll send you the checklist I use.\"\n\n(The agent checks that sharing the anecdote does not identify the family.)\n\n### Pitfalls\n\n- **Swapping one cliché for another.** Banning words is not enough; add real specifics.\n- **Fake specificity.** Inventing stories or numbers to sound authentic is deception. Use only true details.\n- **Losing your voice through over-editing with AI.** Keep some imperfection.",
+          "video": null,
+          "keyTakeaways": [
+            "Generic AI style is recognisable; your experiences, data and opinions are the differentiator.",
+            "Feed raw material only you have, lead with opinions and demand specifics.",
+            "Maintain a banned-phrase list and ask the model to self-check against it.",
+            "Never fake specificity; use AI for structure and critique, and keep your own words where it matters."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which input most reliably makes AI output less generic?",
+              "options": [
+                "A longer role description",
+                "Using a different font",
+                "Asking for more emojis",
+                "Raw material only you have, such as real stories, customer language and opinions"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Unique inputs produce unique outputs. Role and formatting do not add distinctive substance."
+            },
+            {
+              "question": "A creator asks AI to invent a customer story to sound more authentic. What is the issue?",
+              "options": [
+                "Fabricated stories presented as real are deceptive and damage trust",
+                "AI cannot write stories",
+                "Stories must be under 50 words",
+                "None; stories perform well"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Specificity must be true. Invented testimonials or stories presented as real mislead audiences."
+            }
+          ],
+          "activity": "Take a generic AI draft, rewrite it using at least three of the seven techniques with only true details, and compare engagement if you publish it."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 20,
+    "timeLimitMinutes": 30,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "pe-001",
+        "module": "anatomy-of-a-prompt",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which prompt part tells the model who the audience is and what the campaign is for?",
+        "options": [
+          "Role",
+          "Examples",
+          "Context",
+          "Output format"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Context covers brand, audience, situation and facts. Role sets expertise; format sets structure."
+      },
+      {
+        "id": "pe-002",
+        "module": "anatomy-of-a-prompt",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A prompt says 'You are a world-class marketer. Write a caption.' Output is generic. What is the MOST impactful addition?",
+        "options": [
+          "Add 'please' and 'thank you'",
+          "Make the role more impressive",
+          "Ask for the caption in capital letters",
+          "Add context: product, audience, goal, platform and voice example"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "The role is not the problem; missing context is. Specific context drives relevance."
+      },
+      {
+        "id": "pe-003",
+        "module": "anatomy-of-a-prompt",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which are valid output-format instructions? Select all that apply.",
+        "options": [
+          "'Table with columns Time, Visual, Voiceover'",
+          "'Return CSV with headers subject_line, preview_text'",
+          "'Be amazing'",
+          "'Numbered list with the angle in brackets'"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Tables, CSV and structured lists are concrete formats. 'Be amazing' is not a format instruction."
+      },
+      {
+        "id": "pe-004",
+        "module": "anatomy-of-a-prompt",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does few-shot prompting mean?",
+        "options": [
+          "Using very short prompts",
+          "Limiting output to a few words",
+          "Including a few examples for the model to follow",
+          "Asking only a few questions per day"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Few-shot prompting provides examples that demonstrate the desired pattern."
+      },
+      {
+        "id": "pe-005",
+        "module": "anatomy-of-a-prompt",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Your prompt includes 'Be concise' and later 'Include every product detail'. Outputs are inconsistent. What is the best fix?",
+        "options": [
+          "Resolve the conflict by stating which rule wins and what details are essential",
+          "Repeat both instructions three times",
+          "Switch to a different tool",
+          "Add more examples"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Conflicting instructions confuse the model. Decide the priority and specify essential details."
+      },
+      {
+        "id": "pe-006",
+        "module": "anatomy-of-a-prompt",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Outputs repeat exact lines from your example captions. What should you add?",
+        "options": [
+          "'Match tone and structure, but do not reuse phrases or topics from the examples'",
+          "More examples with the same lines",
+          "A bigger role",
+          "Nothing; delete the examples"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Clarifying what to copy and what not to copy fixes over-imitation while keeping the benefit of examples."
+      },
+      {
+        "id": "pe-007",
+        "module": "anatomy-of-a-prompt",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An old example caption in your prompt includes a health claim the brand no longer makes. What risk does this create?",
+        "options": [
+          "None; examples are ignored",
+          "The model will refuse to answer",
+          "It only affects formatting",
+          "The model may reproduce the outdated claim in new outputs"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Models copy patterns from examples, including their flaws. Keep examples compliant and current."
+      },
+      {
+        "id": "pe-008",
+        "module": "iterative-refinement",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is the most specific, useful feedback on a draft?",
+        "options": [
+          "Cut to 60 words and open with the customer's problem",
+          "Make it pop",
+          "Not sure, try again",
+          "Better please"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Specific feedback defines what to change and how."
+      },
+      {
+        "id": "pe-009",
+        "module": "iterative-refinement",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "When is restarting with an improved original prompt better than refining?",
+        "options": [
+          "When the draft targets the wrong audience or the chat has accumulated conflicting instructions",
+          "When the draft is 10 words too long",
+          "Always after the first reply",
+          "When only the CTA needs a tweak"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Fundamental mismatches and muddled chats are faster to fix at the source prompt."
+      },
+      {
+        "id": "pe-010",
+        "module": "iterative-refinement",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which techniques help generate less predictable ideas? Select all that apply.",
+        "options": [
+          "Apply creative constraints such as 'no adjectives in the first line'",
+          "Generate many options, then filter",
+          "Ask for multiple audience perspectives",
+          "Accept the first answer every time"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Volume, constraints and perspectives push beyond the obvious. Accepting the first answer keeps you in predictable territory."
+      },
+      {
+        "id": "pe-011",
+        "module": "iterative-refinement",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "You ask AI to role-play a sceptical customer reviewing your landing page. How should you treat its feedback?",
+        "options": [
+          "As irrelevant",
+          "As a legal review",
+          "As a quick pre-test surfacing possible gaps, to be validated with real customer data",
+          "As validated market research"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Simulated feedback reflects average patterns and is useful for spotting gaps, but real audience data decides."
+      },
+      {
+        "id": "pe-012",
+        "module": "iterative-refinement",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why break a full campaign into chained prompts with checkpoints?",
+        "options": [
+          "It uses fewer words overall",
+          "Each step is easier to check and errors do not compound silently",
+          "Models cannot write long outputs",
+          "Platforms require it"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Chaining with reviews catches problems early and lets you steer each stage."
+      },
+      {
+        "id": "pe-013",
+        "module": "iterative-refinement",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "After four revisions, an email now says delivery is 'guaranteed within 48 hours', which was never in your notes. What does this illustrate?",
+        "options": [
+          "Revision drift introducing unverified promises; re-check facts in the final version",
+          "A formatting issue",
+          "A helpful improvement",
+          "A token limit error"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Each regeneration can add claims. Verify the final version, not just the first draft."
+      },
+      {
+        "id": "pe-014",
+        "module": "iterative-refinement",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does the 'ask it to ask you' technique involve?",
+        "options": [
+          "Asking the model its opinion of you",
+          "Letting the model send emails",
+          "Asking the model to write questions for your audience",
+          "Having the model ask you clarifying questions before it writes"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "The model asks for missing context first, which improves the brief."
+      },
+      {
+        "id": "pe-015",
+        "module": "reusable-prompt-templates",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the main benefit of turning a working prompt into a template with placeholders?",
+        "options": [
+          "It makes quality repeatable and shareable with teammates",
+          "It makes the model faster",
+          "It removes the need for review",
+          "It makes outputs random"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Templates capture what works so results are consistent across uses and people."
+      },
+      {
+        "id": "pe-016",
+        "module": "reusable-prompt-templates",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Roughly how many words fit a 40-second voiceover at a comfortable pace of about 2.5 words per second?",
+        "options": [
+          "About 250",
+          "About 100",
+          "About 400",
+          "About 30"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "40 seconds at about 2.5 words per second is roughly 100 words."
+      },
+      {
+        "id": "pe-017",
+        "module": "reusable-prompt-templates",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which lines belong in a responsible sales or ad template? Select all that apply.",
+        "options": [
+          "'Comply with the platform's ad policies'",
+          "'Add urgency even if the offer has no deadline'",
+          "'Use [PLACEHOLDER] where proof would help'",
+          "'Do not invent testimonials, results, discounts or deadlines'"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Guardrails against invention and policy breaches belong in templates. Fake urgency is misleading."
+      },
+      {
+        "id": "pe-018",
+        "module": "reusable-prompt-templates",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An AI ad draft opens with 'Struggling with your weight?' for a fitness app. What is the concern?",
+        "options": [
+          "It implies knowledge of a personal health attribute, which major ad platforms restrict",
+          "It needs more emojis",
+          "Questions reduce clicks",
+          "It is too short"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Ad policies commonly restrict copy asserting or implying personal attributes such as health or weight."
+      },
+      {
+        "id": "pe-019",
+        "module": "reusable-prompt-templates",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What is the most useful final instruction in a post-call follow-up template?",
+        "options": [
+          "'Send automatically'",
+          "'Make it as long as possible'",
+          "'List any promises or figures in the email I should confirm before sending'",
+          "'Add three testimonials'"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "It creates a checkpoint to catch over-promises the model may have introduced."
+      },
+      {
+        "id": "pe-020",
+        "module": "reusable-prompt-templates",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which input makes a hook generator template produce more relevant hooks?",
+        "options": [
+          "The creator's favourite colour",
+          "A list of random hashtags",
+          "The number of followers",
+          "The audience's desire and frustration plus the video's single key point"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Audience and key point anchor hooks to the actual content and viewer."
+      },
+      {
+        "id": "pe-021",
+        "module": "reusable-prompt-templates",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A cold DM draft references a prospect's family holiday photos to 'build rapport'. What is the best judgement?",
+        "options": [
+          "Remove it; use relevant professional, public business information instead of over-personal details",
+          "Send it to more prospects",
+          "Add more personal details",
+          "Keep it; personalisation always works"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Over-personalisation feels intrusive and damages trust. Personalise with relevant business context."
+      },
+      {
+        "id": "pe-022",
+        "module": "brand-voice-and-quality",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which element makes a brand voice guide most usable by AI?",
+        "options": [
+          "A long list of adjectives",
+          "The logo file",
+          "Labelled real examples plus 'this, not that' personality contrasts",
+          "The company history since founding"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Examples and contrasts define the voice concretely."
+      },
+      {
+        "id": "pe-023",
+        "module": "brand-voice-and-quality",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which items belong in an AI-ready voice guide? Select all that apply.",
+        "options": [
+          "Client passwords",
+          "Guardrails on claims and required disclosures",
+          "Banned words and phrases",
+          "Language rules such as spelling variety and emoji policy"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Vocabulary, language rules and guardrails guide output. Credentials never belong in prompts."
+      },
+      {
+        "id": "pe-024",
+        "module": "brand-voice-and-quality",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "In the CLEAR rubric, what does the 'L' check?",
+        "options": [
+          "Likes",
+          "Legal and compliant: disclosures, ad policies, no misleading claims",
+          "Length",
+          "Links"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "L covers legal and compliance checks, which are blocking criteria."
+      },
+      {
+        "id": "pe-025",
+        "module": "brand-voice-and-quality",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A sponsored caption is highly engaging but claims the product 'melts fat while you sleep' and lacks #ad. What should happen?",
+        "options": [
+          "Do not publish until the unsupported claim is removed and disclosure is added",
+          "Only remove the emoji",
+          "Publish; engagement is what the brand pays for",
+          "Publish and add #ad later"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Failing correctness or compliance blocks publishing regardless of engagement."
+      },
+      {
+        "id": "pe-026",
+        "module": "brand-voice-and-quality",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why use a fresh chat when asking AI to evaluate its own draft?",
+        "options": [
+          "It reduces bias from the drafting conversation, though models can still be generous",
+          "Old chats cannot evaluate",
+          "Fresh chats are free",
+          "It makes the output longer"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "A fresh context gives a less anchored critique, but human judgement remains essential."
+      },
+      {
+        "id": "pe-027",
+        "module": "brand-voice-and-quality",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which phrase is a classic sign of generic AI copy?",
+        "options": [
+          "'In today's fast-paced world'",
+          "'Code SAM20 gets you 20% off'",
+          "'I viewed 11 villas with a family last month'",
+          "'Drive the school run at 7:30am before choosing'"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Stock openers like this signal generic output. The others contain specific, concrete details."
+      },
+      {
+        "id": "pe-028",
+        "module": "brand-voice-and-quality",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which approaches produce original, trustworthy content? Select all that apply.",
+        "options": [
+          "Leading with a genuine opinion",
+          "Using AI for structure while writing key lines yourself",
+          "Feeding real anecdotes and customer language (anonymised)",
+          "Inventing a detailed customer story to sound authentic"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "True specifics, opinions and human-written key lines create originality. Fabricated stories are deceptive."
+      },
+      {
+        "id": "pe-029",
+        "module": "brand-voice-and-quality",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "An agency manages five clients in one AI tool. What prevents voice mix-ups and data leakage?",
+        "options": [
+          "One shared chat for all clients",
+          "Using only one example per client",
+          "Turning off all AI features",
+          "Separate named projects or guides per client, never mixed in the same chat"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Separating clients keeps voice consistent and confidential details contained."
+      },
+      {
+        "id": "pe-030",
+        "module": "anatomy-of-a-prompt",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Where should the most important rules go in a long prompt?",
+        "options": [
+          "Clearly stated near the task",
+          "Nowhere; the model will infer them",
+          "Hidden in the middle of background text",
+          "Only in the role line"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Placing key rules clearly near the task reduces the chance they are diluted."
+      },
+      {
+        "id": "pe-031",
+        "module": "iterative-refinement",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which prompt best asks the model to critique before revising?",
+        "options": [
+          "'Is this good?'",
+          "'Rewrite it'",
+          "'Make it viral'",
+          "'List three weaknesses from the viewpoint of a busy parent scrolling Instagram, then fix them'"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Explicit critique from a defined audience viewpoint, followed by revision, yields targeted improvements."
+      },
+      {
+        "id": "pe-032",
+        "module": "reusable-prompt-templates",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Why include key dates such as Ramadan, Eid or Black Friday in a content calendar prompt?",
+        "options": [
+          "So the plan reflects moments that matter to your audience and market",
+          "To avoid posting on those days",
+          "To make the calendar longer",
+          "Because AI requires dates"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Key dates shape relevance and timing for campaigns in each market."
+      }
+    ]
+  }
+}
