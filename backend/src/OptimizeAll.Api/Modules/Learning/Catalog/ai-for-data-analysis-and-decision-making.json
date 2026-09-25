@@ -1,0 +1,1547 @@
+{
+  "slug": "ai-for-data-analysis-and-decision-making",
+  "version": 1,
+  "title": "AI for Data Analysis & Decision Making",
+  "subtitle": "Clean, explore and analyse data with AI, verify formulas, SQL and Python, avoid statistical traps and communicate uncertainty",
+  "category": "ai",
+  "level": "intermediate",
+  "estimatedMinutes": 180,
+  "description": "AI assistants can clean spreadsheets, write formulas, SQL and Python, draw charts and summarise findings in minutes. This course teaches you to get that speed without being fooled. You will learn a trustworthy analysis workflow, how to clean and prepare messy data with visible, reversible changes, and how to explore data and frame decision-focused questions. You will generate spreadsheet formulas, SQL queries and Python analyses with AI, and verify them systematically. You will build honest charts and insight narratives, recognise statistical traps from correlation-causation confusion to Simpson's paradox, and use forecasts with appropriate caveats. Finally, you will communicate uncertainty clearly and use AI to support, not replace, sound decisions. Designed for analysts, marketers, product and operations professionals, with 'going further' notes for technical learners.",
+  "outcomes": [
+    "Run a six-step AI analysis workflow with verification built in",
+    "Clean and prepare messy data using review-then-apply with a change log",
+    "Explore data systematically and frame decision-focused analytical questions",
+    "Generate and verify spreadsheet formulas, SQL queries and Python analyses",
+    "Create honest charts and Situation-Insight-Implication-Action narratives",
+    "Recognise statistical traps and use forecasts with baselines and intervals",
+    "Communicate uncertainty clearly and document AI-supported decisions"
+  ],
+  "skills": [
+    "Data analysis",
+    "AI-assisted analytics",
+    "SQL",
+    "Python for analysis",
+    "Data visualisation",
+    "Statistical thinking",
+    "Decision making"
+  ],
+  "prerequisites": [],
+  "badge": {
+    "name": "Certified AI Data Analyst",
+    "description": "The holder can use AI assistants to clean, explore and analyse data while keeping results trustworthy. They can generate and verify formulas, SQL and Python, build honest charts and narratives, avoid common statistical traps, use forecasts with appropriate caveats, and communicate uncertainty to support sound decisions.",
+    "criteria": "Completed all lessons and scored at least 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "ai-analysis-foundations",
+      "title": "Foundations: AI as your analysis partner",
+      "summary": "Set up a trustworthy workflow for analysing data with AI assistants, and use AI to clean and prepare messy data.",
+      "lessons": [
+        {
+          "slug": "ai-analysis-workflow",
+          "title": "A trustworthy AI analysis workflow",
+          "type": "video",
+          "durationMinutes": 11,
+          "body": "### The opportunity and the trap\n\nAI assistants can now read spreadsheets, write formulas, generate SQL and Python, run code in sandboxes, draw charts and summarise findings in plain language. For analysts, marketers and product people, this compresses hours of work into minutes. The trap is that the same fluency makes wrong answers look right. A confident paragraph about \"a 23% uplift\" is persuasive whether or not the number is real.\n\nThe goal of this course is to get the speed without the trap: **AI does the heavy lifting; you stay in charge of the questions, the checks and the conclusions.**\n\n### Two modes of AI analysis\n\n1. **Code-executing mode.** The assistant writes and runs code (for example Python in a sandbox) on your uploaded data and reports results. Numbers come from computation, which is far more reliable, and you can inspect the code.\n2. **Text-only mode.** The model reads data pasted into the prompt and answers from \"reading\" it. Fine for small tables and qualitative observations, but models can miscount, misadd and misremember rows, especially in large tables.\n\n**Rule:** for any number that matters, make sure it comes from executed code or a formula you can check, not from the model's reading of the data.\n\n### The six-step workflow\n\n1. **Frame the question.** What decision will this analysis inform? What would change your mind? Write it down.\n2. **Understand the data.** Source, time period, definitions, granularity (one row per what?), known issues.\n3. **Prepare the data.** Clean, standardise and document every change (next lesson).\n4. **Explore and analyse.** Summaries, segments, trends, comparisons, with AI generating code and you reviewing it.\n5. **Verify.** Reconcile totals to a trusted source, spot-check rows, rerun key numbers a second way.\n6. **Communicate.** Charts, narrative, uncertainty, and the recommendation, with assumptions stated.\n\nAI can help at every step, but steps 1, 5 and the final judgement in 6 are yours.\n\n### Prompting for analysis\n\nA strong analysis prompt includes context about the data and the decision:\n\n```text\nContext: This CSV has one row per online order from Jan-Jun 2026 for our\nUK and UAE stores. Columns: order_id, order_date, country, channel,\nrevenue_gbp (converted at monthly average rate), discount_code, new_customer.\n\nDecision: whether to continue the \"SUMMER10\" discount in July.\n\nTask: Using Python, (1) check data quality (missing values, duplicates,\ndate range), (2) compare average order value and repeat-purchase rate for\norders with and without SUMMER10, by country, (3) show the code and\nresults. Flag anything that limits what we can conclude.\n```\n\nNotice: grain (one row per order), definitions (currency conversion), decision, explicit request for code and limitations.\n\n### Data privacy first\n\nBefore uploading data to any AI tool:\n\n- Check your organisation's policy on which tools are approved for which data.\n- Remove or pseudonymise personal data you do not need (names, emails, phone numbers). Often an ID is enough.\n- Be careful with commercially sensitive data; check the tool's data retention and training settings.\n- Aggregate where possible: many questions can be answered from summarised data.\n\n### Worked example\n\nA marketing manager asks an assistant, in text-only mode, \"Which campaign had the best return?\" after pasting 400 rows. The assistant confidently names a campaign and a figure. Rerunning the question in code-executing mode shows a different winner: the text-only answer had silently skipped rows. The lesson is not that AI is useless, but that the mode matters and verification is non-negotiable.\n\n### What good looks like\n\nAt the end of an AI-assisted analysis you should be able to answer:\n\n- Where did every key number come from (which code or formula)?\n- What cleaning was applied, and could someone reproduce it?\n- What are the main limitations and alternative explanations?\n- What would you need to see to change the recommendation?\n\n### Going further\n\nFor recurring analyses, move from chat to scripts or notebooks: ask the AI to produce a reusable, commented script that reads the raw export, applies the documented cleaning, and outputs the tables and charts. You then review it once, version it, and rerun it monthly, rather than re-prompting and hoping for consistent results.",
+          "video": {
+            "script": "Welcome to AI for Data Analysis and Decision Making. Let's start with the most important idea in the whole course.\n\nAI assistants have become astonishingly good at analysis work. They can clean messy spreadsheets, write formulas, SQL and Python, draw charts, and explain results in plain language. But the same fluency that makes them useful makes them dangerous. A wrong number, written confidently, looks exactly like a right one.\n\nSo here's the rule. For any number that matters, make sure it came from executed code or a formula you can check, not from the model reading your data and telling you what it thinks it saw. When you paste hundreds of rows into a chat, models can skip rows, misadd, or blend things up. When the assistant writes code and runs it, the numbers come from computation, and you can inspect exactly how.\n\nWe'll use a simple six-step workflow throughout the course. Frame the question: what decision does this analysis inform? Understand the data: where it came from, and what one row represents. Prepare it, documenting every change. Explore and analyse, with AI writing the code and you reviewing it. Verify, by reconciling totals and checking a few rows by hand. And finally, communicate: charts, a clear story, and honest uncertainty.\n\nAI can help at every step. But framing, verification and the final judgement stay with you. That's not a limitation. It's what makes your analysis trustworthy, and it's what makes you valuable.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "AI speeds up analysis, but fluent answers can be wrong; you own questions, checks and conclusions.",
+            "For numbers that matter, use executed code or checkable formulas, not the model's reading of pasted data.",
+            "Follow six steps: frame, understand, prepare, explore, verify, communicate.",
+            "Protect personal and sensitive data before uploading, and move recurring work into reviewed scripts."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "You paste 500 rows into a chat and ask for the total revenue. What is the main risk?",
+              "options": [
+                "The chat will be too short",
+                "The model may miscount or skip rows when 'reading' rather than computing",
+                "The model refuses",
+                "Totals are always exact"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Text-only reading of large tables is error-prone; use code execution or formulas."
+            },
+            {
+              "question": "Which step of the workflow should always remain your responsibility?",
+              "options": [
+                "Framing the decision and verifying key numbers",
+                "Formatting charts",
+                "Renaming columns",
+                "Writing boilerplate code"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Framing and verification are where judgement and accountability sit."
+            },
+            {
+              "question": "What should you do before uploading customer order data to an AI tool?",
+              "options": [
+                "Convert it to PDF",
+                "Nothing",
+                "Add more columns",
+                "Check policy, remove unnecessary personal data and consider aggregating"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Data minimisation and policy compliance come first."
+            }
+          ],
+          "activity": "Take a question you need to answer from data this month. Write the decision it informs, the data grain and definitions, and a prompt following the example structure."
+        },
+        {
+          "slug": "cleaning-data-with-ai",
+          "title": "Cleaning and preparing messy data with AI",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Why cleaning matters most\n\nMost analysis errors start in the data, not the maths. Duplicated rows, inconsistent spellings, mixed date formats and currency confusion quietly distort every result downstream. AI assistants are excellent cleaning partners, because cleaning is repetitive, pattern-based work, as long as every change is visible and reversible.\n\n### Start with a data quality audit\n\nBefore changing anything, ask for an audit:\n\n```text\nProfile this dataset with Python and report:\n- row count, column types, date range\n- missing values per column (count and %)\n- duplicate rows and duplicate IDs\n- distinct values for categorical columns (top 20 each)\n- numeric columns: min, max, mean, and suspicious values (negatives, zeros, extreme outliers)\nDo not modify the data yet.\n```\n\nThis surfaces issues like \"country\" containing UK, U.K., United Kingdom and GB; revenue with negative values (refunds?); dates spanning an unexpected year.\n\n### Common cleaning tasks AI handles well\n\n- **Standardising categories:** mapping spelling variants to canonical values. Ask for the mapping table first, review it, then apply it.\n- **Parsing dates** in mixed formats. Be careful with ambiguous formats: is 03/04/2026 the 3rd of April or March 4th? Tell the AI which convention your source uses; if mixed, flag ambiguous rows rather than guessing.\n- **Splitting and combining fields:** full names, addresses, product codes.\n- **Fixing types:** numbers stored as text, currency symbols and thousands separators.\n- **Deduplicating:** exact duplicates, and fuzzy duplicates (for example \"Acme Ltd\" and \"ACME Limited\"), where AI can propose candidate matches for you to confirm.\n- **Categorising free text:** tagging support tickets or survey comments into themes, with a defined category list.\n\n### The review-then-apply pattern\n\nNever let an assistant silently \"clean\" your data. Use a two-step pattern:\n\n1. **Propose:** \"List every transformation you would apply and show a mapping table for category changes. Don't apply yet.\"\n2. **Apply with a log:** \"Apply the approved transformations in code. Output the cleaned file and a change log with row counts before and after each step.\"\n\n```text\nStep                          Rows before  Rows after  Notes\nRemove exact duplicates       12,480       12,391      89 duplicates\nDrop test orders (email @ourco) 12,391     12,352      39 test orders\nStandardise country            12,352      12,352      14 variants -> 6 values\nFlag ambiguous dates           12,352      12,352      57 flagged, not dropped\n```\n\nThe log makes your cleaning reproducible and defensible.\n\n### Missing data: decisions, not defaults\n\nHow you handle missing values can change conclusions. Options include leaving them as missing, excluding rows, filling with a default, or imputing. AI will happily fill blanks with averages if asked, but that can hide real patterns (for example, missing income data may be concentrated in one customer group). Ask the AI to show you *where* data is missing (by segment and over time) before deciding, and document the decision.\n\n### Outliers: investigate before removing\n\nAn order worth 100 times the average might be an error, a test, a bulk B2B purchase or your best customer. Ask the AI to list outliers with their full rows, then decide with business context. Removing outliers because they are inconvenient is a classic way to fool yourself.\n\n### Worked example: a lead list from three sources\n\nA marketing team merges leads from an events spreadsheet, website forms and a purchased list. Issues found by the audit: company names in several variants, phone numbers in local and international formats (Pakistan, UAE and UK numbers), job titles in free text, and 6% duplicate emails. The AI proposes standard formats (international phone format, a job-level category from titles, a company matching table). The team reviews the fuzzy company matches, rejecting a few wrong merges (two different companies with similar names). The final log shows each step and count.\n\nAlso noted: the purchased list's consent status is unclear, so it is kept separate until the team confirms it can be used lawfully for marketing under relevant data protection and e-marketing rules.\n\n### Failure modes\n\n- Silent changes with no log.\n- Over-aggressive fuzzy matching merging different entities.\n- Guessing ambiguous dates.\n- Filling missing values without understanding why they are missing.\n\n### Going further\n\nTurn your cleaning steps into a reusable script with tests: for example, assert no duplicate IDs remain, all countries are in the approved list, and totals reconcile to the source system within a tolerance. AI can write these tests too; you review them once and run them every time new data arrives.",
+          "video": null,
+          "keyTakeaways": [
+            "Most analysis errors start in the data; audit quality before changing anything.",
+            "AI excels at standardising categories, parsing dates, fixing types, deduplicating and categorising text.",
+            "Use review-then-apply with a change log showing row counts at each step.",
+            "Treat missing data and outliers as decisions to investigate, not defaults to apply."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What should you ask for before letting AI clean a dataset?",
+              "options": [
+                "A data quality audit and a list of proposed transformations",
+                "Nothing; let it clean",
+                "A chart",
+                "A final report"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Audit and proposal first; changes must be reviewed."
+            },
+            {
+              "question": "A date column contains 03/04/2026 and your source is UK-formatted. What should you tell the AI?",
+              "options": [
+                "Nothing; it will guess correctly",
+                "Delete all dates",
+                "Convert to text",
+                "The source uses day/month/year, and to flag any rows where the format is uncertain"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Ambiguous dates must be resolved with known conventions or flagged."
+            },
+            {
+              "question": "An order is 100 times the average value. What is the best first step?",
+              "options": [
+                "Delete it",
+                "Replace it with the average",
+                "Double it",
+                "Inspect the full row and decide with business context"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Outliers may be errors or important real events; investigate first."
+            }
+          ],
+          "activity": "Run a data quality audit on one real dataset with an AI assistant. Produce a proposed cleaning plan and a change log, and note one decision about missing data you made deliberately."
+        }
+      ]
+    },
+    {
+      "slug": "exploring-data",
+      "title": "Exploring data and finding insights",
+      "summary": "Use AI to explore datasets systematically, segment and compare correctly, and ask better analytical questions.",
+      "lessons": [
+        {
+          "slug": "exploratory-analysis",
+          "title": "Exploratory analysis with AI",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Exploration before conclusions\n\nExploratory data analysis (EDA) means looking at the data broadly before testing specific ideas: distributions, trends, relationships and anomalies. AI assistants make EDA fast, which is valuable, but speed can tempt you to accept the first interesting pattern. Good EDA is systematic.\n\n### A systematic EDA prompt\n\n```text\nUsing Python on the attached data (one row per customer subscription):\n1. Summarise each numeric column (distribution, median, percentiles).\n2. Plot monthly new subscriptions and cancellations over time.\n3. Break down churn rate by plan, country and acquisition channel,\n   including the number of customers in each group.\n4. List the 5 most notable patterns, each with the supporting numbers\n   and group sizes.\n5. For each pattern, suggest one alternative explanation.\nShow all code.\n```\n\nTwo elements matter most: **group sizes** (a 50% churn rate in a group of 4 customers means little) and **alternative explanations** (built-in scepticism).\n\n### Distributions before averages\n\nAverages hide shape. Revenue per customer is usually highly skewed: a few large customers and many small ones. The mean can be far above what a typical customer spends. Ask for medians, percentiles and histograms alongside means. For skewed metrics, the median or a percentile often communicates \"typical\" better.\n\n### Trends over time\n\nWhen exploring trends:\n\n- Check for **seasonality** (monthly or weekly patterns, Ramadan, Black Friday, school holidays).\n- Look for **breaks**: tracking changes, pricing changes, product launches, data pipeline issues. A sudden jump is often a measurement change, not a real change.\n- Compare **like with like**: year-over-year for seasonal businesses, not just month-over-month.\n- Beware **partial periods**: the current month's data is incomplete.\n\n### Segmentation\n\nBreaking data into segments (country, channel, plan, cohort) reveals patterns that totals hide. AI can generate dozens of segment cuts in seconds. The risk is **the garden of forking paths**: look at enough cuts and some will show dramatic differences by chance. Mitigations:\n\n- Decide the most important segments before exploring, based on the business question.\n- Report group sizes and treat small groups as anecdotes.\n- Treat surprising findings from broad exploration as hypotheses to confirm with new data or a test, not conclusions.\n\n### Cohort analysis\n\nFor customer behaviour, cohorts (customers grouped by when they joined) are powerful: they separate \"our product got better at retaining customers\" from \"we acquired different customers\". AI can produce cohort retention tables quickly:\n\n```text\nBuild a monthly cohort retention table: rows = signup month, columns =\nmonths since signup, values = % of the cohort still active. Also show the\ncohort sizes. Then describe whether recent cohorts retain better or worse,\nnoting that recent cohorts have fewer months of data.\n```\n\n### Worked example: a subscription box\n\nAn EDA on a subscription box business shows churn is much higher in the UAE than the UK. Before acting, the analyst asks for group sizes and cohort breakdowns. Findings: the UAE launched recently, so most UAE customers are in their first months, when churn is naturally highest for all countries. Comparing like-for-like cohort months, the difference shrinks considerably. The \"UAE problem\" was mostly a composition effect. A good EDA prevented a misguided response.\n\n### Asking the AI to challenge you\n\nUseful follow-ups:\n\n- \"What else could explain this pattern?\"\n- \"Which of these findings would you be least confident in, and why?\"\n- \"What data would we need to confirm this?\"\n- \"Is there any sign that data quality issues could create this pattern?\"\n\n### Failure modes\n\n- Accepting the first dramatic pattern.\n- Ignoring group sizes.\n- Comparing partial and full periods.\n- Mistaking a tracking change for a behaviour change.\n\n### Going further\n\nAsk the assistant to produce an EDA report as a reproducible notebook with sections for data quality, distributions, trends, segments and open questions. Reviewing a structured notebook is faster and safer than scrolling through a long chat, and it becomes a baseline for the next analysis.",
+          "video": null,
+          "keyTakeaways": [
+            "Explore systematically: distributions, trends, segments and anomalies, with code shown.",
+            "Always report group sizes and ask for alternative explanations.",
+            "Use medians and percentiles for skewed metrics; check seasonality, breaks and partial periods in trends.",
+            "Treat patterns found by broad exploration as hypotheses; cohorts help separate composition from behaviour."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A segment shows 60% churn. What should you check first?",
+              "options": [
+                "The average revenue of all customers",
+                "Whether the model is confident",
+                "The colour of the chart",
+                "The number of customers in that segment"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Small groups produce extreme rates by chance."
+            },
+            {
+              "question": "Revenue per customer is highly skewed. Which statistic best represents a typical customer?",
+              "options": [
+                "The median",
+                "The mean only",
+                "The maximum",
+                "The sum"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Medians resist distortion from a few very large values."
+            },
+            {
+              "question": "Sessions jump sharply in one week after a website release. What is a likely first check?",
+              "options": [
+                "Delete the data",
+                "Whether tracking or measurement changed with the release",
+                "Increase ad spend",
+                "Celebrate"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Sudden breaks are often measurement changes."
+            }
+          ],
+          "activity": "Run a systematic EDA prompt on a dataset you know. For the most surprising finding, check group sizes and list two alternative explanations."
+        },
+        {
+          "slug": "asking-analytical-questions",
+          "title": "Asking better analytical questions",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Good analysis starts with good questions\n\nAI can answer almost any question you ask of data, which makes the quality of the question the limiting factor. Vague questions (\"What's interesting in this data?\") produce long lists of observations. Decision-focused questions produce useful answers.\n\n### From vague to decision-focused\n\n| Vague | Decision-focused |\n|---|---|\n| How are our campaigns doing? | Which of our three paid social campaigns should get the extra budget next month, based on cost per qualified lead? |\n| What do customers think? | What are the top three reasons for cancellation among customers who left in the last 90 days, and how common is each? |\n| Is the new feature working? | Did users who adopted the new checkout complete purchases at a higher rate than similar users who didn't, and is the difference large enough to matter? |\n\n### A question-framing template\n\n```text\nDecision: [what will we decide?]\nOptions: [A, B, C]\nMetric that decides it: [e.g. cost per qualified lead]\nThreshold: [what difference would change our mind?]\nTime frame and population: [who, when]\nKnown confounders: [seasonality, price change, channel mix]\n```\n\nShare this frame with the AI before asking for analysis. It will choose better methods and flag relevant limitations.\n\n### Types of analytical questions\n\n1. **Descriptive:** what happened? (sales by month)\n2. **Diagnostic:** why did it happen? (drivers of the drop)\n3. **Predictive:** what is likely to happen? (forecast; module 5)\n4. **Prescriptive:** what should we do? (recommendation)\n\nDescriptive questions are safest to answer from observational data. Diagnostic and prescriptive questions need extra care, because correlation in historical data is not proof of cause. AI assistants often slide from \"these moved together\" to \"this caused that\". Watch for it.\n\n### Metrics: define before you measure\n\nMany disputes about analysis are really disputes about definitions:\n\n- What counts as an \"active user\"? Logged in? Performed a key action?\n- Is \"revenue\" gross or net of refunds and discounts? Before or after VAT?\n- Is \"conversion\" per session, per visitor or per lead?\n\nWrite definitions down and give them to the AI. Ask it to restate your definitions at the top of its analysis, so misunderstandings surface early.\n\n### Leading and lagging indicators\n\nLagging indicators (revenue, churn) confirm results after the fact. Leading indicators (trial activations, demo bookings, onboarding completion) give earlier signals. When exploring, ask the AI to test whether a candidate leading indicator actually relates to the lagging outcome in your historical data, while remembering that such relationships can change.\n\n### Worked example: a B2B SaaS pricing question\n\nVague: \"Should we raise prices?\"\n\nFramed:\n\n```text\nDecision: raise the Team plan price for new customers from next quarter?\nOptions: keep, +10%, +20%\nMetric: expected new MRR from Team plan over 6 months\nThreshold: proceed if expected MRR rises and win-rate drop is modest\nPopulation: new Team plan deals in UK, UAE, KSA, last 12 months\nConfounders: sales team changes in Q2, a competitor price cut in March\n```\n\nWith this frame, the AI proposes looking at win rates by deal size, discounting behaviour and the limits of historical data (no past price tests), and suggests a controlled price test in one region as better evidence than historical analysis alone.\n\n### Questions to ask the AI about its own analysis\n\n- \"What assumptions did you make?\"\n- \"What would change your conclusion?\"\n- \"Which numbers are computed and which are estimates?\"\n- \"What is the simplest alternative explanation?\"\n\n### Going further\n\nMaintain a shared metrics glossary for your team and include it (or the relevant part) in every analysis prompt. Consistent definitions across analyses are one of the highest-leverage improvements in any data-driven organisation, AI-assisted or not.",
+          "video": null,
+          "keyTakeaways": [
+            "Decision-focused questions produce useful analysis; vague questions produce lists.",
+            "Frame the decision, options, deciding metric, threshold, population and confounders before analysing.",
+            "Distinguish descriptive, diagnostic, predictive and prescriptive questions; beware sliding from correlation to cause.",
+            "Define metrics explicitly and have the AI restate them; maintain a shared glossary."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which question is most decision-focused?",
+              "options": [
+                "Which of three campaigns should get extra budget next month, based on cost per qualified lead?",
+                "What's interesting in our data?",
+                "Tell me about our customers",
+                "How are things going?"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "It names the decision, options and deciding metric."
+            },
+            {
+              "question": "Why ask the AI to restate your metric definitions at the top of its analysis?",
+              "options": [
+                "Because models forget everything",
+                "It is a legal requirement",
+                "So misunderstandings about definitions surface early",
+                "To make it longer"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Definition errors silently invalidate analysis."
+            },
+            {
+              "question": "'Customers who used feature X spent more, so feature X increases spending.' What is the issue?",
+              "options": [
+                "It uses too few words",
+                "No issue",
+                "The feature name is unclear",
+                "It infers causation from correlation; engaged customers may both use X and spend more"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Observational correlations need causal caution."
+            }
+          ],
+          "activity": "Rewrite one vague question your team asks into the framing template, including metric definitions and known confounders."
+        }
+      ]
+    },
+    {
+      "slug": "formulas-sql-python",
+      "title": "Writing formulas, SQL and Python with AI, and verifying them",
+      "summary": "Generate spreadsheet formulas, SQL queries and Python analysis with AI, and apply systematic verification so the numbers can be trusted.",
+      "lessons": [
+        {
+          "slug": "spreadsheet-formulas-with-ai",
+          "title": "Spreadsheet formulas with AI",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Why formulas are a sweet spot\n\nSpreadsheets remain the most widely used analysis tool in business. AI assistants (including those built into spreadsheet tools) can write formulas from plain-language descriptions, explain inherited formulas, and debug errors. The result is a formula you can see, test and reuse, which is inherently more verifiable than a number stated in chat.\n\n### Describing what you need\n\nGive the AI the layout and the logic:\n\n```text\nSheet \"Orders\": A = order_date, B = country, C = channel, D = revenue.\nSheet \"Summary\": A2:A7 = countries, B1:G1 = months as dates (first of month).\nWrite a formula for B2 that sums revenue for the country in A2 and the\nmonth in B1, which I can fill across and down. Use Excel. Explain it.\n```\n\nMention which tool (Excel, Google Sheets, others), since functions and syntax differ, and specify the locale if relevant (some locales use semicolons as argument separators).\n\n### Example output and explanation\n\n```text\n=SUMIFS(Orders!$D:$D, Orders!$B:$B, $A2,\n        Orders!$A:$A, \">=\"&B$1, Orders!$A:$A, \"<\"&EDATE(B$1,1))\n```\n\nThe explanation should cover the mixed references (`$A2` locks the column, `B$1` locks the row) so filling works, and the date range logic (from the first of the month up to, but not including, the first of the next month).\n\n### Explaining and debugging\n\n- **Explain:** paste an inherited formula and ask \"Explain step by step what this does and any edge cases where it could give wrong results.\"\n- **Debug:** paste the formula, the error or wrong result, and a few sample rows: \"This returns #N/A for some rows; here are three of them.\"\n- **Refactor:** \"Rewrite this nested IF as something easier to maintain.\"\n\n### Verification techniques for formulas\n\n1. **Hand-check a few cells.** Filter the source data for one country and month, sum it manually (or with the status bar), and compare.\n2. **Reconcile totals.** The sum of your summary table should equal the total of the source column (for the covered period). If not, something is double-counted or missed.\n3. **Test edge cases:** blanks, zero values, text in number columns, dates at month boundaries, spelling variants (\"UK \" with a trailing space).\n4. **Check fill behaviour:** after filling, spot-check a far corner cell to confirm references moved correctly.\n5. **Watch for silent failures:** lookups that return the wrong match because of approximate matching defaults, or errors wrapped in IFERROR that hide real problems.\n\n### Common AI formula mistakes\n\n- Using a function not available in your tool or version.\n- Wrong reference locking, so filled formulas drift.\n- Approximate instead of exact matching in lookups.\n- Off-by-one date ranges (including the first day of the next month).\n- Assuming clean data (trailing spaces, numbers stored as text).\n\n### Worked example: commission calculation\n\nA sales manager asks for a tiered commission formula: 5% up to a threshold, 8% above it, plus a bonus if the target is met. The AI's first formula applies 8% to the whole amount once the threshold is exceeded, rather than only to the portion above it. The manager catches it by testing three example salespeople whose commissions she calculates by hand: one below the threshold, one just above, one far above. The corrected formula passes all three. Tiered logic is exactly where a few hand-calculated test cases pay off.\n\n### Documenting formulas for colleagues\n\nAsk the AI to add a short note beside complex formulas (what it calculates, its inputs and any assumptions, such as \"revenue excludes refunds\"). Workbooks outlive their authors; a one-line explanation prevents the next person from breaking a formula they don't understand.\n\n### Going further\n\nFor important workbooks, build a small \"checks\" sheet: reconciliation totals, counts of blanks, and flags for values outside expected ranges, each showing TRUE or FALSE. Ask the AI to write these check formulas. A glance at the checks sheet before sharing catches most errors.",
+          "video": null,
+          "keyTakeaways": [
+            "Formulas are verifiable artefacts; prefer them to numbers stated in chat.",
+            "Describe sheet layout, logic, tool and locale; ask for an explanation.",
+            "Verify by hand-checking cells, reconciling totals, testing edge cases and checking fill behaviour.",
+            "Tiered and date-boundary logic are common failure points; test with hand-calculated examples."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Your summary table total does not match the source column total for the same period. What does this suggest?",
+              "options": [
+                "Something is double-counted or missed in the formulas",
+                "Everything is fine",
+                "The source data is always wrong",
+                "Rounding only"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Reconciliation failures reveal logic or coverage errors."
+            },
+            {
+              "question": "A tiered commission formula should be tested with which examples?",
+              "options": [
+                "Random numbers",
+                "No tests needed",
+                "Cases below, just above and far above the threshold, calculated by hand",
+                "Only one average salesperson"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Boundary cases reveal tier logic errors."
+            },
+            {
+              "question": "Why tell the AI which spreadsheet tool and locale you use?",
+              "options": [
+                "Functions and syntax, such as argument separators, can differ",
+                "For politeness",
+                "It makes formulas shorter",
+                "It changes the colours"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Tool and locale affect valid syntax."
+            }
+          ],
+          "activity": "Ask an AI to write one formula you need this week. Verify it with three hand-calculated test cases and a reconciliation total."
+        },
+        {
+          "slug": "sql-with-ai",
+          "title": "SQL with AI: from question to query",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Text-to-SQL in practice\n\nAI assistants can translate a business question into SQL. This opens databases to people who are not SQL experts, and speeds up experts. But SQL has a dangerous property: a wrong query usually still runs and returns plausible numbers. Verification is essential.\n\n### Give the model the schema\n\nThe model cannot guess your tables and columns reliably. Provide:\n\n- table names, columns, types and short descriptions\n- how tables join (keys)\n- business definitions (what \"active\" means, which statuses count as \"completed\")\n- the SQL dialect (different databases have different date functions and syntax)\n\n```text\nDialect: PostgreSQL\nTables:\n  orders(order_id PK, customer_id FK, created_at timestamptz,\n         status text  -- 'completed','refunded','cancelled',\n         total_amount numeric  -- in AED, includes VAT)\n  customers(customer_id PK, country text, signup_date date)\nDefinitions: revenue = completed orders only, excluding VAT (VAT rate 5%).\nQuestion: monthly revenue by customer country for 2026, excluding VAT.\nReturn the SQL and explain each part.\n```\n\n### Reviewing the query: a checklist\n\nRead the generated SQL with these questions:\n\n1. **Filters:** are the right statuses and date ranges applied? Is the end date inclusive or exclusive?\n2. **Joins:** is the join type right (inner vs left)? Could a join multiply rows (one-to-many) and inflate sums?\n3. **Grain:** what does one row of the result represent? Does the GROUP BY match?\n4. **Aggregation:** SUM vs COUNT vs COUNT(DISTINCT); averages of averages.\n5. **Nulls:** how are missing values treated in filters and aggregates?\n6. **Definitions:** does it apply your business rules (VAT, refunds, time zones)?\n\n### The join fan-out trap\n\nThe most common silent error: joining orders to a table with multiple rows per order (for example order_items or payments) and then summing order totals. Each order's total gets counted once per matching row.\n\n```sql\n-- WRONG: order total repeated for every item row\nSELECT SUM(o.total_amount)\nFROM orders o JOIN order_items i ON i.order_id = o.order_id;\n\n-- RIGHT: aggregate at the correct grain\nSELECT SUM(o.total_amount)\nFROM orders o\nWHERE EXISTS (SELECT 1 FROM order_items i WHERE i.order_id = o.order_id);\n```\n\nAsk the AI directly: \"Could any join in this query duplicate rows? Check the cardinality of each join.\"\n\n### Verification techniques\n\n- **Row counts at each step:** run the query in stages and check counts.\n- **Reconcile** to a trusted number (a finance report, a dashboard total).\n- **Spot-check** a few records manually (pick one customer and trace their orders).\n- **Sanity bounds:** is monthly revenue in the expected range? Are percentages between 0 and 100?\n- **Second method:** compute a key number another way (a different query shape, or a spreadsheet on an export).\n\n### Safety and access\n\n- Use **read-only** credentials for AI-assisted querying. An assistant should never be able to run UPDATE or DELETE on production data by accident.\n- Limit access to the tables needed, and mask sensitive columns.\n- Beware **expensive queries** on large tables: add limits and date filters while exploring.\n- If you build a text-to-SQL feature for others, add query validation, allow-lists of tables and cost limits.\n\n### Worked example\n\nAn analyst asks for \"average order value by country\". The AI's query averages the `total_amount` after joining to `payments`, where some orders have two payments (split payments). The average is distorted. The analyst's row-count check reveals more rows than orders. After fixing the join, the result matches the finance dashboard within rounding.\n\n### Time zones and date boundaries\n\nA subtle but common issue: timestamps stored in UTC while the business reports in local time (for example Gulf Standard Time or UK time). Orders placed late in the evening can land in the wrong day or month. Tell the AI which time zone reports use, and check month-end totals against finance figures.\n\n### Going further\n\nBuild a small library of verified queries for core metrics, with definitions in comments, and give it to the AI as examples. Models produce much better SQL when they can see how your organisation already calculates key metrics correctly.",
+          "video": null,
+          "keyTakeaways": [
+            "Provide schema, join keys, business definitions and SQL dialect.",
+            "Review filters, joins, grain, aggregation, nulls and definitions for every generated query.",
+            "Watch for join fan-out inflating sums; check row counts and reconcile to trusted figures.",
+            "Use read-only access, limited tables and cost controls for AI-assisted querying."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A revenue query joins orders to order_items and sums order totals. What is the likely error?",
+              "options": [
+                "Revenue will be too low",
+                "The query will fail",
+                "Order totals are counted once per item row, inflating revenue",
+                "Nothing"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "One-to-many joins multiply rows; aggregate at the right grain."
+            },
+            {
+              "question": "What credentials should an AI assistant use to query production data?",
+              "options": [
+                "The CEO's account",
+                "Shared passwords in the prompt",
+                "Admin credentials",
+                "Read-only credentials with limited table access"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Read-only, least-privilege access prevents accidental changes."
+            },
+            {
+              "question": "Which is a strong verification step for a generated SQL query?",
+              "options": [
+                "Reconciling the result to a trusted report and spot-checking records",
+                "Checking that it runs without errors",
+                "Making the query longer",
+                "Asking the AI if it is correct"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Running is not the same as being right; reconcile and spot-check."
+            }
+          ],
+          "activity": "Write a schema description for two related tables you use. Ask an AI for a query answering a real question, and apply the six-point review checklist before trusting the result."
+        },
+        {
+          "slug": "python-with-ai-and-verification",
+          "title": "Python analysis with AI, and verifying the results",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Why Python (even if you are not a programmer)\n\nMany AI assistants can write and run Python in a sandbox. For analysts who don't code, this unlocks powerful analysis: joining large files, statistical tests, charts, and repeatable scripts. You do not need to write Python yourself, but learning to **read** it at a basic level and to **verify** its results is a valuable skill.\n\n### A good analysis request\n\n```text\nUsing Python (pandas), load sales.csv and customers.csv.\n- Join on customer_id (check for customers missing in either file and report counts).\n- Compute monthly revenue and number of active customers per region.\n- Show the first 5 rows after each major step.\n- Plot monthly revenue by region as a line chart.\nKeep the code simple and commented so a non-programmer can follow it.\n```\n\nAsking for intermediate outputs (\"show the first 5 rows after each step\") and counts makes each step inspectable.\n\n### Reading AI-generated Python: what to look for\n\nYou don't need to understand every line. Focus on:\n\n- **Filters:** `df[df[\"status\"] == \"completed\"]` shows which rows are kept.\n- **Joins:** `merge(..., how=\"left\")` or `how=\"inner\"`: inner joins drop unmatched rows silently.\n- **Grouping:** `groupby([\"month\", \"region\"])` shows the grain of results.\n- **Aggregations:** `.sum()`, `.mean()`, `.nunique()`: is the right one used?\n- **Missing values:** `dropna()` or `fillna(0)` change results; know when they are used.\n- **Dates:** parsing and time zones; how months are defined.\n\n### Built-in checks\n\nAsk the AI to include assertions that fail loudly if assumptions are violated:\n\n```python\n# Checks the analysis relies on\nassert sales[\"order_id\"].is_unique, \"Duplicate order IDs\"\nassert (sales[\"revenue\"] >= 0).all(), \"Negative revenue found\"\nmerged = sales.merge(customers, on=\"customer_id\", how=\"left\")\nassert len(merged) == len(sales), \"Join changed row count\"\nprint(\"Unmatched customers:\", merged[\"region\"].isna().sum())\n```\n\nThese turn silent errors into visible ones.\n\n### Verification strategies\n\n1. **Reconcile totals** with a trusted source.\n2. **Trace one entity:** pick one customer and manually check their rows through each step.\n3. **Recompute key numbers differently:** a pivot table in a spreadsheet, or a separate simple script.\n4. **Look at the charts critically:** sudden spikes or drops often reveal data issues.\n5. **Rerun on fresh data:** if the script is reused, check it still behaves when the data changes.\n\n### Statistical functions: ask what and why\n\nWhen the AI runs statistical tests (t-tests, regressions, correlations), ask:\n\n- \"Which test did you use and why is it appropriate for this data?\"\n- \"What assumptions does it make, and do they hold here?\"\n- \"What does this result mean in plain language, and what does it not mean?\"\n\nA p-value or regression coefficient reported without context invites misinterpretation (module 5 covers common traps).\n\n### Worked example: marketing mix exploration\n\nA marketer asks for \"the impact of each channel on sales\" using weekly spend and sales data. The AI runs a regression and reports channel coefficients. The marketer asks about assumptions. The AI notes: only 52 weeks of data, strong correlation between channels (spend often rises together before holidays), and no control for seasonality. The coefficients are unstable. Conclusion: useful for hypotheses, not budget decisions; the team plans geo-based tests instead. The AI's willingness to list limitations was only triggered by asking.\n\n### Reproducibility\n\nSave the final code with the data version it ran on. Ask the AI to consolidate the chat's code into a single clean script or notebook. This lets a colleague rerun it, and lets you rerun next month.\n\n### Going further\n\nLearn a handful of pandas operations by reading: `read_csv`, `merge`, `groupby`, `agg`, `pivot_table`, `query`, `plot`. With these, you can follow most AI-generated analysis. Ask the assistant to explain any unfamiliar line; it is an excellent tutor for this.",
+          "video": null,
+          "keyTakeaways": [
+            "AI-run Python unlocks powerful analysis; learn to read the key operations and verify results.",
+            "Request intermediate outputs, counts and simple, commented code.",
+            "Add assertions for assumptions (unique IDs, row counts after joins, valid ranges).",
+            "Ask which statistical method was used, why, and what the result does and doesn't mean; save reproducible scripts."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why ask the AI to show the first rows and counts after each step?",
+              "options": [
+                "To make each transformation inspectable and catch errors early",
+                "To make output longer",
+                "Because Python requires it",
+                "To reduce cost"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Visible intermediate results reveal where things go wrong."
+            },
+            {
+              "question": "What does an assertion like 'join did not change row count' catch?",
+              "options": [
+                "Slow code",
+                "Spelling errors",
+                "Joins that silently duplicate or drop rows",
+                "Chart colour issues"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Row-count assertions detect fan-out and dropped matches."
+            },
+            {
+              "question": "A regression on 52 weeks of highly correlated channel spend gives unstable coefficients. What is the sensible use?",
+              "options": [
+                "Treat results as hypotheses and plan controlled tests",
+                "Ignore all data",
+                "Report coefficients as exact ROI",
+                "Reallocate the whole budget immediately"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Weak observational evidence should guide testing, not big decisions."
+            }
+          ],
+          "activity": "Ask an AI assistant to perform a join-and-aggregate analysis in Python with assertions. Trace one customer through each step manually to verify."
+        }
+      ]
+    },
+    {
+      "slug": "charts-and-narratives",
+      "title": "Charts and insight narratives",
+      "summary": "Create honest, clear charts with AI and turn analysis into narratives that drive decisions.",
+      "lessons": [
+        {
+          "slug": "choosing-and-building-charts",
+          "title": "Choosing and building honest charts",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### The chart's job\n\nA chart exists to answer a question quickly. AI assistants can produce charts in seconds, which makes it tempting to accept the default. Good charts come from deciding first **what comparison the reader must see**, then choosing the form that makes that comparison easiest.\n\n### Matching question to chart\n\n| The reader needs to see... | Usually use |\n|---|---|\n| Change over time | Line chart (bars for few, discrete periods) |\n| Comparison across categories | Horizontal bar chart, sorted |\n| Part-to-whole (few parts) | Stacked bar or a simple table; pie only for 2-3 parts |\n| Distribution | Histogram or box plot |\n| Relationship between two measures | Scatter plot |\n| Exact values for lookup | A table, not a chart |\n\nWhen asking the AI for a chart, state the question:\n\n```text\nCreate a chart that shows whether UAE revenue growth is outpacing UK\ngrowth month by month in 2026. Use a line chart with both countries,\nlabel the lines directly instead of using a legend, start the y-axis at\nzero, and add a one-sentence title stating the main takeaway.\n```\n\n### Honesty rules\n\nAI-generated charts can mislead by default or by request. Check for:\n\n- **Truncated axes:** bar charts must start at zero; otherwise small differences look huge. Line charts can use a non-zero baseline when the focus is change, but make it clear.\n- **Dual axes:** two y-axes can suggest correlations that are artefacts of scaling. Prefer two separate charts or indexed values.\n- **Cherry-picked time ranges:** starting at a low point exaggerates growth. Show a sensible, consistent window.\n- **Inconsistent intervals:** missing months or uneven gaps on the time axis.\n- **Area and 3D effects:** distort perception; avoid them.\n- **Percentages without bases:** \"up 200%\" from 2 to 6 customers. Show counts too.\n\n### Clarity rules\n\n- **Title with the takeaway:** \"UAE revenue grew faster than UK every month since March\" rather than \"Revenue by country\".\n- **Direct labels** over legends where possible.\n- **Sort** categorical bars by value.\n- **Highlight** the important series in a strong colour; mute the rest.\n- **Accessible colours:** avoid red-green only distinctions; ensure sufficient contrast.\n- **Units and sources:** state currency, period and data source.\n\n### Reviewing AI charts with AI\n\nA useful loop: generate the chart, then ask a vision-capable model (or the same assistant) to critique it:\n\n```text\nReview this chart for (1) whether a busy executive can grasp the main\npoint in 5 seconds, (2) anything that could mislead, (3) accessibility\nissues. Suggest specific fixes.\n```\n\nThen apply the fixes you agree with. You remain the judge of what is honest.\n\n### Worked example\n\nA growth marketer asks for a chart of weekly sign-ups after a campaign. The first version is a bar chart starting at 900, making a rise from 950 to 1,010 look like a doubling, with a title \"Campaign success!\". The revised version starts the axis at zero, extends the window to include the 8 weeks before the campaign (showing a similar bump the previous month), and retitles it \"Sign-ups rose about 6% during the campaign, within the range of recent variation\". Less exciting, far more useful.\n\n### Tables are sometimes better\n\nIf readers need to look up exact values (prices by plan, targets by region), a well-formatted table beats any chart. Ask the AI for a table with sensible rounding, aligned numbers, totals where meaningful and the most important column highlighted or sorted. Not every insight needs a visual.\n\n### Going further\n\nIf your team produces recurring charts, have the AI write a small charting style function (fonts, colours, label placement, source note) and reuse it. Consistency reduces cognitive load for readers and removes a whole class of errors from each new chart.",
+          "video": null,
+          "keyTakeaways": [
+            "Decide the comparison the reader must see, then choose the chart form.",
+            "Check honesty: zero-based bars, dual axes, cherry-picked ranges, missing periods, percentages without bases.",
+            "Use takeaway titles, direct labels, sorting, highlighting, accessible colours, units and sources.",
+            "Use AI to critique charts, but you judge what is honest."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which chart best compares revenue across 12 product categories?",
+              "options": [
+                "A 3D pie chart",
+                "A sorted horizontal bar chart",
+                "A scatter plot",
+                "A dual-axis line chart"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Sorted bars make category comparisons easy."
+            },
+            {
+              "question": "A bar chart's y-axis starts at 900 and shows values between 950 and 1,010. What is the problem?",
+              "options": [
+                "It needs a legend",
+                "No problem",
+                "Bars should be 3D",
+                "The truncated axis exaggerates small differences"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Bar charts should start at zero to keep lengths proportional."
+            },
+            {
+              "question": "Which title is most useful?",
+              "options": [
+                "'UAE revenue grew faster than UK every month since March'",
+                "'Chart 3'",
+                "'Revenue by country'",
+                "'Data'"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Takeaway titles tell readers what to see."
+            }
+          ],
+          "activity": "Take a chart from a recent report and critique it with the honesty and clarity rules. Ask an AI to regenerate it with your fixes."
+        },
+        {
+          "slug": "insight-narratives",
+          "title": "From analysis to insight narratives",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Numbers don't speak for themselves\n\nDecision-makers rarely want your full analysis. They want to know **what is happening, why it matters, and what to do**. An insight narrative connects data to a decision. AI is an excellent drafting partner here, but it tends to produce either bland summaries or overconfident stories. Your job is to keep it specific and honest.\n\n### A simple structure: Situation, Insight, Implication, Action\n\n1. **Situation:** the context and the question. \"We asked whether the SUMMER10 discount is worth continuing.\"\n2. **Insight:** the key finding with the numbers that support it. \"Discounted orders had a lower average order value, and repeat purchase rates were similar to non-discounted orders.\"\n3. **Implication:** what it means for the business. \"The discount appears to shift timing and margin rather than create loyal customers.\"\n4. **Action:** the recommendation and next step. \"End the discount in July, and run a small holdout test if we want stronger evidence.\"\n\nAdd **confidence and caveats** as a short, clear line, not buried in footnotes.\n\n### Prompting for a narrative\n\n```text\nHere are the analysis results (tables below) and the decision we face.\nWrite a 200-word summary for the marketing director using:\nSituation, Insight, Implication, Action.\nRules:\n- Use only numbers from the tables; do not introduce new figures.\n- State the confidence level and the main caveat in one sentence.\n- Avoid causal language unless the tables come from a controlled test.\n- Plain English, no jargon.\n```\n\nThe rules matter. Without them, AI drafts often add plausible-sounding numbers, overclaim causation or bury the recommendation.\n\n### The \"so what\" test\n\nFor each sentence, ask \"so what?\" If the answer is not clear, cut it or connect it to the decision. \"Traffic from Instagram rose 12%\" becomes \"Instagram traffic rose 12%, but it converts at half the rate of search, so it added little revenue; we should not shift budget there yet.\"\n\n### Tailoring to the audience\n\nAsk the AI for versions for different readers:\n\n- **Executives:** one-paragraph summary, decision first.\n- **Team leads:** key numbers by segment and next steps.\n- **Analysts:** methods, definitions, limitations, code links.\n\nThe underlying facts must stay identical across versions; check that the AI hasn't changed numbers when rewriting.\n\n### Checking the narrative\n\nBefore sending:\n\n- Every number traced back to a table or query.\n- No causal claim without causal evidence.\n- Caveats proportionate: not hidden, not overwhelming.\n- Recommendation clear and actionable.\n- Nothing that overstates certainty (\"proves\", \"guarantees\").\n\n### Worked example: quarterly performance email\n\nAn operations analyst in Dubai asks the AI to draft a quarterly performance note from four tables. The first draft claims \"customer satisfaction drove a 9% increase in repeat orders\". The analyst checks: the tables show both rose, but no analysis links them. The revised line: \"Repeat orders rose 9% and satisfaction scores improved; we haven't established whether one caused the other.\" The recommendation remains clear, and the director is not misled into over-investing in a single lever.\n\n### Storytelling without spin\n\nGood narratives are persuasive because they are clear, not because they are one-sided. Include the strongest counter-evidence you found, and explain why your recommendation still holds (or state what would change it). Readers trust analysts who show their doubts.\n\n### Length and format\n\nMost decision narratives should fit on one screen. Lead with the recommendation for senior readers, put supporting numbers in a short table, and link to the full analysis. Ask the AI for a version that works as a message in your team's chat tool as well as a longer document; many decisions are made from the short version.\n\n### Going further\n\nCreate a narrative template for your team (sections, tone, confidence language, a checklist) and provide it to the AI with each request. Combined with a metrics glossary, this makes AI-drafted summaries consistent and much faster to review.",
+          "video": null,
+          "keyTakeaways": [
+            "Structure narratives as Situation, Insight, Implication, Action, plus a clear confidence line.",
+            "Prompt with rules: only use provided numbers, avoid unsupported causal language, plain English.",
+            "Apply the 'so what' test and tailor versions by audience while keeping facts identical.",
+            "Trace every number, include counter-evidence, and avoid overstating certainty."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "An AI draft says 'satisfaction drove repeat orders' but the analysis only shows both rose. What should you do?",
+              "options": [
+                "Add a bigger claim",
+                "Remove all numbers",
+                "Keep it; it sounds convincing",
+                "Rewrite to state both rose without claiming causation"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Causal claims require causal evidence."
+            },
+            {
+              "question": "Why instruct the AI to use only numbers from the provided tables?",
+              "options": [
+                "It is a style preference",
+                "To shorten the text",
+                "Because models cannot count",
+                "To prevent plausible but invented figures"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Narrative drafts can introduce unsupported numbers."
+            },
+            {
+              "question": "What belongs in the 'Implication' part of the structure?",
+              "options": [
+                "The SQL query",
+                "The chart colours",
+                "What the finding means for the business",
+                "The raw data"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Implication connects insight to business consequences."
+            }
+          ],
+          "activity": "Write a 200-word Situation-Insight-Implication-Action summary of a recent analysis with AI help. Trace every number back to its source and add one line of counter-evidence."
+        }
+      ]
+    },
+    {
+      "slug": "statistical-traps-and-forecasting",
+      "title": "Statistical traps and forecasting caveats",
+      "summary": "Recognise the statistical traps AI analysis falls into, and use forecasts wisely with honest caveats.",
+      "lessons": [
+        {
+          "slug": "statistical-traps",
+          "title": "Avoiding common statistical traps",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Why this matters more with AI\n\nAI makes it easy to run many analyses quickly. More analyses mean more chances to find patterns that are not real, and AI narratives can describe spurious patterns fluently. Knowing the classic traps lets you catch them, whether you or the AI fell in.\n\n### Trap 1: correlation is not causation\n\nTwo things moving together may share a cause, or be coincidence. Ice cream sales and sunburn rise together because of sunny weather. In business: customers who use the mobile app spend more, but perhaps engaged customers both download the app and spend more. **Ask:** what else could cause both? Could the arrow run the other way? Only controlled experiments (or careful causal methods) support causal claims.\n\n### Trap 2: Simpson's paradox\n\nA trend in combined data can reverse within every subgroup. Illustrative example: a new checkout appears to lower conversion overall, but within both mobile and desktop it improves conversion. The overall drop occurs because the new checkout was released while mobile traffic (which converts lower) grew as a share of visits. **Ask:** does the pattern hold within key segments? Has the mix changed?\n\n### Trap 3: small samples and extreme rates\n\nSmall groups produce extreme results by chance. The best and worst performing stores are often the smallest. **Ask:** how many observations underlie each rate? Would the result survive with more data?\n\n### Trap 4: multiple comparisons\n\nTest 20 segments at a conventional significance threshold, and on average about one will look \"significant\" by chance even if nothing real is happening. AI can test hundreds of cuts in seconds. **Ask:** how many comparisons were made? Was this hypothesis set before looking? Confirm surprising results with new data.\n\n### Trap 5: survivorship bias\n\nAnalysing only what survived distorts conclusions. Studying only your retained customers to learn \"what makes customers successful\" ignores those who churned doing the same things. **Ask:** who is missing from this data, and why?\n\n### Trap 6: selection bias\n\nSurvey respondents, reviewers and beta users are not typical customers. Satisfaction among people who chose to answer is not satisfaction among all customers. **Ask:** how were these people or records selected?\n\n### Trap 7: regression to the mean\n\nExtreme results tend to be followed by more typical ones. The worst month is often followed by a better one, with or without your intervention. If you only act after bad months, your actions will appear to work. **Ask:** would we have seen improvement anyway?\n\n### Trap 8: averages of averages and base effects\n\nAveraging percentages from groups of different sizes gives wrong totals. Large percentage changes on tiny bases (\"up 300%!\") mislead. **Ask:** is this weighted correctly? What are the absolute numbers?\n\n### Using AI as a trap detector\n\n```text\nHere is my analysis and conclusion: [summary].\nAct as a sceptical statistician. Check for: correlation vs causation,\nSimpson's paradox (mix shifts), small samples, multiple comparisons,\nsurvivorship and selection bias, regression to the mean, and\nbase-rate issues. For each, say whether it could apply here and what\ncheck would rule it out.\n```\n\nThis will not catch everything, but it makes a structured second look fast.\n\n### Worked example\n\nA retail chain's AI-assisted analysis finds that stores with the new layout had higher sales growth. Trap check: the new layout was rolled out first to stores that had the worst previous quarter (regression to the mean), and to larger urban stores (selection). Comparing each new-layout store with a similar store without it, over the same period, shows a much smaller effect. The chain decides to run a proper pilot with matched control stores.\n\n### Going further\n\nWhen decisions are important and you can intervene, prefer experiments: A/B tests online, randomised or matched pilots offline, holdout groups for campaigns. AI can help design them: sample size estimates, randomisation plans and analysis scripts. Experiments are the most reliable antidote to most of the traps above.",
+          "video": null,
+          "keyTakeaways": [
+            "More analyses mean more spurious patterns; know the traps.",
+            "Key traps: correlation vs causation, Simpson's paradox, small samples, multiple comparisons, survivorship and selection bias, regression to the mean, base effects.",
+            "Use AI as a structured sceptic to check for each trap.",
+            "Prefer experiments (A/B tests, matched pilots, holdouts) for important causal questions."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A new checkout lowers conversion overall but improves it on both mobile and desktop separately. What is this?",
+              "options": [
+                "Survivorship bias",
+                "A data entry error",
+                "Regression to the mean",
+                "Simpson's paradox caused by a mix shift"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Subgroup trends reverse in aggregate when the mix changes."
+            },
+            {
+              "question": "You test 40 customer segments and find 2 'significant' differences. What should you do?",
+              "options": [
+                "Act on both immediately",
+                "Treat them as hypotheses; with many comparisons some will be significant by chance",
+                "Delete the data",
+                "Test 400 more segments"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Multiple comparisons inflate false positives; confirm with new data."
+            },
+            {
+              "question": "You intervene only after the worst months, and the next months improve. What trap might explain this?",
+              "options": [
+                "Simpson's paradox",
+                "Selection of charts",
+                "Regression to the mean",
+                "Dual axes"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Extreme months tend to be followed by more typical ones regardless of action."
+            }
+          ],
+          "activity": "Take one conclusion from a recent analysis and run the sceptical statistician prompt. Identify which trap is most plausible and what check would rule it out."
+        },
+        {
+          "slug": "forecasting-caveats",
+          "title": "Forecasting with AI: useful, with caveats",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### What forecasting can and cannot do\n\nA forecast estimates future values based on past patterns and assumptions. AI assistants can quickly build forecasts, from simple trend lines to established time-series methods, and explain them. Forecasts are useful for planning stock, staffing, budgets and targets. But every forecast assumes the future resembles the past in specific ways, and it is only as good as those assumptions.\n\n### Common approaches (conceptually)\n\n- **Naive and seasonal naive:** next period equals the last period, or the same period last year. Surprisingly hard to beat for some series, and an essential baseline.\n- **Moving averages and exponential smoothing:** weight recent data more heavily; some variants handle trend and seasonality.\n- **Classical time-series models** such as ARIMA-family models: capture autocorrelation patterns.\n- **Regression with drivers:** relate the target to factors such as price, marketing spend or holidays.\n- **Machine learning and foundation models for time series:** can capture complex patterns when there is enough data; not automatically better.\n\nAlways compare any sophisticated forecast against a simple baseline. If it doesn't beat seasonal naive on held-out data, it isn't adding value.\n\n### How to ask for a forecast\n\n```text\nUsing Python on the attached weekly sales (3 years), forecast the next\n12 weeks.\n1. Hold out the last 12 weeks, fit on the rest, and compare at least\n   two methods against a seasonal-naive baseline using mean absolute\n   percentage error or mean absolute error.\n2. Account for Ramadan and Eid timing (dates differ each year) and\n   Black Friday; tell me how you handled them.\n3. Give the forecast with 80% and 95% prediction intervals.\n4. List the assumptions and the events that would invalidate the forecast.\n```\n\nKey ingredients: backtesting on held-out data, a baseline, handling of known events (including moving holidays), **prediction intervals**, and explicit assumptions.\n\n### Prediction intervals, not just point forecasts\n\nA single number (\"we'll sell 4,200 units\") hides uncertainty. A range (\"likely between 3,700 and 4,800; very likely between 3,400 and 5,100\") supports better decisions: how much safety stock to hold, what budget contingency to keep. Be aware that intervals from many methods are often too narrow because they assume the model is correct and conditions are stable; treat them as a minimum estimate of uncertainty.\n\n### Caveats to state every time\n\n- **Structural breaks:** pandemics, new competitors, price changes, regulation or platform algorithm changes can make history a poor guide.\n- **Limited history:** a year or two of data barely captures seasonality.\n- **Feedback effects:** forecasts can change behaviour (a sales target affects sales effort).\n- **Data issues:** stock-outs make sales data understate demand.\n- **Horizon:** accuracy usually deteriorates the further ahead you forecast.\n\n### Worked example: stock planning\n\nAn online retailer in Saudi Arabia forecasts demand for a gift product ahead of the holiday season. The AI's first forecast uses a simple trend, missing that Ramadan shifted by roughly eleven days between years. After adding holiday calendar features and backtesting, the model beats the seasonal-naive baseline modestly. The team orders to the upper part of the 80% interval for high-margin items and the middle for low-margin ones, a decision rule that uses the uncertainty rather than ignoring it. They also note last year's stock-out weeks, which understated demand, and adjust.\n\n### Using forecasts in decisions\n\n- Pair forecasts with **scenarios** (best, base, worst) and decision rules.\n- Monitor **forecast vs actual** and update regularly.\n- Record the forecast and its assumptions, so you can learn from misses rather than rewriting history.\n\n### Going further\n\nMeasure forecast accuracy across many periods and items, not one headline number. Different products may need different methods. And remember that forecasting market-wide or macroeconomic outcomes is much harder than forecasting your own operational series; treat AI-generated macro predictions with particular caution.",
+          "video": null,
+          "keyTakeaways": [
+            "Forecasts assume the future resembles the past; state the assumptions.",
+            "Backtest on held-out data and always compare against a simple baseline such as seasonal naive.",
+            "Use prediction intervals and scenarios; intervals are often too narrow, so treat them as minimum uncertainty.",
+            "Handle known events (including moving holidays), stock-outs and structural breaks; monitor forecast vs actual."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A sophisticated model does not beat seasonal naive on held-out data. What should you conclude?",
+              "options": [
+                "It is not adding value for this series; prefer the simpler baseline or improve inputs",
+                "Remove the held-out data",
+                "Forecasting is impossible",
+                "Use the sophisticated model anyway"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Baselines reveal whether complexity helps."
+            },
+            {
+              "question": "Why might past sales understate true demand?",
+              "options": [
+                "Customers buy too much",
+                "Stock-outs limited sales in some periods",
+                "Sales data is always exact",
+                "Prices were too low"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "When items are unavailable, recorded sales underestimate demand."
+            },
+            {
+              "question": "What is the main value of prediction intervals?",
+              "options": [
+                "They guarantee outcomes",
+                "They replace backtesting",
+                "They make charts colourful",
+                "They express uncertainty so decisions like safety stock can account for it"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Ranges support risk-aware decisions."
+            }
+          ],
+          "activity": "Ask an AI assistant to forecast one of your time series with a held-out backtest, a seasonal-naive baseline and 80% intervals. Write down three assumptions that would break it."
+        }
+      ]
+    },
+    {
+      "slug": "uncertainty-and-decisions",
+      "title": "Communicating uncertainty and making decisions",
+      "summary": "Express uncertainty clearly, and use AI to support, not replace, sound decision-making.",
+      "lessons": [
+        {
+          "slug": "communicating-uncertainty",
+          "title": "Communicating uncertainty clearly",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Why uncertainty is hard to communicate\n\nStakeholders often want a single number and a firm answer. Analysts worry that caveats will make them sound unsure. AI drafts tend to either overstate confidence or drown findings in hedges. Communicating uncertainty well means being **clear about what you know, what you don't, and how much it matters for the decision**.\n\n### Sources of uncertainty\n\n- **Sampling:** results from a sample (survey, test group) differ from the whole population.\n- **Measurement:** data errors, tracking gaps, definitions.\n- **Model:** forecasting or statistical model assumptions.\n- **Causal:** whether an observed relationship is causal.\n- **Future:** events that haven't happened yet.\n\nNaming the main source helps readers understand what could change.\n\n### Techniques\n\n**1. Ranges instead of points.** \"Conversion rose by between 1 and 3 percentage points\" is more honest than \"rose 2 points\", and more useful.\n\n**2. Consistent confidence language.** Agree team-wide on what phrases mean. For example:\n\n```text\nAlmost certain   - we would be very surprised to be wrong\nLikely           - more likely than not, with meaningful doubt\nUncertain        - evidence is mixed or thin\nUnlikely         - evidence points the other way\n```\n\nSome organisations attach rough probability ranges to such terms; if you do, define them once and use them consistently.\n\n**3. Natural frequencies.** \"About 3 in 10 customers\" is often understood better than \"30%\", especially for risks.\n\n**4. Visuals.** Error bars, shaded forecast intervals, and scenario fans show uncertainty at a glance.\n\n**5. Decision relevance.** Say whether the uncertainty changes the decision. \"Even at the low end of the range, the campaign pays back within six months\" is powerful. So is \"The result could go either way; a two-week test would resolve it.\"\n\n**6. What would change our mind.** State the evidence that would reverse the recommendation.\n\n### Prompting AI to express uncertainty well\n\n```text\nRewrite this summary for the leadership team. For each key claim:\n- give a range where the data supports one\n- label confidence as Almost certain / Likely / Uncertain / Unlikely\n- say in one sentence whether the uncertainty changes the recommendation\nDo not add hedges that don't change the decision.\n```\n\nThe last line prevents the opposite failure: so many \"may\" and \"might\" words that nothing is said.\n\n### Worked example: campaign results\n\nOriginal AI draft: \"The campaign increased sales by 14%, proving its effectiveness.\"\n\nRevised: \"Sales in campaign regions rose about 8-18% versus comparable regions (likely a real effect; the comparison regions weren't perfectly matched). Even at the low end, the campaign covered its cost. Recommendation: repeat it in two more regions with matched controls to firm up the estimate.\"\n\nThe revised version is more useful to a decision-maker, and more defensible if challenged.\n\n### Avoiding false precision\n\nReporting \"18.73%\" from a sample of 200 implies precision that doesn't exist. Round sensibly and show the range. AI outputs frequently carry spurious decimals from computations; tidy them before presenting.\n\n### Handling pushback\n\nWhen a stakeholder says \"Just give me a number\", give one, with its range attached: \"Plan for about 4,200 units; we'd be surprised by fewer than 3,700 or more than 4,800.\" This respects their need for a planning figure while keeping the uncertainty visible. If they ask why the range is wide, explain the main source of uncertainty in one sentence and what would narrow it (more data, a test, time). Uncertainty presented this way reads as expertise, not indecision.\n\n### Common failure modes\n\n- Burying the key caveat in a footnote nobody reads.\n- Listing every possible limitation equally, so the important one is lost.\n- Presenting a forecast point without a range.\n- Using \"significant\" loosely, where readers may hear \"statistically significant\" or \"large\".\n\n### Going further\n\nCreate a one-page uncertainty guide for your team: confidence terms, rounding rules, required ranges for key metrics, and a template \"What would change our mind\" line. Include it in AI prompts for reports so drafts follow your standard.",
+          "video": null,
+          "keyTakeaways": [
+            "Name the main sources of uncertainty: sampling, measurement, model, causal, future.",
+            "Use ranges, consistent confidence language, natural frequencies and visuals.",
+            "Say whether uncertainty changes the decision and what would change your mind.",
+            "Avoid both overconfidence and empty hedging; round away false precision."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which statement communicates uncertainty best?",
+              "options": [
+                "'Sales may or may not have risen'",
+                "'Results are unclear'",
+                "'Sales rose 14.27%, proving the campaign works'",
+                "'Sales rose about 8-18% vs comparable regions; even the low end covers the cost'"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "A range with decision relevance is clear and honest."
+            },
+            {
+              "question": "Why agree on team-wide confidence terms?",
+              "options": [
+                "To sound formal",
+                "To avoid numbers",
+                "So words like 'likely' mean the same to everyone",
+                "Because AI requires it"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Consistent language prevents misinterpretation."
+            },
+            {
+              "question": "What is false precision?",
+              "options": [
+                "Rounding numbers",
+                "Showing error bars",
+                "Using ranges",
+                "Reporting more decimal places than the data supports"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Spurious decimals imply certainty that doesn't exist."
+            }
+          ],
+          "activity": "Rewrite a recent result summary using ranges, a confidence label and a 'what would change our mind' line."
+        },
+        {
+          "slug": "decision-making-with-ai",
+          "title": "Making decisions with AI support",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### AI supports decisions; people make them\n\nAI can widen your options, stress-test your reasoning, and speed up analysis. It cannot own accountability, fully understand your organisation's context and values, or bear the consequences. The goal is **augmented judgement**: better decisions because AI helped you think, not decisions delegated to a model.\n\n### A decision workflow with AI\n\n1. **Frame:** the decision, options, criteria and constraints (as in module 2).\n2. **Gather evidence:** analyses from earlier modules, with verified numbers.\n3. **Generate options:** ask AI for alternatives you may not have considered.\n4. **Stress-test:** premortem, devil's advocate and assumption checks.\n5. **Decide:** weigh evidence and values; record the reasoning.\n6. **Review:** after the outcome, compare with expectations and learn.\n\n### Useful prompts\n\n**Option generation:**\n\n```text\nWe're deciding how to respond to a competitor's 15% price cut in the UAE.\nCurrent options: match, partial match, hold price and add value.\nSuggest 4 other options, with the main risk of each.\n```\n\n**Premortem:**\n\n```text\nImagine it's six months from now and our decision to hold price\nfailed badly. Write the most plausible story of why it failed,\nthen list early warning signs we should monitor.\n```\n\n**Criteria scoring (with caution):**\n\n```text\nScore each option 1-5 on: margin impact, customer retention risk,\nbrand fit, execution effort. Explain every score and flag which\nscores rely on assumptions rather than data.\n```\n\nScoring matrices are useful for structure, but the weights and scores are judgements. Don't let a numeric total disguise subjective inputs.\n\n### Biases AI can help counter (and ones it can amplify)\n\nAI can help counter:\n\n- **Confirmation bias:** by arguing the other side.\n- **Narrow framing:** by generating more options.\n- **Overconfidence:** by listing failure modes.\n\nAI can amplify:\n\n- **Automation bias:** trusting outputs because they look authoritative.\n- **Anchoring:** the first AI suggestion becomes the default.\n- **Sycophancy:** models may lean toward agreeing with the framing you give them. Ask neutrally, or ask it to argue against your preferred option explicitly.\n\n### Match rigour to stakes\n\n| Decision type | Suggested rigour |\n|---|---|\n| Reversible, low impact (subject line test) | Quick analysis, decide, measure |\n| Reversible, higher impact (budget shift) | Verified analysis, stress-test, pilot |\n| Hard to reverse, high impact (pricing, market entry) | Full verification, multiple perspectives, experiments where possible, documented reasoning |\n\n### Documenting decisions\n\nA short decision record improves future learning:\n\n```text\nDecision: Hold price, add free delivery for orders over 200 AED\nDate / owner: 2026-09-25 / Head of E-commerce\nEvidence: [links to analysis]; key numbers verified\nAlternatives considered: match, partial match, bundle\nKey assumptions: competitor cut is temporary; delivery cost per order stays under X\nReview date and success metric: 2026-12-15; retention of top-tier customers\n```\n\nAI can draft this from your notes. When you review later, you can see whether the decision failed because of bad reasoning, bad information or bad luck, which are very different lessons.\n\n### Accountability and transparency\n\n- Be transparent with stakeholders about how AI was used in the analysis.\n- For decisions affecting people (hiring, credit, pricing for individuals, performance reviews), be especially careful: fairness, explainability and regulatory requirements apply, and data protection laws in many jurisdictions restrict purely automated decisions with significant effects on individuals. Our Responsible AI course covers this in depth.\n\n### Worked example\n\nA regional e-commerce company uses the workflow for the competitor price cut. AI analysis of verified data shows most revenue comes from customers who rarely compare prices; the premortem flags risk among price-sensitive new customers. The team holds price, adds a delivery perk targeted at new customers, sets warning metrics, and documents the decision. Three months later, the review shows retention held; the record also shows that one assumption (delivery cost) was wrong, a lesson for next time.\n\n### Going further\n\nBuild a lightweight decision log across your team. Over time, reviewing it shows where your forecasts and assumptions tend to be wrong, which is the most valuable dataset for improving judgement.",
+          "video": null,
+          "keyTakeaways": [
+            "AI augments judgement; accountability stays with people.",
+            "Workflow: frame, gather verified evidence, generate options, stress-test, decide, review.",
+            "Use premortems and devil's advocacy; beware automation bias, anchoring and sycophancy.",
+            "Match rigour to stakes, document decisions, and take extra care with decisions affecting individuals."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is a premortem?",
+              "options": [
+                "An analysis after a failure",
+                "A data cleaning step",
+                "A type of chart",
+                "Imagining a decision has failed and explaining why, before deciding"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Premortems surface risks and warning signs in advance."
+            },
+            {
+              "question": "How can you reduce the risk of an AI simply agreeing with your preferred option?",
+              "options": [
+                "Use capital letters",
+                "Tell it your preference strongly",
+                "Ask it only once",
+                "Ask neutrally or explicitly ask it to argue against your preferred option"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Neutral framing and forced counter-arguments counter sycophancy."
+            },
+            {
+              "question": "Which decision warrants the most rigour?",
+              "options": [
+                "Choosing between two email subject lines",
+                "Changing a button colour",
+                "Entering a new country market",
+                "Scheduling a meeting"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Hard-to-reverse, high-impact decisions need full verification and documentation."
+            }
+          ],
+          "activity": "Use the premortem and option-generation prompts on a decision your team faces, then write a decision record with assumptions and a review date."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 25,
+    "timeLimitMinutes": 40,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "ada-001",
+        "module": "ai-analysis-foundations",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "For a number that will appear in a board report, where should it come from?",
+        "options": [
+          "The first AI answer",
+          "Executed code or a checkable formula, verified against a trusted source",
+          "The model's reading of pasted rows",
+          "A guess from the chart"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Computed, verifiable numbers are the standard for anything that matters."
+      },
+      {
+        "id": "ada-002",
+        "module": "ai-analysis-foundations",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the first step of the AI analysis workflow in this course?",
+        "options": [
+          "Write Python",
+          "Frame the question and the decision it informs",
+          "Clean the data",
+          "Make a chart"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Framing determines what analysis is relevant."
+      },
+      {
+        "id": "ada-003",
+        "module": "ai-analysis-foundations",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which should you do before uploading a customer dataset to an AI tool? (Choose all that apply.)",
+        "options": [
+          "Check which tools are approved for this data",
+          "Add customers' passwords for completeness",
+          "Remove personal data you don't need",
+          "Aggregate if the question allows"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Policy, minimisation and aggregation protect data."
+      },
+      {
+        "id": "ada-004",
+        "module": "ai-analysis-foundations",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "An AI proposes merging 'Acme Ltd' and 'Acme Logistics LLC' as duplicates. What should happen?",
+        "options": [
+          "Accept all fuzzy matches automatically",
+          "Delete both",
+          "Rename both to Acme",
+          "Review proposed matches; reject merges of different entities"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Fuzzy matching needs human review to avoid merging distinct entities."
+      },
+      {
+        "id": "ada-005",
+        "module": "ai-analysis-foundations",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "After cleaning, your row count fell from 12,480 to 11,200 and you can't explain why. What is the best next step?",
+        "options": [
+          "Proceed; cleaning always removes rows",
+          "Require a step-by-step change log with row counts and investigate the unexplained drop",
+          "Fill the missing rows with averages",
+          "Restart with a different AI tool"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Every change must be explained; logs make cleaning reproducible and auditable."
+      },
+      {
+        "id": "ada-006",
+        "module": "ai-analysis-foundations",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why investigate where values are missing before filling them with averages?",
+        "options": [
+          "Missingness may be concentrated in a group, and filling can hide real patterns",
+          "Missing values never matter",
+          "Averages are always wrong",
+          "It is faster"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Understanding missingness avoids biased conclusions."
+      },
+      {
+        "id": "ada-007",
+        "module": "ai-analysis-foundations",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the review-then-apply pattern?",
+        "options": [
+          "Let the AI decide everything",
+          "Never clean data",
+          "Apply changes, then review later",
+          "Have AI propose transformations for approval, then apply them in code with a log"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Proposals are reviewed before changes are made, with a log."
+      },
+      {
+        "id": "ada-008",
+        "module": "exploring-data",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Why report group sizes alongside segment rates?",
+        "options": [
+          "Small groups produce extreme rates by chance",
+          "Because AI requires it",
+          "To make tables longer",
+          "For decoration"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Rates from small samples are unreliable."
+      },
+      {
+        "id": "ada-009",
+        "module": "exploring-data",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Churn looks much higher in a newly launched country. What analysis best tests whether this is a composition effect?",
+        "options": [
+          "A cohort comparison at the same months since signup",
+          "A pie chart",
+          "Averaging all countries",
+          "Removing that country"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Cohorts compare like with like, separating tenure mix from behaviour."
+      },
+      {
+        "id": "ada-010",
+        "module": "exploring-data",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which make an analytical question decision-focused? (Choose all that apply.)",
+        "options": [
+          "The decision and options",
+          "A request to 'find something interesting'",
+          "The metric that decides it and a threshold",
+          "Known confounders"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Decision, metric, threshold and confounders focus analysis."
+      },
+      {
+        "id": "ada-011",
+        "module": "exploring-data",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is a leading indicator?",
+        "options": [
+          "An earlier signal that tends to precede an outcome",
+          "A chart title",
+          "The largest number in a table",
+          "A metric that confirms results after the fact"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Leading indicators give earlier signals than lagging outcomes."
+      },
+      {
+        "id": "ada-012",
+        "module": "exploring-data",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Exploring 60 segment cuts, the AI highlights one with a dramatic difference. What is the right treatment?",
+        "options": [
+          "Ignore all segments",
+          "Run 600 more cuts",
+          "Treat it as a hypothesis, check group size, and confirm with new data or a test",
+          "Announce it as a key finding"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Broad exploration produces chance patterns; confirm before acting."
+      },
+      {
+        "id": "ada-013",
+        "module": "exploring-data",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Two teams report different 'active users' numbers. What is the most likely cause?",
+        "options": [
+          "Rounding",
+          "Different metric definitions",
+          "Chart choice",
+          "One team is lying"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Definitions differ more often than data; maintain a glossary."
+      },
+      {
+        "id": "ada-014",
+        "module": "exploring-data",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which statistic better represents a typical customer's spend in skewed data?",
+        "options": [
+          "Sum",
+          "Maximum",
+          "Median",
+          "Mean"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Medians resist distortion by very large values."
+      },
+      {
+        "id": "ada-015",
+        "module": "formulas-sql-python",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What should you provide when asking AI to write SQL?",
+        "options": [
+          "A chart",
+          "Only the question",
+          "Schema, join keys, business definitions and SQL dialect",
+          "Your password"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Context enables correct queries."
+      },
+      {
+        "id": "ada-016",
+        "module": "formulas-sql-python",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A query joins orders to payments (some orders have two payments) and averages order totals. What happens?",
+        "options": [
+          "Nothing unusual",
+          "The average is always lower",
+          "Orders with multiple payments are over-weighted, distorting the average",
+          "The query fails"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Join fan-out distorts aggregates."
+      },
+      {
+        "id": "ada-017",
+        "module": "formulas-sql-python",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which checks help verify a generated query? (Choose all that apply.)",
+        "options": [
+          "Confirming it runs without error, and stopping there",
+          "Spot-checking a few records",
+          "Row counts at each step",
+          "Reconciling to a trusted report"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "A query that runs can still be wrong; reconcile and spot-check."
+      },
+      {
+        "id": "ada-018",
+        "module": "formulas-sql-python",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A tiered commission formula passes a test for a salesperson below the threshold but you haven't tested others. What is the key risk?",
+        "options": [
+          "The formula is too short",
+          "None",
+          "Spreadsheets can't do tiers",
+          "The tier logic above the threshold (e.g. applying the higher rate to the whole amount) may be wrong"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Boundary and above-threshold cases reveal tier errors."
+      },
+      {
+        "id": "ada-019",
+        "module": "formulas-sql-python",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What access should AI-assisted querying of production databases use?",
+        "options": [
+          "Admin",
+          "Shared personal accounts",
+          "Write access to all tables",
+          "Read-only, least privilege"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Read-only access prevents accidental changes."
+      },
+      {
+        "id": "ada-020",
+        "module": "formulas-sql-python",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why add assertions like 'order_id is unique' to AI-generated Python?",
+        "options": [
+          "To improve charts",
+          "To make violated assumptions fail loudly instead of silently",
+          "To slow code down",
+          "Because pandas requires it"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Assertions turn silent errors into visible ones."
+      },
+      {
+        "id": "ada-021",
+        "module": "formulas-sql-python",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "An AI runs a regression and reports coefficients. What should you ask? (Choose all that apply.)",
+        "options": [
+          "Which method was used and why",
+          "What assumptions it makes and whether they hold",
+          "What the result means and does not mean",
+          "Whether it can add more decimals"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Understanding method, assumptions and interpretation prevents misuse."
+      },
+      {
+        "id": "ada-022",
+        "module": "charts-and-narratives",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which chart best shows change over time?",
+        "options": [
+          "Line chart",
+          "Pie chart",
+          "Word cloud",
+          "3D area chart"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Lines show trends over time clearly."
+      },
+      {
+        "id": "ada-023",
+        "module": "charts-and-narratives",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which chart practices can mislead? (Choose all that apply.)",
+        "options": [
+          "Direct labelling of lines",
+          "Starting the time range at a convenient low point",
+          "Dual y-axes suggesting correlation",
+          "Bar charts with truncated y-axes"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Truncation, dual axes and cherry-picked ranges mislead; direct labels help clarity."
+      },
+      {
+        "id": "ada-024",
+        "module": "charts-and-narratives",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What is the purpose of the 'so what' test for narratives?",
+        "options": [
+          "To remove numbers",
+          "To make text longer",
+          "To add jargon",
+          "To ensure each point connects to the decision or is cut"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Every sentence should matter for the decision."
+      },
+      {
+        "id": "ada-025",
+        "module": "charts-and-narratives",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "In Situation-Insight-Implication-Action, what comes under Action?",
+        "options": [
+          "The chart style",
+          "The dataset name",
+          "The recommendation and next step",
+          "The raw data"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Action states what to do."
+      },
+      {
+        "id": "ada-026",
+        "module": "charts-and-narratives",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An AI-drafted report says 'the loyalty programme caused a 12% rise in spend' based on members vs non-members. What is the best revision?",
+        "options": [
+          "Remove the number",
+          "State that members spent more, note members may differ from non-members, and suggest a test to establish cause",
+          "Say 'proved'",
+          "Keep it"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Self-selected groups don't support causal claims."
+      },
+      {
+        "id": "ada-027",
+        "module": "charts-and-narratives",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why instruct the AI to use only numbers from provided tables when writing narratives?",
+        "options": [
+          "To avoid charts",
+          "For brevity",
+          "Because tables are prettier",
+          "To prevent invented but plausible figures"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Constraining numbers to sources keeps narratives accurate."
+      },
+      {
+        "id": "ada-028",
+        "module": "charts-and-narratives",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which title is best for a chart?",
+        "options": [
+          "'Wow!'",
+          "'Data'",
+          "'Weekly sign-ups rose about 6%, within recent variation'",
+          "'Figure 2'"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Takeaway titles communicate the point honestly."
+      },
+      {
+        "id": "ada-029",
+        "module": "statistical-traps-and-forecasting",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Customers who use the app spend more. What is the key caution?",
+        "options": [
+          "Spending causes app usage, definitely",
+          "Apps always cause spending",
+          "Correlation doesn't prove causation; engaged customers may do both",
+          "The data must be wrong"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Consider confounders and reverse causation."
+      },
+      {
+        "id": "ada-030",
+        "module": "statistical-traps-and-forecasting",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why do the best and worst stores by growth rate often turn out to be small stores?",
+        "options": [
+          "Small samples produce more extreme rates by chance",
+          "Data is missing for large stores",
+          "Small stores are better managed",
+          "Growth rates can't be computed for large stores"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Variability is larger in small groups."
+      },
+      {
+        "id": "ada-031",
+        "module": "statistical-traps-and-forecasting",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which improve a forecast's reliability? (Choose all that apply.)",
+        "options": [
+          "Modelling known events like moving holidays",
+          "Comparing against a seasonal-naive baseline",
+          "Reporting only a single point with many decimals",
+          "Backtesting on held-out data"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Backtests, baselines and event handling improve reliability; false precision does not."
+      },
+      {
+        "id": "ada-032",
+        "module": "statistical-traps-and-forecasting",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A new store layout was installed first in the worst-performing stores, which then improved. What best explains why the improvement may be overstated?",
+        "options": [
+          "Regression to the mean combined with selection of stores",
+          "Simpson's paradox only",
+          "Rounding",
+          "Survivorship of charts"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Worst performers tend to improve anyway; selected stores differ from others."
+      },
+      {
+        "id": "ada-033",
+        "module": "statistical-traps-and-forecasting",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does a prediction interval express?",
+        "options": [
+          "The data source",
+          "The exact future value",
+          "The model's training time",
+          "A range of plausible future values"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Intervals communicate forecast uncertainty."
+      },
+      {
+        "id": "ada-034",
+        "module": "statistical-traps-and-forecasting",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why might recorded sales understate demand?",
+        "options": [
+          "Stock-outs prevented some purchases",
+          "Customers lie",
+          "Charts were truncated",
+          "Prices were rounded"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Unavailable stock hides demand."
+      },
+      {
+        "id": "ada-035",
+        "module": "statistical-traps-and-forecasting",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "You survey customers who opted into your newsletter and find very high satisfaction. What trap applies when generalising to all customers?",
+        "options": [
+          "Regression to the mean",
+          "Simpson's paradox",
+          "Selection bias",
+          "Base effects only"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Opted-in respondents are not representative of all customers."
+      },
+      {
+        "id": "ada-036",
+        "module": "uncertainty-and-decisions",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which statement best expresses uncertainty for a decision-maker?",
+        "options": [
+          "'Revenue is likely 1.1-1.4M; even the low end meets our target'",
+          "'Revenue will be exactly 1.24M'",
+          "'Revenue might change'",
+          "'We can't know anything'"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Ranges plus decision relevance are clear and useful."
+      },
+      {
+        "id": "ada-037",
+        "module": "uncertainty-and-decisions",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which AI-related biases can affect decisions? (Choose all that apply.)",
+        "options": [
+          "Anchoring on the first AI suggestion",
+          "Perfect objectivity guaranteed by AI",
+          "Sycophancy: models leaning toward agreeing with your framing",
+          "Automation bias: over-trusting AI outputs"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "These are known risks; AI is not guaranteed objective."
+      },
+      {
+        "id": "ada-038",
+        "module": "uncertainty-and-decisions",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why keep a decision record with assumptions and a review date?",
+        "options": [
+          "To avoid decisions",
+          "Because AI requires it",
+          "For bureaucracy",
+          "To learn later whether outcomes came from reasoning, information or luck"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Records enable learning from outcomes."
+      },
+      {
+        "id": "ada-039",
+        "module": "uncertainty-and-decisions",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Who is accountable for a decision made with AI-supported analysis?",
+        "options": [
+          "The AI vendor only",
+          "The AI model",
+          "The people and organisation making the decision",
+          "Nobody"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Accountability stays with people."
+      },
+      {
+        "id": "ada-040",
+        "module": "uncertainty-and-decisions",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An AI system would automatically decide credit limits for individual customers with no human review. What should concern you most?",
+        "options": [
+          "The number of decimals",
+          "Fairness, explainability and legal restrictions on solely automated decisions with significant effects on individuals",
+          "Chart design",
+          "Server speed"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Decisions significantly affecting individuals raise fairness and regulatory issues in many jurisdictions."
+      },
+      {
+        "id": "ada-041",
+        "module": "uncertainty-and-decisions",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What does reporting '18.73%' from a sample of 200 suggest?",
+        "options": [
+          "Appropriate precision",
+          "A calculation error",
+          "False precision; round and give a range",
+          "Understated certainty"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Decimals imply precision the sample cannot support."
+      },
+      {
+        "id": "ada-042",
+        "module": "uncertainty-and-decisions",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What is the purpose of a premortem prompt?",
+        "options": [
+          "To format a chart",
+          "To imagine a future failure of the decision and identify risks and warning signs",
+          "To clean data",
+          "To analyse a past failure"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Premortems surface risks before committing."
+      }
+    ]
+  }
+}

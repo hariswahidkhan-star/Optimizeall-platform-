@@ -1,0 +1,1491 @@
+{
+  "slug": "building-ai-products-and-workflows",
+  "version": 1,
+  "title": "Building AI Products & Workflows",
+  "subtitle": "From use-case discovery to production: prototyping, build vs buy, privacy, evaluation, monitoring, costs, UX and governance",
+  "category": "ai",
+  "level": "advanced",
+  "estimatedMinutes": 180,
+  "description": "Most AI initiatives stall between an impressive demo and dependable daily use. This advanced course is for product managers, operations leads, founders and team heads who decide what gets built and make it work. You will learn to find and scope high-value use cases, prototype cheaply on real data, and decide whether to build, buy or blend. You will design data flows that respect privacy, address AI-specific security threats and manage vendor risk. You will adopt evaluation-driven development, monitor quality, cost and drift in production, model unit economics, and apply UX patterns that build calibrated trust. Finally, you will set up proportionate governance, drive adoption and scale from pilots to a portfolio. Vendor-neutral, practical and full of templates you can use immediately, with 'going further' notes for technical readers.",
+  "outcomes": [
+    "Identify, prioritise and scope high-value AI use cases with clear success and kill criteria",
+    "Prototype AI features cheaply on real data and decide build, buy or blend",
+    "Design privacy-aware data flows and mitigate AI-specific security and vendor risks",
+    "Run evaluation-driven development with error analysis and staged rollouts",
+    "Monitor AI features for quality, cost, user signals, safety and drift",
+    "Model unit economics and apply UX patterns that build calibrated trust",
+    "Establish proportionate AI governance and scale adoption across a portfolio"
+  ],
+  "skills": [
+    "AI product management",
+    "AI strategy",
+    "Evaluation-driven development",
+    "AI governance",
+    "AI UX design",
+    "Data privacy",
+    "Build vs buy"
+  ],
+  "prerequisites": [],
+  "badge": {
+    "name": "Certified AI Product Builder",
+    "description": "The holder can take AI features from idea to dependable production use: discovering and scoping high-value use cases, prototyping, making build-or-buy decisions, designing privacy-aware and secure architectures, running evaluation-driven development and monitoring, managing unit economics and UX, and establishing proportionate governance and adoption.",
+    "criteria": "Completed all lessons and scored at least 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "use-case-discovery",
+      "title": "Finding and scoping high-value use cases",
+      "summary": "Identify where AI creates real value, prioritise ruthlessly, and define success before anything is built.",
+      "lessons": [
+        {
+          "slug": "finding-high-value-use-cases",
+          "title": "Finding high-value AI use cases",
+          "type": "video",
+          "durationMinutes": 12,
+          "body": "### Start with problems, not models\n\nMany AI initiatives start with \"we should use AI for something\". They produce demos that impress in a meeting and die in production. Successful teams start from **work that is valuable, frequent and painful**, then ask whether AI is the right tool.\n\n### Where AI tends to create value\n\nAI (particularly language and multimodal models) is strongest where work involves:\n\n- **Unstructured information:** emails, documents, tickets, calls, images.\n- **Language transformation:** drafting, summarising, translating, rewriting, classifying.\n- **Judgement at scale with tolerance for review:** triage, first drafts, recommendations that humans approve.\n- **Search and synthesis:** finding and combining information across sources.\n- **Repetitive steps with variation:** processes too irregular for traditional rules-based automation.\n\nIt is weaker where work requires guaranteed exactness without verification, has little data or context available, or involves high-stakes decisions with no room for review.\n\n### A discovery method\n\n1. **Map workflows, not departments.** Walk through a process step by step (for example \"handling a supplier invoice\" or \"responding to a sales enquiry\"). Note time spent, volume, error rates and frustrations.\n2. **Identify candidate steps.** For each step: is it language-heavy, repetitive, rules-with-exceptions, or search-heavy?\n3. **Estimate value.** Time saved multiplied by volume, faster response, higher quality, revenue impact, risk reduction.\n4. **Estimate feasibility.** Data availability, integration difficulty, accuracy needed, risk if wrong.\n5. **Prioritise** on a value-feasibility grid.\n\n### The value-feasibility grid\n\n```text\n                 Low feasibility          High feasibility\nHigh value   |  Strategic bets:        |  Quick wins:             |\n             |  plan carefully,        |  start here              |\n             |  de-risk with pilots    |                          |\nLow value    |  Avoid                  |  Nice-to-have: only if    |\n             |                         |  nearly free             |\n```\n\nQuick wins build credibility and learning. Strategic bets need executive sponsorship and staged investment.\n\n### Questions that reveal real value\n\n- How many times a week does this happen?\n- How long does it take, and who does it (and what does their time cost)?\n- What happens when it's done badly or slowly?\n- Would a good-enough draft that a human edits save most of the time?\n- What would the team do with the time saved?\n\n### Worked example: a small agency\n\nA digital agency serving e-commerce clients in the UK, UAE and Pakistan maps three workflows:\n\n- **Monthly client reports:** analysts spend many hours collating platform data and writing commentary. AI can draft commentary from exported data; analysts review. High value, high feasibility: a quick win.\n- **New business proposals:** each is bespoke; AI can draft sections from a library of past proposals and case studies. Medium value, medium feasibility.\n- **Automated media buying decisions:** high potential value, but high risk and dependence on platform APIs and data quality. A strategic bet for later, with human approval gates.\n\nThey start with reports, measure hours saved and client feedback, and use the result to fund the proposal assistant.\n\n### Red flags in use-case selection\n\n- \"AI for everything\" initiatives with no named process owner.\n- Use cases chosen for impressiveness, not frequency.\n- No way to measure success.\n- Tasks where errors are costly and outputs cannot be checked.\n- Automating a broken process instead of fixing it first.\n\n### Involve the people who do the work\n\nThe best use-case ideas usually come from front-line staff, not strategy decks. Run short sessions where people describe their most repetitive, frustrating tasks and show you real examples. You will find better candidates, understand edge cases early, and build the goodwill that adoption later depends on.\n\n### Going further\n\nMaintain a use-case backlog with consistent scoring (value, feasibility, risk, strategic fit) and revisit it quarterly. Model capabilities and costs change quickly; a use case that was infeasible six months ago may now be a quick win, and vice versa if costs or regulations shift.",
+          "video": {
+            "script": "Welcome to Building AI Products and Workflows. This course is for the people who decide what gets built and make it work in the real world: product managers, operations leads, founders and team heads.\n\nLet's start where most AI projects go wrong: at the very beginning. Too many initiatives start with \"we should use AI for something\". The result is a dazzling demo that never makes it into daily work.\n\nSuccessful teams do the opposite. They start with work that is valuable, frequent and painful, and only then ask whether AI is the right tool. AI tends to shine where there's lots of unstructured information, like emails, documents, tickets and calls; where the work is transforming language, like drafting, summarising and classifying; and where a good first draft that a human reviews saves most of the effort.\n\nHere's a simple method. Map a real workflow step by step. For each step, note how often it happens, how long it takes, and what goes wrong. Then score each candidate on value and feasibility. High value and high feasibility? That's a quick win. Start there. High value but hard? That's a strategic bet: plan it, pilot it, and stage the investment.\n\nAnd watch for red flags: no named owner, no way to measure success, errors that are costly and impossible to check, or automating a process that's broken to begin with.\n\nIn the next lesson, we'll turn a chosen use case into a clear scope with success metrics, before anyone writes a line of code or signs a contract.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Start from valuable, frequent, painful work, not from the technology.",
+            "AI is strongest with unstructured information, language transformation, reviewable judgement at scale and search-and-synthesis.",
+            "Map workflows step by step, estimate value and feasibility, and prioritise on a grid.",
+            "Begin with quick wins, stage strategic bets, and avoid impressive-but-rare or unmeasurable use cases."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which use case is typically the best first AI project?",
+              "options": [
+                "A rare, high-risk decision with no review",
+                "A task requiring guaranteed exact calculations with no checks",
+                "A frequent, language-heavy task where humans can review drafts",
+                "Whatever looks most impressive in a demo"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Frequent, reviewable, language-heavy work offers high value and feasibility."
+            },
+            {
+              "question": "On the value-feasibility grid, what are high-value, low-feasibility items?",
+              "options": [
+                "Nice-to-haves",
+                "Items to avoid",
+                "Strategic bets to plan and de-risk with pilots",
+                "Quick wins"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "They need staged investment and sponsorship."
+            },
+            {
+              "question": "Why map workflows rather than departments?",
+              "options": [
+                "It avoids talking to people",
+                "Value and feasibility live in specific steps of real processes",
+                "Departments don't use AI",
+                "It is faster to draw"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Step-level mapping reveals where AI helps and how much."
+            }
+          ],
+          "activity": "Map one workflow in your organisation step by step. Score three candidate steps on value and feasibility and place them on the grid."
+        },
+        {
+          "slug": "scoping-and-success-metrics",
+          "title": "Scoping and defining success",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### A use case is not a scope\n\n\"AI for customer support\" is a theme. A scope is: \"Draft first replies to order-status and returns emails in English and Arabic, for human agents to review and send, reducing median handling time without lowering quality scores.\" Clear scope is what turns ideas into shippable products.\n\n### The one-page AI brief\n\nBefore building or buying, write a one-page brief:\n\n```text\nProblem:        What pain, for whom, how often?\nUsers:          Who uses the output? Who is affected by it?\nScope (in):     Which inputs, tasks, languages, channels?\nScope (out):    What we explicitly won't do in v1\nAI's role:      Draft / recommend / classify / act (with what approval?)\nSuccess:        Primary metric + target; quality guardrail metrics\nRisks:          What happens if it's wrong? Who could be harmed?\nData:           What data it needs, where it lives, sensitivity\nEvaluation:     How we'll test before launch\nOwner:          Accountable person\n```\n\n### Choosing the AI's role\n\nThe same use case can be designed with very different levels of autonomy:\n\n1. **Assist:** AI suggests; human decides and acts (drafts, summaries, recommendations).\n2. **Automate with review:** AI acts, a human approves before it takes effect.\n3. **Automate with audit:** AI acts; humans review samples afterwards.\n4. **Full automation:** AI acts; exceptions escalate.\n\nChoose based on the cost of errors, the ability to detect errors, volume, and user trust. Most first versions should be at level 1 or 2.\n\n### Success metrics: three layers\n\n- **Business outcome:** the reason the project exists (handling time, conversion, cost per case, revenue, customer satisfaction).\n- **Quality metrics:** accuracy, groundedness, policy compliance, tone, measured by evaluation and review.\n- **Adoption and experience:** usage rate, edit rate (how much humans change AI drafts), user satisfaction, time to complete.\n\nPlus **guardrail metrics** that must not get worse: complaint rate, error escalations, fairness indicators across user groups.\n\nSet targets before launch. \"We'll see how it goes\" makes every result look like success.\n\n### Establish a baseline\n\nYou can only claim improvement against a baseline. Before launch, measure the current process: time per task, error rate, customer satisfaction, cost. If the baseline doesn't exist, spend a week or two collecting it. It will be the most persuasive number in your launch review.\n\n### Define \"good enough\"\n\nAI outputs are probabilistic; perfection is not the bar. Define acceptable quality by comparing with the current human process and the cost of errors:\n\n- For internal drafts reviewed by experts, moderate accuracy can still save a lot of time.\n- For customer-facing automated replies, the bar is much higher, and some categories may be excluded entirely.\n\n### Worked example\n\nAn insurance broker scopes a document assistant:\n\n- **Problem:** brokers spend significant time extracting key terms from policy documents to compare quotes.\n- **Scope in:** extracting 15 defined fields from PDF policy schedules from the top 10 insurers; English only in v1.\n- **Scope out:** giving advice to customers; handwritten documents; other languages.\n- **AI's role:** extract fields with page citations; broker reviews in a side-by-side view.\n- **Success:** median extraction time per document reduced substantially; field accuracy above an agreed threshold on the evaluation set; broker satisfaction above baseline survey.\n- **Guardrails:** no increase in quote errors reported by customers.\n- **Owner:** head of broking operations.\n\nThis brief makes the build smaller, the evaluation concrete, and the launch decision clear.\n\n### Going further\n\nWrite \"kill criteria\" as well as success criteria: the conditions under which you'll stop or pivot (for example, accuracy plateaus below the threshold after two iterations, or edit rates show drafts aren't saving time). Pre-committing prevents sunk-cost projects that linger for years.",
+          "video": null,
+          "keyTakeaways": [
+            "Turn themes into scopes with explicit in-scope and out-of-scope boundaries.",
+            "Write a one-page AI brief: problem, users, scope, AI's role, success, risks, data, evaluation and owner.",
+            "Choose the AI's autonomy level based on error cost, detectability, volume and trust.",
+            "Define business, quality, adoption and guardrail metrics; measure a baseline and set kill criteria."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which is a scope rather than a theme?",
+              "options": [
+                "'Use AI more'",
+                "'Draft first replies to order-status emails in English and Arabic for agent review, reducing handling time'",
+                "'An AI strategy'",
+                "'AI for marketing'"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "A scope defines inputs, task, users, role and success."
+            },
+            {
+              "question": "Why measure a baseline before launch?",
+              "options": [
+                "To choose a model",
+                "To delay the project",
+                "Regulators require it everywhere",
+                "Improvement claims need a comparison with the current process"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Without a baseline, results can't be credibly evaluated."
+            },
+            {
+              "question": "What is the purpose of kill criteria?",
+              "options": [
+                "To replace success metrics",
+                "To pre-define when to stop or pivot, avoiding sunk-cost projects",
+                "To speed up launches",
+                "To punish teams"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Pre-committed stop conditions keep portfolios healthy."
+            }
+          ],
+          "activity": "Write a one-page AI brief for your top-priority use case, including out-of-scope items, the AI's autonomy level, three layers of metrics, a baseline plan and kill criteria."
+        }
+      ]
+    },
+    {
+      "slug": "prototyping-and-build-vs-buy",
+      "title": "Prototyping and build vs buy",
+      "summary": "Validate ideas quickly with prototypes, and decide whether to build, buy or combine.",
+      "lessons": [
+        {
+          "slug": "rapid-prototyping",
+          "title": "Rapid prototyping of AI features",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Why prototype first\n\nAI features are unusually hard to judge on paper. A prompt that seems obviously right may fail on real inputs; a use case that sounds marginal may turn out delightful. Prototypes answer the key questions cheaply: **Can the model do this well enough, on our data, in a way users find valuable?**\n\n### The prototyping ladder\n\n1. **Chat prototype (hours).** Try the task manually in an AI assistant with 10 to 20 real examples. Refine the prompt. This alone kills or confirms many ideas.\n2. **Prompt + spreadsheet evaluation (days).** Run a fixed prompt over 50 to 100 real inputs (many tools and simple scripts can do this), and have experts grade the outputs in a spreadsheet.\n3. **Clickable or no-code prototype (days to weeks).** A simple interface, workflow tool or internal app so real users can try it in context.\n4. **Pilot (weeks).** A limited production version with a small group of users, logging, and evaluation.\n\nMove up only when the lower rung shows promise. Each rung costs roughly an order of magnitude more than the one below.\n\n### What to learn at each stage\n\n- **Feasibility:** does output quality meet the \"good enough\" bar on real, messy inputs?\n- **Value:** do users save time or produce better work? Do they want to use it?\n- **Workflow fit:** where does it slot into existing tools and steps?\n- **Risks:** what failure modes appear? How often? Are they detectable?\n- **Cost signals:** tokens per task, latency, review time.\n\n### Using real data safely\n\nPrototypes are only informative with realistic inputs, but prototyping often happens before security reviews. Balance this by:\n\n- Using approved tools for any sensitive data.\n- Anonymising or synthesising data where possible (while checking that synthetic data isn't unrealistically clean).\n- Starting with public or low-sensitivity examples.\n\n### Prompt and evaluation assets are the real output\n\nThe most valuable outputs of prototyping are not the demo, but:\n\n- a tested prompt (or chain) with versions\n- an evaluation set of real inputs with expert grades\n- a documented list of failure modes\n- user feedback and observed workflow fit\n\nThese carry directly into the production build (or vendor evaluation).\n\n### Worked example: a proposal assistant\n\nAn agency tests whether AI can draft proposal sections.\n\n- **Chat prototype:** using five past briefs, the team finds drafts are generic unless given case studies and service descriptions. They build a context pack.\n- **Spreadsheet evaluation:** 30 past briefs run through the prompt with context; senior staff score drafts 1 to 5 on relevance and accuracy. Most scores are acceptable for first drafts; case-study selection is a common failure.\n- **No-code prototype:** a form where account managers paste the brief and get a draft in a shared document. Usage over three weeks is high; edit time is measured.\n- **Decision:** proceed to a pilot with retrieval over the case-study library to fix selection errors.\n\nTotal investment before any engineering: modest, with strong evidence for the next step.\n\n### Common prototyping mistakes\n\n- Demoing on hand-picked easy examples.\n- Skipping users and testing only with the builders.\n- Treating a prototype as production (no logging, no security, no evaluation).\n- Falling in love with a demo and ignoring the evaluation data.\n\n### Who should build prototypes?\n\nEarly rungs rarely need engineers. Product managers, analysts and domain experts can run chat prototypes and spreadsheet evaluations themselves, which keeps iteration fast and puts domain judgement at the centre. Bring in engineering when you reach integration, security and scale questions, with the evaluation evidence already in hand.\n\n### Going further\n\nTimebox each rung and define the evidence needed to move up before you start (\"at least 70% of drafts rated 4+ by two senior reviewers\" or \"users choose the tool for at least half of eligible tasks\"). This keeps prototyping honest and fast.",
+          "video": null,
+          "keyTakeaways": [
+            "Prototype to test feasibility, value, workflow fit, risk and cost on real inputs.",
+            "Climb the ladder: chat prototype, spreadsheet evaluation, no-code prototype, pilot, each only when justified.",
+            "Use real data safely: approved tools, anonymisation, low-sensitivity examples first.",
+            "The durable outputs are the tested prompt, evaluation set, failure modes and user evidence."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the cheapest first test of an AI idea?",
+              "options": [
+                "Trying the task manually in an AI assistant with 10-20 real examples",
+                "Hiring a vendor",
+                "A company-wide rollout",
+                "A full production build"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Chat prototypes validate or kill ideas in hours."
+            },
+            {
+              "question": "Why is demoing on hand-picked examples risky?",
+              "options": [
+                "Users prefer bad examples",
+                "It costs more",
+                "It is too slow",
+                "It hides real-world failure modes and overstates quality"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Representative, messy inputs reveal true performance."
+            },
+            {
+              "question": "Which prototype output is most valuable for the production build?",
+              "options": [
+                "The demo video",
+                "The slide deck",
+                "The project name",
+                "The tested prompt, evaluation set and documented failure modes"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "These assets carry directly into production."
+            }
+          ],
+          "activity": "Run a chat prototype for one use case on 15 real examples. Record failure modes and write the evidence threshold required to move to the next rung."
+        },
+        {
+          "slug": "build-vs-buy",
+          "title": "Build vs buy (and blend)",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### The options\n\nFor most AI features, there are four broad paths:\n\n1. **Use AI features inside tools you already have.** Many office suites, CRMs, help desks and analytics platforms now include AI features.\n2. **Buy a specialised AI product.** Vertical tools for specific jobs (contract review, support automation, meeting notes, sales intelligence).\n3. **Build on model APIs or platforms.** Your team combines model APIs, retrieval, tools and your own interface or workflow.\n4. **Blend.** Buy the commodity parts, build the differentiating parts, connect them with integrations (including open standards such as MCP).\n\n### Decision criteria\n\n| Question | Leans buy | Leans build |\n|---|---|---|\n| Is this capability a differentiator for us? | No, it's table stakes | Yes, it's core to our value |\n| Does a good product exist for our exact need? | Yes | No, or poorly fitting |\n| How specific are our data and workflows? | Standard | Highly specific |\n| Do we have engineering and ML/AI ops capacity? | Limited | Strong |\n| Time to value needed | Weeks | Can invest months |\n| Control over data, models and roadmap | Vendor terms acceptable | Need full control |\n| Scale and unit economics | Low-medium volume | High volume where per-seat pricing is costly |\n\nNo single row decides; weigh them together.\n\n### Hidden costs of building\n\n- Evaluation, monitoring and maintenance, which continue after launch.\n- Keeping up with model changes and deprecations.\n- Security reviews, access control and compliance work.\n- UX work to make AI outputs usable and trustworthy.\n- On-call ownership when things break.\n\nA useful rule of thumb: the initial prototype is a small fraction of the total cost of ownership.\n\n### Hidden costs of buying\n\n- Integration and data plumbing.\n- Per-seat or per-usage pricing that grows with adoption.\n- Limited customisation; workflows bend to the tool.\n- Vendor risk: roadmap changes, acquisition, shutdown, price increases.\n- Data terms: where data is processed and stored, retention, whether it is used for training.\n- Lock-in: exporting your data, prompts and configurations may be hard.\n\n### Evaluating vendors\n\nTreat vendor selection like a benchmark (see evaluation lessons):\n\n- **Test on your data:** run your evaluation set through a trial, rather than relying on demos.\n- **Security and privacy:** certifications, data residency options, retention and training policies, sub-processors, incident history.\n- **Controls:** admin settings, permissions, audit logs, SSO.\n- **Transparency:** which underlying models are used, how changes are communicated, evaluation evidence.\n- **Commercials:** pricing model, caps, exit terms, data export.\n- **Fit:** integrations with your systems; support in your regions and languages.\n\n### Worked example: support automation\n\nA regional e-commerce company compares:\n\n- **Buy:** a help desk's built-in AI agent. Fast to launch, good for common intents, limited control over tone and integrations with their custom order system.\n- **Build:** an assistant on model APIs with retrieval over their help centre and tools for their order system. Full control, requires two engineers plus ongoing ownership.\n\nEvaluation on 200 real tickets shows the built-in agent handles common intents well but struggles with Arabic tone and custom order data. Decision: **blend**. Use the help desk AI for triage and English FAQs, and build a small service that exposes order data as tools, which the help desk's AI can call (the vendor supports external tool integrations). Differentiating logic stays in-house; commodity parts are bought.\n\n### Revisit regularly\n\nThe market changes fast. What required building a year ago may now be a feature in your existing tools, and vice versa. Revisit build/buy decisions at contract renewals and major model shifts.\n\n### Going further\n\nDesign for replaceability: keep prompts, evaluation sets, retrieval indexes and business logic in assets you own, and connect vendors through standard interfaces. This preserves negotiating power and lets you switch components as better options emerge.",
+          "video": null,
+          "keyTakeaways": [
+            "Four paths: AI in existing tools, specialised products, building on APIs, or blending.",
+            "Weigh differentiation, fit, data specificity, team capacity, time to value, control and unit economics.",
+            "Account for hidden costs on both sides: maintenance and ownership for builds; pricing, lock-in and data terms for buys.",
+            "Evaluate vendors on your own data and design for replaceability."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which factor most strongly favours building?",
+              "options": [
+                "The capability is standard and table stakes",
+                "The capability is a core differentiator with highly specific data and workflows",
+                "You need results in two weeks with no engineers",
+                "A vendor product fits perfectly"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Differentiation and specificity justify the cost of building."
+            },
+            {
+              "question": "Which is a hidden cost of building AI features in-house?",
+              "options": [
+                "Per-seat licence fees",
+                "Vendor shutdown risk",
+                "Vendor lock-in",
+                "Ongoing evaluation, monitoring and adapting to model changes"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Builds carry continuing ownership costs."
+            },
+            {
+              "question": "What is the most reliable way to evaluate an AI vendor's quality?",
+              "options": [
+                "Their marketing demo",
+                "Price alone",
+                "Their logo list",
+                "Running your own evaluation set through a trial"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Your data reveals real performance."
+            }
+          ],
+          "activity": "For one use case, fill in the build-vs-buy table with your organisation's answers and recommend build, buy or blend with three reasons."
+        }
+      ]
+    },
+    {
+      "slug": "data-privacy-architecture",
+      "title": "Data, privacy and security architecture",
+      "summary": "Design how data flows through AI features, protect privacy, and manage security and vendor risk.",
+      "lessons": [
+        {
+          "slug": "data-and-privacy-architecture",
+          "title": "Data and privacy architecture for AI features",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Map the data flow first\n\nEvery AI feature moves data: from users and systems, into prompts, to model providers, into logs and back out as outputs. Privacy and security problems usually come from flows nobody mapped. Start with a simple diagram:\n\n```text\nUser input --> App backend --> [Retrieval: internal docs, CRM] --> Prompt assembly\n     --> Model provider API --> Output checks --> User\n     \\--> Logs / analytics / evaluation store (retention: ?)\n```\n\nFor each arrow, ask: what data travels, how sensitive is it, where is it processed and stored, for how long, and who can access it?\n\n### Classify your data\n\nUse your organisation's data classification (for example public, internal, confidential, restricted) and decide which classes may flow to which AI services. Personal data needs particular care, and special categories (health, biometric, financial details, children's data and similar) carry stricter rules in many jurisdictions.\n\n### Privacy principles applied to AI\n\n- **Lawful basis and transparency:** tell users how AI processes their data; ensure you have a lawful basis under applicable laws (for example UK GDPR and EU GDPR, and data protection laws in the UAE, Saudi Arabia, Pakistan and elsewhere as applicable).\n- **Data minimisation:** send only what the task needs. Often an ID and a few fields suffice; redact the rest.\n- **Purpose limitation:** don't reuse data collected for one purpose to train or tune for another without appropriate grounds.\n- **Retention:** set retention for prompts, outputs and logs; delete on schedule.\n- **Rights:** be able to find and delete a person's data, including in logs, evaluation sets and memory stores.\n- **Cross-border transfers:** know where your providers process data and whether transfer rules apply; some providers offer regional processing options.\n\nThis is not legal advice; involve your privacy or legal team early, especially for customer-facing features.\n\n### Provider terms to check\n\n- Is your data used to train the provider's models? (Many business and API offerings default to no, but verify.)\n- Retention periods for inputs and outputs, and options for shorter retention.\n- Data residency and sub-processors.\n- Security certifications and audit reports.\n- Contractual terms such as a data processing agreement.\n\n### Architecture patterns that reduce risk\n\n1. **Redaction gateway:** detect and mask personal data (names, emails, IDs) before prompts leave your environment, and re-insert where needed in outputs.\n2. **Permission-aware retrieval:** retrieval filters by the requesting user's access rights, so the AI never sees documents the user couldn't open.\n3. **Tenant isolation:** in multi-client products, strict separation of each client's data, indexes, memories and logs.\n4. **Secrets outside prompts:** API keys and credentials never appear in prompts or logs.\n5. **Private or self-hosted models** for the most sensitive workloads, where justified by risk and supported by operational capacity.\n6. **Log hygiene:** log what you need for debugging and evaluation, with masking and access controls.\n\n### Worked example: HR assistant\n\nA company builds an assistant for employees' HR questions.\n\n- Data flow mapping shows employee questions may include health and family details.\n- Decisions: permission-aware retrieval over HR policies only (no individual records in v1); a redaction step for personal identifiers in logs; logs retained for a short defined period for quality review; a clear notice explaining how questions are processed; and escalation to a human HR partner for sensitive topics.\n- The provider's business terms confirm no training on inputs and offer regional processing.\n- Privacy team signs off on a data protection impact assessment before launch.\n\n### Common failure modes\n\n- Retrieval that ignores permissions, letting users \"ask\" their way into confidential documents.\n- Full prompts, including personal data, stored indefinitely in logs.\n- Evaluation datasets built from production data without review.\n- Assuming \"enterprise\" plans settle all privacy questions.\n\n### Going further\n\nMaintain a record of each AI feature's data flows, providers, data categories, retention and legal basis, updated with each significant change. It supports impact assessments, customer security questionnaires and regulatory inquiries, and it forces the right questions at design time.",
+          "video": null,
+          "keyTakeaways": [
+            "Map every data flow: inputs, retrieval, provider, outputs, logs and evaluation stores.",
+            "Apply classification, lawful basis, minimisation, purpose limitation, retention and rights to AI data.",
+            "Check provider terms: training use, retention, residency, sub-processors and certifications.",
+            "Use redaction gateways, permission-aware retrieval, tenant isolation, secrets outside prompts and log hygiene."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "An employee asks an internal assistant about a confidential board document they can't normally open, and gets an answer. What design flaw is this?",
+              "options": [
+                "Retrieval that ignores user permissions",
+                "Wrong model temperature",
+                "A short context window",
+                "Slow retrieval"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Permission-aware retrieval is essential."
+            },
+            {
+              "question": "What does data minimisation mean for prompts?",
+              "options": [
+                "Using smaller models",
+                "Deleting all logs immediately",
+                "Sending only the data the task needs and redacting the rest",
+                "Using shorter words"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Minimise personal and sensitive data in every flow."
+            },
+            {
+              "question": "Which provider term should you verify before sending customer data?",
+              "options": [
+                "The CEO's name",
+                "The number of employees",
+                "The provider's logo colour",
+                "Whether inputs are used for training and how long they are retained"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Training use and retention are core data protection questions."
+            }
+          ],
+          "activity": "Draw the data flow for one AI feature. For each arrow, note data sensitivity, location, retention and access, and identify one risk to fix."
+        },
+        {
+          "slug": "security-and-vendor-risk",
+          "title": "Security threats and vendor risk for AI features",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### AI adds new attack surfaces\n\nTraditional application security still applies (authentication, authorisation, input validation, secrets management), but AI features add new risks. Industry resources such as OWASP's work on risks for large language model and agentic applications catalogue them; the main ones for product teams are below.\n\n### Key AI-specific threats\n\n1. **Prompt injection** (direct and indirect): inputs or retrieved content that manipulate the model into ignoring instructions or misusing tools.\n2. **Sensitive information disclosure:** the model revealing data from its context (other users' data, system prompts, internal documents) through clever questioning.\n3. **Excessive agency:** AI features with more permissions or autonomy than needed, turning a manipulation into real damage.\n4. **Insecure output handling:** passing model output directly into other systems (web pages, SQL, shell commands, emails) without validation, enabling classic injection attacks.\n5. **Supply-chain risk:** third-party models, plugins, MCP servers, datasets and libraries that are compromised or low quality.\n6. **Data and memory poisoning:** malicious content inserted into knowledge bases, training data or memory that later influences outputs.\n7. **Denial of wallet:** abuse that drives up token usage and costs.\n\n### Controls that matter most\n\n- **Least privilege** for every tool and data source the AI can use.\n- **Human approval** for consequential actions.\n- **Treat model output as untrusted input** to downstream systems: encode, validate, parameterise.\n- **Permission-aware retrieval** and tenant isolation.\n- **Rate limits and budgets** per user and per feature.\n- **Allow-listed integrations** with security review, version pinning and monitoring.\n- **Content provenance** for knowledge bases: who can add or edit documents that the AI will trust?\n- **Red-teaming** before launch and after major changes, including injection and data-exfiltration attempts.\n- **Logging and anomaly detection** on tool calls, data access and cost.\n\n### Output handling example\n\n```python\n# Model drafts a customer-facing message that will be rendered in a web page\ndraft = model_output[\"message\"]\n\nsafe_html = html_escape(draft)                 # never render raw model output as HTML\nlinks = extract_links(draft)\nif any(not allowed_domain(u) for u in links):  # block unexpected external links\n    route_to_review(draft, reason=\"unapproved link\")\n```\n\nRendering model output as raw HTML, or letting it add arbitrary links and images, can create cross-site scripting and data-exfiltration paths.\n\n### Vendor and model risk management\n\nFor each AI vendor or model provider:\n\n- Security posture: certifications, penetration testing, incident history and response commitments.\n- Data handling terms (previous lesson).\n- Model change management: how they notify you of model updates or deprecations; whether you can pin versions.\n- Availability: service levels, rate limits, regional outages; do you need a fallback provider?\n- Concentration risk: if one provider fails or changes terms, what breaks?\n\nA **fallback plan** can be as simple as a degraded mode (the feature switches off gracefully and routes to humans) or as robust as a second provider behind your abstraction layer, pre-tested with your evaluation set.\n\n### Worked example: a sales email assistant\n\nA B2B company's assistant drafts outreach using CRM data and web research. Threat modelling reveals:\n\n- Web research pages could contain injected instructions: mitigated by treating web content as untrusted, no email-sending tool (drafts only), and link allow-listing in drafts.\n- CRM access was broader than needed: reduced to the fields used.\n- Costs could spike via misuse: per-user daily budgets added.\n- Provider outage: drafting falls back to templates with a notice.\n\n### Incident readiness\n\nPrepare for AI-specific incidents: harmful or embarrassing outputs, data leakage, runaway costs, compromised integrations. Define who is on call, how to disable features quickly (kill switches), how to preserve logs, and how to notify affected users and regulators where required.\n\n### Going further\n\nInclude AI features in your regular security programme: threat models at design, security review before launch, red-team exercises, and inclusion in penetration tests. Treat prompts, tool definitions and retrieval sources as security-relevant configuration under change control.",
+          "video": null,
+          "keyTakeaways": [
+            "AI adds threats: prompt injection, disclosure, excessive agency, insecure output handling, supply chain, poisoning and denial of wallet.",
+            "Key controls: least privilege, approvals, untrusted-output handling, permission-aware retrieval, budgets, allow-lists and red-teaming.",
+            "Manage vendors for security, data terms, model change management, availability and concentration risk; plan fallbacks.",
+            "Prepare incident response with kill switches, log preservation and notification plans."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A model's output is inserted directly into a web page as HTML. What is the risk?",
+              "options": [
+                "Better SEO",
+                "No risk",
+                "Slower pages",
+                "Insecure output handling enabling script injection or data exfiltration"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Model output must be treated as untrusted and encoded or validated."
+            },
+            {
+              "question": "What is 'denial of wallet'?",
+              "options": [
+                "Abuse that drives up token usage and costs",
+                "A refund policy",
+                "A payment bug",
+                "A pricing model"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Rate limits and budgets mitigate cost-based abuse."
+            },
+            {
+              "question": "Which fallback plan is reasonable for a provider outage?",
+              "options": [
+                "No plan; outages never happen",
+                "Disable logging",
+                "A degraded mode routing to humans or templates, or a pre-tested second provider",
+                "Retry forever"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Graceful degradation or tested redundancy keeps service running."
+            }
+          ],
+          "activity": "Run a 30-minute threat modelling session on one AI feature using the seven threats. List the top three risks and the control you'll add for each."
+        }
+      ]
+    },
+    {
+      "slug": "evaluation-and-monitoring",
+      "title": "Evaluation-driven development and production monitoring",
+      "summary": "Make evaluation the engine of development, and monitor AI features in production for quality, drift and incidents.",
+      "lessons": [
+        {
+          "slug": "evaluation-driven-development",
+          "title": "Evaluation-driven development",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Why AI products need a different development loop\n\nIn traditional software, you specify behaviour and test it deterministically. AI features are probabilistic: the same input can produce different outputs, a prompt tweak can fix one case and break another, and a model update can shift behaviour overnight. Teams that succeed treat **evaluation as the core of development**, much as test-driven development treats tests.\n\n### The loop\n\n```text\n1. Define success criteria (from the AI brief)\n2. Build the evaluation set (real inputs + grading notes)\n3. Build the simplest version that could work\n4. Run evals -> read failures -> categorise\n5. Change one thing (prompt, retrieval, model, tool, UX)\n6. Re-run evals; keep changes that improve without regressions\n7. Repeat until launch criteria are met; keep running after launch\n```\n\n### Components of an evaluation system\n\n- **Evaluation sets:** representative, edge, failure and adversarial cases, tagged by category (see our Advanced Prompt Engineering course for depth).\n- **Graders:** code checks for objective criteria; rubric-based LLM judges, calibrated against humans, for subjective criteria; human review for samples.\n- **A harness:** a script or tool that runs the current version against the set and reports results by tag, with comparisons to the previous version.\n- **Launch thresholds:** agreed minimums for quality and safety metrics.\n- **Regression gates:** changes that drop key metrics below thresholds don't ship.\n\n### What product managers own\n\nEvaluation is not only an engineering task. Product and domain experts should own:\n\n- **Success criteria and rubrics:** what \"good\" means for users.\n- **Case selection:** which scenarios matter most, including high-risk ones.\n- **Grading calibration:** expert judgements that LLM judges are compared with.\n- **Trade-off decisions:** is a small quality gain worth a latency increase?\n\n### Error analysis: the highest-leverage activity\n\nAggregate scores tell you *how much*; reading failures tells you *why*. Regularly review a sample of failures and categorise them:\n\n| Failure category | Count (illustrative) | Likely fix |\n|---|---|---|\n| Retrieved wrong document | 14 | Chunking, metadata filters |\n| Ignored policy exception | 9 | Prompt instruction + examples |\n| Wrong tone in Arabic replies | 7 | Examples, model choice for Arabic |\n| Missing data in source system | 5 | Data fix, not AI fix |\n\nFix the biggest category first. You'll often find some failures aren't AI problems at all (data quality, unclear policy, UX confusion).\n\n### Online evaluation: A/B tests and staged rollouts\n\nOffline evaluation predicts; online evaluation confirms. Options:\n\n- **Shadow mode:** new version runs silently alongside; compare outputs.\n- **Staged rollout:** small percentage of traffic first, watching metrics and guardrails.\n- **A/B tests:** randomised comparison of versions on business outcomes (handling time, conversion, satisfaction).\n\nFor A/B tests, pre-define the primary metric, guardrails and duration, and avoid stopping early at the first favourable result.\n\n### Worked example\n\nA support-reply drafting feature launches in pilot. Offline, it meets the quality threshold. Online, edit rates are higher than expected for returns questions. Error analysis shows agents rewrite drafts because they cite an outdated returns window. The fix is in retrieval (a superseded document) plus a regression case added to the evaluation set. Edit rates for returns fall the following week, and the same error can't silently return.\n\n### Common mistakes\n\n- Launching on \"it looked good in the demo\" with no evaluation set.\n- Evaluation sets built once and never refreshed.\n- Aggregate scores without error analysis.\n- Changing prompt, model and retrieval at the same time, so nobody knows what helped.\n\n### Going further\n\nStore every production interaction's inputs, outputs, versions and user signals (with privacy controls) in an evaluation store. Sample from it weekly to refresh your evaluation set, so it tracks how real usage evolves. The evaluation set is a living product asset.",
+          "video": null,
+          "keyTakeaways": [
+            "AI features are probabilistic; make evaluation the core development loop.",
+            "Components: evaluation sets, calibrated graders, a harness, launch thresholds and regression gates.",
+            "Product and domain experts own success criteria, case selection, grading calibration and trade-offs.",
+            "Error analysis finds the biggest failure categories; confirm offline results with shadow mode, staged rollouts and A/B tests."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is a regression gate?",
+              "options": [
+                "A type of chart",
+                "A rule that blocks changes that drop key metrics below thresholds",
+                "A physical barrier",
+                "A model parameter"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Gates prevent quality regressions from shipping."
+            },
+            {
+              "question": "Error analysis shows many failures come from missing data in a source system. What is the right fix?",
+              "options": [
+                "Add more prompt instructions",
+                "Ignore them",
+                "Fix the data problem; not every failure is an AI problem",
+                "Change the model"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Categorising failures reveals non-AI root causes."
+            },
+            {
+              "question": "Why should product experts own rubrics and case selection?",
+              "options": [
+                "To reduce costs",
+                "Engineers don't like rubrics",
+                "They know what 'good' means for users and which scenarios matter most",
+                "It is legally required"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Domain knowledge defines quality."
+            }
+          ],
+          "activity": "Create an error-analysis table for an AI feature (or prototype) from 30 failures, categorised with likely fixes, and prioritise the top category."
+        },
+        {
+          "slug": "monitoring-in-production",
+          "title": "Monitoring AI features in production",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Launch is the beginning\n\nAI features change behaviour even when your code doesn't: users bring new questions, content changes, providers update models, and costs drift. Monitoring catches problems before users or finance do.\n\n### What to monitor\n\n**1. Operational health**\n\n- Latency (median and slow tail), error rates, timeouts, rate-limit hits.\n- Provider availability and fallback activations.\n\n**2. Cost**\n\n- Tokens and cost per request, per user, per feature and per successful outcome.\n- Retry rates and reasoning token usage.\n- Budget alerts and anomaly detection.\n\n**3. Quality**\n\n- Automated checks on live outputs (schema validity, groundedness checks, policy checks).\n- Sampled human review with rubrics, stratified by topic and risk.\n- LLM-judge scoring on samples (calibrated).\n\n**4. User signals**\n\n- Explicit: thumbs up/down, ratings, \"report a problem\".\n- Implicit: edit rate of drafts, acceptance rate of suggestions, regenerate clicks, abandonment, escalation to humans, repeat questions.\n\n**5. Safety and misuse**\n\n- Policy violations, jailbreak or injection attempts, unusual tool usage, data access anomalies.\n\n**6. Drift**\n\n- Changes in input distribution (new topics, languages, lengths).\n- Changes in output characteristics (length, refusal rate, abstention rate).\n- Changes after model or prompt updates.\n\n### Implicit signals are gold\n\nExplicit feedback is sparse: most users never click thumbs. Implicit signals scale:\n\n- **Edit distance** between AI draft and sent version shows usefulness.\n- **Regenerate** clicks suggest dissatisfaction.\n- **Escalations** reveal where automation fails.\n- **Follow-up questions** like \"that's not what I asked\" flag misunderstandings.\n\nDefine these signals at design time so the product logs them.\n\n### Dashboards and alerts\n\nA practical AI feature dashboard includes: volume, latency, cost per outcome, quality score (sampled), user signals, safety events, and version markers (so you can see changes after deployments). Alerts should fire on: error spikes, cost anomalies, quality drops beyond thresholds, safety events and provider failures. Keep alert thresholds meaningful to avoid alert fatigue.\n\n### Tracing\n\nFor complex features (retrieval, chains, agents), log **traces**: each step's inputs, outputs, timings and versions under one request ID. When a user reports a bad answer, you can see whether retrieval, the model, a tool or post-processing caused it. Many observability tools support AI traces; the key is consistent IDs and versions.\n\n### Privacy in monitoring\n\nMonitoring needs data, but logs can accumulate sensitive information. Apply the principles from the privacy lesson: minimise, mask, restrict access, set retention, and document what is logged. Let users know, in your privacy notice, how interactions are reviewed for quality.\n\n### Worked example: a drop nobody noticed\n\nA document summarisation feature's thumbs-down rate is stable, but monitoring shows average output length fell sharply after a provider model update, and the edit rate rose. Sampled review shows summaries now omit key figures. Because prompt, model version and output metrics were logged together, the team quickly links the change to the update, adjusts the prompt to require key figures, reruns evaluations and redeploys. Without the length and edit-rate signals, the degradation would have been noticed only through complaints weeks later.\n\n### Incident response\n\nWhen monitoring detects a serious issue:\n\n1. Assess severity (harm, scale, data exposure).\n2. Mitigate: kill switch, rollback to previous version, fallback mode.\n3. Preserve logs and traces.\n4. Communicate with affected users and, where required, regulators.\n5. Post-incident review: root cause, new evaluation cases, control improvements.\n\n### Who watches the dashboard?\n\nMonitoring only works with ownership. Assign a named owner for each AI feature's dashboard, a weekly review slot to look at sampled outputs and trends, and clear escalation paths. A dashboard nobody looks at is just an expensive log.\n\n### Going further\n\nRun periodic \"evaluation replays\": re-run a sample of last month's real inputs through the current production version and compare to what users received. This detects silent drift and gives you a continuously refreshed benchmark grounded in real usage.",
+          "video": null,
+          "keyTakeaways": [
+            "Monitor operations, cost, quality, user signals, safety and drift, not just uptime.",
+            "Implicit signals (edit rate, regenerations, escalations) scale better than explicit feedback.",
+            "Use dashboards with version markers, meaningful alerts and end-to-end traces with request IDs.",
+            "Apply privacy controls to logs and prepare incident response with kill switches and rollbacks."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which implicit signal best indicates whether AI drafts are useful?",
+              "options": [
+                "Page views",
+                "Server CPU usage",
+                "How much users edit drafts before sending",
+                "Number of employees"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Edit rate shows how close drafts are to what users need."
+            },
+            {
+              "question": "Output length drops sharply after a provider model update. What should you do first?",
+              "options": [
+                "Ignore it",
+                "Double the budget",
+                "Sample outputs, check quality and compare against the evaluation set",
+                "Remove monitoring"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Behaviour shifts after updates warrant immediate quality checks."
+            },
+            {
+              "question": "Why log traces with a request ID across retrieval, model and tool steps?",
+              "options": [
+                "To find which step caused a bad answer",
+                "For decoration",
+                "Because regulations require request IDs",
+                "To increase costs"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Traces make root-cause analysis fast."
+            }
+          ],
+          "activity": "Design a monitoring dashboard for one AI feature: list two metrics for each of the six categories and three alerts with thresholds."
+        }
+      ]
+    },
+    {
+      "slug": "costs-and-ux",
+      "title": "Unit economics and UX patterns for AI features",
+      "summary": "Model and control the costs of AI features, and design user experiences that build appropriate trust.",
+      "lessons": [
+        {
+          "slug": "unit-economics",
+          "title": "Unit economics of AI features",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Why AI changes product economics\n\nTraditional software features have near-zero marginal cost per use. AI features have **variable costs per interaction**: tokens, model calls, retrieval, tool calls and sometimes human review. A feature that delights users can lose money at scale if nobody models the economics. Prices change frequently and vary by provider, so build models that you can update, rather than relying on fixed numbers.\n\n### Cost components\n\n- **Model usage:** input tokens, output tokens, reasoning tokens, images or audio processed.\n- **Retrieval and storage:** embeddings, vector database, document processing.\n- **Tool and API calls:** third-party services the feature uses.\n- **Infrastructure:** hosting, observability, evaluation runs.\n- **Human costs:** review, escalation handling, quality sampling.\n- **Development and maintenance:** engineering, prompt and evaluation upkeep.\n\n### A simple cost model (illustrative)\n\n```text\nCost per task = model cost + retrieval cost + tool cost + human review cost\n\nmodel cost    = calls per task x (input tokens x input price + output tokens x output price)\nreview cost   = review rate x minutes per review x loaded cost per minute\n\nMonthly cost  = cost per task x tasks per month + fixed platform costs\nValue         = time saved x loaded cost + revenue impact + quality gains\n```\n\nFill it with your own measured numbers from prototypes and pilots. Human review is often the largest cost component, which is why improving quality (reducing review needs) can matter more than cheaper tokens.\n\n### Cost per outcome\n\nMeasure **cost per successful outcome**: cost per resolved ticket, per qualified lead, per processed invoice. A cheaper model that fails more often may cost more per outcome after retries, escalations and human time.\n\n### Levers to improve unit economics\n\n- **Right-size models:** small, fast models for simple steps; larger ones only where needed.\n- **Route by difficulty:** easy cases automated cheaply, hard ones escalated.\n- **Prompt caching:** stable prefixes (instructions, documents) cached where providers support it.\n- **Trim context:** shorter prompts, fewer retrieved passages, concise tool results.\n- **Batch processing:** for non-urgent work, batch endpoints are often cheaper.\n- **Reduce retries:** better prompts and structured outputs reduce validation failures.\n- **Improve quality to reduce review:** often the biggest lever.\n\n### Pricing AI features\n\nIf you sell a product with AI features, pricing must cover variable costs:\n\n- **Bundled:** included in existing plans; watch heavy users.\n- **Usage-based:** credits or per-use fees; transparent but can deter use.\n- **Tiered:** AI features in higher tiers; usage limits per tier.\n- **Outcome-based:** pay per resolution or result; aligns value but shifts risk to you.\n\nProtect margins with fair-use limits, rate limits and monitoring of heavy users, and communicate limits clearly to customers.\n\n### Worked example: invoice processing\n\nAn operations team models invoice extraction:\n\n- Model and processing cost per invoice: small.\n- Human review: 20% of invoices reviewed at a few minutes each, which dominates cost.\n- Improving field accuracy reduces the review rate to 10% for trusted suppliers.\n- Result: total cost per invoice falls substantially more from the review reduction than from switching to a cheaper model.\n\nThe team invests in evaluation and quality improvements rather than chasing the lowest token price.\n\n### Budget governance\n\n- Set budgets and alerts per feature.\n- Track cost per outcome monthly, alongside value delivered.\n- Review model choices when providers change prices or release new models.\n- Include evaluation and monitoring costs in the business case; they are not optional.\n\n### Going further\n\nBuild a simple unit-economics model in a spreadsheet with inputs (volume, tokens, prices, review rate, time saved) and scenarios (low, expected, high adoption). Update it with real data after launch. It turns debates about \"is AI worth it?\" into specific, testable assumptions.",
+          "video": null,
+          "keyTakeaways": [
+            "AI features have variable per-use costs; model them before scaling.",
+            "Costs include model usage, retrieval, tools, infrastructure, human review and maintenance.",
+            "Measure cost per successful outcome; human review is often the biggest cost lever.",
+            "Improve economics with right-sizing, routing, caching, trimming, batching and quality; price AI features to cover variable costs."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why can a cheaper model increase total cost?",
+              "options": [
+                "Providers charge penalties",
+                "It can't",
+                "Cheaper models are always slower",
+                "More failures lead to retries, escalations and human time"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Cost per outcome captures downstream costs of lower quality."
+            },
+            {
+              "question": "In many AI workflows, which component is often the largest cost?",
+              "options": [
+                "Domain names",
+                "Human review and escalation time",
+                "Token prices",
+                "Logo design"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Reducing review needs through quality often matters most."
+            },
+            {
+              "question": "Which pricing approach shifts the most risk to the vendor?",
+              "options": [
+                "Tiered pricing",
+                "Bundled pricing",
+                "Free trials",
+                "Outcome-based pricing"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Outcome-based pricing means the vendor absorbs costs when outcomes fail."
+            }
+          ],
+          "activity": "Build a spreadsheet unit-economics model for one AI feature with low, expected and high adoption scenarios, including human review costs."
+        },
+        {
+          "slug": "ux-patterns-for-ai-features",
+          "title": "UX patterns for AI features",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Designing for probabilistic output\n\nTraditional UX assumes the software does what it says every time. AI features are sometimes wrong, variable and hard to predict. Good AI UX helps users **get value when the AI is right, notice when it's wrong, and recover easily**, building *calibrated* trust: not blind trust, not reflexive distrust.\n\n### Core patterns\n\n**1. Draft, don't decide (by default).** Present outputs as editable drafts or suggestions, with clear ownership: the user sends, publishes or approves. Examples: suggested replies, draft summaries, proposed categories.\n\n**2. Show sources and evidence.** Citations, highlighted source passages, links to records. Users can verify claims quickly, and trust grows where it is earned.\n\n**3. Communicate uncertainty and limits.** Flag low-confidence outputs (\"I couldn't find this in your documents\"), and state what the feature can't do. Avoid fake precision (confidence percentages users can't interpret).\n\n**4. Make correction easy.** Inline editing, regenerate with guidance (\"shorter\", \"more formal\"), and one-click feedback. Capture corrections as evaluation data (with consent and privacy controls).\n\n**5. Preview before action.** For actions (sending, updating records, booking), show exactly what will happen and require confirmation. Include undo where possible.\n\n**6. Progressive disclosure.** Show the answer first, then reasoning, sources and details on demand.\n\n**7. Set expectations at the entry point.** Example prompts, capability descriptions, and suggested starting points reduce the \"blank box\" problem where users don't know what to ask.\n\n**8. Graceful failure.** When the AI can't help, say so and offer a path: search, a human, a form. Never leave users in a loop.\n\n**9. Latency design.** Stream output; show progress for multi-step tasks (\"Searching policies... Drafting reply...\"); allow cancelling.\n\n**10. Transparency about AI.** Make it clear when content is AI-generated and when users are interacting with an AI rather than a person. Some regulations and platform policies require such disclosure.\n\n### Choosing the right interface\n\nNot every AI feature should be a chat box.\n\n- **Inline assistance** (in the document, form or ticket) often beats a separate chat window, because context is already present.\n- **Structured outputs** (filled fields, tags, tables) fit workflows better than prose.\n- **Background automation** with review queues suits high-volume operations.\n- **Chat** fits open-ended exploration and questions where users don't know the exact path.\n\n### Worked example: CRM call summaries\n\nA sales team gets AI call summaries in their CRM.\n\n- v1: a long prose summary in a chat panel. Reps rarely read it.\n- v2: structured fields filled automatically (pain points, budget signals, next steps, competitors mentioned), each with a timestamp link to the call recording, editable inline, with a \"confirm\" button that logs the activity.\n- Adoption rises; edit rates show which fields need improvement (budget signals are often wrong, so they are shown as \"suggested\" with the quote).\n\nThe model didn't change; the UX did.\n\n### Anti-patterns\n\n- **Overclaiming:** marketing copy and UI that imply the AI is always right.\n- **Hidden AI:** users can't tell what is AI-generated.\n- **Dead ends:** \"Sorry, I can't help\" with no alternative.\n- **Anthropomorphism that misleads:** personas that encourage users to over-trust or share inappropriately.\n- **Confirmation fatigue:** asking users to approve trivial steps, so they stop reading important ones.\n\n### Accessibility and inclusion\n\nAI features should work with assistive technologies, support the languages your users speak, and be tested with diverse users. Streaming text, dynamic updates and chat interfaces need particular attention for screen-reader users.\n\n### Writing UI copy for AI features\n\nMicrocopy shapes trust. Prefer plain, honest labels such as \"Suggested reply (review before sending)\" over \"Perfect reply\". Explain what the feature used (\"Based on the last 3 emails and your returns policy\") so users understand its limits. Keep error messages specific and actionable.\n\n### Going further\n\nRun usability tests specifically on failure scenarios: show users wrong outputs and observe whether they notice and recover. A design that works only when the AI is right is not finished.",
+          "video": null,
+          "keyTakeaways": [
+            "Design for calibrated trust: value when right, noticeable when wrong, easy to recover.",
+            "Core patterns: drafts not decisions, sources, uncertainty cues, easy correction, previews, progressive disclosure, expectation setting, graceful failure, latency design, transparency.",
+            "Choose inline, structured or background interfaces when they fit better than chat.",
+            "Avoid overclaiming, hidden AI, dead ends and confirmation fatigue; test failure scenarios and accessibility."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which pattern most helps users verify an AI answer quickly?",
+              "options": [
+                "Citations with highlighted source passages",
+                "A friendlier persona",
+                "Longer answers",
+                "A confidence percentage"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Sources let users check claims efficiently."
+            },
+            {
+              "question": "A sales team ignores long prose call summaries. What UX change is likely to help most?",
+              "options": [
+                "Add emojis",
+                "Structured, editable fields with links to evidence, inline in the CRM",
+                "Make summaries longer",
+                "Move summaries to a separate app"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Structured, in-context outputs fit workflows better."
+            },
+            {
+              "question": "What is confirmation fatigue?",
+              "options": [
+                "Slow loading",
+                "A server error",
+                "Users confirming too few actions",
+                "Asking for approval on trivial steps so users stop reading important ones"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Reserve confirmations for consequential actions."
+            }
+          ],
+          "activity": "Audit one AI feature you use or build against the ten core patterns. Pick the two biggest gaps and sketch improved designs."
+        }
+      ]
+    },
+    {
+      "slug": "governance-and-scaling",
+      "title": "Governance, adoption and scaling",
+      "summary": "Govern AI features responsibly without slowing everything down, drive adoption, and scale from pilots to a portfolio.",
+      "lessons": [
+        {
+          "slug": "operational-governance",
+          "title": "Operational AI governance for product teams",
+          "type": "article",
+          "durationMinutes": 12,
+          "body": "### Governance that enables\n\nAI governance is often seen as a brake. Done well, it is what lets organisations move faster with confidence: clear rules on what's allowed, clear owners, and proportionate checks. Our Responsible AI course covers principles and ethics in depth; this lesson focuses on the operational machinery product and operations teams need.\n\n### The building blocks\n\n**1. An AI use policy.** What tools staff may use, with which data; what requires approval; disclosure rules. Short and practical beats long and ignored.\n\n**2. An inventory (register) of AI systems.** For each feature or tool: owner, purpose, users, data categories, providers and models (versions), risk level, evaluation status, and review dates.\n\n**3. Risk-tiered review.** Not every AI use needs the same scrutiny.\n\n```text\nTier 1 (low):    internal drafting aids, no personal data\n                 -> self-assessment checklist\nTier 2 (medium): customer-facing content with human review,\n                 or personal data processed\n                 -> product + privacy + security review\nTier 3 (high):   decisions affecting individuals' rights or access\n                 (credit, hiring, health), autonomous actions,\n                 regulated domains\n                 -> full impact assessment, legal review, sign-off\n```\n\n**4. Clear ownership.** Every AI feature has an accountable owner responsible for its performance, risks and compliance, not \"the AI team\" collectively.\n\n**5. Standard artefacts.** AI brief, data flow map, evaluation report, risk assessment, monitoring plan and incident runbook. Templates make these fast.\n\n**6. Change management.** Prompt, model, tool and data source changes go through evaluation and appropriate review, proportionate to tier.\n\n**7. Incident management.** A way to report AI issues, triage them, fix them and learn.\n\n### Regulatory awareness\n\nAI regulation is evolving and varies by jurisdiction. Examples product teams should be aware of include the EU AI Act (a risk-based framework with obligations that phase in over time), existing data protection laws that already apply to AI processing (such as GDPR and UK GDPR), sector regulations (finance, health, employment), consumer protection and advertising rules, and national AI strategies and guidelines in places such as the UAE and Saudi Arabia. Requirements and timelines are changing; work with legal counsel to determine what applies to you, and design your governance so new requirements can be absorbed (the inventory and risk tiers help).\n\nVoluntary frameworks, such as the NIST AI Risk Management Framework and the ISO/IEC 42001 standard for AI management systems, offer useful structures even where not mandatory.\n\n### Governance in the development lifecycle\n\n| Stage | Governance activity |\n|---|---|\n| Idea | Register use case, initial risk tier |\n| Prototype | Approved tools and data only |\n| Pre-launch | Evaluation report, risk review per tier, privacy/security sign-off |\n| Launch | Monitoring plan, incident runbook, user disclosures |\n| Operation | Periodic review, change control, audits |\n| Retirement | Data deletion, communication, register update |\n\n### Worked example\n\nA financial services firm's product team wants an AI assistant that helps advisers draft client suitability notes. Risk tier 3 (regulated advice context). Governance steps: impact assessment; legal review of regulatory obligations for record-keeping and advice; adviser remains responsible and must review every note; evaluation focused on factual accuracy against client data; audit logging; quarterly review. The project takes longer than an internal drafting tool, but it launches with confidence and survives its first regulatory audit.\n\nMeanwhile, a tier 1 internal meeting-notes tool goes live in two weeks with a checklist. Proportionality lets both happen.\n\n### Anti-patterns\n\n- One-size-fits-all review boards that become bottlenecks.\n- Policies nobody reads or can find.\n- No inventory, so nobody knows what AI is in use.\n- Governance that ends at launch.\n\n### Going further\n\nAutomate governance where you can: register entries created from project templates, evaluation reports generated by your harness, monitoring dashboards linked from the register. Governance that is embedded in tooling is followed; governance that lives only in documents is not.",
+          "video": null,
+          "keyTakeaways": [
+            "Good governance enables speed: clear rules, owners and proportionate checks.",
+            "Building blocks: use policy, AI inventory, risk-tiered review, ownership, standard artefacts, change and incident management.",
+            "Regulation varies and evolves (e.g. EU AI Act, data protection, sector rules); work with counsel and design for change.",
+            "Embed governance across the lifecycle and automate it in tooling where possible."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why use risk tiers for AI review?",
+              "options": [
+                "Because regulators ban tiers",
+                "To avoid all reviews",
+                "To apply scrutiny proportionate to risk, so low-risk uses move fast and high-risk uses get full review",
+                "To reduce documentation to zero"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Proportionality prevents bottlenecks while protecting high-risk uses."
+            },
+            {
+              "question": "Which belongs in an AI inventory entry?",
+              "options": [
+                "Only the tool's name",
+                "Owner, purpose, data categories, models and versions, risk tier and review dates",
+                "Nothing; inventories are optional",
+                "The team's lunch preferences"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Inventories make AI use visible and manageable."
+            },
+            {
+              "question": "An AI tool helping decide job applicants' shortlists is which tier?",
+              "options": [
+                "Tier 1",
+                "Tier 3",
+                "No tier needed",
+                "Tier 2"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Decisions affecting individuals' access to jobs are high-risk."
+            }
+          ],
+          "activity": "Draft a one-page risk-tier policy for your organisation and classify three AI uses you know into tiers with the review each requires."
+        },
+        {
+          "slug": "adoption-and-scaling",
+          "title": "Driving adoption and scaling from pilot to portfolio",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### The last mile is people\n\nMany AI features that work technically fail on adoption: users don't trust them, don't know when to use them, or find they don't fit their workflow. Scaling AI is as much change management as engineering.\n\n### Adoption drivers\n\n1. **Workflow fit:** the feature appears where the work happens, with minimal extra steps.\n2. **Clear value:** users see time saved or quality improved in their own work.\n3. **Trust:** sources, reliability and honest limits (see UX lesson).\n4. **Skills:** users know how to use it well, including prompting and reviewing.\n5. **Permission and incentives:** managers endorse use; metrics don't penalise learning time; policies are clear on what's allowed.\n6. **Champions:** respected colleagues who share tips and examples.\n\n### An adoption playbook\n\n- **Pilot with motivated users** who represent real work, not just enthusiasts.\n- **Train on real tasks:** short sessions using participants' own work, with a checklist for reviewing AI outputs.\n- **Share wins and failures:** concrete examples of time saved and mistakes caught build realistic expectations.\n- **Collect feedback continuously:** in-product and through regular check-ins.\n- **Measure adoption and value:** active users, usage per eligible task, edit rates, time saved, quality outcomes.\n- **Address fears directly:** be honest about how roles will change and how time saved will be used. Anxiety about job security undermines adoption if ignored.\n\n### From pilot to production to portfolio\n\n**Pilot to production checklist:**\n\n- Success criteria met on evaluation and in pilot metrics.\n- Security, privacy and governance reviews complete for the risk tier.\n- Monitoring, alerts and incident runbook ready.\n- Support model defined: who users contact, who owns fixes.\n- Costs modelled at full scale.\n- Training and documentation prepared.\n\n**Scaling to a portfolio:** as more AI features launch, shared foundations reduce cost and risk:\n\n- **Platform components:** a model gateway (routing, logging, keys, budgets), retrieval infrastructure, evaluation harness, monitoring and redaction services.\n- **Reusable assets:** prompt libraries, evaluation sets, tool integrations (for example MCP servers for core systems), UX components.\n- **Communities of practice:** product, engineering, data, legal and operations sharing lessons.\n- **Portfolio review:** regularly assess each feature's value, cost and risk; invest, improve or retire.\n\n### Measuring value credibly\n\nLeadership will ask whether AI is worth it. Prepare credible evidence:\n\n- Baselines measured before launch.\n- Outcome metrics (time, cost, revenue, quality), not just usage.\n- Controlled comparisons where possible (pilot group vs similar group).\n- Honest accounting of costs, including review time and platform investment.\n- Qualitative evidence: user stories, customer feedback.\n\nAvoid inflated claims (for example multiplying time saved per task by all tasks, when not all time saved converts into valuable work). Conservative, verified numbers build lasting credibility.\n\n### Worked example: an agency rollout\n\nA 40-person agency with offices in London, Dubai and Lahore pilots AI report drafting with one team. After six weeks, report preparation time drops meaningfully and client feedback is stable. Before scaling, they add monitoring, a review checklist and a short training session. Rollout goes team by team with a champion in each office. Three months later, they reuse the same model gateway, evaluation harness and CRM integration for a proposal assistant, launching it in half the time. A quarterly portfolio review retires an image-tagging experiment that never found regular use.\n\n### Retiring features\n\nNot every AI feature should live forever. Retire when value is low, costs are high, risks outweigh benefits, or better options exist. Communicate clearly, remove data per retention rules, and update the inventory.\n\n### Going further\n\nTreat your AI portfolio like a product portfolio with explicit bets, metrics and review cadence. The organisations that benefit most from AI are rarely those with the flashiest demos, but those that build reliable foundations and steadily compound small, measured wins.",
+          "video": null,
+          "keyTakeaways": [
+            "Adoption depends on workflow fit, visible value, trust, skills, permission and champions.",
+            "Pilot with representative users, train on real tasks, share wins and failures, measure adoption and address fears honestly.",
+            "Use a pilot-to-production checklist, then scale with shared platform components, reusable assets and portfolio reviews.",
+            "Report value with baselines, outcomes, comparisons and honest costs; retire features that don't earn their place."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A technically strong AI feature has low usage. What should you examine first?",
+              "options": [
+                "The model's size",
+                "Workflow fit, trust, training and whether users see value",
+                "The company logo",
+                "The server region"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Adoption problems are usually human and workflow issues."
+            },
+            {
+              "question": "Which shared component most reduces cost and risk when scaling multiple AI features?",
+              "options": [
+                "More slide decks",
+                "A new chat app per team",
+                "A separate API key per employee",
+                "A model gateway with routing, logging, budgets and key management"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Shared platform components provide consistency and control."
+            },
+            {
+              "question": "How should time savings be reported to leadership?",
+              "options": [
+                "Use baselines, measured outcomes and honest cost accounting",
+                "Avoid reporting",
+                "Multiply estimated savings by every task, regardless of use",
+                "Only report usage counts"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Conservative, verified evidence builds credibility."
+            }
+          ],
+          "activity": "Write an adoption plan for one AI feature: pilot group, training approach, champions, metrics and a pilot-to-production checklist."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 25,
+    "timeLimitMinutes": 40,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "bap-001",
+        "module": "use-case-discovery",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the best starting point for an AI initiative?",
+        "options": [
+          "Identifying valuable, frequent, painful work",
+          "Choosing the newest model",
+          "A company-wide chatbot for everything",
+          "Buying the most expensive tool"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Problems first, technology second."
+      },
+      {
+        "id": "bap-002",
+        "module": "use-case-discovery",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which characteristics make a workflow step a strong AI candidate? (Choose all that apply.)",
+        "options": [
+          "Search and synthesis across many sources",
+          "High frequency with humans able to review drafts",
+          "Rare, high-stakes decisions with no way to check outputs",
+          "Language-heavy work with unstructured inputs"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Unstructured, frequent, reviewable and search-heavy work suits AI; unverifiable high-stakes decisions do not."
+      },
+      {
+        "id": "bap-003",
+        "module": "use-case-discovery",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Where on the value-feasibility grid should you usually start?",
+        "options": [
+          "Low value, low feasibility",
+          "Low value, high feasibility",
+          "Anywhere at random",
+          "High value, high feasibility (quick wins)"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Quick wins build credibility and learning."
+      },
+      {
+        "id": "bap-004",
+        "module": "use-case-discovery",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which AI role should most first versions of customer-facing features adopt?",
+        "options": [
+          "Automation with annual audits",
+          "Full automation with no review",
+          "Assist or automate-with-review",
+          "No defined role"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Start with lower autonomy and build trust with evidence."
+      },
+      {
+        "id": "bap-005",
+        "module": "use-case-discovery",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A team proposes 'AI for customer experience' with no owner, no baseline and no metric. What is the best response?",
+        "options": [
+          "Approve it; AI always helps",
+          "Reject all AI work",
+          "Require a one-page brief with scoped task, owner, baseline, success and kill criteria",
+          "Buy a tool immediately"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Scoping turns themes into accountable, measurable projects."
+      },
+      {
+        "id": "bap-006",
+        "module": "use-case-discovery",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Why define kill criteria before a project starts?",
+        "options": [
+          "Regulators require them",
+          "To speed up coding",
+          "To avoid sunk-cost projects by pre-committing when to stop or pivot",
+          "To guarantee failure"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Pre-commitment counters sunk-cost bias."
+      },
+      {
+        "id": "bap-007",
+        "module": "use-case-discovery",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What are guardrail metrics?",
+        "options": [
+          "The main business goal",
+          "Token counts",
+          "Marketing KPIs only",
+          "Metrics that must not get worse, such as complaint rate or fairness indicators"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Guardrails catch harm hidden behind improved primary metrics."
+      },
+      {
+        "id": "bap-008",
+        "module": "prototyping-and-build-vs-buy",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the cheapest way to test whether AI can do a task on your data?",
+        "options": [
+          "Hire a vendor",
+          "Run a company survey",
+          "Try it manually in an AI assistant with real examples",
+          "Build a production system"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Chat prototypes answer feasibility in hours."
+      },
+      {
+        "id": "bap-009",
+        "module": "prototyping-and-build-vs-buy",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which are durable outputs of prototyping that carry into production? (Choose all that apply.)",
+        "options": [
+          "A list of observed failure modes",
+          "A demo run only on hand-picked easy examples",
+          "A tested prompt or chain with versions",
+          "An evaluation set with expert grades"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Prompts, evaluation sets and failure modes are assets; cherry-picked demos mislead."
+      },
+      {
+        "id": "bap-010",
+        "module": "prototyping-and-build-vs-buy",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which situation leans toward buying rather than building?",
+        "options": [
+          "A good product already fits a standard need and you need value in weeks",
+          "The capability is a core differentiator",
+          "High-volume use where per-seat pricing is costly",
+          "You have highly specific workflows and strong engineering"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Standard needs with good existing products favour buying."
+      },
+      {
+        "id": "bap-011",
+        "module": "prototyping-and-build-vs-buy",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A help desk's built-in AI handles English FAQs well but fails on Arabic tone and custom order data. What is the most sensible strategy?",
+        "options": [
+          "Abandon AI",
+          "Buy three more vendors",
+          "Blend: use the vendor for triage and English FAQs, and build the order-data tools and Arabic handling where you differentiate",
+          "Build everything from scratch immediately"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Blending buys commodity parts and builds differentiating ones."
+      },
+      {
+        "id": "bap-012",
+        "module": "prototyping-and-build-vs-buy",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is a hidden cost of building AI features in-house?",
+        "options": [
+          "Ongoing evaluation, monitoring and adapting to model changes",
+          "Sales commissions",
+          "Vendor bankruptcy",
+          "Per-seat fees"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Builds carry continuing ownership costs."
+      },
+      {
+        "id": "bap-013",
+        "module": "prototyping-and-build-vs-buy",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why design for replaceability (owning prompts, eval sets, indexes, logic)?",
+        "options": [
+          "Because vendors require it",
+          "To increase lock-in",
+          "To keep negotiating power and switch components as better options emerge",
+          "To avoid documentation"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Owned assets reduce lock-in."
+      },
+      {
+        "id": "bap-014",
+        "module": "prototyping-and-build-vs-buy",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "When evaluating an AI vendor, what matters most for quality claims?",
+        "options": [
+          "Their office location",
+          "Results on your own evaluation set during a trial",
+          "Their marketing demo",
+          "Their social media followers"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Your data reveals real performance."
+      },
+      {
+        "id": "bap-015",
+        "module": "data-privacy-architecture",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What should you map first when designing an AI feature's privacy architecture?",
+        "options": [
+          "The pricing page",
+          "The data flows: inputs, retrieval, provider, outputs, logs",
+          "The logo",
+          "The marketing plan"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Unmapped flows are where privacy problems hide."
+      },
+      {
+        "id": "bap-016",
+        "module": "data-privacy-architecture",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which architecture patterns reduce privacy and security risk? (Choose all that apply.)",
+        "options": [
+          "Permission-aware retrieval",
+          "Tenant isolation for multi-client data",
+          "A redaction gateway before prompts leave your environment",
+          "Storing API keys in the system prompt"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Redaction, permissions and isolation help; secrets must never be in prompts."
+      },
+      {
+        "id": "bap-017",
+        "module": "data-privacy-architecture",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Model output is inserted as raw HTML into a customer portal. Which threat category is this?",
+        "options": [
+          "Data poisoning",
+          "Supply-chain risk",
+          "Denial of wallet",
+          "Insecure output handling"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Model output must be treated as untrusted input to downstream systems."
+      },
+      {
+        "id": "bap-018",
+        "module": "data-privacy-architecture",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An internal assistant can call a CRM tool with full admin rights to answer sales questions, and it reads web pages for research. What is the most important change?",
+        "options": [
+          "Reduce the CRM tool to read-only access for needed fields and gate any writes with approval",
+          "Disable logging",
+          "Use a bigger model",
+          "Add 'be safe' to the prompt"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Least privilege limits damage from injection via web content (excessive agency)."
+      },
+      {
+        "id": "bap-019",
+        "module": "data-privacy-architecture",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is 'denial of wallet'?",
+        "options": [
+          "Abuse that drives up AI usage costs",
+          "A refund scam",
+          "A payment gateway feature",
+          "A privacy law"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Rate limits and budgets mitigate it."
+      },
+      {
+        "id": "bap-020",
+        "module": "data-privacy-architecture",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which provider terms should be checked before sending personal data? (Choose all that apply.)",
+        "options": [
+          "Retention periods and data residency",
+          "Whether inputs are used for training",
+          "The provider's brand colours",
+          "Sub-processors and certifications"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Training use, retention, residency and sub-processors are core data protection questions."
+      },
+      {
+        "id": "bap-021",
+        "module": "data-privacy-architecture",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What should happen to logs containing personal data from AI interactions?",
+        "options": [
+          "Minimise, mask, restrict access and apply retention limits",
+          "Email them to the vendor",
+          "Publish them for transparency",
+          "Keep them forever"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Logs are data too and need privacy controls."
+      },
+      {
+        "id": "bap-022",
+        "module": "evaluation-and-monitoring",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is evaluation-driven development?",
+        "options": [
+          "Evaluating staff performance",
+          "Making evaluation sets and graders the core loop for every change",
+          "Writing code without testing",
+          "Launching first and evaluating never"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Evaluation guides and gates changes to probabilistic systems."
+      },
+      {
+        "id": "bap-023",
+        "module": "evaluation-and-monitoring",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Error analysis shows the largest failure category is 'retrieved wrong document'. What should the team prioritise?",
+        "options": [
+          "Increasing temperature",
+          "Changing the UI colour",
+          "Adding more users",
+          "Retrieval fixes such as chunking and metadata filters"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Fix the biggest failure category at its root."
+      },
+      {
+        "id": "bap-024",
+        "module": "evaluation-and-monitoring",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which are valuable implicit signals in production? (Choose all that apply.)",
+        "options": [
+          "Escalations to humans",
+          "The number of office plants",
+          "Edit rate of AI drafts",
+          "Regenerate clicks"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Implicit behaviours reveal usefulness at scale."
+      },
+      {
+        "id": "bap-025",
+        "module": "evaluation-and-monitoring",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "After a provider model update, error rates are unchanged but output length drops sharply and edit rates rise. What does this suggest and what should you do?",
+        "options": [
+          "Increase the budget",
+          "A silent quality regression; sample outputs, run evaluations, adjust prompt or pin the previous version",
+          "Users are editing for fun",
+          "Nothing; errors are unchanged"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Behavioural drift signals need investigation even without errors."
+      },
+      {
+        "id": "bap-026",
+        "module": "evaluation-and-monitoring",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is shadow mode?",
+        "options": [
+          "Disabling a feature",
+          "Running a new version silently alongside the current one to compare outputs",
+          "A dark UI theme",
+          "Hiding logs"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Shadow mode tests on real traffic without user impact."
+      },
+      {
+        "id": "bap-027",
+        "module": "evaluation-and-monitoring",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why include version markers on AI feature dashboards?",
+        "options": [
+          "For decoration",
+          "To reduce costs",
+          "Required by browsers",
+          "To link metric changes to specific prompt or model deployments"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Version markers make cause and effect visible."
+      },
+      {
+        "id": "bap-028",
+        "module": "evaluation-and-monitoring",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What should an A/B test of an AI feature define in advance?",
+        "options": [
+          "The press release",
+          "Nothing; look at results and decide",
+          "Only the winner",
+          "Primary metric, guardrail metrics and duration"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Pre-registration prevents cherry-picking and early stopping."
+      },
+      {
+        "id": "bap-029",
+        "module": "costs-and-ux",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Why do AI features change product unit economics?",
+        "options": [
+          "They only cost money during development",
+          "They reduce all costs to zero",
+          "They have variable costs per interaction",
+          "They are free to run"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Tokens, calls and review create per-use costs."
+      },
+      {
+        "id": "bap-030",
+        "module": "costs-and-ux",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "In an invoice-processing workflow, review time dominates cost. Which lever likely saves the most?",
+        "options": [
+          "Switching to the cheapest token price",
+          "Removing monitoring",
+          "Improving accuracy to reduce the share of invoices needing review",
+          "Adding more reviewers"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Reducing review often outweighs token savings."
+      },
+      {
+        "id": "bap-031",
+        "module": "costs-and-ux",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which UX patterns support calibrated trust? (Choose all that apply.)",
+        "options": [
+          "Presenting outputs as editable drafts",
+          "Clear messages when the AI can't help, with alternatives",
+          "Hiding that content is AI-generated",
+          "Showing sources with highlighted passages"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Evidence, editability and graceful failure support trust; hiding AI undermines it."
+      },
+      {
+        "id": "bap-032",
+        "module": "costs-and-ux",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An AI assistant asks users to confirm every minor step, and users begin approving everything without reading, including a wrong refund. What is the best redesign?",
+        "options": [
+          "Add more confirmations",
+          "Make buttons larger",
+          "Reserve confirmations for consequential actions and show exact details for those",
+          "Remove all confirmations"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Targeted confirmations avoid fatigue and keep oversight meaningful."
+      },
+      {
+        "id": "bap-033",
+        "module": "costs-and-ux",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which interface is often better than a chat box for a CRM call summary?",
+        "options": [
+          "An email to the manager",
+          "A PDF attachment",
+          "Structured, editable fields inline in the CRM with links to evidence",
+          "A separate chat window"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "In-context structured outputs fit workflows."
+      },
+      {
+        "id": "bap-034",
+        "module": "costs-and-ux",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why measure cost per successful outcome rather than cost per request?",
+        "options": [
+          "Providers bill that way",
+          "It captures retries, escalations and human time caused by failures",
+          "It is always lower",
+          "It ignores quality"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Outcome-based cost reflects the true economics."
+      },
+      {
+        "id": "bap-035",
+        "module": "costs-and-ux",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which pricing approach passes variable AI costs most directly to customers?",
+        "options": [
+          "One-time licence",
+          "Free",
+          "Bundled",
+          "Usage-based credits or fees"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Usage pricing aligns revenue with variable cost, though it can deter use."
+      },
+      {
+        "id": "bap-036",
+        "module": "governance-and-scaling",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is an AI inventory (register)?",
+        "options": [
+          "A vendor price list",
+          "A record of AI systems with owners, purposes, data, models, risk tiers and reviews",
+          "A list of office equipment",
+          "A marketing plan"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Inventories make AI use visible and governable."
+      },
+      {
+        "id": "bap-037",
+        "module": "governance-and-scaling",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "An internal meeting-notes tool with no personal data beyond attendees' names is proposed. What review is proportionate in a tiered model?",
+        "options": [
+          "A ban",
+          "A lighter self-assessment or standard review consistent with its lower tier",
+          "Full impact assessment and board sign-off",
+          "No review at all ever"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Proportionate review lets low-risk tools move quickly."
+      },
+      {
+        "id": "bap-038",
+        "module": "governance-and-scaling",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which regulatory statements are accurate? (Choose all that apply.)",
+        "options": [
+          "Existing data protection laws already apply to AI processing of personal data",
+          "The EU AI Act uses a risk-based approach with obligations phasing in over time",
+          "AI is unregulated everywhere",
+          "Requirements vary by jurisdiction and sector"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "AI regulation is risk-based in the EU, data protection already applies, and rules vary; it is not unregulated."
+      },
+      {
+        "id": "bap-039",
+        "module": "governance-and-scaling",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A bank wants an AI tool that automatically rejects loan applications without human involvement. Which governance response is most appropriate?",
+        "options": [
+          "Highest-tier review: impact assessment, legal review of automated decision rules, fairness testing, human oversight design and audit logging",
+          "Tier 1 checklist",
+          "Ask the vendor to decide",
+          "Launch and monitor later"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Decisions with significant effects on individuals demand the most rigorous governance."
+      },
+      {
+        "id": "bap-040",
+        "module": "governance-and-scaling",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What most often causes technically good AI features to fail?",
+        "options": [
+          "Too many GPUs",
+          "Fonts",
+          "Poor adoption: workflow fit, trust, skills or unclear value",
+          "Excessive testing"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "The last mile is people and workflow."
+      },
+      {
+        "id": "bap-041",
+        "module": "governance-and-scaling",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which shared foundation helps scale multiple AI features safely?",
+        "options": [
+          "Each team picking its own keys and logging",
+          "Separate vendors for every feature",
+          "A model gateway with routing, logging, budgets and key management",
+          "No monitoring"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Shared platform components provide consistency and control."
+      },
+      {
+        "id": "bap-042",
+        "module": "governance-and-scaling",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "How should AI time savings be presented to leadership?",
+        "options": [
+          "Report only usage counts",
+          "Multiply per-task savings by all tasks regardless of use",
+          "Avoid numbers entirely",
+          "Use baselines, measured outcomes, controlled comparisons where possible and honest costs"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Conservative, verified evidence builds lasting credibility."
+      }
+    ]
+  }
+}
