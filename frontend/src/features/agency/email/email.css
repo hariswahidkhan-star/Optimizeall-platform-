@@ -21,18 +21,6 @@
   min-width: min(100%, 18rem);
 }
 
-/* Phones: the page title leads; the section strip and workspace picker follow it (pages render their PageHeader as
-   a direct child of the area). */
-@media (max-width: 767px) {
-  .email-area > .ui-page-header {
-    order: -1;
-  }
-
-  .email-area > .ui-page-header + * {
-    margin-top: 0;
-  }
-}
-
 /* The area's sections: a segmented track (one scrollable row on phones). */
 .email-subnav {
   max-width: 100%;
