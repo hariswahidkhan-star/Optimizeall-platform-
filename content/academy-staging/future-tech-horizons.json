@@ -6,7 +6,7 @@
   "subtitle": "Evaluate frontier AI, robotics, spatial computing, quantum and more, then build a three-horizon roadmap for your business",
   "category": "business",
   "level": "intermediate",
-  "estimatedMinutes": 233,
+  "estimatedMinutes": 278,
   "description": "Leaders are bombarded with claims about the next big technology. This course gives you the judgement to separate signal from noise and turn it into decisions. You will learn to evaluate emerging tech with hype cycles, readiness levels and a practical scorecard, then explore the frontier: reasoning models and agents, multimodal and on-device AI, world models, robotics and embodied AI, spatial computing, digital twins, quantum computing and NIST's post-quantum cryptography standards. You will weigh the energy and compute constraints behind AI, understand synthetic media and content provenance (C2PA), anticipate how AI search is changing the web and how work and skills are shifting, using cautious, sourced evidence. Finally, you will build a horizon-scanning practice, run scenario planning, and produce a three-horizon technology roadmap for a real business. Outlook is framed as outlook, with reasoning.",
   "outcomes": [
     "Assess emerging technologies with hype cycles, readiness levels, ecosystem readiness and an eight-part scorecard",
@@ -107,7 +107,7 @@
           ],
           "activity": "Start a signal log for one emerging technology relevant to your work. Record at least five entries, including one counter-signal, and set a threshold for moving to the next stage.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Every year brings a technology that will change everything. Some really do, slowly. Many fade away. A few arrive faster than anyone expected. In this lesson you will learn three lenses for judging where a technology really stands, how to separate signal from noise, and how to time your bets without having to predict the future.",
@@ -120,6 +120,24 @@
                 "onScreen": "The mindset\n• Not prediction, judgement\n• Signal over noise\n• Small reversible bets first\n• Big commitments after evidence",
                 "visual": "A stack of small coloured chips being placed on several squares, and one large chip held back until a green light appears.",
                 "seconds": 27
+              },
+              {
+                "narration": "Why does this matter so much right now? Because the cost of getting timing wrong has gone up. When technology moved slowly, being a year late rarely mattered. Today, AI capabilities, prices and regulations shift within months. Commit too early and you pay for immature tools, retrain people twice, and absorb public failures. Commit too late and competitors have built skills, data and customer expectations you can't copy quickly. The lenses in this lesson won't make you a fortune teller. They'll make you consistently less wrong, which, over a few years, is a real competitive advantage.",
+                "onScreen": "Why it matters now\n• Change cycles measured in months\n• Too early: immature tools, rework\n• Too late: lost skills and customers\n• Aim: consistently less wrong",
+                "visual": "Layout: a timeline with two warning zones at each end labelled 'too early' and 'too late'; a green band in the middle labelled 'staged commitment' widens as the narration mentions the lenses.",
+                "seconds": 42
+              },
+              {
+                "narration": "Here's an analogy. Evaluating emerging tech is a lot like judging the weather for an outdoor event. The hype cycle is the chatter at the office, everyone saying it's going to be glorious or a washout. Technology readiness is the actual barometer reading. And ecosystem readiness is whether your venue has a tent, parking and caterers available that day. You'd never plan a wedding on office chatter alone. Don't plan technology investments on headlines alone either.",
+                "onScreen": "Planning an outdoor event\n• Hype = office chatter\n• TRL = the barometer\n• Ecosystem = tent, parking, caterers\n• Plan on readings, not chatter",
+                "visual": "Layout: three panels left to right. Panel 1: speech bubbles swirling. Panel 2: a barometer needle settling. Panel 3: a venue with tent, car park and catering van icons ticking in. A banner 'Plan on readings' slides across the bottom.",
+                "seconds": 33
+              },
+              {
+                "narration": "A simple example. Your team hears that AI video avatars will replace all corporate training videos. Apply the lenses. Hype: very loud right now. Readiness: tools exist and work in production for some companies, so maturity is fairly high for narrow uses. Ecosystem: do you have approved scripts, legal clearance for likeness, accessibility captions, and a platform to host them? If not, the right stage is experiment: one short internal video, measured against your current format.",
+                "onScreen": "Simple example: AI training videos\n• Hype: loud\n• Maturity: fairly high for narrow uses\n• Ecosystem: scripts, rights, captions?\n• Stage: experiment with one video",
+                "visual": "Layout: a claim card 'AI avatars will replace all training videos' at top; three lens icons scan it in turn, each leaving a short verdict label; a stage marker lands on 'Experiment' on a four-step track.",
+                "seconds": 33
               },
               {
                 "narration": "Lens one is the hype cycle. Gartner describes a common pattern: an innovation trigger, a peak of inflated expectations, a trough of disillusionment, a slope of enlightenment, and a plateau of productivity. It's a model of expectations and attention, not of technical progress, and not every technology follows it. Its practical value is psychological. When something is in every headline, expect over-promising. When it's gone quiet after disappointment, look for teams quietly making it work.",
@@ -168,6 +186,18 @@
                 "onScreen": "Counter-signals matter\n• Ended pilots\n• Regulator warnings\n• Stalled costs\n• Independent tests contradict claims",
                 "visual": "A signal log with green plus signs, then a red minus sign row slides in and is highlighted as 'most informative'.",
                 "seconds": 25
+              },
+              {
+                "narration": "Three common mistakes. First, confusing maturity in someone else's context with maturity in yours. A technology proven in a US warehouse may face different rules, costs and skills in Karachi or Riyadh. Second, letting one spectacular demo reset your whole timeline. Demos are curated. Third, treating surveys of intentions as evidence of adoption. Plans to adopt are not adoption. Keep asking: who is using this in production, in a context like mine, and what did it cost them?",
+                "onScreen": "Three mistakes\n• Borrowed context\n• Demo-driven timelines\n• Intentions mistaken for adoption",
+                "visual": "Layout: three cards drop in: a map pin moving from 'US warehouse' to 'your market' with a question mark; a spotlight on a stage labelled 'demo'; a survey chart with a 'plans' label crossed out and replaced by 'production use?'.",
+                "seconds": 34
+              },
+              {
+                "narration": "Try this now. Pick one technology that's been mentioned in a meeting recently. Open a blank document and write three lines. Hype: how loud is it, and who's making the noise? Readiness: what's the strongest evidence of production use you can find in fifteen minutes, with a link? Ecosystem: what would you need locally, suppliers, skills, rules, that you don't have today? Then write one sentence: our stage is watch, experiment, pilot or scale, because. Share it with one colleague and ask them to challenge it. That's your first signal-log entry, done in twenty minutes.",
+                "onScreen": "Try this now\n• One technology from a recent meeting\n• Hype, readiness, ecosystem: one line each\n• Stage + because\n• Ask a colleague to challenge it",
+                "visual": "Layout: a blank document appears; four lines type in sequence with labels Hype, Readiness, Ecosystem, Stage; a colleague icon adds a comment bubble; a stopwatch shows 20 minutes.",
+                "seconds": 41
               },
               {
                 "narration": "To recap. Use three lenses: the hype cycle for expectations, readiness levels for technical maturity, and ecosystem readiness for whether you can adopt it. Weight real signals over noise, and stage your commitment with evidence thresholds. Your next step: start a signal log for one technology you care about, as shown in the lesson text, with at least five entries including one counter-signal. Next, we turn this into a practical scorecard.",
@@ -244,7 +274,7 @@
           ],
           "activity": "Run the research prompt for one technology, verify three key sources yourself, and complete the scorecard with your team, including the cheapest next experiment.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "When a new technology hits the leadership agenda, the conversation usually swings between excitement and scepticism depending on who spoke last. In this lesson you'll get a scorecard that asks the same eight questions every time, a research prompt that uses AI to speed up the homework, and a way to run the scoring session so the loudest voice doesn't win.",
@@ -257,6 +287,24 @@
                 "onScreen": "Eight dimensions\n• Problem fit • Maturity\n• Ecosystem • Economics\n• Risk and regulation • Reversibility\n• Strategic value • Internal readiness",
                 "visual": "An eight-row scorecard with a one-to-five scale; each row lights up as it's named.",
                 "seconds": 34
+              },
+              {
+                "narration": "Why does this matter? Because technology decisions are increasingly made by groups under time pressure, often after a persuasive demo. Without a shared structure, the conversation follows whoever is most senior, most excited or most sceptical. Good ideas get killed for the wrong reasons, and weak ideas get funded because they sounded exciting. A scorecard gives everyone the same questions, makes disagreements visible, and leaves a record you can learn from. It also protects you later, when someone asks why did we invest in this? You'll have the answer, with sources.",
+                "onScreen": "Why it matters\n• Group decisions under time pressure\n• Loudest voice wins without structure\n• Shared questions, visible disagreement\n• A record you can defend",
+                "visual": "Layout: a meeting table with speech bubbles of different sizes; the largest bubble dominates, then a scorecard grid overlays the table and all bubbles resize equally.",
+                "seconds": 40
+              },
+              {
+                "narration": "Here's an analogy. A scorecard is like a pilot's pre-flight checklist. Experienced pilots don't skip it because they're confident. They use it because confidence is exactly when people miss things. The checklist doesn't fly the plane, and your scorecard doesn't make the decision. It makes sure the same critical questions get asked every time, whoever happens to be in the room.",
+                "onScreen": "The pre-flight checklist\n• Used because of confidence, not despite it\n• Doesn't fly the plane\n• Same questions every time",
+                "visual": "Layout: a cockpit checklist clipboard with items ticking; the items morph into the eight scorecard dimensions; a pilot icon gives a thumbs up only after the last tick.",
+                "seconds": 27
+              },
+              {
+                "narration": "A simple example with just three dimensions. You're considering AI meeting transcription for a ten-person agency. Problem fit: five, because everyone hates writing notes. Maturity: five, because it's widely used in production. Risk: three, because client calls need consent and some clients are in regulated industries. The pattern says pilot, but with a consent process and an opt-out for sensitive clients. Three scores and a pattern turned a vague yes into a specific plan.",
+                "onScreen": "Simple example: meeting transcription\n• Problem fit: 5\n• Maturity: 5\n• Risk: 3 (consent, regulated clients)\n• Pattern → pilot with consent process",
+                "visual": "Layout: a mini scorecard with three bars filling to 5, 5 and 3; the risk bar glows amber; a decision card appears reading 'Pilot + consent process + opt-out'.",
+                "seconds": 32
               },
               {
                 "narration": "Add two fields that aren't scored but matter just as much. First, what would change our mind? Write down the specific evidence that would move a score up or down, like two peer companies in production, or official guidance from the regulator. Second, what's the cheapest next experiment? These two lines turn a debate into a plan.",
@@ -307,6 +355,18 @@
                 "seconds": 27
               },
               {
+                "narration": "Three common mistakes. First, summing the scores into one number, which hides the trade-off that matters, like a brilliant idea with a legal red flag. Second, letting the vendor fill in the scorecard, which is like asking a car salesperson to do your inspection. Third, scoring once and never revisiting, so you never learn whether your judgement was early, right or late.",
+                "onScreen": "Three mistakes\n• One total hides trade-offs\n• Vendor-filled scorecards\n• Never revisiting",
+                "visual": "Layout: three cards: several bars collapsing into a single number with a red flag hidden behind it; a salesperson icon holding the clipboard with a red cross; a calendar with an unchecked 'review' date.",
+                "seconds": 27
+              },
+              {
+                "narration": "Try this now. Take a technology your organisation is currently debating, and fill in just four of the eight dimensions: problem fit, maturity, risk and reversibility. For each, write a score from one to five, one sentence of justification, and a source link. Then write what would change your mind. If you can't find a source for a score, mark it unknown rather than guessing. Share the half-finished scorecard with two colleagues and ask them to score independently before you compare. You'll learn more from the differences than from the numbers themselves.",
+                "onScreen": "Try this now\n• Four dimensions: fit, maturity, risk, reversibility\n• Score + sentence + source\n• 'Unknown' beats guessing\n• Compare with two colleagues",
+                "visual": "Layout: a scorecard with four rows active and four greyed; scores, sentences and link icons fill in; two more scorecards appear from colleague icons and the differences highlight in amber.",
+                "seconds": 40
+              },
+              {
                 "narration": "To recap. Score eight dimensions with sources, add what would change your mind and the cheapest next experiment, and read patterns rather than totals. Use AI to gather and label evidence, then verify it yourself. Score independently before discussing, and revisit regularly. Your next step: run the research prompt on one technology, verify three sources, and complete the scorecard with your team. Next module: the frontier of AI itself.",
                 "onScreen": "Recap\n• Eight dimensions + two fields\n• Patterns, not totals\n• AI gathers, you verify and judge\n• Next: frontier AI trends",
                 "visual": "Recap slide with the scorecard icon, then a teaser of a neural network glowing.",
@@ -341,7 +401,7 @@
           "title": "Frontier AI: reasoning models and agents",
           "type": "article",
           "durationMinutes": 7,
-          "body": "### Two shifts that define today's frontier\n\nBetween 2024 and 2026, two developments changed what AI can do for a business. First, **reasoning models**: systems that spend extra computation \"thinking\" through a problem before answering, which markedly improved performance on maths, coding, analysis and multi-step planning. Second, **agents**: systems that use tools, take actions and work over many steps toward a goal, from coding agents that edit whole repositories to browser agents that operate websites. Understanding both, and their limits, is essential for any horizon scan.\n\n### Reasoning models: what changed\n\nOpenAI's o1 (September 2024) popularised the approach of training models to produce an extended chain of reasoning before the final answer. DeepSeek's R1 (January 2025) showed that strong reasoning could be achieved and released with open weights, which intensified competition and lowered costs. Since then, most frontier model families (from Anthropic, Google, OpenAI and others) offer reasoning or \"extended thinking\" modes, often with controls for how much the model thinks.\n\nThe key idea for business leaders is **test-time compute**: you can buy better answers on hard problems by letting the model think longer, at the cost of latency and money. That creates a new design choice: fast, cheap responses for routine tasks; slower, deeper reasoning for high-stakes analysis.\n\n**Where reasoning models shine**: structured analysis (financial models, contract comparisons), debugging and coding, planning multi-step work, maths and logic, and reviewing their own drafts.\n\n**Where they still fail**: facts they were never given (they can reason confidently from wrong premises), tasks needing up-to-date information without retrieval, and judgement calls that depend on context the model lacks.\n\n### Agents: from answering to doing\n\nAn agent combines a model with **tools** (search, code execution, APIs, browsers, files), **memory** (what it has done and learned), and a **loop** (plan, act, observe, adjust). Standards such as the **Model Context Protocol (MCP)** made connecting models to tools and data much easier, and agent-to-agent protocols such as **A2A** aim to let agents from different vendors collaborate.\n\nWhere agents are delivering value as of 2026:\n\n- **Software engineering**: coding agents that read codebases, make multi-file changes, run tests and open pull requests under developer review.\n- **Research and analysis**: deep-research modes that search, read and synthesise many sources into a report.\n- **Operations**: agents that triage tickets, reconcile data, draft responses, and operate software through APIs or screens, with human approval for consequential actions.\n\nThe consistent lesson from early deployments: agents work best on **well-scoped tasks with clear success criteria**, **good tool access** and **human oversight**. Open-ended autonomy on high-stakes tasks remains risky because errors compound and agents can be manipulated through the content they read (prompt injection).\n\n### Outlook: what to watch (reasoned, not predicted)\n\n- **Longer, more reliable autonomous work.** Vendors and independent researchers track how long and complex a task an agent can complete reliably. If that trend continues, more multi-hour knowledge tasks become delegable. Watch independent evaluations rather than launch claims.\n- **Cost per unit of intelligence falling.** Historically, the price of a given level of model capability has dropped quickly as newer, more efficient models arrive. If that continues, use cases that are uneconomic today may become viable. Re-cost your ideas every six months.\n- **Governance catching up.** Rules such as the EU AI Act, sector regulators and standards (like ISO/IEC 42001) shape how agents can be deployed. Expect more requirements around transparency, oversight and logging.\n\n### Hands-on: a reasoning-versus-fast test\n\nPick three real tasks: one routine (rewrite an email), one analytical (compare two supplier quotes with different terms), one planning (draft a 90-day rollout). Run each on a fast model mode and a reasoning mode.\n\n```text\nEVALUATION GRID\nTask | Mode | Time taken | Cost (if visible) | Accuracy (checked by you) | Usefulness 1-5 | Notes\n-----|------|------------|-------------------|---------------------------|----------------|------\nEmail rewrite | fast | ... | ... | ... | ... | ...\nEmail rewrite | reasoning | ...\nQuote comparison | fast | ...\nQuote comparison | reasoning | ...\n90-day plan | fast | ...\n90-day plan | reasoning | ...\nConclusion: use reasoning mode for ______ ; fast mode for ______\n```\n\n### Worked example: a Dubai finance team\n\nA mid-size trading company in Dubai tested reasoning models on month-end variance analysis. The fast mode produced plausible but shallow explanations; the reasoning mode, given the ledger extracts, identified that a large variance came from a currency revaluation and a mis-coded invoice. The team adopted reasoning mode for analysis with a rule: every explanation must cite the specific ledger lines, which a human checks. They also built a small agent that pulls the extracts automatically, but kept posting journal entries as a human-only step.\n\n### Pitfalls\n\n- Using reasoning mode for everything (slow and costly) or for nothing (missing its value).\n- Trusting agent output without verification because the reasoning \"looks thorough\".\n- Granting agents broad access before scoping and testing.\n\n### How to measure success\n\nFor each use case: accuracy on a checked sample, time saved, cost per task, and human review time. Re-run when vendors ship new models.\n",
+          "body": "### Two shifts that define today's frontier\n\nBetween 2024 and 2026, two developments changed what AI can do for a business. First, **reasoning models**: systems that spend extra computation \"thinking\" through a problem before answering, which markedly improved performance on maths, coding, analysis and multi-step planning. Second, **agents**: systems that use tools, take actions and work over many steps towards a goal, from coding agents that edit whole repositories to browser agents that operate websites. Understanding both, and their limits, is essential for any horizon scan.\n\n### Reasoning models: what changed\n\nOpenAI's o1 (September 2024) popularised the approach of training models to produce an extended chain of reasoning before the final answer. DeepSeek's R1 (January 2025) showed that strong reasoning could be achieved and released with open weights, which intensified competition and lowered costs. Since then, most frontier model families (from Anthropic, Google, OpenAI and others) offer reasoning or \"extended thinking\" modes, often with controls for how much the model thinks.\n\nThe key idea for business leaders is **test-time compute**: you can buy better answers on hard problems by letting the model think longer, at the cost of latency and money. That creates a new design choice: fast, cheap responses for routine tasks; slower, deeper reasoning for high-stakes analysis.\n\n**Where reasoning models shine**: structured analysis (financial models, contract comparisons), debugging and coding, planning multi-step work, maths and logic, and reviewing their own drafts.\n\n**Where they still fail**: facts they were never given (they can reason confidently from wrong premises), tasks needing up-to-date information without retrieval, and judgement calls that depend on context the model lacks.\n\n### Agents: from answering to doing\n\nAn agent combines a model with **tools** (search, code execution, APIs, browsers, files), **memory** (what it has done and learned), and a **loop** (plan, act, observe, adjust). Standards such as the **Model Context Protocol (MCP)** made connecting models to tools and data much easier, and agent-to-agent protocols such as **A2A** aim to let agents from different vendors collaborate.\n\nWhere agents are delivering value as of 2026:\n\n- **Software engineering**: coding agents that read codebases, make multi-file changes, run tests and open pull requests under developer review.\n- **Research and analysis**: deep-research modes that search, read and synthesise many sources into a report.\n- **Operations**: agents that triage tickets, reconcile data, draft responses, and operate software through APIs or screens, with human approval for consequential actions.\n\nThe consistent lesson from early deployments: agents work best on **well-scoped tasks with clear success criteria**, **good tool access** and **human oversight**. Open-ended autonomy on high-stakes tasks remains risky because errors compound and agents can be manipulated through the content they read (prompt injection).\n\n### Outlook: what to watch (reasoned, not predicted)\n\n- **Longer, more reliable autonomous work.** Vendors and independent researchers track how long and complex a task an agent can complete reliably. If that trend continues, more multi-hour knowledge tasks become delegable. Watch independent evaluations rather than launch claims.\n- **Cost per unit of intelligence falling.** Historically, the price of a given level of model capability has dropped quickly as newer, more efficient models arrive. If that continues, use cases that are uneconomic today may become viable. Re-cost your ideas every six months.\n- **Governance catching up.** Rules such as the EU AI Act, sector regulators and standards (like ISO/IEC 42001) shape how agents can be deployed. Expect more requirements around transparency, oversight and logging.\n\n### Hands-on: a reasoning-versus-fast test\n\nPick three real tasks: one routine (rewrite an email), one analytical (compare two supplier quotes with different terms), one planning (draft a 90-day rollout). Run each on a fast model mode and a reasoning mode.\n\n```text\nEVALUATION GRID\nTask | Mode | Time taken | Cost (if visible) | Accuracy (checked by you) | Usefulness 1-5 | Notes\n-----|------|------------|-------------------|---------------------------|----------------|------\nEmail rewrite | fast | ... | ... | ... | ... | ...\nEmail rewrite | reasoning | ...\nQuote comparison | fast | ...\nQuote comparison | reasoning | ...\n90-day plan | fast | ...\n90-day plan | reasoning | ...\nConclusion: use reasoning mode for ______ ; fast mode for ______\n```\n\n### Worked example: a Dubai finance team\n\nA mid-size trading company in Dubai tested reasoning models on month-end variance analysis. The fast mode produced plausible but shallow explanations; the reasoning mode, given the ledger extracts, identified that a large variance came from a currency revaluation and a mis-coded invoice. The team adopted reasoning mode for analysis with a rule: every explanation must cite the specific ledger lines, which a human checks. They also built a small agent that pulls the extracts automatically, but kept posting journal entries as a human-only step.\n\n### Pitfalls\n\n- Using reasoning mode for everything (slow and costly) or for nothing (missing its value).\n- Trusting agent output without verification because the reasoning \"looks thorough\".\n- Granting agents broad access before scoping and testing.\n\n### How to measure success\n\nFor each use case: accuracy on a checked sample, time saved, cost per task, and human review time. Re-run when vendors ship new models.\n",
           "video": null,
           "keyTakeaways": [
             "Reasoning models spend extra test-time compute to improve hard analysis, coding and planning, at a cost in latency and money.",
@@ -392,10 +452,10 @@
           ],
           "activity": "Run the reasoning-versus-fast test on three real tasks and write one rule for when your team should use each mode.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 8,
             "scenes": [
               {
-                "narration": "If you last looked closely at AI a couple of years ago, two things have changed dramatically. Models now reason, spending extra effort thinking before they answer. And they act, using tools and working through many steps toward a goal. In this lesson you'll understand both shifts, where they genuinely help, where they still fail, and what's worth watching next.",
+                "narration": "If you last looked closely at AI a couple of years ago, two things have changed dramatically. Models now reason, spending extra effort thinking before they answer. And they act, using tools and working through many steps towards a goal. In this lesson you'll understand both shifts, where they genuinely help, where they still fail, and what's worth watching next.",
                 "onScreen": "Frontier AI\n• Reasoning models\n• Agents that act\n• Where they help and fail\n• What to watch",
                 "visual": "A simple chat bubble evolves into a thought-bubble chain, then into a robot hand picking up tools: magnifier, spreadsheet, browser.",
                 "seconds": 26
@@ -405,6 +465,24 @@
                 "onScreen": "Reasoning models\n• o1 popularised the approach (2024)\n• DeepSeek R1: open weights (2025)\n• Now standard across major families\n• A dial for thinking effort",
                 "visual": "Timeline with two milestone markers, then a row of generic model cards each showing a small 'thinking' dial.",
                 "seconds": 29
+              },
+              {
+                "narration": "Why does this matter for your business? Because these two shifts change which tasks AI can take on. Two years ago, many teams tried AI on analysis and planning and were disappointed by shallow answers. Reasoning models changed that for many analytical tasks. And agents moved AI from drafting text to doing multi-step work in real systems. That means the list of things worth trying has grown, but so has the need for careful scoping, verification and access control. The organisations getting value are the ones that understand both the capability and its limits.",
+                "onScreen": "Why it matters\n• Reasoning: deeper analysis now feasible\n• Agents: from drafting to doing\n• More opportunities, more need for control",
+                "visual": "Layout: a list titled 'Worth trying with AI' grows longer as two new cards 'deep analysis' and 'multi-step work' slide in; a shield icon labelled 'scope, verify, control' appears beside the list.",
+                "seconds": 41
+              },
+              {
+                "narration": "Here's an analogy. A fast model is like asking a knowledgeable colleague a quick question in the corridor. A reasoning model is like asking them to sit down with a notepad for twenty minutes. For where's the meeting room, the corridor answer is perfect. For should we restructure our pricing, you want the notepad. And an agent is that colleague with a laptop, a phone and access to your systems, who can go and do the work, which is exactly why you give them clear instructions and check their output.",
+                "onScreen": "Corridor, notepad, laptop\n• Fast model = corridor answer\n• Reasoning = sit down with a notepad\n• Agent = colleague with system access",
+                "visual": "Layout: three vignettes in a row: two figures chatting in a corridor; one figure writing on a notepad at a desk; one figure at a laptop with tool icons around it. Labels appear under each.",
+                "seconds": 39
+              },
+              {
+                "narration": "A simple example. You ask a fast model to compare two supplier quotes. It says supplier A is cheaper. You ask a reasoning model with the same quotes. It works through delivery charges, payment terms and a minimum order quantity buried in the small print, and concludes supplier B is cheaper for your actual volumes. Same question, same documents, different depth. That's test-time compute earning its cost, and it's why you check the reasoning, not just the conclusion.",
+                "onScreen": "Simple example: two quotes\n• Fast: A is cheaper\n• Reasoning: B is cheaper at your volume\n• Hidden terms change the answer\n• Check the reasoning",
+                "visual": "Layout: two quote documents side by side; a quick arrow points to A; then a slower sequence highlights delivery, payment terms and minimum order lines, and the arrow swings to B with a working-out panel beneath.",
+                "seconds": 34
               },
               {
                 "narration": "The idea to remember is test-time compute. You can buy a better answer on a hard problem by letting the model think longer, at the cost of time and money. That gives you a new design choice. Fast, cheap responses for routine work like rewriting an email. Slower, deeper reasoning for high-stakes analysis like comparing contracts or explaining a financial variance.",
@@ -449,6 +527,18 @@
                 "seconds": 33
               },
               {
+                "narration": "Three common mistakes. First, using reasoning mode for everything, which is slow and expensive, or for nothing, which misses its value on hard problems. Second, trusting a long, confident chain of reasoning without checking its premises. Third, giving agents broad access before you've scoped the task and tested it. The safest path is narrow tasks, clear success criteria, least-privilege access, and humans approving anything consequential.",
+                "onScreen": "Three mistakes\n• All or nothing on reasoning\n• Confidence mistaken for correctness\n• Broad agent access too early",
+                "visual": "Layout: three cards: a dial stuck at either extreme then settling in the middle; a long reasoning chain resting on a cracked foundation; a key ring with many keys shrinking to one.",
+                "seconds": 28
+              },
+              {
+                "narration": "Try this now. Pick three real tasks from your week: one routine, like rewriting an email; one analytical, like comparing two offers; and one planning task, like a ninety-day rollout. Run each in a fast mode and in a reasoning mode of the assistant you already use. Check the answers yourself for accuracy, note how long each took, and rate usefulness from one to five. Then write one sentence: we use reasoning mode when, and fast mode when. Pin that sentence where your team will see it, and revisit it when new models arrive.",
+                "onScreen": "Try this now\n• Three tasks: routine, analytical, planning\n• Fast vs reasoning mode\n• Check accuracy, time, usefulness\n• Write your team's rule",
+                "visual": "Layout: a three-by-two grid of task cards (fast and reasoning columns); ratings and timers fill in; a rule card 'We use reasoning mode when...' pins to a noticeboard.",
+                "seconds": 41
+              },
+              {
                 "narration": "To recap. Reasoning models trade time and cost for better answers on hard problems, but still need correct inputs. Agents add tools, memory and a loop, and work best when tightly scoped and overseen. Watch reliability, cost and governance using independent evidence. Your next step: run the reasoning-versus-fast test in the lesson text on three real tasks, and write one rule for when to use each mode. Next, multimodal AI, world models and on-device AI.",
                 "onScreen": "Recap\n• Reasoning: better, slower, costlier\n• Agents: scope and oversight\n• Watch with evidence\n• Next: multimodal, world models, on-device",
                 "visual": "Recap slide; teaser shows a phone chip glowing and a small generated 3D world.",
@@ -475,6 +565,10 @@
               {
                 "term": "ISO",
                 "say": "I S O"
+              },
+              {
+                "term": "ISO 42001",
+                "say": "I S O forty-two thousand and one"
               }
             ]
           }
@@ -535,7 +629,7 @@
           ],
           "activity": "Run the multimodal opportunity scan for one team and prototype one workflow with the prompt, checking every extracted value against originals.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Text was just the beginning. Today's AI can look at a photo, listen to a call, watch a video, and even simulate how a world behaves. And more of it is running directly on the phone in your pocket. In this lesson you'll explore multimodal AI, world models and on-device AI, with a clear view of what works now and what's still an outlook.",
@@ -548,6 +642,24 @@
                 "onScreen": "Multimodal now\n• Invoices and receipts\n• Dashboards from screenshots\n• Product photo inspection\n• Call summaries\n• Voice agents",
                 "visual": "A grid of six tiles, each animating a small example: a receipt being read, a chart annotated, a product photo with a defect circled, a waveform turning into bullet points.",
                 "seconds": 30
+              },
+              {
+                "narration": "Why does this matter? Because a huge amount of business information never arrives as neat text. It arrives as photos of receipts, screenshots of dashboards, voice notes from the field, scanned forms and video. Until recently, turning that into usable data meant manual typing. Multimodal and on-device AI change the economics of that work, especially for small teams and field operations. And world models hint at a future where more testing and training happens in simulation first. Knowing what's ready now, and what isn't, helps you pick the right experiments.",
+                "onScreen": "Why it matters\n• Much information isn't text\n• Photos, voice notes, scans, video\n• Cheaper to turn into data\n• Know what's ready now",
+                "visual": "Layout: a stream of mixed items (receipt photo, voice waveform, scanned form, video frame) flows into a funnel and comes out as tidy spreadsheet rows; a 'ready now' badge appears on some items and 'watch' on a 3D world icon.",
+                "seconds": 39
+              },
+              {
+                "narration": "Here's an analogy. Think of multimodal AI as giving your assistant eyes and ears, not just a keyboard. World models are like giving them imagination: the ability to picture what would happen if they pushed a box or turned a corner. And on-device AI is like the assistant working at your desk instead of in a distant office: faster, more private, but with a smaller toolbox. Each adds something different, and each has its own limits.",
+                "onScreen": "Eyes, imagination and a desk nearby\n• Multimodal = eyes and ears\n• World models = imagination\n• On-device = working at your desk",
+                "visual": "Layout: an assistant icon gains eye and ear icons (multimodal), then a thought bubble showing a box being pushed (world model), then shrinks into a phone on a desk (on-device). Labels fade in beside each transformation.",
+                "seconds": 33
+              },
+              {
+                "narration": "A simple example of multimodal in practice. A small restaurant in Dubai photographs supplier invoices on a phone at the back door. A multimodal assistant extracts supplier, date, items and total into a spreadsheet, and flags two invoices where the total was hard to read. The owner checks those two by hand. What used to be an evening of typing becomes ten minutes of checking. But notice the flags: the value comes from the model being honest about uncertainty.",
+                "onScreen": "Simple example: invoice photos\n• Photos → spreadsheet rows\n• Two uncertain totals flagged\n• Owner checks only those\n• Honest uncertainty is the value",
+                "visual": "Layout: a phone camera snaps three invoices; rows appear in a spreadsheet; two cells glow amber with 'check' tags; a timer shows evening reduced to minutes, labelled 'illustrative'.",
+                "seconds": 34
               },
               {
                 "narration": "But know the limits. Multimodal models still struggle with fine detail in dense images, precise counting and measurement, and some spatial reasoning. Generated media can contain invented details. And a demo on clean, well-lit images tells you little about messy real-world photos taken on a busy shop floor. Always test on your own samples, in your own languages, like Arabic and Urdu.",
@@ -590,6 +702,18 @@
                 "onScreen": "Voice agents\n• Natural, interruptible conversations\n• Bookings, status, first-line support\n• Disclose AI, consent to record\n• Test real accents and dialects",
                 "visual": "A phone call waveform with a small 'AI assistant' label; a 'talk to a person' button glows; dialect tags float nearby.",
                 "seconds": 30
+              },
+              {
+                "narration": "Three common mistakes. First, assuming a demo on clean, well-lit images will work on real photos taken in a hurry. Test on your own messy samples. Second, treating world models as production tools for ordinary businesses today, rather than a watch item. Third, planning on-device features around the newest flagship phone, when many of your users have older devices with far less capability.",
+                "onScreen": "Three mistakes\n• Demo images ≠ real photos\n• World models as production tools\n• Designing only for flagship phones",
+                "visual": "Layout: three cards: a crisp studio photo next to a blurry one with a lower confidence meter; a 3D world with a 'watch' label; a row of phones from old to new with a feature working only on the newest, then adapted for all.",
+                "seconds": 27
+              },
+              {
+                "narration": "Try this now. Walk through one team's week and list every moment information arrives as an image, a PDF, audio or video. Pick the most frequent one. Collect five real samples, messy ones included, and run them through a multimodal assistant with the prompt in the lesson text, which asks it to extract fields and mark anything unreadable instead of guessing. Check every value against the original. Count how many were right, how many were flagged, and how many were wrong but not flagged. That last number tells you whether it's safe to scale.",
+                "onScreen": "Try this now\n• List non-text inputs for one team\n• Pick the most frequent\n• Test five real, messy samples\n• Count right, flagged, wrong-but-unflagged",
+                "visual": "Layout: a checklist of input types; one is circled; five sample thumbnails run through an AI icon; a results table with three columns (right, flagged, wrong-unflagged) fills in, the last column highlighted.",
+                "seconds": 41
               },
               {
                 "narration": "To recap. Multimodal AI opens document, visual and voice use cases now, but test on real samples. World models are an outlook for most, an experiment for some. On-device AI brings privacy, speed and offline use, usually in a hybrid with the cloud. Your next step: run the multimodal opportunity scan in the lesson text for one team and prototype one workflow, checking every value. Next module: robots, spatial computing and digital twins.",
@@ -683,7 +807,7 @@
           ],
           "activity": "Complete the robotics task sheet for one physical task in your organisation or a client's, and decide the stage.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Robots have worked in car factories for decades, but they followed exact scripts in fenced-off cages. Something new is happening: robots guided by learned models that can see messy environments, follow spoken instructions and handle objects they were never explicitly programmed for. In this lesson you'll learn what's really changed, where robots deliver value today, and how to evaluate a robotics idea without being dazzled by demo videos.",
@@ -696,6 +820,24 @@
                 "onScreen": "Vision-language-action models\n• Images + instruction → actions\n• Gemini Robotics, Isaac GR00T, π0\n• Learn from demos, simulation, web data",
                 "visual": "Diagram: camera frame and text instruction flow into a model box, which outputs arrows to a robot arm's joints.",
                 "seconds": 26
+              },
+              {
+                "narration": "Why does this matter now? Labour shortages in warehouses, manufacturing and logistics, rising expectations for delivery speed, and hot, physically demanding work in regions like the Gulf all create pressure to automate physical tasks. At the same time, the technology is shifting from rigid, pre-programmed machines towards more flexible, learning systems. That combination means you'll hear more robotics pitches, some excellent, some premature. The skill you need is telling them apart, based on your specific task, not on the most impressive video.",
+                "onScreen": "Why it matters now\n• Labour shortages, speed, heat\n• Rigid to flexible robots\n• More pitches, mixed maturity\n• Judge by your task",
+                "visual": "Layout: three pressure icons (worker shortage, delivery clock, thermometer) push against a warehouse; robot icons arrive, some solid, some translucent labelled 'premature'; a task sheet filters them.",
+                "seconds": 36
+              },
+              {
+                "narration": "Here's an analogy. Traditional industrial robots are like trains: brilliant on fixed tracks, useless off them. Mobile robots in warehouses are like buses on set routes: more flexible, still predictable. Learned, embodied AI aims for something closer to a taxi driver who can handle new streets and unusual passengers. The further you go from train to taxi, the more flexible the robot, and the harder it becomes to guarantee reliability and safety.",
+                "onScreen": "Trains, buses and taxis\n• Classic robots = trains on tracks\n• AMRs = buses on routes\n• Embodied AI = taxis on any street\n• Flexibility vs reliability",
+                "visual": "Layout: three transport icons in a row with labels; a slider beneath them moves from 'predictable' to 'flexible'; a reliability gauge above the slider drops as it moves right.",
+                "seconds": 31
+              },
+              {
+                "narration": "A simple example. A small e-commerce warehouse in Lahore packs orders into three box sizes. Items vary, but boxes don't. A cobot that picks the right box size and places it at the packing station is a well-defined, low-variation task, often a good starting point. Picking the items themselves, from bins of mixed shapes, is a high-variation task where learned models help but reliability varies. Start with the box, not the items.",
+                "onScreen": "Simple example: a packing station\n• Box selection: low variation → good start\n• Item picking: high variation → harder\n• Start with the box",
+                "visual": "Layout: a packing station illustration; a cobot arm places boxes of three sizes smoothly (green); then attempts to pick mixed items from a bin, with an amber reliability meter; caption 'start with the box'.",
+                "seconds": 31
               },
               {
                 "narration": "Training in the real world is slow, expensive and risky, so much learning happens in simulation, and increasingly with world models. The catch is the sim-to-real gap: behaviour that works in a clean simulation can fail with real lighting, friction and clutter. Closing that gap is one of the central challenges in the field, and one reason real-world production evidence matters so much.",
@@ -744,6 +886,18 @@
                 "onScreen": "People and change\n• Roles shift to supervision and maintenance\n• Involve workers early\n• Consultation duties\n• Afterthought plans stall",
                 "visual": "A worker icon transitioning from carrying boxes to monitoring a tablet showing a robot fleet.",
                 "seconds": 25
+              },
+              {
+                "narration": "Three common mistakes. First, choosing the most impressive robot rather than the simplest automation that solves the task. Second, underestimating integration: warehouse software, Wi-Fi coverage, floor quality and maintenance all matter. Third, treating safety certification and worker consultation as paperwork to do at the end. They shape the design, so involve safety specialists and workers from the start.",
+                "onScreen": "Three mistakes\n• Impressive over simple\n• Underestimating integration\n• Safety and people left to the end",
+                "visual": "Layout: three cards: a flashy humanoid beside a simple conveyor, the conveyor gets the tick; a robot with cables to WMS, Wi-Fi and floor icons; a safety shield and worker icons moved from the end of a timeline to the start.",
+                "seconds": 25
+              },
+              {
+                "narration": "Try this now. Choose one physical task you know well, in your business or a client's. Fill in the robotics task sheet from the lesson text: objects, weights, variation, environment, current cycle time, error rate and injury risk. Then answer one question honestly: is the variation low, medium or high? If it's low, look first at mature automation like conveyors, mobile robots or cobots. If it's high, write down what production evidence you'd need from a vendor before a pilot. Share the sheet with the people who do the task today and ask what you've missed.",
+                "onScreen": "Try this now\n• One physical task\n• Complete the task sheet\n• Judge variation honestly\n• Low → mature automation; high → evidence first\n• Ask the people who do it",
+                "visual": "Layout: the task sheet fills section by section; a variation dial lands on low, medium or high; two paths branch to 'mature automation' and 'evidence required'; worker icons add sticky notes.",
+                "seconds": 42
               },
               {
                 "narration": "To recap. Embodied AI brings learned perception and control to robots. Proven value today sits in warehouses, manufacturing and inspection, while humanoids are mostly a watch-and-learn item. Evaluate by task, variation, safety, economics and change, and choose the simplest automation that works. Your next step: complete the robotics task sheet in the lesson text for one physical task you know. Next: spatial computing and augmented reality.",
@@ -836,7 +990,7 @@
           ],
           "activity": "Fill in the spatial use-case canvas for one job in your organisation where hands are busy or scale matters, and define a six-week pilot.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Imagine a junior technician on a hot rooftop, looking at a cooling unit, while a senior engineer across the city sees exactly what they see and draws arrows on the real equipment. That's spatial computing earning its keep. In this lesson you'll learn what spatial computing is, today's device landscape, where it creates value now, and how to think about its future without falling for the hype.",
@@ -849,6 +1003,24 @@
                 "onScreen": "Definitions\n• VR: fully immersive\n• MR: digital objects in your space\n• AR: overlays via glasses or phone\n• Focus on the job to be done",
                 "visual": "Three side-by-side scenes: a fully virtual room, a real room with a virtual object on the table, and a street with a floating label.",
                 "seconds": 25
+              },
+              {
+                "narration": "Why does this matter? Because the next wave of AI assistants is being designed to see and hear the world around you, and glasses and headsets are how that happens hands-free. For businesses with field staff, technicians, trainers, designers or retail customers, that could change how knowledge reaches people at the moment they need it. But spatial computing also has a long history of overpromising. Knowing where it genuinely works today protects your budget and lets you move quickly when the right use case appears.",
+                "onScreen": "Why it matters\n• AI assistants that see and hear\n• Knowledge at the point of need\n• History of overpromising\n• Know where it works today",
+                "visual": "Layout: a technician on a ladder receives a floating instruction card; beside it, a faded 'hype' banner from past years peels away to reveal a list titled 'works today'.",
+                "seconds": 37
+              },
+              {
+                "narration": "Here's an analogy. Think of spatial computing as moving information off the screen and onto the world. A phone is like carrying a map in your pocket; you have to stop and look down. Smart glasses are like having a guide beside you who points at things as you walk. A headset is like stepping into a model of the city itself. Each is useful for different journeys, and you don't need the full model city to find the nearest pharmacy.",
+                "onScreen": "Map, guide or model city\n• Phone = map in your pocket\n• Glasses = guide who points\n• Headset = walking inside a model\n• Match device to journey",
+                "visual": "Layout: three scenes: a person looking down at a phone map; the same person with glasses and floating arrows pointing ahead; the person inside a translucent 3D city model. Labels appear under each.",
+                "seconds": 35
+              },
+              {
+                "narration": "A simple example. A furniture retailer wants to reduce returns. Customers often buy sofas that don't fit their living rooms. Phone-based AR lets a shopper place a true-to-scale sofa in their room using the camera, no headset required. The retailer measures conversion and return rates for shoppers who used the feature versus those who didn't. That's spatial computing earning its keep with a device everyone already owns.",
+                "onScreen": "Simple example: sofa placement\n• Problem: returns from poor fit\n• Phone AR places sofa at true scale\n• Measure conversion and returns",
+                "visual": "Layout: a phone screen shows a living room; a sofa model drops in and snaps to the floor with scale markers; beside it, two small bar charts compare returns with and without AR, labelled 'illustrative'.",
+                "seconds": 29
               },
               {
                 "narration": "Here's the landscape as of September 2026. Headsets include Apple Vision Pro, launched in 2024, Samsung's Galaxy XR, launched in October 2025 as the first Android XR device with Gemini built in, and Meta's Quest line, which leads consumer VR. Smart glasses are lighter, with cameras, audio and AI assistants, some with small displays, including Meta's Ray-Ban glasses and Android XR glasses from Google and partners. And phones remain the biggest AR platform of all.",
@@ -891,6 +1063,18 @@
                 "onScreen": "Start with the phone\n• Largest AR audience\n• Try-on and placement\n• Web AR, no app needed\n• Measure conversion and returns",
                 "visual": "A phone camera view placing a virtual sofa in a living room; a small returns-rate chart beside it labelled 'illustrative'.",
                 "seconds": 30
+              },
+              {
+                "narration": "Three common mistakes. First, starting with we need a metaverse strategy instead of a specific job to be done. Second, ignoring comfort, heat, battery life and device management, which decide whether people actually keep using the device after week two. Third, underestimating privacy duties to bystanders, especially when cameras are worn in shops, homes, clinics or offices.",
+                "onScreen": "Three mistakes\n• Strategy before a job to be done\n• Ignoring comfort and battery\n• Forgetting bystanders",
+                "visual": "Layout: three cards: a vague 'metaverse strategy' cloud replaced by a sharp task card; a headset with thermometer and battery icons; a street scene with bystander silhouettes and a privacy shield.",
+                "seconds": 25
+              },
+              {
+                "narration": "Try this now. Think of one job in your organisation where people's hands are busy, where scale matters, or where an expert has to travel to help. Fill in the spatial use-case canvas from the lesson text: the user and context, the job to be done, why spatial beats a tablet here, the device class, the content needed, privacy considerations and success metrics. Then define a small pilot: ten users, six weeks, with a baseline measured before you start. If you can't explain why spatial beats a tablet, park the idea.",
+                "onScreen": "Try this now\n• One hands-busy or travel-heavy job\n• Complete the canvas\n• 10 users, 6 weeks, baseline first\n• Can't beat a tablet? Park it",
+                "visual": "Layout: a canvas template fills in panel by panel; a small pilot card appears with '10 users, 6 weeks'; a tablet icon challenges the headset icon with a 'why better?' label.",
+                "seconds": 40
               },
               {
                 "narration": "To recap. Spatial computing blends digital and physical across headsets, glasses and phones. Remote assistance, training, design and try-on deliver value now, and AI-first glasses are the category to watch. Treat privacy as a design requirement. Your next step: fill in the spatial use-case canvas in the lesson text for one hands-busy job, and define a six-week pilot with a baseline. Next: digital twins.",
@@ -979,7 +1163,7 @@
           ],
           "activity": "Complete the digital twin scope for one asset or process you know, including the validation plan and the limits on any automated action.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "What if you could test a change to your warehouse, your building or your production line before touching anything real? That's the promise of a digital twin. In this lesson you'll learn what a twin really is, the levels of sophistication, where twins pay off, how AI is changing them, and a practical path to your first one.",
@@ -992,6 +1176,24 @@
                 "onScreen": "Definition\n• Model\n• Live data connection\n• Purpose: a decision\n• 3D or dashboard alone ≠ twin",
                 "visual": "Three interlocking circles labelled Model, Data, Decision; their overlap glows and is labelled 'Digital twin'.",
                 "seconds": 28
+              },
+              {
+                "narration": "Why does this matter? Because many of the most expensive decisions in operations, where to place equipment, when to maintain it, how to set energy systems, are still made on experience and spreadsheets. Digital twins let you see the whole system, test changes before you make them, and spot problems early. In hot climates, where cooling can be one of the biggest operating costs, even a simple twin of your chillers or cold rooms can pay for itself. The key is starting with a decision, not a 3D model.",
+                "onScreen": "Why it matters\n• Big decisions on gut and spreadsheets\n• See the whole system\n• Test before changing\n• Cooling costs in hot climates",
+                "visual": "Layout: a spreadsheet and a gut-feeling icon on one side; a live system dashboard with a 'test change' button on the other; a thermometer icon with a rising energy bill that flattens after the twin appears.",
+                "seconds": 39
+              },
+              {
+                "narration": "Here's an analogy. A digital twin is like a flight simulator for your business assets. Pilots practise emergencies in a simulator that behaves like the real plane, because practising on the real plane is expensive and dangerous. A twin lets you test a new warehouse layout, a maintenance schedule or an energy setting before you touch the real thing. And just like a simulator, it's only useful if it behaves like reality, which is why validation matters so much.",
+                "onScreen": "The flight simulator\n• Practise without real-world risk\n• Test changes before touching the real thing\n• Only useful if it matches reality",
+                "visual": "Layout: a cockpit simulator on the left morphs into a warehouse simulation on the right; a 'matches reality?' gauge fills as real and simulated data lines converge.",
+                "seconds": 34
+              },
+              {
+                "narration": "A simple example. A small cold-storage business in Jeddah has four freezers with temperature sensors. A descriptive twin shows all four on one floor-plan dashboard, with live temperatures and door-open events. Within a week, they notice one freezer's temperature rises every afternoon when deliveries arrive. The fix is simple: a strip curtain and a delivery schedule change. No 3D, no simulation, just a model, live data and a decision.",
+                "onScreen": "Simple example: four freezers\n• Floor plan + live temperatures + door events\n• Afternoon spike spotted\n• Fix: strip curtain + schedule",
+                "visual": "Layout: a simple floor plan with four freezer icons showing live temperatures; one icon's line chart spikes every afternoon; a strip-curtain icon appears and the spike flattens.",
+                "seconds": 30
               },
               {
                 "narration": "Twins come in levels. Descriptive twins mirror the current state with live data. Diagnostic twins help explain why something happened. Predictive twins forecast what will happen, like when a pump needs maintenance. Prescriptive twins test actions in simulation, like a new warehouse layout. And autonomous twins adjust the real system within limits. Most organisations should start at descriptive or predictive, on one valuable asset.",
@@ -1026,7 +1228,7 @@
               {
                 "narration": "A hotel group in Doha built a twin of the chiller plants across three properties, combining building management data with maintenance logs. The first win was almost embarrassingly simple: seeing all the chillers at once revealed wasteful setpoints. Next, a predictive model spotted a compressor trend weeks before failure, confirmed by the engineers. Automated setpoint changes were allowed only within a narrow approved range, and every change was logged. And their operational technology was reviewed for security before connecting it.",
                 "onScreen": "Worked example: chillers\n• BMS data + maintenance logs\n• Quick win: wasteful setpoints\n• Predicted compressor issue\n• Narrow automation limits, logged\n• OT security review",
-                "visual": "Dashboard of three hotel chiller plants with setpoint gauges; one trend line rising toward a warning threshold.",
+                "visual": "Dashboard of three hotel chiller plants with setpoint gauges; one trend line rising towards a warning threshold.",
                 "seconds": 35
               },
               {
@@ -1034,6 +1236,18 @@
                 "onScreen": "Data quality first\n• Sensor drift, timestamp gaps\n• Incomplete logs\n• One asset register\n• Trust depends on it",
                 "visual": "Two mismatched data tables being aligned into one clean table with a shared asset ID column.",
                 "seconds": 26
+              },
+              {
+                "narration": "Three common mistakes. First, starting with a photorealistic 3D model and no decision to improve. It looks great in a boardroom and changes nothing. Second, poor data quality, which destroys trust in the twin within weeks. Third, connecting operational technology like building controls or machines to networks without a security review, which can create serious safety risks.",
+                "onScreen": "Three mistakes\n• Pretty 3D, no decision\n• Poor data quality\n• OT connected without security review",
+                "visual": "Layout: three cards: a glossy 3D render with a 'so what?' tag; a data table with gaps and mismatches; a machine icon connected to a cloud with an open padlock, which then closes after a 'security review' stamp.",
+                "seconds": 25
+              },
+              {
+                "narration": "Try this now. Pick one asset or process where a better decision would clearly save money or time: a chiller plant, a delivery route, a production line, a set of freezers. Write the decision it would improve and how often it's made. List the data you already have, sensors, logs, systems, and note its quality honestly. Then choose the minimum model, maybe just a floor plan with live readings. Write a validation plan: how many weeks you'll compare predictions to reality, and what accuracy you'd accept before acting on it.",
+                "onScreen": "Try this now\n• One asset, one decision\n• List existing data honestly\n• Choose the minimum model\n• Write a validation plan",
+                "visual": "Layout: the twin scope template fills in; a data inventory list shows quality badges (good, patchy); a 'minimum model' selector clicks to 'floor plan + live data'; a validation timeline with weeks appears.",
+                "seconds": 39
               },
               {
                 "narration": "To recap. A twin is a model plus live data plus a decision. Start descriptive or predictive on one asset, use the minimum model, validate before trusting, and automate only within limits. Secure your operational technology. Your next step: complete the twin scope in the lesson text for one asset or process you know. Next module: quantum computing and post-quantum cryptography.",
@@ -1078,7 +1292,7 @@
           "title": "Quantum computing: what it is and what it is not",
           "type": "article",
           "durationMinutes": 7,
-          "body": "### Cutting through the mystique\n\nQuantum computing is often described as \"trying every answer at once\". That is misleading. A quantum computer uses **qubits**, which can exist in **superposition** (a combination of 0 and 1) and can be **entangled** (their states correlated in ways classical bits cannot be). Quantum algorithms choreograph **interference** so that wrong answers cancel out and right answers are amplified. This only produces a speed-up for **specific kinds of problems**. For most everyday computing (spreadsheets, websites, most AI inference), classical computers remain better and will stay so.\n\n### Where quantum could matter\n\n- **Simulating molecules and materials.** Nature is quantum mechanical, so quantum computers are natural simulators. This is widely seen as the most promising early application: catalysts, batteries, drugs, fertilisers, materials.\n- **Breaking some of today's public-key cryptography.** Shor's algorithm, run on a large enough, error-corrected quantum computer, could break RSA and elliptic-curve cryptography, which protect much of today's internet. This is why post-quantum cryptography matters now (next lesson).\n- **Certain optimisation and sampling problems.** Claims here are more contested; advantages over the best classical methods are not established for most practical business problems.\n- **Quantum sensing and communication.** Separate but related technologies: ultra-precise sensors (navigation, medical imaging, geology) and quantum key distribution for specific secure links.\n\nGrover's algorithm offers only a quadratic speed-up for unstructured search, which is why symmetric cryptography such as AES remains secure with sufficiently long keys (for example AES-256).\n\n### The hardware race and the error problem\n\nSeveral hardware approaches compete: **superconducting circuits**, **trapped ions**, **neutral atoms**, **photonics**, and others, each with trade-offs in speed, stability and scalability. The central obstacle is **errors**: qubits are fragile, and noise corrupts calculations quickly. The path to useful machines runs through **quantum error correction**, which combines many noisy **physical qubits** into fewer reliable **logical qubits**.\n\nRecent years brought meaningful milestones, including demonstrations that adding more physical qubits to an error-correcting code can reduce logical error rates (a key threshold result reported by Google in late 2024), and steady progress from multiple companies and research labs on logical qubits. Vendors publish roadmaps toward fault-tolerant machines, but timelines differ and should be treated as goals, not guarantees.\n\n### How to read quantum news\n\n| Claim | Questions to ask |\n|---|---|\n| \"X qubits!\" | Physical or logical? What error rates? Qubit count alone means little. |\n| \"Quantum advantage achieved\" | On what problem? Is it useful? Has the classical comparison been challenged? |\n| \"Solves optimisation for logistics\" | Compared with the best classical solver? On a real instance at scale? |\n| \"Breaks encryption soon\" | What resources would that require, and what do credible estimates say? |\n| Roadmap dates | Vendor goal or independently evidenced progress? |\n\n### Outlook (with reasoning)\n\nA balanced view: **useful, fault-tolerant quantum computers are likely to arrive gradually**, with early advantages in scientific simulation before broad commercial use; the exact timing is uncertain and disputed among experts. What is not uncertain is that **cryptographic migration takes many years**, and data stolen today could be decrypted later (\"harvest now, decrypt later\"). That is why governments have set migration timelines regardless of when a cryptographically relevant quantum computer appears.\n\n### What businesses should do now\n\n1. **Most organisations**: no need to buy quantum computing. Do start post-quantum cryptography planning (next lesson).\n2. **Chemistry, materials, pharma, energy, finance research teams**: build literacy; run small experiments via cloud quantum services (major cloud providers and hardware vendors offer access) with academic or vendor partners; track error-correction progress.\n3. **Everyone**: learn to spot hype; apply the scorecard from module one.\n\n### Hands-on: a quantum relevance screen\n\n```text\nQUANTUM RELEVANCE SCREEN (answer yes/no)\n1. Do we rely on public-key cryptography to protect data that must stay secret for 5+ years? -> PQC planning now\n2. Is molecular/materials simulation central to our R&D? -> build literacy, consider partnered experiments\n3. Do we solve very large combinatorial optimisation problems where small gains are worth millions? -> watch; benchmark against best classical methods first\n4. Are precise sensing, timing or navigation critical to our operations? -> watch quantum sensing\n5. None of the above -> monitor annually; focus on PQC via vendors\n```\n\n### Worked example: a Saudi petrochemicals R&D team\n\nAn R&D group in Saudi Arabia screened quantum relevance: yes on materials simulation and long-lived confidential data. Actions: a small literacy programme for chemists, a partnered research project using cloud quantum hardware on a toy catalyst problem (explicitly exploratory), and a separate PQC inventory led by IT security. The board received a one-page outlook with reasoning rather than a prediction.\n\n### Pitfalls\n\n- Buying \"quantum-ready\" consulting before knowing whether quantum is relevant.\n- Confusing qubit counts with capability.\n- Ignoring PQC because \"quantum is years away\".\n\n### How to measure success\n\nLiteracy (can leaders explain the relevance screen?), completed PQC planning milestones, and, for R&D teams, clear learning outcomes from experiments.\n",
+          "body": "### Cutting through the mystique\n\nQuantum computing is often described as \"trying every answer at once\". That is misleading. A quantum computer uses **qubits**, which can exist in **superposition** (a combination of 0 and 1) and can be **entangled** (their states correlated in ways classical bits cannot be). Quantum algorithms choreograph **interference** so that wrong answers cancel out and right answers are amplified. This only produces a speed-up for **specific kinds of problems**. For most everyday computing (spreadsheets, websites, most AI inference), classical computers remain better and will stay so.\n\n### Where quantum could matter\n\n- **Simulating molecules and materials.** Nature is quantum mechanical, so quantum computers are natural simulators. This is widely seen as the most promising early application: catalysts, batteries, drugs, fertilisers, materials.\n- **Breaking some of today's public-key cryptography.** Shor's algorithm, run on a large enough, error-corrected quantum computer, could break RSA and elliptic-curve cryptography, which protect much of today's internet. This is why post-quantum cryptography matters now (next lesson).\n- **Certain optimisation and sampling problems.** Claims here are more contested; advantages over the best classical methods are not established for most practical business problems.\n- **Quantum sensing and communication.** Separate but related technologies: ultra-precise sensors (navigation, medical imaging, geology) and quantum key distribution for specific secure links.\n\nGrover's algorithm offers only a quadratic speed-up for unstructured search, which is why symmetric cryptography such as AES remains secure with sufficiently long keys (for example AES-256).\n\n### The hardware race and the error problem\n\nSeveral hardware approaches compete: **superconducting circuits**, **trapped ions**, **neutral atoms**, **photonics**, and others, each with trade-offs in speed, stability and scalability. The central obstacle is **errors**: qubits are fragile, and noise corrupts calculations quickly. The path to useful machines runs through **quantum error correction**, which combines many noisy **physical qubits** into fewer reliable **logical qubits**.\n\nRecent years brought meaningful milestones, including demonstrations that adding more physical qubits to an error-correcting code can reduce logical error rates (a key threshold result reported by Google in late 2024), and steady progress from multiple companies and research labs on logical qubits. Vendors publish roadmaps towards fault-tolerant machines, but timelines differ and should be treated as goals, not guarantees.\n\n### How to read quantum news\n\n| Claim | Questions to ask |\n|---|---|\n| \"X qubits!\" | Physical or logical? What error rates? Qubit count alone means little. |\n| \"Quantum advantage achieved\" | On what problem? Is it useful? Has the classical comparison been challenged? |\n| \"Solves optimisation for logistics\" | Compared with the best classical solver? On a real instance at scale? |\n| \"Breaks encryption soon\" | What resources would that require, and what do credible estimates say? |\n| Roadmap dates | Vendor goal or independently evidenced progress? |\n\n### Outlook (with reasoning)\n\nA balanced view: **useful, fault-tolerant quantum computers are likely to arrive gradually**, with early advantages in scientific simulation before broad commercial use; the exact timing is uncertain and disputed among experts. What is not uncertain is that **cryptographic migration takes many years**, and data stolen today could be decrypted later (\"harvest now, decrypt later\"). That is why governments have set migration timelines regardless of when a cryptographically relevant quantum computer appears.\n\n### What businesses should do now\n\n1. **Most organisations**: no need to buy quantum computing. Do start post-quantum cryptography planning (next lesson).\n2. **Chemistry, materials, pharma, energy, finance research teams**: build literacy; run small experiments via cloud quantum services (major cloud providers and hardware vendors offer access) with academic or vendor partners; track error-correction progress.\n3. **Everyone**: learn to spot hype; apply the scorecard from module one.\n\n### Hands-on: a quantum relevance screen\n\n```text\nQUANTUM RELEVANCE SCREEN (answer yes/no)\n1. Do we rely on public-key cryptography to protect data that must stay secret for 5+ years? -> PQC planning now\n2. Is molecular/materials simulation central to our R&D? -> build literacy, consider partnered experiments\n3. Do we solve very large combinatorial optimisation problems where small gains are worth millions? -> watch; benchmark against best classical methods first\n4. Are precise sensing, timing or navigation critical to our operations? -> watch quantum sensing\n5. None of the above -> monitor annually; focus on PQC via vendors\n```\n\n### Worked example: a Saudi petrochemicals R&D team\n\nAn R&D group in Saudi Arabia screened quantum relevance: yes on materials simulation and long-lived confidential data. Actions: a small literacy programme for chemists, a partnered research project using cloud quantum hardware on a toy catalyst problem (explicitly exploratory), and a separate PQC inventory led by IT security. The board received a one-page outlook with reasoning rather than a prediction.\n\n### Pitfalls\n\n- Buying \"quantum-ready\" consulting before knowing whether quantum is relevant.\n- Confusing qubit counts with capability.\n- Ignoring PQC because \"quantum is years away\".\n\n### How to measure success\n\nLiteracy (can leaders explain the relevance screen?), completed PQC planning milestones, and, for R&D teams, clear learning outcomes from experiments.\n",
           "video": null,
           "keyTakeaways": [
             "Quantum computers use superposition, entanglement and interference; they speed up specific problems, not everyday computing.",
@@ -1129,7 +1343,7 @@
           ],
           "activity": "Complete the quantum relevance screen for your organisation and write a three-sentence outlook for leadership, with reasoning.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "You've probably heard that quantum computers try every answer at once. That's not quite right, and the misunderstanding leads to a lot of bad decisions. In this lesson you'll learn what quantum computers actually do, where they could matter, why errors are the big obstacle, how to read quantum news, and what your business should do right now.",
@@ -1142,6 +1356,24 @@
                 "onScreen": "The mental model\n• Superposition\n• Entanglement\n• Interference amplifies right answers\n• Only for specific problems",
                 "visual": "Wave animation: two waves overlapping, cancelling in some places and reinforcing in others; labels 'wrong answers cancel', 'right answers amplify'.",
                 "seconds": 30
+              },
+              {
+                "narration": "Why does this matter to a business leader? Two reasons. First, quantum claims are increasingly used in marketing and investor pitches, and you'll be asked for a view. Knowing the basics lets you respond calmly instead of either dismissing it or panicking. Second, and more urgently, quantum computing creates a real, dated security task for almost every organisation: moving to post-quantum cryptography. Understanding why that's necessary makes it much easier to get budget and attention for it, long before any quantum computer breaks anything.",
+                "onScreen": "Why it matters\n• You'll be asked for a view\n• Respond calmly, not with panic\n• Real task now: post-quantum cryptography",
+                "visual": "Layout: a boardroom question bubble 'What's our quantum strategy?' appears; a calm answer card slides in; beside it a padlock with a calendar icon labelled 'PQC planning'.",
+                "seconds": 37
+              },
+              {
+                "narration": "Here's an analogy. A quantum computer isn't a faster version of your laptop, any more than a submarine is a faster car. A submarine is extraordinary at one kind of journey, underwater, and useless for the school run. Quantum computers are extraordinary for certain problems, like simulating molecules, and pointless for spreadsheets and websites. Most confusion about quantum comes from imagining it as a faster car.",
+                "onScreen": "Submarine, not a faster car\n• Extraordinary for specific journeys\n• Useless for everyday trips\n• Match the machine to the problem",
+                "visual": "Layout: a car and a submarine side by side on a split background of road and sea; task icons (spreadsheet, molecule) drift towards the right vehicle: spreadsheet to the car, molecule to the submarine.",
+                "seconds": 29
+              },
+              {
+                "narration": "A simple example of reading the news. A headline says a company has built a machine with thousands of qubits. Ask three questions. Are they physical qubits or error-corrected logical ones? What are the error rates? And has it solved a useful problem faster than the best classical computer, with that claim checked by independent experts? If the article answers none of those, you've learned very little, however big the number.",
+                "onScreen": "Simple example: a qubit headline\n• Physical or logical?\n• Error rates?\n• Useful problem, verified advantage?\n• No answers → little learned",
+                "visual": "Layout: a headline card with a large number; three question tags attach to it one by one; each tag shows a blank answer box; a caption appears 'Big number, little information'.",
+                "seconds": 31
               },
               {
                 "narration": "So where could quantum matter? The most promising early area is simulating molecules and materials, because nature itself is quantum. Think batteries, catalysts, drugs and fertilisers. Second, a large enough error-corrected quantum computer running Shor's algorithm could break RSA and elliptic-curve cryptography, which protect much of the internet. Third, some optimisation and sampling problems, though advantages there are contested. And separately, quantum sensing and communication.",
@@ -1190,6 +1422,18 @@
                 "onScreen": "Quantum sensing\n• Ultra-precise time, fields, gravity\n• Navigation without satellites\n• Medical imaging, geology\n• Often nearer-term than computing",
                 "visual": "A compass needle, an MRI-style scan outline and a geological cross-section, each with a subtle quantum glow.",
                 "seconds": 30
+              },
+              {
+                "narration": "Three common mistakes. First, buying quantum-ready consulting before checking whether quantum is even relevant to your business. Second, confusing qubit counts with capability. Third, ignoring post-quantum cryptography because quantum computers seem years away. That last one is the most costly, because migration takes years and data captured today could be decrypted later.",
+                "onScreen": "Three mistakes\n• Consulting before relevance\n• Qubit counts as capability\n• Ignoring post-quantum cryptography",
+                "visual": "Layout: three cards: a consulting invoice with a question mark; a qubit counter with a 'capability?' gauge that doesn't move; a padlock with an hourglass and 'migration takes years' label.",
+                "seconds": 23
+              },
+              {
+                "narration": "Try this now. Answer the five questions in the quantum relevance screen from the lesson text for your organisation. Do we protect data that must stay secret for five years or more? Is molecular or materials simulation central to our research? Do we solve huge optimisation problems where tiny gains are worth a lot? Do we depend on precise sensing, timing or navigation? If none apply, write that down too. Then draft a three-sentence outlook for your leadership team: what quantum means for us, what we're doing now, and when we'll review it.",
+                "onScreen": "Try this now\n• Answer the five screening questions\n• Note which apply\n• Three-sentence outlook for leadership\n• Set a review date",
+                "visual": "Layout: five yes/no toggles flip in sequence; the results feed into a three-line outlook card; a calendar icon adds a review date.",
+                "seconds": 40
               },
               {
                 "narration": "To recap. Quantum computers exploit superposition, entanglement and interference for specific problems. Simulation is the most promising early use, and Shor's algorithm threatens today's public-key cryptography. Errors are the obstacle, error correction is the path, and news deserves careful questions. Your next step: complete the quantum relevance screen in the lesson text. Next lesson: post-quantum cryptography and how to migrate.",
@@ -1282,7 +1526,7 @@
           ],
           "activity": "Create a PQC inventory for five of your most important systems, test one public endpoint for hybrid key exchange, and send PQC roadmap questions to one vendor.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "If quantum computers capable of breaking today's encryption might be years away, why start changing cryptography now? Because big cryptographic migrations take years, and data captured today could be decrypted later. In this lesson you'll learn the new standards, the government timelines, what's already happening in the products you use, and a practical migration plan for a normal organisation.",
@@ -1295,6 +1539,24 @@
                 "onScreen": "The first standards (Aug 2024)\n• FIPS 203: ML-KEM (key establishment)\n• FIPS 204: ML-DSA (signatures)\n• FIPS 205: SLH-DSA (hash-based signatures)",
                 "visual": "Three official-looking document cards (no seals or logos) labelled FIPS 203, 204 and 205, each with a key or pen icon.",
                 "seconds": 27
+              },
+              {
+                "narration": "Why does this matter now, rather than in ten years? Because cryptography is buried everywhere: websites, VPNs, payment systems, signed software, identity systems, smart devices and supplier connections. Most organisations don't even have a list of where it's used. Governments have published migration timelines, regulated sectors are starting to ask about plans, and vendors are shipping post-quantum options. Starting the inventory now spreads the effort over years, lets you ride vendor upgrades you'd be doing anyway, and avoids a rushed, expensive scramble later.",
+                "onScreen": "Why it matters now\n• Cryptography is everywhere\n• Few have an inventory\n• Timelines published, regulators asking\n• Start early, avoid a scramble",
+                "visual": "Layout: an organisation diagram with many small padlock icons appearing on websites, VPNs, payments, devices and suppliers; a timeline beneath shows a smooth ramp labelled 'start now' versus a steep spike labelled 'rush later'.",
+                "seconds": 36
+              },
+              {
+                "narration": "Here's an analogy. Post-quantum migration is like replacing the locks in a large building before a new kind of lock-pick becomes widely available. Nobody can say exactly when the lock-pick arrives, but you know three things. It will take years to change every lock. Some rooms hold documents that must stay secret for decades. And thieves are already photocopying documents today to open later. So you start with an inventory of every lock, then change the most important ones first.",
+                "onScreen": "Changing the locks early\n• Takes years to change every lock\n• Some secrets last decades\n• Copies taken today, opened later\n• Inventory, then prioritise",
+                "visual": "Layout: a building floor plan with many lock icons; a clock face with a blurred hour hand; a figure photocopying documents in one room; locks change colour from red to green starting with the most important rooms.",
+                "seconds": 35
+              },
+              {
+                "narration": "A simple example of an inventory row. System: customer portal login. Cryptography used: TLS on the web server, managed by your cloud load balancer. Algorithm today: elliptic-curve key exchange. Data secrecy lifetime: customer records, sensitive for many years. Internet-facing: yes. Vendor roadmap: the cloud provider supports hybrid post-quantum key exchange. Priority: high. Action: enable hybrid mode and test with older clients. That's one row, and it's already a plan.",
+                "onScreen": "Simple example: one inventory row\n• System, crypto use, algorithm\n• Secrecy lifetime, exposure\n• Vendor roadmap\n• Priority and action",
+                "visual": "Layout: a spreadsheet row builds cell by cell with the example values; the priority cell turns red 'High'; an action note slides in beneath.",
+                "seconds": 30
               },
               {
                 "narration": "More is on the way. FN-DSA, based on FALCON, is being standardised as FIPS two oh six. And in March 2025, NIST selected HQC as an additional key-establishment algorithm, a backup to ML-KEM built on different mathematics, with a draft standard to follow. Check NIST's official pages for the current status, because these move through drafts and approvals.",
@@ -1337,6 +1599,18 @@
                 "onScreen": "Crypto-agility in practice\n• Central certificate and key management\n• Maintained libraries\n• Algorithms as configuration\n• Test in staging",
                 "visual": "A control panel with an 'algorithm' dropdown switching between options without any code change, and a staging environment icon.",
                 "seconds": 26
+              },
+              {
+                "narration": "Three common mistakes. First, waiting for a quantum emergency before starting the inventory, when discovery alone can take a year or more. Second, rolling out new algorithms without testing compatibility, because larger keys and new handshakes can break older devices and network equipment. Third, forgetting third parties and long-lived devices, like payment terminals, industrial controllers and firmware signing, which can't be updated overnight.",
+                "onScreen": "Three mistakes\n• Waiting for an emergency\n• Skipping compatibility tests\n• Forgetting suppliers and long-lived devices",
+                "visual": "Layout: three cards: an alarm bell with a calendar showing 'too late'; a handshake icon failing on an old router; a supply chain diagram with device icons tagged '2035'.",
+                "seconds": 27
+              },
+              {
+                "narration": "Try this now. Pick five systems that matter most to your business, for example your website, customer portal, VPN, payment connection and document signing. For each, fill in one inventory row: what cryptography it uses, how long the data it protects must stay secret, whether it's internet-facing, and what the vendor says about post-quantum support. If you have OpenSSL three point five or later, test one public endpoint for hybrid key exchange using the command in the lesson text. Then email one vendor asking for their post-quantum roadmap.",
+                "onScreen": "Try this now\n• Five key systems\n• One inventory row each\n• Test one endpoint (OpenSSL 3.5+)\n• Ask one vendor for their roadmap",
+                "visual": "Layout: five inventory rows fill in; a terminal window runs a test command and prints a result line; an email draft to a vendor with the subject 'Post-quantum roadmap' slides in.",
+                "seconds": 38
               },
               {
                 "narration": "To recap. NIST's FIPS two oh three, two oh four and two oh five are the foundation, with more standards coming. Timelines point to 2030 and 2035, with the NCSC asking for discovery by 2028. Much migration comes through vendors, so inventory, prioritise, ask vendors, build agility, test hybrids and plan long-lived devices. Your next step: inventory five key systems and test one endpoint. Next module: the energy and compute constraints behind AI.",
@@ -1448,7 +1722,7 @@
           ],
           "activity": "Complete the AI workload review for your top five AI workflows and apply routing, caching or batching to at least one, then re-measure cost per task.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "AI feels weightless. You type a question, an answer appears. But behind every answer is a data centre full of specialised chips drawing electricity, needing cooling, and connected to grids that are sometimes already stretched. In this lesson you'll learn why energy and compute are becoming strategic constraints, what the evidence says, and what that means for your costs, sustainability and choices.",
@@ -1463,7 +1737,25 @@
                 "seconds": 37
               },
               {
-                "narration": "Electricity isn't the only constraint. Advanced chips depend on a concentrated supply chain, leading-edge fabrication, advanced packaging and high-bandwidth memory, which is exposed to export controls and geopolitics. In many regions, new data centres wait a long time for grid connections. Hot climates, including the Gulf, raise cooling demands, pushing operators toward liquid cooling and water-efficient designs. And communities scrutinise land, water and local power prices.",
+                "narration": "Why does this matter to you? Because energy and compute constraints show up in three places you care about. Your costs: AI bills can grow quickly as usage spreads across teams. Your commitments: if you report emissions or have sustainability targets, AI use now contributes to them. And your options: data residency rules and regional capacity decide which models and providers you can actually use. Leaders who understand the physical side of AI make better choices about which workloads to run, where, and on which models.",
+                "onScreen": "Why it matters\n• Costs grow with usage\n• Sustainability commitments\n• Residency and capacity limit options",
+                "visual": "Layout: three tiles light up: a rising bill, an emissions report, a map with region pins. A connecting line links them to a central 'AI workload decisions' card.",
+                "seconds": 37
+              },
+              {
+                "narration": "Here's an analogy. AI is a bit like air travel. The ticket price per journey has fallen a lot over the decades, thanks to more efficient planes. But because flying got cheaper, far more people fly, and total fuel use grew. AI is showing a similar pattern: each answer tends to get cheaper and more efficient, while total demand for compute and electricity keeps rising. Both things are true at once, and your planning needs to hold both.",
+                "onScreen": "Like air travel\n• Cheaper per journey\n• Many more journeys\n• Total use can still grow",
+                "visual": "Layout: a price-per-ticket line falling while a passengers-per-year line rises; a third line for total fuel use rises more gently. The lines relabel to 'cost per answer', 'answers', 'total compute'.",
+                "seconds": 34
+              },
+              {
+                "narration": "A simple example of right-sizing. A customer-service team sends every incoming email to a large reasoning model just to label it as billing, delivery or complaint. That's like hiring a senior lawyer to sort the post. Routing those labels to a small, fast model costs a fraction as much and is usually just as accurate for simple categories. The large model is then reserved for the tricky complaints that genuinely need careful reasoning.",
+                "onScreen": "Simple example: sorting emails\n• Large model for simple labels = lawyer sorting post\n• Small model for labels\n• Large model only for tricky cases",
+                "visual": "Layout: a stream of email icons flows into a large 'reasoning' funnel; then a switch redirects most emails to a small funnel labelled 'small model', with only a few amber 'complex' emails continuing to the large one; a cost meter drops.",
+                "seconds": 32
+              },
+              {
+                "narration": "Electricity isn't the only constraint. Advanced chips depend on a concentrated supply chain, leading-edge fabrication, advanced packaging and high-bandwidth memory, which is exposed to export controls and geopolitics. In many regions, new data centres wait a long time for grid connections. Hot climates, including the Gulf, raise cooling demands, pushing operators towards liquid cooling and water-efficient designs. And communities scrutinise land, water and local power prices.",
                 "onScreen": "Other constraints\n• Chip supply chain\n• Grid connection queues\n• Cooling and water\n• Local community impact",
                 "visual": "Four icons in a row: a chip with a chain, a plug in a queue, a thermometer with water drops, and houses near a data centre.",
                 "seconds": 29
@@ -1503,6 +1795,18 @@
                 "onScreen": "Region and residency\n• Residency rules in KSA, UAE, EU\n• Sector-specific rules\n• In-region processing options\n• Newest models not everywhere",
                 "visual": "A map with region pins; some model icons appear in all regions, a newer one appears in only a few.",
                 "seconds": 28
+              },
+              {
+                "narration": "Three common mistakes. First, assuming falling unit prices mean falling total costs. Usage usually grows. Second, using the biggest reasoning model for trivial tasks. Third, choosing providers and regions without checking data residency rules and capacity, which can force painful migrations later, especially for teams operating across the EU, the UK and the Gulf.",
+                "onScreen": "Three mistakes\n• Unit price ≠ total cost\n• Biggest model for trivial tasks\n• Ignoring residency and capacity",
+                "visual": "Layout: three cards: a falling price tag next to a rising bill; a heavy crane lifting a feather; a map with region pins and a 'residency' lock.",
+                "seconds": 23
+              },
+              {
+                "narration": "Try this now. List your five busiest AI workflows. For each, note the model or tier used, roughly how many calls per month, whether a smaller model could do the job, whether the prompts repeat and could be cached, and whether the work could run overnight in a batch. Pick the single workflow with the most obvious saving, apply one change, and measure cost per task and quality for two weeks. Then ask your main AI provider what emissions and region information they can share for your usage.",
+                "onScreen": "Try this now\n• Five busiest workflows\n• Model, volume, smaller? cache? batch?\n• One change, two weeks\n• Ask provider for emissions and region data",
+                "visual": "Layout: a five-row workload table fills in with tick boxes for smaller, cache, batch; one row highlights; a two-week chart shows cost per task falling while a quality line stays level, labelled 'illustrative'.",
+                "seconds": 38
               },
               {
                 "narration": "To recap. AI runs on chips, power, cooling and grids, and those limits shape its cost and geography. The IEA's base case sees data-centre electricity more than doubling by 2030, but treat that as a scenario. Efficiency and demand pull against each other. For your organisation: watch cost per task, right-size, cache and batch, and include AI in sustainability and residency decisions. Your next step: complete the workload review. Next: synthetic media and provenance.",
@@ -1591,7 +1895,7 @@
           ],
           "activity": "Inspect three images with c2patool or the Content Credentials verify site, then draft a one-page synthetic-media policy covering consent, disclosure, provenance, verification and incidents.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "A finance manager hears the CFO's voice asking for an urgent transfer. It sounds exactly right. It isn't the CFO. Synthetic media makes stories like this possible, and it also powers incredible creative work. In this lesson you'll learn the risks, how provenance and watermarking work, what the rules say, and how to build a practical policy.",
@@ -1604,6 +1908,24 @@
                 "onScreen": "Opportunity vs risk\n• Imagery, dubbing, personalised video\n• Scams, fake endorsements, disinformation\n• Three responses: provenance, watermarks, rules",
                 "visual": "Split screen: creative outputs (product shots, dubbed video) on the left; warning icons (mask, fake badge, broken trust) on the right.",
                 "seconds": 24
+              },
+              {
+                "narration": "Why does this matter to every organisation? Because synthetic media touches you whether or not you create it. Your marketing team may use AI images and voices. Fraudsters may clone your executives' voices to request payments. Fake videos or images about your brand can spread faster than corrections. And regulations, like the EU AI Act's transparency rules, now set expectations for labelling. Understanding provenance, detection and disclosure lets you use the creative upside while protecting your people, customers and reputation.",
+                "onScreen": "Why it matters\n• You may create synthetic media\n• You may be targeted by it\n• Regulation sets labelling expectations\n• Use the upside, manage the risk",
+                "visual": "Layout: a brand shield in the centre; on the left, creative AI outputs flow in with CR badges; on the right, a fake voice waveform and a doctored image approach and are stopped by a verification checkpoint.",
+                "seconds": 35
+              },
+              {
+                "narration": "Here's an analogy. Content Credentials work like a food label combined with a tamper-evident seal. The label tells you where the product came from and what went into it. The seal shows whether anyone opened it on the way. But a product with no label isn't necessarily poisoned. It might just come from a market stall that doesn't print labels. Provenance helps you trust labelled content more. It can't, on its own, prove unlabelled content is fake.",
+                "onScreen": "Food label and seal\n• Label = origin and ingredients\n• Seal = tamper evidence\n• No label ≠ poisoned",
+                "visual": "Layout: a jar with a label listing 'origin, tool, edits, AI used' and an intact seal; a second unlabelled jar sits beside it with a neutral question mark rather than a red cross.",
+                "seconds": 33
+              },
+              {
+                "narration": "A simple example. Your marketing team generates a product image with an AI tool that attaches Content Credentials. You edit it in a design tool that preserves them, then post it. Someone checks it with a verification tool and sees: created with an AI image generator, edited in a design application, published by your brand. Transparent and trustworthy. Now imagine you export it with a setting that strips metadata. The history is gone, and you've lost that trust signal for no reason.",
+                "onScreen": "Simple example: an AI product image\n• Generated with credentials\n• Edited, credentials preserved\n• Verifier shows full history\n• Stripped metadata = lost trust signal",
+                "visual": "Layout: a workflow of three nodes: generator, editor, social post; a CR badge travels along the arrows; a second path shows an export dialog with 'strip metadata' ticked and the badge falling off.",
+                "seconds": 36
               },
               {
                 "narration": "Provenance first. The Coalition for Content Provenance and Authenticity, known as C2PA, publishes an open standard for attaching cryptographically signed manifests to media. A manifest can record who made the content, with what tool or device, what edits were made, and whether AI was involved. For consumers, these are called Content Credentials, often shown with a small CR icon.",
@@ -1646,6 +1968,18 @@
                 "onScreen": "Provenance in your workflow\n• Enable Content Credentials\n• Don't strip metadata on export\n• Keep originals\n• Label realistic AI content",
                 "visual": "A creative workflow: design tool, export dialog with a 'keep credentials' toggle on, then a social post with an AI label.",
                 "seconds": 30
+              },
+              {
+                "narration": "Three common mistakes. First, relying on AI detectors as proof, which can wrongly accuse genuine creators. Second, stripping Content Credentials in your own asset pipeline through careless export settings. Third, cloning a voice or likeness without documented consent, which creates legal, ethical and reputational risk, even for internal or light-hearted uses.",
+                "onScreen": "Three mistakes\n• Detectors as proof\n• Stripping credentials yourself\n• Cloning without consent",
+                "visual": "Layout: three cards: a detector gauge with a gavel crossed out; an export dialog with a badge being removed; a voice waveform with a signed consent form appearing beside it.",
+                "seconds": 22
+              },
+              {
+                "narration": "Try this now. Find three images: one you know was generated with an AI tool that adds Content Credentials, one photo straight from a recent phone, and one downloaded from social media. Check each with the Content Credentials verify site or c2patool. Note what history each one shows, or doesn't. Then draft a one-page synthetic media policy using the five parts from this lesson: consent, disclosure, provenance, verification and incident response. Finally, agree a call-back rule for any urgent money request that arrives by voice or video.",
+                "onScreen": "Try this now\n• Check three images for credentials\n• Note what history survives\n• Draft a five-part policy\n• Agree a call-back rule for money requests",
+                "visual": "Layout: three image thumbnails pass through a verification scanner, each showing a different result panel; a policy document with five sections builds; a phone icon with 'call back on known number' appears.",
+                "seconds": 38
               },
               {
                 "narration": "To recap. Synthetic media brings value and real risk. Content Credentials prove history when present, but absence proves nothing. Watermarks help; detectors alone don't. The EU AI Act's Article 50 applies from August 2026, and platforms and ad regulators have their own rules. Build a policy on consent, disclosure, provenance, verification and incident response. Your next step: inspect three images and draft that policy. Next module: AI search and the future of work.",
@@ -1745,7 +2079,7 @@
           ],
           "activity": "Run the AI visibility check for ten real customer questions across three assistants, then fix one factual error at its source.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "For twenty years, the web ran on a simple loop. Search, click, visit. AI search is changing that loop. More and more, the answer appears right there, with a few citations, and sometimes an agent does the task for the user. In this lesson you'll learn what the evidence says, three plausible shifts ahead, and what to do now so your business stays findable and trusted.",
@@ -1758,6 +2092,24 @@
                 "onScreen": "The landscape\n• AI Overviews and AI Mode\n• ChatGPT search, Perplexity, Copilot\n• Assistants in phones and browsers\n• Answers first, links second",
                 "visual": "Several neutral answer-panel mock-ups arranged like cards, each with citation chips; no brand logos.",
                 "seconds": 26
+              },
+              {
+                "narration": "Why does this matter? Because for many businesses, being found online has been the engine of growth for twenty years, through search engine rankings, reviews and content. If more questions are answered directly by AI, and more tasks are completed by agents, the rules of being found change. Some traffic will fall. Some will become more valuable. And the facts about your business, scattered across your site, directories and profiles, now feed machines that summarise you to customers. Getting ahead of this is a marketing, operations and reputation issue at once.",
+                "onScreen": "Why it matters\n• Discovery drove growth for 20 years\n• Answers and agents change the rules\n• Your facts feed machine summaries",
+                "visual": "Layout: a growth arrow powered by a 'search' engine icon; the engine morphs into an 'AI answers' icon; scattered fact cards from different websites flow into a summary bubble describing a business.",
+                "seconds": 40
+              },
+              {
+                "narration": "Here's an analogy. Traditional search was like a library catalogue: it pointed you to the right shelf, and you went and read the books. AI search is more like a well-read librarian who reads the books for you and gives you a summary, mentioning a few titles. If you're an author, the question changes from am I on the shelf to does the librarian trust my book enough to quote it. And sometimes, the librarian will even go and fetch or buy the thing for the reader.",
+                "onScreen": "Catalogue to librarian\n• Old: point to the shelf\n• New: summarise and quote a few\n• Goal: be the book they trust",
+                "visual": "Layout: a library catalogue card with shelf numbers transforms into a librarian icon holding a summary card with three small book citations; one book cover glows as 'cited'.",
+                "seconds": 38
+              },
+              {
+                "narration": "A simple example. A small accounting firm in Manchester asks three AI assistants, what does a sole trader need to do at the end of the tax year in the UK. Two answers cite big national publishers. One cites a competitor's clear, dated checklist page. The firm's own page is a vague, undated overview. The action is obvious: publish a clear, dated, well-structured checklist with specific steps, written by a qualified accountant. Then check the same question again next month.",
+                "onScreen": "Simple example: an accounting firm\n• Assistants cite clear, dated checklists\n• Firm's page is vague and undated\n• Publish a specific, expert checklist\n• Re-check monthly",
+                "visual": "Layout: three answer panels side by side with citation chips; the firm's page appears greyed; then a new checklist page with a date stamp and author badge appears, and next month's panel shows it cited.",
+                "seconds": 35
               },
               {
                 "narration": "What does the evidence say about clicks? Independent research, including a 2025 Pew Research Center analysis of real browsing data, found people were less likely to click through to websites when an AI summary appeared. Many publishers report traffic declines on informational content, though the effect varies widely by sector and query. On the other hand, clicks that do arrive from AI answers can be more qualified, because the user has already done early research.",
@@ -1802,7 +2154,19 @@
                 "seconds": 29
               },
               {
-                "narration": "To recap. AI search turns links into answers, reducing clicks on many informational queries and making citations the new visibility. Expect shifts toward being cited, toward agent tasks, and toward many discovery surfaces. Be the best source, keep facts consistent, own your audience and measure citations and conversions. Your next step: run the AI visibility check on ten real customer questions and fix one factual error at its source. Next: jobs, skills and work redesign.",
+                "narration": "Three common mistakes. First, chasing tricks to game AI answers rather than becoming the most useful source. Second, measuring only traffic and panicking at declines, while enquiries and conversions hold. Third, letting facts about your business drift across directories, profiles and your own pages, so assistants repeat outdated or conflicting information.",
+                "onScreen": "Three mistakes\n• Gaming instead of earning\n• Traffic-only measurement\n• Drifting facts across the web",
+                "visual": "Layout: three cards: a trick-lever with a red cross; a traffic graph falling beside a flat conversions line; several profile cards showing different phone numbers merging into one consistent card.",
+                "seconds": 22
+              },
+              {
+                "narration": "Try this now. Write down ten questions your customers genuinely ask before buying, in their words. Ask three different AI assistants each question. For every answer, log whether you're mentioned, whether you're cited with a link, which competitors appear, and whether the facts about you are correct. Find the one factual error that appears most often and fix it at its source, whether that's your own page, a directory listing or a business profile. Then set a monthly reminder to repeat the check with the same questions.",
+                "onScreen": "Try this now\n• Ten real customer questions\n• Three assistants\n• Log mentions, citations, competitors, accuracy\n• Fix one error at its source\n• Repeat monthly",
+                "visual": "Layout: a log table with ten question rows and three assistant columns fills with icons; one repeated error cell pulses; a fix arrow points to a directory listing being corrected; a monthly calendar reminder appears.",
+                "seconds": 38
+              },
+              {
+                "narration": "To recap. AI search turns links into answers, reducing clicks on many informational queries and making citations the new visibility. Expect shifts towards being cited, towards agent tasks, and towards many discovery surfaces. Be the best source, keep facts consistent, own your audience and measure citations and conversions. Your next step: run the AI visibility check on ten real customer questions and fix one factual error at its source. Next: jobs, skills and work redesign.",
                 "onScreen": "Recap\n• Answers over links\n• Three shifts\n• Best source, consistent facts\n• Measure citations and outcomes\n• Next: jobs and skills",
                 "visual": "Recap slide; teaser showing a team around a table with AI assistant icons.",
                 "seconds": 33
@@ -1884,7 +2248,7 @@
           ],
           "activity": "Complete the task-redesign worksheet for one role with the people who do it, then generate and refine a 90-day skills plan.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Few topics attract more confident claims with less evidence than AI and jobs. One headline says mass unemployment. The next says nothing will change. In this lesson you'll get a grounded view: what credible research suggests, what's genuinely uncertain, and a practical, task-based method to redesign work and build skills responsibly.",
@@ -1897,6 +2261,24 @@
                 "onScreen": "Tasks, not jobs\n• Exposure measured by task\n• Clerical work most exposed (ILO)\n• Augmentation more common than automation",
                 "visual": "A job card splits into several task cards; some glow 'AI can help', others stay 'human'.",
                 "seconds": 33
+              },
+              {
+                "narration": "Why does this matter? Because your people are already asking what AI means for their jobs, and silence fills with rumours. Leaders who respond with hype or with fear lose trust. Leaders who respond with a clear, evidence-based approach, looking at tasks, redesigning roles together, investing in skills and sharing the gains, keep their best people and get more value from AI. How you handle this conversation will shape adoption, morale and retention far more than which tool you choose.",
+                "onScreen": "Why it matters\n• People are already asking\n• Silence breeds rumours\n• Evidence-based approach builds trust\n• Shapes adoption and retention",
+                "visual": "Layout: a team of figures with question-mark bubbles; one path leads to a fog labelled 'rumours'; another leads to a clear table labelled 'task map' where figures gather with lightbulb icons.",
+                "seconds": 35
+              },
+              {
+                "narration": "Here's an analogy. When spreadsheets arrived, they didn't eliminate accountants. They eliminated a lot of manual arithmetic, and accountants spent more time on analysis and advice. Some roles shrank, new ones appeared, and the people who learned the tool early had an advantage. AI is a bigger and faster change, and the outcomes are genuinely uncertain, but the lesson from spreadsheets still helps: think in tasks, not jobs, and invest in the skills that grow in value.",
+                "onScreen": "The spreadsheet lesson\n• Tasks changed more than jobs\n• Time shifted to analysis and advice\n• Early learners gained an edge\n• AI: bigger, faster, less certain",
+                "visual": "Layout: an old ledger book transforms into a spreadsheet; an accountant icon's desk shifts from 'arithmetic' tasks to 'analysis' and 'advice' cards. A caption 'Tasks, not jobs' fades in.",
+                "seconds": 33
+              },
+              {
+                "narration": "A simple example of task mapping. A customer-support agent's week includes answering order-status questions, handling refund requests, dealing with angry complaints and writing weekly feedback summaries. Order status is high-volume and rule-based: automate with checks. Refunds need policy judgement: augment. Angry complaints need empathy and authority: keep human, with AI suggesting a draft. Feedback summaries: automate, with a human reviewing themes. One role, four different answers.",
+                "onScreen": "Simple example: a support role\n• Order status → automate + check\n• Refunds → augment\n• Angry complaints → human (AI drafts)\n• Feedback summaries → automate + review",
+                "visual": "Layout: a role card splits into four task cards; each slides into a column labelled Automate, Augment or Human; a small AI icon appears beside tasks where it helps.",
+                "seconds": 29
               },
               {
                 "narration": "What about productivity? Controlled studies of customer support agents, writers, consultants and developers found real gains in speed and quality on suitable tasks, often bigger for less experienced workers. But they also found worse outcomes when people used AI on tasks beyond its capabilities. The lesson: gains are real, uneven, and depend on knowing where AI works and where it doesn't.",
@@ -1941,6 +2323,18 @@
                 "seconds": 29
               },
               {
+                "narration": "Three common mistakes. First, announcing headcount changes before understanding what actually changes at the task level. Second, quoting dramatic, unsourced statistics about job losses or gains, which damages credibility and trust. Third, ignoring entry-level learning: if AI absorbs the tasks that used to train juniors, you need to design new ways for them to build expertise.",
+                "onScreen": "Three mistakes\n• Announcements before analysis\n• Unsourced statistics\n• Neglecting junior learning",
+                "visual": "Layout: three cards: a megaphone with a 'task analysis first' label; a statistic with a missing-source tag; a ladder with missing bottom rungs being rebuilt.",
+                "seconds": 24
+              },
+              {
+                "narration": "Try this now. Choose one role you know well, ideally your own. With the people who do it, list its main tasks and roughly what share of the week each takes. Label each task automate with checks, augment, or keep human, and write one sentence about what people would do with the time freed. Then use the skills-plan prompt in the lesson text to draft a ninety-day learning plan, with weekly two-hour blocks tied to real work. Review the plan together and adjust it. The conversation is as valuable as the document.",
+                "onScreen": "Try this now\n• One role, with the people who do it\n• Tasks and time shares\n• Automate / augment / human\n• 90-day skills plan\n• Review together",
+                "visual": "Layout: a task worksheet fills with rows and percentage bars; labels drop onto each row; a 90-day calendar with weekly learning blocks appears; a small group of figures reviews it.",
+                "seconds": 40
+              },
+              {
                 "narration": "To recap. Analyse work task by task; augmentation is more common than full automation for most roles. Productivity gains are real but uneven. Treat surveys as expectations and plan with scenarios. Redesign roles, define new skills, protect junior learning and share gains. Your next step: complete the task-redesign worksheet in the lesson text for one role, with the people who do it, and build a ninety-day skills plan. Next module: building your horizon-scanning practice.",
                 "onScreen": "Recap\n• Tasks, not jobs\n• Uneven gains\n• Scenarios over forecasts\n• Redesign and protect learning\n• Next: horizon scanning",
                 "visual": "Recap slide; teaser of a radar screen with technology blips.",
@@ -1971,7 +2365,7 @@
           "title": "Building a horizon-scanning practice",
           "type": "article",
           "durationMinutes": 7,
-          "body": "### From occasional curiosity to a system\n\nMost organisations notice emerging technology by accident: a competitor launches something, a board member reads an article, a vendor pitches. **Horizon scanning** replaces accidents with a light, repeatable system for spotting change early, making sense of it and deciding what to do. It works for a solo creator, an agency of ten and an enterprise alike; only the scale differs.\n\n### The scanning loop\n\n1. **Scope**: define what matters: your customers, value chain, regulation and capabilities. A scan with no scope becomes endless reading.\n2. **Sources**: curate a diverse set (see below), weighted toward primary sources.\n3. **Capture**: log signals in one place with a consistent format.\n4. **Sense-making**: regularly cluster signals into themes, assess relevance and maturity (module one's lenses and scorecard).\n5. **Decide**: for each theme, choose a stage (watch, experiment, pilot, scale) and an owner.\n6. **Communicate**: short, regular briefings to decision-makers.\n7. **Review**: check past calls; adjust sources and thresholds.\n\n### A balanced source diet\n\n| Source type | Examples | Why |\n|---|---|---|\n| Primary technical | Vendor documentation and changelogs, research papers (for example arXiv), standards bodies (NIST, W3C, ISO, C2PA) | What actually shipped or was specified |\n| Regulators and government | EU AI Office, UK ICO and NCSC, US FTC and NIST, national AI and data authorities in KSA, UAE, Pakistan | Rules that shape adoption |\n| Independent analysis | Research institutes, the IEA for energy, academic reviews, reputable journalism | Context and critique |\n| Market signals | Job postings, pricing pages, customer case studies, procurement notices | Real adoption |\n| Frontline voices | Sales calls, support tickets, customer interviews, staff on the ground | Early weak signals |\n| Contrarian views | Critics and sceptics with track records | Protection against groupthink |\n\nAvoid over-reliance on social media and newsletters that simply repackage announcements.\n\n### Using AI to scale your scan (with guardrails)\n\nAI assistants can monitor feeds, summarise papers, cluster signals and draft briefings. Guardrails:\n\n- **Always keep links to sources**, and verify anything that will drive a decision.\n- **Ask for counter-evidence** as well as supporting evidence.\n- **Label** fact, vendor claim and opinion.\n- **Keep the judgement human**: AI suggests themes; people decide relevance.\n\n```text\nPROMPT: Monthly signal clustering\nBelow are 40 signals captured this month (date, source, summary, link).\n1) Cluster them into 4-7 themes. For each theme: a one-line description, the signals (by ID),\n   and whether the evidence is mostly primary, analysis, or claims.\n2) For each theme, list what would count as a strong signal next month and a counter-signal.\n3) Flag any signal whose source looks unreliable or whose summary may be inaccurate.\nDo not add signals that are not in the list.\n```\n\nFor a light automation, many teams use an RSS reader or a workflow tool (for example n8n, Make or Zapier) to collect items from chosen sources into a spreadsheet, then run the clustering prompt monthly. Keep humans reviewing inputs and outputs.\n\n### The briefing format\n\nA one-page monthly or quarterly radar:\n\n```text\nHORIZON BRIEF - Q4 2026 (example structure)\nTop 3 changes since last brief: ...\nRadar (theme | stage | movement since last time | owner):\n  AI agents for back office | Pilot | ↑ | Ops director\n  AI-first smart glasses | Watch | → | Innovation lead\n  Post-quantum migration | Plan | ↑ (vendor roadmaps arriving) | CISO\nDecisions requested: ...\nWhat we got wrong last time: ...\n```\n\nIncluding \"what we got wrong\" builds credibility and improves calibration.\n\n### Right-sizing the practice\n\n- **Solo creator or freelancer**: 30 minutes a week; ten well-chosen sources; a simple log; one monthly reflection.\n- **SME or agency**: a rotating owner, a shared log, a monthly 45-minute sense-making session, a quarterly one-page brief to leadership.\n- **Enterprise**: a small foresight function, cross-functional scanning network, integration with strategy and risk processes, and links to innovation budgets.\n\n### Worked example: a Karachi digital agency\n\nA 25-person agency in Karachi set up a shared signal log with each team lead scanning their area (paid media, SEO, creative, analytics). A monthly session clustered signals; a quarterly brief went to the founders and a simplified version to clients as thought leadership. Within a year, the practice led to early pilots in AI search visibility audits and synthetic-media disclosure services, which became new revenue lines.\n\n### Pitfalls\n\n- Scanning without deciding: a log that never changes decisions is a hobby.\n- Echo chambers: all sources saying the same thing.\n- Overwhelming leaders with long reports.\n\n### How to measure success\n\nDecisions influenced by the scan, time from first signal to decision, hit rate of stage calls in hindsight, and stakeholder usefulness ratings of the brief.\n",
+          "body": "### From occasional curiosity to a system\n\nMost organisations notice emerging technology by accident: a competitor launches something, a board member reads an article, a vendor pitches. **Horizon scanning** replaces accidents with a light, repeatable system for spotting change early, making sense of it and deciding what to do. It works for a solo creator, an agency of ten and an enterprise alike; only the scale differs.\n\n### The scanning loop\n\n1. **Scope**: define what matters: your customers, value chain, regulation and capabilities. A scan with no scope becomes endless reading.\n2. **Sources**: curate a diverse set (see below), weighted towards primary sources.\n3. **Capture**: log signals in one place with a consistent format.\n4. **Sense-making**: regularly cluster signals into themes, assess relevance and maturity (module one's lenses and scorecard).\n5. **Decide**: for each theme, choose a stage (watch, experiment, pilot, scale) and an owner.\n6. **Communicate**: short, regular briefings to decision-makers.\n7. **Review**: check past calls; adjust sources and thresholds.\n\n### A balanced source diet\n\n| Source type | Examples | Why |\n|---|---|---|\n| Primary technical | Vendor documentation and changelogs, research papers (for example arXiv), standards bodies (NIST, W3C, ISO, C2PA) | What actually shipped or was specified |\n| Regulators and government | EU AI Office, UK ICO and NCSC, US FTC and NIST, national AI and data authorities in KSA, UAE, Pakistan | Rules that shape adoption |\n| Independent analysis | Research institutes, the IEA for energy, academic reviews, reputable journalism | Context and critique |\n| Market signals | Job postings, pricing pages, customer case studies, procurement notices | Real adoption |\n| Frontline voices | Sales calls, support tickets, customer interviews, staff on the ground | Early weak signals |\n| Contrarian views | Critics and sceptics with track records | Protection against groupthink |\n\nAvoid over-reliance on social media and newsletters that simply repackage announcements.\n\n### Using AI to scale your scan (with guardrails)\n\nAI assistants can monitor feeds, summarise papers, cluster signals and draft briefings. Guardrails:\n\n- **Always keep links to sources**, and verify anything that will drive a decision.\n- **Ask for counter-evidence** as well as supporting evidence.\n- **Label** fact, vendor claim and opinion.\n- **Keep the judgement human**: AI suggests themes; people decide relevance.\n\n```text\nPROMPT: Monthly signal clustering\nBelow are 40 signals captured this month (date, source, summary, link).\n1) Cluster them into 4-7 themes. For each theme: a one-line description, the signals (by ID),\n   and whether the evidence is mostly primary, analysis, or claims.\n2) For each theme, list what would count as a strong signal next month and a counter-signal.\n3) Flag any signal whose source looks unreliable or whose summary may be inaccurate.\nDo not add signals that are not in the list.\n```\n\nFor a light automation, many teams use an RSS reader or a workflow tool (for example n8n, Make or Zapier) to collect items from chosen sources into a spreadsheet, then run the clustering prompt monthly. Keep humans reviewing inputs and outputs.\n\n### The briefing format\n\nA one-page monthly or quarterly radar:\n\n```text\nHORIZON BRIEF - Q4 2026 (example structure)\nTop 3 changes since last brief: ...\nRadar (theme | stage | movement since last time | owner):\n  AI agents for back office | Pilot | ↑ | Ops director\n  AI-first smart glasses | Watch | → | Innovation lead\n  Post-quantum migration | Plan | ↑ (vendor roadmaps arriving) | CISO\nDecisions requested: ...\nWhat we got wrong last time: ...\n```\n\nIncluding \"what we got wrong\" builds credibility and improves calibration.\n\n### Right-sizing the practice\n\n- **Solo creator or freelancer**: 30 minutes a week; ten well-chosen sources; a simple log; one monthly reflection.\n- **SME or agency**: a rotating owner, a shared log, a monthly 45-minute sense-making session, a quarterly one-page brief to leadership.\n- **Enterprise**: a small foresight function, cross-functional scanning network, integration with strategy and risk processes, and links to innovation budgets.\n\n### Worked example: a Karachi digital agency\n\nA 25-person agency in Karachi set up a shared signal log with each team lead scanning their area (paid media, SEO, creative, analytics). A monthly session clustered signals; a quarterly brief went to the founders and a simplified version to clients as thought leadership. Within a year, the practice led to early pilots in AI search visibility audits and synthetic-media disclosure services, which became new revenue lines.\n\n### Pitfalls\n\n- Scanning without deciding: a log that never changes decisions is a hobby.\n- Echo chambers: all sources saying the same thing.\n- Overwhelming leaders with long reports.\n\n### How to measure success\n\nDecisions influenced by the scan, time from first signal to decision, hit rate of stage calls in hindsight, and stakeholder usefulness ratings of the brief.\n",
           "video": null,
           "keyTakeaways": [
             "Horizon scanning is a repeatable loop: scope, sources, capture, sense-making, decide, communicate, review.",
@@ -2022,7 +2416,7 @@
           ],
           "activity": "Set up a signal log with at least ten sources across the six source types, capture 20 signals over two weeks, and run the clustering prompt.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Most organisations discover emerging technology by accident. A competitor launches something. A board member reads an article. A vendor pitches. Horizon scanning replaces those accidents with a light, repeatable system. In this lesson you'll learn the scanning loop, how to build a balanced source diet, how AI can help without taking over your judgement, and how to brief leaders in one page.",
@@ -2035,6 +2429,24 @@
                 "onScreen": "The scanning loop\n• Scope • Sources • Capture\n• Sense-making • Decide\n• Communicate • Review",
                 "visual": "A circular seven-step loop diagram with icons for each step animating clockwise.",
                 "seconds": 29
+              },
+              {
+                "narration": "Why does this matter? Because most organisations are surprised by change they could have seen coming. The signals were there: a regulator's consultation, a competitor's job adverts, customers asking new questions, a vendor's changelog. Nobody was assigned to notice, and nobody connected the dots. A light, regular scanning practice costs a few hours a month and turns surprises into options. It also makes your strategy conversations better, because they start from shared evidence rather than whoever read the most dramatic headline that week.",
+                "onScreen": "Why it matters\n• Surprises were usually visible early\n• Nobody assigned to notice\n• A few hours a month\n• Better strategy conversations",
+                "visual": "Layout: a set of faint signals (consultation doc, job advert, customer question, changelog) scattered on a timeline; lines connect them into a pattern that points at a future 'surprise' marker, which turns into an 'option' marker.",
+                "seconds": 36
+              },
+              {
+                "narration": "Here's an analogy. A horizon-scanning practice is like a ship's lookout. The lookout doesn't steer the ship or predict the weather for next month. Their job is to notice things early, report them clearly, and let the captain decide whether to change course. A good lookout has a regular watch schedule, knows what to look for, uses the right instruments, and doesn't shout about every seagull.",
+                "onScreen": "The ship's lookout\n• Notices early\n• Reports clearly\n• Captain decides\n• Regular watch, right instruments",
+                "visual": "Layout: a ship at sea with a lookout in the crow's nest scanning with binoculars; small icons appear on the horizon and are reported to a captain icon at the wheel.",
+                "seconds": 29
+              },
+              {
+                "narration": "A simple example for a solo creator. You're a YouTube educator. You pick ten sources: the platform's official creator blog, two AI tool changelogs, a regulator's AI guidance page, three respected newsletters with critics among them, and three creators in your niche. Every Friday you spend thirty minutes logging anything that could change your work. Once a month, you ask an AI assistant to cluster the log and you decide one thing to try. That's a complete horizon-scanning practice for one person.",
+                "onScreen": "Simple example: a solo creator\n• 10 chosen sources\n• 30 minutes every Friday\n• Monthly clustering\n• One experiment a month",
+                "visual": "Layout: a creator's desk with ten source icons arranged in a ring; a calendar highlights Fridays; a monthly cluster graphic forms from logged items; a single 'try this' card pops out.",
+                "seconds": 36
               },
               {
                 "narration": "Now your source diet. Primary technical sources, like vendor docs, changelogs, research papers and standards bodies, tell you what actually shipped. Regulators, like the EU AI Office, the UK ICO and NCSC, the US FTC and NIST, and national authorities in Saudi Arabia, the UAE and Pakistan, tell you the rules. Independent analysis gives context and critique. Market signals, job postings, pricing pages and case studies, show real adoption.",
@@ -2083,6 +2495,18 @@
                 "onScreen": "Weak signals\n• Odd customer questions\n• Strange competitor experiments\n• New job titles\n• Five minutes on the strangest items",
                 "visual": "A cluster of ordinary grey dots with one small odd-coloured dot; a magnifier lingers on it.",
                 "seconds": 30
+              },
+              {
+                "narration": "Three common mistakes. First, scanning without deciding: a log that never changes a decision is a hobby, not a practice. Second, echo chambers, where every source repeats the same announcements. Third, overwhelming leaders with long reports nobody reads. One page, top changes, decisions needed, and what you got wrong last time, is enough.",
+                "onScreen": "Three mistakes\n• Scanning without deciding\n• Echo-chamber sources\n• Reports too long to read",
+                "visual": "Layout: three cards: a log with no arrows leading to decisions; a ring of identical speech bubbles; a thick report shrinking into a single page.",
+                "seconds": 23
+              },
+              {
+                "narration": "Try this now. Open a spreadsheet with columns for date, source, signal summary, link, signal type, and your gut rating of relevance. Choose ten sources across the six types in the lesson: primary technical, regulators, independent analysis, market signals, frontline voices and credible sceptics. For the next two weeks, spend ten minutes a day logging anything that could affect your work. At the end, paste the log into an AI assistant with the clustering prompt, and decide on one theme to watch more closely and one small experiment.",
+                "onScreen": "Try this now\n• Spreadsheet signal log\n• Ten sources across six types\n• Ten minutes a day for two weeks\n• Cluster with AI, pick one theme and one experiment",
+                "visual": "Layout: a spreadsheet with headers appears; ten source icons arrange around it; daily rows fill in over a two-week calendar; a cluster diagram forms; one theme and one experiment card pop out.",
+                "seconds": 38
               },
               {
                 "narration": "To recap. Horizon scanning is a loop: scope, sources, capture, sense-making, decisions, communication and review. Balance your sources, use AI to scale with guardrails, and brief leaders in one page, including what you got wrong. Your next step: set up a signal log with at least ten sources across the six types, capture twenty signals over two weeks, and run the clustering prompt. Next: scenario planning.",
@@ -2175,7 +2599,7 @@
           ],
           "activity": "Run a mini scenario exercise on one focal question: choose two critical uncertainties, sketch four scenarios with indicators, and stress-test two of your current strategies.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Here's a truth about forecasts: they're usually wrong in the details that matter. Scenario planning takes a different approach. Instead of asking what will happen, it asks what could plausibly happen, and how would we do in each case? In this lesson you'll learn the method, see a complete worked example for a marketing agency, and learn how to use AI as a sparring partner without letting it write generic futures for you.",
@@ -2188,6 +2612,24 @@
                 "onScreen": "What scenarios are\n• Structured, plausible stories\n• Not predictions\n• Expose assumptions\n• Find robust strategies",
                 "visual": "Four story-book covers with abstract illustrations, each opening slightly to reveal a short narrative.",
                 "seconds": 23
+              },
+              {
+                "narration": "Why does this matter? Because the biggest strategic mistakes usually come from betting everything on one view of the future that turns out wrong. Technology change, regulation and customer behaviour are all uncertain right now, especially around AI. Scenario planning doesn't remove the uncertainty. It helps you find moves that work in several futures, hedges against the ones that would hurt, and early warning signs that tell you which future is arriving. That makes your organisation calmer and faster when things change.",
+                "onScreen": "Why it matters\n• One-view bets fail\n• Uncertainty is high\n• Robust moves, hedges, early warnings\n• Calmer and faster response",
+                "visual": "Layout: a single arrow aimed at one future breaks; replaced by four branching paths with a shared 'robust move' bridge across them and small warning lights at each branch.",
+                "seconds": 36
+              },
+              {
+                "narration": "Here's an analogy. Scenario planning is like packing for a trip where you don't know the weather. You don't pack only for sunshine because the forecast says so, and you don't bring every piece of clothing you own. You think through a few plausible conditions, hot, cold, rainy, and pack items that work across them, like layers and a light rain jacket. Those layers are your robust moves. The umbrella you might need is your hedge.",
+                "onScreen": "Packing for uncertain weather\n• Several plausible conditions\n• Layers = robust moves\n• Umbrella = hedge",
+                "visual": "Layout: an open suitcase; weather icons for sun, cold and rain orbit it; layered clothing items drop in first (labelled 'robust'), then an umbrella (labelled 'hedge').",
+                "seconds": 33
+              },
+              {
+                "narration": "A simple example for a small online retailer. Focal question: how should we sell in 2029? Axis one: do customers mostly shop through AI assistants or still through websites and apps? Axis two: are delivery costs rising sharply or stable? Four worlds emerge quickly. And a robust move becomes obvious across all four: keep product data clean and structured, because both assistants and websites need it, whatever happens to delivery costs.",
+                "onScreen": "Simple example: an online retailer\n• Axis 1: assistants vs websites\n• Axis 2: delivery costs rising vs stable\n• Four worlds\n• Robust move: clean product data",
+                "visual": "Layout: a 2x2 grid draws itself with the two axis labels; four small icons populate the quadrants; a 'clean product data' card slides across all four quadrants with a tick in each.",
+                "seconds": 31
               },
               {
                 "narration": "The method has seven steps. Set a focal question with a time horizon. List the driving forces: technological, economic, regulatory, social and environmental, using your horizon scan. Separate the fairly predictable forces from those that are both highly uncertain and highly impactful. Pick two of those critical uncertainties as the axes of a two-by-two matrix. Write four scenarios. Test your strategies against each. And monitor signposts.",
@@ -2236,6 +2678,18 @@
                 "onScreen": "Signposts\n• Observable within 12 months\n• Lead share from AI assistants\n• Label enforcement, credentials display\n• Regulatory actions\n• Feed into the scan",
                 "visual": "The 2x2 grid with small indicator gauges in each quadrant; one gauge rises and its quadrant glows.",
                 "seconds": 29
+              },
+              {
+                "narration": "Three common mistakes. First, choosing best case, worst case and middle case, which is just a forecast with error bars. Second, picking axes that move together, so your four worlds collapse into two. Third, holding a great workshop and never looking at the scenarios again. Tie each scenario's signposts to your horizon scan, and revisit the whole set at least once a year.",
+                "onScreen": "Three mistakes\n• Best/worst/middle\n• Axes that move together\n• One-off workshops",
+                "visual": "Layout: three cards: three stacked lines labelled best, middle, worst with a 'forecast in disguise' tag; two axis arrows collapsing into one; a workshop wall of sticky notes gathering dust, then refreshed with a yearly calendar icon.",
+                "seconds": 27
+              },
+              {
+                "narration": "Try this now. Write one focal question for your organisation with a time horizon, for example: what should our service mix be in 2030? List ten forces that could affect it. Mark each as fairly predictable or genuinely uncertain, and high or low impact. Pick the two most uncertain, high-impact forces that don't move together, and sketch a two-by-two with a name and three sentences for each world. Then test two of your current strategies against all four. Which ones hold up everywhere?",
+                "onScreen": "Try this now\n• One focal question with a year\n• Ten forces, rated\n• Two independent uncertainties → 2x2\n• Name each world\n• Test two strategies",
+                "visual": "Layout: a focal question card; ten force chips sort into a grid by uncertainty and impact; two chips lift onto axes and a 2x2 draws; four world names appear; two strategy cards test across all quadrants with ticks and crosses.",
+                "seconds": 36
               },
               {
                 "narration": "To recap. Scenarios are plausible stories, not predictions. Build a two-by-two from independent critical uncertainties, write vivid narratives with indicators, and test strategies for robust moves, hedges and options. Use AI to spar, not to decide. Your next step: run a mini scenario exercise on one focal question for your organisation. Next is the capstone: your three-horizon technology roadmap.",
@@ -2312,7 +2766,7 @@
           ],
           "activity": "Build a three-horizon roadmap for a real business with at least three initiatives per horizon, scorecards, a scenario robustness check, stage gates and signposts. Critique it with the AI prompt, then revise.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "This is where everything comes together. In this capstone, you'll build a three-horizon technology roadmap for a real business, a decision document leaders can act on, not a trend report. We'll cover the three horizons model, the components of a strong roadmap, a condensed worked example, and how to present it so it actually changes decisions.",
@@ -2325,6 +2779,24 @@
                 "onScreen": "The three horizons\n• H1: improve the core (0 to 12 months)\n• H2: build emerging opportunities (1 to 3 years)\n• H3: create future options (3+ years)",
                 "visual": "Three columns labelled H1, H2, H3 with icons: a gear, a sprouting plant, a telescope.",
                 "seconds": 31
+              },
+              {
+                "narration": "Why does this matter? Because most technology plans fail in one of two ways. Either they're a list of trendy tools with no link to the business, or they're so focused on this year that the organisation is blindsided three years later. A three-horizon roadmap forces you to connect technology to real problems today, build a pipeline of tested opportunities for tomorrow, and keep cheap options open for the future. It's also the document that turns everything you've learned in this course into decisions your leaders can act on.",
+                "onScreen": "Why it matters\n• Trend lists without business links\n• Short-termism\n• Connect today, build tomorrow, keep options\n• Turns learning into decisions",
+                "visual": "Layout: a messy trend list crumples; a single-year plan with a cliff edge at year three fades; a three-horizon roadmap unfolds smoothly across the screen.",
+                "seconds": 39
+              },
+              {
+                "narration": "Here's an analogy. The three horizons are like managing a farm. Horizon one is this season's harvest: you tend it carefully and measure yield. Horizon two is the new orchard you planted two years ago: it needs investment and patience before it pays. Horizon three is the seed bank and the test plots: small, cheap experiments that might become the crops of the future. A farm that only harvests starves later. A farm that only experiments starves now.",
+                "onScreen": "Managing a farm\n• H1 = this season's harvest\n• H2 = the young orchard\n• H3 = test plots and seed bank\n• Balance keeps the farm alive",
+                "visual": "Layout: a farm landscape in three bands: a golden field labelled H1, young trees labelled H2, small test plots labelled H3. A seasons wheel turns in the corner.",
+                "seconds": 34
+              },
+              {
+                "narration": "A simple example for a five-person design studio. Horizon one: use AI tools to speed up mock-ups and client presentations, measured by hours saved per project. Horizon two: pilot a new service designing AR product try-ons for local retailers, with a gate of two paying clients in six months. Horizon three: watch AI-generated interactive 3D and spatial design tools, with a signpost of when major clients start asking for them. Three lines, three horizons, three different ways of measuring progress.",
+                "onScreen": "Simple example: a design studio\n• H1: AI for mock-ups (hours saved)\n• H2: AR try-on service (2 clients in 6 months)\n• H3: watch spatial design tools (client demand)",
+                "visual": "Layout: three columns labelled H1, H2, H3; one initiative card drops into each; beneath each card, a different metric badge appears: a stopwatch, a two-client gate, a signpost.",
+                "seconds": 35
               },
               {
                 "narration": "Time ranges differ by industry. What matters is balance, and managing each horizon differently. Horizon one runs on efficiency and KPIs. Horizon two runs on experiments and learning milestones. Horizon three runs on options and signposts. Judge a horizon three idea by horizon one metrics, and you'll kill every future option before it can teach you anything.",
@@ -2373,6 +2845,18 @@
                 "onScreen": "Stress-test before presenting\n• AI as sceptical board member and CFO\n• Balance, owners, thresholds, sources\n• Weakest initiative\n• Then a human reviewer",
                 "visual": "Two role icons, a board member and a CFO, taking turns annotating a roadmap document with red comments that get resolved.",
                 "seconds": 31
+              },
+              {
+                "narration": "Three common mistakes on roadmaps. First, everything in horizon one, which feels safe but leaves no pipeline for the future. Second, a roadmap full of exciting horizon three ideas with no near-term value to fund them. Third, no stage gates, so initiatives drift forward on enthusiasm or get quietly abandoned. Give each initiative an owner, a gate, and a date when you'll look at the evidence.",
+                "onScreen": "Three mistakes\n• All H1, no future\n• All H3, no funding\n• No gates or owners",
+                "visual": "Layout: three cards: a column overflowing with H1 cards while H2 and H3 are empty; the reverse, with a coin icon draining; initiative cards drifting until a gate with an owner badge and a date stops them.",
+                "seconds": 29
+              },
+              {
+                "narration": "Try this now. Choose a real business and write its one-page context: strategy, customers, markets and constraints. Then list three candidate initiatives for each horizon. For each, write a one-line problem it solves, a quick scorecard across the eight dimensions, an owner and a gate with an evidence threshold. Check each initiative against your four scenarios. Finally, paste the draft into an AI assistant with the critique prompt, asking it to play a sceptical board member and then a pragmatic finance director, and revise based on what holds up.",
+                "onScreen": "Try this now\n• One-page context\n• Three initiatives per horizon\n• Scorecard, owner, gate\n• Scenario check\n• AI critique, then revise",
+                "visual": "Layout: a context page appears; three columns fill with three cards each; small scorecard bars and gate icons attach; a 2x2 overlay checks each card; two critic icons annotate the roadmap with comments.",
+                "seconds": 39
               },
               {
                 "narration": "Congratulations, you've reached the end of the course. You can now judge emerging technology with clear lenses and a scorecard, understand the frontier of AI, robotics, spatial computing, digital twins, quantum and post-quantum security, weigh energy and trust constraints, anticipate changes in search and work, and run horizon scanning and scenario planning. Your final step: build your three-horizon roadmap, critique it with the prompt, revise it, and then take the final assessment. Well done.",
