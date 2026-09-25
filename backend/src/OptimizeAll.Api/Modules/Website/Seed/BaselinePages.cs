@@ -73,8 +73,8 @@ internal static class BaselinePages
         "> **Template — review with legal counsel before publishing.** This page was generated as a starting point for Optimize All. " +
         "It is not legal advice. Replace the bracketed placeholders, adapt it to the laws of every country you operate in, and have it reviewed by a qualified lawyer.\n\n";
 
-    public static readonly PageSeed[] Pages =
-    {
+    /// <summary>The About page shipped before the two-pillar repositioning (2026-09): an untouched copy is upgraded.</summary>
+    public static readonly PageSeed PreviousAbout =
         new("about", "About us", "Optimize All is a full-service digital marketing agency built around measurable growth.", SitePageKind.Standard, new[]
         {
             Hero("About Optimize All", "Marketing that proves its worth", "We're a full-service digital marketing agency. One accountable team for search, social, paid media, content, email, brand and web — focused on the numbers that grow your business."),
@@ -89,7 +89,54 @@ internal static class BaselinePages
             PageBlockValidator.Block(PageBlockTypes.ServicesGrid, new ServicesGridBlock("What we do", "Nine service lines, one integrated team.", null), "services"),
             PageBlockValidator.Block(PageBlockTypes.Testimonials, new TestimonialsBlock("What clients say", Array.Empty<Guid>()), "testimonials"),
             Cta("Let's grow together", "Tell us about your goals and we'll show you where the biggest opportunities are — free."),
+        }, 10);
+
+    public static readonly PageSeed[] Pages =
+    {
+        new("about", "About us", "Optimize All helps people and businesses grow: a free academy that teaches the skills, and an agency that puts them to work.", SitePageKind.Standard, new[]
+        {
+            Hero("About Optimize All", "We help people and businesses grow", "Optimize All has two pillars. Optimize All Academy teaches the skills behind modern growth in free courses with verifiable certificates. Optimize All Agency puts those skills to work for clients as a full-service digital marketing team.",
+                new SiteLink("Start learning free", "/learn"), new SiteLink("Get a free audit", "/free-audit")),
+            Text("story", "## Our story\n\nOptimize All started as a platform that pays everyday creators to share brands they believe in — with every post human-reviewed and clearly disclosed. Building that network taught us what brands really need from marketing: transparency, accountability and results you can verify.\n\nIt also taught us that the skills behind good marketing should not be locked away. So we built an academy: free, self-paced courses in AI, marketing, SEO, sales, design and business, each ending in an assessment and a certificate anyone can verify.\n\nToday the academy and the agency share one set of principles. Whether you are learning with us or working with us, you will always know what we are doing, why, and what it is delivering."),
+            PageBlockValidator.Block(PageBlockTypes.FeaturesGrid, new FeaturesGridBlock("Two pillars, one mission", "Grow your skills, grow your business — or both.", new[]
+            {
+                new FeatureItem("Optimize All Academy", "Free, certificate-backed courses in AI, marketing, SEO, sales, design and business. Learn at your own pace, pass the final assessment and add a verifiable certificate to your LinkedIn profile.", "graduation-cap"),
+                new FeatureItem("Optimize All Agency", "A full-service digital marketing team for search, social, paid media, content, email, brand and web — one accountable programme with every result reported in plain numbers.", "rocket"),
+            }), "pillars"),
+            PageBlockValidator.Block(PageBlockTypes.FeaturesGrid, new FeaturesGridBlock("What we believe", null, new[]
+            {
+                new FeatureItem("Knowledge should be free", "Every academy course is free for everyone, with a certificate that anyone can verify.", "book-open"),
+                new FeatureItem("Outcomes over outputs", "We measure success in skills gained, leads, revenue and profit — not impressions or hours logged.", "target"),
+                new FeatureItem("Radical transparency", "Clients see our work, our data and our reasoning in their client portal, any time.", "eye"),
+                new FeatureItem("Honest measurement", "Estimates are labelled as estimates. We never dress up vanity metrics as results.", "shield-check"),
+            }), "values"),
+            PageBlockValidator.Block(PageBlockTypes.Testimonials, new TestimonialsBlock("What clients say", Array.Empty<Guid>()), "testimonials"),
+            PageBlockValidator.Block(PageBlockTypes.Cta, new CtaBlock("Grow with us", "Start a free course today, or tell us about your goals and we will show you where the biggest opportunities are — free.",
+                new SiteLink("Start learning free", "/learn"), new SiteLink("Get a free audit", "/free-audit")), "cta"),
         }, 10),
+        new("academy", "Optimize All Academy", "Free, self-paced courses in AI, marketing, SEO, sales, design and business, with verifiable certificates.", SitePageKind.Standard, new[]
+        {
+            Hero("Optimize All Academy", "Learn the skills that grow businesses — free", "Self-paced courses in AI, marketing, SEO, sales, design and business. Pass the final assessment to earn a certificate with its own public verification page, ready for your LinkedIn profile.",
+                new SiteLink("Browse all courses", "/learn"), new SiteLink("How certificates work", "/academy#certificates")),
+            PageBlockValidator.Block(PageBlockTypes.FeaturesGrid, new FeaturesGridBlock("Why learn with Optimize All", null, new[]
+            {
+                new FeatureItem("Free for everyone", "Every course, lesson and assessment is free. A free account saves your progress and unlocks the final assessment.", "gift"),
+                new FeatureItem("Built for real work", "Practical lessons, worked examples and knowledge checks on the tools and techniques teams use today.", "briefcase"),
+                new FeatureItem("Verifiable certificates", "Each certificate has a unique code, a public verification page and an Open Badges 2.0 badge.", "badge-check"),
+                new FeatureItem("Learn at your pace", "Start and stop whenever you like, on any device. Your progress is saved as you go.", "clock"),
+                new FeatureItem("From beginner to advanced", "Courses are labelled by level, so you can go from first principles to advanced practice.", "trending-up"),
+                new FeatureItem("Taught by an agency", "The academy is run by the team behind Optimize All Agency, so lessons reflect client work.", "users"),
+            }), "why"),
+            PageBlockValidator.Block(PageBlockTypes.Faq, new FaqBlock("Academy questions", new[]
+            {
+                new FaqEntry("Are the courses really free?", "Yes. Every course, lesson, knowledge check, assessment and certificate is free."),
+                new FaqEntry("Do I need an account?", "You can read courses without one. A free account saves your progress and unlocks the final assessment and certificate."),
+                new FaqEntry("How do certificates work?", "Pass a course's final assessment and a certificate is issued in your name, with a unique verification code and a public page that anyone can open to check it."),
+                new FaqEntry("Can I add my certificate to LinkedIn?", "Yes. Each certificate has an add-to-profile link for the Licenses & certifications section of your LinkedIn profile."),
+            }), "faq"),
+            PageBlockValidator.Block(PageBlockTypes.Cta, new CtaBlock("Start learning today", "Pick a course and take the first lesson in minutes.",
+                new SiteLink("Start learning free", "/learn"), new SiteLink("Get a free audit", "/free-audit")), "cta"),
+        }, 15),
         new("how-we-work", "How we work", "Our process: audit, strategy, execution and transparent reporting.", SitePageKind.Standard, new[]
         {
             Hero("How we work", "A process built for accountability", "Every engagement follows the same four steps, so you always know what's happening and what it's achieving."),

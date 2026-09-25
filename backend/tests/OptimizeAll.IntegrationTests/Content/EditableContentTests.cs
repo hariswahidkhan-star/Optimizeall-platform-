@@ -24,7 +24,7 @@ public sealed class EditableContentTests(ApiFactory api) : IClassFixture<ApiFact
 
         var catalog = await admin.GetJsonAsync("/api/v1/agency/website/copy");
         var title = Entry(catalog, "home.hero.title");
-        Assert.Equal("Marketing that grows revenue —", title.GetProperty("default").GetString());
+        Assert.Equal("Learn AI, marketing and growth —", title.GetProperty("default").GetString());
         Assert.False(title.GetProperty("isCustomized").GetBoolean());
         // The website endpoint never lists portal texts.
         Assert.DoesNotContain(catalog.GetProperty("groups").EnumerateArray(), g => g.GetProperty("scope").GetString() == "Portal");
