@@ -709,8 +709,32 @@
 }
 
 /* ---------- Notifications ---------- */
+.pp-notification {
+  position: relative;
+}
+
 .pp-notification[data-unread='true'] {
-  background: var(--color-primary-soft);
+  background: color-mix(in srgb, var(--color-primary-soft) 55%, transparent);
+}
+
+.pp-notification .pp-list__title .ui-link {
+  color: var(--color-heading);
+  text-decoration: none;
+}
+
+.pp-notification .pp-list__title .ui-link:hover {
+  color: var(--color-link-hover);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.pp-notification[data-unread='false'] .pp-list__title {
+  font-weight: var(--weight-medium);
+}
+
+.pp-notification .pp-prewrap {
+  color: var(--color-text-muted);
 }
 
 .pp-notification[data-unread='true'] .pp-list__title::before {
@@ -1438,13 +1462,15 @@
 }
 
 /* Home "needs attention" rows: the status pill stays top-right instead of wrapping under the title. */
-.pp-home .pp-list__item {
-  flex-wrap: nowrap;
-  align-items: flex-start;
-}
+@media (min-width: 640px) {
+  .pp-home .pp-list__item {
+    flex-wrap: nowrap;
+    align-items: flex-start;
+  }
 
-.pp-home .pp-list__item > .ui-badge {
-  flex: none;
+  .pp-home .pp-list__item > .ui-badge {
+    flex: none;
+  }
 }
 
 .pp-section:has(> .pp-balance) {

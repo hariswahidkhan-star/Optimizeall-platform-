@@ -253,6 +253,7 @@
 
 /* Version terms under the rates table: one quiet surface instead of rows floating on the page. */
 .rt-terms {
+  margin-top: var(--space-3);
   padding: var(--space-2) var(--space-5);
   border-radius: var(--radius-card);
   background: var(--color-surface);
