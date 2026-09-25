@@ -6,7 +6,7 @@
   "subtitle": "Steer Google, Meta, TikTok and LinkedIn AI with signals, value and creative — then prove results with incrementality and MMM",
   "category": "marketing",
   "level": "advanced",
-  "estimatedMinutes": 271,
+  "estimatedMinutes": 273,
   "description": "Ad platforms now decide who sees your ads, where and at what price. Your advantage is what you feed them and how you verify the results. This advanced course explains how Google's Performance Max, Demand Gen and AI Max for Search, Meta Advantage+, TikTok Smart+ and LinkedIn Accelerate actually work, and which controls are hard constraints versus soft signals. You will design first-party signals and margin-aware conversion values, build a creative system where concepts act as targeting, produce AI creative at scale while meeting disclosure rules such as the EU AI Act, and run clean creative tests. Then you will allocate budget on marginal returns, understand what attribution can and cannot tell you, design geo and lift experiments, and use open-source mix models like Meridian and Robyn. You finish with guardrails, AI-assisted reporting and a capstone: a full-funnel campaign plan with a fully specified test design.",
   "outcomes": [
     "Explain how platform AI retrieves, ranks, bids and learns, and separate hard constraints from soft signals",
@@ -1321,7 +1321,7 @@
           ],
           "activity": "Pick your two largest channels. Sketch what you believe their response curves look like and write one budget experiment that would tell you if you are right.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Here's a mistake that costs businesses real money every month. A campaign shows a return on ad spend of six, another shows three, and someone moves budget from the three to the six. It sounds obvious. It's often wrong. In this lecture you'll learn why average returns mislead, what response curves and marginal returns are, how to find your curves, and a toy optimizer you can run to reason about budget trade-offs.",
@@ -1388,6 +1388,12 @@
                 "onScreen": "Mistakes + try this now\n• Average-ROAS moves\n• Platform forecasts as truth\n• Cutting awareness blindly\n• Big overnight jumps\n• Try: sketch one response curve",
                 "visual": "Layout: blank axes labeled spend and results; data points drop in one by one; a hand-drawn style curve connects them and flattens at the right.",
                 "seconds": 38
+              },
+              {
+                "narration": "Quick self-check. You have an extra fifty thousand to spend this month. Search is limited by budget and its last increase brought a strong jump in sales. Meta's last increase brought almost nothing extra. Where does the money go first? Pause. The answer: search, because the evidence says its marginal return is higher right now. But notice the phrase right now. Curves move with seasonality, creative and competition, so you'll re-check next month rather than locking the decision in. That habit, allocate on the latest marginal evidence and re-check, is the entire discipline.",
+                "onScreen": "Quick self-check\n• Extra 50,000 to allocate\n• Search: last increase worked\n• Meta: last increase didn't\n• Answer: search, re-check monthly",
+                "visual": "Layout: a coin stack labeled 50,000 hovers between two channel cards with small 'last increase' sparkline charts; after a pause, the coins slide to the search card and a calendar icon marks 're-check'.",
+                "seconds": 40
               },
               {
                 "narration": "Recap. Allocate on marginal returns, not averages. Diminishing returns are the norm, and response curves describe them. Equalize marginal returns within sensible limits, source curves from models and experiments, and move gradually. Your next step: sketch what you believe the response curves look like for your two biggest channels, and design one budget experiment that would prove you right or wrong.",
@@ -1476,7 +1482,7 @@
           ],
           "activity": "Write a one-page 'measurement charter' for your business: which number is the scoreboard, which numbers steer each channel, which tests you will run this quarter.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Here's a scene that plays out in marketing meetings every week. Meta says it drove a thousand sales. Google says eight hundred. TikTok says four hundred. The finance team says you sold one thousand two hundred in total. Who's lying? Nobody. In this lecture you'll learn what each of those numbers actually measures, why they never add up, and how mature teams give every number a clear job so the arguments stop.",
@@ -1543,6 +1549,12 @@
                 "onScreen": "Mistakes + try this now\n• Cross-platform judging\n• Credit ≠ cause\n• Shifting windows\n• Chasing perfect MTA\n• Try: build the 4-column scoreboard",
                 "visual": "Layout: a four-column table slides in; values fill in for one month; a 'scoreboard' label stamps above it.",
                 "seconds": 36
+              },
+              {
+                "narration": "Quick self-check. Your Meta dashboard says return on ad spend is five. Your finance team says total marketing spend rose twenty percent last quarter while new customers rose only five percent. Which number should drive next quarter's budget conversation? Pause and think. The answer: the backend numbers set the scoreboard, and they're telling you the extra spend bought few new customers. Meta's five isn't wrong, it's measuring credit, not cause. The right next step isn't to argue about dashboards. It's to run a lift or geo test on the channel that grew most, so you replace the argument with evidence.",
+                "onScreen": "Quick self-check\n• Meta ROAS 5\n• Spend +20%, new customers +5%\n• Which drives the budget talk?\n• Answer: backend + a test",
+                "visual": "Layout: two stat cards side by side (Meta ROAS 5; spend +20% vs customers +5%). A pause timer counts 3 seconds, then an answer card slides up highlighting 'backend scoreboard + run a test'.",
+                "seconds": 43
               },
               {
                 "narration": "Recap. Every number has a job. Platforms steer, analytics explains, the backend keeps score, and experiments and mix models decide budgets. Totals overshooting is normal. Attribution divides credit, it doesn't prove cause. Your next step: write a one-page measurement charter saying which number is your scoreboard, which numbers steer each channel, and which tests you'll run this quarter.",
