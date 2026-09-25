@@ -1,0 +1,1182 @@
+{
+  "slug": "discount-code-affiliate-sales-mastery",
+  "version": 1,
+  "title": "Discount-Code & Affiliate Sales Mastery",
+  "subtitle": "Choose the right products, create offers that convert, track honestly and build repeat buyers",
+  "category": "sales",
+  "level": "intermediate",
+  "estimatedMinutes": 160,
+  "description": "Discount codes and affiliate links are how many creators and micro-entrepreneurs earn on Optimize All — but the difference between occasional sales and dependable income lies in the details. This course explains how code and link programmes really work, from commission and attribution windows to validation and reversals.\n\nYou'll learn to choose products that fit your audience, design offers people want, and use content formats that convert: honest reviews, tutorials, comparisons, bundles and genuine limited-time deals. You'll place codes and links where buyers decide, read attribution data correctly, and report sales accurately with order IDs and privacy-safe proof. Crucially, you'll learn to avoid fraud, self-dealing and policy violations, to disclose affiliate income clearly under international advertising and consumer-protection principles, and to scale sustainably through repeat buyers.",
+  "outcomes": [
+    "Explain commission, attribution windows, validation and reversals in code and link programmes",
+    "Score campaigns for product and audience fit before accepting them",
+    "Design honest offers using bundles, risk reversal and genuine deadlines",
+    "Choose content formats that answer each buyer's question",
+    "Place codes and links effectively and interpret EPC, conversion and reversal data",
+    "Report sales accurately with order IDs and privacy-safe proof",
+    "Avoid self-dealing and fraud, and disclose affiliate income compliantly",
+    "Build repeat-buyer systems with opt-in communities"
+  ],
+  "skills": [
+    "Affiliate marketing",
+    "Offer design",
+    "Conversion content",
+    "Sales attribution",
+    "Sales reporting",
+    "Advertising compliance",
+    "Customer retention"
+  ],
+  "prerequisites": [],
+  "badge": {
+    "name": "Certified Affiliate Sales Specialist",
+    "description": "The holder can run profitable, compliant discount-code and affiliate campaigns: selecting well-matched products, designing honest offers, creating converting content, placing and tracking codes, reporting sales accurately with proper evidence, avoiding fraud and self-dealing, and building repeat-buyer income.",
+    "criteria": "Completed all lessons and scored at least 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "how-programs-work",
+      "title": "How affiliate and discount-code programmes work",
+      "summary": "Understand the mechanics, economics and terms of code and link programmes, and choose products that genuinely fit your audience.",
+      "lessons": [
+        {
+          "slug": "programme-mechanics",
+          "title": "The mechanics: codes, links, commission and cookies",
+          "type": "video",
+          "durationMinutes": 10,
+          "body": "### The basic model\n\nAffiliate and discount-code programmes pay you for **sales you help generate**. A brand (the merchant) gives you a unique way to identify customers you referred — usually a personal discount code, a tracked link, or both. When a customer buys using your code or link, the sale is attributed to you and you earn a commission or reward.\n\nOn Optimize All, brand campaigns can reward you for sharing campaign content and for sales made with your personal discount code. The details — commission rate, eligible products, dates, and how you report — are set out in each campaign brief. **Always read the brief**: it's your contract.\n\n### Codes versus links\n\n| | Discount code | Tracked (affiliate) link |\n|---|---|---|\n| How it's tracked | Customer types code at checkout | Click stores an identifier (often a cookie or URL parameter) |\n| Works offline / in video / spoken | Yes — easy to say and remember | Harder — needs a clickable place |\n| Customer benefit | Usually a discount or gift | Not always |\n| Weaknesses | Codes can leak to coupon sites; customer may forget to enter it | Blocked cookies, different devices, or long gaps can break tracking |\n\nMany sellers use **both**: a link for convenience and a code as a backup that also gives the buyer a reason to use it.\n\n### Key terms\n\n- **Commission** — your earnings per sale, usually a percentage of order value (sometimes excluding tax and shipping) or a fixed amount.\n- **Attribution window / cookie duration** — how long after a click a purchase still counts for you.\n- **Last-click attribution** — if a customer clicks several affiliates' links, the last one usually gets the credit. Codes often override links, depending on the programme.\n- **Validation / locking period** — a period during which sales can be reversed (returns, cancellations, fraud checks) before commission is confirmed.\n- **Reversal / clawback** — commission removed for returned, cancelled or invalid orders.\n- **Payout threshold and schedule** — minimum balance and timing for payment.\n- **Exclusions** — products, categories or order types that don't earn commission (for example, gift cards or items already on sale).\n\n### The economics — an illustrative example\n\nIllustrative numbers only: a product costs 4,000 PKR. Your code gives buyers 10% off (so they pay 3,600), and you earn 8% commission on the discounted price — 288 PKR per sale. If 25 people buy in a month, you'd earn 7,200 PKR, *before* any returns are reversed. If three orders are returned, confirmed earnings fall to 6,336 PKR.\n\nThis shows two important truths: **returns reduce earnings**, and **recommending the right product to the right people** — which lowers returns — is financially smart as well as ethical.\n\n### Reading the terms: a checklist\n\nBefore you promote anything, check:\n\n1. What exactly earns commission (products, regions, new vs. returning customers)?\n2. What's the rate and is it on pre- or post-discount, pre- or post-tax value?\n3. Campaign dates and attribution window.\n4. How and when sales are validated, reversed and paid.\n5. Where you're allowed to promote (some programmes ban paid search on brand terms, coupon sites or certain platforms).\n6. Disclosure and content requirements.\n7. Prohibited behaviour (self-purchase, incentivised orders, misleading claims).\n\n### Worked example\n\nHamza, a gaming creator in Lahore, joins a headset campaign. Reading the brief, he notices commission applies only to orders delivered in Pakistan, excludes bundles, and requires orders to be reported with order IDs within the campaign window. He plans his content around the single headset, tells his UAE followers that the code won't work for them, and sets a reminder to submit his sales evidence before the deadline. No surprises at payout.\n\n### Do and don't\n\n**Do** read every brief fully. **Do** use both a code and a link where allowed. **Do** factor returns into your expectations.\n\n**Don't** assume commission applies to everything on the site. **Don't** promote in channels the programme prohibits. **Don't** promise followers a discount you haven't confirmed.",
+          "video": {
+            "script": "Let's demystify how you actually get paid for selling with a discount code or affiliate link. A brand gives you a unique identifier. Sometimes it's a code, like SARA10. Sometimes it's a tracked link. Often it's both. When someone buys using your code or link, the sale is attributed to you, and you earn a commission. Codes are brilliant for video and spoken content, because people can remember them. Links are convenient, but tracking can break if someone switches devices or waits too long. Using both gives you the best chance of getting credit. Now, the fine print matters. Every programme has terms: what earns commission, what doesn't, how long the attribution window lasts, and when sales are confirmed. Most programmes have a validation period, where returned or cancelled orders are reversed. That last point is important. If you push a product to people it doesn't suit, they return it, and your commission disappears. So recommending the right product to the right people isn't just ethical — it's the smart way to earn. Before you promote anything, read the campaign brief like a contract, because it is one. Check the rate, the dates, the eligible products and regions, how to report your sales, and what's prohibited — like buying with your own code. In this course, you'll learn how to pick products that fit, create offers and content that convert, place your code where it works, track and report sales correctly, stay compliant, and build repeat buyers who come back to you again and again.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Programmes pay for sales you help generate, tracked by codes, links or both.",
+            "Know the commission basis, attribution window, validation period and exclusions.",
+            "Returns and cancellations reverse commission — fit reduces returns.",
+            "The campaign brief is your contract: read it before promoting."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is an attribution window?",
+              "options": [
+                "The time your post stays live",
+                "The payout date",
+                "The discount percentage",
+                "How long after a click or code use a purchase still counts for you"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "The attribution window defines how long after the referral a purchase is credited to you."
+            },
+            {
+              "question": "Why is a discount code useful in video and spoken content?",
+              "options": [
+                "It always pays more commission",
+                "It hides the disclosure",
+                "It's easy to say and remember, and works without a clickable link",
+                "It never leaks"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Codes can be spoken and remembered; links need a clickable placement."
+            },
+            {
+              "question": "What happens to commission on an order that's later returned?",
+              "options": [
+                "It's paid in full regardless",
+                "It's usually reversed during the validation period",
+                "It's doubled",
+                "It moves to another creator"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Most programmes reverse commission for returns and cancellations."
+            }
+          ],
+          "activity": "Take one active or upcoming campaign brief and complete the seven-point terms checklist in writing."
+        },
+        {
+          "slug": "choosing-products-that-fit",
+          "title": "Choosing products your audience will actually buy",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### The most important decision\n\nIn affiliate and code-based selling, **what** you promote matters more than how cleverly you promote it. The right product for your audience sells with honest, simple content. The wrong one fails no matter how hard you push — and costs you trust.\n\n### The product-fit scorecard\n\nScore each campaign from 1 to 5 on these criteria:\n\n1. **Audience need** — does it solve a problem your audience talks about?\n2. **Price fit** — is it affordable for a typical follower?\n3. **Availability** — can they buy and receive it where they live, in their currency?\n4. **Personal credibility** — can you speak about it from experience?\n5. **Product quality and reviews** — independent reviews, return rates if the brand shares them, your own testing.\n6. **Brand reliability** — delivery times, customer service, returns policy.\n7. **Commission and terms** — fair rate, reasonable window, clear rules.\n8. **Content potential** — can you make genuinely useful content around it?\n\nA product that scores highly on 1–6 with an average commission will usually earn more over time than a high-commission product that scores poorly on fit and quality.\n\n### Test before you promote\n\nWherever possible, use the product yourself for long enough to form an honest view. For consumables such as skincare or food, give it realistic time. For tech, test the features your audience cares about. Note genuine positives and negatives as you go — they become your content.\n\nIf you can't test it (for example, a service you can't use yourself), be honest: \"I haven't used this personally, but here's what I know and why I think it's worth a look.\" Never imply personal use you haven't had.\n\n### Warning signs to avoid\n\n- Unrealistic claims in the brief (\"cures\", \"guaranteed weight loss\", \"get rich\").\n- Very high commission on a product with poor reviews or no clear returns policy.\n- Pressure to promote regulated products (medicines, supplements with health claims, financial or investment products, crypto, gambling, alcohol, tobacco or vapes) without clear compliance guidance. Many of these are restricted or banned in some of your audience markets — gambling and alcohol promotion, for instance, are prohibited or heavily restricted in Pakistan, Saudi Arabia and the UAE.\n- Brands that can't explain their delivery and refund process.\n- \"Opportunities\" requiring you to pay upfront or recruit others to earn — hallmarks of pyramid-style schemes.\n\n### Matching products to audience segments\n\nYour audience isn't one person. Use analytics and conversations to identify segments — for example, a parenting creator's audience might include expecting parents, parents of toddlers, and parents of school-age children. Different products fit different segments, and your content should say who it's for.\n\n### Worked example\n\nNoor, a home-organisation creator in Dubai, is offered three campaigns:\n\n- **A**: a premium storage system (high price, strong quality, ships across the GCC, good commission).\n- **B**: a cheap gadget with dramatic claims, mixed reviews and a very high commission.\n- **C**: a budget label maker (affordable, reliable, ships across the UAE, modest commission).\n\nShe scores B low on quality and brand reliability and declines. She accepts C for her budget-conscious segment and A for the segment that has asked about full-room makeovers — creating separate content that tells each group who the product is for.\n\n### Saying no professionally\n\n> \"Thank you for thinking of me. I don't think this is the right fit for my audience at the moment, so I'll pass on this one, but I'd love to hear about future campaigns in [category].\"\n\nDeclining protects your trust account and your conversion rates.\n\n### Do and don't\n\n**Do** score campaigns before accepting. **Do** test products personally where possible. **Do** decline poor fits politely.\n\n**Don't** choose purely on commission. **Don't** promote regulated products without understanding the rules in your audience's markets. **Don't** claim experience you don't have.",
+          "video": null,
+          "keyTakeaways": [
+            "Product choice matters more than promotional technique.",
+            "Score campaigns on need, price, availability, credibility, quality, brand reliability, terms and content potential.",
+            "Test products before promoting and never imply use you haven't had.",
+            "Avoid regulated categories without clear compliance, and decline poor fits politely."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A product offers very high commission but has poor reviews and no clear returns policy. What's the wise choice?",
+              "options": [
+                "Promote it only to new followers",
+                "Decline or investigate further — quality and reliability risks harm trust and cause reversals",
+                "Promote it without disclosure",
+                "Promote it heavily for the commission"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Poor quality leads to returns, reversed commission and damaged trust."
+            },
+            {
+              "question": "You can't personally use a service you're promoting. What should you do?",
+              "options": [
+                "Pretend you use it",
+                "Avoid disclosure",
+                "Say honestly that you haven't used it and share what you do know",
+                "Copy someone else's review"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Implying personal use you haven't had is misleading."
+            },
+            {
+              "question": "Which 'opportunity' is a warning sign of a pyramid-style scheme?",
+              "options": [
+                "A fixed commission per sale",
+                "A tracked link",
+                "A 30-day attribution window",
+                "A requirement to pay upfront and recruit others to earn"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Paying to join and earning mainly by recruiting are classic warning signs."
+            }
+          ],
+          "activity": "Score your next three potential campaigns on the eight-point product-fit scorecard and decide which to accept, which to test, and which to decline."
+        }
+      ]
+    },
+    {
+      "slug": "offers-and-content",
+      "title": "Offers and content that convert",
+      "summary": "Design compelling, honest offers and use proven content formats — reviews, tutorials, comparisons, bundles and genuine limited-time deals.",
+      "lessons": [
+        {
+          "slug": "creating-offers",
+          "title": "Creating offers people want",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### An offer is more than a discount\n\nAn **offer** is the complete package a buyer weighs up: the product, the price, the discount, any bonus, the guarantee or returns policy, the delivery promise and the reason to act now. A 10% code on its own is weak; a clearly explained package that removes risk is strong.\n\n### The components of a strong offer\n\n1. **Clear value** — what they get and the outcome it delivers.\n2. **Relevant incentive** — a discount, free shipping, a gift with purchase or a bundle price, as agreed with the brand.\n3. **Risk reversal** — returns policy, guarantee, trial period (only if the brand genuinely offers it).\n4. **Reason to act now** — a genuine deadline, season or limited stock confirmed by the brand.\n5. **Simple next step** — the code, the link and what to do.\n\n### Working with brands on offers\n\nYou can often influence the offer. Brands benefit when creators convert well, so it's reasonable to ask:\n\n- \"Could my code include free delivery? My audience often mentions delivery costs.\"\n- \"Could we create a bundle of the cleanser and moisturiser? Followers usually ask which two to buy together.\"\n- \"Is there a launch window with a slightly higher discount for the first week?\"\n\nBase your requests on audience insight (\"followers ask about X\"), not just wanting more.\n\n### Types of incentive\n\n- **Percentage off** — simple and familiar; works well for mid-priced items.\n- **Fixed amount off** — \"500 PKR off\" can feel more tangible on lower-priced items.\n- **Free shipping** — powerful where delivery fees are a known barrier.\n- **Gift with purchase** — adds perceived value without reducing price.\n- **Bundle** — increases order value and solves a complete problem.\n- **Tiered** — \"10% off, 15% over a certain spend\" — encourages larger baskets.\n\n### Honest pricing\n\nConsumer-protection laws in many countries prohibit misleading price claims. At a principle level:\n\n- Don't claim \"was 5,000, now 3,000\" unless the product was genuinely sold at 5,000 for a meaningful period.\n- Don't advertise a discount that doesn't exist or is available to everyone anyway as if it were exclusive.\n- State key exclusions and conditions clearly.\n- Don't add hidden charges.\n\n### Worked example: upgrading an offer\n\n**Before**: \"Use code SANA10 for 10% off.\"\n\n**After**: \"#ad — I asked [Brand] for something better for you: code SANA10 now gives 10% off **plus free delivery** anywhere in Pakistan on the Hydration Duo (cleanser + moisturiser) — the combo most of you asked about. 14-day returns if it doesn't suit your skin. Valid until 31 May.\"\n\nThe upgraded version combines incentive, bundle, risk reversal, a genuine deadline and disclosure.\n\n### Offers for different audiences\n\n- **New followers**: low-risk entry products, samples, trial sizes.\n- **Warm followers**: bundles and complete solutions.\n- **Past buyers**: refills, upgrades, accessories (with genuine usefulness).\n\n### Common mistakes\n\n- Treating the code as the whole offer.\n- Promising offers the brand hasn't confirmed.\n- Over-discounting, which can cheapen a brand and train your audience to wait for sales.\n- Making the conditions so complex people give up.\n\n### Do and don't\n\n**Do** build offers around audience insight. **Do** include risk reversal where genuinely available. **Do** confirm every term with the brand.\n\n**Don't** use fake \"was\" prices. **Don't** claim exclusivity that isn't real. **Don't** hide conditions.",
+          "video": null,
+          "keyTakeaways": [
+            "An offer combines value, incentive, risk reversal, a genuine reason to act and a simple next step.",
+            "Use audience insight to negotiate better offers with brands.",
+            "Choose incentives — percentage, fixed, free delivery, gift, bundle — that fit the product and audience.",
+            "Price claims must be honest: no fake 'was' prices or false exclusivity."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which is the strongest offer?",
+              "options": [
+                "'10% off plus free delivery on the bundle you asked about, 14-day returns, valid until 31 May' — with disclosure",
+                "'Huge sale, buy now!'",
+                "'Code X for 10% off'",
+                "'Best price ever, trust me'"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "It combines incentive, relevance, risk reversal, a genuine deadline and disclosure."
+            },
+            {
+              "question": "When is 'was 5,000, now 3,000' acceptable?",
+              "options": [
+                "If you add #ad",
+                "If the brand asks you to say it",
+                "Only if the product was genuinely sold at 5,000 for a meaningful period",
+                "Always, it's marketing"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Reference prices must be genuine; otherwise they're misleading."
+            },
+            {
+              "question": "What's the best basis for asking a brand to improve your code's offer?",
+              "options": [
+                "Audience insight, such as repeated questions about delivery costs",
+                "Wanting more money",
+                "Threatening to stop posting",
+                "Comparing yourself to celebrities"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Insight-based requests show the brand how the change will increase conversions."
+            }
+          ],
+          "activity": "Upgrade one of your current code offers by adding at least two components (bundle, risk reversal, free delivery, genuine deadline) and confirm them with the brand."
+        },
+        {
+          "slug": "content-formats-that-convert",
+          "title": "Content formats that convert",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Match the format to the buying question\n\nEvery buyer has a question in their head. The best-converting content answers it directly:\n\n| Buyer's question | Best format |\n|---|---|\n| \"Does it actually work?\" | Honest review / long-term test |\n| \"How do I use it?\" | Tutorial / demonstration |\n| \"Which one should I buy?\" | Comparison |\n| \"What do I need to get started?\" | Bundle / starter kit |\n| \"Should I buy now?\" | Genuine limited-time offer |\n| \"Is it for someone like me?\" | Story / day-in-the-life / FAQ |\n\n### 1. The honest review\n\n**Structure**: context (why you tried it) → how you tested (duration, conditions) → what you liked → what you didn't → who it's for / not for → offer and disclosure.\n\n**Tips**: show real use, not just unboxing. Mention the testing period. Include at least one genuine limitation. Show the product in realistic conditions — Karachi humidity, a London winter, a Riyadh summer.\n\n### 2. The tutorial\n\n**Structure**: the outcome (\"perfect cold brew in 5 minutes\") → what you need → step-by-step → common mistakes → where to get it (code).\n\n**Tips**: the product is the tool; the result is the hero. Tutorials keep earning because people search for them long after posting.\n\n### 3. The comparison\n\n**Structure**: the choice people face → criteria that matter → side-by-side results → recommendation by use-case → code(s).\n\n**Tips**: include options you aren't paid for — this is what makes comparisons credible. Be fair: if the unpaid option wins for some users, say so. Disclose which products you earn from.\n\n### 4. The bundle or starter kit\n\n**Structure**: the goal (\"start home workouts with a small budget\") → what you really need vs. nice-to-haves → the kit → total cost with your code.\n\n**Tips**: bundles raise order value and help beginners. Only include items that genuinely belong together.\n\n### 5. The genuine limited-time offer\n\n**Structure**: what's on offer → why it's limited (brand's sale, season, launch) → exact end date/time and time zone → code.\n\n**Tips**: use sparingly, and only for real deadlines. Countdown stickers work well in stories. Post a reminder near the end — once, not ten times.\n\n### 6. FAQ and objection-busting content\n\nCollect repeated questions and answer them in one post: sizing, delivery, ingredients, halal certification where relevant, compatibility, returns. This converts people who are close to buying.\n\n### Hooks by format\n\n- Review: \"I used this every day for 30 days. Here's the honest verdict.\"\n- Tutorial: \"The 3-step method that finally fixed my…\"\n- Comparison: \"Budget vs. premium: is the expensive one worth it?\"\n- Bundle: \"Everything you need to start X for under Y.\"\n- Limited-time: \"The brand's Eid sale ends Sunday — here's what I'd actually buy.\"\n\n### Worked example: a month's plan for one product\n\nA tech creator promoting a mid-range smartwatch:\n\n- **Week 1**: unboxing plus first impressions (discovery), disclosed.\n- **Week 2**: tutorial — \"Set up sleep tracking properly.\"\n- **Week 3**: comparison — this watch vs. a popular budget one vs. a premium one.\n- **Week 4**: 30-day honest review plus FAQ, with the code and a genuine end-of-month deadline from the brand.\n\nEach piece is useful alone and moves viewers along the buying journey.\n\n### Format-specific cautions\n\n- **Before/after content**: don't edit images to exaggerate results; filters on cosmetic results can be misleading (the UK ASA, for instance, has ruled against filtered beauty ads).\n- **Health and wellness**: avoid medical claims; stick to your experience and the brand's approved, substantiated claims.\n- **Financial products**: in many markets, promoting investments or credit is regulated; don't do it without explicit compliance guidance.\n\n### Do and don't\n\n**Do** choose the format that answers the buyer's question. **Do** include unpaid alternatives in comparisons. **Do** show real conditions.\n\n**Don't** use filters that misrepresent results. **Don't** fake limited-time offers. **Don't** make unsubstantiated health or money claims.",
+          "video": null,
+          "keyTakeaways": [
+            "Pick the format that answers the buyer's question: review, tutorial, comparison, bundle, limited-time or FAQ.",
+            "Comparisons are credible when they include options you aren't paid for.",
+            "Use limited-time formats only for genuine deadlines.",
+            "Never use filters or edits that exaggerate product results."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A follower asks 'Which of these three should I buy?' Which format fits best?",
+              "options": [
+                "Comparison",
+                "Meme",
+                "Unboxing",
+                "Limited-time offer"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Comparisons directly answer 'which one should I buy?'."
+            },
+            {
+              "question": "What makes a comparison post credible?",
+              "options": [
+                "Including unpaid options and being fair about which suits whom",
+                "Using the brand's script",
+                "Only featuring products you're paid for",
+                "Hiding your disclosure"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Fairness and unpaid alternatives show you're helping, not just selling."
+            },
+            {
+              "question": "Which practice is misleading in beauty content?",
+              "options": [
+                "Mentioning a limitation",
+                "Applying a skin-smoothing filter to demonstrate a foundation's effect",
+                "Showing the product in daylight",
+                "Stating the testing period"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Filters that exaggerate a product's effect misrepresent results."
+            }
+          ],
+          "activity": "Plan a four-week content sequence for one product using at least three different formats, each answering a different buyer question."
+        }
+      ]
+    },
+    {
+      "slug": "placement-and-tracking",
+      "title": "Code placement, tracking and attribution",
+      "summary": "Put your code and link where buyers see them at the moment of decision, and understand how attribution really works.",
+      "lessons": [
+        {
+          "slug": "link-and-code-placement",
+          "title": "Link and code placement that works",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### Placement is conversion\n\nA buyer who's convinced but can't find your code in the moment will often buy without it — or not at all. Good placement makes the next step obvious at the point of decision.\n\n### Placement by platform and format\n\n**Instagram / Facebook feed and Reels**\n- Code in the **first lines** of the caption (after disclosure).\n- Code on screen near the end of the video.\n- Pinned comment with code and link instructions.\n- Link in bio or link page, clearly labelled.\n\n**Stories**\n- Link sticker plus code text on the frame.\n- Repeat the code on the final frame.\n- Save to a Highlight named after the product or \"Codes\" so it keeps working.\n\n**TikTok**\n- Code on screen and in the caption.\n- Pinned comment.\n- Where available, platform shopping or link features.\n\n**YouTube**\n- Say the code clearly, and show it on screen.\n- Link and code at the **top** of the description, with disclosure.\n- Pinned comment.\n- Chapters so buyers can jump back to the relevant section.\n\n**WhatsApp and Telegram (broadcasts, channels, communities)**\n- Only to people who've opted in. Include disclosure, the code and a short reason it helps them.\n\n**LinkedIn** (for B2B products or services)\n- Code or link in the post or first comment, framed professionally with disclosure.\n\n### Making codes easy\n\n- **Memorable**: your name plus a number (AYESHA10) beats random strings.\n- **Unambiguous**: avoid characters like O/0 and I/l confusion.\n- **Consistent**: use the same code across platforms unless tracking requires different ones.\n- **Tested**: check it works on mobile checkout before posting.\n\n### Timing and repetition\n\n- Mention the code early (for people who are already convinced) and again at the end (for people who watched to the end).\n- For live streams, repeat the code periodically and keep it visible.\n- Don't over-repeat in captions — once clearly, plus a pinned comment, is usually enough.\n\n### Link hygiene\n\n- Use the exact tracked link from the campaign; don't shorten or change it with tools that strip tracking parameters unless the programme allows.\n- Check links open the right product on mobile.\n- Label link-in-bio entries clearly: \"[Brand] headset — affiliate link, I earn commission\".\n- Replace or remove expired links and codes to avoid frustrating buyers.\n\n### Where NOT to place your code\n\nMany programmes prohibit certain placements. Common prohibitions include:\n\n- **Coupon and voucher websites**, unless explicitly allowed.\n- **Bidding on the brand's name** in search ads.\n- **Spam**: mass comments on other people's posts, unsolicited DMs, group spam.\n- **Other creators' content or the brand's own page** comments.\n- **Misleading contexts**: pretending to be the brand, or posting in communities where promotion is banned.\n\nViolating placement rules can lead to reversed commissions and removal from programmes.\n\n### Worked example\n\nAli, a fitness creator in Manchester with followers in the UK and Pakistan, noticed viewers asking \"what was the code again?\" under his reels. He now: puts the code in the first caption line after \"Ad |\", shows it on screen at the start and end, pins a comment with code and link, and keeps a \"Codes\" Highlight. Questions about the code fall away, and his tracked sales become more consistent.\n\n### Do and don't\n\n**Do** place the code where people decide. **Do** keep Highlights and pinned comments updated. **Do** test codes and links on mobile.\n\n**Don't** post codes on coupon sites or spam other accounts. **Don't** strip tracking parameters. **Don't** leave expired codes live.",
+          "video": null,
+          "keyTakeaways": [
+            "Place codes at the moment of decision: first caption lines, on screen, pinned comments, Highlights.",
+            "Make codes memorable, unambiguous, consistent and tested.",
+            "Label link-in-bio entries as affiliate links.",
+            "Respect programme placement rules — no coupon sites, spam or brand-name bidding unless allowed."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Where should the code appear in a YouTube video's description?",
+              "options": [
+                "At the top, with the disclosure",
+                "At the bottom, after 30 hashtags",
+                "In a hidden comment",
+                "Nowhere; only say it"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Top-of-description placement ensures viewers see it without expanding the description."
+            },
+            {
+              "question": "Which is commonly prohibited by affiliate programmes?",
+              "options": [
+                "Posting your code in your own caption",
+                "Pinning a comment with your code",
+                "Saving stories to a Highlight",
+                "Uploading your code to coupon websites without permission"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Coupon-site placement is often restricted because it captures buyers who were already going to buy."
+            },
+            {
+              "question": "Why avoid codes like 'O0Il1'?",
+              "options": [
+                "Similar-looking characters cause entry errors",
+                "Brands charge extra",
+                "They're illegal",
+                "They're too short"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Ambiguous characters cause failed code entries and lost attribution."
+            }
+          ],
+          "activity": "Audit your profiles: add the code to pinned comments, create or update a Codes Highlight, label link-in-bio entries and test every code on mobile."
+        },
+        {
+          "slug": "tracking-and-attribution",
+          "title": "Tracking and attribution: what the numbers mean",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Why attribution isn't perfect\n\nAttribution tries to answer: \"Which content caused this sale?\" In reality, buyers often see you several times, discuss with friends and buy days later on another device. No system captures every influence. Understanding the gaps helps you interpret your numbers — and avoid unfair assumptions about your performance.\n\n### How sales get attributed to you\n\n1. **Code redemption** — the customer enters your code at checkout. Usually the most reliable for creator programmes.\n2. **Tracked link** — the click carries an identifier; if the customer buys within the window on the same browser/device, you get credit.\n3. **Platform-native shopping tags** — some platforms track sales from in-app shops.\n4. **Manual reporting with proof** — in some campaigns you submit order IDs and evidence, which the brand or platform verifies.\n\n### Common reasons you don't get credit\n\n- The customer forgot to enter the code.\n- They clicked your link on mobile and bought on a laptop.\n- Cookies were blocked or cleared, or the attribution window expired.\n- Another affiliate's link or code was used later (last-click rules).\n- The order was placed outside the eligible region or excluded category.\n- The sale was returned or cancelled.\n\nReduce these by using code **and** link, reminding buyers to enter the code, and being clear about eligibility.\n\n### Metrics to track\n\n- **Clicks** — how many people clicked your link.\n- **Code uses / orders** — attributed purchases.\n- **Conversion rate** — orders ÷ clicks.\n- **Average order value (AOV)** — revenue ÷ orders.\n- **Earnings per click (EPC)** — commission ÷ clicks. Useful for comparing campaigns.\n- **Reversal rate** — reversed orders ÷ total orders. A high rate suggests poor fit, misleading expectations or quality problems.\n- **Confirmed earnings** — after validation.\n\n### Illustrative comparison\n\n*Illustrative numbers only.* Campaign A: 1,000 clicks, 20 orders, commission 300 per order → 6,000 earned, EPC 6. Campaign B: 400 clicks, 16 orders, commission 350 → 5,600 earned, EPC 14. B earns far more per click, suggesting better fit — worth prioritising, even though A had more clicks.\n\n### Using UTM-style tags and separate codes (where allowed)\n\nSome programmes let you create sub-IDs or separate codes per platform. This helps answer \"Does YouTube or Instagram convert better for me?\" Only do this where the programme allows, and keep naming consistent (for example, AYESHA-YT, AYESHA-IG).\n\n### Keeping your own records\n\nDon't rely solely on dashboards. Keep a simple log: date, platform, content link, clicks, orders, earnings, notes. When numbers look wrong, your records help you raise questions with evidence.\n\n### When numbers look wrong\n\n1. Check the obvious: correct link? Code working? Campaign dates?\n2. Compare with your content analytics: did clicks spike when you posted?\n3. Gather evidence: screenshots of analytics, the post, any buyer messages confirming code use (with permission).\n4. Raise it politely with the platform or brand through official support, with specifics.\n\nNever \"fix\" a shortfall by submitting orders you can't verify.\n\n### Worked example\n\nRabia, a UK-based Pakistani fashion creator, notices high clicks but low orders from Pakistan. Investigating, she finds the brand's site defaulted to GBP and international shipping was expensive. She tells the brand, who enables local currency and a Pakistan shipping option. She then clarifies delivery options in her content. Conversion improves — not because of new content, but because she read the data correctly.\n\n### Do and don't\n\n**Do** use code plus link. **Do** track EPC and reversal rate. **Do** keep your own records.\n\n**Don't** assume low attribution means low influence. **Don't** create sub-codes without permission. **Don't** submit unverifiable orders to \"correct\" numbers.",
+          "video": null,
+          "keyTakeaways": [
+            "Attribution is imperfect: devices, cookies, windows and last-click rules all cause gaps.",
+            "Use both code and link, and remind buyers to enter the code.",
+            "Track conversion rate, EPC, AOV and reversal rate — not just clicks.",
+            "Investigate discrepancies with evidence through official channels."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Campaign A has EPC 6 and Campaign B has EPC 14. What does this suggest?",
+              "options": [
+                "EPC is irrelevant",
+                "They are identical",
+                "A converts better",
+                "B earns more per click, suggesting better fit"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Higher earnings per click indicate stronger conversion or order value."
+            },
+            {
+              "question": "A buyer clicks your link on their phone but buys on a laptop days later without the code. What's likely?",
+              "options": [
+                "The sale may not be attributed to you",
+                "You'll definitely get credit",
+                "The brand will double your commission",
+                "The order will be cancelled"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Cross-device purchases often break link tracking, which is why codes help."
+            },
+            {
+              "question": "A high reversal rate most likely indicates…",
+              "options": [
+                "Poor fit, misleading expectations or quality issues",
+                "Excellent fit",
+                "Too many followers",
+                "A low commission rate"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Many returns or cancellations signal a mismatch between expectation and reality."
+            }
+          ],
+          "activity": "Build a simple tracking log and calculate conversion rate, EPC and reversal rate for your last two campaigns."
+        }
+      ]
+    },
+    {
+      "slug": "reporting-and-integrity",
+      "title": "Reporting sales and protecting integrity",
+      "summary": "Report sales accurately with proper evidence, and avoid fraud, self-dealing and policy violations that cost earnings and reputations.",
+      "lessons": [
+        {
+          "slug": "reporting-sales-correctly",
+          "title": "Reporting sales correctly: order IDs and proof",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### Why accurate reporting matters\n\nWhen your earnings depend on reported sales, accuracy is everything. Brands and platforms pay out based on data they trust. Accurate, well-evidenced reporting gets you paid faster, builds your reputation, and qualifies you for better campaigns. Inaccurate reporting — even by mistake — can delay payment or trigger investigations.\n\n### What a good sales report includes\n\nFollow the specific instructions in each Optimize All campaign brief. In general, a sale report should include:\n\n- **Order ID / order number** — the unique identifier from the brand's system.\n- **Date and time** of purchase.\n- **Code or link used.**\n- **Order value** (and currency).\n- **Products purchased** (if requested).\n- **Proof** — as specified in the brief, for example a platform-generated confirmation or a screenshot of the order confirmation shared by the buyer **with their consent**, with personal details redacted.\n\n### Protecting buyer privacy\n\nProof of sale often involves personal data. Handle it carefully:\n\n- Only collect what the campaign actually requires.\n- Ask the buyer's permission before using any screenshot they send you.\n- **Redact** names, addresses, phone numbers, emails and payment details unless the brief specifically requires and justifies them.\n- Store evidence securely and delete it when no longer needed.\n- Never post buyers' order details publicly.\n\n### Timing and deadlines\n\n- Submit reports within the campaign window and any reporting deadline.\n- Don't batch everything to the last day — mistakes are more likely.\n- Keep a running log as sales come in.\n\n### Handling edge cases\n\n- **Duplicate reports**: check your log before submitting; never report the same order twice.\n- **Returns and cancellations**: if you learn an order was cancelled, update or withdraw your report as instructed.\n- **Orders outside eligibility**: don't report orders from excluded regions or products.\n- **Unclear cases**: ask support before submitting rather than guessing.\n\n### A reporting checklist\n\n1. Is this a genuine purchase by a real customer?\n2. Was it made using my code/link within the campaign dates?\n3. Is it eligible under the brief (region, product, customer type)?\n4. Do I have the order ID and required proof, with personal data redacted?\n5. Have I checked it isn't a duplicate?\n6. Am I submitting before the deadline?\n\n### Worked example\n\nUsman, a tech creator in Islamabad, receives messages from buyers saying they used his code. The campaign requires order IDs. He replies: \"Thank you so much! If you're happy to, could you share the order number? Please don't send your address or phone — just the order number and date is fine.\" He logs each one, checks for duplicates, and submits them weekly. When one buyer later cancels, Usman updates his report. His payouts arrive without disputes, and the brand invites him to the next campaign.\n\n### Mistakes to avoid\n\n- Submitting estimates as confirmed sales.\n- Reporting orders you \"think\" came from you without evidence.\n- Editing screenshots — even to \"tidy\" them — beyond redacting personal data.\n- Collecting more personal data than needed.\n\n### Do and don't\n\n**Do** log sales as they happen. **Do** redact personal data. **Do** update reports for cancellations.\n\n**Don't** report duplicates or ineligible orders. **Don't** edit proof. **Don't** miss deadlines.",
+          "video": null,
+          "keyTakeaways": [
+            "Follow each campaign brief's reporting instructions exactly.",
+            "Include order ID, date, code, value and consented, redacted proof.",
+            "Log sales continuously, check for duplicates and update for cancellations.",
+            "Protect buyer privacy: collect minimal data and store it securely."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A buyer sends a screenshot showing their full name, address and phone number. What should you do before submitting it?",
+              "options": [
+                "Submit it unchanged",
+                "Get their consent and redact personal details not required by the brief",
+                "Delete it and report the sale without evidence",
+                "Post it on your story as proof"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Only the required data should be shared, with consent and redaction."
+            },
+            {
+              "question": "You discover that an order you reported has been cancelled. What should you do?",
+              "options": [
+                "Report it again",
+                "Nothing",
+                "Update or withdraw the report as instructed",
+                "Ask the buyer to reorder with a friend's code"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Accurate reporting includes correcting for cancellations."
+            },
+            {
+              "question": "Which should never be done to proof of sale?",
+              "options": [
+                "Editing figures or details to change what it shows",
+                "Redacting personal data",
+                "Storing it securely",
+                "Deleting it when no longer needed"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Altering evidence is fraud; redaction of personal data is appropriate."
+            }
+          ],
+          "activity": "Create a sales log with columns for order ID, date, code/link, value, eligibility check, proof status and submission date."
+        },
+        {
+          "slug": "avoiding-fraud-and-self-dealing",
+          "title": "Avoiding fraud, self-dealing and policy violations",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Why integrity is non-negotiable\n\nAffiliate and code programmes work only if brands can trust the data. Fraud — deliberate or careless — harms brands, honest creators and customers. Platforms and brands use increasingly sophisticated checks, and consequences range from reversed commissions and account suspension to legal action. Integrity is also your long-term competitive advantage: trusted sellers get the best campaigns.\n\n### Common forms of fraud and self-dealing\n\n**1. Self-purchasing (self-dealing)**\nBuying with your own code or link to earn commission, then keeping or returning the product. Unless a programme explicitly allows it, this is a violation.\n\n**2. Incentivised or paid orders**\nPaying friends or family to buy with your code, or refunding them afterwards. This creates fake sales.\n\n**3. Fake or duplicate reporting**\nSubmitting orders that didn't happen, reporting the same order twice, or claiming others' sales.\n\n**4. Code leaking and coupon-site abuse**\nPosting your code on coupon sites or forums where the programme forbids it, capturing sales you didn't influence.\n\n**5. Cookie stuffing and click fraud**\nForcing tracking cookies onto users without a genuine click, or using bots to generate clicks.\n\n**6. Brand-bidding and impersonation**\nRunning ads on the brand's name, or pretending to be the brand's official account.\n\n**7. Fake engagement**\nBuying followers, likes or comments to appear more influential in order to win campaigns.\n\n**8. Misleading claims**\nInventing results, testimonials or scarcity to push sales.\n\n### Grey areas — ask first\n\n- **Buying for yourself because you genuinely want the product**: fine to buy, but don't use your own code unless the brief allows it.\n- **Family members who genuinely want the product**: rules vary. Many programmes exclude household purchases. Check the brief or ask.\n- **Sharing your code in a WhatsApp group you belong to**: fine if members opted in and group rules allow promotion; disclose the commercial relationship.\n\nWhen in doubt, ask the platform's support **before** acting, and keep a record of the answer.\n\n### Red flags from others\n\nBe wary of anyone offering:\n\n- \"Guaranteed orders\" to boost your numbers.\n- Services to buy followers or engagement.\n- Schemes to \"share codes\" among creators to inflate sales.\n- Requests to pay upfront to join a \"premium\" affiliate programme.\n\nThese can involve you in fraud or be scams targeting creators.\n\n### What happens when fraud is detected\n\nConsequences typically include reversed commissions, withheld payouts, removal from campaigns and platforms, reputational damage with brands, and in serious cases, legal liability. Detection methods include purchase-pattern analysis, device and address matching and return-rate monitoring — which is why \"small\" self-dealing is rarely invisible.\n\n### Worked scenario\n\nKiran is close to a bonus tier. A friend offers to buy five items with Kiran's code if Kiran reimburses her, then return them after the validation period. Kiran declines: this would be incentivised fake orders, likely to be detected, and would put her account and reputation at risk. Instead, she posts a genuine comparison video, which brings in several real orders — not enough for the bonus this time, but her record stays clean and the brand renews her for the next campaign.\n\n### Building a personal integrity policy\n\nWrite down your rules, for example:\n\n1. I only promote products I've tested or am honest about not having tested.\n2. I never buy with my own code unless the brief allows it.\n3. I never pay or reimburse anyone to buy.\n4. I only report orders with evidence.\n5. I disclose every commercial relationship.\n6. I ask before acting in grey areas.\n\n### Do and don't\n\n**Do** read prohibited behaviours in every brief. **Do** ask when unsure. **Do** report suspected fraud or scams to the platform.\n\n**Don't** self-purchase without permission. **Don't** buy engagement. **Don't** accept \"guaranteed order\" offers.",
+          "video": null,
+          "keyTakeaways": [
+            "Self-purchasing, paid orders, fake reports, code leaking and fake engagement are fraud or violations.",
+            "Detection is sophisticated; consequences include reversals, bans and legal liability.",
+            "In grey areas, ask the platform first and keep a record.",
+            "A written personal integrity policy protects your income and reputation."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which of these is self-dealing?",
+              "options": [
+                "Buying with your own code to earn commission when the brief doesn't allow it",
+                "Replying to a buyer's question",
+                "Recommending a product you genuinely use",
+                "Sharing your code in your own caption"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Earning commission on your own purchases without permission is self-dealing."
+            },
+            {
+              "question": "A friend offers to buy with your code if you reimburse them. What is this?",
+              "options": [
+                "A smart growth tactic",
+                "A normal referral",
+                "Allowed if they keep the product",
+                "An incentivised fake order — a violation"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Paying or reimbursing someone to purchase creates fake sales."
+            },
+            {
+              "question": "You're unsure whether your sister can use your code. What should you do?",
+              "options": [
+                "Use it and hope",
+                "Use a different creator's code",
+                "Ask her to buy from another address",
+                "Check the brief or ask platform support before acting"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Household purchases are often restricted; ask first and keep a record."
+            }
+          ],
+          "activity": "Write your own five- or six-point personal integrity policy and keep it somewhere you'll see it when accepting campaigns."
+        }
+      ]
+    },
+    {
+      "slug": "compliance-and-scaling",
+      "title": "Compliance, disclosure and scaling with repeat buyers",
+      "summary": "Disclose affiliate relationships correctly, handle consumer-protection basics, and grow sustainable income through repeat buyers.",
+      "lessons": [
+        {
+          "slug": "affiliate-disclosure-compliance",
+          "title": "Affiliate disclosure and consumer protection",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### Affiliate income requires disclosure\n\nEarning commission from a code or link is a **material connection**, just like a paid post. Regulators including the US FTC, the UK's ASA and CMA, and consumer-protection authorities across the EU, the Gulf and South Asia expect it to be disclosed clearly. This lesson covers principles; it's not legal advice, so always check current rules for your audience's markets.\n\n### Disclosure for affiliate content\n\n- **Caption**: begin with \"Ad\" or \"#ad\", or \"Affiliate: I earn commission from purchases using my code\".\n- **Video**: say it and show it at the start — \"This is an ad; I earn commission if you use my code.\"\n- **Link-in-bio / link pages**: label affiliate links clearly at the top of the page and next to links.\n- **YouTube descriptions**: place disclosure at the top, above the fold, alongside the code.\n- **Blogs and newsletters**: disclose before the first affiliate link, not only in a footer.\n- **DMs, WhatsApp and Telegram**: mention you earn commission when sharing the code.\n- **Language**: disclose in the language of the content — English, Urdu, Arabic or others — using words your audience understands.\n\n\"Affiliate link\" alone may not be understood by everyone; combining it with \"I earn commission\" or \"Ad\" is clearer.\n\n### Consumer-protection basics\n\nDisclosure is only one part. Across most markets, consumer-protection principles also prohibit:\n\n- **Misleading claims** about product performance, results, ingredients or origin.\n- **False prices and discounts** (fake reference prices, fake exclusivity).\n- **False urgency or scarcity.**\n- **Fake reviews and testimonials**, including incentivised reviews presented as independent. In the US, the FTC's rule on fake reviews applies; in the UK, fake reviews are banned under the Digital Markets, Competition and Consumers Act 2024.\n- **Hiding material information**, such as significant exclusions or extra charges.\n\n### Category-specific rules\n\nSome product categories carry extra requirements or bans, which vary by country:\n\n- **Health, supplements and cosmetics**: claims often need substantiation; medical claims are heavily restricted.\n- **Financial products and crypto**: often tightly regulated; in the UK, for example, promoting certain financial products without authorisation can be a criminal offence.\n- **Alcohol, gambling, tobacco and vapes**: banned or restricted in many of your markets, including Pakistan and the Gulf states.\n- **Products for children**: extra protections apply; avoid targeting children with direct appeals to buy.\n\nIf a brief involves any of these, ask for written compliance guidance, or decline.\n\n### Licensing in the Gulf\n\nIn the UAE and Saudi Arabia, individuals who carry out paid advertising on social media may need a licence or permit from the relevant media authority (for example, Saudi Arabia's Mawthooq licence). Check current requirements before accepting paid or commission-based campaigns aimed at those audiences.\n\n### Keeping records\n\nKeep campaign briefs, agreements, approved claims, content copies and proof of disclosure for a reasonable period. If a question arises later, records protect you.\n\n### Worked example: fixing a non-compliant post\n\n**Before**: \"OMG best serum ever, cleared my acne in 3 days!! Only 2 left!! Link in bio 💕 #skincare #sp\"\n\nProblems: unclear disclosure (#sp), unsubstantiated medical claim, likely false scarcity, no code clarity.\n\n**After**: \"Ad | I earn commission with my code. I've used this serum for 6 weeks — my skin feels less oily and breakouts seem calmer (everyone's skin is different). Code HINA10 gives 10% off until 30 June; 14-day returns. Link in bio (affiliate).\"\n\n### Do and don't\n\n**Do** disclose affiliate income clearly, upfront, in the post's language. **Do** stick to substantiated claims. **Do** keep records.\n\n**Don't** rely on \"#sp\" or a footer-only disclosure. **Don't** make medical, financial or income promises. **Don't** promote restricted categories without compliance guidance.",
+          "video": null,
+          "keyTakeaways": [
+            "Commission is a material connection — disclose it upfront in every format.",
+            "Combine 'Ad' or 'I earn commission' with clear placement; 'affiliate link' alone may be unclear.",
+            "Consumer protection also prohibits misleading claims, fake prices, false urgency and fake reviews.",
+            "Regulated categories and Gulf licensing need checking before you accept campaigns."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which disclosure is clearest for an affiliate link in a blog post?",
+              "options": [
+                "'Ad — I earn commission from purchases using links in this post' before the first link",
+                "#aff at the end",
+                "No disclosure; links are obvious",
+                "A footer note at the bottom of the page"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Clear wording placed before the first link is upfront and understandable."
+            },
+            {
+              "question": "Which claim is most likely to be a problem?",
+              "options": [
+                "'Everyone's skin is different'",
+                "'My skin feels less oily after six weeks'",
+                "'I've used it for six weeks'",
+                "'Cleared my acne in 3 days — guaranteed'"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Guaranteed medical-type results are unsubstantiated and misleading."
+            },
+            {
+              "question": "A brief asks you to promote an investment app to UK followers. What should you do?",
+              "options": [
+                "Promote only in Stories",
+                "Seek written compliance guidance or decline, because financial promotions are tightly regulated",
+                "Promote it without disclosure",
+                "Promote it like any product"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Financial promotions are heavily regulated; unauthorised promotion can be unlawful."
+            }
+          ],
+          "activity": "Rewrite one of your past affiliate posts to meet the disclosure and consumer-protection principles in this lesson."
+        },
+        {
+          "slug": "scaling-with-repeat-buyers",
+          "title": "Scaling with repeat buyers",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### The repeat-buyer advantage\n\nIt's generally cheaper and easier to sell to someone who already trusts you than to win a new buyer. Repeat buyers also tend to return less (they know what they're getting) and recommend you to others. Sustainable affiliate income is built on them.\n\n### Why buyers come back\n\n- The first purchase met or exceeded expectations (because you set them honestly).\n- You helped them get value from the product.\n- You kept recommending relevant things, not random ones.\n- They feel part of a community around your content.\n\n### The repeat-buyer system\n\n**1. Set honest expectations at the first sale.** Over-promising leads to returns and lost trust.\n\n**2. Help after purchase.** Create \"how to get the most from it\" content: setup guides, care tips, recipes, routines. Pin or save these where buyers will find them.\n\n**3. Recommend the natural next step.** Refills, compatible accessories, the next level of a product. Only recommend what genuinely helps: \"If you liked the cleanser, the moisturiser pairs well — but if your skin's happy, you don't need it.\"\n\n**4. Build an opt-in community.** A broadcast channel, a newsletter or a WhatsApp community where people choose to receive your recommendations. Respect consent, disclose commercial links, and make leaving easy.\n\n**5. Time recommendations to real needs.** Consumables run out; seasons change; festivals and school terms create needs. A reminder when a 30-day supply might be running low can be genuinely helpful.\n\n**6. Ask for feedback and use it.** \"What did you think?\" — then share the learnings (with permission) and adjust future recommendations.\n\n### Scaling beyond yourself\n\nAs you grow:\n\n- **Content libraries**: evergreen tutorials, comparisons and FAQs that keep converting.\n- **Multiple programmes in one niche**: become the trusted guide for a category rather than a random promoter.\n- **Collaboration**: joint content with complementary creators (with disclosure of any commercial arrangements).\n- **Negotiating better terms**: use your consistent, well-evidenced sales record to ask brands for higher commission, better offers for your audience or exclusive codes.\n\n### Metrics for repeat business\n\n- **Repeat purchase rate** — share of buyers who buy again (where the brand shares data).\n- **Returning code users** — if your code data shows repeat uses.\n- **Community growth and engagement** — opt-in subscribers and their activity.\n- **Reversal rate over time** — should fall as your recommendations improve.\n\n### Worked example\n\nSadia, a baking creator in Doha, used to earn mostly from one-off equipment sales. She added a \"baking basics\" series showing how to use each tool, a monthly \"what I'm baking this month\" post with the ingredients and tools she genuinely used, and an opt-in channel for seasonal recipe ideas ahead of Ramadan, Eid and National Day. Over time, a noticeable share of her orders came from returning followers, and her reversal rate fell because buyers knew exactly what to expect.\n\n### Ethics of repeat selling\n\n- Don't create artificial dissatisfaction (\"your old one is useless now\") to drive upgrades.\n- Don't spam your community with daily codes; value first.\n- Respect unsubscribes immediately.\n- Keep disclosing on every recommendation, even to loyal buyers.\n\n### Do and don't\n\n**Do** help buyers succeed after purchase. **Do** build an opt-in community. **Do** recommend genuine next steps.\n\n**Don't** treat buyers as one-off transactions. **Don't** spam or pressure. **Don't** stop disclosing to regular followers.",
+          "video": null,
+          "keyTakeaways": [
+            "Repeat buyers are cheaper to serve, return less and refer others.",
+            "Set honest expectations, help after purchase and recommend genuine next steps.",
+            "Build opt-in communities and respect consent and unsubscribes.",
+            "Use a clean, evidenced sales record to negotiate better terms."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which action most directly encourages repeat purchases?",
+              "options": [
+                "Creating 'how to get the most from it' content after a purchase",
+                "Posting codes daily in every channel",
+                "Telling buyers their product is outdated",
+                "Hiding the disclosure from regular followers"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Helping buyers succeed builds satisfaction and trust for the next purchase."
+            },
+            {
+              "question": "How should you grow a community for recommendations?",
+              "options": [
+                "Add all past buyers to a WhatsApp group without asking",
+                "Offer an opt-in channel and make leaving easy",
+                "Share buyers' numbers with brands",
+                "Buy a contact list"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Consent-based communities respect privacy and marketing rules."
+            },
+            {
+              "question": "Why might a falling reversal rate over time indicate success?",
+              "options": [
+                "It means fewer people are buying",
+                "The brand stopped tracking",
+                "It has no meaning",
+                "Buyers' expectations are well set and recommendations fit better"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Fewer returns suggest better-matched recommendations and honest expectations."
+            }
+          ],
+          "activity": "Design a simple post-purchase journey for one product: a thank-you touch, a how-to post, a genuine next-step recommendation and an opt-in community invitation."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 20,
+    "timeLimitMinutes": 30,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "dcam-001",
+        "module": "how-programs-work",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "In a discount-code programme, how is a sale usually attributed to you?",
+        "options": [
+          "By the brand guessing",
+          "By the buyer following you",
+          "By the buyer entering your unique code at checkout",
+          "By the buyer liking your post"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Your unique code identifies you at checkout."
+      },
+      {
+        "id": "dcam-002",
+        "module": "how-programs-work",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Illustratively, you earn 8% on a 3,600 order. Two of 20 orders are returned. What happens to commission on those two?",
+        "options": [
+          "It's typically reversed",
+          "It doubles",
+          "It's paid anyway",
+          "It transfers to your next campaign automatically"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Returned orders are usually reversed during validation."
+      },
+      {
+        "id": "dcam-003",
+        "module": "how-programs-work",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which should you check in a campaign brief before promoting? (Choose all that apply.)",
+        "options": [
+          "Prohibited promotion channels",
+          "Attribution window and validation period",
+          "Eligible products and regions",
+          "The brand's office address"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Eligibility, timing and prohibited channels directly affect earnings and compliance."
+      },
+      {
+        "id": "dcam-004",
+        "module": "how-programs-work",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Campaign X pays high commission on a product with poor reviews; Campaign Y pays average commission on a well-reviewed product your audience asks about. Which is likely to earn more over time?",
+        "options": [
+          "Neither",
+          "Y, because fit and quality drive conversions and reduce reversals",
+          "Both equally",
+          "X, because of higher commission"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Fit and quality produce more confirmed sales and fewer reversals."
+      },
+      {
+        "id": "dcam-005",
+        "module": "how-programs-work",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is 'last-click attribution'?",
+        "options": [
+          "Credit is split equally",
+          "The last referrer before purchase usually gets credit",
+          "The first affiliate gets credit",
+          "The brand keeps all credit"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Under last-click rules, the final referral before purchase typically wins."
+      },
+      {
+        "id": "dcam-006",
+        "module": "how-programs-work",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An 'affiliate opportunity' requires a joining fee and pays mostly for recruiting new members. What should you conclude?",
+        "options": [
+          "It's fine if the fee is small",
+          "It's a standard affiliate programme",
+          "It's only a problem in the UK",
+          "It shows warning signs of a pyramid-style scheme and should be avoided"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Upfront fees and recruitment-based earnings are classic pyramid-scheme signs."
+      },
+      {
+        "id": "dcam-007",
+        "module": "offers-and-content",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is part of a strong offer?",
+        "options": [
+          "Risk reversal such as a genuine returns policy",
+          "A vague 'huge sale'",
+          "Fake scarcity",
+          "Hidden conditions"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Risk reversal reduces buyer hesitation."
+      },
+      {
+        "id": "dcam-008",
+        "module": "offers-and-content",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Followers keep mentioning delivery costs. What's the best offer improvement to request from the brand?",
+        "options": [
+          "A higher commission for you only",
+          "A bigger percentage discount on unrelated products",
+          "A countdown timer",
+          "Free delivery with your code"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Addressing the specific barrier your audience mentions is most likely to lift conversion."
+      },
+      {
+        "id": "dcam-009",
+        "module": "offers-and-content",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A buyer's question is 'How do I use this?'. Which format answers it best?",
+        "options": [
+          "Limited-time offer",
+          "Unboxing",
+          "Tutorial",
+          "Giveaway"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Tutorials show how to use the product and achieve an outcome."
+      },
+      {
+        "id": "dcam-010",
+        "module": "offers-and-content",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A brand asks you to say 'was 6,000, now 3,500' but the product has always sold at 3,500. What should you do?",
+        "options": [
+          "Decline the false reference price and describe the offer accurately",
+          "Say it; the brand is responsible",
+          "Say it with #ad",
+          "Say it only in Stories"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Fake reference prices are misleading under consumer-protection principles; disclosure doesn't fix that."
+      },
+      {
+        "id": "dcam-011",
+        "module": "offers-and-content",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which make a comparison post credible? (Choose all that apply.)",
+        "options": [
+          "Including options you aren't paid for",
+          "Recommending by use-case, even if an unpaid option wins for some",
+          "Disclosing which products you earn from",
+          "Only showing the paid product's best angles"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Fairness, unpaid alternatives and disclosure make comparisons trustworthy."
+      },
+      {
+        "id": "dcam-012",
+        "module": "offers-and-content",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "When should you use limited-time content?",
+        "options": [
+          "Only when the deadline is genuine and confirmed by the brand",
+          "When sales are slow",
+          "Every post",
+          "Whenever you want more urgency"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "False urgency is misleading."
+      },
+      {
+        "id": "dcam-013",
+        "module": "placement-and-tracking",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Where should your code appear in an Instagram caption?",
+        "options": [
+          "Buried among hashtags at the end",
+          "Nowhere",
+          "Only in your bio",
+          "In the first lines, after the disclosure"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Early placement ensures people see it at the moment of decision."
+      },
+      {
+        "id": "dcam-014",
+        "module": "placement-and-tracking",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which placement is commonly prohibited by programmes?",
+        "options": [
+          "Posting your code on coupon websites without permission",
+          "Saying your code in a video",
+          "A labelled link in bio",
+          "A pinned comment on your own post"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Coupon-site placement is often restricted."
+      },
+      {
+        "id": "dcam-015",
+        "module": "placement-and-tracking",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why use both a code and a tracked link?",
+        "options": [
+          "It hides the disclosure",
+          "Brands require both",
+          "Links pay double",
+          "Codes can be remembered and help when link tracking breaks across devices or time"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Codes are a backup for cross-device or delayed purchases."
+      },
+      {
+        "id": "dcam-016",
+        "module": "placement-and-tracking",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Illustratively: Campaign A — 1,000 clicks, 6,000 commission; Campaign B — 400 clicks, 5,600 commission. Which statement is correct?",
+        "options": [
+          "EPC can't be calculated",
+          "B has higher EPC (14 vs 6) and likely better fit",
+          "A has higher EPC",
+          "Both have the same EPC"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "EPC = commission ÷ clicks: A = 6, B = 14."
+      },
+      {
+        "id": "dcam-017",
+        "module": "placement-and-tracking",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Clicks are high but orders from one country are low. Which investigations are sensible? (Choose all that apply.)",
+        "options": [
+          "Check the code works on mobile checkout there",
+          "Review whether the product is eligible in that region",
+          "Submit extra orders to balance the numbers",
+          "Check currency and shipping options for that country"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Currency, shipping, checkout and eligibility can all block conversion. Submitting unverifiable orders is fraud."
+      },
+      {
+        "id": "dcam-018",
+        "module": "placement-and-tracking",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does a high reversal rate usually signal?",
+        "options": [
+          "Low commission",
+          "Mismatch between expectations and reality, or quality issues",
+          "Too many clicks",
+          "Great fit"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Returns and cancellations indicate problems with fit, claims or quality."
+      },
+      {
+        "id": "dcam-019",
+        "module": "reporting-and-integrity",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is essential when reporting a sale?",
+        "options": [
+          "The buyer's home address",
+          "A screenshot of your follower count",
+          "The buyer's card number",
+          "The order ID and required proof"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Order IDs and specified proof verify sales; payment and address data aren't needed."
+      },
+      {
+        "id": "dcam-020",
+        "module": "reporting-and-integrity",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A buyer's order confirmation shows their phone number. What should you do?",
+        "options": [
+          "With consent, redact the phone number unless the brief requires it",
+          "Share it unchanged",
+          "Ignore the sale",
+          "Post it publicly"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Minimise and redact personal data."
+      },
+      {
+        "id": "dcam-021",
+        "module": "reporting-and-integrity",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which are forms of fraud or violation? (Choose all that apply.)",
+        "options": [
+          "Recommending a product you use",
+          "Buying followers to win campaigns",
+          "Reporting the same order twice",
+          "Reimbursing friends to buy with your code"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Incentivised orders, duplicates and fake engagement are violations."
+      },
+      {
+        "id": "dcam-022",
+        "module": "reporting-and-integrity",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "You're near a bonus tier. A friend offers to buy and return items after the validation period if you reimburse them. What's right?",
+        "options": [
+          "Decline — it's an incentivised fake order and a violation",
+          "Ask a different friend",
+          "Accept — returns after validation aren't detectable",
+          "Accept but only for two items"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Paid or reimbursed purchases are fraud regardless of detection risk, and platforms monitor such patterns."
+      },
+      {
+        "id": "dcam-023",
+        "module": "reporting-and-integrity",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "You're unsure whether household members may use your code. What's the best approach?",
+        "options": [
+          "Check the brief or ask platform support first and keep a record of the answer",
+          "Assume yes",
+          "Use another creator's code",
+          "Ask them to use a different address"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Grey areas should be clarified before acting."
+      },
+      {
+        "id": "dcam-024",
+        "module": "reporting-and-integrity",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "When should you submit sales reports?",
+        "options": [
+          "Only once a year",
+          "Within the campaign window and reporting deadline, ideally as sales happen",
+          "After the deadline",
+          "Whenever you remember"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Timely, continuous logging reduces errors and missed payouts."
+      },
+      {
+        "id": "dcam-025",
+        "module": "compliance-and-scaling",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Does earning commission from a discount code require disclosure?",
+        "options": [
+          "Only on YouTube",
+          "Yes, it's a material connection",
+          "No",
+          "Only above a certain amount"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Commission is a material connection requiring clear disclosure."
+      },
+      {
+        "id": "dcam-026",
+        "module": "compliance-and-scaling",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which link-in-bio setup is best?",
+        "options": [
+          "Unlabelled links",
+          "Links labelled as affiliate, with a note that you earn commission",
+          "Only the brand's homepage",
+          "Links hidden in a highlight"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Clear labelling tells people about the commercial relationship."
+      },
+      {
+        "id": "dcam-027",
+        "module": "compliance-and-scaling",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which claims or practices are problematic under consumer-protection principles? (Choose all that apply.)",
+        "options": [
+          "'I've used it for six weeks and my skin feels less oily'",
+          "'Guaranteed to cure acne in 3 days'",
+          "Fake 'only 2 left' messages",
+          "Presenting incentivised reviews as independent"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Unsubstantiated guarantees, false scarcity and disguised incentivised reviews are misleading. A personal, qualified experience is fine."
+      },
+      {
+        "id": "dcam-028",
+        "module": "compliance-and-scaling",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which approach best builds repeat buyers?",
+        "options": [
+          "Posting codes daily in every channel",
+          "Telling buyers their product is outdated",
+          "Helping buyers use the product well and recommending genuine next steps",
+          "Adding buyers to groups without consent"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "After-sale help and relevant recommendations build loyalty."
+      },
+      {
+        "id": "dcam-029",
+        "module": "compliance-and-scaling",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A creator in Pakistan receives a campaign for a vape brand aimed at Gulf audiences. What's the most appropriate response?",
+        "options": [
+          "Decline or seek written compliance guidance, as tobacco and vape promotion is restricted or banned in many of these markets",
+          "Accept and post only in Urdu",
+          "Accept and post as normal",
+          "Accept but skip disclosure"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Restricted categories require careful compliance checks and are often prohibited."
+      },
+      {
+        "id": "dcam-030",
+        "module": "compliance-and-scaling",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What should you do when a community member unsubscribes?",
+        "options": [
+          "Add them again later",
+          "Respect it immediately",
+          "Keep messaging them",
+          "Ask them to justify it"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Respecting opt-outs is required by many marketing rules and builds trust."
+      },
+      {
+        "id": "dcam-031",
+        "module": "offers-and-content",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which incentive is most likely to raise average order value?",
+        "options": [
+          "A giveaway",
+          "A well-matched bundle or tiered discount",
+          "A countdown timer",
+          "A single-item discount"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Bundles and tiers encourage larger baskets."
+      }
+    ]
+  }
+}

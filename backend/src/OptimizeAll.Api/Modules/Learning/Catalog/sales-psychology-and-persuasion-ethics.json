@@ -1,0 +1,1181 @@
+{
+  "slug": "sales-psychology-and-persuasion-ethics",
+  "version": 1,
+  "title": "Sales Psychology & Ethical Persuasion",
+  "subtitle": "Understand how buyers decide and influence them honestly — without dark patterns",
+  "category": "sales",
+  "level": "advanced",
+  "estimatedMinutes": 170,
+  "description": "Persuasion is powerful — and that's exactly why it must be used responsibly. This advanced course explores the psychology behind buying decisions and shows you where the ethical line sits for every technique.\n\nYou'll learn to distinguish persuasion from manipulation using four practical tests, understand fast and slow thinking and perceived risk, and apply Cialdini's seven principles of influence honestly. You'll examine cognitive biases such as anchoring, framing, decoys and defaults, and use pricing psychology to clarify rather than distort value. You'll craft stories with integrity, and learn a structured approach to recovering trust when things go wrong. Finally, you'll learn to recognise and avoid dark patterns, and understand consumer-protection principles across the UK, EU, US, Pakistan, the UAE and Saudi Arabia — so your selling is effective, respected and compliant.",
+  "outcomes": [
+    "Apply the truth, transparency, benefit and freedom tests to any persuasion technique",
+    "Use Cialdini's seven principles of influence ethically and spot their misuse",
+    "Identify cognitive biases in buying decisions and present options that clarify value",
+    "Design honest pricing presentations and avoid drip pricing and fake reference prices",
+    "Write persuasive stories that pass a six-point integrity checklist",
+    "Recover trust after mistakes using the ACRAF framework",
+    "Recognise dark patterns and apply consumer-protection principles across key markets"
+  ],
+  "skills": [
+    "Sales psychology",
+    "Ethical persuasion",
+    "Behavioural economics",
+    "Pricing strategy",
+    "Storytelling",
+    "Consumer protection",
+    "Trust management"
+  ],
+  "prerequisites": [],
+  "badge": {
+    "name": "Ethical Persuasion Specialist",
+    "description": "The holder understands the psychology of buying decisions and can apply principles of influence, cognitive biases, pricing psychology and storytelling ethically; recover trust after mistakes; and recognise and avoid dark patterns in line with consumer-protection principles across major markets.",
+    "criteria": "Completed all lessons and scored at least 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "foundations-of-ethical-persuasion",
+      "title": "Foundations of ethical persuasion",
+      "summary": "Distinguish persuasion from manipulation and understand how people actually make buying decisions.",
+      "lessons": [
+        {
+          "slug": "persuasion-vs-manipulation",
+          "title": "Persuasion versus manipulation",
+          "type": "video",
+          "durationMinutes": 10,
+          "body": "### A line worth drawing\n\nAll selling involves influence. The question isn't whether you influence people, but **how**. Ethical persuasion helps people make decisions that serve their own interests, using accurate information and respecting their freedom to say no. Manipulation steers people towards decisions they wouldn't make with full information and a clear head — usually for the seller's benefit.\n\nThe same psychological principle can be used either way. Social proof is persuasion when you share genuine reviews; it's manipulation when you fabricate them. Scarcity is persuasion when stock really is limited; it's manipulation when the countdown timer resets every time you refresh.\n\n### Four tests for ethical influence\n\nBefore using any persuasion technique, run it through four questions:\n\n1. **Truth test** — Is everything I'm saying or implying accurate?\n2. **Transparency test** — Would I be comfortable if the buyer knew exactly what technique I was using and why?\n3. **Benefit test** — Does this decision genuinely serve the buyer, not just me?\n4. **Freedom test** — Can the buyer easily say no, take time, or change their mind?\n\nIf a technique fails any test, don't use it. The transparency test is particularly powerful: manipulation depends on the target not noticing it.\n\n### Why ethics is also good business\n\n- **Repeat business and referrals** depend on buyers feeling good about the decision afterwards, not just at the moment of purchase.\n- **Returns, chargebacks and complaints** rise when people feel tricked.\n- **Regulators** in the UK, EU, US, Pakistan, the Gulf and elsewhere increasingly target manipulative practices, and platforms penalise misleading content.\n- **Reputation** spreads faster than ever — one screenshot of a manipulative DM can undo years of trust.\n\n### The respect spectrum\n\nPicture influence on a spectrum:\n\n- **Informing** — giving accurate, relevant information.\n- **Advising** — offering your honest recommendation.\n- **Encouraging** — highlighting genuine benefits and addressing hesitation.\n- **Pressuring** — creating stress to force a quick decision.\n- **Deceiving** — using false information or hidden tricks.\n- **Exploiting** — targeting vulnerability (distress, addiction, financial desperation, children).\n\nEthical selling lives in the first three. The last three erode trust and often break the law.\n\n### Vulnerable buyers\n\nTake extra care when buyers may be vulnerable: young people, people in financial difficulty, people who are grieving or unwell, or anyone who seems confused. Signs include repeated misunderstanding, emotional distress or pressure from others. In such cases, slow down, simplify, suggest they take time or talk to someone they trust — and be prepared not to sell.\n\n### Worked example\n\nA skincare creator's audience includes many teenagers. A brand suggests a campaign emphasising \"fix your skin before school photos — everyone will notice\". It passes the truth test only loosely, fails the benefit test (it plays on insecurity in a young audience) and probably fails the transparency test. She reframes: an educational series on simple, affordable routines, with clear messaging that some skin concerns need a doctor, not a product — and with her code offered for the basic cleanser. Sales are steadier, and parents in her audience start trusting her too.\n\n### A personal code\n\nMany professionals adopt a short personal code, such as:\n\n- I will never state or imply something I believe is false.\n- I will tell buyers when a product isn't right for them.\n- I will never create false urgency.\n- I will make it easy to say no.\n- I will take extra care with vulnerable people.\n\n### Do and don't\n\n**Do** use the four tests before any technique. **Do** take extra care with vulnerable buyers. **Do** aim for buyers who are glad they bought.\n\n**Don't** use techniques you'd be embarrassed to explain. **Don't** exploit insecurity or distress. **Don't** confuse short-term conversions with long-term success.",
+          "video": {
+            "script": "Every seller influences people. That's not the problem. The question is how. Persuasion helps people make decisions that are good for them, using honest information, and leaving them free to say no. Manipulation steers people towards decisions they wouldn't make if they saw the full picture. Here's what's tricky: the same psychology can be used either way. Genuine reviews are persuasive. Fake reviews are manipulation. A real deadline helps people act. A countdown timer that resets every time you refresh is a trick. So before you use any technique, run four quick tests. The truth test: is everything I'm saying, or implying, accurate? The transparency test: would I be comfortable if the buyer knew exactly what I was doing, and why? The benefit test: does this decision really serve them, not just me? And the freedom test: can they easily say no, take their time, or change their mind? If a technique fails any one of these, leave it out. This isn't only about being a good person — although that matters. It's also smart business. People who feel tricked return products, leave bad reviews, and tell their friends. Regulators in many countries are cracking down on manipulative selling. And people who feel respected come back, again and again. In this course, we'll explore the psychology behind buying decisions — influence principles, cognitive biases, pricing, and storytelling — and for each one, you'll learn both how it works and where the ethical line sits. Let's get started.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Ethical persuasion helps people decide in their own interest; manipulation bypasses that.",
+            "Use the truth, transparency, benefit and freedom tests before any technique.",
+            "Stay in informing, advising and encouraging — never pressuring, deceiving or exploiting.",
+            "Take extra care with vulnerable buyers, and be willing not to sell."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which test asks, 'Would I be comfortable if the buyer knew exactly what technique I was using?'",
+              "options": [
+                "Truth test",
+                "Transparency test",
+                "Freedom test",
+                "Benefit test"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "The transparency test exposes manipulation, which relies on not being noticed."
+            },
+            {
+              "question": "Showing genuine customer reviews is persuasion. What makes the same principle manipulation?",
+              "options": [
+                "Asking customers for reviews",
+                "Showing negative reviews",
+                "Using more reviews",
+                "Fabricating or selectively faking reviews"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Fabrication fails the truth test; the principle becomes deception."
+            },
+            {
+              "question": "A buyer seems confused and distressed about a large purchase. What's the ethical response?",
+              "options": [
+                "Slow down, simplify, and suggest they take time or talk to someone they trust",
+                "Offer a bigger discount to push the sale",
+                "Close quickly before they change their mind",
+                "Stop replying"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Vulnerable buyers require extra care; ethical sellers prioritise their wellbeing."
+            }
+          ],
+          "activity": "Write your personal persuasion code in five lines, then review your last three promotional posts against the four tests."
+        },
+        {
+          "slug": "how-buyers-decide",
+          "title": "How buyers actually decide",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### Two modes of thinking\n\nPsychologist Daniel Kahneman popularised a useful model: **System 1** thinking is fast, automatic and intuitive; **System 2** is slow, deliberate and effortful. Most everyday buying — especially on social media — leans heavily on System 1. People scroll quickly, react to faces, colours, stories and cues, and make many decisions on gut feel. Bigger or riskier purchases pull in more System 2: comparing, reading reviews, asking questions.\n\nKnowing this helps you design communication for both:\n\n- **For System 1**: clear visuals, a simple message, a recognisable face, social cues and an easy next step.\n- **For System 2**: specifics, comparisons, evidence, honest trade-offs and time to think.\n\nEthical selling serves both. It doesn't exploit System 1 to rush people past thinking they'd want to do; it makes the fast impression accurate and supports the slow thinking when it's needed.\n\n### The buyer's hidden questions\n\nBehind most purchases are four questions:\n\n1. **Do I have a problem worth solving?** (Relevance)\n2. **Will this solve it for someone like me?** (Fit and proof)\n3. **Is it worth the money and effort?** (Value and risk)\n4. **Is now the right time?** (Timing)\n\nContent that sells answers all four — honestly.\n\n### Emotion and reason\n\nPeople often decide emotionally and justify rationally. This isn't a weakness to exploit; it's how humans work. A parent buying a car seat feels protectiveness (emotion) and checks safety standards (reason). Good selling respects both: acknowledge the feeling, supply the facts.\n\n### Perceived risk: the silent deal-killer\n\nMany buyers who want a product still don't buy because of perceived risk:\n\n- **Financial**: \"What if it's a waste of money?\"\n- **Performance**: \"What if it doesn't work for me?\"\n- **Social**: \"What will people think?\"\n- **Time**: \"What if it takes ages to arrive or set up?\"\n- **Security**: \"Is this site safe? Will my data be misused?\"\n\nReduce risk ethically with honest reviews, clear returns, trusted checkouts, realistic expectations and transparent delivery information.\n\n### Cognitive load\n\nThe more effort a decision requires, the more likely people are to postpone it. Reduce unnecessary effort: clear options, simple instructions, one call to action, answers to predictable questions. But don't remove *necessary* effort — people should still see key terms, prices and conditions.\n\n### Cultural context\n\nDecision-making is shaped by culture. In many South Asian and Gulf households, significant purchases may involve family discussion; in some contexts, recommendations from elders, religious considerations (for example, halal certification) or community reputation matter greatly. In individualistic contexts, personal preference may dominate. Understand your audience and avoid assumptions — ask.\n\n### Worked example\n\nA UAE-based creator promotes a premium stroller. Her content includes a quick, visual reel showing it folding one-handed at a mall (System 1), a detailed comparison with two other strollers including weight, safety certifications and price (System 2), a post addressing common worries — delivery times, warranty, returns (risk) — and an invitation for partners and grandparents to ask questions (culture). The campaign converts steadily, with few returns.\n\n### Do and don't\n\n**Do** design for both fast and slow thinking. **Do** reduce perceived risk honestly. **Do** consider who else is involved in the decision.\n\n**Don't** rush people past information they need. **Don't** hide terms to reduce \"friction\". **Don't** assume everyone decides like you.",
+          "video": null,
+          "keyTakeaways": [
+            "System 1 is fast and intuitive; System 2 is slow and deliberate — serve both.",
+            "Buyers ask: is it relevant, will it work for me, is it worth it, is now right?",
+            "Perceived risk often blocks purchases — reduce it honestly.",
+            "Reduce unnecessary effort, but never hide necessary information."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which content mainly serves System 2 thinking?",
+              "options": [
+                "A trending sound",
+                "A bright thumbnail",
+                "A 5-second visual reel",
+                "A detailed comparison with specifications and trade-offs"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Detailed comparisons support slow, deliberate evaluation."
+            },
+            {
+              "question": "A buyer wants a product but worries 'what if it doesn't work for me?'. What type of risk is this?",
+              "options": [
+                "Performance risk",
+                "Social risk",
+                "Security risk",
+                "Time risk"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Concern about whether it will work is performance risk."
+            },
+            {
+              "question": "Which is an unethical way to reduce 'friction'?",
+              "options": [
+                "Hiding key terms and conditions",
+                "Answering common questions upfront",
+                "Using one clear call to action",
+                "Offering a clear returns policy"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Hiding necessary information misleads buyers."
+            }
+          ],
+          "activity": "For a product you promote, write one piece of System 1 content and one piece of System 2 content, and list how each reduces a specific perceived risk."
+        }
+      ]
+    },
+    {
+      "slug": "influence-principles",
+      "title": "Cialdini's principles, applied ethically",
+      "summary": "Apply the seven widely cited principles of influence — and recognise where each one crosses into manipulation.",
+      "lessons": [
+        {
+          "slug": "reciprocity-commitment-social-proof",
+          "title": "Reciprocity, commitment and social proof",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### The principles of influence\n\nRobert Cialdini's research on influence identified principles that reliably shape how people respond to requests: **reciprocity, commitment and consistency, social proof, authority, liking, scarcity** and, added later, **unity**. They work because they're mental shortcuts that usually serve people well. That's exactly why they must be used honestly. This lesson covers the first three.\n\n### 1. Reciprocity\n\n**What it is**: people feel inclined to return favours.\n\n**Ethical use**: give genuine value first — free tutorials, honest advice, useful templates, answering questions thoroughly. The goodwill you build makes people more open to your recommendations.\n\n**Examples**:\n- A food creator shares a free Ramadan meal-planning guide; later, followers are receptive to her cookware recommendations.\n- An agency offers a short, genuinely useful audit of a prospect's social profiles.\n\n**Where it crosses the line**:\n- \"Gifts\" designed to create guilt: \"I gave you this free guide, so the least you can do is buy.\"\n- Tiny favours followed by large, pressured asks.\n- Hidden strings attached to \"free\" offers (for example, a free trial that silently converts into a costly subscription).\n\n**Test**: would you still give the value if no one bought anything? If yes, it's generosity. If the gift only exists to create obligation, reconsider.\n\n### 2. Commitment and consistency\n\n**What it is**: once people commit to something — especially publicly or in writing — they tend to act consistently with it.\n\n**Ethical use**: help people make small, genuine commitments aligned with their own goals.\n\n**Examples**:\n- A fitness creator invites followers to a free seven-day challenge. Participants who commit publicly are more likely to follow through — and some will buy equipment that genuinely helps.\n- In a sales conversation: \"You mentioned measuring sales is your top priority — shall we make sure any proposal is built around that?\"\n\n**Where it crosses the line**:\n- The \"foot-in-the-door\" used deceptively: getting a small yes under false pretences, then leveraging it.\n- Pre-ticked boxes that create \"commitments\" people didn't consciously make.\n- Using someone's earlier statement to shame them: \"You said you cared about your family's health…\"\n\n**Test**: is the commitment something the person freely and knowingly chose, aligned with their interests?\n\n### 3. Social proof\n\n**What it is**: people look at what others like them are doing, especially when uncertain.\n\n**Ethical use**: share genuine evidence that people like your audience have found the product useful.\n\n**Examples**:\n- Real reviews and comments (with permission), including mixed ones.\n- \"Many of you asked about this after last week's post\" — if true.\n- User-generated content with consent and disclosure where relevant.\n\n**Specificity matters**: \"people like you\" proof is more persuasive than generic numbers. \"Several nurses in my audience told me these shoes survived 12-hour shifts\" beats \"thousands sold\".\n\n**Where it crosses the line**:\n- Fake reviews, bought followers or engagement pods — deceptive, and fake reviews are explicitly prohibited in the US (FTC rule) and UK (DMCC Act 2024), among others.\n- Cherry-picking only perfect reviews and hiding a pattern of complaints.\n- Invented popularity: \"Everyone's buying this!\" without basis.\n- Undisclosed incentivised reviews presented as independent.\n\n### Combining principles responsibly\n\nThese principles often work together. A creator gives a free, useful guide (reciprocity), invites followers to commit to a small challenge (commitment), and shares genuine results from participants with consent (social proof). Used honestly, this creates an experience people value — and some will buy. The ethics lie in the truth of each element.\n\n### Worked example: reviewing a campaign plan\n\nA brand proposes: (1) a \"free\" sample requiring card details and auto-enrolling people in a monthly subscription; (2) a pre-ticked box to join a mailing list; (3) screenshots of \"reviews\" written by the brand team.\n\nAn ethical seller responds: offer the sample without auto-enrolment, or with clear, prominent subscription terms and easy cancellation; use an unticked opt-in box; and use only genuine, verifiable reviews. The campaign still uses reciprocity, commitment and social proof — just honestly.\n\n### Do and don't\n\n**Do** give real value first. **Do** encourage commitments aligned with buyers' goals. **Do** share genuine, representative social proof.\n\n**Don't** create guilt, pre-tick boxes or hide subscription terms. **Don't** fake or cherry-pick reviews. **Don't** exaggerate popularity.",
+          "video": null,
+          "keyTakeaways": [
+            "Reciprocity: give real value first — never use gifts to create guilt.",
+            "Commitment: invite small, freely chosen commitments aligned with the buyer's goals.",
+            "Social proof: use genuine, representative evidence from people like your audience.",
+            "Fake reviews and hidden subscription terms cross into deception."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which is an ethical use of reciprocity?",
+              "options": [
+                "Sharing a genuinely useful free guide with no strings attached",
+                "A tiny gift followed by an aggressive ask",
+                "A free trial that silently converts to a paid subscription",
+                "'I gave you a free guide, so you owe me a purchase'"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Genuine value given freely builds goodwill without obligation."
+            },
+            {
+              "question": "Which social proof is most persuasive and ethical?",
+              "options": [
+                "'Several nurses in my audience said these shoes survived 12-hour shifts' — if true",
+                "Bought followers",
+                "'Thousands sold!' with no basis",
+                "Reviews written by the brand's staff"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Specific, genuine proof from similar people is both persuasive and honest."
+            },
+            {
+              "question": "Why are pre-ticked opt-in boxes problematic?",
+              "options": [
+                "They're hard to design",
+                "They're only used in the UK",
+                "They reduce list size",
+                "They create 'commitments' people didn't consciously make"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Consent should be active and informed; pre-ticked boxes undermine that."
+            }
+          ],
+          "activity": "Audit one campaign for reciprocity, commitment and social proof: list how each is used, and change anything that fails the truth or freedom tests."
+        },
+        {
+          "slug": "authority-liking-scarcity-unity",
+          "title": "Authority, liking, scarcity and unity",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Four more principles\n\nThis lesson covers the remaining principles — **authority, liking, scarcity and unity** — with ethical applications and red lines.\n\n### 4. Authority\n\n**What it is**: people tend to follow credible experts.\n\n**Ethical use**: demonstrate genuine expertise and cite credible sources accurately.\n\n- Share how you tested a product, your relevant qualifications or experience.\n- Reference genuine expert guidance (for example, a dermatologist's general advice on sunscreen) accurately and in context.\n- Be clear about the limits of your expertise: \"I'm not a doctor — if you have a skin condition, see one.\"\n\n**Where it crosses the line**:\n- Claiming credentials you don't have, or wearing a lab coat to imply medical authority.\n- \"Doctors recommend\" or \"clinically proven\" without substantiation.\n- Presenting paid experts as independent without disclosure.\n\n### 5. Liking\n\n**What it is**: people are more easily influenced by people they like — those who are similar, friendly, complimentary and cooperative.\n\n**Ethical use**: be genuinely yourself, find real common ground, be warm and helpful.\n\n- Share relatable experiences and your real personality.\n- Engage personally with your community.\n- Compliment sincerely — never as a tactic.\n\n**Where it crosses the line**:\n- Faking similarity (\"I'm also a struggling student!\" when you're not).\n- Love-bombing: excessive flattery to lower defences before a pitch.\n- Using parasocial relationships to pressure: \"If you really supported me, you'd buy this.\"\n\n### 6. Scarcity\n\n**What it is**: things seem more valuable when they're rare, limited or at risk of being lost.\n\n**Ethical use**: communicate *genuine* limits clearly — real stock limits, real deadlines, seasonal availability.\n\n- \"The brand's Eid discount ends Friday at midnight Gulf time.\"\n- \"This is a limited-edition run — the brand has confirmed no restock.\"\n\n**Where it crosses the line**:\n- Fake countdown timers and \"only 2 left\" when untrue — widely treated as misleading by regulators, including the UK CMA, the US FTC and EU consumer authorities.\n- \"Price goes up tomorrow\" when it doesn't.\n- Creating panic to stop people comparing options.\n\n**Framing tip**: loss framing (\"don't miss out\") is more intense than gain framing (\"get this benefit\"). Use loss framing sparingly and only when the loss is real.\n\n### 7. Unity\n\n**What it is**: people are influenced by those they see as part of a shared identity — \"one of us\" — such as family, community, region, faith or a shared passion.\n\n**Ethical use**: build genuine community around shared values and interests.\n\n- A modest-fashion community sharing styling ideas for Eid.\n- A local creator championing businesses from their city.\n- A running community where members encourage each other.\n\n**Where it crosses the line**:\n- Exploiting identity to shut down scrutiny: \"Real Muslims / real Pakistanis / true fans buy this.\"\n- Using religious or national sentiment to sell products with no genuine connection to it.\n- Creating \"us vs. them\" hostility towards competitors or critics.\n\nIdentity-based appeals are powerful and sensitive — especially around faith and nationality. Use them only when the connection is genuine and respectful.\n\n### Putting it together: an ethical campaign example\n\nA UK-based Pakistani creator promotes a halal-certified skincare brand to her community:\n\n- **Authority**: she shares the certification details and her testing process; she notes she isn't a dermatologist.\n- **Liking**: she films in her real bathroom, sharing her own routine.\n- **Scarcity**: she mentions the brand's genuine launch discount, with the actual end date.\n- **Unity**: she speaks to her community's genuine desire for halal-certified options — without implying anyone who doesn't buy is less devout.\n\nEvery principle is at work; every one passes the truth, transparency, benefit and freedom tests.\n\n### Do and don't\n\n**Do** show real expertise and its limits. **Do** be genuinely yourself. **Do** communicate real deadlines and stock limits. **Do** build genuine community.\n\n**Don't** fake credentials, similarity or scarcity. **Don't** use parasocial guilt. **Don't** weaponise faith or national identity.",
+          "video": null,
+          "keyTakeaways": [
+            "Authority: show genuine expertise and its limits; never fake credentials or claims.",
+            "Liking: be authentic — no faked similarity, love-bombing or parasocial guilt.",
+            "Scarcity: communicate only real limits and deadlines.",
+            "Unity: build genuine community; never weaponise faith or identity."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which is an ethical use of scarcity?",
+              "options": [
+                "'Only 2 left!' when stock is plentiful",
+                "'Price doubles tomorrow' when it doesn't",
+                "'The brand's Eid discount ends Friday at midnight Gulf time' — when true",
+                "A countdown timer that resets on refresh"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Genuine, specific deadlines are ethical; fabricated scarcity is misleading."
+            },
+            {
+              "question": "'If you really supported me, you'd buy this.' Which principle is being misused?",
+              "options": [
+                "Reciprocity only",
+                "Scarcity",
+                "Liking (parasocial pressure)",
+                "Authority"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "It exploits the emotional relationship between creator and audience."
+            },
+            {
+              "question": "Which unity appeal crosses the line?",
+              "options": [
+                "'Real Muslims buy this brand'",
+                "Building a community around a shared hobby",
+                "Championing local businesses genuinely",
+                "Sharing styling ideas for Eid"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Using faith identity to pressure purchases is exploitative."
+            }
+          ],
+          "activity": "Take one of your recent campaigns and write how each of the seven principles appears — then flag and fix any use that fails the four ethical tests."
+        }
+      ]
+    },
+    {
+      "slug": "biases-and-pricing",
+      "title": "Cognitive biases and pricing psychology",
+      "summary": "Recognise the biases that shape buying decisions and use pricing psychology in ways that clarify rather than distort value.",
+      "lessons": [
+        {
+          "slug": "cognitive-biases-in-buying",
+          "title": "Cognitive biases in buying decisions",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### What biases are\n\nCognitive biases are systematic patterns in how people process information and make decisions. They're not flaws in \"other people\" — everyone has them, including you. Understanding them helps you communicate clearly, avoid accidentally misleading people and spot manipulation.\n\n### Key biases for sellers\n\n**Anchoring**\nThe first number people see influences their judgement of later numbers. If a buyer sees a premium option first, a mid-range option can seem more reasonable.\n- *Ethical use*: show genuine options in a logical order and explain the differences.\n- *Red line*: inventing inflated \"original\" prices to anchor.\n\n**Loss aversion**\nMany people feel losses more strongly than equivalent gains, so \"avoid losing\" can motivate more than \"gain\".\n- *Ethical use*: help people see the genuine cost of an unsolved problem (\"you're spending two hours a week on this\").\n- *Red line*: exaggerating fear or loss to rush a decision.\n\n**Framing**\nThe same information presented differently leads to different choices: \"95% fat-free\" versus \"contains 5% fat\".\n- *Ethical use*: choose frames that are accurate and meaningful to the buyer.\n- *Red line*: frames that mislead (\"only costs a coffee a day\" when the total commitment is large and not stated).\n\n**Decoy effect**\nAdding a clearly inferior option can make another option more attractive by comparison.\n- *Ethical use*: every option you present should be a genuine choice someone might sensibly pick.\n- *Red line*: options designed only to trick people into the most expensive choice.\n\n**Choice overload**\nToo many options can make deciding harder, and some people postpone the decision. (Research findings vary by context, but simplifying is usually helpful.)\n- *Ethical use*: curate two or three well-explained options.\n\n**Default effect**\nPeople tend to stick with pre-selected options.\n- *Ethical use*: set defaults that serve most buyers (for example, the standard size, no add-ons).\n- *Red line*: defaults that add costs or subscriptions without clear consent.\n\n**Present bias**\nPeople often prefer rewards now over larger rewards later.\n- *Ethical use*: show immediate benefits alongside long-term ones.\n- *Red line*: \"buy now, pay later\" framing that hides the total cost or encourages people to overspend.\n\n**Bandwagon and authority biases**\nPeople follow the crowd and experts — see the influence principles lesson.\n\n**Confirmation bias**\nPeople seek information that confirms what they already believe.\n- *Ethical use*: help buyers check their assumptions with balanced information.\n- *Red line*: feeding only confirming information to someone who's about to make a poor choice.\n\n### Your own biases as a seller\n\nBiases also affect you:\n\n- **Optimism bias** — overestimating how well a campaign will perform.\n- **Sunk cost** — continuing to push a poor product because you've already invested time.\n- **Projection** — assuming your audience thinks like you.\n\nCounter them with data, a trusted peer's review and your weekly improvement loop.\n\n### Worked example\n\nA tech creator presents three laptops. Version 1: a very expensive model first (anchor), then an overpriced mid-model with worse specs than the budget one (decoy), and a fake \"was\" price on the premium. Version 2 (ethical): three genuine options — budget, mid-range and premium — in ascending price, each with a clear \"best for\" description, genuine prices, and a note that the budget model is enough for most students. Version 2 builds trust, earns steady sales and generates few returns.\n\n### Do and don't\n\n**Do** present genuine options in a logical, explained way. **Do** frame accurately. **Do** set defaults that serve buyers.\n\n**Don't** use fake anchors, decoys or hidden defaults. **Don't** amplify fear. **Don't** exploit present bias with hidden costs.",
+          "video": null,
+          "keyTakeaways": [
+            "Biases — anchoring, loss aversion, framing, decoys, defaults, present bias — affect everyone.",
+            "Use them to clarify genuine choices, never to distort them.",
+            "Every option you present should be one someone might sensibly choose.",
+            "Watch your own biases: optimism, sunk cost and projection."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A seller shows an inflated 'original price' that was never charged. Which bias is being exploited?",
+              "options": [
+                "Anchoring",
+                "Confirmation bias",
+                "Default effect",
+                "Present bias"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Fake reference prices exploit anchoring and are misleading."
+            },
+            {
+              "question": "Which is an ethical use of the default effect?",
+              "options": [
+                "Pre-selecting the standard option with no extras",
+                "Pre-selecting a paid add-on",
+                "Hiding the opt-out",
+                "Defaulting buyers into a subscription"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Defaults should serve most buyers without adding unconsented costs."
+            },
+            {
+              "question": "You keep promoting a poor-performing product because you've already made lots of content about it. Which bias is this?",
+              "options": [
+                "Sunk cost",
+                "Anchoring",
+                "Framing",
+                "Bandwagon"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Continuing because of past investment rather than future value is the sunk-cost bias."
+            }
+          ],
+          "activity": "Review one of your sales posts or proposals and identify every bias at play. Rewrite any element that distorts rather than clarifies."
+        },
+        {
+          "slug": "pricing-psychology",
+          "title": "Pricing psychology without deception",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Price is a message\n\nPrice communicates quality, value and positioning. How you present price — for products you promote, services you sell or rates you charge brands — affects how people perceive value. Pricing psychology is legitimate when it helps people understand value; it becomes deceptive when it hides costs or creates false impressions.\n\n### Common pricing techniques\n\n**1. Charm pricing (ending in 9 or 99)**\nPrices like 2,999 may be perceived as meaningfully lower than 3,000 by some buyers. Evidence varies by context and audience; some premium brands deliberately use round numbers to signal quality. Either is fine — it's a presentation choice, not a deception.\n\n**2. Tiered pricing (good–better–best)**\nOffering two or three packages helps buyers self-select. Ethical tiers are genuinely different and each suits a real type of buyer.\n\n**3. Bundling**\nCombining products or services at a combined price can create real value (convenience, savings) and increase order value. State what's included and ensure the bundle price is a genuine saving if you say it is.\n\n**4. Price anchoring with genuine references**\nShowing the regular price next to a discounted one helps people understand the saving — *if* the regular price was genuinely charged.\n\n**5. Reframing cost over time**\n\"About 100 rupees a day\" can help people understand a subscription — *as long as* the total and the commitment period are also clear.\n\n**6. Value-based pricing for services**\nFor agency and creator services, pricing based on value to the client (with scope clarity) is more sustainable than pricing by hours alone.\n\n**7. Payment options**\nInstalment and \"buy now, pay later\" options can help affordability, but must be presented with total costs, fees and conditions clearly. Encouraging people to borrow for non-essential items raises ethical concerns, especially for young or financially stretched audiences.\n\n### Deceptive pricing practices to avoid\n\nConsumer-protection laws in many countries prohibit these practices:\n\n- **Fake reference prices** — \"was\" prices that weren't genuinely charged.\n- **Drip pricing** — revealing mandatory fees only late in the checkout. The UK's DMCC Act 2024 and US FTC rules on hidden fees in certain sectors target these practices.\n- **Bait advertising** — advertising a price for something that isn't realistically available.\n- **Misleading \"free\"** — \"free\" items that require undisclosed purchases or subscriptions.\n- **Hidden subscriptions** — auto-renewals not clearly disclosed, or difficult cancellation.\n- **Per-unit confusion** — making prices hard to compare deliberately.\n\n### Pricing your own services\n\nIf you're a creator or freelancer:\n\n- **Anchor with value, not just time**: \"This package is designed to generate tracked sales for your launch.\"\n- **Offer tiers**: Essential / Recommended / Comprehensive.\n- **Be transparent**: what's included, usage rights, revisions, timelines, payment terms.\n- **Don't undercut yourself** into unsustainable rates; don't overcharge by hiding scope.\n\n### Worked example\n\nA Karachi-based agency previously quoted a single price: \"PKR 200,000/month\". Buyers often balked. They switched to three tiers with clear scope (Essential: content only; Recommended: content plus two creator collaborations with tracked codes; Comprehensive: adds paid social management). Each tier had a \"best for\" description. More clients chose Recommended — not because of a trick, but because they could see what they were getting and choose what fit.\n\n### Presenting promoted-product prices as a creator\n\n- Quote prices accurately, with currency and date (\"price at time of posting\").\n- Include key costs (shipping, taxes) where relevant, or signpost them.\n- Don't promise prices you can't guarantee.\n\n### Do and don't\n\n**Do** present genuine tiers and bundles clearly. **Do** show total costs and commitments. **Do** price services on value with clear scope.\n\n**Don't** use fake \"was\" prices, drip pricing or bait offers. **Don't** hide subscriptions. **Don't** encourage risky borrowing.",
+          "video": null,
+          "keyTakeaways": [
+            "Pricing psychology is fine when it clarifies value and deceptive when it hides costs.",
+            "Tiers and bundles should be genuine choices with clear contents.",
+            "Avoid fake reference prices, drip pricing, bait offers and hidden subscriptions.",
+            "Price services on value with transparent scope and terms."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which pricing practice is deceptive?",
+              "options": [
+                "A bundle at a genuinely lower combined price",
+                "Revealing a mandatory fee only at the final checkout step",
+                "Three genuine tiers with clear scope",
+                "Using round-number prices"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Drip pricing hides mandatory costs and is targeted by consumer-protection rules."
+            },
+            {
+              "question": "'Only about 100 rupees a day' is ethical when…",
+              "options": [
+                "It's only used on Instagram",
+                "It's said quickly",
+                "The total cost and commitment period are also clear",
+                "It's in small print"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Reframing is fine alongside clear total cost and terms."
+            },
+            {
+              "question": "What's the best way to present agency pricing?",
+              "options": [
+                "Hide the price until the contract",
+                "A price that changes daily",
+                "Two or three genuine tiers with clear scope and 'best for' descriptions",
+                "One unexplained monthly figure"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Clear tiers help buyers choose what fits."
+            }
+          ],
+          "activity": "Redesign the pricing presentation for a service you offer (or a product you promote) into two or three genuine tiers with clear scope, total costs and 'best for' descriptions."
+        }
+      ]
+    },
+    {
+      "slug": "storytelling-and-trust",
+      "title": "Storytelling and trust recovery",
+      "summary": "Use narrative to make value memorable and learn how to recover trust when something goes wrong.",
+      "lessons": [
+        {
+          "slug": "persuasive-storytelling",
+          "title": "Persuasive storytelling with integrity",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Why stories persuade\n\nStories engage attention, emotion and memory in ways that facts alone rarely do. When people follow a story, they imagine themselves in it, which makes benefits feel concrete. Stories also carry values: they show *why* something matters, not just *what* it does.\n\nThat power demands integrity. A story that's invented or exaggerated is a lie with a narrative arc.\n\n### Story structures for selling\n\n**1. Hero's journey (simplified)**\nOrdinary world → problem → guide appears → plan → action → outcome → transformation. In sales, the **customer is the hero**; you or the product is the **guide**.\n\n**2. Problem–agitation–solution (PAS)**\nDescribe the problem, explore why it matters (agitation), then present the solution. *Caution*: agitation must reflect genuine consequences, not manufactured fear.\n\n**3. Before–after–bridge**\nShow the \"before\", paint the \"after\", explain the \"bridge\" (how to get there).\n\n**4. The origin story**\nWhy you (or the brand) started. Powerful for personal brands and small businesses — but only if true.\n\n**5. The honest failure**\nA story about something that didn't work, and what you learned. Builds credibility and relatability.\n\n### Elements of a compelling story\n\n- **A relatable character** with a clear desire.\n- **Specific detail**: place, time, sensory detail (\"the 45°C August heat in Riyadh\").\n- **Tension**: an obstacle or doubt.\n- **A turning point**: the moment things changed.\n- **A realistic resolution**, with honest caveats.\n- **A clear meaning**: what the audience should take away.\n\n### Story integrity checklist\n\n1. **Is it true?** If it's a composite or illustrative example, say so.\n2. **Is it typical?** If the result is unusual, say \"results vary\" meaningfully, not as a tiny disclaimer.\n3. **Do I have permission?** For customer stories, get consent and respect privacy.\n4. **Is the product's role accurate?** Don't credit the product for outcomes it didn't cause.\n5. **Is the emotion proportionate?** Emotional stories are fine; exploiting grief, fear or insecurity isn't.\n6. **Is the commercial relationship disclosed?**\n\n### Using customer stories\n\nCustomer stories are often more persuasive than your own. To use them ethically:\n\n- Ask permission explicitly, and explain where the story will appear.\n- Let customers review how they're represented.\n- Don't edit quotes to change meaning.\n- Disclose if the customer received anything in return.\n- Represent the range of experiences, not just the best.\n\n### Worked example: rewriting an exaggerated story\n\n**Exaggerated**: \"I was drowning in debt and depressed. Then I found this budgeting app and within a month my life was completely transformed!\"\n\n**Honest**: \"Last year I kept running out of money before payday and felt anxious every time I checked my account. I started using [App] to track spending (#ad, I'm a paid partner). It didn't fix everything — I still had to cut back on takeaways — but seeing where money went each week helped me save a small emergency fund over six months. If you're dealing with serious debt, a free debt-advice service is a better first step than any app.\"\n\nThe honest version is more believable, safer and more respectful of vulnerable viewers.\n\n### Cultural storytelling\n\nDraw on your audience's culture authentically: family traditions, festivals, local humour, regional languages. Avoid stereotypes and avoid using religious or cultural symbolism to sell products with no genuine connection to it.\n\n### Do and don't\n\n**Do** make the customer the hero. **Do** use specific, sensory detail. **Do** include honest caveats and disclosure.\n\n**Don't** invent or exaggerate stories. **Don't** exploit painful emotions. **Don't** use customer stories without consent.",
+          "video": null,
+          "keyTakeaways": [
+            "Stories persuade by making benefits concrete and memorable — so they must be true.",
+            "Make the customer the hero and you or the product the guide.",
+            "Use the integrity checklist: true, typical, permitted, accurate, proportionate, disclosed.",
+            "Honest stories with caveats are more believable and protect vulnerable viewers."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "In a hero's-journey sales story, who should be the hero?",
+              "options": [
+                "The seller",
+                "The customer",
+                "The brand",
+                "The product"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "The customer is the hero; the seller or product is the guide."
+            },
+            {
+              "question": "A story uses a customer's quote edited to sound more enthusiastic. What's the problem?",
+              "options": [
+                "Editing quotes to change meaning is misleading",
+                "It's too long",
+                "Nothing, editing is normal",
+                "It's not on-brand"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Changing the meaning of a quote misrepresents the customer's experience."
+            },
+            {
+              "question": "Which story element makes an unusual result ethically presentable?",
+              "options": [
+                "Hiding it in the comments",
+                "A clear, meaningful statement that results vary and this was unusual",
+                "A tiny disclaimer at the end",
+                "More emotional music"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Meaningful context prevents people from assuming unusual results are typical."
+            }
+          ],
+          "activity": "Write a 150-word story about a product you genuinely use, then run it through the six-point integrity checklist and revise."
+        },
+        {
+          "slug": "trust-recovery",
+          "title": "Trust recovery when things go wrong",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### Mistakes will happen\n\nProducts fail, deliveries go missing, codes don't work, a post misses its disclosure, a claim turns out to be wrong. What separates trusted sellers isn't a perfect record — it's how they respond. A thoughtful recovery can preserve, and sometimes even strengthen, trust. A defensive or silent one can destroy it.\n\n### The trust-recovery framework: ACRAF\n\n1. **Acknowledge** — say clearly what happened, without minimising. \"My code didn't work for the first six hours of the sale.\"\n2. **Care** — show you understand the impact. \"I know some of you missed out or paid full price, and that's frustrating.\"\n3. **Responsibility** — own your part without shifting blame. Even if the brand made the error, you recommended it to your audience. \"I should have tested the code before posting.\"\n4. **Act** — fix what you can. \"The brand has agreed to honour the discount for anyone who bought during those hours — here's how to claim it.\"\n5. **Follow up and prevent** — explain what you'll do differently, then do it. \"From now on I test every code on mobile before posting.\"\n\n### What a good apology sounds like\n\n> \"I got this wrong. On Tuesday I said this supplement 'boosts immunity'. That claim isn't supported, and I shouldn't have made it. I've edited the post and I'm sorry to anyone who bought it because of that line. If you'd like a refund, the brand's returns process is here, and I'll help if you have trouble.\"\n\nNotice: specific, no excuses, no \"sorry if anyone was offended\", practical remedy, clear correction.\n\n### What to avoid\n\n- **Silence or deletion** — deleting criticism or the problem post without explanation looks like hiding.\n- **Non-apologies** — \"Sorry you feel that way.\"\n- **Blame-shifting** — \"It's the brand's fault, not mine.\"\n- **Over-promising** — \"This will never happen again\" (make specific commitments instead).\n- **Arguing** with upset customers in public.\n\n### Common scenarios and responses\n\n**Product quality complaints from several buyers**\nAcknowledge publicly, contact the brand, share the resolution path, and consider pausing promotion until resolved. If the problem is systemic, stop promoting.\n\n**Missed disclosure**\nCorrect it immediately (edit caption, add label, pin a comment), and consider a brief note: \"I forgot to label this as an ad — fixed now.\"\n\n**Inaccurate claim**\nCorrect it clearly, explain the correction and offer help to anyone who bought based on it.\n\n**Delivery or service failures by the brand**\nBe the bridge: collect issues, escalate to the brand, update your audience. Don't disappear until it's resolved.\n\n**Personal mistake (for example, a rude reply)**\nApologise directly to the person and, if it was public, publicly.\n\n### The recovery opportunity\n\nResearch on \"service recovery\" suggests that a very well-handled problem can sometimes leave customers as satisfied as — occasionally more satisfied than — those who never had a problem, though this doesn't hold reliably and depends on the severity of the issue. Don't count on it; do handle problems well.\n\n### Worked example\n\nA Dubai tech creator promoted a power bank; several followers reported overheating. He paused promotion, posted: \"Several of you have reported overheating — please stop using it and contact the brand's support at [link]. I've escalated this, and I've stopped promoting it until I know more.\" After the brand issued a recall, he shared the details and later posted about how he now checks product safety certifications. His audience engagement dipped briefly, then recovered — and comments praised his handling.\n\n### Do and don't\n\n**Do** respond quickly, specifically and with practical remedies. **Do** take responsibility for your recommendation. **Do** make and keep specific prevention commitments.\n\n**Don't** delete, deflect or argue. **Don't** use non-apologies. **Don't** keep promoting a product with serious unresolved issues.",
+          "video": null,
+          "keyTakeaways": [
+            "How you respond to mistakes matters more than a perfect record.",
+            "Use ACRAF: Acknowledge, Care, Responsibility, Act, Follow up and prevent.",
+            "Avoid silence, deletion, non-apologies and blame-shifting.",
+            "Pause or stop promoting products with serious unresolved issues."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which is a genuine apology?",
+              "options": [
+                "'I got this wrong — here's what happened, what I've corrected and how I'll help'",
+                "'Sorry if anyone was offended'",
+                "Deleting the post quietly",
+                "'The brand messed up, not me'"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Specific ownership plus remedy is a genuine apology."
+            },
+            {
+              "question": "You forgot to disclose a paid post. What should you do?",
+              "options": [
+                "Leave it — it's already posted",
+                "Delete it and say nothing",
+                "Correct the disclosure immediately and consider a brief note",
+                "Blame the platform"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Prompt correction restores compliance and trust."
+            },
+            {
+              "question": "Several buyers report a product overheating. What's the most responsible action?",
+              "options": [
+                "Pause promotion, warn buyers, share support routes and escalate",
+                "Delete the complaints",
+                "Offer a bigger discount",
+                "Keep promoting until the brand responds"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Safety comes first; pausing and informing protects your audience."
+            }
+          ],
+          "activity": "Write an ACRAF response for a realistic scenario (for example, a code that didn't work during a sale) and save it as a template."
+        }
+      ]
+    },
+    {
+      "slug": "dark-patterns-and-consumer-protection",
+      "title": "Dark patterns and consumer protection",
+      "summary": "Recognise manipulative design and sales patterns, and understand consumer-protection principles that apply across your markets.",
+      "lessons": [
+        {
+          "slug": "dark-patterns-to-avoid",
+          "title": "Dark patterns to avoid",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### What dark patterns are\n\n\"Dark patterns\" (also called deceptive design) are interface or communication choices that trick or pressure people into doing things they didn't intend — buying more, sharing data or signing up for subscriptions. Regulators have increasingly targeted them: the US FTC published a major report on dark patterns in 2022, the EU's Digital Services Act prohibits many deceptive interface designs on online platforms, and UK consumer law, strengthened by the DMCC Act 2024, applies to misleading and aggressive practices online. Many other jurisdictions apply general consumer-protection law to the same practices.\n\nAs a creator or seller you may not build websites, but you do design **content, DMs, landing pages, forms and offers**. The same principles apply.\n\n### Common dark patterns\n\n**1. Fake urgency**\nCountdown timers that reset, \"offer ends in 10 minutes\" messages that never end.\n\n**2. Fake scarcity**\n\"Only 2 left!\" or \"14 people are looking at this\" when untrue.\n\n**3. Confirmshaming**\nGuilt-tripping language on decline options: \"No thanks, I don't care about my family's health.\"\n\n**4. Sneak into basket**\nAdding extra items, insurance or donations without clear consent.\n\n**5. Hidden costs / drip pricing**\nMandatory fees revealed only at the end.\n\n**6. Forced continuity / subscription traps**\nFree trials that convert to paid subscriptions without clear notice, and cancellation that's far harder than sign-up. Several jurisdictions have introduced or are introducing rules requiring clear pre-contract information, reminders and easy cancellation for subscriptions (for example, subscription-contract provisions under the UK's DMCC Act).\n\n**7. Roach motel**\nEasy to get in, hard to get out — for example, cancelling requires a phone call during limited hours.\n\n**8. Disguised ads**\nAdverts that look like independent content, reviews or news; undisclosed sponsored posts.\n\n**9. Trick questions and pre-ticked boxes**\nConfusing wording or pre-selected options that lead people to agree to things they didn't intend.\n\n**10. Nagging**\nRepeated, intrusive prompts until the person gives in.\n\n**11. Bait and switch**\nAdvertising one thing and delivering another or pushing people towards a different, pricier option.\n\n### Dark patterns in creator content\n\nWatch for these in your own work:\n\n- Captions that say \"link in bio for free gift\" when a purchase is required.\n- Giveaways where entry requires following many accounts, with terms that aren't clear and a winner who's never announced.\n- Stories that repeat fake countdown stickers every day.\n- DMs that nag after someone has said no.\n- \"Reviews\" in which the commercial relationship is hidden.\n- Landing pages with pre-ticked marketing consent.\n\n### Giveaway and prize promotions\n\nGiveaways are popular but regulated. At a principle level, most markets expect: clear terms (eligibility, closing date, how winners are chosen and notified), genuine prizes, fair selection and prompt award. Some markets impose specific requirements or permits for prize promotions, and some types of promotion may count as unlawful lotteries or gambling. Check local rules — especially in the Gulf and Pakistan — and follow the platform's promotion policies.\n\n### The fair-design checklist\n\n1. Can people clearly see what they're agreeing to, and what it costs in total?\n2. Is saying no as easy and respectful as saying yes?\n3. Are all urgency and scarcity claims true?\n4. Is consent active (unticked boxes, clear choices)?\n5. Is cancelling as easy as signing up?\n6. Is every advert clearly identifiable as an advert?\n\n### Worked example\n\nA brand's landing page for a creator campaign includes a 15-minute timer that resets, a pre-ticked box for a monthly subscription and a decline button that reads \"No, I prefer dull skin\". The creator raises concerns and asks the brand to remove the resetting timer, make the subscription an unticked opt-in with clear terms, and change the decline button to \"No thanks\". She explains that her audience trusts her and that these patterns may breach consumer law in several of her audience's markets. The brand agrees; conversion is healthy and refunds fall.\n\n### Do and don't\n\n**Do** make \"no\" easy and respectful. **Do** make total costs and commitments clear. **Do** push back on brands using dark patterns.\n\n**Don't** use fake timers, confirmshaming or pre-ticked boxes. **Don't** run giveaways with unclear terms. **Don't** disguise ads as independent content.",
+          "video": null,
+          "keyTakeaways": [
+            "Dark patterns trick or pressure people into unintended actions — regulators increasingly target them.",
+            "Common patterns: fake urgency or scarcity, confirmshaming, hidden costs, subscription traps, disguised ads.",
+            "Creators can create dark patterns through captions, DMs, giveaways and landing pages.",
+            "Use the fair-design checklist and push back on brands using manipulative design."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A decline button says 'No thanks, I don't care about saving money'. What is this called?",
+              "options": [
+                "Social proof",
+                "Confirmshaming",
+                "Anchoring",
+                "Bundling"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Guilt-tripping decline language is confirmshaming."
+            },
+            {
+              "question": "Which is a subscription trap?",
+              "options": [
+                "A bundle discount",
+                "A clearly explained subscription with easy online cancellation",
+                "A free trial that converts to paid without clear notice and requires a phone call to cancel",
+                "A one-off purchase"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Hidden conversion and difficult cancellation are classic forced-continuity patterns."
+            },
+            {
+              "question": "Which giveaway practice is fair?",
+              "options": [
+                "Clear terms on eligibility, closing date and how winners are chosen",
+                "No stated closing date",
+                "Never announcing a winner",
+                "Requiring purchase without saying so"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Clear terms and genuine prizes are expected in most markets."
+            }
+          ],
+          "activity": "Audit one landing page, giveaway or DM sequence you use against the six-point fair-design checklist and fix any issues."
+        },
+        {
+          "slug": "consumer-protection-basics",
+          "title": "Consumer-protection basics across markets",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Why sellers need to know this\n\nConsumer-protection law exists to make sure buyers get truthful information, fair treatment and remedies when things go wrong. As a creator, affiliate or salesperson, you're part of the chain that informs buyers — and in many jurisdictions you can be held responsible for misleading or unfair practices, not just the brand. This lesson gives principle-level guidance, not legal advice; always check current rules for your audience's markets.\n\n### Principles common to most markets\n\nAcross the UK, EU, US, Pakistan, the UAE, Saudi Arabia and many other countries, consumer law broadly prohibits:\n\n1. **Misleading actions** — false or deceptive claims about a product, price, availability, origin, results or the seller's identity.\n2. **Misleading omissions** — leaving out information buyers need to make an informed decision (key costs, conditions, the fact that content is an advert).\n3. **Aggressive practices** — harassment, coercion or undue influence that impairs the buyer's freedom of choice.\n4. **Unfair contract terms** — hidden or one-sided terms.\n5. **Fake reviews and testimonials** — increasingly singled out specifically.\n\nAnd broadly guarantees rights such as:\n\n- Products that match their description and are of acceptable quality.\n- Remedies (repair, replacement, refund) for faulty goods.\n- In many markets, cooling-off or cancellation rights for distance purchases (for example, the UK and EU typically give 14 days for many online purchases, with exceptions).\n\n### A snapshot of key frameworks\n\n- **United Kingdom**: Consumer Rights Act 2015 and the Digital Markets, Competition and Consumers Act 2024, which gave the CMA direct fining powers, banned fake reviews and introduced subscription-contract rules. The ASA's CAP Code covers advertising content.\n- **European Union**: Unfair Commercial Practices Directive, Consumer Rights Directive, and the Digital Services Act for platforms.\n- **United States**: the FTC Act prohibits unfair or deceptive practices; the FTC's Endorsement Guides and rule on consumer reviews and testimonials are directly relevant to creators. States also have their own consumer laws.\n- **Pakistan**: the Competition Act 2010 prohibits deceptive marketing practices (enforced by the Competition Commission of Pakistan), and provincial consumer-protection acts provide remedies through consumer courts.\n- **UAE**: federal consumer-protection law protects consumers against misleading advertising and unfair practices, and media and advertising content standards apply.\n- **Saudi Arabia**: consumer-protection, e-commerce and anti-commercial-fraud rules prohibit misleading advertising, alongside media regulations and influencer licensing.\n\n### Practical rules for sellers\n\n1. **Substantiate claims** — have evidence for objective claims (\"waterproof\", \"lasts 48 hours\", \"clinically tested\"). If the brand provides the claim, ask for the evidence.\n2. **Disclose material information** — the commercial relationship, key costs, significant exclusions, subscription terms.\n3. **Don't pressure** — no harassment, no false urgency, no exploiting vulnerability.\n4. **Honour promises** — if you promise help with returns or a bonus, deliver it.\n5. **Support remedies** — point buyers to the brand's returns and complaints processes.\n6. **Protect data** — handle personal data lawfully and minimally.\n7. **Know category rules** — health, finance, children, alcohol, gambling, tobacco and others have extra rules or bans.\n\n### Special care: children and young people\n\nMany jurisdictions give children extra protection. At a principle level: don't directly urge children to buy or pester their parents, don't exploit their inexperience, clearly identify ads in content aimed at young audiences, and avoid promoting age-restricted products to audiences likely to include minors.\n\n### Worked scenario\n\nA Lahore-based creator promotes a \"detox tea\" that the brand says \"burns fat fast\". Her audience includes many teenagers. Applying the principles: the claim needs substantiation (unlikely), weight-loss products marketed to young people raise serious concerns, and the content could be misleading and harmful. She declines the campaign and explains why to the brand. Months later, she's approached by a better-quality brand precisely because of her reputation for responsible content.\n\n### When you're unsure\n\n- Ask the brand for written substantiation and compliance guidance.\n- Check the regulator's published guidance in each key market.\n- Choose the more cautious option.\n- Keep records of what you checked.\n\n### Do and don't\n\n**Do** substantiate claims and disclose material information. **Do** support buyers' rights to remedies. **Do** take extra care with young audiences.\n\n**Don't** make claims you can't back up. **Don't** omit key costs or conditions. **Don't** assume the brand alone bears responsibility.",
+          "video": null,
+          "keyTakeaways": [
+            "Consumer law broadly prohibits misleading actions and omissions, aggressive practices and fake reviews.",
+            "Creators and sellers can be held responsible, not just brands.",
+            "Substantiate claims, disclose material information and support buyers' remedies.",
+            "Take extra care with children and regulated categories; when unsure, choose caution."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Leaving out a significant subscription fee from your promotion is an example of…",
+              "options": [
+                "An aggressive practice",
+                "A misleading omission",
+                "A fair term",
+                "Social proof"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Omitting information buyers need to decide is a misleading omission."
+            },
+            {
+              "question": "A brand gives you a claim that its product 'lasts 48 hours'. What should you do?",
+              "options": [
+                "Ask for evidence that substantiates the claim",
+                "Avoid disclosure",
+                "Repeat it without question",
+                "Change it to 'lasts forever'"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Objective claims need substantiation, even if they come from the brand."
+            },
+            {
+              "question": "Which is appropriate for content with many young viewers?",
+              "options": [
+                "Urging kids to ask their parents to buy",
+                "Clearly identifying ads and avoiding age-restricted products",
+                "Promoting weight-loss teas",
+                "Using fake scarcity to excite them"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Young audiences need extra protection and clear advertising identification."
+            }
+          ],
+          "activity": "List the objective claims in your current campaign and confirm you have substantiation for each. Replace any you can't support with honest, experience-based language."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 20,
+    "timeLimitMinutes": 30,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "spe-001",
+        "module": "foundations-of-ethical-persuasion",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What distinguishes ethical persuasion from manipulation?",
+        "options": [
+          "Manipulation is always illegal and persuasion never is",
+          "There is no real difference",
+          "Ethical persuasion helps people decide in their own interest with accurate information and freedom to say no",
+          "Ethical persuasion never mentions benefits"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Ethical persuasion respects truth, benefit and autonomy."
+      },
+      {
+        "id": "spe-002",
+        "module": "foundations-of-ethical-persuasion",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A technique works only if the buyer doesn't realise it's being used. Which test does it fail?",
+        "options": [
+          "Truth test",
+          "Benefit test",
+          "Freedom test",
+          "Transparency test"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Manipulation relies on concealment, failing the transparency test."
+      },
+      {
+        "id": "spe-003",
+        "module": "foundations-of-ethical-persuasion",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A brand wants a campaign targeting teenagers' insecurity about their skin before exams and school photos. What's the most ethical response?",
+        "options": [
+          "Run it only in Stories",
+          "Reframe towards education and simple, affordable routines, noting when to see a doctor",
+          "Run it as briefed",
+          "Run it but add small disclaimers"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Exploiting insecurity in a young audience fails the benefit test; reframing serves the audience."
+      },
+      {
+        "id": "spe-004",
+        "module": "foundations-of-ethical-persuasion",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which content mainly supports System 1 (fast) thinking?",
+        "options": [
+          "A long FAQ",
+          "A clear visual reel showing the product's main benefit in seconds",
+          "A detailed specification table",
+          "A price-comparison spreadsheet"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Quick visuals serve fast, intuitive processing."
+      },
+      {
+        "id": "spe-005",
+        "module": "foundations-of-ethical-persuasion",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which are types of perceived risk that can stop a purchase? (Choose all that apply.)",
+        "options": [
+          "Performance risk",
+          "Social risk",
+          "Security risk",
+          "Anchoring risk"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Performance, social and security risk are recognised risk types; 'anchoring risk' isn't."
+      },
+      {
+        "id": "spe-006",
+        "module": "foundations-of-ethical-persuasion",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Where does ethical selling sit on the respect spectrum?",
+        "options": [
+          "Exploiting",
+          "Pressuring and deceiving",
+          "Only informing, never recommending",
+          "Informing, advising and encouraging"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Informing, advising and encouraging respect the buyer."
+      },
+      {
+        "id": "spe-007",
+        "module": "influence-principles",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which principle describes people's tendency to return favours?",
+        "options": [
+          "Scarcity",
+          "Unity",
+          "Authority",
+          "Reciprocity"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Reciprocity is the urge to return favours."
+      },
+      {
+        "id": "spe-008",
+        "module": "influence-principles",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A creator hosts a free seven-day challenge and invites participants to commit publicly. Which principle is primarily at work?",
+        "options": [
+          "Liking",
+          "Authority",
+          "Scarcity",
+          "Commitment and consistency"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Public commitments increase follow-through."
+      },
+      {
+        "id": "spe-009",
+        "module": "influence-principles",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which use of authority is ethical?",
+        "options": [
+          "Explaining your testing process and noting you're not a medical professional",
+          "Presenting a paid expert as independent",
+          "Wearing a lab coat to imply you're a doctor",
+          "Saying 'doctors recommend' without evidence"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Genuine expertise with honest limits is ethical."
+      },
+      {
+        "id": "spe-010",
+        "module": "influence-principles",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which uses of influence principles cross into manipulation? (Choose all that apply.)",
+        "options": [
+          "'Real Pakistanis buy this brand'",
+          "'If you really supported me, you'd buy this'",
+          "A countdown timer that resets on refresh",
+          "Sharing genuine reviews including mixed ones"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Fake scarcity, parasocial guilt and identity pressure are manipulative; genuine mixed reviews are ethical social proof."
+      },
+      {
+        "id": "spe-011",
+        "module": "influence-principles",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A brand offers a 'free sample' that requires card details and silently enrols buyers in a monthly subscription. How should you respond?",
+        "options": [
+          "Add #ad and proceed",
+          "Promote it without mentioning the subscription",
+          "Ask for clear, prominent subscription terms and easy cancellation — or no auto-enrolment — before promoting",
+          "Promote it as a free sample"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Hidden subscriptions are deceptive; reciprocity must not hide strings."
+      },
+      {
+        "id": "spe-012",
+        "module": "influence-principles",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which principle was added later to Cialdini's original six?",
+        "options": [
+          "Scarcity",
+          "Authority",
+          "Unity",
+          "Liking"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Unity — shared identity — was added to the original six."
+      },
+      {
+        "id": "spe-013",
+        "module": "biases-and-pricing",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "The first price a buyer sees influences their view of later prices. This is…",
+        "options": [
+          "Choice overload",
+          "Loss aversion",
+          "Default effect",
+          "Anchoring"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Anchoring describes the influence of an initial reference."
+      },
+      {
+        "id": "spe-014",
+        "module": "biases-and-pricing",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which is the ethical way to use the decoy effect?",
+        "options": [
+          "Only present options that someone might genuinely and sensibly choose",
+          "Add a deliberately bad option to push the most expensive one",
+          "Change options daily",
+          "Hide the cheapest option"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Every option should be a genuine choice."
+      },
+      {
+        "id": "spe-015",
+        "module": "biases-and-pricing",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "'95% fat-free' versus 'contains 5% fat' is an example of…",
+        "options": [
+          "Sunk cost",
+          "Anchoring",
+          "Framing",
+          "Unity"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "The same facts presented differently is framing."
+      },
+      {
+        "id": "spe-016",
+        "module": "biases-and-pricing",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "A checkout reveals a mandatory service fee only on the final step. Which statements are correct? (Choose all that apply.)",
+        "options": [
+          "Consumer-protection rules in the UK and elsewhere target this practice",
+          "Total mandatory costs should be clear upfront",
+          "This is drip pricing",
+          "It's acceptable if the fee is small"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Drip pricing hides mandatory costs and is targeted by regulators regardless of fee size."
+      },
+      {
+        "id": "spe-017",
+        "module": "biases-and-pricing",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "You keep promoting a low-converting product mainly because you've already made lots of content about it. What should you do?",
+        "options": [
+          "Double the posting frequency",
+          "Switch to fake urgency",
+          "Recognise the sunk-cost bias and decide based on future value and audience fit",
+          "Continue — the effort is already spent"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Past investment shouldn't drive future decisions."
+      },
+      {
+        "id": "spe-018",
+        "module": "biases-and-pricing",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which pricing presentation is transparent?",
+        "options": [
+          "'Only 100 a day' without the commitment period",
+          "A fee revealed at checkout",
+          "'About 100 a day — 36,500 per year, 12-month minimum, cancel online anytime after'",
+          "A 'was' price never charged"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Reframing is ethical when totals and commitments are clear."
+      },
+      {
+        "id": "spe-019",
+        "module": "storytelling-and-trust",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "In a sales story, what role should the product or seller usually play?",
+        "options": [
+          "The hero",
+          "The guide",
+          "The villain",
+          "The audience"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "The customer is the hero; the seller or product is the guide."
+      },
+      {
+        "id": "spe-020",
+        "module": "storytelling-and-trust",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which practice with customer stories is ethical?",
+        "options": [
+          "Editing quotes to sound more positive",
+          "Getting explicit permission and letting customers review how they're represented",
+          "Using only the most extreme results without context",
+          "Sharing names and photos without asking"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Consent and accurate representation are essential."
+      },
+      {
+        "id": "spe-021",
+        "module": "storytelling-and-trust",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "A story says a budgeting app 'completely transformed my life in a month', but the real result was modest savings over six months. Which revisions are appropriate? (Choose all that apply.)",
+        "options": [
+          "State the real result and timeframe",
+          "Disclose the paid partnership",
+          "Keep the exaggeration because it's more emotional",
+          "Signpost free debt advice for people in serious difficulty"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Accuracy, disclosure and care for vulnerable viewers make the story ethical."
+      },
+      {
+        "id": "spe-022",
+        "module": "storytelling-and-trust",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "In ACRAF, what does the 'R' stand for?",
+        "options": [
+          "Refund",
+          "Reframe",
+          "Responsibility",
+          "Repeat"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "ACRAF: Acknowledge, Care, Responsibility, Act, Follow up and prevent."
+      },
+      {
+        "id": "spe-023",
+        "module": "storytelling-and-trust",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Several buyers say your code didn't work during a sale. What's the best first public response?",
+        "options": [
+          "Say it's the brand's fault",
+          "Ignore it until the sale ends",
+          "Acknowledge the issue, show you understand the impact, and explain what you're doing to fix it",
+          "Delete the complaints"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Prompt acknowledgement and action preserve trust."
+      },
+      {
+        "id": "spe-024",
+        "module": "storytelling-and-trust",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A product you promoted is reported to overheat by several buyers. What's the most responsible sequence?",
+        "options": [
+          "Keep promoting while waiting for the brand",
+          "Offer a bigger discount to offset complaints",
+          "Pause promotion, warn buyers to stop using it and contact support, escalate to the brand, update your audience",
+          "Delete the original post quietly"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Safety issues require pausing, warning and transparent follow-up."
+      },
+      {
+        "id": "spe-025",
+        "module": "dark-patterns-and-consumer-protection",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is a 'dark pattern'?",
+        "options": [
+          "A type of logo",
+          "An analytics chart",
+          "A design or communication choice that tricks or pressures people into unintended actions",
+          "A dark-mode design"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Dark patterns manipulate choices through deceptive design."
+      },
+      {
+        "id": "spe-026",
+        "module": "dark-patterns-and-consumer-protection",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which is a 'roach motel' pattern?",
+        "options": [
+          "A clear pricing page",
+          "An unticked opt-in box",
+          "Easy sign-up and easy cancellation",
+          "Easy sign-up but cancellation requiring a phone call during limited hours"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Easy in, hard out is the roach-motel pattern."
+      },
+      {
+        "id": "spe-027",
+        "module": "dark-patterns-and-consumer-protection",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which elements make a giveaway fair? (Choose all that apply.)",
+        "options": [
+          "Clear eligibility and closing date",
+          "A stated method for choosing and notifying winners",
+          "Keeping entry terms vague to maximise entries",
+          "Checking local rules on prize promotions"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Clear terms, fair selection and local-law checks are expected; vague terms are unfair."
+      },
+      {
+        "id": "spe-028",
+        "module": "dark-patterns-and-consumer-protection",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which is a misleading omission?",
+        "options": [
+          "Not mentioning that a 'free trial' auto-renews into a paid subscription",
+          "Stating total costs clearly",
+          "Providing a returns link",
+          "Labelling an ad"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Omitting key subscription terms prevents informed decisions."
+      },
+      {
+        "id": "spe-029",
+        "module": "dark-patterns-and-consumer-protection",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A brand provides the claim 'burns fat fast' for a detox tea and your audience includes many teenagers. What's the best course of action?",
+        "options": [
+          "Use the claim with #ad",
+          "Use the claim as provided",
+          "Use it only in a different language",
+          "Ask for substantiation and, given the audience and category, likely decline"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Unsubstantiated weight-loss claims to young audiences are misleading and potentially harmful."
+      },
+      {
+        "id": "spe-030",
+        "module": "dark-patterns-and-consumer-protection",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which principle do consumer-protection laws broadly share across markets?",
+        "options": [
+          "Sellers can make any claim if disclosed",
+          "Prohibiting misleading actions, misleading omissions and aggressive practices",
+          "Fake reviews are allowed if positive",
+          "Only brands are ever responsible"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "These core prohibitions are common across many jurisdictions."
+      },
+      {
+        "id": "spe-031",
+        "module": "dark-patterns-and-consumer-protection",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which change best fixes a decline button that reads 'No, I prefer dull skin'?",
+        "options": [
+          "'No, I hate beautiful skin'",
+          "Removing the decline option",
+          "Making the decline button invisible",
+          "'No thanks'"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Neutral, respectful decline wording removes confirmshaming."
+      }
+    ]
+  }
+}
