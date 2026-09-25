@@ -95,11 +95,15 @@ export function HomePage() {
           <ul className="site-grid site-grid--3">
             {(data?.serviceCategories ?? []).map((group) => (
               <li key={group.slug}>
-                <article className="site-card">
+                <article className="site-card site-card--category">
                   <span className="site-card__icon">
                     <SiteIcon name={group.icon} />
                   </span>
-                  <h3 className="site-card__title">{group.name}</h3>
+                  <h3 className="site-card__title">
+                    <Link to={`/services?category=${encodeURIComponent(group.slug)}`} className="site-card__link">
+                      {group.name}
+                    </Link>
+                  </h3>
                   {group.description && <p className="site-card__text">{group.description}</p>}
                   <ul className="site-chips">
                     {group.services.slice(0, 5).map((s) => (
