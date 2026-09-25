@@ -1,0 +1,9 @@
+{
+  "_comment": "Copy to studio.config.json (git-ignored) to override defaults. Paths are relative to this file. No secrets here: YouTube/ElevenLabs credentials come from environment variables only.",
+  "catalog_dir": "../../backend/src/OptimizeAll.Api/Modules/Learning/Catalog",
+  "work_dir": ".work",
+  "site_base_url": "https://www.optimizeall.com",
+  "render_workers": 3,
+  "youtube_privacy": "unlisted",
+  "max_output_bytes": 3000000000
+}

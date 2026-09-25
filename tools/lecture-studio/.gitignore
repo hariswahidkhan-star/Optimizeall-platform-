@@ -1,0 +1,15 @@
+# Media, caches and run state never go to git
+.work/
+node_modules/
+__pycache__/
+*.pyc
+*.mp4
+*.mp3
+*.wav
+*.m4a
+*.png
+*.jpg
+*.vtt
+studio.config.json
+youtube-ledger.json
+lecture-src-patch.json
