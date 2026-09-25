@@ -42,7 +42,15 @@ export function ContinueCard({ item, headingLevel = 2 }: { item: EnrolmentCard; 
     <Card className="lx-continue">
       <CardBody>
         <div className="lx-continue__row">
-          <ProgressRing value={item.progressPercent} label={`${item.course.title}: ${item.progressPercent}% complete`} size={76} />
+          {/* Course art: the course badge sits inside the progress ring. */}
+          <ProgressRing
+            value={item.progressPercent}
+            label={`${item.course.title}: ${item.progressPercent}% complete`}
+            size={96}
+            strokeWidth={5}
+            className="lx-continue__ring"
+            centerText={<BadgeImage src={item.course.badgeImageUrl} size={64} className="lx-continue__badge" />}
+          />
           <div className="lx-continue__text">
             <p className="lx-continue__kicker">Continue where you left off</p>
             <Heading className="lx-continue__title">
@@ -308,7 +316,11 @@ export function LearningCertificatePage() {
                     </li>
                     <li>
                       <a href={q.data.links.openBadgeAssertionUrl} target="_blank" rel="noopener noreferrer">
-                        Open Badge 2.0 assertion (JSON) <ExternalLink aria-hidden="true" className="lx-inline-icon" />
+                        Open Badge 2.0 assertion{' '}
+                        {/* Keeps the icon on the line of the last word instead of wrapping onto a line of its own. */}
+                        <span className="lx-nowrap">
+                          (JSON) <ExternalLink aria-hidden="true" className="lx-inline-icon" />
+                        </span>
                         <span className="visually-hidden"> (opens in a new tab)</span>
                       </a>
                     </li>

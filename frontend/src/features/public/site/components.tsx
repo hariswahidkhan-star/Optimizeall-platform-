@@ -27,10 +27,19 @@ export const PERIOD_SUFFIX: Record<BillingPeriod, string> = {
   Yearly: '/ year',
 };
 
+/**
+ * A marketing price: whole amounts drop their ".00" ("$1,500 / month", like Stripe or Linear pricing pages); amounts
+ * with cents keep them. Formatting stays with formatMoney (currency, locale, minor units).
+ */
+function marketingPrice(amount: number, currency: string): string {
+  const text = formatMoney(amount, currency, { currencyDisplay: 'narrowSymbol' });
+  return Number.isInteger(amount) ? text.replace(/[.,]00(?=\D*$)/, '') : text;
+}
+
 export function PriceText({ price, prefix = 'From' }: { price: Price; prefix?: string }) {
   return (
     <span className="site-price-text">
-      {prefix} <strong className="tabular">{formatMoney(price.amount, price.currency, { currencyDisplay: 'narrowSymbol' })}</strong>{' '}
+      {prefix} <strong className="tabular">{marketingPrice(price.amount, price.currency)}</strong>{' '}
       {PERIOD_SUFFIX[price.billingPeriod]}
     </span>
   );
@@ -226,16 +235,16 @@ export function PackageCard({ pkg, serviceName, serviceSlug }: { pkg: PublicPack
       {pkg.description && <p className="site-package__desc">{pkg.description}</p>}
       <p className="site-package__price">
         {pkg.isCustomQuote || pkg.price === null ? (
-          <span className="site-package__amount">Custom quote</span>
+          <span className="site-package__amount site-package__amount--quote">Custom quote</span>
         ) : (
           <>
-            <span className="site-package__amount tabular">{formatMoney(pkg.price, pkg.currency, { currencyDisplay: 'narrowSymbol' })}</span>{' '}
+            <span className="site-package__amount tabular">{marketingPrice(pkg.price, pkg.currency)}</span>{' '}
             <span className="site-package__period">{PERIOD_SUFFIX[pkg.billingPeriod]}</span>
           </>
         )}
       </p>
       {pkg.setupFee !== null && pkg.setupFee > 0 && (
-        <p className="site-package__setup">+ {formatMoney(pkg.setupFee, pkg.currency, { currencyDisplay: 'narrowSymbol' })} one-time setup</p>
+        <p className="site-package__setup">+ {marketingPrice(pkg.setupFee, pkg.currency)} one-time setup</p>
       )}
       <ul className="site-package__features">
         {pkg.features.map((f) => (

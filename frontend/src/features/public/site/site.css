@@ -450,6 +450,13 @@
   background: var(--color-surface-2);
 }
 
+/* Two plain sections in a row share one gap instead of stacking both paddings (a 112px hole between service groups
+   on a phone). Tinted and brand bands keep their own padding, since their background edge marks the break. */
+.site-section:not(.site-section--muted, .site-section--brand, .site-section--tight)
+  + .site-section:not(.site-section--muted, .site-section--brand, .site-section--tight) {
+  padding-top: 0;
+}
+
 /* Brand band: the navy brand gradient in both themes, an amber glow and a dot grid fading in from the right. */
 .site-section--brand {
   position: relative;
@@ -890,9 +897,12 @@
   }
 }
 
-.site-card:has(.site-card__link):hover {
-  box-shadow: var(--shadow-card-hover);
-  transform: translateY(-2px);
+/* Lift only where hover exists: on phones a tap would leave the card stuck in its lifted state. */
+@media (hover: hover) {
+  .site-card:has(.site-card__link):hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
+  }
 }
 
 .site-card__link {
@@ -964,11 +974,11 @@
 }
 
 .site-card__title {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1.125rem;
   font-weight: var(--weight-semibold);
   line-height: 1.3;
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: -0.011em;
 }
 
 .site-card:has(.site-card__icon) .site-card__title {
@@ -1282,6 +1292,21 @@
   line-height: 1.05;
 }
 
+/* "Custom quote" is words, not a figure: a size down so it doesn't outweigh the prices, on the same line box so the
+   tiers' rules and feature lists stay level. */
+.site-package__amount--quote {
+  font-size: clamp(1.5rem, 1.4rem + 0.5vw, 1.875rem);
+  letter-spacing: var(--tracking-tight);
+  line-height: calc(clamp(2rem, 1.8rem + 0.8vw, 2.5rem) * 1.05);
+}
+
+/* Side-by-side tiers: reserve two lines of description so the prices line up across the row. */
+@media (min-width: 768px) {
+  .site-packages .site-package__desc {
+    min-block-size: calc(2lh);
+  }
+}
+
 .site-package__period {
   color: var(--color-text-muted);
   font-size: var(--text-small);
@@ -1296,6 +1321,7 @@
   list-style: none;
   font-size: var(--text-small);
   flex: 1;
+  align-content: start; /* the list fills the card's spare height; keep its rhythm instead of spreading the items */
 }
 
 .site-package__features li {
@@ -1519,9 +1545,9 @@
 }
 
 .site-feature h3 {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1.125rem;
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: -0.011em;
 }
 
 .site-feature p {
@@ -1675,16 +1701,16 @@
   background: var(--color-accent-soft);
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-accent) 30%, transparent);
   color: var(--color-accent-text);
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 0.9375rem;
   font-weight: var(--weight-semibold);
   font-variant-numeric: tabular-nums;
 }
 
 .site-steps h3 {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1.125rem;
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: -0.011em;
 }
 
 .site-steps p {
@@ -1812,7 +1838,9 @@ button.site-chip {
 
 .site-prose h4 {
   margin-top: 1.6em;
+  font-family: var(--font-sans);
   font-size: 1.0625rem;
+  letter-spacing: -0.011em;
 }
 
 .site-prose > :first-child {
@@ -2182,7 +2210,7 @@ button.site-chip {
 }
 
 .site-aside .site-hero__panel h2 {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1.0625rem;
 }
 
@@ -2312,9 +2340,9 @@ button.site-chip {
 .site-team h2,
 .site-team h3 {
   margin-top: var(--space-4);
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1.125rem;
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: -0.011em;
 }
 
 /* Section actions, sub-headings, stacked prose sections */
@@ -2342,9 +2370,9 @@ button.site-chip {
 .site-subheading {
   margin: var(--space-8) 0 var(--space-4);
   color: var(--color-heading);
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1.1875rem;
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: -0.011em;
 }
 
 .site-prose-stack {
@@ -2525,4 +2553,10 @@ button.site-chip {
   border-color: rgb(255 255 255 / 0.45);
   background: rgb(255 255 255 / 0.16);
   color: #fff;
+}
+
+/* Small card titles (16px) read better in Inter than in the tightly set display face; Inter Tight stays for 20px+. */
+.site-layout .ui-card__title {
+  font-family: var(--font-sans);
+  letter-spacing: -0.011em;
 }
