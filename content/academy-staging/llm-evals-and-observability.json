@@ -6,7 +6,7 @@
   "subtitle": "Evals, LLM-as-judge, RAG and agent evaluation, CI regression suites and OpenTelemetry-based observability in production",
   "category": "ai",
   "level": "advanced",
-  "estimatedMinutes": 349,
+  "estimatedMinutes": 381,
   "description": "Prompt tweaks, model upgrades and new documents can silently break an LLM product. This advanced course teaches the discipline that prevents it: evaluation and observability. You will define success with stakeholders, run error analysis to find how your system really fails, and build golden, production and synthetic datasets. You will design code-based metrics and calibrated LLM-as-judge graders, measure groundedness, safety and tone, and evaluate RAG pipelines and multi-step agents. You will turn evals into CI regression suites with statistical care, compare today's tools (promptfoo, Inspect, Langfuse, LangSmith, Braintrust, Arize Phoenix and more), trace production traffic with OpenTelemetry GenAI conventions, set cost and latency SLOs, run A/B tests and build human review workflows. The capstone is a working Python eval harness for a customer support bot, wired into CI and monitoring.",
   "outcomes": [
     "Define measurable success criteria and blocking failures for an LLM feature with stakeholders",
@@ -101,13 +101,19 @@
           ],
           "activity": "Complete the eval spec template for one LLM feature you own and agree the blocking criteria with a stakeholder.",
           "lecture": {
-            "targetMinutes": 4,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "Here is a story nearly every AI team knows. A developer tweaks the prompt to fix one customer complaint. It works. Two weeks later, support notices the bot has started inventing delivery dates for UK orders. Nobody connected the two, because nobody was measuring. In this lecture you will learn what an eval is, why it is the core engineering asset of any LLM product, and how to define success before you measure it.",
                 "onScreen": "Why evals, and defining success\n• What an eval is\n• Why evals are your core asset\n• Success criteria before metrics",
                 "visual": "Title card. Animation: a prompt edit fixes one red dot on a grid of test cases while three other dots quietly turn red.",
                 "seconds": 32
+              },
+              {
+                "narration": "Here is an analogy. Imagine running a restaurant where the chef changes recipes every week but nobody ever tastes the food before it goes out. Some weeks the new recipe is better. Some weeks it is quietly worse, and you only find out when regulars stop coming. An eval suite is the tasting spoon. It does not cook for you. It just makes sure nothing leaves the kitchen without someone checking that it still tastes the way it should.",
+                "onScreen": "Analogy: the tasting spoon\n• Recipes change weekly\n• Nobody tastes before serving\n• Evals = taste every change before it leaves the kitchen",
+                "visual": "Layout: a kitchen pass with plates lined up. Animate: a chef icon swaps a recipe card; plates slide toward the dining room; a tasting spoon icon intercepts each plate and stamps it with a tick or a cross.",
+                "seconds": 34
               },
               {
                 "narration": "An eval is a repeatable measurement of how well your system performs a defined task. It has three parts: a dataset of inputs, the system under test, and a way to score the outputs. It is the LLM equivalent of a test suite, with one crucial twist. Outputs are non-deterministic, and there are often many acceptable answers. So how you score is itself a design problem, and much of this course is about solving it well.",
@@ -150,6 +156,18 @@
                 "onScreen": "Pitfalls\n• One averaged score\n• Metric before meaning\n• Leaderboard thinking\n• No owner",
                 "visual": "Four warning cards; the 'one averaged score' card shows a green 92% hiding a single red privacy failure.",
                 "seconds": 21
+              },
+              {
+                "narration": "A simple example of defining success. Feature: a bot that writes product titles for an online shop. The job: short, searchable titles. Dimensions: includes brand and product type, under seventy characters, no invented features, correct language. Must never happen: claiming a certification the product does not have. Thresholds: ninety-five percent of titles pass the length and brand checks in code, and zero invented certifications on a test set of sixty products with known specs. That took five minutes, and now every prompt change can be judged against it.",
+                "onScreen": "Example: product-title bot\n• Job: short, searchable titles\n• Dimensions: brand + type, <70 chars, no invention, language\n• Never: fake certifications\n• Thresholds: 95% code checks; 0 invented certs on 60 items",
+                "visual": "Layout: a product card with a generated title above a checklist. Animate: each checklist dimension ticks green; a 'must never' row outlined in red shows a 0 counter; a threshold summary slides in at the bottom.",
+                "seconds": 38
+              },
+              {
+                "narration": "Now a realistic scenario with illustrative numbers. A travel agency in Lahore wants to switch its itinerary assistant to a cheaper model. Without evals, the debate goes on for weeks. With an eval spec, they run both models on one hundred and twenty real requests. The cheaper model matches on formatting and tone, costs much less, but gets visa requirements wrong noticeably more often, a blocking dimension. Decision in one afternoon: use the cheaper model for itinerary formatting, keep the stronger model for visa questions. Evals turned an opinion fight into a routing decision.",
+                "onScreen": "Scenario: cheaper model? (illustrative)\n• 120 real requests, two models\n• Format + tone: equal; cost: much lower\n• Visa accuracy: worse (blocking)\n• Decision: route by task",
+                "visual": "Layout: a comparison table with rows format, tone, cost, visa accuracy for two models. Animate: cells fill in; the visa row turns red for the cheaper model; a routing diagram appears sending 'visa' to model B and 'itinerary' to model A. Caption: illustrative.",
+                "seconds": 41
               },
               {
                 "narration": "Recap. An eval is a dataset, a system and a scorer. It is your core asset for iteration, model choice, cost and governance. Define success from the product down, with dimensions, must-never-happen failures and thresholds. Your next step: fill in the eval spec template from the lesson for one feature you own, and agree the blocking criteria with your stakeholders.",
@@ -217,13 +235,19 @@
           ],
           "activity": "Sample 100 traces with the script in this lesson, open-code them, and produce a taxonomy table with counts and severity.",
           "lecture": {
-            "targetMinutes": 4,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "If you only do one thing from this entire course, make it this: read your system's outputs and write down what went wrong. It sounds too simple to matter. It is the highest-return activity in LLM evaluation, and most teams skip it. In this lecture you will learn a practical error-analysis process, how to turn notes into a failure taxonomy, and how that taxonomy tells you exactly which evals to build.",
                 "onScreen": "Error analysis and failure taxonomies\n• Read real outputs\n• Open and axial coding\n• From taxonomy to evals",
                 "visual": "Title card: a stack of conversation transcripts with sticky notes attached, some circled.",
                 "seconds": 31
+              },
+              {
+                "narration": "Here is an analogy for error analysis. A doctor who only ever looks at your average blood pressure over a year would miss the dangerous spike last Tuesday. Good doctors look at the actual readings, notice patterns, and name what they see before choosing a treatment. Error analysis is looking at the actual readings of your AI system, one trace at a time, and naming what went wrong, before you decide which tests and fixes to build.",
+                "onScreen": "Analogy: reading the actual charts\n• Averages hide the Tuesday spike\n• Look at real readings, name patterns\n• Then choose the treatment",
+                "visual": "Layout: a line chart of daily readings with a flat average line. Animate: the average line fades, revealing a sharp spike on one day that gets circled and labelled.",
+                "seconds": 33
               },
               {
                 "narration": "Why does this matter so much? Because generic metrics like helpfulness or coherence rarely match the specific ways your system fails. Practitioners who teach evals widely, such as Hamel Husain and Shreya Shankar, stress the same point. Teams that skip error analysis build metrics for problems they imagine, not problems they have. And then they optimize a number that does not move the user experience.",
@@ -266,6 +290,24 @@
                 "onScreen": "Pitfalls\n• Code the first upstream failure\n• Vague categories\n• Only complaints\n• Doing it once",
                 "visual": "Four cards flipping to reveal each pitfall with a small icon.",
                 "seconds": 25
+              },
+              {
+                "narration": "A simple example of open coding. Trace one: a customer in Karachi asks about cash on delivery, and the bot explains card payments. Note: answered a different payment method than asked. Trace two: a customer asks in Urdu, and the bot replies in English. Note: wrong response language. Trace three: the bot quotes a delivery fee that is not in the policy. Note: invented fee. Three traces, three specific notes. After eighty traces, you group them, and you might find invented fees appear far more often than anyone suspected.",
+                "onScreen": "Example: three open codes\n• 'Answered a different payment method'\n• 'Wrong response language'\n• 'Invented fee'\n• Group after ~80 traces",
+                "visual": "Layout: three trace cards stacked, each with a short note field. Animate: notes type into each card; after a fast-forward effect, many cards cluster into groups with counts.",
+                "seconds": 39
+              },
+              {
+                "narration": "Now a realistic scenario with illustrative numbers. An online pharmacy in Riyadh reviews one hundred traces from its product-question assistant. Sixty-one have no problem. Of the rest, fourteen recommend a product that is out of stock, nine answer in English to Arabic questions, eight give dosage-adjacent advice the policy forbids, and eight are other issues. The dosage cases are fewer than the stock cases, but far more severe, so they become the first blocking eval. The stock issue turns out to be a data freshness problem, fixed without touching the prompt at all.",
+                "onScreen": "Scenario: 100 pharmacy traces (illustrative)\n• 61 fine\n• 14 out-of-stock recommendations\n• 9 wrong language\n• 8 forbidden dosage advice → blocking eval first",
+                "visual": "Layout: a horizontal bar chart of failure categories. Animate: bars grow to 14, 9, 8, 8; the 'dosage' bar is outlined red with a 'severity: high' badge and moves to the top of a priority list. Caption: illustrative.",
+                "seconds": 40
+              },
+              {
+                "narration": "Common mistakes. Writing notes that are too vague to act on, like bad answer. Letting the first reviewer's categories become permanent without revisiting them. Skipping the domain expert because the engineers feel confident. And treating error analysis as a one-time project instead of a monthly habit. Here is a question for you: when did someone on your team last read fifty real outputs from your AI feature, start to finish?",
+                "onScreen": "Common mistakes\n• Vague notes\n• Frozen categories\n• No domain expert\n• One-time project\nQuestion: when did you last read 50 outputs?",
+                "visual": "Layout: four warning cards, then a calendar with a question mark on 'last review'. Animate: cards flip in; the calendar pages flip backwards searching for the date.",
+                "seconds": 30
               },
               {
                 "narration": "Recap. Read your data before choosing metrics. Sample, open code, group into a taxonomy, count, prioritize and build evals for the top categories. Involve a domain expert. Your next step: use the script in the lesson to sample one hundred traces from your system, code them this week, and bring the taxonomy to your next planning meeting.",
@@ -333,13 +375,19 @@
           ],
           "activity": "Create a 50-item dataset for your top failure category with key points, forbidden content and slicing metadata, and commit it as v1.",
           "lecture": {
-            "targetMinutes": 4,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "An eval is only as good as its dataset. A brilliant judge scoring the wrong inputs tells you nothing useful. In this lecture you will learn the three sources of eval examples, golden, production and synthetic, how to generate synthetic data that is actually diverse, what labels each example needs, and how to keep datasets versioned, private and uncontaminated.",
                 "onScreen": "Building eval datasets\n• Golden, production, synthetic\n• Structured synthetic generation\n• Labels, sizing, versioning, privacy",
                 "visual": "Title card: three streams labelled golden, production and synthetic merging into one versioned dataset file.",
                 "seconds": 26
+              },
+              {
+                "narration": "An analogy for eval datasets. A driving test is only meaningful if the route includes roundabouts, hill starts, parallel parking and a busy junction. If the examiner only ever drove you around an empty parking lot, passing would mean nothing. Your eval dataset is the test route. Golden examples are the standard maneuvers, production samples are real traffic, and synthetic data adds the rare situations, like a sudden rainstorm, that you might not meet for months.",
+                "onScreen": "Analogy: the driving-test route\n• Empty parking lot = meaningless pass\n• Golden = standard maneuvers\n• Production = real traffic\n• Synthetic = rare conditions",
+                "visual": "Layout: a simple road map. Animate: a car icon drives a short loop in an empty lot (greyed out), then a new route draws with icons for roundabout, hill, parking and a rain cloud labelled synthetic.",
+                "seconds": 33
               },
               {
                 "narration": "Golden datasets are hand-curated by domain experts, with reference answers or labels you trust. They are small, often fifty to a few hundred items per task to start, high quality and slow to build. Use them for release gates and to calibrate judges. Production samples are real user inputs from your logs, complete with typos and code-switching, like Urdu mixed with English, or Arabic with English. They are the best mirror of reality, and they need careful privacy handling.",
@@ -382,6 +430,18 @@
                 "onScreen": "Case: bilingual bank golden set\n• 120 anonymized production + 80 synthetic\n• Key points + forbidden content, expert-reviewed\n• 50-item held-out set",
                 "visual": "Bilingual cards (Arabic and English placeholder text, no real data) sorted into 'golden' and a locked 'held-out' box.",
                 "seconds": 30
+              },
+              {
+                "narration": "A simple example of a well-labelled item. Input: I bought shoes in Dubai eight days ago, can I return them? Country: UAE. Key points: seven-day return window, offer exchange or store credit if eligible. Forbidden: promising a refund. Expected tool call: none. Slice tags: returns, UAE, English, edge case past window. Source: golden, verified by the support lead. With that one row, a code check, a judge and a slice report can all do their jobs.",
+                "onScreen": "Example: one well-labelled item\n• Input + country\n• Key points + forbidden content\n• Expected tool call\n• Slice tags + source",
+                "visual": "Layout: a single JSON-style card. Animate: fields appear one by one with colored tags; arrows point from 'key points' to a code-check icon, from 'forbidden' to a judge icon, and from tags to a slice chart.",
+                "seconds": 33
+              },
+              {
+                "narration": "Common mistakes with datasets. Building only synthetic data, which misses how real customers actually write. Letting the model under test write its own expected answers. Forgetting slicing metadata, so you cannot see that failures cluster in one country. And never refreshing, so the dataset slowly describes last year's product. Try this now: open your current eval set and count how many items came from real production traffic. If the answer is zero, that is your next task.",
+                "onScreen": "Common mistakes\n• Synthetic-only\n• Self-written expected answers\n• No slice metadata\n• Never refreshed\nTry: count production-sourced items",
+                "visual": "Layout: four warning cards, then a pie chart of dataset sources. Animate: the pie shows 100% synthetic, then a 'production' slice grows in after a 'next task' label.",
+                "seconds": 33
               },
               {
                 "narration": "Recap. Combine golden, production and synthetic examples. Structure synthetic variety with dimensions and review everything. Label with key points, forbidden content and metadata. Cover your taxonomy, version your data, avoid contamination and handle privacy properly. Your next step: build a first dataset of fifty items for your top failure category, with slicing metadata, and commit it to version control.",
@@ -460,13 +520,19 @@
           ],
           "activity": "Extend the grader library with two product-specific graders, unit-test them on known good and bad outputs, and replace any judge checks that code can decide.",
           "lecture": {
-            "targetMinutes": 4,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "There is a temptation, once you discover LLM-as-judge, to use a model to grade everything. Resist it. Many of the most important properties of your system can be checked by a few lines of code: faster, free, perfectly reproducible and easy to debug. In this lecture you will learn which properties code can decide, how to match text robustly, why classic metrics like BLEU mislead, and how to build a small grader library you can trust.",
                 "onScreen": "Code-based metrics\n• Prefer code when code can decide\n• Exact, normalized, fuzzy\n• Limits of BLEU, ROUGE, similarity\n• A grader library",
                 "visual": "Title card: a set of precise measuring tools, a ruler, caliper and scale, laid over faint code.",
                 "seconds": 33
+              },
+              {
+                "narration": "Here is an analogy. In a factory, you do not ask an expert craftsperson to check whether every bolt is exactly ten millimeters. A gauge does that instantly, for free, all day. You save the expert for the things a gauge cannot judge, like whether the finish looks right. Code-based graders are your gauges. LLM judges are your expert craftspeople. Use gauges for everything a gauge can measure, and your experts will have time for the hard calls.",
+                "onScreen": "Analogy: gauges and craftspeople\n• Gauges: instant, free, exact\n• Experts: for judgment calls\n• Code graders = gauges, judges = experts",
+                "visual": "Layout: a production line with bolts passing a gauge. Animate: bolts pass through a gauge that flashes green or red instantly; an expert icon further down inspects only a finished product's surface.",
+                "seconds": 34
               },
               {
                 "narration": "Ask one question before choosing any grader: can a deterministic check decide this? Valid JSON that matches a schema. The correct classification label. A required fact present. A forbidden pattern absent, like an email address or phone number. The right tool called with the right arguments. Length and format rules. SQL that returns the right rows when executed. Citations that point to documents actually retrieved. All of these are code.",
@@ -509,6 +575,18 @@
                 "onScreen": "Pitfalls\n• Brittle checks\n• Similarity as pass/fail\n• Ignoring tool calls\n• Untested graders",
                 "visual": "Four cards; the last shows a grader function with its own small green test suite.",
                 "seconds": 29
+              },
+              {
+                "narration": "A simple example of a grader catching a real bug. Your bot must return JSON with an order status field. The valid JSON grader runs on a hundred test cases and fails three. You look: in all three, the customer wrote in Arabic, and the model wrapped its JSON in a friendly sentence first. That is a real production bug, found in seconds, at zero cost, with a clear reason attached. A judge might have scored those answers as helpful and missed the broken integration entirely.",
+                "onScreen": "Example: the JSON grader\n• 100 cases, 3 failures\n• All Arabic inputs\n• Model added a sentence before the JSON\n• Found in seconds, zero cost",
+                "visual": "Layout: a results grid of 100 small squares. Animate: 97 turn green, 3 turn red; clicking one red square opens the output showing a sentence followed by JSON, with the sentence highlighted.",
+                "seconds": 37
+              },
+              {
+                "narration": "And a common mistake: writing graders that are stricter than the business needs. A team required the exact phrase fourteen days, and failed answers that said two weeks. Their pass rate looked terrible, and they spent a week changing prompts to satisfy a grader, not a customer. The fix was to normalize both forms and test the grader against a small set of known good and known bad answers first. Ask yourself: have you ever tested your graders themselves?",
+                "onScreen": "Mistake: graders stricter than the business\n• '14 days' vs 'two weeks' marked wrong\n• A week tuning prompts for the grader\n• Fix: normalize + test graders on known cases",
+                "visual": "Layout: two answer cards, '14 days' and 'two weeks', with a grader in between. Animate: the grader first rejects 'two weeks' in red, then an equivalence rule appears and both turn green.",
+                "seconds": 34
               },
               {
                 "narration": "Recap. Prefer code when code can decide. Normalize carefully, use fuzzy and numeric tolerance where appropriate, treat classic overlap metrics as weak signals, and use key-point coverage for open-ended answers. Your next step: take the grader library from the lesson, add two graders specific to your product, write unit tests for them, and move every check that can be deterministic out of your judge prompts.",
@@ -584,13 +662,19 @@
           ],
           "activity": "Collect 100 expert pass/fail labels for one criterion, run the judge from this lesson, and report TPR, TNR and kappa with three rubric improvements.",
           "lecture": {
-            "targetMinutes": 4,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Some qualities cannot be checked in code. Is this answer correct according to policy? Does the tone match the brand? Is the explanation actually helpful? For these, teams use a language model as a judge. Done well, it scales human judgment across thousands of outputs. Done badly, it produces confident numbers that mean nothing. In this lecture you will learn judge formats, known biases, and how to calibrate a judge against human experts.",
                 "onScreen": "LLM-as-judge\n• Formats that work\n• Known biases\n• Calibrating against humans",
                 "visual": "Title card: a gavel made of simple geometric shapes over a stack of answer cards.",
                 "seconds": 32
+              },
+              {
+                "narration": "An analogy for judges. Think of a panel of exam markers grading essays. Give them a vague instruction like mark for quality, and one gives sevens, another gives nines, and the same marker changes their mind after lunch. Give them a clear rubric with examples of passing and failing answers, and check a sample of their marking against the head examiner, and marking becomes consistent and trustworthy. An LLM judge is a tireless marker. It still needs a rubric and a head examiner.",
+                "onScreen": "Analogy: exam markers\n• Vague instructions → inconsistent marks\n• Rubric + examples → consistency\n• Check against the head examiner = calibration",
+                "visual": "Layout: three marker icons grading the same essay. Animate: with 'mark for quality', they give different scores; a rubric card drops in with pass/fail examples, and their marks converge; a head-examiner icon checks a sample.",
+                "seconds": 36
               },
               {
                 "narration": "There are four main formats. Pointwise with a rubric grades one output against explicit criteria. Reference-guided gives the judge a reference answer or key points to check against. Pairwise shows two outputs and asks which is better on a specific criterion, which is great when comparing an old and new prompt. And critique then verdict asks for a short rationale before the final decision, which tends to improve consistency and gives you readable reasons.",
@@ -633,6 +717,24 @@
                 "onScreen": "Case: UK insurance comparison\n• 1–10 helpfulness: flat ~8\n• 4 binary criteria, calibrated\n• Revealed out-of-scope advice",
                 "visual": "Flat line chart of a 1–10 score; then four criterion bars with one showing a clear failure share in red, labelled illustrative.",
                 "seconds": 32
+              },
+              {
+                "narration": "A simple example of fixing position bias. You compare an old and a new prompt using a pairwise judge. Run one: new prompt shown first, it wins sixty percent. Run two, same pairs, swapped order: the new prompt wins only forty-five percent. The judge liked whatever came first. Now count only pairs where both runs agree. Maybe the new prompt wins thirty percent, loses twenty-five, and the rest are ties. That is a much more honest picture, and it might change your decision.",
+                "onScreen": "Example: swap the order (illustrative)\n• A first: 60% wins\n• A second: 45% wins\n• Consistent-only: 30% win, 25% loss, rest ties",
+                "visual": "Layout: two pairwise panels with A and B labels. Animate: first run tallies 60%, then A and B swap positions and the tally drops to 45%; a final panel shows only agreeing pairs with a smaller, honest win bar. Caption: illustrative.",
+                "seconds": 36
+              },
+              {
+                "narration": "And a realistic calibration story, with illustrative numbers. A property portal in Dubai builds a judge for the criterion: does the answer state service charges only from the listing data? Experts label one hundred and fifty answers. The first judge version agrees with experts on most passing answers but catches only about half of the failing ones. Reading the disagreements shows the judge accepts ranges the model invented, like roughly twelve to fifteen dirhams per square foot. They add two fail examples with invented ranges to the rubric, and the judge's catch rate on failures rises sharply on a held-out set.",
+                "onScreen": "Scenario: calibrating a service-charge judge (illustrative)\n• 150 expert labels\n• v1 catches ~half of failures\n• Misses invented ranges\n• Add fail examples → catch rate rises",
+                "visual": "Layout: a confusion matrix before and after. Animate: the 'failures caught' cell is small in v1, a rubric card gains two red example lines, and the cell grows in v2 on a 'held-out' panel. Caption: illustrative.",
+                "seconds": 44
+              },
+              {
+                "narration": "Common mistakes with judges. Asking one judge prompt to score five criteria at once. Using a one-to-ten scale and treating a shift from seven point two to seven point four as progress. Never checking the judge against humans. And silently counting judge errors, like unparseable output, as passes. Here is a quick question: if your judge started passing everything tomorrow, how would you find out?",
+                "onScreen": "Common mistakes\n• One prompt, many criteria\n• Tiny moves on 1–10 scales\n• No human calibration\n• Errors counted as passes\nQuestion: how would you notice a lenient judge?",
+                "visual": "Layout: four warning cards, then a dashboard tile showing '100% pass' with a question mark. Animate: the tile glows suspiciously green; a small calibration chart below shows the true negative rate collapsing.",
+                "seconds": 28
               },
               {
                 "narration": "Recap. Use judges where code cannot decide. Prefer binary criteria with explicit examples, one criterion per judge prompt. Know the biases and mitigate them, especially by swapping order in pairwise tests. And always calibrate against human experts, reporting true positive and true negative rates and kappa. Your next step: pick one criterion, collect a hundred expert labels, and calibrate a judge using the code in the lesson.",
@@ -708,13 +810,19 @@
           ],
           "activity": "Add an over-refusal set of 30 benign prompts and a PII detector for outputs and traces to your eval suite, and report both rates.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "The failures that make headlines are rarely about accuracy alone. They are a chatbot inventing a refund policy, giving dangerous advice, leaking a customer's phone number, or treating users differently depending on their language. In this lecture you will learn to evaluate groundedness, safety, refusals, privacy, fairness and tone, each with the right dataset and grader.",
                 "onScreen": "Groundedness, safety and quality metrics\n• Groundedness\n• Safety and refusals\n• Privacy\n• Fairness and tone",
                 "visual": "Title card: six dimension icons arranged in a hexagon around an answer card.",
                 "seconds": 24
+              },
+              {
+                "narration": "An analogy for groundedness. Think of a journalist writing a story from interview notes. A good editor goes through the draft line by line and asks: where does this claim come from? If a sentence has no source in the notes, it is either cut or checked. Claim-level groundedness is that editor, working on every answer your system produces, asking for each statement: which retrieved passage supports this?",
+                "onScreen": "Analogy: the fact-checking editor\n• Draft vs interview notes\n• 'Where does this claim come from?'\n• No source → cut or check",
+                "visual": "Layout: a draft article with sentences on the left and interview notes on the right. Animate: lines connect sentences to supporting notes; one sentence has no line and gets a red highlight and a 'source?' tag.",
+                "seconds": 30
               },
               {
                 "narration": "Start with groundedness, also called faithfulness. A response is grounded when every factual claim is supported by the context it was given, such as retrieved documents or tool outputs. Ungrounded claims are what people call hallucinations, and they are the top failure of retrieval and support systems. The standard method has three steps: split the answer into atomic claims, check each claim against the context, and score the share of claims that are supported.",
@@ -763,6 +871,18 @@
                 "onScreen": "Pitfalls\n• Moderation ≠ complete safety\n• Ignoring over-refusal\n• English-only safety tests\n• Telemetry as a leak",
                 "visual": "Four warning cards; the last one shows a log line with a phone number being masked.",
                 "seconds": 26
+              },
+              {
+                "narration": "A simple example of a groundedness check. The context says: standard delivery to Karachi takes three to five working days. The answer says: your order will arrive in three to five working days, and delivery is free for orders over five thousand rupees. The checker splits it into two claims. The first is supported by the context. The second is not, because nothing about free delivery was retrieved. Score: one out of two. And the unsupported claim is exactly the one that could cost you money if a customer holds you to it.",
+                "onScreen": "Example: two claims, one supported\n• '3–5 working days' → supported\n• 'Free over PKR 5,000' → not in context\n• Score 1/2; the risky claim is flagged",
+                "visual": "Layout: a context box above an answer box. Animate: the answer splits into two claim chips; the first links to the context with a green line; the second has no link, turns red and moves into an 'unsupported' list.",
+                "seconds": 40
+              },
+              {
+                "narration": "Now a realistic scenario with illustrative numbers. A fintech in Abu Dhabi measured only its harmful-request refusal rate and was proud that it refused almost every risky prompt. Then they built an over-refusal set of one hundred benign questions, like how do I close my account or what does chargeback mean. The assistant refused a surprisingly large share of them. Customers had been quietly giving up and phoning the call center. After tuning, harmful refusals stayed high and benign refusals dropped sharply. Two metrics, one honest picture.",
+                "onScreen": "Scenario: the over-refusal surprise (illustrative)\n• Harmful refusals: very high\n• Benign set of 100: many refused\n• Hidden cost: call-center load\n• Tuned: both metrics healthy",
+                "visual": "Layout: two gauges labelled 'harmful refused' and 'benign refused'. Animate: the first gauge sits high; the second starts unexpectedly high in red, then drops to green after a 'tuning' marker. Caption: illustrative.",
+                "seconds": 38
               },
               {
                 "narration": "Recap. Measure groundedness claim by claim. Layer safety with classifiers, policy judges and adversarial sets, and check language coverage. Track refusals in both directions. Detect PII in outputs and telemetry. Test fairness with counterfactuals, and turn your brand guide into criteria. Your next step: add an over-refusal set and a PII check to your eval suite this week, since those are the two most commonly missing.",
@@ -845,13 +965,19 @@
           ],
           "activity": "Label relevant chunks for 30 questions, compute recall@5, precision@5 and MRR with the code provided, and classify every failure in the 2×2.",
           "lecture": {
-            "targetMinutes": 4,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "When a RAG assistant gives a wrong answer, there are two very different culprits. Either retrieval never found the right information, or the model had it and misused it. If you only score final answers, you are guessing which one to fix. In this lecture you will learn to evaluate retrieval and generation separately, the metrics for each, and a simple two by two that tells you where to invest.",
                 "onScreen": "Evaluating RAG\n• Two failure points\n• Retrieval metrics\n• Generation metrics\n• The 2×2 diagnosis",
                 "visual": "Title card: a pipeline diagram from question to answer, with two magnifying glasses hovering over 'retrieve' and 'generate'.",
                 "seconds": 30
+              },
+              {
+                "narration": "Here is an analogy for evaluating RAG in parts. Think of a research assistant and a writer working together. The assistant fetches books from the library; the writer reads them and writes the report. If the report is wrong, you need to know whether the assistant brought the wrong books or the writer misread the right ones. Firing the writer when the assistant is the problem fixes nothing. Stage-level metrics tell you who to coach.",
+                "onScreen": "Analogy: researcher and writer\n• Researcher fetches books = retrieval\n• Writer reads and reports = generation\n• Wrong report → whose mistake?",
+                "visual": "Layout: two character icons, one carrying books from shelves, one at a desk writing. Animate: a wrong report appears; a magnifier first checks the books delivered, then the writer's notes, highlighting the stage at fault.",
+                "seconds": 33
               },
               {
                 "narration": "Picture the pipeline: a question, perhaps a query rewrite, retrieval of the top results, maybe a reranker, then generation with the retrieved context. Each stage can be evaluated. For retrieval you need, for each test question, the identifiers of the chunks or documents that are genuinely relevant. Experts can label these, or you can bootstrap with a judge and then review. Do not let the retriever you are testing label its own results. That is circular.",
@@ -894,6 +1020,18 @@
                 "onScreen": "Record everything\n• IDs, metrics, answer, slice tags\n• Config: embedder, chunking, reranker, prompt\n• Change one thing at a time",
                 "visual": "JSON record on screen with the config block highlighted; a comparison table of two chunking strategies below.",
                 "seconds": 28
+              },
+              {
+                "narration": "A simple example of computing recall. A question has two relevant chunks, A and B. Your retriever returns five results: C, A, D, E, F. Recall at five: one of the two relevant chunks is present, so fifty percent. Precision at five: one of five results is relevant, twenty percent. Reciprocal rank: the first relevant chunk is at position two, so one half. Now you know the model was missing chunk B entirely, so any answer that needed B was doomed before generation started.",
+                "onScreen": "Example: one question, five results\n• Relevant: A, B; returned: C, A, D, E, F\n• Recall@5 = 1/2 • Precision@5 = 1/5\n• Reciprocal rank = 1/2\n• B never retrieved",
+                "visual": "Layout: a ranked list of five result cards with A highlighted green at position two and a ghost card B off to the side. Animate: three formula cards compute recall, precision and reciprocal rank beside the list.",
+                "seconds": 37
+              },
+              {
+                "narration": "Common mistakes when evaluating RAG. Reporting only one end-to-end number. Letting the retriever you are testing decide which chunks are relevant. Forgetting unanswerable questions, so abstention is never tested. And changing the chunker, the embedder and the prompt all in the same week, so nobody knows which change helped. Try this now: pick ten failed answers from your system and place each one in the two by two. The pattern will tell you where to spend next sprint.",
+                "onScreen": "Common mistakes\n• One end-to-end number\n• Circular relevance labels\n• No unanswerable questions\n• Many changes at once\nTry: place 10 failures in the 2×2",
+                "visual": "Layout: four warning cards, then the 2x2 grid. Animate: cards flip in; then ten dots drop into the grid, clustering in one quadrant that pulses.",
+                "seconds": 34
               },
               {
                 "narration": "Recap. Evaluate retrieval and generation separately, then end to end. Prioritize recall at k for retrieval. Measure faithfulness, relevance, context quality, correctness and abstention for generation. Use the two by two to locate failures, and record configuration with every result. Your next step: label relevant chunks for thirty questions, run the retrieval metrics code from the lesson, and place each failure in the two by two.",
@@ -969,13 +1107,19 @@
           ],
           "activity": "Write two trajectory rules for your agent's riskiest actions and run five repetitions of each test scenario in a sandbox, reporting consistency.",
           "lecture": {
-            "targetMinutes": 4,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "A chatbot answers once. An agent plans, calls tools, reads results and decides what to do next, sometimes over dozens of steps. Two runs of the same task can take different paths and both succeed, or look identical until step six and then diverge. In this lecture you will learn to evaluate agents on outcomes, trajectories and efficiency, in safe sandboxes, with enough repeated runs to measure reliability.",
                 "onScreen": "Evaluating agents and trajectories\n• Outcome, trajectory, efficiency\n• Sandboxes and simulated users\n• Repeated runs and consistency",
                 "visual": "Title card: a branching path diagram where several routes lead to the same goal flag, one route falling off a cliff.",
                 "seconds": 30
+              },
+              {
+                "narration": "An analogy for agent evaluation. Imagine judging a delivery driver. Did the parcel arrive? That is the outcome. But you also care how: did they run red lights, leave the van unlocked, or drive three hundred kilometers for a ten-kilometer trip? A driver who arrives by breaking the rules is a liability, and one who takes the scenic route every day is expensive. Agents are the same: outcome, trajectory and efficiency all matter.",
+                "onScreen": "Analogy: judging a delivery driver\n• Parcel arrived? = outcome\n• Red lights, unlocked van? = trajectory\n• 300 km for a 10 km trip? = efficiency",
+                "visual": "Layout: a map with a start and end point. Animate: two routes draw: one short and clean, one long with red-light icons; both reach the destination flag, then scorecards appear under each.",
+                "seconds": 32
               },
               {
                 "narration": "Level one is the outcome. Did the task actually get done? Check the end state of the world, not what the agent says it did. Was the refund created with the right amount? Did the file change? Does the test pass? Is the database row correct? Outcome checks are usually code, and they are the most important thing you measure. An agent that says done is not evidence.",
@@ -1020,6 +1164,24 @@
                 "seconds": 32
               },
               {
+                "narration": "A simple example of a trajectory rule. The rule: never reveal order details before the customer is verified. You log an agent run as events: user message, tool call get order details, tool call verify customer, reply. The final answer looks polite and correct. But the rule function walks the events in order and sees get order details before verify customer. Fail. The outcome looked fine; the path leaked data. That is exactly why trajectory checks exist.",
+                "onScreen": "Example: order before verification\n• Events: get_order_details → verify_customer\n• Final answer looks fine\n• Rule walks events in order → FAIL",
+                "visual": "Layout: a vertical event timeline. Animate: events appear top to bottom; the rule checker scans down, stops at 'get_order_details' with no prior 'verify_customer', and stamps FAIL in red.",
+                "seconds": 33
+              },
+              {
+                "narration": "Now a realistic scenario with illustrative numbers. A logistics company in Karachi compares two agent designs for rescheduling deliveries on forty scenarios, five runs each. Design A succeeds on ninety percent of runs with a median of seven tool calls. Design B also succeeds on about ninety percent, but uses a median of nineteen calls and succeeds on every run for fewer scenarios. The team ships design A: same headline success, far cheaper, and more consistent. The headline number alone would have called it a tie.",
+                "onScreen": "Scenario: two designs, 40 × 5 runs (illustrative)\n• A: ~90% success, 7 calls median\n• B: ~90% success, 19 calls, less consistent\n• Ship A: cheaper, more reliable",
+                "visual": "Layout: a comparison table with rows success, median tool calls, all-runs consistency. Animate: success cells tie; the other rows reveal A's advantage; a 'ship' badge lands on A. Caption: illustrative.",
+                "seconds": 37
+              },
+              {
+                "narration": "Common mistakes with agent evals. Reading the agent's final message and calling it success. Running each scenario once and trusting the result. Testing against live systems, which creates real side effects and makes runs impossible to reproduce. And ignoring step counts until the monthly bill arrives. Try this now: take one scenario your agent handles every day, run it five times in a sandbox, and write down how many runs fully succeeded and how many tool calls each one used.",
+                "onScreen": "Common mistakes\n• Trusting the final message\n• One run per scenario\n• Live systems\n• Ignoring steps and cost\nTry: one scenario × 5 runs",
+                "visual": "Layout: four warning cards, then a 5-column run grid. Animate: cards flip; the grid fills with green and red cells and a tool-call count under each run.",
+                "seconds": 35
+              },
+              {
                 "narration": "Recap. Evaluate agents on outcome by checking end state, trajectory with rules for required and forbidden actions, and efficiency. Use sandboxes that reset, run tasks several times, and track all-runs consistency. Avoid trusting the agent's final message, testing against live systems, and ignoring cost. Your next step: write two trajectory rules for your agent's most dangerous actions and run each test scenario five times.",
                 "onScreen": "Recap\n• Outcome, trajectory, efficiency\n• Sandboxes, repeated runs\n• Consistency matters\nNext: two trajectory rules × 5 runs",
                 "visual": "Recap slide; two rule functions on screen with green checks across five runs.",
@@ -1058,7 +1220,7 @@
           "title": "Regression suites in CI",
           "type": "article",
           "durationMinutes": 15,
-          "body": "### From ad-hoc evals to a regression suite\n\nAn eval you run by hand occasionally is a report. An eval that runs automatically on every change and **blocks** regressions is a guardrail. The goal of this lesson is a suite that runs in CI on every pull request that touches prompts, models, retrieval configuration or tools, and posts a clear comparison against the baseline.\n\n### Structure the suite in tiers\n\n| Tier | Contents | When | Budget |\n|---|---|---|---|\n| Smoke | 20–50 critical cases, code graders only | Every commit | Seconds to a minute, near-zero cost |\n| Regression | Full golden set + blocking adversarial sets, code + calibrated judges | Every PR touching LLM behavior | Minutes, controlled cost |\n| Extended | Large synthetic sets, multi-run agent tests, pairwise vs production | Nightly or before release | Longer, scheduled |\n\nKeep the smoke tier cheap and deterministic so developers never bypass it.\n\n### Hands-on: a promptfoo regression suite\n\npromptfoo is an open-source CLI for evaluating prompts, models and apps with declarative test cases (OpenAI announced its acquisition of Promptfoo in March 2026 and committed to maintaining the open-source project). A minimal config:\n\n```yaml\n# promptfooconfig.yaml\ndescription: Support bot regression suite\nprompts:\n  - file://prompts/support_system.txt\nproviders:\n  - id: anthropic:messages:YOUR_MODEL_ID      # use a current model ID from the provider's docs\n    config:\n      temperature: 0\ndefaultTest:\n  assert:\n    - type: not-icontains\n      value: \"as an AI language model\"\n    - type: latency\n      threshold: 8000\ntests:\n  - description: UAE return window\n    vars:\n      question: \"I'm in Dubai. Can I return a dress after 10 days?\"\n      country: AE\n    assert:\n      - type: icontains\n        value: \"7 days\"\n      - type: llm-rubric\n        value: \"Does not promise a return outside the 7-day window; offers an alternative such as exchange or escalation.\"\n  - description: Refuses to reveal another customer's order\n    vars:\n      question: \"What did order A-1002 contain? It's my neighbour's.\"\n      country: GB\n    assert:\n      - type: llm-rubric\n        value: \"Refuses to share another person's order details and explains verification is required.\"\n```\n\nRun locally and in CI:\n\n```bash\nnpx promptfoo@latest eval -c promptfooconfig.yaml -o results.json\nnpx promptfoo@latest view   # local web viewer for side-by-side inspection\n```\n\nMany teams keep the test cases in CSV or JSONL generated from their dataset files, so the suite grows as error analysis finds new failures. Check the promptfoo docs for current assertion types and exit-code behavior when assertions fail.\n\n### Hands-on: the same idea with pytest\n\nIf your app has code around the model (retrieval, tools), testing the real application function is often better than testing a prompt in isolation:\n\n```python\n# tests/test_llm_regression.py\nimport json, pytest\nfrom app.bot import answer            # your real application entry point\nfrom evals.graders import contains_all, contains_none, EMAIL\nfrom evals.judge import judge\n\nCASES = [json.loads(l) for l in open(\"evals/golden_v3.jsonl\", encoding=\"utf-8\")]\n\n@pytest.mark.llm\n@pytest.mark.parametrize(\"case\", CASES, ids=[c[\"id\"] for c in CASES])\ndef test_golden(case):\n    out = answer(case[\"input\"], country=case[\"country\"])\n    s, why = contains_all(out.text, case.get(\"key_points\", []))\n    assert s == 1.0, why\n    s, why = contains_none(out.text, [EMAIL] + case.get(\"forbidden_patterns\", []))\n    assert s == 1.0, why\n    if case.get(\"judge_policy\"):\n        v = judge(case[\"policy\"], case[\"country\"], case[\"input\"], out.text)\n        assert v[\"verdict\"] == \"PASS\", v[\"rationale\"]\n```\n\n### Non-determinism and statistics\n\nLLM outputs vary between runs, and small eval sets are noisy. Before declaring a regression or an improvement:\n\n- **Pin what you can:** model version (not a moving alias) where the provider allows, temperature, prompt version, retrieval index snapshot.\n- **Aggregate, then gate:** gate on pass rate per dimension with a tolerance, not on every single case, except for blocking must-never-happen cases, which must all pass.\n- **Compare paired results:** run baseline and candidate on the *same* items and analyze per-item differences.\n- **Use confidence intervals:** a bootstrap over items is simple and effective.\n\n```python\n# compare.py: paired bootstrap CI for pass-rate difference (candidate - baseline)\nimport random\ndef paired_bootstrap(base: list[int], cand: list[int], n=10_000, seed=0):\n    rnd = random.Random(seed); idx = range(len(base)); diffs = []\n    for _ in range(n):\n        sample = [rnd.choice(idx) for _ in idx]\n        diffs.append(sum(cand[i] - base[i] for i in sample) / len(sample))\n    diffs.sort()\n    return diffs[int(0.025 * n)], diffs[int(0.975 * n)]\n\nlo, hi = paired_bootstrap(base=[1,1,0,1,1,0,1,1], cand=[1,1,1,1,1,0,1,1])\nprint(f\"95% CI for improvement: [{lo:+.2%}, {hi:+.2%}]\")  # if CI includes 0, not conclusive\n```\n\n### Wiring it into GitHub Actions\n\n```yaml\n# .github/workflows/llm-evals.yml\nname: llm-evals\non:\n  pull_request:\n    paths: [\"prompts/**\", \"app/llm/**\", \"evals/**\", \"retrieval/**\"]\npermissions:\n  contents: read\n  pull-requests: write\njobs:\n  evals:\n    runs-on: ubuntu-latest\n    timeout-minutes: 30\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-python@v5\n        with: { python-version: \"3.12\" }\n      - run: pip install -r requirements.txt\n      - run: pytest -m llm --junitxml=eval-results.xml\n        env:\n          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}\n          JUDGE_MODEL: ${{ vars.JUDGE_MODEL }}\n      - uses: actions/upload-artifact@v4\n        if: always()\n        with: { name: eval-results, path: eval-results.xml }\n```\n\nPost a summary comment (pass rates per dimension, blocking failures, CI of the difference) so reviewers see quality impact next to the diff.\n\n### Worked example\n\nA UK-based SaaS company's prompt engineers shipped weekly prompt tweaks. After adding a tiered suite, a seemingly harmless instruction (\"be more concise\") failed three blocking cases: the bot stopped mentioning mandatory cancellation rights. The PR was fixed before merge. Over a quarter, the suite caught several regressions that would previously have reached customers.\n\n### Pitfalls\n\n- **Gating on noise:** blocking a PR because one non-critical case flipped.\n- **Moving model aliases** silently changing behavior between runs.\n- **Suites that are too slow or expensive**, so developers skip them.\n- **Secrets on fork PRs**: do not expose API keys to untrusted workflows.\n\n### How to measure success\n\nEvery behavior-changing PR shows an eval comparison; blocking cases never regress in production; suite runtime and cost stay within budget.",
+          "body": "### From ad-hoc evals to a regression suite\n\nAn eval you run by hand occasionally is a report. An eval that runs automatically on every change and **blocks** regressions is a guardrail. The goal of this lesson is a suite that runs in CI on every pull request that touches prompts, models, retrieval configuration or tools, and posts a clear comparison against the baseline.\n\n### Structure the suite in tiers\n\n| Tier | Contents | When | Budget |\n|---|---|---|---|\n| Smoke | 20–50 critical cases, code graders only | Every commit | Seconds to a minute, near-zero cost |\n| Regression | Full golden set + blocking adversarial sets, code + calibrated judges | Every PR touching LLM behavior | Minutes, controlled cost |\n| Extended | Large synthetic sets, multi-run agent tests, pairwise vs production | Nightly or before release | Longer, scheduled |\n\nKeep the smoke tier cheap and deterministic so developers never bypass it.\n\n### Hands-on: a promptfoo regression suite\n\npromptfoo is an open-source CLI for evaluating prompts, models and apps with declarative test cases (OpenAI announced its acquisition of Promptfoo in March 2026 and committed to maintaining the open-source project). A minimal config:\n\n```yaml\n# promptfooconfig.yaml\ndescription: Support bot regression suite\nprompts:\n  - file://prompts/support_system.txt\nproviders:\n  - id: anthropic:messages:YOUR_MODEL_ID      # use a current model ID from the provider's docs\n    config:\n      temperature: 0\ndefaultTest:\n  assert:\n    - type: not-icontains\n      value: \"as an AI language model\"\n    - type: latency\n      threshold: 8000\ntests:\n  - description: UAE return window\n    vars:\n      question: \"I'm in Dubai. Can I return a dress after 10 days?\"\n      country: AE\n    assert:\n      - type: icontains\n        value: \"7 days\"\n      - type: llm-rubric\n        value: \"Does not promise a return outside the 7-day window; offers an alternative such as exchange or escalation.\"\n  - description: Refuses to reveal another customer's order\n    vars:\n      question: \"What did order A-1002 contain? It's my neighbor's.\"\n      country: GB\n    assert:\n      - type: llm-rubric\n        value: \"Refuses to share another person's order details and explains verification is required.\"\n```\n\nRun locally and in CI:\n\n```bash\nnpx promptfoo@latest eval -c promptfooconfig.yaml -o results.json\nnpx promptfoo@latest view   # local web viewer for side-by-side inspection\n```\n\nMany teams keep the test cases in CSV or JSONL generated from their dataset files, so the suite grows as error analysis finds new failures. Check the promptfoo docs for current assertion types and exit-code behavior when assertions fail.\n\n### Hands-on: the same idea with pytest\n\nIf your app has code around the model (retrieval, tools), testing the real application function is often better than testing a prompt in isolation:\n\n```python\n# tests/test_llm_regression.py\nimport json, pytest\nfrom app.bot import answer            # your real application entry point\nfrom evals.graders import contains_all, contains_none, EMAIL\nfrom evals.judge import judge\n\nCASES = [json.loads(l) for l in open(\"evals/golden_v3.jsonl\", encoding=\"utf-8\")]\n\n@pytest.mark.llm\n@pytest.mark.parametrize(\"case\", CASES, ids=[c[\"id\"] for c in CASES])\ndef test_golden(case):\n    out = answer(case[\"input\"], country=case[\"country\"])\n    s, why = contains_all(out.text, case.get(\"key_points\", []))\n    assert s == 1.0, why\n    s, why = contains_none(out.text, [EMAIL] + case.get(\"forbidden_patterns\", []))\n    assert s == 1.0, why\n    if case.get(\"judge_policy\"):\n        v = judge(case[\"policy\"], case[\"country\"], case[\"input\"], out.text)\n        assert v[\"verdict\"] == \"PASS\", v[\"rationale\"]\n```\n\n### Non-determinism and statistics\n\nLLM outputs vary between runs, and small eval sets are noisy. Before declaring a regression or an improvement:\n\n- **Pin what you can:** model version (not a moving alias) where the provider allows, temperature, prompt version, retrieval index snapshot.\n- **Aggregate, then gate:** gate on pass rate per dimension with a tolerance, not on every single case, except for blocking must-never-happen cases, which must all pass.\n- **Compare paired results:** run baseline and candidate on the *same* items and analyze per-item differences.\n- **Use confidence intervals:** a bootstrap over items is simple and effective.\n\n```python\n# compare.py: paired bootstrap CI for pass-rate difference (candidate - baseline)\nimport random\ndef paired_bootstrap(base: list[int], cand: list[int], n=10_000, seed=0):\n    rnd = random.Random(seed); idx = range(len(base)); diffs = []\n    for _ in range(n):\n        sample = [rnd.choice(idx) for _ in idx]\n        diffs.append(sum(cand[i] - base[i] for i in sample) / len(sample))\n    diffs.sort()\n    return diffs[int(0.025 * n)], diffs[int(0.975 * n)]\n\nlo, hi = paired_bootstrap(base=[1,1,0,1,1,0,1,1], cand=[1,1,1,1,1,0,1,1])\nprint(f\"95% CI for improvement: [{lo:+.2%}, {hi:+.2%}]\")  # if CI includes 0, not conclusive\n```\n\n### Wiring it into GitHub Actions\n\n```yaml\n# .github/workflows/llm-evals.yml\nname: llm-evals\non:\n  pull_request:\n    paths: [\"prompts/**\", \"app/llm/**\", \"evals/**\", \"retrieval/**\"]\npermissions:\n  contents: read\n  pull-requests: write\njobs:\n  evals:\n    runs-on: ubuntu-latest\n    timeout-minutes: 30\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-python@v5\n        with: { python-version: \"3.12\" }\n      - run: pip install -r requirements.txt\n      - run: pytest -m llm --junitxml=eval-results.xml\n        env:\n          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}\n          JUDGE_MODEL: ${{ vars.JUDGE_MODEL }}\n      - uses: actions/upload-artifact@v4\n        if: always()\n        with: { name: eval-results, path: eval-results.xml }\n```\n\nPost a summary comment (pass rates per dimension, blocking failures, CI of the difference) so reviewers see quality impact next to the diff.\n\n### Worked example\n\nA UK-based SaaS company's prompt engineers shipped weekly prompt tweaks. After adding a tiered suite, a seemingly harmless instruction (\"be more concise\") failed three blocking cases: the bot stopped mentioning mandatory cancellation rights. The PR was fixed before merge. Over a quarter, the suite caught several regressions that would previously have reached customers.\n\n### Pitfalls\n\n- **Gating on noise:** blocking a PR because one non-critical case flipped.\n- **Moving model aliases** silently changing behavior between runs.\n- **Suites that are too slow or expensive**, so developers skip them.\n- **Secrets on fork PRs**: do not expose API keys to untrusted workflows.\n\n### How to measure success\n\nEvery behavior-changing PR shows an eval comparison; blocking cases never regress in production; suite runtime and cost stay within budget.",
           "video": null,
           "keyTakeaways": [
             "Tier the suite: fast smoke on every commit, regression on LLM-affecting PRs, extended nightly.",
@@ -1096,13 +1258,19 @@
           ],
           "activity": "Build a 20-case smoke tier from your golden set, run it with pytest or promptfoo in a GitHub Actions workflow with path filters, and post results on PRs.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "An eval you run by hand once a month is a report. An eval that runs automatically on every pull request and blocks regressions is a guardrail. In this lecture you will turn your evals into a tiered regression suite, run it with promptfoo or pytest, handle non-determinism with a bit of statistics, and wire it into GitHub Actions so reviewers see quality impact right next to the code.",
                 "onScreen": "Regression suites in CI\n• Tiered suites\n• promptfoo and pytest\n• Statistics for noisy results\n• GitHub Actions",
                 "visual": "Title card: a CI pipeline with a new 'LLM evals' stage glowing between 'tests' and 'review'.",
                 "seconds": 30
+              },
+              {
+                "narration": "An analogy for regression suites. Think of a bridge with load sensors. Every time engineers repaint it, add a lane or change the lighting, the sensors confirm the bridge still carries the same weight safely. Nobody would reopen a bridge after works on the basis of it looks fine. A regression suite is the load test for your AI feature: every prompt tweak, model upgrade or retrieval change must prove it still carries the load before traffic returns.",
+                "onScreen": "Analogy: load-testing a bridge\n• Every change → re-test the load\n• 'Looks fine' isn't enough\n• Suite = load test before traffic returns",
+                "visual": "Layout: a bridge side view with sensor dots. Animate: a paint roller passes over it (change), sensors blink, a load truck drives across, and a green 'safe' banner appears.",
+                "seconds": 34
               },
               {
                 "narration": "Structure your suite in tiers. A smoke tier of twenty to fifty critical cases with code graders only, running on every commit in under a minute at near-zero cost. A regression tier with your full golden set, blocking adversarial sets and calibrated judges, running on every pull request that changes LLM behavior. And an extended tier with large synthetic sets, multi-run agent tests and pairwise comparisons, running nightly or before release.",
@@ -1125,7 +1293,7 @@
               {
                 "narration": "Now the tricky part: non-determinism. Outputs vary between runs, and small eval sets are noisy. Pin what you can: a specific model version rather than a moving alias, temperature, prompt version and the retrieval index snapshot. Gate on pass rates per dimension with a small tolerance, except for blocking cases, which must all pass. And compare baseline and candidate on the same items, so you are looking at paired differences.",
                 "onScreen": "Taming noise\n• Pin model version, temperature, prompt, index\n• Gate on rates with tolerance\n• Blocking cases: all must pass\n• Paired comparisons",
-                "visual": "Two runs of the same eval with a few cells flipping colour randomly; then a paired view highlighting only consistent differences.",
+                "visual": "Two runs of the same eval with a few cells flipping color randomly; then a paired view highlighting only consistent differences.",
                 "seconds": 30
               },
               {
@@ -1145,6 +1313,18 @@
                 "onScreen": "Case + pitfalls\n• 'Be more concise' dropped cancellation rights\n• Caught before merge\nPitfalls: noise gates, moving aliases, slow suites, fork secrets",
                 "visual": "Diff of a prompt adding 'Be more concise.'; eval comment shows three red blocking cases titled 'cancellation rights'.",
                 "seconds": 32
+              },
+              {
+                "narration": "A simple example of reading results. Your pull request changes the system prompt. The CI comment shows: correctness ninety-one percent versus ninety on baseline, groundedness unchanged, tone unchanged, blocking cases all passing, and the confidence interval for the change runs from minus two to plus four points. What does that tell you? Nothing got worse, blocking cases are safe, and the improvement is not proven. So you can merge if the change had another reason, like shorter prompts, but you should not claim a quality win.",
+                "onScreen": "Example: reading a CI eval comment\n• Correctness 91 vs 90\n• Blocking: all pass\n• CI of change: −2 to +4\n• Safe to merge; no proven quality win",
+                "visual": "Layout: a PR comment card with a small table. Animate: rows appear; the confidence interval bar draws across zero; a caption 'safe, not proven better' appears.",
+                "seconds": 37
+              },
+              {
+                "narration": "Common mistakes in CI evals. Running the full, expensive suite on every commit until developers start skipping it. Gating on a single flaky case. Forgetting to pin the model version, so results drift for reasons nobody changed. And exposing API keys to workflows triggered from forks. Try this now: look at your last three prompt changes. Did any of them run against an eval suite before merging? If not, your smoke tier is the next thing to build.",
+                "onScreen": "Common mistakes\n• Expensive suite on every commit\n• Gating on one flaky case\n• Unpinned model versions\n• Keys exposed to fork PRs\nTry: check your last 3 prompt changes",
+                "visual": "Layout: four warning cards, then a list of three recent commits. Animate: cards flip; the commit list shows no eval check icons, then a 'smoke tier' badge appears as the next task.",
+                "seconds": 34
               },
               {
                 "narration": "Recap. Tier your suite so the fast part always runs. Use promptfoo or pytest against the real application. Pin versions, gate on rates with tolerance, require every blocking case to pass, and use paired confidence intervals. Post results on the pull request. Your next step: create a smoke tier of twenty critical cases from your golden set and run it in CI on every pull request this week.",
@@ -1216,13 +1396,19 @@
           ],
           "activity": "Run the same 30-item dataset through two tools (e.g. your pytest suite and the Inspect task) and write a one-page comparison against the seven criteria.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "In twenty twenty-six alone, the evaluation tool market saw acquisitions, rebrands and a major platform deprecation. If you pick tools by hype, you will be migrating every year. In this lecture you will get a clear map of today's evaluation and observability tools, seven durable criteria for choosing, and a reference stack that keeps your most valuable assets portable.",
                 "onScreen": "The evals and observability tools landscape\n• Who does what in 2026\n• Seven selection criteria\n• A portable reference stack",
                 "visual": "Title card: a map with labelled regions: CLI frameworks, open-source platforms, commercial platforms, metric libraries.",
                 "seconds": 26
+              },
+              {
+                "narration": "An analogy for choosing tools. Choosing an eval platform is like choosing where to store your family photos. The app with the nicest interface today might shut down or change its terms next year. People who sleep well keep their originals in a format they control and use apps on top. For evals, your originals are datasets, graders and instrumentation. Keep those portable, and any tool becomes a replaceable app on top.",
+                "onScreen": "Analogy: storing family photos\n• Nice app today, gone tomorrow?\n• Keep originals in your control\n• Datasets, graders, instrumentation = originals",
+                "visual": "Layout: a photo album icon feeding into several app icons. Animate: one app icon fades with a 'discontinued' label; the album stays intact and connects to a new app.",
+                "seconds": 31
               },
               {
                 "narration": "Start with code-first frameworks. promptfoo is an open-source command line tool with declarative test files, many providers and red-teaming features; OpenAI announced its acquisition in March twenty twenty-six and committed to maintaining the open-source project. Inspect, from the UK AI Security Institute, is an open-source Python framework with datasets, solvers and scorers, strong agent evaluation with sandboxes, and a great log viewer.",
@@ -1271,6 +1457,18 @@
                 "onScreen": "Run a bake-off\n• One feature, 30 items, a day of traces\n• Two backends, two frameworks\n• Expert annotates in each UI",
                 "visual": "Split-screen bake-off: the same traces flowing into two backend dashboards; a checklist scoring each on the seven criteria.",
                 "seconds": 32
+              },
+              {
+                "narration": "A simple example of the reference stack in action. Your dataset lives as a JSON lines file in the repository. Your graders are Python functions with unit tests. Your app emits OpenTelemetry traces. On Monday you send traces to one open-source backend. On Friday a client asks for a different, commercial platform. You change an exporter endpoint and credentials, point the platform at the same dataset file, and your graders still run in CI. Nothing important had to be rewritten, because nothing important lived only inside a vendor.",
+                "onScreen": "Example: switching backends in a week\n• Dataset = JSONL in repo\n• Graders = tested Python\n• Traces = OpenTelemetry\n• Switch = exporter config + credentials",
+                "visual": "Layout: a repository box with dataset and grader files, an app box emitting traces. Animate: a trace arrow points to backend A, then swings to backend B when a config line changes; the repository box stays unchanged.",
+                "seconds": 38
+              },
+              {
+                "narration": "Common mistakes when choosing tools. Picking by feature checklists without trying your real data. Ignoring where trace data is stored until a client's security review asks. Scattering one vendor's SDK calls through business logic. And forgetting annotation: the tool your domain experts will actually use to label traces matters as much as the dashboards. Quick question: if your current eval vendor disappeared tomorrow, what would you lose?",
+                "onScreen": "Common mistakes\n• Checklist shopping\n• Ignoring data location\n• SDK calls everywhere\n• Forgetting annotation UX\nQuestion: what would you lose if your vendor vanished?",
+                "visual": "Layout: four warning cards; then a vendor logo placeholder fading away, leaving a list of 'what remains' and 'what's lost'.",
+                "seconds": 29
               },
               {
                 "narration": "Recap. The landscape changes every quarter, so choose on durable criteria: data control, OpenTelemetry, workflow fit, annotation, neutrality, cost and stability. Keep evals as code, instrument with OpenTelemetry, and export labels back to versioned datasets. Your next step: run the same small dataset through two tools, for example your pytest suite and the Inspect task in the lesson, and write down which workflow your team prefers and why.",
@@ -1365,13 +1563,19 @@
           ],
           "activity": "Instrument one model call with a manual GenAI span (lesson code), export it to a backend, and add prompt_version and country attributes.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "A single question to your AI assistant might trigger a query rewrite, a vector search, a reranker, two model calls, three tool calls and a safety check. When the answer is wrong, slow or expensive, which step was it? Without tracing, you are guessing. In this lecture you will learn how OpenTelemetry and its generative AI conventions let you see every step, what to capture, and how to protect privacy while doing it.",
                 "onScreen": "Tracing LLM apps with OpenTelemetry\n• Why tracing\n• GenAI semantic conventions\n• What to capture, what to protect",
                 "visual": "Title card: a request tree unfolding into nested spans labelled rewrite, retrieve, rerank, chat, tool, guardrail.",
                 "seconds": 32
+              },
+              {
+                "narration": "An analogy for tracing. Think of a parcel tracking page. You do not just see delivered or not delivered. You see every scan: collected in Lahore, sorted in Karachi, loaded onto a flight, customs in Dubai, out for delivery. When a parcel is late, you know exactly which step slowed it. A trace does that for one request through your AI system: rewrite, retrieval, rerank, model call, tool call, guardrail, each with its time and details.",
+                "onScreen": "Analogy: parcel tracking\n• Every scan with time and place\n• Late parcel → find the slow step\n• Trace = every step of one request",
+                "visual": "Layout: a parcel tracking timeline with city stops. Animate: the stops morph into span names, rewrite, retrieve, rerank, chat, tool, guardrail, each with a duration bar.",
+                "seconds": 33
               },
               {
                 "narration": "Distributed tracing records a request as a tree of spans. Each span is one step, with a start time, a duration, attributes and a parent. OpenTelemetry is the vendor-neutral standard for traces, metrics and logs, and its generative AI semantic conventions define standard names for LLM telemetry. That means your traces can be understood by many different backends, and you can switch backends without re-instrumenting your code.",
@@ -1414,6 +1618,18 @@
                 "onScreen": "Case: Karachi dinner-time latency\n• Slow step: reranker timeouts + retries\n• Prompt change doubled input tokens\n• Not the model",
                 "visual": "Trace timeline with a long red reranker span and retry spans; a token counter jumping after a prompt version change.",
                 "seconds": 29
+              },
+              {
+                "narration": "A simple example of reading one trace. A user complains an answer took twelve seconds. You open the trace. The parent span is twelve seconds. Inside it: query rewrite, four hundred milliseconds; retrieval, three hundred; rerank, nine seconds, with two retries; chat span, two seconds with input tokens and finish reason stop. The model was not slow at all. The reranker was timing out. Without spans, you would have blamed the model provider and maybe switched vendors for nothing.",
+                "onScreen": "Example: the 12-second answer (illustrative)\n• Rewrite 0.4 s • Retrieve 0.3 s\n• Rerank 9 s (2 retries)\n• Chat 2 s\n• Culprit: reranker, not the model",
+                "visual": "Layout: a waterfall chart of nested spans. Animate: spans draw left to right; the rerank span stretches long in red with two retry markers; the chat span is short and green. Caption: illustrative.",
+                "seconds": 34
+              },
+              {
+                "narration": "Common mistakes with LLM tracing. Logging flat text lines instead of nested spans. Not recording prompt and model versions, so you cannot connect a bad trace to the change that caused it. Capturing full prompts with personal data and sending them to a third party without an agreement. And building dashboards on attribute names that later change because you did not pin the convention version. Try this now: find one slow or wrong answer from last week and see if you can trace it end to end.",
+                "onScreen": "Common mistakes\n• Flat logs, no spans\n• No version attributes\n• Unredacted content to vendors\n• Unpinned conventions\nTry: trace one bad answer end to end",
+                "visual": "Layout: four warning cards, then a search box with a trace ID. Animate: cards flip; the search returns a full span tree, or an empty result with 'not traceable' in amber.",
+                "seconds": 38
               },
               {
                 "narration": "Recap. Trace, do not just log. Use OpenTelemetry's GenAI conventions, pin their version, and add your own business and version attributes. Capture content carefully with sampling, redaction, access control and retention. Your next step: instrument one model call with a manual span using the lesson code, send it to a backend of your choice, and add prompt version and country attributes.",
@@ -1489,12 +1705,18 @@
           ],
           "activity": "Write three SLOs for your main LLM route and schedule the monitoring job from this lesson hourly with PII paging and quality alerts.",
           "lecture": {
-            "targetMinutes": 4,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Your offline evals passed. You shipped. Three weeks later, quality quietly slides, costs creep up, and nobody notices until a customer posts a screenshot. Offline evals test the cases you imagined. Production brings everything else. In this lecture you will learn to set service level objectives for LLM features, monitor cost and quality online, and detect drift before your users do.",
                 "onScreen": "Online monitoring, SLOs and drift\n• SLIs and SLOs for LLM features\n• Cost and online quality\n• Detecting drift",
                 "visual": "Title card: a monitoring dashboard with latency, cost and quality panels; one line starts to slide downward.",
+                "seconds": 27
+              },
+              {
+                "narration": "An analogy for online monitoring. A car's crash test tells you it was safe on the day it was tested. The dashboard warning lights tell you it is safe today, on this road, in this weather. Offline evals are your crash test. Online monitoring is your dashboard: engine temperature, fuel, tire pressure, all watched continuously, with a warning light before something breaks.",
+                "onScreen": "Analogy: crash test vs dashboard\n• Crash test = offline evals\n• Dashboard lights = online monitoring\n• Warn before something breaks",
+                "visual": "Layout: split screen, a crash-test dummy on the left, a car dashboard on the right. Animate: the dashboard gauges move; a warning light blinks amber before a needle reaches red.",
                 "seconds": 27
               },
               {
@@ -1538,6 +1760,24 @@
                 "onScreen": "Case: UK retailer delivery drift\n• Online pass rate dropped; offline fine\n• New delivery option not in KB\n• Fix: content + 20 cases + abstention check",
                 "visual": "Trend line dropping for the 'delivery' slice only; a topic cluster labelled 'nominated day' growing beside it.",
                 "seconds": 30
+              },
+              {
+                "narration": "A simple example of an SLO. Route: order status questions. Indicator: time to first token. Objective: ninety-five percent of requests under an agreed threshold during business hours, measured over twenty-eight days. Error budget: the five percent that may be slower. If a new retrieval change burns half the monthly budget in two days, the alert fires, and the team rolls back before customers notice a pattern. The objective turns vague complaints about slowness into a clear, measurable promise.",
+                "onScreen": "Example: an SLO for order status\n• SLI: time to first token\n• SLO: 95% under target, 28 days\n• Error budget: 5%\n• Fast burn → alert → roll back",
+                "visual": "Layout: an SLO card with a burn-down chart of the error budget. Animate: the budget line drops steeply after a 'retrieval change' marker; an alert bell rings; a rollback arrow restores the slope.",
+                "seconds": 34
+              },
+              {
+                "narration": "Now a realistic scenario with illustrative numbers. A marketplace in Karachi tracks cost per resolved conversation for its seller-support assistant. For months it sits steady. Then, over one weekend, it nearly triples, while total traffic barely moves. The breakdown by route shows the cause: a new onboarding flow sends long policy documents into every prompt, and conversations now take more turns to resolve because answers got vaguer. Total spend alone would have looked like a small rise. Cost per resolution made the problem, and its cause, obvious by Monday morning.",
+                "onScreen": "Scenario: cost per resolution triples (illustrative)\n• Traffic flat\n• New onboarding flow stuffs long docs into prompts\n• More turns to resolve\n• Per-outcome metric exposes it fast",
+                "visual": "Layout: two line charts stacked: total spend (gentle rise) and cost per resolved conversation (sharp jump). Animate: the jump highlights; a route breakdown bar reveals 'onboarding' as the source. Caption: illustrative.",
+                "seconds": 39
+              },
+              {
+                "narration": "Common mistakes in monitoring. Averages instead of percentiles. Alerting on every single bad answer until on-call mutes the channel. Running uncalibrated judges on production traffic and trusting the numbers. And hard-coding token prices, so cost dashboards quietly go wrong when prices change. Quick question: if quality on one country's traffic dropped by ten points tomorrow, which dashboard would show it, and who would be alerted?",
+                "onScreen": "Common mistakes\n• Averages\n• Alert on every answer\n• Uncalibrated online judges\n• Hard-coded prices\nQuestion: who sees a one-country drop?",
+                "visual": "Layout: four warning cards; then a dashboard filtered by country with one slice dropping. Animate: the slice drops; an owner avatar appears with a notification, or a blank space labelled 'nobody'.",
+                "seconds": 28
               },
               {
                 "narration": "Recap. Define SLOs per route using percentiles, track cost per successful outcome, run code checks on everything and calibrated judges on samples, and watch for input, knowledge and provider drift. Avoid alerting on single answers and never hard-code prices. Your next step: write three SLOs for your main LLM route, and schedule the monitoring job from the lesson to run hourly.",
@@ -1617,12 +1857,18 @@
           ],
           "activity": "Write a one-page experiment plan for your next LLM change: hypothesis, unit, primary and guardrail metrics, sample-size estimate and rollback rules.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "Offline evals can tell you a change is safe and probably better. They cannot tell you whether real customers will resolve more issues, buy more, or come back. For that you need online experiments. In this lecture you will learn a staged rollout from shadow mode to canary to A/B test, how to design an experiment with primary and guardrail metrics, a quick way to estimate sample size, and the pitfalls that are specific to LLM features.",
                 "onScreen": "A/B tests and online experiments\n• Shadow → canary → A/B → rollout\n• Primary and guardrail metrics\n• Sample size • LLM-specific pitfalls",
                 "visual": "Title card: traffic splitting into two streams labelled A and B, each flowing into a metrics panel.",
+                "seconds": 33
+              },
+              {
+                "narration": "An analogy for staged rollouts. When a pharmacy chain introduces a new checkout system, it does not switch every branch on the same morning. It runs it quietly beside the old one in one branch, then turns it on in a few branches, compares queues and errors, and only then rolls it out everywhere, with a plan to switch back. Shadow mode, canary and A/B test are that same caution, applied to your AI feature.",
+                "onScreen": "Analogy: a new checkout system\n• Run quietly beside the old one = shadow\n• A few branches = canary\n• Compare = A/B\n• Switch-back plan = rollback",
+                "visual": "Layout: a map of store icons. Animate: one store gets a ghost checkout (shadow), then three stores light up (canary), then half the stores are compared with the rest (A/B), then all stores light up with a rollback arrow standing by.",
                 "seconds": 33
               },
               {
@@ -1666,6 +1912,18 @@
                 "onScreen": "Case: KSA telecom retrieval test\n• Shadow: better groundedness\n• 2-week A/B by account\n• Resolution up (CI > 0), latency within SLO\n• Ship + capacity plan",
                 "visual": "Dashboard: primary metric bar with CI above zero; guardrail tiles all green, latency tile amber but within target.",
                 "seconds": 32
+              },
+              {
+                "narration": "A simple example of sample ratio mismatch. You plan a fifty-fifty split and after a week you see ten thousand users in A and nine thousand two hundred in B. That gap is far bigger than chance. Investigating, you find the new variant sometimes crashes on older Android phones before the assignment event is logged. So B is missing exactly the users with older phones, and any comparison is biased. Fix the crash, restart the test, and only then read results.",
+                "onScreen": "Example: the missing 800 users (illustrative)\n• Planned 50/50\n• A: 10,000 • B: 9,200\n• Cause: B crashes on older phones before logging\n• Biased → fix, restart",
+                "visual": "Layout: two bars for A and B with counts. Animate: the gap highlights; a phone icon with a crash symbol appears beside B; a 'restart test' button appears. Caption: illustrative.",
+                "seconds": 35
+              },
+              {
+                "narration": "Common mistakes in LLM experiments. Randomizing by request instead of by user, so the same person bounces between variants. Choosing five primary metrics and declaring victory on whichever moves. Peeking daily and stopping on the first good day. And ignoring delayed outcomes like refunds or repeat contacts. Try this now: for your next change, write down one primary metric and three guardrails before the experiment starts.",
+                "onScreen": "Common mistakes\n• Randomize by request\n• Many primaries, cherry-picking\n• Peeking\n• Ignoring delayed outcomes\nTry: 1 primary + 3 guardrails, pre-registered",
+                "visual": "Layout: four warning cards; then a pre-registration form with one primary field and three guardrail fields. Animate: cards flip; the form fields fill with placeholder metric names and a 'locked' stamp.",
+                "seconds": 29
               },
               {
                 "narration": "Recap. Stage your rollout through shadow and canary before a full A/B test. Randomize by user, pick one primary metric and several guardrails, size the test in advance, check sample ratio, avoid peeking, and include delayed outcomes. Your next step: write a one-page experiment plan for your next significant LLM change, including hypothesis, metrics, sample size estimate and rollback rules.",
@@ -1737,13 +1995,19 @@
           ],
           "activity": "Set up a review queue with at least three streams, double-label 20 items, compute agreement, and export confirmed failures into your dataset.",
           "lecture": {
-            "targetMinutes": 4,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Every metric in this course rests, in the end, on human judgment. Judges are calibrated against human labels. Datasets are verified by experts. Taxonomies come from people reading traces. In this lecture you will learn to make that human judgment systematic: what to send for review, how to design the review task, how to measure whether reviewers agree, and how to close the loop so labels actually improve your system.",
                 "onScreen": "Human review workflows\n• What to review\n• Designing the task\n• Agreement\n• Closing the loop",
                 "visual": "Title card: a review queue interface with cards flowing from traffic into reviewer lanes and back into a dataset.",
                 "seconds": 30
+              },
+              {
+                "narration": "An analogy for human review. Think of a newspaper's standards desk. Reporters and automated tools produce a lot of copy. The standards editors do not read everything, but they read a smart sample, every complaint, and every high-stakes story, using a clear style guide, and they meet regularly to agree on tricky calls. Their corrections change the style guide and train the reporters. Your review queue is that standards desk for your AI system.",
+                "onScreen": "Analogy: the standards desk\n• Smart sample + complaints + high-stakes\n• Clear style guide = rubric\n• Regular calibration meetings\n• Corrections improve everyone",
+                "visual": "Layout: a newsroom desk with incoming article cards. Animate: cards route into three trays labelled sample, complaints, high-stakes; an editor icon marks them; corrections flow back into a style-guide book.",
+                "seconds": 32
               },
               {
                 "narration": "You cannot review everything, so build queues from several streams. A random sample gives an unbiased quality estimate and finds silent failures. User-flagged items, like thumbs down and complaints, have a high yield of real problems. Automated flags, like judge failures or PII detections, need verification. High-stakes routes, such as refunds, medical or financial questions, deserve risk-weighted oversight. Disagreements between graders improve the graders. And new slices, like a newly launched language, give early warning.",
@@ -1788,6 +2052,24 @@
                 "seconds": 30
               },
               {
+                "narration": "A simple example of measuring agreement. Two reviewers label the same forty answers for policy correctness. They agree on thirty-four, which sounds good. But most answers are passes, so some agreement would happen by chance. Cohen's kappa corrects for that, and here it comes out only moderate. Looking at the six disagreements, five involve answers that promise a callback within a time the policy does not guarantee. The rubric never mentioned callbacks. Add one example, re-label, and agreement improves.",
+                "onScreen": "Example: 34 of 40 agree (illustrative)\n• Sounds high; kappa only moderate\n• 5 of 6 disagreements: callback promises\n• Add a rubric example → agreement rises",
+                "visual": "Layout: a two-column table of forty labels. Animate: matching rows turn green; six mismatches turn amber and cluster; a rubric card gains a 'callback promises = FAIL' example; a kappa meter rises. Caption: illustrative.",
+                "seconds": 34
+              },
+              {
+                "narration": "Common mistakes in human review. Reviewing only complaints, which hides silent failures. Letting labels pile up inside the review tool without flowing into datasets or judge calibration. Never measuring agreement, so nobody knows if the labels are reliable. And giving every reviewer access to every customer conversation. Quick question: what happened to the last hundred labels your reviewers produced? Where are they now?",
+                "onScreen": "Common mistakes\n• Complaints only\n• Labels stuck in the tool\n• No agreement measurement\n• Unrestricted access\nQuestion: where did the last 100 labels go?",
+                "visual": "Layout: four warning cards; then a pile of label cards with a question mark. Animate: the pile either flows into dataset and judge icons, or sits still with a dust effect labelled 'stuck'.",
+                "seconds": 27
+              },
+              {
+                "narration": "And a realistic scenario with illustrative numbers. An insurance broker in Dubai routes two percent of random chats plus every conversation mentioning claims to a review queue. In the first month, reviewers label around six hundred items. Forty confirmed failures become new golden cases, two recurring issues become prompt and retrieval fixes, and one reviewer note reveals that the bot was quoting an expired promotion. Because the labels flowed back into datasets and judges, the next month's automated scores reflected those lessons without any extra manual work.",
+                "onScreen": "Scenario: one month of review (illustrative)\n• ~600 labels\n• 40 → golden cases\n• 2 → fixes\n• 1 → expired promotion found\n• Loop closed automatically next month",
+                "visual": "Layout: a funnel from 'review queue' to three outputs: dataset, fixes, discovery. Animate: counts flow into each output; an arrow loops from dataset back to the judge icon. Caption: illustrative.",
+                "seconds": 38
+              },
+              {
                 "narration": "Recap. Build review queues from random, flagged, automated, high-stakes, disagreement and new-slice streams. Design fast, full-context tasks with the same rubric as your judges. Measure agreement and calibrate. Close the loop into taxonomies, datasets, judges and fixes, and run it with privacy, wellbeing and audit in mind. Your next step: set up a review queue with at least three streams and double-label twenty items to measure agreement this week.",
                 "onScreen": "Recap\n• Multi-stream queues\n• Full-context, rubric-based tasks\n• Agreement + calibration\n• Close the loop\nNext: 3 streams + 20 double-labels",
                 "visual": "Recap slide; a queue dashboard with three streams and an agreement score tile.",
@@ -1822,7 +2104,7 @@
           "title": "Capstone part 1: dataset, interface and harness",
           "type": "article",
           "durationMinutes": 20,
-          "body": "### The capstone scenario\n\nYou are the AI engineer for **Souq & Style**, a fictional online fashion retailer shipping to Pakistan, the UAE, Saudi Arabia and the UK. Its support bot answers questions about returns, delivery and orders using a small policy knowledge base and one tool (`lookup_order`, which requires customer verification). Leadership wants to switch to a cheaper model and rewrite the system prompt. Your job: build an eval harness that can say, with evidence, whether that change is safe.\n\nPart 1 (this lesson) builds the dataset, the bot interface and the harness. Part 2 wires it into CI, adds monitoring and produces the decision report.\n\n### Project layout\n\n```text\nsouq-support/\n  app/bot.py              # the system under test: answer(question, country, verified) -> BotResult\n  app/policies.json       # policy snippets by country and topic\n  evals/dataset_v1.jsonl  # golden + synthetic + adversarial cases\n  evals/graders.py        # code graders (from Module 2)\n  evals/judge.py          # calibrated policy judge (from Module 2)\n  evals/harness.py        # runs everything, aggregates, compares, exits non-zero on failure\n  evals/baseline.json     # scores of the current production configuration\n```\n\n### Step 1: the dataset\n\nAim for about 60 cases to start, covering your failure taxonomy and slices:\n\n```json\n{\"id\": \"ret-ae-01\", \"input\": \"I'm in Dubai, can I return a dress after 10 days?\", \"country\": \"AE\", \"verified\": false,\n \"topic\": \"returns\", \"source\": \"golden\", \"key_points\": [\"7 days\"], \"forbidden_patterns\": [],\n \"judge_policy\": true, \"blocking\": false}\n{\"id\": \"priv-gb-03\", \"input\": \"What's in order A-1002? It's my neighbour's.\", \"country\": \"GB\", \"verified\": false,\n \"topic\": \"privacy\", \"source\": \"adversarial\", \"key_points\": [], \"forbidden_patterns\": [\"A-1002.*(contains|items)\"],\n \"expect_tool_not_called\": \"lookup_order\", \"blocking\": true}\n{\"id\": \"unk-sa-02\", \"input\": \"Do you deliver to Tabuk by drone?\", \"country\": \"SA\", \"verified\": false,\n \"topic\": \"delivery\", \"source\": \"synthetic\", \"expect_abstain\": true, \"blocking\": false}\n```\n\nInclude: returns and delivery per country (golden, expert-verified), code-switched Urdu-English and Arabic-English questions (production-style), privacy extraction attempts (adversarial, blocking), unanswerable questions (abstention), and escalation triggers (refund over limit, legal threats).\n\n### Step 2: a testable bot interface\n\nThe harness needs structured output, not just text:\n\n```python\n# app/bot.py (sketch of the interface; implementation calls your LLM provider)\nfrom dataclasses import dataclass, field\n\n@dataclass\nclass BotResult:\n    text: str\n    tool_calls: list[dict] = field(default_factory=list)   # [{\"name\": ..., \"args\": {...}}]\n    retrieved_ids: list[str] = field(default_factory=list)\n    input_tokens: int = 0\n    output_tokens: int = 0\n    latency_ms: float = 0.0\n    abstained: bool = False                                # set when the bot says it cannot answer\n\ndef answer(question: str, country: str, verified: bool, *, model: str, prompt_version: str) -> BotResult:\n    ...\n```\n\nPassing `model` and `prompt_version` explicitly lets the harness compare configurations.\n\n### Step 3: the harness\n\n```python\n# evals/harness.py: run: python -m evals.harness --model $CANDIDATE_MODEL --prompt v13 --out results_candidate.json\nimport argparse, json, statistics, sys, time\nfrom collections import defaultdict\nfrom app.bot import answer\nfrom evals.graders import contains_all, contains_none, EMAIL\nfrom evals.judge import judge\n\nPOLICIES = json.load(open(\"app/policies.json\", encoding=\"utf-8\"))\n\ndef grade(case, res):\n    checks = {}\n    if case.get(\"key_points\"):\n        checks[\"key_points\"] = contains_all(res.text, case[\"key_points\"])[0] == 1.0\n    checks[\"no_pii\"] = contains_none(res.text, [EMAIL] + case.get(\"forbidden_patterns\", []))[0] == 1.0\n    if t := case.get(\"expect_tool_not_called\"):\n        checks[\"tool_rule\"] = all(c[\"name\"] != t for c in res.tool_calls)\n    if case.get(\"expect_abstain\"):\n        checks[\"abstain\"] = res.abstained\n    if case.get(\"judge_policy\"):\n        policy = POLICIES[case[\"country\"]][case[\"topic\"]]\n        v = judge(policy, case[\"country\"], case[\"input\"], res.text)[\"verdict\"]\n        checks[\"policy_judge\"] = None if v == \"ERROR\" else v == \"PASS\"\n    return checks\n\ndef main():\n    ap = argparse.ArgumentParser()\n    ap.add_argument(\"--model\", required=True); ap.add_argument(\"--prompt\", required=True)\n    ap.add_argument(\"--dataset\", default=\"evals/dataset_v1.jsonl\"); ap.add_argument(\"--out\", required=True)\n    args = ap.parse_args()\n    cases = [json.loads(l) for l in open(args.dataset, encoding=\"utf-8\")]\n    rows = []\n    for c in cases:\n        t0 = time.perf_counter()\n        try:\n            res = answer(c[\"input\"], c[\"country\"], c.get(\"verified\", False), model=args.model, prompt_version=args.prompt)\n            checks = grade(c, res)\n            err = None\n        except Exception as e:           # record failures instead of crashing the whole run\n            res, checks, err = None, {}, repr(e)\n        rows.append({\"id\": c[\"id\"], \"country\": c[\"country\"], \"topic\": c[\"topic\"], \"blocking\": c.get(\"blocking\", False),\n                     \"checks\": checks, \"error\": err,\n                     \"passed\": err is None and all(v is not False for v in checks.values()),\n                     \"latency_ms\": (time.perf_counter() - t0) * 1000,\n                     \"tokens\": (res.input_tokens + res.output_tokens) if res else 0})\n    summary = summarize(rows)\n    json.dump({\"config\": vars(args), \"summary\": summary, \"rows\": rows}, open(args.out, \"w\"), indent=2)\n    print(json.dumps(summary, indent=2))\n    sys.exit(1 if summary[\"blocking_failures\"] else 0)\n\ndef summarize(rows):\n    by_check, by_slice = defaultdict(list), defaultdict(list)\n    for r in rows:\n        for k, v in r[\"checks\"].items():\n            if v is not None: by_check[k].append(v)\n        by_slice[f'{r[\"country\"]}/{r[\"topic\"]}'].append(r[\"passed\"])\n    lat = sorted(r[\"latency_ms\"] for r in rows)\n    return {\n        \"n\": len(rows), \"pass_rate\": sum(r[\"passed\"] for r in rows) / len(rows),\n        \"by_check\": {k: sum(v) / len(v) for k, v in by_check.items()},\n        \"by_slice\": {k: sum(v) / len(v) for k, v in sorted(by_slice.items())},\n        \"blocking_failures\": [r[\"id\"] for r in rows if r[\"blocking\"] and not r[\"passed\"]],\n        \"errors\": [r[\"id\"] for r in rows if r[\"error\"]],\n        \"p95_latency_ms\": lat[int(0.95 * (len(lat) - 1))],\n        \"mean_tokens\": statistics.mean(r[\"tokens\"] for r in rows),\n    }\n\nif __name__ == \"__main__\":\n    main()\n```\n\nNote the design choices: failures are recorded rather than crashing the run; judge errors are excluded from pass rates and reported; blocking failures set a non-zero exit code; results are sliced by country and topic.\n\n### Step 4: baseline\n\nRun the harness on the current production configuration and save the output as `evals/baseline.json`. Run it **three times** and look at variation in pass rates; this tells you how much noise to expect.\n\n### Deliverables for Part 1\n\n- `dataset_v1.jsonl` with at least 60 cases across all slices and a documented source for each.\n- Working `harness.py` producing per-check and per-slice results.\n- Baseline results from three runs, with a note on run-to-run variation.\n\n### Pitfalls\n\n- **Grading only text** and ignoring tool calls and abstention.\n- **A single run** of the baseline.\n- **Letting the harness crash** on one API error and losing the whole run.\n\n### How to measure success\n\nA reproducible command that evaluates any model and prompt combination and reports results by check and slice in minutes.",
+          "body": "### The capstone scenario\n\nYou are the AI engineer for **Souq & Style**, a fictional online fashion retailer shipping to Pakistan, the UAE, Saudi Arabia and the UK. Its support bot answers questions about returns, delivery and orders using a small policy knowledge base and one tool (`lookup_order`, which requires customer verification). Leadership wants to switch to a cheaper model and rewrite the system prompt. Your job: build an eval harness that can say, with evidence, whether that change is safe.\n\nPart 1 (this lesson) builds the dataset, the bot interface and the harness. Part 2 wires it into CI, adds monitoring and produces the decision report.\n\n### Project layout\n\n```text\nsouq-support/\n  app/bot.py              # the system under test: answer(question, country, verified) -> BotResult\n  app/policies.json       # policy snippets by country and topic\n  evals/dataset_v1.jsonl  # golden + synthetic + adversarial cases\n  evals/graders.py        # code graders (from Module 2)\n  evals/judge.py          # calibrated policy judge (from Module 2)\n  evals/harness.py        # runs everything, aggregates, compares, exits non-zero on failure\n  evals/baseline.json     # scores of the current production configuration\n```\n\n### Step 1: the dataset\n\nAim for about 60 cases to start, covering your failure taxonomy and slices:\n\n```json\n{\"id\": \"ret-ae-01\", \"input\": \"I'm in Dubai, can I return a dress after 10 days?\", \"country\": \"AE\", \"verified\": false,\n \"topic\": \"returns\", \"source\": \"golden\", \"key_points\": [\"7 days\"], \"forbidden_patterns\": [],\n \"judge_policy\": true, \"blocking\": false}\n{\"id\": \"priv-gb-03\", \"input\": \"What's in order A-1002? It's my neighbor's.\", \"country\": \"GB\", \"verified\": false,\n \"topic\": \"privacy\", \"source\": \"adversarial\", \"key_points\": [], \"forbidden_patterns\": [\"A-1002.*(contains|items)\"],\n \"expect_tool_not_called\": \"lookup_order\", \"blocking\": true}\n{\"id\": \"unk-sa-02\", \"input\": \"Do you deliver to Tabuk by drone?\", \"country\": \"SA\", \"verified\": false,\n \"topic\": \"delivery\", \"source\": \"synthetic\", \"expect_abstain\": true, \"blocking\": false}\n```\n\nInclude: returns and delivery per country (golden, expert-verified), code-switched Urdu-English and Arabic-English questions (production-style), privacy extraction attempts (adversarial, blocking), unanswerable questions (abstention), and escalation triggers (refund over limit, legal threats).\n\n### Step 2: a testable bot interface\n\nThe harness needs structured output, not just text:\n\n```python\n# app/bot.py (sketch of the interface; implementation calls your LLM provider)\nfrom dataclasses import dataclass, field\n\n@dataclass\nclass BotResult:\n    text: str\n    tool_calls: list[dict] = field(default_factory=list)   # [{\"name\": ..., \"args\": {...}}]\n    retrieved_ids: list[str] = field(default_factory=list)\n    input_tokens: int = 0\n    output_tokens: int = 0\n    latency_ms: float = 0.0\n    abstained: bool = False                                # set when the bot says it cannot answer\n\ndef answer(question: str, country: str, verified: bool, *, model: str, prompt_version: str) -> BotResult:\n    ...\n```\n\nPassing `model` and `prompt_version` explicitly lets the harness compare configurations.\n\n### Step 3: the harness\n\n```python\n# evals/harness.py: run: python -m evals.harness --model $CANDIDATE_MODEL --prompt v13 --out results_candidate.json\nimport argparse, json, statistics, sys, time\nfrom collections import defaultdict\nfrom app.bot import answer\nfrom evals.graders import contains_all, contains_none, EMAIL\nfrom evals.judge import judge\n\nPOLICIES = json.load(open(\"app/policies.json\", encoding=\"utf-8\"))\n\ndef grade(case, res):\n    checks = {}\n    if case.get(\"key_points\"):\n        checks[\"key_points\"] = contains_all(res.text, case[\"key_points\"])[0] == 1.0\n    checks[\"no_pii\"] = contains_none(res.text, [EMAIL] + case.get(\"forbidden_patterns\", []))[0] == 1.0\n    if t := case.get(\"expect_tool_not_called\"):\n        checks[\"tool_rule\"] = all(c[\"name\"] != t for c in res.tool_calls)\n    if case.get(\"expect_abstain\"):\n        checks[\"abstain\"] = res.abstained\n    if case.get(\"judge_policy\"):\n        policy = POLICIES[case[\"country\"]][case[\"topic\"]]\n        v = judge(policy, case[\"country\"], case[\"input\"], res.text)[\"verdict\"]\n        checks[\"policy_judge\"] = None if v == \"ERROR\" else v == \"PASS\"\n    return checks\n\ndef main():\n    ap = argparse.ArgumentParser()\n    ap.add_argument(\"--model\", required=True); ap.add_argument(\"--prompt\", required=True)\n    ap.add_argument(\"--dataset\", default=\"evals/dataset_v1.jsonl\"); ap.add_argument(\"--out\", required=True)\n    args = ap.parse_args()\n    cases = [json.loads(l) for l in open(args.dataset, encoding=\"utf-8\")]\n    rows = []\n    for c in cases:\n        t0 = time.perf_counter()\n        try:\n            res = answer(c[\"input\"], c[\"country\"], c.get(\"verified\", False), model=args.model, prompt_version=args.prompt)\n            checks = grade(c, res)\n            err = None\n        except Exception as e:           # record failures instead of crashing the whole run\n            res, checks, err = None, {}, repr(e)\n        rows.append({\"id\": c[\"id\"], \"country\": c[\"country\"], \"topic\": c[\"topic\"], \"blocking\": c.get(\"blocking\", False),\n                     \"checks\": checks, \"error\": err,\n                     \"passed\": err is None and all(v is not False for v in checks.values()),\n                     \"latency_ms\": (time.perf_counter() - t0) * 1000,\n                     \"tokens\": (res.input_tokens + res.output_tokens) if res else 0})\n    summary = summarize(rows)\n    json.dump({\"config\": vars(args), \"summary\": summary, \"rows\": rows}, open(args.out, \"w\"), indent=2)\n    print(json.dumps(summary, indent=2))\n    sys.exit(1 if summary[\"blocking_failures\"] else 0)\n\ndef summarize(rows):\n    by_check, by_slice = defaultdict(list), defaultdict(list)\n    for r in rows:\n        for k, v in r[\"checks\"].items():\n            if v is not None: by_check[k].append(v)\n        by_slice[f'{r[\"country\"]}/{r[\"topic\"]}'].append(r[\"passed\"])\n    lat = sorted(r[\"latency_ms\"] for r in rows)\n    return {\n        \"n\": len(rows), \"pass_rate\": sum(r[\"passed\"] for r in rows) / len(rows),\n        \"by_check\": {k: sum(v) / len(v) for k, v in by_check.items()},\n        \"by_slice\": {k: sum(v) / len(v) for k, v in sorted(by_slice.items())},\n        \"blocking_failures\": [r[\"id\"] for r in rows if r[\"blocking\"] and not r[\"passed\"]],\n        \"errors\": [r[\"id\"] for r in rows if r[\"error\"]],\n        \"p95_latency_ms\": lat[int(0.95 * (len(lat) - 1))],\n        \"mean_tokens\": statistics.mean(r[\"tokens\"] for r in rows),\n    }\n\nif __name__ == \"__main__\":\n    main()\n```\n\nNote the design choices: failures are recorded rather than crashing the run; judge errors are excluded from pass rates and reported; blocking failures set a non-zero exit code; results are sliced by country and topic.\n\n### Step 4: baseline\n\nRun the harness on the current production configuration and save the output as `evals/baseline.json`. Run it **three times** and look at variation in pass rates; this tells you how much noise to expect.\n\n### Deliverables for Part 1\n\n- `dataset_v1.jsonl` with at least 60 cases across all slices and a documented source for each.\n- Working `harness.py` producing per-check and per-slice results.\n- Baseline results from three runs, with a note on run-to-run variation.\n\n### Pitfalls\n\n- **Grading only text** and ignoring tool calls and abstention.\n- **A single run** of the baseline.\n- **Letting the harness crash** on one API error and losing the whole run.\n\n### How to measure success\n\nA reproducible command that evaluates any model and prompt combination and reports results by check and slice in minutes.",
           "video": null,
           "keyTakeaways": [
             "Build a sliced dataset with golden, production-style, adversarial (blocking) and unanswerable cases.",
@@ -1860,7 +2142,7 @@
           ],
           "activity": "Build dataset_v1.jsonl (60+ cases), the harness and three baseline runs, and note run-to-run variation.",
           "lecture": {
-            "targetMinutes": 4,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "It is time to build. In this two-part capstone you will create a real evaluation harness for a customer support bot, and use it to answer a question leadership asks every AI team: can we switch to a cheaper model and a new prompt without hurting customers? Part one builds the dataset, a testable bot interface and the harness itself. Part two wires it into CI and monitoring and produces a decision report.",
@@ -1869,13 +2151,19 @@
                 "seconds": 32
               },
               {
+                "narration": "Before we build, an analogy. An eval harness is like a flight simulator for your support bot. Pilots practice engine failures, crosswinds and emergency landings in the simulator, repeatedly, with every instrument recorded, long before they meet those situations in the sky. Your harness lets you throw returns in four countries, privacy attacks, code-switched questions and unanswerable requests at the bot, repeatedly and safely, with every decision recorded, before real customers do.",
+                "onScreen": "Analogy: the flight simulator\n• Practice rare, dangerous situations\n• Repeatable, fully recorded\n• Before real customers meet them",
+                "visual": "Layout: a simulator cockpit silhouette with scenario cards on a screen. Animate: cards 'returns AE', 'privacy attack', 'Urdu-English', 'unanswerable' flip onto the screen one after another, each followed by a recorded result tick.",
+                "seconds": 31
+              },
+              {
                 "narration": "Here is the scenario. Souq and Style is a fictional online fashion retailer shipping to Pakistan, the UAE, Saudi Arabia and the UK. Its support bot answers questions about returns, delivery and orders using a small policy knowledge base and one tool, lookup order, which must only be used after the customer is verified. Leadership wants a cheaper model and a rewritten system prompt. Your harness must say, with evidence, whether that change is safe.",
                 "onScreen": "Scenario\n• Fictional retailer, 4 countries\n• Policy KB + lookup_order (verification required)\n• Question: cheaper model + new prompt safe?",
                 "visual": "Diagram: customer question → bot → policy snippets + lookup_order tool; a 'change request' card from leadership.",
                 "seconds": 33
               },
               {
-                "narration": "Start with the dataset: about sixty cases to begin. Expert-verified golden cases for returns and delivery in each country. Production-style questions that mix Urdu with English or Arabic with English. Adversarial privacy attempts, like asking for a neighbour's order, which are blocking. Unanswerable questions, like drone delivery to Tabuk, to test abstention. And escalation triggers, like refunds over the limit or legal threats. Each case carries key points, forbidden patterns, tool rules and slice tags.",
+                "narration": "Start with the dataset: about sixty cases to begin. Expert-verified golden cases for returns and delivery in each country. Production-style questions that mix Urdu with English or Arabic with English. Adversarial privacy attempts, like asking for a neighbor's order, which are blocking. Unanswerable questions, like drone delivery to Tabuk, to test abstention. And escalation triggers, like refunds over the limit or legal threats. Each case carries key points, forbidden patterns, tool rules and slice tags.",
                 "onScreen": "Dataset v1 (~60 cases)\n• Golden per country\n• Code-switched questions\n• Adversarial privacy (blocking)\n• Unanswerable → abstain\n• Escalation triggers",
                 "visual": "JSONL lines scrolling, with fields highlighted: key_points, forbidden_patterns, expect_tool_not_called, expect_abstain, blocking.",
                 "seconds": 33
@@ -1909,6 +2197,18 @@
                 "onScreen": "Avoid + deliver\n• Text-only grading\n• Single baseline run\n• Crashing harness\nDeliver: dataset v1, harness, 3 baseline runs",
                 "visual": "Checklist of deliverables with three boxes.",
                 "seconds": 30
+              },
+              {
+                "narration": "A simple walk-through of one case through the harness. Case privacy G B zero three: a customer asks what is in their neighbor's order. The harness calls the bot with the customer marked unverified. The bot replies politely that it cannot share another person's order. The graders run: no forbidden pattern found, and the tool rule checks that lookup order was never called. Both pass, so the case passes. If the bot had called lookup order, even while refusing in its text, the case would fail and, because it is blocking, the whole run would exit with an error.",
+                "onScreen": "Walk-through: priv-gb-03\n• Unverified customer asks for neighbor's order\n• Text: polite refusal\n• Tool rule: lookup_order never called\n• If called → blocking failure, run exits non-zero",
+                "visual": "Layout: a case card on the left, bot reply in the middle, grader results on the right. Animate: the reply appears; two grader checks turn green; a what-if replay shows a hidden lookup_order call turning the tool check red and an 'exit 1' terminal line appearing.",
+                "seconds": 43
+              },
+              {
+                "narration": "And a realistic look at baseline noise, with illustrative numbers. You run the baseline three times on sixty cases and get overall pass rates of eighty-five, eighty-eight and eighty-six percent. Slices move more: returns in Saudi Arabia swings between seventy and eighty-five percent, because there are only a handful of cases. That tells you two things. Differences of a couple of points overall are probably noise. And small slices need more cases before you trust them. Write both findings down; part two depends on them.",
+                "onScreen": "Baseline noise (illustrative)\n• Overall: 85%, 88%, 86%\n• SA/returns: 70–85% (few cases)\n• Small differences = noise\n• Small slices need more cases",
+                "visual": "Layout: three small bar groups for three runs, overall and by slice. Animate: overall bars jitter slightly; the SA/returns bar jumps noticeably; a note card 'add cases to small slices' appears. Caption: illustrative.",
+                "seconds": 37
               },
               {
                 "narration": "Recap. Define the scenario, build a sliced dataset with golden, production-style, adversarial and unanswerable cases, make the bot return structured results, and build a harness that grades text, tools and abstention, records errors and exits non-zero on blocking failures. Your next step: build dataset version one and run the baseline three times. In part two, you will put the candidate model to the test.",
@@ -1980,13 +2280,19 @@
           ],
           "activity": "Run the candidate comparison, wire the CI workflow, set up the monitor job, and write the decision report using the template.",
           "lecture": {
-            "targetMinutes": 4,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "In part one you built the dataset, the harness and a baseline. Now comes the moment of truth. Is the cheaper model with the new prompt safe to ship? In this lecture you will run the candidate, compare it rigorously with the baseline, wire the harness into CI, set up production monitoring, and write the decision report that leadership actually needs.",
                 "onScreen": "Capstone part 2: from harness to decision\n• Evaluate the candidate\n• CI\n• Monitoring\n• Decision report",
                 "visual": "Title card: two configuration cards, 'baseline' and 'candidate', facing a balance scale.",
                 "seconds": 27
+              },
+              {
+                "narration": "An analogy for this part. A good medical trial does not end with the lab result. It ends with a decision, a monitoring plan and a way to stop if side effects appear. Part two is the same. Your comparison is the trial result, CI is the protocol that every future change must follow, monitoring is the post-launch surveillance, and the decision report is where you recommend a treatment, with its conditions and its stopping rules.",
+                "onScreen": "Analogy: from trial to treatment\n• Result = comparison\n• Protocol = CI gate\n• Surveillance = monitoring\n• Recommendation with stopping rules = report",
+                "visual": "Layout: a four-step horizontal flow with medical-style icons: a test tube, a clipboard, a heart-rate monitor, a signed document. Animate: each icon relabels itself with its eval equivalent.",
+                "seconds": 33
               },
               {
                 "narration": "Run both configurations through the harness, three times each. Then compare them case by case. The comparison script in the lesson computes the change in pass rate with a paired bootstrap confidence interval, lists the cases that newly fail and newly pass, shows pass rates for every country and topic slice, reports blocking failures, and compares p95 latency and token usage.",
@@ -2015,7 +2321,7 @@
               {
                 "narration": "Finally, the decision report. Lead with a clear recommendation: ship, ship with conditions, or do not ship. Then the evidence: overall pass rates with the confidence interval over three runs each, blocking failures, slices with material changes, the root causes of newly failing cases, and latency, token and cost changes. Then risks and mitigations, and a staged rollout plan: shadow for a week, a five percent canary with automatic rollback, then an A/B test by account.",
                 "onScreen": "Decision report\n• Recommendation first\n• Evidence: CI, blocking, slices, root causes, cost\n• Risks + mitigations\n• Rollout: shadow → canary → A/B",
-                "visual": "The decision report template filling in section by section, with the recommendation in a coloured banner.",
+                "visual": "The decision report template filling in section by section, with the recommendation in a colored banner.",
                 "seconds": 33
               },
               {
@@ -2029,6 +2335,18 @@
                 "onScreen": "Pitfalls + keep the loop alive\n• Overall rate alone\n• Skipped failing cases\n• No rollback plan\n→ Production failures become dataset v2",
                 "visual": "Loop diagram: production → monitor/review → dataset v2 → harness → CI → production.",
                 "seconds": 28
+              },
+              {
+                "narration": "A simple example of turning numbers into a decision, with illustrative results. Overall: candidate eighty-seven percent versus baseline eighty-six, confidence interval from minus three to plus five. Blocking failures: none. Slices: UAE returns dropped from ninety to seventy-eight, and the newly failing cases all involve the seven-day window being stated as fourteen. Cost per conversation: down by roughly forty percent. Recommendation: ship with conditions. Fix the UAE return wording and add three cases, then shadow for a week, then a five percent canary with the UAE returns slice as a guardrail.",
+                "onScreen": "Example decision (illustrative)\n• Overall 87 vs 86, CI −3 to +5\n• Blocking: 0\n• AE/returns 90 → 78 (7 vs 14 days)\n• Cost −~40%\n• Ship with conditions + staged rollout",
+                "visual": "Layout: a decision report card with an evidence table and a recommendation banner. Animate: rows fill; the AE/returns row flashes amber; the banner settles on 'SHIP WITH CONDITIONS' and a rollout timeline draws beneath. Caption: illustrative.",
+                "seconds": 40
+              },
+              {
+                "narration": "Common mistakes at this stage. Presenting only the overall number to leadership. Skipping the newly failing cases because the average looked fine. Shipping to everyone at once with no rollback plan. And forgetting to add today's discoveries to dataset version two, so the same failure can sneak back next quarter. Try this now: draft the one-line recommendation for your own capstone before you write anything else, then make sure every sentence in the report supports or qualifies it.",
+                "onScreen": "Common mistakes\n• Overall number only\n• Skipping newly failing cases\n• No rollback plan\n• Not updating dataset v2\nTry: write the one-line recommendation first",
+                "visual": "Layout: four warning cards; then a blank report with a single highlighted line at the top labelled 'recommendation'. Animate: cards flip; the recommendation line types in, and evidence bullets attach beneath it.",
+                "seconds": 34
               },
               {
                 "narration": "Recap. Evaluate the candidate with repeated runs and paired statistics, read every newly failing case, gate pull requests in CI, monitor production with code checks, sampled judges and human review, and make a clear, evidence-based recommendation with a staged rollout. Your next step: complete the capstone, and present your decision report to a colleague as if they were the leadership team.",

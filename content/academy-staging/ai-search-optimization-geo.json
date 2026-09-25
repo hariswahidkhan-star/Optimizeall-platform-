@@ -1284,17 +1284,17 @@
               "explanation": "OAI-SearchBot supports search features; GPTBot is for training."
             },
             {
-              "question": "Which Google controls limit how content appears in AI Overviews?",
+              "question": "Which Google lever excludes a site from AI Overviews and AI Mode while keeping normal search snippets?",
               "options": [
                 "crawl-delay",
-                "Google-Extended only",
-                "llms.txt",
-                "nosnippet, data-nosnippet, max-snippet and noindex"
+                "Blocking Google-Extended",
+                "The Search generative AI control in Search Console settings",
+                "Sitewide nosnippet"
               ],
               "correct": [
-                3
+                2
               ],
-              "explanation": "Google points to its Search snippet and indexing controls."
+              "explanation": "The Search Console control (global since end of Aug 2026) targets AI surfaces only; nosnippet also removes normal snippets, and Google-Extended governs Gemini training/grounding."
             }
           ],
           "activity": "Document which AI user agents appear in your logs over two weeks, their status codes, and whether each matches your intended policy.",
@@ -1417,7 +1417,7 @@
               "correct": [
                 3
               ],
-              "explanation": "It is a proposal with limited, mostly documentation-focused adoption."
+              "explanation": "llms.txt is a 2024 proposal; no engine has committed to using it, and Google says Google Search ignores it. It has a niche for developer documentation."
             },
             {
               "question": "A local plumbing company wants to be recommended by assistants. Which policy fits best?",
