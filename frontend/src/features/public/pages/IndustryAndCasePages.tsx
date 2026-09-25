@@ -7,6 +7,7 @@ import { headFromSeo, useDocumentHead } from '../site/head';
 import { SiteIcon } from '../site/icons';
 import { Markdown } from '../site/Markdown';
 import { useSiteCopy } from '../site/copy';
+import { PartnerSlot } from '../partners/PartnerSlot';
 
 /** /industries */
 export function IndustriesPage() {
@@ -253,6 +254,11 @@ export function CaseStudyDetailPage() {
                 </figure>
               )}
               {c.publishedAt && <p className="text-small text-muted">Published {formatPublished(c.publishedAt)}</p>}
+              <PartnerSlot
+                slot="case-study.detail"
+                keywords={[c.industryName, ...c.services.map((s) => s.name)].filter((k): k is string => !!k)}
+                categories={[c.industrySlug, ...c.services.map((s) => s.slug)].filter((k): k is string => !!k)}
+              />
             </div>
           </div>
 

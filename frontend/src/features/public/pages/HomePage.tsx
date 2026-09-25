@@ -8,6 +8,7 @@ import { CaseStudyCard, CtaBand, PackageCard, PostCard, Section, TestimonialCaro
 import { headFromSeo, useDocumentHead } from '../site/head';
 import { SiteIcon } from '../site/icons';
 import { NewsletterSignup } from '../site/NewsletterSignup';
+import { PartnerSlot } from '../partners/PartnerSlot';
 
 /** Agency homepage: value proposition, proof, services, results, process, industries, pricing, blog and creators. */
 export function HomePage() {
@@ -69,6 +70,8 @@ export function HomePage() {
           </div>
         </div>
       )}
+
+      <PartnerSlot slot="home.partners" />
 
       <Section
         id="services"

@@ -375,6 +375,17 @@ jobs:
           E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-edge
         run: scripts/e2e-journeys.sh
 
+      # Partners and sponsored placements: the home strip and footer line, /partners and the profile pages (JSON-LD,
+      # sitemap), a sponsored unit on a blog post, rel="sponsored noopener" on every outbound partner link, the click
+      # redirect with UTM tags, and the Website → Partners editor and report. Demo seed, SQLite.
+      - name: Partners journey (scripts/e2e-journeys.sh, E2E_SUITE=j-partners, SQLite)
+        env:
+          E2E_SUITE: j-partners
+          E2E_DB_PROVIDER: sqlite
+          E2E_SKIP_BUILD: "1"
+          E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-partners
+        run: scripts/e2e-journeys.sh
+
       # The agency's email-marketing journey in a brand-new client workspace: settings and a verified sender, lists,
       # manual contacts and CSV imports (malformed rows, duplicates, limits), suppression, templates and test sends,
       # campaigns from draft through schedule/send/pause/cancel (no double sends under concurrent job runs), open/click
@@ -448,6 +459,8 @@ jobs:
             ${{ runner.temp }}/e2e-j-email/web.log
             ${{ runner.temp }}/e2e-j-auth/api.log
             ${{ runner.temp }}/e2e-j-auth/web.log
+            ${{ runner.temp }}/e2e-j-partners/api.log
+            ${{ runner.temp }}/e2e-j-partners/web.log
             ${{ runner.temp }}/web-smoke.log
           retention-days: 7
           if-no-files-found: ignore

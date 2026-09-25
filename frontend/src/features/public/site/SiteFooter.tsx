@@ -4,6 +4,7 @@ import { BRAND_TAGLINE, Logo } from '@/components/brand/Logo';
 import { isExternalHref, isInternalHref } from '@/lib/safeHref';
 import { type SiteLink, useSite } from './api';
 import { useSiteCopy } from './copy';
+import { PartnerSlot } from '../partners/PartnerSlot';
 import { NewsletterSignup } from './NewsletterSignup';
 
 const FALLBACK_COLUMNS: { title: string; links: SiteLink[] }[] = [
@@ -69,6 +70,7 @@ export function SiteFooter({ onCookieSettings }: { onCookieSettings: () => void 
             {site?.footer.blurb ??
               'A full-service digital marketing agency: search, social, paid media, content, email, brand and web.'}
           </p>
+          <PartnerSlot slot="footer.partners" />
           {contact && (
             <ul className="site-footer__contact">
               {contact.email && (

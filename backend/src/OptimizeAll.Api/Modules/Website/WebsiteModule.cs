@@ -6,6 +6,7 @@ using OptimizeAll.Api.Modules.Website.Careers;
 using OptimizeAll.Api.Modules.Website.Catalog;
 using OptimizeAll.Api.Modules.Website.Leads;
 using OptimizeAll.Api.Modules.Website.Pages;
+using OptimizeAll.Api.Modules.Website.Partners;
 using OptimizeAll.Api.Modules.Website.Public;
 using OptimizeAll.Api.Modules.Website.Redirects;
 using OptimizeAll.Api.Modules.Website.Seed;
@@ -43,6 +44,7 @@ public static class WebsiteModule
 
         services.AddScoped<ISeeder, WebsiteBaselineSeeder>();
         services.AddScoped<ISeeder, WebsiteDemoSeeder>();
+        services.AddWebsitePartners();
         return services;
     }
 }

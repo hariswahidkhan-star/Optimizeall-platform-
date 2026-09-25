@@ -18,7 +18,7 @@ The public marketing site of Optimize All (the agency) and the CMS that runs it.
 `/` home · `/services` and `/services/{slug}` · `/pricing` · `/industries` and `/industries/{slug}` ·
 `/case-studies` and `/case-studies/{slug}` (filter with `?service=` / `?industry=`) · `/team` · `/blog` (filter with
 `?category=`, `?tag=`, `?q=`) and `/blog/{slug}` · `/careers` and `/careers/{slug}` (apply with a PDF CV) ·
-`/contact` · `/free-audit` · `/get-a-quote` (3 steps) · `/book-a-consultation` · `/newsletter/confirm` and
+`/partners` and `/partners/{slug}` · `/contact` · `/free-audit` · `/get-a-quote` (3 steps) · `/book-a-consultation` · `/newsletter/confirm` and
 `/newsletter/unsubscribe` · `/search` · every published CMS page at `/{slug}`: the seeded `/about`, `/how-we-work`,
 and the legal pages `/privacy-policy`, `/terms-of-service`, `/cookie-policy`, `/accessibility`, `/refund-policy`. The creator (participant) landing
 page that used to be the home page now lives at `/creators`; `/faq` is unchanged. A CMS page cannot take the address
@@ -118,6 +118,78 @@ trust logos. Only add logos of clients who agreed to be shown.
 from `/api/v1/files/…`. External image URLs must be `https://` on a host listed in `Content:AllowedImageHosts` (and
 in the web server's `IMG_SRC_EXTRA`, see below).
 
+## Partners and sponsored placements
+
+Optimize All is the **official marketing partner of PCI AI and Certuvo**. Both are independent platforms; the site
+promotes them with a profile page each, a partners page, a logo strip, a footer line and sponsored ad units.
+
+| Layer | Where |
+|---|---|
+| Entities | `Domain/Website/WebsitePartners.cs` (`WebsitePartner`, `WebsitePartnerStat`, slot registry `PartnerSlots`, `PartnerTargeting`, `PartnerOfferRules`), `Domain/Website/PartnerLinkPolicy.cs` |
+| API | `Modules/Website/Partners/` (admin + public controllers, services, JSON-LD, seeder, sitemap contributor) — tables `website_partners`, `website_partner_stats` |
+| Public site | `frontend/src/features/public/partners/` (`PartnerSlot`, pages, `partnerLinks.ts`, `tracking.ts`, `slots.ts`) |
+| CMS | Agency → Website → **Partners** (`site.manage`) and **Placement report** (`/agency/website/partners/report`) |
+| Tests | `backend/tests/*/Website/Partner*`, `frontend/src/features/public/partners/partners.test.tsx`, `frontend/e2e/j-partners/` |
+
+**Partner fields.** Name, slug (profile at `/partners/{slug}`), logo (upload, allow-listed https image, or a bundled
+`/partners/…` asset), website (optional: while it is empty every link and call to action to the partner is hidden),
+tagline, description (Markdown), relationship statement (`{Partner}` is replaced by the name; default "Optimize All is
+the official marketing partner of {Partner}"), highlights, offerings (sections of the profile, each with an optional
+`#anchor` and a site-path link), keywords and categories (targeting), official profiles (`sameAs`), related partners,
+brand colour, UTM source/medium/campaign, a current offer, SEO overrides, active flag and order. Every change is audited
+and needs the concurrency stamp; creating, editing, deleting and reordering are refused while impersonating (like the
+site settings: partners decide which paid links every visitor sees). Renaming an active partner records a 301 from its
+old profile address. `partners` is a reserved CMS slug and `/partners` a built-in page.
+
+**Offers.** An offer (text, optional code, optional end date) is shown only after an editor ticks *I checked this offer
+is still valid*: until its end date, or — without one — for 30 days after it was last edited or confirmed, so a forgotten
+promotion disappears on its own. Certuvo's launch offer (`LAUNCH50`) is seeded **unconfirmed** because its end date is
+unknown.
+
+**Slots** (`PartnerSlots` / `slots.ts`, kept equal by a unit test):
+
+| Slot | Kind | Where it renders |
+|---|---|---|
+| `home.partners` | list | Home page, after the hero: "Official marketing partner of" logo strip + statement |
+| `footer.partners` | list | Footer of every public page: "Optimize All is the official marketing partner of PCI AI and Certuvo." |
+| `blog.inline` | unit | Inside a blog post, before its second section (long posts only) |
+| `blog.end` | unit | After the blog post body |
+| `service.detail` | unit | Service pages, after the overview |
+| `case-study.detail` | unit | Case studies, after the story |
+| `careers.index` | unit | Careers page, under the open roles |
+| `learn.course`, `learn.lesson`, `learn.exam`, `learn.certificate`, `learn.dashboard` | unit | Academy (`/learn`, built separately): drop in `<PartnerSlot slot="learn.course" keywords={course.tags} categories={[course.category]} />` |
+| `partners.profile`, `partners.directory` | page | The partner pages themselves (clicks and impressions only) |
+
+List slots show every active partner enabled for them. A unit slot shows **at most one** ad unit, always labelled
+**Sponsored** (with "Partner"), with the relationship statement, a "Visit {host}" link and an internal "About {name}" link.
+
+**Targeting.** `GET /public/partners/placement` scores each active partner enabled for the slot: one point per page
+keyword matching one of its keywords/categories (case- and punctuation-insensitive; whole-word phrase containment),
+two per page category equal to one of its categories. The best score wins; ties — and pages where nothing matches
+(the fallback) — rotate deterministically by page path and UTC day. Pages pass: blog tags + category slugs; the service
+name, service line and tools + service and line slugs; a case study's industry and services; `careers`; for the academy
+the course category and topics.
+
+**Tracking.** Impressions: a placement counts once per partner, slot and page per visit when half of it has been on
+screen; the web app batches them (≤ 20, `fetch` keepalive) to `POST /public/partners/impressions`. Clicks: every outbound
+partner link goes through `GET /public/partners/{slug}/visit?slot=&path=`, which counts and redirects (302) to the
+partner with `utm_source`, `utm_medium` and `utm_campaign` (the partner's campaign, else the slot). Only daily counters
+per partner, slot, page and UTC day are stored — no cookies, visitor ids or IP addresses; suspected bots are never
+counted. The campaign tracking links (`/t/{code}`) were not reused: they belong to client campaigns. The report shows
+totals, CTR, by partner, slot, top pages and day, with CSV export.
+
+**Partner links in editorial content.** The Markdown renderer marks any link whose host is an active partner's website
+(or a subdomain) as a partner link automatically: `rel="sponsored noopener"`, new tab and UTM tags
+(`utm_campaign=editorial` unless the partner has its own). Editors can link to pciai.org or certuvo.com normally.
+
+**Seeded content (Baseline, `PartnerBaselineSeeder`, once per slug, never overwrites edits).** PCI AI
+(https://pciai.org) and Certuvo (https://certuvo.com), active, with profile texts, offerings, keywords, categories and
+slots. The PCI AI facts come from pciai.org screenshots and the Certuvo facts from certuvo.com screenshots supplied by the
+user on 2026-09-25 (search-engine listings before that): they state only what the partners publish, plus the
+partnership. **Have both partners confirm the texts** and keep them current in Website → Partners. Logos:
+`frontend/public/partners/pci-ai.png` (+ `.webp`, `-256.webp`, `-128.webp`) and `certuvo.jpg` (whitespace cropped, padded to
+a square; + `.webp` variants and `certuvo-wordmark.webp`).
+
 ## Forms, spam and privacy
 
 - Every public form fetches a signed token (`GET /public/forms/token`). Submissions faster than
@@ -175,6 +247,9 @@ not scripts, so they need no CSP change.
   app another way, route both paths to the API the same way (`/robots.txt` → API `/robots.txt`, `/sitemap.xml` → API
   `/api/v1/public/sitemap.xml`). Submit the sitemap URL in Google Search Console.
 - The RSS feed is `GET /api/v1/public/blog/rss.xml`.
+- **Extension point:** features with public pages outside the CMS tables register an `ISitemapContributor`
+  (`Modules/Website/Public/SitemapContributors.cs`); its URLs are appended to the sitemap. The partner pages use it
+  (`/partners` and every active, indexable `/partners/{slug}`).
 
 **The site is a client-rendered SPA.** Google and Bing execute JavaScript and see the full page, titles, meta tags
 and JSON-LD (the head manager writes them after the data loads); the sitemap guarantees discovery. Crawlers and link
@@ -189,6 +264,8 @@ in this workstream.
   categories and 33 services with packages and production copy, 9 industries, the About / How we work / Pricing /
   Contact pages, 5 legal page templates, 7 blog categories, default site settings and booking availability
   (Mon–Fri 09:00–12:00 and 13:00–17:00 UTC, 30-minute slots, 12 h notice, 30 days ahead). Edits made in the CMS are never overwritten.
+- **Partners** (`PartnerBaselineSeeder`, Baseline, Order 61): PCI AI and Certuvo (see "Partners and sponsored
+  placements"), each created once by slug.
 - **Demo** (`WebsiteDemoSeeder`, Order 300, `Demo` seed profile, once): team members, case studies,
   testimonials, blog posts in every workflow state, jobs and applications, inquiries, bookings and subscribers.
 

@@ -34,6 +34,8 @@
 #                           j-auth          authentication & security: registration, lockout, reset, sessions and refresh
 #                                           rotation, portal guards, impersonation, headers, rate limits, IDOR/XSS (Demo seed)
 #                           j-edge          cross-cutting edge cases: time zones, currencies, lists at volume (Demo seed)
+#                           j-partners      partners and sponsored placements: home strip, footer, /partners, profiles,
+#                                           blog ad unit, rel="sponsored", click redirect, admin editor and report (Demo seed)
 #   E2E_SEED              comma-separated seed profiles (default: Baseline for journeys and j-participant,
 #                         Baseline,Demo for everything else)
 #   E2E_DB_PROVIDER=mysql mysql (default) or sqlite (a fresh file in $E2E_WORK_DIR; no MySQL server needed)

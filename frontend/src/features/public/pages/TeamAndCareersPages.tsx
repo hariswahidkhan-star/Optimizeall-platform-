@@ -14,6 +14,7 @@ import { CtaBand, formatPublished, PageHero, PublicQueryState, Section } from '.
 import { ConsentCheckbox, fieldErrorsOf, Honeypot, useFormToken, useRenewFormToken } from '../site/forms';
 import { headFromSeo, useDocumentHead } from '../site/head';
 import { Markdown } from '../site/Markdown';
+import { PartnerSlot } from '../partners/PartnerSlot';
 
 /** /team */
 export function TeamPage() {
@@ -120,6 +121,7 @@ export function CareersPage() {
               ))}
             </ul>
           )}
+          <PartnerSlot slot="careers.index" keywords={['careers', 'professional development']} categories={['careers']} />
         </Section>
       </PublicQueryState>
     </>

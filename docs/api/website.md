@@ -57,6 +57,11 @@ Contents: [Public site](#public-site) · [Public forms](#public-forms) · [SEO f
 | `GET /api/v1/public/careers` · `/careers/{slug}` | Open jobs / job detail with requirements, benefits, optional salary range and JobPosting JSON-LD. |
 | `GET /api/v1/public/redirects?path=/old-page` | Where a moved public address lives now: `{ location, statusCode: 301 }` (other query parameters of `path` carried over), else 404 `website.redirect_not_found`. The web app asks this when a public page is not found and navigates client-side. |
 | `GET\|HEAD /api/v1/public/redirects/gate` | For the web server (not the app): the request target in `X-Original-URI` → `301` + `Location` when moved, else an empty `404` (serve the app shell). nginx and the Vite dev/preview server ask it before serving the shell. `tracking` rate-limit policy. |
+| `GET /api/v1/public/partners` | Active partners `{ partners: [{ slug, name, logoUrl, tagline, relationshipLabel, brandColor, websiteHost?, visitUrl?, profilePath, slots, offer? }], linkRules: [{ slug, host, utmSource, utmMedium, utmCampaign? }], seo, jsonLd }` for /partners, the home strip, the footer line and partner links in editorial content. `websiteHost`/`visitUrl` are null while a partner has no website (links hidden). |
+| `GET /api/v1/public/partners/{slug}` | A partner's profile: the card fields plus `descriptionMarkdown`, `highlights`, `offerings: [{ title, summary?, facts, anchor?, link? }]`, `keywords`, `offer?` (only a confirmed, unexpired one), `related` (cards), `updatedAt`, `seo`, `jsonLd` (Organization, WebPage, BreadcrumbList). 404 `website.not_found` when inactive. |
+| `GET /api/v1/public/partners/placement?slot=&keywords=&categories=&path=` | The ad unit of a unit slot: `{ slot, partner: card \| null }` (best keyword/category match, else rotation by page and day). `keywords`/`categories` repeat or are comma-separated (≤ 30). 400 `website.partner_slot_invalid` for unknown and list slots. |
+| `POST /api/v1/public/partners/impressions` | `{ items: [{ partner, slot, path }] }` (≤ 20) → `202 { accepted }`. Bots, unknown/inactive partners, slots the partner is not enabled for and paths that are not public pages are ignored; duplicates in a batch count once. `tracking` rate-limit policy. |
+| `GET /api/v1/public/partners/{slug}/visit?slot=&path=` | Counts a click (not for bots) and answers `302` to the partner's website with `utm_source`, `utm_medium` and `utm_campaign` (the partner's campaign, else the slot). The destination comes only from the partner record. 404 when inactive or without a website. `X-Robots-Tag: noindex, nofollow`; `tracking` policy. |
 
 Example (`GET /public/services/seo`, trimmed):
 
@@ -182,6 +187,23 @@ a renamed landing page) records a 301 redirect from the old address in the same 
 Every change is audited (`website.redirect_created`, `website.redirect_updated` when a chain is collapsed,
 `website.redirect_removed` when live content claims the address again, `website.redirect_deleted`).
 
+## Partners (`site.manage`)
+
+| Method & path | Notes |
+|---|---|
+| `GET /partners` | Every partner (active or not) with all fields, `offerVisible`, `offerVisibleUntil`, `publicPath`, `concurrencyStamp`. |
+| `GET /partners/slots` | The placement slots `[{ name, kind: List\|Unit\|Page, label, description }]`. |
+| `GET /partners/{id}` | One partner. |
+| `POST /partners` | `{ slug, name, logoUrl, websiteUrl?, tagline, descriptionMarkdown?, relationshipLabel?, highlights, offerings, keywords, categories, sameAs, relatedPartnerIds, slots, brandColor?, utmSource?, utmMedium?, utmCampaign?, offerText?, offerCode?, offerExpiresAt?, offerConfirmed, seo, isActive, sortOrder }` → 201. `logoUrl`: an upload, an allow-listed https image or `/partners/{name}.png\|jpg\|webp\|svg`; `websiteUrl` and `sameAs`: https only; `slots`: list/unit slot names; `relationshipLabel` defaults to "Optimize All is the official marketing partner of {Partner}". 400 `website.invalid` (field errors), 409 `website.slug_taken`. Denied while impersonating. |
+| `PUT /partners/{id}` | Same body plus `concurrencyStamp` (409 `concurrency.conflict`). Renaming an active partner records a 301 from `/partners/{old}`. Denied while impersonating. |
+| `DELETE /partners/{id}` | 204 (its statistics go with it). Denied while impersonating. |
+| `POST /partners/reorder` | `{ ids }`. Denied while impersonating. |
+| `GET /partners/report?from=&to=&partnerId=&slot=` | UTC days (default the last 30, at most 366): `{ from, to, impressions, clicks, clickThroughRate, byPartner, bySlot, byPage (top 50), daily }`. 400 `website.invalid_range`. |
+| `GET /partners/report.csv?…` | Same filters: `day, partner, partner_name, slot, page, impressions, clicks, ctr` (≤ 50,000 rows). |
+
+Every change is audited (`website.partner_created`, `website.partner_updated`, `website.partner_deleted`,
+`website.partners_reordered`).
+
 ## Site settings (`site.manage`)
 
 | Method & path | Notes |
@@ -271,4 +293,4 @@ Published through `IEventPublisher` after the transaction commits (types in `Dom
 `blog.publish_required` (403) · `careers.invalid` (400) · `careers.job_has_applications` (409) ·
 `concurrency.conflict` (409) · `auth.forbidden` (403) · `website.redirect_not_found` (404) ·
 `website.invalid_redirect` (400) · `website.redirect_exists`, `website.redirect_source_live`, `website.redirect_loop`,
-`website.redirects_busy` (409).
+`website.redirects_busy` (409) · `website.partner_slot_invalid`, `website.invalid_range` (400).

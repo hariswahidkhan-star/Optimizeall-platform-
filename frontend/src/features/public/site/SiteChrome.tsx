@@ -5,6 +5,7 @@ import { isInternalHref } from '@/lib/safeHref';
 import { safeStorage } from '@/lib/hooks/storage';
 import { useSite } from './api';
 import { captureAttribution } from './attribution';
+import { PartnerLinksProvider } from '../partners/PartnerLinksContext';
 import { CookieConsent } from './CookieConsent';
 import { SiteFooter } from './SiteFooter';
 import { SiteHeader } from './SiteHeader';
@@ -67,17 +68,19 @@ export function SiteChrome({ children }: { children: ReactNode }) {
   }, [location.pathname, location.hash]);
 
   return (
-    <div className="public-layout site-layout">
-      <a className="skip-link" href="#main">
-        Skip to content
-      </a>
-      <AnnouncementBar />
-      <SiteHeader />
-      <main id="main" ref={mainRef} tabIndex={-1} className="public-main">
-        {children}
-      </main>
-      <SiteFooter onCookieSettings={() => setConsentOpen(true)} />
-      <CookieConsent ids={site?.analytics} open={consentOpen} onClose={() => setConsentOpen(false)} />
-    </div>
+    <PartnerLinksProvider>
+      <div className="public-layout site-layout">
+        <a className="skip-link" href="#main">
+          Skip to content
+        </a>
+        <AnnouncementBar />
+        <SiteHeader />
+        <main id="main" ref={mainRef} tabIndex={-1} className="public-main">
+          {children}
+        </main>
+        <SiteFooter onCookieSettings={() => setConsentOpen(true)} />
+        <CookieConsent ids={site?.analytics} open={consentOpen} onClose={() => setConsentOpen(false)} />
+      </div>
+    </PartnerLinksProvider>
   );
 }

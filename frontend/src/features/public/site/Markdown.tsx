@@ -3,6 +3,8 @@ import { Fragment, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { ScrollArea } from '@/components/ui/ScrollArea';
 import { isExternalHref, isInternalHref } from '@/lib/safeHref';
+import { usePartnerLinkRules } from '../partners/PartnerLinksContext';
+import { applyPartnerLink, type PartnerLinkRule } from '../partners/partnerLinks';
 
 /**
  * Safe Markdown renderer for CMS content. It parses a practical Markdown subset (headings, paragraphs, lists,
@@ -17,7 +19,7 @@ export interface Heading {
   level: number;
 }
 
-type Block =
+export type Block =
   | { kind: 'heading'; level: number; text: string }
   | { kind: 'paragraph'; text: string }
   | { kind: 'list'; ordered: boolean; items: string[] }
@@ -160,7 +162,11 @@ function isSafeLink(href: string): boolean {
 const INLINE =
   /(`+)([^`]+?)\1|!\[([^\]]*)\]\(\s*([^)\s]+)(?:\s+"[^"]*")?\s*\)|\[([^\]]+)\]\(\s*([^)\s]+)(?:\s+"([^"]*)")?\s*\)|\*\*([^*]+?)\*\*|__([^_]+?)__|\*([^*\s][^*]*?)\*|(?<![\w])_([^_\s][^_]*?)_(?![\w])| {2,}\n/g;
 
-export function renderInline(text: string, keyPrefix = 'i'): ReactNode[] {
+/**
+ * Renders inline Markdown. Links to an active partner's website (`partnerLinks`, see partners/partnerLinks.ts) are
+ * partnership links: they get `rel="sponsored noopener"`, a new tab and the partner's UTM tags.
+ */
+export function renderInline(text: string, keyPrefix = 'i', partnerLinks: readonly PartnerLinkRule[] = []): ReactNode[] {
   const out: ReactNode[] = [];
   let last = 0;
   let n = 0;
@@ -172,9 +178,17 @@ export function renderInline(text: string, keyPrefix = 'i'): ReactNode[] {
     else if (m[4] !== undefined) {
       out.push(isSafeImage(m[4]) ? <img key={key} src={m[4]} alt={m[3]} loading="lazy" decoding="async" /> : m[3]);
     } else if (m[6] !== undefined) {
-      const label = renderInline(m[5], key);
+      const label = renderInline(m[5], key, partnerLinks);
       const href = m[6];
+      const partner = isSafeLink(href) ? applyPartnerLink(href, partnerLinks) : null;
       if (!isSafeLink(href)) out.push(<Fragment key={key}>{label}</Fragment>);
+      else if (partner)
+        out.push(
+          <a key={key} href={partner.href} title={m[7]} target={partner.target} rel={partner.rel} data-partner={partner.partnerSlug}>
+            {label}
+            <span className="visually-hidden"> (opens in a new tab)</span>
+          </a>,
+        );
       else if (href.startsWith('/') && isInternalHref(href))
         out.push(
           <Link key={key} to={href} title={m[7]}>
@@ -195,9 +209,9 @@ export function renderInline(text: string, keyPrefix = 'i'): ReactNode[] {
           </a>,
         );
     } else if (m[8] !== undefined || m[9] !== undefined)
-      out.push(<strong key={key}>{renderInline(m[8] ?? m[9], key)}</strong>);
+      out.push(<strong key={key}>{renderInline(m[8] ?? m[9], key, partnerLinks)}</strong>);
     else if (m[10] !== undefined || m[11] !== undefined)
-      out.push(<em key={key}>{renderInline(m[10] ?? m[11], key)}</em>);
+      out.push(<em key={key}>{renderInline(m[10] ?? m[11], key, partnerLinks)}</em>);
     else out.push(<br key={key} />);
     last = index + m[0].length;
   }
@@ -213,81 +227,108 @@ export interface MarkdownProps {
    * '#' or '##' and the page outline never skips a level.
    */
   minLevel?: number;
+  /**
+   * Rendered once inside the text (e.g. the blog's inline partner unit): before the second top-level heading, or after
+   * the third block of a long text without headings. Short texts get none (see `interludeIndex`).
+   */
+  interlude?: ReactNode;
 }
 
-export function Markdown({ source, className, minLevel = 2 }: MarkdownProps) {
+/** Where `interlude` goes: the index of the block it precedes, or -1. */
+export function interludeIndex(blocks: readonly Block[]): number {
+  const top = topLevel(blocks);
+  const headings = blocks.map((b, i) => (b.kind === 'heading' && b.level === top ? i : -1)).filter((i) => i >= 0);
+  if (headings.length >= 2) return headings[1];
+  if (headings.length === 1 && headings[0] >= 2) return headings[0];
+  return blocks.length >= 5 ? 3 : -1;
+}
+
+export function Markdown({ source, className, minLevel = 2, interlude }: MarkdownProps) {
+  const partnerLinks = usePartnerLinkRules();
   if (!source) return null;
   const used = new Map<string, number>();
   const blocks = parseMarkdown(source);
   const top = topLevel(blocks);
+  const interludeAt = interlude ? interludeIndex(blocks) : -1;
+  const renderBlock = (block: Block, key: string): ReactNode => {
+    switch (block.kind) {
+      case 'heading': {
+        const level = headingLevel(block.level, top, minLevel);
+        const Tag = `h${level}` as 'h2';
+        return (
+          <Tag key={key} id={uniqueId(slugifyHeading(block.text), used)}>
+            {renderInline(block.text, key, partnerLinks)}
+          </Tag>
+        );
+      }
+      case 'paragraph':
+        return <p key={key}>{renderInline(block.text, key, partnerLinks)}</p>;
+      case 'list': {
+        const Tag = block.ordered ? 'ol' : 'ul';
+        return (
+          <Tag key={key}>
+            {block.items.map((item, j) => (
+              <li key={j}>{renderInline(item, `${key}-${j}`, partnerLinks)}</li>
+            ))}
+          </Tag>
+        );
+      }
+      case 'quote':
+        return (
+          <blockquote key={key}>
+            <Markdown source={block.text} minLevel={minLevel} className="site-prose--nested" />
+          </blockquote>
+        );
+      case 'code':
+        return (
+          <pre key={key}>
+            <code>{block.text}</code>
+          </pre>
+        );
+      case 'table':
+        return (
+          <ScrollArea key={key} className="site-prose__table" label="Table">
+            <table>
+              <thead>
+                <tr>
+                  {block.header.map((cell, j) => (
+                    <th key={j} scope="col">
+                      {renderInline(cell, `${key}-h${j}`, partnerLinks)}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {block.rows.map((row, r) => (
+                  <tr key={r}>
+                    {row.map((cell, j) => (
+                      <td key={j}>{renderInline(cell, `${key}-${r}-${j}`, partnerLinks)}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </ScrollArea>
+        );
+      case 'rule':
+        return <hr key={key} />;
+      default:
+        return null;
+    }
+  };
   return (
     <div className={clsx('site-prose', className)}>
       {blocks.map((block, index) => {
         const key = `b${index}`;
-        switch (block.kind) {
-          case 'heading': {
-            const level = headingLevel(block.level, top, minLevel);
-            const Tag = `h${level}` as 'h2';
-            return (
-              <Tag key={key} id={uniqueId(slugifyHeading(block.text), used)}>
-                {renderInline(block.text, key)}
-              </Tag>
-            );
-          }
-          case 'paragraph':
-            return <p key={key}>{renderInline(block.text, key)}</p>;
-          case 'list': {
-            const Tag = block.ordered ? 'ol' : 'ul';
-            return (
-              <Tag key={key}>
-                {block.items.map((item, j) => (
-                  <li key={j}>{renderInline(item, `${key}-${j}`)}</li>
-                ))}
-              </Tag>
-            );
-          }
-          case 'quote':
-            return (
-              <blockquote key={key}>
-                <Markdown source={block.text} minLevel={minLevel} className="site-prose--nested" />
-              </blockquote>
-            );
-          case 'code':
-            return (
-              <pre key={key}>
-                <code>{block.text}</code>
-              </pre>
-            );
-          case 'table':
-            return (
-              <ScrollArea key={key} className="site-prose__table" label="Table">
-                <table>
-                  <thead>
-                    <tr>
-                      {block.header.map((cell, j) => (
-                        <th key={j} scope="col">
-                          {renderInline(cell, `${key}-h${j}`)}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {block.rows.map((row, r) => (
-                      <tr key={r}>
-                        {row.map((cell, j) => (
-                          <td key={j}>{renderInline(cell, `${key}-${r}-${j}`)}</td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </ScrollArea>
-            );
-          case 'rule':
-            return <hr key={key} />;
-          default:
-            return null;
-        }
+        const node = renderBlock(block, key);
+        return index === interludeAt ? (
+          <Fragment key={key}>
+            {interlude}
+            {node}
+          </Fragment>
+        ) : (
+          node
+        );
       })}
     </div>
   );

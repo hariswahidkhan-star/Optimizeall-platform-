@@ -73,6 +73,12 @@ public sealed class DefaultDenyTests(ApiFactory api) : IClassFixture<ApiFactory>
         "GET api/v1/public/redirects",
         "GET api/v1/public/redirects/gate",
         "HEAD api/v1/public/redirects/gate",
+        // Partners: the partners page, profiles and ad units, the impression beacon and the click redirect (Website/Partners).
+        "GET api/v1/public/partners",
+        "GET api/v1/public/partners/placement",
+        "GET api/v1/public/partners/{slug}",
+        "POST api/v1/public/partners/impressions",
+        "GET api/v1/public/partners/{slug}/visit",
         "GET api/v1/public/blog",
         "GET api/v1/public/blog/{slug}",
         "GET api/v1/public/blog/rss.xml",

@@ -104,6 +104,12 @@ import { defineConfig, devices } from '@playwright/test';
  * the browser at UTC+14, UTC-12 and UTC+05:45, invoices in currencies with 0/2/3 minor units, and a list of identical
  * rows paged through plus wildcard/quote/backslash/emoji search. Serial, one worker, desktop only. Run it with
  * `E2E_SUITE=j-edge E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
+ *
+ * The j-partners suite covers partners and sponsored placements against the Baseline + Demo seed: the home partner
+ * strip and footer line, /partners and the profile pages (JSON-LD, head tags, sitemap), a sponsored unit on a blog post,
+ * rel="sponsored noopener" on every outbound partner link and the click redirect with UTM tags, and the Website →
+ * Partners editor and report. Serial, one worker, desktop only. Run it with
+ * `E2E_SUITE=j-partners E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
  */
 const suite = process.env.E2E_SUITE ?? 'smoke';
 /** Suites whose mobile project runs only responsive.spec.ts (and whose desktop project runs everything else). */
@@ -123,6 +129,7 @@ const desktopJourney = [
   'j-edge',
   'j-email',
   'j-auth',
+  'j-partners',
 ].includes(suite);
 /** The finance journey compares datetime-local input (browser time) with UTC periods, so its browser runs in UTC. */
 const finance = suite === 'j-finance';

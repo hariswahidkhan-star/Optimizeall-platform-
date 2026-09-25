@@ -42,7 +42,7 @@ public static class RedirectPaths
     {
         "/", "/services", "/industries", "/case-studies", "/pricing", "/team", "/careers", "/blog", "/contact", "/free-audit",
         "/get-a-quote", "/book-a-consultation", "/newsletter", "/newsletter/confirm", "/newsletter/unsubscribe", "/search", "/faq",
-        "/creators", "/lp", "/robots.txt", "/sitemap.xml", "/favicon.ico",
+        "/creators", "/lp", "/robots.txt", "/sitemap.xml", "/favicon.ico", "/partners",
     };
 
     /// <summary>Parses a raw request target ("/path?query#fragment"); null when it is not a safe same-site address.</summary>

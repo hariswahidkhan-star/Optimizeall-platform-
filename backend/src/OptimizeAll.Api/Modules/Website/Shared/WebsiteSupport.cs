@@ -225,6 +225,7 @@ public sealed class CmsStore(AppDbContext db, IAuditLogger audit, IDatabaseDiale
         nameof(WebsiteInquiry) => "Inquiry",
         nameof(ConsultationBooking) => "Booking",
         nameof(ConsultationBlackout) => "Blackout date",
+        nameof(WebsitePartner) => "Partner",
         _ => typeof(T).Name,
     };
 

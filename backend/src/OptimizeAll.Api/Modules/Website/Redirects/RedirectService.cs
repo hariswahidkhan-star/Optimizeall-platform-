@@ -174,6 +174,7 @@ public sealed class RedirectService(
                         db.Set<ServiceCategory>().Any(c => c.Id == s.CategoryId && c.IsPublished), ct),
                     "case-studies" => await db.Set<CaseStudy>().AnyAsync(c => c.Slug == slug && c.IsPublished, ct),
                     "industries" => await db.Set<Industry>().AnyAsync(i => i.Slug == slug && i.IsPublished, ct),
+                    "partners" => await db.Set<WebsitePartner>().AnyAsync(p => p.Slug == slug && p.IsActive, ct),
                     "careers" => await db.Set<JobOpening>().AnyAsync(j => j.Slug == slug && j.Status == JobOpeningStatus.Open &&
                         (j.ClosesAt == null || j.ClosesAt > now), ct),
                     _ => false,
