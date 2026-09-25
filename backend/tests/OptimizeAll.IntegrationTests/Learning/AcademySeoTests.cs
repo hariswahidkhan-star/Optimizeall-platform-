@@ -51,6 +51,19 @@ public sealed class AcademySeoTests(ApiFactory api) : IClassFixture<ApiFactory>
         }
         Assert.True(problems.Count == 0, string.Join("\n", problems));
 
+        // The partner blog posts (W1) link to these courses: each is a live academy page.
+        foreach (var course in new[]
+                 {
+                     "project-controls-with-ai", "project-finance-and-financial-modelling", "project-management-leadership-with-ai",
+                     "professional-certification-exam-success", "leadership-and-communication", "ai-for-data-analysis-and-decision-making",
+                     "prompt-engineering-foundations", "advanced-prompt-engineering", "mastering-claude", "mastering-chatgpt",
+                 })
+            Assert.Contains("/learn/" + course, urls);
+        var postLinks = OptimizeAll.Api.Modules.Website.Seed.PartnerPostLibrary.All
+            .SelectMany(p => Regex.Matches(p.Body, @"\]\((/learn/[a-z0-9-]+)\)").Select(m => m.Groups[1].Value)).Distinct().ToList();
+        Assert.NotEmpty(postLinks);
+        Assert.All(postLinks, link => Assert.Contains(link, urls));
+
         var llms = await anon.GetStringAsync("/llms.txt");
         Assert.Contains("## Academy (free courses)", llms);
         Assert.Contains("/learn.md", llms);

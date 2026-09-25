@@ -153,7 +153,8 @@ public static partial class CoursePackValidator
         if (lesson.DurationMinutes is < 1 or > 240) v.Add($"{lp}.durationMinutes", "Use a whole number of minutes from 1 to 240.");
         v.Markdown($"{lp}.body", lesson.Body, 20_000);
         v.Words($"{lp}.body", lesson.Body, 500, 1100);
-        if (!string.IsNullOrEmpty(lesson.Body) && TopHeadingRegex().IsMatch(lesson.Body))
+        // Only real headings count: "#" lines inside fenced code (robots.txt/shell comments, Markdown samples) are code.
+        if (!string.IsNullOrEmpty(lesson.Body) && TopHeadingRegex().IsMatch(StripCode(lesson.Body)))
             v.Add($"{lp}.body", "Headings start at ### (the page already has the lesson title).");
 
         if (lesson.Type == "video")
@@ -235,7 +236,9 @@ public static partial class CoursePackValidator
             v.Add($"{qp}.options", $"Give {min} to {max} options.");
             return;
         }
-        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        // Exact duplicates only: options that differ in capitalisation are distinct answers (e.g. #smallbusinesstips vs
+        // #SmallBusinessTips when the question is about capitalisation).
+        var seen = new HashSet<string>(StringComparer.Ordinal);
         for (var o = 0; o < options.Count; o++)
         {
             var text = options[o]?.Trim() ?? string.Empty;
@@ -302,7 +305,9 @@ public static partial class CoursePackValidator
         public void Unique(string path, List<string>? items)
         {
             if (items is null) return;
-            var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            // Exact duplicates only: options that differ in capitalisation are distinct answers (e.g. #smallbusinesstips vs
+        // #SmallBusinessTips when the question is about capitalisation).
+        var seen = new HashSet<string>(StringComparer.Ordinal);
             foreach (var item in items.Where(i => i is not null))
                 if (!seen.Add(item.Trim())) Add(path, $"'{item}' is listed twice.");
         }

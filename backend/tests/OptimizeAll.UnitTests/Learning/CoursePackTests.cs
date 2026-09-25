@@ -94,6 +94,11 @@ public sealed class CoursePackTests
         // HTML inside code is fine (technical SEO lessons show tags).
         p = Sample(); p.Modules![0].Lessons![0].Body += "\n\nUse `<link rel=\"canonical\">`.\n\n```html\n<title>Example</title>\n```";
         Assert.Empty(CoursePackValidator.Validate(p));
+        // "#" lines inside fenced code are not headings (robots.txt and shell comments, Markdown samples).
+        p = Sample(); p.Modules![0].Lessons![0].Body += "\n\n```text\n# robots.txt for https://www.example.com\nUser-agent: *\n```\n\n~~~markdown\n## Services\n~~~";
+        Assert.Empty(CoursePackValidator.Validate(p));
+        p = Sample(); p.Modules![0].Lessons![0].Body += "\n\n```text\ncode\n```\n\n# A real top heading after code";
+        AssertIssue(p, "modules[0].lessons[0].body");
         p = Sample(); p.Modules![0].Lessons![0].Body = "Too short."; AssertIssue(p, "modules[0].lessons[0].body");
         Assert.DoesNotContain(CoursePackValidator.Validate(p, PackValidationMode.Authoring), i => i.Path == "modules[0].lessons[0].body");
         p = Sample(); p.Modules![0].Lessons![1].Video = null; AssertIssue(p, "modules[0].lessons[1].video");
@@ -101,6 +106,12 @@ public sealed class CoursePackTests
         p = Sample(); p.Modules![0].Lessons![1].Video!.Src = "http://insecure.example.com/v.mp4"; AssertIssue(p, "modules[0].lessons[1].video.src");
         p = Sample(); p.Modules![0].Lessons![1].Video!.Src = "/api/v1/files/0f8fad5b-d9cb-469f-a165-70867728950e"; Assert.Empty(CoursePackValidator.Validate(p));
         p = Sample(); p.Modules![0].Lessons![0].KeyTakeaways = new() { "one" }; AssertIssue(p, "modules[0].lessons[0].keyTakeaways");
+        // Exact duplicate options are refused; options that differ only in capitalisation are different answers.
+        p = Sample(); var dup = p.Modules![0].Lessons![0].KnowledgeCheck![0]; dup.Options![1] = dup.Options[0];
+        AssertIssue(p, "modules[0].lessons[0].knowledgeCheck[0].options[1]");
+        p = Sample(); var caps = p.Modules![0].Lessons![0].KnowledgeCheck![0];
+        caps.Options = new() { "#smallbusinesstips", "#SMALLBUSINESSTIPS", "#SmallBusinessTips", "#s_m_a_l_l" }; caps.Correct = new() { 2 };
+        Assert.DoesNotContain(CoursePackValidator.Validate(p), i => i.Path.StartsWith("modules[0].lessons[0].knowledgeCheck[0].options", StringComparison.Ordinal));
         p = Sample(); p.Modules![0].Lessons![0].KnowledgeCheck = new() { p.Modules[0].Lessons![0].KnowledgeCheck![0] };
         AssertIssue(p, "modules[0].lessons[0].knowledgeCheck");
         p = Sample(); p.Modules![0].Lessons![0].KnowledgeCheck![0].Correct = new() { 7 }; AssertIssue(p, "modules[0].lessons[0].knowledgeCheck[0].correct");

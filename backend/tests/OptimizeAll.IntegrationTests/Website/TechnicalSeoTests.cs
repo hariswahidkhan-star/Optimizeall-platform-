@@ -411,7 +411,8 @@ public sealed class TechnicalSeoTests(ApiFactory api) : IClassFixture<ApiFactory
         Assert.Contains($"{Base}/services/seo", locs);
         Assert.Contains($"{Base}/blog/{slug}", locs);
         Assert.DoesNotContain($"{Base}/blog/{slug}-hidden", locs);
-        Assert.DoesNotContain(locs, l => l.Contains("/login") || l.Contains("/search") || l.Contains("/agency"));
+        // Sign-in, site search and portal pages are never listed (by first path segment: "/learn/ai-search-…" is a course).
+        Assert.DoesNotContain(locs, l => new Uri(l).AbsolutePath.Split('/')[1] is "login" or "search" or "agency");
         foreach (var loc in locs)
         {
             var doc = await GetDocAsync(loc[Base.Length..]);
