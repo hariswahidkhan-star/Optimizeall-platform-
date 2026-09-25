@@ -217,6 +217,14 @@ Every routed page is code-split: route modules reference pages through `lazyPage
 while visitors of the public site download ~107 KB (gzip) of shared code instead of every portal. Public-website
 routes use the router's `lazy` field. Add new pages the same way.
 
+### Learning (Optimize All Academy)
+
+`Modules/Learning` runs the free academy: course packs (`Modules/Learning/Catalog/*.json`, validated in CI and upserted
+by the Baseline seed), immutable course versions, enrolments and progress, server-graded exams, certificates (PDFsharp
+PDF with embedded OFL fonts, SVG, Open Badges 2.0, LinkedIn links) and the Learning admin. Public pages live under
+`/learn` (website) and `/verify/certificates/{id}`; the participant portal section is `/app/learning`. See
+[LEARNING.md](LEARNING.md).
+
 ### Third-party integrations
 
 External platforms (Meta/Instagram/Facebook, X, LinkedIn, TikTok, YouTube, Google Ads, Meta Ads, SMS/WhatsApp

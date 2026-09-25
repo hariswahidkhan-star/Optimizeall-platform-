@@ -20,6 +20,7 @@ interface PackQuestion {
   options: string[];
   correct: number[];
   type: 'single' | 'multiple';
+  explanation: string;
 }
 
 interface PackCheck {

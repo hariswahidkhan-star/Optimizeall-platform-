@@ -74,7 +74,9 @@ test.describe.serial('learner journey', () => {
     await expect(page.getByTestId('exam-outcome')).toHaveText('Not passed this time');
     // Per-question review with the correct answer and the explanation.
     await expect(page.getByText('Correct answer').first()).toBeVisible();
-    await expect(page.getByText(pack.finalExam.pool[0]!.explanation).or(page.getByText('Why:').first())).toBeVisible();
+    await expect(page.getByText('Why:').first()).toBeVisible();
+    const explanations = await page.locator('.lx-explanation').allTextContents();
+    expect(explanations.every((text) => pack.finalExam.pool.some((q) => text.includes(q.explanation)))).toBe(true);
     expect(await axeViolations(page)).toEqual([]);
 
     await page.getByRole('link', { name: /Retake/ }).click();

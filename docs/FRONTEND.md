@@ -188,7 +188,7 @@ where useful, the next action; errors sit in a card with a retry.
 
 | Portal | Home |
 |---|---|
-| Participant `/app` | Greeting + unread/support shortcuts, banners, earnings strip (pending · approved · paid · lifetime), submissions needing attention beside the next-payout panel, recommendations, achievements, announcements |
+| Participant `/app` | Greeting + unread/support shortcuts, banners, earnings strip (pending · approved · paid · lifetime), submissions needing attention beside the next-payout panel, recommendations, onboarding, a Learning panel (continue where you left off, progress rings, certificates, recommended courses — `features/participant/learning`, [LEARNING.md](LEARNING.md)), achievements, announcements |
 | Reviewer `/review` | “Start reviewing” action, workload strip (pending · under review · oldest · my decisions), secondary counts, quick links to each queue |
 | Campaign manager `/manage` | Last-30-days strip with deltas and sparklines, active campaigns table, submissions area chart beside spend-by-campaign meters |
 | Finance `/finance` | Strip (cutoff countdown · approvals · holds · batches awaiting payment), current period beside the schedule, latest batches beside reconciliation |
