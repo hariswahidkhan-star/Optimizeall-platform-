@@ -2263,9 +2263,8 @@ section > .lx-subhead {
 }
 
 /* The certificate sits on a soft "mat", like a framed document (only as tall as the document). */
-.ui-card:has(> .ui-card__body > .lx-cert-image) {
-  block-size: auto;
-  align-self: start;
+.ui-dash-cell > .ui-card:has(> .ui-card__body > .lx-cert-image) {
+  flex: none;
 }
 
 .ui-card__body:has(> .lx-cert-image) {
