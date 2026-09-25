@@ -27,16 +27,23 @@ public sealed class LearningCatalogSeeder(IDatabaseDialect dialect, TimeProvider
     public string Profile => "Baseline";
     public int Order => 40;
 
-    public Task SeedAsync(AppDbContext db, CancellationToken ct) => UpsertAsync(db, CoursePackLibrary.All, ct);
+    // Streams the packs one at a time: the whole parsed catalog is never in memory at once.
+    public Task SeedAsync(AppDbContext db, CancellationToken ct) => UpsertAsync(db, CoursePackLibrary.Enumerate(), ct);
 
-    public async Task<int> UpsertAsync(AppDbContext db, IReadOnlyList<PackFile> files, CancellationToken ct)
+    /// <summary>
+    /// Upserts each pack under its own savepoint, clearing the change tracker after each one (the content JSON of every
+    /// course version would otherwise stay tracked until the end). A pack that fails is rolled back, logged and skipped;
+    /// the others are still applied.
+    /// </summary>
+    public async Task<int> UpsertAsync(AppDbContext db, IEnumerable<PackFile> files, CancellationToken ct)
     {
         await using var _ = await dialect.AcquireNamedLockAsync(db, LockName, TimeSpan.FromSeconds(120), ct);
         await using var tx = await dialect.BeginWriteTransactionAsync(db, ct);
         var now = clock.GetUtcNow().UtcDateTime;
-        var changes = 0;
+        int changes = 0, packs = 0, failed = 0;
         foreach (var file in files)
         {
+            packs++;
             if (file.Pack is not { } pack)
             {
                 logger.LogError("Course pack {File} is not valid JSON: {Error}", file.FileName, file.ParseError);
@@ -48,11 +55,25 @@ public sealed class LearningCatalogSeeder(IDatabaseDialect dialect, TimeProvider
                 logger.LogError("Course pack {File} is invalid and was skipped: {Issues}", file.FileName, string.Join("; ", issues.Take(10)));
                 continue;
             }
-            if (await UpsertAsync(db, pack, now, ct)) changes++;
+            await tx.CreateSavepointAsync("course_pack", ct);
+            try
+            {
+                if (await UpsertAsync(db, pack, now, ct)) changes++;
+                await tx.ReleaseSavepointAsync("course_pack", ct);
+            }
+            catch (Exception ex) when (ex is not OperationCanceledException)
+            {
+                failed++;
+                await tx.RollbackToSavepointAsync("course_pack", ct);
+                logger.LogError(ex, "Course pack {File} could not be applied and was skipped", file.FileName);
+            }
+            finally
+            {
+                db.ChangeTracker.Clear();
+            }
         }
-        await db.SaveChangesAsync(ct);
         await tx.CommitAsync(ct);
-        if (changes > 0) logger.LogInformation("Learning catalog: {Count} course pack(s) added or updated", changes);
+        logger.LogInformation("Learning catalog: {Packs} course pack(s) checked, {Count} added or updated, {Failed} failed", packs, changes, failed);
         return changes;
     }
 

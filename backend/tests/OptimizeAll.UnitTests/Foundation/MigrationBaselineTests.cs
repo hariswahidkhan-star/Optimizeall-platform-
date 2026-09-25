@@ -67,6 +67,8 @@ public class MigrationBaselineTests
     [InlineData("", BaselineUpgradeMode.Auto)]
     [InlineData("auto", BaselineUpgradeMode.Auto)]
     [InlineData("Refuse", BaselineUpgradeMode.Refuse)]
+    [InlineData("autoorfresh", BaselineUpgradeMode.AutoOrFresh)]
+    [InlineData(" AutoOrFresh ", BaselineUpgradeMode.AutoOrFresh)]
     public void The_baseline_upgrade_mode_is_parsed(string? value, BaselineUpgradeMode expected) =>
         Assert.Equal(expected, BaselineUpgrade.ParseMode(value));
 

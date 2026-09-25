@@ -107,7 +107,7 @@ public sealed class LearningAdminService(
                                   u == null ? null : u.DisplayName, v.Id == course.PublishedVersionId, v.Id == course.LatestVersionId))
             .ToListAsync(ct);
         var packFile = course.Origin == CourseSource.Pack
-            ? CoursePackLibrary.All.FirstOrDefault(f => f.Pack?.Slug == course.Slug)?.FileName
+            ? CoursePackLibrary.FileNameForSlug(course.Slug)
             : null;
         return new AdminCourseDetailDto(row, versions, packFile);
     }

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -19,10 +20,18 @@ public sealed class DatabaseOptions
 
     /// <summary>
     /// What Migrate does with a database created from an earlier, replaced <c>InitialCreate</c> baseline: "Auto" (default;
-    /// SQLite: back up the file and copy its data into the current schema; MySQL: refuse with instructions) or "Refuse".
+    /// SQLite: back up the file and copy its data into the current schema; MySQL: refuse with instructions), "Refuse", or
+    /// "AutoOrFresh" (demo/staging only: like Auto, but when the upgrade fails verification or the file is unreadable, the
+    /// old file is set aside unchanged in backups/ and the API starts with a fresh database).
     /// See the BaselineUpgrade class and docs/DATABASE.md § Baseline upgrade.
     /// </summary>
     public string BaselineUpgrade { get; set; } = "Auto";
+
+    /// <summary>
+    /// What startup does when a seeder throws: "Continue" (default; log the error, skip that seeder, start the API) or
+    /// "Fail" (stop startup). Schema and migration failures are always fatal.
+    /// </summary>
+    public string SeedFailure { get; set; } = "Continue";
 
     /// <summary>How long startup waits for the database server to accept connections before failing.</summary>
     public int StartupWaitSeconds { get; set; } = 120;
@@ -55,17 +64,27 @@ public static class DatabaseInitializer
         var logger = sp.GetRequiredService<ILoggerFactory>().CreateLogger("DatabaseInitializer");
         var options = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<DatabaseOptions>>().Value;
         var db = sp.GetRequiredService<AppDbContext>();
+        var total = Stopwatch.StartNew();
+        logger.LogInformation("Startup: database initialization ({Provider}, mode {Mode}, seed [{Seed}], baseline upgrade {Upgrade})",
+            db.Database.ProviderName, options.InitializationMode, string.Join(", ", options.Seed), options.BaselineUpgrade);
 
         // A SQLite file needs no server; its directory is created when the connection string is resolved.
         if (options.InitializationMode != "None" && db.IsMySql)
             await WaitForDatabaseAsync(db, options.StartupWaitSeconds, logger, ct);
 
+        // Schema: failures are fatal (the API must not run on a schema it doesn't know), except that
+        // Database:BaselineUpgrade=AutoOrFresh (demo/staging) falls back to a fresh database inside BaselineUpgrade.
+        var phase = Stopwatch.StartNew();
         switch (options.InitializationMode)
         {
             case "Migrate":
                 // A database from an earlier InitialCreate would otherwise fail on its first CREATE TABLE.
-                if (await BaselineUpgrade.RunIfNeededAsync(sp, db, options, logger, ct) is not null)
+                if (await BaselineUpgrade.RunIfNeededAsync(sp, db, options, logger, ct) is { } upgrade)
+                {
                     db.ChangeTracker.Clear();
+                    logger.LogWarning("Startup: baseline {Outcome} done in {Ms} ms",
+                        upgrade.StartedFresh ? "reset (fresh database, old file set aside)" : "upgrade", phase.ElapsedMilliseconds);
+                }
                 logger.LogInformation("Applying database migrations ({Provider})", db.Database.ProviderName);
                 await db.Database.MigrateAsync(ct);
                 break;
@@ -77,20 +96,52 @@ public static class DatabaseInitializer
             default:
                 throw new InvalidOperationException($"Unknown Database:InitializationMode '{options.InitializationMode}'.");
         }
+        logger.LogInformation("Startup: schema ready in {Ms} ms ({Memory})", phase.ElapsedMilliseconds, MemoryNow());
 
         await EnsureDataProtectionKeyAsync(sp, db, logger, ct);
         await EnsureBootstrapAdminAsync(sp, db, logger, ct);
 
+        // Seed: idempotent reference/demo data. A failing seeder is logged and skipped (Database:SeedFailure=Continue, the
+        // default), so a data problem in, say, the demo content cannot keep the whole API from starting; "Fail" stops.
+        var failFast = string.Equals(options.SeedFailure, "Fail", StringComparison.OrdinalIgnoreCase);
+        var failed = new List<string>();
         var seeders = sp.GetServices<ISeeder>().OrderBy(s => s.Order).ToList();
         foreach (var profile in options.Seed)
         {
             foreach (var seeder in seeders.Where(s => string.Equals(s.Profile, profile, StringComparison.OrdinalIgnoreCase)))
             {
-                logger.LogInformation("Running seeder {Seeder} ({Profile})", seeder.GetType().Name, profile);
-                await seeder.SeedAsync(db, ct);
-                db.ChangeTracker.Clear();
+                var name = seeder.GetType().Name;
+                logger.LogInformation("Running seeder {Seeder} ({Profile})", name, profile);
+                phase.Restart();
+                try
+                {
+                    await seeder.SeedAsync(db, ct);
+                    logger.LogInformation("Startup: seeder {Seeder} done in {Ms} ms ({Memory})", name, phase.ElapsedMilliseconds, MemoryNow());
+                }
+                catch (Exception ex) when (!failFast && ex is not OperationCanceledException)
+                {
+                    failed.Add(name);
+                    logger.LogError(ex, "Startup: seeder {Seeder} ({Profile}) failed after {Ms} ms and was skipped; the API starts " +
+                                        "without its data (Database:SeedFailure=Continue)", name, profile, phase.ElapsedMilliseconds);
+                    await db.Database.CloseConnectionAsync(); // rolls back a transaction the seeder left open
+                }
+                finally
+                {
+                    db.ChangeTracker.Clear();
+                }
             }
         }
+        if (failed.Count > 0)
+            logger.LogError("Startup: {Count} seeder(s) failed and were skipped: {Seeders}", failed.Count, string.Join(", ", failed));
+        logger.LogInformation("Startup: database initialization finished in {Ms} ms ({Memory})", total.ElapsedMilliseconds, MemoryNow());
+    }
+
+    /// <summary>Managed heap and process memory, for the startup phase logs (small hosts such as Render starter: 512 MB).</summary>
+    private static string MemoryNow()
+    {
+        var info = GC.GetGCMemoryInfo();
+        return $"managed heap {GC.GetTotalMemory(false) / 1048576} MiB, GC committed {info.TotalCommittedBytes / 1048576} MiB, " +
+               $"working set {Environment.WorkingSet / 1048576} MiB";
     }
 
     /// <summary>

@@ -81,6 +81,7 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
                 ["Database:InitializationMode"] = Environment.GetEnvironmentVariable("OPTIMIZEALL_TEST_DB_INIT") ?? "Migrate",
                 ["Database:InitializeOnStartup"] = "true",
                 ["Database:Seed:0"] = "Baseline",
+                ["Database:SeedFailure"] = "Fail", // tests surface seeder bugs instead of skipping them
                 ["Jwt:SigningKey"] = "integration-test-signing-key-0123456789abcdef0123",
                 ["Security:HashSalt"] = "integration-test-salt",
                 ["Security:SecureCookies"] = "false",

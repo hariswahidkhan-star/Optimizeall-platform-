@@ -47,16 +47,38 @@ public static class BaselineUpgrade
         var known = db.Database.GetMigrations().ToList();
         var current = known.FirstOrDefault(id => id.EndsWith(InitialCreateSuffix, StringComparison.Ordinal))
                       ?? throw new InvalidOperationException("This build contains no InitialCreate migration.");
-        var foreign = FindForeignBaseline(await db.Database.GetAppliedMigrationsAsync(ct), known);
-        if (foreign is null) return null;
 
         if (db.IsMySql)
+        {
+            var foreignMySql = FindForeignBaseline(await db.Database.GetAppliedMigrationsAsync(ct), known);
+            if (foreignMySql is null) return null;
             throw new BaselineUpgradeException(
-                $"The MySQL database was created by an earlier release (baseline migration '{foreign}'); this release's " +
+                $"The MySQL database was created by an earlier release (baseline migration '{foreignMySql}'); this release's " +
                 $"baseline is '{current}', so its schema cannot be migrated in place and the API will not start. Automatic " +
                 "baseline upgrade is supported on SQLite only. Back up the database, then run " +
                 "scripts/upgrade-baseline-mysql.sh (docs/DATABASE.md § Baseline upgrade), which copies the data into the " +
                 "current schema and keeps the old tables in a backup database; or redeploy the release that created it.");
+        }
+
+        var dialect = sp.GetRequiredService<IDatabaseDialect>();
+        await using var _ = await dialect.AcquireNamedLockAsync(db, "database-baseline-upgrade", TimeSpan.FromMinutes(5), ct);
+        db.ChangeTracker.Clear();
+
+        var probe = await SqliteDatabaseProbe.InspectAsync(db, known, verifyIntegrity: mode == BaselineUpgradeMode.AutoOrFresh, ct);
+        if (probe.Unreadable is { } unreadable)
+        {
+            if (mode != BaselineUpgradeMode.AutoOrFresh)
+                throw new BaselineUpgradeException(
+                    $"The SQLite database {probe.Path} cannot be read ({unreadable}), so the API will not start. Restore it from " +
+                    "a backup (docs/RENDER.md § Backups), or on a demo/staging environment set " +
+                    "Database:BaselineUpgrade=AutoOrFresh to set the file aside and start with a fresh database " +
+                    "(docs/DATABASE.md § Baseline upgrade).");
+            return await SqliteFreshStart.SetAsideAsync(db, probe.Path, "unreadable", unreadable, logger, ct);
+        }
+
+        var foreign = probe.ForeignBaseline;
+        if (foreign is null) return null;
+
         if (mode == BaselineUpgradeMode.Refuse)
             throw new BaselineUpgradeException(
                 $"The SQLite database was created by an earlier release (baseline migration '{foreign}'); this release's " +
@@ -64,25 +86,30 @@ public static class BaselineUpgrade
                 "Database:BaselineUpgrade=Auto (the default) to back up the file and copy its data into the current schema " +
                 "at startup (docs/DATABASE.md § Baseline upgrade), or redeploy the release that created it.");
 
-        var dialect = sp.GetRequiredService<IDatabaseDialect>();
-        await using var _ = await dialect.AcquireNamedLockAsync(db, "database-baseline-upgrade", TimeSpan.FromMinutes(5), ct);
-        // Another caller in this process may have upgraded the file while this one waited for the lock.
-        db.ChangeTracker.Clear();
-        foreign = FindForeignBaseline(await db.Database.GetAppliedMigrationsAsync(ct), known);
-        if (foreign is null) return null;
-
         logger.LogWarning(
             "Database baseline {Foreign} is not this release's baseline {Current}: upgrading the SQLite database by copying " +
-            "its data into the current schema (Database:BaselineUpgrade=Auto)", foreign, current);
-        var summary = await new SqliteBaselineUpgrader(sp, db, logger).UpgradeAsync(foreign, ct);
-        summary.Log(logger);
-        return summary;
+            "its data into the current schema (Database:BaselineUpgrade={Mode})", foreign, current, mode);
+        try
+        {
+            var summary = await new SqliteBaselineUpgrader(sp, db, logger).UpgradeAsync(foreign, ct);
+            summary.Log(logger);
+            return summary;
+        }
+        catch (Exception ex) when (mode == BaselineUpgradeMode.AutoOrFresh && ex is not OperationCanceledException)
+        {
+            // The upgrader left the live file untouched; its online-backup copy is redundant next to the set-aside file.
+            if (ex is BaselineUpgradeException { BackupPath: { } copy }) SqliteFreshStart.TryDelete(copy, logger);
+            return await SqliteFreshStart.SetAsideAsync(db, probe.Path, foreign, ex.Message, logger, ct);
+        }
     }
+
+    /// <summary>Label used for a database that has tables but no migrations history (created outside EF migrations).</summary>
+    public const string NoHistoryBaseline = "no-migrations-history";
 
     public static BaselineUpgradeMode ParseMode(string? value) =>
         string.IsNullOrWhiteSpace(value) ? BaselineUpgradeMode.Auto
         : Enum.TryParse<BaselineUpgradeMode>(value.Trim(), ignoreCase: true, out var mode) && Enum.IsDefined(mode) ? mode
-        : throw new InvalidOperationException($"Unknown Database:BaselineUpgrade '{value}'. Use Auto or Refuse.");
+        : throw new InvalidOperationException($"Unknown Database:BaselineUpgrade '{value}'. Use Auto, Refuse or AutoOrFresh.");
 }
 
 public enum BaselineUpgradeMode
@@ -92,10 +119,22 @@ public enum BaselineUpgradeMode
 
     /// <summary>Refuse to start when the database has a foreign baseline.</summary>
     Refuse,
+
+    /// <summary>
+    /// Demo/staging only. Like <see cref="Auto"/>, but when the upgrade fails verification, or the SQLite file cannot be
+    /// read, the file is set aside unchanged as <c>backups/&lt;name&gt;-&lt;old baseline&gt;-&lt;utc&gt;-unmigrated.db</c> and the
+    /// API starts with a fresh database (migrations + seed). Never use it where the data matters. MySQL: as Auto.
+    /// </summary>
+    AutoOrFresh,
 }
 
 /// <summary>The database cannot be brought to the current schema automatically; the message says what to do.</summary>
-public sealed class BaselineUpgradeException(string message, Exception? inner = null) : InvalidOperationException(message, inner);
+public sealed class BaselineUpgradeException(string message, Exception? inner = null, string? backupPath = null)
+    : InvalidOperationException(message, inner)
+{
+    /// <summary>The online-backup copy the failed upgrade made, if any (the live file is unchanged).</summary>
+    public string? BackupPath { get; } = backupPath;
+}
 
 public sealed record BaselineTableCopy(string Table, long Rows, IReadOnlyList<string> NewColumns, IReadOnlyList<string> DroppedColumns);
 
@@ -107,6 +146,12 @@ public sealed record BaselineUpgradeSummary(
     IReadOnlyList<string> DroppedTables,
     TimeSpan Elapsed)
 {
+    /// <summary>
+    /// True when <see cref="BaselineUpgradeMode.AutoOrFresh"/> set the old file aside (<see cref="BackupPath"/>) and the API
+    /// starts with a fresh, empty database instead of an upgraded one.
+    /// </summary>
+    public bool StartedFresh { get; init; }
+
     public void Log(ILogger logger)
     {
         logger.LogWarning(
@@ -158,11 +203,20 @@ internal sealed class SqliteBaselineUpgrader(IServiceProvider sp, AppDbContext d
         DeleteDatabaseFiles(tempPath); // left over from an interrupted attempt
 
         // (1) Backup: checkpoint, then SQLite's online backup (a consistent single-file copy including any WAL content).
-        await using (var live = await OpenAsync(livePath, ct))
+        try
         {
+            await using var live = await OpenAsync(livePath, ct);
             await CheckpointAsync(live, livePath, ct);
             await using var backup = await OpenAsync(backupPath, ct);
             live.BackupDatabase(backup);
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            SqliteConnection.ClearAllPools();
+            DeleteDatabaseFiles(backupPath);
+            throw new BaselineUpgradeException(
+                $"Baseline upgrade from '{foreignBaseline}' failed before any change: the database {livePath} could not be " +
+                $"backed up. Cause: {ex.Message}", ex);
         }
         logger.LogWarning("Baseline upgrade: backed up {Live} to {Backup}", livePath, backupPath);
 
@@ -192,7 +246,7 @@ internal sealed class SqliteBaselineUpgrader(IServiceProvider sp, AppDbContext d
             throw new BaselineUpgradeException(
                 $"Baseline upgrade from '{foreignBaseline}' failed; the database {livePath} was left unchanged (a backup is at " +
                 $"{backupPath}). Cause: {ex.Message} Fix the data or set Database:BaselineUpgrade=Refuse and upgrade manually " +
-                "(docs/DATABASE.md § Baseline upgrade).", ex);
+                "(docs/DATABASE.md § Baseline upgrade).", ex, backupPath);
         }
 
         // (5) Swap. No connection is open (no pooling on the upgrade connections, pools cleared); the live file was fully

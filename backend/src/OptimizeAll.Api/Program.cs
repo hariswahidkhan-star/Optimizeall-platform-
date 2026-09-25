@@ -356,7 +356,11 @@ app.MapHealthChecks("/health/ready", new()
 }).AllowAnonymous();
 
 if (app.Configuration.GetValue("Database:InitializeOnStartup", true))
+{
+    // /health/live answers (and other paths 503 "starting") while migrations and seeding run.
+    await using var probe = await StartupProbe.StartAsync(app);
     await DatabaseInitializer.InitializeAsync(app.Services);
+}
 
 // Load the site URL / remembered origin now, so the first request never waits on it (IPublicOrigin.Current is synchronous).
 await app.Services.GetRequiredService<IPublicOrigin>().GetAsync();

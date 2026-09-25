@@ -23,7 +23,10 @@ namespace OptimizeAll.IntegrationTests.Infrastructure;
 /// whatever OPTIMIZEALL_TEST_PROVIDER says.
 /// <para>Fixtures (Fixtures/Baselines/sqlite-&lt;migration id&gt;.db.br, Brotli): the SQLite file an earlier release creates
 /// on its first Render start, i.e. that commit's API started once with Database:InitializationMode=Migrate and the
-/// Baseline+Demo seed, then VACUUMed. 20260924192026 is commit b70926b, 20260924231550 is commit a730b95. To add one:
+/// Baseline+Demo seed, then VACUUMed. 20260923201802 is commit 5ca8a65 (the first SQLite release: its first start
+/// migrated, then crashed in the Baseline seed, so the file has the schema and almost no rows), 20260923214609 is f781343,
+/// 20260924192026 is b70926b, 20260924231550 is a730b95. Every other InitialCreate of the history (20 on the main line)
+/// was checked the same way against the Render-like container (docs/DATABASE.md § Baseline upgrade). To add one:
 /// <c>git archive &lt;commit&gt; backend global.json | tar -x -C /tmp/old</c>, build it, start it once as in render.yaml
 /// (Database__Provider=Sqlite, Database__SqlitePath=…, Seed Baseline+Demo), stop it, VACUUM and Brotli-compress the file.</para>
 /// </summary>
@@ -59,6 +62,7 @@ public sealed class BaselineUpgradeTests : IDisposable
                     ["Database:InitializationMode"] = "Migrate",
                     ["Database:InitializeOnStartup"] = "true",
                     ["Database:BaselineUpgrade"] = mode,
+                    ["Database:SeedFailure"] = "Fail",
                     ["Jwt:SigningKey"] = "integration-test-signing-key-0123456789abcdef0123",
                     ["Security:HashSalt"] = "integration-test-salt",
                     ["Security:SecureCookies"] = "false",
@@ -90,7 +94,12 @@ public sealed class BaselineUpgradeTests : IDisposable
         brotli.CopyTo(output);
     }
 
-    public static TheoryData<string> Fixtures => new() { "20260924192026_InitialCreate", "20260924231550_InitialCreate" };
+    public static TheoryData<string> Fixtures => new()
+    {
+        "20260923214609_InitialCreate", // f781343, the oldest release whose first start completed its seed
+        "20260924192026_InitialCreate",
+        "20260924231550_InitialCreate",
+    };
 
     [Theory]
     [MemberData(nameof(Fixtures))]
@@ -150,6 +159,109 @@ public sealed class BaselineUpgradeTests : IDisposable
             Assert.True(reseeded[table] >= before[table], $"{table}: {before[table]} rows before, {reseeded[table]} after seeding");
         Assert.Equal(before["users"], reseeded["users"]); // the demo seed found its accounts instead of adding them again
         Assert.Equal(new[] { "ok" }, Query(DbPath, "PRAGMA integrity_check"));
+    }
+
+    [Fact]
+    public async Task The_oldest_baseline_left_by_a_crashed_first_start_is_upgraded_and_seeded_in_one_start()
+    {
+        // 5ca8a65: migrated, then crashed in the Baseline seed. Render then starts the new release with Baseline+Demo.
+        ExtractFixture("20260923201802_InitialCreate");
+        Assert.Equal(new[] { "20260923201802_InitialCreate" }, Query(DbPath, "SELECT MigrationId FROM __EFMigrationsHistory"));
+
+        await using (var host = Start("Auto", "Baseline", "Demo"))
+        {
+            await host.StartAsync();
+            using var client = host.CreateClient();
+            client.DefaultRequestHeaders.Add("X-Requested-With", "tests");
+            Assert.Equal(HttpStatusCode.OK, (await client.GetAsync("/health/ready")).StatusCode);
+            var login = await client.PostAsJsonAsync("/api/v1/auth/login", new { email = DemoAccounts.Admin, password = DemoAccounts.Password });
+            Assert.Equal(HttpStatusCode.OK, login.StatusCode);
+        }
+        SqliteConnection.ClearAllPools();
+        Assert.Equal(new[] { CurrentSqliteBaseline }, Query(DbPath, "SELECT MigrationId FROM __EFMigrationsHistory"));
+        Assert.StartsWith("optimizeall-20260923201802_InitialCreate-", Path.GetFileName(Assert.Single(Directory.GetFiles(BackupDirectory))));
+        Assert.Equal(new[] { "ok" }, Query(DbPath, "PRAGMA integrity_check"));
+    }
+
+    [Fact]
+    public async Task AutoOrFresh_sets_a_database_that_fails_verification_aside_and_starts_fresh()
+    {
+        await CreateCurrentDatabaseWithUserAsync();
+        Exec(DbPath,
+            "PRAGMA foreign_keys=OFF;" +
+            "UPDATE __EFMigrationsHistory SET MigrationId = '20200101000000_InitialCreate';" +
+            "INSERT INTO user_roles (UserId, Role, GrantedAt) VALUES ('00000000-0000-0000-0000-00000000DEAD', 'Admin', '2026-01-01 00:00:00');");
+        var hash = Hash(DbPath);
+
+        await using (var host = Start("AutoOrFresh", "Baseline"))
+        {
+            await host.StartAsync();
+            using var client = host.CreateClient();
+            Assert.Equal(HttpStatusCode.OK, (await client.GetAsync("/health/ready")).StatusCode);
+        }
+        SqliteConnection.ClearAllPools();
+
+        // The old file is kept byte for byte under a name that says what happened; nothing else is left behind.
+        var aside = Assert.Single(Directory.GetFiles(BackupDirectory));
+        Assert.Matches(@"^optimizeall-20200101000000_InitialCreate-\d{8}T\d{6}Z-unmigrated\.db$", Path.GetFileName(aside));
+        Assert.Equal(hash, Hash(aside));
+        Assert.Empty(Directory.GetFiles(_directory, "*.tmp*"));
+        // The live database is new: current baseline, seeded, without the old rows.
+        Assert.Equal(new[] { CurrentSqliteBaseline }, Query(DbPath, "SELECT MigrationId FROM __EFMigrationsHistory"));
+        Assert.Equal(new[] { "0" }, Query(DbPath, "SELECT COUNT(*) FROM users WHERE NormalizedEmail = 'UPGRADE@EXAMPLE.TEST'"));
+        Assert.NotEqual(new[] { "0" }, Query(DbPath, "SELECT COUNT(*) FROM campaign_categories"));
+
+        // The next start finds the current baseline and keeps the database.
+        await using (var host = Start("AutoOrFresh"))
+            await host.StartAsync();
+        SqliteConnection.ClearAllPools();
+        Assert.Single(Directory.GetFiles(BackupDirectory));
+    }
+
+    [Fact]
+    public async Task An_unreadable_file_refuses_in_Auto_and_starts_fresh_in_AutoOrFresh()
+    {
+        var junk = new byte[64 * 1024];
+        new Random(42).NextBytes(junk);
+        File.WriteAllBytes(DbPath, junk);
+        var hash = Hash(DbPath);
+
+        await using (var host = Start("Auto"))
+        {
+            var error = await Assert.ThrowsAnyAsync<Exception>(() => host.StartAsync());
+            var refusal = Find<BaselineUpgradeException>(error);
+            Assert.Contains("cannot be read", refusal.Message);
+            Assert.Contains("AutoOrFresh", refusal.Message);
+        }
+        SqliteConnection.ClearAllPools();
+        Assert.Equal(hash, Hash(DbPath));
+
+        await using (var host = Start("AutoOrFresh", "Baseline"))
+        {
+            await host.StartAsync();
+            using var client = host.CreateClient();
+            Assert.Equal(HttpStatusCode.OK, (await client.GetAsync("/health/ready")).StatusCode);
+        }
+        SqliteConnection.ClearAllPools();
+        var aside = Assert.Single(Directory.GetFiles(BackupDirectory));
+        Assert.Matches(@"^optimizeall-unreadable-\d{8}T\d{6}Z-unmigrated\.db$", Path.GetFileName(aside));
+        Assert.Equal(hash, Hash(aside));
+        Assert.Equal(new[] { CurrentSqliteBaseline }, Query(DbPath, "SELECT MigrationId FROM __EFMigrationsHistory"));
+    }
+
+    [Fact]
+    public async Task Tables_without_a_migrations_history_are_treated_as_a_foreign_baseline()
+    {
+        var userId = await CreateCurrentDatabaseWithUserAsync();
+        Exec(DbPath, "DROP TABLE __EFMigrationsHistory;");
+
+        await using (var host = Start("Auto"))
+            await host.StartAsync();
+        SqliteConnection.ClearAllPools();
+
+        Assert.Equal(new[] { CurrentSqliteBaseline }, Query(DbPath, "SELECT MigrationId FROM __EFMigrationsHistory"));
+        Assert.Equal(new[] { "1" }, Query(DbPath, $"SELECT COUNT(*) FROM users WHERE Id = '{userId.ToString().ToUpperInvariant()}'"));
+        Assert.StartsWith($"optimizeall-{BaselineUpgrade.NoHistoryBaseline}-", Path.GetFileName(Assert.Single(Directory.GetFiles(BackupDirectory))));
     }
 
     [Fact]
