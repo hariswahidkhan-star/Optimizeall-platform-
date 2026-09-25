@@ -5,7 +5,7 @@
   "subtitle": "Design, build, secure, evaluate and ship AI agents that work reliably with real tools, data and people",
   "category": "ai",
   "level": "advanced",
-  "estimatedMinutes": 466,
+  "estimatedMinutes": 470,
   "lastReviewed": "2026-09",
   "description": "Agents are moving from demos to production, and most fail for engineering reasons, not model reasons. This advanced course teaches you to build agents that work reliably. You will learn when an agent is the right choice and when a workflow is better, the core architectures (prompt chaining, routing, orchestrator–workers, evaluator–optimizer, multi-agent), and how to hand-build the agent loop in Python. You will design tools models use correctly, tune reasoning effort, engineer context and memory, and make long-running agents durable and idempotent. You will add human approvals, defend against prompt injection with least privilege and validators, evaluate outcomes and trajectories with pass^k, and instrument agents with OpenTelemetry. Finally you will cut cost and latency, deploy with sandboxes and staged rollouts, compare today's agent SDKs (Claude Agent SDK, OpenAI Agents SDK, Google ADK, LangGraph, CrewAI, Microsoft Agent Framework), and build and launch a research-and-ops agent end to end.",
   "outcomes": [
@@ -579,6 +579,12 @@
                 "seconds": 37
               },
               {
+                "narration": "A question people often ask: how long should a tool description be? Longer than you think, but not a novel. For an important tool, three to six sentences is typical: what it does, when to use it, when not to, what it needs first, the limits, and what it returns. For a trivial tool, one or two sentences is fine. The test is simple: could a smart new colleague use this tool correctly after reading only the description? If they'd need to ask a question, the model needs the answer written down too.",
+                "onScreen": "How long should a description be?\n• 3–6 sentences for key tools\n• Purpose, when/when not, prerequisites, limits, output\n• The new-colleague test",
+                "visual": "Layout: a tool card whose description expands line by line with labeled margins (Purpose, When, When not, Needs, Limits, Returns); a colleague icon gives a thumbs-up at the end.",
+                "seconds": 40
+              },
+              {
                 "narration": "Try this now. Pick the tool your agent uses most, or the one it gets wrong most often. Rewrite its name as verb and noun. Expand its description to cover what it does, when to use it, when not to, and what it returns. Add enums and formats to every parameter you can. Then write five test requests a real user might send, and check whether the model picks this tool with valid arguments before and after your change. Keep the before and after numbers. They make a very persuasive slide for your team.",
                 "onScreen": "Try this now\n• Pick your most-used or most-wrong tool\n• Rename, describe, constrain\n• Five test requests, before vs after",
                 "visual": "Layout: a before/after scorecard. Left column 'Before' shows 2/5 correct; right column 'After' counts up to 5/5 (illustrative). Beneath, the rewritten tool definition scrolls briefly.",
@@ -650,7 +656,7 @@
           ],
           "activity": "Run your five baseline goals from lesson 3 at two effort levels. Record success, tokens and latency, and choose a setting per step type.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Remember when every prompt ended with, let's think step by step? Today's leading models from Anthropic, OpenAI and Google reason internally, before and between tool calls, and the APIs let you control how much. In this lesson you'll learn how to tune reasoning depth for each step, and the planning patterns that still matter for long tasks.",
@@ -705,6 +711,12 @@
                 "onScreen": "Budgets and pitfalls\n• Visible budgets help models pace\n• Enforce hard limits in code\n• Don't max effort everywhere\n• Keep thinking blocks in history",
                 "visual": "A fuel gauge labeled 'task budget' decreasing as the agent works; the agent icon slows and parks neatly as it nears empty.",
                 "seconds": 40
+              },
+              {
+                "narration": "Here's a question that comes up a lot: should you ask the model to show its reasoning in the answer? Usually not. Current reasoning models already think internally, and asking for long visible reasoning makes you pay twice, once for the thinking and again for the explanation. If users need an explanation, ask for a short, clear rationale in plain language, like three bullets on why this recommendation. If you need to debug, many APIs can return a summarized view of the thinking, which is separate from the answer and easy to hide from users.",
+                "onScreen": "Show reasoning in the answer?\n• Usually no: you pay twice\n• Ask for a short rationale instead\n• Use thinking summaries for debugging",
+                "visual": "Layout: a response card split into a large hidden 'thinking' layer and a small visible 'answer' layer; a 'long explanation' block is crossed out and replaced by a three-bullet rationale chip.",
+                "seconds": 41
               },
               {
                 "narration": "Try this now. Take your five baseline goals from the loop lesson. Run each at two effort settings on the same model, and record success, total tokens and seconds. Put the numbers in a small table, and compute cost per completed task using prices from your provider's pricing page. Then make one decision: which steps get low effort, and which get more. Write that decision down with the evidence next to it. Next time a new model launches, rerun the same table instead of guessing.",
@@ -833,6 +845,12 @@
                 "onScreen": "Pitfalls\n• Sub-agents for trivial tasks\n• Raw dumps instead of summaries\n• Unowned shared state\n• Handoff loops\n• Always compare to a single agent",
                 "visual": "Four red flags pop up; then a scale weighs 'quality gain' against 'token cost' and tips toward whichever the illustrative data supports.",
                 "seconds": 35
+              },
+              {
+                "narration": "How do sub agents hand results back without flooding the lead? Ask each one for a compact, structured summary: the findings in a few bullet points, the sources with links, a confidence level and any open questions. Cap the length, for example two hundred words. The lead then reads a handful of tidy summaries instead of dozens of raw pages. If the lead needs detail on one point, it can ask that specific sub agent a follow up question, rather than every sub agent sending everything up front.",
+                "onScreen": "Clean hand-backs\n• Structured summary: findings, sources, confidence, open questions\n• Length cap (~200 words)\n• Follow-ups only where needed",
+                "visual": "Layout: five sub-agent icons each send a small, uniform summary card up to a lead icon; one card gets a 'follow-up?' arrow back to its sub-agent.",
+                "seconds": 38
               },
               {
                 "narration": "Try this now. Take a research question you'd genuinely like answered, like how do three competitors in your market handle free trials. Write three sub agent briefs using the five parts: objective, output format, boundaries, budget and stop condition. Then run the question once with a single agent and once with the briefs, and compare quality, tokens and time. You might find the single agent is good enough, which is a perfectly valid result. The point is that you decided with evidence.",
@@ -986,6 +1004,12 @@
                 "seconds": 25
               },
               {
+                "narration": "A common question: should an agent write to memory automatically, or should a human approve? It depends on the stakes. For low risk preferences, like prefers bullet points, automatic writes with an easy undo are fine. For facts that change decisions, like a client's budget, contract terms or who has approval authority, have the agent propose and a person confirm. And whatever you choose, show users what's remembered and let them edit it. Visible memory builds trust; invisible memory creates surprises.",
+                "onScreen": "Auto-write or approve?\n• Low-risk preferences → auto + undo\n• Decision-changing facts → propose + confirm\n• Always visible and editable",
+                "visual": "Layout: two memory cards; 'prefers bullet points' slides straight into storage with an undo chip; 'budget = PKR 2.5m' pauses at a confirm dialog before storing; a user panel lists memories with edit icons.",
+                "seconds": 35
+              },
+              {
                 "narration": "Try this now. Take an assistant you use or want to build, and make a five row table, one row per memory type: working, episodic, semantic, procedural and profile. For each, write who writes it, who reads it, when it expires, and how a user can correct or delete it. Then pick the single most important fact your assistant keeps forgetting, and move it into structured state. That one change often fixes the most annoying bug users complain about.",
                 "onScreen": "Try this now\n• Five-row memory table\n• Writer, reader, expiry, correction\n• Move one critical fact into state",
                 "visual": "Layout: a five-row table animates in with the four column headers; one row highlights and a fact chip moves from a chat bubble into a 'State' panel.",
@@ -1057,7 +1081,7 @@
           ],
           "activity": "Design two scoped search tools for your knowledge base with the filters they need, and write ten evaluation questions with the expected document IDs.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "A new analyst doesn't answer from memory. They search, open the right documents, cross check, and cite what they found. That's what we want agents to do. In this lesson you'll learn agentic retrieval: how to design search as tools, how to keep answers grounded with verified citations, and how to measure retrieval inside an agent.",
@@ -1118,6 +1142,12 @@
                 "onScreen": "Measure every layer\n• Retrieval recall\n• Citation precision\n• Faithfulness\n• Abstention accuracy",
                 "visual": "A four-row scorecard fills in with illustrative percentages, each row linked to a different layer of a stacked pipeline diagram.",
                 "seconds": 29
+              },
+              {
+                "narration": "Let's look at a failure you'll almost certainly see: the agent retrieves the right document but still answers wrongly. Usually the relevant passage was buried in a long result, or two documents disagreed and the agent picked the older one. Fixes: return shorter, focused snippets with dates, tell the agent to prefer the most recent effective date, and ask it to mention conflicts explicitly instead of silently choosing. Then add that exact case to your evaluation set, so you know when it's fixed.",
+                "onScreen": "Right document, wrong answer\n• Buried passage or conflicting docs\n• Shorter dated snippets\n• Prefer latest effective date\n• Surface conflicts explicitly",
+                "visual": "Layout: two policy cards with different dates overlap; the agent's answer initially cites the older one (red); after the fix, it cites the newer one and adds a 'conflict noted' chip.",
+                "seconds": 36
               },
               {
                 "narration": "Try this now. List the three or four document collections your team actually searches. For two of them, design a search tool: its name, the filters it needs, like market, date or product, and what each result returns. Then write ten real questions people ask, with the document you'd expect to be the answer. Run them and measure recall first: did the right document show up at all? Fix recall before you tune the wording of answers.",
@@ -1197,7 +1227,7 @@
           ],
           "activity": "Add a runs table and the once() helper to your lesson 3 agent. Kill the process mid-run and confirm it resumes without repeating a side effect.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "A demo agent runs for thirty seconds in one process. A real one might run for an hour, wait overnight for approval, survive a deploy, and crash halfway through a step. If it can't pick up where it left off, you get lost work, duplicate emails, or worse, two refunds. In this lesson you'll learn how to make agents durable: checkpoints, idempotency and the right execution model.",
@@ -1258,6 +1288,12 @@
                 "onScreen": "Pitfalls and metrics\n• In-memory state • Keyless retries\n• Load-balancer timeouts • No status endpoint\n• Target: zero duplicate actions",
                 "visual": "Pitfall icons, then a chaos-testing dashboard where a 'kill worker' button is pressed and a 'resumed OK' counter increments.",
                 "seconds": 25
+              },
+              {
+                "narration": "People often ask how long to keep run state. Keep active runs until they finish or expire, then keep a compact record for as long as you need it for audits and debugging, typically weeks or months, not forever. Store the final outcome, the key decisions, approvals and costs, and drop bulky intermediate tool outputs, especially if they contain personal data. Set a retention policy, automate cleanup, and make sure it matches what your privacy notice promises.",
+                "onScreen": "How long to keep run state?\n• Active runs: until done or expired\n• Then a compact audit record\n• Drop bulky or personal intermediates\n• Automated retention policy",
+                "visual": "Layout: a run record shrinks over a timeline from full detail (active) to a compact audit card (weeks later); a bin icon removes large tool outputs; a policy tag reads 'retention: 90 days' (illustrative).",
+                "seconds": 33
               },
               {
                 "narration": "Try this now. Add the runs table and the once helper from the lesson to your own agent. Pick one tool with a side effect, even a fake one that writes to a file. Start a run, and kill the process halfway through with Control C. Restart it from the saved run id. Did it continue from the right step? Did the side effect happen exactly once? If either answer is no, you've just found a production bug in a safe place.",
@@ -1344,7 +1380,7 @@
           ],
           "activity": "Build an action inventory for your agent's tools with tiers and policies, and sketch the approval message a reviewer would see for your riskiest action.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "The best production agents aren't the ones that never involve people. They're the ones designed around people: who approves what, who gets notified, and who can take over. In this lesson you'll learn to classify actions by risk, build approval flows that reviewers actually use, and define clean escalation paths.",
@@ -1405,6 +1441,12 @@
                 "onScreen": "Pitfalls and metrics\n• Raw JSON reviews • Fail-open defaults\n• Stale approvals • Retry-after-reject\n• Track latency, edits, incidents",
                 "visual": "Warning icons, followed by a metrics panel with approval latency trending down over weeks (illustrative).",
                 "seconds": 27
+              },
+              {
+                "narration": "What about approvals when nobody is around, like overnight or on weekends? Decide explicitly. Some actions can wait: the agent pauses, and the approval is waiting in the morning. Some are time sensitive, so route them to an on call person, or pre approve narrow classes of action with tight limits, like pause any ad set that spends more than twice its daily budget. What you should never do is let an unanswered approval silently turn into an automatic yes after a timeout.",
+                "onScreen": "Approvals out of hours\n• Can wait → pause until morning\n• Time-sensitive → on-call or narrow pre-approval\n• Never: timeout = automatic yes",
+                "visual": "Layout: a clock moves to 2 a.m.; one approval card waits with a sunrise icon; another routes to an on-call phone; a third card labeled 'timeout → approve' is crossed out.",
+                "seconds": 36
               },
               {
                 "narration": "Try this now. List every tool your agent can call and give each a tier from zero to three. For your riskiest tool, write the exact approval message a reviewer would see on their phone: the action, the key arguments, why the agent wants it, the evidence, and the expected impact, in plain language. Show it to someone who'd actually approve it and ask, could you decide in thirty seconds? If not, rewrite it until they can.",
@@ -1698,6 +1740,12 @@
                 "seconds": 30
               },
               {
+                "narration": "A practical question: how many test cases do you need? Start with twenty to fifty real tasks, run three times each. That's enough to catch big problems and compare two versions with obvious differences. As the agent matures and changes become subtler, grow the set toward a hundred or more, especially covering your most common and most costly task types. And weight your attention by business impact: a failure on refunds matters more than a failure on a greeting.",
+                "onScreen": "How many cases?\n• Start: 20–50 real tasks × 3 runs\n• Grow toward 100+ as changes get subtler\n• Weight by business impact",
+                "visual": "Layout: a test-case stack grows from 20 to 50 to 100+; color bands mark 'common' and 'costly' tasks; a scale icon tilts toward 'refunds' over 'greetings'.",
+                "seconds": 34
+              },
+              {
                 "narration": "Try this now. Write ten test cases for your agent. For each, define what the world should look like afterwards, and write a small function that checks it. Add at least one trajectory rule per case, like must call this tool first, or must never call that one. Run each case three times and calculate pass at one and pass hat three. The gap between those two numbers tells you whether your next job is capability or reliability.",
                 "onScreen": "Try this now\n• Ten cases with state checks\n• One trajectory rule each\n• Three runs → pass@1 and pass^3\n• Read the gap",
                 "visual": "Layout: a test file template scrolls with ten case stubs; a results panel shows pass@1 and pass^3 bars side by side with the gap highlighted.",
@@ -1840,6 +1888,12 @@
                 "onScreen": "Pitfalls and metrics\n• Final-answer-only logs • Hoarding secrets\n• No correlation IDs • Unwatched dashboards\n• Track MTTD, MTTD-to-diagnose, trace coverage",
                 "visual": "Pitfall icons then a stopwatch labeled 'time to detect' shrinking over illustrative weeks.",
                 "seconds": 26
+              },
+              {
+                "narration": "How long should you keep traces? Balance debugging needs against cost and privacy. A common pattern: keep full traces, with redacted payloads, for a short window like two weeks, keep aggregated metrics for a year or more, and keep sampled traces of failures and escalations longer for evaluation work. Make sure anything containing personal data follows your retention policy, and that access to raw traces is limited to the people who need it.",
+                "onScreen": "Trace retention\n• Full redacted traces: short window\n• Aggregated metrics: long term\n• Failure samples: kept for evals\n• Restricted access",
+                "visual": "Layout: three storage bins with different timers (2 weeks, 1 year, 'eval samples'); a lock icon guards the raw-trace bin.",
+                "seconds": 32
               },
               {
                 "narration": "Try this now. Wrap your agent's model calls and tool calls in spans, using the code in the lesson, and send them to a local tracing tool. Run ten tasks. Then build three panels: success rate, cost per run and steps per run. Finally, pick one failed or slow run and read its trace from top to bottom. Write one sentence explaining what happened. If you can't, add the missing attribute that would have told you.",
@@ -2137,6 +2191,12 @@
                 "seconds": 40
               },
               {
+                "narration": "How do you roll back an agent? Because prompts, model ids and limits live in versioned configuration, rollback is usually switching the active config version, not redeploying code. Practice it before you need it: in staging, promote a new config, run a few requests, then roll back and confirm behavior returns to the previous version. Also decide in advance what triggers a rollback, like success rate dropping below a threshold or cost per run jumping, so nobody debates it during an incident.",
+                "onScreen": "Rolling back\n• Switch config version, not code\n• Rehearse in staging\n• Pre-agreed rollback triggers",
+                "visual": "Layout: a version selector with v12 active; a red metric alert triggers a click back to v11; the dashboard metrics return to normal.",
+                "seconds": 36
+              },
+              {
                 "narration": "Try this now. Draw your agent's deployment on one page using the reference architecture: where requests come in, where state lives, where tools and credentials sit, and where code runs. Circle the single point that would hurt most if it failed. Then write a four phase rollout plan: shadow, assist, canary and ramp, with one metric that must hold before each phase moves forward. Share it with whoever would be paged at night.",
                 "onScreen": "Try this now\n• One-page architecture\n• Circle the riskiest point\n• Four-phase rollout with gate metrics",
                 "visual": "Layout: a blank architecture canvas where boxes and arrows draw themselves; a red circle appears around one component; below, a four-step rollout ribbon with a metric badge on each step.",
@@ -2279,6 +2339,12 @@
                 "onScreen": "Traps and the bake-off\n• Popularity ≠ fit\n• Avoid maintenance-mode starts\n• Keep portability\n• Same agent, same eval, compare",
                 "visual": "A two-lane race track with identical checkpoints labeled pass^k, cost, latency, code size, transparency.",
                 "seconds": 32
+              },
+              {
+                "narration": "What if you pick a framework and it stalls or changes direction? That's why the portable layer matters. If your tools are MCP servers, your prompts live in your repository, your evals run independently, and your traces use open standards, then moving frameworks means rewriting the orchestration glue, not the valuable parts. Check a framework's release history, maintainers and issue activity before adopting, and revisit your choice once a year with the same bake off method.",
+                "onScreen": "If a framework stalls\n• Portable layer limits the damage\n• Rewrite glue, keep tools/prompts/evals\n• Check health before adopting; revisit yearly",
+                "visual": "Layout: a framework block cracks; underneath, a solid foundation labeled 'MCP tools • Prompts • Evals • Traces' remains, and a new framework block slots on top.",
+                "seconds": 33
               },
               {
                 "narration": "Try this now. Score two frameworks you're considering against the eight criteria in the lesson, on a simple one to three scale. Then build the smallest possible version of your agent in both: one tool, one goal, run five eval cases each. Compare reliability, cost, lines of code you wrote, and how easy it was to see the actual prompt and tool calls. Write down your choice and the reason, so the next person understands why.",
@@ -2439,6 +2505,12 @@
                 "seconds": 35
               },
               {
+                "narration": "A question you might have: why not let Market Scout create tickets directly for low priority items? You could, later, with evidence. Start with proposals only. After a few weeks, look at the approval data: if low priority proposals are approved unchanged almost every time, and a mistake would be cheap and reversible, move that narrow class to automatic creation with a daily cap. That's how autonomy should grow: one well understood class of action at a time, justified by data.",
+                "onScreen": "Growing autonomy later\n• Start: proposals only\n• Review approval data\n• Automate one narrow, reversible class with caps",
+                "visual": "Layout: an approval-rate chart for 'low priority tickets' climbs near 100% (illustrative); a toggle switches that class to 'auto (max 5/day)' while other classes stay 'proposal'.",
+                "seconds": 35
+              },
+              {
                 "narration": "Try this now. Build Market Scout with fictional client notes and run four briefs for four markets: the UAE, Saudi Arabia, Pakistan and the UK. For each, record steps, input and output tokens, cache reads from step two onward, and one weakness in the brief, such as a missing source or stale evidence. Also check the approvals table: were ticket proposals sensible, and were any duplicated? Those notes become your eval cases in part two.",
                 "onScreen": "Try this now\n• Four markets, four briefs\n• Log steps, tokens, cache reads\n• One weakness per brief\n• Inspect proposed tickets",
                 "visual": "Layout: four country chips (AE, SA, PK, UK) each expand into a mini results card with steps, tokens, cache reads and a 'weakness' note; an approvals table slides in below.",
@@ -2571,6 +2643,12 @@
                 "onScreen": "Deliverable: launch memo\n• Purpose • Eval + cost results\n• Red-team results • Limitations\n• Rollout, owner, rollback",
                 "visual": "A single-page memo template filling in section by section, then stamped 'Ready for review'.",
                 "seconds": 29
+              },
+              {
+                "narration": "What if your stakeholders ask for a single number to decide? Give them two, side by side: reliability, as pass hat three on your eval, and cost per completed brief at the ninety fifth percentile. Then add one sentence on risk: the red team result. Decision makers can weigh quality, cost and risk quickly when they're presented together, and it stops the conversation drifting into anecdotes about one impressive or one embarrassing example.",
+                "onScreen": "The decision summary\n• Reliability: pass^3\n• Cost: p95 per brief\n• Risk: red-team result in one sentence",
+                "visual": "Layout: a slide with three large KPI tiles (pass^3, p95 cost, red-team status) and a single decision button 'Proceed to staged launch'.",
+                "seconds": 32
               },
               {
                 "narration": "Try this now. Complete the six steps for Market Scout and assemble your one page launch memo. Then do a final dress rehearsal: ask a colleague to play the stakeholder and read only the memo. Can they tell you what the agent does, how reliable it is, what it costs, what could go wrong, and how to switch it off? If any answer is missing, the memo isn't finished. When it is, you're ready for the final exam and for a real launch.",

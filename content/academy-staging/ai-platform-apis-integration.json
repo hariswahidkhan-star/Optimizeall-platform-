@@ -5,7 +5,7 @@
   "subtitle": "Production-grade integration of Claude, OpenAI, Gemini, cloud platforms and open models: formats, tools, cost, reliability, security",
   "category": "ai",
   "level": "advanced",
-  "estimatedMinutes": 482,
+  "estimatedMinutes": 483,
   "lastReviewed": "2026-09",
   "description": "Most AI products now depend on more than one model provider, and the hard part is integration, not the prompt. This advanced, hands-on course teaches you to integrate Anthropic Claude, OpenAI and Google Gemini through their official SDKs, plus cloud platforms (Amazon Bedrock, Microsoft Foundry, Gemini Enterprise Agent Platform) and open-weight models via hosted APIs. You will compare message formats side by side, stream responses safely, implement tool calling and structured outputs across providers, send images, PDFs and audio, and build semantic search with embeddings. You will cut cost with batch APIs and prompt caching, handle rate limits and failures with backoff and circuit breakers, track spend per feature and tenant, and design a multi-provider abstraction with fallbacks and model routing. You will finish with security, privacy and a production checklist, then build, test and deploy a provider-agnostic content-generation microservice with a TypeScript client.",
   "outcomes": [
@@ -651,6 +651,12 @@
                 "seconds": 18
               },
               {
+                "narration": "A question that comes up with streaming and structured data: can you stream JSON? You can, but the partial JSON isn't valid until the end, so don't parse it as you go unless your SDK provides a tolerant partial parser. A good pattern for user interfaces is to stream a human readable draft first, then send a final validated structured object at the end, which your app uses for saving or routing. Users see progress, and your code only acts on validated data.",
+                "onScreen": "Streaming structured data\n• Partial JSON isn't valid mid-stream\n• Stream readable draft, then final validated object\n• Act only on validated data",
+                "visual": "Layout: a text draft streams into a preview pane while a JSON object assembles faintly in the background; at the end, a 'validated' badge stamps the JSON and a save button activates.",
+                "seconds": 36
+              },
+              {
                 "narration": "How do you know streaming is working well? Measure time to first token, the gap between the request leaving your server and the first text arriving. Track it at the median and the ninety fifth percentile, per model and per region. Watch abandonment, meaning users who leave before the stream ends, and duplicate submits. If time to first token jumps after a change, check whether you've added slow work before the model call, like retrieval or a large prompt, and consider streaming a status event while that work runs.",
                 "onScreen": "Measure streaming quality\n• TTFT p50/p95 per model and region\n• Abandonment and duplicate submits\n• Slow pre-work? Stream a status first",
                 "visual": "Layout: a line chart of TTFT p50 and p95 over a week (illustrative), with a spike annotated 'retrieval added'; a status-event capsule is inserted before the first text capsule and the perceived-wait bar shrinks.",
@@ -805,6 +811,12 @@
                 "seconds": 27
               },
               {
+                "narration": "Here's a question many teams ask: how many tools can I give a model before quality drops? There's no single number, and it varies by model and provider. The practical signal is your eval: if tool selection accuracy falls as you add tools, or calls per task rise, you've gone too far. Group tools into focused sets per feature, give each tool a distinct name and description, and consider tool search or deferred loading features where providers offer them.",
+                "onScreen": "How many tools?\n• No universal limit\n• Watch accuracy and calls per task\n• Focused tool sets per feature\n• Tool search where available",
+                "visual": "Layout: a line chart where tool-selection accuracy dips as the number of tools grows (illustrative); tool icons regroup into three focused sets and the line recovers.",
+                "seconds": 34
+              },
+              {
                 "narration": "Quick recap. The loop is universal: define, call, execute, return, continue. Claude uses tool use and tool result blocks. OpenAI uses function call items with string arguments. Gemini uses function calls and function responses. Keep one canonical schema, validate in code, and cap every loop. Try this now: take one of your own tools, implement it against two providers with the canonical schema approach, add a step cap and an error path, and compare accuracy on ten realistic requests.",
                 "onScreen": "Recap + try this now\n• Universal loop, three dialects\n• Canonical schema + validation\n• Implement one tool on two providers\n• Compare on ten requests",
                 "visual": "Layout: recap card with the loop diagram; a two-column scoreboard fills with illustrative accuracy for two providers.",
@@ -939,6 +951,12 @@
                 "seconds": 20
               },
               {
+                "narration": "A question from product teams: what about outputs that are mostly text, like an email, but need a few fields too? Put the text inside the schema as a string field, next to the structured fields, like subject, body, tone and needs review. You keep one call, one validated object, and your app can route or store the metadata while displaying the body. Just set sensible length limits on long text fields, so a runaway answer can't blow your token budget.",
+                "onScreen": "Text plus fields\n• Body as a string field\n• Metadata alongside (subject, tone, flags)\n• Length limits on long fields",
+                "visual": "Layout: an email preview on the right; on the left, the JSON object with 'subject', 'body', 'tone', 'needs_review' fields, each connected to where it appears in the UI.",
+                "seconds": 35
+              },
+              {
                 "narration": "A quick note on performance and cost. The first time you use a new schema, some providers need a moment to prepare it, so the very first request can be slower; later requests reuse that work. Large schemas also add input tokens to every call. Keep schemas stable, reuse them across requests, and split a giant extraction into two smaller calls if one schema grows past a few dozen fields. Your latency charts will thank you.",
                 "onScreen": "Performance notes\n• First use of a schema may be slower\n• Big schemas cost input tokens\n• Keep stable; split giant schemas",
                 "visual": "Layout: a latency chart with a tall first bar labeled 'first use' followed by short bars; then one large schema card splits into two smaller cards.",
@@ -1027,7 +1045,7 @@
           ],
           "activity": "Build a receipt or invoice extractor with structured outputs and arithmetic checks, test it on 20 real documents in your languages, and measure field accuracy.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Most business information doesn't arrive as neat text. It arrives as photos of receipts, PDF rate cards, screenshots of dashboards, and recordings of sales calls. Modern models can read all of these. In this lesson you'll learn how to send images, documents and audio to Claude, OpenAI and Gemini, and how to turn them into reliable data rather than impressive demos.",
@@ -1094,6 +1112,12 @@
                 "onScreen": "Common mistakes\n• Full-res when a crop would do\n• No arithmetic checks\n• Recordings without consent\n• Assumed audio/video support",
                 "visual": "Layout: four mistake cards flip over to reveal their fixes.",
                 "seconds": 19
+              },
+              {
+                "narration": "What about video? Some models, such as Gemini, accept video directly and can describe scenes, read on screen text and answer questions about moments in the footage. For others, a common approach is to sample frames at intervals and transcribe the audio, then send frames plus transcript. For marketing teams, that's useful for checking ad creatives against brand rules or summarizing webinar recordings, but check length limits, costs and data terms first.",
+                "onScreen": "Video inputs\n• Native video on some models (e.g., Gemini)\n• Otherwise: sampled frames + transcript\n• Check limits, cost, data terms",
+                "visual": "Layout: a video timeline with frames sampled every few seconds and a transcript track; both feed into a model icon that outputs 'brand check: logo too small at 0:12'.",
+                "seconds": 31
               },
               {
                 "narration": "Quick recap. All three providers read images and PDFs, and audio and video support varies. Use each provider's block or part format, combine vision with structured outputs, check numbers in code, control cost by cropping and reusing uploads, and treat multimodal data as sensitive. Try this now: build a receipt or invoice extractor using structured outputs and a sum check, test it on twenty real documents in the languages you support, and measure field accuracy per language.",
@@ -1855,6 +1879,12 @@
                 "seconds": 22
               },
               {
+                "narration": "A common question: should you show AI costs to your customers or users? For internal teams, yes: showing each team its monthly AI spend changes behavior quickly. For external customers, it depends on your pricing model. Many products bundle AI into plan tiers with fair use limits, while agencies often pass through costs with a margin. Either way, your ledger gives you the numbers to decide pricing with confidence rather than guesswork.",
+                "onScreen": "Showing costs\n• Internal teams: show spend\n• Customers: bundle tiers or pass-through + margin\n• Ledger enables confident pricing",
+                "visual": "Layout: an internal dashboard with team spend bars; beside it, a pricing page with plan tiers and an 'AI included (fair use)' badge.",
+                "seconds": 31
+              },
+              {
                 "narration": "One last habit: forecast. Take the last four weeks of ledger data per feature, work out cost per outcome and outcomes per week, and project forward with known changes, like a new client, a marketing campaign or a model switch. Add a buffer for growth and price changes, share it with finance, and compare forecast with actual every month. The gap tells you which assumption was wrong, and over time your forecasts become boringly accurate, which is exactly what finance wants.",
                 "onScreen": "Forecast monthly\n• 4 weeks of ledger data per feature\n• Cost per outcome × expected outcomes\n• Known changes + buffer\n• Compare forecast vs actual",
                 "visual": "Layout: a line chart with four weeks of actuals and a dashed forecast line with a shaded buffer band; next month's actual lands inside the band with a green tick.",
@@ -2006,6 +2036,12 @@
                 "onScreen": "Common mistakes\n• Lowest-common-denominator design\n• Untested fallbacks\n• Falling back on 400s\n• Ignoring data boundaries",
                 "visual": "Layout: four red cards flip to green fixes.",
                 "seconds": 25
+              },
+              {
+                "narration": "A question architects ask: where should the abstraction live, in every service or in one gateway? For a small team, a shared library is simplest. As you grow, a central internal gateway service often wins: one place for keys, routing, budgets, logging and fallbacks, used by every product team over a simple internal API. Either way, keep the interface small, version it, and make provider specific features available when a team genuinely needs them.",
+                "onScreen": "Library or gateway?\n• Small team: shared library\n• Growing org: internal gateway service\n• Small, versioned interface\n• Escape hatch for special features",
+                "visual": "Layout: several service icons each importing a library, then consolidating to call one central gateway box that holds keys, routes and budgets.",
+                "seconds": 32
               },
               {
                 "narration": "A quick word on testing fallbacks, because untested fallbacks are the most common surprise during real outages. Schedule a monthly game day. In staging, block the primary provider with a firewall rule or an invalid endpoint, and run your eval suite through the router. Check three things: that the fallback activates within seconds, that quality stays inside your agreed range, and that logs and cost reports clearly show which requests used the fallback. Then restore the primary and check traffic returns.",
@@ -2644,6 +2680,12 @@
                 "seconds": 25
               },
               {
+                "narration": "What should you do when a customer asks what happens to their data in your AI features? Have a short, accurate answer ready, agreed with legal: which providers process it, for what purpose, how long it's kept, where it's processed, and how they can request deletion. Put it in your privacy notice and your help center. Being able to answer clearly and quickly is one of the strongest trust signals you can give business customers.",
+                "onScreen": "Answering data questions\n• Providers, purpose, retention, location\n• How to request deletion\n• In the privacy notice + help center",
+                "visual": "Layout: a customer chat asking 'what happens to my data?'; a help-center card slides in with five short labeled lines.",
+                "seconds": 33
+              },
+              {
                 "narration": "A quick word on disclosure and marketing rules, since many of you will generate customer facing content. Where AI generated content could mislead people, be transparent about it, and follow your market's advertising rules: sponsored posts need clear labels like ad, and claims about health, performance or prices need evidence, whether a human or a model wrote them. Regulators in the UK, the EU, the Gulf and the US all expect marketers to stand behind their claims. Put these rules into your prompts, your validators and your review steps.",
                 "onScreen": "Disclosure and advertising rules\n• Be transparent where AI could mislead\n• Label sponsored content (#ad)\n• Evidence for health/performance/price claims\n• Encode rules in prompts, validators, reviews",
                 "visual": "Layout: a social post mock-up gains an '#ad' label; a claim 'clinically proven' is highlighted and routed to a 'needs evidence' review box; a small globe shows UK, EU, Gulf and US markers.",
@@ -2812,6 +2854,12 @@
                 "seconds": 23
               },
               {
+                "narration": "Why does the service return a needs review flag instead of just refusing risky content? Because in marketing, many briefs are fine with small edits, and a human reviewer can fix them quickly. The flag, with reasons, turns the model into a helpful first drafter that also highlights risk, like an unsupported health claim or a missing sponsorship label. Your portal can show flagged drafts with a yellow banner, so reviewers know exactly where to look.",
+                "onScreen": "Why a needs_review flag?\n• Many risky briefs just need edits\n• Reasons point reviewers to the issue\n• Portal shows a yellow banner",
+                "visual": "Layout: a draft card with a yellow banner 'needs review: health claim unsupported'; the reviewer edits one sentence and approves.",
+                "seconds": 33
+              },
+              {
                 "narration": "Quick recap. You've built a multi provider content service with configuration based routing, fallbacks and a circuit breaker, strict structured outputs validated with Pydantic, budgets and a cost ledger, redaction and server side keys. Try this now: build it with at least two providers, set up the routes file, and generate one piece of content for each task in two languages, recording the provider and cost for each. In part two, you'll test, evaluate, observe, deploy and add a TypeScript client.",
                 "onScreen": "Recap + try this now\n• Routing, fallbacks, breaker\n• Validated structured output\n• Budgets + redaction\n• Generate 3 tasks × 2 languages",
                 "visual": "Layout: recap card; a results grid (tasks × languages) fills with provider and cost chips; an arrow points to 'Part 2'.",
@@ -2964,6 +3012,12 @@
                 "onScreen": "Common mistakes\n• Tests hitting real providers\n• English-only evals\n• Raw briefs in logs\n• Provider keys in the browser",
                 "visual": "Layout: four red cards flip to green fixes.",
                 "seconds": 20
+              },
+              {
+                "narration": "One more question you'll face after launch: how do you add a fourth task, like blog outlines? Add the task to the schemas, write its rules, add a route in the configuration with a primary and fallback, write thirty eval briefs across your languages, and run the eval before exposing it in the client. Because the architecture separates configuration, schemas and evaluation, new tasks become a routine change rather than a new project.",
+                "onScreen": "Adding a new task\n• Schema + rules\n• Route in config\n• 30 eval briefs across languages\n• Expose in the client after eval",
+                "visual": "Layout: a checklist for 'blog_outline' ticks through Schema, Rules, Route, Eval, Client; the service diagram gains a new task lane.",
+                "seconds": 32
               },
               {
                 "narration": "Quick recap, and congratulations. You've tested with fakes, evaluated routes across languages, added observability, deployed securely and shipped a TypeScript client and a runbook. Across the course you've learned the provider landscape, keys, message formats, streaming, tools, structured outputs, multimodal inputs, embeddings, batch, caching, reliability, cost tracking, abstraction, routing, cloud platforms, open models and security. Try this now: add the four tests, run the eval across two providers and three languages, deploy to staging, build a tiny web page with the client, write the runbook, and then take the final exam.",

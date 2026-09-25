@@ -5,7 +5,7 @@
   "subtitle": "Design, build, secure and ship MCP servers and clients that connect Claude, ChatGPT, IDEs and agents to real business systems",
   "category": "ai",
   "level": "advanced",
-  "estimatedMinutes": 456,
+  "estimatedMinutes": 463,
   "lastReviewed": "2026-09",
   "description": "The Model Context Protocol (MCP) is the open standard for connecting AI applications to tools and data, now governed by the Agentic AI Foundation and updated in the stateless 2026-07-28 specification. This advanced, hands-on course takes you from why MCP exists to running it in production. You will learn the host–client–server architecture, tools, resources and prompts, elicitation and multi round-trip requests, extensions such as Tasks and MCP Apps, and the stdio and Streamable HTTP transports. You will build servers with the official Python and TypeScript v2 SDKs, design tools models use well, connect them to Claude, ChatGPT, VS Code and your own agents, and write your own client. You will implement OAuth 2.1 authorization correctly, defend against tool poisoning, prompt injection and confused-deputy attacks, test with the MCP Inspector, deploy remote servers, publish to registries, and govern an enterprise rollout. The capstone builds and ships an MCP server for a marketing CRM dataset.",
   "outcomes": [
@@ -483,6 +483,12 @@
                 "seconds": 42
               },
               {
+                "narration": "A question people ask: can the same capability be both a resource and a tool? Yes, and it's often wise. A brand guide could be a resource, so users can attach it deliberately, and also a read brand guide tool, so tool first hosts and autonomous agents can fetch it when needed. Keep them consistent by having both call the same function. Just avoid duplicating everything; offer the dual form only for high value context that different hosts surface differently.",
+                "onScreen": "Resource and tool?\n• Yes for high-value context\n• Same underlying function\n• Don't duplicate everything",
+                "visual": "Layout: a brand-guide document connects to two doors labeled 'resource' and 'tool', both leading to the same function box.",
+                "seconds": 35
+              },
+              {
                 "narration": "Try this now. Pick one system you plan to expose. On a single page, list three tools, two resources and one prompt. For each, write one sentence explaining why it's that primitive, using the controller test: does the model decide, does the app or user attach it, or does the user start it? Then check your target hosts' documentation: do they surface resources and prompts? If not, decide whether a read tool should mirror your most important resource.",
                 "onScreen": "Try this now\n• 3 tools, 2 resources, 1 prompt\n• Justify each with the controller test\n• Check host support; add read tools if needed",
                 "visual": "Layout: a one-page worksheet with three sections filling in; a small host-support checklist appears at the bottom with ticks and crosses.",
@@ -771,6 +777,12 @@
                 "seconds": 38
               },
               {
+                "narration": "What about serverless platforms? Streamable HTTP under the twenty twenty six spec is a great fit, because every request is independent. But watch three things. Cold starts can add latency to the first request after idle time. Execution time limits can cut off long running tools, so use the tasks extension or background jobs for slow work. And keep connection pools and SDK clients outside the request handler, so warm instances reuse them.",
+                "onScreen": "Serverless notes\n• Stateless spec fits well\n• Watch cold starts\n• Time limits → tasks/background jobs\n• Reuse clients across invocations",
+                "visual": "Layout: a serverless function icon wakes from sleep with a small delay badge; a long tool call hits a timer wall and is redirected to a 'task' queue; a shared client icon sits outside the handler.",
+                "seconds": 32
+              },
+              {
                 "narration": "Try this now. Run the lesson's server both ways. First, standard I O: open the Inspector and call the tool. Then start it with the HTTP flag and connect the Inspector to the local URL. Try adding a print statement to the standard I O version and watch what breaks. Finally, write one paragraph for your team: which transport your first production server will use, who needs to reach it, how they'll authenticate, and what happens when you need three copies of it.",
                 "onScreen": "Try this now\n• Run over stdio and HTTP\n• Break stdio with a print()\n• Write your transport decision",
                 "visual": "Layout: two terminal panes (stdio, HTTP) each followed by a green 'connected' badge; then a red error appears in the stdio pane after a print() line is highlighted.",
@@ -867,7 +879,7 @@
           ],
           "activity": "Build the campaign-analytics server against a small local dataset (SQLite is fine), write two in-memory tests, and connect it to one host.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "In this lesson you'll build a real MCP server in Python, not a toy: a read only campaign analytics server with typed tools, structured outputs, a shared database pool, a resource, a prompt and tests. You'll also learn how the official SDK changed in version two, so old tutorials don't trip you up.",
@@ -928,6 +940,12 @@
                 "onScreen": "Connecting and pitfalls\n• mcp dev / mcp install / claude mcp add\n• Absolute paths, env-based secrets\n• No print() on stdio\n• Cap every query",
                 "visual": "Three host windows each showing the server connected; a small warning card lists the pitfalls.",
                 "seconds": 34
+              },
+              {
+                "narration": "A frequent question: how do I pass secrets like database passwords to a server that a desktop host launches? Not in the code, and not in a file you commit. Put them in the host's server configuration as environment variables, or reference a local secret store. For remote servers, load them from your platform's secret manager. And never accept secrets as tool arguments, because the model and the host logs would see them.",
+                "onScreen": "Secrets for servers\n• Host config env vars (local)\n• Secret manager (remote)\n• Never as tool arguments",
+                "visual": "Layout: a config JSON with an 'env' block holding a masked value; a remote server pulls from a vault icon; a tool argument field labeled 'password' is crossed out.",
+                "seconds": 32
               },
               {
                 "narration": "Try this now. Build the campaign analytics server against a tiny local dataset; SQLite is fine. Add two in memory tests: one that checks a long date range returns an error, and one that checks the tool list includes find campaigns. Then connect it to one host with an absolute path and your database setting in the host's environment configuration. Ask the model a real question, like how did our UAE search campaigns do last week, and watch which tools it calls.",
@@ -1015,7 +1033,7 @@
           ],
           "activity": "Build the property-leads server, add one more tool of your own, write two in-process tests, and connect it to Claude Code or VS Code.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Now let's build the same kind of server in TypeScript. You'll use the official SDK version two to create a property leads server with typed tools, structured output, an idempotent write, a resource template and a prompt, and you'll see how the same code scales over HTTP.",
@@ -1076,6 +1094,12 @@
                 "onScreen": "Pitfalls\n• Shared instance outside the factory\n• console.log on stdio\n• outputSchema without structuredContent\n• Non-idempotent writes",
                 "visual": "Four red warning cards flipping over to reveal their fixes.",
                 "seconds": 27
+              },
+              {
+                "narration": "Should you use Zod or another schema library? Any library that implements the Standard Schema interface works with version two, so pick what your team already uses. What matters more is how you use it: describe every field, set sensible bounds, and prefer enums for fixed choices. Those descriptions and constraints become the JSON schema the model reads, so they're part of your prompt, not just your validation.",
+                "onScreen": "Schema library choice\n• Any Standard Schema lib (Zod v4, Valibot, ArkType)\n• Describe fields, bound values, use enums\n• Schemas are part of the prompt",
+                "visual": "Layout: three schema-library badges plug into a single 'Standard Schema' socket; a field definition with .describe() and .max() transforms into a JSON Schema card shown to a model icon.",
+                "seconds": 30
               },
               {
                 "narration": "Try this now. Build the property leads server and add one tool of your own, maybe schedule callback with an idempotency key. Write two in process tests: one that calls search properties and checks the structured results, and one that calls request viewing twice with the same key and confirms only one record exists. Then connect it to Claude Code or VS Code and ask for three bedroom homes in Manchester under three hundred thousand pounds.",
@@ -1163,7 +1187,7 @@
           ],
           "activity": "Apply the design checklist to three tools you plan to ship, estimate your tool list's token cost, and rewrite the weakest tool.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "A server can follow the spec perfectly and still fail in the real world. The model picks the wrong tool, sends bad arguments, drowns in output, or burns through tokens. In this lesson you'll learn how to design MCP tools that models use well, even when they're mixed with other servers' tools in hosts you don't control.",
@@ -1224,6 +1248,12 @@
                 "onScreen": "Pitfalls and metrics\n• Endpoint mirroring • Generic names\n• Raw payloads • Silent changes\n• Evaluate in two hosts",
                 "visual": "Two host windows running the same eval side by side with scoreboards.",
                 "seconds": 24
+              },
+              {
+                "narration": "How do you handle breaking changes to a tool? Treat tools like a public API. Add new tools or optional parameters rather than changing the meaning of existing ones. If you must break something, publish a new tool name, keep the old one working for a transition period with a description that points to the new one, announce it in your changelog, and remove it only after checking usage. Hosts and agents that depend on you will thank you.",
+                "onScreen": "Breaking changes\n• Prefer additive changes\n• New name + deprecation period\n• Changelog + usage check before removal",
+                "visual": "Layout: a tool 'crm_find_deals_v1' with a 'deprecated → use crm_find_deals' banner alongside the new tool; a usage graph for v1 declines to zero before removal.",
+                "seconds": 34
               },
               {
                 "narration": "Try this now. Take three tools you plan to ship and run the ten point checklist from the lesson on each. Estimate how many tokens your whole tool list adds to every model call. Then rewrite the weakest tool: consolidate it with a neighbor, sharpen its description, or cut its output down to what the next step needs. Test the before and after versions with five realistic requests in a real host, and keep the numbers.",
@@ -1373,6 +1403,12 @@
                 "seconds": 33
               },
               {
+                "narration": "A common question: can I use the same server from both a desktop host and a web host? Yes, if you offer the right transport for each. Desktop hosts can launch your server locally over standard I O, while web hosts like Claude on the web or ChatGPT need a remote URL. Many teams ship both: a local package for developers and a hosted remote endpoint for everyone else, built from the same code and tool definitions.",
+                "onScreen": "Desktop and web hosts\n• Desktop: local stdio\n• Web: remote URL\n• Ship both from one codebase",
+                "visual": "Layout: one codebase icon splits into two outputs: a local package feeding a desktop host, and a cloud endpoint feeding a web host.",
+                "seconds": 33
+              },
+              {
                 "narration": "Try this now. Connect one of your servers to two different hosts. In each, confirm the tool list, then run the same three prompts: a simple lookup, a multi step question, and something that should trigger a write or confirmation. Note what each host shows: resources, prompts, confirmation dialogs, error messages. Record it in a small table. That table will save your users hours, and it becomes part of your server's documentation.",
                 "onScreen": "Try this now\n• One server, two hosts\n• Same three prompts\n• Record features and dialogs in a table",
                 "visual": "Layout: a comparison table with columns Host A and Host B and rows Tools, Resources, Prompts, Confirmations, Errors; ticks and notes fill in.",
@@ -1454,7 +1490,7 @@
           ],
           "activity": "Extend the bridge example to a second model provider or add an approval step for one write tool, and trace each call with server and tool names.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Hosts like Claude and IDEs cover chat and coding. But when MCP tools need to power your own product, like a reporting agent or a support backend, you need your own client. In this lesson you'll learn what a client is responsible for, use the Python SDK's client, and build a complete bridge that lets a model use tools from several MCP servers.",
@@ -1515,6 +1551,12 @@
                 "onScreen": "Pitfalls and metrics\n• No allowlist • Collisions\n• Token passthrough • Ignored errors\n• Track success, latency, tokens",
                 "visual": "Pitfall cards, then a small dashboard with per-server success bars.",
                 "seconds": 26
+              },
+              {
+                "narration": "What about performance when your client connects to several servers? List tools once and cache them, respecting the cache hints servers send. Run independent tool calls in parallel. Set timeouts per server, so one slow server doesn't stall the whole agent. And if a server is down, remove its tools from the list for that run and tell the model, rather than letting every call fail. Your agent stays useful even when one integration has a bad day.",
+                "onScreen": "Client performance\n• Cache tool lists (respect ttl)\n• Parallel independent calls\n• Per-server timeouts\n• Drop tools of a down server",
+                "visual": "Layout: three server icons; one turns red and its tools gray out of the list; the other two continue serving parallel calls with timers.",
+                "seconds": 34
               },
               {
                 "narration": "Try this now. Take the bridge example from the lesson and connect it to one of your own servers. Then extend it in one direction. Either add a second model provider by writing the conversion for its tool format, or add an approval step for one write tool that pauses and asks you in the terminal before calling the server. Add a log line for every call with the server name, tool name, duration and error flag. You now have the core of a production client.",
@@ -1656,6 +1698,12 @@
                 "onScreen": "Example: agency CRM on Entra ID\n• Metadata + two scopes\n• PKCE with resource URL\n• 403 + scope challenge for writes\n• Own vendor credential + user audit",
                 "visual": "Code editor showing the JwtVerifier class with audience and issuer arguments highlighted, beside a flow diagram of the example.",
                 "seconds": 44
+              },
+              {
+                "narration": "A question from developers: can I use an API key instead of OAuth for my remote server? For internal machine to machine use, like a scheduled job calling your server, a well scoped credential or the OAuth client credentials extension can be appropriate. But for people using AI hosts, OAuth is what hosts expect, because it gives each user their own consent, scopes and revocation. Shared API keys make it impossible to know which person did what.",
+                "onScreen": "API keys vs OAuth\n• Machine jobs: scoped credential / client credentials\n• People in hosts: OAuth per user\n• Shared keys hide who did what",
+                "visual": "Layout: a scheduled-job robot uses a narrow key to reach the server; human users each pass through a consent screen with their own token; a shared key icon is shown with a question mark over 'who?'.",
+                "seconds": 33
               },
               {
                 "narration": "Try this now. Draw the OAuth flow for your remote server with your actual identity provider: the first four oh one, the metadata, discovery, registration, the PKCE flow with the resource parameter, the issuer check and the calls with the token. List each tool and the scope it needs. Then write three negative tests you can run against staging: a token for the wrong audience, an expired token, and a read token calling a write tool. If all three fail correctly, you're in good shape.",
@@ -1818,6 +1866,12 @@
                 "seconds": 30
               },
               {
+                "narration": "How do you respond if you suspect a compromised server? First, disconnect it from all hosts, using your admin controls or gateway. Second, revoke any tokens and credentials it held. Third, review the logs of tool calls it received and what data it returned, looking for unexpected arguments or instructions. Fourth, notify affected owners and, if personal data was involved, your privacy team. Practicing this once with a harmless test server makes the real thing far calmer.",
+                "onScreen": "Suspected compromise\n• Disconnect everywhere\n• Revoke credentials\n• Review call logs\n• Notify owners + privacy team",
+                "visual": "Layout: an incident checklist with four steps; a server icon is unplugged from three hosts; a key icon turns gray; a log panel highlights suspicious arguments.",
+                "seconds": 33
+              },
+              {
                 "narration": "Try this now. Make an inventory of every MCP server your team uses, including the ones people added themselves. For each, rate the seven threats as low, medium or high. Then implement two defenses in your client or host: fingerprinting approved tool definitions, and one argument guard on your riskiest tool, like a recipient allowlist for email. Finally, schedule a thirty minute review each quarter to repeat the inventory.",
                 "onScreen": "Try this now\n• Inventory all servers\n• Rate seven threats each\n• Add fingerprinting + one argument guard\n• Quarterly review",
                 "visual": "Layout: a spreadsheet-like inventory grid with seven threat columns and colored cells; two defense badges attach to the client icon; a calendar icon marks a quarterly review.",
@@ -1969,6 +2023,12 @@
                 "seconds": 28
               },
               {
+                "narration": "Should you test against every host? Aim for the ones your users actually run. Pick two or three priority hosts, run a short manual script in each before every release, and automate what you can with the Inspector's command line mode and your own client. Keep a small compatibility table in your docs, noting which features each host supports, so users know what to expect and your support team can answer quickly.",
+                "onScreen": "Which hosts to test?\n• 2–3 priority hosts\n• Short manual script per release\n• Automate via Inspector CLI + client\n• Publish a compatibility table",
+                "visual": "Layout: three host tiles with release-check ticks; a CLI terminal runs automated checks; a compatibility table appears in a docs page.",
+                "seconds": 31
+              },
+              {
                 "narration": "Try this now. Add three protocol tests to your server: stable tool order, every property described, and one error path with helpful text. Add three security tests against a staging deployment: no token, wrong audience, and a read token calling a write tool. Then write ten realistic requests with the tool you expect for each, and run them through a model. Put all of it in continuous integration, with the eval running nightly.",
                 "onScreen": "Try this now\n• 3 protocol tests\n• 3 security tests on staging\n• 10 eval requests, nightly in CI",
                 "visual": "Layout: a CI pipeline with three stages (Protocol, Security, Nightly eval) turning green in sequence; a small table of ten eval rows appears beneath.",
@@ -2050,7 +2110,7 @@
           ],
           "activity": "Containerize your server, deploy it to a staging environment with auth in front, test it with an older and a current client, and draft a server.json (public or private catalog).",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "A server on your laptop helps you. A remote server helps your whole company, or your customers. In this lesson you'll learn how to deploy remote MCP servers properly, serve both old and new protocol clients, and publish to registries so people can find you.",
@@ -2111,6 +2171,12 @@
                 "onScreen": "Pitfalls and metrics\n• Replica-unsafe state\n• Unsecured public listings\n• Unannounced breaking changes\n• Ignored older clients",
                 "visual": "Pitfall cards and a small metrics dashboard.",
                 "seconds": 28
+              },
+              {
+                "narration": "A common worry: will publishing to the public registry expose my server to attackers? The registry lists metadata, but a public server is discoverable anyway once people use it. What protects you is the same as for any public API: strong authentication, least privilege scopes, rate limits, input validation, monitoring and a security contact. Publishing responsibly means having those in place first, plus clear documentation of what data your server touches.",
+                "onScreen": "Public listing and security\n• Discoverable either way\n• Auth, scopes, rate limits, validation\n• Monitoring + security contact\n• Document data handling",
+                "visual": "Layout: a registry card links to a server protected by layered shields labeled Auth, Scopes, Rate limits, Validation, Monitoring.",
+                "seconds": 31
               },
               {
                 "narration": "Try this now. Containerize your server with the Dockerfile pattern from the lesson and deploy it to a staging environment with authentication in front. Run two replicas. Test with a current host and, if you can, an older client that speaks an earlier protocol version. Then draft a server dot json file with your server's name, description, version and remote URL, and decide whether it belongs in the public registry or your organization's private catalog.",
@@ -2257,6 +2323,12 @@
                 "seconds": 31
               },
               {
+                "narration": "How do you measure whether the program is working? Track four numbers. The share of MCP traffic flowing through cataloged servers, which should rise. The number of unmanaged servers, which should fall. Intake turnaround time, which should stay short so people don't route around you. And reuse, meaning how many clients each server serves. Review them monthly with stakeholders, and celebrate teams whose servers are widely reused.",
+                "onScreen": "Program metrics\n• Cataloged traffic share ↑\n• Unmanaged servers ↓\n• Intake turnaround (short)\n• Reuse per server ↑",
+                "visual": "Layout: four KPI tiles with trend arrows; a monthly review calendar; a 'most reused server' badge awarded to a team.",
+                "seconds": 29
+              },
+              {
                 "narration": "Try this now. Draft catalog entries for two MCP servers your organization uses or needs, using the template from the lesson: owner, transport, versions, auth, scopes mapped to tools, data classification, approved hosts, definition fingerprint and review dates. Then write a one page ninety day plan with a named owner for each phase and one metric per phase, like number of unmanaged servers, intake turnaround time, or share of traffic through cataloged servers.",
                 "onScreen": "Try this now\n• Two catalog entries\n• 90-day plan with owners\n• One metric per phase",
                 "visual": "Layout: two YAML catalog cards fill in field by field; a four-phase plan ribbon appears beneath with an owner avatar and a metric chip on each phase.",
@@ -2349,7 +2421,7 @@
           ],
           "activity": "Write the one-page crescent-crm design doc with jobs, primitives, scopes, data-protection decisions and at least ten acceptance tests and eval requests.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Welcome to the capstone. You're the AI platform lead at Crescent Growth, a fictional marketing agency with offices in Lahore, Dubai and London. Account managers, analysts and a reporting agent all need safe access to the agency's CRM and campaign data from Claude, VS Code and custom agents. Over three lessons you'll design, build and ship an MCP server for it. This first part is design, which is where most of the value is decided.",
@@ -2410,6 +2482,12 @@
                 "onScreen": "Deliverable\n• One-page design doc\n• Jobs, primitives, scopes\n• Data protection decisions\n• Tests and evals",
                 "visual": "A one-page document template filling section by section.",
                 "seconds": 23
+              },
+              {
+                "narration": "A question you'll get from stakeholders: why not just give the AI read access to the whole database? Because the job doesn't need it, and every extra field is extra risk. A curated set of tools returns exactly what each job requires, with caps and minimal personal data, and it's much easier to explain to a privacy officer or a client. If a new need appears, you add a tool deliberately, with a scope and a review, rather than having unlimited access by default.",
+                "onScreen": "Why not full database access?\n• Jobs don't need it\n• Extra fields = extra risk\n• Curated tools are explainable\n• Add capabilities deliberately",
+                "visual": "Layout: a full database icon with a red 'all tables' arrow crossed out; a curated tool set passes only selected fields through a filter labeled 'job needs'.",
+                "seconds": 37
               },
               {
                 "narration": "Try this now. Write the one page crescent CRM design document. List the user jobs, the tools, resources and prompts with one line each, the scopes and who gets them, your personal data decisions, and at least ten acceptance tests and eval requests with the tool calls you expect. Then walk it past an account manager, an analyst and whoever owns privacy. Record their objections. Unresolved objections become named risks with owners.",
@@ -2483,7 +2561,7 @@
           ],
           "activity": "Build crescent-crm with a fictional seed dataset, verify the four Inspector checks, and connect it to Claude Code or VS Code.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Time to build. In this lesson you'll turn the crescent CRM design into a working Python server with the official SDK: five read tools, two safe write tools, two resources and two prompts, running on a fictional SQLite dataset you can swap for Postgres later.",
@@ -2544,6 +2622,12 @@
                 "onScreen": "Try it\n• Inspector: four checks\n• Connect Claude Code\n• Ask a real question\n• Watch tool choices",
                 "visual": "Screen-recording style: the Inspector running the four checks with green ticks, then a Claude Code session calling crm_find_companies and crm_company_brief.",
                 "seconds": 33
+              },
+              {
+                "narration": "What if the model asks for a date range in the wrong format, or in words, like last month? The Pydantic date type rejects invalid formats automatically with a clear validation message, and the model usually retries correctly. For relative ranges, you have two options: add a helper tool that converts phrases like last month into exact dates, or state in the description that dates must be absolute, in year month day format. Either way, test it with a few natural phrasings.",
+                "onScreen": "Dates the model gets wrong\n• Pydantic date validation\n• Helper tool for 'last month'\n• Or require absolute dates in the description",
+                "visual": "Layout: an argument 'last month' bounces off a date validator with a message; a small helper tool converts it to '2026-08-01 → 2026-08-31'; the call succeeds.",
+                "seconds": 36
               },
               {
                 "narration": "Try this now. Create a small fictional dataset, build the server, and run the four Inspector checks: find a company and get its brief, request a hundred and twenty day range and read the error, log the same activity twice with the same key, and try a marketing draft to a contact without consent. Then connect it to Claude Code and ask a real question. Note which tools the model calls and in what order. That order tells you whether your descriptions are doing their job.",
@@ -2677,6 +2761,12 @@
                 "narration": "Here's how a pilot might go. Account managers love the company brief but ask for last contacted dates. Analysts hit the ninety two day limit for quarter over quarter comparisons. The team adds last contacted to the contact summary, with no new personal data, and adds guidance to the performance tool's description about using two calls for quarters. Eval accuracy stays stable, and the changelog records both changes. That's the loop: pilot, learn, adjust, re evaluate, document.",
                 "onScreen": "Example: pilot findings\n• Add last_contacted (no new PII)\n• Quarter guidance in description\n• Eval stable\n• Changelog updated",
                 "visual": "Feedback cards from personas turn into two small code diffs, followed by a stable eval chart labeled illustrative.",
+                "seconds": 33
+              },
+              {
+                "narration": "What happens after launch? Plan a short operating rhythm. Weekly for the first month: review errors, slow tools, denied scope attempts and a sample of real questions that went badly, and add them to the eval set. Monthly after that: review the catalog entry, dependency updates and costs. And every time a new host version or protocol version arrives, rerun the host tests. A server that's cared for stays trustworthy; one that's forgotten slowly drifts.",
+                "onScreen": "After launch\n• Weekly (month 1): errors, slow tools, denials, bad answers → evals\n• Monthly: catalog, dependencies, costs\n• On host/protocol updates: rerun host tests",
+                "visual": "Layout: a calendar with weekly then monthly review markers; small icons for errors, latency, denials and cost flow into an 'eval set' folder.",
                 "seconds": 33
               },
               {
