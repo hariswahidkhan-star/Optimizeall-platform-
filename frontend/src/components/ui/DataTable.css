@@ -283,3 +283,11 @@
   color: var(--color-link-hover);
   text-decoration-line: underline;
 }
+
+/* A plain-text empty state (a paragraph instead of <EmptyState>) still gets the empty box's breathing room. */
+.ui-table-empty > :is(p, span):only-child {
+  margin: 0;
+  padding: var(--space-6) var(--space-5);
+  color: var(--color-text-muted);
+  text-align: center;
+}

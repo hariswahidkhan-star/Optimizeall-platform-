@@ -439,6 +439,7 @@
 .ui-progress__value {
   color: var(--color-text-muted);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .ui-progress__track {
@@ -900,4 +901,14 @@
 
 .ui-money--negative {
   color: var(--danger-fg);
+}
+
+/* Phones: header actions (e.g. "9 unread notifications", "2 open support tickets") become an even row of compact
+ * chips instead of a ragged column of full buttons. */
+@media (max-width: 639px) {
+  .ui-page-header__actions > :is(.ui-button, a.ui-button) {
+    min-height: 40px;
+    padding-inline: var(--space-3);
+    font-size: var(--text-small);
+  }
 }
