@@ -109,6 +109,8 @@ public sealed class FileService(AppDbContext db, IFileStorage storage, ICurrentU
         if (file.IsPublic && file.Purpose is FilePurpose.CampaignAsset or FilePurpose.ContentImage) return true;
         if (!currentUser.IsAuthenticated) return false;
         if (currentUser.Id == file.OwnerUserId) return true;
+        if (file.Purpose == FilePurpose.SaleProof)
+            return currentUser.HasPermission(Permissions.SalesReview) || currentUser.HasPermission(Permissions.CodesView);
         if (file.Purpose != FilePurpose.SubmissionScreenshot)
             return currentUser.HasPermission(Permissions.CampaignsManage) || currentUser.HasPermission(Permissions.ContentManage);
 

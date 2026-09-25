@@ -38,6 +38,9 @@ internal sealed class EarningEntryConfiguration : IEntityTypeConfiguration<Earni
         // Campaign budget / spent aggregates filter on (CampaignId, Status IN ...).
         b.HasIndex(x => new { x.CampaignId, x.Status });
         b.HasIndex(x => x.SubmissionId);
+        // Discount-code sales: a sale's earnings; a program's spent budget and per-person caps.
+        b.HasIndex(x => x.CodeSaleId);
+        b.HasIndex(x => new { x.CodeProgramId, x.UserId });
         b.HasIndex(x => x.PayoutItemId);
         b.HasIndex(x => x.ReversesEntryId).IsUnique();
 
@@ -45,6 +48,8 @@ internal sealed class EarningEntryConfiguration : IEntityTypeConfiguration<Earni
         b.HasOne<PayoutItem>().WithMany().HasForeignKey(x => x.PayoutItemId).OnDelete(DeleteBehavior.Restrict);
         b.HasOne<EarningEntry>().WithMany().HasForeignKey(x => x.ReversesEntryId).OnDelete(DeleteBehavior.Restrict);
         b.HasOne<ExchangeRate>().WithMany().HasForeignKey(x => x.ExchangeRateId).OnDelete(DeleteBehavior.Restrict);
+        b.HasOne<OptimizeAll.Domain.Codes.CodeProgram>().WithMany().HasForeignKey(x => x.CodeProgramId).OnDelete(DeleteBehavior.Restrict);
+        b.HasOne<OptimizeAll.Domain.Codes.CodeSale>().WithMany().HasForeignKey(x => x.CodeSaleId).OnDelete(DeleteBehavior.Restrict);
     }
 }
 

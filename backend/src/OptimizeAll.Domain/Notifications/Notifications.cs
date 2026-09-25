@@ -32,6 +32,8 @@ public static class NotificationTypes
     public const string SupportReply = "support.reply";
     public const string ReviewLiveCheckDue = "review.live_check_due";
     public const string BatchPrepared = "payout.batch_prepared";
+    public const string CodeAssigned = "codes.assigned";
+    public const string CodeSaleDecision = "code_sale.decision";
 
     /// <summary>Transactional kinds that cannot be muted.</summary>
     public static readonly IReadOnlySet<string> Essential = new HashSet<string>

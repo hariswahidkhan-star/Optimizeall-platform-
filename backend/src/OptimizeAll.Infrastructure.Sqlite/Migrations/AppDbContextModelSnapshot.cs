@@ -2961,6 +2961,657 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.ToTable("post_templates", (string)null);
                 });
 
+            modelBuilder.Entity("OptimizeAll.Domain.Codes.CodeImportBatch", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Created")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Flagged")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Kind")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Matched")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("ProgramId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Rejected")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Rows")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProgramId", "CreatedAt");
+
+                    b.ToTable("code_import_batches", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Codes.CodePayoutOverride", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EndReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("EndedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("EndedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("FlatAmount")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("GroupId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PayoutType")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("Percent")
+                        .HasPrecision(9, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ProgramId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Target")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("ProgramId", "GroupId");
+
+                    b.HasIndex("ProgramId", "UserId");
+
+                    b.ToTable("code_payout_overrides", null, t =>
+                        {
+                            t.HasCheckConstraint("ck_code_payout_overrides_target", "(\"Target\" = 'Person' AND \"UserId\" IS NOT NULL AND \"GroupId\" IS NULL) OR (\"Target\" = 'Group' AND \"GroupId\" IS NOT NULL AND \"UserId\" IS NULL)");
+                        });
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Codes.CodeProgram", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ArchivedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("BrandName")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("BudgetAmount")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("CampaignId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ClientAccountId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("TEXT")
+                        .IsFixedLength();
+
+                    b.Property<decimal?>("DailyCapPerPerson")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DiscountLabel")
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("EndsAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("FlatAmount")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("MaxOrderAgeDays")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PayoutType")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PayoutVersion")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal?>("Percent")
+                        .HasPrecision(9, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("ProgramCapPerPerson")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("RequireProof")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("StartsAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StoreUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Terms")
+                        .HasMaxLength(4000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CampaignId");
+
+                    b.HasIndex("ClientAccountId");
+
+                    b.HasIndex("Status", "CreatedAt");
+
+                    b.ToTable("code_programs", null, t =>
+                        {
+                            t.HasCheckConstraint("ck_code_programs_flat", "CAST(\"FlatAmount\" AS REAL) IS NULL OR CAST(\"FlatAmount\" AS REAL) > 0");
+
+                            t.HasCheckConstraint("ck_code_programs_percent", "CAST(\"Percent\" AS REAL) IS NULL OR (CAST(\"Percent\" AS REAL) > 0 AND CAST(\"Percent\" AS REAL) <= 100)");
+                        });
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Codes.CodeProgramTier", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("BonusAmount")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("FlatAmount")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("Percent")
+                        .HasPrecision(9, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ProgramId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ThresholdSales")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProgramId", "ThresholdSales")
+                        .IsUnique();
+
+                    b.ToTable("code_program_tiers", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Codes.CodeSale", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ActiveOrderKey")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AppliedCaps")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("AssignmentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CodeId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("CommissionAmount")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("TEXT")
+                        .IsFixedLength();
+
+                    b.Property<DateTime?>("DecidedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("DecidedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DecisionReason")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("DiscountAmount")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("EstimatedCommission")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("ExchangeRate")
+                        .HasPrecision(18, 8)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ExchangeRateId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("GroupId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ImportBatchId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("NetAmount")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedOrderReference")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OrderReference")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PayoutSourceLabel")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("PayoutVersion")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ProductNote")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("ProgramDiscountAmount")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ProgramId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("ProgramNetAmount")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ProofFileId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RefundReason")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("RefundedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("ReportedNetAmount")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ReportedOrderDate")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("SubmittedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Verification")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("VerificationNote")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssignmentId");
+
+                    b.HasIndex("CodeId");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("ImportBatchId");
+
+                    b.HasIndex("ProofFileId");
+
+                    b.HasIndex("ProgramId", "ActiveOrderKey")
+                        .IsUnique();
+
+                    b.HasIndex("ProgramId", "NormalizedOrderReference");
+
+                    b.HasIndex("ProgramId", "Status");
+
+                    b.HasIndex("Status", "SubmittedAt");
+
+                    b.HasIndex("UserId", "ProgramId");
+
+                    b.ToTable("code_sales", null, t =>
+                        {
+                            t.HasCheckConstraint("ck_code_sales_amounts", "CAST(\"NetAmount\" AS REAL) > 0 AND CAST(\"DiscountAmount\" AS REAL) >= 0 AND CAST(\"ExchangeRate\" AS REAL) > 0");
+                        });
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Codes.CodeSaleEvent", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ActorUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("At")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FromStatus")
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Reason")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("SaleId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ToStatus")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SaleId", "At");
+
+                    b.ToTable("code_sale_events", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Codes.DiscountCode", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ImportBatchId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedCode")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ProgramId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ValidFrom")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ValidTo")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ImportBatchId");
+
+                    b.HasIndex("ProgramId", "NormalizedCode")
+                        .IsUnique();
+
+                    b.HasIndex("ProgramId", "Status");
+
+                    b.ToTable("discount_codes", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Codes.DiscountCodeAssignment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CodeId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EndReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("EndedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("EndedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("GroupId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ProgramId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Target")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ValidFrom")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ValidTo")
+                        .HasPrecision(6)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProgramId");
+
+                    b.HasIndex("CodeId", "EndedAt");
+
+                    b.HasIndex("GroupId", "ProgramId");
+
+                    b.HasIndex("UserId", "ProgramId");
+
+                    b.ToTable("discount_code_assignments", null, t =>
+                        {
+                            t.HasCheckConstraint("ck_discount_code_assignments_target", "(\"Target\" = 'Person' AND \"UserId\" IS NOT NULL AND \"GroupId\" IS NULL) OR (\"Target\" = 'Group' AND \"GroupId\" IS NOT NULL AND \"UserId\" IS NULL)");
+                        });
+                });
+
             modelBuilder.Entity("OptimizeAll.Domain.Content.Announcement", b =>
                 {
                     b.Property<Guid>("Id")
@@ -7345,6 +7996,12 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.Property<Guid?>("CampaignId")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("CodeProgramId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("CodeSaleId")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("TEXT");
@@ -7460,6 +8117,8 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CodeSaleId");
+
                     b.HasIndex("ExchangeRateId");
 
                     b.HasIndex("IdempotencyKey")
@@ -7473,6 +8132,8 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.HasIndex("SubmissionId");
 
                     b.HasIndex("CampaignId", "Status");
+
+                    b.HasIndex("CodeProgramId", "UserId");
 
                     b.HasIndex("Status", "AvailableAt");
 
@@ -15510,6 +16171,145 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
                 });
 
+            modelBuilder.Entity("OptimizeAll.Domain.Codes.CodeImportBatch", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Codes.CodeProgram", null)
+                        .WithMany()
+                        .HasForeignKey("ProgramId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Codes.CodePayoutOverride", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Rewards.RateGroup", null)
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("OptimizeAll.Domain.Codes.CodeProgram", null)
+                        .WithMany()
+                        .HasForeignKey("ProgramId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OptimizeAll.Domain.Identity.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Codes.CodeProgram", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Campaigns.Campaign", null)
+                        .WithMany()
+                        .HasForeignKey("CampaignId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("OptimizeAll.Domain.Agency.ClientAccount", null)
+                        .WithMany()
+                        .HasForeignKey("ClientAccountId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Codes.CodeProgramTier", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Codes.CodeProgram", null)
+                        .WithMany("Tiers")
+                        .HasForeignKey("ProgramId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Codes.CodeSale", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Codes.DiscountCodeAssignment", null)
+                        .WithMany()
+                        .HasForeignKey("AssignmentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("OptimizeAll.Domain.Codes.DiscountCode", null)
+                        .WithMany()
+                        .HasForeignKey("CodeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OptimizeAll.Domain.Rewards.RateGroup", null)
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("OptimizeAll.Domain.Codes.CodeImportBatch", null)
+                        .WithMany()
+                        .HasForeignKey("ImportBatchId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("OptimizeAll.Domain.Codes.CodeProgram", null)
+                        .WithMany()
+                        .HasForeignKey("ProgramId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OptimizeAll.Domain.Files.StoredFile", null)
+                        .WithMany()
+                        .HasForeignKey("ProofFileId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("OptimizeAll.Domain.Identity.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Codes.CodeSaleEvent", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Codes.CodeSale", null)
+                        .WithMany()
+                        .HasForeignKey("SaleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Codes.DiscountCode", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Codes.CodeImportBatch", null)
+                        .WithMany()
+                        .HasForeignKey("ImportBatchId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("OptimizeAll.Domain.Codes.CodeProgram", null)
+                        .WithMany()
+                        .HasForeignKey("ProgramId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Codes.DiscountCodeAssignment", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Codes.DiscountCode", null)
+                        .WithMany()
+                        .HasForeignKey("CodeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OptimizeAll.Domain.Rewards.RateGroup", null)
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("OptimizeAll.Domain.Codes.CodeProgram", null)
+                        .WithMany()
+                        .HasForeignKey("ProgramId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OptimizeAll.Domain.Identity.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("OptimizeAll.Domain.Content.OnboardingStepCompletion", b =>
                 {
                     b.HasOne("OptimizeAll.Domain.Content.OnboardingStep", null)
@@ -16172,6 +16972,16 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
             modelBuilder.Entity("OptimizeAll.Domain.Ledger.EarningEntry", b =>
                 {
+                    b.HasOne("OptimizeAll.Domain.Codes.CodeProgram", null)
+                        .WithMany()
+                        .HasForeignKey("CodeProgramId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("OptimizeAll.Domain.Codes.CodeSale", null)
+                        .WithMany()
+                        .HasForeignKey("CodeSaleId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("OptimizeAll.Domain.Ledger.ExchangeRate", null)
                         .WithMany()
                         .HasForeignKey("ExchangeRateId")
@@ -17501,6 +18311,11 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                     b.Navigation("Disclosures");
 
                     b.Navigation("Platforms");
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Codes.CodeProgram", b =>
+                {
+                    b.Navigation("Tiers");
                 });
 
             modelBuilder.Entity("OptimizeAll.Domain.Crm.Proposal", b =>

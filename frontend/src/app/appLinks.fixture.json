@@ -23,8 +23,11 @@
     { "name": "Achievements", "path": "/app/achievements" },
     { "name": "Referrals", "path": "/app/referrals" },
     { "name": "SupportTicket", "path": "/app/support/:id" },
+    { "name": "MyCodes", "path": "/app/codes" },
+    { "name": "MyCodeSale", "path": "/app/codes/sales/:id" },
     { "name": "ReviewSubmission", "path": "/review/queue/:id" },
     { "name": "ReviewLiveChecks", "path": "/review/live-checks" },
+    { "name": "ReviewCodeSale", "path": "/review/code-sales/:id" },
     { "name": "FinanceBatch", "path": "/finance/batches/:id" },
     { "name": "FinancePayments", "path": "/finance/payments" }
   ]

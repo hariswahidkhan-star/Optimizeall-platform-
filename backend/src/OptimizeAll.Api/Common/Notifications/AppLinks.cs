@@ -47,9 +47,14 @@ public static class AppLinks
     public const string Referrals = "/app/referrals";
     public static string SupportTicket(Guid ticketId) => $"/app/support/{ticketId}";
 
+    /// <summary>The participant's discount codes and the sales they reported (docs/DISCOUNT_CODES.md).</summary>
+    public const string MyCodes = "/app/codes";
+    public static string MyCodeSale(Guid saleId) => $"/app/codes/sales/{saleId}";
+
     // ---------- Reviewer portal (/review) ----------
     public static string ReviewSubmission(Guid submissionId) => $"/review/queue/{submissionId}";
     public const string ReviewLiveChecks = "/review/live-checks";
+    public static string ReviewCodeSale(Guid saleId) => $"/review/code-sales/{saleId}";
 
     // ---------- Finance portal (/finance) ----------
     public static string FinanceBatch(Guid batchId) => $"/finance/batches/{batchId}";

@@ -17,12 +17,20 @@ public static class CsvParser
     }
 
     /// <summary>Parses all records. Throws <see cref="FormatException"/> for an unterminated quote or too many columns.</summary>
-    public static List<string[]> Parse(string content, char? delimiter = null)
+    public static List<string[]> Parse(string content, char? delimiter = null) =>
+        ParseRecords(content, delimiter).Select(r => r.Fields).ToList();
+
+    /// <summary>
+    /// Like <see cref="Parse"/>, with the 1-based line each record starts on (blank lines are skipped but still counted), so
+    /// import reports can point at the line a spreadsheet shows.
+    /// </summary>
+    public static List<CsvRecord> ParseRecords(string content, char? delimiter = null)
     {
         if (content.Length > 0 && content[0] == '﻿') content = content[1..];
         var d = delimiter ?? DetectDelimiter(content);
-        var rows = new List<string[]>();
+        var rows = new List<CsvRecord>();
         var fields = new List<string>();
+        var recordLine = 1;
         var field = new StringBuilder();
         var inQuotes = false;
         var i = 0;
@@ -51,6 +59,7 @@ public static class CsvParser
                 AddField();
                 EndRow();
                 line++;
+                recordLine = line;
                 i++;
             }
             else { field.Append(c); i++; }
@@ -71,8 +80,11 @@ public static class CsvParser
         void EndRow()
         {
             // Skip completely blank lines.
-            if (!(fields.Count == 1 && fields[0].Length == 0)) rows.Add(fields.ToArray());
+            if (!(fields.Count == 1 && fields[0].Length == 0)) rows.Add(new CsvRecord(recordLine, fields.ToArray()));
             fields.Clear();
         }
     }
 }
+
+/// <summary>A parsed CSV record and the (1-based) line it starts on.</summary>
+public sealed record CsvRecord(int Line, string[] Fields);
