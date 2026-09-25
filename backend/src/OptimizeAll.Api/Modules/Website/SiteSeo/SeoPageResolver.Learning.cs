@@ -37,6 +37,13 @@ public sealed partial class SeoPageResolver
         c.Add(new ParagraphNode("Practical training in sales, marketing, SEO and AI — built for creators, freelancers and growing teams. " +
                                 "Read every lesson for free; create a free account to track progress, take the final assessment and earn a " +
                                 "certificate you can add to LinkedIn."));
+        var paths = await learning.Paths.ListAsync(ct);
+        if (paths.Paths.Count > 0)
+        {
+            c.Add(new HeadingNode(2, "Learning paths"));
+            c.Add(new LinkListNode(paths.Paths.Select(p => new LinkItem($"{p.Title} learning path", LearningLinks.PathPath(p.Slug),
+                $"{p.Subtitle} · {p.CourseCount} courses")).ToList()));
+        }
         foreach (var group in courses.Items.GroupBy(x => x.Category).OrderBy(g => g.Key))
         {
             c.Add(new HeadingNode(2, PublicLearningService.CategoryLabels[group.Key]));
@@ -45,8 +52,73 @@ public sealed partial class SeoPageResolver
         return page;
     }
 
+    /// <summary>"Sep 2026" from a pack's lastReviewed ("2026-09"), or null.</summary>
+    public static string? ReviewedLabel(string? lastReviewed) =>
+        lastReviewed is not null && DateTime.TryParseExact(lastReviewed + "-01", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture,
+            System.Globalization.DateTimeStyles.None, out var month)
+            ? month.ToString("MMM yyyy", System.Globalization.CultureInfo.InvariantCulture)
+            : null;
+
+    /// <summary>/learn/paths: every learning path with its courses.</summary>
+    private async Task<SeoPage> PathsIndexAsync(CancellationToken ct)
+    {
+        var d = await learning.Paths.ListAsync(ct);
+        var page = NewPage(LearningLinks.PathsPath, d.Seo.Title, d.Seo.Description);
+        page.Source = "Learning paths";
+        page.EditPath = LearningAdminPath;
+        ApplyLearningSeo(page, d.Seo, d.JsonLd, null);
+        Crumbs(page, ("Academy", "/learn"), ("Learning paths", LearningLinks.PathsPath));
+        var c = page.Content;
+        c.Add(new ParagraphNode("Optimize All Academy"));
+        c.Add(new HeadingNode(1, "Learning paths"));
+        c.Add(new ParagraphNode("Step-by-step tracks of free courses towards a role or goal. Every course ends with a verifiable certificate and a badge you can add to LinkedIn."));
+        foreach (var p in d.Paths)
+        {
+            c.Add(new HeadingNode(2, p.Title));
+            c.Add(new ParagraphNode($"{p.Subtitle} · {p.Level} · {p.CourseCount} courses · about {Math.Max(1, (int)Math.Round(p.TotalMinutes / 60.0))} hours"));
+            c.Add(new LinkListNode(new[] { new LinkItem($"View the {p.Title} path", LearningLinks.PathPath(p.Slug)) }));
+        }
+        return page;
+    }
+
+    /// <summary>/learn/paths/{slug}: the path's description, outcomes, audience and ordered courses.</summary>
+    private async Task<SeoPage> PathAsync(string slug, CancellationToken ct)
+    {
+        var d = await learning.Paths.DetailAsync(slug, ct); // unknown or no published course → 404
+        var path = LearningLinks.PathPath(d.Card.Slug);
+        var page = NewPage(path, d.Seo.Title, d.Seo.Description);
+        page.Source = "Learning path";
+        page.EditPath = LearningAdminPath;
+        ApplyLearningSeo(page, d.Seo, d.JsonLd, null);
+        Crumbs(page, ("Academy", "/learn"), ("Learning paths", LearningLinks.PathsPath), (d.Card.Title, path));
+        var c = page.Content;
+        c.Add(new ParagraphNode($"Learning path · {d.Card.Level} · {d.Card.CourseCount} free courses · about {Math.Max(1, (int)Math.Round(d.Card.TotalMinutes / 60.0))} hours"));
+        c.Add(new HeadingNode(1, $"{d.Card.Title} learning path"));
+        c.Add(new ParagraphNode(d.Card.Subtitle));
+        if (d.Courses.Count > 0) c.Add(new ActionNode("Start the first course", LearningLinks.CoursePath(d.Courses[0].Course.Slug)));
+        c.Add(new HeadingNode(2, "About this path"));
+        c.Add(new MarkdownNode(d.Description, 3));
+        if (d.Outcomes.Count > 0)
+        {
+            c.Add(new HeadingNode(2, "What you will be able to do"));
+            c.Add(new ListNode(d.Outcomes));
+        }
+        if (d.Audience.Count > 0)
+        {
+            c.Add(new HeadingNode(2, "Who it is for"));
+            c.Add(new ListNode(d.Audience));
+        }
+        c.Add(new HeadingNode(2, "Courses in order"));
+        c.Add(new LinkListNode(d.Courses.Select(x => new LinkItem($"{x.Position}. {x.Course.Title}", LearningLinks.CoursePath(x.Course.Slug),
+            $"{x.Course.Subtitle} · {x.Course.LessonCount} lessons · badge: {x.Course.BadgeName}")).ToList()));
+        c.Add(new HeadingNode(2, "Badges you earn along the way"));
+        c.Add(new ListNode(d.Card.Badges.Select(b => $"{b.BadgeName} — {b.CourseTitle}").ToList()));
+        return page;
+    }
+
     private async Task<SeoPage> CourseAsync(string slug, CancellationToken ct)
     {
+        if (slug == "paths") return await PathsIndexAsync(ct); // /learn/paths (a reserved course slug)
         var d = await learning.CourseAsync(slug, ct); // unpublished or unknown → 404
         var path = LearningLinks.CoursePath(d.Card.Slug);
         var page = NewPage(path, d.Seo.Title, d.Seo.Description);
@@ -57,9 +129,23 @@ public sealed partial class SeoPageResolver
         page.ModifiedAt = d.UpdatedAt;
         page.Section = PublicLearningService.CategoryLabels[d.Card.Category];
         var c = page.Content;
-        c.Add(new ParagraphNode($"{PublicLearningService.CategoryLabels[d.Card.Category]} · {d.Card.Level} · {d.Card.EstimatedMinutes} minutes · free"));
+        var reviewed = ReviewedLabel(d.LastReviewed);
+        c.Add(new ParagraphNode($"{PublicLearningService.CategoryLabels[d.Card.Category]} · {d.Card.Level} · {d.Card.EstimatedMinutes} minutes · free" +
+                                (reviewed is null ? string.Empty : $" · updated {reviewed}")));
         c.Add(new HeadingNode(1, d.Card.Title));
         c.Add(new ParagraphNode(d.Card.Subtitle));
+        var facts = new List<KeyValuePair<string, string>>
+        {
+            KeyValuePair.Create("Lessons", $"{d.Card.LessonCount} in {d.Card.ModuleCount} modules"),
+        };
+        if (d.LectureCount > 0) facts.Add(KeyValuePair.Create("Video lectures", $"{d.LectureCount} lectures, {d.LectureMinutes} minutes"));
+        if (reviewed is not null) facts.Add(KeyValuePair.Create("Updated", reviewed));
+        c.Add(new FactsNode(facts));
+        if (d.Tools.Count > 0)
+        {
+            c.Add(new HeadingNode(2, "Tools you'll use"));
+            c.Add(new ListNode(d.Tools));
+        }
         var first = d.Modules.SelectMany(m => m.Lessons).FirstOrDefault();
         if (first is not null) c.Add(new ActionNode("Start the course", LearningLinks.LessonPath(d.Card.Slug, first.Slug)));
         if (!string.IsNullOrWhiteSpace(d.Description))
@@ -96,6 +182,7 @@ public sealed partial class SeoPageResolver
 
     private async Task<SeoPage> LessonAsync(string slug, string lessonSlug, CancellationToken ct)
     {
+        if (slug == "paths") return await PathAsync(lessonSlug, ct); // /learn/paths/{path}
         var l = await learning.LessonAsync(slug, lessonSlug, ct); // unknown course or lesson → 404
         var path = LearningLinks.LessonPath(l.CourseSlug, l.Slug);
         var page = NewPage(path, l.Seo.Title, l.Seo.Description);
@@ -109,6 +196,21 @@ public sealed partial class SeoPageResolver
         c.Add(new ParagraphNode($"{l.CourseTitle} · {l.ModuleTitle} · lesson {l.Position} of {l.LessonCount} · {l.DurationMinutes} min"));
         c.Add(new HeadingNode(1, l.Title));
         c.Add(new MarkdownNode(l.Body, 2));
+        if (l.Lecture is { } lecture)
+        {
+            // The lecture transcript is crawlable text on the page, produced or not (the web app shows it in a panel).
+            c.Add(new HeadingNode(2, $"Video lecture: {lecture.Title}"));
+            c.Add(new ParagraphNode(lecture.Produced
+                ? $"{lecture.Chapters.Count} chapters · about {lecture.TargetMinutes} minutes · captions and full transcript below."
+                : $"Lecture coming soon · {lecture.Chapters.Count} chapters · about {lecture.TargetMinutes} minutes. Read the full transcript below."));
+            c.Add(new ListNode(lecture.Chapters.Select(ch => ch.Title).ToList(), Ordered: true));
+            c.Add(new HeadingNode(2, "Lecture transcript"));
+            foreach (var chapter in lecture.Chapters)
+            {
+                c.Add(new HeadingNode(3, chapter.Title));
+                c.Add(new ParagraphNode(chapter.Narration));
+            }
+        }
         if (l.Video is { Transcript.Length: > 0 } video)
         {
             c.Add(new HeadingNode(2, "Video transcript"));

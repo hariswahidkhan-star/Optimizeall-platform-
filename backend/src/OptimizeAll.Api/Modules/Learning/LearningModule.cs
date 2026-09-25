@@ -21,6 +21,7 @@ public static class LearningModule
         services.AddScoped<LearningIssuerProvider>();
         services.AddScoped<PublicLearningService>();
         services.AddScoped<MyLearningService>();
+        services.AddScoped<MyLearningPathService>();
         services.AddScoped<ExamService>();
         services.AddScoped<CertificateService>();
         services.AddScoped<LearningAdminService>();
@@ -49,7 +50,16 @@ public sealed class LearningSitemapContributor(AppDbContext db, CourseContentCac
         var courses = await db.Set<Course>().AsNoTracking()
             .Where(c => c.Status == CourseStatus.Published && c.PublishedVersionId != null)
             .OrderBy(c => c.SortOrder).ThenBy(c => c.Slug).ToListAsync(ct);
-        var result = new List<SitemapContribution> { new("/learn", courses.Count == 0 ? null : courses.Max(c => c.UpdatedAt), "Academy") };
+        var lastUpdate = courses.Count == 0 ? (DateTime?)null : courses.Max(c => c.UpdatedAt);
+        var result = new List<SitemapContribution> { new("/learn", lastUpdate, "Academy") };
+        // Learning paths with at least one published course (/learn/paths and each path).
+        var bySlug = courses.ToDictionary(c => c.Slug, StringComparer.Ordinal);
+        var paths = LearningPathLibrary.Paths.Select(p => (Path: p, Courses: LearningPathService.Resolve(p, bySlug))).Where(x => x.Courses.Count > 0).ToList();
+        if (paths.Count > 0)
+        {
+            result.Add(new SitemapContribution(LearningLinks.PathsPath, lastUpdate, "Learning paths"));
+            result.AddRange(paths.Select(x => new SitemapContribution(LearningLinks.PathPath(x.Path.Slug), x.Courses.Max(c => c.UpdatedAt), x.Path.Title)));
+        }
         foreach (var course in courses)
         {
             result.Add(new SitemapContribution(LearningLinks.CoursePath(course.Slug), course.UpdatedAt, course.Title));

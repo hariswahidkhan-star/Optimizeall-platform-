@@ -248,14 +248,24 @@ public sealed class LearningAdminService(
         var baseVersion = course.LatestVersionId ?? throw DomainException.NotFound("CourseVersion");
         var pack = (await cache.GetAsync(db, baseVersion, ct)).Pack.Clone();
         var lesson = pack.AllLessons.Select(x => x.Lesson).FirstOrDefault(l => l.Slug == lessonSlug) ?? throw DomainException.NotFound("Lesson");
-        if (lesson.TypeValue != LessonType.Video || lesson.Video is null)
+        // A lesson with a lecture (pack v2) gets the produced lecture; otherwise only a v1 video lesson has a video block.
+        if (lesson.Lecture is null && (lesson.TypeValue != LessonType.Video || lesson.Video is null))
             throw DomainException.Conflict("learning.not_a_video_lesson", "Only video lessons have a video; change the lesson type in the course editor first.");
         foreach (var (field, value) in new[] { ("src", request.Src), ("poster", request.Poster), ("captions", request.Captions) })
             if (!string.IsNullOrWhiteSpace(value) && !CoursePackValidator.IsMediaUrl(value.Trim()))
                 throw FieldRules.FieldError("learning.invalid_media_url", field, "Use an uploaded file (/api/v1/files/{id}) or an https URL.");
-        lesson.Video.Src = Blank(request.Src);
-        lesson.Video.Poster = Blank(request.Poster);
-        lesson.Video.Captions = Blank(request.Captions);
+        if (lesson.Lecture is { } lecture)
+        {
+            lecture.Src = Blank(request.Src);
+            lecture.Poster = Blank(request.Poster);
+            lecture.Captions = Blank(request.Captions);
+        }
+        else
+        {
+            lesson.Video!.Src = Blank(request.Src);
+            lesson.Video.Poster = Blank(request.Poster);
+            lesson.Video.Captions = Blank(request.Captions);
+        }
         var issues = CoursePackValidator.Validate(pack, PackValidationMode.Authoring);
         if (issues.Count > 0)
             throw new DomainException("learning.invalid_course", "The change makes the course invalid: " + string.Join("; ", issues.Take(3)));

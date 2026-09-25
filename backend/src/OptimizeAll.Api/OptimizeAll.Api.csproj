@@ -41,6 +41,9 @@
     <!-- Learning course packs (every *.json in the catalog folder) and the OFL fonts of the certificate PDF. -->
     <Content Remove="Modules\Learning\Catalog\*.json" />
     <EmbeddedResource Include="Modules\Learning\Catalog\*.json" LogicalName="OptimizeAll.Learning.Catalog.%(Filename)%(Extension)" />
+    <!-- Learning paths (ordered course sequences), Modules/Learning/Catalog/paths/*.json. -->
+    <Content Remove="Modules\Learning\Catalog\paths\*.json" />
+    <EmbeddedResource Include="Modules\Learning\Catalog\paths\*.json" LogicalName="OptimizeAll.Learning.Paths.%(Filename)%(Extension)" />
     <EmbeddedResource Include="Modules\Learning\Fonts\*.ttf" LogicalName="OptimizeAll.Learning.Fonts.%(Filename)%(Extension)" />
   </ItemGroup>
 

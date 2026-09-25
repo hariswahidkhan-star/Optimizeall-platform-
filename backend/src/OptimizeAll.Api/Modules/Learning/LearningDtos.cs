@@ -33,7 +33,8 @@ public sealed record BadgeDto(string Name, string Description, string Criteria, 
 
 public sealed record ExamInfoDto(int QuestionCount, int TimeLimitMinutes, int MaxAttemptsPerDay, int PassingScore);
 
-public sealed record LessonSummaryDto(string Slug, string Title, LessonType Type, int DurationMinutes, bool HasVideo);
+/// <summary><see cref="HasVideo"/>: a produced video (v1 video block or v2 lecture); <see cref="LectureMinutes"/>: 0 without a lecture.</summary>
+public sealed record LessonSummaryDto(string Slug, string Title, LessonType Type, int DurationMinutes, bool HasVideo, bool HasLecture, int LectureMinutes);
 
 public sealed record ModuleDto(string Slug, string Title, string Summary, IReadOnlyList<LessonSummaryDto> Lessons);
 
@@ -43,9 +44,24 @@ public sealed record LearningSeoDto(string Title, string Description, string Can
 public sealed record CourseDetailDto(
     CourseCardDto Card, string Description, IReadOnlyList<string> Outcomes, IReadOnlyList<PrerequisiteDto> Prerequisites,
     BadgeDto Badge, ExamInfoDto Exam, IReadOnlyList<ModuleDto> Modules, int Version, DateTime UpdatedAt,
-    LearningSeoDto Seo, IReadOnlyList<JsonElement> JsonLd);
+    LearningSeoDto Seo, IReadOnlyList<JsonElement> JsonLd,
+    // Pack v2: review month ("2026-09"), hands-on tools, and total lecture minutes / lessons with a lecture.
+    string? LastReviewed, IReadOnlyList<string> Tools, int LectureMinutes, int LectureCount);
 
 public sealed record LessonVideoDto(string? Src, string? Poster, string? Captions, string Transcript);
+
+/// <summary>
+/// One chapter of a lesson lecture (a scene): its title (first on-screen line), slide bullets, the narration (transcript) and
+/// its planned position. For a produced lecture the player scales the planned times to the real video duration.
+/// </summary>
+public sealed record LectureChapterDto(int Index, string Title, IReadOnlyList<string> Points, string Narration, int StartSeconds, int Seconds);
+
+/// <summary>
+/// A lesson's video lecture (pack v2). <see cref="Produced"/> is false until the ElevenLabs-produced video is attached
+/// (<see cref="Src"/>): the page then shows "coming soon" with the chapters and the full transcript.
+/// </summary>
+public sealed record LessonLectureDto(string Title, int TargetMinutes, int TotalSeconds, bool Produced, string? Src, string? Poster,
+    string? Captions, IReadOnlyList<LectureChapterDto> Chapters, int TranscriptWords);
 
 /// <summary>A knowledge-check question. Not graded for the certificate, so the answer and explanation are included.</summary>
 public sealed record KnowledgeCheckDto(int Index, string Question, IReadOnlyList<string> Options, IReadOnlyList<int> Correct, string Explanation, bool Multiple);
@@ -56,7 +72,7 @@ public sealed record LessonDto(
     string CourseSlug, string CourseTitle, CourseCategory Category, string ModuleSlug, string ModuleTitle, string Slug, string Title,
     LessonType Type, int DurationMinutes, string Body, LessonVideoDto? Video, IReadOnlyList<string> KeyTakeaways,
     IReadOnlyList<KnowledgeCheckDto> KnowledgeCheck, string? Activity, LessonNavDto? Previous, LessonNavDto? Next,
-    int Position, int LessonCount, LearningSeoDto Seo, IReadOnlyList<JsonElement> JsonLd);
+    int Position, int LessonCount, LearningSeoDto Seo, IReadOnlyList<JsonElement> JsonLd, LessonLectureDto? Lecture, string? LastReviewed);
 
 // ---------------------------------------------------------------- My learning (participant portal)
 

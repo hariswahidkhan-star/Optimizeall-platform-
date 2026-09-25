@@ -24,6 +24,8 @@ public sealed class LearningLinks(string baseUrl)
 
     public static string CoursePath(string slug) => $"/learn/{Uri.EscapeDataString(slug)}";
     public static string LessonPath(string slug, string lesson) => $"/learn/{Uri.EscapeDataString(slug)}/{Uri.EscapeDataString(lesson)}";
+    public const string PathsPath = "/learn/paths";
+    public static string PathPath(string slug) => $"/learn/paths/{Uri.EscapeDataString(slug)}";
     public static string VerifyPath(Guid certificateId) => $"/verify/certificates/{certificateId}";
     public static string BadgeImagePath(string slug) => $"/api/v1/public/learning/courses/{Uri.EscapeDataString(slug)}/badge.svg";
     public static string PdfPath(Guid id) => $"/api/v1/public/learning/certificates/{id}/certificate.pdf";

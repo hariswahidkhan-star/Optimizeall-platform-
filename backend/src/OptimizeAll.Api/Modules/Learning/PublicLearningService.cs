@@ -33,6 +33,11 @@ public sealed partial class PublicLearningService(AppDbContext db, CourseContent
 
     private DateTime Now => clock.GetUtcNow().UtcDateTime;
 
+    private LearningPathService? _paths;
+
+    /// <summary>The learning paths read model (same scope, same data as the catalog).</summary>
+    public LearningPathService Paths => _paths ??= new LearningPathService(db, this, cache, issuers, clock);
+
     public IQueryable<Course> Published() =>
         db.Set<Course>().AsNoTracking().Where(c => c.Status == CourseStatus.Published && c.PublishedVersionId != null);
 
@@ -113,7 +118,8 @@ public sealed partial class PublicLearningService(AppDbContext db, CourseContent
         var card = Card(course, Now);
         var exam = ExamInfo(pack);
         var modules = (pack.Modules ?? new()).Select(m => new ModuleDto(m.Slug, m.Title, m.Summary,
-            (m.Lessons ?? new()).Select(l => new LessonSummaryDto(l.Slug, l.Title, l.TypeValue, l.DurationMinutes, l.Video?.Src is not null)).ToList())).ToList();
+            (m.Lessons ?? new()).Select(l => new LessonSummaryDto(l.Slug, l.Title, l.TypeValue, l.DurationMinutes,
+                l.Video?.Src is not null || l.Lecture?.Src is not null, l.Lecture is not null, l.Lecture?.TargetMinutes ?? 0)).ToList())).ToList();
         var seo = new LearningSeoDto(SeoTitle($"{pack.Title} — free course with certificate", $"{pack.Title} — free course", pack.Title),
             Truncate(pack.Subtitle, SeoDescriptionMax),
             LearningLinks.CoursePath(pack.Slug), links.BadgeImage(pack.Slug), false);
@@ -125,7 +131,8 @@ public sealed partial class PublicLearningService(AppDbContext db, CourseContent
         return new CourseDetailDto(card, pack.Description, pack.Outcomes ?? new(),
             prerequisiteSlugs.Where(titles.ContainsKey).Select(s => new PrerequisiteDto(s, titles[s])).ToList(),
             new BadgeDto(pack.Badge!.Name, pack.Badge.Description, pack.Badge.Criteria, LearningLinks.BadgeImagePath(pack.Slug)),
-            exam, modules, pack.Version, course.UpdatedAt, seo, jsonLd);
+            exam, modules, pack.Version, course.UpdatedAt, seo, jsonLd,
+            pack.LastReviewed, pack.Tools ?? new(), pack.LectureMinutes, pack.AllLessons.Count(x => x.Lesson.Lecture is not null));
     }
 
     public static ExamInfoDto ExamInfo(CoursePack pack) => new(pack.FinalExam!.QuestionCount, pack.FinalExam.TimeLimitMinutes,
@@ -165,8 +172,30 @@ public sealed partial class PublicLearningService(AppDbContext db, CourseContent
             previous is null ? null : new LessonNavDto(previous.Slug, previous.Title),
             next is null ? null : new LessonNavDto(next.Slug, next.Title),
             r.Index + 1, doc.Lessons.Count,
-            new LearningSeoDto(SeoTitle($"{lesson.Title} — {doc.Pack.Title}", lesson.Title), excerpt, path, links.BadgeImage(doc.Pack.Slug), false),
-            jsonLd);
+            new LearningSeoDto(SeoTitle($"{lesson.Title} — {doc.Pack.Title}", lesson.Title), excerpt, path,
+                lesson.Lecture?.Poster is { } poster ? links.Absolute(poster) : links.BadgeImage(doc.Pack.Slug), false),
+            jsonLd, Lecture(lesson), doc.Pack.LastReviewed);
+    }
+
+    /// <summary>The lesson's lecture for the player: chapters from scenes (title = first on-screen line), planned times.</summary>
+    public static LessonLectureDto? Lecture(PackLesson lesson)
+    {
+        if (lesson.Lecture is not { } lecture) return null;
+        var chapters = new List<LectureChapterDto>();
+        var start = 0;
+        var scenes = (lecture.Scenes ?? new()).Where(s => s is not null).ToList();
+        for (var i = 0; i < scenes.Count; i++)
+        {
+            var scene = scenes[i];
+            var lines = (scene.OnScreen ?? string.Empty).Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            var title = scene.ChapterTitle;
+            if (title.Length == 0) title = $"Part {i + 1}";
+            var points = lines.Skip(1).Select(l => l.TrimStart('•', '-', '*', ' ').Trim()).Where(l => l.Length > 0).ToList();
+            chapters.Add(new LectureChapterDto(i, title, points, (scene.Narration ?? string.Empty).Trim(), start, scene.Seconds));
+            start += scene.Seconds;
+        }
+        return new LessonLectureDto(lecture.Title ?? lesson.Title, lecture.TargetMinutes, start, lecture.Src is not null, lecture.Src,
+            lecture.Poster, lecture.Captions, chapters, lecture.NarrationWords);
     }
 
     // ---------------------------------------------------------------- text helpers

@@ -73,6 +73,9 @@ public static partial class CoursePackValidator
 
     private static readonly string[] BannedOptions = { "all of the above", "none of the above" };
 
+    /// <summary>Course slugs that would collide with other /learn/… pages (the learning paths live at /learn/paths).</summary>
+    public static readonly IReadOnlySet<string> ReservedSlugs = new HashSet<string>(StringComparer.Ordinal) { "paths", "search", "catalog" };
+
     public static bool IsSlug(string? value) => !string.IsNullOrEmpty(value) && value.Length <= 80 && SlugRegex().IsMatch(value);
 
     public static bool IsQuestionId(string? value) => !string.IsNullOrEmpty(value) && QuestionIdRegex().IsMatch(value);
@@ -103,6 +106,7 @@ public static partial class CoursePackValidator
         var v = new Collector(mode == PackValidationMode.Strict);
 
         if (!IsSlug(pack.Slug)) v.Add("slug", "Use kebab-case: lower-case letters, digits and single hyphens (max 80 characters).");
+        else if (ReservedSlugs.Contains(pack.Slug)) v.Add("slug", $"'{pack.Slug}' is reserved (/learn/{pack.Slug} is another academy page).");
         if (pack.Version is < 1 or > 100_000) v.Add("version", "Use a whole number of at least 1.");
         v.Text("title", pack.Title, MaxTitle);
         v.Text("subtitle", pack.Subtitle, MaxSubtitle);
