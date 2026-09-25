@@ -80,28 +80,8 @@ public sealed class PublicWebsiteController(PublicSiteService site, AppDbContext
         return Content(await PublicBlogQueries.RssAsync(db, site, clock.GetUtcNow().UtcDateTime, ct), "application/rss+xml; charset=utf-8");
     }
 
-    /// <summary>XML sitemap of every published, indexable page.</summary>
-    [HttpGet("sitemap.xml")]
-    public async Task<ContentResult> Sitemap(CancellationToken ct)
-    {
-        Response.Headers.CacheControl = "public, max-age=300";
-        return Content(await site.SitemapAsync(ct), "application/xml; charset=utf-8");
-    }
-}
-
-/// <summary><c>GET /robots.txt</c> (the web server proxies this path to the API).</summary>
-[ApiController]
-[AllowAnonymous]
-[EnableRateLimiting(RateLimitPolicies.Public)]
-public sealed class RobotsController(PublicSiteService site) : ControllerBase
-{
-    [HttpGet("/robots.txt")]
-    [ApiExplorerSettings(IgnoreApi = true)]
-    public async Task<ContentResult> Robots(CancellationToken ct)
-    {
-        Response.Headers.CacheControl = "public, max-age=3600";
-        return Content(await site.RobotsAsync(ct), "text/plain; charset=utf-8");
-    }
+    // The sitemaps (/sitemap.xml index, /sitemaps/*.xml and the legacy flat /api/v1/public/sitemap.xml) and robots.txt
+    // are served by SiteSeo.SeoFilesController from the SEO page resolver.
 }
 
 /// <summary>Public forms: contact, free audit, quote, consultation booking, newsletter and job applications.</summary>

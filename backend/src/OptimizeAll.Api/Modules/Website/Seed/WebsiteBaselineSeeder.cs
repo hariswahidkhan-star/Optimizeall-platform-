@@ -72,7 +72,7 @@ public sealed class WebsiteBaselineSeeder : ISeeder
                     Icon = s.Icon,
                     CtaLabel = s.CtaLabel,
                     CtaUrl = s.CtaUrl,
-                    Seo = new SeoMeta { Title = $"{s.Name} services", Description = Truncate(s.HeroBody, 200) },
+                    Seo = new SeoMeta { Title = $"{s.Name} services", Description = BaselineSeo.Description(s.HeroBody, s.Slug) },
                     IsPublished = true,
                     IsFeatured = s.Featured,
                     SortOrder = (si + 1) * 10,
@@ -140,7 +140,7 @@ public sealed class WebsiteBaselineSeeder : ISeeder
             db.Add(new SitePage
             {
                 Slug = page.Slug, Title = page.Title, Summary = page.Summary, Kind = page.Kind, BlocksJson = PageBlockValidator.Serialize(page.Blocks),
-                Seo = new SeoMeta { Description = page.Summary }, IsPublished = true, SortOrder = page.Sort,
+                Seo = BaselineSeo.ForPage(page.Slug, page.Summary), IsPublished = true, SortOrder = page.Sort,
             });
         }
 
@@ -163,6 +163,4 @@ public sealed class WebsiteBaselineSeeder : ISeeder
 
         await db.SaveChangesAsync(ct);
     }
-
-    private static string Truncate(string value, int max) => value.Length <= max ? value : value[..(max - 1)].TrimEnd() + "…";
 }

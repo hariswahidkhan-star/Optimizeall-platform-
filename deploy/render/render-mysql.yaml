@@ -111,7 +111,8 @@ services:
     dockerContext: ./frontend
     region: singapore
     plan: starter
-    healthCheckPath: /
+    # nginx's own health endpoint: pages (/) are rendered by the API, which may still be starting (docs/SEO_CRO.md).
+    healthCheckPath: /healthz
     envVars:
       - key: PORT
         value: "8080"

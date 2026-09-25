@@ -52,7 +52,7 @@ public sealed partial class HostileInputContractTests(ContractFixture fx, ITestO
                 return;
             }
             statuses.AddOrUpdate((@case.Name.StartsWith("existing ids", StringComparison.Ordinal), outcome.Status), 1, (_, n) => n + 1);
-            var violation = outcome.ContractViolation() ?? @case.Expect?.Invoke(outcome);
+            var violation = outcome.ContractViolation(endpoint.Key) ?? @case.Expect?.Invoke(outcome);
             if (outcome.IsChallenge && caller is not null) violation ??= $"[401] signed-in caller got {outcome.Short}";
             if (violation is not null)
                 findings.Add($"{endpoint.Key} [{@case.Name}] as {caller?.Name ?? "anonymous"}: {violation}");

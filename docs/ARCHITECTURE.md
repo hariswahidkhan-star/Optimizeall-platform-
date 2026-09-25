@@ -73,6 +73,9 @@ Modules talk to each other through:
 * API contract suite (`IntegrationTests/Contract`, run with `--filter FullyQualifiedName~Contract`): enumerates every
   endpoint and checks each built-in role against its permission metadata, a hostile-input matrix (never a 5xx, 4xx are
   problems) against unknown and existing records, and cross-tenant access. New endpoints are covered automatically.
+  The one documented exception is the server-rendered public page (`/_document{path}`): its 404/410 is the HTML page
+  visitors and crawlers see, so the suite requires a complete `text/html` page there instead of a problem
+  (`Outcome.HtmlDocumentEndpoints`).
 * Optimistic concurrency: entities implementing `IConcurrencyStamped` get a new `ConcurrencyStamp` on each
   update. Mutating staff endpoints accept the stamp the client last saw and reject stale writes with 409.
 * Race-sensitive transitions (claiming a submission, deciding it, recording a payment, including earnings

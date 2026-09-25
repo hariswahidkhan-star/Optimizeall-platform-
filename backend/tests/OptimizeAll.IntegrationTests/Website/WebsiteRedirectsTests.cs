@@ -13,7 +13,7 @@ namespace OptimizeAll.IntegrationTests.Website;
 /// Redirects of old public addresses: recorded automatically when the slug of live content changes (pages, posts, services,
 /// service lines, case studies, industries), chains collapsed, loops impossible, a redirect dropped when live content
 /// claims its address again, the sitemap listing only the new address, manual redirects (site.manage, audited) and the
-/// public lookup / web-server gate (real 301).
+/// public lookup and the server-rendered pages (real 301 from /_document).
 /// </summary>
 public sealed class WebsiteRedirectsTests(ApiFactory api) : IClassFixture<ApiFactory>
 {
@@ -40,17 +40,34 @@ public sealed class WebsiteRedirectsTests(ApiFactory api) : IClassFixture<ApiFac
         return body.GetProperty("location").GetString();
     }
 
-    /// <summary>What the web server gets from the gate for a request target (status, Location).</summary>
-    private async Task<(HttpStatusCode Status, string? Location)> GateAsync(string requestTarget, HttpMethod? method = null)
+    /// <summary>
+    /// What the web server gets for a full page load of a request target: nginx (@document) and the Vite dev/preview server
+    /// (seoShell) render every public page through <c>/_document{target}</c>, which answers a moved address with a real
+    /// 301 (status, Location).
+    /// </summary>
+    private async Task<(HttpStatusCode Status, string? Location)> DocumentAsync(string requestTarget, HttpMethod? method = null)
     {
         var client = api.CreateClient(new Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
-        using var request = new HttpRequestMessage(method ?? HttpMethod.Get, "/api/v1/public/redirects/gate");
-        request.Headers.Add("X-Original-URI", requestTarget);
+        using var request = new HttpRequestMessage(method ?? HttpMethod.Get, "/_document" + requestTarget);
         var response = await client.SendAsync(request);
         return (response.StatusCode, response.Headers.Location?.OriginalString);
     }
 
-    private async Task<string> SitemapAsync() => await (await api.Anonymous().GetAsync("/api/v1/public/sitemap.xml")).Content.ReadAsStringAsync();
+    /// <summary>
+    /// Every sitemap the crawlers get: the sitemap index (/sitemap.xml) and each sitemap it lists (/sitemaps/*.xml),
+    /// concatenated, so an address is "in the sitemap" when any of them lists it.
+    /// </summary>
+    private async Task<string> SitemapAsync()
+    {
+        var anonymous = api.Anonymous();
+        var index = await anonymous.GetStringAsync("/sitemap.xml");
+        var files = System.Text.RegularExpressions.Regex.Matches(index, "<loc>([^<]+)</loc>").Select(m => new Uri(m.Groups[1].Value).AbsolutePath).ToList();
+        Assert.NotEmpty(files);
+        Assert.All(files, f => Assert.StartsWith("/sitemaps/", f));
+        var all = new System.Text.StringBuilder();
+        foreach (var file in files) all.Append(await anonymous.GetStringAsync(file));
+        return all.ToString();
+    }
 
     private async Task<JsonElement> RenamePageAsync(HttpClient admin, JsonElement page, string slug, bool? published = null) =>
         await admin.PutJsonAsync($"{Pages}/{page.GetProperty("id").GetGuid()}",
@@ -69,8 +86,8 @@ public sealed class WebsiteRedirectsTests(ApiFactory api) : IClassFixture<ApiFac
         await api.Anonymous().GetJsonAsync($"/api/v1/public/pages/{b}");
         // The web server gets a real 301 for full page loads; UTM tags and other query parameters are carried over.
         Assert.Equal((HttpStatusCode.MovedPermanently, $"/{b}?utm_source=news&utm_medium=email"),
-            await GateAsync($"/{a}?utm_source=news&utm_medium=email"));
-        Assert.Equal((HttpStatusCode.MovedPermanently, "/" + b), await GateAsync($"/{a.ToUpperInvariant()}/", HttpMethod.Head));
+            await DocumentAsync($"/{a}?utm_source=news&utm_medium=email"));
+        Assert.Equal((HttpStatusCode.MovedPermanently, "/" + b), await DocumentAsync($"/{a.ToUpperInvariant()}/", HttpMethod.Head));
         // The sitemap lists only the new address.
         var sitemap = await SitemapAsync();
         Assert.Contains($"/{b}</loc>", sitemap);
@@ -84,7 +101,7 @@ public sealed class WebsiteRedirectsTests(ApiFactory api) : IClassFixture<ApiFac
         // Back to A: the address is live again, so its redirect is dropped and nothing loops.
         page = await RenamePageAsync(admin, page, a);
         Assert.Null(await LookupAsync("/" + a));
-        Assert.Equal((HttpStatusCode.NotFound, null), await GateAsync("/" + a));
+        Assert.Equal((HttpStatusCode.OK, null), await DocumentAsync("/" + a)); // served, not redirected
         Assert.Equal("/" + a, await LookupAsync("/" + b));
         Assert.Equal("/" + a, await LookupAsync("/" + c));
         var rows = await api.WithDbAsync(db => db.Set<SiteRedirect>().AsNoTracking()
@@ -163,9 +180,9 @@ public sealed class WebsiteRedirectsTests(ApiFactory api) : IClassFixture<ApiFac
             new { slug = lineB, name = "Line", isPublished = true, concurrencyStamp = line.GetProperty("concurrencyStamp").GetGuid() });
         Assert.Equal($"/services?category={lineB}", await LookupAsync($"/services?category={lineA}"));
         Assert.Equal((HttpStatusCode.MovedPermanently, $"/services?category={lineB}&utm_source=ads"),
-            await GateAsync($"/services?utm_source=ads&category={lineA}"));
+            await DocumentAsync($"/services?utm_source=ads&category={lineA}"));
         // The services overview itself is a built-in page and never redirected.
-        Assert.Equal((HttpStatusCode.NotFound, null), await GateAsync("/services"));
+        Assert.Equal((HttpStatusCode.OK, null), await DocumentAsync("/services"));
 
         // Case study and industry.
         var (caseA, caseB) = (Unique("case-a"), Unique("case-b"));
@@ -242,9 +259,9 @@ public sealed class WebsiteRedirectsTests(ApiFactory api) : IClassFixture<ApiFac
     [Fact]
     public async Task Portal_and_unknown_addresses_are_never_redirected_and_redirects_need_site_manage()
     {
-        Assert.Equal((HttpStatusCode.NotFound, null), await GateAsync("/agency/website/pages"));
-        Assert.Equal((HttpStatusCode.NotFound, null), await GateAsync("/no-such-page-" + Guid.NewGuid().ToString("N")));
-        Assert.Equal((HttpStatusCode.NotFound, null), await GateAsync(""));
+        Assert.Equal((HttpStatusCode.OK, null), await DocumentAsync("/agency/website/pages")); // the portal shell (noindex), never a redirect
+        Assert.Equal((HttpStatusCode.NotFound, null), await DocumentAsync("/no-such-page-" + Guid.NewGuid().ToString("N")));
+        Assert.Equal((HttpStatusCode.OK, null), await DocumentAsync("/")); // the home page
         Assert.Null(await LookupAsync("//evil.example"));
 
         var (_, writer) = await api.CreateClientAsync(Role.ContentCreator);

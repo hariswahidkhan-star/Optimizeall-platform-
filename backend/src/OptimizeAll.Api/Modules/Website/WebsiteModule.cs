@@ -11,6 +11,7 @@ using OptimizeAll.Api.Modules.Website.Redirects;
 using OptimizeAll.Api.Modules.Website.Seed;
 using OptimizeAll.Api.Modules.Website.Settings;
 using OptimizeAll.Api.Modules.Website.Shared;
+using OptimizeAll.Api.Modules.Website.SiteSeo;
 using OptimizeAll.Domain.Events;
 
 namespace OptimizeAll.Api.Modules.Website;
@@ -25,6 +26,8 @@ public static class WebsiteModule
         services.AddScoped<PageBlockValidator>();
         services.AddScoped<SiteSettingsService>();
         services.AddScoped<RedirectService>();
+        // Server-rendered pages answer moved addresses with their 301 (replaces SiteSeo's default NoSeoRedirects).
+        services.AddScoped<ISeoRedirectLookup, WebsiteRedirectLookup>();
         services.AddScoped<CatalogAdminService>();
         services.AddScoped<IServiceCatalog, ServiceCatalog>();
         services.AddScoped<PublicSiteService>();
@@ -37,6 +40,7 @@ public static class WebsiteModule
         services.AddScoped<NewsletterService>();
         services.AddScoped<OverviewService>();
         services.AddScoped<IEventHandler<WebsiteInquiryReceived>, InquiryNotificationHandler>();
+        services.AddSiteSeo();
 
         services.AddRecurringJob<BlogSchedulerJob>(TimeSpan.FromMinutes(1));
         services.AddRecurringJob<UsedFormTokenCleanupJob>(TimeSpan.FromHours(1));

@@ -2,7 +2,8 @@
 import { fileURLToPath, URL } from 'node:url';
 import react from '@vitejs/plugin-react';
 import { defineConfig, loadEnv } from 'vite';
-import { devProxy, redirectGate } from './src/app/devProxy';
+import { seoShell } from './seoShell';
+import { devProxy } from './src/app/devProxy';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
@@ -10,8 +11,10 @@ export default defineConfig(({ mode }) => {
   const proxy = devProxy(apiTarget);
 
   return {
-    // redirectGate: moved public addresses get a real 301 before the app shell, like nginx (Website → Redirects).
-    plugins: [react(), redirectGate(apiTarget, proxy)],
+    // seoShell: every page request (GET/HEAD, not an API/proxied path, asset or file) is rendered by the API's
+    // /_document endpoint and served with the app shell, exactly like nginx's @document location: real 200/301/404/410,
+    // including the 301s of moved public addresses (Website → Redirects). docs/SEO_CRO.md § Rendering.
+    plugins: [react(), seoShell(apiTarget)],
     resolve: {
       alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
     },
@@ -35,7 +38,7 @@ export default defineConfig(({ mode }) => {
       globals: true,
       environment: 'jsdom',
       setupFiles: ['./src/test/setup.ts'],
-      include: ['src/**/*.test.{ts,tsx}'],
+      include: ['src/**/*.test.{ts,tsx}', 'seoShell.test.ts'],
       css: false,
       // axe over full pages (e.g. the ~650 country/time-zone options on Register) needs more than the 5s default.
       testTimeout: 30_000,

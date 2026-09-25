@@ -10,13 +10,50 @@ export interface DocumentHead {
   canonical?: string | null;
   image?: string | null;
   noIndex?: boolean;
+  /** With noIndex: let crawlers follow the page's links (search results, utility pages). Default: nofollow. */
+  follow?: boolean;
   type?: 'website' | 'article';
   /** schema.org objects written into `<script type="application/ld+json">` via textContent (never parsed as HTML). */
   jsonLd?: JsonLd[] | null;
 }
 
 const MARK = 'data-oa-head';
+/** Robots directives of an indexable page (the server renders the same; large image previews and full snippets). */
+export const INDEXABLE_ROBOTS = 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
 const DEFAULT_TEMPLATE = '%s | Optimize All';
+/** Built-in social image (1200×630) used when neither the page nor the site settings choose one. */
+export const DEFAULT_OG_IMAGE = '/og-default.png';
+
+/**
+ * Server-rendered documents (docs/SEO_CRO.md § Rendering) mark their head tags `data-oa-ssr`. The head manager updates
+ * the shared ones (title, description, canonical, Open Graph, Twitter) in place, so no tag is ever duplicated. The
+ * server's JSON-LD — which can be richer than a page's own, e.g. ItemList on listing pages — is kept while the visitor
+ * is still on the page the server rendered, and replaced by the page's own JSON-LD after the first client navigation.
+ */
+const SSR = 'data-oa-ssr';
+const initialPath = typeof window === 'undefined' ? '' : window.location.pathname;
+
+function removeServerOnlyTags() {
+  document.head
+    .querySelectorAll(
+      `script[${SSR}], link[rel="prev"][${SSR}], link[rel="next"][${SSR}], meta[property^="og:image:"][${SSR}], ` +
+        `meta[property^="article:"][${SSR}], meta[name="twitter:image:alt"][${SSR}]`,
+    )
+    .forEach((el) => el.remove());
+}
+
+/** Longest title search results show in full. */
+const TITLE_MAX = 60;
+
+/**
+ * The page title with the site's title template — unless the title already names the site, or the suffix would push a
+ * title that fits on its own past 60 characters (same rule as the server's SeoText.ApplyTemplate).
+ */
+export function applyTitleTemplate(title: string, template: string, siteName: string): string {
+  if (title.toLowerCase().includes(siteName.toLowerCase())) return title;
+  const full = template.replace('%s', title);
+  return full.length > TITLE_MAX && title.length <= TITLE_MAX ? title : full;
+}
 
 function setMeta(attr: 'name' | 'property', key: string, content: string | null | undefined) {
   const selector = `meta[${attr}="${key}"]`;
@@ -66,17 +103,19 @@ export function useDocumentHead(head: DocumentHead) {
   const { pathname } = useLocation();
   const template = site?.seo.titleTemplate || DEFAULT_TEMPLATE;
   const siteName = site?.siteName || 'Optimize All';
-  const title = head.title ? template.replace('%s', head.title) : site?.seo.defaultTitle || siteName;
+  const title = head.title ? applyTitleTemplate(head.title, template, siteName) : site?.seo.defaultTitle || siteName;
   const description = head.description ?? site?.seo.defaultDescription ?? null;
   const canonical = absoluteUrl(head.canonical ?? pathname, site?.seo.siteUrl);
-  const image = absoluteUrl(head.image ?? site?.seo.defaultOgImageUrl ?? '/og-image.png', site?.seo.siteUrl);
+  const image = absoluteUrl(head.image ?? site?.seo.defaultOgImageUrl ?? DEFAULT_OG_IMAGE, site?.seo.siteUrl);
   const jsonLdText = JSON.stringify(head.jsonLd ?? []);
   const twitter = site?.seo.twitterHandle ?? null;
 
   useEffect(() => {
+    const onServerRenderedPage = pathname === initialPath && document.head.querySelector(`script[${SSR}]`) !== null;
+    if (!onServerRenderedPage) removeServerOnlyTags();
     document.title = title;
     setMeta('name', 'description', description);
-    setMeta('name', 'robots', head.noIndex ? 'noindex, nofollow' : null);
+    setMeta('name', 'robots', head.noIndex ? (head.follow ? 'noindex, follow' : 'noindex, nofollow') : INDEXABLE_ROBOTS);
     setMeta('property', 'og:title', title);
     setMeta('property', 'og:description', description);
     setMeta('property', 'og:type', head.type ?? 'website');
@@ -90,7 +129,9 @@ export function useDocumentHead(head: DocumentHead) {
     setMeta('name', 'twitter:site', twitter);
     setCanonical(canonical);
 
-    const scripts = (JSON.parse(jsonLdText) as JsonLd[]).map((item) => {
+    // The server's JSON-LD already describes this page: keep it rather than add a second copy.
+    const items = onServerRenderedPage ? [] : (JSON.parse(jsonLdText) as JsonLd[]);
+    const scripts = items.map((item) => {
       const script = document.createElement('script');
       script.type = 'application/ld+json';
       script.setAttribute(MARK, '');
@@ -101,7 +142,7 @@ export function useDocumentHead(head: DocumentHead) {
     return () => {
       for (const script of scripts) script.remove();
     };
-  }, [title, description, canonical, image, siteName, twitter, head.noIndex, head.type, jsonLdText]);
+  }, [title, description, canonical, image, siteName, twitter, head.noIndex, head.follow, head.type, jsonLdText, pathname]);
 
   useEffect(
     () => () => {

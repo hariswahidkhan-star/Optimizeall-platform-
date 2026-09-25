@@ -69,10 +69,9 @@ public sealed class LandingConsistencyTests(LandingPagesFixture fx) : IClassFixt
 
         await (await staff.PostAsync($"/api/v1/agency/pages/landing-pages/{pageId}/publish", null)).ReadJsonAsync();
         Assert.Equal(newPath, await LookupAsync(oldPath));
-        var gate = fx.Host.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
-        using var request = new HttpRequestMessage(HttpMethod.Get, "/api/v1/public/redirects/gate");
-        request.Headers.Add("X-Original-URI", oldPath + "?utm_source=newsletter");
-        var response = await gate.SendAsync(request);
+        // A full page load of the old address (nginx @document / Vite seoShell → /_document) is a real 301.
+        var web = fx.Host.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
+        var response = await web.GetAsync("/_document" + oldPath + "?utm_source=newsletter");
         Assert.Equal(HttpStatusCode.MovedPermanently, response.StatusCode);
         Assert.Equal(newPath + "?utm_source=newsletter", response.Headers.Location!.OriginalString);
         var row = await fx.WithDbAsync(db => db.Set<SiteRedirect>().AsNoTracking().SingleAsync(r => r.FromPath == oldPath));

@@ -122,6 +122,10 @@ jobs:
             echo "::error::The production build emitted source maps"; exit 1
           fi
           grep -qF 'location ~* \.map$' nginx/default.conf.template
+      - name: SEO shell fragments in the build (nginx includes them into server-rendered pages)
+        run: |
+          grep -q '/assets/index-' dist/__shell/head.html || { echo "::error::dist/__shell/head.html has no app bundle"; exit 1; }
+          if grep -q 'og:title\|<title>' dist/__shell/head.html; then echo "::error::the shell kept default SEO tags"; exit 1; fi
 
       - name: Upload build
         uses: actions/upload-artifact@v4
@@ -411,6 +415,30 @@ jobs:
           E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-rates
         run: scripts/e2e-journeys.sh
 
+      # Technical SEO as crawlers see it: every public URL without JavaScript (title, description, canonical, robots,
+      # Open Graph, JSON-LD, content), every sitemap URL live and indexable, robots.txt / llms.txt / Markdown pages,
+      # 404/301/noindex, the app booting over the server HTML, the video block and Core Web Vitals. It runs twice: with
+      # `vite preview` (seoShell plugin) and with the production nginx configuration (SSI shell includes).
+      - name: Install nginx (production web server configuration for j-seo)
+        run: sudo apt-get update && sudo apt-get install -y nginx-light || sudo apt-get install -y nginx
+
+      - name: Technical SEO journey (scripts/e2e-journeys.sh, E2E_SUITE=j-seo, SQLite, vite preview)
+        env:
+          E2E_SUITE: j-seo
+          E2E_DB_PROVIDER: sqlite
+          E2E_SKIP_BUILD: "1"
+          E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-seo
+        run: scripts/e2e-journeys.sh
+
+      - name: Technical SEO journey (scripts/e2e-journeys.sh, E2E_SUITE=j-seo, SQLite, production nginx)
+        env:
+          E2E_SUITE: j-seo
+          E2E_DB_PROVIDER: sqlite
+          E2E_SKIP_BUILD: "1"
+          E2E_WEB_SERVER: nginx
+          E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-seo-nginx
+        run: scripts/e2e-journeys.sh
+
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v4
@@ -462,6 +490,11 @@ jobs:
             ${{ runner.temp }}/e2e-j-auth/web.log
             ${{ runner.temp }}/e2e-j-rates/api.log
             ${{ runner.temp }}/e2e-j-rates/web.log
+            ${{ runner.temp }}/e2e-j-seo/api.log
+            ${{ runner.temp }}/e2e-j-seo/web.log
+            ${{ runner.temp }}/e2e-j-seo-nginx/api.log
+            ${{ runner.temp }}/e2e-j-seo-nginx/web.log
+            ${{ runner.temp }}/e2e-j-seo-nginx/nginx/error.log
             ${{ runner.temp }}/web-smoke.log
           retention-days: 7
           if-no-files-found: ignore

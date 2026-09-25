@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { ChevronDown, MessageCircleQuestion } from 'lucide-react';
-import { useEffect } from 'react';
 import { ButtonLink } from '@/components/ui/ButtonLink';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { api } from '@/lib/api/client';
 import { normalizeFaqs } from './faqs';
 import { useSiteCopy } from './site/copy';
+import { useDocumentHead } from './site/head';
 import './FaqPage.css';
 
 function slug(value: string): string {
@@ -30,10 +30,7 @@ function Paragraphs({ text }: { text: string }) {
 /** Public FAQ, grouped by category, from the content API. */
 export function FaqPage() {
   const copy = useSiteCopy();
-  const browserTitle = copy.text('faq.seo.title');
-  useEffect(() => {
-    document.title = browserTitle;
-  }, [browserTitle]);
+  useDocumentHead({ title: copy.text('faq.seo.title'), description: copy.text('faq.seo.description') });
 
   const query = useQuery({
     queryKey: ['content', 'faqs'],

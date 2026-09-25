@@ -108,8 +108,17 @@ The public agency website is the web service's root URL; no sign-in needed.
 * **First start ≈ 60 s.** On a fresh disk/database the API applies migrations and seeds the demo data before it listens,
   which takes about a minute (later restarts are quick). `https://<web-url>/health/ready` answers 200 once it is up.
   `render.yaml` configures no health check on the private API service: Render documents `healthCheckPath` for web
-  services, and private-service support is not established, so the web service's own check (`/`) is the one Render uses.
+  services, and private-service support is not established, so the web service's own check is the one Render uses. It
+  is nginx's `/healthz` (not `/`): public pages are rendered by the API (docs/SEO_CRO.md § 9), which may still be
+  starting, and a starting API must not fail the web service's deploy.
 * **API docs** are at `https://<web-url>/api/docs`.
+* **SEO.** Public pages are server-rendered by the API through nginx (complete HTML for crawlers, real 404s),
+  `/robots.txt`, `/sitemap.xml` (+ `/sitemaps/*.xml`), `/llms.txt` and `/{page}.md` come from the API too. Canonical URLs
+  use `Email__AppBaseUrl` until **Site settings → SEO → Site URL** is set; with a custom domain set it there, point the
+  domain at the web service, optionally turn on `Website__Seo__CanonicalHostRedirect=true` on `optimizeall-api` (301
+  from `*.onrender.com` to the domain) and submit `https://<domain>/sitemap.xml` in Search Console. The demo
+  Blueprints are staging: consider blocking the crawler groups under Website → SEO → Crawlers & AI unless the demo
+  is the real site. Details: [SEO_CRO.md § 9](SEO_CRO.md#9-technical-seo-of-the-public-website).
 * **Payments** are recorded manually; no money moves. WhatsApp shows as not configured.
 * These Blueprints are for staging/demos (demo accounts, dev mailbox, Swagger on). For production follow
   [DEPLOYMENT.md](DEPLOYMENT.md): real SMTP, no demo seed, Swagger off, backups.
@@ -133,6 +142,12 @@ as root, as Render does). All checks went through the web container only, as the
   `/api/v1/public/site`, `/api/v1/public/home`, `/robots.txt`, `/sitemap.xml` (74 URLs on `Email__AppBaseUrl`),
   `/health/live`, `/health/ready`, `/healthz`; `/e/o/x.gif` answers `image/gif` with `Cache-Control: no-store`;
   `/api/v1/auth/providers` reports Google disabled; `/api/v1/content/copy`; `/api/docs` (Swagger on).
+* **Server-rendered pages and SEO files (2026-09-24, `render.yaml` images):** through the web container, `/`,
+  `/services/seo`, `/blog` answered 200 with the page's own title, canonical on `Email__AppBaseUrl` and the built asset
+  tags filled in by SSI (no `include` left); `/nope` 404; `/login` the shell with `X-Robots-Tag: noindex, nofollow`;
+  `/robots.txt` (Sitemap line on the public URL), `/sitemap.xml` + `/sitemaps/*.xml`, `/llms.txt`, `/about.md` and
+  `/.well-known/security.txt` from the API. With the API stopped, pages answered 503 + `Retry-After` with the app shell
+  and `/healthz` stayed 200.
 * **Sign-in** (`POST /api/v1/auth/login`, refresh cookie `Secure`) for the participant, reviewer, manager, finance,
   admin, `am@`, `seo@` and `owner@nimbus` accounts, with 2–7 authenticated GETs per portal (submissions, earnings,
   review queue, campaigns, calendar, ledger, payout batches, payments hub list + summary, admin users, roles list +

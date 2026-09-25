@@ -9,6 +9,7 @@ import {
   Mail,
   MessageSquareQuote,
   Package,
+  SearchCheck,
   Signpost,
   Settings2,
   Trophy,
@@ -64,6 +65,7 @@ export const nav: PortalNavItem[] = [
   { to: 'website/newsletter', label: 'Newsletter', icon: Mail, description: 'Double opt-in subscribers.', requires: requires.site },
   { to: 'website/redirects', label: 'Redirects', icon: Signpost, description: 'Old addresses that send visitors to where content lives now.', requires: requires.site },
   { to: 'website/copy', label: 'Page texts', icon: Type, description: 'Headlines, introductions and buttons of the built-in pages.', requires: requires.site },
+  { to: 'website/seo', label: 'SEO', icon: SearchCheck, description: 'Titles, descriptions, indexing and crawler access for every public page.', requires: requires.site },
   { to: 'website/settings', label: 'Site settings', icon: Settings2, description: 'Navigation, footer, SEO defaults and analytics.', requires: requires.site },
 ];
 
@@ -85,6 +87,7 @@ export const routes: RouteObject[] = [
   page('website/newsletter', leads, 'SubscribersPage', requires.site),
   page('website/redirects', () => import('./pages/RedirectsAdmin'), 'RedirectsAdminPage', requires.site),
   page('website/copy', () => import('./pages/CopyAdmin'), 'SiteCopyPage', requires.site),
+  page('website/seo', () => import('./pages/SeoAdmin'), 'SeoAdminPage', requires.site),
   page('website/settings', () => import('./pages/SettingsAdmin'), 'SiteSettingsPage', requires.site),
 ];
 

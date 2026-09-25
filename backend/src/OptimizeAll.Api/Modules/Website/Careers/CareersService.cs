@@ -285,7 +285,7 @@ public sealed class CareersService(
         return new PublicJobDto(j.Slug, j.Title, j.Department, j.Location, j.Workplace, j.EmploymentType, j.Summary, j.DescriptionMarkdown,
             j.Requirements, j.Benefits,
             j.SalaryCurrency is not null ? new SalaryDto(j.SalaryMin, j.SalaryMax, j.SalaryCurrency, j.SalaryPeriod ?? SalaryPeriod.Year) : null,
-            j.PostedAt, j.ClosesAt, new PublicSeoDto($"{j.Title} — Careers", j.Summary, null, ld.Url(path), false),
+            j.PostedAt, j.ClosesAt, new PublicSeoDto($"{j.Title} — Careers", SiteSeo.SeoText.Clamp(j.Summary), null, ld.Url(path), false),
             new[] { ld.JobPosting(j), ld.Breadcrumbs(("Home", "/"), ("Careers", "/careers"), (j.Title, path)) });
     }
 

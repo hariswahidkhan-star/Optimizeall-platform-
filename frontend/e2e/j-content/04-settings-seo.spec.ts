@@ -215,8 +215,12 @@ test.describe.serial('site settings, page texts and SEO', () => {
   test('robots.txt, sitemap and canonical links follow the configured site URL', async ({ browser }) => {
     const robots = await anonGet('/robots.txt');
     expect(robots.status).toBe(200);
-    for (const path of ['/app', '/agency', '/client', '/admin', '/finance', '/review', '/manage', '/api'])
-      expect(robots.text).toMatch(new RegExp(`^Disallow: ${path}$`, 'm'));
+    // Each signed-in area is closed exactly (`/app$` and `/app/…`), so public pages such as /apple-… stay open.
+    for (const path of ['/app', '/agency', '/client', '/admin', '/finance', '/review', '/manage']) {
+      expect(robots.text).toContain(`\nDisallow: ${path}$\n`);
+      expect(robots.text).toContain(`\nDisallow: ${path}/\n`);
+    }
+    expect(robots.text).toMatch(/^Disallow: \/api\/$/m);
     expect(robots.text).toMatch(/^Allow: \/api\/v1\/public\/sitemap\.xml$/m);
     const paths = await sitemapPaths();
     expect(paths).toEqual(expect.arrayContaining(['/', '/services', '/blog', '/case-studies', '/pricing']));
@@ -237,8 +241,9 @@ test.describe.serial('site settings, page texts and SEO', () => {
     const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]!);
     expect(locs.length).toBeGreaterThan(5);
     expect(locs.every((l) => l.startsWith('https://www.optimizeall-e2e.example/'))).toBe(true);
+    // robots.txt points at the sitemap index on the site URL (docs/SEO_CRO.md § 9.6).
     expect((await anonGet('/robots.txt')).text).toContain(
-      'Sitemap: https://www.optimizeall-e2e.example/api/v1/public/sitemap.xml',
+      'Sitemap: https://www.optimizeall-e2e.example/sitemap.xml',
     );
     const promise = recall<{ slug: string }>('promisePage');
     const page = await openPublic(browser, `/${promise.slug}`);

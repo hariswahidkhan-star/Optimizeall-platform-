@@ -61,7 +61,7 @@ public sealed class PermissionContractTests(ContractFixture fx, ITestOutputHelpe
         {
             var outcome = await Outcome.ReadAsync(await fx.SendAsync(null, () => HostileCases.BaseRequest(e)));
             if (!outcome.IsChallenge) findings.Add($"{e.Key}: anonymous caller got {outcome.Short}");
-            else if (outcome.ContractViolation() is { } violation) findings.Add($"{e.Key}: {violation}");
+            else if (outcome.ContractViolation(e.Key) is { } violation) findings.Add($"{e.Key}: {violation}");
         });
         findings.AssertEmpty("anonymous", endpoints.Count);
     }

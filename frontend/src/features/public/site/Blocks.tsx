@@ -5,6 +5,7 @@ import type { CaseStudyCard as CaseStudyCardData, FaqEntry, HomeStat, PageBlock,
 import { CaseStudyCard, MetricValue, Section, ServiceCard, TestimonialCarousel } from './components';
 import { SiteIcon } from './icons';
 import { Markdown } from './Markdown';
+import { SiteVideo, type SiteVideoData } from './SiteVideo';
 
 export interface BlockContext {
   testimonials?: Testimonial[];
@@ -219,6 +220,17 @@ export function Blocks({ blocks, context = {} }: { blocks: PageBlock[]; context?
                   <CaseStudyCard study={study} />
                 </div>
               </Section>
+            );
+          }
+          case 'video': {
+            const video = d as unknown as SiteVideoData;
+            if (!str(video.title)) return null;
+            return (
+              <div key={block.id} className="site-section">
+                <div className="container site-narrow">
+                  <SiteVideo video={video} />
+                </div>
+              </div>
             );
           }
           default:

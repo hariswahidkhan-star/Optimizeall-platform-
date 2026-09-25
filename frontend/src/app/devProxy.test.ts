@@ -1,5 +1,6 @@
-import { describe, expect, it, vi } from 'vitest';
-import { asksRedirectGate, devProxy, proxiedBy, redirectGate } from './devProxy';
+import { describe, expect, it } from 'vitest';
+import { devProxy, proxiedBy } from './devProxy';
+import { isDocumentRequest } from './seoShellCore';
 
 const rules = devProxy('http://127.0.0.1:5080');
 
@@ -23,92 +24,59 @@ describe('dev/preview proxy (vite.config.ts)', () => {
     ['/e/c/token', '^/e/'],
     ['/robots.txt', '^/robots\\.txt$'],
     ['/sitemap.xml', '^/sitemap\\.xml$'],
+    ['/sitemaps/blog.xml', '^/sitemaps/'],
+    ['/llms.txt', '^/llms(-full)?\\.txt$'],
+    ['/llms-full.txt', '^/llms(-full)?\\.txt$'],
+    ['/humans.txt', '^/humans\\.txt$'],
+    ['/.well-known/security.txt', '^/\\.well-known/security\\.txt$'],
+    ['/0123456789abcdef.txt', '^/[A-Za-z0-9-]{8,128}\\.txt$'],
+    ['/services/seo.md', '^/(?!api/|assets/|src/|node_modules/)[^?]+\\.md(\\?.*)?$'],
   ])('forwards %s to the API like nginx does', (path, rule) => {
     expect(proxiedBy(rules, path)).toBe(rule);
   });
 
-  it('serves the sitemap from the API sitemap endpoint', () => {
-    expect(rules['^/sitemap\\.xml$']!.rewrite!('/sitemap.xml')).toBe('/api/v1/public/sitemap.xml');
+  it('serves the sitemap index from the API as is', () => {
+    expect(rules['^/sitemap\\.xml$']!.rewrite).toBeUndefined();
+  });
+
+  it('maps Markdown page versions to the API renderer', () => {
+    const md = rules['^/(?!api/|assets/|src/|node_modules/)[^?]+\\.md(\\?.*)?$']!;
+    expect(md.rewrite!('/services/seo.md')).toBe('/_markdown/services/seo');
+    expect(md.rewrite!('/index.md')).toBe('/_markdown/index');
   });
 });
 
-describe('redirect gate (vite.config.ts, mirrors nginx @redirect_gate)', () => {
+describe('page documents vs the proxy (vite.config.ts, mirrors nginx `location /` → @document)', () => {
+  // One fallback chain, as in nginx: proxied paths go to the API as is; every other page request is rendered by
+  // /_document (seoShell.ts), which also answers moved public addresses (Website → Redirects) with their real 301.
   it.each([
-    ['GET', '/about-us', 'text/html,application/xhtml+xml', true],
-    ['GET', '/blog/old-post?utm_source=x', '', true],
-    ['HEAD', '/services?category=old', '*/*', true],
-    ['POST', '/about-us', 'text/html', false],
-    ['GET', '/api/v1/public/site', 'application/json', false],
-    ['GET', '/t/abc123', '*/*', false],
-    ['GET', '/sitemap.xml', '*/*', false],
-    ['GET', '/assets/index-abc.js', '*/*', false],
-    ['GET', '/@vite/client', '*/*', false],
-    ['GET', '/src/main.tsx', '*/*', false],
-    ['GET', '/favicon.ico', 'image/avif,image/webp', false],
-    ['GET', '/about-us', 'application/json', false],
-  ])('%s %s (Accept: %s) asks the gate: %s', (method, url, accept, expected) => {
-    expect(asksRedirectGate(rules, method, url, accept)).toBe(expected);
+    ['GET', '/about-us', true],
+    ['GET', '/blog/old-post?utm_source=x', true],
+    ['HEAD', '/services?category=old', true],
+    ['GET', '/', true],
+    ['POST', '/about-us', false],
+    ['GET', '/assets/index-abc.js', false],
+    ['GET', '/@vite/client', false],
+    ['GET', '/src/main.tsx', false],
+    ['GET', '/favicon.ico', false],
+  ])('%s %s is a page document: %s', (method, url, expected) => {
+    expect(isDocumentRequest(method, url)).toBe(expected);
   });
 
-  function serve(plugin: ReturnType<typeof redirectGate>, url: string) {
-    let handler:
-      Parameters<Parameters<typeof plugin.configureServer>[0]['middlewares']['use']>[0] | undefined;
-    plugin.configureServer({ middlewares: { use: (fn) => void (handler = fn) } });
-    const res = {
-      statusCode: 200,
-      headers: {} as Record<string, string>,
-      ended: false,
-      setHeader(n: string, v: string) {
-        this.headers[n] = v;
-      },
-      end() {
-        this.ended = true;
-      },
-    };
-    return new Promise<{ res: typeof res; next: boolean }>((resolve) => {
-      handler!({ method: 'GET', url, headers: { accept: 'text/html' } }, res, () =>
-        resolve({ res, next: true }),
-      );
-      const poll = setInterval(() => {
-        if (res.ended) {
-          clearInterval(poll);
-          resolve({ res, next: false });
-        }
-      }, 1);
-    });
-  }
-
-  it('answers a moved address with the API’s 301 and falls through otherwise', async () => {
-    const fetchMock = vi.fn(async (_url: string, init?: RequestInit) => {
-      const target = new Headers(init?.headers).get('X-Original-URI');
-      return target === '/about-us?utm_source=x'
-        ? new Response(null, {
-            status: 301,
-            headers: { Location: '/who-we-are?utm_source=x', 'Cache-Control': 'public, max-age=3600' },
-          })
-        : new Response(null, { status: 404 });
-    });
-    vi.stubGlobal('fetch', fetchMock);
-    const plugin = redirectGate('http://127.0.0.1:5080', rules);
-
-    const moved = await serve(plugin, '/about-us?utm_source=x');
-    expect(moved.next).toBe(false);
-    expect(moved.res.statusCode).toBe(301);
-    expect(moved.res.headers.Location).toBe('/who-we-are?utm_source=x');
-    expect(fetchMock.mock.calls[0]![0]).toBe('http://127.0.0.1:5080/api/v1/public/redirects/gate');
-
-    expect((await serve(plugin, '/still-here')).next).toBe(true);
-    // Portal and asset requests never reach the API.
-    const calls = fetchMock.mock.calls.length;
-    expect((await serve(plugin, '/api/v1/public/site')).next).toBe(true);
-    expect(fetchMock.mock.calls.length).toBe(calls);
-  });
-
-  it('serves the app when the API is unreachable', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(async () => Promise.reject(new TypeError('fetch failed'))),
-    );
-    expect((await serve(redirectGate('http://127.0.0.1:5080', rules), '/about-us')).next).toBe(true);
+  it.each([
+    '/api/v1/public/site',
+    '/t/abc123',
+    '/e/o/token.gif',
+    '/robots.txt',
+    '/sitemap.xml',
+    '/sitemaps/blog.xml',
+    '/llms.txt',
+    '/humans.txt',
+    '/.well-known/security.txt',
+    '/0123456789abcdef.txt',
+    '/services/seo.md',
+  ])('the proxied path %s is never rendered as a page', (path) => {
+    expect(proxiedBy(rules, path)).toBeDefined();
+    expect(isDocumentRequest('GET', path)).toBe(false);
   });
 });

@@ -14,7 +14,7 @@ export function CampaignLandingPage() {
   const data = query.data;
 
   useEffect(() => {
-    if (data) document.title = `${data.title} · Optimize All`;
+    if (data) document.title = `${data.title} | Optimize All`;
   }, [data]);
 
   if (query.isPending) return <LandingSkeleton />;

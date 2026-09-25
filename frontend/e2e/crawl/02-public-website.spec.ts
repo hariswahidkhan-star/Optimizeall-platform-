@@ -87,7 +87,15 @@ test('every sitemap URL renders a page and robots.txt points to the sitemap', as
   expect(sitemap.status()).toBe(200);
   expect(sitemap.headers()['content-type']).toMatch(/xml/);
   const xml = await sitemap.text();
-  const urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]!);
+  const locs = (text: string) => [...text.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]!);
+  // /sitemap.xml is a sitemap index (docs/SEO_CRO.md § 9.6): follow it to the page sitemaps (not images/videos).
+  expect(xml).toContain('<sitemapindex');
+  const urls: string[] = [];
+  for (const file of locs(xml).filter((f) => !/\/sitemaps\/(images|videos)(-\d+)?\.xml$/.test(f))) {
+    const child = await request.get(new URL(file).pathname);
+    expect(child.status(), file).toBe(200);
+    urls.push(...locs(await child.text()));
+  }
   expect(urls.length, 'the sitemap lists the public pages').toBeGreaterThan(10);
   expect((await request.get(`${API_URL}/api/v1/public/sitemap.xml`)).status()).toBe(200);
 

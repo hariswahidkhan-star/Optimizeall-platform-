@@ -85,8 +85,10 @@ test.describe('public website', () => {
     expect(robots.ok()).toBe(true);
     const robotsText = await robots.text();
     expect(robotsText).toMatch(/^User-agent: \*/m);
-    expect(robotsText).toMatch(/^Disallow: \/agency$/m);
-    expect(robotsText).toMatch(/^Disallow: \/client$/m);
+    // Areas are closed exactly (`/agency$` and `/agency/…`), never as a bare prefix (docs/SEO_CRO.md § 9.7).
+    expect(robotsText).toMatch(/^Disallow: \/agency\$$/m);
+    expect(robotsText).toMatch(/^Disallow: \/agency\/$/m);
+    expect(robotsText).toMatch(/^Disallow: \/client\$$/m);
     expect(robotsText).toMatch(/^Sitemap: \S+sitemap\.xml$/m);
 
     const sitemap = await request.get(`${API_URL}/api/v1/public/sitemap.xml`);

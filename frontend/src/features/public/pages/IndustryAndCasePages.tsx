@@ -123,7 +123,14 @@ export function CaseStudiesPage() {
   const services = useServices();
   const industries = useIndustries();
   const copy = useSiteCopy();
-  useDocumentHead({ title: copy.text('caseStudies.seo.title'), description: copy.text('caseStudies.seo.description') });
+  // Filtered views are noindex (links followed) with the unfiltered list as canonical, as the server renders them.
+  useDocumentHead({
+    title: copy.text('caseStudies.seo.title'),
+    description: copy.text('caseStudies.seo.description'),
+    canonical: '/case-studies',
+    noIndex: Boolean(service || industry),
+    follow: true,
+  });
 
   const update = (key: string, value: string) => {
     const next = new URLSearchParams(params);

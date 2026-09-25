@@ -16,6 +16,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ButtonLink } from '@/components/ui/ButtonLink';
 import { useSiteCopy } from './site/copy';
+import { useDocumentHead } from './site/head';
 import './LandingPage.css';
 
 /** Icons for the editable steps and rules (by position; extra items reuse them in order). */
@@ -26,11 +27,7 @@ const RULE_ICONS = [UserCheck, Hash, Eye, CalendarClock];
 export function LandingPage() {
   const { hash } = useLocation();
   const copy = useSiteCopy();
-  const browserTitle = copy.text('creators.seo.title');
-
-  useEffect(() => {
-    document.title = browserTitle;
-  }, [browserTitle]);
+  useDocumentHead({ title: copy.text('creators.seo.title'), description: copy.text('creators.seo.description') });
 
   // Router links to /#section: scroll to the section and move focus there for keyboard users.
   useEffect(() => {

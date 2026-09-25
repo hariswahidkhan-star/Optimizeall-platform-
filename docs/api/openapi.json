@@ -39808,30 +39808,6 @@
         }
       }
     },
-    "/api/v1/public/redirects/gate": {
-      "get": {
-        "tags": [
-          "PublicRedirects"
-        ],
-        "summary": "For the web server: `301` with `Location` when the address in `X-Original-URI` is redirected, else an\r\nempty `404` (the web server then serves the app shell). Same limits as the tracking redirects: it runs on\r\nevery full page load of the public site.",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "head": {
-        "tags": [
-          "PublicRedirects"
-        ],
-        "summary": "For the web server: `301` with `Location` when the address in `X-Original-URI` is redirected, else an\r\nempty `404` (the web server then serves the app shell). Same limits as the tracking redirects: it runs on\r\nevery full page load of the public site.",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/t/{code}": {
       "get": {
         "tags": [
@@ -40478,19 +40454,6 @@
         "tags": [
           "PublicWebsite"
         ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/v1/public/sitemap.xml": {
-      "get": {
-        "tags": [
-          "PublicWebsite"
-        ],
-        "summary": "XML sitemap of every published, indexable page.",
         "responses": {
           "200": {
             "description": "OK"
@@ -57088,6 +57051,112 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/agency/website/seo/overview": {
+      "get": {
+        "tags": [
+          "WebsiteSeo"
+        ],
+        "summary": "Every public URL with the title, description, canonical, robots and structured data the server renders, plus warnings.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.SiteSeo.SeoOverviewDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.SiteSeo.SeoOverviewDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.SiteSeo.SeoOverviewDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agency/website/seo/settings": {
+      "get": {
+        "tags": [
+          "WebsiteSeo"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.SiteSeo.SeoSettingsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.SiteSeo.SeoSettingsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.SiteSeo.SeoSettingsDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "WebsiteSeo"
+        ],
+        "summary": "Denied while impersonating: the crawler policy decides which search engines and AI crawlers may read the whole public\r\nsite (platform-wide configuration, like the site settings). Audited.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Website.SiteSeo.UpdateSeoSettingsRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Website.SiteSeo.UpdateSeoSettingsRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Website.SiteSeo.UpdateSeoSettingsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.SiteSeo.SeoSettingsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.SiteSeo.SeoSettingsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.SiteSeo.SeoSettingsDto"
+                }
+              }
+            }
           }
         }
       }
@@ -104558,6 +104627,265 @@
         },
         "additionalProperties": false,
         "description": "Campaign attribution captured by the web app on the visitor's first page view."
+      },
+      "Website.SiteSeo.CrawlerGroupDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true
+          },
+          "label": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "allowedByDefault": {
+            "type": "boolean"
+          },
+          "allowed": {
+            "type": "boolean"
+          },
+          "userAgents": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Website.SiteSeo.SeoCopyKeysDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Page-text keys that hold a built-in page's title and description (editable inline in the overview)."
+      },
+      "Website.SiteSeo.SeoOverviewDto": {
+        "type": "object",
+        "properties": {
+          "siteUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "indexable": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "withErrors": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "withWarnings": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Website.SiteSeo.SeoOverviewRowDto"
+            },
+            "nullable": true
+          },
+          "generatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Website.SiteSeo.SeoOverviewRowDto": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "titleLength": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "descriptionLength": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "canonical": {
+            "type": "string",
+            "nullable": true
+          },
+          "indexable": {
+            "type": "boolean"
+          },
+          "robots": {
+            "type": "string",
+            "nullable": true
+          },
+          "inSitemap": {
+            "type": "boolean"
+          },
+          "jsonLdTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "h1Count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "imageCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "videoCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastModified": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "source": {
+            "type": "string",
+            "nullable": true
+          },
+          "editPath": {
+            "type": "string",
+            "nullable": true
+          },
+          "copyKeys": {
+            "$ref": "#/components/schemas/Website.SiteSeo.SeoCopyKeysDto"
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Website.SiteSeo.SeoWarningDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Website.SiteSeo.SeoSettingsDto": {
+        "type": "object",
+        "properties": {
+          "crawlerGroups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Website.SiteSeo.CrawlerGroupDto"
+            },
+            "nullable": true
+          },
+          "indexNowEnabled": {
+            "type": "boolean"
+          },
+          "indexNowKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "llmsTxtEnabled": {
+            "type": "boolean"
+          },
+          "securityContactEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Website.SiteSeo.SeoWarningDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "severity": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Website.SiteSeo.UpdateSeoSettingsRequest": {
+        "required": [
+          "concurrencyStamp"
+        ],
+        "type": "object",
+        "properties": {
+          "crawlerGroups": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "boolean",
+              "nullable": true
+            },
+            "description": "Crawler group key → allowed. Groups left out keep their current value.",
+            "nullable": true
+          },
+          "indexNowEnabled": {
+            "type": "boolean"
+          },
+          "llmsTxtEnabled": {
+            "type": "boolean"
+          },
+          "securityContactEmail": {
+            "maxLength": 254,
+            "type": "string",
+            "nullable": true
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "securitySchemes": {
