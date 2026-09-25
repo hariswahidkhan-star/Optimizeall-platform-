@@ -92,9 +92,10 @@ public sealed class LlmsTxtService(SeoPageResolver resolver, IMemoryCache cache)
             sb.Append("# ").Append(s.SiteName).Append("\n\n");
             sb.Append("> ").Append(s.Seo.DefaultDescription ?? s.Tagline).Append("\n\n");
             if (!string.IsNullOrWhiteSpace(s.Footer.Blurb)) sb.Append(s.Footer.Blurb).Append("\n\n");
-            sb.Append(s.SiteName).Append(" is a full-service digital marketing agency (SEO, paid media, social, content, email and web) that ")
-                .Append("also runs a creator program (people with established social accounts are paid to share company-approved, clearly disclosed ")
-                .Append("posts) and a free online academy (self-paced courses in sales, marketing, SEO and AI with verified certificates). ")
+            sb.Append(s.SiteName).Append(" has two pillars. Optimize All Academy: free, self-paced courses in AI, marketing, SEO, sales and ")
+                .Append("business, each with a verifiable certificate (a unique code and a public verification page). Optimize All Agency: a ")
+                .Append("full-service digital marketing agency (SEO, paid media, social, content, email, brand and web). It also runs a creator program ")
+                .Append("(people with established social accounts are paid to share company-approved, clearly disclosed posts). ")
                 .Append("Prices on this site are starting prices; ad spend is billed at cost. Results in case studies are labelled measured ")
                 .Append("or estimated. Every link below has a Markdown version (the same URL ending in .md).\n\n");
             if (s.Contact.Email is not null) sb.Append("Contact: ").Append(s.Contact.Email).Append("\n\n");
@@ -114,8 +115,8 @@ public sealed class LlmsTxtService(SeoPageResolver resolver, IMemoryCache cache)
                 sb.Append('\n');
             }
 
-            var keyPaths = new[] { "/", "/services", "/pricing", "/case-studies", "/industries", "/about", "/how-we-work", "/team", "/contact", "/free-audit",
-                "/get-a-quote", "/book-a-consultation", "/learn" };
+            var keyPaths = new[] { "/", "/academy", "/learn", "/services", "/pricing", "/case-studies", "/industries", "/about", "/how-we-work", "/team",
+                "/contact", "/free-audit", "/get-a-quote", "/book-a-consultation" };
             Section("Key pages", keyPaths.Select(p => entries.FirstOrDefault(e => e.Url.Path == p)).OfType<Entry>());
             Section("Services", entries.Where(e => e.Url.Group == SeoPageResolver.GroupServices));
             Section("Industries", entries.Where(e => e.Url.Path.StartsWith("/industries/", StringComparison.Ordinal)));

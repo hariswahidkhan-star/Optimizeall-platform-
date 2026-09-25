@@ -266,6 +266,109 @@ public sealed class SeoCrawlabilityTests(ApiFactory api) : IClassFixture<ApiFact
         Assert.Equal(HttpStatusCode.NotFound, (await anon.GetAsync("/llms/unknown.txt")).StatusCode);
     }
 
+    private static string Copy(string key) =>
+        OptimizeAll.Api.Modules.Content.Copy.SiteCopyCatalog.ByKey[key].Default;
+
+    private static List<string> Pairs(string key, bool titles) => Copy(key).Split('\n').Where(l => l.Trim().Length > 0)
+        .Select(l => l.Split('|', 2)).Select(p => (titles ? p[0] : p.Length > 1 ? p[1] : string.Empty).Trim()).ToList();
+
+    private static string Text(AngleSharp.Dom.IElement? e) => System.Text.RegularExpressions.Regex.Replace(e?.TextContent ?? string.Empty, @"\s+", " ").Trim();
+
+    [Fact]
+    public async Task Home_page_renders_the_academy_first_and_the_agency_second_in_the_web_apps_words()
+    {
+        var doc = await DocAsync("/");
+        var main = doc.QuerySelector("#oa-ssr main")!;
+        var headings = main.QuerySelectorAll("h1, h2, h3").Select(Text).ToList();
+        int At(string key)
+        {
+            var i = headings.IndexOf(Copy(key));
+            Assert.True(i >= 0, $"missing heading {key}: {Copy(key)}");
+            return i;
+        }
+        // Hero: the first call to action is the academy.
+        var heroLinks = main.QuerySelectorAll("ul a").Take(2).Select(a => (Text(a), a.GetAttribute("href"))).ToList();
+        Assert.Equal((Copy("home.hero.learnCta"), "/learn"), heroLinks[0]);
+        Assert.Equal((Copy("home.hero.primaryCta"), "/free-audit"), heroLinks[1]);
+        // Order: academy → paths → steps → certificates → agency → audit → … → trust → final.
+        var order = new[]
+        {
+            At("home.academy.title"), At("home.academy.subjectsTitle"), At("home.academy.featuredTitle"), At("home.paths.title"),
+            At("home.learnSteps.title"), At("home.cert.title"), At("home.agency.title"), At("home.audit.title"), At("home.services.title"),
+            At("home.trust.title"), At("home.final.title"),
+        };
+        Assert.Equal(order.OrderBy(i => i), order);
+        foreach (var title in Pairs("home.learnSteps.steps", titles: true).Concat(Pairs("home.trust.items", titles: true)))
+            Assert.Contains(title, headings);
+        var body = Text(main);
+        foreach (var key in new[] { "home.academy.intro", "home.agency.intro", "home.cert.text", "home.trust.intro", "home.final.text" })
+            Assert.Contains(Copy(key), body);
+        foreach (var item in Copy("home.agency.proof").Split('\n')) Assert.Contains(item.Trim(), body);
+
+        // Live academy figures, labelled with the copy.
+        var facts = main.QuerySelectorAll("dl").First(dl => dl.QuerySelectorAll("dt").Any(dt => Text(dt) == Copy("home.academy.statCourses")));
+        var values = facts.QuerySelectorAll("dt").Zip(facts.QuerySelectorAll("dd"), (dt, dd) => (Text(dt), Text(dd))).ToDictionary(x => x.Item1, x => x.Item2);
+        var catalog = await api.Anonymous().GetJsonAsync("/api/v1/public/learning/courses?page=1&pageSize=200");
+        Assert.Equal(catalog.GetProperty("total").GetInt32().ToString(System.Globalization.CultureInfo.InvariantCulture), values[Copy("home.academy.statCourses")]);
+        var categories = (await api.Anonymous().GetJsonAsync("/api/v1/public/learning/categories")).EnumerateArray()
+            .Where(c => c.GetProperty("courseCount").GetInt32() > 0).ToList();
+        Assert.Equal(categories.Count.ToString(System.Globalization.CultureInfo.InvariantCulture), values[Copy("home.academy.statSubjects")]);
+        Assert.True(int.Parse(values[Copy("home.academy.statLessons")].TrimEnd('+'), System.Globalization.CultureInfo.InvariantCulture) > 0);
+
+        // Subjects link the filtered catalog; featured courses link their course pages; the final band links both pillars.
+        foreach (var c in categories)
+            Assert.NotNull(main.QuerySelector($"a[href='/learn?category={c.GetProperty("category").GetString()}']"));
+        Assert.True(main.QuerySelectorAll("a[href^='/learn/']").Length >= 2, "featured courses link their course pages");
+        var final = main.QuerySelectorAll("ul").Last(ul => ul.QuerySelector("a[href='/learn']") is not null && ul.QuerySelector("a[href='/free-audit']") is not null);
+        Assert.Equal(Copy("home.final.learnCta"), Text(final.QuerySelector("a[href='/learn']")));
+        Assert.Equal(Copy("home.final.agencyCta"), Text(final.QuerySelector("a[href='/free-audit']")));
+    }
+
+    [Fact]
+    public async Task Academy_overview_renders_live_figures_and_course_links_after_its_hero()
+    {
+        var doc = await DocAsync("/academy");
+        var main = doc.QuerySelector("#oa-ssr main")!;
+        Assert.Single(main.QuerySelectorAll("h1"));
+        var headings = main.QuerySelectorAll("h2").Select(Text).ToList();
+        Assert.Contains(Copy("home.academy.subjectsTitle"), headings);
+        Assert.Contains(Copy("home.academy.featuredTitle"), headings);
+        Assert.Contains(Copy("home.cert.title"), headings);
+        Assert.NotNull(main.QuerySelectorAll("dt").FirstOrDefault(dt => Text(dt) == Copy("home.academy.statCourses")));
+        Assert.True(main.QuerySelectorAll("a[href^='/learn/']").Length >= 2);
+        Assert.NotNull(main.QuerySelector("a[href^='/learn?category=']"));
+        // The hero comes first.
+        Assert.Equal("H1", main.QuerySelectorAll("h1, dl").First().TagName);
+    }
+
+    [Fact]
+    public async Task Not_found_pages_and_llms_txt_point_to_both_pillars()
+    {
+        var response = await api.Anonymous().GetAsync("/_document/no-such-page-" + Guid.NewGuid().ToString("N")[..6]);
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        var doc = Parser.ParseDocument(await response.Content.ReadAsStringAsync());
+        Assert.Equal("Academy", Text(doc.QuerySelector("#oa-ssr main a[href='/academy']")));
+        Assert.Equal("Free courses", Text(doc.QuerySelector("#oa-ssr main a[href='/learn']")));
+
+        var llms = await api.Anonymous().GetStringAsync("/llms.txt");
+        var keyPages = llms[llms.IndexOf("## Key pages", StringComparison.Ordinal)..llms.IndexOf("## Services", StringComparison.Ordinal)];
+        Assert.Contains("(http://app.test/academy.md)", keyPages);
+        Assert.Contains("(http://app.test/learn.md)", keyPages);
+        Assert.Contains("Optimize All Academy", llms);
+
+        var home = await DocAsync("/");
+        Assert.Equal("Optimize All: free AI, marketing and growth courses with certificates, and a full-service marketing agency",
+            await DefaultImageAltAsync());
+        Assert.NotNull(Meta(home, "og:image:alt"));
+    }
+
+    /// <summary>The alt text of the built-in default image (a noindex page keeps the default social image).</summary>
+    private async Task<string?> DefaultImageAltAsync()
+    {
+        var response = await api.Anonymous().GetAsync("/_document/login");
+        return Meta(Parser.ParseDocument(await response.Content.ReadAsStringAsync()), "og:image:alt");
+    }
+
     private sealed class VideoContributor : ISitemapContributor
     {
         public string Group => SeoPageResolver.GroupLearn;

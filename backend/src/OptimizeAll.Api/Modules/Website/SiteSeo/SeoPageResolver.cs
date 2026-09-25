@@ -288,7 +288,7 @@ public sealed partial class SeoPageResolver(
     {
         var chosen = image ?? _settings.Seo.DefaultOgImageUrl;
         page.OgImage = chosen is null ? _ld.Url(DefaultOgImagePath) : _ld.Url(chosen);
-        page.OgImageAlt = chosen is null ? $"{_settings.SiteName}: full-service digital marketing agency" : alt ?? page.Title;
+        page.OgImageAlt = chosen is null ? $"{_settings.SiteName}: free AI, marketing and growth courses with certificates, and a full-service marketing agency" : alt ?? page.Title;
         (page.OgImageWidth, page.OgImageHeight) = chosen is null ? (1200, 630) : ((int?)null, (int?)null);
         if (image is not null) page.Images.Add(new SeoImage(_ld.Url(image), alt ?? page.Title));
     }
@@ -413,7 +413,8 @@ public sealed partial class SeoPageResolver(
         page.Content.Add(new HeadingNode(2, "Helpful links"));
         page.Content.Add(new LinkListNode(new[]
         {
-            new LinkItem("Home", "/"), new LinkItem("Services", "/services"), new LinkItem("Case studies", "/case-studies"),
+            new LinkItem("Home", "/"), new LinkItem("Academy", "/academy"), new LinkItem("Free courses", "/learn"),
+            new LinkItem("Services", "/services"), new LinkItem("Case studies", "/case-studies"),
             new LinkItem("Pricing", "/pricing"), new LinkItem("Blog", "/blog"), new LinkItem("Contact us", "/contact"),
             new LinkItem("Search the site", "/search"),
         }));

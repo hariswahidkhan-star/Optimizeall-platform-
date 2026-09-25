@@ -16,6 +16,10 @@ public sealed partial class SeoPageResolver
 {
     // ---------------------------------------------------------------- Home
 
+    /// <summary>
+    /// The home page: Academy first, Agency second, in the order and words of the web app's home page
+    /// (frontend/src/features/public/pages/HomePage.tsx), with the same live academy figures.
+    /// </summary>
     private async Task<SeoPage> HomeAsync(CancellationToken ct)
     {
         var home = await site.HomeAsync(ct);
@@ -32,17 +36,33 @@ public sealed partial class SeoPageResolver
         c.Add(new ListNode(_copy.List("home.hero.proof")));
         c.Add(new LinkListNode(new[]
         {
+            new LinkItem(_copy.Text("home.hero.learnCta"), "/learn"), new LinkItem(_copy.Text("home.hero.primaryCta"), "/free-audit"),
+        }));
+
+        // Pillar 1: the academy.
+        c.AddRange(await HomeAcademyNodesAsync(ct));
+
+        // Pillar 2: the agency, with the free-audit panel.
+        c.Add(new ParagraphNode(_copy.Text("home.agency.eyebrow")));
+        c.Add(new HeadingNode(2, _copy.Text("home.agency.title")));
+        c.Add(new ParagraphNode(_copy.Text("home.agency.intro")));
+        c.Add(new ListNode(_copy.List("home.agency.proof")));
+        c.Add(new LinkListNode(new[]
+        {
             new LinkItem(_copy.Text("home.hero.primaryCta"), "/free-audit"), new LinkItem(_copy.Text("home.hero.secondaryCta"), "/book-a-consultation"),
         }));
-        c.Add(new HeadingNode(2, _copy.Text("home.audit.title")));
+        c.Add(new HeadingNode(3, _copy.Text("home.audit.title")));
         c.Add(new ListNode(_copy.List("home.audit.items")));
+        c.Add(new ActionNode(_copy.Text("home.audit.cta"), "/free-audit"));
 
         c.Add(new HeadingNode(2, _copy.Text("home.services.title")));
         c.Add(new ParagraphNode(_copy.Text("home.services.intro")));
-        foreach (var group in home.ServiceCategories)
+        for (var gi = 0; gi < home.ServiceCategories.Count; gi++)
         {
+            var group = home.ServiceCategories[gi];
             c.Add(new HeadingNode(3, group.Name));
-            c.Add(new LinkListNode(group.Services.Select(s => new LinkItem(s.Name, $"/services/{s.Slug}", s.Tagline)).ToList()));
+            if (!string.IsNullOrWhiteSpace(group.Description)) c.Add(new ParagraphNode(group.Description));
+            c.Add(new LinkListNode(group.Services.Take(gi < 2 ? 6 : 4).Select(s => new LinkItem(s.Name, $"/services/{s.Slug}")).ToList()));
         }
         c.Add(new ActionNode(_copy.Text("home.services.cta"), "/services"));
 
@@ -68,7 +88,7 @@ public sealed partial class SeoPageResolver
         if (home.Industries.Count > 0)
         {
             c.Add(new HeadingNode(2, _copy.Text("home.industries.title")));
-            c.Add(new LinkListNode(home.Industries.Select(i => new LinkItem(i.Name, $"/industries/{i.Slug}", i.Summary)).ToList()));
+            c.Add(new LinkListNode(home.Industries.Take(6).Select(i => new LinkItem(i.Name, $"/industries/{i.Slug}", i.Summary)).ToList()));
         }
         if (home.Testimonials.Count > 0)
         {
@@ -83,6 +103,19 @@ public sealed partial class SeoPageResolver
             c.Add(new FactsNode(home.PricingTeaser.Select(p => KeyValuePair.Create($"{p.ServiceName} — {p.Package.Name}", PackagePrice(p.Package))).ToList()));
             c.Add(new ActionNode(_copy.Text("home.pricing.cta"), "/pricing"));
         }
+        c.Add(new ParagraphNode(_copy.Text("home.trust.eyebrow")));
+        c.Add(new HeadingNode(2, _copy.Text("home.trust.title")));
+        c.Add(new ParagraphNode(_copy.Text("home.trust.intro")));
+        foreach (var (title, text) in _copy.Pairs("home.trust.items"))
+        {
+            c.Add(new HeadingNode(3, title));
+            c.Add(new ParagraphNode(text));
+        }
+        c.Add(new LinkListNode(new[]
+        {
+            new LinkItem("Privacy policy", "/privacy-policy"), new LinkItem("Accessibility statement", "/accessibility"),
+            new LinkItem("Cookie policy", "/cookie-policy"), new LinkItem("Terms of service", "/terms-of-service"),
+        }));
         if (home.LatestPosts.Count > 0)
         {
             c.Add(new HeadingNode(2, _copy.Text("home.blog.title")));
@@ -90,7 +123,17 @@ public sealed partial class SeoPageResolver
         }
         c.Add(new HeadingNode(2, _copy.Text("home.creators.title")));
         c.Add(new ParagraphNode(_copy.Text("home.creators.intro")));
-        c.Add(new ActionNode(_copy.Text("home.creators.secondaryCta"), "/creators"));
+        c.Add(new LinkListNode(new[]
+        {
+            new LinkItem(_copy.Text("home.creators.primaryCta"), "/register"), new LinkItem(_copy.Text("home.creators.secondaryCta"), "/creators"),
+        }));
+        c.Add(new HeadingNode(2, _copy.Text("home.final.title")));
+        c.Add(new ParagraphNode(_copy.Text("home.final.text")));
+        c.Add(new LinkListNode(new[]
+        {
+            new LinkItem(_copy.Text("home.final.learnCta"), "/learn", _copy.Text("home.academy.eyebrow")),
+            new LinkItem(_copy.Text("home.final.agencyCta"), "/free-audit", _copy.Text("home.agency.eyebrow")),
+        }));
         page.ModifiedAt = Latest(_settingsUpdatedAt, _copyUpdatedAt, home.LatestPosts.Select(p => p.PublishedAt).Max());
         return AddCatalogVideos(page);
     }
@@ -604,6 +647,15 @@ public sealed partial class SeoPageResolver
             page.Content.Add(new HeadingNode(1, p.Title));
             if (!string.IsNullOrWhiteSpace(p.Summary)) page.Content.Add(new ParagraphNode(p.Summary));
         }
+        if (slug == "academy")
+        {
+            // /academy (web app: PillarPages.tsx AcademyOverviewPage): the CMS hero, the live academy sections, then the rest.
+            var hero = p.Blocks.FirstOrDefault()?.Type == PageBlockTypes.Hero ? p.Blocks.Take(1).ToList() : new List<PageBlock>();
+            page.Content.AddRange(BlockNodes(page, hero, p.Title, p.Testimonials, p.CaseStudies, p.ServiceCategories, p.UpdatedAt));
+            page.Content.AddRange(await AcademyPageLiveNodesAsync(ct));
+            page.Content.AddRange(BlockNodes(page, p.Blocks.Skip(hero.Count).ToList(), p.Title, p.Testimonials, p.CaseStudies, p.ServiceCategories, p.UpdatedAt, firstIsTop: false));
+            return AddCatalogVideos(page);
+        }
         page.Content.AddRange(BlockNodes(page, p.Blocks, p.Title, p.Testimonials, p.CaseStudies, p.ServiceCategories, p.UpdatedAt));
         return AddCatalogVideos(page);
     }
@@ -624,7 +676,7 @@ public sealed partial class SeoPageResolver
     }
 
     private List<ContentNode> BlockNodes(SeoPage page, IReadOnlyList<PageBlock> blocks, string pageTitle, IReadOnlyList<PublicTestimonialDto> testimonials,
-        IReadOnlyList<CaseStudyCardDto> caseStudies, IReadOnlyList<ServiceCategoryGroupDto> groups, DateTime updatedAt)
+        IReadOnlyList<CaseStudyCardDto> caseStudies, IReadOnlyList<ServiceCategoryGroupDto> groups, DateTime updatedAt, bool firstIsTop = true)
     {
         var nodes = new List<ContentNode>();
         T? Read<T>(PageBlock b) where T : class
@@ -639,7 +691,7 @@ public sealed partial class SeoPageResolver
             {
                 case PageBlockTypes.Hero when Read<HeroBlock>(block) is { } h:
                     if (h.Eyebrow is not null) nodes.Add(new ParagraphNode(h.Eyebrow));
-                    nodes.Add(new HeadingNode(index == 0 ? 1 : 2, h.Title ?? pageTitle));
+                    nodes.Add(new HeadingNode(index == 0 && firstIsTop ? 1 : 2, h.Title ?? pageTitle));
                     if (h.Subtitle is not null) nodes.Add(new ParagraphNode(h.Subtitle));
                     if (h.ImageUrl is not null) nodes.Add(new ImageNode(h.ImageUrl, string.Empty, 640, 480, Priority: index == 0));
                     var links = new[] { h.PrimaryCta, h.SecondaryCta }.OfType<SiteLink>().Select(l => new LinkItem(l.Label, l.Url)).ToList();
