@@ -119,6 +119,12 @@ import { defineConfig, devices } from '@playwright/test';
  * rate, submit → approve → ledger rate source, a new card version that leaves approved earnings unchanged, four-eyes on
  * a large raise and the deal's expiry). Serial, one worker, desktop only, against Baseline + Demo:
  * `E2E_SUITE=j-rates E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
+ *
+ * The j-partners suite covers partners and sponsored placements against the Baseline + Demo seed: the home partner
+ * strip and footer line, /partners and the profile pages (JSON-LD, head tags, sitemap), a sponsored unit on a blog post,
+ * rel="sponsored noopener" on every outbound partner link and the click redirect with UTM tags, and the Website →
+ * Partners editor and report. Serial, one worker, desktop only. Run it with
+ * `E2E_SUITE=j-partners E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
  */
 const suite = process.env.E2E_SUITE ?? 'smoke';
 /** Suites whose mobile project runs only responsive.spec.ts (and whose desktop project runs everything else). */
@@ -140,6 +146,7 @@ const desktopJourney = [
   'j-auth',
   'j-rates',
   'j-seo',
+  'j-partners',
 ].includes(suite);
 /** The finance journey compares datetime-local input (browser time) with UTC periods, so its browser runs in UTC. */
 const finance = suite === 'j-finance';

@@ -1366,6 +1366,75 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "website_partners",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Slug = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    LogoUrl = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    WebsiteUrl = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Tagline = table.Column<string>(type: "varchar(160)", maxLength: 160, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DescriptionMarkdown = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RelationshipLabel = table.Column<string>(type: "varchar(160)", maxLength: 160, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Highlights = table.Column<string>(type: "json", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Offerings = table.Column<string>(type: "json", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Keywords = table.Column<string>(type: "json", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Categories = table.Column<string>(type: "json", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    SameAs = table.Column<string>(type: "json", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RelatedPartnerIds = table.Column<string>(type: "json", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Slots = table.Column<string>(type: "json", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    BrandColor = table.Column<string>(type: "varchar(7)", maxLength: 7, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UtmSource = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UtmMedium = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UtmCampaign = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    OfferText = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    OfferCode = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    OfferExpiresAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    OfferConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    OfferUpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: true),
+                    SeoTitle = table.Column<string>(type: "varchar(70)", maxLength: 70, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    SeoDescription = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    SeoOgImageUrl = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    SeoCanonicalUrl = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    SeoNoIndex = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    SortOrder = table.Column<int>(type: "int", nullable: false),
+                    ConcurrencyStamp = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_website_partners", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "website_redirects",
                 columns: table => new
                 {
@@ -2570,6 +2639,32 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         name: "FK_website_page_revisions_website_pages_PageId",
                         column: x => x.PageId,
                         principalTable: "website_pages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "website_partner_stats",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    PartnerId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Slot = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PagePath = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Day = table.Column<DateOnly>(type: "date", nullable: false),
+                    Impressions = table.Column<int>(type: "int", nullable: false),
+                    Clicks = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_website_partner_stats", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_website_partner_stats_website_partners_PartnerId",
+                        column: x => x.PartnerId,
+                        principalTable: "website_partners",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -11243,6 +11338,28 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_website_partner_stats_Day",
+                table: "website_partner_stats",
+                column: "Day");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_website_partner_stats_PartnerId_Slot_PagePath_Day",
+                table: "website_partner_stats",
+                columns: new[] { "PartnerId", "Slot", "PagePath", "Day" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_website_partners_IsActive_SortOrder",
+                table: "website_partners",
+                columns: new[] { "IsActive", "SortOrder" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_website_partners_Slug",
+                table: "website_partners",
+                column: "Slug",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_website_redirects_CreatedAt",
                 table: "website_redirects",
                 column: "CreatedAt");
@@ -11825,6 +11942,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                 name: "website_page_revisions");
 
             migrationBuilder.DropTable(
+                name: "website_partner_stats");
+
+            migrationBuilder.DropTable(
                 name: "website_redirects");
 
             migrationBuilder.DropTable(
@@ -11958,6 +12078,9 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "website_pages");
+
+            migrationBuilder.DropTable(
+                name: "website_partners");
 
             migrationBuilder.DropTable(
                 name: "website_services");

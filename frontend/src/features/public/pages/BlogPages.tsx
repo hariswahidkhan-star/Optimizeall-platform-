@@ -11,6 +11,7 @@ import { CtaBand, formatPublished, PageHero, PostCard, PublicQueryState, Section
 import { absoluteUrl, headFromSeo, useDocumentHead } from '../site/head';
 import { extractHeadings, Markdown } from '../site/Markdown';
 import { NewsletterSignup } from '../site/NewsletterSignup';
+import { PartnerSlot } from '../partners/PartnerSlot';
 
 /** /blog — categories, tags, search and pagination, all kept in the URL. */
 export function BlogPage() {
@@ -199,7 +200,10 @@ export function BlogPostPage() {
           </PageHero>
           <div className="container site-article">
             <article aria-label={post.title}>
-              <Markdown source={post.bodyMarkdown} />
+              <Markdown
+                source={post.bodyMarkdown}
+                interlude={<PartnerSlot slot="blog.inline" keywords={post.tags} categories={post.categories.map((c) => c.slug)} />}
+              />
               {post.tags.length > 0 && (
                 <ul className="site-chips" aria-label="Tags" style={{ marginTop: 'var(--space-8)' }}>
                   {post.tags.map((t) => (
@@ -211,6 +215,7 @@ export function BlogPostPage() {
                   ))}
                 </ul>
               )}
+              <PartnerSlot slot="blog.end" keywords={post.tags} categories={post.categories.map((c) => c.slug)} />
               {post.author && (
                 <aside className="site-author" aria-label="About the author" style={{ marginTop: 'var(--space-8)' }}>
                   {post.author.photoUrl ? (

@@ -33,7 +33,13 @@ public static class SeoDocumentWriter
 
     private static readonly JsonSerializerOptions JsonOptions = new() { Encoder = JavaScriptEncoder.Default };
 
-    public static string Write(SeoPage page, SiteChromeLinks chrome, string siteName, string? twitterHandle, string baseUrl)
+    /// <summary>
+    /// The document for <paramref name="page"/>. <paramref name="partnerLinks"/> are the active partners' link rules: every
+    /// link to a partner's website in the page gets <c>rel="sponsored noopener"</c>, <c>target="_blank"</c> and the
+    /// partner's UTM tags (<see cref="SeoPartnerLinks"/>, Google's link-spam policy).
+    /// </summary>
+    public static string Write(SeoPage page, SiteChromeLinks chrome, string siteName, string? twitterHandle, string baseUrl,
+        IReadOnlyList<OptimizeAll.Domain.Website.PartnerLinkRule>? partnerLinks = null)
     {
         var e = (Func<string?, string>)SeoHtml.Attr;
         var sb = new StringBuilder(16 * 1024);
@@ -89,7 +95,9 @@ public static class SeoDocumentWriter
             sb.Append("<link rel=\"preload\" as=\"image\" href=\"").Append(e(img.Src)).Append("\" fetchpriority=\"high\">\n");
         sb.Append(InlineStyle).Append('\n');
         sb.Append(ShellHeadInclude).Append("\n</head>\n<body>\n<div id=\"root\">");
-        SeoHtml.WriteBody(sb, page, chrome);
+        var body = new StringBuilder(8 * 1024);
+        SeoHtml.WriteBody(body, page, chrome);
+        sb.Append(SeoPartnerLinks.Apply(body.ToString(), partnerLinks ?? Array.Empty<OptimizeAll.Domain.Website.PartnerLinkRule>()));
         sb.Append("</div>\n").Append(ShellBodyInclude).Append("\n</body>\n</html>\n");
         return sb.ToString();
     }

@@ -75,6 +75,7 @@ public sealed class LlmsTxtService(SeoPageResolver resolver)
         Section("Blog", entries.Where(e => e.Url.Group == SeoPageResolver.GroupBlog).Take(50));
         Section("Careers", entries.Where(e => e.Url.Path == "/careers" || e.Url.Group == SeoPageResolver.GroupCareers));
         Section("Creator program", entries.Where(e => e.Url.Path is "/creators" or "/faq"));
+        Section("Partners", entries.Where(e => e.Url.Group == SeoPageResolver.GroupPartners));
         var listed = new HashSet<string>(keyPaths.Concat(new[] { "/careers", "/creators", "/faq", "/blog" }));
         Section("Optional", entries.Where(e => e.Url.Group == SeoPageResolver.GroupPages && !listed.Contains(e.Url.Path) &&
                                                !e.Url.Path.StartsWith("/industries/", StringComparison.Ordinal))

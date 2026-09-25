@@ -55,7 +55,7 @@ public sealed class SeoDocumentController(SeoPageResolver resolver, IConfigurati
                 return StatusCode(page.Status);
             }
             html = SeoDocumentWriter.Write(page, await resolver.ChromeAsync(ct), resolver.Settings.SiteName, resolver.Settings.Seo.TwitterHandle,
-                resolver.BaseUrl);
+                resolver.BaseUrl, await resolver.PartnerLinkRulesAsync(ct));
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {

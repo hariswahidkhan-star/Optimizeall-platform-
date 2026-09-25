@@ -71,6 +71,12 @@ public sealed class DefaultDenyTests(ApiFactory api) : IClassFixture<ApiFactory>
         "GET api/v1/public/search",
         // Moved public addresses: the web app's lookup during client-side navigation (full page loads get the 301 from _document).
         "GET api/v1/public/redirects",
+        // Partners: the partners page, profiles and ad units, the impression beacon and the click redirect (Website/Partners).
+        "GET api/v1/public/partners",
+        "GET api/v1/public/partners/placement",
+        "GET api/v1/public/partners/{slug}",
+        "POST api/v1/public/partners/impressions",
+        "GET api/v1/public/partners/{slug}/visit",
         "GET api/v1/public/blog",
         "GET api/v1/public/blog/{slug}",
         "GET api/v1/public/blog/rss.xml",

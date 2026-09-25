@@ -38,6 +38,9 @@ public sealed class SeoOverviewService(SeoPageResolver resolver, AppDbContext db
                 (p.Seo.NoIndex || p.Seo.CanonicalUrl != null)).Select(p => "/blog/" + p.Slug).ToListAsync(ct));
         paths.AddRange(await db.Set<AgencyService>().AsNoTracking().Where(s => s.IsPublished && (s.Seo.NoIndex || s.Seo.CanonicalUrl != null))
             .Select(s => "/services/" + s.Slug).ToListAsync(ct));
+        // Every active partner profile (Website → Partners), including noindex ones.
+        paths.AddRange(await db.Set<WebsitePartner>().AsNoTracking().Where(p => p.IsActive).OrderBy(p => p.SortOrder).ThenBy(p => p.Name)
+            .Select(p => "/partners/" + p.Slug).ToListAsync(ct));
         paths.AddRange(SeoPageResolver.UtilityPaths);
 
         var rows = new List<SeoOverviewRowDto>();

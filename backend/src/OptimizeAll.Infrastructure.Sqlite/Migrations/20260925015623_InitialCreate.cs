@@ -1063,6 +1063,50 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "website_partners",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Slug = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    LogoUrl = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
+                    WebsiteUrl = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
+                    Tagline = table.Column<string>(type: "TEXT", maxLength: 160, nullable: false),
+                    DescriptionMarkdown = table.Column<string>(type: "TEXT", nullable: true),
+                    RelationshipLabel = table.Column<string>(type: "TEXT", maxLength: 160, nullable: false),
+                    Highlights = table.Column<string>(type: "TEXT", nullable: false),
+                    Offerings = table.Column<string>(type: "TEXT", nullable: false),
+                    Keywords = table.Column<string>(type: "TEXT", nullable: false),
+                    Categories = table.Column<string>(type: "TEXT", nullable: false),
+                    SameAs = table.Column<string>(type: "TEXT", nullable: false),
+                    RelatedPartnerIds = table.Column<string>(type: "TEXT", nullable: false),
+                    Slots = table.Column<string>(type: "TEXT", nullable: false),
+                    BrandColor = table.Column<string>(type: "TEXT", maxLength: 7, nullable: true),
+                    UtmSource = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    UtmMedium = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    UtmCampaign = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
+                    OfferText = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
+                    OfferCode = table.Column<string>(type: "TEXT", maxLength: 40, nullable: true),
+                    OfferExpiresAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
+                    OfferConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
+                    OfferUpdatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: true),
+                    SeoTitle = table.Column<string>(type: "TEXT", maxLength: 70, nullable: true),
+                    SeoDescription = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
+                    SeoOgImageUrl = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
+                    SeoCanonicalUrl = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
+                    SeoNoIndex = table.Column<bool>(type: "INTEGER", nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
+                    SortOrder = table.Column<int>(type: "INTEGER", nullable: false),
+                    ConcurrencyStamp = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", precision: 6, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_website_partners", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "website_redirects",
                 columns: table => new
                 {
@@ -2044,6 +2088,29 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         name: "FK_website_page_revisions_website_pages_PageId",
                         column: x => x.PageId,
                         principalTable: "website_pages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "website_partner_stats",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    PartnerId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Slot = table.Column<string>(type: "TEXT", maxLength: 40, nullable: false),
+                    PagePath = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
+                    Day = table.Column<DateOnly>(type: "TEXT", nullable: false),
+                    Impressions = table.Column<int>(type: "INTEGER", nullable: false),
+                    Clicks = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_website_partner_stats", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_website_partner_stats_website_partners_PartnerId",
+                        column: x => x.PartnerId,
+                        principalTable: "website_partners",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -9751,6 +9818,28 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_website_partner_stats_Day",
+                table: "website_partner_stats",
+                column: "Day");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_website_partner_stats_PartnerId_Slot_PagePath_Day",
+                table: "website_partner_stats",
+                columns: new[] { "PartnerId", "Slot", "PagePath", "Day" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_website_partners_IsActive_SortOrder",
+                table: "website_partners",
+                columns: new[] { "IsActive", "SortOrder" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_website_partners_Slug",
+                table: "website_partners",
+                column: "Slug",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_website_redirects_CreatedAt",
                 table: "website_redirects",
                 column: "CreatedAt");
@@ -10333,6 +10422,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                 name: "website_page_revisions");
 
             migrationBuilder.DropTable(
+                name: "website_partner_stats");
+
+            migrationBuilder.DropTable(
                 name: "website_redirects");
 
             migrationBuilder.DropTable(
@@ -10466,6 +10558,9 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
 
             migrationBuilder.DropTable(
                 name: "website_pages");
+
+            migrationBuilder.DropTable(
+                name: "website_partners");
 
             migrationBuilder.DropTable(
                 name: "website_services");

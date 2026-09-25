@@ -30,5 +30,7 @@ export const publicRoutes: RouteObject[] = [
   { path: 'newsletter/confirm', lazy: async () => ({ Component: (await import('./pages/MiscPages')).NewsletterConfirmPage }) },
   { path: 'newsletter/unsubscribe', lazy: async () => ({ Component: (await import('./pages/MiscPages')).NewsletterUnsubscribePage }) },
   { path: 'search', lazy: async () => ({ Component: (await import('./pages/MiscPages')).SearchPage }) },
+  { path: 'partners', lazy: async () => ({ Component: (await import('./partners/PartnerPages')).PartnersPage }) },
+  { path: 'partners/:slug', lazy: async () => ({ Component: (await import('./partners/PartnerPages')).PartnerProfilePage }) },
   { path: ':slug', lazy: async () => ({ Component: (await import('./pages/CmsPage')).CmsPage }) },
 ];

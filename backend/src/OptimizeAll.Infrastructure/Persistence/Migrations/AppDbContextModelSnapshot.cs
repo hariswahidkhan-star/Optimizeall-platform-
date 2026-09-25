@@ -15030,6 +15030,175 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                     b.ToTable("website_inquiries", (string)null);
                 });
 
+            modelBuilder.Entity("OptimizeAll.Domain.Website.WebsitePartner", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("BrandColor")
+                        .HasMaxLength(7)
+                        .HasColumnType("varchar(7)");
+
+                    b.Property<string>("Categories")
+                        .IsRequired()
+                        .HasColumnType("json");
+
+                    b.Property<Guid>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("DescriptionMarkdown")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Highlights")
+                        .IsRequired()
+                        .HasColumnType("json");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Keywords")
+                        .IsRequired()
+                        .HasColumnType("json");
+
+                    b.Property<string>("LogoUrl")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("OfferCode")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)");
+
+                    b.Property<bool>("OfferConfirmed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("OfferExpiresAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("OfferText")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<DateTime?>("OfferUpdatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Offerings")
+                        .IsRequired()
+                        .HasColumnType("json");
+
+                    b.Property<string>("RelatedPartnerIds")
+                        .IsRequired()
+                        .HasColumnType("json");
+
+                    b.Property<string>("RelationshipLabel")
+                        .IsRequired()
+                        .HasMaxLength(160)
+                        .HasColumnType("varchar(160)");
+
+                    b.Property<string>("SameAs")
+                        .IsRequired()
+                        .HasColumnType("json");
+
+                    b.Property<string>("Slots")
+                        .IsRequired()
+                        .HasColumnType("json");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Tagline")
+                        .IsRequired()
+                        .HasMaxLength(160)
+                        .HasColumnType("varchar(160)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasPrecision(6)
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("UtmCampaign")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("UtmMedium")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("UtmSource")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("WebsiteUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.HasIndex("IsActive", "SortOrder");
+
+                    b.ToTable("website_partners", (string)null);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Website.WebsitePartnerStat", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("Clicks")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly>("Day")
+                        .HasColumnType("date");
+
+                    b.Property<int>("Impressions")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PagePath")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<Guid>("PartnerId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Slot")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Day");
+
+                    b.HasIndex("PartnerId", "Slot", "PagePath", "Day")
+                        .IsUnique();
+
+                    b.ToTable("website_partner_stats", (string)null);
+                });
+
             modelBuilder.Entity("OptimizeAll.Domain.Ads.Ad", b =>
                 {
                     b.HasOne("OptimizeAll.Domain.Ads.AdGroup", null)
@@ -17533,6 +17702,58 @@ namespace OptimizeAll.Infrastructure.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("AssignedToUserId")
                         .OnDelete(DeleteBehavior.SetNull);
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Website.WebsitePartner", b =>
+                {
+                    b.OwnsOne("OptimizeAll.Domain.Website.SeoMeta", "Seo", b1 =>
+                        {
+                            b1.Property<Guid>("WebsitePartnerId")
+                                .HasColumnType("char(36)");
+
+                            b1.Property<string>("CanonicalUrl")
+                                .HasMaxLength(500)
+                                .HasColumnType("varchar(500)")
+                                .HasColumnName("SeoCanonicalUrl");
+
+                            b1.Property<string>("Description")
+                                .HasMaxLength(200)
+                                .HasColumnType("varchar(200)")
+                                .HasColumnName("SeoDescription");
+
+                            b1.Property<bool>("NoIndex")
+                                .HasColumnType("tinyint(1)")
+                                .HasColumnName("SeoNoIndex");
+
+                            b1.Property<string>("OgImageUrl")
+                                .HasMaxLength(500)
+                                .HasColumnType("varchar(500)")
+                                .HasColumnName("SeoOgImageUrl");
+
+                            b1.Property<string>("Title")
+                                .HasMaxLength(70)
+                                .HasColumnType("varchar(70)")
+                                .HasColumnName("SeoTitle");
+
+                            b1.HasKey("WebsitePartnerId");
+
+                            b1.ToTable("website_partners");
+
+                            b1.WithOwner()
+                                .HasForeignKey("WebsitePartnerId");
+                        });
+
+                    b.Navigation("Seo")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OptimizeAll.Domain.Website.WebsitePartnerStat", b =>
+                {
+                    b.HasOne("OptimizeAll.Domain.Website.WebsitePartner", null)
+                        .WithMany()
+                        .HasForeignKey("PartnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("OptimizeAll.Domain.Ads.AdExperiment", b =>

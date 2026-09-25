@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Modules.Content.Copy;
 using OptimizeAll.Api.Modules.LandingPages;
 using OptimizeAll.Api.Modules.Website.Careers;
+using OptimizeAll.Api.Modules.Website.Partners;
 using OptimizeAll.Api.Modules.Website.Public;
 using OptimizeAll.Api.Modules.Website.Settings;
 using OptimizeAll.Domain.Common;
@@ -42,7 +43,7 @@ public sealed class NoSeoRedirects : ISeoRedirectLookup
 /// </summary>
 public sealed partial class SeoPageResolver(
     PublicSiteService site, AppDbContext db, SiteCopyService copyService, CareersService careers, LandingPageService landing,
-    ISeoRedirectLookup redirects, TimeProvider clock)
+    ISeoRedirectLookup redirects, PartnerPublicService partners, IEnumerable<ISitemapContributor> sitemapContributors, TimeProvider clock)
 {
     /// <summary>Signed-in areas (portals). Never indexed; disallowed in robots.txt.</summary>
     public static readonly string[] PortalPrefixes = { "/app", "/admin", "/agency", "/client", "/review", "/finance", "/manage" };
@@ -174,6 +175,7 @@ public sealed partial class SeoPageResolver(
                     "contact" or "free-audit" or "get-a-quote" or "book-a-consultation" => await FormPageAsync(path, ct),
                     "creators" => CreatorsPage(),
                     "faq" => await FaqAsync(ct),
+                    "partners" => await PartnersAsync(ct),
                     _ => await CmsPageAsync(segments[0], ct),
                 };
             case 2:
@@ -185,6 +187,7 @@ public sealed partial class SeoPageResolver(
                     "blog" => await PostAsync(segments[1], ct),
                     "careers" => await JobAsync(segments[1], ct),
                     "c" => await CampaignAsync(segments[1], ct),
+                    "partners" => await PartnerAsync(segments[1], ct),
                     _ => null,
                 };
             case 3 when segments[0] == "lp":

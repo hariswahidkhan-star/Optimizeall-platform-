@@ -247,6 +247,22 @@ public sealed class ImpersonationTests(ApiFactory api) : IClassFixture<ApiFactor
             new { fromPath = "/old-campaign-" + Guid.NewGuid().ToString("N")[..6], toPath = "/contact" })).ReadJsonAsync();
         await (await Impersonating.SendAsync(admin, HttpMethod.Delete, $"/api/v1/agency/website/redirects/{redirect.GetProperty("id").GetGuid()}", token))
             .ShouldFailAsync(403, "auth.impersonation_forbidden_action");
+
+        // Partners decide which sponsored links and ads every visitor sees: readable, but not changeable while impersonated.
+        var partners = await (await Impersonating.SendAsync(admin, HttpMethod.Get, "/api/v1/agency/website/partners", token)).ReadJsonAsync();
+        var partner = partners.EnumerateArray().First();
+        var partnerId = partner.GetProperty("id").GetGuid();
+        await (await Impersonating.SendAsync(admin, HttpMethod.Post, "/api/v1/agency/website/partners", token,
+            new { slug = "impersonated-partner", name = "Impersonated", logoUrl = "/partners/pci-ai.png", tagline = "Nope" }))
+            .ShouldFailAsync(403, "auth.impersonation_forbidden_action");
+        await (await Impersonating.SendAsync(admin, HttpMethod.Put, $"/api/v1/agency/website/partners/{partnerId}", token,
+            new { slug = partner.GetProperty("slug").GetString(), name = "Renamed", logoUrl = partner.GetProperty("logoUrl").GetString(),
+                tagline = "Changed", concurrencyStamp = partner.GetProperty("concurrencyStamp").GetGuid() }))
+            .ShouldFailAsync(403, "auth.impersonation_forbidden_action");
+        await (await Impersonating.SendAsync(admin, HttpMethod.Delete, $"/api/v1/agency/website/partners/{partnerId}", token))
+            .ShouldFailAsync(403, "auth.impersonation_forbidden_action");
+        await (await Impersonating.SendAsync(admin, HttpMethod.Post, "/api/v1/agency/website/partners/reorder", token, new { ids = new[] { partnerId } }))
+            .ShouldFailAsync(403, "auth.impersonation_forbidden_action");
     }
 
     [Fact]

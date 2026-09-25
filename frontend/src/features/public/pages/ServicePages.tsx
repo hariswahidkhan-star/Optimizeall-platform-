@@ -10,6 +10,7 @@ import { headFromSeo, useDocumentHead } from '../site/head';
 import { RedirectIfMoved } from '../site/redirects';
 import { SiteIcon } from '../site/icons';
 import { Markdown } from '../site/Markdown';
+import { PartnerSlot } from '../partners/PartnerSlot';
 
 /** /services — every service line, filterable by category. */
 export function ServicesPage() {
@@ -140,6 +141,10 @@ export function ServiceDetailPage() {
               </div>
             </div>
           )}
+
+          <div className="container site-narrow">
+            <PartnerSlot slot="service.detail" keywords={[s.name, s.categoryName, ...s.tools]} categories={[s.slug, s.categorySlug]} />
+          </div>
 
           {s.problemsSolved.length > 0 && (
             <Section title={copy.text('services.detail.problemsTitle')} tone="muted">

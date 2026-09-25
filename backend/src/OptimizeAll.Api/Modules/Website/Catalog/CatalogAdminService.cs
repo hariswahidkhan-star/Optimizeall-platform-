@@ -764,7 +764,7 @@ public sealed class CatalogAdminService(
     {
         // public website
         "services", "industries", "case-studies", "team", "careers", "blog", "free-audit", "get-a-quote",
-        "book-a-consultation", "newsletter", "search", "faq", "creators", "design-system",
+        "book-a-consultation", "newsletter", "search", "faq", "creators", "design-system", "partners",
         // sign-in and account emails
         "login", "register", "check-email", "verify-email", "forgot-password", "reset-password", "auth",
         // portals and the API

@@ -20,7 +20,8 @@ namespace OptimizeAll.Api.Modules.Website.Public;
 /// Anonymous read model of the agency website. Only published content is ever returned: unpublished services (or services
 /// in an unpublished category), industries, case studies, testimonials, team members and pages answer 404 / are left out.
 /// </summary>
-public sealed class PublicSiteService(AppDbContext db, SiteSettingsService settingsService, IOptions<EmailOptions> email, TimeProvider clock)
+public sealed class PublicSiteService(
+    AppDbContext db, SiteSettingsService settingsService, IOptions<EmailOptions> email, TimeProvider clock)
 {
     private SiteSettings? _settings;
     private Catalog? _catalog;

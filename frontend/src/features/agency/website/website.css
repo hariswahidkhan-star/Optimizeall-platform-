@@ -269,3 +269,9 @@
   list-style: none;
   font-size: var(--text-small);
 }
+
+/* Partners editor: vertical stack of fields. */
+.cms-stack {
+  display: grid;
+  gap: var(--space-4);
+}

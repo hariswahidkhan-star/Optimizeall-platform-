@@ -2,6 +2,8 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Modules.LandingPages;
 using OptimizeAll.Api.Modules.Website.Pages;
+using OptimizeAll.Api.Modules.Website.Partners;
+using OptimizeAll.Api.Modules.Website.Public;
 using OptimizeAll.Domain.Agency;
 using OptimizeAll.Domain.Campaigns;
 using OptimizeAll.Domain.LandingPages;
@@ -20,9 +22,14 @@ public sealed partial class SeoPageResolver
     public const string GroupBlog = "blog";
     public const string GroupCareers = "careers";
     public const string GroupLanding = "landing-pages";
+    /// <summary>Partner pages (/partners and profiles), contributed by <see cref="PartnerSitemapContributor"/>.</summary>
+    public const string GroupPartners = PartnerSitemapContributor.GroupName;
 
-    /// <summary>The content sitemaps, in index order (images and videos are derived from these URLs' media).</summary>
-    public static readonly string[] UrlGroups = { GroupPages, GroupServices, GroupCaseStudies, GroupBlog, GroupCareers, GroupLanding };
+    /// <summary>
+    /// The content sitemaps, in index order (images and videos are derived from these URLs' media). Groups of
+    /// <see cref="ISitemapContributor"/>s must be listed here.
+    /// </summary>
+    public static readonly string[] UrlGroups = { GroupPages, GroupServices, GroupCaseStudies, GroupBlog, GroupCareers, GroupLanding, GroupPartners };
 
     private static readonly IReadOnlyList<SeoImage> NoImages = Array.Empty<SeoImage>();
     private static readonly IReadOnlyList<SeoVideo> NoVideos = Array.Empty<SeoVideo>();
@@ -114,6 +121,10 @@ public sealed partial class SeoPageResolver
             Add($"/careers/{j.Slug}", j.UpdatedAt, GroupCareers, j.Title);
 
         await AddLandingPagesAsync(urls, ct);
+        foreach (var contributor in sitemapContributors)
+            foreach (var u in await contributor.UrlsAsync(ct))
+                if (urls.All(x => x.Path != u.Path))
+                    Add(u.Path, u.Modified, contributor.Group, u.Title, u.ImageUrl is null ? null : Img((u.ImageUrl, u.Title)));
         return urls.Select(u => u with { Images = u.Images.DistinctBy(i => i.Url).ToList() }).ToList();
     }
 

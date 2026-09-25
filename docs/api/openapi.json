@@ -39805,6 +39805,235 @@
         }
       }
     },
+    "/api/v1/public/partners": {
+      "get": {
+        "tags": [
+          "PublicPartners"
+        ],
+        "summary": "Active partners (partners page, home strip, footer line), link rules for partner links in content, SEO and JSON-LD.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Partners.PublicPartnersDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Partners.PublicPartnersDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Partners.PublicPartnersDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/public/partners/placement": {
+      "get": {
+        "tags": [
+          "PublicPartners"
+        ],
+        "summary": "The ad unit for a slot: the best-matching partner for the page's keywords/categories, or null.",
+        "parameters": [
+          {
+            "name": "Slot",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "maxLength": 40,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Keywords",
+            "in": "query",
+            "description": "Page keywords (blog tags, service name, course topics). Comma-separated or repeated.",
+            "schema": {
+              "maxItems": 30,
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "Categories",
+            "in": "query",
+            "description": "Page categories (blog category slugs, service slug, course category).",
+            "schema": {
+              "maxItems": 30,
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "Path",
+            "in": "query",
+            "description": "The page path (rotation key).",
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Partners.PartnerPlacementDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Partners.PartnerPlacementDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Partners.PartnerPlacementDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/public/partners/{slug}": {
+      "get": {
+        "tags": [
+          "PublicPartners"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Partners.PublicPartnerDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Partners.PublicPartnerDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Partners.PublicPartnerDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/public/partners/impressions": {
+      "post": {
+        "tags": [
+          "PublicPartners"
+        ],
+        "summary": "Counts impressions (batched by the web app; bots are ignored). Always 202.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Website.Partners.PartnerImpressionsInput"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Website.Partners.PartnerImpressionsInput"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Website.Partners.PartnerImpressionsInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Partners.PartnerImpressionsResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Partners.PartnerImpressionsResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Partners.PartnerImpressionsResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/public/partners/{slug}/visit": {
+      "get": {
+        "tags": [
+          "PublicPartners"
+        ],
+        "summary": "Counts a click and redirects (302) to the partner's website with its UTM tags. The destination always comes from\r\nthe partner record, never from the request, so this cannot be used as an open redirect. 404 when the partner is\r\ninactive or has no website. robots.txt disallows /api, and links to it carry rel=\"sponsored\".",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "slot",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "path",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v1/public/proposals/{token}": {
       "get": {
         "tags": [
@@ -57147,6 +57376,392 @@
             "schema": {
               "type": "integer",
               "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/agency/website/partners": {
+      "get": {
+        "tags": [
+          "WebsitePartners"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Website.Partners.PartnerDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Website.Partners.PartnerDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Website.Partners.PartnerDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "WebsitePartners"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Website.Partners.PartnerInput"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Website.Partners.PartnerInput"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Website.Partners.PartnerInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/agency/website/partners/slots": {
+      "get": {
+        "tags": [
+          "WebsitePartners"
+        ],
+        "summary": "The placement slots of the public site (what each partner can be switched on for).",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Website.Partners.PartnerSlotDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Website.Partners.PartnerSlotDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Website.Partners.PartnerSlotDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agency/website/partners/{id}": {
+      "get": {
+        "tags": [
+          "WebsitePartners"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Partners.PartnerDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Partners.PartnerDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Partners.PartnerDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "WebsitePartners"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Website.Partners.PartnerInput"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Website.Partners.PartnerInput"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Website.Partners.PartnerInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Partners.PartnerDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Partners.PartnerDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Partners.PartnerDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "WebsitePartners"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/agency/website/partners/reorder": {
+      "post": {
+        "tags": [
+          "WebsitePartners"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Website.Shared.ReorderInput"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Website.Shared.ReorderInput"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Website.Shared.ReorderInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Shared.ReorderResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Shared.ReorderResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Shared.ReorderResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agency/website/partners/report": {
+      "get": {
+        "tags": [
+          "WebsitePartners"
+        ],
+        "summary": "Impressions, clicks and click-through rate by partner, slot, page and day (UTC days, default the last 30).",
+        "parameters": [
+          {
+            "name": "From",
+            "in": "query",
+            "description": "First day (UTC, inclusive). Default: 30 days before OptimizeAll.Api.Modules.Website.Partners.PartnerReportQuery.To.",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "To",
+            "in": "query",
+            "description": "Last day (UTC, inclusive). Default: today.",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "PartnerId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Slot",
+            "in": "query",
+            "schema": {
+              "maxLength": 40,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Partners.PartnerReportDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Partners.PartnerReportDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website.Partners.PartnerReportDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agency/website/partners/report.csv": {
+      "get": {
+        "tags": [
+          "WebsitePartners"
+        ],
+        "parameters": [
+          {
+            "name": "From",
+            "in": "query",
+            "description": "First day (UTC, inclusive). Default: 30 days before OptimizeAll.Api.Modules.Website.Partners.PartnerReportQuery.To.",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "To",
+            "in": "query",
+            "description": "Last day (UTC, inclusive). Default: today.",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "PartnerId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Slot",
+            "in": "query",
+            "schema": {
+              "maxLength": 40,
+              "type": "string"
             }
           }
         ],
@@ -83770,6 +84385,14 @@
         ],
         "type": "string"
       },
+      "OptimizeAll.Domain.Website.PartnerSlotKind": {
+        "enum": [
+          "List",
+          "Unit",
+          "Page"
+        ],
+        "type": "string"
+      },
       "OptimizeAll.Domain.Website.ProcessStep": {
         "type": "object",
         "properties": {
@@ -102878,6 +103501,790 @@
             "type": "string"
           },
           "data": {}
+        },
+        "additionalProperties": false
+      },
+      "Website.Partners.PartnerDayDto": {
+        "type": "object",
+        "properties": {
+          "day": {
+            "type": "string",
+            "format": "date"
+          },
+          "impressions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "clicks": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Website.Partners.PartnerDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "logoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "websiteUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "tagline": {
+            "type": "string",
+            "nullable": true
+          },
+          "descriptionMarkdown": {
+            "type": "string",
+            "nullable": true
+          },
+          "relationshipLabel": {
+            "type": "string",
+            "nullable": true
+          },
+          "highlights": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "offerings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Website.Partners.PartnerOfferingDto"
+            },
+            "nullable": true
+          },
+          "keywords": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "sameAs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "relatedPartnerIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "nullable": true
+          },
+          "slots": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "brandColor": {
+            "type": "string",
+            "nullable": true
+          },
+          "utmSource": {
+            "type": "string",
+            "nullable": true
+          },
+          "utmMedium": {
+            "type": "string",
+            "nullable": true
+          },
+          "utmCampaign": {
+            "type": "string",
+            "nullable": true
+          },
+          "offerText": {
+            "type": "string",
+            "nullable": true
+          },
+          "offerCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "offerExpiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "offerConfirmed": {
+            "type": "boolean"
+          },
+          "offerUpdatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "offerVisible": {
+            "type": "boolean"
+          },
+          "offerVisibleUntil": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "seo": {
+            "$ref": "#/components/schemas/Website.Shared.SeoDto"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "sortOrder": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "publicPath": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Website.Partners.PartnerImpressionInput": {
+        "required": [
+          "partner",
+          "path",
+          "slot"
+        ],
+        "type": "object",
+        "properties": {
+          "partner": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "slot": {
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string"
+          },
+          "path": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Website.Partners.PartnerImpressionsInput": {
+        "required": [
+          "items"
+        ],
+        "type": "object",
+        "properties": {
+          "items": {
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Website.Partners.PartnerImpressionInput"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "Website.Partners.PartnerImpressionsResult": {
+        "type": "object",
+        "properties": {
+          "accepted": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Website.Partners.PartnerInput": {
+        "required": [
+          "logoUrl",
+          "name",
+          "slug",
+          "tagline"
+        ],
+        "type": "object",
+        "properties": {
+          "slug": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "logoUrl": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          },
+          "websiteUrl": {
+            "maxLength": 500,
+            "type": "string",
+            "description": "Optional until known: while empty, every link and call to action to the partner is hidden.",
+            "nullable": true
+          },
+          "tagline": {
+            "maxLength": 160,
+            "minLength": 1,
+            "type": "string"
+          },
+          "descriptionMarkdown": {
+            "maxLength": 20000,
+            "type": "string",
+            "nullable": true
+          },
+          "relationshipLabel": {
+            "maxLength": 160,
+            "type": "string",
+            "description": "\"{Partner}\" is replaced by the partner's name. Defaults to OptimizeAll.Api.Modules.Website.Partners.PartnerRules.DefaultRelationship.",
+            "nullable": true
+          },
+          "highlights": {
+            "maxItems": 12,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "offerings": {
+            "maxItems": 16,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Website.Partners.PartnerOfferingInput"
+            },
+            "nullable": true
+          },
+          "keywords": {
+            "maxItems": 40,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "categories": {
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "sameAs": {
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "relatedPartnerIds": {
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "nullable": true
+          },
+          "slots": {
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "brandColor": {
+            "maxLength": 7,
+            "type": "string",
+            "nullable": true
+          },
+          "utmSource": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "utmMedium": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "utmCampaign": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "offerText": {
+            "maxLength": 200,
+            "type": "string",
+            "nullable": true
+          },
+          "offerCode": {
+            "maxLength": 40,
+            "type": "string",
+            "nullable": true
+          },
+          "offerExpiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "offerConfirmed": {
+            "type": "boolean",
+            "description": "Tick after checking the offer is still valid: offers are never shown unconfirmed."
+          },
+          "seo": {
+            "$ref": "#/components/schemas/Website.Shared.SeoInput"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "sortOrder": {
+            "maximum": 100000,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Website.Partners.PartnerLinkRuleDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "host": {
+            "type": "string",
+            "nullable": true
+          },
+          "utmSource": {
+            "type": "string",
+            "nullable": true
+          },
+          "utmMedium": {
+            "type": "string",
+            "nullable": true
+          },
+          "utmCampaign": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Website.Partners.PartnerMetricDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true
+          },
+          "label": {
+            "type": "string",
+            "nullable": true
+          },
+          "impressions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "clicks": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "clickThroughRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Website.Partners.PartnerOfferingDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "summary": {
+            "type": "string",
+            "nullable": true
+          },
+          "facts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "anchor": {
+            "type": "string",
+            "nullable": true
+          },
+          "link": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Website.Partners.PartnerOfferingInput": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "maxLength": 120,
+            "type": "string",
+            "nullable": true
+          },
+          "summary": {
+            "maxLength": 600,
+            "type": "string",
+            "nullable": true
+          },
+          "facts": {
+            "maxItems": 12,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "anchor": {
+            "maxLength": 60,
+            "type": "string",
+            "description": "Section id on the profile page (lower-case slug). Default: none.",
+            "nullable": true
+          },
+          "link": {
+            "maxLength": 300,
+            "type": "string",
+            "description": "A site path the item links to, e.g. /partners/pci-ai#pcl-ai.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Website.Partners.PartnerPlacementDto": {
+        "type": "object",
+        "properties": {
+          "slot": {
+            "type": "string",
+            "nullable": true
+          },
+          "partner": {
+            "$ref": "#/components/schemas/Website.Partners.PublicPartnerCardDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Website.Partners.PartnerReportDto": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "string",
+            "format": "date"
+          },
+          "to": {
+            "type": "string",
+            "format": "date"
+          },
+          "impressions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "clicks": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "clickThroughRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "byPartner": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Website.Partners.PartnerMetricDto"
+            },
+            "nullable": true
+          },
+          "bySlot": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Website.Partners.PartnerMetricDto"
+            },
+            "nullable": true
+          },
+          "byPage": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Website.Partners.PartnerMetricDto"
+            },
+            "nullable": true
+          },
+          "daily": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Website.Partners.PartnerDayDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Website.Partners.PartnerSlotDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "kind": {
+            "$ref": "#/components/schemas/OptimizeAll.Domain.Website.PartnerSlotKind"
+          },
+          "label": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Website.Partners.PublicPartnerCardDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "logoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "tagline": {
+            "type": "string",
+            "nullable": true
+          },
+          "relationshipLabel": {
+            "type": "string",
+            "nullable": true
+          },
+          "brandColor": {
+            "type": "string",
+            "nullable": true
+          },
+          "websiteHost": {
+            "type": "string",
+            "nullable": true
+          },
+          "visitUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "profilePath": {
+            "type": "string",
+            "nullable": true
+          },
+          "slots": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "offer": {
+            "$ref": "#/components/schemas/Website.Partners.PublicPartnerOfferDto"
+          }
+        },
+        "additionalProperties": false,
+        "description": "A partner as a card, strip logo or ad unit. OptimizeAll.Api.Modules.Website.Partners.PublicPartnerCardDto.VisitUrl (the click counter, which redirects to the partner's site\r\nwith UTM tags) and OptimizeAll.Api.Modules.Website.Partners.PublicPartnerCardDto.WebsiteHost are null while the partner has no website: every outbound link is then hidden.\r\nOutbound links must be rendered with `rel=\"sponsored noopener\"` and `target=\"_blank\"`."
+      },
+      "Website.Partners.PublicPartnerDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "logoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "tagline": {
+            "type": "string",
+            "nullable": true
+          },
+          "relationshipLabel": {
+            "type": "string",
+            "nullable": true
+          },
+          "brandColor": {
+            "type": "string",
+            "nullable": true
+          },
+          "websiteHost": {
+            "type": "string",
+            "nullable": true
+          },
+          "visitUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "descriptionMarkdown": {
+            "type": "string",
+            "nullable": true
+          },
+          "highlights": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "offerings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Website.Partners.PartnerOfferingDto"
+            },
+            "nullable": true
+          },
+          "keywords": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "offer": {
+            "$ref": "#/components/schemas/Website.Partners.PublicPartnerOfferDto"
+          },
+          "related": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Website.Partners.PublicPartnerCardDto"
+            },
+            "nullable": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "seo": {
+            "$ref": "#/components/schemas/Website.Public.PublicSeoDto"
+          },
+          "jsonLd": {
+            "type": "array",
+            "items": {},
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Website.Partners.PublicPartnerOfferDto": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "A currently valid offer of a partner (only confirmed, unexpired offers are ever returned)."
+      },
+      "Website.Partners.PublicPartnersDto": {
+        "type": "object",
+        "properties": {
+          "partners": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Website.Partners.PublicPartnerCardDto"
+            },
+            "nullable": true
+          },
+          "linkRules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Website.Partners.PartnerLinkRuleDto"
+            },
+            "nullable": true
+          },
+          "seo": {
+            "$ref": "#/components/schemas/Website.Public.PublicSeoDto"
+          },
+          "jsonLd": {
+            "type": "array",
+            "items": {},
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },

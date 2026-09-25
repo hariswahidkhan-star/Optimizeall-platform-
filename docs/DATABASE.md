@@ -525,6 +525,8 @@ Growth classes: **high-volume** (append-only or one row per event/recipient/day;
 | `website_newsletter_subscribers` | per-client / business | |
 | `website_page_revisions` | per-client / business | |
 | `website_pages` | static / config | |
+| `website_partner_stats` | high-volume | daily partner impression/click counters; unique (`PartnerId`, `Slot`, `PagePath`, `Day`), no visitor data |
+| `website_partners` | static / config | partners and their placement slots, UTM tags and offers; unique `Slug` |
 | `website_redirects` | static / config | 301 redirects of old public addresses (automatic on slug renames, manual); unique `FromPath` |
 | `website_service_categories` | static / config | |
 | `website_service_packages` | static / config | |

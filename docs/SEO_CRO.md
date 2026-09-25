@@ -179,7 +179,45 @@ briefs, published landing pages with forms and submissions, and an A/B test. Dem
 The baseline seeder (order 300/310) loads audit rules, citation directories, 6 landing-page templates and 4 form
 templates in every environment.
 
-## 8. Known limitations
+## 8. Partner links and Google's link-spam policy
+
+Optimize All is the official marketing partner of PCI AI and Certuvo and promotes them on its own site
+([WEBSITE.md](WEBSITE.md#partners-and-sponsored-placements)). Google's spam policies treat links that are paid for or
+part of a partnership as *link schemes* unless they are qualified, so the site follows these rules:
+
+* **Every outbound partner link is `rel="sponsored noopener"` and opens in a new tab** — ad units, strip and card
+  buttons, profile calls to action (`SponsoredLink`), and links to a partner's website written into blog posts, CMS
+  pages or course content (the Markdown renderer applies `PartnerLinkPolicy` automatically). Outbound partner links go
+  through `/api/v1/public/partners/{slug}/visit` (disallowed in robots.txt, `X-Robots-Tag: noindex, nofollow`), which
+  redirects to the partner with UTM tags. The one rule lives in `Domain/Website/PartnerLinkPolicy.cs` and its mirror
+  `frontend/src/features/public/partners/partnerLinks.ts` (same test cases); **any server-side renderer of public HTML
+  (prerendering) must pass every outbound `href` through `PartnerLinkPolicy.Apply`** and emit the returned `rel`/`target`.
+  The server-rendered pages (§ 9, `/_document{path}`) do: `SeoPartnerLinks` rewrites every anchor of the rendered body
+  (content, Markdown and site chrome) to a partner's website or the click counter with the UTM tags,
+  `rel="sponsored noopener"` and `target="_blank"`. `/partners` and `/partners/{slug}` are server-rendered too (same
+  title, description, canonical and JSON-LD as the app), listed in the `partners` child sitemap
+  (`/sitemaps/partners.xml`, via `ISitemapContributor`), in llms.txt (*Partners*) and in the admin SEO overview.
+* **Every ad unit is visibly labelled "Sponsored"**, and every partner page states the relationship in visible text
+  ("Optimize All is the official marketing partner of …", plus a disclosure that the partner is an independent platform
+  and that links to it are sponsored). No hidden text, no keyword lists in markup, no unlabelled paid links; keywords
+  are used for targeting and appear only as the `knowsAbout` topics of the partner's structured data.
+* **How the partnership helps the partners' visibility, legitimately:** indexable, content-rich profile pages on our
+  domain (`/partners/{slug}`) with the brand name in the title, H1 and copy, real descriptions of what they offer
+  (from their own sites), internal links to them from every footer, the home strip and the partners page, good
+  titles/descriptions and the partner logo as Open Graph image, and inclusion in the sitemap. Internal links to our own
+  profile pages are ordinary links; only links to the partners' sites are sponsored.
+* **Structured data** (validated by `WebsitePartnersTests`): the profile page carries the partner as an `Organization`
+  (`name`, `url`, `logo`, `image`, `description`, `slogan`, `sameAs`, `knowsAbout`), a `WebPage` whose `about` is that
+  organization and whose `publisher` is Optimize All, and a `BreadcrumbList`; the partners page is a `CollectionPage`
+  whose `mentions` are the partner organizations and whose `mainEntity` is an `ItemList` of the profiles. schema.org has
+  no "partner" property: `member`/`memberOf` claim membership, `sponsor`/`funder` claim sponsorship or funding, and
+  `parentOrganization`/`subOrganization` claim ownership — none is true of a marketing partnership, so Optimize All's own
+  `Organization` object is deliberately unchanged and the relationship is expressed in visible text plus
+  `about`/`mentions`.
+* Do not buy or exchange links on the partners' sites for PageRank either: links from their sites to ours should carry
+  `rel="sponsored"` too if they are part of the agreement.
+
+## 9. Known limitations
 
 * Registrable-domain detection uses a compact public-suffix list (common multi-part suffixes such as `co.uk`,
   `com.au`, `com.pk`), not the full PSL.
