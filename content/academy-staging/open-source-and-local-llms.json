@@ -6,7 +6,7 @@
   "subtitle": "Licenses, model families, quantization, VRAM sizing, Ollama, llama.cpp, vLLM, edge AI, privacy and hybrid routing",
   "category": "ai",
   "level": "advanced",
-  "estimatedMinutes": 402,
+  "estimatedMinutes": 419,
   "description": "Open-weight models now handle a large share of real business work on hardware you control. This advanced, hands-on course teaches you to choose, run and deploy them responsibly. You will read licenses the way legal will (Apache-2.0, MIT, the Llama community license), shortlist current model families on evidence, and understand quantization formats such as GGUF, AWQ, GPTQ, FP8 and MXFP4. You will size memory with a real formula for weights and KV cache, choose hardware on 24-month cost, and run models with Ollama, llama.cpp and LM Studio, including structured output and tool calling. You will serve at scale with vLLM, compare engines like SGLang fairly, put small models on devices, secure the model supply chain, respect data residency, and benchmark honestly. Finally you will build a hybrid router and a private, cited, permission-aware RAG assistant with an evaluation report.",
   "outcomes": [
     "Explain open-weight vs closed models and triage licenses per release",
@@ -113,7 +113,7 @@
           ],
           "activity": "List three AI workloads in your organization. For each, answer the four decision questions and mark it local, API or hybrid. Keep this list; you will revisit it in Module 6.",
           "lecture": {
-            "targetMinutes": 8,
+            "targetMinutes": 9,
             "scenes": [
               {
                 "narration": "Imagine your company's most sensitive document. A contract, a patient file, a payroll sheet. Now imagine asking an AI to summarize it, and knowing for certain that not a single word ever leaves the room. That is the promise of open-weight models. In this course you will learn to choose them, run them, size the hardware, serve them at scale and build a private assistant. Let's start by getting the words right, because the words drive the decisions.",
@@ -180,6 +180,12 @@
                 "onScreen": "Try this now\n• Pick one task from this week\n• Answer the four questions\n• Yes to data + capability → first local candidate",
                 "visual": "A note-taking card animates open. Four checkbox lines appear one per second. Two of them tick green and a highlighted banner slides up reading \"first local candidate\".",
                 "seconds": 42
+              },
+              {
+                "narration": "Watch me do it. I will take one real workload and run the four questions live. The workload: summarizing supplier contracts for a procurement team in Karachi. First, data. I open a sample contract and highlight what is sensitive: bank details, pricing, a named contact. Verdict: it should stay inside. Second, quality. I pull ten redacted contracts, run them through a local eight billion model and a cloud model, and score each summary against a three-point checklist: parties, value, renewal date. The local model gets nine of ten fully right, the cloud model ten. Third, volume: about sixty contracts a day, steady. Fourth, capability: the IT team already runs a Linux server. I write the decision in one line on the note: local, with a human check on renewal dates, revisit in three months. That took me about forty minutes, and now the decision has evidence behind it instead of opinions.",
+                "onScreen": "Watch me do it\n1 Mark sensitive fields\n2 Score 10 contracts, local vs cloud\n3 Check volume + capability\n4 Write a one-line decision",
+                "visual": "Screen recording: a contract PDF with three fields highlighted in yellow; then a spreadsheet with ten rows and two score columns filling in (local 9/10, cloud 10/10); finally a note app where a one-line decision is typed.",
+                "seconds": 66
               },
               {
                 "narration": "Quick recap. Most open models are open-weight, not fully open source. They give you control, stability, customization and offline use, in exchange for some peak capability and a lot of operational responsibility. Decide with four questions: data, quality, volume, capability. Your next step: list three AI workloads in your organization and label each one local, API or hybrid. We will come back to that list at the end of the course.",
@@ -265,7 +271,7 @@
           ],
           "activity": "Create a model register entry (use the YAML template) for one open-weight model you are considering. Link the license text and list any attribution, naming or geographic terms.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Picture this. Your team spends six weeks building on the model that topped your benchmark. Launch review arrives, legal reads the license, and the answer is no. Six weeks gone. It happens more than you would think. In this lesson you will learn to read model licenses like a practitioner, know which families use which terms right now, and keep a simple register so this never catches you out. One note first: this is practical guidance, not legal advice.",
@@ -332,6 +338,12 @@
                 "onScreen": "Try this now\n• Open one model card\n• Find: license, usage policy, attribution/naming\n• Fill the YAML register\n• Can't find it in 5 minutes? Flag it",
                 "visual": "Browser-style frame showing a generic model card; three highlight boxes animate over license, policy and attribution sections, then the values fly into a YAML file on the right.",
                 "seconds": 33
+              },
+              {
+                "narration": "Watch me do it. I will fill in a register entry for a model from scratch. I open the model's page and scroll to the license section. It says Apache 2.0, so I type that in. Next I search the page for the words usage policy and find a link to the publisher's policy; I paste the link into additional policies. Then I check for attribution rules: Apache asks me to keep the license and notice files if I redistribute, so I note that. Naming rules: none. Geographic restrictions: I search for European Union and region, and find nothing, so I write none found, re-check on upgrade. Finally, I note how we will use it: internal only, a quantized copy built from the official weights. I add the reviewer and a review date six months out. Seven fields, eight minutes, and the next person who asks can we use this gets an answer immediately.",
+                "onScreen": "Watch me do it\n1 Find the license\n2 Search for a usage policy\n3 Attribution + naming rules\n4 Geographic limits\n5 Use, reviewer, review date",
+                "visual": "Split screen: left, a generic model card scrolling with search highlights on \"license\" and \"policy\"; right, the YAML register file with fields filling in one by one; a timer in the corner reads 8 minutes.",
+                "seconds": 67
               },
               {
                 "narration": "To recap. Check licenses before benchmarks. Apache and MIT are permissive but still carry notices and sometimes usage policies. Llama's community license adds a user threshold, branding and naming rules, and an acceptable use policy with an EU limit on multimodal models. Licenses belong to releases, and quantized copies inherit them. Your next step: fill in a register entry for one model you are considering, and link the license text itself.",
@@ -421,7 +433,7 @@
           ],
           "activity": "Write 30 real tasks from your work into tasks.jsonl, run the harness against two local models, and record pass rate and median latency in a shortlist table.",
           "lecture": {
-            "targetMinutes": 8,
+            "targetMinutes": 9,
             "scenes": [
               {
                 "narration": "Every week a new open model claims the top spot somewhere. If you chase leaderboards you will never ship. So in this lesson you will learn the handful of dimensions that decide whether a model fits your job, get a snapshot of the major families as of September twenty twenty-six, and walk away with a four-step shortlist method and a tiny evaluation harness you can run today.",
@@ -494,6 +506,12 @@
                 "onScreen": "Try this now\n• Write 5 hard constraints\n• List 3 candidates of different sizes\n• Notice how many drop out early",
                 "visual": "A funnel graphic; five constraint labels appear on its rim one by one, and a crowd of model dots enters the top, with only three dots exiting the bottom.",
                 "seconds": 27
+              },
+              {
+                "narration": "Watch me do it. My task: classify customer reviews for an e-commerce seller into five topics, in English and Arabic. Constraints first: permissive license, Arabic support, a sixteen gigabyte GPU. I pull three candidates of different sizes with Ollama, a small, a mid-size and a larger quantized model. I open my tasks file: forty reviews, each with the expected topic. I run the harness from the lesson against all three. The output prints pass rates and median latency. The small model gets thirty-one of forty, the mid-size thirty-seven, the larger thirty-eight but twice as slow. I read the three failures of the mid-size model: two are genuinely ambiguous reviews, one is a sarcastic Arabic comment. I decide on the mid-size model, add the sarcastic case to the tasks file for future comparisons, and write the result into a small table with license, pass rate and latency.",
+                "onScreen": "Watch me do it\n1 Constraints first\n2 Pull 3 sizes\n3 Run 40 tasks\n4 Read the failures\n5 Pick the smallest that passes",
+                "visual": "Terminal recording: three ollama pull commands, then the harness printing three result lines (31/40, 37/40, 38/40 with latencies); a failures view highlights one Arabic review; a results table is saved.",
+                "seconds": 63
               },
               {
                 "narration": "Recap. Pick models on dimensions, not headlines. Remember that mixture-of-experts models need memory for all their parameters but compute with a few. Know the major families, and verify every model card. Shortlist three to five, evaluate on your own tasks at deployment precision, and choose the smallest that passes. Your next step: write thirty real tasks from your job and run the harness on two local models.",
@@ -594,7 +612,7 @@
           ],
           "activity": "Download two quantization levels (for example Q4_K_M and Q8_0) of the same model, run 20 of your tasks on each, and record size, speed and score.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Here is a party trick that is actually an engineering superpower. Take a model file that weighs sixteen gigabytes and shrink it to about five, then watch it run faster, while answering almost as well. That is quantization. In this lesson you will learn what it really does, decode the alphabet soup of GGUF, AWQ, GPTQ, FP8 and MXFP4, and pick the right level for your hardware with evidence rather than guesswork.",
@@ -661,6 +679,12 @@
                 "onScreen": "Try this now\n• Check which quant you are running\n• Download one level higher\n• Same 5 prompts on both\n• Can you tell the difference?",
                 "visual": "Terminal panel showing an ollama show output with the quantization line highlighted, followed by a two-column comparison card for five prompts with tick marks.",
                 "seconds": 32
+              },
+              {
+                "narration": "Watch me do it. I have one model in two quantizations, Q four K M and Q eight zero, both downloaded as GGUF files. First I check sizes on disk: roughly five gigabytes versus eight and a half. Then I run llama bench on both with the same settings, and write down prompt processing and generation speed. The four-bit version generates noticeably faster on my laptop. Now quality. I run the same twenty prompts from my own work through both, at temperature zero, and paste the outputs side by side in a sheet. I score each pair: same quality, four-bit worse, or four-bit better. Result: seventeen the same, two slightly worse, one oddly better. The two worse ones are long numeric tables, where small errors crept in. So my decision: Q four K M for everyday drafting, Q eight zero for the table-heavy report workflow. Size, speed and task quality, all measured in under an hour.",
+                "onScreen": "Watch me do it\n1 Compare file sizes\n2 llama-bench speeds\n3 Same 20 prompts, side by side\n4 Score pairs\n5 Choose per workflow",
+                "visual": "Terminal shows ls with two file sizes, then llama-bench output with pp and tg columns for both files; a spreadsheet with 20 paired outputs gets colored tags: same, worse, better.",
+                "seconds": 68
               },
               {
                 "narration": "Recap. Quantization stores weights in fewer bits, so models get smaller and usually faster, with a small precision cost. GGUF is for local runtimes; AWQ, GPTQ and FP8 are for GPU servers; MXFP4 is how gpt-oss ships. Q four K M is a sensible default, but a table of size, speed and task score is what makes the decision. Your next step: run two quant levels of one model on twenty of your tasks and fill in that table.",
@@ -762,7 +786,7 @@
           ],
           "activity": "Fetch a model's config.json, run the sizing calculator for solo, team and peak scenarios, then compare with your runtime's reported memory.",
           "lecture": {
-            "targetMinutes": 8,
+            "targetMinutes": 9,
             "scenes": [
               {
                 "narration": "A client once asked me to approve a purchase order for a GPU server. I asked one question: how many users, at what context length? Nobody knew. Ten minutes with a calculator showed the card they wanted could serve about a third of their team at the context they needed. In this lesson you will learn that ten-minute calculation: how much memory a model needs, how much context you can offer, how many users fit on one card, and roughly how fast it will talk.",
@@ -829,6 +853,12 @@
                 "onScreen": "Try this now\n• Find layers, KV heads, head_dim\n• 2 × L × H × D × 2 bytes = KV/token\n• × your context length\n• Compare with weights",
                 "visual": "A config.json snippet with three fields highlighted in sequence; the numbers fly into the formula line and a result appears next to a weights bar for comparison.",
                 "seconds": 34
+              },
+              {
+                "narration": "Watch me do it. I open the config file of a fourteen billion parameter model. I find forty-eight hidden layers, eight key-value heads and a head dimension of one twenty-eight. Weights first: at Q four K M, about fourteen billion times four point eight bits, divided by eight, which is about eight point four gigabytes. KV cache per token: two times forty-eight times eight times one twenty-eight times two bytes, which is one hundred ninety-six thousand six hundred and eight bytes, about a hundred ninety-two kibibytes. My team wants eight thousand tokens each, for four people at once: that is thirty-two thousand tokens, about six gigabytes of cache. Add two gigabytes of overhead: about sixteen and a half gigabytes. My card has twenty-four. It fits, with headroom. Then I start the server and compare with the reported memory: within ten percent. All numbers here are illustrative, but the method is exactly what you will use.",
+                "onScreen": "Watch me do it (illustrative)\n• 14B at Q4_K_M ≈ 8.4 GB\n• KV ≈ 192 KiB/token\n• 4 users × 8k ≈ 6 GB\n• + 2 GB overhead ≈ 16.5 GB on a 24 GB card",
+                "visual": "Config.json on the left with three fields highlighted; a calculator panel on the right fills each formula step; a stacked bar settles under a 24 GB line; finally a runtime log line shows measured memory for comparison.",
+                "seconds": 67
               },
               {
                 "narration": "Recap. Total memory is weights plus KV cache plus overhead. Weights scale with parameters and bits. The KV cache scales with layers, key-value heads, head size, context and concurrent users. Speed is bounded by bandwidth divided by bytes per token. Estimate on paper, then confirm on hardware. Your next step: run the calculator for a model you are considering and write down the maximum users and context one card can support.",
@@ -918,7 +948,7 @@
           ],
           "activity": "Fill in the 24-month TCO template for two options (on-prem vs cloud) and compare the cost per 1,000 requests with an API model you already use.",
           "lecture": {
-            "targetMinutes": 8,
+            "targetMinutes": 9,
             "scenes": [
               {
                 "narration": "Two companies buy the same expensive GPU. One runs it flat out serving hundreds of staff and pays it back in months. The other runs it five percent of the time and quietly burns money for two years. Same chip, opposite outcomes. In this lesson you will learn the five hardware tiers for running models, the trade-offs that actually matter, and a simple total cost sketch so your purchase is defensible.",
@@ -991,6 +1021,12 @@
                 "onScreen": "Try this now\n• Peak concurrent users?\n• Real context length?\n• Place yourself on the five tiers\n• Tier 4–5: rent for a day first",
                 "visual": "The five-tier staircase from earlier reappears; a marker pin drops onto one step based on two slider inputs labeled users and context.",
                 "seconds": 32
+              },
+              {
+                "narration": "Watch me do it. A thirty-person office asks me what to buy. I start with numbers, not shopping. Peak concurrent users: I check their chat tool logs and see about twelve at the busiest hour. Context: most documents fit in eight thousand tokens. I run the sizing calculator for a fourteen billion model at four bits: comfortably inside a forty-eight gigabyte workstation card, with room for more users. Next I rent that GPU class in the cloud for an afternoon, serve the model with vLLM, and replay fifty real prompts at twelve concurrent requests. Latency looks good. Then the cost sketch: workstation price, power at their local tariff, a UPS, and two hours a month of admin, over twenty-four months, divided by expected requests. I compare with their current API bill. The workstation pays for itself in the second year, and it keeps client files in the office. That is the recommendation I send.",
+                "onScreen": "Watch me do it\n1 Peak users from logs\n2 Size the model\n3 Rent + replay 50 prompts\n4 24-month cost vs API\n5 Recommend",
+                "visual": "Screen sequence: a chat-tool usage chart with a peak marker; the sizing calculator output; a cloud console showing a rented GPU; a latency chart; a spreadsheet cost comparison with a crossover month highlighted.",
+                "seconds": 67
               },
               {
                 "narration": "Recap. Start from sizing and the workload. Capacity decides fit, bandwidth decides speed. Unified memory is great for individuals, batching GPU servers are best for teams. Mixture-of-experts models need memory more than compute. And judge purchases on twenty-four month cost per thousand requests, including power, cooling and people. Your next step: fill in the cost template for two options and compare them with an API you already use.",
@@ -1083,7 +1119,7 @@
           ],
           "activity": "Create a Modelfile for an assistant in your domain, set num_ctx deliberately, and call it from Python with both the native and the OpenAI-compatible client.",
           "lecture": {
-            "targetMinutes": 8,
+            "targetMinutes": 9,
             "scenes": [
               {
                 "narration": "In the next ten minutes you will go from an empty laptop to a branded, team-ready AI assistant that never sends a word to the cloud. We will use Ollama, the most popular local model runner. You will learn the five commands that matter, the one setting that silently breaks long documents, how to package your own assistant, how to call it from code, and how to share it without accidentally publishing it to the internet.",
@@ -1156,6 +1192,12 @@
                 "onScreen": "Try this now\n• Pull a small model\n• Watch ollama ps while it answers\n• Fix any CPU share\n• Create a named Modelfile for a weekly task",
                 "visual": "Terminal split view: left pane streaming an answer, right pane showing ollama ps refreshing with the processor column highlighted.",
                 "seconds": 32
+              },
+              {
+                "narration": "Watch me do it. I open a terminal and type ollama pull, then a small model tag. While it downloads, I create a file called Modelfile. First line: FROM and the model tag. Then PARAMETER temperature zero point two, and PARAMETER num context sixteen thousand three hundred eighty-four. Then a SYSTEM block: you are the internal assistant for our support team; answer in the language of the question; say when you are unsure. I save it and run ollama create support assistant with the file. Now ollama run support assistant, and I paste a long refund policy plus a question about the last paragraph. It answers correctly, which tells me the context setting worked. In a second terminal I run ollama ps: one hundred percent GPU. Finally I call it from Python with the OpenAI client, changing only the base address and the model name. Ten minutes, start to finish.",
+                "onScreen": "Watch me do it\n1 ollama pull\n2 Write the Modelfile\n3 ollama create\n4 Test a long document\n5 ollama ps → 100% GPU\n6 Call from Python",
+                "visual": "Terminal recording in two panes: left shows pull progress, Modelfile editing and ollama create; right shows ollama ps with the processor column at 100% GPU; final frame shows a Python script returning an answer.",
+                "seconds": 65
               },
               {
                 "narration": "Recap. Ollama pulls, manages and serves models locally. Check ollama ps for GPU fit. Set context length deliberately. Package assistants with Modelfiles. Use the OpenAI-compatible endpoint to reuse code. And never expose it without authentication. Your next step: write a Modelfile for an assistant in your own domain and call it from Python with both clients. The code is in the lesson.",
@@ -1249,7 +1291,7 @@
           ],
           "activity": "Serve a GGUF with llama-server using an API key and a JSON schema for a classification task from your work; benchmark two quantizations with llama-bench.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 9,
             "scenes": [
               {
                 "narration": "Ollama is the easy button. But sometimes you need to open the hood: force a model to return perfect JSON, squeeze a model onto a machine that is slightly too small, or hand a friendly app to colleagues who never touch a terminal. That is where llama dot cpp and LM Studio come in. In this lesson you will run the llama dot cpp server with sensible flags, constrain output with a schema, tune performance, and set up LM Studio for non-technical teams.",
@@ -1322,6 +1364,12 @@
                 "onScreen": "Try this now\n• llama-server + API key\n• Same request ×10 with and without schema\n• Count parseable answers",
                 "visual": "Two tally counters side by side labeled \"with schema\" and \"without schema\", incrementing as ten requests animate through each.",
                 "seconds": 25
+              },
+              {
+                "narration": "Watch me do it. I start llama server with a GGUF model, a context of sixteen thousand, all layers on the GPU, two parallel slots, the jinja template flag and an API key from an environment variable. I check the health endpoint: it says ok. Now I send a classification request for an email that says my order arrived broken, I want my money back, with a JSON schema that allows only four intents. The response comes back as clean JSON: intent refund, order number included. I send the same request ten times without the schema and count: eight parseable, two chatty answers. Next I switch to LM Studio for a colleague. I search the same model, and the app shows which quantization fits her laptop. She downloads it, compares it side by side with another model on three of her real emails, then turns on the local server. Two tools, two audiences, same model file.",
+                "onScreen": "Watch me do it\n1 llama-server with key + template\n2 Health check\n3 Schema request → clean JSON\n4 Without schema: 8/10 parseable\n5 LM Studio for a colleague",
+                "visual": "Terminal shows llama-server startup flags and a curl to the health endpoint; a JSON response panel; a tally of 10 unconstrained requests; then an LM Studio-style desktop app with a fit indicator and a side-by-side chat.",
+                "seconds": 68
               },
               {
                 "narration": "Recap. llama dot cpp gives you control: flags, schemas, performance tuning and a small OpenAI-compatible server. Remember context is split across slots, and templates matter for tools. LM Studio gives people a friendly way to explore and serve models locally. Your next step: serve a model with an API key and a JSON schema for one classification task from your work, then benchmark two quantizations with llama bench.",
@@ -1415,7 +1463,7 @@
           ],
           "activity": "Build a schema-constrained extractor for one task in your work, label 50 examples, and report per-field accuracy and the 10 worst errors.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "A chatbot that is right most of the time is a demo. A component that is right, parseable and traceable every time is a product. In this lesson you will turn a local model into something other software can rely on: guaranteed structured output, tool calling, and the reliability patterns that stop two a.m. pages. Everything runs locally, and the code is in the lesson.",
@@ -1488,6 +1536,12 @@
                 "onScreen": "Try this now\n• Turn a real form into a Pydantic model\n• 3 real examples, temperature 0\n• Count correct fields",
                 "visual": "A paper form morphs into a Python class on screen, field by field; three example cards pass through and a small per-field accuracy table appears.",
                 "seconds": 27
+              },
+              {
+                "narration": "Watch me do it. I write a Pydantic class for a sales lead: name, company, country, budget and an intent from a fixed list. I pass its schema to Ollama's format parameter with temperature zero, and send three real, anonymized emails. The first comes back perfect. The second has budget empty, correct, because the email did not mention one. The third labels intent as demo, but my labeling guide says pricing wins when both are mentioned. So I add one sentence to the system prompt about that priority, rerun, and it now says pricing. Next I add a read-only tool, get order status, and ask where is order five five three one. The model proposes the call, my code checks the name against an allow-list, runs it, and returns the result, and the model answers in one sentence. I log the model tag and quantization with every output. Twenty minutes, and it behaves like a component.",
+                "onScreen": "Watch me do it\n1 Pydantic schema → format\n2 3 real emails\n3 Fix one priority rule\n4 Add a read-only tool\n5 Allow-list + log model tag",
+                "visual": "Code editor with the Lead class; terminal outputs three JSON objects, one highlighted amber then turning green after a prompt edit; a sequence diagram animates the tool call through an allow-list gate.",
+                "seconds": 68
               },
               {
                 "narration": "Recap. Constrain output with schemas, but remember valid is not the same as correct. Tool calling works locally with an allow-list and validation. Build reliability with low temperature, retries, timeouts, warm models, logging and least privilege. Your next step: build one schema-constrained extractor for your work and measure it on fifty labeled examples.",
@@ -1580,7 +1634,7 @@
           ],
           "activity": "Serve a model with vLLM, run a benchmark at three request rates using your own prompts, and write a one-page capacity note with p95 TTFT and ITL.",
           "lecture": {
-            "targetMinutes": 8,
+            "targetMinutes": 9,
             "scenes": [
               {
                 "narration": "Your pilot was a hit. Twelve people loved the local assistant. Now the whole company wants it, plus an application that fires hundreds of requests at once. The desktop runner that was perfect for one person starts to queue, stall and time out. This lesson is about serving at scale with vLLM: why it is fast, how to launch it properly, which flags to tune, and how to measure performance like an operator.",
@@ -1653,6 +1707,12 @@
                 "onScreen": "Try this now\n• vllm serve a small model at 4k context\n• Read the KV capacity log line\n• Restart at 16k and compare",
                 "visual": "Two terminal snapshots side by side with the capacity log line highlighted; a number animates from larger to smaller as context grows.",
                 "seconds": 28
+              },
+              {
+                "narration": "Watch me do it. I launch vllm serve with an eight billion model, maximum context eight thousand, memory utilization zero point nine and an API key. While it starts, I watch the log and find the line reporting KV cache capacity and maximum concurrency. I note both numbers. Then I run the benchmark command, replaying two hundred prompts from our support logs at two, four and eight requests per second. For each rate I copy the median and ninety-fifth percentile time to first token and inter-token latency into a table. At four requests per second, first tokens arrive in about a second at p ninety-five. At eight, queueing pushes it past four seconds. I open the metrics endpoint and point a dashboard at it, with an alert when queue length stays high for five minutes. Then I write the capacity note: one GPU handles up to four requests per second within target; add a replica beyond that. Illustrative numbers, real method.",
+                "onScreen": "Watch me do it\n1 vllm serve + read capacity line\n2 Benchmark at 3 rates\n3 Record p50/p95\n4 Dashboard + alert\n5 One-paragraph capacity note",
+                "visual": "Terminal with vllm serve logs scrolling and one capacity line highlighted; a benchmark results table filling in for three rates; a dashboard with a queue-length panel and an alert rule; a short capacity note document.",
+                "seconds": 70
               },
               {
                 "narration": "Recap. vLLM is built for throughput under concurrency thanks to PagedAttention and continuous batching. Tune maximum context and memory first, and read the capacity line in the log. Measure first-token and inter-token latency at realistic load, watch the ninety-fifth percentile, and monitor metrics. Your next step: serve a model, benchmark it at three request rates with your own prompts, and write a one-page capacity note.",
@@ -1750,7 +1810,7 @@
           ],
           "activity": "Run a bake-off between two engines on your hardware with 100 of your prompts at two concurrency levels; record p50/p95 TTFT, throughput and errors.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Every few months someone posts a chart claiming a new serving engine is three times faster. Sometimes it is, for their traffic, on their hardware. The question is whether it is faster for yours. In this lesson you will get a clear map of the main engines as of September twenty twenty-six, a five-question decision guide, and a small bake-off script to test engines with your own prompts.",
@@ -1823,6 +1883,12 @@
                 "onScreen": "Try this now\n• Hardware?\n• Exact model + tool calling/reasoning needs?\n• Shared long prefixes?\n• Unknowns first",
                 "visual": "Three question cards flip over to reveal short answers; one card shows a question mark and pulses to indicate \"find out first\".",
                 "seconds": 24
+              },
+              {
+                "narration": "Watch me do it. I start vLLM on port eight thousand and SGLang on port thirty thousand, same model, same precision, same maximum context. I check both health endpoints. Then I prepare one hundred real prompts, most of which share our long system prompt, and run the bake-off script at sixteen concurrent requests against each engine. It prints median and ninety-fifth percentile time to first token. I repeat at thirty-two concurrent requests. Next I test what the lesson warned about: tool calls. I send ten prompts that should trigger our lookup tool and check both engines return properly parsed tool calls. One engine needs a specific parser flag for this model family; I add it and rerun. Finally I write the table: engine, first-token latency at both loads, error count, tool-call success, and a sentence on which one fits our Docker setup. The decision takes an afternoon and ends the debate.",
+                "onScreen": "Watch me do it\n1 Two engines, identical settings\n2 100 real prompts at 16 and 32 concurrency\n3 Test tool-call parsing\n4 Fix parser flag\n5 Decision table",
+                "visual": "Two terminal panes each launching an engine; a load script printing results for both; a tool-call test grid with ticks and one cross fixed after a flag change; a final comparison table.",
+                "seconds": 66
               },
               {
                 "narration": "Recap. vLLM is the sensible default for GPU serving, SGLang shines with shared prefixes and structured output, TensorRT-LLM for peak NVIDIA performance, llama dot cpp for anywhere else, and TGI only for existing deployments you plan to migrate. Decide on hardware, model support, traffic, skills and longevity, then prove it with a fair bake-off. Your next step: run the bake-off on your hardware with a hundred of your prompts.",
@@ -1919,7 +1985,7 @@
           ],
           "activity": "Pick one narrow task from your product, run a small model for it on your own device, and measure accuracy on 30 examples plus latency and memory.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Here is a quiet revolution. The phone in your pocket can now run a language model that rewrites messages, classifies requests and extracts data with no network, no per-request cost and no data leaving the device. In this lesson you will meet the small model families, the runtimes on Apple, Android, browsers and Windows, the design patterns that make small models shine, and how to evaluate them on real devices.",
@@ -1992,6 +2058,12 @@
                 "onScreen": "Try this now\n• List 3 narrow, frequent, low-risk tasks\n• Write each task's fixed output set\n• One line? Good small-model fit",
                 "visual": "Checklist card with three rows; each row gets a short output set typed in, and a small chip icon appears beside rows that fit on one line.",
                 "seconds": 26
+              },
+              {
+                "narration": "Watch me do it. On a Mac, I install mlx lm and run a four-bit, four billion parameter model with a one-line prompt to rewrite a message politely. It answers in about a second. Now a real task: classify thirty support messages into billing, delivery, technical or other. I run the Python classifier from the lesson, which forces one label and maps anything unexpected to other. It gets twenty-six right. Three misses are messages mentioning two problems; I add a priority rule to the system prompt and it gets twenty-eight. Then I check the device side: I watch memory use in the activity monitor, around three gigabytes, and run the classifier on a loop for twenty minutes while noting battery and temperature. Everything stays reasonable. Last step, I note what would happen on an older device, and decide the cloud fallback threshold for users below our minimum spec.",
+                "onScreen": "Watch me do it\n1 mlx_lm quick test\n2 Classify 30 messages\n3 Add a priority rule\n4 20-minute device test\n5 Set fallback rules",
+                "visual": "Terminal with mlx_lm.generate output; a small results table 26/30 → 28/30; an activity-monitor-style memory graph and a battery curve during a 20-minute loop; a note defining the fallback threshold.",
+                "seconds": 64
               },
               {
                 "narration": "Recap. Small models win on privacy, cost, offline use and latency for narrow tasks. Choose between built-in platform models and your own, and often use both. Narrow the task, add local retrieval, fine-tune when needed, and always test on real target devices. Your next step: pick one narrow task from your product, run a small model on your own device, and measure accuracy on thirty examples plus latency and memory.",
@@ -2085,7 +2157,7 @@
           ],
           "activity": "Draw the data-flow map for one AI system you run or plan (all seven hops), and note retention, encryption and access for each.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Here is a sentence I hear a lot: it is local, so it is private. It is a comforting sentence, and it is often wrong. In this lesson you will see why local hosting is the start of privacy, not the end, how data residency rules drive open-weight adoption in the Gulf, South Asia, the UK and beyond, and how to secure the model supply chain and the running system. This is practical guidance, not legal advice.",
@@ -2158,6 +2230,12 @@
                 "onScreen": "Try this now\n• Pick one AI tool\n• Where are prompts logged?\n• How long are they kept?\n• Unknown = first privacy task",
                 "visual": "Magnifying glass sweeps over a simplified settings screen and stops on a \"logging\" section; a sticky note appears with retention period and owner fields.",
                 "seconds": 25
+              },
+              {
+                "narration": "Watch me do it. I take our internal policy assistant and map its data flow on a whiteboard. Hop one, the web front end: I check browser storage and server logs, and find chat history kept for ninety days; I note it. Hop two, the proxy: access logs only, no bodies, good. Hop three, the inference server: debug logging was on; I turn it off. Hop four, the vector database: document chunks include salary bands, so I confirm permission filters are applied at retrieval and test with a non-HR account; restricted chunks never come back. Hop five, tracing: prompts were going to a hosted tool abroad; I switch to redacted traces stored in-country. Hop six, backups: encrypted, retained thirty days. Hop seven, update channels: I disable telemetry in the runner. Finally I run the hash check script on the deployed model file. It matches the register. Seven hops, two fixes, one afternoon.",
+                "onScreen": "Watch me do it\n1 Map seven hops\n2 Turn off debug prompt logs\n3 Test retrieval permissions\n4 Redact + localize traces\n5 Verify model hash",
+                "visual": "Whiteboard diagram with seven nodes drawn in sequence; two nodes turn red then green after fixes; a terminal runs the hash-check script and prints Verified.",
+                "seconds": 66
               },
               {
                 "narration": "Recap. Local hosting avoids sending data to a model vendor, but logs, vectors, traces and backups still need controls. Residency rules often make self-hosting the enabling choice. Secure the supply chain with official sources, safetensors, no untrusted remote code and hash pinning. Enforce permissions at retrieval. Your next step: draw the seven-hop data-flow map for one AI system you run or plan, with retention, encryption and access for each hop.",
@@ -2255,7 +2333,7 @@
           ],
           "activity": "Score two local models on 50 of your tasks, run the paired bootstrap script, and write a one-page evaluation report using the template.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "A new model tops the leaderboard on Monday. By Wednesday your CEO asks why you are not using it. By Friday you have switched, and by the next Monday your Urdu extraction accuracy has quietly dropped. Sound familiar? In this lesson you will learn why public benchmarks mislead, how to build an evaluation you can trust, how to use AI judges without fooling yourself, and how to be statistically honest about small differences.",
@@ -2328,6 +2406,12 @@
                 "onScreen": "Try this now\n• Recall a past comparison\n• How many examples? Same settings?\n• < 30 or unfair → hunch, not result",
                 "visual": "A small form with two fields, sample size and same settings, filling in; a label flips from \"result\" to \"hunch\" when the threshold is not met.",
                 "seconds": 26
+              },
+              {
+                "narration": "Watch me do it. I have fifty tasks from our work, in English and Urdu, each with a rubric. I run two local models on all fifty at deployment settings, same quantization and template. Then I score them, but blind: a script shuffles the outputs and hides which model wrote which. I use a judge model with the rubric, swapping answer order, and I also score fifteen items myself to check the judge agrees; it matches on thirteen. I save per-item scores to two files and run the paired bootstrap script. Output: model A ahead by a small margin, but the interval crosses zero. Not distinguishable. Then I split by language: in Urdu, model B is clearly better. So the decision is not A or B overall, it is B for Urdu-heavy tasks. I write the one-page report with setup, data, results with intervals, judge calibration and the decision.",
+                "onScreen": "Watch me do it\n1 50 tasks, deployment settings\n2 Blind, order-swapped judging\n3 Calibrate on 15 items\n4 Paired bootstrap\n5 Split by language → decide",
+                "visual": "Screen recording: a shuffling script hides model names; a judge scoring log with swapped orders; a calibration mini-table 13/15; the bootstrap output with an interval crossing zero; a language-split bar chart; the one-page report.",
+                "seconds": 65
               },
               {
                 "narration": "Recap. Leaderboards spot candidates; your evaluation decides. Use representative data at deployment settings, keep a holdout, calibrate AI judges, and report confidence intervals, not just point scores. Your next step: score two local models on fifty of your tasks, run the paired bootstrap script, and write a one-page evaluation report.",
@@ -2416,7 +2500,7 @@
           ],
           "activity": "Adapt the router to three request types from your organization, seed 20 canary requests with fake IDs, and verify none reach the cloud route.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Here is the question most teams eventually face: local or cloud? And the best answer is usually: both, per request. In this lesson you will build a router, a small piece of software that decides which model handles each request based on data sensitivity, task difficulty, cost, latency and availability. You will learn the four routing strategies, how to detect sensitive data locally, what counts as confidence, and how to prove where your data went.",
@@ -2489,6 +2573,12 @@
                 "onScreen": "Try this now\n• 3 routing rules, sensitivity first\n• 5 fake sensitive requests\n• 5 non-sensitive requests\n• = your canary set",
                 "visual": "Numbered rule list types itself, followed by ten envelope icons labeled with fake IDs sorting into two columns.",
                 "seconds": 21
+              },
+              {
+                "narration": "Watch me do it. I open the router script and set the local base address, the cloud gateway address and the model names from environment variables. I add our organization's rule first: anything from the HR source stays local. Then I write twenty canary requests with fake identifiers: fake CNIC numbers, fake Emirates ID numbers, fake emails, mixed into ordinary questions. I run them all through the router and print only the route for each. Nineteen go local correctly. One slips to the cloud: an ID number written with spaces instead of dashes. I update the pattern to allow both, rerun, and all twenty stay local. Then I simulate a cloud outage by pointing the cloud address at nothing; hard tasks fall back to local with the right route label, and no sensitive canary leaves. Finally I check the route log shows counts per route without any request content.",
+                "onScreen": "Watch me do it\n1 Configure routes from env vars\n2 20 canary requests\n3 Catch a spaced ID → fix pattern\n4 Simulate outage\n5 Check the route log",
+                "visual": "Code editor with router settings; a terminal prints 20 route lines, one highlighted red; the regex is edited; rerun shows all green; an outage toggle flips and fallback labels appear; a route-count table.",
+                "seconds": 65
               },
               {
                 "narration": "Three pitfalls, then recap. Never run the sensitivity check in the cloud. Make sure sensitivity rules beat fallback rules, or an outage will quietly send private data out. And share prompts across routes so tone stays consistent. To recap: route per request, sensitivity first, observable confidence signals, and log every route. Your next step: adapt the router to three request types from your work, seed twenty fake-ID canary requests, and prove none reach the cloud.",
@@ -2574,7 +2664,7 @@
           ],
           "activity": "Complete the capstone deliverables on a folder of at least 20 real (non-sensitive or approved) documents and a 40-question evaluation set.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "This is where everything comes together. You are going to build a private assistant that answers questions from your organization's documents, cites its sources, admits when it does not know, respects who is allowed to see what, and runs entirely on a laptop or internal server. Then you will prove it works with an evaluation report. Licenses, sizing, local runtimes, structured output, security, benchmarking: all of it shows up here.",
@@ -2647,6 +2737,12 @@
                 "onScreen": "Try this now\n• 10 questions before any code\n• 6 answerable (with source) · 2 unanswerable · 2 permission\n• Reuse on every change",
                 "visual": "A spreadsheet-style table fills with ten rows color-coded into three groups, with a source column populated for the first six.",
                 "seconds": 25
+              },
+              {
+                "narration": "Watch me do it. I put twenty-two markdown policy files in the documents folder and write the access file: most documents available to all, two restricted to HR. I run build index; it embeds about three hundred chunks in under a minute. Now my evaluation file: twenty-five answerable questions, ten unanswerable, five permission tests. I run them all. Retrieval finds the right source for twenty-two of twenty-five. Nine of ten unanswerable questions correctly return not found. All five permission tests pass. I look at the three retrieval misses: two are about a policy that has an older duplicate in the folder. I delete the old version, rebuild, and the hit rate rises to twenty-four. The one unanswerable failure was a confident answer from a loosely related chunk, so I raise the similarity threshold slightly and rerun: ten of ten. I paste the metrics into the report template with the five worst failures explained.",
+                "onScreen": "Watch me do it\n1 22 docs + access file\n2 Build index\n3 Run 40 eval questions\n4 Remove duplicate → rebuild\n5 Tune threshold → report",
+                "visual": "Folder view of 22 files and an acl.json; terminal shows build_index progress; an evaluation table fills with hit, abstention and permission columns; a duplicate file is deleted; metrics update; the report template fills in.",
+                "seconds": 67
               },
               {
                 "narration": "Congratulations. You can now choose open-weight models with licenses in mind, size hardware with a formula, run models locally and at scale, secure the stack, benchmark honestly, route between local and cloud, and ship a private assistant with evidence that it works. Your next step is the capstone itself. Pick a folder of at least twenty approved documents, write your forty questions, and build it. Then take the final exam.",

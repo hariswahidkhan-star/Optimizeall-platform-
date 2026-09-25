@@ -6,7 +6,7 @@
   "subtitle": "When not to fine-tune, data curation, SFT, LoRA/QLoRA, DPO, GRPO, distillation, embeddings, evaluation, cost and deployment",
   "category": "ai",
   "level": "advanced",
-  "estimatedMinutes": 407,
+  "estimatedMinutes": 426,
   "description": "Fine-tuning is powerful for the right problems and a costly detour for the wrong ones. This advanced, hands-on course teaches you to decide with evidence and then do it properly. You will climb the customization ladder before touching weights, map methods to gaps (SFT, LoRA and QLoRA, DPO and other preference methods, reinforcement fine-tuning with GRPO, distillation and embedding fine-tuning), and build datasets that teach what you mean: labeling guides, coverage, deduplication, leakage-free splits, synthetic data with strict filtering, PII redaction and license checks. You will train with Hugging Face TRL, PEFT, Unsloth and Axolotl, evaluate against your best non-fine-tuned baseline by slice with confidence intervals, compare hosted platforms including the 2026 changes, and model costs and break-even. Finally you will deploy, monitor drift and retrain, and complete a capstone: a fine-tuned support-intent router with a full evaluation report.",
   "outcomes": [
     "Decide when fine-tuning is justified using the customization ladder",
@@ -116,7 +116,7 @@
           ],
           "activity": "Complete the fine-tuning worksheet for one real task: record the score at each rung you have tried and decide whether fine-tuning is justified.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 9,
             "scenes": [
               {
                 "narration": "A company spent three months fine-tuning a model to answer questions about its products. It launched, and within two weeks half the answers were outdated because prices and policies had changed. The fix was a retrieval system that took a week. In this lesson you will learn when not to fine-tune, the customization ladder to climb first, and the five signals that tell you fine-tuning is genuinely worth it.",
@@ -195,6 +195,12 @@
                 "onScreen": "Try this now\n• Score your best prompt on 10 examples\n• Name the gap: knowledge, behavior, cost, latency\n• Knowledge → retrieval",
                 "visual": "A small score card with 10 checkboxes filling in, then a four-option label selector where one option lights up and a routing arrow appears.",
                 "seconds": 27
+              },
+              {
+                "narration": "Watch me do it. A product manager asks me to fine-tune a model for support replies. I open the worksheet. Current best setup: a strong API model with a good prompt. I run it on the fifty-item evaluation set with the rubric: mean score four point one. Target: four point three, at a lower cost per reply. Now the gap: I read the ten lowest-scoring replies. Six are wrong about this month's shipping promotion. That is knowledge, so I add retrieval over the promotions page and rerun: mean four point three. Target met on quality. Remaining gap: cost, since volume is one hundred thousand replies a month. I check the signals: long repeated prompt, yes; a small model almost passes, I test one, it scores three point nine; two thousand approved replies exist; rubric exists; tone is stable. Five of five. My written decision: retrieval now, and a distillation project for cost, starting next sprint.",
+                "onScreen": "Watch me do it\n1 Score best setup on 50 items\n2 Read the 10 worst\n3 Knowledge gap → add retrieval\n4 Check five signals\n5 Write the decision",
+                "visual": "Worksheet YAML on screen; an evaluation table with scores; ten low-scoring replies expand, six tagged \"promotion\"; a retrieval icon added; score updates; five signal checkboxes tick; decision line typed.",
+                "seconds": 67
               },
               {
                 "narration": "Recap. Fine-tuning changes behavior, not knowledge. Climb the ladder: prompt, examples, structure, retrieval, model choice, and only then fine-tuning. Look for the five signals, and measure every rung on the same evaluation set. Your next step: fill in the worksheet for one real task and decide, with evidence, whether fine-tuning is justified.",
@@ -280,7 +286,7 @@
           ],
           "activity": "For one product, list three performance gaps and map each to a method, data format and evaluation metric using the decision flow.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 9,
             "scenes": [
               {
                 "narration": "Ask five engineers what fine-tuning means and you will get five answers. One means training on examples, one means LoRA, one means RLHF, one means distillation, and one means making the search better. They are all different techniques with different data, tools and results. In this lesson you will get one clear map of customization methods, a decision flow to pick the right one, and the exact data format each needs.",
@@ -359,6 +365,12 @@
                 "onScreen": "Try this now\n• 3 × \"the model currently fails when…\"\n• Method per failure\n• One-line data description\n• Can't describe data? Solve that first",
                 "visual": "Three sentence strips appear; beside each, a method chip and a one-line JSON sample type in.",
                 "seconds": 24
+              },
+              {
+                "narration": "Watch me do it. I take a real product, a telecom self-service app, and list its three biggest AI complaints from support tickets. One: the assistant answers in long paragraphs when customers want short steps. Two: agents prefer a warmer tone than the model uses. Three: searches for eSIM activation do not find the right help article. For the first, I can write ideal short answers, so I mark SFT with LoRA and sketch one line of messages data. For the second, it is easier to compare than to write, so I mark DPO after SFT and sketch a chosen and rejected pair. For the third, retrieval is failing, so I check recall at fifty first: the right article is not even in the candidates, so a reranker will not help. I mark embedding fine-tuning with anchor and positive pairs. Three gaps, three methods, three data formats, written down in ten minutes.",
+                "onScreen": "Watch me do it\n1 List 3 complaints\n2 Short steps → SFT\n3 Warmer tone → DPO\n4 Missing articles → check recall@50 → embeddings\n5 Sketch data for each",
+                "visual": "A table with three complaint rows; method badges drop into a second column; a third column shows a one-line JSON sample for each; a small recall@50 check appears for the third row.",
+                "seconds": 66
               },
               {
                 "narration": "Recap. SFT imitates demonstrations. LoRA is how you train cheaply, with any objective. DPO learns from preferences, reinforcement fine-tuning learns from a grader, distillation shrinks a teacher into a student, and embedding fine-tuning improves retrieval. Choose by gap type, then choose hosted or self-managed. Your next step: list three gaps in one product and map each to a method, data format and metric.",
@@ -479,7 +491,7 @@
           ],
           "activity": "Write a one-page labeling guide for one task, have two people label the same 50 examples, measure agreement, and run the prep script on your data.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Here is a story I have seen many times. A team fine-tunes a model on twelve thousand examples, gets disappointing results, and spends two weeks tweaking learning rates. Nothing helps. Then someone reads a hundred training examples and finds duplicates, contradictory labels and a system prompt that does not match production. In this lesson you will learn to design and curate datasets so that the model learns what you actually mean.",
@@ -558,6 +570,12 @@
                 "onScreen": "Try this now\n• Read 50 real examples\n• Count duplicates\n• Count unsure labels\n• Note languages and channels",
                 "visual": "Three counters animate upward as a list of fifty examples scrolls past: duplicates, unsure, and a small pie chart for languages.",
                 "seconds": 21
+              },
+              {
+                "narration": "Watch me do it. I export eight hundred support messages with labels from two teams. First I read fifty. I spot auto-generated delivery notifications, so I run a dedup on normalized text: one hundred and ten duplicates removed. Then I sort by label and read twenty billing examples: team A labels late refunds as billing, team B as refund. I write a priority rule, refunds outrank billing, and relabel the sixty affected messages. Next the coverage matrix: rows are intents, columns are English, Arabic and Roman Urdu. Roman Urdu account-access has only four examples, so I flag it for collection. Then I run the prep script: it validates every line, splits by customer, and prints class counts per split. One rare class is missing from the test split entirely, so I adjust the split seed. Finally I fill in the data card: source, dates, counts, the new priority rule and the known gap.",
+                "onScreen": "Watch me do it\n1 Read 50\n2 Dedup (−110)\n3 Priority rule + relabel 60\n4 Coverage matrix gap\n5 Prep script + split check\n6 Data card",
+                "visual": "A message list with duplicates collapsing and a counter showing 110 removed; two label columns reconcile under a rule card; a heat-map matrix with one pale cell; terminal class-count table; data card filling in.",
+                "seconds": 67
               },
               {
                 "narration": "Recap. The model becomes its data. Write and test a labeling guide. Cover the real variety of your traffic. Clean duplicates, fix labels and match production format. Split by customer or time. And document a data card. Your next step: write a one-page guide for one task, have two people label fifty examples, measure agreement, and run the prep script.",
@@ -639,7 +657,7 @@
           ],
           "activity": "Run the synthetic pipeline for one under-covered class and language in your coverage matrix, review 50 outputs, and report your rejection rate and reasons.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 9,
             "scenes": [
               {
                 "narration": "Imagine you need two thousand labeled customer messages in Roman Urdu for a rare complaint type, and you have forty. You could wait six months for real data. Or you could ask a strong model to help. In this lesson you will learn how to use synthetic data and distillation properly: the four ways to use a teacher model, how to make synthetic data diverse, how to filter it, and the license checks that keep you out of trouble.",
@@ -718,6 +736,12 @@
                 "onScreen": "Try this now\n• Find the emptiest cell\n• Write a controlled generation prompt\n• Generate 20, read all 20",
                 "visual": "The coverage matrix appears; one cell pulses. A prompt card types beside it, and twenty small cards appear in a grid with a reviewer eye icon.",
                 "seconds": 22
+              },
+              {
+                "narration": "Watch me do it. My coverage matrix shows almost no Roman Urdu messages about card blocking. I start the teacher model on our vLLM server and run the synthetic script only for that cell, across two channels and three difficulty styles, generating sixty messages with fictional names. The script deduplicates and re-labels each one with the teacher. Fifty-one agree with the intended label and go into the synthetic file; nine go to the review file. I read the nine: four are genuinely ambiguous, card blocked and fraud together, so I add them as edge cases with a human label. Five are off-topic and I drop them. Then I read twenty of the kept messages: two sound too polished for WhatsApp, so I add a style note to the generation prompt, typos and short sentences, and regenerate that batch. Finally I decontaminate against the test set and record the synthetic share for that class.",
+                "onScreen": "Watch me do it\n1 Target one empty cell\n2 Generate 60\n3 51 kept · 9 to review\n4 Read and fix style\n5 Decontaminate + record share",
+                "visual": "Coverage matrix with one pulsing cell; terminal generation counter; kept vs review files; a reviewer view of nine messages sorted into edge case and drop; a style note added to the prompt; a synthetic-share badge on the class.",
+                "seconds": 67
               },
               {
                 "narration": "Recap. Use teachers to label, write, fill gaps and create preference pairs. Design for diversity with attribute grids. Filter hard, and evaluate the student only on real held-out data. And always check terms and licenses. Your next step: run the pipeline for one under-covered cell of your coverage matrix, review fifty outputs, and report your rejection rate and the reasons.",
@@ -803,7 +827,7 @@
           ],
           "activity": "Run the redaction script (with local recognizers) on 100 of your training examples, review misses manually, and record the miss rate in your data card.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Here is an uncomfortable fact. If a training example contains a customer's phone number, the fine-tuned model might one day repeat it to someone else. And deleting that customer from your database does not delete them from the model. In this lesson you will learn to treat training data as both an asset and a liability: rights, minimization, PII redaction, copyright and licenses, regulation touchpoints, and safety testing after tuning. This is practical guidance, not legal advice.",
@@ -882,6 +906,12 @@
                 "onScreen": "Try this now\n• Hand-highlight PII in 10 examples\n• Run a detector on the same 10\n• Count the misses",
                 "visual": "Two columns of the same ten examples: hand-highlighted on the left, detector-highlighted on the right; mismatches blink and a miss counter increments.",
                 "seconds": 23
+              },
+              {
+                "narration": "Watch me do it. I take one hundred training examples and run the redaction script with the default recognizers plus our CNIC and Emirates ID patterns. Then I review every redacted example by hand, with the original beside it. I find six misses: four phone numbers written with spaces, one name in Urdu script, one account number inside a sentence. I add a phone pattern that accepts spaces and an account-number pattern, rerun, and review again: one miss left, the Urdu name. I note it as a known limitation and add a human review step for Urdu-script messages. Then the rights check: I open our privacy notice and the relevant customer contract clause, and write in the data card the basis we rely on and who approved it. Finally I add a memorization test to the evaluation plan: ten prompts starting with the beginning of real records, checking the model does not complete sensitive details.",
+                "onScreen": "Watch me do it\n1 Redact 100 examples\n2 Hand review: 6 misses\n3 Add patterns → 1 miss\n4 Rights check → data card\n5 Add memorization test",
+                "visual": "Two-column review screen with original and redacted text; miss counter drops from 6 to 1; a patterns file gains two lines; the data card fields for basis and approver fill in; a memorization test list appears.",
+                "seconds": 67
               },
               {
                 "narration": "Recap. Models can memorize, so treat training data as a liability. Ask about rights, minimization, security and deletion. Redact and replace personal data, and measure what you miss. Respect copyright and licenses. Know your regulation touchpoints. And re-test safety after tuning. Your next step: run the redaction script on a hundred of your examples, review misses by hand, and record the miss rate in your data card.",
@@ -982,7 +1012,7 @@
           ],
           "activity": "Train a LoRA SFT adapter on your prepared dataset, plot training and validation loss, and compare task accuracy at each saved checkpoint.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Supervised fine-tuning is the workhorse of model customization. It is also where most first attempts quietly go wrong, not because the idea is hard, but because of three small details. In this lesson you will see what actually happens during SFT, the data formats that make it easy, the hyperparameters that matter, how to read training curves, and a complete working script with TRL and LoRA.",
@@ -1061,6 +1091,12 @@
                 "onScreen": "Try this now\n• Convert 20 examples to prompt/completion\n• Use the production system prompt\n• Print one after applying the chat template",
                 "visual": "A JSON line transforms into a templated string with special tokens highlighted in a different color, animating token by token.",
                 "seconds": 27
+              },
+              {
+                "narration": "Watch me do it. I convert two thousand labeled messages into prompt and completion lines with our exact production system prompt. I load them with the datasets library and print one example after the chat template is applied, to see the special tokens. Then I do a smoke run: one hundred examples, twenty steps, to confirm training, saving and evaluation all work. It does. Now the real run: two epochs, learning rate two times ten to the minus four, LoRA on all linear layers, evaluation every hundred steps. I watch the curves: training loss falls steadily; validation loss flattens after about one and a half epochs. I evaluate three saved checkpoints on the validation set with macro F1: the middle one wins. I load it with the base model, test five tricky Roman Urdu messages by hand, and only then run the test set, once. Result recorded with the config and data hash.",
+                "onScreen": "Watch me do it\n1 Convert to prompt/completion\n2 Inspect the template\n3 Smoke run\n4 Full run + curves\n5 Pick checkpoint by F1\n6 Test once",
+                "visual": "Terminal showing the templated example with special tokens colored; a smoke-run progress bar; loss curves drawing live; a checkpoint comparison table with one starred; a final test-set result card with a config hash.",
+                "seconds": 67
               },
               {
                 "narration": "Recap. SFT continues next-token training on your demonstrations. Mask loss to responses, keep templates and prompts identical to production, and use prompt-completion format for short-answer tasks. Tune one thing at a time, watch for overfitting, and pick checkpoints by task metrics. Your next step: train a LoRA adapter on your dataset, plot the curves, and compare accuracy across checkpoints.",
@@ -1150,7 +1186,7 @@
           ],
           "activity": "Train a QLoRA adapter for a style task on your GPU (or a rented one), merge it, quantize for serving, and compare scores before and after quantization.",
           "lecture": {
-            "targetMinutes": 8,
+            "targetMinutes": 9,
             "scenes": [
               {
                 "narration": "A few years ago, fine-tuning a seven billion parameter model meant a rack of expensive GPUs and a full copy of the model for every task. Today you can do it overnight on one consumer graphics card and store the result in a file smaller than a movie. That shift is thanks to LoRA and QLoRA. In this lesson you will learn how they work, how to choose settings, and how to take an adapter all the way to a served model.",
@@ -1229,6 +1265,12 @@
                 "onScreen": "Try this now\n• Find hidden size + layers\n• r × (d + k) per matrix\n• × matrices per layer × layers\n• Compare with total parameters",
                 "visual": "Calculator-style animation: numbers from a config snippet feed a formula, producing a small parameter count beside a huge total, with a percentage badge.",
                 "seconds": 30
+              },
+              {
+                "narration": "Watch me do it. I have a twenty-four gigabyte GPU and want to adapt an eight billion model to a client's brand voice. I load the base in four-bit with the bits and bytes config and check memory: about six gigabytes. I add a LoRA config, rank sixteen, alpha thirty-two, all linear layers, and print the trainable parameters: well under one percent of the model. I train on six hundred approved captions with gradient checkpointing; memory peaks around seventeen gigabytes. Training takes about forty minutes. Then deployment: I load the base in sixteen-bit on a bigger machine, attach the adapter, merge and save. I convert the merged model to GGUF, quantize to Q five K M, and load it in Ollama. Last and most important, I rerun the voice evaluation on the quantized model: the score is within noise of the unquantized adapter. Only now is it ready to serve.",
+                "onScreen": "Watch me do it\n1 4-bit base (~6 GB)\n2 LoRA r=16, all-linear\n3 Train (~17 GB peak)\n4 Merge into 16-bit\n5 Quantize + load\n6 Re-evaluate",
+                "visual": "GPU memory gauge rising in steps as base, adapter and training load; a trainable-parameters printout; training progress; merge and GGUF conversion commands; a before/after evaluation score comparison.",
+                "seconds": 65
               },
               {
                 "narration": "Recap. LoRA trains small adapters while the base stays frozen, and all linear layers is the usual default. QLoRA puts the base in four-bit so you can train on one consumer GPU. Keep adapters per task, or merge into a sixteen-bit base for simple deployment, then quantize and re-evaluate. Your next step: train a QLoRA adapter for a style task, merge and quantize it, and compare scores before and after quantization.",
@@ -1326,7 +1368,7 @@
           ],
           "activity": "Convert your SFT script into either an Axolotl YAML or a pinned TRL project in Git, run it twice, and confirm the metrics match within variance.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Your first fine-tune usually lives in a notebook on one person's machine. It works, everyone celebrates, and three weeks later nobody can reproduce it. In this lesson you will map the open-source training stack, see when to use TRL, Unsloth or Axolotl, where to get GPUs, and how to make training reproducible so the second model is easier than the first.",
@@ -1405,6 +1447,12 @@
                 "onScreen": "Try this now\n• Pin transformers, trl, peft, datasets, accelerate\n• Commit requirements + script\n• Record base model revision",
                 "visual": "Editor view of a requirements file with pinned versions typing in, then a git commit animation with a hash label.",
                 "seconds": 20
+              },
+              {
+                "narration": "Watch me do it. I turn a working notebook into a reproducible project. First I create a requirements file pinning transformers, TRL, PEFT, datasets, accelerate and bits and bytes to the exact versions that worked. Then I write the training settings as an Axolotl YAML: base model with its revision hash, QLoRA, rank, dataset path with the chat template type, sequence length, batch sizes, epochs and learning rate. I compute the SHA of the training file and write it into the config comments. I commit everything to Git. Next I run axolotl train on a rented cloud GPU in our approved region, with runs logged to MLflow. The run finishes; I note the metrics. Then a colleague clones the repository on a different machine and runs the same command. Her validation macro F1 matches mine to the second decimal place. That is the moment the model stops belonging to one person's laptop.",
+                "onScreen": "Watch me do it\n1 Pin versions\n2 Axolotl YAML with revision hash\n3 Hash the data\n4 Commit + run in approved region\n5 Colleague reproduces the run",
+                "visual": "Editor showing requirements.txt and a YAML config; a terminal computes a SHA; a git commit animation; an MLflow-style runs table where two runs from different users show matching metrics.",
+                "seconds": 66
               },
               {
                 "narration": "Recap. Use TRL and PEFT for transparency, Unsloth for speed on one GPU, and Axolotl or LLaMA-Factory for reproducible configuration. Get GPUs from environments that match your data rules. Pin, hash, track and document every run. Your next step: turn your SFT script into a pinned project or an Axolotl YAML in Git, run it twice, and confirm the metrics match within normal variance.",
@@ -1513,7 +1561,7 @@
           ],
           "activity": "Collect 200 preference pairs from edits or A/B choices in your workflow, filter for length bias, and run a small DPO job; measure blind win rate on 50 held-out prompts.",
           "lecture": {
-            "targetMinutes": 8,
+            "targetMinutes": 9,
             "scenes": [
               {
                 "narration": "Try this. Write the perfect reply to an angry customer. Hard, right? Now I show you two replies and ask which is better. Easy. That gap, between writing and choosing, is why preference optimization exists. In this lesson you will understand RLHF at a practitioner level, see why DPO became the default, meet the variants, learn where preference data comes from, and run a DPO job with TRL.",
@@ -1592,6 +1640,12 @@
                 "onScreen": "Try this now\n• 10 outputs → write better versions\n• 10 preference pairs\n• Check: is \"better\" always longer?",
                 "visual": "Ten pairs of cards appear in a grid with a length bar under each card; a warning icon appears if the chosen bars are always longer.",
                 "seconds": 22
+              },
+              {
+                "narration": "Watch me do it. Our logs hold four weeks of agent edits: eighteen hundred pairs of original draft and edited reply. I load them and compute the length difference for each pair. Four hundred pairs differ only by added sentences with the same meaning; I drop them to avoid teaching length. I balance topics so refunds do not dominate, and split off two hundred pairs for validation. I run the DPO script on our merged SFT model with beta zero point one and one epoch. In the logs, reward accuracy on validation climbs from about fifty percent to the high seventies, and margins widen. Now the real test: I generate replies from the SFT and DPO models for sixty held-out prompts, shuffle them, and ask three agents to pick the better one blind. The DPO model wins most comparisons. I rerun the accuracy checklist and the safety suite: no regressions. Average length rose a little; I set an alert on it.",
+                "onScreen": "Watch me do it\n1 1,800 edit pairs\n2 Drop 400 length-only pairs\n3 Balance + validation split\n4 DPO run: reward accuracy up\n5 Blind test + regressions",
+                "visual": "Data table with a length-difference column and 400 rows fading out; a topic balance chart; training logs with reward accuracy climbing; a blind review interface; a regression dashboard all green with a small length alert.",
+                "seconds": 70
               },
               {
                 "narration": "Recap. Preference optimization learns from comparisons. RLHF uses a reward model and reinforcement learning, while DPO optimizes preferences directly with a reference model and a beta setting. Agent edits are gold, but watch length bias. And judge success by blind win rate plus regression tests. Your next step: collect two hundred pairs from your workflow, filter them, run a small DPO job, and measure the win rate on fifty held-out prompts.",
@@ -1701,7 +1755,7 @@
           ],
           "activity": "Write a grader for one checkable task in your work, test it on 20 known good and bad outputs, and describe two ways a model could game it and how you would block them.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Some questions have a right answer you can check. Is the fee correct? Does the code pass its tests? Did the model extract the right weight from the booking? When you can check, you can train differently. Instead of writing ideal answers or comparing pairs, you write a grader, and let the model learn to score higher. That is reinforcement fine-tuning. In this lesson you will learn GRPO, how to design graders, how to run it with TRL, and how to catch reward hacking.",
@@ -1774,6 +1828,12 @@
                 "onScreen": "Try this now\n• Grader first\n• 10 correct + 10 wrong (incl. 1 sneaky)\n• Fix any loophole before training",
                 "visual": "Twenty output cards pass through a grader gate; one sneaky card slips through green, then the gate is updated and it turns red.",
                 "seconds": 26
+              },
+              {
+                "narration": "Watch me do it. Before any training, I write the fee grader and test it. Ten correct answers score one; ten wrong answers score zero; then I write a sneaky answer that lists three amounts including the right one. The grader gives it one. Loophole. I change it to require exactly one parsed amount, rerun, and the sneaky answer now scores zero. Next I start GRPO on our SFT model with eight generations per prompt and five hundred fee questions. Every hundred steps I stop to read twenty sampled answers, not just the reward curve. Around step three hundred, answers get shorter and one starts hedging with approximately; the length bonus is fine, but I add a small penalty for hedging words. At the end, I run the independent evaluation, a separate held-out set scored by a different grader, and pass rate is clearly above the SFT baseline. Samples look normal. Only then do I save the adapter.",
+                "onScreen": "Watch me do it\n1 Test grader (catch a loophole)\n2 Fix: exactly one amount\n3 GRPO, 8 generations\n4 Read samples every 100 steps\n5 Independent evaluation",
+                "visual": "Grader test grid with a sneaky card passing then failing after a code edit; training reward curve; periodic sample viewer panels; a hedging word highlighted; final comparison bar vs SFT baseline.",
+                "seconds": 69
               },
               {
                 "narration": "Recap. Use reinforcement fine-tuning when correctness is checkable. GRPO reinforces answers that beat their group's average, without a critic model. Graders must be correct, hard to game, dense and composable. Expect reward hacking and keep an independent evaluation. Your next step: write a grader for one checkable task, test it on twenty good and bad outputs, and list two ways a model could game it.",
@@ -1878,7 +1938,7 @@
           ],
           "activity": "Write a decision rule for your fine-tune, then evaluate baseline vs fine-tuned on your test set by slice, with confidence intervals, and state ship or no-ship.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Every fine-tuning project ends with the same question: is it better? And most teams answer it badly, by comparing against the wrong thing, looking only at averages, or deciding what better means after seeing the results. In this lesson you will build an evaluation plan that gives an honest answer: the right baseline, the four parts of a plan, test sets and slices, a comparison harness, and online testing before full rollout.",
@@ -1957,6 +2017,12 @@
                 "onScreen": "Try this now\n• Line 1: target + minimum gain\n• Line 2: max slice/safety regression\n• Line 3: latency or cost limit\n• Share it",
                 "visual": "Three-line rule card types itself, then is sealed in an envelope and passed to a colleague icon.",
                 "seconds": 24
+              },
+              {
+                "narration": "Watch me do it. I write the decision rule first, in a text file: ship if macro F1 improves by at least three points with the interval above zero, no language slice drops by more than two points, and p ninety-five latency is under eight hundred milliseconds. I commit it. Then I start vLLM with the base model and our adapter registered under the name intents. I run the comparison script: baseline prompt on the base model versus the adapter, same test set. Overall macro F1 rises five points. I run the bootstrap: interval comfortably above zero. Now slices: English up six, Urdu up four, Arabic down one. Within the rule. Latency: p ninety-five at four hundred milliseconds. I also run the safety suite and a small general-instruction test: no regressions. I paste all numbers into the report and check each line of the rule. All conditions met: ship to shadow mode for one week.",
+                "onScreen": "Watch me do it\n1 Write + commit the rule\n2 Serve base + adapter\n3 Compare overall + bootstrap\n4 Check slices, latency, safety\n5 Apply the rule",
+                "visual": "A text file with the rule typed and committed; vLLM launch with --lora-modules; a comparison output; slice bars with a two-point tolerance band; a checklist ticking each condition; a \"shadow mode\" stamp.",
+                "seconds": 67
               },
               {
                 "narration": "Recap. Beat your best non-fine-tuned setup, not the raw base model. Plan targets, regressions, operations and a written decision rule. Report by slice with confidence intervals. Use blind comparisons for generation, then shadow and canary before rollout. Your next step: write your decision rule, evaluate baseline against fine-tune by slice, and make a clear ship or no-ship call.",
@@ -2042,7 +2108,7 @@
           ],
           "activity": "Complete the six-point decision checklist for two hosted options and one self-managed option for your task, and write converters from your canonical JSONL to each format.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "In twenty twenty-six, a lot of teams woke up to an email saying the fine-tuning platform they built on was being wound down. Their fine-tuned models would keep running for a while, but new training would end. The teams that shrugged were the ones who had kept their data and evaluations portable. In this lesson you will map the hosted fine-tuning landscape, the formats and APIs, and the checklist that keeps you able to move.",
@@ -2121,6 +2187,12 @@
                 "onScreen": "Try this now\n• 20-line converter to one other format\n• Run on 10 examples\n• Validate the output",
                 "visual": "Split code view: canonical JSON on the left, converted JSON on the right, with matching fields linked by animated lines.",
                 "seconds": 20
+              },
+              {
+                "narration": "Watch me do it. Our canonical data is prompt and completion JSON lines. I write a short converter to the Gemini format: the system message becomes the system instruction, user turns become contents with role user and a text part, and the assistant completion becomes role model. I convert ten examples and validate them against the format described in the docs. Then I upload the full files to a storage bucket in the approved region and launch the tuning job with the Google Gen AI SDK, passing the base model, training dataset and a validation dataset. While it runs, I fill in the six-point checklist: models and regions, methods, data handling from the terms page, inference pricing for tuned models, the deprecation policy for the base, and export options, which for this closed model are none. When the job finishes, I evaluate the tuned model with the same harness and the same test set as our open-model adapter, so the comparison is fair.",
+                "onScreen": "Watch me do it\n1 Write a converter\n2 Validate 10 examples\n3 Upload + launch job\n4 Fill the 6-point checklist\n5 Evaluate with the same harness",
+                "visual": "Code editor with a converter function mapping fields with colored arrows; a validation output; a cloud storage upload bar; the tuning-job code; a checklist with six rows filling in; a comparison table of two models on one test set.",
+                "seconds": 71
               },
               {
                 "narration": "Recap. Hosted fine-tuning is convenient and fast-moving. Know the current landscape, and verify it. Closed-model fine-tunes are not portable, so keep data, graders and evaluations provider-neutral. Check regions, data handling, inference pricing and lifecycle. Your next step: complete the checklist for two hosted options and one self-managed option, and write converters from your canonical format to each.",
@@ -2218,7 +2290,7 @@
           ],
           "activity": "Build 500 (query, passage) pairs from your search or support logs, fine-tune an embedding model, and report Recall@5 and MRR before and after on real held-out queries.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Here is a secret about RAG systems. When answers are wrong, the language model often gets the blame, but the real culprit is retrieval. The right passage never reached the model. And one of the cheapest, highest-return fixes is fine-tuning the embedding model on your own queries. In this lesson you will learn when to do it, how contrastive training works, a complete Sentence Transformers script, and the operational steps people forget.",
@@ -2297,6 +2369,12 @@
                 "onScreen": "Try this now\n• 50 real queries + correct documents\n• Run current retrieval\n• Count top-5 hits = baseline",
                 "visual": "A table of 50 queries with a hit/miss column filling in; a percentage appears at the bottom labeled baseline recall@5.",
                 "seconds": 25
+              },
+              {
+                "narration": "Watch me do it. I export three months of help-center searches where users clicked an article and did not come back to search again. After cleaning, I have two thousand four hundred query and article pairs. I split off ten percent, and for evaluation I use the full corpus of all articles, not just the held-out positives. Baseline recall at five: fifty-eight percent. I mine one hard negative per pair with the current model, and train one epoch with multiple negatives ranking loss and the no-duplicates sampler, batch size sixty-four. It takes twenty-five minutes. Recall at five on the same evaluation rises to seventy-three percent, and English-only queries do not regress. Then operations: I embed every article with the new model into a new index named with the model version, run both indexes in shadow for a week, compare results on live queries, and switch. All numbers illustrative.",
+                "onScreen": "Watch me do it (illustrative)\n1 2,400 click pairs\n2 Full-corpus baseline: 58%\n3 Hard negatives + 1 epoch\n4 Recall@5: 73%\n5 New versioned index, shadow, switch",
+                "visual": "Search-log table filtering to click pairs; an evaluator output showing a baseline; training progress; an after-metrics panel; two index boxes v1 and v2 running in parallel before a traffic switch.",
+                "seconds": 64
               },
               {
                 "narration": "Recap. Retrieval caps RAG quality. Try cheaper fixes first, then fine-tune embeddings with anchor and positive pairs, in-batch negatives and hard negatives. Evaluate on real queries against the full corpus, and always re-index into a versioned index. Your next step: build five hundred pairs from your logs, fine-tune, and report recall at five and MRR before and after.",
@@ -2390,7 +2468,7 @@
           ],
           "activity": "Fill in the break-even calculator with your real volumes and current price sheets, then run pessimistic, expected and optimistic scenarios.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Sooner or later, someone from finance asks two questions: what does this cost, and when does it pay back? If your answer is it depends, the project stalls. In this lesson you will build a cost model for custom models that you can defend: one-off and recurring costs, two ways to estimate training, inference economics, break-even, and stress tests. Every number I use is illustrative; you will plug in your own.",
@@ -2471,6 +2549,12 @@
                 "seconds": 21
               },
               {
+                "narration": "Watch me do it. I open our usage dashboard for the classification feature: one point eight million requests last month, average nine hundred forty input tokens and six output tokens. I open the provider's current price page and note the date. Cost per request: input tokens times the input price plus output tokens times the output price, and I multiply by volume for the monthly bill. For the fine-tuned option, I run a short training trial on a rented GPU and measure tokens per second, which gives GPU hours for the full run; I multiply by four for experiments. I add labeling hours, evaluation hours and engineering days at our loaded rates, and the monthly server and monitoring costs. I put everything into the calculator and run three volume scenarios. Expected case: break-even in about eight months. Pessimistic, half the volume: never within two years. I write both on the summary slide, with sources and dates.",
+                "onScreen": "Watch me do it\n1 Real volume + tokens\n2 Current prices, dated\n3 Measure training throughput\n4 Add people costs\n5 Three scenarios → summary slide",
+                "visual": "Usage dashboard with highlighted averages; a price page snippet with a date stamp; a throughput measurement in a terminal; a spreadsheet filling one-off and recurring rows; three break-even lines, one never crossing.",
+                "seconds": 68
+              },
+              {
                 "narration": "Recap. Separate one-off and recurring costs. Estimate training by tokens or measured GPU hours. Remember shorter prompts after fine-tuning. Compute break-even, stress-test it, and count value beyond cost. Your next step: fill in the calculator with your real volumes and current prices, and run pessimistic, expected and optimistic scenarios.",
                 "onScreen": "Recap\n• Costs, break-even, stress tests, value\n• Next: three scenarios with real prices",
                 "visual": "Recap card with a calculator and a three-line chart icon.",
@@ -2549,7 +2633,7 @@
           ],
           "activity": "Build a weekly drift report for a model you run (or plan), define three retraining triggers, and document the rollback procedure.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "Launch day is exciting. Month four is where custom models quietly fail. Customers start writing differently, a new product launches, a festive season changes everything, and nobody notices until complaints pile up. In this lesson you will learn how to deploy custom models, version and release them safely, monitor for drift and quality, and decide when to retrain, before your users tell you.",
@@ -2628,6 +2712,12 @@
                 "onScreen": "Try this now\n• 3 Monday-morning numbers\n• A threshold for each\n• = your monitoring plan",
                 "visual": "Three dashboard tiles appear with a number and a dashed threshold line each; one tile crosses its threshold and turns amber.",
                 "seconds": 25
+              },
+              {
+                "narration": "Watch me do it. It is Monday morning. I run the drift report on last week's traffic. Language PSI is low. Channel PSI is point one five, fine. Label PSI is point two eight, above threshold, and the share of other has doubled. I open fifty messages labeled other and read them: thirty mention a new instalment payment option launched last Tuesday. That is a new intent. I check the weekly quality sample: accuracy on known intents is stable, so the model itself is fine; the world changed. I label two hundred instalment messages, add the intent, retrain with the same config, and run the evaluation rule: all conditions pass. I deploy the new adapter as challenger in shadow for three days, compare with the champion, then promote it. The old adapter stays in the registry for rollback. I update the model card and add instalments to the monitoring labels.",
+                "onScreen": "Watch me do it\n1 Monday drift report\n2 Label PSI 0.28 → read \"other\"\n3 New intent found\n4 Label, retrain, evaluate\n5 Shadow → promote, keep rollback",
+                "visual": "Terminal drift report with one PSI value highlighted; a message browser grouping 30 similar messages; a retrain pipeline animation; champion and challenger boxes in shadow; a registry list showing both versions.",
+                "seconds": 65
               },
               {
                 "narration": "Recap. Choose a deployment option that matches your tasks and runtime. Version base, adapter and data together, keep model cards, release champion versus challenger, and keep rollback one click away. Monitor input drift, output drift, quality and operations, and write retraining triggers in advance. Your next step: build a weekly drift report, define three triggers, and document your rollback procedure.",
@@ -2713,7 +2803,7 @@
           ],
           "activity": "Complete the capstone: a fine-tuned support-intent (or brand-voice) model with all seven deliverables, evaluated on real held-out data against your best baseline.",
           "lecture": {
-            "targetMinutes": 7,
+            "targetMinutes": 8,
             "scenes": [
               {
                 "narration": "This is where everything comes together. You are going to fine-tune a small open-weight model to route customer support messages to the right intent, fast and cheaply enough to run on every message, and prove with evidence that it beats your best non-fine-tuned setup. Uncertain messages will escalate to a stronger model or a human. If brand voice matters more to you, the same steps build a brand-voice classifier instead.",
@@ -2792,6 +2882,12 @@
                 "onScreen": "Try this now\n• Intent list + one-line definitions\n• Priority rule for the top ambiguity\n• 2 people label the same 20 messages",
                 "visual": "Intent list document types in; two labeler avatars label the same 20 message cards and an agreement percentage appears between them.",
                 "seconds": 23
+              },
+              {
+                "narration": "Watch me do it, in miniature. I take six intents and six hundred labeled messages. Baseline first: our best prompt on a strong model scores macro F1 of point eight three on a held-out set of one hundred and twenty. Then I fine-tune a small instruct model with LoRA on four hundred and eighty messages; it scores point eight six. I serve it with vLLM and run the router script on the held-out set. Two samples agree and the label is not other for ninety-eight messages; the small model is right on ninety-four of those. The other twenty-two escalate to the strong model, which gets nineteen right. Blended accuracy is higher than either alone, and the cost per thousand messages drops sharply because most never touch the strong model. I write these numbers, share handled, accuracy on that share and blended cost, straight into the evaluation report. Illustrative numbers, real workflow.",
+                "onScreen": "Watch me do it (illustrative)\n1 Baseline 0.83\n2 LoRA model 0.86\n3 Router: 98 handled, 94 correct\n4 22 escalated, 19 correct\n5 Report share, accuracy, cost",
+                "visual": "Mini pipeline animation from dataset split to baseline card, training card and router; a donut chart for handled vs escalated with accuracy labels; a cost-per-1,000 bar comparison; the report table filling in.",
+                "seconds": 66
               },
               {
                 "narration": "Congratulations. You can now decide when fine-tuning is worth it, build and protect datasets, train with SFT, LoRA and QLoRA, apply DPO and GRPO, evaluate honestly, choose hosted or self-managed paths, fine-tune embeddings, model costs, and run custom models in production. Your next step is the capstone itself. Then take the final exam.",
