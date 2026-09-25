@@ -34,6 +34,14 @@ export interface StatProps {
 }
 
 export function MeasurementTag({ measurement }: { measurement: Measurement }) {
+  // A plain count of records is self-evident: the label stays for assistive tech but adds no visual noise. The
+  // distinction that matters to readers, Measured vs Estimated, stays visible on every tile.
+  if (measurement === 'Count')
+    return (
+      <span className="visually-hidden">
+        {measurement}: {MEASUREMENT_HELP[measurement]}
+      </span>
+    );
   return (
     <span
       className={clsx('ui-measure', measurement === 'Estimated' && 'ui-measure--estimated')}
