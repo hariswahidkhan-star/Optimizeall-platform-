@@ -144,10 +144,10 @@
   padding: 0 var(--space-3);
   border-radius: var(--radius-control);
   color: var(--color-heading);
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1.0625rem;
   font-weight: var(--weight-semibold);
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: -0.011em;
   text-decoration: none;
   transition: background-color var(--duration-fast) var(--ease-standard);
 }
@@ -204,6 +204,16 @@
   background: var(--color-surface-2);
   box-shadow: inset 0 1px 0 var(--color-border);
   color: var(--color-text-muted);
+}
+
+/* Pages that end in a padded band (a site section, the closing CTA, a padded page container) already own their bottom
+   rhythm; the footer's own margin would stack on top of that padding and leave an empty strip of page background. */
+.public-main:has(
+    > :last-child:is(.site-section, .site-cta, .lx-public, .site-form-layout, .status-page),
+    > :last-child:not(.container) > :last-child:is(.site-section, .site-cta)
+  )
+  + .public-footer {
+  margin-top: 0;
 }
 
 .public-footer__inner {

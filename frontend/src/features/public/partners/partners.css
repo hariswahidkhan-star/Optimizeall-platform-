@@ -79,8 +79,8 @@
 
 .partner-unit__name {
   color: var(--color-heading);
-  font-family: var(--font-display);
-  letter-spacing: var(--tracking-tight);
+  font-family: var(--font-sans);
+  letter-spacing: -0.011em;
   font-size: 1.125rem;
   font-weight: var(--weight-semibold);
   line-height: var(--leading-snug);
@@ -186,7 +186,7 @@
   background: var(--color-surface);
   box-shadow: var(--shadow-card);
   color: var(--color-heading);
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-weight: var(--weight-semibold);
   letter-spacing: -0.01em;
   text-decoration: none;
@@ -398,9 +398,9 @@
 
 .partner-offering h3 {
   margin: 0;
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1.125rem;
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: -0.011em;
 }
 
 .partner-offering p {

@@ -48,9 +48,9 @@
 section > .lx-subhead {
   margin: var(--space-4) 0 0;
   color: var(--color-heading);
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1.125rem;
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: -0.011em;
   text-transform: none;
 }
 
@@ -62,9 +62,15 @@ section > .lx-subhead {
 }
 
 .lx-inline-icon {
+  display: inline-block; /* base.css makes every svg a block, which would put the icon on a line of its own */
   inline-size: 0.9em;
   block-size: 0.9em;
   vertical-align: -0.1em;
+}
+
+/* Glues a trailing icon to the last word of a link. */
+.lx-nowrap {
+  white-space: nowrap;
 }
 
 /* Inline flow (not flex) so a trailing note wraps like text. */
@@ -180,9 +186,12 @@ section > .lx-subhead {
     transform var(--duration-base) var(--ease-standard);
 }
 
-.lx-card:hover {
-  box-shadow: var(--shadow-card-hover), var(--shadow-highlight);
-  transform: translateY(-2px);
+/* Hover lift only where hover exists: on touch screens a tap would leave the card stuck lifted and underlined. */
+@media (hover: hover) {
+  .lx-card:hover {
+    box-shadow: var(--shadow-card-hover), var(--shadow-highlight);
+    transform: translateY(-2px);
+  }
 }
 
 .lx-card:has(.lx-card__link:focus-visible) {
@@ -260,8 +269,10 @@ section > .lx-subhead {
   transition: transform var(--duration-slow) var(--ease-emphasized);
 }
 
-.lx-card:hover .lx-card__badge {
-  transform: translateY(-2px) scale(1.04) rotate(-2deg);
+@media (hover: hover) {
+  .lx-card:hover .lx-card__badge {
+    transform: translateY(-2px) scale(1.04) rotate(-2deg);
+  }
 }
 
 .lx-card__body {
@@ -275,11 +286,11 @@ section > .lx-subhead {
 .lx-card__title {
   margin: 0;
   color: var(--color-heading);
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1.125rem;
   font-weight: var(--weight-semibold);
   line-height: 1.28;
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: -0.011em;
 }
 
 .lx-card__link {
@@ -305,11 +316,13 @@ section > .lx-subhead {
   box-shadow: none;
 }
 
-.lx-card:hover .lx-card__title {
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+@media (hover: hover) {
+  .lx-card:hover .lx-card__title {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+  }
 }
 
 .lx-card__subtitle {
@@ -689,11 +702,11 @@ section > .lx-subhead {
 
 .lx-hero__badge-name {
   color: var(--color-heading);
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1rem;
   font-weight: var(--weight-semibold);
   line-height: 1.3;
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: -0.011em;
 }
 
 @media (min-width: 900px) {
@@ -918,7 +931,7 @@ section > .lx-subhead {
   border-radius: 10px;
   background: var(--lx-cat-soft, var(--color-surface-2));
   color: var(--lx-cat-text, var(--color-text));
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 0.875rem;
   font-weight: var(--weight-semibold);
   font-variant-numeric: tabular-nums;
@@ -1237,6 +1250,11 @@ section > .lx-subhead {
   animation: lx-rise var(--duration-base) var(--ease-standard);
 }
 
+/* On the public academy the bar would otherwise sit over the footer's legal links at the very end of the page. */
+.site-layout:has(.lx-sticky-cta) .public-footer__legal {
+  padding-bottom: calc(var(--space-6) + 80px + env(safe-area-inset-bottom));
+}
+
 .portal-layout--bottom-nav .lx-sticky-cta {
   bottom: calc(var(--bottom-nav-height) + var(--space-3) + env(safe-area-inset-bottom));
 }
@@ -1247,7 +1265,7 @@ section > .lx-subhead {
   margin: 0;
   overflow: hidden;
   color: var(--color-heading);
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: var(--text-small);
   font-weight: var(--weight-semibold);
   text-overflow: ellipsis;
@@ -1407,7 +1425,7 @@ section > .lx-subhead {
   color: var(--color-heading);
   font-family: var(--font-display);
   font-weight: var(--weight-semibold);
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: -0.014em; /* 20–24px: a touch looser than the display tracking so words don't run together */
   line-height: 1.25;
   text-wrap: balance;
 }
@@ -1424,7 +1442,9 @@ section > .lx-subhead {
 
 .lx-lesson__body .site-prose h4 {
   margin-top: 1.6em;
+  font-family: var(--font-sans);
   font-size: 1.05em;
+  letter-spacing: -0.011em;
 }
 
 .lx-lesson__body .site-prose :where(h2, h3, h4) + * {
@@ -1564,7 +1584,7 @@ section > .lx-subhead {
 .lx-video__soon-title {
   margin: 0 0 2px;
   color: #fff;
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1.0625rem;
   font-weight: var(--weight-semibold);
 }
@@ -1667,7 +1687,7 @@ section > .lx-subhead {
   margin-bottom: var(--space-4);
   padding: 0;
   color: var(--color-heading);
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1.0625rem;
   font-weight: var(--weight-semibold);
   line-height: 1.45;
@@ -1936,7 +1956,7 @@ section > .lx-subhead {
   background: var(--color-surface);
   box-shadow: var(--shadow-card), var(--shadow-highlight);
   color: var(--color-heading);
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-weight: var(--weight-semibold);
   line-height: 1.35;
   text-decoration: none;
@@ -2045,7 +2065,7 @@ section > .lx-subhead {
 .lx-cta__title {
   margin: 0 0 var(--space-1) !important;
   color: var(--color-heading);
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1.0625rem;
   font-weight: var(--weight-semibold);
   line-height: 1.35;
@@ -2103,6 +2123,14 @@ section > .lx-subhead {
   text-transform: uppercase;
 }
 
+/* Phones: the eyebrow fits beside the ring on one line. */
+@media (max-width: 599px) {
+  .lx-continue__kicker {
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+  }
+}
+
 .lx-continue__title {
   margin: 0 0 var(--space-1);
   font-family: var(--font-display);
@@ -2141,11 +2169,20 @@ section > .lx-subhead {
 }
 
 .lx-continue .ui-ring__label {
+  display: grid;
+  place-items: center;
   color: #fff;
   font-size: 1rem;
 }
 
+/* The course badge is the card's art, framed by the progress ring. */
+.lx-continue__badge {
+  display: block;
+  filter: drop-shadow(0 6px 14px rgb(0 0 0 / 0.35));
+}
+
 .lx-continue .ui-button--primary {
+  border-color: transparent; /* the primary's navy edge reads as a dark outline on amber */
   background: var(--color-accent);
   color: var(--color-text-on-accent);
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.4), 0 8px 20px -8px rgb(252 179 30 / 0.6);
@@ -2223,6 +2260,26 @@ section > .lx-subhead {
   font-weight: var(--weight-semibold);
   line-height: 1.35;
   text-decoration: none;
+}
+
+/* Phones: the category tag moves under the title instead of squeezing it into a four-line column. */
+@media (max-width: 599px) {
+  .lx-row:has(> .lx-tag) {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: var(--space-4);
+    row-gap: var(--space-2);
+  }
+
+  .lx-row:has(> .lx-tag) > :first-child {
+    grid-row: span 2;
+    align-self: center;
+  }
+
+  .lx-row > .lx-tag {
+    grid-column: 2;
+    justify-self: start;
+  }
 }
 
 .lx-row__title:hover {
@@ -2345,7 +2402,7 @@ section > .lx-subhead {
 
 .lx-exam__course {
   color: var(--color-heading);
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-weight: var(--weight-semibold);
   line-height: 1.3;
 }
@@ -2361,7 +2418,7 @@ section > .lx-subhead {
   background: var(--color-surface-2);
   box-shadow: var(--ring-hairline);
   color: var(--color-heading);
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1.125rem;
   font-weight: var(--weight-semibold);
   font-variant-numeric: tabular-nums;
@@ -2937,4 +2994,18 @@ section > .lx-subhead {
   padding-left: 1.2em;
   max-block-size: 320px;
   overflow: auto;
+}
+
+/* "Check answer" is a small button on desktop; on touch screens it gets a full 44px target. */
+@media (pointer: coarse) {
+  .lx-check .ui-button {
+    min-block-size: 44px;
+    padding-inline: var(--space-5);
+  }
+}
+
+/* Small card titles (16px) on the portal's learning pages: Inter, like the public academy (see site.css). */
+.lx-page .ui-card__title {
+  font-family: var(--font-sans);
+  letter-spacing: -0.011em;
 }
