@@ -25,18 +25,18 @@ ARG DOTNET_VERSION=8.0
 FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine AS build
 WORKDIR /src
 
-# Restore layer: only project files + shared build props, so source edits don't invalidate the NuGet cache.
+# Restore layer: only project files + shared build props, so source edits don't invalidate the restored packages.
+# The packages live IN this layer (no BuildKit cache mount): builders such as Render reuse a cached restore layer but
+# not a cache mount's contents, which left `publish --no-restore` without its packages (NETSDK1064).
 COPY Directory.Build.props ./
 COPY src/OptimizeAll.Domain/OptimizeAll.Domain.csproj                 src/OptimizeAll.Domain/
 COPY src/OptimizeAll.Infrastructure/OptimizeAll.Infrastructure.csproj src/OptimizeAll.Infrastructure/
 COPY src/OptimizeAll.Infrastructure.Sqlite/OptimizeAll.Infrastructure.Sqlite.csproj src/OptimizeAll.Infrastructure.Sqlite/
 COPY src/OptimizeAll.Api/OptimizeAll.Api.csproj                       src/OptimizeAll.Api/
-RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
-    dotnet restore src/OptimizeAll.Api/OptimizeAll.Api.csproj
+RUN dotnet restore src/OptimizeAll.Api/OptimizeAll.Api.csproj
 
 COPY src/ src/
-RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
-    dotnet publish src/OptimizeAll.Api/OptimizeAll.Api.csproj \
+RUN dotnet publish src/OptimizeAll.Api/OptimizeAll.Api.csproj \
         -c Release --no-restore -o /app/publish /p:UseAppHost=false
 
 # ---------------------------------------------------------------------------------------------------------
@@ -44,8 +44,7 @@ FROM build AS efbundle
 ARG DOTNET_EF_VERSION=8.0.10
 ENV PATH="${PATH}:/root/.dotnet/tools"
 RUN dotnet tool install --global dotnet-ef --version ${DOTNET_EF_VERSION}
-RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
-    dotnet ef migrations bundle \
+RUN dotnet ef migrations bundle \
         --project src/OptimizeAll.Infrastructure/OptimizeAll.Infrastructure.csproj \
         --startup-project src/OptimizeAll.Api/OptimizeAll.Api.csproj \
         --configuration Release \
