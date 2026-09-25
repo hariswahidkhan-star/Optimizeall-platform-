@@ -252,10 +252,14 @@ target's email to be typed) starts a time-boxed session:
   settings (they choose the tag-manager/analytics scripts on every public page and the canonical site URL), adding
   and deleting website redirects (they decide where every visitor of a public address lands) and manual job runs, social
   OAuth connections/tokens and the email provider choice, client member invitations/role changes/removals (agency and
-  client portal), client proposal acceptance, and billable rates. Reads stay available so the impersonator can see what
-  the user sees. `UnitTests/Admin/ImpersonationCoverageTests` scans every controller action by reflection: any write
-  guarded by a money/credential/identity/role/integration permission must carry the attribute (or be allow-listed with a
-  reason there), and a maintained deny list covers the endpoints that are sensitive for what they do.
+  client portal), client proposal acceptance, and billable rates; also every message to a client's audience: sending or
+  scheduling an email or SMS campaign, resuming a paused one, activating a journey or enrolling a contact in it, and a
+  client's approval of a campaign send (docs/EMAIL_SMS.md, "Impersonation"). Campaign test sends (verified staff
+  addresses only) and pausing, unscheduling or cancelling a send stay available. Reads stay available so the
+  impersonator can see what the user sees. `UnitTests/Admin/ImpersonationCoverageTests` scans every controller action by
+  reflection (including actions inherited from an abstract base controller, e.g. the shared email/SMS campaign actions):
+  any write guarded by a money/credential/identity/role/integration permission must carry the attribute (or be
+  allow-listed with a reason there), and a maintained deny list covers the endpoints that are sensitive for what they do.
 * **Audit.** `admin.impersonation_started` (with the reason) and `admin.impersonation_ended` are recorded; every
   business audit row written during the session has `ActorUserId` = the user and `ImpersonatorUserId` = the staff
   member (`ActorType` "impersonation"; the audit log UI and CSV show "Admin X as User Y"); every state-changing

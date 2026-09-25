@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Api.Common.Notifications;
@@ -25,7 +26,8 @@ public sealed class TimeService(
     IAuditLogger audit,
     INotificationService notifications,
     IDatabaseDialect dialect,
-    TimeProvider clock)
+    TimeProvider clock,
+    IOptions<ExportOptions> exports)
 {
     /// <summary>Capacity used for utilization: 8 hours per weekday.</summary>
     public const int DailyCapacityMinutes = 8 * 60;
@@ -96,6 +98,13 @@ public sealed class TimeService(
 
     public async Task<IReadOnlyList<TimeEntryDto>> ListAsync(TimeEntryQuery q, CancellationToken ct)
     {
+        var rows = await (await FilterAsync(q, ct)).OrderByDescending(e => e.Date).ThenByDescending(e => e.CreatedAt).Take(2000).ToListAsync(ct);
+        return await ToDtosAsync(rows, ct);
+    }
+
+    /// <summary>The entries <paramref name="q"/> selects that the caller may see (own time, or everyone's with time.view_all).</summary>
+    private async Task<IQueryable<TimeEntry>> FilterAsync(TimeEntryQuery q, CancellationToken ct)
+    {
         var userId = q.UserId ?? currentUser.Id;
         if (userId != currentUser.Id || q.ProjectId is not null || q.ClientId is not null)
         {
@@ -110,9 +119,7 @@ public sealed class TimeService(
         var from = q.From ?? BudgetMath.WeekStart(await LocalTodayAsync(ct));
         var to = q.To ?? from.AddDays(6);
         if (to.DayNumber - from.DayNumber > 366) throw DeliveryRules.Invalid("time.range_too_large", "to", "Choose at most one year.");
-        query = query.Where(e => e.Date >= from && e.Date <= to);
-        var rows = await query.OrderByDescending(e => e.Date).ThenByDescending(e => e.CreatedAt).Take(2000).ToListAsync(ct);
-        return await ToDtosAsync(rows, ct);
+        return query.Where(e => e.Date >= from && e.Date <= to);
     }
 
     public async Task<TimeEntryDto> CreateAsync(TimeEntryRequest r, CancellationToken ct)
@@ -386,9 +393,15 @@ public sealed class TimeService(
         return new UtilizationDto(from, to, rows, rows.Sum(r => r.TotalMinutes), rows.Sum(r => r.BillableMinutes));
     }
 
+    /// <summary>
+    /// CSV of every entry the filters select (not only the 2,000 the list shows). More than the cap (Exports:TimeEntries,
+    /// default 50,000) is refused with 422 <c>export.too_large</c>.
+    /// </summary>
     public async Task<FileContentResult> ExportCsvAsync(TimeEntryQuery q, CancellationToken ct)
     {
-        var rows = await ListAsync(q, ct);
+        var filtered = await FilterAsync(q, ct);
+        await ExportLimit.EnsureAsync(filtered, exports.Value.TimeEntries, ct);
+        var rows = await ToDtosAsync(await filtered.OrderBy(e => e.Date).ThenBy(e => e.CreatedAt).ThenBy(e => e.Id).ToListAsync(ct), ct);
         return Csv.File($"time-{q.From:yyyyMMdd}-{q.To:yyyyMMdd}.csv",
             new[] { "Date", "User", "Client", "Project", "Task", "Hours", "Minutes", "Billable", "Note" },
             rows.OrderBy(r => r.Date).Select(r => new object?[]

@@ -488,7 +488,7 @@ changes nothing visible. Public replies on Closed tickets → `409 support.ticke
 | verb | path | permission |
 |---|---|---|
 | GET | `/admin/users?search=&role=&status=&country=&tier=&permission=&sort=email\|displayName\|lastActiveAt\|createdAt&desc=` | `users.view` |
-| GET | `/admin/users/export.csv` (same filters, ≤ 50,000 rows; no secrets) | `users.view` |
+| GET | `/admin/users/export.csv` (same filters, ≤ 50,000 rows, over the cap: 422 `export.too_large`; no secrets) | `users.view` |
 | GET | `/admin/users/{id}` | `users.view` |
 | POST | `/admin/users/{id}/suspend` `{ reason (3–500), confirm: true }` | `users.suspend` |
 | POST | `/admin/users/{id}/reactivate` `{ reason }` | `users.suspend` |
@@ -605,7 +605,7 @@ first; `action` is a prefix match (`admin.` or `admin.user_suspended`); `from`/`
   "before": { "tier": "Standard" }, "after": { "tier": "Gold" }, "reason": "...", "ipAddress": "...", "correlationId": "..." }
 ```
 
-`GET /admin/audit-logs/export.csv` — same filters, max 50,000 rows, UTF-8 with BOM, columns
+`GET /admin/audit-logs/export.csv` — same filters, max 50,000 rows (over the cap: 422 `export.too_large`, never a cut-short file), UTF-8 with BOM, columns
 `id,createdAt,actorUserId,actorEmail,actorType,action,entityType,entityId,reason,ipAddress,correlationId,before,after`
 (formula-injection safe).
 

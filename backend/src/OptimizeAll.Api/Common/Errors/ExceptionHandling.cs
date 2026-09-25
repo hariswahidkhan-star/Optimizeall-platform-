@@ -59,6 +59,7 @@ public sealed class ProblemExceptionHandler(ILogger<ProblemExceptionHandler> log
         DomainErrorKind.Forbidden => StatusCodes.Status403Forbidden,
         DomainErrorKind.Unauthorized => StatusCodes.Status401Unauthorized,
         DomainErrorKind.TooManyRequests => StatusCodes.Status429TooManyRequests,
+        DomainErrorKind.Unprocessable => StatusCodes.Status422UnprocessableEntity,
         _ => StatusCodes.Status400BadRequest,
     };
 

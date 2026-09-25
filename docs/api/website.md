@@ -248,7 +248,7 @@ Base path `/api/v1/agency/website`.
 |---|---|---|
 | `GET /overview` | any website permission | Dashboard numbers: inquiries in the last 30 days vs the previous 30, new inquiries, upcoming consultations, confirmed/pending subscribers, new applications, published and in-review posts, and inquiries by type, source (UTM) and day. |
 | `GET /inquiries?type=&status=&from=&to=&service=&utmSource=&search=&page=&pageSize=` | `site.manage` or `crm.view` | Inbox. `type`: `Contact \| Audit \| Quote \| Consultation`; `status`: `New \| InProgress \| Qualified \| Converted \| Closed \| Spam`. |
-| `GET /inquiries/export.csv` (same filters) | `site.manage` or `crm.view` | CSV (formula-injection safe), audited. |
+| `GET /inquiries/export.csv` (the list's filters: `type`, `status`, `from`, `to`, `service`, `utmSource`, `assignedTo`, `search`) | `site.manage` or `crm.view` | CSV (formula-injection safe) of exactly what the list shows; audited with the filters. ≤ 50,000 rows (over the cap: 422 `export.too_large`). |
 | `GET /inquiries/{id}` | `site.manage` or `crm.view` | Full payload, UTM, referrer, landing page, consent record. |
 | `PUT /inquiries/{id}` | `site.manage` | `{ status, assignedToUserId?, staffNotes?, concurrencyStamp }` |
 | `GET /bookings/settings` · `PUT /bookings/settings` | `site.manage` | `{ timeZone (IANA), slotMinutes 15–240, minNoticeHours, maxDaysAhead, weeklyAvailability: [{ day, start "09:00", end "17:00" }], isEnabled, concurrencyStamp }` |
@@ -259,7 +259,7 @@ Base path `/api/v1/agency/website`.
 | `POST /bookings/{id}/reschedule` | `site.manage` | `{ slotStart, notifyVisitor, concurrencyStamp }` (`409 website.slot_taken`). |
 | `POST /bookings/{id}/status` | `site.manage` | `{ status: Completed \| NoShow, concurrencyStamp }` |
 | `GET /newsletter/subscribers?status=&search=&page=&pageSize=` | `site.manage` | `status`: `Pending \| Confirmed \| Unsubscribed`. |
-| `GET /newsletter/subscribers/export.csv?status=` | `site.manage` | CSV of confirmed (or filtered) subscribers with consent version and timestamps; audited. |
+| `GET /newsletter/subscribers/export.csv?status=&search=` | `site.manage` | CSV of the subscribers the list shows (status, email search) with consent version and timestamps; audited. ≤ 100,000 rows (over the cap: 422 `export.too_large`). |
 
 ## Images
 

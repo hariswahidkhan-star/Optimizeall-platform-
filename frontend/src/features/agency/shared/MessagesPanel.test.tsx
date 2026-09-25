@@ -1,10 +1,15 @@
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { json, makeUser, mockFetch, session } from '@/test/fetchMock';
 import { renderWithApp } from '@/test/render';
 import { mockStaffApi } from '../delivery/testData';
-import { MessagesPanel } from './MessagesPanel';
+import { MessagesPanel, THREADS_PAGE_SIZE } from './MessagesPanel';
+
+/** A PagedResult as `GET …/threads/paged` returns it. */
+function paged<T>(items: T[], page = 1, total = items.length, pageSize = THREADS_PAGE_SIZE) {
+  return { items, total, page, pageSize, totalPages: Math.ceil(total / pageSize) };
+}
 
 function sizedFile(name: string, bytes: number, type = 'image/png') {
   const file = new File(['x'], name, { type });
@@ -15,7 +20,7 @@ function sizedFile(name: string, bytes: number, type = 'image/png') {
 describe('MessagesPanel composer', () => {
   it('names a file over 50 MB instead of silently sending the message without it', async () => {
     const user = userEvent.setup({ applyAccept: false });
-    const { calls } = mockStaffApi({ 'GET /agency/clients/c1/threads': () => json(200, []) });
+    const { calls } = mockStaffApi({ 'GET /agency/clients/c1/threads/paged': () => json(200, paged([])) });
     renderWithApp(<MessagesPanel base="/agency/clients/c1" audience="staff" />, {
       route: '/agency/clients/c1',
     });
@@ -37,7 +42,7 @@ describe('MessagesPanel composer', () => {
 
   it('refuses more than 10 attachments with a message', async () => {
     const user = userEvent.setup({ applyAccept: false });
-    mockStaffApi({ 'GET /agency/clients/c1/threads': () => json(200, []) });
+    mockStaffApi({ 'GET /agency/clients/c1/threads/paged': () => json(200, paged([])) });
     renderWithApp(<MessagesPanel base="/agency/clients/c1" audience="staff" />, {
       route: '/agency/clients/c1',
     });
@@ -90,8 +95,8 @@ describe('MessagesPanel internal threads', () => {
   it('lets staff start an internal conversation and marks internal threads', async () => {
     const user = userEvent.setup();
     const { calls } = mockStaffApi({
-      'GET /agency/clients/c1/threads': () =>
-        json(200, [summary({ id: 'th0', subject: 'Margin notes', isInternal: true })]),
+      'GET /agency/clients/c1/threads/paged': () =>
+        json(200, paged([summary({ id: 'th0', subject: 'Margin notes', isInternal: true })])),
       'POST /agency/clients/c1/threads': () =>
         json(201, thread({ id: 'th2', subject: 'Pricing strategy', isInternal: true })),
       'GET /agency/clients/c1/threads/th2': () =>
@@ -121,7 +126,7 @@ describe('MessagesPanel internal threads', () => {
     });
     const { calls } = mockFetch({
       'POST /auth/refresh': () => json(200, session(user)),
-      'GET /client/orgs/c1/threads': () => json(200, [summary()]),
+      'GET /client/orgs/c1/threads/paged': () => json(200, paged([summary()])),
       'GET /client/orgs/c1/threads/th1': () => json(200, thread({ canReply: false })),
     });
     renderWithApp(<MessagesPanel base="/client/orgs/c1" audience="client" canWrite={false} />, {
@@ -147,7 +152,7 @@ describe('MessagesPanel internal threads', () => {
     });
     mockFetch({
       'POST /auth/refresh': () => json(200, session(user)),
-      'GET /client/orgs/c1/threads': () => json(200, [summary()]),
+      'GET /client/orgs/c1/threads/paged': () => json(200, paged([summary()])),
       'GET /client/orgs/c1/threads/th1': () => json(200, thread({ canReply: false })),
     });
     renderWithApp(<MessagesPanel base="/client/orgs/c1" audience="client" />, {
@@ -159,5 +164,47 @@ describe('MessagesPanel internal threads', () => {
       ),
     ).toBeInTheDocument();
     expect(screen.queryByRole('form', { name: 'Reply' })).not.toBeInTheDocument();
+  });
+});
+
+describe('MessagesPanel paging', () => {
+  it('pages through more than 200 conversations instead of stopping at the first batch', async () => {
+    const user = userEvent.setup();
+    const total = 260;
+    const all = Array.from({ length: total }, (_, i) =>
+      summary({ id: `th${i}`, subject: `Conversation ${i + 1}` }),
+    );
+    let requested = 0;
+    const { fn } = mockStaffApi({
+      'GET /agency/clients/c1/threads/paged': () => {
+        requested += 1;
+        const page = requested;
+        const start = (page - 1) * THREADS_PAGE_SIZE;
+        return json(200, paged(all.slice(start, start + THREADS_PAGE_SIZE), page, total));
+      },
+    });
+    renderWithApp(<MessagesPanel base="/agency/clients/c1" audience="staff" />, {
+      route: '/agency/clients/c1',
+    });
+    const list = await screen.findByRole('list', { name: 'Conversations' });
+    expect(within(list).getAllByRole('listitem')).toHaveLength(THREADS_PAGE_SIZE);
+    expect(screen.getByText(`Showing ${THREADS_PAGE_SIZE} of ${total} conversations`)).toBeInTheDocument();
+
+    for (let shown = THREADS_PAGE_SIZE; shown < total; shown += THREADS_PAGE_SIZE) {
+      await user.click(screen.getByRole('button', { name: 'Show more conversations' }));
+      const expected = Math.min(shown + THREADS_PAGE_SIZE, total);
+      await waitFor(() => expect(within(list).getAllByRole('listitem')).toHaveLength(expected));
+    }
+    expect(within(list).getAllByRole('listitem')).toHaveLength(total);
+    // Past 200: the conversations the old endpoint silently dropped are reachable.
+    expect(within(list).getByRole('button', { name: 'Conversation 201' })).toBeInTheDocument();
+    expect(within(list).getByRole('button', { name: `Conversation ${total}` })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Show more conversations' })).not.toBeInTheDocument();
+
+    const urls = fn.mock.calls
+      .map(([input]) => new URL(String(input), 'http://localhost'))
+      .filter((u) => u.pathname.endsWith('/threads/paged'));
+    expect(urls.map((u) => u.searchParams.get('page'))).toEqual(['1', '2', '3', '4', '5', '6']);
+    expect(urls.every((u) => u.searchParams.get('pageSize') === String(THREADS_PAGE_SIZE))).toBe(true);
   });
 });

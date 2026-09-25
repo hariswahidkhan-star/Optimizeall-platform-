@@ -42,7 +42,7 @@ public sealed class PaymentsHubController(
     [RequireAnyPermission(Permissions.BillingView, Permissions.PayoutsView)]
     public Task<PaymentRecordDetailDto> Detail(PaymentRecordKind kind, Guid id, CancellationToken ct) => queries.DetailAsync(kind, id, ct);
 
-    /// <summary>CSV of every record matching the filters (formula-safe; at most 20,000 rows).</summary>
+    /// <summary>CSV of every record matching the filters (formula-safe; over 20,000 rows is a 422 <c>export.too_large</c>).</summary>
     [HttpGet("export.csv")]
     [RequireAnyPermission(Permissions.BillingView, Permissions.PayoutsView)]
     public async Task<FileContentResult> Export([FromQuery] PaymentHubQuery query, CancellationToken ct)

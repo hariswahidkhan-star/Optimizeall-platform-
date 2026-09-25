@@ -144,7 +144,8 @@ keep using *Agency → Billing*.
 month (net of refunds and reversals), outstanding receivables by age (current, 1–30, 31–60, 61–90, 90+ days), payouts
 due in batches, the next payout cycle's estimate and what was paid out this month. The table can be filtered by
 direction, status, type, method, client, participant, invoice, batch, dates and "overdue only", and exported as CSV
-(formula-safe; at most 20,000 rows). Click a row for its detail: the invoice's payments, proof files, reminders sent and
+(formula-safe; more than 20,000 matching rows is refused with 422 `export.too_large` and the page says to narrow the
+filters, instead of a file cut short). Click a row for its detail: the invoice's payments, proof files, reminders sent and
 the audit history.
 
 Statuses: **Scheduled** (payout in a draft batch), **Pending** (an open invoice balance, an unconfirmed client report

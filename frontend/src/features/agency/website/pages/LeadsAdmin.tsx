@@ -146,6 +146,7 @@ export function WebsiteOverviewPage() {
 // ---------------------------------------------------------------- Inquiries
 
 export function InquiriesPage() {
+  const toast = useToast();
   const [params, setParams] = useSearchParams();
   const [search, setSearch] = useState(params.get('search') ?? '');
   const page = Number(params.get('page') ?? 1) || 1;
@@ -172,7 +173,16 @@ export function InquiriesPage() {
         title="Inquiries"
         description="Every contact, audit, quote and consultation request from the website. New inquiries also notify staff and create CRM leads."
         actions={
-          <Button variant="secondary" leadingIcon={<Download />} onClick={() => void api.download(`${W}/inquiries/export.csv`, 'website-inquiries.csv', { query: { type, status } })}>
+          <Button
+            variant="secondary"
+            leadingIcon={<Download />}
+            onClick={() =>
+              // The same filters as the list, so the file holds what the inbox shows.
+              api
+                .download(`${W}/inquiries/export.csv`, 'website-inquiries.csv', { query: { type, status, assignedTo, search } })
+                .catch((e) => toast.error('Export failed', errorMessage(e)))
+            }
+          >
             Export CSV
           </Button>
         }
@@ -663,7 +673,15 @@ export function SubscribersPage() {
         title="Newsletter subscribers"
         description="Double opt-in: only Confirmed subscribers may be emailed. Consent version, time and source are kept for every signup."
         actions={
-          <Button variant="secondary" leadingIcon={<Download />} onClick={() => void api.download(`${W}/newsletter/subscribers/export.csv`, 'newsletter-subscribers.csv', { query: { status } })}>
+          <Button
+            variant="secondary"
+            leadingIcon={<Download />}
+            onClick={() =>
+              api
+                .download(`${W}/newsletter/subscribers/export.csv`, 'newsletter-subscribers.csv', { query: { status, search } })
+                .catch((e) => toast.error('Export failed', errorMessage(e)))
+            }
+          >
             Export CSV
           </Button>
         }

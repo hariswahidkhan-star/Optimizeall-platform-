@@ -18,7 +18,8 @@ namespace OptimizeAll.Api.Modules.Website.Blog;
 /// <summary>
 /// Blog editorial workflow. <c>blog.write</c> drafts, edits drafts/in-review posts and submits them for review;
 /// <c>blog.publish</c> publishes, schedules, unpublishes, returns posts to draft and edits live posts. Audited. Renaming a
-/// live post redirects its old address to the new one (<see cref="RedirectService"/>).
+/// live post redirects its old address to the new one (<see cref="RedirectService"/>); so does publishing again under a new
+/// slug a post that was unpublished and renamed meanwhile (<see cref="BlogPost.LastLiveSlug"/>).
 /// </summary>
 public sealed class BlogService(CmsStore store, IAuditLogger audit, WebsiteRules rules, ICurrentUser user, TimeProvider clock, RedirectService redirects)
 {
@@ -155,7 +156,7 @@ public sealed class BlogService(CmsStore store, IAuditLogger audit, WebsiteRules
         await ApplyAsync(p, input, ct);
         await store.EnsureSlugFreeAsync<BlogPost>(p.Slug, p.Id, ct);
         audit.Record("blog.post_updated", nameof(BlogPost), p.Id, before, Snapshot(p));
-        await redirects.SaveAsync(Address(p, wasAt), () => store.SaveAsync(ct), ct);
+        await redirects.SaveAsync(await AddressAsync(p, wasAt, ct), () => store.SaveAsync(ct), ct);
         return ToDto(p);
     }
 
@@ -230,7 +231,7 @@ public sealed class BlogService(CmsStore store, IAuditLogger audit, WebsiteRules
         var wasAt = LiveAddress(p);
         change(p);
         audit.Record(action, nameof(BlogPost), p.Id, before, new { p.Status, p.PublishAt, p.PublishedAt }, WebsiteRules.Clean(input.Note));
-        await redirects.SaveAsync(Address(p, wasAt), () => Db.SaveChangesAsync(ct), ct);
+        await redirects.SaveAsync(await AddressAsync(p, wasAt, ct), () => Db.SaveChangesAsync(ct), ct);
         return ToDto(p);
     }
 
@@ -249,7 +250,30 @@ public sealed class BlogService(CmsStore store, IAuditLogger audit, WebsiteRules
     private string? LiveAddress(BlogPost p) =>
         p.Status == BlogPostStatus.Published && p.PublishedAt <= clock.GetUtcNow().UtcDateTime ? RedirectPaths.PostPath(p.Slug) : null;
 
-    private AddressChange Address(BlogPost p, string? wasAt) => new(RedirectPaths.Post, p.Id, wasAt, LiveAddress(p));
+    /// <summary>
+    /// The address change of a save. A post that is live after the save and was not live before it (published again, or
+    /// published for the first time) moves from the address it was last live under, if that differs: an unpublish →
+    /// rename → publish keeps the old links working like a rename of the live post does. Also remembers the live slug.
+    /// </summary>
+    private async Task<AddressChange> AddressAsync(BlogPost p, string? wasAt, CancellationToken ct)
+    {
+        var liveAt = LiveAddress(p);
+        if (liveAt is null) return new AddressChange(RedirectPaths.Post, p.Id, wasAt, null);
+        var from = wasAt ?? await PreviousLiveAddressAsync(Db, p.Id, p.Slug, p.LastLiveSlug, ct);
+        p.LastLiveSlug = p.Slug;
+        return new AddressChange(RedirectPaths.Post, p.Id, from, liveAt);
+    }
+
+    /// <summary>
+    /// /blog/{lastLiveSlug} when the post was last live under another slug that no other post has taken since (that post
+    /// owns the address now), else null.
+    /// </summary>
+    internal static async Task<string?> PreviousLiveAddressAsync(AppDbContext db, Guid postId, string slug, string? lastLiveSlug, CancellationToken ct)
+    {
+        if (string.IsNullOrEmpty(lastLiveSlug) || lastLiveSlug == slug) return null;
+        var taken = await db.Set<BlogPost>().AnyAsync(o => o.Id != postId && o.Slug == lastLiveSlug, ct);
+        return taken ? null : RedirectPaths.PostPath(lastLiveSlug);
+    }
 
     private static DomainException InvalidTransition(string message) => DomainException.Conflict("blog.invalid_transition", message);
 
@@ -311,7 +335,7 @@ public sealed class BlogService(CmsStore store, IAuditLogger audit, WebsiteRules
 }
 
 /// <summary>Publishes scheduled posts whose time has come. Conditional per-row update: safe to retry and to run on several instances.</summary>
-public sealed class BlogSchedulerJob(AppDbContext db, IAuditLogger audit, TimeProvider clock) : IJob
+public sealed class BlogSchedulerJob(AppDbContext db, IAuditLogger audit, TimeProvider clock, RedirectService redirects) : IJob
 {
     public string Name => nameof(BlogSchedulerJob);
 
@@ -321,26 +345,34 @@ public sealed class BlogSchedulerJob(AppDbContext db, IAuditLogger audit, TimePr
         var due = await db.Set<BlogPost>().AsNoTracking()
             .Where(p => p.Status == BlogPostStatus.Scheduled && p.PublishAt != null && p.PublishAt <= now)
             .OrderBy(p => p.PublishAt).ThenBy(p => p.Id)
-            .Select(p => new { p.Id, p.PublishAt }).Take(200).ToListAsync(ct);
+            .Select(p => new { p.Id, p.PublishAt, p.Slug, p.LastLiveSlug }).Take(200).ToListAsync(ct);
         var published = 0;
         foreach (var post in due)
         {
             var at = post.PublishAt!.Value;
-            var changed = await db.Set<BlogPost>()
-                .Where(p => p.Id == post.Id && p.Status == BlogPostStatus.Scheduled && p.PublishAt == post.PublishAt)
-                .ExecuteUpdateAsync(s => s
-                    .SetProperty(p => p.Status, BlogPostStatus.Published)
-                    .SetProperty(p => p.PublishedAt, p => p.PublishedAt ?? at)
-                    .SetProperty(p => p.PublishAt, (DateTime?)null)
-                    .SetProperty(p => p.UpdatedAt, now)
-                    .SetProperty(p => p.ConcurrencyStamp, Guid.NewGuid()), ct);
-            if (changed == 1)
+            // Going live claims the address and, when the post was last live under another slug (unpublished and renamed
+            // before it was scheduled), redirects that address here, like publishing by hand (BlogService).
+            var from = await BlogService.PreviousLiveAddressAsync(db, post.Id, post.Slug, post.LastLiveSlug, ct);
+            var change = new AddressChange(RedirectPaths.Post, post.Id, from, RedirectPaths.PostPath(post.Slug));
+            var done = await redirects.WriteAsync(async () =>
             {
+                var changed = await db.Set<BlogPost>()
+                    .Where(p => p.Id == post.Id && p.Status == BlogPostStatus.Scheduled && p.PublishAt == post.PublishAt && p.Slug == post.Slug)
+                    .ExecuteUpdateAsync(s => s
+                        .SetProperty(p => p.Status, BlogPostStatus.Published)
+                        .SetProperty(p => p.PublishedAt, p => p.PublishedAt ?? at)
+                        .SetProperty(p => p.PublishAt, (DateTime?)null)
+                        .SetProperty(p => p.LastLiveSlug, p => p.Slug)
+                        .SetProperty(p => p.UpdatedAt, now)
+                        .SetProperty(p => p.ConcurrencyStamp, Guid.NewGuid()), ct);
+                if (changed != 1) return false;
+                await redirects.StageAsync(change, ct);
                 audit.RecordSystem("blog.post_published", nameof(BlogPost), post.Id, new { Status = BlogPostStatus.Published, ScheduledFor = at });
-                published++;
-            }
+                await db.SaveChangesAsync(ct);
+                return true;
+            }, ct);
+            if (done) published++;
         }
-        if (published > 0) await db.SaveChangesAsync(ct);
         return $"Published {published} scheduled post(s).";
     }
 }

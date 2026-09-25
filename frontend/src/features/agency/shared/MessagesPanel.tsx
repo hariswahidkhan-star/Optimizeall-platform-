@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { MessagesSquare, Paperclip } from 'lucide-react';
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -17,6 +17,7 @@ import {
 } from '@/components/ui';
 import { api } from '@/lib/api/client';
 import { errorMessage } from '@/lib/api/errors';
+import type { PagedResult } from '@/lib/api/types';
 import type { DeliveryFile, Thread, ThreadSummary } from './deliveryTypes';
 import { FilePreview } from './deliveryUi';
 
@@ -29,6 +30,8 @@ interface Props {
 }
 
 const MAX_BYTES = 50 * 1024 * 1024;
+/** Conversations loaded per request; "Show more conversations" loads the next page. */
+export const THREADS_PAGE_SIZE = 50;
 const MAX_FILES = 10;
 
 function Composer({
@@ -200,10 +203,19 @@ export function MessagesPanel({ base, audience, canWrite = true }: Props) {
   const qc = useQueryClient();
   const [params, setParams] = useSearchParams();
   const openId = params.get('thread');
-  const threads = useQuery({
+  // Paged (most recent activity first): a client with hundreds of conversations still reaches the oldest ones.
+  const threads = useInfiniteQuery({
     queryKey: ['delivery', 'threads', base],
-    queryFn: ({ signal }) => api.get<ThreadSummary[]>(`${base}/threads`, { signal }),
+    queryFn: ({ signal, pageParam }) =>
+      api.get<PagedResult<ThreadSummary>>(`${base}/threads/paged`, {
+        signal,
+        query: { page: pageParam, pageSize: THREADS_PAGE_SIZE },
+      }),
+    initialPageParam: 1,
+    getNextPageParam: (last) => (last.page < last.totalPages ? last.page + 1 : undefined),
   });
+  const threadItems = threads.data?.pages.flatMap((p) => p.items) ?? [];
+  const threadTotal = threads.data?.pages.at(-1)?.total ?? 0;
   const thread = useQuery({
     queryKey: ['delivery', 'thread', base, openId],
     queryFn: ({ signal }) => api.get<Thread>(`${base}/threads/${openId}`, { signal }),
@@ -231,13 +243,14 @@ export function MessagesPanel({ base, audience, canWrite = true }: Props) {
         <h2 id="threads-heading">Conversations</h2>
         {threads.isPending ? (
           <Skeleton height={120} />
-        ) : threads.isError ? (
+        ) : !threads.data ? (
+          // Only when the first page failed: a failed "show more" keeps the loaded list (alert below).
           <ErrorState error={threads.error} compact />
-        ) : threads.data.length === 0 ? (
+        ) : threadItems.length === 0 ? (
           <EmptyState compact icon={<MessagesSquare aria-hidden="true" />} title="No conversations yet" />
         ) : (
           <ul className="dl-list" aria-label="Conversations">
-            {threads.data.map((t) => (
+            {threadItems.map((t) => (
               <li key={t.id} className="dl-list__item" aria-current={t.id === openId ? 'true' : undefined}>
                 <span className="dl-list__main">
                   <button type="button" className="dl-card__title" onClick={() => open(t.id)}>
@@ -257,6 +270,21 @@ export function MessagesPanel({ base, audience, canWrite = true }: Props) {
             ))}
           </ul>
         )}
+        {threadItems.length > 0 && threadTotal > threadItems.length ? (
+          <div className="dl-row">
+            <span className="dl-muted" role="status">
+              Showing {threadItems.length} of {threadTotal} conversations
+            </span>
+            <Button
+              variant="secondary"
+              loading={threads.isFetchingNextPage}
+              onClick={() => void threads.fetchNextPage()}
+            >
+              Show more conversations
+            </Button>
+          </div>
+        ) : null}
+        {threads.isFetchNextPageError ? <Alert tone="danger">{errorMessage(threads.error)}</Alert> : null}
         {canWrite && openId ? (
           <Button variant="secondary" onClick={() => open(null)}>
             New conversation

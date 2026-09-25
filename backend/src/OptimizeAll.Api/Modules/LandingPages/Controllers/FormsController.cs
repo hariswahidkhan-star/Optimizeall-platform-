@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Api.Common.Security;
@@ -113,7 +114,7 @@ public sealed class SubmissionQuery : PageQuery
 [Route("api/v1/agency/pages")]
 public sealed class FormsController(
     AppDbContext db, SeoAccess access, IClientScope scope, FormService forms, FormFileStore fileStore, IAuditLogger audit,
-    IConfiguration configuration) : ControllerBase
+    IConfiguration configuration, IOptions<ExportOptions> exports) : ControllerBase
 {
     [HttpGet("form-templates")]
     public async Task<List<FormTemplateDto>> Templates(CancellationToken ct)
@@ -225,7 +226,8 @@ public sealed class FormsController(
     public async Task<IActionResult> Export(Guid id, [FromQuery] SubmissionQuery query, CancellationToken ct)
     {
         var form = await LoadAsync(id, ct, tracked: false);
-        var rows = await Filter(id, query).OrderByDescending(s => s.SubmittedAt).Take(50_000).ToListAsync(ct);
+        await ExportLimit.EnsureAsync(Filter(id, query), exports.Value.FormSubmissions, ct);
+        var rows = await Filter(id, query).OrderByDescending(s => s.SubmittedAt).ThenByDescending(s => s.Id).ToListAsync(ct);
         var dtos = await ToDtosAsync(form, rows, ct);
         var fieldKeys = FormSchemas.Deserialize(form.SchemaJson).AllFields.Select(f => f.Key).ToList();
         audit.Record("forms.submissions_exported", nameof(Form), form.Id, after: new { Rows = rows.Count });

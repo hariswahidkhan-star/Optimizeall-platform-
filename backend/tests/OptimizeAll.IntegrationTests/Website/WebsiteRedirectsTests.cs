@@ -206,6 +206,62 @@ public sealed class WebsiteRedirectsTests(ApiFactory api) : IClassFixture<ApiFac
     }
 
     [Fact]
+    public async Task A_post_unpublished_renamed_and_published_again_redirects_its_old_live_address()
+    {
+        var admin = await api.AdminAsync();
+        const string posts = "/api/v1/agency/website/blog/posts";
+        var body = string.Join(" ", Enumerable.Repeat("An unpublished rename must not break the links to the address that was live.", 3));
+        object Post(string slug, Guid? stamp = null) => new { slug, title = "Post", excerpt = "Excerpt.", bodyMarkdown = body, concurrencyStamp = stamp };
+        async Task<JsonElement> ActAsync(JsonElement p, string action, object? extra = null) =>
+            await admin.PostJsonAsync($"{posts}/{p.GetProperty("id").GetGuid()}/{action}",
+                extra ?? new { concurrencyStamp = p.GetProperty("concurrencyStamp").GetGuid() }, 200);
+        async Task<JsonElement> RenameAsync(JsonElement p, string slug) =>
+            await admin.PutJsonAsync($"{posts}/{p.GetProperty("id").GetGuid()}", Post(slug, p.GetProperty("concurrencyStamp").GetGuid()));
+
+        // Live at A → unpublished → renamed to B (nothing live to redirect to yet) → published again at B: A redirects to B.
+        var (a, b, c) = (Unique("post-live"), Unique("post-renamed"), Unique("post-again"));
+        var post = await admin.PostJsonAsync(posts, Post(a), 201);
+        post = await ActAsync(post, "publish");
+        // An older address that already redirected to A follows the post to its new address (no chain).
+        var older = Unique("post-older");
+        await admin.PostJsonAsync(Redirects, new { fromPath = $"/blog/{older}", toPath = $"/blog/{a}" }, 201);
+        post = await ActAsync(post, "unpublish");
+        post = await RenameAsync(post, b);
+        Assert.Null(await LookupAsync($"/blog/{a}"));
+        post = await ActAsync(post, "publish");
+        Assert.Equal($"/blog/{b}", await LookupAsync($"/blog/{a}"));
+        Assert.Equal($"/blog/{b}", await LookupAsync($"/blog/{older}"));
+        Assert.Equal((HttpStatusCode.MovedPermanently, $"/blog/{b}"), await DocumentAsync($"/blog/{a}"));
+        var sitemap = await SitemapAsync();
+        Assert.Contains($"/blog/{b}</loc>", sitemap);
+        Assert.DoesNotContain($"/blog/{a}</loc>", sitemap);
+
+        // The same through a return to draft and the scheduler: the job publishing the post records the redirect too.
+        post = await ActAsync(post, "return-to-draft");
+        post = await RenameAsync(post, c);
+        post = await ActAsync(post, "schedule", new { concurrencyStamp = post.GetProperty("concurrencyStamp").GetGuid(), publishAt = api.Clock.GetUtcNow().UtcDateTime.AddHours(1) });
+        Assert.Null(await LookupAsync($"/blog/{c}"));
+        api.Clock.Advance(TimeSpan.FromHours(2));
+        await api.RunJobAsync<OptimizeAll.Api.Modules.Website.Blog.BlogSchedulerJob>();
+        Assert.Equal($"/blog/{c}", await LookupAsync($"/blog/{b}"));
+        Assert.Equal($"/blog/{c}", await LookupAsync($"/blog/{a}"));
+        Assert.Equal($"/blog/{c}", await LookupAsync($"/blog/{older}"));
+        await api.Anonymous().GetJsonAsync($"/api/v1/public/blog/{c}");
+        admin = await api.AdminAsync(); // the clock moved past the access token's lifetime
+
+        // An old address another post has taken since is left to that post.
+        var (x, y) = (Unique("post-x"), Unique("post-y"));
+        var first = await ActAsync(await admin.PostJsonAsync(posts, Post(x), 201), "publish");
+        first = await ActAsync(first, "unpublish");
+        first = await RenameAsync(first, y);
+        var newcomer = await ActAsync(await admin.PostJsonAsync(posts, Post(x), 201), "publish");
+        await ActAsync(first, "publish");
+        Assert.Null(await LookupAsync($"/blog/{x}"));
+        Assert.False(await api.WithDbAsync(db => db.Set<SiteRedirect>().AnyAsync(r => r.FromPath == $"/blog/{x}")));
+        Assert.Equal(x, newcomer.GetProperty("slug").GetString());
+    }
+
+    [Fact]
     public async Task Staff_add_and_delete_manual_redirects_with_validation_collapse_and_loop_prevention()
     {
         var admin = await api.AdminAsync();

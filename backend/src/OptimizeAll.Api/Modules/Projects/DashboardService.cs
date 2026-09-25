@@ -154,7 +154,7 @@ public sealed class ClientPortalService(
             all.Where(d => d.Status != DeliverableStatus.ClientReview).Take(6).ToList(),
             (await reports.ClientListAsync(clientId, ct)).FirstOrDefault(),
             meetings.Where(m => m.Status == MeetingStatus.Scheduled).Take(5).ToList(),
-            (await communication.ThreadsAsync(clientId, ct)).Take(5).ToList(),
+            (await communication.ThreadPageAsync(clientId, new ThreadQuery { Page = 1, PageSize = 5 }, ct)).Items.ToList(),
             await clients.AccountTeamAsync(clientId, ct),
             await ProjectsAsync(clientId, ct),
             await relationship.NpsStatusAsync(clientId, ct),

@@ -27,6 +27,13 @@ public class BlogCategory : AuditedEntity, IConcurrencyStamped, ISlugged
 public class BlogPost : AuditedEntity, IConcurrencyStamped, ISlugged
 {
     public string Slug { get; set; } = string.Empty;
+
+    /// <summary>
+    /// The slug the post was last live under (set whenever it is live). When an unpublished post is renamed and published
+    /// again, its old public address redirects to the new one from this, although the post was not live at the rename.
+    /// </summary>
+    public string? LastLiveSlug { get; set; }
+
     public string Title { get; set; } = string.Empty;
     public string Excerpt { get; set; } = string.Empty;
 

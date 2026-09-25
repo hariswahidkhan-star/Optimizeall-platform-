@@ -218,7 +218,7 @@ describe('Client messages by duty', () => {
   ];
 
   it('is read-only for a Viewer: no composer, with an explanation', async () => {
-    mockClientApi({ 'GET /client/orgs/org-a/threads': () => json(200, threads) }, [aurora]);
+    mockClientApi({ 'GET /client/orgs/org-a/threads/paged': () => json(200, { items: threads, total: threads.length, page: 1, pageSize: 50, totalPages: 1 }) }, [aurora]);
     renderWithApp(<ClientMessagesPage />, { route: '/client/messages', path: '/client/messages' });
     expect(await screen.findByText(/Your role is read-only here/)).toBeInTheDocument();
     expect(await screen.findByRole('button', { name: 'Launch plan' })).toBeInTheDocument();
@@ -226,7 +226,7 @@ describe('Client messages by duty', () => {
   });
 
   it('lets an Approver start a conversation', async () => {
-    mockClientApi({ 'GET /client/orgs/org-n/threads': () => json(200, []) }, [nimbus]);
+    mockClientApi({ 'GET /client/orgs/org-n/threads/paged': () => json(200, { items: [], total: 0, page: 1, pageSize: 50, totalPages: 0 }) }, [nimbus]);
     renderWithApp(<ClientMessagesPage />, { route: '/client/messages', path: '/client/messages' });
     expect(await screen.findByRole('form', { name: 'New conversation' })).toBeInTheDocument();
     expect(screen.queryByText(/Your role is read-only here/)).not.toBeInTheDocument();

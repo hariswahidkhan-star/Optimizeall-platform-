@@ -5,6 +5,7 @@ import {
   address,
   as,
   call,
+  codeOf,
   design,
   landing,
   mailsWith,
@@ -21,7 +22,8 @@ import {
 /**
  * Who may do what with the journey's email: client approval in the client portal (reject with a note → back to draft
  * → approve → sent), the client portal's tenancy (another organisation sees nothing), staff without email.send (author
- * only), staff without email.manage (no area at all), anonymous callers, and an admin viewing as the account manager.
+ * only), staff without email.manage (no area at all), anonymous callers, and an admin viewing as the account manager
+ * (reads and drafts only: the send to the audience is refused, 403 auth.impersonation_forbidden_action, in the API and UI).
  */
 interface Campaign {
   id: string;
@@ -263,7 +265,13 @@ test('designer (no email permission), client users and anonymous callers are kep
   expect((await call(accounts.designerStaff, 'GET', '/client/email/campaigns')).status).toBe(403);
 });
 
-test('an admin viewing as the account manager: reads and drafts work, the send is audited as "admin as AM"', async () => {
+const BLOCKED =
+  'This action is not available while you are viewing as another user. Exit the impersonation session first.';
+
+test('an admin viewing as the account manager: reads and drafts work, sending to the audience is refused (403 in the API and the UI)', async ({
+  browser,
+}) => {
+  test.setTimeout(4 * 60_000);
   const admin = await as(accounts.admin);
   const users = await admin.get<{ items: { id: string; email: string }[] }>(
     `/admin/users?search=${encodeURIComponent(accounts.am.email)}`,
@@ -300,19 +308,71 @@ test('an admin viewing as the account manager: reads and drafts work, the send i
     },
   });
   expect(created.status).toBe(200);
-  const sent = await raw<Campaign>('POST', `/agency/email/campaigns/${created.body.id}/send`, {
-    token,
-    body: { confirm: true, confirmName: name, concurrencyStamp: created.body.concurrencyStamp },
+  // Sending (or scheduling) reaches the client's whole audience: refused while impersonating, like payouts.
+  const sent = await raw<{ code?: string; title?: string }>(
+    'POST',
+    `/agency/email/campaigns/${created.body.id}/send`,
+    {
+      token,
+      body: { confirm: true, confirmName: name, concurrencyStamp: created.body.concurrencyStamp },
+    },
+  );
+  expect(`${sent.status} ${codeOf(sent)}`).toBe('403 auth.impersonation_forbidden_action');
+  expect(sent.body.title).toBe(BLOCKED);
+  // Nothing was confirmed: still a draft, no send_confirmed audit row; the refused request is on record for the session.
+  const draftNow = await call<Campaign>(accounts.am, 'GET', `/agency/email/campaigns/${created.body.id}`);
+  expect(draftNow.body.status).toBe('Draft');
+  const confirmed = await admin.get<{ items: unknown[] }>(
+    `/admin/audit-logs?action=email.campaign.send_confirmed&entityId=${created.body.id}`,
+  );
+  expect(confirmed.items).toHaveLength(0);
+  const refused = await admin.get<{
+    items: { actorUserId: string; impersonatorUserId: string | null; after: unknown }[];
+  }>(`/admin/audit-logs?action=impersonation.request&entityId=${amId}&pageSize=50`);
+  const refusedRow = refused.items.find((i) =>
+    JSON.stringify(i.after).includes(`/agency/email/campaigns/${created.body.id}/send`),
+  );
+  expect(refusedRow).toMatchObject({ actorUserId: amId, impersonatorUserId: admin.user.id });
+  expect(JSON.stringify(refusedRow!.after)).toContain('403');
+  // The same in the browser: the admin logs in as the account manager and tries to send the draft.
+  const page = await actor(browser, accounts.admin, landing.admin);
+  const errors = watchErrors(page);
+  await page.goto(`/admin/users/${amId}`);
+  await page.getByRole('button', { name: 'Log in as' }).click();
+  const login = page.getByRole('alertdialog', { name: /^Log in as / });
+  await login.getByLabel(`Type ${accounts.am.email} to confirm`).fill(accounts.am.email);
+  await login.getByLabel(/Why do you need to view this account/).fill('E2E: checking a send as Amira');
+  await login.getByRole('button', { name: 'Log in as user' }).click();
+  await expect(page).toHaveURL(landing.agency, { timeout: 60_000 });
+  await expect(page.getByRole('region', { name: 'Impersonation' })).toContainText('You are viewing as');
+  errors.ignore(/HTTP 403 POST /);
+  await page.goto(`/agency/email/campaigns/${created.body.id}`);
+  await expect(page.getByRole('heading', { level: 1, name })).toBeVisible();
+  await page.getByRole('button', { name: 'Review & send' }).click();
+  const send = modal(page, `Send “${name}”?`);
+  await send.getByLabel(`Type ${name} to confirm`).fill(name);
+  await send.getByRole('button', { name: 'Send now' }).click();
+  await expect(send.getByRole('alert')).toContainText(BLOCKED);
+  expect(
+    (await call<Campaign>(accounts.am, 'GET', `/agency/email/campaigns/${created.body.id}`)).body.status,
+  ).toBe('Draft');
+  errors.expectClean('a refused send while viewing as the account manager');
+  await send.getByRole('button', { name: 'Cancel' }).click();
+  await expect(send).toBeHidden();
+  await page.getByRole('region', { name: 'Impersonation' }).getByRole('button', { name: 'Exit' }).click();
+  await expect(page).toHaveURL(/\/admin\/users$/);
+
+  // The account manager (not impersonated) can still send it; cancel it again to leave the journey as it was.
+  const own = await call<Campaign>(accounts.am, 'POST', `/agency/email/campaigns/${created.body.id}/send`, {
+    confirm: true,
+    confirmName: name,
+    concurrencyStamp: draftNow.body.concurrencyStamp,
   });
-  expect(sent.status).toBe(200);
-  const audit = await admin.get<{
-    items: { action: string; actorUserId: string; impersonatorUserId: string | null }[];
-  }>(`/admin/audit-logs?action=email.campaign.send_confirmed&entityId=${created.body.id}`);
-  expect(audit.items[0]).toMatchObject({ actorUserId: amId, impersonatorUserId: admin.user.id });
+  expect(own.status, JSON.stringify(own.body)).toBe(200);
   expect(
     (
       await call(accounts.am, 'POST', `/agency/email/campaigns/${created.body.id}/cancel`, {
-        concurrencyStamp: sent.body.concurrencyStamp,
+        concurrencyStamp: own.body.concurrencyStamp,
         reason: 'E2E',
       })
     ).status,

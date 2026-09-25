@@ -14,6 +14,13 @@ public static class Money
         ["PYG"] = 0, ["RWF"] = 0, ["KMF"] = 0, ["GNF"] = 0, ["DJF"] = 0, ["VUV"] = 0, ["XPF"] = 0,
     };
 
+    /// <summary>
+    /// Currencies whose minor unit is not 2 (every other currency has 2). The web app's <c>MINOR_UNITS</c> table
+    /// (frontend/src/lib/format/money.ts) must list exactly these; <c>UnitTests/Foundation/MinorUnitsSyncTests</c> fails
+    /// when the two differ.
+    /// </summary>
+    public static IReadOnlyDictionary<string, int> NonDefaultMinorUnits => MinorUnits;
+
     /// <summary>ISO 4217 currencies the platform accepts. Extend here when a new payout currency is enabled.</summary>
     public static readonly IReadOnlySet<string> SupportedCurrencies = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
     {

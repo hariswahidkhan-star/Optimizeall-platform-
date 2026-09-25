@@ -2,6 +2,7 @@ using System.Security.Cryptography;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Api.Common.Notifications;
@@ -32,9 +33,9 @@ public sealed class AdminUsersService(
     IPermissionDirectory directory,
     IPermissionResolver permissionResolver,
     Roles.AdminRolesService customRoles,
-    TimeProvider clock)
+    TimeProvider clock,
+    IOptions<ExportOptions> exports)
 {
-    public const int MaxExportRows = 50_000;
     private const string ReferralAlphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
     private static readonly string[] StatusActions = { "admin.user_suspended", "admin.user_reactivated" };
 
@@ -83,7 +84,9 @@ public sealed class AdminUsersService(
 
     public async Task<FileContentResult> ExportCsvAsync(AdminUserQuery query, CancellationToken ct)
     {
-        var users = await (await FilterAsync(query, ct)).Include(u => u.Roles).OrderBy(u => u.CreatedAt).ThenBy(u => u.Id).Take(MaxExportRows).ToListAsync(ct);
+        var filtered = await FilterAsync(query, ct);
+        await ExportLimit.EnsureAsync(filtered, exports.Value.Users, ct);
+        var users = await filtered.Include(u => u.Roles).OrderBy(u => u.CreatedAt).ThenBy(u => u.Id).ToListAsync(ct);
         audit.Record("admin.users_exported", nameof(User), "bulk",
             after: new { rows = users.Count, query.Search, query.Role, query.Status, query.Country, query.Tier, query.Permission });
         await db.SaveChangesAsync(ct);

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Api.Common.Ledger;
 using OptimizeAll.Api.Common.Security;
@@ -26,11 +27,9 @@ public sealed class PaymentsHubQueries(
     IClientScope scope,
     BillingReports reports,
     IPayoutScheduleProvider schedules,
-    TimeProvider clock)
+    TimeProvider clock,
+    IOptions<ExportOptions> exports)
 {
-    /// <summary>Hard cap of the CSV export.</summary>
-    public const int MaxExportRows = 20_000;
-
     private DateOnly Today => DateOnly.FromDateTime(clock.GetUtcNow().UtcDateTime);
 
     public bool CanIncoming => currentUser.HasPermission(Permissions.BillingView);
@@ -68,15 +67,22 @@ public sealed class PaymentsHubQueries(
         return new PagedResult<PaymentRecordDto>(await HydrateAsync(page, ct), total, query.Page, query.PageSize);
     }
 
-    /// <summary>Every matching record (for CSV), up to <see cref="MaxExportRows"/>.</summary>
+    /// <summary>
+    /// Every matching record (for CSV). More than the cap (Exports:PaymentsHub, default 20,000) is refused with
+    /// 422 <c>export.too_large</c> instead of a file cut short.
+    /// </summary>
     public async Task<IReadOnlyList<PaymentRecordDto>> ExportAsync(PaymentHubQuery query, CancellationToken ct)
     {
         RequireAny();
+        var sources = await SourcesAsync(query, ct);
+        var matching = 0L;
+        foreach (var source in sources) matching += await source.CountAsync(ct);
+        ExportLimit.Ensure(matching, exports.Value.PaymentsHub);
         var keys = new List<Key>();
-        foreach (var source in await SourcesAsync(query, ct))
-            keys.AddRange(await Order(source, query.Desc).Take(MaxExportRows).ToListAsync(ct));
+        foreach (var source in sources)
+            keys.AddRange(await Order(source, query.Desc).ToListAsync(ct));
         var rows = new List<PaymentRecordDto>();
-        foreach (var chunk in Sort(keys, query.Desc).Take(MaxExportRows).Chunk(500))
+        foreach (var chunk in Sort(keys, query.Desc).Chunk(500))
             rows.AddRange(await HydrateAsync(chunk, ct));
         return rows;
     }

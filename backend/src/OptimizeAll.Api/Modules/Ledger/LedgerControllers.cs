@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Domain.Common;
@@ -37,10 +38,8 @@ public sealed class MyEarningsController(AppDbContext db, IEarningsSummaryServic
 [Route("api/v1/finance")]
 [DeniedWhileImpersonating(WritesOnly = true)]
 public sealed class FinanceLedgerController(
-    AppDbContext db, IEarningsSummaryService summaries, LedgerAdminService service) : ControllerBase
+    AppDbContext db, IEarningsSummaryService summaries, LedgerAdminService service, IOptions<ExportOptions> exports) : ControllerBase
 {
-    public const int MaxExportRows = 100_000;
-
     [HttpGet("ledger")]
     [HasPermission(Permissions.LedgerView)]
     public async Task<PagedResult<LedgerRowDto>> Ledger([FromQuery] LedgerQuery query, CancellationToken ct)
@@ -49,12 +48,16 @@ public sealed class FinanceLedgerController(
         return new PagedResult<LedgerRowDto>(page.Items.Select(r => r.ToLedgerDto()).ToList(), page.Total, page.Page, page.PageSize);
     }
 
-    /// <summary>CSV of the ledger with the same filters (max 100,000 rows, newest first).</summary>
+    /// <summary>
+    /// CSV of the ledger with the same filters (newest first). More matching rows than the cap (Exports:Ledger, default
+    /// 100,000) is a 422 <c>export.too_large</c>, never a cut-short file.
+    /// </summary>
     [HttpGet("ledger/export.csv")]
     [HasPermission(Permissions.LedgerView)]
     public async Task<IActionResult> Export([FromQuery] LedgerQuery query, CancellationToken ct)
     {
-        var rows = await LedgerQueries.FinanceLedger(db, query).Take(MaxExportRows).ToListAsync(ct);
+        await ExportLimit.EnsureAsync(LedgerQueries.FinanceLedger(db, query), exports.Value.Ledger, ct);
+        var rows = await LedgerQueries.FinanceLedger(db, query).ToListAsync(ct);
         return Csv.File($"ledger-{DateTime.UtcNow:yyyyMMdd-HHmmss}.csv", LedgerCsv.Header, rows.Select(LedgerCsv.Row));
     }
 

@@ -1,6 +1,7 @@
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using OptimizeAll.Api.Common.Audit;
+using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Api.Common.Notifications;
 using OptimizeAll.Api.Common.Security;
 using OptimizeAll.Api.Modules.Clients;
@@ -199,12 +200,29 @@ public sealed class CommunicationService(
         return role is ClientMemberRole.Owner or ClientWriterDuty;
     }
 
-    public async Task<IReadOnlyList<ThreadSummaryDto>> ThreadsAsync(Guid clientId, CancellationToken ct)
+    /// <summary>
+    /// One page of the client's threads the caller may see, most recent activity first (ties by id, so pages never
+    /// repeat or skip a thread), with the total; <c>search</c> matches the subject or the last message.
+    /// </summary>
+    public async Task<PagedResult<ThreadSummaryDto>> ThreadPageAsync(Guid clientId, ThreadQuery query, CancellationToken ct)
     {
         await scope.EnsureAccessAsync(clientId, ct: ct);
+        var q = VisibleThreads(clientId).AsNoTracking();
+        if (!string.IsNullOrWhiteSpace(query.Search))
+        {
+            var pattern = PagingExtensions.LikePattern(query.Search);
+            q = q.Where(t => EF.Functions.Like(t.Subject, pattern, "\\") ||
+                             (t.LastMessagePreview != null && EF.Functions.Like(t.LastMessagePreview, pattern, "\\")));
+        }
+        var total = await q.CountAsync(ct);
+        var threads = await q.OrderByDescending(t => t.LastMessageAt).ThenByKey(t => t.Id, descending: true)
+            .Skip(PagingExtensions.SkipFor(query.Page, query.PageSize)).Take(query.PageSize).ToListAsync(ct);
+        return new PagedResult<ThreadSummaryDto>(await SummariesAsync(threads, ct), total, query.Page, query.PageSize);
+    }
+
+    private async Task<IReadOnlyList<ThreadSummaryDto>> SummariesAsync(List<MessageThread> threads, CancellationToken ct)
+    {
         var me = currentUser.Id;
-        var threads = await VisibleThreads(clientId).AsNoTracking()
-            .OrderByDescending(t => t.LastMessageAt).Take(200).ToListAsync(ct);
         var ids = threads.Select(t => t.Id).ToList();
         var unread = await (from m in db.Set<ThreadMessage>().AsNoTracking()
                             join r in db.Set<ThreadReadState>().Where(x => x.UserId == me) on m.ThreadId equals r.ThreadId into rs

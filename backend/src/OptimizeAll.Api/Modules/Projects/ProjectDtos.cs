@@ -594,6 +594,9 @@ public sealed class BriefStatusRequest
     public Guid? ConcurrencyStamp { get; set; }
 }
 
+/// <summary>Paging (page, pageSize up to 200) and an optional search of the subject and last message.</summary>
+public sealed class ThreadQuery : PageQuery;
+
 public sealed record ThreadSummaryDto(Guid Id, Guid ClientId, string Subject, Guid? ProjectId, DateTime LastMessageAt, int MessageCount, int UnreadCount, string? LastMessagePreview, string? LastAuthor, bool IsInternal);
 
 public sealed record MessageDto(Guid Id, PersonDto Author, bool FromClient, string Body, IReadOnlyList<DeliveryFileDto> Attachments, DateTime CreatedAt, IReadOnlyList<string> ReadBy);

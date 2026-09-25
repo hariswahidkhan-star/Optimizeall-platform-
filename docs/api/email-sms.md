@@ -20,7 +20,7 @@ client scope. Records of another workspace answer `404`.
 | GET, POST | `/lists` | `?clientId`; create with name, description, `doubleOptIn`, `showInPreferenceCenter`, `consentText`, `consentTextVersion`. |
 | GET, PUT, DELETE | `/lists/{id}` | DELETE archives the list. |
 | GET | `/lists/{id}/health?days=90` | Tiers (active/warm/cold/new), bounced/complained, daily growth. |
-| GET | `/lists/{id}/export.csv` | Contacts with consent evidence (audited). |
+| GET | `/lists/{id}/export.csv` | Contacts with consent evidence (audited); ≤ 200,000 (over the cap: 422 `export.too_large`). |
 | POST | `/lists/{id}/imports/preview` | `{ csv }` → headers, sample rows, suggested mapping. |
 | POST | `/lists/{id}/imports` | `{ fileName, csv, mapping, tags, confirmConsent: true, consentSource, grantSmsConsent }`. Up to 10 MB; small files finish inline, large ones run in `SubscriberImportJob`. Never re-subscribes unsubscribed/bounced/suppressed addresses, nor a contact who unsubscribed from that list. |
 | GET | `/lists/{id}/imports`, `/imports/{id}` | Import status and per-row errors (`row` is the line of the file, counting the header, blank lines and multi-line values). |
@@ -59,7 +59,7 @@ client scope. Records of another workspace answer `404`.
 | GET | `/{id}/preview` | Rendered with sample data. |
 | POST | `/{id}/test` | Test send (verified staff only). |
 | GET | `/{id}/report` | Delivery, human vs machine opens, clicks per link, devices, mail clients, A/B, timeline, unsubscribes, complaints, conversions and revenue, SMS cost. |
-| POST | `/{id}/send` | **`email.send`**. `{ confirm: true, confirmName: <campaign name>, concurrencyStamp, reason? }`. Queues (or schedules) the send; `CampaignSendJob` does the sending. |
+| POST | `/{id}/send` | **`email.send`**. `{ confirm: true, confirmName: <campaign name>, concurrencyStamp, reason? }`. Queues (or schedules) the send; `CampaignSendJob` does the sending. Refused while impersonating (403 `auth.impersonation_forbidden_action`), as are `resume`, journey `activate`/`enroll` and the client `approval`; `test`, `pause`, `unschedule` and `cancel` stay available (see [EMAIL_SMS.md](../EMAIL_SMS.md#impersonation-viewing-as)). |
 | POST | `/{id}/unschedule`, `/pause`, `/resume`, `/cancel` | **`email.send`**. `{ concurrencyStamp, reason? }`. |
 | POST | `/sms/campaigns/segments` | `{ text, recipients, costPerSegment }` → encoding (GSM-7/UCS-2), segments, cost estimate. |
 

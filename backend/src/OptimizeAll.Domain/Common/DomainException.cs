@@ -24,6 +24,9 @@ public class DomainException : Exception
     public static DomainException Conflict(string code, string message) => new(code, message, DomainErrorKind.Conflict);
 
     public static DomainException Forbidden(string code, string message) => new(code, message, DomainErrorKind.Forbidden);
+
+    /// <summary>A well-formed request the server will not carry out as asked (422), e.g. an export over its row cap.</summary>
+    public static DomainException Unprocessable(string code, string message) => new(code, message, DomainErrorKind.Unprocessable);
 }
 
 public enum DomainErrorKind
@@ -34,4 +37,5 @@ public enum DomainErrorKind
     Forbidden,
     Unauthorized,
     TooManyRequests,
+    Unprocessable,
 }

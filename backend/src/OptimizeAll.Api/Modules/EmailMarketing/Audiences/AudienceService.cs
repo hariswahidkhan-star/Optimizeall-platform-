@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Http;
 using OptimizeAll.Api.Common.Persistence;
@@ -162,7 +163,8 @@ public sealed class AudienceService(
     EmailProviderResolver providers,
     AutomationTriggers triggers,
     TimeProvider clock,
-    ILogger<AudienceService> logger)
+    ILogger<AudienceService> logger,
+    IOptions<ExportOptions> exports)
 {
     public const int ConfirmationValidDays = 7;
 
@@ -887,11 +889,12 @@ public sealed class AudienceService(
     public async Task<(string FileName, IReadOnlyList<string> Header, IReadOnlyList<object?[]> Rows)> ExportListAsync(Guid listId, CancellationToken ct)
     {
         var list = await LoadListAsync(listId, ct);
+        await ExportLimit.EnsureAsync(db.Set<ListMembership>().Where(m => m.ListId == listId), exports.Value.EmailList, ct);
         var rows = await (from m in db.Set<ListMembership>().AsNoTracking()
                           join s in db.Set<Subscriber>() on m.SubscriberId equals s.Id
                           where m.ListId == listId
-                          orderby s.CreatedAt
-                          select new { s, m }).Take(200_000).ToListAsync(ct);
+                          orderby s.CreatedAt, s.Id
+                          select new { s, m }).ToListAsync(ct);
         var ids = rows.Select(r => r.s.Id).ToList();
         var tags = new List<SubscriberTag>();
         var fields = new List<SubscriberField>();

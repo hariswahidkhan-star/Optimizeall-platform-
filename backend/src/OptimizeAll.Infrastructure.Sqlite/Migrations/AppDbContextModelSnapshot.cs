@@ -13625,6 +13625,10 @@ namespace OptimizeAll.Infrastructure.Sqlite.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("LastLiveSlug")
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime?>("PublishAt")
                         .HasPrecision(6)
                         .HasColumnType("TEXT");

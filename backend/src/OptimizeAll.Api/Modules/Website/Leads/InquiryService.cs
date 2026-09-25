@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using OptimizeAll.Api.Common.Audit;
 using OptimizeAll.Api.Common.Events;
 using OptimizeAll.Api.Common.Http;
@@ -28,7 +29,8 @@ internal sealed record ContactDetails(string Name, string Email, string? Phone, 
 /// (the CRM creates leads from it; this module notifies staff).
 /// </summary>
 public sealed class InquiryService(
-    AppDbContext db, FormGuard guard, FormTokenLedger tokens, IPrivacyHasher hasher, ICurrentUser user, IEventPublisher events, IAuditLogger audit, TimeProvider clock)
+    AppDbContext db, FormGuard guard, FormTokenLedger tokens, IPrivacyHasher hasher, ICurrentUser user, IEventPublisher events, IAuditLogger audit, TimeProvider clock,
+    IOptions<ExportOptions> exports)
 {
     public const string SpamMessage = "Thanks! We've received your message and will reply within one business day.";
 
@@ -200,6 +202,22 @@ public sealed class InquiryService(
     public async Task<PagedResult<InquirySummaryDto>> ListAsync(InquiryQuery query, CancellationToken ct)
     {
         user.RequireAny(Permissions.SiteManage, Permissions.CrmView);
+        var q = Filter(query);
+        if (!string.IsNullOrWhiteSpace(query.Service))
+        {
+            // Service slugs live in a JSON list: filter in memory (inbox volumes are small).
+            var all = WithService(await q.ToListAsync(ct), query.Service);
+            return new PagedResult<InquirySummaryDto>(all.Skip(query.Skip).Take(query.PageSize).Select(Summary).ToList(), all.Count, query.Page, query.PageSize);
+        }
+        return CmsStore.Map(await q.ToPagedAsync(query, ct), Summary);
+    }
+
+    /// <summary>
+    /// The list's filters (type, status, dates, UTM source, assignee, search; service in memory by <see cref="WithService"/>),
+    /// newest first. The list and the CSV export share it, so the export holds exactly what the inbox shows.
+    /// </summary>
+    private IOrderedQueryable<WebsiteInquiry> Filter(InquiryQuery query)
+    {
         var q = db.Set<WebsiteInquiry>().AsNoTracking();
         if (query.Type is { } type) q = q.Where(i => i.Type == type);
         if (query.Status is { } status) q = q.Where(i => i.Status == status);
@@ -228,15 +246,13 @@ public sealed class InquiryService(
             var p = PagingExtensions.LikePattern(query.Search);
             q = q.Where(i => EF.Functions.Like(i.Name, p, "\\") || EF.Functions.Like(i.Email, p, "\\") || (i.Company != null && EF.Functions.Like(i.Company, p, "\\")));
         }
-        q = q.OrderByDescending(i => i.CreatedAt).ThenByDescending(i => i.Id);
-        if (!string.IsNullOrWhiteSpace(query.Service))
-        {
-            // Service slugs live in a JSON list: filter in memory (inbox volumes are small).
-            var service = query.Service.Trim();
-            var all = (await q.ToListAsync(ct)).Where(i => i.ServiceSlugs.Contains(service)).ToList();
-            return new PagedResult<InquirySummaryDto>(all.Skip(query.Skip).Take(query.PageSize).Select(Summary).ToList(), all.Count, query.Page, query.PageSize);
-        }
-        return CmsStore.Map(await q.ToPagedAsync(query, ct), Summary);
+        return q.OrderByDescending(i => i.CreatedAt).ThenByDescending(i => i.Id);
+    }
+
+    private static List<WebsiteInquiry> WithService(IEnumerable<WebsiteInquiry> rows, string service)
+    {
+        var slug = service.Trim();
+        return rows.Where(i => i.ServiceSlugs.Contains(slug)).ToList();
     }
 
     public async Task<InquiryDto> GetAsync(Guid id, CancellationToken ct)
@@ -278,11 +294,23 @@ public sealed class InquiryService(
     public async Task<IReadOnlyList<WebsiteInquiry>> ExportRowsAsync(InquiryQuery query, CancellationToken ct)
     {
         user.RequireAny(Permissions.SiteManage, Permissions.CrmView);
-        var q = db.Set<WebsiteInquiry>().AsNoTracking();
-        if (query.Type is { } type) q = q.Where(i => i.Type == type);
-        if (query.Status is { } status) q = q.Where(i => i.Status == status);
-        var rows = await q.OrderByDescending(i => i.CreatedAt).ThenByDescending(i => i.Id).Take(10000).ToListAsync(ct);
-        audit.Record("website.inquiries_exported", nameof(WebsiteInquiry), "bulk", after: new { rows = rows.Count, query.Type, query.Status });
+        var q = Filter(query);
+        var max = exports.Value.Inquiries;
+        List<WebsiteInquiry> rows;
+        if (!string.IsNullOrWhiteSpace(query.Service))
+        {
+            rows = WithService(await q.ToListAsync(ct), query.Service);
+            ExportLimit.Ensure(rows.Count, max);
+        }
+        else
+        {
+            await ExportLimit.EnsureAsync(q, max, ct);
+            rows = await q.ToListAsync(ct);
+        }
+        audit.Record("website.inquiries_exported", nameof(WebsiteInquiry), "bulk", after: new
+        {
+            rows = rows.Count, query.Type, query.Status, query.From, query.To, query.Service, query.UtmSource, query.AssignedTo, query.Search,
+        });
         await db.SaveChangesAsync(ct);
         return rows;
     }
