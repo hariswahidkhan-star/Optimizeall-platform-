@@ -16,6 +16,8 @@ public static class CertificateArt
     public const string NavyDark = "#12163A";
     public const string Amber = "#FCB31E";
     public const string Ink = "#1D174C";
+    /// <summary>Amber-toned text on white (5.1:1); amber itself is too faint for text on light backgrounds.</summary>
+    public const string AmberText = "#9A6200";
 
     public static string CategoryColor(CourseCategory category) => category switch
     {
@@ -77,25 +79,215 @@ public static class CertificateArt
 
     private static string Points((double X, double Y)[] points) => string.Join(' ', points.Select(p => $"{F(p.X)},{F(p.Y)}"));
 
-    /// <summary>The badge emblem as SVG elements in a 400×400 box at (x, y) scaled by <paramref name="scale"/>.</summary>
-    private static string Emblem(string badgeName, CourseCategory category, CourseLevel level, string issuer, double x, double y, double scale)
+    /// <summary>Font stack of the artwork. SVG images cannot load web fonts, so the metrics below target Helvetica/Arial.</summary>
+    public const string SansStack = "'Inter Tight', Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif";
+
+    // Advance widths of Arial/Helvetica Bold (1/1000 em) for the characters badge texts use; anything else counts as wide.
+    private static readonly Dictionary<char, int> BoldWidths = BuildBoldWidths();
+
+    private static Dictionary<char, int> BuildBoldWidths()
+    {
+        var w = new Dictionary<char, int>();
+        void Set(string chars, int width)
+        {
+            foreach (var c in chars) w[c] = width;
+        }
+        Set("ABCDHKNRUÄÅÀÁÂÃÇÑÜÚÙÛ&", 722);
+        Set("EPSVXYÉÈÊË", 667);
+        Set("FTZL", 611);
+        Set("GOQÖÓÒÔÕØ", 778);
+        Set("M", 833);
+        Set("W", 944);
+        Set("IÍÌÎÏ", 278);
+        Set("J", 556);
+        Set("0123456789–$#?", 556);
+        Set(" .,:;!|'’·", 278);
+        Set("-()/[]", 333);
+        Set("+=<>", 584);
+        Set("@", 975);
+        Set("%", 889);
+        Set("…", 1000);
+        return w;
+    }
+
+    /// <summary>
+    /// Estimated rendered width of upper-case bold text: glyph advances (Arial Bold metrics, +6% headroom for fallback fonts
+    /// such as DejaVu or Segoe UI) plus the letter spacing between glyphs. Every emblem text is sized and cut with it.
+    /// </summary>
+    public static double MeasureCaps(string text, double fontSize, double letterSpacing = 0)
+    {
+        if (string.IsNullOrEmpty(text)) return 0;
+        var units = text.Sum(c => BoldWidths.TryGetValue(char.ToUpperInvariant(c), out var v) ? v : 760);
+        return units / 1000.0 * fontSize * 1.06 + letterSpacing * (text.Length - 1);
+    }
+
+    /// <summary>Cuts <paramref name="text"/> with an ellipsis until it measures at most <paramref name="maxWidth"/>.</summary>
+    public static string Truncate(string text, double fontSize, double letterSpacing, double maxWidth)
+    {
+        if (MeasureCaps(text, fontSize, letterSpacing) <= maxWidth) return text;
+        var cut = text;
+        while (cut.Length > 1 && MeasureCaps(cut + "…", fontSize, letterSpacing) > maxWidth) cut = cut[..^1];
+        return cut.TrimEnd(' ', '.', ',', '&', '-', '–', '·') + "…";
+    }
+
+    /// <summary>The badge name laid out for the emblem: one to four balanced lines at the largest size that fits.</summary>
+    public sealed record BadgeNameLayout(IReadOnlyList<string> Lines, double FontSize, double LineHeight);
+
+    /// <summary>Width available to each badge-name line inside the emblem's inner hairline (400-unit box).</summary>
+    public const double BadgeNameMaxWidth = 226;
+
+    /// <summary>Height available to the badge-name block (cap top of the first line to baseline of the last).</summary>
+    public const double BadgeNameMaxHeight = 92;
+
+    public const double BadgeNameMaxSize = 27;
+    public const double BadgeNameMinSize = 14;
+    private const double BadgeNameSpacing = 0.6;
+    private const double BadgeNameLeading = 1.16;
+    private const double CapHeight = 0.72;
+
+    /// <summary>Visual height of a block of <paramref name="lines"/> upper-case lines at <paramref name="size"/>.</summary>
+    public static double BadgeNameBlockHeight(int lines, double size) => size * (BadgeNameLeading * (lines - 1) + CapHeight);
+
+    public static BadgeNameLayout LayoutBadgeName(string badgeName)
+    {
+        var text = string.Join(' ', (badgeName ?? string.Empty).ToUpperInvariant().Split(' ', StringSplitOptions.RemoveEmptyEntries));
+        if (text.Length == 0) text = "BADGE";
+        IReadOnlyList<string>? bestLines = null;
+        double bestSize = 0, bestScore = double.MinValue;
+        for (var n = 1; n <= 4; n++)
+        {
+            var lines = Balance(text, n);
+            if (lines.Count != n) break;
+            var size = BadgeNameMaxSize;
+            while (size > BadgeNameMinSize
+                   && (lines.Any(l => MeasureCaps(l, size, BadgeNameSpacing) > BadgeNameMaxWidth) || BadgeNameBlockHeight(n, size) > BadgeNameMaxHeight))
+                size -= 0.5;
+            if (lines.Any(l => MeasureCaps(l, size, BadgeNameSpacing) > BadgeNameMaxWidth)) continue;
+            // Fewer lines read better: an extra line has to buy a clearly larger type size.
+            // Type under 18 units gets hard to read on small badge thumbnails, so it counts extra against a layout.
+            var score = size - (n - 1) * 2.5 - Math.Max(0, 18 - size) * 1.5;
+            if (score > bestScore)
+            {
+                bestScore = score;
+                bestLines = lines;
+                bestSize = size;
+            }
+        }
+        if (bestLines is null)
+        {
+            // Very long names: four balanced lines at the minimum size, each cut to the width with an ellipsis.
+            bestSize = BadgeNameMinSize;
+            bestLines = Balance(text, 4).Select(l => Truncate(l, bestSize, BadgeNameSpacing, BadgeNameMaxWidth)).ToList();
+        }
+        return new BadgeNameLayout(bestLines, bestSize, Math.Round(bestSize * BadgeNameLeading, 2));
+    }
+
+    /// <summary>Splits the words into (at most) <paramref name="lines"/> lines, minimising the widest line.</summary>
+    private static List<string> Balance(string text, int lines)
+    {
+        var words = text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (lines <= 1 || words.Length <= 1) return new List<string> { string.Join(' ', words) };
+        lines = Math.Min(lines, words.Length);
+        List<string>? best = null;
+        var bestWidth = double.MaxValue;
+        // Badge names are a handful of words, so trying every split is cheap (and deterministic).
+        void Search(int start, int remaining, List<string> acc)
+        {
+            if (remaining == 1)
+            {
+                var candidate = new List<string>(acc) { string.Join(' ', words[start..]) };
+                // A line should not start with a dash (it reads as a list marker): such splits count as much wider.
+                var width = candidate.Max(l => MeasureCaps(l, 1)) + (candidate.Skip(1).Any(l => l[0] is '–' or '-' or '—') ? 1.5 : 0);
+                if (width < bestWidth - 1e-9)
+                {
+                    bestWidth = width;
+                    best = candidate;
+                }
+                return;
+            }
+            for (var end = start + 1; end <= words.Length - remaining + 1; end++)
+            {
+                acc.Add(string.Join(' ', words[start..end]));
+                Search(end, remaining - 1, acc);
+                acc.RemoveAt(acc.Count - 1);
+            }
+        }
+        Search(0, lines, new List<string>());
+        return best!;
+    }
+
+    /// <summary>A darker shade of a #RRGGBB colour.</summary>
+    private static string Shade(string hex, double factor)
+    {
+        int C(int i) => (int)Math.Round(Convert.ToInt32(hex.Substring(i, 2), 16) * factor);
+        return $"#{C(1):X2}{C(3):X2}{C(5):X2}";
+    }
+
+    /// <summary>True when white text on <paramref name="hex"/> would be too faint (light accents such as amber).</summary>
+    private static bool IsLight(string hex)
+    {
+        double L(int i)
+        {
+            var c = Convert.ToInt32(hex.Substring(i, 2), 16) / 255.0;
+            return c <= 0.03928 ? c / 12.92 : Math.Pow((c + 0.055) / 1.055, 2.4);
+        }
+        return 0.2126 * L(1) + 0.7152 * L(3) + 0.0722 * L(5) > 0.4;
+    }
+
+    // Emblem geometry (400-unit box): the inner hairline hexagon has radius 156, so its straight sides span y 122–278 at
+    // x 65–335 and the slanted sides narrow to the tips at y 44 and 356. Every text sits inside those bounds.
+    private const double HairlineRadius = 156;
+    public const double IssuerMaxWidth = 212;
+
+    /// <summary>
+    /// The badge emblem as SVG elements in a 400×400 box at (x, y) scaled by <paramref name="scale"/>: a soft-cornered
+    /// hexagon with a category-colour rim, navy face and amber hairline; a star, the issuer line, the badge name (sized to
+    /// fit, 1–4 lines) and a level ribbon. <paramref name="idPrefix"/> keeps gradient ids unique within a document.
+    /// </summary>
+    private static string Emblem(string badgeName, CourseCategory category, CourseLevel level, string issuer, double x, double y, double scale,
+        string idPrefix = "oa-badge")
     {
         var accent = CategoryColor(category);
         var sb = new StringBuilder();
         sb.Append($"<g transform=\"translate({F(x)} {F(y)}) scale({F(scale)})\">");
-        sb.Append($"<polygon points=\"{Points(Hexagon(200, 200, 196))}\" fill=\"{accent}\"/>");
-        sb.Append($"<polygon points=\"{Points(Hexagon(200, 200, 178))}\" fill=\"{Navy}\"/>");
-        sb.Append($"<polygon points=\"{Points(Hexagon(200, 200, 166))}\" fill=\"none\" stroke=\"{Amber}\" stroke-width=\"3\" stroke-opacity=\"0.9\"/>");
-        sb.Append($"<polygon points=\"{Points(Star(200, 92, 26, 11))}\" fill=\"{Amber}\"/>");
-        var lines = Wrap(badgeName.ToUpperInvariant(), 15, 3);
-        var size = lines.Max(l => l.Length) > 13 ? 25 : 29;
-        var top = 205 - (lines.Count - 1) * (size + 6) / 2.0;
-        for (var i = 0; i < lines.Count; i++)
-            sb.Append($"<text x=\"200\" y=\"{F(top + i * (size + 6))}\" text-anchor=\"middle\" font-family=\"'Work Sans', 'Segoe UI', Arial, sans-serif\" font-weight=\"700\" font-size=\"{size}\" letter-spacing=\"1\" fill=\"#FFFFFF\">{X(lines[i])}</text>");
-        sb.Append($"<rect x=\"128\" y=\"282\" width=\"144\" height=\"30\" rx=\"15\" fill=\"{accent}\"/>");
-        sb.Append($"<text x=\"200\" y=\"303\" text-anchor=\"middle\" font-family=\"'Work Sans', 'Segoe UI', Arial, sans-serif\" font-weight=\"700\" font-size=\"15\" letter-spacing=\"2\" fill=\"#FFFFFF\">{X(level.ToString().ToUpperInvariant())}</text>");
-        var footer = issuer.Length > 26 ? issuer[..25] + "…" : issuer;
-        sb.Append($"<text x=\"200\" y=\"340\" text-anchor=\"middle\" font-family=\"'Work Sans', 'Segoe UI', Arial, sans-serif\" font-weight=\"600\" font-size=\"13\" letter-spacing=\"2.5\" fill=\"{Amber}\">{X(footer.ToUpperInvariant())}</text>");
+        sb.Append("<defs>");
+        sb.Append($"<linearGradient id=\"{idPrefix}-rim\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"{accent}\"/><stop offset=\"1\" stop-color=\"{Shade(accent, 0.7)}\"/></linearGradient>");
+        sb.Append($"<linearGradient id=\"{idPrefix}-face\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#2B3577\"/><stop offset=\"0.5\" stop-color=\"{Navy}\"/><stop offset=\"1\" stop-color=\"{NavyDark}\"/></linearGradient>");
+        sb.Append("</defs>");
+        // Rim and face; round joins soften the corners.
+        sb.Append($"<polygon points=\"{Points(Hexagon(200, 200, 182))}\" fill=\"url(#{idPrefix}-rim)\" stroke=\"url(#{idPrefix}-rim)\" stroke-width=\"22\" stroke-linejoin=\"round\"/>");
+        sb.Append($"<polygon points=\"{Points(Hexagon(200, 200, 170))}\" fill=\"url(#{idPrefix}-face)\" stroke=\"#FFFFFF\" stroke-opacity=\"0.16\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>");
+        sb.Append($"<polygon points=\"{Points(Hexagon(200, 200, HairlineRadius))}\" fill=\"none\" stroke=\"{Amber}\" stroke-opacity=\"0.55\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>");
+        sb.Append($"<polygon points=\"{Points(Star(200, 90, 17, 7.2))}\" fill=\"{Amber}\" stroke=\"{Amber}\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>");
+
+        // Issuer: small caps line in the straight-sided band, never on the slanted edges.
+        const double issuerSpacing = 2.2;
+        var issuerText = string.Join(' ', (issuer ?? string.Empty).ToUpperInvariant().Split(' ', StringSplitOptions.RemoveEmptyEntries));
+        var issuerSize = 12.0;
+        while (issuerSize > 9 && MeasureCaps(issuerText, issuerSize, issuerSpacing) > IssuerMaxWidth) issuerSize -= 0.5;
+        issuerText = Truncate(issuerText, issuerSize, issuerSpacing, IssuerMaxWidth);
+        sb.Append($"<text x=\"200\" y=\"136\" text-anchor=\"middle\" font-family=\"{SansStack}\" font-weight=\"600\" font-size=\"{F(issuerSize)}\" letter-spacing=\"{F(issuerSpacing)}\" fill=\"{Amber}\">{X(issuerText)}</text>");
+        sb.Append($"<line x1=\"186\" y1=\"152\" x2=\"214\" y2=\"152\" stroke=\"{Amber}\" stroke-opacity=\"0.7\" stroke-width=\"1.5\" stroke-linecap=\"round\"/>");
+
+        // Badge name: its block (cap top to last baseline, at most 92 high) is centred on y 214, between the divider
+        // (y 152) and the ribbon (y 279).
+        var name = LayoutBadgeName(badgeName);
+        var blockHeight = BadgeNameBlockHeight(name.Lines.Count, name.FontSize);
+        var firstBaseline = 214 - blockHeight / 2 + name.FontSize * CapHeight;
+        for (var i = 0; i < name.Lines.Count; i++)
+            sb.Append($"<text x=\"200\" y=\"{F(firstBaseline + i * name.LineHeight)}\" text-anchor=\"middle\" font-family=\"{SansStack}\" font-weight=\"700\" font-size=\"{F(name.FontSize)}\" letter-spacing=\"{F(BadgeNameSpacing)}\" fill=\"#FFFFFF\">{X(name.Lines[i])}</text>");
+
+        // Level ribbon with notched ends (fits the narrowing hexagon: half-width 76 at y 305, where the hairline allows 88).
+        const double ry = 292, rh = 26, rw = 128;
+        var l = 200 - rw / 2;
+        var r = 200 + rw / 2;
+        sb.Append($"<polygon points=\"{F(l - 10)},{F(ry - rh / 2)} {F(r + 10)},{F(ry - rh / 2)} {F(r + 2)},{F(ry)} {F(r + 10)},{F(ry + rh / 2)} {F(l - 10)},{F(ry + rh / 2)} {F(l - 2)},{F(ry)}\" fill=\"{accent}\" stroke=\"{accent}\" stroke-width=\"2\" stroke-linejoin=\"round\"/>");
+        var levelText = level.ToString().ToUpperInvariant();
+        var levelSize = 12.0;
+        while (levelSize > 9 && MeasureCaps(levelText, levelSize, 2.4) > rw - 16) levelSize -= 0.5;
+        var levelFill = IsLight(accent) ? Navy : "#FFFFFF";
+        sb.Append($"<text x=\"200\" y=\"{F(ry + levelSize * 0.36)}\" text-anchor=\"middle\" font-family=\"{SansStack}\" font-weight=\"700\" font-size=\"{F(levelSize)}\" letter-spacing=\"2.4\" fill=\"{levelFill}\">{X(levelText)}</text>");
+        sb.Append($"<polygon points=\"200,320 205,326 200,332 195,326\" fill=\"{Amber}\" fill-opacity=\"0.85\"/>");
         sb.Append("</g>");
         return sb.ToString();
     }
@@ -148,7 +340,7 @@ public static class CertificateArt
         for (var i = 0; i < titleLines.Count; i++)
             sb.Append($"<text x=\"{left}\" y=\"{600 + i * 54}\" font-family=\"{sans}\" font-weight=\"700\" font-size=\"44\" fill=\"{Ink}\">{X(titleLines[i])}</text>");
         var y = 600 + titleLines.Count * 54 + 10;
-        sb.Append($"<text x=\"{left}\" y=\"{y}\" font-family=\"{sans}\" font-size=\"26\" fill=\"{accent}\" font-weight=\"700\">Awarded the {X(t.BadgeName)} badge</text>");
+        sb.Append($"<text x=\"{left}\" y=\"{y}\" font-family=\"{sans}\" font-size=\"26\" fill=\"{(IsLight(accent) ? AmberText : accent)}\" font-weight=\"700\">Awarded the {X(t.BadgeName)} badge</text>");
         if (t.Skills.Count > 0)
         {
             var skills = Wrap("Skills: " + string.Join(" · ", t.Skills), 80, 2);
